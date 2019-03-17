@@ -2,8 +2,8 @@
 
 const semver = require('semver')
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 const { NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 

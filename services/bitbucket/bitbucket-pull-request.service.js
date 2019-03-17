@@ -2,12 +2,16 @@
 
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
-const { metric } = require('../../lib/text-formatters')
-const { nonNegativeInteger } = require('../validators')
+const { metric } = require('../text-formatters')
+const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const bitbucketPullRequestSchema = Joi.object({
   size: nonNegativeInteger,
+}).required()
+
+const queryParamSchema = Joi.object({
+  server: optionalUrl,
 }).required()
 
 function pullRequestClassGenerator(raw) {
@@ -15,6 +19,10 @@ function pullRequestClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketPullRequest extends BaseJsonService {
+    static get name() {
+      return `BitbucketPullRequest${raw ? 'Raw' : ''}`
+    }
+
     async fetchCloud({ args, user, repo }) {
       args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
       args.options = { qs: { state: 'OPEN', limit: 0 } }
@@ -98,7 +106,7 @@ function pullRequestClassGenerator(raw) {
       return {
         base: `bitbucket/${routePrefix}`,
         pattern: `:user/:repo`,
-        queryParams: ['server'],
+        queryParamSchema,
       }
     }
 

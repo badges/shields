@@ -7,23 +7,25 @@ const coalesce = require('./coalesce')
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
 
+const isOptionalNonNegativeInteger = Joi.number()
+  .integer()
+  .min(0)
+
 const queryParamSchema = Joi.object({
-  // Not using nonNegativeInteger because it's not required.
-  maxAge: Joi.number()
-    .integer()
-    .min(0),
+  cacheSeconds: isOptionalNonNegativeInteger,
+  maxAge: isOptionalNonNegativeInteger,
 })
+  .oxor('cacheSeconds', 'maxAge')
   .unknown(true)
   .required()
 
 function overrideCacheLengthFromQueryParams(queryParams) {
   try {
-    const { maxAge: overrideCacheLength } = Joi.attempt(
-      queryParams,
-      queryParamSchema,
-      { allowUnknown: true }
-    )
-    return overrideCacheLength
+    const {
+      cacheSeconds: overrideCacheLength,
+      maxAge: legacyOverrideCacheLength,
+    } = Joi.attempt(queryParams, queryParamSchema)
+    return coalesce(overrideCacheLength, legacyOverrideCacheLength)
   } catch (e) {
     return undefined
   }

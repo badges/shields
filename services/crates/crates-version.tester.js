@@ -11,8 +11,8 @@ const t = (module.exports = new ServiceTester({
 
 t.create('version')
   .get('/libc.json')
-  .expectJSONTypes({ name: 'crates.io', value: isSemver })
+  .expectBadge({ label: 'crates.io', message: isSemver })
 
 t.create('version (not found)')
   .get('/not-a-real-package.json')
-  .expectJSON({ name: 'crates.io', value: 'not found' })
+  .expectBadge({ label: 'crates.io', message: 'not found' })

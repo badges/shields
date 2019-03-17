@@ -1,19 +1,15 @@
 'use strict'
 
-const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version (valid)')
   .get('/formatador.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'gem',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'gem',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('version (not found)')
   .get('/not-a-package.json')
-  .expectJSON({ name: 'gem', value: 'not found' })
+  .expectBadge({ label: 'gem', message: 'not found' })

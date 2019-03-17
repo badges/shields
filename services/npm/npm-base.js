@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService, InvalidResponse, NotFound } = require('..')
+const { optionalUrl } = require('../validators')
 const { isDependencyMap } = require('../package-json-helpers')
 
 const deprecatedLicenseObjectSchema = Joi.object({
@@ -30,6 +31,10 @@ const packageDataSchema = Joi.object({
     .default([]),
 }).required()
 
+const queryParamSchema = Joi.object({
+  registry_uri: optionalUrl,
+}).required()
+
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
@@ -38,13 +43,13 @@ module.exports = class NpmBase extends BaseJsonService {
       return {
         base,
         pattern: ':scope(@[^/]+)?/:packageName/:tag?',
-        queryParams: ['registry_uri'],
+        queryParamSchema,
       }
     } else {
       return {
         base,
         pattern: ':scope(@[^/]+)?/:packageName',
-        queryParams: ['registry_uri'],
+        queryParamSchema,
       }
     }
   }
@@ -126,3 +131,5 @@ module.exports = class NpmBase extends BaseJsonService {
     return this.constructor._validate(packageData, packageDataSchema)
   }
 }
+
+module.exports.queryParamSchema = queryParamSchema

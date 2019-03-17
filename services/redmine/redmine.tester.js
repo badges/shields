@@ -11,27 +11,21 @@ const t = (module.exports = new ServiceTester({
 
 t.create('plugin rating')
   .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rating',
-      value: Joi.string().regex(/^[0-9]+\.[0-9]+\/5\.0$/),
-    })
-  )
+  .expectBadge({
+    label: 'rating',
+    message: Joi.string().regex(/^[0-9]+\.[0-9]+\/5\.0$/),
+  })
 
 t.create('plugin stars')
   .get('/plugin/stars/redmine_xlsx_format_issue_exporter.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'stars',
-      value: isStarRating,
-    })
-  )
+  .expectBadge({
+    label: 'stars',
+    message: isStarRating,
+  })
 
 t.create('plugin not found')
   .get('/plugin/rating/plugin_not_found.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'redmine',
-      value: 'not found',
-    })
-  )
+  .expectBadge({
+    label: 'redmine',
+    message: 'not found',
+  })

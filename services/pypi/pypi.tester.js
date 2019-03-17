@@ -19,31 +19,31 @@ module.exports = t
 
 t.create('daily downloads (valid)')
   .get('/dd/djangorestframework.json')
-  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('weekly downloads (valid)')
   .get('/dw/djangorestframework.json')
-  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('monthly downloads (valid)')
   .get('/dm/djangorestframework.json')
-  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('downloads (mixed-case package name)')
   .get('/dd/DjangoRestFramework.json')
-  .expectJSONTypes({ name: 'downloads', value: isMetricOverTimePeriod })
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('daily downloads (not found)')
   .get('/dd/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'package not found' })
+  .expectBadge({ label: 'downloads', message: 'package not found' })
 
 t.create('weekly downloads (not found)')
   .get('/dw/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'package not found' })
+  .expectBadge({ label: 'downloads', message: 'package not found' })
 
 t.create('monthly downloads (not found)')
   .get('/dm/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'package not found' })
+  .expectBadge({ label: 'downloads', message: 'package not found' })
 
 /*
   tests for version endpoint
@@ -61,26 +61,22 @@ t.create('monthly downloads (not found)')
 */
 t.create('version (semver)')
   .get('/v/requests.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pypi',
-      value: isSemver,
-    })
-  )
+  .expectBadge({
+    label: 'pypi',
+    message: isSemver,
+  })
 
 // ..whereas this project does not folow SemVer
 t.create('version (not semver)')
   .get('/v/psycopg2.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pypi',
-      value: isPsycopg2Version,
-    })
-  )
+  .expectBadge({
+    label: 'pypi',
+    message: isPsycopg2Version,
+  })
 
 t.create('version (invalid)')
   .get('/v/not-a-package.json')
-  .expectJSON({ name: 'pypi', value: 'package or version not found' })
+  .expectBadge({ label: 'pypi', message: 'package or version not found' })
 
 t.create('no trove classifiers')
   .get('/v/mapi.json')
@@ -96,24 +92,24 @@ t.create('no trove classifiers')
         releases: {},
       })
   )
-  .expectJSON({
-    name: 'pypi',
-    value: 'v1.2.3',
+  .expectBadge({
+    label: 'pypi',
+    message: 'v1.2.3',
   })
 
 // tests for license endpoint
 
 t.create('license (valid, package version in request)')
   .get('/l/requests/2.18.4.json')
-  .expectJSON({ name: 'license', value: 'Apache 2.0' })
+  .expectBadge({ label: 'license', message: 'Apache 2.0' })
 
 t.create('license (valid, no package version specified)')
   .get('/l/requests.json')
-  .expectJSON({ name: 'license', value: 'Apache 2.0' })
+  .expectBadge({ label: 'license', message: 'Apache 2.0' })
 
 t.create('license (invalid)')
   .get('/l/not-a-package.json')
-  .expectJSON({ name: 'license', value: 'package or version not found' })
+  .expectBadge({ label: 'license', message: 'package or version not found' })
 
 t.create('license (from trove classifier)')
   .get('/l/mapi.json')
@@ -129,9 +125,9 @@ t.create('license (from trove classifier)')
         releases: {},
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'mit license',
+  .expectBadge({
+    label: 'license',
+    message: 'mit license',
   })
 
 t.create('license (as acronym from trove classifier)')
@@ -150,142 +146,145 @@ t.create('license (as acronym from trove classifier)')
         releases: {},
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'GPL',
+  .expectBadge({
+    label: 'license',
+    message: 'GPL',
   })
 
 // tests for wheel endpoint
 
 t.create('wheel (has wheel, package version in request)')
   .get('/wheel/requests/2.18.4.json')
-  .expectJSON({ name: 'wheel', value: 'yes' })
+  .expectBadge({ label: 'wheel', message: 'yes' })
 
 t.create('wheel (has wheel, no package version specified)')
   .get('/wheel/requests.json')
-  .expectJSON({ name: 'wheel', value: 'yes' })
+  .expectBadge({ label: 'wheel', message: 'yes' })
 
 t.create('wheel (no wheel)')
   .get('/wheel/chai/1.1.2.json')
-  .expectJSON({ name: 'wheel', value: 'no' })
+  .expectBadge({ label: 'wheel', message: 'no' })
 
 t.create('wheel (invalid)')
   .get('/wheel/not-a-package.json')
-  .expectJSON({ name: 'wheel', value: 'package or version not found' })
+  .expectBadge({ label: 'wheel', message: 'package or version not found' })
 
 // tests for format endpoint
 
 t.create('format (wheel, package version in request)')
   .get('/format/requests/2.18.4.json')
-  .expectJSON({ name: 'format', value: 'wheel' })
+  .expectBadge({ label: 'format', message: 'wheel' })
 
 t.create('format (wheel, no package version specified)')
   .get('/format/requests.json')
-  .expectJSON({ name: 'format', value: 'wheel' })
+  .expectBadge({ label: 'format', message: 'wheel' })
 
 t.create('format (source)')
   .get('/format/chai/1.1.2.json')
-  .expectJSON({ name: 'format', value: 'source' })
+  .expectBadge({ label: 'format', message: 'source' })
 
 t.create('format (egg)')
   .get('/format/virtualenv/0.8.2.json')
-  .expectJSON({ name: 'format', value: 'egg' })
+  .expectBadge({ label: 'format', message: 'egg' })
 
 t.create('format (invalid)')
   .get('/format/not-a-package.json')
-  .expectJSON({ name: 'format', value: 'package or version not found' })
+  .expectBadge({ label: 'format', message: 'package or version not found' })
 
 // tests for pyversions endpoint
 
 t.create('python versions (valid, package version in request)')
   .get('/pyversions/requests/2.18.4.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'python',
-      value: isPipeSeparatedPythonVersions,
-    })
-  )
+  .expectBadge({
+    label: 'python',
+    message: isPipeSeparatedPythonVersions,
+  })
 
 t.create('python versions (valid, no package version specified)')
   .get('/pyversions/requests.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'python',
-      value: isPipeSeparatedPythonVersions,
-    })
-  )
+  .expectBadge({
+    label: 'python',
+    message: isPipeSeparatedPythonVersions,
+  })
+
+t.create('python versions ("Only" and others)')
+  .get('/pyversions/uvloop/0.12.1.json')
+  .expectBadge({ label: 'python', message: '3.5 | 3.6 | 3.7' })
+
+t.create('python versions ("Only" only)')
+  .get('/pyversions/hashpipe/0.9.1.json')
+  .expectBadge({ label: 'python', message: '3' })
 
 t.create('python versions (no versions specified)')
   .get('/pyversions/pyshp/1.2.12.json')
-  .expectJSON({ name: 'python', value: 'missing' })
+  .expectBadge({ label: 'python', message: 'missing' })
 
 t.create('python versions (invalid)')
   .get('/pyversions/not-a-package.json')
-  .expectJSON({ name: 'python', value: 'package or version not found' })
+  .expectBadge({ label: 'python', message: 'package or version not found' })
 
 // tests for django versions endpoint
 
 t.create('supported django versions (valid, package version in request)')
   .get('/djversions/djangorestframework/3.7.3.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'django versions',
-      value: isPipeSeparatedDjangoVersions,
-    })
-  )
+  .expectBadge({
+    label: 'django versions',
+    message: isPipeSeparatedDjangoVersions,
+  })
 
 t.create('supported django versions (valid, no package version specified)')
   .get('/djversions/djangorestframework.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'django versions',
-      value: isPipeSeparatedDjangoVersions,
-    })
-  )
+  .expectBadge({
+    label: 'django versions',
+    message: isPipeSeparatedDjangoVersions,
+  })
 
 t.create('supported django versions (no versions specified)')
   .get('/djversions/django/1.11.json')
-  .expectJSON({ name: 'django versions', value: 'missing' })
+  .expectBadge({ label: 'django versions', message: 'missing' })
 
 t.create('supported django versions (invalid)')
   .get('/djversions/not-a-package.json')
-  .expectJSON({
-    name: 'django versions',
-    value: 'package or version not found',
+  .expectBadge({
+    label: 'django versions',
+    message: 'package or version not found',
   })
 
 // tests for implementation endpoint
 
 t.create('implementation (valid, package version in request)')
   .get('/implementation/beehive/1.0.json')
-  .expectJSON({ name: 'implementation', value: 'cpython | jython | pypy' })
+  .expectBadge({ label: 'implementation', message: 'cpython | jython | pypy' })
 
 t.create('implementation (valid, no package version specified)')
   .get('/implementation/numpy.json')
-  .expectJSON({ name: 'implementation', value: 'cpython' })
+  .expectBadge({ label: 'implementation', message: 'cpython' })
 
 t.create('implementation (not specified)')
   .get('/implementation/chai/1.1.2.json')
-  .expectJSON({ name: 'implementation', value: 'cpython' })
+  .expectBadge({ label: 'implementation', message: 'cpython' })
 
 t.create('implementation (invalid)')
   .get('/implementation/not-a-package.json')
-  .expectJSON({ name: 'implementation', value: 'package or version not found' })
+  .expectBadge({
+    label: 'implementation',
+    message: 'package or version not found',
+  })
 
 // tests for status endpoint
 
 t.create('status (valid, stable, package version in request)')
   .get('/status/django/1.11.json')
-  .expectJSON({ name: 'status', value: 'stable' })
+  .expectBadge({ label: 'status', message: 'stable' })
 
 t.create('status (valid, no package version specified)')
   .get('/status/typing.json')
-  .expectJSON({ name: 'status', value: 'stable' })
+  .expectBadge({ label: 'status', message: 'stable' })
 
 t.create('status (valid, beta)')
   .get('/status/django/2.0rc1.json')
-  .expectJSON({ name: 'status', value: 'beta' })
+  .expectBadge({ label: 'status', message: 'beta' })
 
 t.create('status (invalid)')
   .get('/status/not-a-package.json')
-  .expectJSON({ name: 'status', value: 'package or version not found' })
+  .expectBadge({ label: 'status', message: 'package or version not found' })

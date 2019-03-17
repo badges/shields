@@ -2,19 +2,22 @@
 
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
-
-const rowSchema = Joi.object().keys({ su: Joi.boolean() })
+const {
+  queryParamSchema,
+  exampleQueryParams,
+  renderWebsiteStatus,
+} = require('../website-status')
 
 const schema = Joi.array()
-  .items(rowSchema)
+  .items(Joi.object().keys({ su: Joi.boolean() }))
   .min(1)
 
 /*
  * this is the checkUuid for the NodePing.com (as used on the [example page](https://nodeping.com/reporting.html#results))
  */
-const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
+const exampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 
-class NodePingStatus extends BaseJsonService {
+module.exports = class NodePingStatus extends BaseJsonService {
   static get category() {
     return 'monitoring'
   }
@@ -29,7 +32,7 @@ class NodePingStatus extends BaseJsonService {
     return {
       base: 'nodeping/status',
       pattern: ':checkUuid',
-      queryParams: ['up_message', 'down_message', 'up_color', 'down_color'],
+      queryParamSchema,
     }
   }
 
@@ -38,26 +41,10 @@ class NodePingStatus extends BaseJsonService {
       {
         title: 'NodePing status',
         namedParams: {
-          checkUuid: sampleCheckUuid,
+          checkUuid: exampleCheckUuid,
         },
-        staticPreview: this.render({ status: true }),
-      },
-      {
-        title: 'NodePing status (customized)',
-        namedParams: {
-          checkUuid: sampleCheckUuid,
-        },
-        queryParams: {
-          up_message: 'Online',
-          up_color: 'blue',
-          down_message: 'Offline',
-          down_color: 'lightgrey',
-        },
-        staticPreview: this.render({
-          status: true,
-          upMessage: 'Online',
-          upColor: 'blue',
-        }),
+        queryParams: exampleQueryParams,
+        staticPreview: renderWebsiteStatus({ isUp: true }),
       },
     ]
   }
@@ -73,7 +60,7 @@ class NodePingStatus extends BaseJsonService {
         },
       },
     })
-    return { status: rows[0].su }
+    return { isUp: rows[0].su }
   }
 
   async handle(
@@ -85,21 +72,13 @@ class NodePingStatus extends BaseJsonService {
       down_color: downColor,
     }
   ) {
-    const { status } = await this.fetch({ checkUuid })
-    return this.constructor.render({
-      status,
+    const { isUp } = await this.fetch({ checkUuid })
+    return renderWebsiteStatus({
+      isUp,
       upMessage,
       downMessage,
       upColor,
       downColor,
     })
   }
-
-  static render({ status, upMessage, downMessage, upColor, downColor }) {
-    return status
-      ? { message: upMessage || 'up', color: upColor || 'brightgreen' }
-      : { message: downMessage || 'down', color: downColor || 'red' }
-  }
 }
-
-module.exports = NodePingStatus

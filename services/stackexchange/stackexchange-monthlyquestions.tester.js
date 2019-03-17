@@ -1,24 +1,18 @@
 'use strict'
 
-const Joi = require('joi')
 const { isMetricOverTimePeriod } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Monthly Questions for StackOverflow Momentjs')
   .get('/stackoverflow/qm/momentjs.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'stackoverflow momentjs questions',
-      value: isMetricOverTimePeriod,
-    })
-  )
+  .expectBadge({
+    label: 'stackoverflow momentjs questions',
+    message: isMetricOverTimePeriod,
+  })
 
 t.create('Monthly Questions for Tex Spacing')
   .get('/tex/qm/spacing.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tex spacing questions',
-      value: isMetricOverTimePeriod,
-    })
-  )
+  .expectBadge({
+    label: 'tex spacing questions',
+    message: isMetricOverTimePeriod,
+  })

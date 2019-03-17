@@ -1,10 +1,10 @@
 'use strict'
 
-const BaseService = require('./base')
 const emojic = require('emojic')
+const yaml = require('js-yaml')
+const BaseService = require('./base')
 const { InvalidResponse } = require('./errors')
 const trace = require('./trace')
-const yaml = require('js-yaml')
 
 class BaseYamlService extends BaseService {
   async _requestYaml({

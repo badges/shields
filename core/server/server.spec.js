@@ -1,15 +1,14 @@
 'use strict'
 
+const fs = require('fs')
+const path = require('path')
 const { expect } = require('chai')
 const fetch = require('node-fetch')
 const got = require('got')
-const fs = require('fs')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
-const path = require('path')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
-const Joi = require('joi')
 const svg2img = require('../../gh-badges/lib/svg-to-img')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
@@ -124,35 +123,6 @@ describe('The server', function() {
       // This emits status code 200, though 500 would be preferable.
       expect(res.status).to.equal(200)
       expect(await res.text()).to.include(expectedError)
-    })
-  })
-
-  describe('analytics endpoint', function() {
-    it('should return analytics in the expected format', async function() {
-      const countSchema = Joi.array()
-        .items(
-          Joi.number()
-            .integer()
-            .min(0)
-            .required()
-        )
-        .length(36)
-        .required()
-      const analyticsSchema = Joi.object({
-        vendorMonthly: countSchema,
-        rawMonthly: countSchema,
-        vendorFlatMonthly: countSchema,
-        rawFlatMonthly: countSchema,
-        vendorFlatSquareMonthly: countSchema,
-        rawFlatSquareMonthly: countSchema,
-      }).required()
-
-      const res = await fetch(`${baseUrl}$analytics/v1`)
-      expect(res.ok).to.be.true
-
-      const json = await res.json()
-
-      Joi.assert(json, analyticsSchema)
     })
   })
 })

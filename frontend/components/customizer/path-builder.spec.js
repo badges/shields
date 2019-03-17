@@ -1,6 +1,6 @@
-import PathBuilder from './path-builder'
 import { test, given } from 'sazerac'
 import pathToRegexp from 'path-to-regexp'
+import PathBuilder from './path-builder'
 
 describe('<PathBuilder />', function() {
   const tokens = pathToRegexp.parse('github/license/:user/:repo')

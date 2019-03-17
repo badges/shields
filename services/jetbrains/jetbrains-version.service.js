@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderVersionBadge } = require('../version')
 const JetbrainsBase = require('./jetbrains-base')
-const { renderVersionBadge } = require('../../lib/version')
 
 const schema = Joi.object({
   'plugin-repository': Joi.object({
@@ -20,7 +20,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JetbrainsDownloads extends JetbrainsBase {
+module.exports = class JetbrainsVersion extends JetbrainsBase {
   static get category() {
     return 'version'
   }
@@ -33,7 +33,6 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     return [
       {
         title: 'JetBrains IntelliJ Plugins',
-        pattern: ':pluginId',
         namedParams: {
           pluginId: '9630-a8translate',
         },
@@ -43,7 +42,10 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
   }
 
   static get route() {
-    return this.buildUrl('jetbrains/plugin/v')
+    return {
+      base: 'jetbrains/plugin/v',
+      pattern: ':pluginId',
+    }
   }
 
   static render({ version }) {

@@ -1,13 +1,21 @@
 'use strict'
 
-const Joi = require('joi')
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
+const { isMetricOverTimePeriod } = require('../test-validators')
+const t = (module.exports = new ServiceTester({
+  id: 'AmoDownloads',
+  title: 'AmoDownloads',
+  pathPrefix: '/amo',
+}))
 
-t.create('Downloads')
-  .get('/IndieGala-Helper.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
+t.create('Weekly Downloads')
+  .get('/dw/dustman.json')
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
-t.create('Downloads (not found)')
-  .get('/not-a-real-plugin.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+t.create('Weekly Downloads (not found)')
+  .get('/dw/not-a-real-plugin.json')
+  .expectBadge({ label: 'downloads', message: 'not found' })
+
+t.create('/d URL should redirect to /dw')
+  .get('/d/dustman.json')
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })

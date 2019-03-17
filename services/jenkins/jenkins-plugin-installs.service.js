@@ -1,11 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
-const { metric } = require('../../lib/text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { metric } = require('../text-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 

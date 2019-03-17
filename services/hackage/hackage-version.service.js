@@ -1,7 +1,7 @@
 'use strict'
 
 const { BaseService, InvalidResponse } = require('..')
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 
 module.exports = class HackageVersion extends BaseService {
   static get category() {

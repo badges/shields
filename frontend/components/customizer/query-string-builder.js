@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import humanizeString from 'humanize-string'
 import { stringify as stringifyQueryString } from 'query-string'
 import { advertisedStyles } from '../../../supported-features.json'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
@@ -24,9 +25,9 @@ const QueryParamCaption = styled(BuilderCaption)`
 `
 
 const supportedBadgeOptions = [
-  { name: 'style' },
+  { name: 'style', shieldsDefaultValue: 'flat' },
   { name: 'label', label: 'override label' },
-  { name: 'colorB', label: 'override color' },
+  { name: 'color', label: 'override color' },
   { name: 'logo', label: 'named logo' },
   { name: 'logoColor', label: 'override logo color' },
 ]
@@ -35,22 +36,39 @@ function getBadgeOption(name) {
   return supportedBadgeOptions.find(opt => opt.name === name)
 }
 
+// The UI for building the query string, which includes two kinds of settings:
+// 1. Custom query params defined by the service, stored in
+//    `this.state.queryParams`
+// 2. The standard badge options which apply to all badges, stored in
+//    `this.state.badgeOptions`
 export default class QueryStringBuilder extends React.Component {
   constructor(props) {
     super(props)
 
-    const { exampleParams, defaultStyle } = props
+    const { exampleParams, initialStyle } = props
 
+    // Create empty values in `this.state.queryParams` for each of the custom
+    // query params defined in `this.props.exampleParams`.
     const queryParams = {}
     Object.entries(exampleParams).forEach(([name, value]) => {
+      // Custom query params are either string or boolean. Inspect the example
+      // value to infer which one, and set empty values accordingly.
+      // Throughout the component, these two types are supported in the same
+      // manner: by inspecting this value type.
       const isStringParam = typeof value === 'string'
       queryParams[name] = isStringParam ? '' : true
     })
 
+    // Create empty values in `this.state.badgeOptions` for each of the
+    // standard badge options. When `this.props.initialStyle` has been
+    // provided, use that as the initial style.
     const badgeOptions = {}
-    const defaults = { style: defaultStyle }
     supportedBadgeOptions.forEach(({ name }) => {
-      badgeOptions[name] = defaults[name] || ''
+      if (name === 'style') {
+        badgeOptions[name] = initialStyle
+      } else {
+        badgeOptions[name] = ''
+      }
     })
 
     this.state = { queryParams, badgeOptions }
@@ -61,17 +79,20 @@ export default class QueryStringBuilder extends React.Component {
     let isComplete = true
 
     Object.entries(queryParams).forEach(([name, value]) => {
+      // As above, there are two types of supported params: strings and
+      // booleans.
       const isStringParam = typeof value === 'string'
       if (isStringParam) {
         if (value) {
           outQuery[name] = value
         } else {
-          // Omit empty string params.
+          // Skip empty params.
           isComplete = false
         }
       } else {
-        // Translate `true` to `null`, which provides an empty query param
-        // like `?compact_message`. Omit `false`. Omit default values.
+        // Generate empty query params for boolean parameters by translating
+        // `{ compact_message: true }` to `?compact_message`. When values are
+        // false, skip the param.
         if (value) {
           outQuery[name] = null
         }
@@ -79,8 +100,8 @@ export default class QueryStringBuilder extends React.Component {
     })
 
     Object.entries(badgeOptions).forEach(([name, value]) => {
-      const { defaultValue } = getBadgeOption(name)
-      if (value && value !== defaultValue) {
+      const { shieldsDefaultValue } = getBadgeOption(name)
+      if (value && value !== shieldsDefaultValue) {
         outQuery[name] = value
       }
     })
@@ -154,18 +175,18 @@ export default class QueryStringBuilder extends React.Component {
         <td>
           {isStringParam ? (
             <QueryParamInput
-              type="text"
-              name={name}
               checked={value}
+              name={name}
               onChange={this.handleServiceQueryParamChange}
+              type="text"
               {...noAutocorrect}
             />
           ) : (
             <input
-              type="checkbox"
-              name={name}
               checked={value}
+              name={name}
               onChange={this.handleServiceQueryParamChange}
+              type="checkbox"
             />
           )}
         </td>
@@ -178,8 +199,8 @@ export default class QueryStringBuilder extends React.Component {
       return (
         <select
           name="style"
-          value={value}
           onChange={this.handleBadgeOptionChange}
+          value={value}
         >
           {advertisedStyles.map(style => (
             <option key={style} value={style}>
@@ -191,10 +212,10 @@ export default class QueryStringBuilder extends React.Component {
     } else {
       return (
         <QueryParamInput
-          type="text"
-          name={name}
           checked={value}
+          name={name}
           onChange={this.handleBadgeOptionChange}
+          type="text"
           {...noAutocorrect}
         />
       )
@@ -204,7 +225,7 @@ export default class QueryStringBuilder extends React.Component {
   renderBadgeOption(name, value) {
     const {
       label = humanizeString(name),
-      defaultValue: hasDefaultValue,
+      shieldsDefaultValue: hasShieldsDefaultValue,
     } = getBadgeOption(name)
     return (
       <tr key={name}>
@@ -212,7 +233,9 @@ export default class QueryStringBuilder extends React.Component {
           <QueryParamLabel htmlFor={name}>{label}</QueryParamLabel>
         </td>
         <td>
-          {!hasDefaultValue && <QueryParamCaption>optional</QueryParamCaption>}
+          {!hasShieldsDefaultValue && (
+            <QueryParamCaption>optional</QueryParamCaption>
+          )}
         </td>
         <td>{this.renderBadgeOptionInput(name, value)}</td>
       </tr>
@@ -258,10 +281,10 @@ export default class QueryStringBuilder extends React.Component {
   }
 }
 QueryStringBuilder.propTypes = {
-  exampleParams: PropTypes.object.isRequired,
-  defaultStyle: PropTypes.string,
+  exampleParams: objectOfKeyValuesPropType,
+  initialStyle: PropTypes.string,
   onChange: PropTypes.func,
 }
 QueryStringBuilder.defaultProps = {
-  defaultStyle: 'flat',
+  initialStyle: 'flat',
 }

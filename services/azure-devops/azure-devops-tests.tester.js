@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const org = 'azuredevops-powershell'
 const project = 'azuredevops-powershell'
@@ -113,11 +114,9 @@ const isCompactCustomAzureDevOpsTestTotals = isAzureDevOpsTestTotals(
   true
 )
 
-const t = (module.exports = require('../tester').createServiceTester())
-
 t.create('unknown build definition')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
-  .expectJSON({ name: 'tests', value: 'build pipeline not found' })
+  .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('404 latest build error response')
   .get(mockBadgeUri)
@@ -126,9 +125,9 @@ t.create('404 latest build error response')
       .get(mockLatestBuildApiUriPath)
       .reply(404)
   )
-  .expectJSON({
-    name: 'tests',
-    value: 'build pipeline or test result summary not found',
+  .expectBadge({
+    label: 'tests',
+    message: 'build pipeline or test result summary not found',
   })
 
 t.create('no build response')
@@ -141,7 +140,7 @@ t.create('no build response')
         value: [],
       })
   )
-  .expectJSON({ name: 'tests', value: 'build pipeline not found' })
+  .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('no test result summary response')
   .get(mockBadgeUri)
@@ -152,9 +151,9 @@ t.create('no test result summary response')
       .get(mockTestResultSummaryApiUriPath)
       .reply(404)
   )
-  .expectJSON({
-    name: 'tests',
-    value: 'build pipeline or test result summary not found',
+  .expectBadge({
+    label: 'tests',
+    message: 'build pipeline or test result summary not found',
   })
 
 t.create('invalid test result summary response')
@@ -166,7 +165,7 @@ t.create('invalid test result summary response')
       .get(mockTestResultSummaryApiUriPath)
       .reply(200, {})
   )
-  .expectJSON({ name: 'tests', value: 'invalid response data' })
+  .expectBadge({ label: 'tests', message: 'invalid response data' })
 
 t.create('no tests in test result summary response')
   .get(mockBadgeUri)
@@ -177,27 +176,23 @@ t.create('no tests in test result summary response')
       .get(mockTestResultSummaryApiUriPath)
       .reply(200, mockEmptyTestResultSummaryResponse)
   )
-  .expectJSON({ name: 'tests', value: 'no tests' })
+  .expectBadge({ label: 'tests', message: 'no tests' })
 
 t.create('test status')
   .get(mockBadgeUri)
   .intercept(mockTestResultSummarySetup)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: expectedDefaultAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: expectedDefaultAzureDevOpsTestTotals,
+  })
 
 t.create('test status on branch')
   .get(mockBranchBadgeUri)
   .intercept(mockBranchTestResultSummarySetup)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: expectedDefaultAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: expectedDefaultAzureDevOpsTestTotals,
+  })
 
 t.create('test status with compact message')
   .get(mockBadgeUri, {
@@ -206,12 +201,10 @@ t.create('test status with compact message')
     },
   })
   .intercept(mockTestResultSummarySetup)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: expectedCompactAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: expectedCompactAzureDevOpsTestTotals,
+  })
 
 t.create('test status with custom labels')
   .get(mockBadgeUri, {
@@ -222,12 +215,10 @@ t.create('test status with custom labels')
     },
   })
   .intercept(mockTestResultSummarySetup)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: expectedCustomAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: expectedCustomAzureDevOpsTestTotals,
+  })
 
 t.create('test status with compact message and custom labels')
   .get(mockBadgeUri, {
@@ -239,24 +230,18 @@ t.create('test status with compact message and custom labels')
     },
   })
   .intercept(mockTestResultSummarySetup)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: expectedCompactCustomAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: expectedCompactCustomAzureDevOpsTestTotals,
+  })
 
 t.create('live test status')
   .get(mockBadgeUri)
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
-  )
+  .expectBadge({ label: 'tests', message: isDefaultAzureDevOpsTestTotals })
 
 t.create('live test status on branch')
   .get(mockBranchBadgeUri)
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isDefaultAzureDevOpsTestTotals })
-  )
+  .expectBadge({ label: 'tests', message: isDefaultAzureDevOpsTestTotals })
 
 t.create('live test status with compact message')
   .get(mockBadgeUri, {
@@ -264,9 +249,7 @@ t.create('live test status with compact message')
       compact_message: null,
     },
   })
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isCompactAzureDevOpsTestTotals })
-  )
+  .expectBadge({ label: 'tests', message: isCompactAzureDevOpsTestTotals })
 
 t.create('live test status with custom labels')
   .get(mockBadgeUri, {
@@ -276,9 +259,7 @@ t.create('live test status with custom labels')
       skipped_label: 'n/a',
     },
   })
-  .expectJSONTypes(
-    Joi.object().keys({ name: 'tests', value: isCustomAzureDevOpsTestTotals })
-  )
+  .expectBadge({ label: 'tests', message: isCustomAzureDevOpsTestTotals })
 
 t.create('live test status with compact message and custom labels')
   .get(mockBadgeUri, {
@@ -289,9 +270,7 @@ t.create('live test status with compact message and custom labels')
       skipped_label: '🤷',
     },
   })
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'tests',
-      value: isCompactCustomAzureDevOpsTestTotals,
-    })
-  )
+  .expectBadge({
+    label: 'tests',
+    message: isCompactCustomAzureDevOpsTestTotals,
+  })

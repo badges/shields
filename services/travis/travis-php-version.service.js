@@ -7,7 +7,7 @@ const {
   minorVersion: phpMinorVersion,
   versionReduction: phpVersionReduction,
   getPhpReleases,
-} = require('../../lib/php-version')
+} = require('../php-version')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

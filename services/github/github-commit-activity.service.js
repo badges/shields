@@ -1,21 +1,20 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const { metric } = require('../../lib/text-formatters')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const Joi = require('joi')
+const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
+const { GithubAuthService } = require('./github-auth-service')
+const { errorMessagesFor, documentation } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubCommitActivity extends LegacyService {
+const schema = Joi.array()
+  .items(
+    Joi.object({
+      total: nonNegativeInteger,
+    })
+  )
+  .required()
+
+module.exports = class GithubCommitActivity extends GithubAuthService {
   static get category() {
     return 'activity'
   }
@@ -23,117 +22,85 @@ module.exports = class GithubCommitActivity extends LegacyService {
   static get route() {
     return {
       base: 'github/commit-activity',
-      pattern: ':interval(y|4w|w)/:user/:repo',
+      pattern: ':interval(y|m|4w|w)/:user/:repo',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'GitHub commit activity the past year',
-        pattern: 'y/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
-        staticPreview: {
-          label: 'commit activity',
-          message: '457/year',
-          color: 'blue',
-        },
-        keywords: ['commits'],
-        documentation,
-      },
-      {
-        title: 'GitHub commit activity the past month',
-        pattern: 'm/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
-        staticPreview: {
-          label: 'commit activity',
-          message: '38/month',
-          color: 'blue',
-        },
-        keywords: ['commits'],
-        documentation,
-      },
-      {
-        title: 'GitHub commit activity the past week',
-        pattern: 'w/:user/:repo',
-        namedParams: { user: 'eslint', repo: 'eslint' },
-        staticPreview: {
-          label: 'commit activity',
-          message: '9/week',
-          color: 'blue',
-        },
+        title: 'GitHub commit activity',
+        // Override the pattern to omit the deprecated interval "4w".
+        pattern: ':interval(y|m|w)/:user/:repo',
+        namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
+        staticPreview: this.render({ interval: 'm', commitCount: 457 }),
         keywords: ['commits'],
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/commit-activity\/(y|m|4w|w)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const interval = match[1]
-        const user = match[2]
-        const repo = match[3]
-        const format = match[4]
-        const apiUrl = `/repos/${user}/${repo}/stats/commit_activity`
-        const badgeData = getBadgeData('commit activity', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-          badgeData.links = [`https://github.com/${user}/${repo}`]
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedData = JSON.parse(buffer)
-            let value
-            let intervalLabel
-            switch (interval) {
-              case 'y':
-                value = parsedData.reduce(
-                  (sum, weekInfo) => sum + weekInfo.total,
-                  0
-                )
-                intervalLabel = '/year'
-                break
-              case 'm':
-                // To approximate the value for the past month, get the sum for the last
-                // four weeks and add a weighted value for the fifth week.
-                const fourWeeksValue = parsedData
-                  .slice(-4)
-                  .reduce((sum, weekInfo) => sum + weekInfo.total, 0)
-                const fifthWeekValue = parsedData.slice(-5)[0].total
-                const averageWeeksPerMonth = 365 / 12 / 7
-                value =
-                  fourWeeksValue +
-                  Math.round((averageWeeksPerMonth - 4) * fifthWeekValue)
-                intervalLabel = '/month'
-                break
-              case '4w':
-                value = parsedData
-                  .slice(-4)
-                  .reduce((sum, weekInfo) => sum + weekInfo.total, 0)
-                intervalLabel = '/four weeks'
-                break
-              case 'w':
-                value = parsedData.slice(-2)[0].total
-                intervalLabel = '/week'
-                break
-              default:
-                throw Error('Unhandled case')
-            }
-            badgeData.text[1] = `${metric(value)}${intervalLabel}`
-            badgeData.colorscheme = 'blue'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static get defaultBadgeData() {
+    return {
+      label: 'commit activity',
+      color: 'blue',
+    }
+  }
+
+  static render({ interval, commitCount }) {
+    const intervalLabel = {
+      y: '/year',
+      m: '/month',
+      '4w': '/four weeks',
+      w: '/week',
+    }[interval]
+
+    return {
+      message: `${metric(commitCount)}${intervalLabel}`,
+    }
+  }
+
+  static transform({ interval, weekData }) {
+    const weekTotals = weekData.map(({ total }) => total)
+
+    if (interval === 'm') {
+      // To approximate the value for the past month, get the sum for the last
+      // four weeks and add a weighted value for the fifth week.
+      const fourWeeksValue = weekTotals
+        .slice(-4)
+        .reduce((sum, weekTotal) => sum + weekTotal, 0)
+      const fifthWeekValue = weekTotals.slice(-5)[0]
+      const averageWeeksPerMonth = 365 / 12 / 7
+      return (
+        fourWeeksValue + Math.round((averageWeeksPerMonth - 4) * fifthWeekValue)
+      )
+    }
+
+    let wantedWeekData
+    switch (interval) {
+      case 'y':
+        wantedWeekData = weekTotals
+        break
+      case '4w':
+        wantedWeekData = weekTotals.slice(-4)
+        break
+      case 'w':
+        wantedWeekData = weekTotals.slice(-2, -1)
+        break
+      default:
+        throw Error('Unhandled case')
+    }
+
+    return wantedWeekData.reduce((sum, weekTotal) => sum + weekTotal, 0)
+  }
+
+  async handle({ interval, user, repo }) {
+    const weekData = await this._requestJson({
+      url: `/repos/${user}/${repo}/stats/commit_activity`,
+      schema,
+      errorMessages: errorMessagesFor(),
+    })
+    const commitCount = this.constructor.transform({ interval, weekData })
+    return this.constructor.render({ interval, commitCount })
   }
 }

@@ -1,7 +1,7 @@
 'use strict'
 
-const { renderVersionBadge, odataToObject } = require('./nuget-helpers')
 const { test, given } = require('sazerac')
+const { renderVersionBadge, odataToObject } = require('./nuget-helpers')
 
 describe('NuGet helpers', function() {
   test(renderVersionBadge, () => {

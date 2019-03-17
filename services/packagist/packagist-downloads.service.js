@@ -52,9 +52,10 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   static get examples() {
     return [
       {
-        title: 'Packagist Monthly Downloads',
+        title: 'Packagist',
         pattern: 'dm/:user/:repo',
         namedParams: {
+          interval: 'dm',
           user: 'doctrine',
           repo: 'orm',
         },

@@ -2,7 +2,6 @@
 
 const { renderVersionBadge } = require('../../lib/version')
 const { isStable: phpStableVersion } = require('../../lib/php-version')
-
 const {
   allVersionsSchema,
   keywords,

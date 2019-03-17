@@ -3,14 +3,6 @@
 const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 
-function createRoute(which) {
-  return {
-    base: `badge/dynamic/${which}`,
-    pattern: '',
-    queryParams: ['uri', 'url', 'query', 'prefix', 'suffix'],
-  }
-}
-
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
   query: Joi.string().required(),
@@ -20,7 +12,14 @@ const queryParamSchema = Joi.object({
   .rename('uri', 'url', { ignoreUndefined: true, override: true })
   .required()
 
+function createRoute(which) {
+  return {
+    base: `badge/dynamic/${which}`,
+    pattern: '',
+    queryParamSchema,
+  }
+}
+
 module.exports = {
   createRoute,
-  queryParamSchema,
 }

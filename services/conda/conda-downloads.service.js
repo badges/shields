@@ -1,8 +1,8 @@
 'use strict'
 
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const BaseCondaService = require('./conda-base')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
 
 module.exports = class CondaDownloads extends BaseCondaService {
   static get category() {

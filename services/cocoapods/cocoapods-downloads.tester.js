@@ -10,16 +10,16 @@ const t = (module.exports = new ServiceTester({
 
 t.create('downloads (valid, monthly)')
   .get('/dm/AFNetworking.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectBadge({ label: 'downloads', message: 'no longer available' })
 
 t.create('downloads (valid, weekly)')
   .get('/dw/AFNetworking.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectBadge({ label: 'downloads', message: 'no longer available' })
 
 t.create('downloads (valid, total)')
   .get('/dt/AFNetworking.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectBadge({ label: 'downloads', message: 'no longer available' })
 
 t.create('downloads (not found)')
   .get('/dt/not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'no longer available' })
+  .expectBadge({ label: 'downloads', message: 'no longer available' })

@@ -3,7 +3,7 @@
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 

@@ -8,7 +8,10 @@ class GoodService extends BaseJsonService {
   }
 
   static get route() {
-    return { pattern: 'good' }
+    return {
+      base: 'it/is',
+      pattern: 'good',
+    }
   }
 }
 

@@ -1,34 +1,46 @@
 'use strict'
 
-const { renderTestResultBadge } = require('../../lib/text-formatters')
+const {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} = require('../test-results')
 const AppVeyorBase = require('./appveyor-base')
 
 const documentation = `
 <p>
   You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters <code>&passed_label=</code>, <code>&failed_label=</code> and <code>&skipped_label=</code> respectively.
-  <br>
-  There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
-  <br>
+</p>
+
+<p>
   For example, if you want to use a different terminology:
   <br>
   <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?passed_label=good&failed_label=bad&skipped_label=n%2Fa</code>
-  <br>
-  Or, use symbols:
+</p>
+
+<p>
+  Or symbols:
   <br>
   <code>/appveyor/tests/NZSmartie/coap-net-iu0to.svg?compact_message&passed_label=%F0%9F%8E%89&failed_label=%F0%9F%92%A2&skipped_label=%F0%9F%A4%B7</code>
 </p>
+
+<p>
+  There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
+</p>
 `
+
+const commonPreviewProps = {
+  passed: 477,
+  failed: 2,
+  skipped: 0,
+  total: 479,
+  isCompact: false,
+}
 
 module.exports = class AppVeyorTests extends AppVeyorBase {
   static get route() {
     return {
       ...this.buildRoute('appveyor/tests'),
-      queryParams: [
-        'compact_message',
-        'passed_label',
-        'failed_label',
-        'skipped_label',
-      ],
+      queryParamSchema: testResultQueryParamSchema,
     }
   }
 
@@ -47,26 +59,18 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
           user: 'NZSmartie',
           repo: 'coap-net-iu0to',
         },
-        staticPreview: {
-          label: 'tests',
-          message: '477 passed, 2 failed',
-          color: 'red',
-        },
+        staticPreview: this.render(commonPreviewProps),
         documentation,
       },
       {
-        title: 'AppVeyor tests branch',
+        title: 'AppVeyor tests (branch)',
         pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'NZSmartie',
           repo: 'coap-net-iu0to',
           branch: 'master',
         },
-        staticPreview: {
-          label: 'tests',
-          message: '477 passed, 2 failed',
-          color: 'red',
-        },
+        staticPreview: this.render(commonPreviewProps),
         documentation,
       },
       {
@@ -77,11 +81,10 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
           repo: 'coap-net-iu0to',
         },
         queryParams: { compact_message: null },
-        staticPreview: {
-          label: 'tests',
-          message: '✔ 477 | ✘ 2',
-          color: 'red',
-        },
+        staticPreview: this.render({
+          ...commonPreviewProps,
+          isCompact: true,
+        }),
         documentation,
       },
       {
@@ -96,11 +99,12 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
           failed_label: 'bad',
           skipped_label: 'n/a',
         },
-        staticPreview: {
-          label: 'tests',
-          message: '477 good, 2 bad',
-          color: 'red',
-        },
+        staticPreview: this.render({
+          ...commonPreviewProps,
+          passedLabel: 'good',
+          failedLabel: 'bad',
+          skippedLabel: 'n/a',
+        }),
         documentation,
       },
     ]

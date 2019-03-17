@@ -1,50 +1,45 @@
 'use strict'
 
-const Joi = require('joi')
-const { withRegex } = require('../test-validators')
-
+const { isMetricOverTimePeriod } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('(live) jquery hits/day')
+t.create('jquery hits/day')
+  .timeout(5000)
   .get('/hd/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(day)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery hits/week')
+t.create('jquery hits/week')
+  .timeout(5000)
   .get('/hw/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(week)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery hits/month')
+t.create('jquery hits/month')
+  .timeout(5000)
   .get('/hm/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(month)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery hits/year')
+t.create('jquery hits/year')
+  .timeout(5000)
   .get('/hy/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(year)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) fake package')
+t.create('fake package')
+  .timeout(5000)
   .get('/hd/somefakepackage.json')
-  .expectJSON({
-    name: 'jsdelivr',
+  .expectBadge({
+    label: 'jsdelivr',
     // Will return 0 hits/day as the endpoint can't send 404s at present.
-    value: '0 hits/day',
+    message: '0/day',
   })

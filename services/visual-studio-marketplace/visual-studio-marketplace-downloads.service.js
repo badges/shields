@@ -1,8 +1,8 @@
 'use strict'
 
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
 
 const documentation = `
 <p>

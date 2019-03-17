@@ -19,56 +19,48 @@ module.exports = t
 
 t.create('total downloads (valid)')
   .get('/dt/ACMESharp.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 t.create('version (valid)')
   .get('/v/ACMESharp.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'powershell gallery',
-      value: isVPlusDottedVersionNClauses,
-    })
-  )
+  .expectBadge({
+    label: 'powershell gallery',
+    message: isVPlusDottedVersionNClauses,
+  })
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')
-  .expectJSON({ name: 'powershell gallery', value: 'not found' })
+  .expectBadge({ label: 'powershell gallery', message: 'not found' })
 
 t.create('version (pre) (valid)')
   .get('/vpre/ACMESharp.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'powershell gallery',
-      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    })
-  )
+  .expectBadge({
+    label: 'powershell gallery',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
-  .expectJSON({ name: 'powershell gallery', value: 'not found' })
+  .expectBadge({ label: 'powershell gallery', message: 'not found' })
 
 t.create('platform (valid')
   .get('/p/DNS.1.1.1.1.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'platform',
-      value: isPlatform,
-    })
-  )
+  .expectBadge({
+    label: 'platform',
+    message: isPlatform,
+  })
 
 t.create('platform (no tags)')
   .get('/p/ACMESharp.json')
-  .expectJSON({ name: 'platform', value: 'not specified' })
+  .expectBadge({ label: 'platform', message: 'not specified' })
 
 t.create('platform (not found)')
   .get('/p/not-a-real-package.json')
-  .expectJSON({ name: 'platform', value: 'not found' })
+  .expectBadge({ label: 'platform', message: 'not found' })

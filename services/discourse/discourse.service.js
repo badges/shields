@@ -1,176 +1,119 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { metric } = require('../../lib/text-formatters')
+const camelcase = require('camelcase')
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
+const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Discourse extends LegacyService {
+const schema = Joi.object({
+  topic_count: nonNegativeInteger,
+  user_count: nonNegativeInteger,
+  post_count: nonNegativeInteger,
+  like_count: nonNegativeInteger,
+}).required()
+
+class DiscourseBase extends BaseJsonService {
   static get category() {
     return 'chat'
   }
 
-  static get route() {
+  static buildRoute(metric) {
     return {
       base: 'discourse',
-      pattern:
-        ':scheme(http|https)/:host/:which(topics|posts|users|likes|status)',
+      pattern: `:scheme(http|https)/:host/${metric}`,
     }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'discourse' }
+  }
+
+  async fetch({ scheme, host }) {
+    return this._requestJson({
+      schema,
+      url: `${scheme}://${host}/site/statistics.json`,
+    })
+  }
+}
+
+function DiscourseMetricIntegrationFactory({ metricName, property }) {
+  return class DiscourseMetric extends DiscourseBase {
+    static get name() {
+      // The space is needed so we get 'DiscourseTopics' rather than
+      // 'Discoursetopics'. `camelcase()` removes it.
+      return camelcase(`Discourse ${metricName}`, { pascalCase: true })
+    }
+
+    static get route() {
+      return this.buildRoute(metricName)
+    }
+
+    static get examples() {
+      return [
+        {
+          title: `Discourse ${metricName}`,
+          namedParams: {
+            scheme: 'https',
+            host: 'meta.discourse.org',
+          },
+          staticPreview: this.render({ stat: 100 }),
+        },
+      ]
+    }
+
+    static render({ stat }) {
+      return {
+        message: `${metric(stat)} ${metricName}`,
+        color: 'brightgreen',
+      }
+    }
+
+    async handle({ scheme, host }) {
+      const data = await this.fetch({ scheme, host })
+      return this.constructor.render({ stat: data[property] })
+    }
+  }
+}
+
+class DiscourseStatus extends DiscourseBase {
+  static get route() {
+    return this.buildRoute('status')
   }
 
   static get examples() {
     return [
       {
-        title: 'Discourse topics',
-        pattern: ':scheme(http|https)/:host/topics',
+        title: `Discourse status`,
         namedParams: {
           scheme: 'https',
           host: 'meta.discourse.org',
         },
-        staticPreview: {
-          label: 'discourse',
-          message: '27k topics',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'Discourse posts',
-        pattern: ':scheme(http|https)/:host/posts',
-        namedParams: {
-          scheme: 'https',
-          host: 'meta.discourse.org',
-        },
-        staticPreview: {
-          label: 'discourse',
-          message: '490k posts',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'Discourse users',
-        pattern: ':scheme(http|https)/:host/users',
-        namedParams: {
-          scheme: 'https',
-          host: 'meta.discourse.org',
-        },
-        staticPreview: {
-          label: 'discourse',
-          message: '42k users',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'Discourse likes',
-        pattern: ':scheme(http|https)/:host/likes',
-        namedParams: {
-          scheme: 'https',
-          host: 'meta.discourse.org',
-        },
-        staticPreview: {
-          label: 'discourse',
-          message: '499k likes',
-          color: 'brightgreen',
-        },
-      },
-      {
-        title: 'Discourse status',
-        pattern: ':scheme(http|https)/:host/status',
-        namedParams: {
-          scheme: 'https',
-          host: 'meta.discourse.org',
-        },
-        staticPreview: {
-          label: 'discourse',
-          message: 'online',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render(),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/discourse\/(http(?:s)?)\/(.*)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const scheme = match[1] // eg, https
-        const host = match[2] // eg, meta.discourse.org
-        const stat = match[3] // eg, user_count
-        const format = match[4]
-        const url = `${scheme}://${host}/site/statistics.json`
+  static render() {
+    return {
+      message: 'online',
+      color: 'brightgreen',
+    }
+  }
 
-        const options = {
-          method: 'GET',
-          uri: url,
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-
-        const badgeData = getBadgeData('discourse', data)
-        request(options, (err, res) => {
-          if (err != null) {
-            if (res) {
-              console.error(`${res}`)
-            }
-
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
-
-          if (res.statusCode !== 200) {
-            badgeData.text[1] = 'inaccessible'
-            badgeData.colorscheme = 'red'
-            sendBadge(format, badgeData)
-            return
-          }
-
-          badgeData.colorscheme = 'brightgreen'
-
-          try {
-            const data = JSON.parse(res['body'])
-            let statCount
-
-            switch (stat) {
-              case 'topics':
-                statCount = data.topic_count
-                badgeData.text[1] = `${metric(statCount)} topics`
-                break
-              case 'posts':
-                statCount = data.post_count
-                badgeData.text[1] = `${metric(statCount)} posts`
-                break
-              case 'users':
-                statCount = data.user_count
-                badgeData.text[1] = `${metric(statCount)} users`
-                break
-              case 'likes':
-                statCount = data.like_count
-                badgeData.text[1] = `${metric(statCount)} likes`
-                break
-              case 'status':
-                badgeData.text[1] = 'online'
-                break
-              default:
-                badgeData.text[1] = 'invalid'
-                badgeData.colorscheme = 'yellow'
-                break
-            }
-
-            sendBadge(format, badgeData)
-          } catch (e) {
-            console.error(`${e.stack}`)
-            badgeData.colorscheme = 'yellow'
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ scheme, host }) {
+    await this.fetch({ scheme, host })
+    // if fetch() worked, the server is up
+    // if it failed, we'll show an error e.g: 'inaccessible'
+    return this.constructor.render()
   }
 }
+
+const metricIntegrations = [
+  { metricName: 'topics', property: 'topic_count' },
+  { metricName: 'users', property: 'user_count' },
+  { metricName: 'posts', property: 'post_count' },
+  { metricName: 'likes', property: 'like_count' },
+].map(DiscourseMetricIntegrationFactory)
+
+module.exports = [...metricIntegrations, DiscourseStatus]

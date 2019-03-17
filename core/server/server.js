@@ -1,9 +1,9 @@
 'use strict'
 
 const fs = require('fs')
-const bytes = require('bytes')
 const path = require('path')
 const url = require('url')
+const bytes = require('bytes')
 const Joi = require('joi')
 const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
@@ -16,9 +16,8 @@ const {
   handleRequest,
   clearRequestCache,
 } = require('../base-service/legacy-request-handler')
-const { clearRegularUpdateCache } = require('../../lib/regular-update')
+const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
-const analytics = require('./analytics')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -46,9 +45,6 @@ const publicConfigSchema = Joi.object({
   metrics: {
     prometheus: {
       enabled: Joi.boolean().required(),
-      allowedIps: Joi.array()
-        .items(Joi.string().ip())
-        .required(),
     },
   },
   ssl: {
@@ -138,7 +134,9 @@ module.exports = class Server {
       persistence: publicConfig.persistence,
       service: publicConfig.services.github,
     })
-    this.metrics = new PrometheusMetrics(publicConfig.metrics.prometheus)
+    if (publicConfig.metrics.prometheus.enabled) {
+      this.metrics = new PrometheusMetrics()
+    }
   }
 
   get port() {
@@ -185,10 +183,11 @@ module.exports = class Server {
   registerServices() {
     const { config, camp } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
+    const { requestCounter } = this.metrics || {}
 
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider },
+        { camp, handleRequest, githubApiProvider, requestCounter },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
@@ -252,15 +251,13 @@ module.exports = class Server {
       key,
     }))
 
-    analytics.load()
-    analytics.scheduleAutosaving()
-    analytics.setRoutes(camp)
-
     this.cleanupMonitor = sysMonitor.setRoutes({ rateLimit }, camp)
 
     const { githubConstellation, metrics } = this
     githubConstellation.initialize(camp)
-    metrics.initialize(camp)
+    if (metrics) {
+      metrics.initialize(camp)
+    }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
@@ -299,6 +296,8 @@ module.exports = class Server {
       this.githubConstellation = undefined
     }
 
-    analytics.cancelAutosaving()
+    if (this.metrics) {
+      this.metrics.stop()
+    }
   }
 }

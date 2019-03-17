@@ -5,7 +5,7 @@ const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { checkErrorResponse } = require('../../lib/error-helper')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class ScrutinizerBuild extends LegacyService {
   static get category() {

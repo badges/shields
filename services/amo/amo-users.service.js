@@ -1,6 +1,6 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoUsers extends BaseAmoService {
@@ -41,6 +41,6 @@ module.exports = class AmoUsers extends BaseAmoService {
 
   async handle({ addonId }) {
     const data = await this.fetch({ addonId })
-    return this.constructor.render({ users: data.addon.daily_users })
+    return this.constructor.render({ users: data.average_daily_users })
   }
 }

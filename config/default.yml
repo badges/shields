@@ -5,7 +5,6 @@ public:
   metrics:
     prometheus:
       enabled: false
-      allowedIps: []
 
   ssl:
     isSecure: false

@@ -3,14 +3,13 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const { isSemver } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
   .get('.json?query=//name&label=Package Name&style=_shields_test')
-  .expectJSON({
-    name: 'Package Name',
-    value: 'invalid query parameter: url',
+  .expectBadge({
+    label: 'Package Name',
+    message: 'invalid query parameter: url',
     color: 'red',
   })
 
@@ -18,9 +17,9 @@ t.create('No query specified')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&label=Package Name&style=_shields_test'
   )
-  .expectJSON({
-    name: 'Package Name',
-    value: 'invalid query parameter: query',
+  .expectBadge({
+    label: 'Package Name',
+    message: 'invalid query parameter: query',
     color: 'red',
   })
 
@@ -28,9 +27,9 @@ t.create('XML from url')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'IndieGala Helper',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'IndieGala Helper',
     color: 'blue',
   })
 
@@ -38,9 +37,9 @@ t.create('XML from uri (support uri query parameter)')
   .get(
     '.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'IndieGala Helper',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'IndieGala Helper',
     color: 'blue',
   })
 
@@ -48,55 +47,47 @@ t.create('XML from url (attribute)')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/reviews/@num'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'custom badge',
-      value: Joi.string().regex(/^\d+$/),
-    })
-  )
+  .expectBadge({
+    label: 'custom badge',
+    message: Joi.string().regex(/^\d+$/),
+  })
 
 t.create('XML from url | multiple results')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/compatible_applications/application/name'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'custom badge',
-      value: Joi.string().regex(
-        /^Firefox( for Android)?,\sFirefox( for Android)?$/
-      ),
-    })
-  )
+  .expectBadge({
+    label: 'custom badge',
+    message: Joi.string().regex(
+      /^Firefox( for Android)?,\sFirefox( for Android)?$/
+    ),
+  })
 
 t.create('XML from url | caching with new query params')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/version'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'custom badge',
-      value: isSemver,
-    })
-  )
+  .expectBadge({
+    label: 'custom badge',
+    message: isSemver,
+  })
 
 t.create('XML from url | with prefix & suffix & label')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=//version&prefix=v&suffix= dev&label=IndieGala Helper'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'IndieGala Helper',
-      value: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/),
-    })
-  )
+  .expectBadge({
+    label: 'IndieGala Helper',
+    message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/),
+  })
 
 t.create('XML from url | query doesnt exist')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/exist&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'no result',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'no result',
     color: 'lightgrey',
   })
 
@@ -104,9 +95,9 @@ t.create('XML from url | query doesnt exist (attribute)')
   .get(
     '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/@exist&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'no result',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'no result',
     color: 'lightgrey',
   })
 
@@ -114,19 +105,19 @@ t.create('XML from url | invalid url')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'resource not found',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'resource not found',
     color: 'red',
   })
 
 t.create('XML from url | user color overrides default')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&colorB=10ADED&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&color=10ADED&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'IndieGala Helper',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'IndieGala Helper',
     color: '#10aded',
   })
 
@@ -134,17 +125,17 @@ t.create('XML from url | error color overrides default')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'resource not found',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'resource not found',
     color: 'red',
   })
 
 t.create('XML from url | error color overrides user specified')
-  .get('.json?query=//version&colorB=10ADED&style=_shields_test')
-  .expectJSON({
-    name: 'custom badge',
-    value: 'invalid query parameter: url',
+  .get('.json?query=//version&color=10ADED&style=_shields_test')
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid query parameter: url',
     color: 'red',
   })
 
@@ -159,7 +150,7 @@ t.create('XML from url | request should set Accept header')
         return '<?xml version="1.0" encoding="utf-8" ?><name>dynamic xml</name>'
       })
   )
-  .expectJSON({ name: 'custom badge', value: 'dynamic xml' })
+  .expectBadge({ label: 'custom badge', message: 'dynamic xml' })
   .after(() => {
     expect(headers).to.have.property('accept', 'application/xml, text/xml')
   })

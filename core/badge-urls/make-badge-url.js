@@ -14,7 +14,7 @@ function badgeUrlFromPath({
   const outExt = format.length ? `.${format}` : ''
 
   const outQueryString = queryString.stringify({
-    maxAge: longCache ? '2592000' : undefined,
+    cacheSeconds: longCache ? '2592000' : undefined,
     style,
     ...queryParams,
   })
@@ -71,9 +71,74 @@ function staticBadgeUrl({
   return `${baseUrl}/badge/${path}.${format}${suffix}`
 }
 
+function queryStringStaticBadgeUrl({
+  baseUrl = '',
+  label,
+  message,
+  color,
+  labelColor,
+  style,
+  namedLogo,
+  logoColor,
+  logoWidth,
+  logoPosition,
+  format = 'svg',
+}) {
+  // schemaVersion could be a parameter if we iterate on it,
+  // for now it's hardcoded to the only supported version.
+  const schemaVersion = '1'
+  const suffix = `?${queryString.stringify({
+    label,
+    message,
+    color,
+    labelColor,
+    style,
+    logo: namedLogo,
+    logoColor,
+    logoWidth,
+    logoPosition,
+  })}`
+  return `${baseUrl}/static/v${schemaVersion}.${format}${suffix}`
+}
+
+function dynamicBadgeUrl({
+  baseUrl,
+  datatype,
+  label,
+  dataUrl,
+  query,
+  prefix,
+  suffix,
+  color,
+  style,
+  format = 'svg',
+}) {
+  const queryParams = {
+    label,
+    url: dataUrl,
+    query,
+    style,
+  }
+
+  if (color) {
+    queryParams.color = color
+  }
+  if (prefix) {
+    queryParams.prefix = prefix
+  }
+  if (suffix) {
+    queryParams.suffix = suffix
+  }
+
+  const outQueryString = queryString.stringify(queryParams)
+  return `${baseUrl}/badge/dynamic/${datatype}.${format}?${outQueryString}`
+}
+
 module.exports = {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
+  queryStringStaticBadgeUrl,
+  dynamicBadgeUrl,
 }

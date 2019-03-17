@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderLicenseBadge } = require('../../lib/licenses')
-const { renderVersionBadge } = require('../../lib/version')
-const { metric } = require('../../lib/text-formatters')
+const { renderLicenseBadge } = require('../licenses')
+const { renderVersionBadge } = require('../version')
+const { metric } = require('../text-formatters')
 const { BaseJsonService, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 

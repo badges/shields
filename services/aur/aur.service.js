@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
-const { addv, metric } = require('../../lib/text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
+const { addv, metric } = require('../text-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 

@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 

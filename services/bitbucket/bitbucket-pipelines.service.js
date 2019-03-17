@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService } = require('..')
 
 const bitbucketPipelinesSchema = Joi.object({
@@ -75,8 +75,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   static get route() {
     return {
       base: 'bitbucket/pipelines',
-      format: '([^/]+)/([^/]+)(?:/(.+))?',
-      capture: ['user', 'repo', 'branch'],
+      pattern: ':user/:repo/:branch*',
     }
   }
 

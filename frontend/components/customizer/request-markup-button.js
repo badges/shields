@@ -93,21 +93,21 @@ class GetMarkupButton extends React.PureComponent {
 
     return (
       <MarkupFormatSelect
-        ref={this.selectRef}
-        options={markupOptions}
-        placeholder="Copy Badge URL"
-        value=""
-        isDisabled={isDisabled}
-        closeMenuOnScroll
         blurInputOnSelect
-        menuPlacement="auto"
-        isSearchable={false}
-        onControlMouseDown={this.onControlMouseDown}
-        onChange={this.onOptionClick}
         classNamePrefix="markup-format"
+        closeMenuOnScroll
         components={{
           Control: ClickableControl,
         }}
+        isDisabled={isDisabled}
+        isSearchable={false}
+        menuPlacement="auto"
+        onChange={this.onOptionClick}
+        onControlMouseDown={this.onControlMouseDown}
+        options={markupOptions}
+        placeholder="Copy Badge URL"
+        ref={this.selectRef}
+        value=""
       />
     )
   }

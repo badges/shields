@@ -1,16 +1,42 @@
 'use strict'
 
+const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
-const { prepareRoute, namedParamsForMatch } = require('./route')
+const { isValidCategory } = require('./categories')
+const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
-module.exports = function redirector({ category, route, target, dateAdded }) {
+const attrSchema = Joi.object({
+  category: isValidCategory,
+  route: isValidRoute,
+  transformPath: Joi.func()
+    .maxArity(1)
+    .required()
+    .error(
+      () =>
+        '"transformPath" must be a function that transforms named params to a new path'
+    ),
+  transformQueryParams: Joi.func().arity(1),
+  dateAdded: Joi.date().required(),
+  overrideTransformedQueryParams: Joi.bool().optional(),
+}).required()
+
+module.exports = function redirector(attrs) {
+  const {
+    category,
+    route,
+    transformPath,
+    transformQueryParams,
+    overrideTransformedQueryParams,
+  } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
+
   return class Redirector extends BaseService {
     static get category() {
       return category
@@ -24,19 +50,18 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
       return true
     }
 
-    static validateDefinition() {
-      super.validateDefinition()
-      Joi.assert(
-        { dateAdded },
-        Joi.object({
-          dateAdded: Joi.date().required(),
-        }),
-        `Redirector for ${route.base}`
-      )
+    static get name() {
+      return `${camelcase(route.base.replace(/\//g, '_'), {
+        pascalCase: true,
+      })}Redirect`
     }
 
-    static register({ camp }) {
+    static register({ camp, requestCounter }) {
       const { regex, captureNames } = prepareRoute(this.route)
+
+      const serviceRequestCounter = this._createServiceRequestCounter({
+        requestCounter,
+      })
 
       camp.route(regex, async (queryParams, match, end, ask) => {
         if (serverHasBeenUpSinceResourceCached(ask.req)) {
@@ -56,12 +81,24 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetUrl = target(namedParams)
-        trace.logTrace('validate', emojic.dart, 'Target', targetUrl)
+        const targetPath = transformPath(namedParams)
+        trace.logTrace('validate', emojic.dart, 'Target', targetPath)
+
+        let urlSuffix = ask.uri.search || ''
+
+        if (transformQueryParams) {
+          const specifiedParams = queryString.parse(urlSuffix)
+          const transformedParams = transformQueryParams(namedParams)
+          const redirectParams = overrideTransformedQueryParams
+            ? Object.assign(transformedParams, specifiedParams)
+            : Object.assign(specifiedParams, transformedParams)
+          const outQueryString = queryString.stringify(redirectParams)
+          urlSuffix = `?${outQueryString}`
+        }
 
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
-        const redirectUrl = `${targetUrl}.${format}${ask.uri.search || ''}`
+        const redirectUrl = `${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301
@@ -72,6 +109,8 @@ module.exports = function redirector({ category, route, target, dateAdded }) {
         setCacheHeadersForStaticResource(ask.res)
 
         ask.res.end()
+
+        serviceRequestCounter.inc()
       })
     }
   }

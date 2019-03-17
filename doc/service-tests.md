@@ -35,21 +35,16 @@ We'll start by adding some boilerplate to our file:
 ```js
 'use strict'
 
-const Joi = require('joi')
-
 const t = (module.exports = require('../tester').createServiceTester())
 ```
 
-1. Import [Joi][] We'll use this to make assertions. This is the same library
-   we use to define schema for validation in the main badge class.
-
-2. If our `.service.js` module exports a single class, we can
-   `require('../tester').createServiceTester()`, which uses convention to create a
-   `ServiceTester` object. Calling this inside
-   `services/wercker/wercker.tester.js` will create a `ServiceTester` object
-   configured for the service exported in `services/wercker/wercker.service.js`.
-   We will add our tests to this `ServiceTester` object `t`, which is exported
-   from the module.
+If our `.service.js` module exports a single class, we can
+`require('../tester').createServiceTester()`, which uses convention to create a
+`ServiceTester` object. Calling this inside
+`services/wercker/wercker.tester.js` will create a `ServiceTester` object
+configured for the service exported in `services/wercker/wercker.service.js`.
+We will add our tests to this `ServiceTester` object `t`, which is exported
+from the module.
 
 ### (2) Our First Test Case
 
@@ -60,12 +55,7 @@ const { isBuildStatus } = require('../test-validators')
 
 t.create('Build status')
   .get('/build/wercker/go-wercker-api.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({ label: 'build', message: isBuildStatus })
 ```
 
 1. The `create()` method adds a new test to the tester object.
@@ -76,13 +66,12 @@ t.create('Build status')
    - Note that when we call our badge, we are allowing it to communicate with an external service without mocking the response. We write tests which interact with external services, which is unusual practice in unit testing. We do this because one of the purposes of service tests is to notify us if a badge has broken due to an upstream API change. For this reason it is important for at least one test to call the live API without mocking the interaction.
    - All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/build/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
    - We don't need to explicitly call `/wercker/build/wercker/go-wercker-api.json` here, only `/build/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case `/wercker`) is used as the base URL for any requests made by the tester object.
-3. `expectJSONTypes()` is an IcedFrisby method which accepts a [Joi][] schema.
+3. `expectBadge()` is a helper function which accepts either a string literal or a [Joi][] schema for `message`.
    Joi is a validation library that is build into IcedFrisby which you can use to
    match based on a set of allowed strings, regexes, or specific values. You can
    refer to their [API reference][joi api].
-4. `Joi.object().keys()` defines a Joi object schema containing some defined keys
-5. We expect `name` to be a string literal `"build"`
-6. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc.) already have validators defined here.
+4. We expect `label` to be a string literal `"build"`.
+5. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc.) already have validators defined here.
 
 When defining an IcedFrisby test, typically you would invoke the `toss()`
 method, to register the test. This is not necessary, because the Shields test
@@ -137,12 +126,7 @@ We should write tests cases for valid paths through our code. The Wercker badge 
 ```js
 t.create('Build status (with branch)')
   .get('/build/wercker/go-wercker-api/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({ label: 'build', message: isBuildStatus })
 ```
 
 ```
@@ -178,17 +162,17 @@ First we'll add a test for a project which will return a 404 error:
 ```js
 t.create('Build status (application not found)')
   .get('/build/some-project/that-doesnt-exist.json')
-  .expectJSON({ name: 'build', value: 'application not found' })
+  .expectBadge({ label: 'build', message: 'application not found' })
 ```
 
-In this case we are expecting an object literal instead of a pattern so we should use `expectJSON()` instead of `expectJSONTypes()`. This is more concise and gives us a more helpful error message if the test fails.
+In this case we are expecting a string literal instead of a pattern for `message`. This narrows down the expectation and gives us a more helpful error message if the test fails.
 
 We also want to include a test for the 'private application not supported' case. One way to do this would be to find another example of a private project which is unlikely to change. For example:
 
 ```js
 t.create('Build status (private application)')
   .get('/build/wercker/blueprint.json')
-  .expectJSON({ name: 'build', value: 'private application not supported' })
+  .expectBadge({ label: 'build', message: 'private application not supported' })
 ```
 
 ## (5) Mocking Responses
@@ -203,7 +187,7 @@ t.create('Build status (private application)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(401)
   )
-  .expectJSON({ name: 'build', value: 'private application not supported' })
+  .expectBadge({ label: 'build', message: 'private application not supported' })
 ```
 
 This will intercept the request and provide our own mock response.
@@ -244,9 +228,9 @@ t.create('Build passed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'passed' }])
   )
-  .expectJSON({
-    name: 'build',
-    value: 'passing',
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
     color: 'brightgreen',
   })
 
@@ -257,20 +241,10 @@ t.create('Build failed (mocked)')
       .get('/wercker/go-wercker-api/builds?limit=1')
       .reply(200, [{ status: 'finished', result: 'failed' }])
   )
-  .expectJSON({ name: 'build', value: 'failed', colorB: colorScheme.red })
+  .expectBadge({ label: 'build', message: 'failed', color: 'red' })
 ```
 
-Note that in these tests, we are passing the URL parameter `?style=_shields_test`. This returns a JSON response which also contains the color. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors. Using the `colorScheme` test helper here allows us to test against named colors instead of literal hex values, so we can write
-
-```js
-.expectJSON({ name: 'build', value: 'failed', colorB: colorScheme.red })
-```
-
-instead of
-
-```js
-.expectJSON({ name: 'build', value: 'passing', colorB: '#e05d44' })
-```
+Note that in these tests, we are passing the URL parameter `?style=_shields_test`. This returns a JSON response which also contains the color. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.
 
 ## Code coverage
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
@@ -14,6 +14,10 @@ function issueClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketIssues extends BaseJsonService {
+    static get name() {
+      return `BitbucketIssues${raw ? 'Raw' : ''}`
+    }
+
     async fetch({ user, repo }) {
       const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
       return this._requestJson({
@@ -50,8 +54,7 @@ function issueClassGenerator(raw) {
     static get route() {
       return {
         base: `bitbucket/${routePrefix}`,
-        format: '([^/]+)/([^/]+)',
-        capture: ['user', 'repo'],
+        pattern: ':user/:repo',
       }
     }
 
@@ -59,7 +62,6 @@ function issueClassGenerator(raw) {
       return [
         {
           title: 'Bitbucket open issues',
-          pattern: ':user/:repo',
           namedParams: {
             user: 'atlassian',
             repo: 'python-bitbucket',

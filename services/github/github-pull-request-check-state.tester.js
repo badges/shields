@@ -4,11 +4,11 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('github pull request check state')
   .get('/s/pulls/badges/shields/1110.json')
-  .expectJSON({ name: 'checks', value: 'failure' })
+  .expectBadge({ label: 'checks', message: 'failure' })
 
 t.create('github pull request check state (pull request not found)')
   .get('/s/pulls/badges/shields/5110.json')
-  .expectJSON({ name: 'checks', value: 'pull request or repo not found' })
+  .expectBadge({ label: 'checks', message: 'pull request or repo not found' })
 
 t.create(
   "github pull request check state (ref returned by github doesn't exist"
@@ -21,11 +21,11 @@ t.create(
         .reply(200, JSON.stringify({ head: { sha: 'abc123' } })) // Looks like a real ref, but isn't.
   )
   .networkOn()
-  .expectJSON({
-    name: 'checks',
-    value: 'commit not found',
+  .expectBadge({
+    label: 'checks',
+    message: 'commit not found',
   })
 
 t.create('github pull request check contexts')
   .get('/contexts/pulls/badges/shields/1110.json')
-  .expectJSON({ name: 'checks', value: '1 failure' })
+  .expectBadge({ label: 'checks', message: '1 failure' })

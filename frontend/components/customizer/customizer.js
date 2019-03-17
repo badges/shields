@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
-import { staticBadgeUrl } from '../../lib/badge-url'
+import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
 import QueryStringBuilder from './query-string-builder'
@@ -11,15 +12,12 @@ import CopiedContentIndicator from './copied-content-indicator'
 
 export default class Customizer extends React.Component {
   static propTypes = {
-    // This is an item from the `examples` array within the
-    // `serviceDefinition` schema.
-    // https://github.com/badges/shields/blob/master/services/service-definitions.js
     baseUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     pattern: PropTypes.string.isRequired,
-    exampleNamedParams: PropTypes.object.isRequired,
-    exampleQueryParams: PropTypes.object.isRequired,
-    defaultStyle: PropTypes.string,
+    exampleNamedParams: objectOfKeyValuesPropType,
+    exampleQueryParams: objectOfKeyValuesPropType,
+    initialStyle: PropTypes.string,
   }
 
   indicatorRef = React.createRef()
@@ -61,12 +59,11 @@ export default class Customizer extends React.Component {
     if (pathIsComplete) {
       src = this.generateBuiltBadgeUrl()
     } else {
-      src = staticBadgeUrl(
+      src = staticBadgeUrl({
         baseUrl,
-        'preview',
-        'some parameters missing',
-        'lightgray'
-      )
+        label: 'preview',
+        message: 'some parameters missing',
+      })
     }
     return (
       <p>
@@ -108,7 +105,7 @@ export default class Customizer extends React.Component {
     return (
       <div>
         {this.renderLivePreview()}
-        <CopiedContentIndicator ref={indicatorRef} copiedContent="Copied">
+        <CopiedContentIndicator copiedContent="Copied" ref={indicatorRef}>
           <RequestMarkupButtom
             isDisabled={!pathIsComplete}
             onMarkupRequested={this.copyMarkup}
@@ -137,19 +134,19 @@ export default class Customizer extends React.Component {
       pattern,
       exampleNamedParams,
       exampleQueryParams,
-      defaultStyle,
+      initialStyle,
     } = this.props
 
     return (
       <form action="">
         <PathBuilder
-          pattern={pattern}
           exampleParams={exampleNamedParams}
           onChange={this.handlePathChange}
+          pattern={pattern}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
-          defaultStyle={defaultStyle}
+          initialStyle={initialStyle}
           onChange={this.handleQueryStringChange}
         />
         <div>{this.renderMarkupAndLivePreview()}</div>

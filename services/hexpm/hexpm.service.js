@@ -1,11 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric, addv, maybePluralize } = require('../../lib/text-formatters')
-const {
-  downloadCount,
-  version: versionColor,
-} = require('../../lib/color-formatters')
+const { metric, addv, maybePluralize } = require('../text-formatters')
+const { downloadCount, version: versionColor } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 const hexSchema = Joi.object({
@@ -122,22 +119,29 @@ class HexPmVersion extends BaseHexPmService {
 }
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix } = {
+  const { base, messageSuffix, name } = {
     day: {
       base: 'hexpm/dd',
       messageSuffix: '/day',
+      name: 'HexPmDownloadsDay',
     },
     week: {
       base: 'hexpm/dw',
       messageSuffix: '/week',
+      name: 'HexPmDownloadsWeek',
     },
     all: {
       base: 'hexpm/dt',
       messageSuffix: '',
+      name: 'HexPmDownloadsTotal',
     },
   }[interval]
 
   return class HexPmDownloads extends BaseHexPmService {
+    static get name() {
+      return name
+    }
+
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,

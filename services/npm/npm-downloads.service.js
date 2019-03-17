@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
@@ -18,26 +18,30 @@ const rangeResponseSchema = Joi.object({
 }).required()
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix = '', query, isRange = false } = {
+  const { base, messageSuffix = '', query, isRange = false, name } = {
     week: {
       base: 'npm/dw',
       messageSuffix: '/w',
       query: 'point/last-week',
+      name: 'NpmDownloadsWeek',
     },
     month: {
       base: 'npm/dm',
       messageSuffix: '/m',
       query: 'point/last-month',
+      name: 'NpmDownloadsMonth',
     },
     year: {
       base: 'npm/dy',
       messageSuffix: '/y',
       query: 'point/last-year',
+      name: 'NpmDownloadsYear',
     },
     total: {
       base: 'npm/dt',
       query: 'range/1000-01-01:3000-01-01',
       isRange: true,
+      name: 'NpmDownloadsTotal',
     },
   }[interval]
 
@@ -46,6 +50,10 @@ function DownloadsForInterval(interval) {
   // This hits an entirely different API from the rest of the NPM services, so
   // it does not use NpmBase.
   return class NpmDownloads extends BaseJsonService {
+    static get name() {
+      return name
+    }
+
     static get category() {
       return 'downloads'
     }

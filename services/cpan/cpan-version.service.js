@@ -1,7 +1,7 @@
 'use strict'
 
+const { renderVersionBadge } = require('../version')
 const BaseCpanService = require('./cpan')
-const { renderVersionBadge } = require('../../lib/version')
 
 module.exports = class CpanVersion extends BaseCpanService {
   static get category() {

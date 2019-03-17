@@ -1,53 +1,30 @@
 'use strict'
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'bitrise',
-  title: 'Bitrise',
-}))
+const { isBuildStatus } = require('../build-status')
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('deploy status')
-  .get('/cde737473028420d/master.json?token=GCIdEzacE4GW32jLVrZb7A')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bitrise',
-      value: Joi.equal('success', 'error', 'unknown'),
-    })
-  )
-
-t.create('deploy status without branch')
   .get('/cde737473028420d.json?token=GCIdEzacE4GW32jLVrZb7A')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bitrise',
-      value: Joi.equal('success', 'error', 'unknown'),
-    })
-  )
+  .expectBadge({
+    label: 'bitrise',
+    message: isBuildStatus,
+  })
+
+t.create('deploy status with branch')
+  .get('/cde737473028420d/master.json?token=GCIdEzacE4GW32jLVrZb7A')
+  .expectBadge({
+    label: 'bitrise',
+    message: isBuildStatus,
+  })
 
 t.create('unknown branch')
   .get('/cde737473028420d/unknown.json?token=GCIdEzacE4GW32jLVrZb7A')
-  .expectJSON({ name: 'bitrise', value: 'unknown' })
+  .expectBadge({ label: 'bitrise', message: 'branch not found' })
 
 t.create('invalid token')
   .get('/cde737473028420d/unknown.json?token=token')
-  .expectJSON({ name: 'bitrise', value: 'inaccessible' })
+  .expectBadge({ label: 'bitrise', message: 'app not found or invalid token' })
 
 t.create('invalid App ID')
   .get('/invalid/master.json?token=GCIdEzacE4GW32jLVrZb7A')
-  .expectJSON({ name: 'bitrise', value: 'inaccessible' })
-
-t.create('server error')
-  .get('/AppID/branch.json?token=token')
-  .intercept(nock =>
-    nock('https://app.bitrise.io')
-      .get('/app/AppID/status.json?token=token&branch=branch')
-      .reply(500, 'Something went wrong')
-  )
-  .expectJSON({ name: 'bitrise', value: 'inaccessible' })
-
-t.create('connection error')
-  .get('/AppID/branch.json?token=token')
-  .networkOff()
-  .expectJSON({ name: 'bitrise', value: 'inaccessible' })
+  .expectBadge({ label: 'bitrise', message: 'app not found or invalid token' })

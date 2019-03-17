@@ -2,7 +2,7 @@
 
 const { InvalidResponse } = require('..')
 const { LiberapayBase } = require('./liberapay-base')
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 
 module.exports = class LiberapayGoal extends LiberapayBase {
   static get route() {

@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isMetric } = require('../test-validators')
 
@@ -13,17 +12,15 @@ module.exports = t
 
 t.create('total downloads of left-pad')
   .get('/dt/left-pad.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'downloads',
-      value: isMetric,
-      color: 'brightgreen',
-    })
-  )
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+    color: 'brightgreen',
+  })
 
 t.create('total downloads of @cycle/core')
   .get('/dt/@cycle/core.json')
-  .expectJSONTypes(Joi.object().keys({ name: 'downloads', value: isMetric }))
+  .expectBadge({ label: 'downloads', message: isMetric })
 
 t.create('total downloads of package with zero downloads')
   .get('/dt/package-no-downloads.json?style=_shields_test')
@@ -34,7 +31,7 @@ t.create('total downloads of package with zero downloads')
         downloads: [{ downloads: 0, day: '2018-01-01' }],
       })
   )
-  .expectJSON({ name: 'downloads', value: '0', color: 'red' })
+  .expectBadge({ label: 'downloads', message: '0', color: 'red' })
 
 t.create('exact total downloads value')
   .get('/dt/exact-value.json')
@@ -48,12 +45,12 @@ t.create('exact total downloads value')
         ],
       })
   )
-  .expectJSON({ name: 'downloads', value: '5' })
+  .expectBadge({ label: 'downloads', message: '5' })
 
 t.create('total downloads of unknown package')
   .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
-  .expectJSON({
-    name: 'downloads',
-    value: 'package not found or too new',
+  .expectBadge({
+    label: 'downloads',
+    message: 'package not found or too new',
     color: 'red',
   })

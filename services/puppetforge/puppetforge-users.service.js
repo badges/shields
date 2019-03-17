@@ -5,8 +5,8 @@ const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
-const { metric } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
 
 class PuppetforgeUserReleases extends LegacyService {
   static get category() {
@@ -79,6 +79,13 @@ class PuppetforgeUserModules extends LegacyService {
 class PuppetforgeUsers extends LegacyService {
   static get category() {
     return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge',
+      pattern: '([^/]+)/([^/]+)/([^/]+)',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

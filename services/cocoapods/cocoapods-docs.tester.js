@@ -1,18 +1,14 @@
 'use strict'
 
-const Joi = require('joi')
 const { isIntegerPercentage } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('doc percent (valid)')
   .get('/AFNetworking.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'docs',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'docs',
+    message: isIntegerPercentage,
+  })
 
 t.create('doc percent (null)')
   .get('/AFNetworking.json')
@@ -21,8 +17,8 @@ t.create('doc percent (null)')
       .get('/api/v1/pods/AFNetworking')
       .reply(200, '{"cocoadocs": {"doc_percent": null}}')
   )
-  .expectJSON({ name: 'docs', value: '0%' })
+  .expectBadge({ label: 'docs', message: '0%' })
 
 t.create('doc percent (not found)')
   .get('/not-a-package.json')
-  .expectJSON({ name: 'docs', value: 'not found' })
+  .expectBadge({ label: 'docs', message: 'not found' })

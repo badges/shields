@@ -3,14 +3,6 @@
 const { BaseXmlService, NotFound } = require('..')
 
 module.exports = class JetbrainsBase extends BaseXmlService {
-  static buildUrl(base) {
-    return {
-      base,
-      format: '(.+)',
-      capture: ['pluginId'],
-    }
-  }
-
   static _validate(data, schema) {
     if (data['plugin-repository'] === '') {
       // Note the 'not found' response from JetBrains Plugins Repository is:

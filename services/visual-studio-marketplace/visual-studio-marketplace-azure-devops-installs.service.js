@@ -1,8 +1,15 @@
 'use strict'
 
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
+
+const documentation = `
+  <p>
+    This badge can show total installs, installs for Azure DevOps Services,
+    or on-premises installs for Azure DevOps Server.
+  </p>
+`
 
 // This service exists separately from the other Marketplace downloads badges (in ./visual-studio-marketplace-downloads.js)
 // due differences in how the Marketplace tracks metrics for Azure DevOps extensions vs. other extension types.
@@ -35,29 +42,14 @@ module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends Visual
   static get examples() {
     return [
       {
-        title:
-          'Visual Studio Marketplace - Azure DevOps Extension (Total Installs)',
-        pattern: 'total/:extensionId',
-        namedParams: { extensionId: 'swellaby.mirror-git-repository' },
+        title: 'Visual Studio Marketplace Installs - Azure DevOps Extension',
+        namedParams: {
+          measure: 'total',
+          extensionId: 'swellaby.mirror-git-repository',
+        },
         staticPreview: this.render({ count: 651 }),
         keywords: this.keywords,
-      },
-      {
-        title:
-          'Visual Studio Marketplace - Azure DevOps Extension (Services Installs)',
-        pattern: 'services/:extensionId',
-        namedParams: { extensionId: 'swellaby.mirror-git-repository' },
-        staticPreview: this.render({ count: 496 }),
-        keywords: this.keywords,
-      },
-
-      {
-        title:
-          'Visual Studio Marketplace - Azure DevOps Extension (OnPrem Installs)',
-        pattern: 'onprem/:extensionId',
-        namedParams: { extensionId: 'swellaby.mirror-git-repository' },
-        staticPreview: this.render({ count: 155 }),
-        keywords: this.keywords,
+        documentation,
       },
     ]
   }

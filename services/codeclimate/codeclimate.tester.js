@@ -12,105 +12,89 @@ const t = (module.exports = new ServiceTester({
 // Tests based on Code Climate's test reports endpoint.
 t.create('test coverage percentage')
   .get('/c/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('test coverage percentage alternative coverage URL')
   .get('/coverage/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('test coverage percentage alternative top-level URL')
   .get('/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('test coverage letter')
   .get('/c-letter/jekyll/jekyll.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
+  })
 
 t.create('test coverage percentage for non-existent repo')
   .get('/c/unknown/unknown.json')
-  .expectJSON({
-    name: 'coverage',
-    value: 'not found',
+  .expectBadge({
+    label: 'coverage',
+    message: 'not found',
   })
 
 t.create('test coverage percentage for repo without test reports')
   .get('/c/angular/angular.js.json')
-  .expectJSON({
-    name: 'coverage',
-    value: 'unknown',
+  .expectBadge({
+    label: 'coverage',
+    message: 'unknown',
   })
 
 // Tests based on Code Climate's snapshots endpoint.
 t.create('issues count')
   .get('/issues/angular/angular.js.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'issues',
-      value: Joi.number()
-        .integer()
-        .positive(),
-    })
-  )
+  .expectBadge({
+    label: 'issues',
+    message: Joi.number()
+      .integer()
+      .positive(),
+  })
 
 t.create('technical debt percentage')
   .get('/tech-debt/angular/angular.js.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'technical debt',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'technical debt',
+    message: isIntegerPercentage,
+  })
 
 t.create('maintainability percentage')
   .get('/maintainability-percentage/angular/angular.js.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'maintainability',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'maintainability',
+    message: isIntegerPercentage,
+  })
 
 t.create('maintainability letter')
   .get('/maintainability/angular/angular.js.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'maintainability',
-      value: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
-    })
-  )
+  .expectBadge({
+    label: 'maintainability',
+    message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
+  })
 
 t.create('maintainability letter for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
-  .expectJSON({
-    name: 'maintainability',
-    value: 'not found',
+  .expectBadge({
+    label: 'maintainability',
+    message: 'not found',
   })
 
 t.create('maintainability letter for repo without snapshots')
   .get('/maintainability/kabisaict/flow.json')
-  .expectJSON({
-    name: 'maintainability',
-    value: 'unknown',
+  .expectBadge({
+    label: 'maintainability',
+    message: 'unknown',
   })
 
 t.create('malformed response for outer user repos query')
@@ -122,9 +106,9 @@ t.create('malformed response for outer user repos query')
         data: [{}], // No relationships in the list of data elements.
       })
   )
-  .expectJSON({
-    name: 'maintainability',
-    value: 'invalid',
+  .expectBadge({
+    label: 'maintainability',
+    message: 'invalid',
   })
 
 t.create('malformed response for inner specific repo query')
@@ -135,7 +119,7 @@ t.create('malformed response for inner specific repo query')
       .reply(200, {})
   ) // No data.
   .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
-  .expectJSON({
-    name: 'maintainability',
-    value: 'invalid',
+  .expectBadge({
+    label: 'maintainability',
+    message: 'invalid',
   })

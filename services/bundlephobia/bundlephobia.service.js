@@ -1,117 +1,111 @@
 'use strict'
 
+const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const LegacyService = require('../legacy-service')
+const { BaseJsonService } = require('..')
+const { nonNegativeInteger } = require('../validators')
 
-const keywords = ['node']
+const schema = Joi.object({
+  size: nonNegativeInteger,
+  gzip: nonNegativeInteger,
+}).required()
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Bundlephobia extends LegacyService {
+const keywords = ['node', 'bundlephobia']
+
+module.exports = class Bundlephobia extends BaseJsonService {
   static get category() {
     return 'size'
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'bundlephobia',
+      color: 'informational',
+    }
   }
 
   static get route() {
     return {
       base: 'bundlephobia',
-      pattern: '',
+      pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
+    }
+  }
+
+  static render({ format, size }) {
+    const label = format === 'min' ? 'minified size' : 'minzipped size'
+    return {
+      label,
+      message: prettyBytes(size),
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'npm bundle size (minified)',
-        pattern: 'min/:packageName',
-        namedParams: { packageName: 'react' },
-        staticPreview: {
-          label: 'minified size',
-          message: '6.06 kB',
-          color: 'blue',
+        title: 'npm bundle size',
+        pattern: ':format(min|minzip)/:packageName',
+        namedParams: {
+          format: 'min',
+          packageName: 'react',
         },
+        staticPreview: this.render({ format: 'min', size: 6652 }),
         keywords,
       },
       {
-        title: 'npm bundle size (minified + gzip)',
-        pattern: 'minzip/:packageName',
-        namedParams: { packageName: 'react' },
-        staticPreview: {
-          label: 'minzipped size',
-          message: '2.57 kB',
-          color: 'blue',
+        title: 'npm bundle size (scoped)',
+        pattern: ':format(min|minzip)/:scope/:packageName',
+        namedParams: {
+          format: 'min',
+          scope: '@cycle',
+          packageName: 'core',
         },
+        staticPreview: this.render({ format: 'min', size: 3562 }),
+        keywords,
+      },
+      {
+        title: 'npm bundle size (version)',
+        pattern: ':format(min|minzip)/:packageName/:version',
+        namedParams: {
+          format: 'min',
+          packageName: 'react',
+          version: '15.0.0',
+        },
+        staticPreview: this.render({ format: 'min', size: 20535 }),
+        keywords,
+      },
+      {
+        title: 'npm bundle size (scoped version)',
+        pattern: ':format(min|minzip)/:scope/:packageName/:version',
+        namedParams: {
+          format: 'min',
+          scope: '@cycle',
+          packageName: 'core',
+          version: '7.0.0',
+        },
+        staticPreview: this.render({ format: 'min', size: 3562 }),
         keywords,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bundlephobia\/(min|minzip)\/(?:@([^/]+)?\/)?([^/]+)?(?:\/([^/]+)?)?\.(svg|png|gif|jpg|json)?$/,
-      cache((data, match, sendBadge, request) => {
-        // A: /bundlephobia/(min|minzip)/:package.:format
-        // B: /bundlephobia/(min|minzip)/:package/:version.:format
-        // C: /bundlephobia/(min|minzip)/@:scope/:package.:format
-        // D: /bundlephobia/(min|minzip)/@:scope/:package/:version.:format
-        const resultType = match[1]
-        const scope = match[2]
-        const packageName = match[3]
-        const packageVersion = match[4]
-        const format = match[5]
-        const showMin = resultType === 'min'
+  async fetch({ scope, packageName, version }) {
+    const packageQuery = `${scope ? `${scope}/` : ''}${packageName}${
+      version ? `@${version}` : ''
+    }`
+    const options = { qs: { package: packageQuery } }
+    return this._requestJson({
+      schema,
+      url: 'https://bundlephobia.com/api/size',
+      options,
+      errorMessages: {
+        404: 'package or version not found',
+      },
+    })
+  }
 
-        const badgeData = getBadgeData(
-          showMin ? 'minified size' : 'minzipped size',
-          data
-        )
-
-        let packageString =
-          typeof scope === 'string' ? `@${scope}/${packageName}` : packageName
-
-        if (packageVersion) {
-          packageString += `@${packageVersion}`
-        }
-
-        const requestOptions = {
-          url: 'https://bundlephobia.com/api/size',
-          qs: {
-            package: packageString,
-          },
-          json: true,
-        }
-
-        /**
-         * `ErrorCode` => `error code`
-         * @param {string} code
-         * @returns {string}
-         */
-        const formatErrorCode = code =>
-          code
-            .replace(/([A-Z])/g, ' $1')
-            .trim()
-            .toLowerCase()
-
-        request(requestOptions, (error, response, body) => {
-          if (typeof body !== 'object' || body === null) {
-            badgeData.text[1] = 'error'
-            badgeData.colorscheme = 'red'
-          } else if (error !== null || body.error) {
-            badgeData.text[1] =
-              'code' in body.error ? formatErrorCode(body.error.code) : 'error'
-            badgeData.colorscheme = 'red'
-          } else {
-            badgeData.text[1] = prettyBytes(showMin ? body.size : body.gzip)
-            badgeData.colorscheme = 'blue'
-          }
-          sendBadge(format, badgeData)
-        })
-      })
-    )
+  async handle({ format, scope, packageName, version }) {
+    const json = await this.fetch({ scope, packageName, version })
+    const size = format === 'min' ? json.size : json.gzip
+    return this.constructor.render({ format, size })
   }
 }

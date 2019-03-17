@@ -2,8 +2,8 @@
 
 const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
-const { metric, formatDate } = require('../../lib/text-formatters')
-const { age: ageColor, downloadCount } = require('../../lib/color-formatters')
+const { metric, formatDate } = require('../text-formatters')
+const { age: ageColor, downloadCount } = require('../color-formatters')
 const { NotFound } = require('..')
 const BaseSteamAPI = require('./steam-base')
 

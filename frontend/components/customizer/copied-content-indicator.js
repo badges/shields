@@ -52,8 +52,8 @@ export default class CopiedContentIndicator extends React.Component {
     return (
       <ContentAnchor>
         <PosedContentContainer
-          pose={pose}
           onPoseComplete={this.handlePoseComplete}
+          pose={pose}
         >
           {this.props.copiedContent}
         </PosedContentContainer>

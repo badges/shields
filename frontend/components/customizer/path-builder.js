@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
 import humanizeString from 'humanize-string'
+import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
+import { patternToOptions } from '../../lib/pattern-helpers'
 import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
@@ -11,13 +13,13 @@ import {
 } from './builder-common'
 
 const PathBuilderColumn = styled.span`
-  height: 58px;
+  height: 78px;
 
   float: left;
   display: flex;
   flex-direction: column;
 
-  margin: 5px 0;
+  margin: 0;
 
   ${({ withHorizPadding }) =>
     withHorizPadding &&
@@ -27,7 +29,7 @@ const PathBuilderColumn = styled.span`
 `
 
 const PathLiteral = styled.div`
-  margin-top: 20px;
+  margin-top: 39px;
   ${({ isFirstToken }) =>
     isFirstToken &&
     css`
@@ -35,18 +37,30 @@ const PathLiteral = styled.div`
     `};
 `
 
-const NamedParamLabel = styled(BuilderLabel)`
-  height: 20px;
+const NamedParamLabelContainer = styled.span`
+  display: flex;
+  flex-direction: column;
+  height: 37px;
   width: 100%;
+  justify-content: center;
+`
 
+const inputStyling = `
+  width: 100%;
   text-align: center;
 `
 
+// 2px to align with input boxes alongside.
 const NamedParamInput = styled(StyledInput)`
-  width: 100%;
-  text-align: center;
-
+  ${inputStyling}
+  margin-top: 2px;
   margin-bottom: 10px;
+`
+
+const NamedParamSelect = styled.select`
+  ${inputStyling}
+  margin-bottom: 9px;
+  font-size: 10px;
 `
 
 const NamedParamCaption = styled(BuilderCaption)`
@@ -57,7 +71,7 @@ const NamedParamCaption = styled(BuilderCaption)`
 export default class PathBuilder extends React.Component {
   static propTypes = {
     pattern: PropTypes.string.isRequired,
-    exampleParams: PropTypes.object.isRequired,
+    exampleParams: objectOfKeyValuesPropType,
     onChange: PropTypes.func,
   }
 
@@ -91,13 +105,16 @@ export default class PathBuilder extends React.Component {
         if (typeof token === 'string') {
           return token
         } else {
-          const { delimiter, name } = token
-          let value = namedParams[name]
-          if (!value) {
+          const { delimiter, name, optional } = token
+          const value = namedParams[name]
+          if (value) {
+            return `${delimiter}${value}`
+          } else if (optional) {
+            return ''
+          } else {
             isComplete = false
-            value = `:${name}`
+            return `${delimiter}:${name}`
           }
-          return `${delimiter}${value}`
         }
       })
       .join('')
@@ -142,29 +159,58 @@ export default class PathBuilder extends React.Component {
     )
   }
 
-  renderNamedParam(token, tokenIndex, namedParamIndex) {
-    const { delimiter, name } = token
-
-    const { exampleParams } = this.props
-    const exampleValue = exampleParams[name]
+  renderNamedParamInput(token) {
+    const { name, pattern } = token
+    const options = patternToOptions(pattern)
 
     const { namedParams } = this.state
     const value = namedParams[name]
+
+    if (options) {
+      return (
+        <NamedParamSelect
+          name={name}
+          onChange={this.handleTokenChange}
+          value={value}
+        >
+          <option key="empty" value="">
+            {' '}
+          </option>
+          {options.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </NamedParamSelect>
+      )
+    } else {
+      return (
+        <NamedParamInput
+          name={name}
+          onChange={this.handleTokenChange}
+          type="text"
+          value={value}
+          {...noAutocorrect}
+        />
+      )
+    }
+  }
+
+  renderNamedParam(token, tokenIndex, namedParamIndex) {
+    const { delimiter, name, optional } = token
+
+    const { exampleParams } = this.props
+    const exampleValue = exampleParams[name] || '(not set)'
 
     return (
       <React.Fragment key={token.name}>
         {this.renderLiteral(delimiter, tokenIndex)}
         <PathBuilderColumn withHorizPadding>
-          <NamedParamLabel htmlFor={name}>
-            {humanizeString(name)}
-          </NamedParamLabel>
-          <NamedParamInput
-            type="text"
-            name={name}
-            value={value}
-            onChange={this.handleTokenChange}
-            {...noAutocorrect}
-          />
+          <NamedParamLabelContainer>
+            <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
+            {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
+          </NamedParamLabelContainer>
+          {this.renderNamedParamInput(token)}
           <NamedParamCaption>
             {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
           </NamedParamCaption>

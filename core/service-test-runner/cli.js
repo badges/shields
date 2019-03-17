@@ -54,10 +54,10 @@
 const minimist = require('minimist')
 const envFlag = require('node-env-flag')
 const readAllStdinSync = require('read-all-stdin-sync')
-const Runner = require('./runner')
 const { createTestServer } = require('../server/in-process-server-test-helpers')
+const Runner = require('./runner')
 
-require('../../lib/unhandled-rejection.spec')
+require('../unhandled-rejection.spec')
 
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {

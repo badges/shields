@@ -1,50 +1,45 @@
 'use strict'
 
-const Joi = require('joi')
-const { withRegex } = require('../test-validators')
-
+const { isMetricOverTimePeriod } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('(live) jquery/jquery hits/day')
+t.create('jquery/jquery hits/day')
+  .timeout(5000)
   .get('/hd/jquery/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(day)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery/jquery hits/week')
+t.create('jquery/jquery hits/week')
+  .timeout(5000)
   .get('/hw/jquery/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(week)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery/jquery hits/month')
+t.create('jquery/jquery hits/month')
+  .timeout(5000)
   .get('/hm/jquery/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(month)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) jquery/jquery hits/year')
+t.create('jquery/jquery hits/year')
+  .timeout(5000)
   .get('/hy/jquery/jquery.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'jsdelivr',
-      value: withRegex(/^(\d)+([kMG])*( hits\/)+(year)$/),
-    })
-  )
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
 
-t.create('(live) fake package')
+t.create('fake package')
+  .timeout(5000)
   .get('/hd/somefakepackage/somefakepackage.json')
-  .expectJSON({
-    name: 'jsdelivr',
+  .expectBadge({
+    label: 'jsdelivr',
     // Will return 0 hits/day as the endpoint can't send 404s at present.
-    value: '0 hits/day',
+    message: '0/day',
   })

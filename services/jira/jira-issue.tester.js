@@ -5,11 +5,11 @@ const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 t.create('live: unknown issue')
   .get('/https/issues.apache.org/jira/notArealIssue-000.json')
-  .expectJSON({ name: 'jira', value: 'issue not found' })
+  .expectBadge({ label: 'jira', message: 'issue not found' })
 
 t.create('live: known issue')
   .get('/https/issues.apache.org/jira/kafka-2896.json')
-  .expectJSON({ name: 'kafka-2896', value: 'Resolved' })
+  .expectBadge({ label: 'kafka-2896', message: 'Resolved' })
 
 t.create('no status color')
   .get('/http/issues.apache.org/jira/foo-123.json?style=_shields_test')
@@ -24,9 +24,9 @@ t.create('no status color')
         },
       })
   )
-  .expectJSON({
-    name: 'foo-123',
-    value: 'pending',
+  .expectBadge({
+    label: 'foo-123',
+    message: 'pending',
     color: 'lightgrey',
   })
 
@@ -46,9 +46,9 @@ t.create('green status color')
         },
       })
   )
-  .expectJSON({
-    name: 'bar-345',
-    value: 'done',
+  .expectBadge({
+    label: 'bar-345',
+    message: 'done',
     color: 'green',
   })
 
@@ -68,9 +68,9 @@ t.create('medium-gray status color')
         },
       })
   )
-  .expectJSON({
-    name: 'abc-123',
-    value: 'under review',
+  .expectBadge({
+    label: 'abc-123',
+    message: 'under review',
     color: 'lightgrey',
   })
 
@@ -90,9 +90,9 @@ t.create('yellow status color')
         },
       })
   )
-  .expectJSON({
-    name: 'test-001',
-    value: 'in progress',
+  .expectBadge({
+    label: 'test-001',
+    message: 'in progress',
     color: 'yellow',
   })
 
@@ -112,9 +112,9 @@ t.create('brown status color')
         },
       })
   )
-  .expectJSON({
-    name: 'zzz-789',
-    value: 'muddy',
+  .expectBadge({
+    label: 'zzz-789',
+    message: 'muddy',
     color: 'orange',
   })
 
@@ -134,9 +134,9 @@ t.create('warm-red status color')
         },
       })
   )
-  .expectJSON({
-    name: 'fire-321',
-    value: 'heating up',
+  .expectBadge({
+    label: 'fire-321',
+    message: 'heating up',
     color: 'red',
   })
 
@@ -156,9 +156,9 @@ t.create('blue-gray status color')
         },
       })
   )
-  .expectJSON({
-    name: 'sky-775',
-    value: 'cloudy',
+  .expectBadge({
+    label: 'sky-775',
+    message: 'cloudy',
     color: 'blue',
   })
 
@@ -183,4 +183,4 @@ t.create('with mock credentials')
       })
   )
   .finally(restore)
-  .expectJSON({ name: 'secure-234', value: 'in progress' })
+  .expectBadge({ label: 'secure-234', message: 'in progress' })

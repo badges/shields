@@ -2,7 +2,7 @@
 
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
-const { colorScale } = require('../../lib/color-formatters')
+const { colorScale } = require('../color-formatters')
 const colorFormatter = colorScale([99, 99.5, 100])
 
 const rowSchema = Joi.object().keys({

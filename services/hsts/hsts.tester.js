@@ -5,25 +5,25 @@ const label = 'hsts preloaded'
 
 t.create('gets the hsts status of github')
   .get('/github.com.json?style=_shields_test')
-  .expectJSON({
-    name: label,
-    value: 'yes',
+  .expectBadge({
+    label,
+    message: 'yes',
     color: 'brightgreen',
   })
 
 t.create('gets the hsts status of httpforever')
   .get('/httpforever.com.json?style=_shields_test')
-  .expectJSON({
-    name: label,
-    value: 'no',
+  .expectBadge({
+    label,
+    message: 'no',
     color: 'red',
   })
 
 t.create('gets the status of an invalid uri')
   .get('/does-not-exist.json?style=_shields_test')
-  .expectJSON({
-    name: label,
-    value: 'no',
+  .expectBadge({
+    label,
+    message: 'no',
     color: 'red',
   })
 
@@ -34,9 +34,9 @@ t.create('gets the hsts status of github (mock)')
       .get('/api/v2/status?domain=github.com')
       .reply(200, { status: 'preloaded' })
   )
-  .expectJSON({
-    name: label,
-    value: 'yes',
+  .expectBadge({
+    label,
+    message: 'yes',
     color: 'brightgreen',
   })
 
@@ -47,9 +47,9 @@ t.create('gets the hsts status of httpforever (mock)')
       .get('/api/v2/status?domain=httpforever.com')
       .reply(200, { status: 'unknown' })
   )
-  .expectJSON({
-    name: label,
-    value: 'no',
+  .expectBadge({
+    label,
+    message: 'no',
     color: 'red',
   })
 
@@ -60,9 +60,9 @@ t.create('gets the hsts status of a pending site (mock)')
       .get('/api/v2/status?domain=pending.mock')
       .reply(200, { status: 'pending' })
   )
-  .expectJSON({
-    name: label,
-    value: 'pending',
+  .expectBadge({
+    label,
+    message: 'pending',
     color: 'yellow',
   })
 
@@ -73,8 +73,8 @@ t.create('gets the status of an invalid uri (mock)')
       .get('/api/v2/status?domain=does-not-exist')
       .reply(200, { status: 'unknown' })
   )
-  .expectJSON({
-    name: label,
-    value: 'no',
+  .expectBadge({
+    label,
+    message: 'no',
     color: 'red',
   })

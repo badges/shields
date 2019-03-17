@@ -1,25 +1,27 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseXmlService } = require('..')
+const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const keywords = ['amo', 'firefox']
 
 const schema = Joi.object({
-  addon: Joi.object({
-    total_downloads: nonNegativeInteger,
-    rating: nonNegativeInteger,
-    daily_users: nonNegativeInteger,
+  average_daily_users: nonNegativeInteger,
+  current_version: Joi.object({
     version: Joi.string().required(),
   }).required(),
+  ratings: Joi.object({
+    average: Joi.number().required(),
+  }).required(),
+  weekly_downloads: nonNegativeInteger,
 }).required()
 
-class BaseAmoService extends BaseXmlService {
+class BaseAmoService extends BaseJsonService {
   async fetch({ addonId }) {
-    return this._requestXml({
+    return this._requestJson({
       schema,
-      url: `https://services.addons.mozilla.org/api/1.5/addon/${addonId}`,
+      url: `https://addons.mozilla.org/api/v3/addons/addon/${addonId}`,
     })
   }
 

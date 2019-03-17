@@ -1,21 +1,18 @@
 'use strict'
 
-const Joi = require('joi')
-const { isCurrencyOverTime } = require('./liberapay-base')
 const t = (module.exports = require('../tester').createServiceTester())
+const { isCurrencyOverTime } = require('./liberapay-base')
 
 t.create('Giving (valid)')
   .get('/Changaco.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'gives',
-      value: isCurrencyOverTime,
-    })
-  )
+  .expectBadge({
+    label: 'gives',
+    message: isCurrencyOverTime,
+  })
 
 t.create('Giving (not found)')
   .get('/does-not-exist.json')
-  .expectJSON({ name: 'liberapay', value: 'not found' })
+  .expectBadge({ label: 'liberapay', message: 'not found' })
 
 t.create('Giving (null)')
   .get('/Liberapay.json')
@@ -29,4 +26,4 @@ t.create('Giving (null)')
         goal: null,
       })
   )
-  .expectJSON({ name: 'liberapay', value: 'no public giving stats' })
+  .expectBadge({ label: 'liberapay', message: 'no public giving stats' })

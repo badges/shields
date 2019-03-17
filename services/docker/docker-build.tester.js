@@ -1,23 +1,19 @@
 'use strict'
 
-const Joi = require('joi')
-const { dockerBlue } = require('./docker-helpers')
-const { isBuildStatus } = require('../../lib/build-status')
-
+const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
+const { dockerBlue } = require('./docker-helpers')
 
 t.create('docker build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'docker build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'docker build',
+    message: isBuildStatus,
+  })
 
 t.create('docker build status (not found)')
   .get('/_/not-a-real-repo.json')
-  .expectJSON({ name: 'docker build', value: 'repo not found' })
+  .expectBadge({ label: 'docker build', message: 'repo not found' })
 
 t.create('docker build status (passing)')
   .get('/_/ubuntu.json?style=_shields_test')
@@ -26,9 +22,9 @@ t.create('docker build status (passing)')
       .get('/v2/repositories/library/ubuntu/buildhistory')
       .reply(200, { results: [{ status: 10 }] })
   )
-  .expectJSON({
-    name: 'docker build',
-    value: 'passing',
+  .expectBadge({
+    label: 'docker build',
+    message: 'passing',
     color: 'brightgreen',
   })
 
@@ -39,7 +35,7 @@ t.create('docker build status (failing)')
       .get('/v2/repositories/library/ubuntu/buildhistory')
       .reply(200, { results: [{ status: -1 }] })
   )
-  .expectJSON({ name: 'docker build', value: 'failing', color: 'red' })
+  .expectBadge({ label: 'docker build', message: 'failing', color: 'red' })
 
 t.create('docker build status (building)')
   .get('/_/ubuntu.json?style=_shields_test')
@@ -48,8 +44,8 @@ t.create('docker build status (building)')
       .get('/v2/repositories/library/ubuntu/buildhistory')
       .reply(200, { results: [{ status: 1 }] })
   )
-  .expectJSON({
-    name: 'docker build',
-    value: 'building',
+  .expectBadge({
+    label: 'docker build',
+    message: 'building',
     color: `#${dockerBlue}`,
   })

@@ -12,12 +12,10 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Codetally')
   .get('/triggerman722/colorstrap.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'codetally',
-      value: Joi.string().regex(/\b\d+(?:.\d+)?/),
-    })
-  )
+  .expectBadge({
+    label: 'codetally',
+    message: Joi.string().regex(/\b\d+(?:.\d+)?/),
+  })
 
 t.create('Empty')
   .get('/triggerman722/colorstrap.json')
@@ -31,9 +29,9 @@ t.create('Empty')
         currency_abbreviation: 'CAD',
       })
   )
-  .expectJSON({ name: 'codetally', value: '$0.00' })
+  .expectBadge({ label: 'codetally', message: '$0.00' })
 
 t.create('Non existent')
   .get('/not/real.json')
   .timeout(10000)
-  .expectJSON({ name: 'codetally', value: 'repo not found' })
+  .expectBadge({ label: 'codetally', message: 'repo not found' })

@@ -1,7 +1,6 @@
 'use strict'
 
 const BaseJsonService = require('../core/base-service/base-json')
-const LegacyService = require('../services/legacy-service')
 
 class GoodServiceOne extends BaseJsonService {
   static get category() {
@@ -9,16 +8,22 @@ class GoodServiceOne extends BaseJsonService {
   }
 
   static get route() {
-    return { pattern: 'good/one' }
+    return {
+      base: 'good',
+      pattern: 'one',
+    }
   }
 }
-class GoodServiceTwo extends LegacyService {
+class GoodServiceTwo extends BaseJsonService {
   static get category() {
     return 'build'
   }
 
   static get route() {
-    return { pattern: 'good/two' }
+    return {
+      base: 'good',
+      pattern: 'two',
+    }
   }
 }
 

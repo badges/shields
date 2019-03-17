@@ -1,21 +1,20 @@
 'use strict'
 
+const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const { nonNegativeInteger } = require('../validators')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
+const { NotFound } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubSize extends LegacyService {
+const schema = Joi.alternatives(
+  Joi.object({
+    size: nonNegativeInteger,
+  }).required(),
+  Joi.array().required()
+)
+
+module.exports = class GithubSize extends GithubAuthService {
   static get category() {
     return 'size'
   }
@@ -31,66 +30,38 @@ module.exports = class GithubSize extends LegacyService {
     return [
       {
         title: 'GitHub file size in bytes',
-        pattern: ':user/:repo/:path',
         namedParams: {
           user: 'webcaetano',
           repo: 'craft',
           path: 'build/phaser-craft.min.js',
         },
-        staticPreview: {
-          label: 'size',
-          message: '9.17 kB',
-          color: 'green',
-        },
+        staticPreview: this.render({ size: 9170 }),
         keywords: ['repo'],
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/size\/([^/]+)\/([^/]+)\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, mashape
-        const repo = match[2] // eg, apistatus
-        const path = match[3]
-        const format = match[4]
-        const apiUrl = `/repos/${user}/${repo}/contents/${path}`
+  static render({ size }) {
+    return {
+      message: prettyBytes(size),
+      color: 'blue',
+    }
+  }
 
-        const badgeData = getBadgeData('size', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-        }
+  async fetch({ user, repo, path }) {
+    return this._requestJson({
+      url: `/repos/${user}/${repo}/contents/${path}`,
+      schema,
+      errorMessages: errorMessagesFor('repo or file not found'),
+    })
+  }
 
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (
-            githubCheckErrorResponse(
-              badgeData,
-              err,
-              res,
-              'repo or file not found'
-            )
-          ) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const body = JSON.parse(buffer)
-            if (body && Number.isInteger(body.size)) {
-              badgeData.text[1] = prettyBytes(body.size)
-              badgeData.colorscheme = 'green'
-              sendBadge(format, badgeData)
-            } else {
-              badgeData.text[1] = 'not a regular file'
-              sendBadge(format, badgeData)
-            }
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle({ user, repo, path }) {
+    const body = await this.fetch({ user, repo, path })
+    if (Array.isArray(body)) {
+      throw new NotFound({ prettyMessage: 'not a regular file' })
+    }
+    return this.constructor.render({ size: body.size })
   }
 }

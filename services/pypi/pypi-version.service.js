@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
+const { renderVersionBadge } = require('../version')
 const PypiBase = require('./pypi-base')
 
 module.exports = class PypiVersion extends PypiBase {

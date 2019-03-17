@@ -1,29 +1,23 @@
 'use strict'
 
-const Joi = require('joi')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
   .get('/asciidoctor/maven/asciidoctorj.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bintray',
-      value: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    })
-  )
+  .expectBadge({
+    label: 'bintray',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
 t.create('version (not found)')
   .get('/asciidoctor/maven/not-a-real-package.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'bintray',
-      value: 'not found',
-    })
-  )
+  .expectBadge({
+    label: 'bintray',
+    message: 'not found',
+  })
 
 t.create('version (mocked)')
   .get('/asciidoctor/maven/asciidoctorj.json?style=_shields_test')
@@ -34,8 +28,8 @@ t.create('version (mocked)')
         name: '1.5.7',
       })
   )
-  .expectJSON({
-    name: 'bintray',
-    value: 'v1.5.7',
+  .expectBadge({
+    label: 'bintray',
+    message: 'v1.5.7',
     color: 'blue',
   })

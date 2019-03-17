@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { floorCount } = require('../../lib/color-formatters')
-const { ordinalNumber } = require('../../lib/text-formatters')
+const { floorCount } = require('../color-formatters')
+const { ordinalNumber } = require('../text-formatters')
 const { BaseJsonService, InvalidResponse } = require('..')
 
 const keywords = ['ruby']

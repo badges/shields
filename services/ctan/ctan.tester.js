@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
@@ -11,9 +10,9 @@ const t = (module.exports = new ServiceTester({
 
 t.create('license')
   .get('/l/novel.json')
-  .expectJSON({
-    name: 'license',
-    value: 'lppl1.3c, ofl',
+  .expectBadge({
+    label: 'license',
+    message: 'lppl1.3c, ofl',
   })
 
 t.create('license missing')
@@ -27,9 +26,9 @@ t.create('license missing')
         },
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'missing',
+  .expectBadge({
+    label: 'license',
+    message: 'missing',
   })
 
 t.create('single license')
@@ -44,19 +43,17 @@ t.create('single license')
         },
       })
   )
-  .expectJSON({
-    name: 'license',
-    value: 'knuth',
+  .expectBadge({
+    label: 'license',
+    message: 'knuth',
   })
 
 t.create('version')
   .get('/v/novel.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'ctan',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'ctan',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('version (mocked)')
   .get('/v/novel.json?style=_shields_test')
@@ -69,8 +66,8 @@ t.create('version (mocked)')
         },
       })
   )
-  .expectJSON({
-    name: 'ctan',
-    value: 'v1.11',
+  .expectBadge({
+    label: 'ctan',
+    message: 'v1.11',
     color: 'blue',
   })

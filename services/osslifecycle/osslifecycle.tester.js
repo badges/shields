@@ -9,16 +9,16 @@ const t = (module.exports = new ServiceTester({
 
 t.create('osslifecycle status')
   .get('/Netflix/osstracker.json')
-  .expectJSON({
-    name: 'oss lifecycle',
-    value: 'active',
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'active',
   })
 
 t.create('osslifecycle status (branch)')
   .get('/Netflix/osstracker/documentation.json')
-  .expectJSON({
-    name: 'oss lifecycle',
-    value: 'active',
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'active',
   })
 
 t.create('oss metadata in unexpected format')
@@ -32,14 +32,14 @@ t.create('oss metadata in unexpected format')
       'Content-Type': 'text/plain;charset=UTF-8',
     }
   )
-  .expectJSON({
-    name: 'oss lifecycle',
-    value: 'metadata in unexpected format',
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'metadata in unexpected format',
   })
 
 t.create('oss metadata not found')
   .get('/PyvesB/empty-repo.json')
-  .expectJSON({
-    name: 'oss lifecycle',
-    value: 'not found',
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'not found',
   })

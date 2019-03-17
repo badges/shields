@@ -6,7 +6,7 @@ const {
   coveragePercentage: coveragePercentageColor,
   letterScore: letterScoreColor,
   colorScale,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class CodeclimateCoverage extends LegacyService {
   static get route() {

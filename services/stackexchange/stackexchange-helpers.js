@@ -1,7 +1,7 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
-const { floorCount: floorCountColor } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { floorCount: floorCountColor } = require('../color-formatters')
 
 module.exports = function renderQuestionsBadge({
   suffix,

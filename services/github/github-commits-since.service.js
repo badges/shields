@@ -29,7 +29,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
   static get examples() {
     return [
       {
-        title: 'GitHub commits',
+        title: 'GitHub commits since tagged version',
         namedParams: {
           user: 'SubtitleEdit',
           repo: 'subtitleedit',
@@ -43,7 +43,7 @@ module.exports = class GithubCommitsSince extends LegacyService {
         documentation,
       },
       {
-        title: 'GitHub commits (since latest release)',
+        title: 'GitHub commits since latest release',
         namedParams: {
           user: 'SubtitleEdit',
           repo: 'subtitleedit',

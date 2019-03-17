@@ -1,6 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
+const {
+  coveragePercentage: coveragePercentageColor,
+} = require('../color-formatters')
 const AzureDevOpsBase = require('./azure-devops-base')
 const { keywords, getHeaders } = require('./azure-devops-helpers')
 
@@ -24,10 +27,6 @@ const documentation = `
   <code>https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg</code>.
 </p>
 `
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
-
 const buildCodeCoverageSchema = Joi.object({
   coverageData: Joi.array()
     .items(

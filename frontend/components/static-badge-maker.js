@@ -1,65 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { staticBadgeUrl } from '../lib/badge-url'
+import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
-export default class StaticBadgeMaker extends React.Component {
-  static propTypes = {
-    baseUrl: PropTypes.string,
-  }
-
-  state = {
-    subject: '',
-    status: '',
+export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
+  const [values, setValues] = useState({
+    label: '',
+    message: '',
     color: '',
+  })
+
+  const isValid = ['message', 'color'].every(k => values[k])
+
+  const onChange = ({ target: { name, value } }) => {
+    setValues({
+      ...values,
+      [name]: value,
+    })
   }
 
-  handleSubmit(e) {
+  const onSubmit = e => {
     e.preventDefault()
 
-    const { baseUrl } = this.props
-    const { subject, status, color } = this.state
-    const badgeUrl = staticBadgeUrl(
-      baseUrl || window.location.href,
-      subject,
-      status,
-      color
-    )
-
-    document.location = badgeUrl
+    const { label, message, color } = values
+    document.location = staticBadgeUrl({ baseUrl, label, message, color })
   }
 
-  render() {
-    return (
-      <form onSubmit={e => this.handleSubmit(e)}>
-        <InlineInput
-          value={this.state.subject}
-          onChange={event => this.setState({ subject: event.target.value })}
-          placeholder="subject"
-        />
-        <InlineInput
-          value={this.state.status}
-          onChange={event => this.setState({ status: event.target.value })}
-          placeholder="status"
-        />
-        <InlineInput
-          value={this.state.color}
-          onChange={event => this.setState({ color: event.target.value })}
-          list="default-colors"
-          placeholder="color"
-        />
-        <datalist id="default-colors">
-          <option value="brightgreen" />
-          <option value="green" />
-          <option value="yellowgreen" />
-          <option value="yellow" />
-          <option value="orange" />
-          <option value="red" />
-          <option value="lightgrey" />
-          <option value="blue" />
-        </datalist>
-        <button>Make Badge</button>
-      </form>
-    )
-  }
+  return (
+    <form onSubmit={onSubmit}>
+      <InlineInput
+        name="label"
+        onChange={onChange}
+        placeholder="label"
+        value={values.label}
+      />
+      <InlineInput
+        name="message"
+        onChange={onChange}
+        placeholder="message"
+        value={values.message}
+      />
+      <InlineInput
+        list="default-colors"
+        name="color"
+        onChange={onChange}
+        placeholder="color"
+        value={values.color}
+      />
+      <datalist id="default-colors">
+        <option value="brightgreen" />
+        <option value="green" />
+        <option value="yellowgreen" />
+        <option value="yellow" />
+        <option value="orange" />
+        <option value="red" />
+        <option value="lightgrey" />
+        <option value="blue" />
+      </datalist>
+      <button disabled={!isValid}>Make Badge</button>
+    </form>
+  )
+}
+StaticBadgeMaker.propTypes = {
+  baseUrl: PropTypes.string,
 }

@@ -1,5 +1,4 @@
 import groupBy from 'lodash.groupby'
-
 import { services, categories } from '../../../service-definitions.yml'
 export { services, categories } from '../../../service-definitions.yml'
 

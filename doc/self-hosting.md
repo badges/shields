@@ -14,7 +14,7 @@ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -; sudo apt-get ins
 ```sh
 git clone https://github.com/badges/shields.git
 cd shields
-npm install  # You may need sudo for this.
+npm ci  # You may need sudo for this.
 ```
 
 [package manager]: https://nodejs.org/en/download/package-manager/
@@ -46,17 +46,16 @@ For testing purposes, you can go to `http://localhost/`.
 
 ## Heroku
 
-Once you have installed the [Heroku Toolbelt][]:
+Once you have installed the [Heroku CLI][]
 
 ```bash
 heroku login
 heroku create your-app-name
-heroku config:set BUILDPACK_URL=https://github.com/mojodna/heroku-buildpack-multi.git#build-env
-make deploy
+git push heroku master
 heroku open
 ```
 
-[heroku toolbelt]: https://toolbelt.heroku.com/
+[heroku cli]: https://devcenter.heroku.com/articles/heroku-cli
 
 ## Docker
 

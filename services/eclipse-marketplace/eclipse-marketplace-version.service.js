@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
+const { renderVersionBadge } = require('../version')
 const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
-const { renderVersionBadge } = require('../../lib/version')
 
 const versionResponseSchema = Joi.object({
   marketplace: Joi.object({

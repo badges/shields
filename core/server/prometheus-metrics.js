@@ -2,42 +2,32 @@
 
 const prometheus = require('prom-client')
 
-class PrometheusMetrics {
-  constructor(config = {}) {
-    this.enabled = config.enabled || false
-    const matchNothing = /(?!)/
-    this.allowedIps = config.allowedIps
-      ? new RegExp(config.allowedIps)
-      : matchNothing
-    if (this.enabled) {
-      console.log(
-        `Metrics are enabled. Access to /metrics resource is limited to IP addresses matching: ${
-          this.allowedIps
-        }`
-      )
-    }
+module.exports = class PrometheusMetrics {
+  constructor() {
+    this.register = new prometheus.Registry()
+    this.requestCounter = new prometheus.Counter({
+      name: 'service_requests_total',
+      help: 'Total service requests',
+      labelNames: ['category', 'family', 'service'],
+      registers: [this.register],
+    })
   }
 
   async initialize(server) {
-    if (this.enabled) {
-      const register = prometheus.register
-      prometheus.collectDefaultMetrics()
-      this.setRoutes(server, register)
-    }
-  }
+    const { register } = this
+    this.interval = prometheus.collectDefaultMetrics({ register })
 
-  setRoutes(server, register) {
     server.route(/^\/metrics$/, (data, match, end, ask) => {
-      const ip = ask.req.socket.remoteAddress
-      if (this.allowedIps.test(ip)) {
-        ask.res.setHeader('Content-Type', register.contentType)
-        ask.res.end(register.metrics())
-      } else {
-        ask.res.statusCode = 403
-        ask.res.end()
-      }
+      ask.res.setHeader('Content-Type', register.contentType)
+      ask.res.end(register.metrics())
     })
   }
-}
 
-module.exports = PrometheusMetrics
+  stop() {
+    this.register.clear()
+    if (this.interval) {
+      clearInterval(this.interval)
+      this.interval = undefined
+    }
+  }
+}

@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('get room state as guest')
@@ -69,9 +68,9 @@ t.create('get room state as guest')
         ])
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: '2 users',
+  .expectBadge({
+    label: 'chat',
+    message: '2 users',
     color: 'brightgreen',
   })
 
@@ -148,18 +147,18 @@ t.create('get room state as member (backup method)')
         ])
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: '2 users',
+  .expectBadge({
+    label: 'chat',
+    message: '2 users',
     color: 'brightgreen',
   })
 
 t.create('bad server or connection')
   .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
   .networkOff()
-  .expectJSON({
-    name: 'chat',
-    value: 'inaccessible',
+  .expectBadge({
+    label: 'chat',
+    message: 'inaccessible',
     color: 'lightgrey',
   })
 
@@ -194,9 +193,9 @@ t.create('non-world readable room')
         })
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: 'room not world readable or is invalid',
+  .expectBadge({
+    label: 'chat',
+    message: 'room not world readable or is invalid',
     color: 'lightgrey',
   })
 
@@ -222,9 +221,9 @@ t.create('invalid token')
         })
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: 'bad auth token',
+  .expectBadge({
+    label: 'chat',
+    message: 'bad auth token',
     color: 'lightgrey',
   })
 
@@ -259,9 +258,9 @@ t.create('unknown request')
         })
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: 'unknown request',
+  .expectBadge({
+    label: 'chat',
+    message: 'unknown request',
     color: 'lightgrey',
   })
 
@@ -287,17 +286,17 @@ t.create('unknown alias')
         })
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: 'room not found',
+  .expectBadge({
+    label: 'chat',
+    message: 'room not found',
     color: 'red',
   })
 
 t.create('invalid alias')
   .get('/ALIASDUMMY.dumb.json?style=_shields_test')
-  .expectJSON({
-    name: 'chat',
-    value: 'invalid alias',
+  .expectBadge({
+    label: 'chat',
+    message: 'invalid alias',
     color: 'red',
   })
 
@@ -366,9 +365,9 @@ t.create('server uses a custom port')
         ])
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: '2 users',
+  .expectBadge({
+    label: 'chat',
+    message: '2 users',
     color: 'brightgreen',
   })
 
@@ -439,19 +438,17 @@ t.create('specify the homeserver fqdn')
         ])
       )
   )
-  .expectJSON({
-    name: 'chat',
-    value: '2 users',
+  .expectBadge({
+    label: 'chat',
+    message: '2 users',
     color: 'brightgreen',
   })
 
 t.create('test on real matrix room for API compliance')
   .get('/twim:matrix.org.json?style=_shields_test')
   .timeout(10000)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'chat',
-      value: Joi.string().regex(/^[0-9]+ users$/),
-      color: 'brightgreen',
-    })
-  )
+  .expectBadge({
+    label: 'chat',
+    message: Joi.string().regex(/^[0-9]+ users$/),
+    color: 'brightgreen',
+  })

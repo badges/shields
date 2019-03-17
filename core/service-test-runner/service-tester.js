@@ -1,10 +1,11 @@
 'use strict'
 
 const emojic = require('emojic')
-const frisby = require('./icedfrisby-no-nock')(
+const trace = require('../base-service/trace')
+const frisby = require('./icedfrisby-shields')(
+  // eslint-disable-next-line import/order
   require('icedfrisby-nock')(require('icedfrisby'))
 )
-const trace = require('../base-service/trace')
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register

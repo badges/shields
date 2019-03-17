@@ -1,24 +1,25 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
-
-const t = new ServiceTester({ id: 'maintenance', title: 'Maintenance' })
-module.exports = t
+const t = (module.exports = require('../tester').createServiceTester())
 
 const currentYear = new Date().getUTCFullYear()
 
 t.create('yes last maintained 2016 (no)')
   .get('/yes/2016.json')
-  .expectJSON({ name: 'maintained', value: 'no! (as of 2016)' })
+  .expectBadge({ label: 'maintained', message: 'no! (as of 2016)' })
 
 t.create('no longer maintained 2017 (no)')
   .get('/no/2017.json')
-  .expectJSON({ name: 'maintained', value: 'no! (as of 2017)' })
+  .expectBadge({ label: 'maintained', message: 'no! (as of 2017)' })
 
 t.create('yes this year (yes)')
   .get(`/yes/${currentYear}.json`)
-  .expectJSON({ name: 'maintained', value: 'yes' })
+  .expectBadge({ label: 'maintained', message: 'yes' })
 
 t.create(`until end of ${currentYear} (yes)`)
   .get(`/until end of ${currentYear}/${currentYear}.json`)
-  .expectJSON({ name: 'maintained', value: `until end of ${currentYear}` })
+  .expectBadge({ label: 'maintained', message: `until end of ${currentYear}` })
+
+t.create(`stale last maintained ${currentYear - 1} (yes)`)
+  .get(`/yes/${currentYear - 1}.json`)
+  .expectBadge({ label: 'maintained', message: `stale (as of ${currentYear})` })

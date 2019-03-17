@@ -1,10 +1,11 @@
 'use strict'
 
+const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
 const { checkErrorResponse } = require('../../lib/error-helper')
-const { assertValidCategory } = require('../../services/categories')
+const { assertValidCategory } = require('./categories')
 const coalesceBadge = require('./coalesce-badge')
 const {
   NotFound,
@@ -13,15 +14,16 @@ const {
   InvalidParameter,
   Deprecated,
 } = require('./errors')
+const { validateExample, transformExample } = require('./examples')
 const {
   makeFullUrl,
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
+  getQueryParamNames,
 } = require('./route')
 const { assertValidServiceDefinition } = require('./service-definitions')
 const trace = require('./trace')
-const { validateExample, transformExample } = require('./transform-example')
 const validate = require('./validate')
 
 const defaultBadgeDataSchema = Joi.object({
@@ -47,7 +49,10 @@ const serviceDataSchema = Joi.object({
   // `render()` to always return a string.
   message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
-  link: Joi.string().uri(),
+  link: Joi.array()
+    .items(Joi.string().uri())
+    .single()
+    .max(2),
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
@@ -101,9 +106,22 @@ module.exports = class BaseService {
    *  - capture: Array of names for the capture groups in the regular
    *             expression. The handler will be passed an object containing
    *             the matches.
-   *  - queryParams: Array of names for query parameters which will the service
-   *                 uses. For cache safety, only the whitelisted query
-   *                 parameters will be passed to the handler.
+   *  - queryParamSchema: (Optional) A Joi schema (`Joi.object({ ... }).required()`)
+   *                      for the query param object. If you know a parameter
+   *                      will never receive a numeric string, you can use
+   *                      `Joi.string()`. Because of quirks in Scoutcamp and Joi,
+   *                      alphanumeric strings should be declared using
+   *                      `Joi.alternatives().try(Joi.string(), Joi.number())`,
+   *                      otherwise a value like `?success_color=999` will fail.
+   *                      A parameter requiring a numeric string can use
+   *                      `Joi.number()`. A parameter that receives only non-numeric
+   *                      strings can use `Joi.string()`. A parameter that never
+   *                      receives numeric can use `Joi.string()`. A boolean
+   *                      parameter should use `Joi.equal('')` and will receive an
+   *                      empty string on e.g. `?compact_message` and undefined
+   *                      when the parameter is absent. (Note that in,
+   *                      `examples.queryParams` boolean query params should be given
+   *                      `null` values.)
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
@@ -128,7 +146,7 @@ module.exports = class BaseService {
    * this service.
    *
    * The preferred way to specify an example is with `namedParams` which are
-   * substitued into the service's compiled route pattern. The rendered badge
+   * substituted into the service's compiled route pattern. The rendered badge
    * is specified with `staticPreview`.
    *
    * For services which use a route `format`, the `pattern` can be specified as
@@ -139,7 +157,8 @@ module.exports = class BaseService {
    * namedParams: An object containing the values of named parameters to
    *   substitute into the compiled route pattern.
    * queryParams: An object containing query parameters to include in the
-   *   example URLs.
+   *   example URLs. For alphanumeric query parameters, specify a string value.
+   *   For boolean query parameters, specify `null`.
    * pattern: The route pattern to compile. Defaults to `this.route.pattern`.
    * staticPreview: A rendered badge of the sort returned by `handle()` or
    *   `render()`: an object containing `message` and optional `label` and
@@ -174,7 +193,8 @@ module.exports = class BaseService {
 
     let base, format, pattern, queryParams
     try {
-      ;({ base, format, pattern, query: queryParams = [] } = this.route)
+      ;({ base, format, pattern } = this.route)
+      queryParams = getQueryParamNames(this.route)
     } catch (e) {
       // Legacy services do not have a route.
     }
@@ -270,12 +290,50 @@ module.exports = class BaseService {
 
     const serviceInstance = new this(context, config)
 
+    let serviceError
+    const { queryParamSchema } = this.route
+    let transformedQueryParams
+    if (queryParamSchema) {
+      try {
+        transformedQueryParams = validate(
+          {
+            ErrorClass: InvalidParameter,
+            prettyErrorMessage: 'invalid query parameter',
+            includeKeys: true,
+            traceErrorMessage: 'Query params did not match schema',
+            traceSuccessMessage: 'Query params after validation',
+          },
+          queryParams,
+          queryParamSchema
+        )
+        trace.logTrace(
+          'inbound',
+          emojic.crayon,
+          'Query params after validation',
+          queryParams
+        )
+      } catch (error) {
+        serviceError = error
+      }
+    } else {
+      transformedQueryParams = {}
+    }
+
     let serviceData
-    try {
-      serviceData = await serviceInstance.handle(namedParams, queryParams)
-      Joi.assert(serviceData, serviceDataSchema)
-    } catch (error) {
-      serviceData = serviceInstance._handleError(error)
+    if (!serviceError) {
+      try {
+        serviceData = await serviceInstance.handle(
+          namedParams,
+          transformedQueryParams
+        )
+        Joi.assert(serviceData, serviceDataSchema)
+      } catch (error) {
+        serviceError = error
+      }
+    }
+
+    if (serviceError) {
+      serviceData = serviceInstance._handleError(serviceError)
     }
 
     trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
@@ -283,14 +341,33 @@ module.exports = class BaseService {
     return serviceData
   }
 
-  static register({ camp, handleRequest, githubApiProvider }, serviceConfig) {
+  static _createServiceRequestCounter({ requestCounter }) {
+    if (requestCounter) {
+      const { category, serviceFamily, name } = this
+      const service = decamelize(name)
+      return requestCounter.labels(category, serviceFamily, service)
+    } else {
+      // When metrics are disabled, return a mock counter.
+      return { inc: () => {} }
+    }
+  }
+
+  static register(
+    { camp, handleRequest, githubApiProvider, requestCounter },
+    serviceConfig
+  ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
+    const queryParams = getQueryParamNames(this.route)
+
+    const serviceRequestCounter = this._createServiceRequestCounter({
+      requestCounter,
+    })
 
     camp.route(
       regex,
       handleRequest(cacheHeaderConfig, {
-        queryParams: this.route.queryParams,
+        queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
@@ -313,6 +390,8 @@ module.exports = class BaseService {
           // The final capture group is the extension.
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
+
+          serviceRequestCounter.inc()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,
@@ -340,20 +419,6 @@ module.exports = class BaseService {
       },
       data,
       schema
-    )
-  }
-
-  static _validateQueryParams(queryParams, queryParamSchema) {
-    return validate(
-      {
-        ErrorClass: InvalidParameter,
-        prettyErrorMessage: 'invalid query parameter',
-        includeKeys: true,
-        traceErrorMessage: 'Query params did not match schema',
-        traceSuccessMessage: 'Query params after validation',
-      },
-      queryParams,
-      queryParamSchema
     )
   }
 

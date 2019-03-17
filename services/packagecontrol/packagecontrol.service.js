@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
@@ -26,7 +26,7 @@ const schema = Joi.object({
 })
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix, transform } = {
+  const { base, messageSuffix, transform, name } = {
     day: {
       base: 'packagecontrol/dd',
       messageSuffix: '/day',
@@ -39,6 +39,7 @@ function DownloadsForInterval(interval) {
         })
         return downloads
       },
+      name: 'PackageControlDownloadsDay',
     },
     week: {
       base: 'packagecontrol/dw',
@@ -54,6 +55,7 @@ function DownloadsForInterval(interval) {
         })
         return downloads
       },
+      name: 'PackageControlDownloadsWeek',
     },
     month: {
       base: 'packagecontrol/dm',
@@ -69,15 +71,21 @@ function DownloadsForInterval(interval) {
         })
         return downloads
       },
+      name: 'PackageControlDownloadsMonth',
     },
     total: {
       base: 'packagecontrol/dt',
       messageSuffix: '',
       transform: resp => resp.installs.total,
+      name: 'PackageControlDownloadsTotal',
     },
   }[interval]
 
   return class PackageControlDownloads extends BaseJsonService {
+    static get name() {
+      return name
+    }
+
     static render({ downloads }) {
       return {
         message: `${metric(downloads)}${messageSuffix}`,

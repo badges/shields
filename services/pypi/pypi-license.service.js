@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderLicenseBadge } = require('../licenses')
 const PypiBase = require('./pypi-base')
 const { getLicenses } = require('./pypi-helpers')
 

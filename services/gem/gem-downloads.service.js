@@ -2,9 +2,9 @@
 
 const semver = require('semver')
 const Joi = require('joi')
-const { downloadCount } = require('../../lib/color-formatters')
-const { metric } = require('../../lib/text-formatters')
-const { latest: latestVersion } = require('../../lib/version')
+const { downloadCount } = require('../color-formatters')
+const { metric } = require('../text-formatters')
+const { latest: latestVersion } = require('../version')
 const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 

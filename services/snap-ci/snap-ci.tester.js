@@ -7,7 +7,7 @@ module.exports = t
 
 t.create('no longer available (previously build state)')
   .get('/snap-ci/ThoughtWorksStudios/eb_deployer/master.json')
-  .expectJSON({
-    name: 'snap ci',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'snap ci',
+    message: 'no longer available',
   })

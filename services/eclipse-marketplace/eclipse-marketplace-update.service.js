@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
-const { formatDate } = require('../../lib/text-formatters')
-const { age: ageColor } = require('../../lib/color-formatters')
+const { formatDate } = require('../text-formatters')
+const { age: ageColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 
 const updateResponseSchema = Joi.object({
   marketplace: Joi.object({

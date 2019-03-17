@@ -7,21 +7,23 @@ function makeFullUrl(base, partialUrl) {
   return `/${[base, partialUrl].filter(Boolean).join('/')}`
 }
 
-const routeSchema = Joi.object({
-  base: Joi.string().allow(''),
+const isValidRoute = Joi.object({
+  base: Joi.string()
+    .allow('')
+    .required(),
   pattern: Joi.string().allow(''),
   format: Joi.string(),
   capture: Joi.alternatives().when('format', {
     is: Joi.string().required(),
     then: Joi.array().items(Joi.string().required()),
   }),
-  queryParams: Joi.array().items(Joi.string().required()),
+  queryParamSchema: Joi.object().schema(),
 })
   .xor('pattern', 'format')
   .required()
 
 function assertValidRoute(route, message = undefined) {
-  Joi.assert(route, routeSchema, message)
+  Joi.assert(route, isValidRoute, message)
 }
 
 function prepareRoute({ base, pattern, format, capture }) {
@@ -67,9 +69,20 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
   return result
 }
 
+function getQueryParamNames({ queryParamSchema }) {
+  if (queryParamSchema) {
+    const { children, renames = [] } = Joi.describe(queryParamSchema)
+    return Object.keys(children).concat(renames.map(({ from }) => from))
+  } else {
+    return []
+  }
+}
+
 module.exports = {
   makeFullUrl,
+  isValidRoute,
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
+  getQueryParamNames,
 }

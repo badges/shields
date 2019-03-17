@@ -1,5 +1,5 @@
 ports:
   - port: 8080
 tasks:
-  - init: npm install && npm run build
+  - init: npm ci && npm run build
     command: node server 8080 0.0.0.0

@@ -9,12 +9,12 @@ const t = (module.exports = new ServiceTester({
 
 t.create('apps (valid, weekly)')
   .get('/aw/AFNetworking.json')
-  .expectJSON({ name: 'apps', value: 'no longer available' })
+  .expectBadge({ label: 'apps', message: 'no longer available' })
 
 t.create('apps (valid, total)')
   .get('/at/AFNetworking.json')
-  .expectJSON({ name: 'apps', value: 'no longer available' })
+  .expectBadge({ label: 'apps', message: 'no longer available' })
 
 t.create('apps (not found)')
   .get('/at/not-a-package.json')
-  .expectJSON({ name: 'apps', value: 'no longer available' })
+  .expectBadge({ label: 'apps', message: 'no longer available' })

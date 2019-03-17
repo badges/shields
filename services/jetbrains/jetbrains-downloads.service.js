@@ -1,12 +1,10 @@
 'use strict'
 
 const Joi = require('joi')
-const JetbrainsBase = require('./jetbrains-base')
-const { metric } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const JetbrainsBase = require('./jetbrains-base')
 
 const schema = Joi.object({
   'plugin-repository': Joi.object({
@@ -33,7 +31,6 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     return [
       {
         title: 'JetBrains IntelliJ plugins',
-        pattern: ':pluginId',
         namedParams: {
           pluginId: '1347-scala',
         },
@@ -43,7 +40,10 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
   }
 
   static get route() {
-    return this.buildUrl('jetbrains/plugin/d')
+    return {
+      base: 'jetbrains/plugin/d',
+      pattern: ':pluginId',
+    }
   }
 
   static render({ downloads }) {

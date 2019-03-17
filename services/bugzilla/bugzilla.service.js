@@ -1,8 +1,19 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
+
+const schema = Joi.object({
+  bugs: Joi.array()
+    .items(
+      Joi.object({
+        status: Joi.string().required(),
+        resolution: Joi.string().required(),
+      }).required()
+    )
+    .min(1)
+    .required(),
+}).required()
 
 const documentation = `
 <p>
@@ -10,13 +21,7 @@ const documentation = `
 </p>
 `
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class Bugzilla extends LegacyService {
+module.exports = class Bugzilla extends BaseJsonService {
   static get category() {
     return 'issue-tracking'
   }
@@ -33,82 +38,73 @@ module.exports = class Bugzilla extends LegacyService {
       {
         title: 'Bugzilla bug status',
         namedParams: { bugNumber: '996038' },
-        staticPreview: {
-          label: 'bug 996038',
-          message: 'fixed',
-          color: 'brightgreen',
-        },
+        staticPreview: this.render({
+          bugNumber: 996038,
+          status: 'FIXED',
+          resolution: '',
+        }),
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/bugzilla\/(\d+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const bugNumber = match[1] // eg, 1436739
-        const format = match[2]
-        const options = {
-          method: 'GET',
-          json: true,
-          uri: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
-        }
-        const badgeData = getBadgeData(`bug ${bugNumber}`, data)
-        request(options, (err, res, json) => {
-          if (checkErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const bug = json.bugs[0]
+  static get defaultBadgeData() {
+    return { label: 'bugzilla' }
+  }
 
-            switch (bug.status) {
-              case 'UNCONFIRMED':
-                badgeData.text[1] = 'unconfirmed'
-                badgeData.colorscheme = 'blue'
-                break
-              case 'NEW':
-                badgeData.text[1] = 'new'
-                badgeData.colorscheme = 'blue'
-                break
-              case 'ASSIGNED':
-                badgeData.text[1] = 'assigned'
-                badgeData.colorscheme = 'green'
-                break
-              case 'RESOLVED':
-                if (bug.resolution === 'FIXED') {
-                  badgeData.text[1] = 'fixed'
-                  badgeData.colorscheme = 'brightgreen'
-                } else if (bug.resolution === 'INVALID') {
-                  badgeData.text[1] = 'invalid'
-                  badgeData.colorscheme = 'yellow'
-                } else if (bug.resolution === 'WONTFIX') {
-                  badgeData.text[1] = "won't fix"
-                  badgeData.colorscheme = 'orange'
-                } else if (bug.resolution === 'DUPLICATE') {
-                  badgeData.text[1] = 'duplicate'
-                  badgeData.colorscheme = 'lightgrey'
-                } else if (bug.resolution === 'WORKSFORME') {
-                  badgeData.text[1] = 'works for me'
-                  badgeData.colorscheme = 'yellowgreen'
-                } else if (bug.resolution === 'INCOMPLETE') {
-                  badgeData.text[1] = 'incomplete'
-                  badgeData.colorscheme = 'red'
-                } else {
-                  badgeData.text[1] = 'unknown'
-                }
-                break
-              default:
-                badgeData.text[1] = 'unknown'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'unknown'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async fetch({ bugNumber }) {
+    return this._requestJson({
+      schema,
+      url: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
+    })
+  }
+
+  static getDisplayStatus({ status, resolution }) {
+    let displayStatus =
+      status === 'RESOLVED' ? resolution.toLowerCase() : status.toLowerCase()
+    if (displayStatus === 'worksforme') {
+      displayStatus = 'works for me'
+    }
+    if (displayStatus === 'wontfix') {
+      displayStatus = "won't fix"
+    }
+    return displayStatus
+  }
+
+  static getColor({ displayStatus }) {
+    const colorMap = {
+      unconfirmed: 'blue',
+      new: 'blue',
+      assigned: 'green',
+      fixed: 'brightgreen',
+      invalid: 'yellow',
+      "won't fix": 'orange',
+      duplicate: 'lightgrey',
+      'works for me': 'yellowgreen',
+      incomplete: 'red',
+    }
+    if (displayStatus in colorMap) {
+      return colorMap[displayStatus]
+    }
+    return 'lightgrey'
+  }
+
+  static render({ bugNumber, status, resolution }) {
+    const displayStatus = this.getDisplayStatus({ status, resolution })
+    const color = this.getColor({ displayStatus })
+    return {
+      label: `bug ${bugNumber}`,
+      message: displayStatus,
+      color,
+    }
+  }
+
+  async handle({ bugNumber }) {
+    const data = await this.fetch({ bugNumber })
+    return this.constructor.render({
+      bugNumber,
+      status: data.bugs[0].status,
+      resolution: data.bugs[0].resolution,
+    })
   }
 }

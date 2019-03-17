@@ -2,10 +2,25 @@
 
 const { deprecatedService } = require('..')
 
-module.exports = deprecatedService({
+const commonAttrs = {
   category: 'funding',
-  route: {
-    format: '(?:gittip|gratipay(?:/user|/team|/project)?)/(?:.*)',
-  },
   label: 'gratipay',
-})
+  dateAdded: new Date('2017-12-29'),
+}
+
+module.exports = [
+  deprecatedService({
+    route: {
+      base: 'gittip',
+      format: '(?:/user|/team|/project)?/(?:.*)',
+    },
+    ...commonAttrs,
+  }),
+  deprecatedService({
+    route: {
+      base: 'gratipay',
+      format: '(?:/user|/team|/project)?/(?:.*)',
+    },
+    ...commonAttrs,
+  }),
+]

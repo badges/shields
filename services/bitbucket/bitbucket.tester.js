@@ -1,7 +1,8 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
+const { isMetric, isMetricOpenIssues } = require('../test-validators')
+const { isBuildStatus } = require('../build-status')
 const {
   mockBitbucketCreds,
   mockBitbucketServerCreds,
@@ -9,8 +10,6 @@ const {
   user,
   pass,
 } = require('./bitbucket-test-helpers')
-const { isMetric, isMetricOpenIssues } = require('../test-validators')
-const { isBuildStatus } = require('../../lib/build-status')
 
 const t = (module.exports = new ServiceTester({
   id: 'bitbucket',
@@ -21,73 +20,65 @@ const t = (module.exports = new ServiceTester({
 
 t.create('issues-raw (valid)')
   .get('/issues-raw/atlassian/python-bitbucket.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'issues',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'issues',
+    message: isMetric,
+  })
 
 t.create('issues-raw (not found)')
   .get('/issues-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'not found' })
+  .expectBadge({ label: 'issues', message: 'not found' })
 
 t.create('issues-raw (private repo)')
   .get('/issues-raw/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'issues', value: 'private repo' })
+  .expectBadge({ label: 'issues', message: 'private repo' })
 
 t.create('issues (valid)')
   .get('/issues/atlassian/python-bitbucket.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'issues',
-      value: isMetricOpenIssues,
-    })
-  )
+  .expectBadge({
+    label: 'issues',
+    message: isMetricOpenIssues,
+  })
 
 t.create('issues (not found)')
   .get('/issues/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'issues', value: 'not found' })
+  .expectBadge({ label: 'issues', message: 'not found' })
 
 t.create('issues (private repo)')
   .get('/issues/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'issues', value: 'private repo' })
+  .expectBadge({ label: 'issues', message: 'private repo' })
 
 // tests for pull requests endpoints
 
 t.create('pr-raw (valid)')
   .get('/pr-raw/atlassian/python-bitbucket.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: isMetric,
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: isMetric,
+  })
 
 t.create('pr-raw (not found)')
   .get('/pr-raw/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'not found' })
+  .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'private repo' })
+  .expectBadge({ label: 'pull requests', message: 'private repo' })
 
 t.create('pr (valid)')
   .get('/pr/atlassian/python-bitbucket.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: isMetricOpenIssues,
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: isMetricOpenIssues,
+  })
 
 t.create('pr (not found)')
   .get('/pr/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'not found' })
+  .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
-  .expectJSON({ name: 'pull requests', value: 'private repo' })
+  .expectBadge({ label: 'pull requests', message: 'private repo' })
 
 t.create('pr (server)')
   .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
@@ -102,12 +93,10 @@ t.create('pr (server)')
       })
       .reply(200, { size: 42 })
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: isMetricOpenIssues,
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: isMetricOpenIssues,
+  })
 
 t.create('pr (server, invalid credentials)')
   .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
@@ -122,12 +111,10 @@ t.create('pr (server, invalid credentials)')
       })
       .reply(401)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: 'invalid credentials',
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: 'invalid credentials',
+  })
 
 t.create('pr (server, private repo)')
   .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
@@ -142,12 +129,10 @@ t.create('pr (server, private repo)')
       })
       .reply(403)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: 'private repo',
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: 'private repo',
+  })
 
 t.create('pr (server, not found)')
   .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
@@ -162,12 +147,10 @@ t.create('pr (server, not found)')
       })
       .reply(404)
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: 'not found',
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: 'not found',
+  })
 
 t.create('pr (auth)')
   .before(mockBitbucketCreds)
@@ -179,12 +162,10 @@ t.create('pr (auth)')
       .reply(200, { size: 42 })
   )
   .finally(restore)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: isMetricOpenIssues,
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: isMetricOpenIssues,
+  })
 
 t.create('pr (server, auth)')
   .before(mockBitbucketServerCreds)
@@ -196,12 +177,10 @@ t.create('pr (server, auth)')
       .reply(200, { size: 42 })
   )
   .finally(restore)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pull requests',
-      value: isMetricOpenIssues,
-    })
-  )
+  .expectBadge({
+    label: 'pull requests',
+    message: isMetricOpenIssues,
+  })
 // tests for Bitbucket Pipelines
 
 function bitbucketApiResponse(status) {
@@ -223,35 +202,31 @@ function bitbucketApiResponse(status) {
 
 t.create('master build result (valid)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('master build result (not found)')
   .get('/pipelines/atlassian/not-a-repo.json')
-  .expectJSON({ name: 'build', value: 'not found' })
+  .expectBadge({ label: 'build', message: 'not found' })
 
 t.create('branch build result (valid)')
   .get(
     '/pipelines/atlassian/adf-builder-javascript/shields-test-dont-remove.json'
   )
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: isBuildStatus,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('branch build result (not found)')
   .get('/pipelines/atlassian/not-a-repo/some-branch.json')
-  .expectJSON({ name: 'build', value: 'not found' })
+  .expectBadge({ label: 'build', message: 'not found' })
 
 t.create('branch build result (never built)')
   .get('/pipelines/atlassian/adf-builder-javascript/some/new/branch.json')
-  .expectJSON({ name: 'build', value: 'never built' })
+  .expectBadge({ label: 'build', message: 'never built' })
 
 t.create('build result (passing)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -260,7 +235,7 @@ t.create('build result (passing)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('SUCCESSFUL'))
   )
-  .expectJSON({ name: 'build', value: 'passing' })
+  .expectBadge({ label: 'build', message: 'passing' })
 
 t.create('build result (failing)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -269,7 +244,7 @@ t.create('build result (failing)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('FAILED'))
   )
-  .expectJSON({ name: 'build', value: 'failing' })
+  .expectBadge({ label: 'build', message: 'failing' })
 
 t.create('build result (error)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -278,7 +253,7 @@ t.create('build result (error)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('ERROR'))
   )
-  .expectJSON({ name: 'build', value: 'error' })
+  .expectBadge({ label: 'build', message: 'error' })
 
 t.create('build result (stopped)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -287,7 +262,7 @@ t.create('build result (stopped)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('STOPPED'))
   )
-  .expectJSON({ name: 'build', value: 'stopped' })
+  .expectBadge({ label: 'build', message: 'stopped' })
 
 t.create('build result (expired)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -296,7 +271,7 @@ t.create('build result (expired)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('EXPIRED'))
   )
-  .expectJSON({ name: 'build', value: 'expired' })
+  .expectBadge({ label: 'build', message: 'expired' })
 
 t.create('build result (unexpected status)')
   .get('/pipelines/atlassian/adf-builder-javascript.json')
@@ -305,4 +280,4 @@ t.create('build result (unexpected status)')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED'))
   )
-  .expectJSON({ name: 'build', value: 'invalid response data' })
+  .expectBadge({ label: 'build', message: 'invalid response data' })

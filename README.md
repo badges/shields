@@ -59,16 +59,16 @@ This repo hosts:
 
 ## Examples
 
-- code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?maxAge=2592000)
-- stable release version: ![version](https://img.shields.io/badge/version-1.2.3-blue.svg?maxAge=2592000)
-- package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue.svg?maxAge=2592000)
-- status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange.svg?maxAge=2592000)
-- static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green.svg?maxAge=2592000)
-- [SemVer](https://semver.org/) version observance: ![semver](https://img.shields.io/badge/semver-2.0.0-blue.svg?maxAge=2592000)
-- amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow.svg?maxAge=2592000)
-- Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen.svg?maxAge=2592000)
-- Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen.svg?maxAge=2592000)
-- [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen.svg?maxAge=2592000)
+- code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?cacheSeconds=2592000)
+- stable release version: ![version](https://img.shields.io/badge/version-1.2.3-blue.svg?cacheSeconds=2592000)
+- package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue.svg?cacheSeconds=2592000)
+- status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange.svg?cacheSeconds=2592000)
+- static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green.svg?cacheSeconds=2592000)
+- [SemVer](https://semver.org/) version observance: ![semver](https://img.shields.io/badge/semver-2.0.0-blue.svg?cacheSeconds=2592000)
+- amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow.svg?cacheSeconds=2592000)
+- Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen.svg?cacheSeconds=2592000)
+- Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen.svg?cacheSeconds=2592000)
+- [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen.svg?cacheSeconds=2592000)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37.svg`)
@@ -100,7 +100,7 @@ You can read a [tutorial on how to add a badge][tutorial].
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
    Tests need to pass in Node 8 and 9.
 2. Clone this repository.
-3. Run `npm install` to install the dependencies.
+3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the server.
 5. Open `http://localhost:3000/` to view the frontend.
 

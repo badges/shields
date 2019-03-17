@@ -2,17 +2,10 @@
 
 When a service that Shields integrates with shuts down, those badges will no longer work and need to be deprecated within Shields.
 
-Deprecating a badge involves 3 steps:
+Deprecating a badge involves two steps:
 
-1.  Adding an entry for the service to the deprecated service list in `deprecated-services.js`
-2.  Updating the service code to use the `DeprecatedService` class
-3.  Updating the service tests to reflect the new behavior of the deprecated service
-
-## Update Deprecated Service List
-
-All deprecated services are enumerated in the `deprecated-services.js` [file](https://github.com/badges/shields/blob/master/lib/deprecated-services.js) which can be found in the `lib` directory (`./lib/deprecated-services.js`).
-
-Add a key for the service with the corresponding date for deprecation, for example: `nsp: new Date('2018-12-13')`, to the `deprecatedServices` object.
+1.  Updating the service code to use the `DeprecatedService` class
+2.  Updating the service tests to reflect the new behavior of the deprecated service
 
 ## Update Service Implementation
 
@@ -25,7 +18,6 @@ Replace the existing service class implementation with the `DeprecatedService` c
 
 const { deprecatedService } = require('..')
 
-// image layers integration - deprecated as of November 2018.
 module.exports = deprecatedService({
   category: 'size',
   route: {
@@ -33,6 +25,7 @@ module.exports = deprecatedService({
     format: '(?:.+)',
   },
   label: 'imagelayers',
+  dateAdded: new Date('2019-xx-xx'), // Be sure to update this with today's date!
 })
 ```
 
@@ -56,9 +49,9 @@ Next you will need to replace/refactor the existing tests to validate the new de
 ```js
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 ```
 
@@ -78,16 +71,16 @@ const t = (module.exports = new ServiceTester({
 
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 
 t.create('no longer available (previously number of layers)')
   .get('/layers/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 ```
 

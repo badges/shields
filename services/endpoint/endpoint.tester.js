@@ -2,7 +2,6 @@
 
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Valid schema (mocked)')
@@ -16,7 +15,7 @@ t.create('Valid schema (mocked)')
         message: 'yo',
       })
   )
-  .expectJSON({ name: '', value: 'yo' })
+  .expectBadge({ label: '', message: 'yo' })
 
 t.create('color and labelColor')
   .get('.json?url=https://example.com/badge&style=_shields_test')
@@ -51,9 +50,9 @@ t.create('style')
         style: '_shields_test',
       })
   )
-  .expectJSON({
-    name: 'hey',
-    value: 'yo',
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
     // `color` is only in _shields_test which is being specified by the
     // service, not the request. If the color key is here we know this has
     // worked.
@@ -146,9 +145,9 @@ t.create('Invalid schema (mocked)')
         schemaVersion: -1,
       })
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'invalid properties: schemaVersion',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid properties: schemaVersion',
   })
 
 t.create('Invalid schema (mocked)')
@@ -164,12 +163,26 @@ t.create('Invalid schema (mocked)')
         bogus: true,
       })
   )
-  .expectJSON({
-    name: 'custom badge',
-    value: 'invalid properties: extra, bogus',
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid properties: extra, bogus',
   })
 
 t.create('User color overrides success color')
+  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        label: '',
+        message: 'yo',
+        color: 'blue',
+      })
+  )
+  .expectBadge({ label: '', message: 'yo', color: '#101010' })
+
+t.create('User legacy color overrides success color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
   .intercept(nock =>
     nock('https://example.com/')
@@ -181,9 +194,24 @@ t.create('User color overrides success color')
         color: 'blue',
       })
   )
-  .expectJSON({ name: '', value: 'yo', color: '#101010' })
+  .expectBadge({ label: '', message: 'yo', color: '#101010' })
 
 t.create('User color does not override error color')
+  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        schemaVersion: 1,
+        isError: true,
+        label: 'something is',
+        message: 'not right',
+        color: 'red',
+      })
+  )
+  .expectBadge({ label: 'something is', message: 'not right', color: 'red' })
+
+t.create('User legacy color does not override error color')
   .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
   .intercept(nock =>
     nock('https://example.com/')
@@ -196,7 +224,7 @@ t.create('User color does not override error color')
         color: 'red',
       })
   )
-  .expectJSON({ name: 'something is', value: 'not right', color: 'red' })
+  .expectBadge({ label: 'something is', message: 'not right', color: 'red' })
 
 t.create('cacheSeconds')
   .get('.json?url=https://example.com/badge')
@@ -213,7 +241,7 @@ t.create('cacheSeconds')
   .expectHeader('cache-control', 'max-age=500')
 
 t.create('user can override service cacheSeconds')
-  .get('.json?url=https://example.com/badge&maxAge=1000')
+  .get('.json?url=https://example.com/badge&cacheSeconds=1000')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -227,7 +255,7 @@ t.create('user can override service cacheSeconds')
   .expectHeader('cache-control', 'max-age=1000')
 
 t.create('user does not override longer service cacheSeconds')
-  .get('.json?url=https://example.com/badge&maxAge=450')
+  .get('.json?url=https://example.com/badge&cacheSeconds=450')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -256,8 +284,8 @@ t.create('cacheSeconds does not override longer Shields default')
 
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')
-  .expectJSON({ name: 'custom badge', value: 'please use https' })
+  .expectBadge({ label: 'custom badge', message: 'please use https' })
 
 t.create('Blocked domain')
   .get('.json?url=https://img.shields.io/badge/foo-bar-blue.json')
-  .expectJSON({ name: 'custom badge', value: 'domain is blocked' })
+  .expectBadge({ label: 'custom badge', message: 'domain is blocked' })

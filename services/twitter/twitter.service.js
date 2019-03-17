@@ -3,7 +3,7 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { makeLogo: getLogo } = require('../../lib/logos')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

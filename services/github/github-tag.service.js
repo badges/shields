@@ -3,9 +3,9 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { makeLogo: getLogo } = require('../../lib/logos')
-const { addv: versionText } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
-const { latest: latestVersion } = require('../../lib/version')
+const { addv: versionText } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
+const { latest: latestVersion } = require('../version')
 const {
   documentation,
   checkErrorResponse: githubCheckErrorResponse,

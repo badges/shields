@@ -1,9 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-
-const { version: versionColor } = require('../../lib/color-formatters')
-const { addv } = require('../../lib/text-formatters')
+const { version: versionColor } = require('../color-formatters')
+const { addv } = require('../text-formatters')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const {

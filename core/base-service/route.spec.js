@@ -1,15 +1,20 @@
 'use strict'
 
 const { expect } = require('chai')
+const Joi = require('joi')
 const { test, given, forCases } = require('sazerac')
-const { prepareRoute, namedParamsForMatch } = require('./route')
+const {
+  prepareRoute,
+  namedParamsForMatch,
+  getQueryParamNames,
+} = require('./route')
 
 describe('Route helpers', function() {
   context('A `pattern` with a named param is declared', function() {
     const { regex, captureNames } = prepareRoute({
       base: 'foo',
       pattern: ':namedParamA',
-      queryParams: ['queryParamA'],
+      queryParamSchema: Joi.object({ queryParamA: Joi.string() }).required(),
     })
 
     const regexExec = str => regex.exec(str)
@@ -100,5 +105,20 @@ describe('Route helpers', function() {
     ).to.throw(
       'Service MyService declares incorrect number of named params (expected 2, got 1)'
     )
+  })
+
+  it('getQueryParamNames', function() {
+    expect(
+      getQueryParamNames({
+        queryParamSchema: Joi.object({ foo: Joi.string() }).required(),
+      })
+    ).to.deep.equal(['foo'])
+    expect(
+      getQueryParamNames({
+        queryParamSchema: Joi.object({ foo: Joi.string() })
+          .rename('bar', 'foo', { ignoreUndefined: true, override: true })
+          .required(),
+      })
+    ).to.deep.equal(['foo', 'bar'])
   })
 })

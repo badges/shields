@@ -32,7 +32,7 @@ t.create('Topics')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: '23k topics' })
+  .expectBadge({ label: 'discourse', message: '23k topics' })
 
 t.create('Posts')
   .get('/https/meta.discourse.org/posts.json')
@@ -41,7 +41,7 @@ t.create('Posts')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: '338k posts' })
+  .expectBadge({ label: 'discourse', message: '338k posts' })
 
 t.create('Users')
   .get('/https/meta.discourse.org/users.json')
@@ -50,7 +50,7 @@ t.create('Users')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: '31k users' })
+  .expectBadge({ label: 'discourse', message: '31k users' })
 
 t.create('Likes')
   .get('/https/meta.discourse.org/likes.json')
@@ -59,7 +59,7 @@ t.create('Likes')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: '309k likes' })
+  .expectBadge({ label: 'discourse', message: '309k likes' })
 
 t.create('Status')
   .get('/https/meta.discourse.org/status.json')
@@ -68,7 +68,7 @@ t.create('Status')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: 'online' })
+  .expectBadge({ label: 'discourse', message: 'online' })
 
 t.create('Status with http (not https)')
   .get('/http/meta.discourse.org/status.json')
@@ -77,7 +77,12 @@ t.create('Status with http (not https)')
       .get('/site/statistics.json')
       .reply(200, data)
   )
-  .expectJSON({ name: 'discourse', value: 'online' })
+  .expectBadge({ label: 'discourse', message: 'online' })
+
+t.create('Status (offline)')
+  .get('/https/meta.discourse.org/status.json')
+  .networkOff()
+  .expectBadge({ label: 'discourse', message: 'inaccessible' })
 
 t.create('Invalid Host')
   .get('/https/some.host/status.json')
@@ -86,58 +91,36 @@ t.create('Invalid Host')
       .get('/site/statistics.json')
       .reply(404, '<h1>Not Found</h1>')
   )
-  .expectJSON({ name: 'discourse', value: 'inaccessible' })
-
-t.create('Invalid Stat')
-  .get('/https/meta.discourse.org/unknown.json')
-  .intercept(nock =>
-    nock('https://meta.discourse.org')
-      .get('/site/statistics.json')
-      .reply(200, data)
-  )
-  .expectJSON({ name: 'discourse', value: 'invalid' })
-
-t.create('Connection Error')
-  .get('/https/meta.discourse.org/status.json')
-  .networkOff()
-  .expectJSON({ name: 'discourse', value: 'inaccessible' })
+  .expectBadge({ label: 'discourse', message: 'not found' })
 
 t.create('Topics (live)')
   .get('/https/meta.discourse.org/topics.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'discourse',
-      value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? topics$/),
-    })
-  )
+  .expectBadge({
+    label: 'discourse',
+    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? topics$/),
+  })
 
 t.create('Posts (live)')
   .get('/https/meta.discourse.org/posts.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'discourse',
-      value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? posts$/),
-    })
-  )
+  .expectBadge({
+    label: 'discourse',
+    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? posts$/),
+  })
 
 t.create('Users (live)')
   .get('/https/meta.discourse.org/users.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'discourse',
-      value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? users$/),
-    })
-  )
+  .expectBadge({
+    label: 'discourse',
+    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? users$/),
+  })
 
 t.create('Likes (live)')
   .get('/https/meta.discourse.org/likes.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'discourse',
-      value: Joi.string().regex(/^[0-9]+[kMGTPEZY]? likes$/),
-    })
-  )
+  .expectBadge({
+    label: 'discourse',
+    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? likes$/),
+  })
 
 t.create('Status (live)')
   .get('/https/meta.discourse.org/status.json')
-  .expectJSON({ name: 'discourse', value: 'online' })
+  .expectBadge({ label: 'discourse', message: 'online' })

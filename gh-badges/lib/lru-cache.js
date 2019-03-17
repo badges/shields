@@ -15,9 +15,6 @@ function CacheSlot(key, value) {
 }
 
 function Cache(capacity, type) {
-  if (!(this instanceof Cache)) {
-    return new Cache(capacity, type)
-  }
   type = type || 'unit'
   this.capacity = capacity
   this.type = typeEnum[type]

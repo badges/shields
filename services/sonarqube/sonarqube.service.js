@@ -3,10 +3,10 @@
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const serverSecrets = require('../../lib/server-secrets')
-const { metric } = require('../../lib/text-formatters')
+const { metric } = require('../text-formatters')
 const {
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class SonarqubeCoverage extends LegacyService {
   static get category() {

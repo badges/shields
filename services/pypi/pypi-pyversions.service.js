@@ -58,6 +58,15 @@ module.exports = class PypiPythonVersions extends PypiBase {
       packageData,
       /^Programming Language :: Python :: ([\d.]+)$/
     )
+    // If no versions are found yet, check "X :: Only" as a fallback.
+    if (versions.length === 0) {
+      versions.push(
+        ...parseClassifiers(
+          packageData,
+          /^Programming Language :: Python :: (\d+) :: Only$/
+        )
+      )
+    }
 
     return this.constructor.render({ versions })
   }

@@ -5,12 +5,12 @@ const {
   makeBadgeData: getBadgeData,
   makeLabel: getLabel,
 } = require('../../lib/badge-data')
-const { metric, addv: versionText } = require('../../lib/text-formatters')
+const { metric, addv: versionText } = require('../text-formatters')
 const {
   version: versionColor,
   coveragePercentage: coveragePercentageColor,
   downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 
 class PuppetforgeModuleVersion extends LegacyService {
   static get category() {
@@ -181,6 +181,13 @@ class PuppetforgeModuleFeedback extends LegacyService {
 class PuppetforgeModules extends LegacyService {
   static get category() {
     return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'puppetforge',
+      pattern: '([^/]+)/([^/]+)/([^/]+)',
+    }
   }
 
   static registerLegacyRouteHandler({ camp, cache }) {

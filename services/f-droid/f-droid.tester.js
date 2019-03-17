@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
@@ -114,7 +113,7 @@ t.create('Package is found with default metadata format')
       .get(`${path}.txt`)
       .reply(200, testString)
   )
-  .expectJSON({ name: 'f-droid', value: 'v1.4' })
+  .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Package is found with fallback yml matadata format')
   .get('/v/axp.tool.apkextractor.json')
@@ -128,7 +127,7 @@ t.create('Package is found with fallback yml matadata format')
       .get(`${path}.yml`)
       .reply(200, testYmlString)
   )
-  .expectJSON({ name: 'f-droid', value: 'v1.4' })
+  .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Package is found with yml matadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
@@ -137,7 +136,7 @@ t.create('Package is found with yml matadata format')
       .get(`${path}.yml`)
       .reply(200, testYmlString)
   )
-  .expectJSON({ name: 'f-droid', value: 'v1.4' })
+  .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Package is not found with "metadata_format" query parameter')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
@@ -146,7 +145,7 @@ t.create('Package is not found with "metadata_format" query parameter')
       .get(`${path}.yml`)
       .reply(404)
   )
-  .expectJSON({ name: 'f-droid', value: 'app not found' })
+  .expectBadge({ label: 'f-droid', message: 'app not found' })
 
 t.create('Package is found yml matadata format with missing "CurrentVersion"')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
@@ -155,7 +154,7 @@ t.create('Package is found yml matadata format with missing "CurrentVersion"')
       .get(`${path}.yml`)
       .reply(200, 'Categories: System')
   )
-  .expectJSON({ name: 'f-droid', value: 'invalid response data' })
+  .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is found with bad yml matadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
@@ -164,7 +163,7 @@ t.create('Package is found with bad yml matadata format')
       .get(`${path}.yml`)
       .reply(200, '.CurrentVersion: 1.4')
   )
-  .expectJSON({ name: 'f-droid', value: 'invalid response data' })
+  .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is not found')
   .get('/v/axp.tool.apkextractor.json')
@@ -178,7 +177,7 @@ t.create('Package is not found')
       .get(`${path}.yml`)
       .reply(404)
   )
-  .expectJSON({ name: 'f-droid', value: 'app not found' })
+  .expectBadge({ label: 'f-droid', message: 'app not found' })
 
 t.create('The api changed')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
@@ -187,22 +186,20 @@ t.create('The api changed')
       .get(`${path}.yml`)
       .reply(200, '')
   )
-  .expectJSON({ name: 'f-droid', value: 'invalid response data' })
+  .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is not found due invalid metadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=xml')
-  .expectJSON({
-    name: 'f-droid',
-    value: 'invalid query parameter: metadata_format',
+  .expectBadge({
+    label: 'f-droid',
+    message: 'invalid query parameter: metadata_format',
   })
 
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('The real api did not change')
   .get('/v/org.thosp.yourlocalweather.json')
   .timeout(10000)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'f-droid',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'f-droid',
+    message: isVPlusDottedVersionAtLeastOne,
+  })

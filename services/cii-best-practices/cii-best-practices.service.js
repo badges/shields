@@ -4,7 +4,7 @@ const Joi = require('joi')
 const {
   colorScale,
   coveragePercentage: coveragePercentageColor,
-} = require('../../lib/color-formatters')
+} = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 const ciiBestPracticesSchema = Joi.object({

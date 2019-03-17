@@ -1,9 +1,7 @@
 'use strict'
 
-const { metric, addv } = require('../../lib/text-formatters')
-const {
-  downloadCount: downloadCountColor,
-} = require('../../lib/color-formatters')
+const { metric, addv } = require('../text-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
 
 function renderVersionBadge({ version, feed }) {
   let color

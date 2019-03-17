@@ -14,13 +14,11 @@ const t = (module.exports = new ServiceTester({ id: 'depfu', title: 'Depfu' }))
 
 t.create('depfu dependencies (valid)')
   .get('/depfu/example-ruby.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'dependencies',
-      value: isDependencyStatus,
-    })
-  )
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyStatus,
+  })
 
 t.create('depfu dependencies (repo not found)')
   .get('/pyvesb/emptyrepo.json')
-  .expectJSON({ name: 'dependencies', value: 'not found' })
+  .expectBadge({ label: 'dependencies', message: 'not found' })

@@ -3,6 +3,8 @@
 const sinon = require('sinon')
 const serverSecrets = require('../../lib/server-secrets')
 
+const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
+
 function createMockResponse({ status = 'finished', grade, violations }) {
   let response = `
     <project>
@@ -112,7 +114,21 @@ function prepLiveTest() {
   }
 }
 
+function createTest(
+  t,
+  title,
+  { withMockCreds = true } = { withMockCreds: true }
+) {
+  const result = t.create(title)
+  if (withMockCreds) {
+    result.before(mockSymfonyInsightCreds)
+    result.finally(restore)
+  }
+  return result
+}
+
 module.exports = {
+  sampleProjectUuid,
   runningMockResponse,
   platinumMockResponse,
   goldMockResponse,
@@ -131,4 +147,5 @@ module.exports = {
   minorViolation,
   infoViolation,
   multipleViolations,
+  createTest,
 }

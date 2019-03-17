@@ -6,19 +6,14 @@ const {
   makeBadgeData: getBadgeData,
 } = require('../../lib/badge-data')
 const { makeLogo: getLogo } = require('../../lib/logos')
-const { formatDate } = require('../../lib/text-formatters')
-const { age: ageColor } = require('../../lib/color-formatters')
+const { formatDate } = require('../text-formatters')
+const { age: ageColor } = require('../color-formatters')
 const {
   documentation,
   stateColor: githubStateColor,
   commentsColor: githubCommentsColor,
   checkErrorResponse: githubCheckErrorResponse,
 } = require('./github-helpers')
-
-const commonExampleAttrs = {
-  keywords: ['pullrequest', 'detail'],
-  documentation,
-}
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
@@ -35,16 +30,18 @@ module.exports = class GithubIssueDetail extends LegacyService {
     return {
       base: 'github/issues/detail',
       pattern:
-        ':which(s|title|u|label|comments|age|last-update)/:user/:repo/:number(0-9+)',
+        ':which(s|state|title|u|author|label|comments|age|last-update)/:user/:repo/:number(0-9+)',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'GitHub issue/pull request state',
-        pattern: 's/:user/:repo/:number',
+        title: 'GitHub issue/pull request detail',
+        pattern:
+          ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number',
         namedParams: {
+          which: 'state',
           user: 'badges',
           repo: 'shields',
           number: '979',
@@ -54,97 +51,16 @@ module.exports = class GithubIssueDetail extends LegacyService {
           message: 'closed',
           color: 'red',
         },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request title',
-        pattern: 'title/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '1290',
-        },
-        staticPreview: {
-          label: 'issue 1290',
-          message: 'Node 9 support',
-          color: 'lightgrey',
-        },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request author',
-        pattern: 'u/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '979',
-        },
-        staticPreview: {
-          label: 'author',
-          message: 'paulmelnikow',
-          color: 'lightgrey',
-        },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request label',
-        pattern: 'label/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '979',
-        },
-        staticPreview: {
-          label: 'label',
-          message: 'bug | developer-experience',
-          color: 'lightgrey',
-        },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request comments',
-        pattern: 'comments/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '979',
-        },
-        staticPreview: {
-          label: 'comments',
-          message: '24',
-          color: 'yellow',
-        },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request age',
-        pattern: 'age/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '979',
-        },
-        staticPreview: {
-          label: 'created',
-          message: 'april 2017',
-          color: 'orange',
-        },
-        ...commonExampleAttrs,
-      },
-      {
-        title: 'GitHub issue/pull request last update',
-        pattern: 'last-update/:user/:repo/:number',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          number: '979',
-        },
-        staticPreview: {
-          label: 'updated',
-          message: 'december 2017',
-          color: 'orange',
-        },
-        ...commonExampleAttrs,
+        keywords: [
+          'state',
+          'title',
+          'author',
+          'label',
+          'comments',
+          'age',
+          'last update',
+        ],
+        documentation,
       },
     ]
   }
@@ -183,7 +99,8 @@ module.exports = class GithubIssueDetail extends LegacyService {
               queryParams
             )
             switch (which) {
-              case 's': {
+              case 's':
+              case 'state': {
                 const state = (badgeData.text[1] = parsedData.state)
                 badgeData.colorscheme = undefined
                 badgeData.colorB = queryParams.colorB || githubStateColor(state)
@@ -193,6 +110,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
                 badgeData.text[1] = parsedData.title
                 break
               case 'u':
+              case 'author':
                 badgeData.text[0] = getLabel('author', queryParams)
                 badgeData.text[1] = parsedData.user.login
                 break

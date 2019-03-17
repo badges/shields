@@ -1,7 +1,7 @@
 'use strict'
 
+const { renderLicenseBadge } = require('../licenses')
 const BaseBowerService = require('./bower-base')
-const { renderLicenseBadge } = require('../../lib/licenses')
 
 module.exports = class BowerLicense extends BaseBowerService {
   static get category() {

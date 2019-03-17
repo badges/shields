@@ -1,22 +1,19 @@
 'use strict'
 
 const Joi = require('joi')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('gets status for Reactiflux')
   .get('/102860784329052160.json?style=_shields_test')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'chat',
-      value: Joi.string().regex(/^[0-9]+ online$/),
-      color: 'brightgreen',
-    })
-  )
+  .expectBadge({
+    label: 'chat',
+    message: Joi.string().regex(/^[0-9]+ online$/),
+    color: 'brightgreen',
+  })
 
 t.create('invalid server ID')
   .get('/12345.json')
-  .expectJSON({ name: 'chat', value: 'invalid server' })
+  .expectBadge({ label: 'chat', message: 'invalid server' })
 
 t.create('widget disabled')
   .get('/12345.json')
@@ -28,7 +25,7 @@ t.create('widget disabled')
         message: 'Widget Disabled',
       })
   )
-  .expectJSON({ name: 'chat', value: 'widget disabled' })
+  .expectBadge({ label: 'chat', message: 'widget disabled' })
 
 t.create('server error')
   .get('/12345.json')
@@ -37,4 +34,4 @@ t.create('server error')
       .get('/api/guilds/12345/widget.json')
       .reply(500, 'Something broke')
   )
-  .expectJSON({ name: 'chat', value: 'inaccessible' })
+  .expectBadge({ label: 'chat', message: 'inaccessible' })

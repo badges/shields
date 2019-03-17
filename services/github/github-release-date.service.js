@@ -4,8 +4,8 @@ const moment = require('moment')
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const { makeLogo: getLogo } = require('../../lib/logos')
-const { formatDate } = require('../../lib/text-formatters')
-const { age } = require('../../lib/color-formatters')
+const { formatDate } = require('../text-formatters')
+const { age } = require('../color-formatters')
 const { documentation } = require('./github-helpers')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.

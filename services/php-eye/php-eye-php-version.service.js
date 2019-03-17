@@ -2,11 +2,11 @@
 
 const LegacyService = require('../legacy-service')
 const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const log = require('../../core/server/log')
 const {
   versionReduction: phpVersionReduction,
   getPhpReleases,
-} = require('../../lib/php-version')
-const log = require('../../core/server/log')
+} = require('../php-version')
 
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //

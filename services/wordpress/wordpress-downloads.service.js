@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 
@@ -25,6 +25,10 @@ function DownloadsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressDownloads extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Downloads`
+    }
+
     static render({ response }) {
       return {
         message: metric(response.downloaded),
@@ -66,6 +70,10 @@ function InstallsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressInstalls extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Installs`
+    }
+
     static get extensionType() {
       return extensionType
     }
@@ -105,30 +113,38 @@ function InstallsForExtensionType(extensionType) {
 }
 
 function DownloadsForInterval(interval) {
-  const { base, messageSuffix = '', query } = {
+  const { base, messageSuffix = '', query, name } = {
     day: {
       base: 'wordpress/plugin/dd',
       messageSuffix: '/day',
       query: 1,
+      name: 'WordpressDownloadsDay',
     },
     week: {
       base: 'wordpress/plugin/dw',
       messageSuffix: '/week',
       query: 7,
+      name: 'WordpressDownloadsWeek',
     },
     month: {
       base: 'wordpress/plugin/dm',
       messageSuffix: '/month',
       query: 30,
+      name: 'WordpressDownloadsMonth',
     },
     year: {
       base: 'wordpress/plugin/dy',
       messageSuffix: '/year',
       query: 365,
+      name: 'WordpressDownloadsYear',
     },
   }[interval]
 
   return class WordpressDownloads extends BaseJsonService {
+    static get name() {
+      return name
+    }
+
     static get category() {
       return 'downloads'
     }
@@ -176,8 +192,8 @@ function DownloadsForInterval(interval) {
       const downloads = Object.values(json).reduce(
         (a, b) => parseInt(a) + parseInt(b)
       )
-      // This check is for non-existant and brand-new plugins both having new stats.
-      // Non-Existant plugins results are the same as a brandspanking new plugin with no downloads.
+      // This check is for non-existent and brand-new plugins both having new stats.
+      // Non-Existent plugins results are the same as a brandspanking new plugin with no downloads.
       if (downloads <= 0 && size <= 1) {
         throw new NotFound({ prettyMessage: 'plugin not found or too new' })
       }

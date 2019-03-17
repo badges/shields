@@ -1,7 +1,7 @@
 'use strict'
 
-const { renderLicenseBadge } = require('../../lib/licenses')
-const { toArray } = require('../../lib/badge-data')
+const { renderLicenseBadge } = require('../licenses')
+const toArray = require('../../core/base-service/to-array')
 const NpmBase = require('./npm-base')
 
 module.exports = class NpmLicense extends NpmBase {

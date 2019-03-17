@@ -16,6 +16,7 @@ const {
   NugetVersionService: PowershellGalleryVersion,
   NugetDownloadService: PowershellGalleryDownloads,
 } = createServiceFamily({
+  name: 'PowershellGallery',
   defaultLabel: 'powershell gallery',
   serviceBaseUrl: 'powershellgallery',
   apiBaseUrl,

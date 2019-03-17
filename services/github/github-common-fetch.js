@@ -28,31 +28,35 @@ async function fetchJsonFromRepo(
   serviceInstance,
   { schema, user, repo, branch = 'master', filename }
 ) {
-  let url, options
+  const errorMessages = errorMessagesFor(
+    `repo not found, branch not found, or ${filename} missing`
+  )
   if (serviceInstance.staticAuthConfigured) {
-    url = `/repos/${user}/${repo}/contents/${filename}`
-    options = { qs: { ref: branch } }
+    const url = `/repos/${user}/${repo}/contents/${filename}`
+    const options = { qs: { ref: branch } }
+    const { content } = await serviceInstance._requestJson({
+      schema: contentSchema,
+      url,
+      options,
+      errorMessages,
+    })
+
+    let decoded
+    try {
+      decoded = Buffer.from(content, 'base64').toString('utf-8')
+    } catch (e) {
+      throw new InvalidResponse({ prettyMessage: 'undecodable content' })
+    }
+    const json = serviceInstance._parseJson(decoded)
+    return serviceInstance.constructor._validate(json, schema)
   } else {
-    url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
+    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
+    return serviceInstance._requestJson({
+      schema,
+      url,
+      errorMessages,
+    })
   }
-
-  const { content } = await serviceInstance._requestJson({
-    schema: contentSchema,
-    url,
-    options,
-    errorMessages: errorMessagesFor(
-      `repo not found, branch not found, or ${filename} missing`
-    ),
-  })
-
-  let decoded
-  try {
-    decoded = Buffer.from(content, 'base64').toString('utf-8')
-  } catch (e) {
-    throw InvalidResponse({ prettyMessage: 'undecodable content' })
-  }
-  const json = serviceInstance._parseJson(decoded)
-  return serviceInstance.constructor._validate(json, schema)
 }
 
 module.exports = {

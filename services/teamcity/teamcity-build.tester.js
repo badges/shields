@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { withRegex } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 const {
   mockTeamCityCreds,
   pass,
@@ -12,38 +13,30 @@ const {
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
 
-const t = (module.exports = require('../tester').createServiceTester())
-
 t.create('live: codebetter unknown build')
   .get('/codebetter/btabc.json')
-  .expectJSON({ name: 'build', value: 'build not found' })
+  .expectBadge({ label: 'build', message: 'build not found' })
 
 t.create('live: codebetter known build')
   .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: buildStatusValues,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: buildStatusValues,
+  })
 
 t.create('live: simple status for known build')
   .get('/https/teamcity.jetbrains.com/s/bt345.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: buildStatusValues,
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: buildStatusValues,
+  })
 
 t.create('live: full status for known build')
   .get('/https/teamcity.jetbrains.com/e/bt345.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: withRegex(buildStatusTextRegex),
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: withRegex(buildStatusTextRegex),
+  })
 
 t.create('codebetter success build')
   .get('/codebetter/bt123.json?style=_shields_test')
@@ -56,9 +49,9 @@ t.create('codebetter success build')
         statusText: 'Success',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'passing',
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
     color: 'brightgreen',
   })
 
@@ -73,9 +66,9 @@ t.create('codebetter failure build')
         statusText: 'Tests failed: 2',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'failure',
+  .expectBadge({
+    label: 'build',
+    message: 'failure',
     color: 'red',
   })
 
@@ -90,9 +83,9 @@ t.create('simple build status with passed build')
         statusText: 'Tests passed: 100',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'passing',
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
     color: 'brightgreen',
   })
 
@@ -107,9 +100,9 @@ t.create('simple build status with failed build')
         statusText: 'Tests failed: 10 (2 new)',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'failure',
+  .expectBadge({
+    label: 'build',
+    message: 'failure',
     color: 'red',
   })
 
@@ -124,9 +117,9 @@ t.create('full build status with passed build')
         statusText: 'Tests passed: 100, ignored: 3',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'passing',
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
     color: 'brightgreen',
   })
 
@@ -143,9 +136,9 @@ t.create('full build status with failed build')
         statusText: 'Tests failed: 10 (2 new), passed: 99',
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'tests failed: 10 (2 new), passed: 99',
+  .expectBadge({
+    label: 'build',
+    message: 'tests failed: 10 (2 new), passed: 99',
     color: 'red',
   })
 
@@ -169,8 +162,8 @@ t.create('with auth')
       })
   )
   .finally(restore)
-  .expectJSON({
-    name: 'build',
-    value: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
+  .expectBadge({
+    label: 'build',
+    message: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
     color: 'red',
   })

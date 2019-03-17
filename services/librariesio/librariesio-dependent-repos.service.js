@@ -1,10 +1,11 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
-const LibrariesIoBase = require('./librariesio-base')
+const { BaseJsonService } = require('..')
+const { metric } = require('../text-formatters')
+const { fetchProject } = require('./librariesio-common')
 
 // https://libraries.io/api#project-dependent-repositories
-class LibrariesIoDependentRepos extends LibrariesIoBase {
+module.exports = class LibrariesIoDependentRepos extends BaseJsonService {
   static get category() {
     return 'other'
   }
@@ -16,17 +17,19 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
   }
 
   static get route() {
-    return this.buildRoute('librariesio/dependent-repos')
+    return {
+      base: 'librariesio/dependent-repos',
+      pattern: ':platform/:packageName',
+    }
   }
 
   static get examples() {
     return [
       {
         title: 'Dependent repos (via libraries.io)',
-        pattern: ':platform/:library',
         namedParams: {
           platform: 'npm',
-          library: 'got',
+          packageName: 'got',
         },
         staticPreview: this.render({ dependentReposCount: 84000 }),
       },
@@ -41,15 +44,13 @@ class LibrariesIoDependentRepos extends LibrariesIoBase {
   }
 
   async handle({ platform, packageName }) {
-    const { dependent_repos_count: dependentReposCount } = await this.fetch(
+    const { dependent_repos_count: dependentReposCount } = await fetchProject(
+      this,
       {
         platform,
         packageName,
-      },
-      { allowPackages: true }
+      }
     )
     return this.constructor.render({ dependentReposCount })
   }
 }
-
-module.exports = LibrariesIoDependentRepos

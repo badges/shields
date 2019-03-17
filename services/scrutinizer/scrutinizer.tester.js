@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { isBuildStatus } = require('../../lib/build-status')
+const { isBuildStatus } = require('../build-status')
 const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
 
@@ -12,70 +12,58 @@ const t = (module.exports = new ServiceTester({
 
 t.create('code quality')
   .get('/g/filp/whoops.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'code quality',
-      value: Joi.number().positive(),
-    })
-  )
+  .expectBadge({
+    label: 'code quality',
+    message: Joi.number().positive(),
+  })
 
 t.create('code quality (branch)')
   .get('/g/phpmyadmin/phpmyadmin/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'code quality',
-      value: Joi.number().positive(),
-    })
-  )
+  .expectBadge({
+    label: 'code quality',
+    message: Joi.number().positive(),
+  })
 
 t.create('code coverage')
   .get('/coverage/g/filp/whoops.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('code coverage (branch)')
   .get('/coverage/g/PHPMailer/PHPMailer/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'coverage',
-      value: isIntegerPercentage,
-    })
-  )
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
 
 t.create('build')
   .get('/build/g/filp/whoops.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
 
 t.create('build (branch)')
   .get('/build/g/phpmyadmin/phpmyadmin/master.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'build',
-      value: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-    })
-  )
+  .expectBadge({
+    label: 'build',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
 
 t.create('project not found')
   .get('/build/g/does-not-exist/does-not-exist.json')
-  .expectJSON({
-    name: 'build',
-    value: 'project or branch not found',
+  .expectBadge({
+    label: 'build',
+    message: 'project or branch not found',
   })
 
 t.create('code coverage unknown')
   .get('/coverage/g/phpmyadmin/phpmyadmin/master.json')
-  .expectJSON({
-    name: 'coverage',
-    value: 'unknown',
+  .expectBadge({
+    label: 'coverage',
+    message: 'unknown',
   })
 
 t.create('unexpected response data')
@@ -85,9 +73,9 @@ t.create('unexpected response data')
       .get('/api/repositories/g/filp/whoops')
       .reply(200, '{"unexpected":"data"}')
   )
-  .expectJSON({
-    name: 'coverage',
-    value: 'invalid',
+  .expectBadge({
+    label: 'coverage',
+    message: 'invalid',
   })
 
 t.create('build - unknown')
@@ -106,8 +94,8 @@ t.create('build - unknown')
         },
       })
   )
-  .expectJSON({
-    name: 'build',
-    value: 'unknown',
+  .expectBadge({
+    label: 'build',
+    message: 'unknown',
     color: 'lightgrey',
   })

@@ -26,11 +26,6 @@ function expectCacheSlots(cache, keys) {
 }
 
 describe('The LRU cache', function() {
-  it('should support being called without new', function() {
-    const cache = LRU(1)
-    expect(cache).to.be.an.instanceof(LRU)
-  })
-
   it('should support a zero capacity', function() {
     const cache = new LRU(0)
     cache.set('key', 'value')

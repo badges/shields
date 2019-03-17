@@ -11,7 +11,7 @@ const BuilderOuterContainer = styled.div`
 const BuilderInnerContainer = styled.div`
   display: inline-block;
 
-  padding: 11px 14px 10px;
+  padding: 1px 14px 10px;
 
   border-radius: 4px;
   background: #eef;

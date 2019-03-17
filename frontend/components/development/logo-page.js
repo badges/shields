@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { staticBadgeUrl } from '../../lib/badge-url'
+import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../../constants'
 import Meta from '../meta'
 import Header from '../header'
@@ -32,19 +32,27 @@ const NamedLogoTable = ({ logoNames }) => (
         <tr key={name}>
           <td>
             <Badge
-              src={staticBadgeUrl(baseUrl, 'named logo', name, 'blue', {
-                logo: name,
-              })}
               alt={`logo: ${name}`}
+              src={staticBadgeUrl({
+                baseUrl,
+                label: 'named logo',
+                message: name,
+                color: 'blue',
+                namedLogo: name,
+              })}
             />
           </td>
           <td>
             <Badge
-              src={staticBadgeUrl(baseUrl, 'Named Logo', name, 'blue', {
-                logo: name,
+              alt={`logo: ${name}`}
+              src={staticBadgeUrl({
+                baseUrl,
+                label: 'Named Logo',
+                message: name,
+                color: 'blue',
+                namedLogo: name,
                 style: 'social',
               })}
-              alt={`logo: ${name}`}
             />
           </td>
         </tr>

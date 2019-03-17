@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderBuildStatusBadge } = require('../../lib/build-status')
+const { renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService, NotFound } = require('..')
 
 // source: https://github.com/badges/shields/pull/1362#discussion_r161693830

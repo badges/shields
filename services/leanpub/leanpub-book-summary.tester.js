@@ -1,32 +1,27 @@
 'use strict'
 
 const Joi = require('joi')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const knownValidBook = 'juice-shop'
 
-const t = (module.exports = require('../tester').createServiceTester())
-
 t.create('known book pages')
   .get(`/pages/${knownValidBook}.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'pages',
-      value: Joi.number(),
-    })
-  )
+  .expectBadge({
+    label: 'pages',
+    message: Joi.number(),
+  })
 
 t.create('known book sold')
   .get(`/sold/${knownValidBook}.json`)
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'sold',
-      value: Joi.number(),
-    })
-  )
+  .expectBadge({
+    label: 'sold',
+    message: Joi.number(),
+  })
 
 t.create('unknown book')
   .get(`/pages/234uFjAsDf234209.json`)
-  .expectJSON({ name: 'leanpub', value: 'book not found' })
+  .expectBadge({ label: 'leanpub', message: 'book not found' })
 
 t.create('404 book summary error response')
   .get(`/pages/${knownValidBook}.json`)
@@ -35,9 +30,9 @@ t.create('404 book summary error response')
       .get(`/${knownValidBook}.json`)
       .reply(404)
   )
-  .expectJSON({
-    name: 'leanpub',
-    value: 'book not found',
+  .expectBadge({
+    label: 'leanpub',
+    message: 'book not found',
   })
 
 t.create('correct page count')
@@ -51,9 +46,9 @@ t.create('correct page count')
         total_copies_sold: 27,
       })
   )
-  .expectJSON({
-    name: 'pages',
-    value: '190',
+  .expectBadge({
+    label: 'pages',
+    message: '190',
   })
 
 t.create('correct sold count')
@@ -67,7 +62,7 @@ t.create('correct sold count')
         total_copies_sold: 82347,
       })
   )
-  .expectJSON({
-    name: 'sold',
-    value: '82347',
+  .expectBadge({
+    label: 'sold',
+    message: '82347',
   })

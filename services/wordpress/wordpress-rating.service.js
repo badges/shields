@@ -1,8 +1,8 @@
 'use strict'
 
+const { starRating, metric } = require('../text-formatters')
+const { floorCount } = require('../color-formatters')
 const BaseWordpress = require('./wordpress-base')
-const { starRating, metric } = require('../../lib/text-formatters')
-const { floorCount } = require('../../lib/color-formatters')
 
 const extensionData = {
   plugin: {
@@ -38,6 +38,10 @@ function RatingForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRating extends WordpressRatingBase {
+    static get name() {
+      return `Wordpress${capt}Rating`
+    }
+
     static get route() {
       return {
         base: `wordpress/${extensionType}/rating`,
@@ -70,6 +74,10 @@ function StarsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressStars extends WordpressRatingBase {
+    static get name() {
+      return `Wordpress${capt}Stars`
+    }
+
     static render({ response }) {
       const rating = (response.rating / 100) * 5
       return { message: starRating(rating), color: floorCount(rating, 2, 3, 4) }

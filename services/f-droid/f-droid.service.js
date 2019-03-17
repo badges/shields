@@ -1,14 +1,18 @@
 'use strict'
 
 const Joi = require('joi')
-const { addv } = require('../../lib/text-formatters')
-const { version: versionColor } = require('../../lib/color-formatters')
+const { addv } = require('../text-formatters')
+const { version: versionColor } = require('../color-formatters')
 const { BaseYamlService, InvalidResponse } = require('..')
 
 const schema = Joi.object({
   CurrentVersion: Joi.alternatives()
     .try(Joi.number(), Joi.string())
     .required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  metadata_format: Joi.string().valid(['yml', 'txt']),
 }).required()
 
 module.exports = class FDroid extends BaseYamlService {
@@ -19,9 +23,7 @@ module.exports = class FDroid extends BaseYamlService {
     }
   }
 
-  async handle({ appId }, queryParams) {
-    const constructor = this.constructor
-    const { metadata_format: format } = constructor.validateParams(queryParams)
+  async handle({ appId }, { metadata_format: metadataFormat }) {
     const url = `https://gitlab.com/fdroid/fdroiddata/raw/master/metadata/${appId}`
     const fetchOpts = {
       options: {},
@@ -29,7 +31,7 @@ module.exports = class FDroid extends BaseYamlService {
         404: 'app not found',
       },
     }
-    const fetch = format === 'yml' ? this.fetchYaml : this.fetchText
+    const fetch = metadataFormat === 'yml' ? this.fetchYaml : this.fetchText
     let result
 
     try {
@@ -38,14 +40,14 @@ module.exports = class FDroid extends BaseYamlService {
       // on f-droid, so if txt is not found we look for yml as the fallback
       result = await fetch.call(this, url, fetchOpts)
     } catch (error) {
-      if (format) {
+      if (metadataFormat) {
         // if the format was specified it doesn't make the fallback request
         throw error
       }
       result = await this.fetchYaml(url, fetchOpts)
     }
 
-    return constructor.render(result)
+    return this.constructor.render(result)
   }
 
   async fetchYaml(url, options) {
@@ -82,14 +84,6 @@ module.exports = class FDroid extends BaseYamlService {
     return { version: match[1] }
   }
 
-  static validateParams(queryParams) {
-    const queryParamsSchema = Joi.object({
-      metadata_format: Joi.string().valid(['yml', 'txt']),
-    }).required()
-
-    return this._validateQueryParams(queryParams, queryParamsSchema)
-  }
-
   // Metadata
   static get defaultBadgeData() {
     return { label: 'f-droid' }
@@ -103,7 +97,7 @@ module.exports = class FDroid extends BaseYamlService {
     return {
       base: 'f-droid/v',
       pattern: ':appId',
-      queryParams: ['metadata_format'],
+      queryParamSchema,
     }
   }
 

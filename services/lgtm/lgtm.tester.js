@@ -9,18 +9,16 @@ module.exports = t
 
 t.create('alerts: total alerts for a project')
   .get('/alerts/g/apache/cloudstack.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'lgtm',
-      value: Joi.string().regex(/^[0-9kM.]+ alerts?$/),
-    })
-  )
+  .expectBadge({
+    label: 'lgtm',
+    message: Joi.string().regex(/^[0-9kM.]+ alerts?$/),
+  })
 
 t.create('alerts: missing project')
   .get('/alerts/g/some-org/this-project-doesnt-exist.json')
-  .expectJSON({
-    name: 'lgtm',
-    value: 'project not found',
+  .expectBadge({
+    label: 'lgtm',
+    message: 'project not found',
   })
 
 t.create('alerts: no alerts')
@@ -30,7 +28,7 @@ t.create('alerts: no alerts')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, { alerts: 0, languages: data.languages })
   )
-  .expectJSON({ name: 'lgtm', value: '0 alerts' })
+  .expectBadge({ label: 'lgtm', message: '0 alerts' })
 
 t.create('alerts: single alert')
   .get('/alerts/g/apache/cloudstack.json')
@@ -39,7 +37,7 @@ t.create('alerts: single alert')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, { alerts: 1, languages: data.languages })
   )
-  .expectJSON({ name: 'lgtm', value: '1 alert' })
+  .expectBadge({ label: 'lgtm', message: '1 alert' })
 
 t.create('alerts: multiple alerts')
   .get('/alerts/g/apache/cloudstack.json')
@@ -48,7 +46,7 @@ t.create('alerts: multiple alerts')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, { alerts: 123, languages: data.languages })
   )
-  .expectJSON({ name: 'lgtm', value: '123 alerts' })
+  .expectBadge({ label: 'lgtm', message: '123 alerts' })
 
 t.create('alerts: json missing alerts')
   .get('/alerts/g/apache/cloudstack.json')
@@ -57,15 +55,15 @@ t.create('alerts: json missing alerts')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
+  .expectBadge({ label: 'lgtm', message: 'invalid response data' })
 
 // Grade Badge
 
 t.create('grade: missing project')
   .get('/grade/java/g/some-org/this-project-doesnt-exist.json')
-  .expectJSON({
-    name: 'lgtm',
-    value: 'project not found',
+  .expectBadge({
+    label: 'lgtm',
+    message: 'project not found',
   })
 
 t.create('grade: json missing languages')
@@ -75,22 +73,20 @@ t.create('grade: json missing languages')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, {})
   )
-  .expectJSON({ name: 'lgtm', value: 'invalid response data' })
+  .expectBadge({ label: 'lgtm', message: 'invalid response data' })
 
 t.create('grade: grade for a project (java)')
   .get('/grade/java/g/apache/cloudstack.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'code quality: java',
-      value: Joi.string().regex(/^(?:A\+)|A|B|C|D|E$/),
-    })
-  )
+  .expectBadge({
+    label: 'code quality: java',
+    message: Joi.string().regex(/^(?:A\+)|A|B|C|D|E$/),
+  })
 
 t.create('grade: grade for missing language')
   .get('/grade/foo/g/apache/cloudstack.json')
-  .expectJSON({
-    name: 'code quality: foo',
-    value: 'no language data',
+  .expectBadge({
+    label: 'code quality: foo',
+    message: 'no language data',
   })
 
 // Test display of languages
@@ -115,7 +111,7 @@ t.create('grade: cpp')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: c/c++', value: 'A+' })
+  .expectBadge({ label: 'code quality: c/c++', message: 'A+' })
 
 t.create('grade: javascript')
   .get('/grade/javascript/g/apache/cloudstack.json')
@@ -124,7 +120,7 @@ t.create('grade: javascript')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: js/ts', value: 'A' })
+  .expectBadge({ label: 'code quality: js/ts', message: 'A' })
 
 t.create('grade: java')
   .get('/grade/java/g/apache/cloudstack.json')
@@ -133,7 +129,7 @@ t.create('grade: java')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: java', value: 'B' })
+  .expectBadge({ label: 'code quality: java', message: 'B' })
 
 t.create('grade: python')
   .get('/grade/python/g/apache/cloudstack.json')
@@ -142,7 +138,7 @@ t.create('grade: python')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: python', value: 'C' })
+  .expectBadge({ label: 'code quality: python', message: 'C' })
 
 t.create('grade: csharp')
   .get('/grade/csharp/g/apache/cloudstack.json')
@@ -151,7 +147,7 @@ t.create('grade: csharp')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: c#', value: 'D' })
+  .expectBadge({ label: 'code quality: c#', message: 'D' })
 
 t.create('grade: other')
   .get('/grade/other/g/apache/cloudstack.json')
@@ -160,7 +156,7 @@ t.create('grade: other')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: other', value: 'E' })
+  .expectBadge({ label: 'code quality: other', message: 'E' })
 
 t.create('grade: foo (no grade for valid language)')
   .get('/grade/foo/g/apache/cloudstack.json')
@@ -169,4 +165,4 @@ t.create('grade: foo (no grade for valid language)')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
       .reply(200, data)
   )
-  .expectJSON({ name: 'code quality: foo', value: 'no language data' })
+  .expectBadge({ label: 'code quality: foo', message: 'no language data' })

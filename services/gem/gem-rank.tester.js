@@ -1,35 +1,30 @@
 'use strict'
 
 const Joi = require('joi')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
 const isOrdinalNumberDaily = Joi.string().regex(
   /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
 )
 
-const t = (module.exports = require('../tester').createServiceTester())
-
 t.create('total rank (valid)')
   .get('/rt/rspec-puppet-facts.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rank',
-      value: isOrdinalNumber,
-    })
-  )
+  .expectBadge({
+    label: 'rank',
+    message: isOrdinalNumber,
+  })
 
 t.create('daily rank (valid)')
   .get('/rd/rails.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'rank',
-      value: isOrdinalNumberDaily,
-    })
-  )
+  .expectBadge({
+    label: 'rank',
+    message: isOrdinalNumberDaily,
+  })
 
 t.create('rank (not found)')
   .get('/rt/not-a-package.json')
-  .expectJSON({ name: 'rank', value: 'not found' })
+  .expectBadge({ label: 'rank', message: 'not found' })
 
 t.create('rank is null')
   .get('/rd/rails.json')
@@ -43,4 +38,4 @@ t.create('rank is null')
         },
       ])
   )
-  .expectJSON({ name: 'rank', value: 'invalid rank' })
+  .expectBadge({ label: 'rank', message: 'invalid rank' })

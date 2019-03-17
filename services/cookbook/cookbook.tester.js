@@ -1,18 +1,14 @@
 'use strict'
 
-const Joi = require('joi')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
   .get('/chef-sugar.json')
-  .expectJSONTypes(
-    Joi.object().keys({
-      name: 'cookbook',
-      value: isVPlusDottedVersionAtLeastOne,
-    })
-  )
+  .expectBadge({
+    label: 'cookbook',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
 
 t.create('version (mocked)')
   .get('/chef-sugar.json?style=_shields_test')
@@ -23,8 +19,12 @@ t.create('version (mocked)')
         version: '4.1.0',
       })
   )
-  .expectJSON({
-    name: 'cookbook',
-    value: 'v4.1.0',
+  .expectBadge({
+    label: 'cookbook',
+    message: 'v4.1.0',
     color: 'blue',
   })
+
+t.create('version (not found)')
+  .get('/not-a-cookbook.json')
+  .expectBadge({ label: 'cookbook', message: 'not found' })

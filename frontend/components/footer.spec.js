@@ -3,7 +3,7 @@ import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import Footer from './footer'
 
-import './enzyme-conf.spec'
+import '../enzyme-conf.spec'
 
 describe('<Footer />', function() {
   it('renders', function() {
