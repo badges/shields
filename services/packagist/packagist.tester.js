@@ -34,7 +34,7 @@ t.create('gets the package version of symfony 2.8')
 
 t.create('invalid package name')
   .get('/php-v/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'php', value: 'not found' })
+  .expectBadge({ label: 'php', message: 'not found' })
 
 // tests for download stats endpoints
 
@@ -62,27 +62,27 @@ t.create('total downloads (valid, no package version specified)')
 // note: packagist can't give us download stats for a specific version
 t.create('daily downloads (invalid, package version specified)')
   .get('/dd/symfony/symfony/v2.8.0.json')
-  .expectJSON({ name: '404', value: 'badge not found' })
+  .expectBadge({ label: '404', message: 'badge not found' })
 
 t.create('monthly downloads (invalid, package version in request)')
   .get('/dm/symfony/symfony/v2.8.0.json')
-  .expectJSON({ name: '404', value: 'badge not found' })
+  .expectBadge({ label: '404', message: 'badge not found' })
 
 t.create('total downloads (invalid, package version in request)')
   .get('/dt/symfony/symfony/v2.8.0.json')
-  .expectJSON({ name: '404', value: 'badge not found' })
+  .expectBadge({ label: '404', message: 'badge not found' })
 
 t.create('daily downloads (invalid package name)')
   .get('/dd/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 t.create('monthly downloads (invalid package name)')
   .get('/dm/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 t.create('total downloads (invalid package name)')
   .get('/dt/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'downloads', value: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'not found' })
 
 // tests for version endpoint
 
@@ -95,7 +95,7 @@ t.create('version (valid)')
 
 t.create('version (invalid package name)')
   .get('/v/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'packagist', value: 'not found' })
+  .expectBadge({ label: 'packagist', message: 'not found' })
 
 // tests for license endpoint
 
@@ -107,8 +107,8 @@ t.create('license (valid)')
 // but our endpoint only supports fetching license for the lastest version
 t.create('license (invalid, package version in request)')
   .get('/l/symfony/symfony/v2.8.0.json')
-  .expectJSON({ name: '404', value: 'badge not found' })
+  .expectBadge({ label: '404', message: 'badge not found' })
 
 t.create('license (invalid)')
   .get('/l/frodo/is-not-a-package.json')
-  .expectJSON({ name: 'license', value: 'not found' })
+  .expectBadge({ label: 'license', message: 'not found' })
