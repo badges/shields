@@ -1,6 +1,6 @@
 'use strict'
 
-const { renderLicenseBadge } = require('../../lib/licenses')
+const { renderLicenseBadge } = require('../licenses')
 const { keywords, BasePackagistService } = require('./packagist-base')
 
 module.exports = class PackagistLicense extends BasePackagistService {

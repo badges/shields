@@ -1,7 +1,6 @@
 'use strict'
 
 const { allVersionsSchema, BasePackagistService } = require('./packagist-base')
-
 const { NotFound } = require('..')
 
 module.exports = class PackagistPhpVersion extends BasePackagistService {

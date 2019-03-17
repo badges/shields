@@ -1,7 +1,7 @@
 'use strict'
 
-const { renderVersionBadge } = require('../../lib/version')
-const { isStable: phpStableVersion } = require('../../lib/php-version')
+const { renderVersionBadge } = require('../version')
+const { isStable: phpStableVersion } = require('../php-version')
 const {
   allVersionsSchema,
   keywords,

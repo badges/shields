@@ -1,7 +1,7 @@
 'use strict'
 
-const { metric } = require('../../lib/text-formatters')
-const { downloadCount } = require('../../lib/color-formatters')
+const { metric } = require('../text-formatters')
+const { downloadCount } = require('../color-formatters')
 const { keywords, BasePackagistService } = require('./packagist-base')
 
 module.exports = class PackagistDownloads extends BasePackagistService {
@@ -55,7 +55,6 @@ module.exports = class PackagistDownloads extends BasePackagistService {
         title: 'Packagist',
         pattern: 'dm/:user/:repo',
         namedParams: {
-          interval: 'dm',
           user: 'doctrine',
           repo: 'orm',
         },
