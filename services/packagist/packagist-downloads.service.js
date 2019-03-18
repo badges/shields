@@ -8,7 +8,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   static get route() {
     return {
       base: 'packagist',
-      pattern: ':type(dm|dd|dt)/:user/:repo',
+      pattern: ':interval(dm|dd|dt)/:user/:repo',
     }
   }
 
@@ -18,31 +18,35 @@ module.exports = class PackagistDownloads extends BasePackagistService {
     }
   }
 
-  async handle({ type, user, repo }) {
+  async handle({ interval, user, repo }) {
     const {
       package: { downloads },
     } = await this.fetch({ user, repo })
 
-    switch (type) {
-      case 'dm':
-        return this.constructor.render({
-          downloads: downloads.monthly,
-          ending: '/month',
-        })
-      case 'dd':
-        return this.constructor.render({
-          downloads: downloads.daily,
-          ending: '/day',
-        })
-      case 'dt':
-        return this.constructor.render({ downloads: downloads.total })
-    }
+    return this.constructor.render({ downloads, interval })
   }
 
-  static render({ downloads, ending = '' }) {
+  static render({ downloads, interval }) {
+    let amount
+    let ending = ''
+
+    switch (interval) {
+      case 'dm':
+        amount = downloads.monthly
+        ending = '/month'
+        break
+      case 'dd':
+        amount = downloads.daily
+        ending = '/day'
+        break
+      case 'dt':
+        amount = downloads.total
+        break
+    }
+
     return {
-      message: metric(downloads) + ending,
-      color: downloadCount(downloads),
+      message: metric(amount) + ending,
+      color: downloadCount(amount),
     }
   }
 
@@ -53,32 +57,15 @@ module.exports = class PackagistDownloads extends BasePackagistService {
     return [
       {
         title: 'Packagist',
-        pattern: 'dm/:user/:repo',
         namedParams: {
+          interval: 'dm',
           user: 'doctrine',
           repo: 'orm',
         },
-        staticPreview: this.render({ downloads: 1000000, ending: '/month' }),
-        keywords,
-      },
-      {
-        title: 'Packagist Daily Downloads',
-        pattern: 'dd/:user/:repo',
-        namedParams: {
-          user: 'doctrine',
-          repo: 'orm',
-        },
-        staticPreview: this.render({ downloads: 49000, ending: '/day' }),
-        keywords,
-      },
-      {
-        title: 'Packagist Downloads',
-        pattern: 'dt/:user/:repo',
-        namedParams: {
-          user: 'doctrine',
-          repo: 'orm',
-        },
-        staticPreview: this.render({ downloads: 45000000 }),
+        staticPreview: this.render({
+          downloads: { monthly: 1000000 },
+          interval: 'dm',
+        }),
         keywords,
       },
     ]
