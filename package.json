@@ -138,7 +138,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^2.0.1",
     "concurrently": "^4.1.0",
-    "danger": "^7.0.14",
+    "danger": "^7.0.15",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
