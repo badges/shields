@@ -14,3 +14,7 @@ t.create('gets the package version of symfony 2.8')
 t.create('invalid package name')
   .get('/frodo/is-not-a-package.json')
   .expectBadge({ label: 'php', message: 'not found' })
+
+t.create('invalid version')
+  .get('/symfony/symfony/invalid.json')
+  .expectBadge({ label: 'php', message: 'invalid version' })

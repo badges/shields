@@ -24,13 +24,14 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
       repo,
       schema: allVersionsSchema,
     })
-    try {
-      return this.constructor.render({
-        php: allData.package.versions[version].require.php,
-      })
-    } catch (e) {
+
+    if (!allData.package.versions.hasOwnProperty(version)) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
+
+    return this.constructor.render({
+      php: allData.package.versions[version].require.php,
+    })
   }
 
   static render({ php }) {
