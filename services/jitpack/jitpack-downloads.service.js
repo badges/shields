@@ -51,12 +51,12 @@ module.exports = class JitpackDownloads extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'jitpack/d',
-      pattern: ':groupId/:artifactId/:period(dw|dm)',
+      base: 'jitpack',
+      pattern: ':period(dw|dm)/:groupId/:artifactId',
     }
   }
 
-  async handle({ groupId, artifactId, period }) {
+  async handle({ period, groupId, artifactId }) {
     const json = await this.fetch({ groupId, artifactId })
     return this.constructor.render({
       downloads: json[periodMap[period].api_field],
