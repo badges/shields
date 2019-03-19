@@ -64,7 +64,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
           repo: 'orm',
         },
         staticPreview: this.render({
-          downloads: { monthly: 1000000 },
+          downloads: 1000000,
           interval: 'dm',
         }),
         keywords,
