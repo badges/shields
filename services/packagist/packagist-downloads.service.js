@@ -4,6 +4,21 @@ const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const { keywords, BasePackagistService } = require('./packagist-base')
 
+const periodMap = {
+  dm: {
+    field: 'monthly',
+    suffix: '/month',
+  },
+  dd: {
+    field: 'daily',
+    suffix: '/day',
+  },
+  dt: {
+    field: 'total',
+    suffix: '',
+  },
+}
+
 module.exports = class PackagistDownloads extends BasePackagistService {
   static get route() {
     return {
@@ -23,30 +38,16 @@ module.exports = class PackagistDownloads extends BasePackagistService {
       package: { downloads },
     } = await this.fetch({ user, repo })
 
-    return this.constructor.render({ downloads, interval })
+    return this.constructor.render({
+      downloads: downloads[periodMap[interval].field],
+      interval,
+    })
   }
 
   static render({ downloads, interval }) {
-    let amount
-    let ending = ''
-
-    switch (interval) {
-      case 'dm':
-        amount = downloads.monthly
-        ending = '/month'
-        break
-      case 'dd':
-        amount = downloads.daily
-        ending = '/day'
-        break
-      case 'dt':
-        amount = downloads.total
-        break
-    }
-
     return {
-      message: metric(amount) + ending,
-      color: downloadCount(amount),
+      message: metric(downloads) + periodMap[interval].suffix,
+      color: downloadCount(downloads),
     }
   }
 
