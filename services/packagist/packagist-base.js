@@ -50,10 +50,6 @@ class BasePackagistService extends BaseJsonService {
       url,
     })
   }
-
-  static get defaultBadgeData() {
-    return { label: 'packagist' }
-  }
 }
 
 module.exports = { allVersionsSchema, keywords, BasePackagistService }
