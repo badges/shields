@@ -11,7 +11,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-// const groupIdMatcher = /^[a-z]+\..+\..+$/
+const groupIdMatcher = /^[a-z]+\..+\..+$/
 
 module.exports = class JitPackVersion extends BaseJsonService {
   static get category() {
@@ -44,9 +44,17 @@ module.exports = class JitPackVersion extends BaseJsonService {
   }
 
   async fetch({ groupId, artifactId }) {
+    let url = null
+
+    if (groupId.match(groupIdMatcher)) {
+      url = `https://jitpack.io/api/builds/${groupId}/${artifactId}/latest`
+    } else {
+      url = `https://jitpack.io/api/builds/com.github.${groupId}/${artifactId}/latest`
+    }
+
     return this._requestJson({
       schema,
-      url: `https://jitpack.io/api/builds/com.github.${groupId}/${artifactId}/latest`,
+      url,
       errorMessages: { 401: 'project not found or private' },
     })
   }
