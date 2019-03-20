@@ -97,6 +97,8 @@ module.exports = class SonarViolations extends SonarBase {
   }
 
   transformViolations({ json, version, metric, format }) {
+    // We can use the standard transform function in all cases
+    // except when the requested badge is the long format of violations
     if (metric !== 'violations' || format !== 'long') {
       const { metricValue: violations } = this.transform({ json, version })
       return { violations }
@@ -118,6 +120,9 @@ module.exports = class SonarViolations extends SonarBase {
   }
 
   async handle({ protocol, host, component, metric }, { version, format }) {
+    // If the user has requested the long format for the violations badge
+    // then we need to include each individual violation metric in the call to the API
+    // in order to get the count breakdown per each violation category.
     const metricKeys =
       metric === 'violations' && format === 'long'
         ? 'violations,blocker_violations,critical_violations,major_violations,minor_violations,info_violations'
