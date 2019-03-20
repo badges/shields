@@ -22,6 +22,8 @@ const periodMap = {
   },
 }
 
+const groupIdMatcher = /^[a-z]+\..+\..+$/
+
 module.exports = class JitpackDownloads extends BaseJsonService {
   static get examples() {
     return [
@@ -65,9 +67,17 @@ module.exports = class JitpackDownloads extends BaseJsonService {
   }
 
   async fetch({ groupId, artifactId }) {
+    let url = null
+
+    if (groupId.match(groupIdMatcher)) {
+      url = `https://jitpack.io/api/stats/${groupId}/${artifactId}`
+    } else {
+      url = `https://jitpack.io/api/stats/com.github.${groupId}/${artifactId}`
+    }
+
     return this._requestJson({
       schema,
-      url: `https://jitpack.io/api/stats/com.github.${groupId}/${artifactId}`,
+      url,
       errorMessages: { 401: 'project not found or private' },
     })
   }

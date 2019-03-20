@@ -11,6 +11,8 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+// const groupIdMatcher = /^[a-z]+\..+\..+$/
+
 module.exports = class JitPackVersion extends BaseJsonService {
   static get category() {
     return 'version'
