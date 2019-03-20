@@ -30,7 +30,8 @@ module.exports = class JitpackDownloads extends BaseJsonService {
       {
         title: 'JitPack - Downloads',
         namedParams: {
-          groupId: 'jitpack',
+          groupId:
+            'jitpack (github username) or com.github.jitpack (full groupID)',
           artifactId: 'maven-simple',
           period: 'dm',
         },

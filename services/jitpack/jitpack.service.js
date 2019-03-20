@@ -30,7 +30,8 @@ module.exports = class JitPackVersion extends BaseJsonService {
       {
         title: 'JitPack',
         namedParams: {
-          groupId: 'jitpack',
+          groupId:
+            'jitpack (github username) or com.github.jitpack (full groupID)',
           artifactId: 'maven-simple',
         },
         staticPreview: renderVersionBadge({ version: 'v1.1' }),
