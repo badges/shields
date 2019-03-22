@@ -245,7 +245,7 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="http://jsonpath.com"
+            href="https://jsonpath.com"
             target="_BLANK"
             title="JSONPath syntax"
           >
@@ -259,7 +259,7 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="http://xpather.com/"
+            href="http://xpather.com"
             target="_BLANK"
             title="XPath syntax"
           >
@@ -273,7 +273,7 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="http://jsonpath.com"
+            href="https://jsonpath.com"
             target="_BLANK"
             title="YAML (JSONPath) syntax"
           >
