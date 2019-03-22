@@ -245,9 +245,9 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="https://www.npmjs.com/package/jsonpath"
+            href="http://jsonpath.com"
             target="_BLANK"
-            title="JSONdata syntax"
+            title="JSONPath syntax"
           >
             $.DATA.SUBDATA
           </a>
@@ -259,7 +259,7 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="https://www.npmjs.com/package/xpath"
+            href="http://xpather.com/"
             target="_BLANK"
             title="XPath syntax"
           >
@@ -273,9 +273,9 @@ export default function Usage({ baseUrl }) {
           {baseUrl}
           /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
-            href="https://www.npmjs.com/package/jsonpath"
+            href="http://jsonpath.com"
             target="_BLANK"
-            title="JSONdata syntax"
+            title="YAML (JSONPath) syntax"
           >
             $.DATA.SUBDATA
           </a>
