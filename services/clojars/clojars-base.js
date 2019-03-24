@@ -7,8 +7,8 @@ const { BaseJsonService } = require('..')
 
 const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,
+  latest_release: Joi.string().allow(null),
   latest_version: Joi.string().required(),
-  latest_release: Joi.string().required(),
 }).required()
 
 class BaseClojarsService extends BaseJsonService {
