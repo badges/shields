@@ -21,7 +21,7 @@ class BaseGithubLanguage extends GithubAuthService {
   }
 
   getTotalSize(data) {
-    return Object.keys(data).reduce((acc, language) => acc + data[language], 0)
+    return Object.values(data).reduce((acc, size) => acc + size, 0)
   }
 }
 
