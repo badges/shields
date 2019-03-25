@@ -1,15 +1,15 @@
 'use strict'
 
 const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')
 const { errorMessagesFor } = require('./github-helpers')
 
 /*
-Only validate the response is an object because we're expecting a response like
-{ "Python": 39624, "Shell": 104 }
+We're expecting a response like { "Python": 39624, "Shell": 104 }
 The keys could be anything and {} is a valid response (e.g: for an empty repo)
 */
-const schema = Joi.object().required()
+const schema = Joi.object().pattern(/./, nonNegativeInteger)
 
 class BaseGithubLanguage extends GithubAuthService {
   async fetch({ user, repo }) {
