@@ -12,7 +12,7 @@ const latestVersionSchema = Joi.object({
           'branch-alias': Joi.object({
             'dev-master': Joi.string().required(),
           }).required(),
-        }).required(),
+        }),
       }).required(),
     }).required(),
     downloads: Joi.object({

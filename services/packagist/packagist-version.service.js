@@ -1,5 +1,6 @@
 'use strict'
 
+const { InvalidResponse } = require('..')
 const { renderVersionBadge } = require('../version')
 const { isStable: phpStableVersion } = require('../php-version')
 const {
@@ -22,32 +23,31 @@ module.exports = class PackagistVersion extends BasePackagistService {
     }
   }
 
-  async handle({ type, user, repo }) {
-    switch (type) {
-      case 'vpre':
-        const {
-          package: {
-            versions: {
-              'dev-master': {
-                extra: {
-                  'branch-alias': { 'dev-master': version },
-                },
-              },
-            },
-          },
-        } = await this.fetch({ user, repo })
-        return renderVersionBadge({ version })
-      case 'v':
-        const allData = await this.fetch({
-          user,
-          repo,
-          schema: allVersionsSchema,
+  transform({ type, json }) {
+    const versions = json.package.versions
+    if (type === 'vpre') {
+      const devMasterVersion = versions['dev-master']
+      if (!devMasterVersion.extra) {
+        throw new InvalidResponse({
+          prettyMessage: 'prerelease version data not available',
         })
-        const versionsData = allData.package.versions
-        const versions = Object.keys(versionsData)
-        const stableVersions = versions.filter(phpStableVersion)
-        return renderVersionBadge({ version: stableVersions[0] })
+      }
+      const version = devMasterVersion.extra['branch-alias']['dev-master']
+      return { version }
+    } else {
+      const stableVersions = Object.keys(versions).filter(phpStableVersion)
+      return { version: stableVersions[0] }
     }
+  }
+
+  async handle({ type, user, repo }) {
+    const json = await this.fetch({
+      user,
+      repo,
+      schema: type === 'v' ? allVersionsSchema : undefined,
+    })
+    const { version } = this.transform({ type, json })
+    return renderVersionBadge({ version })
   }
 
   static get category() {

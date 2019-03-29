@@ -1,6 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
+const {
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 /*
@@ -22,3 +25,10 @@ t.create('version (valid)')
 t.create('version (invalid package name)')
   .get('/v/frodo/is-not-a-package.json')
   .expectBadge({ label: 'packagist', message: 'not found' })
+
+t.create('pre-release version (valid)')
+  .get('/vpre/symfony/symfony.json')
+  .expectBadge({
+    label: 'packagist',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
