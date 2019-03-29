@@ -7,7 +7,15 @@ const { patternBase, queryParamSchema, getLabel } = require('./sonar-helpers')
 // This service is intended to be a temporary solution to avoid breaking
 // any existing users/badges that were utilizing the "other" Sonar metrics
 // with the Legacy Shields service implementation for Sonar badges.
+// The legacy implementation simply rendered a brightgreen badge with the value,
+// regardless of what the value actually was.
+//
 // See https://github.com/badges/shields/issues/3236 for more information.
+//
+// This service should gradually be replaced by services that handle
+// their respective metrics by providing badges with more context
+// (i.e. a red/error badge when there are multiple security issues)
+//
 // https://docs.sonarqube.org/latest/user-guide/metric-definitions
 const complexityMetricNames = ['complexity', 'cognitive_complexity']
 const duplicationMetricNames = [
@@ -16,6 +24,8 @@ const duplicationMetricNames = [
   'duplicated_lines',
   'duplicated_lines_density',
 ]
+// Sonar seemingly has used the terms 'issues' and 'violations' interchangeably
+// so it's possible users are using both/either for badges
 const issuesMetricNames = [
   'new_violations',
   'new_blocker_violations',

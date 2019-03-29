@@ -47,6 +47,7 @@ module.exports = class SonarBase extends BaseJsonService {
       : json.component.measures[0].value
     const value = parseInt(rawValue)
 
+    // Most values are numeric, but not all of them.
     return { metricValue: value || rawValue }
   }
 
