@@ -11,9 +11,10 @@ const schema = Joi.object({
       .items(
         Joi.object({
           metric: Joi.string(),
-          value: Joi.number()
-            .min(0)
-            .required(),
+          value: Joi.alternatives(
+            Joi.number().min(0),
+            Joi.allow('OK', 'ERROR')
+          ).required(),
         }).required()
       )
       .required(),
@@ -27,9 +28,10 @@ const legacyApiSchema = Joi.array()
         .items(
           Joi.object({
             key: Joi.string(),
-            val: Joi.number()
-              .min(0)
-              .required(),
+            val: Joi.alternatives(
+              Joi.number().min(0),
+              Joi.allow('OK', 'ERROR')
+            ).required(),
           }).required()
         )
         .required(),
@@ -40,11 +42,12 @@ const legacyApiSchema = Joi.array()
 module.exports = class SonarBase extends BaseJsonService {
   transform({ json, version }) {
     const useLegacyApi = isLegacyVersion({ version })
-    const value = parseInt(
-      useLegacyApi ? json[0].msr[0].val : json.component.measures[0].value
-    )
+    const rawValue = useLegacyApi
+      ? json[0].msr[0].val
+      : json.component.measures[0].value
+    const value = parseInt(rawValue)
 
-    return { metricValue: value }
+    return { metricValue: value || rawValue }
   }
 
   async fetch({ version, protocol, host, component, metricName }) {
