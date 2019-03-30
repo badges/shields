@@ -2,13 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'drone-build',
-  title: 'Drone io',
-  pathPrefix: '/drone',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 // Drone Build
 
