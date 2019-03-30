@@ -1,7 +1,18 @@
 'use strict'
 
+const Joi = require('joi')
 const { renderLicenseBadge } = require('../licenses')
 const { keywords, BasePackagistService } = require('./packagist-base')
+
+const schema = Joi.object({
+  package: Joi.object({
+    versions: Joi.object({
+      'dev-master': Joi.object({
+        license: Joi.array().required(),
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
 module.exports = class PackagistLicense extends BasePackagistService {
   static get route() {
@@ -17,14 +28,13 @@ module.exports = class PackagistLicense extends BasePackagistService {
     }
   }
 
+  transform({ json }) {
+    return { license: json.package.versions['dev-master'].license }
+  }
+
   async handle({ user, repo }) {
-    const {
-      package: {
-        versions: {
-          'dev-master': { license },
-        },
-      },
-    } = await this.fetch({ user, repo })
+    const json = await this.fetch({ user, repo, schema })
+    const { license } = this.transform({ json })
     return renderLicenseBadge({ license })
   }
 
