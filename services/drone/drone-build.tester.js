@@ -23,12 +23,3 @@ t.create('build status on named branch')
 t.create('unknown repo')
   .get('/build/this-repo/does-not-exist.json')
   .expectBadge({ label: 'build', message: 'none' })
-
-t.create('invalid svg response')
-  .get('/build/foo/bar.json')
-  .intercept(nock =>
-    nock('https://cloud.drone.io/api/badges')
-      .get('/foo/bar/status.svg')
-      .reply(200)
-  )
-  .expectBadge({ label: 'build', message: 'unparseable svg response' })
