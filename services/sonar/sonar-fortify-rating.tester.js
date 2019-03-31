@@ -70,3 +70,21 @@ t.create('Fortify Security Rating (legacy API supported)')
     label: 'fortify-security-rating',
     message: '3/5',
   })
+
+t.create('Fortify Security Rating (legacy API not supported)')
+  .get(
+    '/https/sonarcloud.io/swellaby:azdo-shellcheck/fortify-security-rating.json?version=4.2'
+  )
+  .expectBadge({
+    label: 'fortify-security-rating',
+    message: 'component or metric not found, or legacy API not supported',
+  })
+
+t.create('Fortify Security Rating (nonexistent component)')
+  .get(
+    '/https/sonarcloud.io/not-a-real-component-fakeness/fortify-security-rating.json'
+  )
+  .expectBadge({
+    label: 'fortify-security-rating',
+    message: 'component or metric not found, or legacy API not supported',
+  })
