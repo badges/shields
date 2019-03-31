@@ -22,18 +22,16 @@ const periodMap = {
   },
 }
 
-const groupIdMatcher = /^[a-z]+\..+\..+$/
-
 module.exports = class JitpackDownloads extends BaseJsonService {
   static get examples() {
     return [
       {
         title: 'JitPack - Downloads',
         namedParams: {
-          groupId:
-            'jitpack (github username) or com.github.jitpack (full groupID)',
-          artifactId: 'maven-simple',
           period: 'dm',
+          vcs: 'github',
+          user: 'jitpack',
+          repo: 'maven-simple',
         },
         staticPreview: JitpackDownloads.render({
           downloads: 14000,
@@ -55,30 +53,22 @@ module.exports = class JitpackDownloads extends BaseJsonService {
   static get route() {
     return {
       base: 'jitpack',
-      pattern: ':period(dw|dm)/:groupId/:artifactId',
+      pattern: ':period(dw|dm)/:vcs(github|bitbucket|gitlab)/:user/:repo',
     }
   }
 
-  async handle({ period, groupId, artifactId }) {
-    const json = await this.fetch({ groupId, artifactId })
+  async handle({ period, vcs, user, repo }) {
+    const json = await this.fetch({ vcs, user, repo })
     return this.constructor.render({
       downloads: json[periodMap[period].api_field],
       period,
     })
   }
 
-  async fetch({ groupId, artifactId }) {
-    let url = null
-
-    if (groupId.match(groupIdMatcher)) {
-      url = `https://jitpack.io/api/stats/${groupId}/${artifactId}`
-    } else {
-      url = `https://jitpack.io/api/stats/com.github.${groupId}/${artifactId}`
-    }
-
+  async fetch({ vcs, user, repo }) {
     return this._requestJson({
       schema,
-      url,
+      url: `https://jitpack.io/api/stats/com.${vcs}.${user}/${repo}`,
       errorMessages: { 401: 'project not found or private' },
     })
   }

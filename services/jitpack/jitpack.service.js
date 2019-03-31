@@ -20,7 +20,7 @@ module.exports = class JitPackVersion extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'jitpack/v',
+      base: 'jitpack',
       pattern: ':groupId/:artifactId',
     }
   }
