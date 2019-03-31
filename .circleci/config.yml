@@ -298,7 +298,7 @@ jobs:
 
   end2end:
     docker:
-      - image: circleci/node:8
+      - image: cypress/base:8
     steps:
       - checkout
 
