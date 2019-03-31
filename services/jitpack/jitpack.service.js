@@ -11,8 +11,6 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-const groupIdMatcher = /^[a-z]+\..+\..+$/
-
 module.exports = class JitPackVersion extends BaseJsonService {
   static get category() {
     return 'version'
@@ -21,7 +19,7 @@ module.exports = class JitPackVersion extends BaseJsonService {
   static get route() {
     return {
       base: 'jitpack',
-      pattern: ':groupId/:artifactId',
+      pattern: ':vcs(github|bitbucket|gitlab)/:user/:repo',
     }
   }
 
@@ -30,9 +28,9 @@ module.exports = class JitPackVersion extends BaseJsonService {
       {
         title: 'JitPack',
         namedParams: {
-          groupId:
-            'jitpack (github username) or com.github.jitpack (full groupID)',
-          artifactId: 'maven-simple',
+          vcs: 'github',
+          user: 'jitpack',
+          repo: 'maven-simple',
         },
         staticPreview: renderVersionBadge({ version: 'v1.1' }),
         keywords: ['java', 'maven'],
@@ -44,14 +42,8 @@ module.exports = class JitPackVersion extends BaseJsonService {
     return { label: 'jitpack' }
   }
 
-  async fetch({ groupId, artifactId }) {
-    let url = null
-
-    if (groupId.match(groupIdMatcher)) {
-      url = `https://jitpack.io/api/builds/${groupId}/${artifactId}/latest`
-    } else {
-      url = `https://jitpack.io/api/builds/com.github.${groupId}/${artifactId}/latest`
-    }
+  async fetch({ vcs, user, repo }) {
+    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latest`
 
     return this._requestJson({
       schema,
@@ -60,8 +52,8 @@ module.exports = class JitPackVersion extends BaseJsonService {
     })
   }
 
-  async handle({ groupId, artifactId }) {
-    const { version } = await this.fetch({ groupId, artifactId })
+  async handle({ vcs, user, repo }) {
+    const { version } = await this.fetch({ vcs, user, repo })
     return renderVersionBadge({ version })
   }
 }
