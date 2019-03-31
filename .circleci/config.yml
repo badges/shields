@@ -296,6 +296,26 @@ jobs:
       - store_test_results:
           path: junit
 
+  end2end:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm ci
+
+      - run:
+          name: Run tests
+          command: npm run end2end
+
 workflows:
   version: 2
 
@@ -336,6 +356,10 @@ workflows:
                 - master
                 - gh-pages
                 - /dependabot\/.*/
+      - end2end:
+          filters:
+            branches:
+              ignore: gh-pages
   # on-commit-with-cache:
   #   jobs:
   #     - npm-install:
