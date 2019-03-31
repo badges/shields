@@ -42,6 +42,9 @@ module.exports = class SonarCoverage extends SonarBase {
           host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
+        queryParams: {
+          version: '4.2',
+        },
         staticPreview: this.render({ coverage: 63 }),
         keywords,
         documentation,

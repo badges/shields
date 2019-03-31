@@ -45,6 +45,9 @@ module.exports = class SonarTechDebt extends SonarBase {
           component: 'org.ow2.petals:petals-se-ase',
           metric: 'tech_debt',
         },
+        queryParams: {
+          version: '4.2',
+        },
         staticPreview: this.render({
           debt: 1,
           metric: 'tech_debt',

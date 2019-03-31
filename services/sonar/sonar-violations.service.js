@@ -83,10 +83,13 @@ module.exports = class SonarViolations extends SonarBase {
       }
     }
 
+    const color =
+      violations === 0 ? 'brightgreen' : violationCategoryColorMap[metricName]
+
     return {
       label: getLabel({ metric: metricName }),
       message: `${metric(violations)}`,
-      color: violationCategoryColorMap[metricName],
+      color,
     }
   }
 
@@ -110,6 +113,7 @@ module.exports = class SonarViolations extends SonarBase {
         },
         queryParams: {
           format: 'short',
+          version: '4.2',
         },
         staticPreview: this.render({
           violations: 0,

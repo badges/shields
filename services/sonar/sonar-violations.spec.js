@@ -34,6 +34,56 @@ describe('SonarViolations', function() {
       message: '5',
       color: 'red',
     })
+    given({ metricName: 'blocker_violations', violations: 0 }).expect({
+      label: 'blocker violations',
+      message: '0',
+      color: 'brightgreen',
+    })
+    given({ metricName: 'blocker_violations', violations: 1 }).expect({
+      label: 'blocker violations',
+      message: '1',
+      color: 'red',
+    })
+    given({ metricName: 'critical_violations', violations: 0 }).expect({
+      label: 'critical violations',
+      message: '0',
+      color: 'brightgreen',
+    })
+    given({ metricName: 'critical_violations', violations: 2 }).expect({
+      label: 'critical violations',
+      message: '2',
+      color: 'orange',
+    })
+    given({ metricName: 'major_violations', violations: 0 }).expect({
+      label: 'major violations',
+      message: '0',
+      color: 'brightgreen',
+    })
+    given({ metricName: 'major_violations', violations: 3 }).expect({
+      label: 'major violations',
+      message: '3',
+      color: 'yellow',
+    })
+    given({ metricName: 'minor_violations', violations: 0 }).expect({
+      label: 'minor violations',
+      message: '0',
+      color: 'brightgreen',
+    })
+    given({ metricName: 'minor_violations', violations: 1 }).expect({
+      label: 'minor violations',
+      message: '1',
+      color: 'yellowgreen',
+    })
+    given({ metricName: 'info_violations', violations: 0 }).expect({
+      label: 'info violations',
+      message: '0',
+      color: 'brightgreen',
+    })
+    given({ metricName: 'info_violations', violations: 4 }).expect({
+      label: 'info violations',
+      message: '4',
+      color: 'green',
+    })
   })
 
   test(SonarViolations.renderLongViolationsBadge, () => {

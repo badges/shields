@@ -48,6 +48,9 @@ module.exports = class SonarQualityGate extends SonarBase {
           component: 'swellaby:azdo-shellcheck',
           metric: 'quality_gate',
         },
+        queryParams: {
+          version: '4.2',
+        },
         staticPreview: this.render({ qualityState: 'OK' }),
         keywords,
         documentation,
