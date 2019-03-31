@@ -108,6 +108,7 @@
     "now-start": "node server",
     "prestart": "run-s --silent depcheck defs features",
     "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
+    "end2end": "start-server-and-test start http://localhost:3000 test:end-to-end",
     "refactoring-report": "node scripts/refactoring-cli.js",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js"
   },
@@ -212,6 +213,7 @@
     "sinon": "^7.2.6",
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^6.2.10",
+    "start-server-and-test": "^1.7.12",
     "styled-components": "^4.2.0",
     "tmp": "0.0.33",
     "url": "^0.11.0",
