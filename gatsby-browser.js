@@ -1,5 +1,6 @@
-// Adapted from https://github.com/gatsbyjs/gatsby/issues/8413
+import redirectLegacyRoutes from './frontend/lib/redirect-legacy-routes'
 
+// Adapted from https://github.com/gatsbyjs/gatsby/issues/8413
 function scrollToElementId(id) {
   const el = document.querySelector(id)
   if (el) {
@@ -11,6 +12,8 @@ function scrollToElementId(id) {
 
 export function onRouteUpdate({ location: { hash } }) {
   if (hash) {
-    window.setTimeout(() => scrollToElementId(hash), 10)
+    if (!redirectLegacyRoutes()) {
+      window.setTimeout(() => scrollToElementId(hash), 10)
+    }
   }
 }

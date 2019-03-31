@@ -12,9 +12,9 @@ describe('Redirector', function() {
     pattern: ':namedParamA',
   }
   const category = 'analysis'
-  const target = () => {}
+  const transformPath = () => {}
   const dateAdded = new Date()
-  const attrs = { category, route, target, dateAdded }
+  const attrs = { category, route, transformPath, dateAdded }
 
   it('returns true on isDeprecated', function() {
     expect(redirector(attrs).isDeprecated).to.be.true
@@ -34,7 +34,7 @@ describe('Redirector', function() {
 
   it('throws the expected error when dateAdded is missing', function() {
     expect(() =>
-      redirector({ route, category, target }).validateDefinition()
+      redirector({ route, category, transformPath }).validateDefinition()
     ).to.throw('"dateAdded" is required')
   })
 
@@ -57,10 +57,15 @@ describe('Redirector', function() {
       }
     })
 
-    const target = ({ namedParamA }) => `/new/service/${namedParamA}`
+    const transformPath = ({ namedParamA }) => `/new/service/${namedParamA}`
 
     beforeEach(function() {
-      const ServiceClass = redirector({ category, route, target, dateAdded })
+      const ServiceClass = redirector({
+        category,
+        route,
+        transformPath,
+        dateAdded,
+      })
       ServiceClass.register({ camp }, {})
     })
 
@@ -100,6 +105,94 @@ describe('Redirector', function() {
       expect(headers.location).to.equal(
         '/new/service/hello-world.svg?color=123&style=flat-square'
       )
+    })
+
+    describe('transformQueryParams', function() {
+      const route = {
+        base: 'another/old/service',
+        pattern: 'token/:token/:namedParamA',
+      }
+      const transformQueryParams = ({ token }) => ({ token })
+
+      beforeEach(function() {
+        const ServiceClass = redirector({
+          category,
+          route,
+          transformPath,
+          transformQueryParams,
+          dateAdded,
+        })
+        ServiceClass.register({ camp }, {})
+      })
+
+      it('should forward the transformed query params', async function() {
+        const { statusCode, headers } = await got(
+          `${baseUrl}/another/old/service/token/abc123/hello-world.svg`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?token=abc123'
+        )
+      })
+
+      it('should forward the specified and transformed query params', async function() {
+        const { statusCode, headers } = await got(
+          `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
+        )
+      })
+
+      it('should use transformed query params on param conflicts by default', async function() {
+        const { statusCode, headers } = await got(
+          `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
+        )
+      })
+
+      it('should use specified query params on param conflicts when configured', async function() {
+        const route = {
+          base: 'override/service',
+          pattern: 'token/:token/:namedParamA',
+        }
+        const ServiceClass = redirector({
+          category,
+          route,
+          transformPath,
+          transformQueryParams,
+          overrideTransformedQueryParams: true,
+          dateAdded,
+        })
+        ServiceClass.register({ camp }, {})
+        const { statusCode, headers } = await got(
+          `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
+          {
+            followRedirect: false,
+          }
+        )
+
+        expect(statusCode).to.equal(301)
+        expect(headers.location).to.equal(
+          '/new/service/hello-world.svg?style=flat-square&token=def456'
+        )
+      })
     })
   })
 })

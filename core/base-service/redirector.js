@@ -3,6 +3,7 @@
 const camelcase = require('camelcase')
 const emojic = require('emojic')
 const Joi = require('joi')
+const queryString = require('query-string')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,
@@ -15,22 +16,26 @@ const trace = require('./trace')
 const attrSchema = Joi.object({
   category: isValidCategory,
   route: isValidRoute,
-  target: Joi.func()
+  transformPath: Joi.func()
     .maxArity(1)
     .required()
     .error(
       () =>
-        '"target" must be a function that transforms named params to a new path'
+        '"transformPath" must be a function that transforms named params to a new path'
     ),
+  transformQueryParams: Joi.func().arity(1),
   dateAdded: Joi.date().required(),
+  overrideTransformedQueryParams: Joi.bool().optional(),
 }).required()
 
 module.exports = function redirector(attrs) {
-  const { category, route, target } = Joi.attempt(
-    attrs,
-    attrSchema,
-    `Redirector for ${attrs.route.base}`
-  )
+  const {
+    category,
+    route,
+    transformPath,
+    transformQueryParams,
+    overrideTransformedQueryParams,
+  } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
 
   return class Redirector extends BaseService {
     static get category() {
@@ -76,12 +81,24 @@ module.exports = function redirector(attrs) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetUrl = target(namedParams)
-        trace.logTrace('validate', emojic.dart, 'Target', targetUrl)
+        const targetPath = transformPath(namedParams)
+        trace.logTrace('validate', emojic.dart, 'Target', targetPath)
+
+        let urlSuffix = ask.uri.search || ''
+
+        if (transformQueryParams) {
+          const specifiedParams = queryString.parse(urlSuffix)
+          const transformedParams = transformQueryParams(namedParams)
+          const redirectParams = overrideTransformedQueryParams
+            ? Object.assign(transformedParams, specifiedParams)
+            : Object.assign(specifiedParams, transformedParams)
+          const outQueryString = queryString.stringify(redirectParams)
+          urlSuffix = `?${outQueryString}`
+        }
 
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
-        const redirectUrl = `${targetUrl}.${format}${ask.uri.search || ''}`
+        const redirectUrl = `${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301

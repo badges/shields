@@ -2,8 +2,7 @@
   "version": 1,
   "name": "shields",
   "env": {
-    "PERSISTENCE_DIR": "/tmp/persistence",
-    "SHIELDS_ANALYTICS_FILE": "/tmp/analytics.json"
+    "PERSISTENCE_DIR": "/tmp/persistence"
   },
   "type": "npm",
   "engines": {

@@ -36,7 +36,7 @@ There are three public badge servers on OVH VPS’s.
 | [s1.shields-server.com][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
 | [s2.shields-server.com][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
 
-- These are single-core virtual hosts with 2 GB RAM [VPS SSD 1]().
+- These are single-core virtual hosts with 2 GB RAM [VPS SSD 1][].
 - The Node version (v9.4.0 at time of writing) and dependency versions on the
   servers can be inspected in Sentry, but only when an error occurs.
 - The servers use self-signed SSL certificates. ([#1460][issue 1460])
@@ -65,8 +65,7 @@ Shields has mercifully little persistent state:
 
 1.  The GitHub tokens we collect are saved on each server in JSON files on disk.
     They can be fetched from the [GitHub auth admin endpoint][] for debugging.
-2.  The analytics data is also saved on each server in JSON files on disk.
-3.  The server keeps a few caches in memory. These are neither persisted nor
+2.  The server keeps a few caches in memory. These are neither persisted nor
     inspectable.
     - The [request cache][]
     - The [regular-update cache][]
@@ -74,7 +73,7 @@ Shields has mercifully little persistent state:
 
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
 [request cache]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js#L29-L30
-[regular-update cache]: https://github.com/badges/shields/blob/master/lib/regular-update.js
+[regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
 [raster cache]: https://github.com/badges/shields/blob/master/gh-badges/lib/svg-to-img.js#L9-L10
 [oauth transfer]: https://developer.github.com/apps/managing-oauth-apps/transferring-ownership-of-an-oauth-app/
 
@@ -95,7 +94,7 @@ files:
   This file contains secrets which are checked in with a deploy commit.
 - [`shields-io-production.yml`][shields-io-production.yml]. This file
   contains non-secrets which are checked in to the main repo.
-- [`default.yml`][default.yml]`. This file contains defaults.
+- [`default.yml`][default.yml]. This file contains defaults.
 
 [start-shields.sh]: https://github.com/badges/ServerScript/blob/master/start-shields.sh#L7
 [config]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
@@ -214,6 +213,9 @@ the server. It's generously donated by [Sentry][sentry home]. We bundle
 
 ## Monitoring
 
+Overall server performance and requests by service are monitored using
+[Prometheus and Grafana][metrics].
+
 Request performance is monitored in two places:
 
 - [Status][] (using [UptimeRobot][])
@@ -221,24 +223,13 @@ Request performance is monitored in two places:
 - [@RedSparr0w's monitor][monitor] which posts [notifications][] to a private
   [#monitor chat room][monitor discord]
 
-Overall server performance is monitored using Prometheus and Grafana.
-Coming soon! ([#2068][issue 2068])
-
+[metrics]: https://metrics.shields.io/
 [status]: https://status.shields.io/
 [server metrics]: https://metrics.shields.io/
 [uptimerobot]: https://uptimerobot.com/
 [monitor]: https://shields.redsparr0w.com/1568/
 [notifications]: http://shields.redsparr0w.com/discord_notification
 [monitor discord]: https://discordapp.com/channels/308323056592486420/470700909182320646
-[issue 2068]: https://github.com/badges/shields/issues/2068
-
-## Analytics
-
-The server analytics data is public and can be fetched from the
-[analytics endpoint][] or using the [analytics script][].
-
-[analytics endpoint]: https://github.com/badges/shields/blob/master/lib/analytics.js
-[analytics script]: https://github.com/badges/ServerScript/blob/master/stats.js
 
 ## Known limitations
 

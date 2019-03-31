@@ -1,6 +1,6 @@
 'use strict'
 
-const { Deprecated } = require('../core/base-service/errors')
+const { Deprecated } = require('.')
 
 function enforceDeprecation(effectiveDate) {
   if (Date.now() >= effectiveDate.getTime()) {

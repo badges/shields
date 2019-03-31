@@ -1,23 +1,67 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class David extends LegacyService {
+const schema = Joi.object({
+  status: Joi.allow(
+    'insecure',
+    'outofdate',
+    'notsouptodate',
+    'uptodate',
+    'none'
+  ).required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  path: Joi.string(),
+}).required()
+
+const statusMap = {
+  insecure: {
+    color: 'red',
+    message: 'insecure',
+  },
+  outofdate: {
+    color: 'red',
+    message: 'out of date',
+  },
+  notsouptodate: {
+    color: 'yellow',
+    message: 'up to date',
+  },
+  uptodate: {
+    color: 'brightgreen',
+    message: 'up to date',
+  },
+  none: {
+    color: 'brightgreen',
+    message: 'none',
+  },
+}
+
+module.exports = class David extends BaseJsonService {
   static get category() {
     return 'dependencies'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
+  }
+
+  static render({ status, kind }) {
+    return {
+      message: statusMap[status].message,
+      color: statusMap[status].color,
+      label: `${kind ? `${kind} ` : ''}dependencies`,
+    }
   }
 
   static get route() {
     return {
       base: 'david',
       pattern: ':kind(dev|optional|peer)?/:user/:repo',
+      queryParamSchema,
     }
   }
 
@@ -26,94 +70,40 @@ module.exports = class David extends LegacyService {
       {
         title: 'David',
         namedParams: { user: 'expressjs', repo: 'express' },
-        staticPreview: this.renderStaticExample(),
+        staticPreview: this.render({ status: 'uptodate' }),
       },
       {
         title: 'David (path)',
         namedParams: { user: 'babel', repo: 'babel' },
         queryParams: { path: 'packages/babel-core' },
-        staticPreview: this.renderStaticExample(),
+        staticPreview: this.render({ status: 'uptodate' }),
       },
     ]
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'dependencies',
-    }
-  }
+  async fetch({ kind, user, repo, path }) {
+    const url = `https://david-dm.org/${user}/${repo}/${
+      kind ? `${kind}-` : ''
+    }info.json`
 
-  static renderStaticExample({ label } = {}) {
-    return { label, message: 'up to date', color: 'brightgreen' }
-  }
-
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/david\/(dev\/|optional\/|peer\/)?(.+?)\.(svg|png|gif|jpg|json)$/,
-      cache({
-        queryParams: ['path'],
-        handler: function(data, match, sendBadge, request) {
-          let dev = match[1]
-          if (dev != null) {
-            dev = dev.slice(0, -1)
-          } // 'dev', 'optional' or 'peer'.
-          // eg, `expressjs/express`, `webcomponents/generator-element`.
-          const userRepo = match[2]
-          const format = match[3]
-          let options = `https://david-dm.org/${userRepo}/${
-            dev ? `${dev}-` : ''
-          }info.json`
-          if (data.path) {
-            // path can be used to specify the package.json location, useful for monorepos
-            options += `?path=${data.path}`
-          }
-          const badgeData = getBadgeData(
-            `${dev ? `${dev} ` : ''}dependencies`,
-            data
-          )
-          request(options, (err, res, buffer) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            } else if (res.statusCode === 500) {
-              /* note:
+    return this._requestJson({
+      schema,
+      url,
+      options: { qs: { path } },
+      errorMessages: {
+        /* note:
         david returns a 500 response for 'not found'
         e.g: https://david-dm.org/foo/barbaz/info.json
         not a 404 so we can't handle 'not found' cleanly
         because this might also be some other error.
         */
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-              return
-            }
-            try {
-              const data = JSON.parse(buffer)
-              let status = data.status
-              if (status === 'insecure') {
-                badgeData.colorscheme = 'red'
-                status = 'insecure'
-              } else if (status === 'notsouptodate') {
-                badgeData.colorscheme = 'yellow'
-                status = 'up to date'
-              } else if (status === 'outofdate') {
-                badgeData.colorscheme = 'red'
-                status = 'out of date'
-              } else if (status === 'uptodate') {
-                badgeData.colorscheme = 'brightgreen'
-                status = 'up to date'
-              } else if (status === 'none') {
-                badgeData.colorscheme = 'brightgreen'
-              }
-              badgeData.text[1] = status
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          })
-        },
-      })
-    )
+        500: 'repo or path not found or david internal error',
+      },
+    })
+  }
+
+  async handle({ kind, user, repo }, { path }) {
+    const json = await this.fetch({ kind, user, repo, path })
+    return this.constructor.render({ status: json.status, kind })
   }
 }

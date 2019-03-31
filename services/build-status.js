@@ -13,13 +13,14 @@ const greenStatuses = [
 
 const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
 
-const redStatuses = ['error', 'failed', 'failing']
+const redStatuses = ['error', 'failed', 'failing', 'infrastructure_failure']
 
 const otherStatuses = [
   'building',
   'canceled',
   'cancelled',
   'expired',
+  'initiated',
   'no tests',
   'not built',
   'not run',
@@ -31,6 +32,7 @@ const otherStatuses = [
   'skipped',
   'starting',
   'stopped',
+  'testing',
   'waiting',
 ]
 

@@ -49,9 +49,9 @@ Next you will need to replace/refactor the existing tests to validate the new de
 ```js
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 ```
 
@@ -71,16 +71,16 @@ const t = (module.exports = new ServiceTester({
 
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 
 t.create('no longer available (previously number of layers)')
   .get('/layers/_/ubuntu/latest.json')
-  .expectJSON({
-    name: 'imagelayers',
-    value: 'no longer available',
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'no longer available',
   })
 ```
 

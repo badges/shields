@@ -2,22 +2,27 @@
 
 const Joi = require('joi')
 const { version: versionColor } = require('../color-formatters')
-const { BaseJsonService, NotFound } = require('..')
+const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const clojarsSchema = Joi.object({
-  // optional due to non-standard 'not found' condition
-  version: Joi.string(),
+  downloads: nonNegativeInteger,
+  latest_release: Joi.string().allow(null),
+  latest_version: Joi.string().required(),
 }).required()
 
-module.exports = class ClojarsVersion extends BaseJsonService {
+class BaseClojarsService extends BaseJsonService {
   async fetch({ clojar }) {
-    const url = `https://clojars.org/${clojar}/latest-version.json`
+    // Clojars API Doc: https://github.com/clojars/clojars-web/wiki/Data
+    const url = `https://clojars.org/api/artifacts/${clojar}`
     return this._requestJson({
       url,
       schema: clojarsSchema,
     })
   }
+}
 
+class BaseClojarsVersionService extends BaseClojarsService {
   static render({ clojar, version }) {
     return {
       message: `[${clojar} "${version}"]`,
@@ -25,32 +30,12 @@ module.exports = class ClojarsVersion extends BaseJsonService {
     }
   }
 
-  async handle({ clojar }) {
-    const json = await this.fetch({ clojar })
-
-    if (Object.keys(json).length === 0) {
-      /* Note the 'not found' response from clojars is:
-          status code = 200, body = {} */
-      throw new NotFound()
-    }
-
-    return this.constructor.render({ clojar, version: json.version })
-  }
-
-  // Metadata
   static get defaultBadgeData() {
     return { label: 'clojars' }
   }
 
   static get category() {
     return 'version'
-  }
-
-  static get route() {
-    return {
-      base: 'clojars/v',
-      pattern: ':clojar+',
-    }
   }
 
   static get examples() {
@@ -62,3 +47,5 @@ module.exports = class ClojarsVersion extends BaseJsonService {
     ]
   }
 }
+
+module.exports = { BaseClojarsService, BaseClojarsVersionService }

@@ -82,8 +82,8 @@ test this kind of logic through unit tests (e.g. of `render()` and
 2.  The Server, which is defined in
     [`core/server/server.js`][core/server/server], is based on the web
     framework [Scoutcamp][]. It creates an http server, sets up helpers for
-    analytics, token persistence, and monitoring. Then it loads all the
-    services, injecting dependencies as it asks each one to register its route
+    token persistence and monitoring. Then it loads all the services,
+    injecting dependencies as it asks each one to register its route
     with Scoutcamp.
 
 3.  The service registration continues in `BaseService.register`. From its
