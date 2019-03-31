@@ -108,4 +108,5 @@ service-definitions.yml
 /public
 
 # Cypress
-/cypress/videos
+/cypress/videos/
+/cypress/screenshots/
