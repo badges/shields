@@ -10,7 +10,7 @@ const t = (module.exports = new ServiceTester({
 
 t.create('sonar version')
   .get(
-    '/4.2/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/alert_status.svg',
+    '/4.2/http/sonar.petalslink.com/org.ow2.petals:petals-se-ase/alert_status.svg',
     {
       followRedirect: false,
     }
@@ -18,5 +18,5 @@ t.create('sonar version')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    '/sonar/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/alert_status.svg?version=4.2'
+    '/sonar/http/sonar.petalslink.com/org.ow2.petals:petals-se-ase/alert_status.svg?version=4.2'
   )

@@ -2,7 +2,12 @@
 
 const { coveragePercentage } = require('../color-formatters')
 const SonarBase = require('./sonar-base')
-const { patternBase, queryParamSchema } = require('./sonar-helpers')
+const {
+  documentation,
+  keywords,
+  patternBase,
+  queryParamSchema,
+} = require('./sonar-helpers')
 
 module.exports = class SonarCoverage extends SonarBase {
   static get category() {
@@ -26,6 +31,22 @@ module.exports = class SonarCoverage extends SonarBase {
       pattern: `${patternBase}/coverage`,
       queryParamSchema,
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Coverage',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+        },
+        staticPreview: this.render({ coverage: 63 }),
+        keywords,
+        documentation,
+      },
+    ]
   }
 
   async handle({ protocol, host, component }, { version }) {

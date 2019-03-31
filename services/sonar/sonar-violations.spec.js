@@ -10,7 +10,7 @@ describe('SonarViolations', function() {
       message: metric(1003),
       color: 'red',
     })
-    given({ metricName: 'violations', violations: 0 }).expect({
+    given({ metricName: 'violations', violations: 0, format: 'short' }).expect({
       message: '0',
       color: 'brightgreen',
     })

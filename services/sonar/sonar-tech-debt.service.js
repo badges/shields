@@ -2,10 +2,12 @@
 
 const SonarBase = require('./sonar-base')
 const {
+  badMetricColorScale,
+  getLabel,
+  documentation,
+  keywords,
   patternBase,
   queryParamSchema,
-  getLabel,
-  badMetricColorScale,
 } = require('./sonar-helpers')
 
 module.exports = class SonarTechDebt extends SonarBase {
@@ -31,6 +33,26 @@ module.exports = class SonarTechDebt extends SonarBase {
       pattern: `${patternBase}/:metric(tech_debt|sqale_debt_ratio)`,
       queryParamSchema,
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Tech Debt',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+          metric: 'tech_debt',
+        },
+        staticPreview: this.render({
+          debt: 1,
+          metric: 'tech_debt',
+        }),
+        keywords,
+        documentation,
+      },
+    ]
   }
 
   async handle({ protocol, host, component, metric }, { version }) {

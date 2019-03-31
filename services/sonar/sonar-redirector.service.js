@@ -11,7 +11,7 @@ module.exports = [
         ':version/:protocol(http|https)/:host(.+)/:component(.+)/:metric',
     },
     transformPath: ({ protocol, host, component, metric }) =>
-      `sonar/${protocol}/${host}/${component}/${metric}`,
+      `/sonar/${protocol}/${host}/${component}/${metric}`,
     transformQueryParams: ({ version }) => ({ version }),
     dateAdded: new Date('2019-04-02'),
   }),

@@ -4,10 +4,12 @@ const { colorScale } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const SonarBase = require('./sonar-base')
 const {
+  getLabel,
+  documentation,
+  isLegacyVersion,
+  keywords,
   patternBase,
   queryParamWithFormatSchema,
-  isLegacyVersion,
-  getLabel,
 } = require('./sonar-helpers')
 
 const violationsColorScale = colorScale(
@@ -94,6 +96,52 @@ module.exports = class SonarViolations extends SonarBase {
       pattern: `${patternBase}/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)`,
       queryParamSchema: queryParamWithFormatSchema,
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Violations (short format)',
+        namedParams: {
+          protocol: 'https',
+          host: 'sonarcloud.io',
+          component: 'swellaby:azdo-shellcheck',
+          metric: 'violations',
+        },
+        queryParams: {
+          format: 'short',
+        },
+        staticPreview: this.render({
+          violations: 0,
+          metricName: 'violations',
+          format: 'short',
+        }),
+        keywords,
+        documentation,
+      },
+      {
+        title: 'Sonar Violations (long format)',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+          metric: 'violations',
+        },
+        queryParams: {
+          format: 'long',
+        },
+        staticPreview: this.render({
+          violations: {
+            info_violations: 2,
+            minor_violations: 1,
+          },
+          metricName: 'violations',
+          format: 'long',
+        }),
+        keywords,
+        documentation,
+      },
+    ]
   }
 
   transformViolations({ json, version, metric, format }) {
