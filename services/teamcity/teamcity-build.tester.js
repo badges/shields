@@ -11,7 +11,7 @@ const {
 } = require('./teamcity-test-helpers')
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
-const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?$/
+const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?(.*)?$/
 
 t.create('live: codebetter unknown build')
   .get('/codebetter/btabc.json')
