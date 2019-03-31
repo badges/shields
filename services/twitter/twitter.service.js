@@ -97,7 +97,8 @@ class TwitterFollow extends BaseJsonService {
   async fetch({ user }) {
     return this._requestJson({
       schema,
-      url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=${user}`,
+      url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json`,
+      options: { qs: { screen_names: user } },
     })
   }
 
