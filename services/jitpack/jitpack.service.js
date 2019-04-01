@@ -18,7 +18,7 @@ module.exports = class JitPackVersion extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'jitpack',
+      base: 'jitpack/v',
       pattern: ':vcs(github|bitbucket|gitlab)/:user/:repo',
     }
   }
