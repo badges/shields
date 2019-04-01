@@ -13,4 +13,4 @@ t.create('jitpack version redirect')
     followRedirect: false,
   })
   .expectStatus(301)
-  .expectHeader('Location', '/jitpack/github/jitpack/maven-simple.svg')
+  .expectHeader('Location', '/jitpack/v/github/jitpack/maven-simple.svg')

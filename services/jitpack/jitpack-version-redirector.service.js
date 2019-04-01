@@ -10,7 +10,7 @@ module.exports = [
       pattern: ':groupId/:artifactId',
     },
     transformPath: ({ groupId, artifactId }) =>
-      `/jitpack/github/${groupId}/${artifactId}`,
+      `/jitpack/v/github/${groupId}/${artifactId}`,
     dateAdded: new Date('2019-03-31'),
   }),
 ]
