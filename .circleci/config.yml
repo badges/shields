@@ -314,10 +314,10 @@ jobs:
 
       - run:
           name: Run tests
-          command: npm run end2end
           environment:
             CYPRESS_REPORTER: junit
             MOCHA_FILE: junit/e2e/results.xml
+          command: npm run end2end
 
       - store_test_results:
           path: junit
