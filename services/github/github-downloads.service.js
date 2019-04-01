@@ -155,7 +155,10 @@ module.exports = class GithubDownloads extends LegacyService {
           if (releasePath) {
             apiUrl = `${apiUrl}/${releasePath}`
           }
+        } else {
+            apiUrl = `${apiUrl}?per_page=500`
         }
+
         const badgeData = getBadgeData('downloads', data)
         if (badgeData.template === 'social') {
           badgeData.logo = getLogo('github', data)
