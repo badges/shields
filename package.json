@@ -123,7 +123,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
-    "@babel/register": "7.0.0",
+    "@babel/register": "7.4.0",
     "@mapbox/react-click-to-select": "^2.2.0",
     "babel-eslint": "^10.0.0",
     "babel-plugin-inline-react-svg": "^1.0.1",
