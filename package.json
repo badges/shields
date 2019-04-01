@@ -85,7 +85,7 @@
     "test:js:frontend": "echo \"Deprecated; run `npm run test:frontend` instead.\" && npm run test:frontend",
     "test:js:package": "echo \"Deprecated; run `npm run test:package` instead.\" && npm run test:package",
     "test:frontend": "cross-env NODE_ENV=test mocha --config .mocharc-frontend.yml \"frontend/**/*.spec.js\"",
-    "test:end-to-end": "cypress run",
+    "test:e2e": "cypress run",
     "test:core": "cross-env NODE_CONFIG_ENV=test mocha \"core/**/*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
     "test:package": "mocha \"gh-badges/**/*.spec.js\"",
     "test:entrypoint": "cross-env NODE_CONFIG_ENV=test mocha entrypoint.spec.js",
@@ -108,7 +108,7 @@
     "now-start": "node server",
     "prestart": "run-s --silent depcheck defs features",
     "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
-    "end2end": "start-server-and-test start http://localhost:3000 test:end-to-end",
+    "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "refactoring-report": "node scripts/refactoring-cli.js",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js"
   },
