@@ -315,6 +315,12 @@ jobs:
       - run:
           name: Run tests
           command: npm run end2end
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/e2e/results.xml
+
+      - store_test_results:
+          path: junit
 
       - store_artifacts:
           path: cypress/videos
