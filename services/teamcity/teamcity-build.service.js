@@ -6,7 +6,7 @@ const TeamCityBase = require('./teamcity-base')
 // The statusText field will start with a summary, potentially including test details, followed by an optional suffix.
 // Regex was updated to account for that optional suffix to address reported bugs.
 // See https://github.com/badges/shields/issues/3244 for an example.
-const buildStatusTextRegex = /^Success|Failure|Error|Tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?(.*)?$/
+const buildStatusTextRegex = /^Success|Failure|Error|Tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?/
 const buildStatusSchema = Joi.object({
   status: Joi.equal('SUCCESS', 'FAILURE', 'ERROR').required(),
   statusText: Joi.string()
