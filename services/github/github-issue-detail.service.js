@@ -1,27 +1,137 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeLabel: getLabel,
-  makeBadgeData: getBadgeData,
-} = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
+const Joi = require('joi')
+const { InvalidResponse } = require('..')
+const { nonNegativeInteger } = require('../validators')
 const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
+const { age } = require('../color-formatters')
+const { GithubAuthService } = require('./github-auth-service')
 const {
   documentation,
-  stateColor: githubStateColor,
-  commentsColor: githubCommentsColor,
-  checkErrorResponse: githubCheckErrorResponse,
+  errorMessagesFor,
+  stateColor,
+  commentsColor,
 } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubIssueDetail extends LegacyService {
+const getDefaultLabel = ({ json }) => {
+  if (json.pull_request) {
+    return `pull request ${json.number}`
+  }
+
+  return `issue ${json.number}`
+}
+
+const commonSchemaFields = {
+  number: nonNegativeInteger,
+  pull_request: Joi.any(),
+}
+
+const stateSchema = Joi.object({
+  ...commonSchemaFields,
+  state: Joi.string()
+    .allow('open', 'closed')
+    .required(),
+}).required()
+
+const stateMap = {
+  schema: stateSchema,
+  getLabel: getDefaultLabel,
+  getColor: ({ value }) => stateColor(value),
+  transform: ({ json }) => json.state,
+}
+
+const titleSchema = Joi.object({
+  ...commonSchemaFields,
+  title: Joi.string().required(),
+}).required()
+
+const titleMap = {
+  schema: titleSchema,
+  getLabel: getDefaultLabel,
+  transform: ({ json }) => json.title,
+}
+
+const authorSchema = Joi.object({
+  ...commonSchemaFields,
+  user: Joi.object({
+    login: Joi.string().required(),
+  }).required(),
+}).required()
+
+const authorMap = {
+  schema: authorSchema,
+  getLabel: () => 'author',
+  transform: ({ json }) => json.user.login,
+}
+
+const labelSchema = Joi.object({
+  ...commonSchemaFields,
+  labels: Joi.array()
+    .items(
+      Joi.object({
+        name: Joi.string().required(),
+        color: Joi.string().required(),
+      })
+    )
+    .required(),
+}).required()
+
+const labelMap = {
+  schema: labelSchema,
+  getColor: ({ json }) => {
+    if (json.labels.length === 1) {
+      return json.labels[0].color
+    }
+  },
+  getLabel: () => 'label',
+  transform: ({ json }) => {
+    if (json.labels.length === 0) {
+      throw new InvalidResponse({ prettyMessage: 'no labels found' })
+    }
+    return json.labels.map(l => l.name).join(' | ')
+  },
+}
+
+const commentsSchema = Joi.object({
+  ...commonSchemaFields,
+  comments: nonNegativeInteger,
+}).required()
+
+const commentsMap = {
+  schema: commentsSchema,
+  getColor: ({ value }) => commentsColor(value),
+  getLabel: () => 'comments',
+  transform: ({ json }) => json.comments,
+}
+
+const ageUpdateSchema = Joi.object({
+  ...commonSchemaFields,
+  created_at: Joi.date().required(),
+  updated_at: Joi.date().required(),
+}).required()
+
+const ageUpdateMap = {
+  schema: ageUpdateSchema,
+  formatMessage: date => formatDate(date),
+  getColor: ({ value }) => age(value),
+  getLabel: ({ which }) => (which === 'age' ? 'created' : 'updated'),
+  transform: ({ json, which }) =>
+    which === 'age' ? json.created_at : json.updated_at,
+}
+
+const whichMap = {
+  s: stateMap,
+  state: stateMap,
+  title: titleMap,
+  u: authorMap,
+  author: authorMap,
+  label: labelMap,
+  comments: commentsMap,
+  age: ageUpdateMap,
+  'last-update': ageUpdateMap,
+}
+
+module.exports = class GithubIssueDetail extends GithubAuthService {
   static get category() {
     return 'issue-tracking'
   }
@@ -30,7 +140,7 @@ module.exports = class GithubIssueDetail extends LegacyService {
     return {
       base: 'github/issues/detail',
       pattern:
-        ':which(s|state|title|u|author|label|comments|age|last-update)/:user/:repo/:number(0-9+)',
+        ':which(s|state|title|u|author|label|comments|age|last-update)/:user/:repo/:number',
     }
   }
 
@@ -65,96 +175,46 @@ module.exports = class GithubIssueDetail extends LegacyService {
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/(?:issues|pulls)\/detail\/(s|title|u|label|comments|age|last-update)\/([^/]+)\/([^/]+)\/(\d+)\.(svg|png|gif|jpg|json)$/,
-      cache((queryParams, match, sendBadge, request) => {
-        const [, which, owner, repo, number, format] = match
-        const uri = `/repos/${owner}/${repo}/issues/${number}`
-        const badgeData = getBadgeData(
-          `issue/pull request ${number}`,
-          queryParams
-        )
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', queryParams)
-        }
-        githubApiProvider.request(request, uri, {}, (err, res, buffer) => {
-          if (
-            githubCheckErrorResponse(
-              badgeData,
-              err,
-              res,
-              'issue, pull request or repo not found'
-            )
-          ) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const parsedData = JSON.parse(buffer)
-            const isPR = 'pull_request' in parsedData
-            const noun = isPR ? 'pull request' : 'issue'
-            badgeData.text[0] = getLabel(
-              `${noun} ${parsedData.number}`,
-              queryParams
-            )
-            switch (which) {
-              case 's':
-              case 'state': {
-                const state = (badgeData.text[1] = parsedData.state)
-                badgeData.colorscheme = undefined
-                badgeData.colorB = queryParams.colorB || githubStateColor(state)
-                break
-              }
-              case 'title':
-                badgeData.text[1] = parsedData.title
-                break
-              case 'u':
-              case 'author':
-                badgeData.text[0] = getLabel('author', queryParams)
-                badgeData.text[1] = parsedData.user.login
-                break
-              case 'label':
-                badgeData.text[0] = getLabel('label', queryParams)
-                badgeData.text[1] = parsedData.labels
-                  .map(i => i.name)
-                  .join(' | ')
-                if (parsedData.labels.length === 1) {
-                  badgeData.colorscheme = undefined
-                  badgeData.colorB =
-                    queryParams.colorB || parsedData.labels[0].color
-                }
-                break
-              case 'comments': {
-                badgeData.text[0] = getLabel('comments', queryParams)
-                const comments = (badgeData.text[1] = parsedData.comments)
-                badgeData.colorscheme = undefined
-                badgeData.colorB =
-                  queryParams.coloB || githubCommentsColor(comments)
-                break
-              }
-              case 'age':
-              case 'last-update': {
-                const label = which === 'age' ? 'created' : 'updated'
-                const date =
-                  which === 'age'
-                    ? parsedData.created_at
-                    : parsedData.updated_at
-                badgeData.text[0] = getLabel(label, queryParams)
-                badgeData.text[1] = formatDate(date)
-                badgeData.colorscheme = ageColor(Date.parse(date))
-                break
-              }
-              default:
-                throw Error('Unreachable due to regex')
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static get defaultBadgeData() {
+    return {
+      label: 'issue/pull request',
+      color: 'informational',
+    }
+  }
+
+  static render({ which, value, json }) {
+    let color
+    if (whichMap[which].getColor) {
+      color = whichMap[which].getColor({ value, json })
+    }
+
+    let message = value
+    if (whichMap[which].formatMessage) {
+      message = whichMap[which].formatMessage({ value })
+    }
+
+    return {
+      label: whichMap[which].getLabel({ which, json }),
+      message,
+      color,
+    }
+  }
+
+  async fetch({ which, user, repo, number }) {
+    return this._requestJson({
+      url: `/repos/${user}/${repo}/issues/${number}`,
+      schema: whichMap[which].schema,
+      errorMessages: errorMessagesFor('issue, pull request or repo not found'),
+    })
+  }
+
+  transform({ json, which }) {
+    return { value: whichMap[which].transform({ json, which }) }
+  }
+
+  async handle({ which, user, repo, number }) {
+    const json = await this.fetch({ which, user, repo, number })
+    const { value } = this.transform({ json, which })
+    return this.constructor.render({ which, value, json })
   }
 }

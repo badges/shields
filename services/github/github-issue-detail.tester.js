@@ -14,7 +14,7 @@ t.create('github issue state')
 t.create('github issue state (repo not found)')
   .get('/s/badges/helmets/979.json')
   .expectBadge({
-    label: 'issue/pull request 979',
+    label: 'issue/pull request',
     message: 'issue, pull request or repo not found',
   })
 
