@@ -6,6 +6,6 @@ describe('Main page', function() {
 
     cy.get('input[placeholder="search / project URL"]').type('pypi')
 
-    cy.contains('tr', 'pypi')
+    cy.contains('PyPI - License')
   })
 })
