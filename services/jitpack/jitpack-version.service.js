@@ -19,7 +19,7 @@ module.exports = class JitPackVersion extends BaseJsonService {
   static get route() {
     return {
       base: 'jitpack/v',
-      pattern: ':groupId/:artifactId',
+      pattern: ':vcs(github|bitbucket|gitlab)/:user/:repo',
     }
   }
 
@@ -28,8 +28,9 @@ module.exports = class JitPackVersion extends BaseJsonService {
       {
         title: 'JitPack',
         namedParams: {
-          groupId: 'jitpack',
-          artifactId: 'maven-simple',
+          vcs: 'github',
+          user: 'jitpack',
+          repo: 'maven-simple',
         },
         staticPreview: renderVersionBadge({ version: 'v1.1' }),
         keywords: ['java', 'maven'],
@@ -41,16 +42,18 @@ module.exports = class JitPackVersion extends BaseJsonService {
     return { label: 'jitpack' }
   }
 
-  async fetch({ groupId, artifactId }) {
+  async fetch({ vcs, user, repo }) {
+    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latest`
+
     return this._requestJson({
       schema,
-      url: `https://jitpack.io/api/builds/com.github.${groupId}/${artifactId}/latest`,
+      url,
       errorMessages: { 401: 'project not found or private' },
     })
   }
 
-  async handle({ groupId, artifactId }) {
-    const { version } = await this.fetch({ groupId, artifactId })
+  async handle({ vcs, user, repo }) {
+    const { version } = await this.fetch({ vcs, user, repo })
     return renderVersionBadge({ version })
   }
 }
