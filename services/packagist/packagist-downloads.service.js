@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const { keywords, BasePackagistService } = require('./packagist-base')
@@ -19,6 +20,16 @@ const periodMap = {
   },
 }
 
+const schema = Joi.object({
+  package: Joi.object({
+    downloads: Joi.object({
+      total: Joi.number().required(),
+      monthly: Joi.number().required(),
+      daily: Joi.number().required(),
+    }).required(),
+  }).required(),
+}).required()
+
 module.exports = class PackagistDownloads extends BasePackagistService {
   static get route() {
     return {
@@ -36,7 +47,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   async handle({ interval, user, repo }) {
     const {
       package: { downloads },
-    } = await this.fetch({ user, repo })
+    } = await this.fetch({ user, repo, schema })
 
     return this.constructor.render({
       downloads: downloads[periodMap[interval].field],

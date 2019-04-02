@@ -1,12 +1,29 @@
 'use strict'
 
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
-const { isStable: phpStableVersion } = require('../php-version')
+const { compare, isStable, latest } = require('../php-version')
 const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
 } = require('./packagist-base')
+
+const schema = Joi.object({
+  package: Joi.object({
+    versions: Joi.object()
+      .pattern(
+        /^/,
+        Joi.object({
+          version: Joi.string().required(),
+          extra: Joi.object({
+            'branch-alias': Joi.object().pattern(/^/, Joi.string()),
+          }),
+        })
+      )
+      .required(),
+  }).required(),
+}).required()
 
 module.exports = class PackagistVersion extends BasePackagistService {
   static get route() {
@@ -22,32 +39,47 @@ module.exports = class PackagistVersion extends BasePackagistService {
     }
   }
 
-  async handle({ type, user, repo }) {
-    switch (type) {
-      case 'vpre':
-        const {
-          package: {
-            versions: {
-              'dev-master': {
-                extra: {
-                  'branch-alias': { 'dev-master': version },
-                },
-              },
-            },
-          },
-        } = await this.fetch({ user, repo })
-        return renderVersionBadge({ version })
-      case 'v':
-        const allData = await this.fetch({
-          user,
-          repo,
-          schema: allVersionsSchema,
-        })
-        const versionsData = allData.package.versions
-        const versions = Object.keys(versionsData)
-        const stableVersions = versions.filter(phpStableVersion)
-        return renderVersionBadge({ version: stableVersions[0] })
+  transform({ type, json }) {
+    const versionsData = json.package.versions
+    let versions = Object.keys(versionsData)
+    const aliasesMap = {}
+    versions.forEach(version => {
+      const versionData = versionsData[version]
+      if (
+        versionData.extra &&
+        versionData.extra['branch-alias'] &&
+        versionData.extra['branch-alias'][version]
+      ) {
+        // eg, version is 'dev-master', mapped to '2.0.x-dev'.
+        const validVersion = versionData.extra['branch-alias'][version]
+        if (
+          aliasesMap[validVersion] === undefined ||
+          compare(aliasesMap[validVersion], validVersion) < 0
+        ) {
+          versions.push(validVersion)
+          aliasesMap[validVersion] = version
+        }
+      }
+    })
+
+    versions = versions.filter(version => !/^dev-/.test(version))
+
+    if (type === 'vpre') {
+      return { version: latest(versions) }
+    } else {
+      const stableVersion = latest(versions.filter(isStable))
+      return { version: stableVersion || latest(versions) }
     }
+  }
+
+  async handle({ type, user, repo }) {
+    const json = await this.fetch({
+      user,
+      repo,
+      schema: type === 'v' ? allVersionsSchema : schema,
+    })
+    const { version } = this.transform({ type, json })
+    return renderVersionBadge({ version })
   }
 
   static get category() {
@@ -56,7 +88,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
   static get examples() {
     return [
       {
-        title: 'Packagist',
+        title: 'Packagist Version',
         pattern: 'v/:user/:repo',
         namedParams: {
           user: 'symfony',
@@ -66,7 +98,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
         keywords,
       },
       {
-        title: 'Packagist Pre Release',
+        title: 'Packagist Pre Release Version',
         pattern: 'vpre/:user/:repo',
         namedParams: {
           user: 'symfony',
