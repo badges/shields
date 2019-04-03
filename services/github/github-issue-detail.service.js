@@ -13,14 +13,6 @@ const {
   commentsColor,
 } = require('./github-helpers')
 
-const getDefaultLabel = ({ json }) => {
-  if (json.pull_request) {
-    return `pull request ${json.number}`
-  }
-
-  return `issue ${json.number}`
-}
-
 const commonSchemaFields = {
   number: nonNegativeInteger,
   pull_request: Joi.any(),
@@ -34,9 +26,9 @@ const stateMap = {
       .required(),
   }).required(),
   transform: ({ json }) => json.state,
-  render: ({ value, json }) => ({
+  render: ({ value, isPR, number }) => ({
     color: stateColor(value),
-    label: getDefaultLabel({ json }),
+    label: `${isPR ? 'pull request' : 'issue'} ${number}`,
     message: value,
   }),
 }
@@ -47,8 +39,8 @@ const titleMap = {
     title: Joi.string().required(),
   }).required(),
   transform: ({ json }) => json.title,
-  render: ({ value, json }) => ({
-    label: getDefaultLabel({ json }),
+  render: ({ value, isPR, number }) => ({
+    label: `${isPR ? 'pull request' : 'issue'} ${number}`,
     message: value,
   }),
 }
@@ -83,17 +75,20 @@ const labelMap = {
     if (json.labels.length === 0) {
       throw new InvalidResponse({ prettyMessage: 'no labels found' })
     }
-    return json.labels.map(l => l.name).join(' | ')
+    return {
+      names: json.labels.map(l => l.name),
+      colors: json.labels.map(l => l.color),
+    }
   },
-  render: ({ value, json }) => {
+  render: ({ value }) => {
     let color
-    if (json.labels.length === 1) {
-      color = json.labels[0].color
+    if (value.colors.length === 1) {
+      color = value.colors[0]
     }
     return {
       color,
       label: 'label',
-      message: value,
+      message: value.names.join(' | '),
     }
   },
 }
@@ -162,7 +157,8 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
         staticPreview: this.render({
           which: 'state',
           value: 'closed',
-          json: { number: 979 },
+          isPR: false,
+          number: '979',
         }),
         keywords: [
           'state',
@@ -185,8 +181,8 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     }
   }
 
-  static render({ which, value, json }) {
-    return whichMap[which].render({ which, value, json })
+  static render({ which, value, isPR, number }) {
+    return whichMap[which].render({ which, value, isPR, number })
   }
 
   async fetch({ which, user, repo, number }) {
@@ -198,12 +194,14 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
   }
 
   transform({ json, which }) {
-    return { value: whichMap[which].transform({ json, which }) }
+    const value = whichMap[which].transform({ json, which })
+    const isPR = json.hasOwnProperty('pull_request')
+    return { value, isPR }
   }
 
   async handle({ which, user, repo, number }) {
     const json = await this.fetch({ which, user, repo, number })
-    const { value } = this.transform({ json, which })
-    return this.constructor.render({ which, value, json })
+    const { value, isPR } = this.transform({ json, which })
+    return this.constructor.render({ which, value, isPR, number })
   }
 }

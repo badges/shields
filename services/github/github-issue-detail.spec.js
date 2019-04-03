@@ -13,13 +13,19 @@ describe('GithubIssueDetail', function() {
     given({
       which: 'state',
       value: 'open',
-      json: { pull_request: {}, number: 12 },
+      number: '12',
+      isPR: true,
     }).expect({
       label: 'pull request 12',
       message: 'open',
       color: stateColor('open'),
     })
-    given({ which: 'state', value: 'closed', json: { number: 15 } }).expect({
+    given({
+      which: 'state',
+      value: 'closed',
+      number: '15',
+      isPR: false,
+    }).expect({
       label: 'issue 15',
       message: 'closed',
       color: stateColor('closed'),
@@ -27,7 +33,8 @@ describe('GithubIssueDetail', function() {
     given({
       which: 'title',
       value: 'refactor [FooService]',
-      json: { pull_request: {}, number: 232 },
+      number: '232',
+      isPR: true,
     }).expect({
       label: 'pull request 232',
       message: 'refactor [FooService]',
@@ -35,7 +42,8 @@ describe('GithubIssueDetail', function() {
     given({
       which: 'title',
       value: 'Packagist: invalid response data',
-      json: { number: 345 },
+      number: '345',
+      isPR: false,
     }).expect({
       label: 'issue 345',
       message: 'Packagist: invalid response data',
@@ -49,8 +57,7 @@ describe('GithubIssueDetail', function() {
     })
     given({
       which: 'label',
-      value: 'feature',
-      json: { labels: [{ name: 'feature', color: 'a2eeef' }] },
+      value: { names: ['feature'], colors: ['a2eeef'] },
     }).expect({
       color: 'a2eeef',
       message: 'feature',
@@ -58,13 +65,7 @@ describe('GithubIssueDetail', function() {
     })
     given({
       which: 'label',
-      value: 'service-badge | bug',
-      json: {
-        labels: [
-          { name: 'service-badge', color: 'a2eeef' },
-          { name: 'bug', color: 'ee0701' },
-        ],
-      },
+      value: { names: ['service-badge', 'bug'], colors: ['a2eeef', 'ee0701'] },
     }).expect({
       color: undefined,
       message: 'service-badge | bug',
@@ -99,53 +100,68 @@ describe('GithubIssueDetail', function() {
       json: { state: 'closed' },
     }).expect({
       value: 'closed',
+      isPR: false,
     })
     given({
       which: 'title',
-      json: { title: 'refactor [Codecov]' },
+      json: { pull_request: {}, title: 'refactor [Codecov]' },
     }).expect({
       value: 'refactor [Codecov]',
+      isPR: true,
     })
     given({
       which: 'author',
       json: { user: { login: 'dependabot' } },
     }).expect({
       value: 'dependabot',
+      isPR: false,
     })
     given({
       which: 'label',
       json: {
+        pull_request: {},
         labels: [
           { name: 'service-badge', color: 'a2eeef' },
           { name: 'bug', color: 'ee0701' },
         ],
       },
     }).expect({
-      value: 'service-badge | bug',
+      value: {
+        names: ['service-badge', 'bug'],
+        colors: ['a2eeef', 'ee0701'],
+      },
+      isPR: true,
     })
     given({
       which: 'label',
       json: { labels: [{ name: 'bug', color: 'ee0701' }] },
     }).expect({
-      value: 'bug',
+      value: {
+        names: ['bug'],
+        colors: ['ee0701'],
+      },
+      isPR: false,
     })
     given({
       which: 'comments',
       json: { comments: 100 },
     }).expect({
       value: 100,
+      isPR: false,
     })
     given({
       which: 'age',
       json: { created_at: '2019-04-01T20:09:31Z' },
     }).expect({
       value: '2019-04-01T20:09:31Z',
+      isPR: false,
     })
     given({
       which: 'last-update',
       json: { updated_at: '2019-04-02T20:09:31Z' },
     }).expect({
       value: '2019-04-02T20:09:31Z',
+      isPR: false,
     })
   })
 
