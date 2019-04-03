@@ -3,8 +3,10 @@
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
 const { InvalidResponse } = require('..')
+const { age } = require('../color-formatters')
+const { formatDate, metric } = require('../text-formatters')
 const GithubIssueDetail = require('./github-issue-detail.service')
-const { stateColor } = require('./github-helpers')
+const { stateColor, commentsColor } = require('./github-helpers')
 
 describe('GithubIssueDetail', function() {
   test(GithubIssueDetail.render, () => {
@@ -21,6 +23,29 @@ describe('GithubIssueDetail', function() {
       label: 'issue 15',
       message: 'closed',
       color: stateColor('closed'),
+    })
+    given({
+      which: 'title',
+      value: 'refactor [FooService]',
+      json: { pull_request: {}, number: 232 },
+    }).expect({
+      label: 'pull request 232',
+      message: 'refactor [FooService]',
+    })
+    given({
+      which: 'title',
+      value: 'Packagist: invalid response data',
+      json: { number: 345 },
+    }).expect({
+      label: 'issue 345',
+      message: 'Packagist: invalid response data',
+    })
+    given({
+      which: 'author',
+      value: 'calebcartwright',
+    }).expect({
+      label: 'author',
+      message: 'calebcartwright',
     })
     given({
       which: 'label',
@@ -45,9 +70,48 @@ describe('GithubIssueDetail', function() {
       message: 'service-badge | bug',
       label: 'label',
     })
+    given({ which: 'comments', value: 27 }).expect({
+      label: 'comments',
+      message: metric(27),
+      color: commentsColor('closed'),
+    })
+    given({
+      which: 'age',
+      value: '2019-04-01T20:09:31Z',
+    }).expect({
+      label: 'created',
+      message: formatDate('2019-04-01T20:09:31Z'),
+      color: age('2019-04-01T20:09:31Z'),
+    })
+    given({
+      which: 'last-update',
+      value: '2019-04-02T20:09:31Z',
+    }).expect({
+      label: 'updated',
+      message: formatDate('2019-04-02T20:09:31Z'),
+      color: age('2019-04-02T20:09:31Z'),
+    })
   })
 
   test(GithubIssueDetail.prototype.transform, () => {
+    given({
+      which: 'state',
+      json: { state: 'closed' },
+    }).expect({
+      value: 'closed',
+    })
+    given({
+      which: 'title',
+      json: { title: 'refactor [Codecov]' },
+    }).expect({
+      value: 'refactor [Codecov]',
+    })
+    given({
+      which: 'author',
+      json: { user: { login: 'dependabot' } },
+    }).expect({
+      value: 'dependabot',
+    })
     given({
       which: 'label',
       json: {
@@ -64,6 +128,24 @@ describe('GithubIssueDetail', function() {
       json: { labels: [{ name: 'bug', color: 'ee0701' }] },
     }).expect({
       value: 'bug',
+    })
+    given({
+      which: 'comments',
+      json: { comments: 100 },
+    }).expect({
+      value: 100,
+    })
+    given({
+      which: 'age',
+      json: { created_at: '2019-04-01T20:09:31Z' },
+    }).expect({
+      value: '2019-04-01T20:09:31Z',
+    })
+    given({
+      which: 'last-update',
+      json: { updated_at: '2019-04-02T20:09:31Z' },
+    }).expect({
+      value: '2019-04-02T20:09:31Z',
     })
   })
 

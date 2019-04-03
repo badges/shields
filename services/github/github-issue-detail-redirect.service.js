@@ -13,7 +13,7 @@ module.exports = [
     route: {
       base: 'github',
       pattern:
-        ':issueKind(issues|pulls)/detail/:which(s|u)/:user/:repo/:number',
+        ':issueKind(issues|pulls)/detail/:which(s|u)/:user/:repo/:number([0-9]+)',
     },
     transformPath: ({ which, user, repo, number }) =>
       `/github/issues/detail/${whichMap[which]}/${user}/${repo}/${number}`,
@@ -24,7 +24,7 @@ module.exports = [
     route: {
       base: 'github/pulls/detail',
       pattern:
-        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number',
+        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
     },
     transformPath: ({ which, user, repo, number }) =>
       `/github/issues/detail/${which}/${user}/${repo}/${number}`,

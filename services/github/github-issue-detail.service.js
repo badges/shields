@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
-const { formatDate } = require('../text-formatters')
+const { formatDate, metric } = require('../text-formatters')
 const { age } = require('../color-formatters')
 const { GithubAuthService } = require('./github-auth-service')
 const {
@@ -107,7 +107,7 @@ const commentsMap = {
   render: ({ value }) => ({
     color: commentsColor(value),
     label: 'comments',
-    message: value,
+    message: metric(value),
   }),
 }
 
@@ -145,7 +145,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     return {
       base: 'github/issues/detail',
       pattern:
-        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number',
+        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
     }
   }
 
@@ -159,11 +159,11 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
           repo: 'shields',
           number: '979',
         },
-        staticPreview: {
-          label: 'issue 979',
-          message: 'closed',
-          color: 'red',
-        },
+        staticPreview: this.render({
+          which: 'state',
+          value: 'closed',
+          json: { number: 979 },
+        }),
         keywords: [
           'state',
           'title',
