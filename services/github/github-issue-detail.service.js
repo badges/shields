@@ -26,104 +26,109 @@ const commonSchemaFields = {
   pull_request: Joi.any(),
 }
 
-const stateSchema = Joi.object({
-  ...commonSchemaFields,
-  state: Joi.string()
-    .allow('open', 'closed')
-    .required(),
-}).required()
-
 const stateMap = {
-  schema: stateSchema,
-  getLabel: getDefaultLabel,
-  getColor: ({ value }) => stateColor(value),
+  schema: Joi.object({
+    ...commonSchemaFields,
+    state: Joi.string()
+      .allow('open', 'closed')
+      .required(),
+  }).required(),
   transform: ({ json }) => json.state,
+  render: ({ value, json }) => ({
+    color: stateColor(value),
+    label: getDefaultLabel({ json }),
+    message: value,
+  }),
 }
-
-const titleSchema = Joi.object({
-  ...commonSchemaFields,
-  title: Joi.string().required(),
-}).required()
 
 const titleMap = {
-  schema: titleSchema,
-  getLabel: getDefaultLabel,
-  transform: ({ json }) => json.title,
-}
-
-const authorSchema = Joi.object({
-  ...commonSchemaFields,
-  user: Joi.object({
-    login: Joi.string().required(),
+  schema: Joi.object({
+    ...commonSchemaFields,
+    title: Joi.string().required(),
   }).required(),
-}).required()
+  transform: ({ json }) => json.title,
+  render: ({ value, json }) => ({
+    label: getDefaultLabel({ json }),
+    message: value,
+  }),
+}
 
 const authorMap = {
-  schema: authorSchema,
-  getLabel: () => 'author',
+  schema: Joi.object({
+    ...commonSchemaFields,
+    user: Joi.object({
+      login: Joi.string().required(),
+    }).required(),
+  }).required(),
   transform: ({ json }) => json.user.login,
+  render: ({ value }) => ({
+    label: 'author',
+    message: value,
+  }),
 }
 
-const labelSchema = Joi.object({
-  ...commonSchemaFields,
-  labels: Joi.array()
-    .items(
-      Joi.object({
-        name: Joi.string().required(),
-        color: Joi.string().required(),
-      })
-    )
-    .required(),
-}).required()
-
 const labelMap = {
-  schema: labelSchema,
-  getColor: ({ json }) => {
-    if (json.labels.length === 1) {
-      return json.labels[0].color
-    }
-  },
-  getLabel: () => 'label',
+  schema: Joi.object({
+    ...commonSchemaFields,
+    labels: Joi.array()
+      .items(
+        Joi.object({
+          name: Joi.string().required(),
+          color: Joi.string().required(),
+        })
+      )
+      .required(),
+  }).required(),
   transform: ({ json }) => {
     if (json.labels.length === 0) {
       throw new InvalidResponse({ prettyMessage: 'no labels found' })
     }
     return json.labels.map(l => l.name).join(' | ')
   },
+  render: ({ value, json }) => {
+    let color
+    if (json.labels.length === 1) {
+      color = json.labels[0].color
+    }
+    return {
+      color,
+      label: 'label',
+      message: value,
+    }
+  },
 }
-
-const commentsSchema = Joi.object({
-  ...commonSchemaFields,
-  comments: nonNegativeInteger,
-}).required()
 
 const commentsMap = {
-  schema: commentsSchema,
-  getColor: ({ value }) => commentsColor(value),
-  getLabel: () => 'comments',
+  schema: Joi.object({
+    ...commonSchemaFields,
+    comments: nonNegativeInteger,
+  }).required(),
   transform: ({ json }) => json.comments,
+  render: ({ value }) => ({
+    color: commentsColor(value),
+    label: 'comments',
+    message: value,
+  }),
 }
 
-const ageUpdateSchema = Joi.object({
-  ...commonSchemaFields,
-  created_at: Joi.date().required(),
-  updated_at: Joi.date().required(),
-}).required()
-
 const ageUpdateMap = {
-  schema: ageUpdateSchema,
-  formatMessage: date => formatDate(date),
-  getColor: ({ value }) => age(value),
-  getLabel: ({ which }) => (which === 'age' ? 'created' : 'updated'),
+  schema: Joi.object({
+    ...commonSchemaFields,
+    created_at: Joi.date().required(),
+    updated_at: Joi.date().required(),
+  }).required(),
   transform: ({ json, which }) =>
     which === 'age' ? json.created_at : json.updated_at,
+  render: ({ which, value }) => ({
+    color: age(value),
+    label: which === 'age' ? 'created' : 'updated',
+    message: formatDate(value),
+  }),
 }
 
 const whichMap = {
-  s: stateMap,
   state: stateMap,
   title: titleMap,
-  u: authorMap,
   author: authorMap,
   label: labelMap,
   comments: commentsMap,
@@ -140,7 +145,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     return {
       base: 'github/issues/detail',
       pattern:
-        ':which(s|state|title|u|author|label|comments|age|last-update)/:user/:repo/:number',
+        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number',
     }
   }
 
@@ -148,8 +153,6 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     return [
       {
         title: 'GitHub issue/pull request detail',
-        pattern:
-          ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number',
         namedParams: {
           which: 'state',
           user: 'badges',
@@ -183,21 +186,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
   }
 
   static render({ which, value, json }) {
-    let color
-    if (whichMap[which].getColor) {
-      color = whichMap[which].getColor({ value, json })
-    }
-
-    let message = value
-    if (whichMap[which].formatMessage) {
-      message = whichMap[which].formatMessage({ value })
-    }
-
-    return {
-      label: whichMap[which].getLabel({ which, json }),
-      message,
-      color,
-    }
+    return whichMap[which].render({ which, value, json })
   }
 
   async fetch({ which, user, repo, number }) {

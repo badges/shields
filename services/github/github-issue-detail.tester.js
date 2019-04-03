@@ -5,14 +5,14 @@ const { isFormattedDate } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('github issue state')
-  .get('/s/badges/shields/979.json')
+  .get('/state/badges/shields/979.json')
   .expectBadge({
     label: 'issue 979',
     message: Joi.equal('open', 'closed'),
   })
 
 t.create('github issue state (repo not found)')
-  .get('/s/badges/helmets/979.json')
+  .get('/state/badges/helmets/979.json')
   .expectBadge({
     label: 'issue/pull request',
     message: 'issue, pull request or repo not found',
@@ -26,7 +26,7 @@ t.create('github issue title')
   })
 
 t.create('github issue author')
-  .get('/u/badges/shields/979.json')
+  .get('/author/badges/shields/979.json')
   .expectBadge({ label: 'author', message: 'paulmelnikow' })
 
 t.create('github issue label')
