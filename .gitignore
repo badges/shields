@@ -106,3 +106,7 @@ service-definitions.yml
 # Gatsby
 /.cache
 /public
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/

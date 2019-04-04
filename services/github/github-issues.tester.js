@@ -67,7 +67,7 @@ t.create('GitHub open issues by label is > zero')
 t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectBadge({
-    label: '"app - cockatrice" issues',
+    label: '"App - Cockatrice" issues',
     message: isMetricOpenIssues,
   })
 
@@ -90,7 +90,7 @@ t.create('GitHub open issues by label including slash character (raw)')
 t.create('GitHub open issues (repo not found)')
   .get('/issues-raw/badges/helmets.json')
   .expectBadge({
-    label: 'open issues',
+    label: 'issues',
     message: 'repo not found',
   })
 
