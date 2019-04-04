@@ -121,7 +121,7 @@ describe('PyPI helpers', function() {
           ],
         },
       }),
-    ]).expect(['mit license'])
+    ]).expect(['MIT'])
     given({
       info: {
         license: '',
