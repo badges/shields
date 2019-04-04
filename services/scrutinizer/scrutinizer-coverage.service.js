@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
+const { colorScale } = require('../color-formatters')
 const ScrutinizerBase = require('./scrutinizer-base')
 
 const schema = Joi.object({
@@ -23,6 +23,12 @@ const schema = Joi.object({
     )
     .required(),
 }).required()
+
+// https://scrutinizer-ci.com/g/filp/whoops/code-structure/master/code-coverage
+// < 40% - red
+// 40-60% (inclusive) - yellow
+// > 60% brightgreen
+const scale = colorScale([40, 61], ['red', 'yellow', 'brightgreen'])
 
 module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
   static get category() {
@@ -50,7 +56,7 @@ module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
     }
     return {
       message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
+      color: scale(coverage),
     }
   }
 
