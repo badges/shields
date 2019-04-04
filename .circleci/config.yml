@@ -313,11 +313,15 @@ jobs:
           command: npm ci
 
       - run:
+          name: Frontend build
+          command: npm run build
+
+      - run:
           name: Run tests
           environment:
             CYPRESS_REPORTER: junit
             MOCHA_FILE: junit/e2e/results.xml
-          command: npm run e2e
+          command: npm run e2e-on-build
 
       - store_test_results:
           path: junit
