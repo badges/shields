@@ -97,60 +97,6 @@ t.create('no trove classifiers')
     message: 'v1.2.3',
   })
 
-// tests for license endpoint
-
-t.create('license (valid, package version in request)')
-  .get('/l/requests/2.18.4.json')
-  .expectBadge({ label: 'license', message: 'Apache 2.0' })
-
-t.create('license (valid, no package version specified)')
-  .get('/l/requests.json')
-  .expectBadge({ label: 'license', message: 'Apache 2.0' })
-
-t.create('license (invalid)')
-  .get('/l/not-a-package.json')
-  .expectBadge({ label: 'license', message: 'package or version not found' })
-
-t.create('license (from trove classifier)')
-  .get('/l/mapi.json')
-  .intercept(nock =>
-    nock('https://pypi.org')
-      .get('/pypi/mapi/json')
-      .reply(200, {
-        info: {
-          version: '1.2.3',
-          license: '',
-          classifiers: ['License :: OSI Approved :: MIT License'],
-        },
-        releases: {},
-      })
-  )
-  .expectBadge({
-    label: 'license',
-    message: 'mit license',
-  })
-
-t.create('license (as acronym from trove classifier)')
-  .get('/l/magma.json')
-  .intercept(nock =>
-    nock('https://pypi.org')
-      .get('/pypi/magma/json')
-      .reply(200, {
-        info: {
-          version: '1.2.3',
-          license: '',
-          classifiers: [
-            'License :: OSI Approved :: GNU General Public License (GPL)',
-          ],
-        },
-        releases: {},
-      })
-  )
-  .expectBadge({
-    label: 'license',
-    message: 'GPL',
-  })
-
 // tests for wheel endpoint
 
 t.create('wheel (has wheel, package version in request)')

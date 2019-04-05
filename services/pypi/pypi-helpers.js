@@ -57,12 +57,18 @@ function getLicenses(packageData) {
   if (license) {
     return [license]
   } else {
-    const acronymRegex = /\(([^)]+)\)/
+    const parenthesizedAcronymRegex = /\(([^)]+)\)/
+    const bareAcronymRegex = /^[a-z0-9]+$/
     let licenses = parseClassifiers(packageData, /^License :: (.+)$/)
       .map(classifier => classifier.split(' :: ').pop())
+      .map(license => license.replace(' license', ''))
       .map(license => {
-        const match = license.match(acronymRegex)
+        const match = license.match(parenthesizedAcronymRegex)
         return match ? match[1].toUpperCase() : license
+      })
+      .map(license => {
+        const match = license.match(bareAcronymRegex)
+        return match ? license.toUpperCase() : license
       })
     if (licenses.length > 1) {
       licenses = licenses.filter(l => l !== 'dfsg approved')
