@@ -14,7 +14,7 @@ module.exports = class NpmDependencyVersion extends NpmBase {
   static get route() {
     return {
       base: 'npm/dependency-version',
-      pattern: ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependency',
+      pattern: ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependency+',
       queryParamSchema,
     }
   }
