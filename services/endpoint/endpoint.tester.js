@@ -18,7 +18,7 @@ t.create('Valid schema (mocked)')
   .expectBadge({ label: '', message: 'yo' })
 
 t.create('color and labelColor')
-  .get('.svg?url=https://example.com/badge')
+  .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -30,8 +30,11 @@ t.create('color and labelColor')
         labelColor: '#e6e6fa',
       })
   )
-  .after(body => {
-    expect(body).to.include('fill="#e6e6fa"')
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
+    color: '#f0dcc3',
+    labelColor: '#e6e6fa',
   })
 
 t.create('style')
@@ -112,7 +115,7 @@ t.create('custom svg logo')
   })
 
 t.create('logoWidth')
-  .get('.svg?url=https://example.com/badge')
+  .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -124,8 +127,10 @@ t.create('logoWidth')
         logoWidth: 30,
       })
   )
-  .after(body => {
-    expect(body).to.include('width="30"')
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
+    logoWidth: 30,
   })
 
 t.create('Invalid schema (mocked)')

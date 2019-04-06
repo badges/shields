@@ -32,7 +32,7 @@ const factory = superclass =>
       return this
     }
 
-    expectBadge({ label, message, color }) {
+    expectBadge({ label, message, logoWidth, labelColor, color }) {
       return this.afterJSON(json => {
         expect(json.label, 'label mismatch').to.equal(label)
         if (typeof message === 'string') {
@@ -43,6 +43,12 @@ const factory = superclass =>
               throw err
             }
           })
+        }
+        if (typeof logoWidth !== 'undefined') {
+          expect(json.logoWidth, 'logoWidth mismatch').to.equal(logoWidth)
+        }
+        if (typeof labelColor !== 'undefined') {
+          expect(json.labelColor, 'labelColor mismatch').to.equal(labelColor)
         }
         if (typeof color !== 'undefined') {
           expect(json.color, 'color mismatch').to.equal(color)
