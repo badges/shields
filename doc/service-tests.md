@@ -222,7 +222,7 @@ We can also use nock to intercept API calls to return a known response body.
 
 ```js
 t.create('Build passed (mocked)')
-  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
+  .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
@@ -235,7 +235,7 @@ t.create('Build passed (mocked)')
   })
 
 t.create('Build failed (mocked)')
-  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
+  .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
@@ -244,7 +244,7 @@ t.create('Build failed (mocked)')
   .expectBadge({ label: 'build', message: 'failed', color: 'red' })
 ```
 
-Note that in these tests, we are passing the URL parameter `?style=_shields_test`. This returns a JSON response which also contains the color. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.
+Note that in these tests, we have specified a `color` parameter in `expectBadge`. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.
 
 ## Code coverage
 

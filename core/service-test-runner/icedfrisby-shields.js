@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { expect } = require('chai')
 
 // based on https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
 // can be used to wrap the original "icedfrisby-nock" with additional functionality:
@@ -32,18 +33,21 @@ const factory = superclass =>
     }
 
     expectBadge({ label, message, color }) {
-      let expectedBadge
-      if (typeof color === 'undefined') {
-        expectedBadge = { name: label, value: message }
-      } else {
-        expectedBadge = { name: label, value: message, color }
-      }
-
-      if (typeof message === 'string') {
-        return this.expectJSON(expectedBadge)
-      } else {
-        return this.expectJSONTypes(Joi.object().keys(expectedBadge))
-      }
+      return this.afterJSON(json => {
+        expect(json.label, 'label mismatch').to.equal(label)
+        if (typeof message === 'string') {
+          expect(json.message, 'message mismatch').to.equal(message)
+        } else {
+          Joi.validate(json.message, message, err => {
+            if (err) {
+              throw err
+            }
+          })
+        }
+        if (typeof color !== 'undefined') {
+          expect(json.color, 'color mismatch').to.equal(color)
+        }
+      })
     }
   }
 

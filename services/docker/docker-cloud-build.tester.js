@@ -25,7 +25,7 @@ t.create('docker cloud build status (not found)')
   .expectBadge({ label: 'docker build', message: 'repo not found' })
 
 t.create('docker cloud build status (passing)')
-  .get('/xenolf/lego.json?style=_shields_test')
+  .get('/xenolf/lego.json')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)
@@ -38,7 +38,7 @@ t.create('docker cloud build status (passing)')
   })
 
 t.create('docker cloud build status (failing)')
-  .get('/xenolf/lego.json?style=_shields_test')
+  .get('/xenolf/lego.json')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)
@@ -47,7 +47,7 @@ t.create('docker cloud build status (failing)')
   .expectBadge({ label: 'docker build', message: 'failing', color: 'red' })
 
 t.create('docker cloud build status (building)')
-  .get('/xenolf/lego.json?style=_shields_test')
+  .get('/xenolf/lego.json')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)

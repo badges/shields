@@ -1,4 +1,7 @@
 {
   "name": {{=JSON.stringify(it.text[0])}},
-  "value": {{=JSON.stringify(it.text[1])}}
+  "label": {{=JSON.stringify(it.text[0])}},
+  "value": {{=JSON.stringify(it.text[1])}},
+  "message": {{=JSON.stringify(it.text[1])}},
+  "color": {{=JSON.stringify(it.color || null)}}
 }

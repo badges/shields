@@ -39,7 +39,7 @@ t.create('live: full status for known build')
   })
 
 t.create('codebetter success build')
-  .get('/codebetter/bt123.json?style=_shields_test')
+  .get('/codebetter/bt123.json')
   .intercept(nock =>
     nock('https://teamcity.jetbrains.com/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt123)')}`)
@@ -56,7 +56,7 @@ t.create('codebetter success build')
   })
 
 t.create('codebetter failure build')
-  .get('/codebetter/bt123.json?style=_shields_test')
+  .get('/codebetter/bt123.json')
   .intercept(nock =>
     nock('https://teamcity.jetbrains.com/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt123)')}`)
@@ -73,7 +73,7 @@ t.create('codebetter failure build')
   })
 
 t.create('simple build status with passed build')
-  .get('/https/myteamcity.com:8080/s/bt321.json?style=_shields_test')
+  .get('/https/myteamcity.com:8080/s/bt321.json')
   .intercept(nock =>
     nock('https://myteamcity.com:8080/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt321)')}`)
@@ -90,7 +90,7 @@ t.create('simple build status with passed build')
   })
 
 t.create('simple build status with failed build')
-  .get('/https/myteamcity.com:8080/s/bt999.json?style=_shields_test')
+  .get('/https/myteamcity.com:8080/s/bt999.json')
   .intercept(nock =>
     nock('https://myteamcity.com:8080/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt999)')}`)
@@ -107,7 +107,7 @@ t.create('simple build status with failed build')
   })
 
 t.create('full build status with passed build')
-  .get('/https/selfhosted.teamcity.com:4000/e/bt321.json?style=_shields_test')
+  .get('/https/selfhosted.teamcity.com:4000/e/bt321.json')
   .intercept(nock =>
     nock('https://selfhosted.teamcity.com:4000/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt321)')}`)
@@ -124,9 +124,7 @@ t.create('full build status with passed build')
   })
 
 t.create('full build status with failed build')
-  .get(
-    '/https/selfhosted.teamcity.com:4000/tc/e/bt567.json?style=_shields_test'
-  )
+  .get('/https/selfhosted.teamcity.com:4000/tc/e/bt567.json')
   .intercept(nock =>
     nock('https://selfhosted.teamcity.com:4000/tc/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt567)')}`)
@@ -144,7 +142,7 @@ t.create('full build status with failed build')
 
 t.create('with auth')
   .before(mockTeamCityCreds)
-  .get('/https/selfhosted.teamcity.com/e/bt678.json?style=_shields_test')
+  .get('/https/selfhosted.teamcity.com/e/bt678.json')
   .intercept(nock =>
     nock('https://selfhosted.teamcity.com/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt678)')}`)

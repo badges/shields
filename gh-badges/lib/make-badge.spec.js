@@ -13,7 +13,6 @@ function testColor(color = '', colorAttr = 'colorB') {
       text: ['name', 'Bob'],
       [colorAttr]: color,
       format: 'json',
-      template: '_shields_test',
     })
   ).color
 }
@@ -115,6 +114,9 @@ describe('The badge generator', function() {
       expect(JSON.parse(jsonBadgeWithUnknownStyle)).to.deep.equal({
         name: 'name',
         value: 'Bob',
+        label: 'name',
+        message: 'Bob',
+        color: null,
       })
     })
 

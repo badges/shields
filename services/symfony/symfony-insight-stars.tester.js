@@ -45,7 +45,7 @@ createTest(t, 'live (stars): nonexistent project', { withMockCreds: false })
   })
 
 createTest(t, 'pending project stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -58,7 +58,7 @@ createTest(t, 'pending project stars')
   })
 
 createTest(t, 'platinum stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -71,7 +71,7 @@ createTest(t, 'platinum stars')
   })
 
 createTest(t, 'gold stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -84,7 +84,7 @@ createTest(t, 'gold stars')
   })
 
 createTest(t, 'silver stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -97,7 +97,7 @@ createTest(t, 'silver stars')
   })
 
 createTest(t, 'bronze stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -110,7 +110,7 @@ createTest(t, 'bronze stars')
   })
 
 createTest(t, 'no medal stars')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)

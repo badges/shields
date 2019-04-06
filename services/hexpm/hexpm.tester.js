@@ -46,7 +46,7 @@ t.create('version (not found)')
   .expectBadge({ label: 'hex', message: 'not found' })
 
 t.create('license')
-  .get('/l/cowboy.json?style=_shields_test')
+  .get('/l/cowboy.json')
   .expectBadge({
     label: 'license',
     message: Joi.string().required(),
@@ -54,7 +54,7 @@ t.create('license')
   })
 
 t.create('license (multiple licenses)')
-  .get('/l/cowboy.json?style=_shields_test')
+  .get('/l/cowboy.json')
   .intercept(nock =>
     nock('https://hex.pm/')
       .get('/api/packages/cowboy')
@@ -71,7 +71,7 @@ t.create('license (multiple licenses)')
   })
 
 t.create('license (no license)')
-  .get('/l/cowboy.json?style=_shields_test')
+  .get('/l/cowboy.json')
   .intercept(nock =>
     nock('https://hex.pm/')
       .get('/api/packages/cowboy')

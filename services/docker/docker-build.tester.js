@@ -16,7 +16,7 @@ t.create('docker build status (not found)')
   .expectBadge({ label: 'docker build', message: 'repo not found' })
 
 t.create('docker build status (passing)')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu/buildhistory')
@@ -29,7 +29,7 @@ t.create('docker build status (passing)')
   })
 
 t.create('docker build status (failing)')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu/buildhistory')
@@ -38,7 +38,7 @@ t.create('docker build status (failing)')
   .expectBadge({ label: 'docker build', message: 'failing', color: 'red' })
 
 t.create('docker build status (building)')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu/buildhistory')

@@ -164,7 +164,6 @@ function makeBadge({
     logoPosition,
     logoWidth,
     logoPadding,
-    // `color` and `labelColor` are included for the `_shields_test` template.
     color: normalizeColor(color),
     labelColor: normalizeColor(labelColor),
     colorA: toSvgColor(labelColor),
