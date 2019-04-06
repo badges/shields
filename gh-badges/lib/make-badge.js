@@ -164,6 +164,7 @@ function makeBadge({
     logoPosition,
     logoWidth,
     logoPadding,
+    // `color` and `labelColor` are included for the `default` JSON template.
     color: normalizeColor(color),
     labelColor: normalizeColor(labelColor),
     colorA: toSvgColor(labelColor),
