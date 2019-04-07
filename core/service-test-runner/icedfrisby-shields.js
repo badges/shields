@@ -34,26 +34,24 @@ const factory = superclass =>
 
     expectBadge({ label, message, logoWidth, labelColor, color }) {
       return this.afterJSON(json => {
-        expect(json.label, 'label mismatch').to.equal(label)
-        if (typeof message === 'string') {
-          expect(json.message, 'message mismatch').to.equal(message)
-        } else {
-          Joi.validate(json.message, message, err => {
-            if (err) {
-              throw err
-            }
-          })
-        }
-        if (typeof logoWidth !== 'undefined') {
-          expect(json.logoWidth, 'logoWidth mismatch').to.equal(logoWidth)
-        }
-        if (typeof labelColor !== 'undefined') {
-          expect(json.labelColor, 'labelColor mismatch').to.equal(labelColor)
-        }
-        if (typeof color !== 'undefined') {
-          expect(json.color, 'color mismatch').to.equal(color)
-        }
+        this.constructor._expectField(json, 'label', label)
+        this.constructor._expectField(json, 'message', message)
+        this.constructor._expectField(json, 'logoWidth', logoWidth)
+        this.constructor._expectField(json, 'labelColor', labelColor)
+        this.constructor._expectField(json, 'color', color)
       })
+    }
+
+    static _expectField(json, name, expected) {
+      if (typeof expected === 'string') {
+        expect(json[name], `${name} mismatch`).to.equal(expected)
+      } else if (typeof expected === 'object') {
+        Joi.validate(json[name], expected, err => {
+          if (err) {
+            throw err
+          }
+        })
+      }
     }
   }
 
