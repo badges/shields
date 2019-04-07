@@ -24,6 +24,13 @@ t.create('gets the dev dependency version (scoped)')
     message: semverRange,
   })
 
+t.create('gets the dev dependency version (scoped dependency)')
+  .get('/mocha/dev/@mocha/contributors.json')
+  .expectBadge({
+    label: '@mocha/contributors',
+    message: semverRange,
+  })
+
 t.create('gets the prod dependency version')
   .get('/react-boxplot/simple-statistics.json')
   .expectBadge({
