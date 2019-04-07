@@ -52,7 +52,7 @@ t.create('no coverage data for build')
   .expectBadge({ label: 'coverage', message: 'no coverage data available' })
 
 t.create('zero lines covered')
-  .get('/bt345.json?style=_shields_test')
+  .get('/bt345.json')
   .intercept(nock =>
     nock('https://teamcity.jetbrains.com/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt345)')}/statistics`)
@@ -78,7 +78,7 @@ t.create('zero lines covered')
 
 t.create('with auth, lines covered')
   .before(mockTeamCityCreds)
-  .get('/https/selfhosted.teamcity.com/bt678.json?style=_shields_test')
+  .get('/https/selfhosted.teamcity.com/bt678.json')
   .intercept(nock =>
     nock('https://selfhosted.teamcity.com/app/rest/builds')
       .get(`/${encodeURIComponent('buildType:(id:bt678)')}/statistics`)

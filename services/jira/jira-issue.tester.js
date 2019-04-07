@@ -12,7 +12,7 @@ t.create('live: known issue')
   .expectBadge({ label: 'kafka-2896', message: 'Resolved' })
 
 t.create('no status color')
-  .get('/http/issues.apache.org/jira/foo-123.json?style=_shields_test')
+  .get('/http/issues.apache.org/jira/foo-123.json')
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2/issue')
       .get(`/${encodeURIComponent('foo-123')}`)
@@ -31,7 +31,7 @@ t.create('no status color')
   })
 
 t.create('green status color')
-  .get('/https/issues.apache.org:8000/jira/bar-345.json?style=_shields_test')
+  .get('/https/issues.apache.org:8000/jira/bar-345.json')
   .intercept(nock =>
     nock('https://issues.apache.org:8000/jira/rest/api/2/issue')
       .get(`/${encodeURIComponent('bar-345')}`)
@@ -53,7 +53,7 @@ t.create('green status color')
   })
 
 t.create('medium-gray status color')
-  .get('/https/issues.apache.org:8080/abc-123.json?style=_shields_test')
+  .get('/https/issues.apache.org:8080/abc-123.json')
   .intercept(nock =>
     nock('https://issues.apache.org:8080/rest/api/2/issue')
       .get(`/${encodeURIComponent('abc-123')}`)
@@ -75,7 +75,7 @@ t.create('medium-gray status color')
   })
 
 t.create('yellow status color')
-  .get('/https/issues.apache.org/test-001.json?style=_shields_test')
+  .get('/https/issues.apache.org/test-001.json')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('test-001')}`)
@@ -97,7 +97,7 @@ t.create('yellow status color')
   })
 
 t.create('brown status color')
-  .get('/https/issues.apache.org/zzz-789.json?style=_shields_test')
+  .get('/https/issues.apache.org/zzz-789.json')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('zzz-789')}`)
@@ -119,7 +119,7 @@ t.create('brown status color')
   })
 
 t.create('warm-red status color')
-  .get('/https/issues.apache.org/fire-321.json?style=_shields_test')
+  .get('/https/issues.apache.org/fire-321.json')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('fire-321')}`)
@@ -141,7 +141,7 @@ t.create('warm-red status color')
   })
 
 t.create('blue-gray status color')
-  .get('/https/issues.apache.org/sky-775.json?style=_shields_test')
+  .get('/https/issues.apache.org/sky-775.json')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('sky-775')}`)

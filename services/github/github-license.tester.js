@@ -7,7 +7,7 @@ const publicDomainLicenseColor = licenseToColor('CC0-1.0')
 const unknownLicenseColor = licenseToColor()
 
 t.create('License')
-  .get('/github/gitignore.json?style=_shields_test')
+  .get('/github/gitignore.json')
   .expectBadge({
     label: 'license',
     message: 'CC0-1.0',
@@ -15,7 +15,7 @@ t.create('License')
   })
 
 t.create('License for repo without a license')
-  .get('/badges/badger.json?style=_shields_test')
+  .get('/badges/badger.json')
   .expectBadge({
     label: 'license',
     message: 'not specified',
@@ -23,7 +23,7 @@ t.create('License for repo without a license')
   })
 
 t.create('License for repo with an unrecognized license')
-  .get('/philokev/sopel-noblerealms.json?style=_shields_test')
+  .get('/philokev/sopel-noblerealms.json')
   .expectBadge({
     label: 'license',
     message: 'not identifiable by github',
@@ -31,7 +31,7 @@ t.create('License for repo with an unrecognized license')
   })
 
 t.create('License with SPDX id not appearing in configuration')
-  .get('/user1/project-with-EFL-license.json?style=_shields_test')
+  .get('/user1/project-with-EFL-license.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user1/project-with-EFL-license')
@@ -54,7 +54,7 @@ t.create('License with SPDX id not appearing in configuration')
   })
 
 t.create('License for unknown repo')
-  .get('/user1/github-does-not-have-this-repo.json?style=_shields_test')
+  .get('/user1/github-does-not-have-this-repo.json')
   .expectBadge({
     label: 'license',
     message: 'repo not found',

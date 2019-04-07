@@ -14,7 +14,7 @@ function logTokenWarning() {
 
 t.create('node with accessibility')
   .before(logTokenWarning)
-  .get('/26699541.json?style=_shields_test')
+  .get('/26699541.json')
   .timeout(7500)
   .interceptIf(noToken, nock =>
     nock('https://wheelmap.org/')
@@ -36,7 +36,7 @@ t.create('node with accessibility')
 
 t.create('node with limited accessibility')
   .before(logTokenWarning)
-  .get('/2034868974.json?style=_shields_test')
+  .get('/2034868974.json')
   .timeout(7500)
   .interceptIf(noToken, nock =>
     nock('https://wheelmap.org/')
@@ -58,7 +58,7 @@ t.create('node with limited accessibility')
 
 t.create('node without accessibility')
   .before(logTokenWarning)
-  .get('/-147495158.json?style=_shields_test')
+  .get('/-147495158.json')
   .timeout(7500)
   .interceptIf(noToken, nock =>
     nock('https://wheelmap.org/')

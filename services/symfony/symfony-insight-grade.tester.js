@@ -63,7 +63,7 @@ createTest(t, '401 not authorized grade')
   })
 
 createTest(t, 'pending project grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -76,7 +76,7 @@ createTest(t, 'pending project grade')
   })
 
 createTest(t, 'platinum grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -89,7 +89,7 @@ createTest(t, 'platinum grade')
   })
 
 createTest(t, 'gold grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -102,7 +102,7 @@ createTest(t, 'gold grade')
   })
 
 createTest(t, 'silver grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -115,7 +115,7 @@ createTest(t, 'silver grade')
   })
 
 createTest(t, 'bronze grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -128,7 +128,7 @@ createTest(t, 'bronze grade')
   })
 
 createTest(t, 'no medal grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)

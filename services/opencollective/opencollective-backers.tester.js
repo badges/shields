@@ -4,7 +4,7 @@ const { nonNegativeInteger } = require('../validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('renders correctly')
-  .get('/shields.json?style=_shields_test')
+  .get('/shields.json')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/users.json')
@@ -85,7 +85,7 @@ t.create('gets amount of backers')
   })
 
 t.create('handles not found correctly')
-  .get('/nonexistent-collective.json?style=_shields_test')
+  .get('/nonexistent-collective.json')
   .expectBadge({
     label: 'backers',
     message: 'collective not found',

@@ -20,7 +20,7 @@ t.create('version (not found)')
   })
 
 t.create('version (mocked)')
-  .get('/asciidoctor/maven/asciidoctorj.json?style=_shields_test')
+  .get('/asciidoctor/maven/asciidoctorj.json')
   .intercept(nock =>
     nock('https://bintray.com')
       .get('/api/v1/packages/asciidoctor/maven/asciidoctorj/versions/_latest')
