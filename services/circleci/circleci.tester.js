@@ -55,7 +55,7 @@ t.create('circle ci (no response data)')
 
 // we're passing &limit=1 so we expect exactly one array element
 t.create('circle ci (invalid json)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json?style=_shields_test')
+  .get('/project/github/RedSparr0w/node-csgo-parser.json')
   .intercept(nock =>
     nock('https://circleci.com')
       .get(

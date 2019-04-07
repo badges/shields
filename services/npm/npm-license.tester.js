@@ -11,25 +11,25 @@ t.create('gets the license of express from a custom registry')
   .expectBadge({ label: 'license', message: 'MIT' })
 
 t.create('public domain license')
-  .get('/redux-auth.json?style=_shields_test')
+  .get('/redux-auth.json')
   .expectBadge({ label: 'license', message: 'WTFPL', color: '#7cd958' })
 
 t.create('copyleft license')
-  .get('/trianglify.json?style=_shields_test')
+  .get('/trianglify.json')
   .expectBadge({ label: 'license', message: 'GPL-3.0', color: 'orange' })
 
 t.create('permissive license')
-  .get('/express.json?style=_shields_test')
+  .get('/express.json')
   .expectBadge({ label: 'license', message: 'MIT', color: 'green' })
 
 t.create('permissive license for scoped package')
-  .get('/@cycle%2Fcore.json?style=_shields_test')
+  .get('/@cycle%2Fcore.json')
   .expectBadge({ label: 'license', message: 'MIT', color: 'green' })
 
 t.create(
   'permissive and copyleft licenses (SPDX license expression syntax version 2.0)'
 )
-  .get('/rho-cc-promise.json?style=_shields_test')
+  .get('/rho-cc-promise.json')
   .expectBadge({
     label: 'license',
     message: '(MPL-2.0 OR MIT)',
@@ -37,7 +37,7 @@ t.create(
   })
 
 t.create('license for package without a license property')
-  .get('/package-without-license.json?style=_shields_test')
+  .get('/package-without-license.json')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/package-without-license/latest')
@@ -49,7 +49,7 @@ t.create('license for package without a license property')
   .expectBadge({ label: 'license', message: 'missing', color: 'red' })
 
 t.create('license for package with a license object')
-  .get('/package-license-object.json?style=_shields_test')
+  .get('/package-license-object.json')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/package-license-object/latest')
@@ -65,7 +65,7 @@ t.create('license for package with a license object')
   .expectBadge({ label: 'license', message: 'MIT', color: 'green' })
 
 t.create('license for package with a license array')
-  .get('/package-license-array.json?style=_shields_test')
+  .get('/package-license-array.json')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/package-license-array/latest')
@@ -82,7 +82,7 @@ t.create('license for package with a license array')
   })
 
 t.create('license for unknown package')
-  .get('/npm-registry-does-not-have-this-package.json?style=_shields_test')
+  .get('/npm-registry-does-not-have-this-package.json')
   .expectBadge({
     label: 'license',
     message: 'package not found',

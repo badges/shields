@@ -11,7 +11,7 @@ t.create('NodePing uptime - live')
   })
 
 t.create('NodePing uptime - 100% (mock)')
-  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test')
+  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
       .get(
@@ -30,7 +30,7 @@ t.create('NodePing uptime - 100% (mock)')
   })
 
 t.create('NodePing uptime - 99.999% (mock)')
-  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test')
+  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
       .get(
@@ -49,7 +49,7 @@ t.create('NodePing uptime - 99.999% (mock)')
   })
 
 t.create('NodePing uptime - 99.001% (mock)')
-  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test')
+  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
       .get(
@@ -68,7 +68,7 @@ t.create('NodePing uptime - 99.001% (mock)')
   })
 
 t.create('NodePing uptime - 90.001% (mock)')
-  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test')
+  .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
       .get(

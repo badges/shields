@@ -3,7 +3,7 @@
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
-  .get('.json?query=$.name&label=Package Name&style=_shields_test')
+  .get('.json?query=$.name&label=Package Name')
   .expectBadge({
     label: 'Package Name',
     message: 'invalid query parameter: url',
@@ -12,7 +12,7 @@ t.create('No URL specified')
 
 t.create('No query specified')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&label=Package Name&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&label=Package Name'
   )
   .expectBadge({
     label: 'Package Name',
@@ -22,7 +22,7 @@ t.create('No query specified')
 
 t.create('YAML from url')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -32,7 +32,7 @@ t.create('YAML from url')
 
 t.create('YAML from uri (support uri query parameter)')
   .get(
-    '.json?uri=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&style=_shields_test'
+    '.json?uri=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -60,7 +60,7 @@ t.create('YAML from url | with prefix & suffix & label')
 
 t.create('YAML from url | object doesnt exist')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.does_not_exist&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.does_not_exist'
   )
   .expectBadge({
     label: 'custom badge',
@@ -70,7 +70,7 @@ t.create('YAML from url | object doesnt exist')
 
 t.create('YAML from url | invalid url')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -80,13 +80,13 @@ t.create('YAML from url | invalid url')
 
 t.create('YAML from url | user color overrides default')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&color=10ADED&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/Chart.yaml&query=$.name&color=10ADED'
   )
   .expectBadge({ label: 'custom badge', message: 'coredns', color: '#10aded' })
 
 t.create('YAML from url | error color overrides default')
   .get(
-    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version&style=_shields_test'
+    '.json?url=https://raw.githubusercontent.com/kubernetes/charts/568291d6e476c39ca8322c30c3f601d0383d4760/stable/coredns/notafile.yaml&query=$.version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -95,7 +95,7 @@ t.create('YAML from url | error color overrides default')
   })
 
 t.create('YAML from url | error color overrides user specified')
-  .get('.json?query=$.version&color=10ADED&style=_shields_test')
+  .get('.json?query=$.version&color=10ADED')
   .expectBadge({
     label: 'custom badge',
     message: 'invalid query parameter: url',
