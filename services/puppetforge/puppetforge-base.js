@@ -18,12 +18,16 @@ const modulesSchema = Joi.object({
   downloads: nonNegativeInteger,
   current_release: Joi.alternatives(
     Joi.object({
-      pdk: Joi.boolean().required(),
+      pdk: Joi.boolean()
+        .valid(true)
+        .required(),
       version: semver,
       metadata: Joi.object({ 'pdk-version': semver }).required(),
     }).required(),
     Joi.object({
-      pdk: Joi.boolean().required(),
+      pdk: Joi.boolean()
+        .valid(false)
+        .required(),
       version: semver,
     }).required()
   ),
