@@ -78,7 +78,7 @@ t.create('total downloads (tenant)')
   })
 
 t.create('version (mocked, yellow badge)')
-  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -98,7 +98,7 @@ t.create('version (mocked, yellow badge)')
   })
 
 t.create('version (mocked, orange badge)')
-  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -118,7 +118,7 @@ t.create('version (mocked, orange badge)')
   })
 
 t.create('version (mocked, blue badge)')
-  .get('/myget/mongodb/v/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -151,7 +151,7 @@ t.create('version (pre) (valid)')
   })
 
 t.create('version (pre) (mocked, yellow badge)')
-  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -171,7 +171,7 @@ t.create('version (pre) (mocked, yellow badge)')
   })
 
 t.create('version (pre) (mocked, orange badge)')
-  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
@@ -191,7 +191,7 @@ t.create('version (pre) (mocked, orange badge)')
   })
 
 t.create('version (pre) (mocked, blue badge)')
-  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json?style=_shields_test')
+  .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')

@@ -25,7 +25,7 @@ t.create('docker automated build (not found)')
   .expectBadge({ label: 'docker build', message: 'repo not found' })
 
 t.create('docker automated build - automated')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu')
@@ -38,7 +38,7 @@ t.create('docker automated build - automated')
   })
 
 t.create('docker automated build - manual')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu')

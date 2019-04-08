@@ -11,7 +11,7 @@ t.create('version')
   })
 
 t.create('version (mocked)')
-  .get('/chef-sugar.json?style=_shields_test')
+  .get('/chef-sugar.json')
   .intercept(nock =>
     nock('https://supermarket.getchef.com')
       .get('/api/v1/cookbooks/chef-sugar/versions/latest')

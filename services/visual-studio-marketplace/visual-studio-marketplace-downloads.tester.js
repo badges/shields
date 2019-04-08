@@ -58,9 +58,7 @@ t.create('live: non existent extension')
   })
 
 t.create('installs')
-  .get(
-    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
-  )
+  .get('/visual-studio-marketplace/i/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -73,9 +71,7 @@ t.create('installs')
   })
 
 t.create('zero installs')
-  .get(
-    '/visual-studio-marketplace/i/swellaby.rust-pack.json?style=_shields_test'
-  )
+  .get('/visual-studio-marketplace/i/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -103,9 +99,7 @@ t.create('zero installs')
   })
 
 t.create('downloads')
-  .get(
-    '/visual-studio-marketplace/d/swellaby.rust-pack.json?style=_shields_test'
-  )
+  .get('/visual-studio-marketplace/d/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)

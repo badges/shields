@@ -11,7 +11,7 @@ const t = new ServiceTester({
 module.exports = t
 
 t.create('total downloads of left-pad')
-  .get('/dt/left-pad.json?style=_shields_test')
+  .get('/dt/left-pad.json')
   .expectBadge({
     label: 'downloads',
     message: isMetric,
@@ -23,7 +23,7 @@ t.create('total downloads of @cycle/core')
   .expectBadge({ label: 'downloads', message: isMetric })
 
 t.create('total downloads of package with zero downloads')
-  .get('/dt/package-no-downloads.json?style=_shields_test')
+  .get('/dt/package-no-downloads.json')
   .intercept(nock =>
     nock('https://api.npmjs.org')
       .get('/downloads/range/1000-01-01:3000-01-01/package-no-downloads')
@@ -48,7 +48,7 @@ t.create('exact total downloads value')
   .expectBadge({ label: 'downloads', message: '5' })
 
 t.create('total downloads of unknown package')
-  .get('/dt/npm-api-does-not-have-this-package.json?style=_shields_test')
+  .get('/dt/npm-api-does-not-have-this-package.json')
   .expectBadge({
     label: 'downloads',
     message: 'package not found or too new',

@@ -11,7 +11,7 @@ t.create('semver stability (valid)')
   })
 
 t.create('semver stability (invalid error)')
-  .get('/invalid-manager/puma.json?style=_shields_test')
+  .get('/invalid-manager/puma.json')
   .expectBadge({
     label: 'semver stability',
     message: 'invalid',

@@ -6,7 +6,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
 
 t.create('request on observatory.mozilla.org')
-  .get('/grade-score/observatory.mozilla.org.json?style=_shields_test')
+  .get('/grade-score/observatory.mozilla.org.json')
   .expectBadge({
     label: 'observatory',
     message: Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
@@ -16,7 +16,7 @@ t.create('request on observatory.mozilla.org')
   })
 
 t.create('request on observatory.mozilla.org with inclusion in public results')
-  .get('/grade-score/observatory.mozilla.org.json?publish&style=_shields_test')
+  .get('/grade-score/observatory.mozilla.org.json?publish')
   .expectBadge({
     label: 'observatory',
     message: Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
@@ -26,7 +26,7 @@ t.create('request on observatory.mozilla.org with inclusion in public results')
   })
 
 t.create('grade without score (mock)')
-  .get('/grade/foo.bar.json?style=_shields_test')
+  .get('/grade/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -39,7 +39,7 @@ t.create('grade without score (mock)')
   })
 
 t.create('grade A with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -52,7 +52,7 @@ t.create('grade A with score (mock)')
   })
 
 t.create('grade A+ with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -65,7 +65,7 @@ t.create('grade A+ with score (mock)')
   })
 
 t.create('grade A- with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -78,7 +78,7 @@ t.create('grade A- with score (mock)')
   })
 
 t.create('grade B with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -91,7 +91,7 @@ t.create('grade B with score (mock)')
   })
 
 t.create('grade B+ with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -104,7 +104,7 @@ t.create('grade B+ with score (mock)')
   })
 
 t.create('grade B- with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -117,7 +117,7 @@ t.create('grade B- with score (mock)')
   })
 
 t.create('grade C with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -130,7 +130,7 @@ t.create('grade C with score (mock)')
   })
 
 t.create('grade C+ with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -143,7 +143,7 @@ t.create('grade C+ with score (mock)')
   })
 
 t.create('grade C- with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -156,7 +156,7 @@ t.create('grade C- with score (mock)')
   })
 
 t.create('grade D with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -169,7 +169,7 @@ t.create('grade D with score (mock)')
   })
 
 t.create('grade D+ with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -182,7 +182,7 @@ t.create('grade D+ with score (mock)')
   })
 
 t.create('grade D- with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -195,7 +195,7 @@ t.create('grade D- with score (mock)')
   })
 
 t.create('grade E with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -208,7 +208,7 @@ t.create('grade E with score (mock)')
   })
 
 t.create('grade E+ with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -221,7 +221,7 @@ t.create('grade E+ with score (mock)')
   })
 
 t.create('grade E- with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -234,7 +234,7 @@ t.create('grade E- with score (mock)')
   })
 
 t.create('grade F with score (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -247,7 +247,7 @@ t.create('grade F with score (mock)')
   })
 
 t.create('aborted (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -260,7 +260,7 @@ t.create('aborted (mock)')
   })
 
 t.create('failed (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -273,7 +273,7 @@ t.create('failed (mock)')
   })
 
 t.create('pending (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -286,7 +286,7 @@ t.create('pending (mock)')
   })
 
 t.create('starting (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -299,7 +299,7 @@ t.create('starting (mock)')
   })
 
 t.create('running (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
@@ -312,7 +312,7 @@ t.create('running (mock)')
   })
 
 t.create('invalid response with grade and score but not finished (mock)')
-  .get('/grade-score/foo.bar.json?style=_shields_test')
+  .get('/grade-score/foo.bar.json')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')

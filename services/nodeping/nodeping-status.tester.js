@@ -40,7 +40,7 @@ t.create('NodePing status - down (mock)')
 
 t.create('NodePing status - custom up color/message')
   .get(
-    '/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test&up_color=blue&up_message=happy'
+    '/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?up_color=blue&up_message=happy'
   )
   .intercept(nock =>
     nock('https://nodeping.com')
@@ -57,7 +57,7 @@ t.create('NodePing status - custom up color/message')
 
 t.create('NodePing status - custom down color/message')
   .get(
-    '/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?style=_shields_test&down_color=yellow&down_message=sad'
+    '/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json?down_color=yellow&down_message=sad'
   )
   .intercept(nock =>
     nock('https://nodeping.com')

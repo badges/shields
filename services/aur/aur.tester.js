@@ -14,7 +14,7 @@ const t = (module.exports = new ServiceTester({
 // version tests
 
 t.create('version (valid)')
-  .get('/version/yaourt.json?style=_shields_test')
+  .get('/version/yaourt.json')
   .expectBadge({
     label: 'aur',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -22,7 +22,7 @@ t.create('version (valid)')
   })
 
 t.create('version (valid, out of date)')
-  .get('/version/gog-gemini-rue.json?style=_shields_test')
+  .get('/version/gog-gemini-rue.json')
   .expectBadge({
     label: 'aur',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,

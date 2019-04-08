@@ -7,7 +7,7 @@ const {
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version (valid)')
-  .get('/vibe-d.json?style=_shields_test')
+  .get('/vibe-d.json')
   .expectBadge({
     label: 'dub',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,

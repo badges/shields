@@ -23,7 +23,7 @@ t.create('live: known sprint')
   })
 
 t.create('100% completion')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -55,7 +55,7 @@ t.create('100% completion')
   })
 
 t.create('0% completion')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -80,7 +80,7 @@ t.create('0% completion')
   })
 
 t.create('no issues in sprint')
-  .get(`/http/issues.apache.org/jira/${sprintId}.json?style=_shields_test`)
+  .get(`/http/issues.apache.org/jira/${sprintId}.json`)
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2')
       .get('/search')
@@ -97,7 +97,7 @@ t.create('no issues in sprint')
   })
 
 t.create('issue with null resolution value')
-  .get(`/https/jira.spring.io:8080/${sprintId}.json?style=_shields_test`)
+  .get(`/https/jira.spring.io:8080/${sprintId}.json`)
   .intercept(nock =>
     nock('https://jira.spring.io:8080/rest/api/2')
       .get('/search')

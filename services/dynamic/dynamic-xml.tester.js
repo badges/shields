@@ -6,7 +6,7 @@ const { isSemver } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
-  .get('.json?query=//name&label=Package Name&style=_shields_test')
+  .get('.json?query=//name&label=Package Name')
   .expectBadge({
     label: 'Package Name',
     message: 'invalid query parameter: url',
@@ -15,7 +15,7 @@ t.create('No URL specified')
 
 t.create('No query specified')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&label=Package Name&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&label=Package Name'
   )
   .expectBadge({
     label: 'Package Name',
@@ -25,7 +25,7 @@ t.create('No query specified')
 
 t.create('XML from url')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -35,7 +35,7 @@ t.create('XML from url')
 
 t.create('XML from uri (support uri query parameter)')
   .get(
-    '.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&style=_shields_test'
+    '.json?uri=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -83,7 +83,7 @@ t.create('XML from url | with prefix & suffix & label')
 
 t.create('XML from url | query doesnt exist')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/exist&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/exist'
   )
   .expectBadge({
     label: 'custom badge',
@@ -93,7 +93,7 @@ t.create('XML from url | query doesnt exist')
 
 t.create('XML from url | query doesnt exist (attribute)')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/@exist&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/does/not/@exist'
   )
   .expectBadge({
     label: 'custom badge',
@@ -103,7 +103,7 @@ t.create('XML from url | query doesnt exist (attribute)')
 
 t.create('XML from url | invalid url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -113,7 +113,7 @@ t.create('XML from url | invalid url')
 
 t.create('XML from url | user color overrides default')
   .get(
-    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&color=10ADED&style=_shields_test'
+    '.json?url=https://services.addons.mozilla.org/en-US/firefox/api/1.5/addon/707078&query=/addon/name&color=10ADED'
   )
   .expectBadge({
     label: 'custom badge',
@@ -123,7 +123,7 @@ t.create('XML from url | user color overrides default')
 
 t.create('XML from url | error color overrides default')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -132,7 +132,7 @@ t.create('XML from url | error color overrides default')
   })
 
 t.create('XML from url | error color overrides user specified')
-  .get('.json?query=//version&color=10ADED&style=_shields_test')
+  .get('.json?query=//version&color=10ADED')
   .expectBadge({
     label: 'custom badge',
     message: 'invalid query parameter: url',

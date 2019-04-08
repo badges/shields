@@ -34,7 +34,5 @@ t.create('unknown user')
 
 // The following build definition has always a partially succeeded status
 t.create('partially succeeded build')
-  .get(
-    '/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/4.json?style=_shields_test'
-  )
+  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/4.json')
   .expectBadge({ label: 'build', message: 'passing', color: 'orange' })

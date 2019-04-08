@@ -35,7 +35,7 @@ createTest(t, 'live: valid project violations', { withMockCreds: false })
   })
 
 createTest(t, 'pending project grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -48,7 +48,7 @@ createTest(t, 'pending project grade')
   })
 
 createTest(t, 'zero violations')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -61,7 +61,7 @@ createTest(t, 'zero violations')
   })
 
 createTest(t, 'critical violations')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -74,7 +74,7 @@ createTest(t, 'critical violations')
   })
 
 createTest(t, 'major violations')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -87,7 +87,7 @@ createTest(t, 'major violations')
   })
 
 createTest(t, 'minor violations')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -104,7 +104,7 @@ createTest(t, 'minor violations')
   })
 
 createTest(t, 'info violations')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
@@ -121,7 +121,7 @@ createTest(t, 'info violations')
   })
 
 createTest(t, 'multiple violations grade')
-  .get(`/${sampleProjectUuid}.json?style=_shields_test`)
+  .get(`/${sampleProjectUuid}.json`)
   .intercept(nock =>
     nock('https://insight.symfony.com/api/projects')
       .get(`/${sampleProjectUuid}`)
