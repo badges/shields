@@ -219,7 +219,7 @@
     "snap-shot-it": "^6.2.10",
     "start-server-and-test": "^1.7.12",
     "styled-components": "^4.2.0",
-    "tmp": "0.0.33",
+    "tmp": "0.1.0",
     "url": "^0.11.0",
     "walkdir": "0.3.2"
   },
