@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
-  badgeUrlFromPath,
+  badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
 import {
@@ -33,13 +33,17 @@ const ClickableCode = styled(StyledCode)`
 function Example({ baseUrl, onClick, exampleData }) {
   const { title, example, preview } = exampleData
 
-  let previewUrl, exampleUrl
-  if (preview.path) {
-    previewUrl = badgeUrlFromPath({
-      baseUrl,
-      path: preview.path,
-      queryParams: preview.queryParams,
-    })
+  const { pattern, namedParams, queryParams } = example
+  const exampleUrl = badgeUrlFromPattern({
+    baseUrl,
+    pattern,
+    namedParams,
+    queryParams,
+  })
+
+  let previewUrl
+  if (!preview) {
+    previewUrl = exampleUrl
   } else {
     const { label, message, color, style, namedLogo } = preview
     previewUrl = staticBadgeUrl({
@@ -49,22 +53,6 @@ function Example({ baseUrl, onClick, exampleData }) {
       color,
       style,
       namedLogo,
-    })
-  }
-
-  if (example.path) {
-    exampleUrl = badgeUrlFromPath({
-      baseUrl,
-      path: example.path,
-      queryParams: example.queryParams,
-    })
-  } else {
-    const { pattern, namedParams, queryParams } = example
-    exampleUrl = badgeUrlFromPath({
-      baseUrl,
-      path: pattern,
-      namedParams,
-      queryParams,
     })
   }
 

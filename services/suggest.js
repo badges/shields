@@ -24,6 +24,11 @@ function twitterPage(url) {
     )}`,
     path: `/twitter/url/${schema}/${host}${path}`,
     queryParams: { style: 'social' },
+    example: {
+      pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
+      namedParams: { protocol: `${schema}`, hostAndPath: `${host}${path}` },
+      queryParams: { style: 'social' },
+    },
   }
 }
 
@@ -33,6 +38,11 @@ function githubIssues(user, repo) {
     title: 'GitHub issues',
     link: `https://github.com/${repoSlug}/issues`,
     path: `/github/issues/${repoSlug}`,
+    example: {
+      pattern: '/github/issues/:user/:repo',
+      namedParams: { user, repo },
+      queryParams: {},
+    },
   }
 }
 
@@ -42,6 +52,11 @@ function githubForks(user, repo) {
     title: 'GitHub forks',
     link: `https://github.com/${repoSlug}/network`,
     path: `/github/forks/${repoSlug}`,
+    example: {
+      pattern: '/github/forks/:user/:repo',
+      namedParams: { user, repo },
+      queryParams: {},
+    },
   }
 }
 
@@ -51,6 +66,11 @@ function githubStars(user, repo) {
     title: 'GitHub stars',
     link: `https://github.com/${repoSlug}/stargazers`,
     path: `/github/stars/${repoSlug}`,
+    example: {
+      pattern: '/github/stars/:user/:repo',
+      namedParams: { user, repo },
+      queryParams: {},
+    },
   }
 }
 
@@ -74,6 +94,11 @@ async function githubLicense(githubApiProvider, user, repo) {
     title: 'GitHub license',
     path: `/github/license/${repoSlug}`,
     link,
+    example: {
+      pattern: '/github/license/:user/:repo',
+      namedParams: { user, repo },
+      queryParams: {},
+    },
   }
 }
 

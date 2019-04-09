@@ -8,7 +8,7 @@ const portfinder = require('portfinder')
 const { setRoutes, githubLicense } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe('Badge suggestions', function() {
+describe.skip('Badge suggestions', function() {
   const githubApiBaseUrl = 'https://api.github.test'
   const apiProvider = new GithubApiProvider({
     baseUrl: githubApiBaseUrl,
