@@ -8,7 +8,7 @@ const serverSecrets = require('../lib/server-secrets')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe('GitHub badge suggestions', function() {
+describe.skip('GitHub badge suggestions', function() {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
   let token, apiProvider
