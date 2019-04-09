@@ -40,7 +40,7 @@
     "glob": "^7.1.1",
     "joi": "14.3.1",
     "joi-extension-semver": "2.0.0",
-    "js-yaml": "^3.12.2",
+    "js-yaml": "^3.13.1",
     "jsonpath": "~1.0.1",
     "lodash.countby": "^4.6.0",
     "lodash.throttle": "^4.1.1",
