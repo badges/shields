@@ -33,23 +33,40 @@ const ClickableCode = styled(StyledCode)`
 function Example({ baseUrl, onClick, exampleData }) {
   const { title, example, preview } = exampleData
 
-  const { label, message, color, style, namedLogo } = preview
-  const previewUrl = staticBadgeUrl({
-    baseUrl,
-    label,
-    message,
-    color,
-    style,
-    namedLogo,
-  })
+  let previewUrl, exampleUrl
+  if (preview.path) {
+    previewUrl = badgeUrlFromPath({
+      baseUrl,
+      path: preview.path,
+      queryParams: preview.queryParams,
+    })
+  } else {
+    const { label, message, color, style, namedLogo } = preview
+    previewUrl = staticBadgeUrl({
+      baseUrl,
+      label,
+      message,
+      color,
+      style,
+      namedLogo,
+    })
+  }
 
-  const { pattern, namedParams, queryParams } = example
-  const exampleUrl = badgeUrlFromPath({
-    baseUrl,
-    path: pattern,
-    namedParams,
-    queryParams,
-  })
+  if (example.path) {
+    exampleUrl = badgeUrlFromPath({
+      baseUrl,
+      path: example.path,
+      queryParams: example.queryParams,
+    })
+  } else {
+    const { pattern, namedParams, queryParams } = example
+    exampleUrl = badgeUrlFromPath({
+      baseUrl,
+      path: pattern,
+      namedParams,
+      queryParams,
+    })
+  }
 
   const handleClick = () => onClick(exampleData)
 
