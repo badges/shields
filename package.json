@@ -34,7 +34,7 @@
     "dotenv": "^7.0.0",
     "emojic": "^1.1.15",
     "escape-string-regexp": "^1.0.5",
-    "fast-xml-parser": "^3.12.13",
+    "fast-xml-parser": "^3.12.16",
     "fsos": "^1.1.3",
     "gh-badges": "file:gh-badges",
     "glob": "^7.1.1",
