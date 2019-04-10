@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
+import pathToRegexp from 'path-to-regexp'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
 import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
+import Path from './path'
 import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
 import CopiedContentIndicator from './copied-content-indicator'
@@ -18,15 +20,10 @@ export default class Customizer extends React.Component {
     exampleNamedParams: objectOfKeyValuesPropType,
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
+    isPathEditable: PropTypes.bool,
   }
 
   indicatorRef = React.createRef()
-
-  state = {
-    path: '',
-    link: '',
-    message: undefined,
-  }
 
   get baseUrl() {
     const { baseUrl } = this.props
@@ -129,21 +126,43 @@ export default class Customizer extends React.Component {
     this.setState({ queryString })
   }
 
+  constructor(props) {
+    super(props)
+    let path = ''
+    let pathIsComplete = false
+    if (!this.props.isPathEditable) {
+      const toPath = pathToRegexp.compile(this.props.pattern)
+      path = toPath(this.props.exampleNamedParams)
+      pathIsComplete = true
+    }
+    this.state = {
+      link: '',
+      message: undefined,
+      path,
+      pathIsComplete,
+    }
+  }
+
   render() {
     const {
       pattern,
       exampleNamedParams,
       exampleQueryParams,
       initialStyle,
+      isPathEditable,
     } = this.props
 
     return (
       <form action="">
-        <PathBuilder
-          exampleParams={exampleNamedParams}
-          onChange={this.handlePathChange}
-          pattern={pattern}
-        />
+        {isPathEditable ? (
+          <PathBuilder
+            exampleParams={exampleNamedParams}
+            onChange={this.handlePathChange}
+            pattern={pattern}
+          />
+        ) : (
+          <Path namedParams={exampleNamedParams} pattern={pattern} />
+        )}
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
           initialStyle={initialStyle}
@@ -153,4 +172,7 @@ export default class Customizer extends React.Component {
       </form>
     )
   }
+}
+Customizer.defaultProps = {
+  isPathEditable: true,
 }

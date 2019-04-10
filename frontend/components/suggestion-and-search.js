@@ -69,11 +69,13 @@ export default class SuggestionAndSearch extends React.Component {
 
     const transformed = [
       {
-        examples: suggestions.map(({ title, example, link }) => ({
+        examples: suggestions.map(({ title, example }) => ({
           title,
-          example,
-          link,
+          example: { ...example, editable: false },
         })),
+        category: '',
+        name: '',
+        isDeprecated: false,
       },
     ]
 
