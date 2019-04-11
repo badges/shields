@@ -78,7 +78,7 @@
     "coverage:report": "run-s --silent coverage:report:generate coverage:report:open",
     "lint": "eslint \"**/*.js\"",
     "prettier": "prettier --write \"**/*.@(js|md|json|yml)\"",
-    "prettier:check": "prettier: --check \"**/*.@(js|md|json|yml)\"",
+    "prettier:check": "prettier --check \"**/*.@(js|md|json|yml)\"",
     "danger": "danger",
     "test:server": "echo \"Deprecated; run `npm run test:core` instead.\" && npm run test:core",
     "test:js:server": "echo \"Deprecated; run `npm run test:core` instead.\" && npm run test:core",
