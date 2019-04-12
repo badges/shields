@@ -24,11 +24,6 @@ t.create('inexistent artifact')
   .get('/v/inexistent-group-id/inexistent-artifact-id.json')
   .expectBadge({ label: 'maven-central', message: 'not found' })
 
-t.create('connection error')
-  .get('/v/com.github.fabriziocucci/yacl4j.json')
-  .networkOff()
-  .expectBadge({ label: 'maven-central', message: 'inaccessible' })
-
 t.create('xml parsing error')
   .get('/v/com.github.fabriziocucci/yacl4j.json')
   .intercept(nock =>

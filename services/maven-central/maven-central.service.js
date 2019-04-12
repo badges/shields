@@ -68,9 +68,9 @@ module.exports = class MavenCentral extends BaseXmlService {
   }
 
   async fetch({ groupId, artifactId }) {
-    const url = `${'https://repo1.maven.org/maven2/'}${encodeURIComponent(
-      groupId
-    ).replace(/\./g, '/')}/${encodeURIComponent(artifactId)}/maven-metadata.xml`
+    const group = encodeURIComponent(groupId).replace(/\./g, '/')
+    const artifact = encodeURIComponent(artifactId)
+    const url = `https://repo1.maven.org/maven2/${group}/${artifact}/maven-metadata.xml`
     return this._requestXml({ schema, url })
   }
 
@@ -81,7 +81,8 @@ module.exports = class MavenCentral extends BaseXmlService {
     if (versionPrefix !== undefined) {
       version = versions.filter(v => v.toString().startsWith(versionPrefix))[0]
       // if the filter returned no results, throw a NotFound
-      if (version === undefined) throw new NotFound()
+      if (version === undefined)
+        throw new NotFound({ prettyMessage: 'version prefix not found' })
     }
     return renderVersionBadge({ version })
   }
