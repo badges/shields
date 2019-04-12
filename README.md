@@ -29,7 +29,7 @@
         <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages.svg?label=commits%20to%20be%20deployed"
             alt="commits to be deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord"
+        <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord&logoColor=white"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
         <img src="https://img.shields.io/twitter/follow/shields_io.svg?style=social&logo=twitter"
