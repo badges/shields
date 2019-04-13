@@ -43,7 +43,7 @@ module.exports = class SonarCoverage extends SonarBase {
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
-          version: '4.2',
+          sonarVersion: '4.2',
         },
         staticPreview: this.render({ coverage: 63 }),
         keywords,
@@ -62,7 +62,7 @@ module.exports = class SonarCoverage extends SonarBase {
     })
     const { metricValue: coverage } = this.transform({
       json,
-      version: sonarVersion,
+      sonarVersion,
     })
     return this.constructor.render({ coverage })
   }

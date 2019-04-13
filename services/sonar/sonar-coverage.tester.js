@@ -14,7 +14,7 @@ t.create('Coverage')
 
 t.create('Coverage (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json?version=4.2'
+    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json?sonarVersion=4.2'
   )
   .expectBadge({
     label: 'coverage',

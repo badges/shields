@@ -148,15 +148,15 @@ module.exports = class SonarViolations extends SonarBase {
     ]
   }
 
-  transformViolations({ json, version, metric, format }) {
+  transformViolations({ json, sonarVersion, metric, format }) {
     // We can use the standard transform function in all cases
     // except when the requested badge is the long format of violations
     if (metric !== 'violations' || format !== 'long') {
-      const { metricValue: violations } = this.transform({ json, version })
+      const { metricValue: violations } = this.transform({ json, sonarVersion })
       return { violations }
     }
 
-    const useLegacyApi = isLegacyVersion({ version })
+    const useLegacyApi = isLegacyVersion({ sonarVersion })
     const measures = useLegacyApi ? json[0].msr : json.component.measures
     const violations = {}
 
@@ -171,7 +171,10 @@ module.exports = class SonarViolations extends SonarBase {
     return { violations }
   }
 
-  async handle({ protocol, host, component, metric }, { version, format }) {
+  async handle(
+    { protocol, host, component, metric },
+    { sonarVersion, format }
+  ) {
     // If the user has requested the long format for the violations badge
     // then we need to include each individual violation metric in the call to the API
     // in order to get the count breakdown per each violation category.
@@ -180,7 +183,7 @@ module.exports = class SonarViolations extends SonarBase {
         ? 'violations,blocker_violations,critical_violations,major_violations,minor_violations,info_violations'
         : metric
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
@@ -189,7 +192,7 @@ module.exports = class SonarViolations extends SonarBase {
 
     const { violations } = this.transformViolations({
       json,
-      version,
+      sonarVersion,
       metric,
       format,
     })

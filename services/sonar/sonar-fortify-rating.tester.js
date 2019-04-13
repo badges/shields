@@ -44,7 +44,7 @@ t.create('Fortify Security Rating')
 
 t.create('Fortify Security Rating (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/fortify-security-rating.json?version=4.2'
+    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/fortify-security-rating.json?sonarVersion=4.2'
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -73,7 +73,7 @@ t.create('Fortify Security Rating (legacy API supported)')
 
 t.create('Fortify Security Rating (legacy API not supported)')
   .get(
-    '/https/sonarcloud.io/swellaby:azdo-shellcheck/fortify-security-rating.json?version=4.2'
+    '/https/sonarcloud.io/swellaby:azdo-shellcheck/fortify-security-rating.json?sonarVersion=4.2'
   )
   .expectBadge({
     label: 'fortify-security-rating',

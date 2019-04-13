@@ -14,7 +14,7 @@ t.create('Tech Debt')
 
 t.create('Tech Debt (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json?version=4.2'
+    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/tech_debt.json?sonarVersion=4.2'
   )
   .expectBadge({
     label: 'tech debt',

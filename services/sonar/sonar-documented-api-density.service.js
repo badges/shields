@@ -34,15 +34,15 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { version }) {
+  async handle({ protocol, host, component }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       metricName: metric,
     })
-    const { metricValue: density } = this.transform({ json, version })
+    const { metricValue: density } = this.transform({ json, sonarVersion })
     return this.constructor.render({ density })
   }
 }

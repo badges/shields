@@ -137,16 +137,16 @@ module.exports = class SonarGeneric extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component, metricName }, { version }) {
+  async handle({ protocol, host, component, metricName }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       metricName,
     })
 
-    const { metricValue } = this.transform({ json, version })
+    const { metricValue } = this.transform({ json, sonarVersion })
     return this.constructor.render({ metricName, metricValue })
   }
 }

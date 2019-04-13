@@ -58,16 +58,16 @@ module.exports = class SonarTechDebt extends SonarBase {
     ]
   }
 
-  async handle({ protocol, host, component, metric }, { version }) {
+  async handle({ protocol, host, component, metric }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       //special condition for backwards compatibility
       metricName: 'sqale_debt_ratio',
     })
-    const { metricValue: debt } = this.transform({ json, version })
+    const { metricValue: debt } = this.transform({ json, sonarVersion })
     return this.constructor.render({ debt, metric })
   }
 }

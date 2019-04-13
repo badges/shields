@@ -58,15 +58,15 @@ module.exports = class SonarQualityGate extends SonarBase {
     ]
   }
 
-  async handle({ protocol, host, component }, { version }) {
+  async handle({ protocol, host, component }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       metricName: 'alert_status',
     })
-    const { metricValue: qualityState } = this.transform({ json, version })
+    const { metricValue: qualityState } = this.transform({ json, sonarVersion })
     return this.constructor.render({ qualityState })
   }
 }

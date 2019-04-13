@@ -14,7 +14,7 @@ t.create('Quality Gate')
 
 t.create('Quality Gate (Alert Status)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/alert_status.json?version=4.2'
+    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/alert_status.json?sonarVersion=4.2'
   )
   .expectBadge({
     label: 'quality gate',

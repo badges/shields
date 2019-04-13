@@ -36,16 +36,16 @@ module.exports = class SonarFortifyRating extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { version }) {
+  async handle({ protocol, host, component }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       metricName: 'fortify-security-rating',
     })
 
-    const { metricValue: rating } = this.transform({ json, version })
+    const { metricValue: rating } = this.transform({ json, sonarVersion })
     return this.constructor.render({ rating })
   }
 }
