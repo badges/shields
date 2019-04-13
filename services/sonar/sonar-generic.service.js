@@ -125,7 +125,7 @@ module.exports = class SonarGeneric extends SonarBase {
     return {
       label: getLabel({ metric: metricName }),
       message: metric(metricValue),
-      color: 'brightgreen',
+      color: 'informational',
     }
   }
 

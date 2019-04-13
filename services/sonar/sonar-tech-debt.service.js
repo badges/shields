@@ -2,7 +2,7 @@
 
 const SonarBase = require('./sonar-base')
 const {
-  badMetricColorScale,
+  negativeMetricColorScale,
   getLabel,
   documentation,
   keywords,
@@ -23,7 +23,7 @@ module.exports = class SonarTechDebt extends SonarBase {
     return {
       label: getLabel({ metric }),
       message: `${debt}%`,
-      color: badMetricColorScale(debt),
+      color: negativeMetricColorScale(debt),
     }
   }
 

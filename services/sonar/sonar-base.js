@@ -40,8 +40,8 @@ const legacyApiSchema = Joi.array()
   .required()
 
 module.exports = class SonarBase extends BaseJsonService {
-  transform({ json, version }) {
-    const useLegacyApi = isLegacyVersion({ version })
+  transform({ json, sonarVersion }) {
+    const useLegacyApi = isLegacyVersion({ sonarVersion })
     const rawValue = useLegacyApi
       ? json[0].msr[0].val
       : json.component.measures[0].value
@@ -51,9 +51,9 @@ module.exports = class SonarBase extends BaseJsonService {
     return { metricValue: value || rawValue }
   }
 
-  async fetch({ version, protocol, host, component, metricName }) {
+  async fetch({ sonarVersion, protocol, host, component, metricName }) {
     let qs, url
-    const useLegacyApi = isLegacyVersion({ version })
+    const useLegacyApi = isLegacyVersion({ sonarVersion })
 
     if (useLegacyApi) {
       url = `${protocol}://${host}/api/resources`

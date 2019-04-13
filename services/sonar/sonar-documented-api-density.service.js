@@ -5,7 +5,7 @@ const {
   patternBase,
   queryParamSchema,
   getLabel,
-  goodMetricColorScale,
+  positiveMetricColorScale,
 } = require('./sonar-helpers')
 
 const metric = 'public_documented_api_density'
@@ -22,7 +22,7 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
   static render({ density }) {
     return {
       message: `${density}%`,
-      color: goodMetricColorScale(density),
+      color: positiveMetricColorScale(density),
     }
   }
 

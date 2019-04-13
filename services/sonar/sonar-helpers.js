@@ -12,34 +12,34 @@ const ratingScaleColors = [
   'orange',
   'red',
 ]
-const badMetricColorScale = colorScale(
+const negativeMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
   ratingScaleColors
 )
-const goodMetricColorScale = colorScale(
+const positiveMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
   ratingScaleColors,
   true
 )
 
-function isLegacyVersion({ version }) {
-  version = parseFloat(version)
-  return !!version && version < 5.4
+function isLegacyVersion({ sonarVersion }) {
+  sonarVersion = parseFloat(sonarVersion)
+  return !!sonarVersion && sonarVersion < 5.4
 }
 
 function getLabel({ metric }) {
   return metric ? metric.replace(/_/g, ' ') : undefined
 }
-const versionSchema = Joi.string()
-  .regex(/[0-9.]+/)
+const sonarVersionSchema = Joi.string()
+  // .regex(/[0-9.]+/)
   .optional()
 
 const queryParamSchema = Joi.object({
-  version: versionSchema,
+  sonarVersion: sonarVersionSchema,
 }).required()
 
 const queryParamWithFormatSchema = Joi.object({
-  version: versionSchema,
+  sonarVersion: sonarVersionSchema,
   format: Joi.string()
     .allow('short', 'long')
     .optional(),
@@ -63,8 +63,8 @@ module.exports = {
   isLegacyVersion,
   queryParamSchema,
   queryParamWithFormatSchema,
-  badMetricColorScale,
-  goodMetricColorScale,
+  negativeMetricColorScale,
+  positiveMetricColorScale,
   keywords,
   documentation,
 }

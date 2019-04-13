@@ -8,11 +8,11 @@ module.exports = [
     route: {
       base: 'sonar',
       pattern:
-        ':version/:protocol(http|https)/:host(.+)/:component(.+)/:metric',
+        ':sonarVersion/:protocol(http|https)/:host(.+)/:component(.+)/:metric',
     },
     transformPath: ({ protocol, host, component, metric }) =>
       `/sonar/${protocol}/${host}/${component}/${metric}`,
-    transformQueryParams: ({ version }) => ({ version }),
+    transformQueryParams: ({ sonarVersion }) => ({ sonarVersion }),
     dateAdded: new Date('2019-04-02'),
   }),
 ]

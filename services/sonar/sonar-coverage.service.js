@@ -52,15 +52,18 @@ module.exports = class SonarCoverage extends SonarBase {
     ]
   }
 
-  async handle({ protocol, host, component }, { version }) {
+  async handle({ protocol, host, component }, { sonarVersion }) {
     const json = await this.fetch({
-      version,
+      sonarVersion,
       protocol,
       host,
       component,
       metricName: 'coverage',
     })
-    const { metricValue: coverage } = this.transform({ json, version })
+    const { metricValue: coverage } = this.transform({
+      json,
+      version: sonarVersion,
+    })
     return this.constructor.render({ coverage })
   }
 }

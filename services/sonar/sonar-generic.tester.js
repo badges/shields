@@ -8,4 +8,5 @@ t.create('Security Rating')
   .expectBadge({
     label: 'security rating',
     message: isMetric,
+    color: 'informational',
   })
