@@ -30,9 +30,10 @@ function isLegacyVersion({ sonarVersion }) {
 function getLabel({ metric }) {
   return metric ? metric.replace(/_/g, ' ') : undefined
 }
-const sonarVersionSchema = Joi.string()
-  // .regex(/[0-9.]+/)
-  .optional()
+const sonarVersionSchema = Joi.alternatives(
+  Joi.string().regex(/[0-9.]+/).optional(),
+  Joi.number().optional(),
+)
 
 const queryParamSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
