@@ -5,7 +5,7 @@ const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
-  id: 'CodeClimateCoverage',
+  id: 'CodeClimateAnalysis',
   title: 'Code Climate',
   pathPrefix: '/codeclimate',
 }))
