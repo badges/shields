@@ -10,13 +10,6 @@ t.create('Release Date. e.g release date|today')
     message: isFormattedDate,
   })
 
-t.create('Release Date - Custom Label. e.g myRelease|today')
-  .get('/release-date/microsoft/vscode.json?label=myRelease')
-  .expectBadge({
-    label: 'myRelease',
-    message: isFormattedDate,
-  })
-
 t.create(
   'Release Date - Should return `no releases or repo not found` for invalid repo'
 )
@@ -30,13 +23,6 @@ t.create('(Pre-)Release Date. e.g release date|today')
   .get('/release-date-pre/microsoft/vscode.json')
   .expectBadge({
     label: 'release date',
-    message: isFormattedDate,
-  })
-
-t.create('(Pre-)Release Date - Custom Label. e.g myRelease|today')
-  .get('/release-date-pre/microsoft/vscode.json?label=myRelease')
-  .expectBadge({
-    label: 'myRelease',
     message: isFormattedDate,
   })
 

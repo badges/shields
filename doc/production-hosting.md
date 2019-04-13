@@ -36,7 +36,7 @@ There are three public badge servers on OVH VPS’s.
 | [s1.shields-server.com][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
 | [s2.shields-server.com][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
 
-- These are single-core virtual hosts with 2 GB RAM [VPS SSD 1]().
+- These are single-core virtual hosts with 2 GB RAM [VPS SSD 1][].
 - The Node version (v9.4.0 at time of writing) and dependency versions on the
   servers can be inspected in Sentry, but only when an error occurs.
 - The servers use self-signed SSL certificates. ([#1460][issue 1460])
@@ -94,7 +94,7 @@ files:
   This file contains secrets which are checked in with a deploy commit.
 - [`shields-io-production.yml`][shields-io-production.yml]. This file
   contains non-secrets which are checked in to the main repo.
-- [`default.yml`][default.yml]`. This file contains defaults.
+- [`default.yml`][default.yml]. This file contains defaults.
 
 [start-shields.sh]: https://github.com/badges/ServerScript/blob/master/start-shields.sh#L7
 [config]: https://github.com/lorenwest/node-config/wiki/Configuration-Files

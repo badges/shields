@@ -4,7 +4,7 @@ const { nonNegativeInteger } = require('../validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('renders correctly')
-  .get('/shields/2988.json?style=_shields_test')
+  .get('/shields/2988.json')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/all.json?TierId=2988')
@@ -67,7 +67,7 @@ t.create('renders correctly')
 
 // Not ideal, but open collective only returns an empty array
 t.create('shows 0 when given a non existent tier')
-  .get('/shields/1234567890.json?style=_shields_test')
+  .get('/shields/1234567890.json')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/all.json?TierId=1234567890')
@@ -87,7 +87,7 @@ t.create('gets amount of backers in specified tier')
   })
 
 t.create('handles not found correctly')
-  .get('/nonexistent-collective/1234.json?style=_shields_test')
+  .get('/nonexistent-collective/1234.json')
   .expectBadge({
     label: 'open collective',
     message: 'collective not found',

@@ -4,7 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('gets status for Reactiflux')
-  .get('/102860784329052160.json?style=_shields_test')
+  .get('/102860784329052160.json')
   .expectBadge({
     label: 'chat',
     message: Joi.string().regex(/^[0-9]+ online$/),

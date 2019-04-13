@@ -13,9 +13,7 @@ t.create('live: rating')
   })
 
 t.create('version')
-  .get(
-    '/visual-studio-marketplace/v/ritwickdey.LiveServer.json?style=_shields_test'
-  )
+  .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -43,9 +41,7 @@ t.create('version')
   })
 
 t.create('pre-release version')
-  .get(
-    '/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json?style=_shields_test'
-  )
+  .get('/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)

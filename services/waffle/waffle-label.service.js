@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
+const { Deprecated } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
@@ -31,6 +32,11 @@ module.exports = class WaffleLabel extends BaseJsonService {
 
   static get defaultBadgeData() {
     return { label: 'waffle' }
+  }
+
+  static get isDeprecated() {
+    const now = new Date()
+    return now.getTime() >= new Date('2019-05-16')
   }
 
   static render({ label, color, count }) {
@@ -95,6 +101,9 @@ module.exports = class WaffleLabel extends BaseJsonService {
   }
 
   async handle({ user, repo, label }) {
+    if (this.constructor.isDeprecated) {
+      throw new Deprecated()
+    }
     const json = await this.fetch({ user, repo })
     const { count, color } = this.transform({ json, label })
     return this.constructor.render({ label, color, count })

@@ -70,7 +70,7 @@ t.create('Test status on non-existent project')
   })
 
 t.create('Test status on project that does exist but has no builds yet')
-  .get('/gruntjs/grunt.json?style=_shields_test')
+  .get('/gruntjs/grunt.json')
   .intercept(nock =>
     nock('https://ci.appveyor.com/api/projects/')
       .get('/gruntjs/grunt')

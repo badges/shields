@@ -4,7 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('get room state as guest')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -75,7 +75,7 @@ t.create('get room state as guest')
   })
 
 t.create('get room state as member (backup method)')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -154,7 +154,7 @@ t.create('get room state as member (backup method)')
   })
 
 t.create('bad server or connection')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .networkOff()
   .expectBadge({
     label: 'chat',
@@ -163,7 +163,7 @@ t.create('bad server or connection')
   })
 
 t.create('non-world readable room')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -200,7 +200,7 @@ t.create('non-world readable room')
   })
 
 t.create('invalid token')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -228,7 +228,7 @@ t.create('invalid token')
   })
 
 t.create('unknown request')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -265,7 +265,7 @@ t.create('unknown request')
   })
 
 t.create('unknown alias')
-  .get('/ALIAS:DUMMY.dumb.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -293,7 +293,7 @@ t.create('unknown alias')
   })
 
 t.create('invalid alias')
-  .get('/ALIASDUMMY.dumb.json?style=_shields_test')
+  .get('/ALIASDUMMY.dumb.json')
   .expectBadge({
     label: 'chat',
     message: 'invalid alias',
@@ -301,7 +301,7 @@ t.create('invalid alias')
   })
 
 t.create('server uses a custom port')
-  .get('/ALIAS:DUMMY.dumb:5555.json?style=_shields_test')
+  .get('/ALIAS:DUMMY.dumb:5555.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb:5555/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -372,9 +372,7 @@ t.create('server uses a custom port')
   })
 
 t.create('specify the homeserver fqdn')
-  .get(
-    '/ALIAS:DUMMY.dumb.json?style=_shields_test&server_fqdn=matrix.DUMMY.dumb'
-  )
+  .get('/ALIAS:DUMMY.dumb.json?server_fqdn=matrix.DUMMY.dumb')
   .intercept(nock =>
     nock('https://matrix.DUMMY.dumb/')
       .post('/_matrix/client/r0/register?kind=guest')
@@ -445,7 +443,7 @@ t.create('specify the homeserver fqdn')
   })
 
 t.create('test on real matrix room for API compliance')
-  .get('/twim:matrix.org.json?style=_shields_test')
+  .get('/twim:matrix.org.json')
   .timeout(10000)
   .expectBadge({
     label: 'chat',

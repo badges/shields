@@ -20,7 +20,7 @@ t.create('Build status (private application)')
   .expectBadge({ label: 'build', message: 'private application not supported' })
 
 t.create('Build passed (mocked)')
-  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
+  .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
@@ -33,7 +33,7 @@ t.create('Build passed (mocked)')
   })
 
 t.create('Build failed (mocked)')
-  .get('/build/wercker/go-wercker-api.json?style=_shields_test')
+  .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')

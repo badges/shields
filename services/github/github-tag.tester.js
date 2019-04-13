@@ -22,7 +22,7 @@ const tagsFixture = [
 ]
 
 t.create('Tag (mocked response, no pre-releases, semver ordering)')
-  .get('/tag/foo/bar.json?style=_shields_test')
+  .get('/tag/foo/bar.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/foo/bar/tags')
@@ -31,7 +31,7 @@ t.create('Tag (mocked response, no pre-releases, semver ordering)')
   .expectBadge({ label: 'tag', message: 'v1.2', color: 'blue' })
 
 t.create('Tag (mocked response, include pre-releases, semver ordering)')
-  .get('/tag-pre/foo/bar.json?style=_shields_test')
+  .get('/tag-pre/foo/bar.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/foo/bar/tags')
@@ -40,7 +40,7 @@ t.create('Tag (mocked response, include pre-releases, semver ordering)')
   .expectBadge({ label: 'tag', message: 'v1.3-beta3', color: 'orange' })
 
 t.create('Tag (mocked response, date ordering)')
-  .get('/tag-date/foo/bar.json?style=_shields_test')
+  .get('/tag-date/foo/bar.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/foo/bar/tags')
