@@ -28,7 +28,10 @@ module.exports = class DynamicXml extends BaseService {
   }
 
   async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
-    const pathIsAttr = pathExpression.includes('@')
+    // e.g. //book[2]/@id
+    const pathIsAttr = (
+      pathExpression.split('/').slice(-1)[0] || ''
+    ).startsWith('@')
 
     const { buffer } = await this._request({
       url,
