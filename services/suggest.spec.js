@@ -8,7 +8,7 @@ const portfinder = require('portfinder')
 const { setRoutes, githubLicense } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe.skip('Badge suggestions', function() {
+describe('Badge suggestions', function() {
   const githubApiBaseUrl = 'https://api.github.test'
   const apiProvider = new GithubApiProvider({
     baseUrl: githubApiBaseUrl,
@@ -36,6 +36,11 @@ describe.skip('Badge suggestions', function() {
           title: 'GitHub license',
           path: '/github/license/atom/atom',
           link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
+          example: {
+            pattern: '/github/license/:user/:repo',
+            namedParams: { user: 'atom', repo: 'atom' },
+            queryParams: {},
+          },
         })
 
         scope.done()
@@ -54,6 +59,11 @@ describe.skip('Badge suggestions', function() {
           title: 'GitHub license',
           path: '/github/license/atom/atom',
           link: 'https://github.com/atom/atom',
+          example: {
+            pattern: '/github/license/:user/:repo',
+            namedParams: { user: 'atom', repo: 'atom' },
+            queryParams: {},
+          },
         })
 
         scope.done()
@@ -115,21 +125,41 @@ describe.skip('Badge suggestions', function() {
               title: 'GitHub issues',
               link: 'https://github.com/atom/atom/issues',
               path: '/github/issues/atom/atom',
+              example: {
+                pattern: '/github/issues/:user/:repo',
+                namedParams: { user: 'atom', repo: 'atom' },
+                queryParams: {},
+              },
             },
             {
               title: 'GitHub forks',
               link: 'https://github.com/atom/atom/network',
               path: '/github/forks/atom/atom',
+              example: {
+                pattern: '/github/forks/:user/:repo',
+                namedParams: { user: 'atom', repo: 'atom' },
+                queryParams: {},
+              },
             },
             {
               title: 'GitHub stars',
               link: 'https://github.com/atom/atom/stargazers',
               path: '/github/stars/atom/atom',
+              example: {
+                pattern: '/github/stars/:user/:repo',
+                namedParams: { user: 'atom', repo: 'atom' },
+                queryParams: {},
+              },
             },
             {
               title: 'GitHub license',
               path: '/github/license/atom/atom',
               link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
+              example: {
+                pattern: '/github/license/:user/:repo',
+                namedParams: { user: 'atom', repo: 'atom' },
+                queryParams: {},
+              },
             },
             {
               title: 'Twitter',
@@ -137,6 +167,15 @@ describe.skip('Badge suggestions', function() {
                 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
               path: '/twitter/url/https/github.com/atom/atom',
               queryParams: {
+                style: 'social',
+              },
+              example: {
+                pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
+                namedParams: {
+                  protocol: 'https',
+                  hostAndPath: 'github.com/atom/atom',
+                },
+                queryParams: {},
                 style: 'social',
               },
             },
