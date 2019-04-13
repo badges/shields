@@ -21,6 +21,7 @@ export default class Customizer extends React.Component {
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
     isPathEditable: PropTypes.bool,
+    link: PropTypes.string,
   }
 
   indicatorRef = React.createRef()
@@ -136,7 +137,7 @@ export default class Customizer extends React.Component {
       pathIsComplete = true
     }
     this.state = {
-      link: '',
+      link: this.props.link || '',
       message: undefined,
       path,
       pathIsComplete,
