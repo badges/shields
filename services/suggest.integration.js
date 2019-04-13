@@ -8,7 +8,7 @@ const serverSecrets = require('../lib/server-secrets')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe.skip('GitHub badge suggestions', function() {
+describe('GitHub badge suggestions', function() {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
   let token, apiProvider
@@ -64,21 +64,41 @@ describe.skip('GitHub badge suggestions', function() {
             title: 'GitHub issues',
             link: 'https://github.com/atom/atom/issues',
             path: '/github/issues/atom/atom',
+            example: {
+              pattern: '/github/issues/:user/:repo',
+              namedParams: { user: 'atom', repo: 'atom' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub forks',
             link: 'https://github.com/atom/atom/network',
             path: '/github/forks/atom/atom',
+            example: {
+              pattern: '/github/forks/:user/:repo',
+              namedParams: { user: 'atom', repo: 'atom' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub stars',
             link: 'https://github.com/atom/atom/stargazers',
             path: '/github/stars/atom/atom',
+            example: {
+              pattern: '/github/stars/:user/:repo',
+              namedParams: { user: 'atom', repo: 'atom' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub license',
             path: '/github/license/atom/atom',
             link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
+            example: {
+              pattern: '/github/license/:user/:repo',
+              namedParams: { user: 'atom', repo: 'atom' },
+              queryParams: {},
+            },
           },
           {
             title: 'Twitter',
@@ -86,6 +106,15 @@ describe.skip('GitHub badge suggestions', function() {
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
             path: '/twitter/url/https/github.com/atom/atom',
             queryParams: {
+              style: 'social',
+            },
+            example: {
+              pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
+              namedParams: {
+                protocol: 'https',
+                hostAndPath: 'github.com/atom/atom',
+              },
+              queryParams: {},
               style: 'social',
             },
           },
@@ -113,21 +142,41 @@ describe.skip('GitHub badge suggestions', function() {
             title: 'GitHub issues',
             link: 'https://github.com/badges/not-a-real-project/issues',
             path: '/github/issues/badges/not-a-real-project',
+            example: {
+              pattern: '/github/issues/:user/:repo',
+              namedParams: { user: 'badges', repo: 'not-a-real-project' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub forks',
             link: 'https://github.com/badges/not-a-real-project/network',
             path: '/github/forks/badges/not-a-real-project',
+            example: {
+              pattern: '/github/forks/:user/:repo',
+              namedParams: { user: 'badges', repo: 'not-a-real-project' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub stars',
             link: 'https://github.com/badges/not-a-real-project/stargazers',
             path: '/github/stars/badges/not-a-real-project',
+            example: {
+              pattern: '/github/stars/:user/:repo',
+              namedParams: { user: 'badges', repo: 'not-a-real-project' },
+              queryParams: {},
+            },
           },
           {
             title: 'GitHub license',
             path: '/github/license/badges/not-a-real-project',
             link: 'https://github.com/badges/not-a-real-project',
+            example: {
+              pattern: '/github/license/:user/:repo',
+              namedParams: { user: 'badges', repo: 'not-a-real-project' },
+              queryParams: {},
+            },
           },
           {
             title: 'Twitter',
@@ -135,6 +184,15 @@ describe.skip('GitHub badge suggestions', function() {
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
             path: '/twitter/url/https/github.com/badges/not-a-real-project',
             queryParams: {
+              style: 'social',
+            },
+            example: {
+              pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
+              namedParams: {
+                protocol: 'https',
+                hostAndPath: 'github.com/badges/not-a-real-project',
+              },
+              queryParams: {},
               style: 'social',
             },
           },
