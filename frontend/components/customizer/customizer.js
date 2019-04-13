@@ -7,7 +7,6 @@ import { generateMarkup } from '../../lib/generate-image-markup'
 import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
-import Path from './path'
 import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
 import CopiedContentIndicator from './copied-content-indicator'
@@ -155,15 +154,12 @@ export default class Customizer extends React.Component {
 
     return (
       <form action="">
-        {isPathEditable ? (
-          <PathBuilder
-            exampleParams={exampleNamedParams}
-            onChange={this.handlePathChange}
-            pattern={pattern}
-          />
-        ) : (
-          <Path namedParams={exampleNamedParams} pattern={pattern} />
-        )}
+        <PathBuilder
+          exampleParams={exampleNamedParams}
+          onChange={this.handlePathChange}
+          pattern={pattern}
+          showActualParams={!isPathEditable}
+        />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
           initialStyle={initialStyle}

@@ -73,6 +73,7 @@ export default class PathBuilder extends React.Component {
     pattern: PropTypes.string.isRequired,
     exampleParams: objectOfKeyValuesPropType,
     onChange: PropTypes.func,
+    showActualParams: PropTypes.bool,
   }
 
   constructor(props) {
@@ -81,17 +82,20 @@ export default class PathBuilder extends React.Component {
     const { pattern } = props
     const tokens = pathToRegexp.parse(pattern)
 
-    const namedParams = {}
-
-    // `pathToRegexp.parse()` returns a mixed array of strings for literals
-    // and  objects for parameters. Filter out the literals and work with the
-    // objects.
-    tokens
-      .filter(t => typeof t !== 'string')
-      .forEach(({ name }) => {
-        namedParams[name] = ''
-      })
-
+    let namedParams
+    if (this.props.showActualParams) {
+      namedParams = this.props.exampleParams
+    } else {
+      namedParams = {}
+      // `pathToRegexp.parse()` returns a mixed array of strings for literals
+      // and  objects for parameters. Filter out the literals and work with the
+      // objects.
+      tokens
+        .filter(t => typeof t !== 'string')
+        .forEach(({ name }) => {
+          namedParams[name] = ''
+        })
+    }
     this.state = {
       tokens,
       namedParams,
@@ -211,9 +215,11 @@ export default class PathBuilder extends React.Component {
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
           </NamedParamLabelContainer>
           {this.renderNamedParamInput(token)}
-          <NamedParamCaption>
-            {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
-          </NamedParamCaption>
+          {!this.props.showActualParams && (
+            <NamedParamCaption>
+              {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
+            </NamedParamCaption>
+          )}
         </PathBuilderColumn>
       </React.Fragment>
     )
