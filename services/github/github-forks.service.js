@@ -1,9 +1,14 @@
 'use strict'
 
+const Joi = require('joi')
+const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
-const schema = Joi.object({}).required()
+const schema = Joi.object({
+  forks_count: nonNegativeInteger,
+}).required()
 
 module.exports = class GithubForks extends GithubAuthService {
   static get category() {
@@ -25,10 +30,18 @@ module.exports = class GithubForks extends GithubAuthService {
           user: 'badges',
           repo: 'shields',
         },
-        staticPreview: Object.assign(this.render({ followers: 150 }), {
-          label: 'fork',
+        // TODO: This is currently a literal, as `staticPreview` doesn't
+        // support `link`.
+        staticPreview: {
+          label: 'Fork',
+          message: '150',
           style: 'social',
-        }),
+        },
+        // staticPreview: {
+        //   ...this.render({ user: 'badges', repo: 'shields', forkCount: 150 }),
+        //   label: 'fork',
+        //   style: 'social',
+        // },
         queryParams: { label: 'Fork' },
         documentation,
       },
@@ -37,44 +50,28 @@ module.exports = class GithubForks extends GithubAuthService {
 
   static get defaultBadgeData() {
     return {
+      label: 'forks',
       namedLogo: 'github',
     }
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/forks\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, qubyte/rubidium
-        const repo = match[2]
-        const format = match[3]
-        const apiUrl = `/repos/${user}/${repo}`
-        const badgeData = getBadgeData('forks', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-          badgeData.links = [
-            `https://github.com/${user}/${repo}/fork`,
-            `https://github.com/${user}/${repo}/network`,
-          ]
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            const forks = data.forks_count
-            badgeData.text[1] = forks
-            badgeData.colorscheme = undefined
-            badgeData.colorB = '#4183C4'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static render({ user, repo, forkCount }) {
+    return {
+      message: metric(forkCount),
+      link: [
+        `https://github.com/${user}/${repo}/fork`,
+        `https://github.com/${user}/${repo}/network`,
+      ],
+    }
+  }
+
+  async handle({ user, repo }) {
+    const { forks_count: forkCount } = await this._requestJson({
+      url: `/repos/${user}/${repo}`,
+      schema,
+      errorMessages: errorMessagesFor(),
+    })
+    console.log('forkCount', forkCount)
+    return this.constructor.render({ user, repo, forkCount })
   }
 }
