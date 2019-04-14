@@ -42,9 +42,7 @@ function Example({ baseUrl, onClick, exampleData }) {
   })
 
   let previewUrl
-  if (!preview) {
-    previewUrl = exampleUrl
-  } else {
+  if (preview) {
     const { label, message, color, style, namedLogo } = preview
     previewUrl = staticBadgeUrl({
       baseUrl,
@@ -54,6 +52,8 @@ function Example({ baseUrl, onClick, exampleData }) {
       style,
       namedLogo,
     })
+  } else {
+    previewUrl = exampleUrl
   }
 
   const handleClick = () => onClick(exampleData)
