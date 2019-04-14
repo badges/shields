@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService } = require('..')
 
@@ -41,12 +42,20 @@ module.exports = class DroneBuild extends BaseJsonService {
 
   async handle({ scheme, host, user, repo, branch }) {
     const ref = branch ? `refs/heads/${branch}` : undefined
-    const apiUrl =
-      host === 'cloud' ? 'https://cloud.drone.io' : `${scheme}://${host}`
+    const options = { qs: { ref } }
+    if (host === 'cloud') {
+      scheme = 'https'
+      host = 'cloud.drone.io'
+    }
+    if (serverSecrets.drone_token) {
+      options.headers = {
+        Authorization: `Bearer ${serverSecrets.drone_token}`,
+      }
+    }
     const json = await this._requestJson({
       schema,
-      url: `${apiUrl}/api/repos/${user}/${repo}/builds/latest`,
-      options: { qs: { ref } },
+      url: `${scheme}://${host}/api/repos/${user}/${repo}/builds/latest`,
+      options,
     })
     return this.constructor.render({
       status: json.status,

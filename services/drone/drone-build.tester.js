@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
+const { mockDroneCreds, token, restore } = require('./drone-test-helpers')
 
 // Drone build (cloud)
 
@@ -33,12 +34,16 @@ t.create('cloud build status on unknown repo')
 // Drone build (self-hosted)
 
 t.create('self-hosted build status on default branch')
+  .before(mockDroneCreds)
   .get('/https/drone.shields.io/build/badges/shields.json')
   .intercept(nock =>
-    nock('https://drone.shields.io/api/repos')
+    nock('https://drone.shields.io/api/repos', {
+      reqheaders: { authorization: `Bearer ${token}` },
+    })
       .get('/badges/shields/builds/latest')
       .reply(200, { status: 'success' })
   )
+  .finally(restore)
   .expectBadge({
     label: 'build',
     color: 'brightgreen',
@@ -46,13 +51,17 @@ t.create('self-hosted build status on default branch')
   })
 
 t.create('self-hosted build status on named branch')
+  .before(mockDroneCreds)
   .get('/https/drone.shields.io/build/badges/shields/master.json')
   .intercept(nock =>
-    nock('https://drone.shields.io/api/repos')
+    nock('https://drone.shields.io/api/repos', {
+      reqheaders: { authorization: `Bearer ${token}` },
+    })
       .get('/badges/shields/builds/latest')
       .query({ ref: 'refs/heads/master' })
       .reply(200, { status: 'success' })
   )
+  .finally(restore)
   .expectBadge({
     label: 'build',
     color: 'brightgreen',
