@@ -149,7 +149,7 @@ export default class Customizer extends React.Component {
           exampleParams={exampleNamedParams}
           onChange={this.handlePathChange}
           pattern={pattern}
-          showActualParams={!showActualParams}
+          showActualParams={showActualParams}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
@@ -160,7 +160,4 @@ export default class Customizer extends React.Component {
       </form>
     )
   }
-}
-Customizer.defaultProps = {
-  showActualParams: true,
 }

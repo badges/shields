@@ -71,7 +71,7 @@ export default class SuggestionAndSearch extends React.Component {
       {
         examples: suggestions.map(({ title, link, example }) => ({
           title,
-          example: { ...example, editable: false },
+          example: { ...example, exact: true },
           link,
         })),
         category: '',

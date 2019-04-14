@@ -34,7 +34,7 @@ export default class MarkupModalContent extends React.Component {
           pattern,
           namedParams,
           queryParams,
-          editable,
+          exact,
           style: exampleInitialStyle,
         },
         link,
@@ -53,7 +53,7 @@ export default class MarkupModalContent extends React.Component {
           initialStyle={previewInitialStyle || exampleInitialStyle}
           link={link}
           pattern={pattern}
-          showActualParams={editable}
+          showActualParams={exact}
           title={title}
         />
       </>
