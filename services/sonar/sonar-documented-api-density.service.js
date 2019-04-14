@@ -6,6 +6,8 @@ const {
   queryParamSchema,
   getLabel,
   positiveMetricColorScale,
+  keywords,
+  documentation,
 } = require('./sonar-helpers')
 
 const metric = 'public_documented_api_density'
@@ -32,6 +34,25 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
       pattern: `${patternBase}/${metric}`,
       queryParamSchema,
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Documented API Density',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+        },
+        queryParams: {
+          sonarVersion: '4.2',
+        },
+        staticPreview: this.render({ density: 82 }),
+        keywords,
+        documentation,
+      },
+    ]
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {

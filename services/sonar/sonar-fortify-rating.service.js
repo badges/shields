@@ -1,7 +1,12 @@
 'use strict'
 
 const SonarBase = require('./sonar-base')
-const { patternBase, queryParamSchema } = require('./sonar-helpers')
+const {
+  patternBase,
+  queryParamSchema,
+  keywords,
+  documentation,
+} = require('./sonar-helpers')
 
 const colorMap = {
   0: 'red',
@@ -34,6 +39,25 @@ module.exports = class SonarFortifyRating extends SonarBase {
       pattern: `${patternBase}/fortify-security-rating`,
       queryParamSchema,
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Fortify Security Rating',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+        },
+        queryParams: {
+          sonarVersion: '4.2',
+        },
+        staticPreview: this.render({ rating: 4 }),
+        keywords,
+        documentation,
+      },
+    ]
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {
