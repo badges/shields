@@ -71,7 +71,6 @@ module.exports = class GithubForks extends GithubAuthService {
       schema,
       errorMessages: errorMessagesFor(),
     })
-    console.log('forkCount', forkCount)
     return this.constructor.render({ user, repo, forkCount })
   }
 }
