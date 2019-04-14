@@ -12,7 +12,7 @@ describe('GithubIssueDetail', function() {
   test(GithubIssueDetail.render, () => {
     given({
       which: 'state',
-      value: 'open',
+      value: { state: 'open' },
       number: '12',
       isPR: true,
     }).expect({
@@ -22,7 +22,7 @@ describe('GithubIssueDetail', function() {
     })
     given({
       which: 'state',
-      value: 'closed',
+      value: { state: 'closed' },
       number: '15',
       isPR: false,
     }).expect({
@@ -99,8 +99,25 @@ describe('GithubIssueDetail', function() {
       which: 'state',
       json: { state: 'closed' },
     }).expect({
-      value: 'closed',
+      // Since it's a PR, the "merged" value is not crucial here.
+      value: { state: 'closed', merged: true },
       isPR: false,
+    })
+    given({
+      which: 'state',
+      kind: 'pulls',
+      json: { state: 'closed', merged_at: null },
+    }).expect({
+      value: { state: 'closed', merged: false },
+      isPR: true,
+    })
+    given({
+      which: 'state',
+      kind: 'pulls',
+      json: { state: 'closed', merged_at: 'I am not null' },
+    }).expect({
+      value: { state: 'closed', merged: true },
+      isPR: true,
     })
     given({
       which: 'title',

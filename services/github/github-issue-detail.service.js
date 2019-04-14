@@ -24,13 +24,36 @@ const stateMap = {
     state: Joi.string()
       .allow('open', 'closed')
       .required(),
+    merged_at: Joi.string().allow(null),
   }).required(),
-  transform: ({ json }) => json.state,
-  render: ({ value, isPR, number }) => ({
-    color: stateColor(value),
-    label: `${isPR ? 'pull request' : 'issue'} ${number}`,
-    message: value,
+  transform: ({ json }) => ({
+    state: json.state,
+    // Because eslint will not be happy with this snake_case name :(
+    merged: json['merged_at'] !== null,
   }),
+  render: ({ value, isPR, number }) => {
+    const state = value.state
+    const label = `${isPR ? 'pull request' : 'issue'} ${number}`
+
+    if (!isPR || state === 'open') {
+      return {
+        color: stateColor(state),
+        label,
+        message: state,
+      }
+    } else if (value.merged) {
+      return {
+        label,
+        message: 'merged',
+        color: 'blueviolet',
+      }
+    } else
+      return {
+        label,
+        message: 'rejected',
+        color: 'red',
+      }
+  },
 }
 
 const titleMap = {
@@ -138,9 +161,9 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
 
   static get route() {
     return {
-      base: 'github/issues/detail',
+      base: 'github',
       pattern:
-        ':which(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
+        ':kind(issues|pulls)/detail/:which(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
     }
   }
 
@@ -149,6 +172,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
       {
         title: 'GitHub issue/pull request detail',
         namedParams: {
+          kind: 'issues',
           which: 'state',
           user: 'badges',
           repo: 'shields',
@@ -156,7 +180,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
         },
         staticPreview: this.render({
           which: 'state',
-          value: 'closed',
+          value: { state: 'closed' },
           isPR: false,
           number: '979',
         }),
@@ -185,23 +209,23 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     return whichMap[which].render({ which, value, isPR, number })
   }
 
-  async fetch({ which, user, repo, number }) {
+  async fetch({ kind, which, user, repo, number }) {
     return this._requestJson({
-      url: `/repos/${user}/${repo}/issues/${number}`,
+      url: `/repos/${user}/${repo}/${kind}/${number}`,
       schema: whichMap[which].schema,
       errorMessages: errorMessagesFor('issue, pull request or repo not found'),
     })
   }
 
-  transform({ json, which }) {
+  transform({ json, which, kind }) {
     const value = whichMap[which].transform({ json, which })
-    const isPR = json.hasOwnProperty('pull_request')
+    const isPR = json.hasOwnProperty('pull_request') || kind === 'pulls'
     return { value, isPR }
   }
 
-  async handle({ which, user, repo, number }) {
-    const json = await this.fetch({ which, user, repo, number })
-    const { value, isPR } = this.transform({ json, which })
+  async handle({ kind, which, user, repo, number }) {
+    const json = await this.fetch({ kind, which, user, repo, number })
+    const { value, isPR } = this.transform({ json, which, kind })
     return this.constructor.render({ which, value, isPR, number })
   }
 }
