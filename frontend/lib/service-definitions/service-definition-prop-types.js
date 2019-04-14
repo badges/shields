@@ -16,7 +16,7 @@ const examplePropType = PropTypes.exact({
     namedParams: objectOfKeyValuesPropType,
     style: PropTypes.string,
     queryParams: objectOfKeyValuesPropType,
-    editable: PropTypes.bool,
+    exact: PropTypes.bool,
   }).isRequired,
   preview: PropTypes.exact({
     label: PropTypes.string,
