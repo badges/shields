@@ -10,7 +10,7 @@ const schema = Joi.object({
     measures: Joi.array()
       .items(
         Joi.object({
-          metric: Joi.string(),
+          metric: Joi.string().required(),
           value: Joi.alternatives(
             Joi.number().min(0),
             Joi.allow('OK', 'ERROR')
@@ -27,7 +27,7 @@ const legacyApiSchema = Joi.array()
       msr: Joi.array()
         .items(
           Joi.object({
-            key: Joi.string(),
+            key: Joi.string().required(),
             val: Joi.alternatives(
               Joi.number().min(0),
               Joi.allow('OK', 'ERROR')
