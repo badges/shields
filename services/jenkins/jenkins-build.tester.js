@@ -29,6 +29,7 @@ const user = 'admin'
 const pass = 'password'
 
 function mockCreds() {
+  console.log(`do i get called in here???`)
   serverSecrets['jenkins_user'] = undefined
   serverSecrets['jenkins_pass'] = undefined
   sinon.stub(serverSecrets, 'jenkins_user').value(user)
