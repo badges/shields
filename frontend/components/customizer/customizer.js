@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
-import pathToRegexp from 'path-to-regexp'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { generateMarkup } from '../../lib/generate-image-markup'
 import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
@@ -128,18 +127,10 @@ export default class Customizer extends React.Component {
 
   constructor(props) {
     super(props)
-    let path = ''
-    let pathIsComplete = false
-    if (!this.props.isPathEditable) {
-      const toPath = pathToRegexp.compile(this.props.pattern)
-      path = toPath(this.props.exampleNamedParams)
-      pathIsComplete = true
-    }
     this.state = {
       link: this.props.link || '',
       message: undefined,
-      path,
-      pathIsComplete,
+      path: '',
     }
   }
 
