@@ -6,7 +6,10 @@ const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const isJenkinsBuildStatus = Joi.alternatives(isBuildStatus, 'unstable')
+const isJenkinsBuildStatus = Joi.alternatives(
+  isBuildStatus,
+  Joi.string().allow('unstable')
+)
 
 t.create('build job not found')
   .get('/https/updates.jenkins-ci.org/job/does-not-exist.json')
