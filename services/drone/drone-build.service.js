@@ -17,8 +17,8 @@ module.exports = class DroneBuild extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'drone/build',
-      pattern: ':user/:repo/:branch*',
+      base: 'drone',
+      pattern: ':scheme(http|https)?/:host/build/:user/:repo/:branch*',
     }
   }
 
@@ -39,11 +39,13 @@ module.exports = class DroneBuild extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ user, repo, branch }) {
+  async handle({ scheme, host, user, repo, branch }) {
     const ref = branch ? `refs/heads/${branch}` : undefined
+    const apiUrl =
+      host === 'cloud' ? 'https://cloud.drone.io' : `${scheme}://${host}`
     const json = await this._requestJson({
       schema,
-      url: `https://cloud.drone.io/api/repos/${user}/${repo}/builds/latest`,
+      url: `${apiUrl}/api/repos/${user}/${repo}/builds/latest`,
       options: { qs: { ref } },
     })
     return this.constructor.render({
@@ -54,8 +56,8 @@ module.exports = class DroneBuild extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Drone',
-        pattern: ':user/:repo',
+        title: 'Drone (cloud)',
+        pattern: 'build/cloud/:user/:repo',
         namedParams: {
           user: 'drone',
           repo: 'drone',
@@ -67,11 +69,38 @@ module.exports = class DroneBuild extends BaseJsonService {
         },
       },
       {
-        title: 'Drone branch',
-        pattern: ':user/:repo/:branch',
+        title: 'Drone branch (cloud)',
+        pattern: 'build/cloud/:user/:repo/:branch',
         namedParams: {
           user: 'drone',
           repo: 'drone',
+          branch: 'master',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'success',
+          color: 'brightgreen',
+        },
+      },
+      {
+        title: 'Drone (self-hosted)',
+        pattern: 'build/https/drone.shields.io/:user/:repo',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
+        },
+        staticPreview: {
+          label: 'build',
+          message: 'success',
+          color: 'brightgreen',
+        },
+      },
+      {
+        title: 'Drone branch (self-hosted)',
+        pattern: 'build/https/drone.shields.io/:user/:repo/:branch',
+        namedParams: {
+          user: 'badges',
+          repo: 'shields',
           branch: 'master',
         },
         staticPreview: {
