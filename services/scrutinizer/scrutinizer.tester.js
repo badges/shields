@@ -79,7 +79,7 @@ t.create('unexpected response data')
   })
 
 t.create('build - unknown')
-  .get('/build/g/filp/whoops.json?style=_shields_test')
+  .get('/build/g/filp/whoops.json')
   .intercept(nock =>
     nock('https://scrutinizer-ci.com')
       .get('/api/repositories/g/filp/whoops')

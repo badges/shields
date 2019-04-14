@@ -71,7 +71,7 @@ jobs:
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
-          command: npm run prettier-check
+          command: npm run prettier:check
 
   main@node-latest:
     docker:
@@ -117,7 +117,7 @@ jobs:
       - run:
           name: 'Prettier check (quick fix: `npm run prettier`)'
           when: always
-          command: npm run prettier-check
+          command: npm run prettier:check
 
   integration:
     docker:
@@ -296,6 +296,42 @@ jobs:
       - store_test_results:
           path: junit
 
+  e2e:
+    docker:
+      - image: cypress/base:8
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package-lock.json" }}
+            # https://github.com/badges/shields/issues/1937
+            - v2-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm ci
+
+      - run:
+          name: Frontend build
+          command: npm run build
+
+      - run:
+          name: Run tests
+          environment:
+            CYPRESS_REPORTER: junit
+            MOCHA_FILE: junit/e2e/results.xml
+          command: npm run e2e-on-build
+
+      - store_test_results:
+          path: junit
+
+      - store_artifacts:
+          path: cypress/videos
+
+      - store_artifacts:
+          path: cypress/screenshots
+
 workflows:
   version: 2
 
@@ -336,6 +372,10 @@ workflows:
                 - master
                 - gh-pages
                 - /dependabot\/.*/
+      - e2e:
+          filters:
+            branches:
+              ignore: gh-pages
   # on-commit-with-cache:
   #   jobs:
   #     - npm-install:

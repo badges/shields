@@ -1,15 +1,13 @@
 'use strict'
 
-const Joi = require('joi')
+const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Forks')
   .get('/badges/shields.json')
   .expectBadge({
     label: 'forks',
-    message: Joi.number()
-      .integer()
-      .positive(),
+    message: isMetric,
   })
 
 t.create('Forks (repo not found)')

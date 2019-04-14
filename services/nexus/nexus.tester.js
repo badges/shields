@@ -43,9 +43,7 @@ t.create('live: search snapshot version of a release artifact')
   .expectBadge({ label: 'nexus', message: 'no snapshot versions found' })
 
 t.create('live: search snapshot version of an inexistent artifact')
-  .get(
-    '/s/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json?style=_shields_test'
-  )
+  .get('/s/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
   .expectBadge({
     label: 'nexus',
     message: 'artifact or version not found',
@@ -78,9 +76,7 @@ t.create('live: repository version of an inexistent artifact')
   })
 
 t.create('snapshot version with + in version')
-  .get(
-    '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
-  )
+  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -94,9 +90,7 @@ t.create('snapshot version with + in version')
   })
 
 t.create('search snapshot version not in latestSnapshot')
-  .get(
-    '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
-  )
+  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -110,9 +104,7 @@ t.create('search snapshot version not in latestSnapshot')
   })
 
 t.create('search snapshot no snapshot versions')
-  .get(
-    '/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json?style=_shields_test'
-  )
+  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -126,9 +118,7 @@ t.create('search snapshot no snapshot versions')
   })
 
 t.create('search release version')
-  .get(
-    '/r/https/repository.jboss.org/nexus/jboss/jboss-client.json?style=_shields_test'
-  )
+  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -142,9 +132,7 @@ t.create('search release version')
   })
 
 t.create('repository release version')
-  .get(
-    '/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json?style=_shields_test'
-  )
+  .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/artifact/maven/resolve')
@@ -168,9 +156,7 @@ t.create('repository release version')
   })
 
 t.create('repository release version')
-  .get(
-    '/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json?style=_shields_test'
-  )
+  .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/artifact/maven/resolve')
@@ -194,7 +180,7 @@ t.create('repository release version')
 
 t.create('user query params')
   .get(
-    '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json?style=_shields_test'
+    '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json'
   )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
@@ -221,9 +207,7 @@ t.create('user query params')
 
 t.create('auth')
   .before(mockNexusCreds)
-  .get(
-    '/r/https/repository.jboss.org/nexus/jboss/jboss-client.json?style=_shields_test'
-  )
+  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')

@@ -5,7 +5,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { dockerBlue } = require('./docker-helpers')
 
 t.create('docker pulls (valid, library)')
-  .get('/_/ubuntu.json?style=_shields_test')
+  .get('/_/ubuntu.json')
   .expectBadge({
     label: 'docker pulls',
     message: isMetric,

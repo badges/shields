@@ -11,36 +11,25 @@
 // DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
 
 const { danger, fail, message, warn } = require('danger')
-const chainsmoker = require('chainsmoker')
 const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts')
-
-const fileMatch = chainsmoker({
-  created: danger.git.created_files,
-  modified: danger.git.modified_files,
-  createdOrModified: danger.git.modified_files.concat(danger.git.created_files),
-  deleted: danger.git.deleted_files,
-})
+const { fileMatch } = danger.git
 
 const documentation = fileMatch(
   '**/*.md',
   'lib/all-badge-examples.js',
-  'frontend/components/usage.js'
+  'frontend/components/usage.js',
+  'frontend/pages/endpoint.js'
 )
-const server = fileMatch('server.js')
-const serverTests = fileMatch('server.spec.js')
-const helpers = fileMatch(
-  'lib/**/*.js',
-  '!**/*.spec.js',
-  '!lib/all-badge-examples.js'
-)
+const server = fileMatch('core/server/**.js', '!*.spec.js')
+const serverTests = fileMatch('core/server/**.spec.js')
+const legacyHelpers = fileMatch('lib/**/*.js', '!*.spec.js')
+const legacyHelperTests = fileMatch('lib/**/*.spec.js')
 const logos = fileMatch('logo/*.svg')
-const helperTests = fileMatch('lib/**/*.spec.js')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
 const secretsDocs = fileMatch('doc/server-secrets.md')
 const capitals = fileMatch('**/*[A-Z]*.js')
 const underscores = fileMatch('**/*_*.js')
-const targetBranch = danger.github.pr.base.ref
 
 message(
   [
@@ -49,13 +38,14 @@ message(
   ].join('')
 )
 
+const targetBranch = danger.github.pr.base.ref
 if (targetBranch !== 'master') {
   const message = `This PR targets \`${targetBranch}\``
   const idea = 'It is likely that the target branch should be `master`'
   warn(`${message} - <i>${idea}</i>`)
 }
 
-if (documentation.createdOrModified) {
+if (documentation.edited) {
   message(
     [
       'Thanks for contributing to our documentation. ',
@@ -79,14 +69,9 @@ if (server.modified && !serverTests.modified) {
   )
 }
 
-if (helpers.created && !helperTests.created) {
-  warn(
-    [
-      'This PR added helper modules in `lib/` but not accompanying tests. <br>',
-      'Generally helper modules should have their own tests.',
-    ].join('')
-  )
-} else if (helpers.createdOrModified && !helperTests.createdOrModified) {
+if (legacyHelpers.created) {
+  warn(['This PR added helper modules in `lib/` which is deprecated.'].join(''))
+} else if (legacyHelpers.edited && !legacyHelperTests.edited) {
   warn(
     [
       'This PR modified helper functions in `lib/` but not accompanying tests. <br>',

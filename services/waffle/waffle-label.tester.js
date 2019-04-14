@@ -11,9 +11,7 @@ t.create('project not found)')
   })
 
 t.create('label not found')
-  .get(
-    '/ritwickdey/vscode-live-server/not-a-real-label.json?style=_shields_test'
-  )
+  .get('/ritwickdey/vscode-live-server/not-a-real-label.json')
   .expectBadge({
     label: 'not-a-real-label',
     message: '0',

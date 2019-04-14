@@ -34,7 +34,7 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "dependencies": {
-    "anafanafo": "^0.1.0",
+    "anafanafo": "^1.0.0",
     "dot": "^1.1.2",
     "gm": "^1.23.0",
     "is-css-color": "^1.0.0",

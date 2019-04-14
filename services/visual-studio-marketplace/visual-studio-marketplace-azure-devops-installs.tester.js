@@ -58,7 +58,7 @@ t.create('live: non existent extension')
   })
 
 t.create('total installs')
-  .get('/total/swellaby.cobertura-transform.json?style=_shields_test')
+  .get('/total/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -71,7 +71,7 @@ t.create('total installs')
   })
 
 t.create('services installs')
-  .get('/services/swellaby.cobertura-transform.json?style=_shields_test')
+  .get('/services/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -84,7 +84,7 @@ t.create('services installs')
   })
 
 t.create('onprem installs')
-  .get('/onprem/swellaby.cobertura-transform.json?style=_shields_test')
+  .get('/onprem/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -97,7 +97,7 @@ t.create('onprem installs')
   })
 
 t.create('zero installs')
-  .get('/total/swellaby.cobertura-transform.json?style=_shields_test')
+  .get('/total/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)

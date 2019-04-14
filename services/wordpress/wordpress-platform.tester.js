@@ -49,7 +49,7 @@ const mockedCoreResponseData = {
 }
 
 t.create('Plugin Tested WP Version - current (mocked)')
-  .get('/plugin/tested/akismet.json?style=_shields_test')
+  .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
       .get('/plugins/info/1.1/')
@@ -73,7 +73,7 @@ t.create('Plugin Tested WP Version - current (mocked)')
   })
 
 t.create('Plugin Tested WP Version - old (mocked)')
-  .get('/plugin/tested/akismet.json?style=_shields_test')
+  .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
       .get('/plugins/info/1.1/')
@@ -97,7 +97,7 @@ t.create('Plugin Tested WP Version - old (mocked)')
   })
 
 t.create('Plugin Tested WP Version - non-exsistant or unsupported (mocked)')
-  .get('/plugin/tested/akismet.json?style=_shields_test')
+  .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
       .get('/plugins/info/1.1/')

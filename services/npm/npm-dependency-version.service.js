@@ -14,7 +14,8 @@ module.exports = class NpmDependencyVersion extends NpmBase {
   static get route() {
     return {
       base: 'npm/dependency-version',
-      pattern: ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependency',
+      pattern:
+        ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependencyScope(@[^/]+)?/:dependency',
       queryParamSchema,
     }
   }
@@ -35,6 +36,20 @@ module.exports = class NpmDependencyVersion extends NpmBase {
         keywords,
       },
       {
+        title: 'npm peer dependency version (scoped)',
+        pattern: ':scope?/:packageName/dev/:dependencyScope?/:dependency',
+        namedParams: {
+          scope: '@swellaby',
+          packageName: 'eslint-config',
+          dependency: 'eslint',
+        },
+        staticPreview: this.render({
+          dependency: 'eslint',
+          range: '^3.0.0',
+        }),
+        keywords,
+      },
+      {
         title: 'npm dev dependency version',
         pattern: ':packageName/dev/:dependency',
         namedParams: {
@@ -48,6 +63,20 @@ module.exports = class NpmDependencyVersion extends NpmBase {
         keywords,
       },
       {
+        title: 'npm dev dependency version (scoped)',
+        pattern: ':scope?/:packageName/dev/:dependencyScope?/:dependency',
+        namedParams: {
+          packageName: 'mocha',
+          dependencyScope: '@mocha',
+          dependency: 'contributors',
+        },
+        staticPreview: this.render({
+          dependency: '@mocha/contributors',
+          range: '^1.0.3',
+        }),
+        keywords,
+      },
+      {
         title: 'npm (prod) dependency version',
         pattern: ':packageName/:dependency',
         namedParams: {
@@ -57,6 +86,20 @@ module.exports = class NpmDependencyVersion extends NpmBase {
         staticPreview: this.render({
           dependency: 'simple-statistics',
           range: '^6.1.1',
+        }),
+        keywords,
+      },
+      {
+        title: 'npm (prod) dependency version (scoped)',
+        pattern: ':scope?/:packageName/:dependencyScope?/:dependency',
+        namedParams: {
+          packageName: 'got',
+          dependencyScope: '@sindresorhus',
+          dependency: 'is',
+        },
+        staticPreview: this.render({
+          dependency: '@sindresorhus/is',
+          range: '^0.15.0',
         }),
         keywords,
       },
@@ -82,7 +125,10 @@ module.exports = class NpmDependencyVersion extends NpmBase {
       namedParams,
       queryParams
     )
-    const { kind, dependency: wantedDependency } = namedParams
+    const { kind, dependency, dependencyScope } = namedParams
+    const wantedDependency = `${
+      dependencyScope ? `${dependencyScope}/` : ''
+    }${dependency}`
 
     const {
       dependencies,
