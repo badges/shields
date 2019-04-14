@@ -8,7 +8,6 @@ const schema = Joi.object({
   status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('none'))
     .required(),
-  statusText: Joi.string(),
 }).required()
 
 module.exports = class DroneBuild extends BaseJsonService {
@@ -49,7 +48,6 @@ module.exports = class DroneBuild extends BaseJsonService {
     })
     return this.constructor.render({
       status: json.status,
-      statusText: json.message,
     })
   }
 
@@ -63,6 +61,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           repo: 'drone',
         },
         staticPreview: {
+          label: 'build',
           message: 'success',
           color: 'brightgreen',
         },
@@ -76,6 +75,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           branch: 'master',
         },
         staticPreview: {
+          label: 'build',
           message: 'success',
           color: 'brightgreen',
         },

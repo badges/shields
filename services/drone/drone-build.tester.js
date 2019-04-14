@@ -7,19 +7,25 @@ const t = (module.exports = require('../tester').createServiceTester())
 // Drone Build
 
 t.create('build status on default branch')
-  .get('/build/drone/drone.json')
+  .get('/drone/drone.json')
   .expectBadge({
     label: 'build',
+    color: 'brightgreen',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
 t.create('build status on named branch')
-  .get('/build/drone/drone/master.json')
+  .get('/drone/drone/master.json')
   .expectBadge({
     label: 'build',
+    color: 'brightgreen',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
 t.create('unknown repo')
-  .get('/build/this-repo/does-not-exist.json')
-  .expectBadge({ label: 'build', message: 'none' })
+  .get('/this-repo/does-not-exist.json')
+  .expectBadge({
+    label: 'build',
+    color: 'lightgrey',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('invalid')),
+  })
