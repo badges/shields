@@ -29,7 +29,6 @@ const user = 'admin'
 const pass = 'password'
 
 function mockCreds() {
-  console.log(`do i get called in here???`)
   serverSecrets['jenkins_user'] = undefined
   serverSecrets['jenkins_pass'] = undefined
   sinon.stub(serverSecrets, 'jenkins_user').value(user)
@@ -41,7 +40,7 @@ t.create('with mock credentials')
   .get('/https/jenkins.ubuntu.com/server/curtin-vmtest-daily-x.json')
   .intercept(nock =>
     nock('https://jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x')
-      .get(`/api/json`)
+      .get(`/api/json?tree=color`)
       // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
       // Without this the request wouldn't match and the test would fail.
       .basicAuth({

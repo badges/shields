@@ -9,7 +9,7 @@ module.exports = class JiraBase extends BaseJsonService {
   }
 
   async fetch({ url, qs, schema, errorMessages }) {
-    const options = { qs }
+    const options = { qs, strictSSL: false }
 
     if (serverSecrets.jira_user) {
       options.auth = {

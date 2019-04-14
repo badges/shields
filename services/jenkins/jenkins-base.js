@@ -10,7 +10,7 @@ module.exports = class JenkinsBase extends BaseJsonService {
     qs,
     errorMessages = { 404: 'instance or job not found' },
   }) {
-    const options = { qs, strictSSL: false }
+    const options = { qs }
 
     if (serverSecrets.jenkins_user) {
       options.auth = {
