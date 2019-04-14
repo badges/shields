@@ -59,7 +59,7 @@ t.create('Fortify Security Rating (legacy API supported)')
         {
           msr: [
             {
-              metric: 'fortify-security-rating',
+              key: 'fortify-security-rating',
               val: 3,
             },
           ],
