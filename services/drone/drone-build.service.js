@@ -2,15 +2,16 @@
 
 const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  message: Joi.alternatives()
+  status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('none'))
     .required(),
+  statusText: Joi.string(),
 }).required()
 
-module.exports = class DroneBuild extends BaseSvgScrapingService {
+module.exports = class DroneBuild extends BaseJsonService {
   static get category() {
     return 'build'
   }
@@ -23,7 +24,10 @@ module.exports = class DroneBuild extends BaseSvgScrapingService {
   }
 
   static get staticPreview() {
-    return { message: 'success', color: 'brightgreen' }
+    return {
+      message: 'success',
+      color: 'brightgreen',
+    }
   }
 
   static get defaultBadgeData() {
@@ -37,25 +41,31 @@ module.exports = class DroneBuild extends BaseSvgScrapingService {
   }
 
   async handle({ user, repo, branch }) {
-    const ref = branch ? `/refs/heads/${branch}` : undefined
-    const { message: status } = await this._requestSvg({
+    const ref = branch ? `refs/heads/${branch}` : undefined
+    const json = await this._requestJson({
       schema,
-      url: `https://cloud.drone.io/api/badges/${user}/${repo}/status.svg`,
+      url: `https://cloud.drone.io/api/repos/${user}/${repo}/builds/latest`,
       options: { qs: { ref } },
-      valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
-
-    return this.constructor.render({ status })
+    return this.constructor.render({
+      status: json.status,
+      statusText: json.message,
+    })
   }
 
   static get examples() {
-    const { staticPreview } = this
     return [
       {
         title: 'Drone',
         pattern: ':user/:repo',
-        namedParams: { user: 'drone', repo: 'drone' },
-        staticPreview,
+        namedParams: {
+          user: 'drone',
+          repo: 'drone',
+        },
+        staticPreview: {
+          message: 'success',
+          color: 'brightgreen',
+        },
       },
       {
         title: 'Drone branch',
@@ -65,7 +75,10 @@ module.exports = class DroneBuild extends BaseSvgScrapingService {
           repo: 'drone',
           branch: 'master',
         },
-        staticPreview,
+        staticPreview: {
+          message: 'success',
+          color: 'brightgreen',
+        },
       },
     ]
   }
