@@ -100,16 +100,16 @@ const testsMetricNames = [
   'test_failures',
   'test_success_density',
 ]
-const metricNames = [].concat(
-  complexityMetricNames,
-  duplicationMetricNames,
-  issuesMetricNames,
-  maintainabilityMetricNames,
-  reliabilityMetricNames,
-  securityMetricNames,
-  sizeMetricNames,
-  testsMetricNames
-)
+const metricNames = [
+  ...complexityMetricNames,
+  ...duplicationMetricNames,
+  ...issuesMetricNames,
+  ...maintainabilityMetricNames,
+  ...reliabilityMetricNames,
+  ...securityMetricNames,
+  ...sizeMetricNames,
+  ...testsMetricNames,
+]
 const metricNameRouteParam = metricNames.join('|')
 
 module.exports = class SonarGeneric extends SonarBase {
