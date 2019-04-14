@@ -55,7 +55,12 @@ module.exports = class SonarFortifyRating extends SonarBase {
         },
         staticPreview: this.render({ rating: 4 }),
         keywords,
-        documentation,
+        documentation: `
+        ${documentation}
+        <p>
+          Note that the Fortify Rating badge is not available for projects analyzed on SonarCloud.io
+        </p>
+      `,
       },
     ]
   }
