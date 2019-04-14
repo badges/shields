@@ -50,7 +50,7 @@ export default class MarkupModalContent extends React.Component {
           baseUrl={baseUrl}
           exampleNamedParams={namedParams}
           exampleQueryParams={queryParams}
-          initialStyle={previewInitialStyle || exampleInitialStyle}
+          initialStyle={exact ? exampleInitialStyle : previewInitialStyle}
           link={link}
           pattern={pattern}
           showActualParams={exact}
