@@ -2,13 +2,7 @@
 
 const { metric } = require('../text-formatters')
 const SonarBase = require('./sonar-base')
-const {
-  patternBase,
-  queryParamSchema,
-  getLabel,
-  keywords,
-  documentation,
-} = require('./sonar-helpers')
+const { patternBase, queryParamSchema, getLabel } = require('./sonar-helpers')
 
 // This service is intended to be a temporary solution to avoid breaking
 // any existing users/badges that were utilizing the "other" Sonar metrics
@@ -141,39 +135,6 @@ module.exports = class SonarGeneric extends SonarBase {
       pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
       queryParamSchema,
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Generic',
-        pattern: `${patternBase}/:metric`,
-        namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
-          component: 'org.ow2.petals:petals-se-ase',
-          metric: 'complexity',
-        },
-        queryParams: {
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({
-          metricName: 'complexity',
-          metricValue: '253',
-        }),
-        keywords,
-        documentation: `
-          <p>
-            This badge provides generic support for any of the other valid <a href='https://docs.sonarqube.org/latest/user-guide/metric-definitions/'>Sonar Metrics</a> supported by the target Sonar instance.
-            It will always display the raw metric value on a blue badge
-          </p>
-          <p>
-            In the future we will be iteratively <a href='https://github.com/badges/shields/issues/3236'>adding enhanced badge support</a> for these other Sonar metrics.
-          </p>
-          ${documentation}
-        `,
-      },
-    ]
   }
 
   async handle({ protocol, host, component, metricName }, { sonarVersion }) {
