@@ -51,9 +51,9 @@ export default class MarkupModalContent extends React.Component {
           exampleNamedParams={namedParams}
           exampleQueryParams={queryParams}
           initialStyle={previewInitialStyle || exampleInitialStyle}
-          isPathEditable={editable}
           link={link}
           pattern={pattern}
+          showActualParams={editable}
           title={title}
         />
       </>

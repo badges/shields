@@ -18,7 +18,7 @@ export default class Customizer extends React.Component {
     exampleNamedParams: objectOfKeyValuesPropType,
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
-    isPathEditable: PropTypes.bool,
+    showActualParams: PropTypes.bool,
     link: PropTypes.string,
   }
 
@@ -140,7 +140,7 @@ export default class Customizer extends React.Component {
       exampleNamedParams,
       exampleQueryParams,
       initialStyle,
-      isPathEditable,
+      showActualParams,
     } = this.props
 
     return (
@@ -149,7 +149,7 @@ export default class Customizer extends React.Component {
           exampleParams={exampleNamedParams}
           onChange={this.handlePathChange}
           pattern={pattern}
-          showActualParams={!isPathEditable}
+          showActualParams={!showActualParams}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
@@ -162,5 +162,5 @@ export default class Customizer extends React.Component {
   }
 }
 Customizer.defaultProps = {
-  isPathEditable: true,
+  showActualParams: true,
 }
