@@ -46,7 +46,7 @@ module.exports = class SonarTechDebt extends SonarBase {
           metric: 'tech_debt',
         },
         queryParams: {
-          version: '4.2',
+          sonarVersion: '4.2',
         },
         staticPreview: this.render({
           debt: 1,

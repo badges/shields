@@ -49,7 +49,7 @@ module.exports = class SonarQualityGate extends SonarBase {
           metric: 'quality_gate',
         },
         queryParams: {
-          version: '4.2',
+          sonarVersion: '4.2',
         },
         staticPreview: this.render({ qualityState: 'OK' }),
         keywords,

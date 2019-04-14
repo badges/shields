@@ -113,7 +113,7 @@ module.exports = class SonarViolations extends SonarBase {
         },
         queryParams: {
           format: 'short',
-          version: '4.2',
+          sonarVersion: '4.2',
         },
         staticPreview: this.render({
           violations: 0,
