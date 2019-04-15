@@ -57,9 +57,7 @@ module.exports = class DroneBuild extends BaseJsonService {
       url: `${scheme}://${host}/api/repos/${user}/${repo}/builds/latest`,
       options,
     })
-    return this.constructor.render({
-      status: json.status,
-    })
+    return renderBuildStatusBadge({ status: json.status })
   }
 
   static get examples() {
