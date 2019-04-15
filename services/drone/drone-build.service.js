@@ -3,12 +3,17 @@
 const Joi = require('joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
+const { optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
-const schema = Joi.object({
+const DroneBuildSchema = Joi.object({
   status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('none'))
     .required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  server: optionalUrl,
 }).required()
 
 module.exports = class DroneBuild extends BaseJsonService {
@@ -18,8 +23,9 @@ module.exports = class DroneBuild extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'drone',
-      pattern: ':scheme(http|https)?/:host/build/:user/:repo/:branch*',
+      queryParamSchema,
+      base: 'drone/build',
+      pattern: ':user/:repo/:branch*',
     }
   }
 
@@ -40,22 +46,24 @@ module.exports = class DroneBuild extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ scheme, host, user, repo, branch }) {
-    const ref = branch ? `refs/heads/${branch}` : undefined
-    const options = { qs: { ref } }
-    if (host === 'cloud') {
-      scheme = 'https'
-      host = 'cloud.drone.io'
+  async handle({ user, repo, branch }, { server }) {
+    const options = {
+      qs: {
+        ref: branch ? `refs/heads/${branch}` : undefined,
+      },
     }
     if (serverSecrets.drone_token) {
       options.headers = {
         Authorization: `Bearer ${serverSecrets.drone_token}`,
       }
     }
+    if (!server) {
+      server = 'https://cloud.drone.io'
+    }
     const json = await this._requestJson({
-      schema,
-      url: `${scheme}://${host}/api/repos/${user}/${repo}/builds/latest`,
       options,
+      schema: DroneBuildSchema,
+      url: `${server}/api/repos/${user}/${repo}/builds/latest`,
     })
     return renderBuildStatusBadge({ status: json.status })
   }
@@ -64,7 +72,7 @@ module.exports = class DroneBuild extends BaseJsonService {
     return [
       {
         title: 'Drone (cloud)',
-        pattern: 'cloud/build/:user/:repo',
+        pattern: ':user/:repo',
         namedParams: {
           user: 'drone',
           repo: 'drone',
@@ -77,7 +85,7 @@ module.exports = class DroneBuild extends BaseJsonService {
       },
       {
         title: 'Drone (cloud) with branch',
-        pattern: 'cloud/build/:user/:repo/:branch',
+        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'drone',
           repo: 'drone',
@@ -91,7 +99,7 @@ module.exports = class DroneBuild extends BaseJsonService {
       },
       {
         title: 'Drone (self-hosted)',
-        pattern: 'https/drone.shields.io/build/:user/:repo',
+        pattern: ':user/:repo?server=https://drone.shields.io',
         namedParams: {
           user: 'badges',
           repo: 'shields',
@@ -104,11 +112,11 @@ module.exports = class DroneBuild extends BaseJsonService {
       },
       {
         title: 'Drone (self-hosted) with branch',
-        pattern: 'https/drone.shields.io/build/:user/:repo/:branch',
+        pattern: ':user/:repo/:branch?server=https://drone.shields.io',
         namedParams: {
           user: 'badges',
           repo: 'shields',
-          branch: 'master',
+          branch: 'feat/awesome-thing',
         },
         staticPreview: {
           label: 'build',

@@ -8,7 +8,7 @@ const { mockDroneCreds, token, restore } = require('./drone-test-helpers')
 // Drone build (cloud)
 
 t.create('cloud build status on default branch')
-  .get('/cloud/build/drone/drone.json')
+  .get('/drone/drone.json')
   .expectBadge({
     label: 'build',
     color: 'brightgreen',
@@ -16,7 +16,7 @@ t.create('cloud build status on default branch')
   })
 
 t.create('cloud build status on named branch')
-  .get('/cloud/build/drone/drone/master.json')
+  .get('/drone/drone/master.json')
   .expectBadge({
     label: 'build',
     color: 'brightgreen',
@@ -24,7 +24,7 @@ t.create('cloud build status on named branch')
   })
 
 t.create('cloud build status on unknown repo')
-  .get('/cloud/build/this-repo/does-not-exist.json')
+  .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'build',
     color: 'lightgrey',
@@ -35,7 +35,7 @@ t.create('cloud build status on unknown repo')
 
 t.create('self-hosted build status on default branch')
   .before(mockDroneCreds)
-  .get('/https/drone.shields.io/build/badges/shields.json')
+  .get('/badges/shields.json?server=https://drone.shields.io')
   .intercept(nock =>
     nock('https://drone.shields.io/api/repos', {
       reqheaders: { authorization: `Bearer ${token}` },
@@ -52,13 +52,15 @@ t.create('self-hosted build status on default branch')
 
 t.create('self-hosted build status on named branch')
   .before(mockDroneCreds)
-  .get('/https/drone.shields.io/build/badges/shields/master.json')
+  .get(
+    '/badges/shields/feat/awesome-thing.json?server=https://drone.shields.io'
+  )
   .intercept(nock =>
     nock('https://drone.shields.io/api/repos', {
       reqheaders: { authorization: `Bearer ${token}` },
     })
       .get('/badges/shields/builds/latest')
-      .query({ ref: 'refs/heads/master' })
+      .query({ ref: 'refs/heads/feat/awesome-thing' })
       .reply(200, { status: 'success' })
   )
   .finally(restore)
