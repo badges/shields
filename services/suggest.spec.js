@@ -166,9 +166,6 @@ describe('Badge suggestions', function() {
               link:
                 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
               path: '/twitter/url/https/github.com/atom/atom',
-              queryParams: {
-                style: 'social',
-              },
               example: {
                 pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
                 namedParams: {

@@ -23,7 +23,6 @@ function twitterPage(url) {
       url.href
     )}`,
     path: `/twitter/url/${schema}/${host}${path}`,
-    queryParams: { style: 'social' },
     example: {
       pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
       namedParams: { protocol: `${schema}`, hostAndPath: `${host}${path}` },
