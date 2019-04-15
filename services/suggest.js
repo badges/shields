@@ -22,7 +22,6 @@ function twitterPage(url) {
     link: `https://twitter.com/intent/tweet?text=Wow:&url=${encodeURIComponent(
       url.href
     )}`,
-    path: `/twitter/url/${schema}/${host}${path}`,
     example: {
       pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
       namedParams: { protocol: `${schema}`, hostAndPath: `${host}${path}` },
@@ -37,7 +36,6 @@ function githubIssues(user, repo) {
   return {
     title: 'GitHub issues',
     link: `https://github.com/${repoSlug}/issues`,
-    path: `/github/issues/${repoSlug}`,
     example: {
       pattern: '/github/issues/:user/:repo',
       namedParams: { user, repo },
@@ -51,7 +49,6 @@ function githubForks(user, repo) {
   return {
     title: 'GitHub forks',
     link: `https://github.com/${repoSlug}/network`,
-    path: `/github/forks/${repoSlug}`,
     example: {
       pattern: '/github/forks/:user/:repo',
       namedParams: { user, repo },
@@ -65,7 +62,6 @@ function githubStars(user, repo) {
   return {
     title: 'GitHub stars',
     link: `https://github.com/${repoSlug}/stargazers`,
-    path: `/github/stars/${repoSlug}`,
     example: {
       pattern: '/github/stars/:user/:repo',
       namedParams: { user, repo },
@@ -92,7 +88,6 @@ async function githubLicense(githubApiProvider, user, repo) {
 
   return {
     title: 'GitHub license',
-    path: `/github/license/${repoSlug}`,
     link,
     example: {
       pattern: '/github/license/:user/:repo',
@@ -127,7 +122,6 @@ async function findSuggestions(githubApiProvider, url) {
 //  - suggestions: list of objects of the form:
 //    - title: string
 //    - link: target as a string URL.
-//    - path: shields image URL path.
 //    - queryParams: Object containing query params (Optional)
 function setRoutes(allowedOrigin, githubApiProvider, server) {
   server.ajax.on('suggest/v1', (data, end, ask) => {

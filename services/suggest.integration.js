@@ -63,7 +63,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub issues',
             link: 'https://github.com/atom/atom/issues',
-            path: '/github/issues/atom/atom',
             example: {
               pattern: '/github/issues/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
@@ -73,7 +72,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub forks',
             link: 'https://github.com/atom/atom/network',
-            path: '/github/forks/atom/atom',
             example: {
               pattern: '/github/forks/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
@@ -83,7 +81,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub stars',
             link: 'https://github.com/atom/atom/stargazers',
-            path: '/github/stars/atom/atom',
             example: {
               pattern: '/github/stars/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
@@ -92,7 +89,6 @@ describe('GitHub badge suggestions', function() {
           },
           {
             title: 'GitHub license',
-            path: '/github/license/atom/atom',
             link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
             example: {
               pattern: '/github/license/:user/:repo',
@@ -104,7 +100,6 @@ describe('GitHub badge suggestions', function() {
             title: 'Twitter',
             link:
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
-            path: '/twitter/url/https/github.com/atom/atom',
             example: {
               pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
               namedParams: {
@@ -138,7 +133,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub issues',
             link: 'https://github.com/badges/not-a-real-project/issues',
-            path: '/github/issues/badges/not-a-real-project',
             example: {
               pattern: '/github/issues/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
@@ -148,7 +142,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub forks',
             link: 'https://github.com/badges/not-a-real-project/network',
-            path: '/github/forks/badges/not-a-real-project',
             example: {
               pattern: '/github/forks/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
@@ -158,7 +151,6 @@ describe('GitHub badge suggestions', function() {
           {
             title: 'GitHub stars',
             link: 'https://github.com/badges/not-a-real-project/stargazers',
-            path: '/github/stars/badges/not-a-real-project',
             example: {
               pattern: '/github/stars/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
@@ -167,7 +159,6 @@ describe('GitHub badge suggestions', function() {
           },
           {
             title: 'GitHub license',
-            path: '/github/license/badges/not-a-real-project',
             link: 'https://github.com/badges/not-a-real-project',
             example: {
               pattern: '/github/license/:user/:repo',
@@ -179,7 +170,6 @@ describe('GitHub badge suggestions', function() {
             title: 'Twitter',
             link:
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
-            path: '/twitter/url/https/github.com/badges/not-a-real-project',
             example: {
               pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
               namedParams: {

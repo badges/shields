@@ -34,7 +34,6 @@ describe('Badge suggestions', function() {
 
         expect(await githubLicense(apiProvider, 'atom', 'atom')).to.deep.equal({
           title: 'GitHub license',
-          path: '/github/license/atom/atom',
           link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
           example: {
             pattern: '/github/license/:user/:repo',
@@ -57,7 +56,6 @@ describe('Badge suggestions', function() {
 
         expect(await githubLicense(apiProvider, 'atom', 'atom')).to.deep.equal({
           title: 'GitHub license',
-          path: '/github/license/atom/atom',
           link: 'https://github.com/atom/atom',
           example: {
             pattern: '/github/license/:user/:repo',
@@ -124,7 +122,6 @@ describe('Badge suggestions', function() {
             {
               title: 'GitHub issues',
               link: 'https://github.com/atom/atom/issues',
-              path: '/github/issues/atom/atom',
               example: {
                 pattern: '/github/issues/:user/:repo',
                 namedParams: { user: 'atom', repo: 'atom' },
@@ -134,7 +131,6 @@ describe('Badge suggestions', function() {
             {
               title: 'GitHub forks',
               link: 'https://github.com/atom/atom/network',
-              path: '/github/forks/atom/atom',
               example: {
                 pattern: '/github/forks/:user/:repo',
                 namedParams: { user: 'atom', repo: 'atom' },
@@ -144,7 +140,6 @@ describe('Badge suggestions', function() {
             {
               title: 'GitHub stars',
               link: 'https://github.com/atom/atom/stargazers',
-              path: '/github/stars/atom/atom',
               example: {
                 pattern: '/github/stars/:user/:repo',
                 namedParams: { user: 'atom', repo: 'atom' },
@@ -153,7 +148,6 @@ describe('Badge suggestions', function() {
             },
             {
               title: 'GitHub license',
-              path: '/github/license/atom/atom',
               link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
               example: {
                 pattern: '/github/license/:user/:repo',
@@ -165,7 +159,6 @@ describe('Badge suggestions', function() {
               title: 'Twitter',
               link:
                 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
-              path: '/twitter/url/https/github.com/atom/atom',
               example: {
                 pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
                 namedParams: {
