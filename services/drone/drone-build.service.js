@@ -31,7 +31,7 @@ module.exports = class DroneBuild extends BaseJsonService {
 
   static get staticPreview() {
     return {
-      message: 'success',
+      message: 'passing',
       color: 'brightgreen',
     }
   }
@@ -79,7 +79,7 @@ module.exports = class DroneBuild extends BaseJsonService {
         },
         staticPreview: {
           label: 'build',
-          message: 'success',
+          message: 'passing',
           color: 'brightgreen',
         },
       },
@@ -93,7 +93,7 @@ module.exports = class DroneBuild extends BaseJsonService {
         },
         staticPreview: {
           label: 'build',
-          message: 'success',
+          message: 'passing',
           color: 'brightgreen',
         },
       },
@@ -107,7 +107,7 @@ module.exports = class DroneBuild extends BaseJsonService {
         },
         staticPreview: {
           label: 'build',
-          message: 'success',
+          message: 'passing',
           color: 'brightgreen',
         },
       },
@@ -122,7 +122,7 @@ module.exports = class DroneBuild extends BaseJsonService {
         },
         staticPreview: {
           label: 'build',
-          message: 'success',
+          message: 'passing',
           color: 'brightgreen',
         },
       },
