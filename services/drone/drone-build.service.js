@@ -99,7 +99,8 @@ module.exports = class DroneBuild extends BaseJsonService {
       },
       {
         title: 'Drone (self-hosted)',
-        pattern: ':user/:repo?server=https://drone.shields.io',
+        pattern: ':user/:repo',
+        queryParams: { server: 'https://drone.shields.io' },
         namedParams: {
           user: 'badges',
           repo: 'shields',
@@ -112,7 +113,8 @@ module.exports = class DroneBuild extends BaseJsonService {
       },
       {
         title: 'Drone (self-hosted) with branch',
-        pattern: ':user/:repo/:branch?server=https://drone.shields.io',
+        pattern: ':user/:repo/:branch',
+        queryParams: { server: 'https://drone.shields.io' },
         namedParams: {
           user: 'badges',
           repo: 'shields',
