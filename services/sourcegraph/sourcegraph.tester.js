@@ -15,7 +15,7 @@ t.create('project usage count')
   })
 
 t.create('project without any available information')
-  .get('/github.com/PyvesB/EmptyRepo.json')
+  .get('/github.com/badges/daily-tests.json')
   .expectBadge({
     label: 'used by',
     message: '0 projects',
