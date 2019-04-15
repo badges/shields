@@ -15,7 +15,7 @@ module.exports = [
     dateAdded: new Date('2019-04-15'),
   }),
   redirector({
-    name: 'CodeclimateCoverageRootRedirect',
+    name: 'CodeclimateTopLevelCoverageRedirect',
     category: 'coverage',
     route: {
       base: 'codeclimate',
