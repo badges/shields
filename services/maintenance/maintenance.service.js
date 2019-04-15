@@ -16,35 +16,51 @@ module.exports = class Maintenance extends NonMemoryCachingBaseService {
     }
   }
 
-  async handle({ maintained, year }) {
-    const now = new Date()
-    const cy = now.getUTCFullYear() // current year.
-    const m = now.getUTCMonth() // month.
-
+  transform({ maintained, year, currentYear, month }) {
     if (maintained === 'no') {
-      return this.constructor.render({ message: `no! (as of ${year})` })
-    } else if (cy <= year) {
-      return this.constructor.render({ message: maintained })
-    } else if (parseInt(cy) === parseInt(year) + 1 && parseInt(m) < 3) {
-      return this.constructor.render({ message: `stale (as of ${cy})` })
+      return { isMaintained: false, targetYear: year }
+    } else if (currentYear <= year) {
+      return { isMaintained: true }
+    } else if (
+      parseInt(currentYear) === parseInt(year) + 1 &&
+      parseInt(month) < 3
+    ) {
+      return { isStale: true, targetYear: currentYear }
     } else {
-      return this.constructor.render({ message: `no! (as of ${year})` })
+      return { isMaintained: false, targetYear: year }
     }
   }
 
-  static render({ message }) {
-    if (message.startsWith('yes')) {
+  async handle({ maintained, year }) {
+    const now = new Date()
+    const currentYear = now.getUTCFullYear() // current year.
+    const month = now.getUTCMonth() // month.
+
+    const { isMaintained, isStale, targetYear } = this.transform({
+      maintained,
+      year,
+      currentYear,
+      month,
+    })
+    return this.constructor.render({
+      isMaintained,
+      isStale,
+      targetYear,
+      message: maintained,
+    })
+  }
+
+  static render({ isMaintained, isStale, targetYear, message }) {
+    if (isMaintained) {
       return {
         message,
         color: 'brightgreen',
       }
-    } else if (message.startsWith('no')) {
-      return {
-        message,
-        color: 'red',
-      }
-    } else {
-      return { message }
+    }
+
+    return {
+      message: `${isStale ? `stale` : 'no!'} (as of ${targetYear})`,
+      color: isStale ? undefined : 'red',
     }
   }
 
