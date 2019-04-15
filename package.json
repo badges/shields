@@ -179,7 +179,7 @@
     "icedfrisby": "2.0.0-alpha.5",
     "icedfrisby-nock": "^1.1.0",
     "is-png": "^1.1.0",
-    "is-svg": "^3.0.0",
+    "is-svg": "^4.1.0",
     "js-yaml-loader": "^1.0.1",
     "lint-staged": "^8.1.5",
     "lodash.debounce": "^4.0.8",
