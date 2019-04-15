@@ -3,6 +3,8 @@
 const Joi = require('joi')
 const { NotFound } = require('..')
 
+const keywords = ['codeclimate']
+
 const repoSchema = Joi.object({
   data: Joi.array()
     .max(1)
@@ -41,5 +43,6 @@ async function fetchRepo(serviceInstance, { user, repo }) {
 }
 
 module.exports = {
+  keywords,
   fetchRepo,
 }

@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
 const { coveragePercentage, letterScore } = require('../color-formatters')
-const { fetchRepo } = require('./codeclimate-common')
+const { keywords, fetchRepo } = require('./codeclimate-common')
 
 const schema = Joi.object({
   data: Joi.object({
@@ -32,23 +32,13 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     return [
       {
         title: 'Code Climate coverage',
-        pattern: 'coverage/:user/:repo',
-        namedParams: { user: 'jekyll', repo: 'jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: '95%',
-          color: 'green',
-        },
-      },
-      {
-        title: 'Code Climate coverage (letter)',
-        pattern: 'coverage-letter/:user/:repo',
-        namedParams: { user: 'jekyll', repo: 'jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: 'A',
-          color: 'brightgreen',
-        },
+        namedParams: { which: 'coverage', user: 'jekyll', repo: 'jekyll' },
+        staticPreview: this.render({
+          which: 'coverage',
+          percentage: 95.123,
+          letter: 'A',
+        }),
+        keywords,
       },
     ]
   }
