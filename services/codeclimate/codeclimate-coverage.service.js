@@ -5,7 +5,16 @@ const { BaseJsonService, NotFound } = require('..')
 const { coveragePercentage, letterScore } = require('../color-formatters')
 const { fetchRepo } = require('./codeclimate-common')
 
-const schema = Joi.object().required()
+const schema = Joi.object({
+  data: Joi.object({
+    attributes: Joi.object({
+      covered_percent: Joi.number().required(),
+      rating: Joi.object({
+        letter: Joi.equal('A', 'B', 'C', 'D', 'E', 'F').required(),
+      }).required(),
+    }).required(),
+  }).allow(null),
+}).required()
 
 module.exports = class CodeclimateCoverage extends BaseJsonService {
   static get route() {
