@@ -19,7 +19,3 @@ t.create('yes this year (yes)')
 t.create(`until end of ${currentYear} (yes)`)
   .get(`/until end of ${currentYear}/${currentYear}.json`)
   .expectBadge({ label: 'maintained', message: `until end of ${currentYear}` })
-
-t.create(`stale last maintained ${currentYear - 1} (yes)`)
-  .get(`/yes/${currentYear - 1}.json`)
-  .expectBadge({ label: 'maintained', message: `stale (as of ${currentYear})` })
