@@ -58,6 +58,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'error' }),
     given({ status: 'failed' }),
     given({ status: 'failing' }),
+    given({ status: 'failure' }),
     given({ status: 'infrastructure_failure' }),
   ]).assert('should be red', b => expect(b).to.include({ color: 'red' }))
 })

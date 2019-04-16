@@ -13,7 +13,13 @@ const greenStatuses = [
 
 const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
 
-const redStatuses = ['error', 'failed', 'failing', 'infrastructure_failure']
+const redStatuses = [
+  'error',
+  'failed',
+  'failing',
+  'failure',
+  'infrastructure_failure',
+]
 
 const otherStatuses = [
   'building',
