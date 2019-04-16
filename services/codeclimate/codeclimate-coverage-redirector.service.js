@@ -2,6 +2,7 @@
 
 const { redirector } = require('..')
 
+// http://github.com/badges/shields/issues/1387
 module.exports = [
   redirector({
     name: 'CodeclimateCoverageShortcutRedirect',
