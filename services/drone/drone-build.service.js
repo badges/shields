@@ -29,13 +29,6 @@ module.exports = class DroneBuild extends BaseJsonService {
     }
   }
 
-  static get staticPreview() {
-    return {
-      message: 'passing',
-      color: 'brightgreen',
-    }
-  }
-
   static get defaultBadgeData() {
     return {
       label: 'build',
