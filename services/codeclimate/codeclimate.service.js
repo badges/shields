@@ -8,46 +8,6 @@ const {
   colorScale,
 } = require('../color-formatters')
 
-class CodeclimateCoverage extends LegacyService {
-  static get route() {
-    return {
-      base: 'codeclimate',
-      pattern: ':which(coverage|coverage-letter)/:userRepo*',
-    }
-  }
-
-  static get category() {
-    return 'coverage'
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Code Climate coverage',
-        pattern: 'coverage/:userRepo',
-        namedParams: { userRepo: 'jekyll/jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: '95%',
-          color: 'green',
-        },
-      },
-      {
-        title: 'Code Climate coverage (letter)',
-        pattern: 'coverage-letter/:userRepo',
-        namedParams: { userRepo: 'jekyll/jekyll' },
-        staticPreview: {
-          label: 'coverage',
-          message: 'A',
-          color: 'brightgreen',
-        },
-      },
-    ]
-  }
-
-  static registerLegacyRouteHandler() {}
-}
-
 // This legacy service should be rewritten to use e.g. BaseJsonService.
 //
 // Tips for rewriting:
@@ -106,7 +66,7 @@ class Codeclimate extends LegacyService {
 
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
-      /^\/codeclimate(\/(c|coverage|maintainability|issues|tech-debt)(-letter|-percentage)?)?\/(.+)\.(svg|png|gif|jpg|json)$/,
+      /^\/codeclimate(\/(maintainability|issues|tech-debt)(-letter|-percentage)?)\/(.+)\.(svg|png|gif|jpg|json)$/,
       cache((data, match, sendBadge, request) => {
         let type
         if (match[2] === 'c' || !match[2]) {
@@ -232,6 +192,5 @@ class Codeclimate extends LegacyService {
 }
 
 module.exports = {
-  CodeclimateCoverage,
   Codeclimate,
 }
