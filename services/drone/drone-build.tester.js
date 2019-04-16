@@ -23,7 +23,7 @@ t.create('cloud-hosted build status on unknown repo')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'build',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('invalid')),
+    message: 'repo not found or not authorized',
   })
 
 t.create('self-hosted build status on default branch')
