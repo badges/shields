@@ -5,30 +5,26 @@ const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 const { mockDroneCreds, token, restore } = require('./drone-test-helpers')
 
-// Drone build (cloud)
-
-t.create('cloud build status on default branch')
+t.create('cloud-hosted build status on default branch')
   .get('/drone/drone.json')
   .expectBadge({
     label: 'build',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
-t.create('cloud build status on named branch')
+t.create('cloud-hosted build status on named branch')
   .get('/drone/drone/master.json')
   .expectBadge({
     label: 'build',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
-t.create('cloud build status on unknown repo')
+t.create('cloud-hosted build status on unknown repo')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'build',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('invalid')),
   })
-
-// Drone build (self-hosted)
 
 t.create('self-hosted build status on default branch')
   .before(mockDroneCreds)
