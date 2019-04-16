@@ -5,10 +5,7 @@ import {
   badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import {
-  serviceDefinitionPropType,
-  examplePropType,
-} from '../lib/service-definitions/service-definition-prop-types'
+import { examplePropType } from '../lib/service-definitions/service-definition-prop-types'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -76,16 +73,11 @@ Example.propTypes = {
   onClick: PropTypes.func.isRequired,
 }
 
-export default function BadgeExamples({ definitions, baseUrl, onClick }) {
-  const flattened = definitions.reduce((accum, current) => {
-    const { examples } = current
-    return accum.concat(examples)
-  }, [])
-
+export default function BadgeExamples({ examples, baseUrl, onClick }) {
   return (
     <ExampleTable>
       <tbody>
-        {flattened.map(exampleData => (
+        {examples.map(exampleData => (
           <Example
             baseUrl={baseUrl}
             exampleData={exampleData}
@@ -98,7 +90,7 @@ export default function BadgeExamples({ definitions, baseUrl, onClick }) {
   )
 }
 BadgeExamples.propTypes = {
-  definitions: PropTypes.arrayOf(serviceDefinitionPropType).isRequired,
+  examples: PropTypes.arrayOf(examplePropType).isRequired,
   baseUrl: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 }

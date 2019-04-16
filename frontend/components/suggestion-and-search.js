@@ -67,23 +67,14 @@ export default class SuggestionAndSearch extends React.Component {
       return null
     }
 
-    const transformed = [
-      {
-        examples: suggestions.map(({ title, link, example }) => ({
-          title,
-          example: { ...example, exact: true },
-          link,
-        })),
-        category: '',
-        name: '',
-        isDeprecated: false,
-      },
-    ]
+    suggestions.forEach(example => {
+      example.example.exact = true
+    })
 
     return (
       <BadgeExamples
         baseUrl={baseUrl}
-        definitions={transformed}
+        examples={suggestions}
         onClick={this.props.onBadgeClick}
       />
     )
