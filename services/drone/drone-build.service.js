@@ -35,10 +35,6 @@ module.exports = class DroneBuild extends BaseJsonService {
     }
   }
 
-  static render({ status }) {
-    return renderBuildStatusBadge({ status })
-  }
-
   async handle({ user, repo, branch }, { server }) {
     const options = {
       qs: {
