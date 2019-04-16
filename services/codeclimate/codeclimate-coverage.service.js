@@ -20,7 +20,8 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
   static get route() {
     return {
       base: 'codeclimate',
-      pattern: ':which(coverage|coverage-letter)/:user/:repo',
+      pattern:
+        ':which(coverage|coverage-letter|coverage-percentage)/:user/:repo',
     }
   }
 

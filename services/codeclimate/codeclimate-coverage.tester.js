@@ -11,6 +11,13 @@ t.create('test coverage percentage')
     message: isIntegerPercentage,
   })
 
+t.create('test coverage percentage')
+  .get('/coverage-percentage/jekyll/jekyll.json')
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
+
 t.create('test coverage letter')
   .get('/coverage-letter/jekyll/jekyll.json')
   .expectBadge({
