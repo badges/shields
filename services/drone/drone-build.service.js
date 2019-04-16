@@ -64,6 +64,9 @@ module.exports = class DroneBuild extends BaseJsonService {
       options,
       schema: DroneBuildSchema,
       url: `${server}/api/repos/${user}/${repo}/builds/latest`,
+      errorMessages: {
+        401: 'repo not found or not authorized',
+      },
     })
     return renderBuildStatusBadge({ status: json.status })
   }
