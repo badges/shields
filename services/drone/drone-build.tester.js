@@ -11,7 +11,6 @@ t.create('cloud build status on default branch')
   .get('/drone/drone.json')
   .expectBadge({
     label: 'build',
-    color: 'brightgreen',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
@@ -19,7 +18,6 @@ t.create('cloud build status on named branch')
   .get('/drone/drone/master.json')
   .expectBadge({
     label: 'build',
-    color: 'brightgreen',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('none')),
   })
 
@@ -27,7 +25,6 @@ t.create('cloud build status on unknown repo')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'build',
-    color: 'lightgrey',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('invalid')),
   })
 
@@ -46,7 +43,6 @@ t.create('self-hosted build status on default branch')
   .finally(restore)
   .expectBadge({
     label: 'build',
-    color: 'brightgreen',
     message: 'passing',
   })
 
@@ -66,6 +62,5 @@ t.create('self-hosted build status on named branch')
   .finally(restore)
   .expectBadge({
     label: 'build',
-    color: 'brightgreen',
     message: 'passing',
   })
