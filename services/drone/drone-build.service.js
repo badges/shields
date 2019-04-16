@@ -69,11 +69,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           user: 'drone',
           repo: 'drone',
         },
-        staticPreview: {
-          label: 'build',
-          message: 'passing',
-          color: 'brightgreen',
-        },
+        staticPreview: renderBuildStatusBadge({ status: 'success' }),
       },
       {
         title: 'Drone (cloud) with branch',
@@ -83,11 +79,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           repo: 'drone',
           branch: 'master',
         },
-        staticPreview: {
-          label: 'build',
-          message: 'passing',
-          color: 'brightgreen',
-        },
+        staticPreview: renderBuildStatusBadge({ status: 'success' }),
       },
       {
         title: 'Drone (self-hosted)',
@@ -97,11 +89,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           user: 'badges',
           repo: 'shields',
         },
-        staticPreview: {
-          label: 'build',
-          message: 'passing',
-          color: 'brightgreen',
-        },
+        staticPreview: renderBuildStatusBadge({ status: 'success' }),
       },
       {
         title: 'Drone (self-hosted) with branch',
@@ -112,11 +100,7 @@ module.exports = class DroneBuild extends BaseJsonService {
           repo: 'shields',
           branch: 'feat/awesome-thing',
         },
-        staticPreview: {
-          label: 'build',
-          message: 'passing',
-          color: 'brightgreen',
-        },
+        staticPreview: renderBuildStatusBadge({ status: 'success' }),
       },
     ]
   }
