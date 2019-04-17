@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { downloadCount } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 
@@ -29,19 +29,19 @@ function DownloadsForExtensionType(extensionType) {
       return `Wordpress${capt}Downloads`
     }
 
-    static render({ downloadCount }) {
+    static render({ downloads }) {
       return {
-        message: metric(downloadCount),
-        color: downloadCountColor(downloadCount),
+        message: metric(downloads),
+        color: downloadCount(downloads),
       }
     }
 
     async handle({ slug }) {
-      const { downloaded: downloadCount } = await this.fetch({
+      const { downloaded: downloads } = await this.fetch({
         extensionType,
         slug,
       })
-      return this.constructor.render({ downloadCount })
+      return this.constructor.render({ downloads })
     }
 
     static get category() {
@@ -64,7 +64,7 @@ function DownloadsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Downloads`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ downloadCount: 200000 }),
+          staticPreview: this.render({ downloads: 200000 }),
         },
       ]
     }
@@ -86,7 +86,7 @@ function InstallsForExtensionType(extensionType) {
     static render({ installCount }) {
       return {
         message: metric(installCount),
-        color: downloadCountColor(installCount),
+        color: downloadCount(installCount),
       }
     }
 
@@ -179,10 +179,10 @@ function DownloadsForInterval(interval) {
       ]
     }
 
-    static render({ downloadCount }) {
+    static render({ downloads }) {
       return {
-        message: `${metric(downloadCount)}${messageSuffix}`,
-        color: downloadCountColor(downloadCount),
+        message: `${metric(downloads)}${messageSuffix}`,
+        color: downloadCount(downloads),
       }
     }
 
@@ -198,15 +198,15 @@ function DownloadsForInterval(interval) {
         },
       })
       const size = Object.keys(json).length
-      const downloadCount = Object.values(json).reduce(
+      const downloads = Object.values(json).reduce(
         (a, b) => parseInt(a) + parseInt(b)
       )
       // This check is for non-existent and brand-new plugins both having new stats.
       // Non-Existent plugins results are the same as a brandspanking new plugin with no downloads.
-      if (downloadCount <= 0 && size <= 1) {
+      if (downloads <= 0 && size <= 1) {
         throw new NotFound({ prettyMessage: 'plugin not found or too new' })
       }
-      return this.constructor.render({ downloadCount })
+      return this.constructor.render({ downloads })
     }
   }
 }
