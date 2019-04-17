@@ -33,9 +33,8 @@ function getOfferedVersions() {
 async function versionColorForWordpressVersion(version) {
   const offeredVersions = await getOfferedVersions()
 
-  const latestVersion = offeredVersions[0]
-
   // What is this?
+  let latestVersion = offeredVersions[0]
   const svVersion =
     latestVersion.split('.').length === 2
       ? (latestVersion += '.0')
