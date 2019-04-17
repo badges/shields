@@ -3,14 +3,14 @@
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
 const { coveragePercentage, letterScore } = require('../color-formatters')
-const { keywords, fetchRepo } = require('./codeclimate-common')
+const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
 
 const schema = Joi.object({
   data: Joi.object({
     attributes: Joi.object({
       covered_percent: Joi.number().required(),
       rating: Joi.object({
-        letter: Joi.equal('A', 'B', 'C', 'D', 'E', 'F').required(),
+        letter: isLetterGrade,
       }).required(),
     }).required(),
   }).allow(null),
@@ -58,7 +58,6 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
       url: `https://api.codeclimate.com/v1/repos/${repoId}/test_reports/${
         testReportInfo.id
       }`,
-      errorMessages: { 404: 'test report not found' },
     })
     return data
   }
