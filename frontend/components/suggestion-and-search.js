@@ -69,6 +69,7 @@ export default class SuggestionAndSearch extends React.Component {
 
     suggestions.forEach(example => {
       example.preview = { ...example.preview, buildFromExample: true }
+      example.keywords = []
     })
 
     return (

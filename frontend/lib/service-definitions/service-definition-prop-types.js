@@ -24,7 +24,7 @@ const examplePropType = PropTypes.exact({
     namedLogo: PropTypes.string,
     buildFromExample: PropTypes.bool,
   }),
-  keywords: PropTypes.arrayOf(PropTypes.string.isRequired),
+  keywords: arrayOfStringsPropType,
   documentation: PropTypes.exact({
     __html: PropTypes.string.isRequired,
   }),
