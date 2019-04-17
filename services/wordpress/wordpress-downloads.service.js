@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
+const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 
@@ -29,11 +29,19 @@ function DownloadsForExtensionType(extensionType) {
       return `Wordpress${capt}Downloads`
     }
 
-    static render({ response }) {
+    static render({ downloadCount }) {
       return {
-        message: metric(response.downloaded),
-        color: downloadCount(response.downloaded),
+        message: metric(downloadCount),
+        color: downloadCountColor(downloadCount),
       }
+    }
+
+    async handle({ slug }) {
+      const { downloaded: downloadCount } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ downloadCount })
     }
 
     static get category() {
@@ -50,16 +58,13 @@ function DownloadsForExtensionType(extensionType) {
         pattern: ':slug',
       }
     }
-    static get extensionType() {
-      return extensionType
-    }
 
     static get examples() {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { downloaded: 200000 } }),
+          staticPreview: this.render({ downloadCount: 200000 }),
         },
       ]
     }
@@ -74,19 +79,23 @@ function InstallsForExtensionType(extensionType) {
       return `Wordpress${capt}Installs`
     }
 
-    static get extensionType() {
-      return extensionType
-    }
-
     static get category() {
       return 'downloads'
     }
 
-    static render({ response }) {
+    static render({ installCount }) {
       return {
-        message: `${metric(response.active_installs)}+`,
-        color: downloadCount(response.active_installs),
+        message: metric(installCount),
+        color: downloadCountColor(installCount),
       }
+    }
+
+    async handle({ slug }) {
+      const { active_installs: installCount } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ installCount })
     }
 
     static get defaultBadgeData() {
@@ -105,7 +114,7 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { active_installs: 300000 } }),
+          staticPreview: this.render({ installCount: 300000 }),
         },
       ]
     }
@@ -170,10 +179,10 @@ function DownloadsForInterval(interval) {
       ]
     }
 
-    static render({ downloads }) {
+    static render({ downloadCount }) {
       return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCount(downloads),
+        message: `${metric(downloadCount)}${messageSuffix}`,
+        color: downloadCountColor(downloadCount),
       }
     }
 
@@ -189,15 +198,15 @@ function DownloadsForInterval(interval) {
         },
       })
       const size = Object.keys(json).length
-      const downloads = Object.values(json).reduce(
+      const downloadCount = Object.values(json).reduce(
         (a, b) => parseInt(a) + parseInt(b)
       )
       // This check is for non-existent and brand-new plugins both having new stats.
       // Non-Existent plugins results are the same as a brandspanking new plugin with no downloads.
-      if (downloads <= 0 && size <= 1) {
+      if (downloadCount <= 0 && size <= 1) {
         throw new NotFound({ prettyMessage: 'plugin not found or too new' })
       }
-      return this.constructor.render({ downloads })
+      return this.constructor.render({ downloadCount })
     }
   }
 }

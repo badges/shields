@@ -25,16 +25,14 @@ module.exports = class BaseWordpress extends BaseJsonService {
     throw new Error(`extensionType() function not implemented for ${this.name}`)
   }
 
-  async fetch({ slug }) {
-    const url = `https://api.wordpress.org/${
-      this.constructor.extensionType
-    }s/info/1.1/`
-    return this._requestJson({
+  async fetch({ extensionType, slug }) {
+    const url = `https://api.wordpress.org/${extensionType}s/info/1.1/`
+    const json = await this._requestJson({
       url,
       schema: schemas,
       options: {
         qs: {
-          action: `${this.constructor.extensionType}_information`,
+          action: `${extensionType}_information`,
           request: {
             slug,
             fields: {
@@ -51,15 +49,9 @@ module.exports = class BaseWordpress extends BaseJsonService {
         },
       },
     })
-  }
-
-  async handle({ slug }) {
-    const json = await this.fetch({ slug })
-
     if (!json) {
       throw new NotFound()
     }
-
-    return this.constructor.render({ response: json })
+    return json
   }
 }

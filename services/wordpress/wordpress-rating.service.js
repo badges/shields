@@ -16,15 +16,6 @@ const extensionData = {
 }
 
 class WordpressRatingBase extends BaseWordpress {
-  static render({ response }) {
-    const total = response.num_ratings
-    const rating = ((response.rating / 100) * 5).toFixed(1)
-    return {
-      message: `${rating}/5 (${metric(total)})`,
-      color: floorCount(rating, 2, 3, 4),
-    }
-  }
-
   static get category() {
     return 'rating'
   }
@@ -49,10 +40,6 @@ function RatingForExtensionType(extensionType) {
       }
     }
 
-    static get extensionType() {
-      return extensionType
-    }
-
     static get examples() {
       return [
         {
@@ -67,6 +54,22 @@ function RatingForExtensionType(extensionType) {
         },
       ]
     }
+
+    static render({ rating, numRatings }) {
+      const scaled = (rating / 100) * 5
+      return {
+        message: `${scaled.toFixed(1)}/5 (${metric(numRatings)})`,
+        color: floorCount(scaled, 2, 3, 4),
+      }
+    }
+
+    async handle({ slug }) {
+      const { rating, num_ratings: numRatings } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ rating, numRatings })
+    }
   }
 }
 
@@ -78,21 +81,11 @@ function StarsForExtensionType(extensionType) {
       return `Wordpress${capt}Stars`
     }
 
-    static render({ response }) {
-      const rating = (response.rating / 100) * 5
-      return { message: starRating(rating), color: floorCount(rating, 2, 3, 4) }
-    }
-
     static get route() {
       return {
         base: `wordpress/${extensionType}`,
-        format: '(?:stars|r)/(.+)',
-        capture: ['slug'],
+        pattern: '(stars|r)/:slug',
       }
-    }
-
-    static get extensionType() {
-      return extensionType
     }
 
     static get examples() {
@@ -110,6 +103,19 @@ function StarsForExtensionType(extensionType) {
           documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
         },
       ]
+    }
+
+    static render({ rating }) {
+      const scaled = (rating / 100) * 5
+      return { message: starRating(scaled), color: floorCount(scaled, 2, 3, 4) }
+    }
+
+    async handle({ slug }) {
+      const { rating } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ rating })
     }
   }
 }
