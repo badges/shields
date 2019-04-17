@@ -166,6 +166,8 @@ describe('Badge suggestions', function() {
                   hostAndPath: 'github.com/atom/atom',
                 },
                 queryParams: {},
+              },
+              preview: {
                 style: 'social',
               },
             },

@@ -107,6 +107,8 @@ describe('GitHub badge suggestions', function() {
                 hostAndPath: 'github.com/atom/atom',
               },
               queryParams: {},
+            },
+            preview: {
               style: 'social',
             },
           },
@@ -177,6 +179,8 @@ describe('GitHub badge suggestions', function() {
                 hostAndPath: 'github.com/badges/not-a-real-project',
               },
               queryParams: {},
+            },
+            preview: {
               style: 'social',
             },
           },

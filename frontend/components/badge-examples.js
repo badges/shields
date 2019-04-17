@@ -39,7 +39,7 @@ function Example({ baseUrl, onClick, exampleData }) {
   })
 
   let previewUrl
-  if (preview) {
+  if (preview && preview.baseUrl) {
     const { label, message, color, style, namedLogo } = preview
     previewUrl = staticBadgeUrl({
       baseUrl,
