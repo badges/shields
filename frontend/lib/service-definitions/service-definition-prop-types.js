@@ -15,14 +15,14 @@ const examplePropType = PropTypes.exact({
     pattern: PropTypes.string.isRequired,
     namedParams: objectOfKeyValuesPropType,
     queryParams: objectOfKeyValuesPropType,
-    exact: PropTypes.bool,
   }).isRequired,
   preview: PropTypes.exact({
     label: PropTypes.string,
-    message: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
+    message: PropTypes.string,
+    color: PropTypes.string,
     style: PropTypes.string,
     namedLogo: PropTypes.string,
+    buildFromExample: PropTypes.bool,
   }),
   keywords: PropTypes.arrayOf(PropTypes.string.isRequired),
   documentation: PropTypes.exact({
