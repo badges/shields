@@ -4,7 +4,7 @@ const { redirector } = require('..')
 
 module.exports = [
   redirector({
-    name: 'CodeclimateCoveragePercentageShortcutRedirect',
+    name: 'CodeclimateCoveragePercentageRedirect',
     category: 'coverage',
     route: {
       base: 'codeclimate',
@@ -14,7 +14,7 @@ module.exports = [
     dateAdded: new Date('2019-04-15'),
   }),
   redirector({
-    name: 'CodeclimateCoverageLetterShortcutRedirect',
+    name: 'CodeclimateCoverageLetterRedirect',
     category: 'coverage',
     route: {
       base: 'codeclimate/c-letter',
