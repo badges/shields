@@ -24,8 +24,8 @@ t.create('live: search release version valid artifact')
     message: isVersion,
   })
 
-t.create('live: search release version of an inexistent artifact')
-  .get('/r/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
+t.create('live: search release version of an nonexistent artifact')
+  .get('/r/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json')
   .expectBadge({
     label: 'nexus',
     message: 'artifact or version not found',
@@ -42,8 +42,8 @@ t.create('live: search snapshot version of a release artifact')
   .get('/s/https/repository.jboss.org/nexus/jboss/jboss-client.json')
   .expectBadge({ label: 'nexus', message: 'no snapshot versions found' })
 
-t.create('live: search snapshot version of an inexistent artifact')
-  .get('/s/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json')
+t.create('live: search snapshot version of an nonexistent artifact')
+  .get('/s/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json')
   .expectBadge({
     label: 'nexus',
     message: 'artifact or version not found',
@@ -66,9 +66,9 @@ t.create('live: repository version with query')
     message: isVersion,
   })
 
-t.create('live: repository version of an inexistent artifact')
+t.create('live: repository version of an nonexistent artifact')
   .get(
-    '/developer/https/repository.jboss.org/nexus/jboss/inexistent-artifact-id.json'
+    '/developer/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json'
   )
   .expectBadge({
     label: 'nexus',

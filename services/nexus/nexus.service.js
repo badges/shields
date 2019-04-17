@@ -46,14 +46,13 @@ module.exports = class Nexus extends BaseJsonService {
       base: 'nexus',
       // API pattern:
       // /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]]
-      format:
-        '(r|s|[^/]+)/(https?)/((?:[^/]+)(?:/[^/]+)?)/([^/]+)/([^/:]+)(:.+)?',
-      capture: ['repo', 'scheme', 'host', 'groupId', 'artifactId', 'queryOpt'],
+      pattern:
+        ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+):queryOpt(:.+)?',
     }
   }
 
   static get defaultBadgeData() {
-    return { color: 'blue', label: 'nexus' }
+    return { label: 'nexus' }
   }
 
   static get examples() {
@@ -114,10 +113,10 @@ module.exports = class Nexus extends BaseJsonService {
         }),
         documentation: `
         <p>
-          Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository)
+          Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository).
         </p>
         <p>
-          Query options should be provided as key=value pairs separated by a semicolon
+          Query options should be provided as key=value pairs separated by a colon.
         </p>
         `,
       },
@@ -144,11 +143,11 @@ module.exports = class Nexus extends BaseJsonService {
     }
   }
 
-  async handle({ repo, scheme, host, groupId, artifactId, queryOpt }) {
+  async handle({ repo, scheme, hostAndPath, groupId, artifactId, queryOpt }) {
     const { json } = await this.fetch({
       repo,
       scheme,
-      host,
+      hostAndPath,
       groupId,
       artifactId,
       queryOpt,
@@ -165,7 +164,7 @@ module.exports = class Nexus extends BaseJsonService {
 
   addQueryParamsToQueryString({ qs, queryOpt }) {
     // Users specify query options with 'key=value' pairs, using a
-    // semicolon delimiter between pairs ([:k1=v1[:k2=v2[...]]]).
+    // colon delimiter between pairs ([:k1=v1[:k2=v2[...]]]).
     // queryOpt will be a string containing those key/value pairs,
     // For example:  :c=agent-apple-osx:p=tar.gz
     const keyValuePairs = queryOpt.split(':')
@@ -177,13 +176,13 @@ module.exports = class Nexus extends BaseJsonService {
     })
   }
 
-  async fetch({ repo, scheme, host, groupId, artifactId, queryOpt }) {
+  async fetch({ repo, scheme, hostAndPath, groupId, artifactId, queryOpt }) {
     const qs = {
       g: groupId,
       a: artifactId,
     }
     let schema
-    let url = `${scheme}://${host}/`
+    let url = `${scheme}://${hostAndPath}/`
     // API pattern:
     // for /nexus/[rs]/... pattern, use the search api of the nexus server, and
     // for /nexus/<repo-name>/... pattern, use the resolve api of the nexus server.
