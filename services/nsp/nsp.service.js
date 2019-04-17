@@ -5,7 +5,7 @@ const { deprecatedService } = require('..')
 module.exports = deprecatedService({
   route: {
     base: 'nsp/npm',
-    format: '(?:.+)',
+    pattern: ':various*',
   },
   label: 'nsp',
   category: 'other',

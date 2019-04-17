@@ -6,7 +6,7 @@ module.exports = deprecatedService({
   category: 'dependencies',
   route: {
     base: 'bithound',
-    format: '(?:code/|dependencies/|devDependencies/)?(?:.+?)',
+    pattern: ':various*',
   },
   label: 'bithound',
   dateAdded: new Date('2018-07-08'),
