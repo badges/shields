@@ -1,9 +1,7 @@
 'use strict'
 
-const semver = require('semver')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
-const { NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 const { versionColorForWordpressVersion } = require('./wordpress-version-color')
 
