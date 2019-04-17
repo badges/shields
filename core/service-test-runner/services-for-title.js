@@ -2,7 +2,7 @@
 
 const difference = require('lodash.difference')
 
-function servicesForTitle(title) {
+module.exports = function servicesForTitle(title) {
   const bracketed = /\[([^\]]+)\]/g
 
   const preNormalized = title.toLowerCase()
@@ -18,5 +18,3 @@ function servicesForTitle(title) {
   const ignored = ['wip', 'rfc', 'security']
   return difference(services, ignored)
 }
-
-module.exports = servicesForTitle
