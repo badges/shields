@@ -14,6 +14,7 @@ const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
 const attrSchema = Joi.object({
+  name: Joi.string().min(3),
   category: isValidCategory,
   route: isValidRoute,
   transformPath: Joi.func()
@@ -30,6 +31,7 @@ const attrSchema = Joi.object({
 
 module.exports = function redirector(attrs) {
   const {
+    name,
     category,
     route,
     transformPath,
@@ -51,9 +53,13 @@ module.exports = function redirector(attrs) {
     }
 
     static get name() {
-      return `${camelcase(route.base.replace(/\//g, '_'), {
-        pascalCase: true,
-      })}Redirect`
+      if (name) {
+        return name
+      } else {
+        return `${camelcase(route.base.replace(/\//g, '_'), {
+          pascalCase: true,
+        })}Redirect`
+      }
     }
 
     static register({ camp, requestCounter }) {
