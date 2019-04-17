@@ -1,28 +1,11 @@
 'use strict'
 
 const semver = require('semver')
-const Joi = require('joi')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { NotFound } = require('..')
 const BaseWordpress = require('./wordpress-base')
 const { versionColorForWordpressVersion } = require('./wordpress-version-color')
-
-const coreSchema = Joi.object()
-  .keys({
-    offers: Joi.array()
-      .items(
-        Joi.object()
-          .keys({
-            version: Joi.string()
-              .regex(/^\d+(\.\d+)?(\.\d+)?$/)
-              .required(),
-          })
-          .required()
-      )
-      .required(),
-  })
-  .required()
 
 class WordpressPluginRequiresVersion extends BaseWordpress {
   static get category() {
@@ -92,20 +75,6 @@ class WordpressPluginTestedVersion extends BaseWordpress {
         }),
       },
     ]
-  }
-
-  static async fetchCore() {
-    // Instead of fetching this resource for every badge, this should be
-    // cached using `regularUpdate`.
-    const coreURL = 'https://api.wordpress.org/core/version-check/1.7/'
-    const json = await this._requestJson({
-      url: coreURL,
-      schema: coreSchema,
-    })
-    if (!json) {
-      throw new NotFound()
-    }
-    return json
   }
 
   static renderStaticPreview({ testedVersion }) {
