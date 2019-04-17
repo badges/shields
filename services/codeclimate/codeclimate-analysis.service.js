@@ -144,16 +144,16 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     const {
       id: repoId,
       relationships: {
-        latest_default_branch_snapshot: { data: testReportInfo },
+        latest_default_branch_snapshot: { data: snapshotInfo },
       },
     } = await fetchRepo(this, { user, repo })
-    if (testReportInfo === null) {
+    if (snapshotInfo === null) {
       throw new NotFound({ prettyMessage: 'snapshot not found' })
     }
     const { data } = await this._requestJson({
       schema,
       url: `https://api.codeclimate.com/v1/repos/${repoId}/snapshots/${
-        testReportInfo.id
+        snapshotInfo.id
       }`,
     })
     return data
