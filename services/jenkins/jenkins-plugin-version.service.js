@@ -1,18 +1,11 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const { BaseService, NotFound } = require('..')
+const { promisify } = require('util')
 const { regularUpdate } = require('../../core/legacy/regular-update')
-const { addv: versionText } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
+const { renderVersionBadge } = require('../version')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class JenkinsPluginVersion extends LegacyService {
+module.exports = class JenkinsPluginVersion extends BaseService {
   static get category() {
     return 'version'
   }
@@ -40,45 +33,32 @@ module.exports = class JenkinsPluginVersion extends LegacyService {
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/jenkins\/plugin\/v\/(.*)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const pluginId = match[1] // e.g. blueocean
-        const format = match[2]
-        const badgeData = getBadgeData('plugin', data)
-        regularUpdate(
-          {
-            url:
-              'https://updates.jenkins-ci.org/current/update-center.actual.json',
-            intervalMillis: 4 * 3600 * 1000,
-            scraper: json =>
-              Object.keys(json.plugins).reduce((previous, current) => {
-                previous[current] = json.plugins[current].version
-                return previous
-              }, {}),
-          },
-          (err, versions) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            try {
-              const version = versions[pluginId]
-              if (version === undefined) {
-                throw Error('Plugin not found!')
-              }
-              badgeData.text[1] = versionText(version)
-              badgeData.colorscheme = versionColor(version)
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'not found'
-              sendBadge(format, badgeData)
-            }
-          }
-        )
-      })
-    )
+  static get defaultBadgeData() {
+    return { label: 'plugin' }
+  }
+
+  async fetch() {
+    return promisify(regularUpdate)({
+      url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
+      intervalMillis: 4 * 3600 * 1000,
+      scraper: json =>
+        Object.keys(json.plugins).reduce((previous, current) => {
+          previous[current] = json.plugins[current].version
+          return previous
+        }, {}),
+    })
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  async handle({ plugin }) {
+    const versions = await this.fetch()
+    const version = versions[plugin]
+    if (version === undefined) {
+      throw new NotFound({ prettyMessage: 'plugin not found' })
+    }
+    return this.constructor.render({ version })
   }
 }

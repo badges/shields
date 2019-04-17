@@ -45,6 +45,7 @@ private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bintray_user: 'BINTRAY_USER'
   bintray_apikey: 'BINTRAY_API_KEY'
+  drone_token: 'DRONE_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
   gh_token: 'GH_TOKEN'
