@@ -3,6 +3,8 @@
 const { redirector } = require('..')
 
 module.exports = [
+  // http://github.com/badges/shields/issues/1387
+  // https://github.com/badges/shields/pull/3320#issuecomment-483795000
   redirector({
     name: 'CodeclimateCoveragePercentageRedirect',
     category: 'coverage',
