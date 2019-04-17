@@ -15,8 +15,8 @@ function servicesForTitle(title) {
   }
   services = services.filter(Boolean).map(service => service.toLowerCase())
 
-  const blacklist = ['wip', 'rfc']
-  return difference(services, blacklist)
+  const ignored = ['wip', 'rfc', 'security']
+  return difference(services, ignored)
 }
 
 module.exports = servicesForTitle
