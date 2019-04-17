@@ -17,6 +17,8 @@
     "test-fixtures",
     "scripts",
     "coverage",
-    "build"
+    "build",
+    ".github",
+    ".next"
   ]
 }
