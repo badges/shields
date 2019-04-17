@@ -2,17 +2,26 @@
 
 const { redirector } = require('..')
 
-// http://github.com/badges/shields/issues/1387
 module.exports = [
   redirector({
-    name: 'CodeclimateCoverageShortcutRedirect',
+    name: 'CodeclimateCoveragePercentageShortcutRedirect',
     category: 'coverage',
     route: {
       base: 'codeclimate',
-      pattern: ':which(c|c-letter)/:user/:repo',
+      pattern: ':which(c|coverage-percentage)/:user/:repo',
     },
-    transformPath: ({ which, user, repo }) =>
-      `/codeclimate/${which.replace('c', 'coverage')}/${user}/${repo}`,
+    transformPath: ({ user, repo }) => `/codeclimate/coverage/${user}/${repo}`,
+    dateAdded: new Date('2019-04-15'),
+  }),
+  redirector({
+    name: 'CodeclimateCoverageLetterShortcutRedirect',
+    category: 'coverage',
+    route: {
+      base: 'codeclimate/c-letter',
+      pattern: ':user/:repo',
+    },
+    transformPath: ({ user, repo }) =>
+      `/codeclimate/coverage-letter/${user}/${repo}`,
     dateAdded: new Date('2019-04-15'),
   }),
   redirector({

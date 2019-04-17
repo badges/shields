@@ -28,3 +28,10 @@ t.create('Coverage letter shortcut')
   })
   .expectStatus(301)
   .expectHeader('Location', '/codeclimate/coverage-letter/jekyll/jekyll.svg')
+
+t.create('Coverage percentage shortcut')
+  .get('/coverage-percentage/jekyll/jekyll.svg', {
+    followRedirect: false,
+  })
+  .expectStatus(301)
+  .expectHeader('Location', '/codeclimate/coverage/jekyll/jekyll.svg')
