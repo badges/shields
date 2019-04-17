@@ -37,7 +37,7 @@ function mockCreds() {
 
 t.create('with mock credentials')
   .before(mockCreds)
-  .get('/https/jenkins.ubuntu.com/server/curtin-vmtest-daily-x.json')
+  .get('/https/jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x.json')
   .intercept(nock =>
     nock('https://jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x')
       .get(`/api/json?tree=color`)
