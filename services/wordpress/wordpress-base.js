@@ -21,10 +21,6 @@ const notFoundSchema = Joi.string().allow(null, false)
 const schemas = Joi.alternatives(foundSchema, notFoundSchema)
 
 module.exports = class BaseWordpress extends BaseJsonService {
-  static get extensionType() {
-    throw new Error(`extensionType() function not implemented for ${this.name}`)
-  }
-
   async fetch({ extensionType, slug }) {
     const url = `https://api.wordpress.org/${extensionType}s/info/1.1/`
     const json = await this._requestJson({
