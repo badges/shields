@@ -98,7 +98,7 @@ You can read a [tutorial on how to add a badge][tutorial].
 ## Development
 
 1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 8 and 9.
+   Tests need to pass in Node 8 and 10.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the server.
