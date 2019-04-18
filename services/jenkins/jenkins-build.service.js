@@ -3,30 +3,13 @@
 const Joi = require('joi')
 const { renderBuildStatusBadge } = require('../build-status')
 const JenkinsBase = require('./jenkins-base')
+const {
+  buildTreeParamQueryString,
+  buildUrl,
+  queryParamSchema,
+} = require('./jenkins-common')
 
 // https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/model/BallColor.java#L56
-const schema = Joi.object({
-  color: Joi.allow(
-    'red',
-    'red_anime',
-    'yellow',
-    'yellow_anime',
-    'blue',
-    'blue_anime',
-    // green included for backwards compatibility
-    'green',
-    'green_anime',
-    'grey',
-    'grey_anime',
-    'disabled',
-    'disabled_anime',
-    'aborted',
-    'aborted_anime',
-    'notbuilt',
-    'notbuilt_anime'
-  ).required(),
-}).required()
-
 const colorStatusMap = {
   red: 'failing',
   red_anime: 'building',
@@ -46,6 +29,10 @@ const colorStatusMap = {
   notbuilt_anime: 'building',
 }
 
+const schema = Joi.object({
+  color: Joi.allow(...Object.keys(colorStatusMap)).required(),
+}).required()
+
 module.exports = class JenkinsBuild extends JenkinsBase {
   static get category() {
     return 'build'
@@ -61,6 +48,7 @@ module.exports = class JenkinsBuild extends JenkinsBase {
     return {
       base: 'jenkins/s',
       pattern: ':protocol(http|https)/:host/:job+',
+      queryParamSchema,
     }
   }
 
@@ -94,12 +82,12 @@ module.exports = class JenkinsBuild extends JenkinsBase {
     return { status: colorStatusMap[json.color] }
   }
 
-  async handle({ protocol, host, job }) {
-    const jobPrefix = job.indexOf('/') > -1 ? '' : 'job/'
+  async handle({ protocol, host, job }, { disableStrictSSL }) {
     const json = await this.fetch({
-      url: `${protocol}://${host}/${jobPrefix}${job}/api/json`,
+      url: buildUrl({ protocol, host, job, lastBuild: false }),
       schema,
-      qs: { tree: 'color' },
+      qs: buildTreeParamQueryString('color'),
+      disableStrictSSL,
     })
     const { status } = this.transform({ json })
     return this.constructor.render({ status })
