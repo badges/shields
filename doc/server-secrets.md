@@ -43,6 +43,13 @@ An Azure DevOps Token (PAT) is required for accessing [private Azure DevOps proj
 The bintray API [requires authentication](https://bintray.com/docs/api/#_authentication)
 Create an account and obtain a token from the user profile page.
 
+## Drone
+
+- `DRONE_TOKEN` (yml: `drone_token`)
+
+The self-hosted Drone API [requires authentication](https://0-8-0.docs.drone.io/api-authentication/)
+Login to your Drone instance and obtain a token from the user profile page.
+
 ## GitHub
 
 - `GH_TOKEN` (yml: `gh_token`)
