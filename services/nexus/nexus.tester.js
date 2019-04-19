@@ -44,7 +44,7 @@ t.create('live: search snapshot version valid snapshot artifact')
   })
 
 t.create('live: search snapshot version of an nonexistent artifact')
-.timeout(10000)
+  .timeout(10000)
   .get(
     '/s/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
   )
