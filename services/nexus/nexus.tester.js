@@ -18,7 +18,7 @@ function mockNexusCreds() {
 }
 
 t.create('live: search release version valid artifact')
-  .timeout(10000)
+  .timeout(15000)
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
     label: 'nexus',
