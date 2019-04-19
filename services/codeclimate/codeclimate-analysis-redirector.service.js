@@ -7,7 +7,7 @@ module.exports = [
   // https://github.com/badges/shields/pull/3320#issuecomment-483795000
   redirector({
     name: 'CodeclimateCoverageMaintainabilityRedirect',
-    category: 'coverage',
+    category: 'analysis',
     route: {
       base: 'codeclimate/maintainability-letter',
       pattern: ':user/:repo',
