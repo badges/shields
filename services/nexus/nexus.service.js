@@ -59,10 +59,10 @@ module.exports = class Nexus extends BaseJsonService {
     return [
       {
         title: 'Sonatype Nexus (Releases)',
-        pattern: 'r/:scheme/:host/:groupId/:artifactId',
+        pattern: 'r/:scheme(http|https)/:hostAndPath/:groupId/:artifactId',
         namedParams: {
           scheme: 'https',
-          host: 'oss.sonatype.org',
+          hostAndPath: 'oss.sonatype.org',
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
@@ -72,10 +72,10 @@ module.exports = class Nexus extends BaseJsonService {
       },
       {
         title: 'Sonatype Nexus (Snapshots)',
-        pattern: 's/:scheme/:host/:groupId/:artifactId',
+        pattern: 's/:scheme(http|https)/:hostAndPath/:groupId/:artifactId',
         namedParams: {
           scheme: 'https',
-          host: 'oss.sonatype.org',
+          hostAndPath: 'oss.sonatype.org',
           groupId: 'com.google.guava',
           artifactId: 'guava',
         },
@@ -85,11 +85,11 @@ module.exports = class Nexus extends BaseJsonService {
       },
       {
         title: 'Sonatype Nexus (Repository)',
-        pattern: ':repo/:scheme/:host/:groupId/:artifactId',
+        pattern: ':repo/:scheme(http|https)/:hostAndPath/:groupId/:artifactId',
         namedParams: {
           repo: 'developer',
           scheme: 'https',
-          host: 'repository.jboss.org/nexus',
+          hostAndPath: 'repository.jboss.org/nexus',
           groupId: 'ai.h2o',
           artifactId: 'h2o-automl',
         },
@@ -99,11 +99,11 @@ module.exports = class Nexus extends BaseJsonService {
       },
       {
         title: 'Sonatype Nexus (Query Options)',
-        pattern: ':repo/:scheme/:host/:groupId/:artifactId/:queryOpt',
+        pattern: ':repo/:scheme(http|https)/:hostAndPath/:groupId/:artifactId/:queryOpt',
         namedParams: {
           repo: 'fs-public-snapshots',
           scheme: 'https',
-          host: 'repository.jboss.org/nexus',
+          hostAndPath: 'repository.jboss.org/nexus',
           groupId: 'com.progress.fuse',
           artifactId: 'fusehq',
           queryOpt: ':c=agent-apple-osx:p=tar.gz',
