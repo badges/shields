@@ -18,6 +18,7 @@ function mockNexusCreds() {
 }
 
 t.create('live: search release version valid artifact')
+  .timeout(10000)
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
     label: 'nexus',
@@ -25,6 +26,7 @@ t.create('live: search release version valid artifact')
   })
 
 t.create('live: search release version of an nonexistent artifact')
+  .timeout(10000)
   .get(
     '/r/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
   )
@@ -34,17 +36,15 @@ t.create('live: search release version of an nonexistent artifact')
   })
 
 t.create('live: search snapshot version valid snapshot artifact')
+  .timeout(10000)
   .get('/s/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
-// t.create('live: search snapshot version of a release artifact')
-//   .get('/s/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-//   .expectBadge({ label: 'nexus', message: 'no snapshot versions found' })
-
 t.create('live: search snapshot version of an nonexistent artifact')
+.timeout(10000)
   .get(
     '/s/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
   )
