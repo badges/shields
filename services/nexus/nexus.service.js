@@ -16,7 +16,10 @@ const searchApiSchema = Joi.object({
       Joi.object({
         latestRelease: optionalDottedVersionNClausesWithOptionalSuffix,
         latestSnapshot: optionalDottedVersionNClausesWithOptionalSuffix,
-        version: optionalDottedVersionNClausesWithOptionalSuffix,
+        version: Joi.alternatives().try(
+          optionalDottedVersionNClausesWithOptionalSuffix,
+          Joi.string()
+        ),
       })
     )
     .required(),
@@ -125,8 +128,15 @@ module.exports = class Nexus extends BaseJsonService {
   }
 
   transform({ repo, json }) {
+    if (json.data.length === 0) {
+      throw new NotFound({ prettyMessage: 'artifact or version not found' })
+    }
     if (repo === 'r') {
-      return { version: json.data[0].latestRelease }
+      const version = json.data[0].latestRelease
+      if (!version) {
+        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+      }
+      return { version }
     } else if (repo === 's') {
       // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
       // 'latestSnapshot' so check 'version' as well before continuing to next entry
@@ -140,7 +150,11 @@ module.exports = class Nexus extends BaseJsonService {
       }
       throw new InvalidResponse({ prettyMessage: 'no snapshot versions found' })
     } else {
-      return { version: json.data.baseVersion || json.data.version }
+      const version = json.data.baseVersion || json.data.version
+      if (!version) {
+        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+      }
+      return { version }
     }
   }
 
@@ -153,13 +167,8 @@ module.exports = class Nexus extends BaseJsonService {
       artifactId,
       queryOpt,
     })
-    if (json.data.length === 0) {
-      throw new NotFound({ prettyMessage: 'artifact or version not found' })
-    }
+
     const { version } = this.transform({ repo, json })
-    if (!version) {
-      throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
-    }
     return this.constructor.render({ version })
   }
 
