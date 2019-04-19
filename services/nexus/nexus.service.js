@@ -99,7 +99,8 @@ module.exports = class Nexus extends BaseJsonService {
       },
       {
         title: 'Sonatype Nexus (Query Options)',
-        pattern: ':repo/:scheme(http|https)/:hostAndPath/:groupId/:artifactId/:queryOpt',
+        pattern:
+          ':repo/:scheme(http|https)/:hostAndPath/:groupId/:artifactId/:queryOpt',
         namedParams: {
           repo: 'fs-public-snapshots',
           scheme: 'https',
