@@ -45,9 +45,9 @@ export default class MarkupModalContent extends React.Component {
           exampleNamedParams={namedParams}
           exampleQueryParams={queryParams}
           initialStyle={initialStyle}
+          isPrefilled={buildFromExample}
           link={link}
           pattern={pattern}
-          showActualParams={buildFromExample}
           title={title}
         />
       </>

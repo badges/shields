@@ -18,7 +18,7 @@ export default class Customizer extends React.Component {
     exampleNamedParams: objectOfKeyValuesPropType,
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
-    showActualParams: PropTypes.bool,
+    isPrefilled: PropTypes.bool,
     link: PropTypes.string,
   }
 
@@ -140,16 +140,16 @@ export default class Customizer extends React.Component {
       exampleNamedParams,
       exampleQueryParams,
       initialStyle,
-      showActualParams,
+      isPrefilled,
     } = this.props
 
     return (
       <form action="">
         <PathBuilder
           exampleParams={exampleNamedParams}
+          isPrefilled={isPrefilled}
           onChange={this.handlePathChange}
           pattern={pattern}
-          showActualParams={showActualParams}
         />
         <QueryStringBuilder
           exampleParams={exampleQueryParams}

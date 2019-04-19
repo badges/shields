@@ -73,7 +73,7 @@ export default class PathBuilder extends React.Component {
     pattern: PropTypes.string.isRequired,
     exampleParams: objectOfKeyValuesPropType,
     onChange: PropTypes.func,
-    showActualParams: PropTypes.bool,
+    isPrefilled: PropTypes.bool,
   }
 
   constructor(props) {
@@ -83,7 +83,7 @@ export default class PathBuilder extends React.Component {
     const tokens = pathToRegexp.parse(pattern)
 
     let namedParams
-    if (this.props.showActualParams) {
+    if (this.props.isPrefilled) {
       namedParams = this.props.exampleParams
     } else {
       namedParams = {}
@@ -215,7 +215,7 @@ export default class PathBuilder extends React.Component {
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
           </NamedParamLabelContainer>
           {this.renderNamedParamInput(token)}
-          {!this.props.showActualParams && (
+          {!this.props.isPrefilled && (
             <NamedParamCaption>
               {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
             </NamedParamCaption>
