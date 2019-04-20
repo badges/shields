@@ -4,6 +4,7 @@ const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { downloadCount } = require('../color-formatters')
 
 const collectionSchema = Joi.object({
   payload: Joi.object({
@@ -24,7 +25,7 @@ module.exports = class bitComponents extends BaseJsonService {
   }
 
   static render({ count }) {
-    return { message: metric(count), color: '#73398D' }
+    return { message: metric(count), color: downloadCount(count) }
   }
 
   async handle({ owner, scope }) {
