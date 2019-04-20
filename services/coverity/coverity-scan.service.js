@@ -66,6 +66,9 @@ module.exports = class CoverityScan extends BaseJsonService {
     const json = await this._requestJson({
       url,
       schema,
+      options: {
+        strictSSL: false,
+      },
       errorMessages: {
         // At the moment Coverity returns an HTTP 200 with an HTML page
         // displaying the text 404 when project is not found.
