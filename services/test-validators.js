@@ -91,6 +91,39 @@ const isDependencyState = withRegex(
   /^(\d+ out of date|\d+ deprecated|up to date)$/
 )
 
+const getTestTotalsValidator = ({ passed, failed, skipped }) =>
+  withRegex(
+    new RegExp(`^[0-9]+ ${passed}(, [0-9]+ ${failed})?(, [0-9]+ ${skipped})?$`)
+  )
+
+const getCompactTestTotalsValidator = ({ passed, failed, skipped }) =>
+  withRegex(
+    new RegExp(
+      `^${passed} [0-9]+( \\| ${failed} [0-9]+)?( \\| ${skipped} [0-9]+)?$`
+    )
+  )
+
+const isDefaultTestTotals = getTestTotalsValidator({
+  passed: 'passed',
+  failed: 'failed',
+  skipped: 'skipped',
+})
+const isDefaultCompactTestTotals = getCompactTestTotalsValidator({
+  passed: '✔',
+  failed: '✘',
+  skipped: '➟',
+})
+const isCustomTestTotals = getTestTotalsValidator({
+  passed: 'good',
+  failed: 'bad',
+  skipped: 'n/a',
+})
+const isCustomCompactTestTotals = getCompactTestTotalsValidator({
+  passed: '💃',
+  failed: '🤦‍♀️',
+  skipped: '🤷',
+})
+
 module.exports = {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -111,4 +144,10 @@ module.exports = {
   isRelativeFormattedDate,
   isDependencyState,
   withRegex,
+  isDefaultTestTotals,
+  isDefaultCompactTestTotals,
+  isCustomTestTotals,
+  isCustomCompactTestTotals,
+  getTestTotalsValidator,
+  getCompactTestTotalsValidator,
 }

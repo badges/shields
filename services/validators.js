@@ -2,11 +2,14 @@
 
 const Joi = require('joi').extend(require('joi-extension-semver'))
 
+const optionalNonNegativeInteger = Joi.number()
+  .integer()
+  .min(0)
+
 module.exports = {
-  nonNegativeInteger: Joi.number()
-    .integer()
-    .min(0)
-    .required(),
+  optionalNonNegativeInteger,
+
+  nonNegativeInteger: optionalNonNegativeInteger.required(),
 
   anyInteger: Joi.number()
     .integer()
