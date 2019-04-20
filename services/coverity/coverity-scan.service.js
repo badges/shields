@@ -10,10 +10,6 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-const queryParamSchema = Joi.object({
-  disableStrictSSL: Joi.equal(''),
-}).required()
-
 module.exports = class CoverityScan extends BaseJsonService {
   static render({ message }) {
     let color
@@ -48,7 +44,6 @@ module.exports = class CoverityScan extends BaseJsonService {
     return {
       base: 'coverity/scan',
       pattern: ':projectId',
-      queryParamSchema,
     }
   }
 
@@ -66,13 +61,13 @@ module.exports = class CoverityScan extends BaseJsonService {
     ]
   }
 
-  async handle({ projectId }, { disableStrictSSL }) {
+  async handle({ projectId }) {
     const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
     const json = await this._requestJson({
       url,
       schema,
       options: {
-        strictSSL: disableStrictSSL === undefined,
+        strictSSL: false,
       },
       errorMessages: {
         // At the moment Coverity returns an HTTP 200 with an HTML page
