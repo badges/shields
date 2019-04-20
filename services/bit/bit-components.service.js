@@ -31,7 +31,6 @@ module.exports = class bitComponents extends BaseJsonService {
     return this.constructor.render({ count: json.payload.totalComponents })
   }
 
-  // Metadata
   static get defaultBadgeData() {
     return { label: 'components' }
   }
