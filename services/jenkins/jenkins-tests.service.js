@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const { InvalidResponse } = require('..')
 const {
+  getDocumentation,
   testResultQueryParamSchema,
   renderTestResultBadge,
 } = require('../test-results')
@@ -14,6 +15,14 @@ const {
   queryParamSchema,
 } = require('./jenkins-common')
 
+// In the API response, the `actions` array can be empty, and when it is not empty it will contain a
+// mix of objects. Some will be empty objects, and several will not have the test count properties.
+// The schema is relaxed to handle this and the `transform` function handles the responsibility of
+// grabbing the correct object to retrieve the test result metrics.
+//
+// Sample data set for the `actions` array:
+// "actions":[{"_class":"hudson.model.ParametersAction"},{"_class":"hudson.model.CauseAction"},{"_class":"hudson.tasks.junit.TestResultAction","failCount":15,"skipCount":0,"totalCount":753},{},{}]
+// https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]
 const schema = Joi.object({
   actions: Joi.array()
     .items(
@@ -39,7 +48,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
 
   static get route() {
     return {
-      base: 'jenkins/t',
+      base: 'jenkins/tests',
       pattern: ':protocol(http|https)/:host/:job+',
       queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
     }
@@ -48,17 +57,28 @@ module.exports = class JenkinsTests extends JenkinsBase {
   static get examples() {
     return [
       {
-        title: 'Jenkins Tests',
-        pattern: ':scheme/:host/:job',
+        title: 'Jenkins tests',
         namedParams: {
-          scheme: 'https',
+          protocol: 'https',
           host: 'jenkins.qa.ubuntu.com',
-          job:
-            'view/Precise/view/All%20Precise/job/precise-desktop-amd64_default',
+          job: 'view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
+        },
+        queryParams: {
+          compact_message: null,
+          passed_label: 'passed',
+          failed_label: 'failed',
+          skipped_label: 'skipped',
         },
         staticPreview: this.render({
-          passed: 45,
-          total: 45,
+          passed: 477,
+          failed: 2,
+          skipped: 0,
+          total: 479,
+          isCompact: false,
+        }),
+        documentation: getDocumentation({
+          route:
+            '/jenkins/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily'
         }),
       },
     ]

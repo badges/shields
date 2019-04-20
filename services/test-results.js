@@ -84,8 +84,31 @@ function renderTestResultBadge({
   return { message, color }
 }
 
+const getDocumentation = ({ route }) => `
+<p>
+  You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters <code>&passed_label=</code>, <code>&failed_label=</code> and <code>&skipped_label=</code> respectively.
+</p>
+
+<p>
+  For example, if you want to use a different terminology:
+  <br>
+  <code>${route}.svg?passed_label=good&failed_label=bad&skipped_label=n%2Fa</code>
+</p>
+
+<p>
+  Or symbols:
+  <br>
+  <code>${route}.svg?compact_message&passed_label=💃&failed_label=🤦‍♀️&skipped_label=🤷</code>
+</p>
+
+<p>
+  There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
+</p>
+`
+
 module.exports = {
   testResultQueryParamSchema,
   renderTestResultMessage,
   renderTestResultBadge,
+  getDocumentation,
 }
