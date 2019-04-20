@@ -17,7 +17,7 @@ module.exports = class bitComponents extends BaseJsonService {
       url,
       schema: ownerSchema,
       errorMessages: {
-        404: 'not found',
+        404: 'collection not found',
       },
     })
   }
