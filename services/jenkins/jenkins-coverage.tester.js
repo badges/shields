@@ -22,6 +22,6 @@ t.create('cobertura: job not found')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')
-  .get('/cobertura/https/jenkins.sqlalchemy.org/job/alembic_coverage.json')
+  .get('/cobertura/https/jenkins.sqlalchemy.org/alembic_coverage.json')
   .timeout(10000)
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
