@@ -8,6 +8,11 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
+// The below page includes links to various publicly accessible Jenkins instances
+// although many of the links are dead, it is is still a helpful resource for finding
+// target Jenkins instances/jobs to use for testing.
+// https://wiki.jenkins.io/pages/viewpage.action?pageId=58001258
+
 t.create('Test status')
   .get(
     '/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily.json'

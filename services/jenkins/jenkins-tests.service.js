@@ -61,7 +61,8 @@ module.exports = class JenkinsTests extends JenkinsBase {
         namedParams: {
           protocol: 'https',
           host: 'jenkins.qa.ubuntu.com',
-          job: 'view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
+          job:
+            'view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
         },
         queryParams: {
           compact_message: null,
@@ -78,7 +79,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
         }),
         documentation: getDocumentation({
           route:
-            '/jenkins/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily'
+            '/jenkins/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
         }),
       },
     ]
