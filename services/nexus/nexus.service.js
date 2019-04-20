@@ -16,10 +16,12 @@ const searchApiSchema = Joi.object({
       Joi.object({
         latestRelease: optionalDottedVersionNClausesWithOptionalSuffix,
         latestSnapshot: optionalDottedVersionNClausesWithOptionalSuffix,
-        version: Joi.alternatives().try(
-          optionalDottedVersionNClausesWithOptionalSuffix,
-          Joi.string()
-        ),
+        // `version` will almost always follow the same pattern as optionalDottedVersionNClausesWithOptionalSuffix.
+        // However, there are a couple exceptions where `version` may be a simple string (like `android-SNAPSHOT`)
+        // This schema is relaxed accordingly since for snapshot/release badges the schema has to validate
+        // the entire history of each published version for the artifact.
+        // Example artifact that includes such a historical version: https://oss.sonatype.org/service/local/lucene/search?g=com.google.guava&a=guava
+        version: Joi.string(),
       })
     )
     .required(),
