@@ -3,11 +3,12 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 
-const ownerSchema = Joi.object({
+const collectionSchema = Joi.object({
   payload: Joi.object({
-    totalComponents: Joi.number(),
-  }),
+    totalComponents: nonNegativeInteger,
+  }).required(),
 }).required()
 
 module.exports = class bitComponents extends BaseJsonService {
@@ -15,7 +16,7 @@ module.exports = class bitComponents extends BaseJsonService {
     const url = `https://api.bit.dev/scope/${owner}/${scope}/`
     return this._requestJson({
       url,
-      schema: ownerSchema,
+      schema: collectionSchema,
       errorMessages: {
         404: 'collection not found',
       },
