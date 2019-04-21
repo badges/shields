@@ -3,15 +3,27 @@
 const { redirector } = require('..')
 
 module.exports = [
+  // http://github.com/badges/shields/issues/1387
+  // https://github.com/badges/shields/pull/3320#issuecomment-483795000
   redirector({
-    name: 'CodeclimateCoverageShortcutRedirect',
+    name: 'CodeclimateCoveragePercentageRedirect',
     category: 'coverage',
     route: {
       base: 'codeclimate',
-      pattern: ':which(c|c-letter)/:user/:repo',
+      pattern: ':which(c|coverage-percentage)/:user/:repo',
     },
-    transformPath: ({ which, user, repo }) =>
-      `/codeclimate/${which.replace('c', 'coverage')}/${user}/${repo}`,
+    transformPath: ({ user, repo }) => `/codeclimate/coverage/${user}/${repo}`,
+    dateAdded: new Date('2019-04-15'),
+  }),
+  redirector({
+    name: 'CodeclimateCoverageLetterRedirect',
+    category: 'coverage',
+    route: {
+      base: 'codeclimate/c-letter',
+      pattern: ':user/:repo',
+    },
+    transformPath: ({ user, repo }) =>
+      `/codeclimate/coverage-letter/${user}/${repo}`,
     dateAdded: new Date('2019-04-15'),
   }),
   redirector({

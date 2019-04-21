@@ -12,14 +12,14 @@ module.exports = [
   deprecatedService({
     route: {
       base: 'snap',
-      format: '(?:[^/]+/[^/]+)(?:/(?:.+))',
+      pattern: ':various*',
     },
     ...commonAttrs,
   }),
   deprecatedService({
     route: {
       base: 'snap-ci',
-      format: '(?:[^/]+/[^/]+)(?:/(?:.+))',
+      pattern: ':various*',
     },
     ...commonAttrs,
   }),
