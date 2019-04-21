@@ -20,17 +20,10 @@ module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService 
     return [
       {
         title: 'Vaadin Directory',
-        pattern: 'rating/:packageName',
-        namedParams: { packageName: 'vaadinvaadin-grid' },
+        pattern: ':which(stars|rating)/:packageName',
+        namedParams: { which: 'rating', packageName: 'vaadinvaadin-grid' },
         staticPreview: this.render({ which: 'rating', score: 4.75 }),
         keywords: ['vaadin-directory', 'rating'],
-      },
-      {
-        title: 'Vaadin Directory',
-        pattern: 'stars/:packageName',
-        namedParams: { packageName: 'vaadinvaadin-grid' },
-        staticPreview: this.render({ which: 'star', score: 4.75 }),
-        keywords: ['vaadin-directory', 'star', 'stars'],
       },
     ]
   }
