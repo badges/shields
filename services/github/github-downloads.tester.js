@@ -6,11 +6,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Downloads all releases')
   .get('/downloads/photonstorm/phaser/total.json')
-  .only()
-  .expectBadge({
-    label: 'downloads',
-    message: Joi.string().regex(/^\w+\s+total$/),
-  })
+  .expectBadge({ label: 'downloads', message: isMetric })
 
 t.create('Downloads all releases (repo not found)')
   .get('/downloads/badges/helmets/total.json')
@@ -21,55 +17,47 @@ t.create('Downloads all releases (repo not found)')
 
 t.create('downloads for latest release')
   .get('/downloads/photonstorm/phaser/latest/total.json')
-  .expectBadge({ label: 'downloads', message: isMetric })
+  .expectBadge({ label: 'downloads@latest', message: isMetric })
 
 t.create('downloads-pre for latest release')
   .get('/downloads-pre/photonstorm/phaser/latest/total.json')
-  .expectBadge({ label: 'downloads', message: isMetric })
+  .expectBadge({ label: 'downloads@latest', message: isMetric })
 
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')
-  .expectBadge({
-    label: 'downloads',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? v0\.190\.0$/),
-  })
+  .expectBadge({ label: 'downloads@v0.190.0', message: isMetric })
 
 t.create('downloads for specific asset without slash')
   .get('/downloads/atom/atom/v0.190.0/atom-amd64.deb.json')
   .expectBadge({
-    label: 'downloads',
-    message: Joi.string().regex(
-      /^[0-9]+[kMGTPEZY]? v0\.190\.0 \[atom-amd64\.deb\]$/
-    ),
+    label: 'downloads@v0.190.0',
+    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/),
   })
 
 t.create('downloads for specific asset from latest release')
   .get('/downloads/atom/atom/latest/atom-amd64.deb.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'downloads@latest',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/),
   })
 
 t.create('downloads-pre for specific asset from latest release')
   .get('/downloads-pre/atom/atom/latest/atom-amd64.deb.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'downloads@latest',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? \[atom-amd64\.deb\]$/),
   })
 
 t.create('downloads for release with slash')
   .get('/downloads/NHellFire/dban/stable/v2.2.8/total.json')
-  .expectBadge({
-    label: 'downloads',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? stable\/v2\.2\.8$/),
-  })
+  .expectBadge({ label: 'downloads@stable/v2.2.8', message: isMetric })
 
 t.create('downloads for specific asset with slash')
   .get('/downloads/NHellFire/dban/stable/v2.2.8/dban-2.2.8_i586.iso.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'downloads@stable/v2.2.8',
     message: Joi.string().regex(
-      /^[0-9]+[kMGTPEZY]? stable\/v2\.2\.8 \[dban-2\.2\.8_i586\.iso\]$/
+      /^[0-9]+[kMGTPEZY]? \[dban-2\.2\.8_i586\.iso\]$/
     ),
   })
 
