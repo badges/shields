@@ -5,6 +5,8 @@ const { NotFound } = require('..')
 
 const keywords = ['codeclimate']
 
+const isLetterGrade = Joi.equal('A', 'B', 'C', 'D', 'E', 'F').required()
+
 const repoSchema = Joi.object({
   data: Joi.array()
     .max(1)
@@ -44,5 +46,6 @@ async function fetchRepo(serviceInstance, { user, repo }) {
 
 module.exports = {
   keywords,
+  isLetterGrade,
   fetchRepo,
 }
