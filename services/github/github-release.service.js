@@ -1,17 +1,9 @@
 'use strict'
 
-const Joi = require('joi')
 const { addv } = require('../text-formatters')
+const { fetchLatestRelease } = require('./github-common-fetch')
 const { GithubAuthService } = require('./github-auth-service')
-const { errorMessagesFor, documentation } = require('./github-helpers')
-
-const releaseInfoSchema = Joi.object({
-  tag_name: Joi.string().required(),
-  prerelease: Joi.boolean().required(),
-}).required()
-const releaseInfoArraySchema = Joi.array()
-  .items(releaseInfoSchema)
-  .required()
+const { documentation } = require('./github-helpers')
 
 module.exports = class GithubRelease extends GithubAuthService {
   static get category() {
@@ -40,27 +32,6 @@ module.exports = class GithubRelease extends GithubAuthService {
     ]
   }
 
-  async fetch({ user, repo, includePre }) {
-    const commonAttrs = {
-      errorMessages: errorMessagesFor('no releases or repo not found'),
-    }
-    if (includePre) {
-      const [releaseInfo] = await this._requestJson({
-        schema: releaseInfoArraySchema,
-        url: `/repos/${user}/${repo}/releases`,
-        ...commonAttrs,
-      })
-      return releaseInfo
-    } else {
-      const releaseInfo = await this._requestJson({
-        schema: releaseInfoSchema,
-        url: `/repos/${user}/${repo}/releases/latest`,
-        ...commonAttrs,
-      })
-      return releaseInfo
-    }
-  }
-
   static get defaultBadgeData() {
     return {
       label: 'release',
@@ -76,7 +47,10 @@ module.exports = class GithubRelease extends GithubAuthService {
   }
 
   async handle({ which, user, repo }) {
-    const { tag_name: version, prerelease: isPrerelease } = await this.fetch({
+    const {
+      tag_name: version,
+      prerelease: isPrerelease,
+    } = await fetchLatestRelease(this, {
       user,
       repo,
       includePre: which === 'release-pre',
