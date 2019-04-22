@@ -2,11 +2,12 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')
 const { fetchLatestRelease } = require('./github-common-fetch')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
-const schema = Joi.object().required()
+const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
 module.exports = class GithubCommitsSince extends GithubAuthService {
   static get category() {
