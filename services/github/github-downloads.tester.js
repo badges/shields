@@ -6,6 +6,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Downloads all releases')
   .get('/downloads/photonstorm/phaser/total.json')
+  .only()
   .expectBadge({
     label: 'downloads',
     message: Joi.string().regex(/^\w+\s+total$/),
