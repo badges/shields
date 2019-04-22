@@ -21,23 +21,8 @@ function VersionForExtensionType(extensionType) {
       return `Wordpress${capt}Version`
     }
 
-    static get extensionType() {
-      return extensionType
-    }
-
-    static render({ response }) {
-      return {
-        message: addv(response.version),
-        color: versionColor(response.version),
-      }
-    }
-
     static get category() {
       return 'version'
-    }
-
-    static get defaultBadgeData() {
-      return { label: extensionType }
     }
 
     static get route() {
@@ -52,9 +37,28 @@ function VersionForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Version`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { version: 2.5 } }),
+          staticPreview: this.render({ version: 2.5 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: extensionType }
+    }
+
+    static render({ version }) {
+      return {
+        message: addv(version),
+        color: versionColor(version),
+      }
+    }
+
+    async handle({ slug }) {
+      const { version } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ version })
     }
   }
 }
