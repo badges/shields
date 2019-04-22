@@ -1,20 +1,14 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const {
-  makeBadgeData: getBadgeData,
-  makeLabel: getLabel,
-} = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const { documentation } = require('./github-helpers')
+const Joi = require('joi')
+const { metric } = require('../text-formatters')
+const { GithubAuthService } = require('./github-auth-service')
+const { fetchLatestRelease } = require('./github-common-fetch')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubCommitsSince extends LegacyService {
+const schema = Joi.object().required()
+
+module.exports = class GithubCommitsSince extends GithubAuthService {
   static get category() {
     return 'activity'
   }
@@ -35,11 +29,10 @@ module.exports = class GithubCommitsSince extends LegacyService {
           repo: 'subtitleedit',
           version: '3.4.7',
         },
-        staticPreview: {
-          label: 'commits since 3.4.7',
-          message: '4225',
-          color: 'blue',
-        },
+        staticPreview: this.render({
+          version: '3.4.7',
+          commitCount: 4225,
+        }),
         documentation,
       },
       {
@@ -49,71 +42,44 @@ module.exports = class GithubCommitsSince extends LegacyService {
           repo: 'subtitleedit',
           version: 'latest',
         },
-        staticPreview: {
-          label: 'commits since 3.5.7',
-          message: '157',
-          color: 'blue',
-        },
+        staticPreview: this.render({
+          version: '3.5.7',
+          commitCount: 157,
+        }),
         documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/commits-since\/([^/]+)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, SubtitleEdit
-        const repo = match[2] // eg, subtitleedit
-        const version = match[3] // eg, 3.4.7 or latest
-        const format = match[4]
-        const badgeData = getBadgeData(`commits since ${version}`, data)
+  static get defaultBadgeData() {
+    return {
+      label: 'github',
+      namedLogo: 'github',
+    }
+  }
 
-        function setCommitsSinceBadge(user, repo, version) {
-          const apiUrl = `/repos/${user}/${repo}/compare/${version}...master`
-          if (badgeData.template === 'social') {
-            badgeData.logo = getLogo('github', data)
-          }
-          githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
+  static render({ version, commitCount }) {
+    return {
+      label: `commits since ${version}`,
+      message: metric(commitCount),
+      color: 'blue',
+    }
+  }
 
-            try {
-              const result = JSON.parse(buffer)
-              badgeData.text[1] = result.ahead_by
-              badgeData.colorscheme = 'blue'
-              badgeData.text[0] = getLabel(`commits since ${version}`, data)
-              sendBadge(format, badgeData)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          })
-        }
+  async handle({ user, repo, version }) {
+    if (version === 'latest') {
+      ;({ tag_name: version } = await fetchLatestRelease(this, {
+        user,
+        repo,
+      }))
+    }
 
-        if (version === 'latest') {
-          const url = `/repos/${user}/${repo}/releases/latest`
-          githubApiProvider.request(request, url, {}, (err, res, buffer) => {
-            if (err != null) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            try {
-              const data = JSON.parse(buffer)
-              setCommitsSinceBadge(user, repo, data.tag_name)
-            } catch (e) {
-              badgeData.text[1] = 'invalid'
-              sendBadge(format, badgeData)
-            }
-          })
-        } else {
-          setCommitsSinceBadge(user, repo, version)
-        }
-      })
-    )
+    const { ahead_by: commitCount } = await this._requestJson({
+      schema,
+      url: `/repos/${user}/${repo}/compare/${version}...master`,
+      errorMessages: errorMessagesFor('repo or version not found'),
+    })
+
+    return this.constructor.render({ version, commitCount })
   }
 }
