@@ -56,10 +56,10 @@ function RatingForExtensionType(extensionType) {
     }
 
     static render({ rating, numRatings }) {
-      const scaled = (rating / 100) * 5
+      const scaledAndRounded = ((rating / 100) * 5).toFixed(1)
       return {
-        message: `${scaled.toFixed(1)}/5 (${metric(numRatings)})`,
-        color: floorCount(scaled, 2, 3, 4),
+        message: `${scaledAndRounded}/5 (${metric(numRatings)})`,
+        color: floorCount(scaledAndRounded, 2, 3, 4),
       }
     }
 
