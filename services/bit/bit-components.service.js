@@ -43,7 +43,7 @@ module.exports = class bitComponents extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'bit/components',
+      base: 'bit/collection/total-components',
       pattern: ':owner/:scope',
     }
   }
