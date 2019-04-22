@@ -5,8 +5,9 @@ const { ServiceTester } = require('../tester')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
-  id: 'wordpress',
+  id: 'WordpressPlatform',
   title: 'Wordpress Platform Tests',
+  pathPrefix: '/wordpress',
 }))
 
 t.create('Plugin Required WP Version')
@@ -18,13 +19,6 @@ t.create('Plugin Required WP Version')
 
 t.create('Plugin Tested WP Version')
   .get('/plugin/tested/akismet.json')
-  .expectBadge({
-    label: 'wordpress',
-    message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
-  })
-
-t.create('Plugin Tested WP Version (Alias)')
-  .get('/v/akismet.json')
   .expectBadge({
     label: 'wordpress',
     message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),

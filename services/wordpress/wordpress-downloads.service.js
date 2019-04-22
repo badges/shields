@@ -29,11 +29,19 @@ function DownloadsForExtensionType(extensionType) {
       return `Wordpress${capt}Downloads`
     }
 
-    static render({ response }) {
+    static render({ downloads }) {
       return {
-        message: metric(response.downloaded),
-        color: downloadCount(response.downloaded),
+        message: metric(downloads),
+        color: downloadCount(downloads),
       }
+    }
+
+    async handle({ slug }) {
+      const { downloaded: downloads } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ downloads })
     }
 
     static get category() {
@@ -50,16 +58,13 @@ function DownloadsForExtensionType(extensionType) {
         pattern: ':slug',
       }
     }
-    static get extensionType() {
-      return extensionType
-    }
 
     static get examples() {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { downloaded: 200000 } }),
+          staticPreview: this.render({ downloads: 200000 }),
         },
       ]
     }
@@ -74,19 +79,23 @@ function InstallsForExtensionType(extensionType) {
       return `Wordpress${capt}Installs`
     }
 
-    static get extensionType() {
-      return extensionType
-    }
-
     static get category() {
       return 'downloads'
     }
 
-    static render({ response }) {
+    static render({ installCount }) {
       return {
-        message: `${metric(response.active_installs)}+`,
-        color: downloadCount(response.active_installs),
+        message: metric(installCount),
+        color: downloadCount(installCount),
       }
+    }
+
+    async handle({ slug }) {
+      const { active_installs: installCount } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ installCount })
     }
 
     static get defaultBadgeData() {
@@ -105,7 +114,7 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { active_installs: 300000 } }),
+          staticPreview: this.render({ installCount: 300000 }),
         },
       ]
     }
