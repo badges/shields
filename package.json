@@ -134,7 +134,7 @@
     "@mapbox/react-click-to-select": "^2.2.0",
     "babel-eslint": "^10.0.0",
     "babel-plugin-inline-react-svg": "^1.1.0",
-    "babel-plugin-istanbul": "^5.1.1",
+    "babel-plugin-istanbul": "^5.1.2",
     "babel-preset-gatsby": "^0.1.11",
     "caller": "^1.0.1",
     "chai": "^4.1.2",
