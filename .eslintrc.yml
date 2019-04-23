@@ -17,6 +17,7 @@ overrides:
     parserOptions:
       sourceType: 'module'
   - files:
+      - 'core/base-service/**/*.js'
       - 'services/**/*.js'
     rules:
       sort-class-members/sort-class-members:
