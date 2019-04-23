@@ -13,8 +13,8 @@ const collectionSchema = Joi.object({
 }).required()
 
 module.exports = class bitComponents extends BaseJsonService {
-  async fetch({ owner, scope }) {
-    const url = `https://api.bit.dev/scope/${owner}/${scope}/`
+  async fetch({ owner, collection }) {
+    const url = `https://api.bit.dev/scope/${owner}/${collection}/`
     return this._requestJson({
       url,
       schema: collectionSchema,
@@ -28,8 +28,8 @@ module.exports = class bitComponents extends BaseJsonService {
     return { message: metric(count), color: downloadCount(count) }
   }
 
-  async handle({ owner, scope }) {
-    const json = await this.fetch({ owner, scope })
+  async handle({ owner, collection }) {
+    const json = await this.fetch({ owner, collection })
     return this.constructor.render({ count: json.payload.totalComponents })
   }
 
@@ -51,7 +51,7 @@ module.exports = class bitComponents extends BaseJsonService {
     return [
       {
         title: 'bit',
-        namedParams: { owner: 'ramda', scope: 'ramda' },
+        namedParams: { owner: 'ramda', collection: 'ramda' },
         staticPreview: this.render({ count: 330 }),
         keywords: ['components'],
       },
