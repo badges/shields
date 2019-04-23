@@ -67,6 +67,11 @@ module.exports = class CoverityScan extends BaseJsonService {
       url,
       schema,
       options: {
+        // Coverity has an issue in their certificate chain that requires
+        // disabling the default strict SSL check in order to call their API.
+        // For more information see:
+        // https://github.com/badges/shields/issues/3334
+        // https://github.com/badges/shields/pull/3336
         strictSSL: false,
       },
       errorMessages: {
