@@ -20,7 +20,8 @@ overrides:
 plugins:
   - mocha
   - no-extension-in-require
-  - 'chai-friendly'
+  - chai-friendly
+  - sort-class-members
 
 rules:
   # Disable some rules from eslint:recommended.
@@ -47,6 +48,26 @@ rules:
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
+  sort-class-members/sort-class-members:
+    [
+      'warn',
+      {
+        order:
+          [
+            'name',
+            'category',
+            'isDeprecated',
+            'route',
+            'examples',
+            'defaultBadgeData',
+            'render',
+            'constructor',
+            'fetch',
+            'transform',
+            'handle',
+          ],
+      },
+    ]
 
   # Mocha-related.
   mocha/no-exclusive-tests: 'error'

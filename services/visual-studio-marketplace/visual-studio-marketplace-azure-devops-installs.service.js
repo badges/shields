@@ -26,19 +26,6 @@ module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends Visual
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'installs',
-    }
-  }
-
-  static render({ count }) {
-    return {
-      message: metric(count),
-      color: downloadCount(count),
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -52,6 +39,19 @@ module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends Visual
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'installs',
+    }
+  }
+
+  static render({ count }) {
+    return {
+      message: metric(count),
+      color: downloadCount(count),
+    }
   }
 
   async handle({ measure, extensionId }) {

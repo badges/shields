@@ -52,10 +52,6 @@ class WordpressPluginTestedVersion extends BaseWordpress {
     return 'platform-support'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'wordpress' }
-  }
-
   static get route() {
     return {
       base: `wordpress/plugin/tested`,
@@ -73,6 +69,10 @@ class WordpressPluginTestedVersion extends BaseWordpress {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'wordpress' }
   }
 
   static renderStaticPreview({ testedVersion }) {

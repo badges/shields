@@ -18,15 +18,15 @@ const schema = Joi.object({
 }).required()
 
 class BaseAmoService extends BaseJsonService {
+  static get defaultBadgeData() {
+    return { label: 'mozilla add-on' }
+  }
+
   async fetch({ addonId }) {
     return this._requestJson({
       schema,
       url: `https://addons.mozilla.org/api/v3/addons/addon/${addonId}`,
     })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'mozilla add-on' }
   }
 }
 
