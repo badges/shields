@@ -8,6 +8,11 @@ There are two ways of setting secrets:
 
 1. Via environment variables. This is a good way to set them in a PaaS
    environment.
+   
+```sh
+GH_TOKEN=...
+```
+
 2. Via checked-in `config/local.yml`:
 
 ```yml
