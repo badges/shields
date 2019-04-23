@@ -16,8 +16,11 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
     return 'chat'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'stackoverflow' }
+  static get route() {
+    return {
+      base: 'stackexchange',
+      pattern: ':stackexchangesite/qm/:query',
+    }
   }
 
   static get examples() {
@@ -35,11 +38,8 @@ module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
     ]
   }
 
-  static get route() {
-    return {
-      base: 'stackexchange',
-      pattern: ':stackexchangesite/qm/:query',
-    }
+  static get defaultBadgeData() {
+    return { label: 'stackoverflow' }
   }
 
   static render(props) {
