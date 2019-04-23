@@ -20,7 +20,8 @@ private:
   gh_token: '...'
 ```
 
-See the [node-config documentation][] for more information.
+For more complex scenarios, configuration files can cascade. See the [node-config documentation][]
+for details.
 
 [node-config documentation]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
