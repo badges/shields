@@ -8,12 +8,21 @@ t.create('Downloads all releases')
   .get('/downloads/photonstorm/phaser/total.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
+t.create('Downloads all releases (no releases)')
+  .get('/downloads/badges/shields/total.json')
+  .expectBadge({ label: 'downloads', message: 'no releases' })
+
+t.create('Downloads-pre all releases (no releases)')
+  .get('/downloads-pre/badges/shields/total.json')
+  .expectBadge({ label: 'downloads', message: 'no releases' })
+
 t.create('Downloads all releases (repo not found)')
   .get('/downloads/badges/helmets/total.json')
-  .expectBadge({
-    label: 'downloads',
-    message: 'repo or release not found',
-  })
+  .expectBadge({ label: 'downloads', message: 'repo not found' })
+
+t.create('Downloads-pre all releases (repo not found)')
+  .get('/downloads-pre/badges/helmets/total.json')
+  .expectBadge({ label: 'downloads', message: 'repo not found' })
 
 t.create('downloads for latest release')
   .get('/downloads/photonstorm/phaser/latest/total.json')

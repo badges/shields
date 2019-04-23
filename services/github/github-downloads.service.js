@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { NotFound } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
@@ -16,9 +17,10 @@ const releaseSchema = Joi.object({
     .required(),
 }).required()
 
-const releaseArraySchema = Joi.array()
-  .items(releaseSchema)
-  .required()
+const releaseArraySchema = Joi.alternatives().try(
+  Joi.array().items(releaseSchema),
+  Joi.array().length(0)
+)
 
 module.exports = class GithubDownloads extends GithubAuthService {
   static get category() {
@@ -163,16 +165,12 @@ module.exports = class GithubDownloads extends GithubAuthService {
   }
 
   async handle({ kind, user, repo, tag, assetName }) {
-    const commonAttrs = {
-      errorMessages: errorMessagesFor('repo or release not found'),
-    }
-
     let releases
     if (tag === 'latest' && kind === 'downloads') {
       const latestRelease = await this._requestJson({
         schema: releaseSchema,
         url: `/repos/${user}/${repo}/releases/latest`,
-        ...commonAttrs,
+        errorMessages: errorMessagesFor('repo not found'),
       })
       releases = [latestRelease]
     } else if (tag === 'latest') {
@@ -181,24 +179,28 @@ module.exports = class GithubDownloads extends GithubAuthService {
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
         options: { qs: { per_page: 1 } },
-        ...commonAttrs,
+        errorMessages: errorMessagesFor('repo not found'),
       })
       releases = [latestReleaseIncludingPrereleases]
-    } else if (tag === undefined) {
+    } else if (tag) {
+      const wantedRelease = await this._requestJson({
+        schema: releaseSchema,
+        url: `/repos/${user}/${repo}/releases/tags/${tag}`,
+        errorMessages: errorMessagesFor('repo or release not found'),
+      })
+      releases = [wantedRelease]
+    } else {
       const allReleases = await this._requestJson({
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
         options: { qs: { per_page: 500 } },
-        ...commonAttrs,
+        errorMessages: errorMessagesFor('repo not found'),
       })
       releases = allReleases
-    } else {
-      const wantedRelease = await this._requestJson({
-        schema: releaseSchema,
-        url: `/repos/${user}/${repo}/releases/tags/${tag}`,
-        ...commonAttrs,
-      })
-      releases = [wantedRelease]
+    }
+
+    if (releases.length === 0) {
+      throw new NotFound({ prettyMessage: 'no releases' })
     }
 
     const { downloadCount } = this.constructor.transform({
