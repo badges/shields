@@ -108,7 +108,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
   }
 
   transform({ json }) {
-    const testsObject = json.actions.find(o => o.hasOwnProperty('failCount'))
+    const testsObject = json.actions.find(o => 'failCount' in o)
     if (!testsObject) {
       throw new InvalidResponse({ prettyMessage: 'no tests found' })
     }
