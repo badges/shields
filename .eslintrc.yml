@@ -12,10 +12,33 @@ parserOptions:
   sourceType: 'script'
 
 overrides:
-  files:
-    - gatsby-browser.js
-  parserOptions:
-    sourceType: 'module'
+  - files:
+      - gatsby-browser.js
+    parserOptions:
+      sourceType: 'module'
+  - files:
+      - 'services/**/*.js'
+    rules:
+      sort-class-members/sort-class-members:
+        [
+          'warn',
+          {
+            order:
+              [
+                'name',
+                'category',
+                'isDeprecated',
+                'route',
+                'examples',
+                'defaultBadgeData',
+                'render',
+                'constructor',
+                'fetch',
+                'transform',
+                'handle',
+              ],
+          },
+        ]
 
 plugins:
   - mocha
@@ -48,26 +71,6 @@ rules:
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
-  sort-class-members/sort-class-members:
-    [
-      'warn',
-      {
-        order:
-          [
-            'name',
-            'category',
-            'isDeprecated',
-            'route',
-            'examples',
-            'defaultBadgeData',
-            'render',
-            'constructor',
-            'fetch',
-            'transform',
-            'handle',
-          ],
-      },
-    ]
 
   # Mocha-related.
   mocha/no-exclusive-tests: 'error'
