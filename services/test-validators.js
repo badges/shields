@@ -91,34 +91,34 @@ const isDependencyState = withRegex(
   /^(\d+ out of date|\d+ deprecated|up to date)$/
 )
 
-const getTestTotalsValidator = ({ passed, failed, skipped }) =>
+const makeTestTotalsValidator = ({ passed, failed, skipped }) =>
   withRegex(
     new RegExp(`^[0-9]+ ${passed}(, [0-9]+ ${failed})?(, [0-9]+ ${skipped})?$`)
   )
 
-const getCompactTestTotalsValidator = ({ passed, failed, skipped }) =>
+const makeCompactTestTotalsValidator = ({ passed, failed, skipped }) =>
   withRegex(
     new RegExp(
       `^${passed} [0-9]+( \\| ${failed} [0-9]+)?( \\| ${skipped} [0-9]+)?$`
     )
   )
 
-const isDefaultTestTotals = getTestTotalsValidator({
+const isDefaultTestTotals = makeTestTotalsValidator({
   passed: 'passed',
   failed: 'failed',
   skipped: 'skipped',
 })
-const isDefaultCompactTestTotals = getCompactTestTotalsValidator({
+const isDefaultCompactTestTotals = makeCompactTestTotalsValidator({
   passed: '✔',
   failed: '✘',
   skipped: '➟',
 })
-const isCustomTestTotals = getTestTotalsValidator({
+const isCustomTestTotals = makeTestTotalsValidator({
   passed: 'good',
   failed: 'bad',
   skipped: 'n/a',
 })
-const isCustomCompactTestTotals = getCompactTestTotalsValidator({
+const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   passed: '💃',
   failed: '🤦‍♀️',
   skipped: '🤷',
@@ -148,6 +148,6 @@ module.exports = {
   isDefaultCompactTestTotals,
   isCustomTestTotals,
   isCustomCompactTestTotals,
-  getTestTotalsValidator,
-  getCompactTestTotalsValidator,
+  makeTestTotalsValidator,
+  makeCompactTestTotalsValidator,
 }
