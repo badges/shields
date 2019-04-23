@@ -9,17 +9,12 @@ module.exports = class PuppetForgeReleaseCountService extends BasePuppetForgeUse
     return 'other'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'releases' }
-  }
-
   static get route() {
     return {
       base: 'puppetforge/rc',
       pattern: ':user',
     }
   }
-
   static get examples() {
     return [
       {
@@ -32,9 +27,8 @@ module.exports = class PuppetForgeReleaseCountService extends BasePuppetForgeUse
     ]
   }
 
-  async handle({ user }) {
-    const data = await this.fetch({ user })
-    return this.constructor.render({ releases: data.release_count })
+  static get defaultBadgeData() {
+    return { label: 'releases' }
   }
 
   static render({ releases }) {
@@ -42,5 +36,10 @@ module.exports = class PuppetForgeReleaseCountService extends BasePuppetForgeUse
       message: metric(releases),
       color: floorCountColor(releases, 10, 50, 100),
     }
+  }
+
+  async handle({ user }) {
+    const data = await this.fetch({ user })
+    return this.constructor.render({ releases: data.release_count })
   }
 }

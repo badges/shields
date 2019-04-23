@@ -12,10 +12,6 @@ module.exports = class PypiWheel extends PypiBase {
     return this.buildRoute('pypi/wheel')
   }
 
-  static get defaultBadgeData() {
-    return { label: 'wheel' }
-  }
-
   static get examples() {
     return [
       {
@@ -26,6 +22,10 @@ module.exports = class PypiWheel extends PypiBase {
         keywords: ['python'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'wheel' }
   }
 
   static render({ hasWheel }) {
