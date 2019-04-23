@@ -77,7 +77,7 @@ module.exports = class Maintenance extends NonMemoryCachingBaseService {
           maintained: 'yes',
           year: '2019',
         },
-        staticPreview: this.render({ message: 'yes' }),
+        staticPreview: this.render({ isMaintained: false, targetYear: '2018' }),
         keywords: ['maintained'],
       },
     ]
