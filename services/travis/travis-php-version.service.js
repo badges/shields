@@ -48,7 +48,7 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
       {
         title: 'PHP from Travis config',
         namedParams: { user: 'symfony', repo: 'symfony' },
-        staticPreview: { message: '^7.1.3', color: 'blue' },
+        staticPreview: this.render({ reduction: ['^7.1.3'] }),
       },
     ]
   }
