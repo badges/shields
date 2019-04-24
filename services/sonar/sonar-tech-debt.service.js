@@ -15,18 +15,6 @@ module.exports = class SonarTechDebt extends SonarBase {
     return 'analysis'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'tech debt' }
-  }
-
-  static render({ debt, metric }) {
-    return {
-      label: getLabel({ metric }),
-      message: `${debt}%`,
-      color: negativeMetricColorScale(debt),
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -58,13 +46,25 @@ module.exports = class SonarTechDebt extends SonarBase {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'tech debt' }
+  }
+
+  static render({ debt, metric }) {
+    return {
+      label: getLabel({ metric }),
+      message: `${debt}%`,
+      color: negativeMetricColorScale(debt),
+    }
+  }
+
   async handle({ protocol, host, component, metric }, { sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       protocol,
       host,
       component,
-      //special condition for backwards compatibility
+      // Special condition for backwards compatibility.
       metricName: 'sqale_debt_ratio',
     })
     const { metricValue: debt } = this.transform({ json, sonarVersion })

@@ -5,33 +5,15 @@ const { downloadCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloads extends BaseSpigetService {
+  static get category() {
+    return 'downloads'
+  }
+
   static get route() {
     return {
       base: 'spiget/downloads',
       pattern: ':resourceId',
     }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'downloads',
-    }
-  }
-
-  async handle({ resourceId }) {
-    const { downloads } = await this.fetch({ resourceId })
-    return this.constructor.render({ downloads })
-  }
-
-  static render({ downloads }) {
-    return {
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
-  }
-
-  static get category() {
-    return 'downloads'
   }
 
   static get examples() {
@@ -46,5 +28,23 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'downloads',
+    }
+  }
+
+  static render({ downloads }) {
+    return {
+      message: metric(downloads),
+      color: downloadCount(downloads),
+    }
+  }
+
+  async handle({ resourceId }) {
+    const { downloads } = await this.fetch({ resourceId })
+    return this.constructor.render({ downloads })
   }
 }

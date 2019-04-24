@@ -14,17 +14,6 @@ module.exports = class SonarCoverage extends SonarBase {
     return 'coverage'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
-
-  static render({ coverage }) {
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -50,6 +39,17 @@ module.exports = class SonarCoverage extends SonarBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {

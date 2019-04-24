@@ -86,27 +86,6 @@ function DownloadsForInterval(interval) {
       return name
     }
 
-    static render({ downloads }) {
-      return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCount(downloads),
-      }
-    }
-
-    async fetch({ packageName }) {
-      const url = `https://packagecontrol.io/packages/${packageName}.json`
-      return this._requestJson({ schema, url })
-    }
-
-    async handle({ packageName }) {
-      const data = await this.fetch({ packageName })
-      return this.constructor.render({ downloads: transform(data) })
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'downloads' }
-    }
-
     static get category() {
       return 'downloads'
     }
@@ -124,6 +103,27 @@ function DownloadsForInterval(interval) {
           keywords,
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'downloads' }
+    }
+
+    static render({ downloads }) {
+      return {
+        message: `${metric(downloads)}${messageSuffix}`,
+        color: downloadCount(downloads),
+      }
+    }
+
+    async fetch({ packageName }) {
+      const url = `https://packagecontrol.io/packages/${packageName}.json`
+      return this._requestJson({ schema, url })
+    }
+
+    async handle({ packageName }) {
+      const data = await this.fetch({ packageName })
+      return this.constructor.render({ downloads: transform(data) })
     }
   }
 }
