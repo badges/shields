@@ -22,7 +22,7 @@ overrides:
     rules:
       sort-class-members/sort-class-members:
         [
-          'warn',
+          'error',
           {
             order:
               [

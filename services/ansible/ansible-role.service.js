@@ -27,22 +27,6 @@ class AnsibleGalaxyRole extends BaseJsonService {
 }
 
 class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
-  static render({ downloads }) {
-    return {
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
-  }
-
-  async handle({ roleId }) {
-    const json = await this.fetch({ roleId })
-    return this.constructor.render({ downloads: json.download_count })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'role downloads' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -63,23 +47,25 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
       },
     ]
   }
-}
 
-class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
-  static render({ name }) {
-    return { message: name, color: 'blue' }
+  static get defaultBadgeData() {
+    return { label: 'role downloads' }
+  }
+
+  static render({ downloads }) {
+    return {
+      message: metric(downloads),
+      color: downloadCount(downloads),
+    }
   }
 
   async handle({ roleId }) {
     const json = await this.fetch({ roleId })
-    const name = `${json.summary_fields.namespace.name}.${json.name}`
-    return this.constructor.render({ name })
+    return this.constructor.render({ downloads: json.download_count })
   }
+}
 
-  static get defaultBadgeData() {
-    return { label: 'role' }
-  }
-
+class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   static get category() {
     return 'other'
   }
@@ -101,6 +87,20 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'role' }
+  }
+
+  static render({ name }) {
+    return { message: name, color: 'blue' }
+  }
+
+  async handle({ roleId }) {
+    const json = await this.fetch({ roleId })
+    const name = `${json.summary_fields.namespace.name}.${json.name}`
+    return this.constructor.render({ name })
   }
 }
 

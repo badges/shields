@@ -17,15 +17,15 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CodeclimateCoverage extends BaseJsonService {
+  static get category() {
+    return 'coverage'
+  }
+
   static get route() {
     return {
       base: 'codeclimate',
       pattern: ':which(coverage|coverage-letter)/:user/:repo',
     }
-  }
-
-  static get category() {
-    return 'coverage'
   }
 
   static get examples() {
@@ -41,6 +41,20 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
         keywords,
       },
     ]
+  }
+
+  static render({ wantLetter, percentage, letter }) {
+    if (wantLetter) {
+      return {
+        message: letter,
+        color: letterScore(letter),
+      }
+    } else {
+      return {
+        message: `${percentage.toFixed(0)}%`,
+        color: coveragePercentage(percentage),
+      }
+    }
   }
 
   async fetch({ user, repo }) {
@@ -60,20 +74,6 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
       }`,
     })
     return data
-  }
-
-  static render({ wantLetter, percentage, letter }) {
-    if (wantLetter) {
-      return {
-        message: letter,
-        color: letterScore(letter),
-      }
-    } else {
-      return {
-        message: `${percentage.toFixed(0)}%`,
-        color: coveragePercentage(percentage),
-      }
-    }
   }
 
   async handle({ which, user, repo }) {

@@ -21,10 +21,6 @@ module.exports = class Buildkite extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
-
   static get examples() {
     return [
       {
@@ -45,6 +41,10 @@ module.exports = class Buildkite extends BaseJsonService {
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'build' }
   }
 
   async fetch({ identifier, branch }) {

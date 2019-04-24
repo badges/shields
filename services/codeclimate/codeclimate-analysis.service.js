@@ -88,16 +88,16 @@ const whichMap = {
 }
 
 module.exports = class CodeclimateAnalysis extends BaseJsonService {
+  static get category() {
+    return 'analysis'
+  }
+
   static get route() {
     return {
       base: 'codeclimate',
       pattern:
         ':which(maintainability|maintainability-percentage|tech-debt|issues)/:user/:repo',
     }
-  }
-
-  static get category() {
-    return 'analysis'
   }
 
   static get examples() {
@@ -140,6 +140,12 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     ]
   }
 
+  static render({ which, ...props }) {
+    const { render } = whichMap[which]
+
+    return render(props)
+  }
+
   async fetch({ user, repo }) {
     const {
       id: repoId,
@@ -157,12 +163,6 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
       }`,
     })
     return data
-  }
-
-  static render({ which, ...props }) {
-    const { render } = whichMap[which]
-
-    return render(props)
   }
 
   async handle({ which, user, repo }) {

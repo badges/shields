@@ -18,37 +18,8 @@ function issueClassGenerator(raw) {
       return `BitbucketIssues${raw ? 'Raw' : ''}`
     }
 
-    async fetch({ user, repo }) {
-      const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
-      return this._requestJson({
-        url,
-        schema: bitbucketIssuesSchema,
-        options: {
-          qs: { limit: 0, status: ['new', 'open'] },
-          useQuerystring: true,
-        },
-        errorMessages: { 403: 'private repo' },
-      })
-    }
-
-    static render({ issues }) {
-      return {
-        message: `${metric(issues)}${badgeSuffix}`,
-        color: issues ? 'yellow' : 'brightgreen',
-      }
-    }
-
-    async handle({ user, repo }) {
-      const data = await this.fetch({ user, repo })
-      return this.constructor.render({ issues: data.count })
-    }
-
     static get category() {
       return 'issue-tracking'
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'issues' }
     }
 
     static get route() {
@@ -69,6 +40,35 @@ function issueClassGenerator(raw) {
           staticPreview: this.render({ issues: 33 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'issues' }
+    }
+
+    static render({ issues }) {
+      return {
+        message: `${metric(issues)}${badgeSuffix}`,
+        color: issues ? 'yellow' : 'brightgreen',
+      }
+    }
+
+    async fetch({ user, repo }) {
+      const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
+      return this._requestJson({
+        url,
+        schema: bitbucketIssuesSchema,
+        options: {
+          qs: { limit: 0, status: ['new', 'open'] },
+          useQuerystring: true,
+        },
+        errorMessages: { 403: 'private repo' },
+      })
+    }
+
+    async handle({ user, repo }) {
+      const data = await this.fetch({ user, repo })
+      return this.constructor.render({ issues: data.count })
     }
   }
 }

@@ -44,12 +44,6 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'tests',
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -108,6 +102,12 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'tests',
+    }
   }
 
   static render({
