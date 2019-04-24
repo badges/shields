@@ -1,14 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'CodeClimateAnalysis',
-  title: 'Code Climate',
-  pathPrefix: '/codeclimate',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('issues count')
   .get('/issues/angular/angular.js.json')
@@ -43,29 +37,29 @@ t.create('maintainability letter')
 t.create('maintainability letter for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectBadge({
-    label: 'maintainability',
-    message: 'not found',
+    label: 'analysis',
+    message: 'repo not found',
   })
 
 t.create('maintainability letter for repo without snapshots')
   .get('/maintainability/kabisaict/flow.json')
   .expectBadge({
-    label: 'maintainability',
-    message: 'unknown',
+    label: 'analysis',
+    message: 'snapshot not found',
   })
 
 t.create('malformed response for outer user repos query')
   .get('/maintainability/angular/angular.js.json')
   .intercept(nock =>
     nock('https://api.codeclimate.com')
-      .get('/v1/repos?github_slug=angular/angular.js')
+      .get('/v1/repos?github_slug=angular%2Fangular.js')
       .reply(200, {
         data: [{}], // No relationships in the list of data elements.
       })
   )
   .expectBadge({
-    label: 'maintainability',
-    message: 'invalid',
+    label: 'analysis',
+    message: 'invalid response data',
   })
 
 t.create('malformed response for inner specific repo query')
@@ -77,6 +71,6 @@ t.create('malformed response for inner specific repo query')
   ) // No data.
   .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
   .expectBadge({
-    label: 'maintainability',
-    message: 'invalid',
+    label: 'analysis',
+    message: 'invalid response data',
   })

@@ -59,7 +59,40 @@ async function fetchJsonFromRepo(
   }
 }
 
+const releaseInfoSchema = Joi.object({
+  tag_name: Joi.string().required(),
+  prerelease: Joi.boolean().required(),
+}).required()
+const releaseInfoArraySchema = Joi.array()
+  .items(releaseInfoSchema)
+  .required()
+
+async function fetchLatestRelease(
+  serviceInstance,
+  { user, repo, includePre = false }
+) {
+  const commonAttrs = {
+    errorMessages: errorMessagesFor('no releases or repo not found'),
+  }
+  if (includePre) {
+    const [releaseInfo] = await serviceInstance._requestJson({
+      schema: releaseInfoArraySchema,
+      url: `/repos/${user}/${repo}/releases`,
+      ...commonAttrs,
+    })
+    return releaseInfo
+  } else {
+    const releaseInfo = await serviceInstance._requestJson({
+      schema: releaseInfoSchema,
+      url: `/repos/${user}/${repo}/releases/latest`,
+      ...commonAttrs,
+    })
+    return releaseInfo
+  }
+}
+
 module.exports = {
   fetchIssue,
   fetchJsonFromRepo,
+  fetchLatestRelease,
 }
