@@ -30,10 +30,6 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'stackoverflow' }
-  }
-
   static get examples() {
     return [
       {
@@ -46,6 +42,10 @@ module.exports = class StackExchangeReputation extends BaseJsonService {
         keywords: ['stackexchange', 'stackoverflow'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'stackoverflow' }
   }
 
   static render({ stackexchangesite, numValue }) {

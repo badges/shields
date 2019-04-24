@@ -8,6 +8,11 @@ There are two ways of setting secrets:
 
 1. Via environment variables. This is a good way to set them in a PaaS
    environment.
+
+```sh
+GH_TOKEN=...
+```
+
 2. Via checked-in `config/local.yml`:
 
 ```yml
@@ -15,7 +20,8 @@ private:
   gh_token: '...'
 ```
 
-See the [node-config documentation][] for more information.
+For more complex scenarios, configuration files can cascade. See the [node-config documentation][]
+for details.
 
 [node-config documentation]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
 

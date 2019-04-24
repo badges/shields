@@ -34,33 +34,6 @@ const periodMap = {
 // this badge uses PyPI Stats instead of the PyPI API
 // so it doesn't extend PypiBase
 module.exports = class PypiDownloads extends BaseJsonService {
-  async fetch({ packageName }) {
-    return this._requestJson({
-      url: `https://pypistats.org/api/packages/${packageName.toLowerCase()}/recent`,
-      schema,
-      errorMessages: { 404: 'package not found' },
-    })
-  }
-
-  static render({ period, downloads }) {
-    return {
-      message: `${metric(downloads)}${periodMap[period].suffix}`,
-      color: downloadCount(downloads),
-    }
-  }
-
-  async handle({ period, packageName }) {
-    const json = await this.fetch({ packageName })
-    return this.constructor.render({
-      period,
-      downloads: json.data[periodMap[period].api_field],
-    })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -84,5 +57,32 @@ module.exports = class PypiDownloads extends BaseJsonService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'downloads' }
+  }
+
+  static render({ period, downloads }) {
+    return {
+      message: `${metric(downloads)}${periodMap[period].suffix}`,
+      color: downloadCount(downloads),
+    }
+  }
+
+  async fetch({ packageName }) {
+    return this._requestJson({
+      url: `https://pypistats.org/api/packages/${packageName.toLowerCase()}/recent`,
+      schema,
+      errorMessages: { 404: 'package not found' },
+    })
+  }
+
+  async handle({ period, packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({
+      period,
+      downloads: json.data[periodMap[period].api_field],
+    })
   }
 }

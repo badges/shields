@@ -40,17 +40,6 @@ const legacyApiSchema = Joi.array()
   .required()
 
 module.exports = class SonarBase extends BaseJsonService {
-  transform({ json, sonarVersion }) {
-    const useLegacyApi = isLegacyVersion({ sonarVersion })
-    const rawValue = useLegacyApi
-      ? json[0].msr[0].val
-      : json.component.measures[0].value
-    const value = parseInt(rawValue)
-
-    // Most values are numeric, but not all of them.
-    return { metricValue: value || rawValue }
-  }
-
   async fetch({ sonarVersion, protocol, host, component, metricName }) {
     let qs, url
     const useLegacyApi = isLegacyVersion({ sonarVersion })
@@ -87,5 +76,16 @@ module.exports = class SonarBase extends BaseJsonService {
         404: 'component or metric not found, or legacy API not supported',
       },
     })
+  }
+
+  transform({ json, sonarVersion }) {
+    const useLegacyApi = isLegacyVersion({ sonarVersion })
+    const rawValue = useLegacyApi
+      ? json[0].msr[0].val
+      : json.component.measures[0].value
+    const value = parseInt(rawValue)
+
+    // Most values are numeric, but not all of them.
+    return { metricValue: value || rawValue }
   }
 }

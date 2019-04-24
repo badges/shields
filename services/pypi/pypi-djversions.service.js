@@ -12,10 +12,6 @@ module.exports = class PypiDjangoVersions extends PypiBase {
     return this.buildRoute('pypi/djversions')
   }
 
-  static get defaultBadgeData() {
-    return { label: 'django versions' }
-  }
-
   static get examples() {
     return [
       {
@@ -26,6 +22,10 @@ module.exports = class PypiDjangoVersions extends PypiBase {
         keywords: ['python'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'django versions' }
   }
 
   static render({ versions }) {

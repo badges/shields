@@ -11,6 +11,43 @@ const wheelmapSchema = Joi.object({
 }).required()
 
 module.exports = class Wheelmap extends BaseJsonService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'wheelmap/a',
+      pattern: ':nodeId(-?[0-9]+)',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Wheelmap',
+        namedParams: { nodeId: '26699541' },
+        staticPreview: this.render({ accessibility: 'yes' }),
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'accessibility' }
+  }
+
+  static render({ accessibility }) {
+    let color
+    if (accessibility === 'yes') {
+      color = 'brightgreen'
+    } else if (accessibility === 'limited') {
+      color = 'yellow'
+    } else if (accessibility === 'no') {
+      color = 'red'
+    }
+    return { message: accessibility, color }
+  }
+
   async fetch({ nodeId }) {
     let options
     if (serverSecrets.wheelmap_token) {
@@ -32,46 +69,9 @@ module.exports = class Wheelmap extends BaseJsonService {
     })
   }
 
-  static render({ accessibility }) {
-    let color
-    if (accessibility === 'yes') {
-      color = 'brightgreen'
-    } else if (accessibility === 'limited') {
-      color = 'yellow'
-    } else if (accessibility === 'no') {
-      color = 'red'
-    }
-    return { message: accessibility, color }
-  }
-
   async handle({ nodeId }) {
     const json = await this.fetch({ nodeId })
     const accessibility = json.node.wheelchair
     return this.constructor.render({ accessibility })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'accessibility' }
-  }
-
-  static get category() {
-    return 'other'
-  }
-
-  static get route() {
-    return {
-      base: 'wheelmap/a',
-      pattern: ':nodeId(-?[0-9]+)',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Wheelmap',
-        namedParams: { nodeId: '26699541' },
-        staticPreview: this.render({ accessibility: 'yes' }),
-      },
-    ]
   }
 }

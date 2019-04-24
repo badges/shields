@@ -25,22 +25,16 @@ const queryParamSchema = Joi.object({
   .required()
 
 class DummyService extends BaseService {
-  static render({ namedParamA, queryParamA }) {
-    return {
-      message: `Hello namedParamA: ${namedParamA} with queryParamA: ${queryParamA}`,
-    }
-  }
-
-  async handle({ namedParamA }, { queryParamA }) {
-    return this.constructor.render({ namedParamA, queryParamA })
-  }
-
   static get category() {
     return 'other'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'cat', namedLogo: 'appveyor' }
+  static get route() {
+    return {
+      base: 'foo',
+      pattern: ':namedParamA',
+      queryParamSchema,
+    }
   }
 
   static get examples() {
@@ -54,12 +48,18 @@ class DummyService extends BaseService {
     ]
   }
 
-  static get route() {
+  static get defaultBadgeData() {
+    return { label: 'cat', namedLogo: 'appveyor' }
+  }
+
+  static render({ namedParamA, queryParamA }) {
     return {
-      base: 'foo',
-      pattern: ':namedParamA',
-      queryParamSchema,
+      message: `Hello namedParamA: ${namedParamA} with queryParamA: ${queryParamA}`,
     }
+  }
+
+  async handle({ namedParamA }, { queryParamA }) {
+    return this.constructor.render({ namedParamA, queryParamA })
   }
 }
 

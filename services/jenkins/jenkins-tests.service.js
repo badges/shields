@@ -1,24 +1,56 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const serverSecrets = require('../../lib/server-secrets')
+const Joi = require('joi')
+const { InvalidResponse } = require('..')
+const {
+  documentation,
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} = require('../test-results')
+const { optionalNonNegativeInteger } = require('../validators')
+const JenkinsBase = require('./jenkins-base')
+const {
+  buildTreeParamQueryString,
+  buildUrl,
+  queryParamSchema,
+} = require('./jenkins-common')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
+// In the API response, the `actions` array can be empty, and when it is not empty it will contain a
+// mix of objects. Some will be empty objects, and several will not have the test count properties.
+// The schema is relaxed to handle this and the `transform` function handles the responsibility of
+// grabbing the correct object to retrieve the test result metrics.
 //
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class JenkinsTests extends LegacyService {
+// Sample data set for the `actions` array:
+// "actions":[{"_class":"hudson.model.ParametersAction"},{"_class":"hudson.model.CauseAction"},{"_class":"hudson.tasks.junit.TestResultAction","failCount":15,"skipCount":0,"totalCount":753},{},{}]
+// https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]
+const schema = Joi.object({
+  actions: Joi.array()
+    .items(
+      Joi.object({
+        totalCount: optionalNonNegativeInteger,
+        failCount: optionalNonNegativeInteger,
+        skipCount: optionalNonNegativeInteger,
+      })
+    )
+    .required(),
+}).required()
+
+module.exports = class JenkinsTests extends JenkinsBase {
   static get category() {
     return 'build'
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'tests',
+    }
+  }
+
   static get route() {
     return {
-      base: 'jenkins/t',
-      pattern: ':scheme(http|https)?/:host/:job*',
+      base: 'jenkins/tests',
+      pattern: ':protocol(http|https)/:host/:job+',
+      queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
     }
   }
 
@@ -26,85 +58,94 @@ module.exports = class JenkinsTests extends LegacyService {
     return [
       {
         title: 'Jenkins tests',
-        pattern: ':scheme/:host/:job',
         namedParams: {
-          scheme: 'https',
+          protocol: 'https',
           host: 'jenkins.qa.ubuntu.com',
           job:
-            'view/Precise/view/All%20Precise/job/precise-desktop-amd64_default',
+            'view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
         },
-        staticPreview: {
-          label: 'build',
-          message: 'passing',
-          color: 'brightgreen',
+        queryParams: {
+          compact_message: null,
+          passed_label: 'passed',
+          failed_label: 'failed',
+          skipped_label: 'skipped',
         },
+        staticPreview: this.render({
+          passed: 477,
+          failed: 2,
+          skipped: 0,
+          total: 479,
+          isCompact: false,
+        }),
+        documentation,
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache }) {
-    camp.route(
-      /^\/jenkins(?:-ci)?\/t\/(http(?:s)?)\/([^/]+)\/(.+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const scheme = match[1] // http(s)
-        const host = match[2] // example.org:8080
-        const job = match[3] // folder/job
-        const format = match[4]
-        const options = {
-          json: true,
-          uri: `${scheme}://${host}/job/${job}/lastBuild/api/json?tree=${encodeURIComponent(
-            'actions[failCount,skipCount,totalCount]'
-          )}`,
-        }
-        if (job.indexOf('/') > -1) {
-          options.uri = `${scheme}://${host}/${job}/lastBuild/api/json?tree=${encodeURIComponent(
-            'actions[failCount,skipCount,totalCount]'
-          )}`
-        }
+  static render({
+    passed,
+    failed,
+    skipped,
+    total,
+    passedLabel,
+    failedLabel,
+    skippedLabel,
+    isCompact,
+  }) {
+    return renderTestResultBadge({
+      passed,
+      failed,
+      skipped,
+      total,
+      passedLabel,
+      failedLabel,
+      skippedLabel,
+      isCompact,
+    })
+  }
 
-        if (serverSecrets.jenkins_user) {
-          options.auth = {
-            user: serverSecrets.jenkins_user,
-            pass: serverSecrets.jenkins_pass,
-          }
-        }
+  transform({ json }) {
+    const testsObject = json.actions.find(o => 'failCount' in o)
+    if (!testsObject) {
+      throw new InvalidResponse({ prettyMessage: 'no tests found' })
+    }
 
-        const badgeData = getBadgeData('tests', data)
-        request(options, (err, res, json) => {
-          if (err !== null) {
-            badgeData.text[1] = 'inaccessible'
-            sendBadge(format, badgeData)
-            return
-          }
+    return {
+      passed:
+        testsObject.totalCount -
+        (testsObject.failCount + testsObject.skipCount),
+      failed: testsObject.failCount,
+      skipped: testsObject.skipCount,
+      total: testsObject.totalCount,
+    }
+  }
 
-          try {
-            const testsObject = json.actions.filter(obj =>
-              obj.hasOwnProperty('failCount')
-            )[0]
-            if (testsObject === undefined) {
-              badgeData.text[1] = 'inaccessible'
-              sendBadge(format, badgeData)
-              return
-            }
-            const successfulTests =
-              testsObject.totalCount -
-              (testsObject.failCount + testsObject.skipCount)
-            const percent = successfulTests / testsObject.totalCount
-            badgeData.text[1] = `${successfulTests} / ${testsObject.totalCount}`
-            if (percent === 1) {
-              badgeData.colorscheme = 'brightgreen'
-            } else if (percent === 0) {
-              badgeData.colorscheme = 'red'
-            } else {
-              badgeData.colorscheme = 'yellow'
-            }
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  async handle(
+    { protocol, host, job },
+    {
+      disableStrictSSL,
+      compact_message: compactMessage,
+      passed_label: passedLabel,
+      failed_label: failedLabel,
+      skipped_label: skippedLabel,
+    }
+  ) {
+    const json = await this.fetch({
+      url: buildUrl({ protocol, host, job }),
+      schema,
+      qs: buildTreeParamQueryString('actions[failCount,skipCount,totalCount]'),
+      disableStrictSSL,
+    })
+    const { passed, failed, skipped, total } = this.transform({ json })
+    return this.constructor.render({
+      passed,
+      failed,
+      skipped,
+      total,
+      isCompact: compactMessage !== undefined,
+      passedLabel,
+      failedLabel,
+      skippedLabel,
+    })
   }
 }

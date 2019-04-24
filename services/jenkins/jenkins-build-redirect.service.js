@@ -2,15 +2,26 @@
 
 const { redirector } = require('..')
 
+const commonProps = {
+  category: 'build',
+  transformPath: ({ protocol, host, job }) =>
+    `/jenkins/build/${protocol}/${host}/${job}`,
+  dateAdded: new Date('2019-04-20'),
+}
+
 module.exports = [
   redirector({
-    category: 'build',
     route: {
-      base: 'jenkins-ci',
-      pattern: 's/:protocol(http|https)/:host+/:job+',
+      base: 'jenkins-ci/s',
+      pattern: ':protocol(http|https)/:host/:job+',
     },
-    transformPath: ({ protocol, host, job }) =>
-      `/jenkins/s/${protocol}/${host}/${job}`,
-    dateAdded: new Date('2019-04-14'),
+    ...commonProps,
+  }),
+  redirector({
+    route: {
+      base: 'jenkins/s',
+      pattern: ':protocol(http|https)/:host/:job+',
+    },
+    ...commonProps,
   }),
 ]
