@@ -24,6 +24,15 @@ describe('Redirector', function() {
     expect(redirector(attrs).name).to.equal('VeryOldServiceRedirect')
   })
 
+  it('overrides the name', function() {
+    expect(
+      redirector({
+        ...attrs,
+        name: 'ShinyRedirect',
+      }).name
+    ).to.equal('ShinyRedirect')
+  })
+
   it('sets specified route', function() {
     expect(redirector(attrs).route).to.deep.equal(route)
   })

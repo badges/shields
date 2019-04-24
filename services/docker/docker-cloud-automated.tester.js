@@ -27,7 +27,7 @@ t.create('docker cloud automated build (not found)')
   .expectBadge({ label: 'docker build', message: 'repo not found' })
 
 t.create('docker cloud automated build - automated')
-  .get('/xenolf/lego.json?style=_shields_test')
+  .get('/xenolf/lego.json')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)
@@ -40,7 +40,7 @@ t.create('docker cloud automated build - automated')
   })
 
 t.create('docker cloud automated build - manual')
-  .get('/xenolf/lego.json?style=_shields_test')
+  .get('/xenolf/lego.json')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)

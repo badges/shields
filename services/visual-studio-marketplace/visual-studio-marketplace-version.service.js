@@ -15,16 +15,6 @@ module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarket
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'version',
-    }
-  }
-
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
   static get examples() {
     return [
       {
@@ -35,6 +25,16 @@ module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarket
         keywords: this.keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'version',
+    }
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
   }
 
   transform({ json }) {

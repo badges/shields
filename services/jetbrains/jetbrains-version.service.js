@@ -25,8 +25,11 @@ module.exports = class JetbrainsVersion extends JetbrainsBase {
     return 'version'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'jetbrains plugin' }
+  static get route() {
+    return {
+      base: 'jetbrains/plugin/v',
+      pattern: ':pluginId',
+    }
   }
 
   static get examples() {
@@ -41,11 +44,8 @@ module.exports = class JetbrainsVersion extends JetbrainsBase {
     ]
   }
 
-  static get route() {
-    return {
-      base: 'jetbrains/plugin/v',
-      pattern: ':pluginId',
-    }
+  static get defaultBadgeData() {
+    return { label: 'jetbrains plugin' }
   }
 
   static render({ version }) {

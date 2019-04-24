@@ -37,6 +37,10 @@ class AmoWeeklyDownloads extends BaseAmoService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'downloads' }
+  }
+
   static render({ downloads }) {
     return {
       message: `${metric(downloads)}/week`,
@@ -49,10 +53,6 @@ class AmoWeeklyDownloads extends BaseAmoService {
     return this.constructor.render({
       downloads: data.weekly_downloads,
     })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
   }
 }
 

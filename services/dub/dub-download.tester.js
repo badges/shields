@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isDownloadsColor = Joi.equal(
   'red',
@@ -12,13 +12,8 @@ const isDownloadsColor = Joi.equal(
   'brightgreen'
 )
 
-const t = (module.exports = new ServiceTester({
-  id: 'dub',
-  title: 'DubDownloads',
-}))
-
 t.create('total downloads (valid)')
-  .get('/dt/vibe-d.json?style=_shields_test')
+  .get('/dt/vibe-d.json')
   .expectBadge({
     label: 'downloads',
     message: isMetric,
@@ -26,24 +21,24 @@ t.create('total downloads (valid)')
   })
 
 t.create('total downloads, specific version (valid)')
-  .get('/dt/vibe-d/0.8.4.json?style=_shields_test')
+  .get('/dt/vibe-d/0.8.4.json')
   .expectBadge({
     label: 'downloads@0.8.4',
-    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
+    message: isMetric,
     color: isDownloadsColor,
   })
   .timeout(15000)
 
 t.create('total downloads, latest version (valid)')
-  .get('/dt/vibe-d/latest.json?style=_shields_test')
+  .get('/dt/vibe-d/latest.json')
   .expectBadge({
     label: 'downloads@latest',
-    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]?$/),
+    message: isMetric,
     color: isDownloadsColor,
   })
 
 t.create('daily downloads (valid)')
-  .get('/dd/vibe-d.json?style=_shields_test')
+  .get('/dd/vibe-d.json')
   .expectBadge({
     label: 'downloads',
     message: isMetricOverTimePeriod,
@@ -51,7 +46,7 @@ t.create('daily downloads (valid)')
   })
 
 t.create('weekly downloads (valid)')
-  .get('/dw/vibe-d.json?style=_shields_test')
+  .get('/dw/vibe-d.json')
   .expectBadge({
     label: 'downloads',
     message: isMetricOverTimePeriod,
@@ -59,7 +54,7 @@ t.create('weekly downloads (valid)')
   })
 
 t.create('monthly downloads (valid)')
-  .get('/dm/vibe-d.json?style=_shields_test')
+  .get('/dm/vibe-d.json')
   .expectBadge({
     label: 'downloads',
     message: isMetricOverTimePeriod,

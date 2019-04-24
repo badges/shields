@@ -5,7 +5,10 @@ exports['The badge generator SVG should always produce the same SVG (unless we h
 exports['The badge generator JSON should always produce the same JSON (unless we have changed something!) 1'] = `
 {
   "name": "cactus",
-  "value": "grown"
+  "label": "cactus",
+  "value": "grown",
+  "message": "grown",
+  "color": null
 }
 `
 

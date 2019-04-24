@@ -18,8 +18,8 @@ module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase 
     return 'license'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'license' }
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/l')
   }
 
   static get examples() {
@@ -32,8 +32,8 @@ module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase 
     ]
   }
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/l')
+  static get defaultBadgeData() {
+    return { label: 'license' }
   }
 
   static render({ license }) {

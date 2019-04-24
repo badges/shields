@@ -56,7 +56,7 @@ t.create('version')
   })
 
 t.create('version (mocked)')
-  .get('/v/novel.json?style=_shields_test')
+  .get('/v/novel.json')
   .intercept(nock =>
     nock('http://www.ctan.org')
       .get('/json/pkg/novel')

@@ -52,13 +52,6 @@ module.exports = class Bugzilla extends BaseJsonService {
     return { label: 'bugzilla' }
   }
 
-  async fetch({ bugNumber }) {
-    return this._requestJson({
-      schema,
-      url: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
-    })
-  }
-
   static getDisplayStatus({ status, resolution }) {
     let displayStatus =
       status === 'RESOLVED' ? resolution.toLowerCase() : status.toLowerCase()
@@ -97,6 +90,13 @@ module.exports = class Bugzilla extends BaseJsonService {
       message: displayStatus,
       color,
     }
+  }
+
+  async fetch({ bugNumber }) {
+    return this._requestJson({
+      schema,
+      url: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
+    })
   }
 
   async handle({ bugNumber }) {

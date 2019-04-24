@@ -10,24 +10,6 @@ const documentation = `
 `
 
 module.exports = class Date extends BaseService {
-  static render({ relativeDateString }) {
-    return {
-      message: relativeDateString,
-      color: relativeDateString === 'invalid date' ? 'grey' : 'blue',
-    }
-  }
-
-  async handle({ timestamp }) {
-    return this.constructor.render({
-      relativeDateString: formatRelativeDate(timestamp),
-    })
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return { label: 'date' }
-  }
-
   static get category() {
     return 'other'
   }
@@ -50,5 +32,22 @@ module.exports = class Date extends BaseService {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'date' }
+  }
+
+  static render({ relativeDateString }) {
+    return {
+      message: relativeDateString,
+      color: relativeDateString === 'invalid date' ? 'grey' : 'blue',
+    }
+  }
+
+  async handle({ timestamp }) {
+    return this.constructor.render({
+      relativeDateString: formatRelativeDate(timestamp),
+    })
   }
 }

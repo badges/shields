@@ -18,7 +18,7 @@ t.create('Valid schema (mocked)')
   .expectBadge({ label: '', message: 'yo' })
 
 t.create('color and labelColor')
-  .get('.json?url=https://example.com/badge&style=_shields_test')
+  .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -30,9 +30,9 @@ t.create('color and labelColor')
         labelColor: '#e6e6fa',
       })
   )
-  .expectJSON({
-    name: 'hey',
-    value: 'yo',
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
     color: '#f0dcc3',
     labelColor: '#e6e6fa',
   })
@@ -47,15 +47,13 @@ t.create('style')
         label: 'hey',
         message: 'yo',
         color: '#99c',
-        style: '_shields_test',
       })
   )
   .expectBadge({
     label: 'hey',
     message: 'yo',
-    // `color` is only in _shields_test which is being specified by the
-    // service, not the request. If the color key is here we know this has
-    // worked.
+    // `color` is being specified by the service, not the request.
+    // If the color key is here we know this has worked.
     color: '#99c',
   })
 
@@ -117,7 +115,7 @@ t.create('custom svg logo')
   })
 
 t.create('logoWidth')
-  .get('.json?url=https://example.com/badge&style=_shields_test')
+  .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -129,10 +127,9 @@ t.create('logoWidth')
         logoWidth: 30,
       })
   )
-  .expectJSON({
-    name: 'hey',
-    value: 'yo',
-    color: 'lightgrey',
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
     logoWidth: 30,
   })
 
@@ -169,7 +166,7 @@ t.create('Invalid schema (mocked)')
   })
 
 t.create('User color overrides success color')
-  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .get('.json?url=https://example.com/badge&color=101010')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -183,7 +180,7 @@ t.create('User color overrides success color')
   .expectBadge({ label: '', message: 'yo', color: '#101010' })
 
 t.create('User legacy color overrides success color')
-  .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
+  .get('.json?url=https://example.com/badge&colorB=101010')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -197,7 +194,7 @@ t.create('User legacy color overrides success color')
   .expectBadge({ label: '', message: 'yo', color: '#101010' })
 
 t.create('User color does not override error color')
-  .get('.json?url=https://example.com/badge&color=101010&style=_shields_test')
+  .get('.json?url=https://example.com/badge&color=101010')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')
@@ -212,7 +209,7 @@ t.create('User color does not override error color')
   .expectBadge({ label: 'something is', message: 'not right', color: 'red' })
 
 t.create('User legacy color does not override error color')
-  .get('.json?url=https://example.com/badge&colorB=101010&style=_shields_test')
+  .get('.json?url=https://example.com/badge&colorB=101010')
   .intercept(nock =>
     nock('https://example.com/')
       .get('/badge')

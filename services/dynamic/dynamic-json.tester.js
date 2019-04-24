@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('No URL specified')
-  .get('.json?query=$.name&label=Package Name&style=_shields_test')
+  .get('.json?query=$.name&label=Package Name')
   .expectBadge({
     label: 'Package Name',
     message: 'invalid query parameter: url',
@@ -14,7 +14,7 @@ t.create('No URL specified')
 
 t.create('No query specified')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&label=Package Name&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&label=Package Name'
   )
   .expectBadge({
     label: 'Package Name',
@@ -24,7 +24,7 @@ t.create('No query specified')
 
 t.create('Malformed url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/%0package.json&query=$.name&label=Package Name&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/%0package.json&query=$.name&label=Package Name'
   )
   .expectBadge({
     label: 'Package Name',
@@ -34,7 +34,7 @@ t.create('Malformed url')
 
 t.create('JSON from url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -44,7 +44,7 @@ t.create('JSON from url')
 
 t.create('JSON from uri (support uri query parameter)')
   .get(
-    '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name&style=_shields_test'
+    '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name'
   )
   .expectBadge({
     label: 'custom badge',
@@ -78,7 +78,7 @@ t.create('JSON from url | with prefix & suffix & label')
 
 t.create('JSON from url | object doesnt exist')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist'
   )
   .expectBadge({
     label: 'custom badge',
@@ -88,7 +88,7 @@ t.create('JSON from url | object doesnt exist')
 
 t.create('JSON from url | invalid url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -98,7 +98,7 @@ t.create('JSON from url | invalid url')
 
 t.create('JSON from url | user color overrides default')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&color=10ADED&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&color=10ADED'
   )
   .expectBadge({
     label: 'custom badge',
@@ -108,7 +108,7 @@ t.create('JSON from url | user color overrides default')
 
 t.create('JSON from url | error color overrides default')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version&style=_shields_test'
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version'
   )
   .expectBadge({
     label: 'custom badge',
@@ -117,7 +117,7 @@ t.create('JSON from url | error color overrides default')
   })
 
 t.create('JSON from url | error color overrides user specified')
-  .get('.json?query=$.version&color=10ADED&style=_shields_test')
+  .get('.json?query=$.version&color=10ADED')
   .expectBadge({
     label: 'custom badge',
     message: 'invalid query parameter: url',

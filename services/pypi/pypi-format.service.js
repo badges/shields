@@ -12,10 +12,6 @@ module.exports = class PypiFormat extends PypiBase {
     return this.buildRoute('pypi/format')
   }
 
-  static get defaultBadgeData() {
-    return { label: 'format' }
-  }
-
   static get examples() {
     return [
       {
@@ -26,6 +22,10 @@ module.exports = class PypiFormat extends PypiBase {
         keywords: ['python'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'format' }
   }
 
   static render({ hasWheel, hasEgg }) {

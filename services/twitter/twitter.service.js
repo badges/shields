@@ -94,14 +94,6 @@ class TwitterFollow extends BaseJsonService {
     }
   }
 
-  async fetch({ user }) {
-    return this._requestJson({
-      schema,
-      url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json`,
-      options: { qs: { screen_names: user } },
-    })
-  }
-
   static render({ user, followers }) {
     return {
       label: `follow @${user}`,
@@ -112,6 +104,14 @@ class TwitterFollow extends BaseJsonService {
         `https://twitter.com/${user}/followers`,
       ],
     }
+  }
+
+  async fetch({ user }) {
+    return this._requestJson({
+      schema,
+      url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json`,
+      options: { qs: { screen_names: user } },
+    })
   }
 
   async handle({ user }) {

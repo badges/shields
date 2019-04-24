@@ -15,11 +15,26 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PackagistLicense extends BasePackagistService {
+  static get category() {
+    return 'license'
+  }
+
   static get route() {
     return {
       base: 'packagist/l',
       pattern: ':user/:repo',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist',
+        namedParams: { user: 'doctrine', repo: 'orm' },
+        staticPreview: renderLicenseBadge({ license: 'MIT' }),
+        keywords,
+      },
+    ]
   }
 
   static get defaultBadgeData() {
@@ -36,19 +51,5 @@ module.exports = class PackagistLicense extends BasePackagistService {
     const json = await this.fetch({ user, repo, schema })
     const { license } = this.transform({ json })
     return renderLicenseBadge({ license })
-  }
-
-  static get category() {
-    return 'license'
-  }
-  static get examples() {
-    return [
-      {
-        title: 'Packagist',
-        namedParams: { user: 'doctrine', repo: 'orm' },
-        staticPreview: renderLicenseBadge({ license: 'MIT' }),
-        keywords,
-      },
-    ]
   }
 }

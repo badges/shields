@@ -55,7 +55,7 @@ t.create('version (valid)')
   })
 
 t.create('version (mocked, yellow badge)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')
@@ -75,7 +75,7 @@ t.create('version (mocked, yellow badge)')
   })
 
 t.create('version (mocked, orange badge)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')
@@ -95,7 +95,7 @@ t.create('version (mocked, orange badge)')
   })
 
 t.create('version (mocked, blue badge)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')
@@ -144,7 +144,7 @@ t.create('version (pre) (valid)')
   })
 
 t.create('version (pre) (mocked, yellow badge)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')
@@ -164,7 +164,7 @@ t.create('version (pre) (mocked, yellow badge)')
   })
 
 t.create('version (pre) (mocked, orange badge)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')
@@ -184,7 +184,7 @@ t.create('version (pre) (mocked, orange badge)')
   })
 
 t.create('version (pre) (mocked, blue badge)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json?style=_shields_test')
+  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
       .get('/v3/index.json')

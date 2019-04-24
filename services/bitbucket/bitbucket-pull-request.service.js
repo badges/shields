@@ -23,6 +23,51 @@ function pullRequestClassGenerator(raw) {
       return `BitbucketPullRequest${raw ? 'Raw' : ''}`
     }
 
+    static get category() {
+      return 'issue-tracking'
+    }
+
+    static get route() {
+      return {
+        base: `bitbucket/${routePrefix}`,
+        pattern: `:user/:repo`,
+        queryParamSchema,
+      }
+    }
+
+    static get examples() {
+      return [
+        {
+          title: 'Bitbucket open pull requests',
+          namedParams: {
+            user: 'atlassian',
+            repo: 'python-bitbucket',
+          },
+          staticPreview: this.render({ prs: 22 }),
+        },
+        {
+          title: 'Bitbucket Server open pull requests',
+          namedParams: {
+            user: 'foo',
+            repo: 'bar',
+          },
+          queryParams: { server: 'https://bitbucket.mydomain.net' },
+          staticPreview: this.render({ prs: 42 }),
+        },
+      ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'pull requests' }
+    }
+
+    static render({ prs }) {
+      return {
+        message: `${metric(prs)}${badgeSuffix}`,
+        color: prs ? 'yellow' : 'brightgreen',
+      }
+    }
+
     async fetchCloud({ args, user, repo }) {
       args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
       args.options = { qs: { state: 'OPEN', limit: 0 } }
@@ -82,54 +127,9 @@ function pullRequestClassGenerator(raw) {
       }
     }
 
-    static render({ prs }) {
-      return {
-        message: `${metric(prs)}${badgeSuffix}`,
-        color: prs ? 'yellow' : 'brightgreen',
-      }
-    }
-
     async handle({ user, repo }, { server }) {
       const data = await this.fetch({ server, user, repo })
       return this.constructor.render({ prs: data.size })
-    }
-
-    static get category() {
-      return 'issue-tracking'
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'pull requests' }
-    }
-
-    static get route() {
-      return {
-        base: `bitbucket/${routePrefix}`,
-        pattern: `:user/:repo`,
-        queryParamSchema,
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: 'Bitbucket open pull requests',
-          namedParams: {
-            user: 'atlassian',
-            repo: 'python-bitbucket',
-          },
-          staticPreview: this.render({ prs: 22 }),
-        },
-        {
-          title: 'Bitbucket Server open pull requests',
-          namedParams: {
-            user: 'foo',
-            repo: 'bar',
-          },
-          queryParams: { server: 'https://bitbucket.mydomain.net' },
-          staticPreview: this.render({ prs: 42 }),
-        },
-      ]
     }
   }
 }

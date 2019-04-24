@@ -9,7 +9,6 @@ package-lock.json
 private/*.json
 /.nyc_output
 analytics.json
-gh-badges/templates/_shields_test-template.json
 gh-badges/templates/default-template.json
 supported-features.json
 service-definitions.yml

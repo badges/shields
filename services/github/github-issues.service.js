@@ -25,13 +25,6 @@ module.exports = class GithubIssues extends GithubAuthService {
     return 'issue-tracking'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'issues',
-      color: 'informational',
-    }
-  }
-
   static get route() {
     return {
       base: 'github',
@@ -221,6 +214,13 @@ module.exports = class GithubIssues extends GithubAuthService {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'issues',
+      color: 'informational',
+    }
   }
 
   static render({ which, numIssues, raw, label }) {

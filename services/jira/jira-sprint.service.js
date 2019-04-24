@@ -27,27 +27,6 @@ const documentation = `
 `
 
 module.exports = class JiraSprint extends JiraBase {
-  static render({ numCompletedIssues, numTotalIssues }) {
-    const percentComplete = numTotalIssues
-      ? (numCompletedIssues / numTotalIssues) * 100
-      : 0
-    let color = 'orange'
-    if (numCompletedIssues === 0) {
-      color = 'red'
-    } else if (numCompletedIssues === numTotalIssues) {
-      color = 'brightgreen'
-    }
-    return {
-      label: 'completion',
-      message: `${percentComplete.toFixed(0)}%`,
-      color,
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'jira' }
-  }
-
   static get route() {
     return {
       base: 'jira/sprint',
@@ -73,6 +52,27 @@ module.exports = class JiraSprint extends JiraBase {
         keywords: ['issues'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'jira' }
+  }
+
+  static render({ numCompletedIssues, numTotalIssues }) {
+    const percentComplete = numTotalIssues
+      ? (numCompletedIssues / numTotalIssues) * 100
+      : 0
+    let color = 'orange'
+    if (numCompletedIssues === 0) {
+      color = 'red'
+    } else if (numCompletedIssues === numTotalIssues) {
+      color = 'brightgreen'
+    }
+    return {
+      label: 'completion',
+      message: `${percentComplete.toFixed(0)}%`,
+      color,
+    }
   }
 
   async handle({ protocol, hostAndPath, sprintId }) {

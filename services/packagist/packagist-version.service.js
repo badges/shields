@@ -26,11 +26,40 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PackagistVersion extends BasePackagistService {
+  static get category() {
+    return 'version'
+  }
+
   static get route() {
     return {
       base: 'packagist',
       pattern: ':type(v|vpre)/:user/:repo',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Packagist Version',
+        pattern: 'v/:user/:repo',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: renderVersionBadge({ version: '4.2.2' }),
+        keywords,
+      },
+      {
+        title: 'Packagist Pre Release Version',
+        pattern: 'vpre/:user/:repo',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        staticPreview: renderVersionBadge({ version: '4.3-dev' }),
+        keywords,
+      },
+    ]
   }
 
   static get defaultBadgeData() {
@@ -80,33 +109,5 @@ module.exports = class PackagistVersion extends BasePackagistService {
     })
     const { version } = this.transform({ type, json })
     return renderVersionBadge({ version })
-  }
-
-  static get category() {
-    return 'version'
-  }
-  static get examples() {
-    return [
-      {
-        title: 'Packagist Version',
-        pattern: 'v/:user/:repo',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        staticPreview: renderVersionBadge({ version: '4.2.2' }),
-        keywords,
-      },
-      {
-        title: 'Packagist Pre Release Version',
-        pattern: 'vpre/:user/:repo',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        staticPreview: renderVersionBadge({ version: '4.3-dev' }),
-        keywords,
-      },
-    ]
   }
 }

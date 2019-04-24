@@ -83,8 +83,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthService {
   static get route() {
     return {
       base: 'github/manifest-json',
-      format: '(?!v)([^/]+)/([^/]+)/([^/]+)/?([^/]+)?',
-      capture: ['key', 'user', 'repo', 'branch'],
+      pattern: ':key([^v/][^/]*)/:user/:repo/:branch*',
     }
   }
 

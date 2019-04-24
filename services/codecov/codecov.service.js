@@ -37,23 +37,6 @@ module.exports = class Codecov extends BaseJsonService {
     return 'coverage'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
-
-  static render({ coverage }) {
-    if (coverage === 'unknown') {
-      return {
-        message: coverage,
-        color: 'lightgrey',
-      }
-    }
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
-    }
-  }
-
   static get route() {
     return {
       base: 'codecov/c',
@@ -98,6 +81,23 @@ module.exports = class Codecov extends BaseJsonService {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
+    if (coverage === 'unknown') {
+      return {
+        message: coverage,
+        color: 'lightgrey',
+      }
+    }
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   async fetch({ vcsName, user, repo, branch, token }) {

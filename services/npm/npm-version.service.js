@@ -21,10 +21,6 @@ module.exports = class NpmVersion extends NpmBase {
     return this.buildRoute('npm/v', { withTag: true })
   }
 
-  static get defaultBadgeData() {
-    return { label: 'npm' }
-  }
-
   static get examples() {
     return [
       {
@@ -64,6 +60,10 @@ module.exports = class NpmVersion extends NpmBase {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'npm' }
   }
 
   static render({ tag, version }) {

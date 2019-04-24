@@ -25,12 +25,12 @@ module.exports = class ChromeWebStoreVersion extends BaseChromeWebStoreService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'chrome web store' }
+  }
+
   async handle({ storeId }) {
     const data = await this.fetch({ storeId })
     return renderVersionBadge({ version: data.version })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'chrome web store' }
   }
 }

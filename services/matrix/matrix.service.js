@@ -55,6 +55,51 @@ const documentation = `
   `
 
 module.exports = class Matrix extends BaseJsonService {
+  static get category() {
+    return 'chat'
+  }
+
+  static get route() {
+    return {
+      base: 'matrix',
+      pattern: ':roomAlias',
+      queryParamSchema,
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Matrix',
+        namedParams: { roomAlias: 'twim:matrix.org' },
+        staticPreview: this.render({ members: 42 }),
+        documentation,
+      },
+      {
+        title: 'Matrix',
+        namedParams: { roomAlias: 'twim:matrix.org' },
+        queryParams: { server_fqdn: 'matrix.org' },
+        staticPreview: this.render({ members: 42 }),
+        documentation,
+      },
+    ]
+  }
+
+  static get _cacheLength() {
+    return 30
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'chat' }
+  }
+
+  static render({ members }) {
+    return {
+      message: `${members} users`,
+      color: 'brightgreen',
+    }
+  }
+
   async retrieveAccessToken({ host }) {
     let auth
     try {
@@ -159,53 +204,8 @@ module.exports = class Matrix extends BaseJsonService {
       : 0
   }
 
-  static get _cacheLength() {
-    return 30
-  }
-
-  static render({ members }) {
-    return {
-      message: `${members} users`,
-      color: 'brightgreen',
-    }
-  }
-
   async handle({ roomAlias }, { server_fqdn: serverFQDN }) {
     const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'chat' }
-  }
-
-  static get category() {
-    return 'chat'
-  }
-
-  static get route() {
-    return {
-      base: 'matrix',
-      pattern: ':roomAlias',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Matrix',
-        namedParams: { roomAlias: 'twim:matrix.org' },
-        staticPreview: this.render({ members: 42 }),
-        documentation,
-      },
-      {
-        title: 'Matrix',
-        namedParams: { roomAlias: 'twim:matrix.org' },
-        queryParams: { server_fqdn: 'matrix.org' },
-        staticPreview: this.render({ members: 42 }),
-        documentation,
-      },
-    ]
   }
 }

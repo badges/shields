@@ -25,7 +25,7 @@ t.create('404 response')
   .expectBadge({ label: 'coverity', message: 'project not found' })
 
 t.create('passed')
-  .get('/2.json?style=_shields_test')
+  .get('/2.json')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -40,7 +40,7 @@ t.create('passed')
   })
 
 t.create('passed with defects')
-  .get('/2.json?style=_shields_test')
+  .get('/2.json')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -55,7 +55,7 @@ t.create('passed with defects')
   })
 
 t.create('pending')
-  .get('/2.json?style=_shields_test')
+  .get('/2.json')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')
@@ -70,7 +70,7 @@ t.create('pending')
   })
 
 t.create('failed')
-  .get('/2.json?style=_shields_test')
+  .get('/2.json')
   .intercept(nock =>
     nock('https://scan.coverity.com/projects/2')
       .get('/badge.json')

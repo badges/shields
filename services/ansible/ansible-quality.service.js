@@ -21,29 +21,6 @@ class AnsibleGalaxyContent extends BaseJsonService {
 }
 
 module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
-  static render({ qualityScore }) {
-    return {
-      message: qualityScore,
-      color: floorCount(qualityScore, 2, 3, 4),
-    }
-  }
-
-  async handle({ projectId }) {
-    const { quality_score: qualityScore } = await this.fetch({ projectId })
-
-    if (qualityScore === null) {
-      throw new InvalidResponse({
-        prettyMessage: 'no score available',
-      })
-    }
-
-    return this.constructor.render({ qualityScore })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'quality' }
-  }
-
   static get category() {
     return 'analysis'
   }
@@ -65,5 +42,28 @@ module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyCon
         staticPreview: this.render({ qualityScore: 4.125 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'quality' }
+  }
+
+  static render({ qualityScore }) {
+    return {
+      message: qualityScore,
+      color: floorCount(qualityScore, 2, 3, 4),
+    }
+  }
+
+  async handle({ projectId }) {
+    const { quality_score: qualityScore } = await this.fetch({ projectId })
+
+    if (qualityScore === null) {
+      throw new InvalidResponse({
+        prettyMessage: 'no score available',
+      })
+    }
+
+    return this.constructor.render({ qualityScore })
   }
 }

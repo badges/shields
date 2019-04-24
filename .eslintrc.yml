@@ -12,15 +12,41 @@ parserOptions:
   sourceType: 'script'
 
 overrides:
-  files:
-    - gatsby-browser.js
-  parserOptions:
-    sourceType: 'module'
+  - files:
+      - gatsby-browser.js
+    parserOptions:
+      sourceType: 'module'
+  - files:
+      - 'core/base-service/**/*.js'
+      - 'services/**/*.js'
+    rules:
+      sort-class-members/sort-class-members:
+        [
+          'error',
+          {
+            order:
+              [
+                'name',
+                'category',
+                'isDeprecated',
+                'route',
+                'examples',
+                '_cacheLength',
+                'defaultBadgeData',
+                'render',
+                'constructor',
+                'fetch',
+                'transform',
+                'handle',
+              ],
+          },
+        ]
 
 plugins:
   - mocha
   - no-extension-in-require
-  - 'chai-friendly'
+  - chai-friendly
+  - sort-class-members
 
 rules:
   # Disable some rules from eslint:recommended.

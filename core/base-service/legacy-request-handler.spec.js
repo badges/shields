@@ -81,7 +81,13 @@ describe('The request handler', function() {
     it('should return the expected response', async function() {
       const res = await fetch(`${baseUrl}/testing/123.json`)
       expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({ name: 'testing', value: '123' })
+      expect(await res.json()).to.deep.equal({
+        name: 'testing',
+        value: '123',
+        label: 'testing',
+        message: '123',
+        color: 'lightgrey',
+      })
     })
   })
 
@@ -96,7 +102,13 @@ describe('The request handler', function() {
     it('should return the expected response', async function() {
       const res = await fetch(`${baseUrl}/testing/123.json`)
       expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({ name: 'testing', value: '123' })
+      expect(await res.json()).to.deep.equal({
+        name: 'testing',
+        value: '123',
+        label: 'testing',
+        message: '123',
+        color: 'lightgrey',
+      })
     })
   })
 
@@ -121,6 +133,9 @@ describe('The request handler', function() {
       expect(await res.json()).to.deep.equal({
         name: 'testing',
         value: '123',
+        label: 'testing',
+        message: '123',
+        color: 'lightgrey',
       })
     })
 
@@ -134,6 +149,9 @@ describe('The request handler', function() {
       expect(await res.json()).to.deep.equal({
         name: 'testing',
         value: 'Maximum response size exceeded',
+        label: 'testing',
+        message: 'Maximum response size exceeded',
+        color: 'lightgrey',
       })
     })
 

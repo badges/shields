@@ -3,6 +3,10 @@
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloadSize extends BaseSpigetService {
+  static get category() {
+    return 'size'
+  }
+
   static get route() {
     return {
       base: 'spiget/download-size',
@@ -10,27 +14,6 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'size',
-      color: 'blue',
-    }
-  }
-
-  async handle({ resourceId }) {
-    const { file } = await this.fetch({ resourceId })
-    return this.constructor.render({ size: file.size, unit: file.sizeUnit })
-  }
-
-  static render({ size, unit }) {
-    return {
-      message: `${size} ${unit}`,
-    }
-  }
-
-  static get category() {
-    return 'size'
-  }
   static get examples() {
     return [
       {
@@ -43,5 +26,23 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'size',
+      color: 'blue',
+    }
+  }
+
+  static render({ size, unit }) {
+    return {
+      message: `${size} ${unit}`,
+    }
+  }
+
+  async handle({ resourceId }) {
+    const { file } = await this.fetch({ resourceId })
+    return this.constructor.render({ size: file.size, unit: file.sizeUnit })
   }
 }

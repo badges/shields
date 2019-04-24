@@ -4,21 +4,21 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { codacyGrade } = require('./codacy-helpers')
 
 t.create('Code quality')
-  .get('/grade/e27821fb6289410b8f58338c7e0bc686.json')
+  .get('/e27821fb6289410b8f58338c7e0bc686.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,
   })
 
 t.create('Code quality on branch')
-  .get('/grade/e27821fb6289410b8f58338c7e0bc686/master.json')
+  .get('/e27821fb6289410b8f58338c7e0bc686/master.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,
   })
 
 t.create('Code quality (package not found)')
-  .get('/grade/00000000000000000000000000000000/master.json')
+  .get('/00000000000000000000000000000000/master.json')
   .expectBadge({
     label: 'code quality',
     message: 'project or branch not found',

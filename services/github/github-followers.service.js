@@ -22,13 +22,6 @@ module.exports = class GithubFollowers extends GithubAuthService {
     }
   }
 
-  static render({ followers }) {
-    return {
-      message: metric(followers),
-      color: '4183C4',
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -48,6 +41,13 @@ module.exports = class GithubFollowers extends GithubAuthService {
     return {
       label: 'followers',
       namedLogo: 'github',
+    }
+  }
+
+  static render({ followers }) {
+    return {
+      message: metric(followers),
+      color: '4183C4',
     }
   }
 

@@ -12,12 +12,12 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class BaseCpanService extends BaseJsonService {
+  static get defaultBadgeData() {
+    return { label: 'cpan' }
+  }
+
   async fetch({ packageName }) {
     const url = `https://fastapi.metacpan.org/v1/release/${packageName}`
     return this._requestJson({ schema, url })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'cpan' }
   }
 }

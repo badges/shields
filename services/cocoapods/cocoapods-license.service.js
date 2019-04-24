@@ -24,6 +24,10 @@ module.exports = class CocoapodsLicense extends BaseCocoaPodsService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'license' }
+  }
+
   static render({ license }) {
     return {
       message: license,
@@ -37,9 +41,5 @@ module.exports = class CocoapodsLicense extends BaseCocoaPodsService {
     const license =
       typeof data.license === 'string' ? data.license : data.license.type
     return this.constructor.render({ license })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
   }
 }
