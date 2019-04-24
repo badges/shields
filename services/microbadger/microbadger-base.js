@@ -30,6 +30,10 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class BaseMicrobadgerService extends BaseJsonService {
+  static get category() {
+    return 'size'
+  }
+
   async fetch({ user, repo }) {
     if (user === '_') {
       user = 'library'
@@ -51,9 +55,5 @@ module.exports = class BaseMicrobadgerService extends BaseJsonService {
       throw new NotFound()
     }
     return image
-  }
-
-  static get category() {
-    return 'size'
   }
 }

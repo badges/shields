@@ -45,19 +45,6 @@ module.exports = class HSTS extends BaseJsonService {
     ]
   }
 
-  async fetch({ domain }) {
-    return this._requestJson({
-      schema,
-      url: `https://hstspreload.org/api/v2/status`,
-      options: { qs: { domain } },
-    })
-  }
-
-  async handle({ domain }) {
-    const { status } = await this.fetch({ domain })
-    return this.constructor.render({ status })
-  }
-
   static render({ status }) {
     let color = 'red'
 
@@ -71,5 +58,18 @@ module.exports = class HSTS extends BaseJsonService {
     }
 
     return { message: status, label, color }
+  }
+
+  async fetch({ domain }) {
+    return this._requestJson({
+      schema,
+      url: `https://hstspreload.org/api/v2/status`,
+      options: { qs: { domain } },
+    })
+  }
+
+  async handle({ domain }) {
+    const { status } = await this.fetch({ domain })
+    return this.constructor.render({ status })
   }
 }

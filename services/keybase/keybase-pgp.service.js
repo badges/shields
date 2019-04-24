@@ -27,10 +27,6 @@ const keyFingerprintSchema = Joi.object({
 }).required()
 
 module.exports = class KeybasePGP extends KeybaseProfile {
-  static get apiVersion() {
-    return '1.0'
-  }
-
   static get route() {
     return {
       base: 'keybase/pgp',
@@ -38,11 +34,31 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Keybase PGP',
+        namedParams: { username: 'skyplabs' },
+        staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'pgp',
       color: 'informational',
     }
+  }
+
+  static render({ fingerprint }) {
+    return {
+      message: fingerprint.slice(-16).toUpperCase(),
+    }
+  }
+
+  static get apiVersion() {
+    return '1.0'
   }
 
   async handle({ username }) {
@@ -69,21 +85,5 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     }
 
     return this.constructor.render({ fingerprint: primaryKey.key_fingerprint })
-  }
-
-  static render({ fingerprint }) {
-    return {
-      message: fingerprint.slice(-16).toUpperCase(),
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Keybase PGP',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
-      },
-    ]
   }
 }

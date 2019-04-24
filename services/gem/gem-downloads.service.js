@@ -27,92 +27,6 @@ const versionSchema = Joi.array()
   .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
-  async fetchDownloadCountForVersion({ gem, version }) {
-    const json = await this._requestJson({
-      url: `https://rubygems.org/api/v1/versions/${gem}.json`,
-      schema: versionSchema,
-      errorMessages: {
-        404: 'gem not found',
-      },
-    })
-
-    let wantedVersion
-    if (version === 'stable') {
-      wantedVersion = latestVersion(
-        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
-      )
-    } else {
-      wantedVersion = version
-    }
-
-    const versionData = json.find(({ number }) => number === wantedVersion)
-    if (versionData) {
-      return versionData.downloads_count
-    } else {
-      throw new InvalidResponse({
-        prettyMessage: 'version not found',
-      })
-    }
-  }
-
-  async fetchDownloadCountForGem({ gem }) {
-    const {
-      downloads: totalDownloads,
-      version_downloads: versionDownloads,
-    } = await this._requestJson({
-      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
-      schema: gemSchema,
-      errorMessages: {
-        404: 'gem not found',
-      },
-    })
-    return { totalDownloads, versionDownloads }
-  }
-
-  static render({ which, version, downloads }) {
-    let label
-    if (version) {
-      label = `downloads@${version}`
-    } else if (which === 'dtv') {
-      label = 'downloads@latest'
-    }
-
-    return {
-      label,
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
-  }
-
-  async handle({ which, gem, version }) {
-    let downloads
-    if (which === 'dv') {
-      if (!version) {
-        throw new InvalidParameter({
-          prettyMessage: 'version downloads requires a version',
-        })
-      }
-      if (version !== 'stable' && !semver.valid(version)) {
-        throw new InvalidParameter({
-          prettyMessage: 'version should be "stable" or valid semver',
-        })
-      }
-      downloads = await this.fetchDownloadCountForVersion({ gem, version })
-    } else {
-      const {
-        totalDownloads,
-        versionDownloads,
-      } = await this.fetchDownloadCountForGem({ gem, which })
-      downloads = which === 'dtv' ? versionDownloads : totalDownloads
-    }
-    return this.constructor.render({ which, version, downloads })
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -175,5 +89,90 @@ module.exports = class GemDownloads extends BaseJsonService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'downloads' }
+  }
+
+  static render({ which, version, downloads }) {
+    let label
+    if (version) {
+      label = `downloads@${version}`
+    } else if (which === 'dtv') {
+      label = 'downloads@latest'
+    }
+
+    return {
+      label,
+      message: metric(downloads),
+      color: downloadCount(downloads),
+    }
+  }
+
+  async fetchDownloadCountForVersion({ gem, version }) {
+    const json = await this._requestJson({
+      url: `https://rubygems.org/api/v1/versions/${gem}.json`,
+      schema: versionSchema,
+      errorMessages: {
+        404: 'gem not found',
+      },
+    })
+
+    let wantedVersion
+    if (version === 'stable') {
+      wantedVersion = latestVersion(
+        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
+      )
+    } else {
+      wantedVersion = version
+    }
+
+    const versionData = json.find(({ number }) => number === wantedVersion)
+    if (versionData) {
+      return versionData.downloads_count
+    } else {
+      throw new InvalidResponse({
+        prettyMessage: 'version not found',
+      })
+    }
+  }
+
+  async fetchDownloadCountForGem({ gem }) {
+    const {
+      downloads: totalDownloads,
+      version_downloads: versionDownloads,
+    } = await this._requestJson({
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
+      schema: gemSchema,
+      errorMessages: {
+        404: 'gem not found',
+      },
+    })
+    return { totalDownloads, versionDownloads }
+  }
+
+  async handle({ which, gem, version }) {
+    let downloads
+    if (which === 'dv') {
+      if (!version) {
+        throw new InvalidParameter({
+          prettyMessage: 'version downloads requires a version',
+        })
+      }
+      if (version !== 'stable' && !semver.valid(version)) {
+        throw new InvalidParameter({
+          prettyMessage: 'version should be "stable" or valid semver',
+        })
+      }
+      downloads = await this.fetchDownloadCountForVersion({ gem, version })
+    } else {
+      const {
+        totalDownloads,
+        versionDownloads,
+      } = await this.fetchDownloadCountForGem({ gem, which })
+      downloads = which === 'dtv' ? versionDownloads : totalDownloads
+    }
+    return this.constructor.render({ which, version, downloads })
   }
 }

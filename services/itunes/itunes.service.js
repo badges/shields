@@ -24,10 +24,6 @@ module.exports = class Itunes extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'itunes app store' }
-  }
-
   static get examples() {
     return [
       {
@@ -36,6 +32,10 @@ module.exports = class Itunes extends BaseJsonService {
         staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'itunes app store' }
   }
 
   async fetch({ bundleId }) {

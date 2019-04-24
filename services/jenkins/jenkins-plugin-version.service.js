@@ -37,6 +37,10 @@ module.exports = class JenkinsPluginVersion extends BaseService {
     return { label: 'plugin' }
   }
 
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
   async fetch() {
     return promisify(regularUpdate)({
       url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
@@ -47,10 +51,6 @@ module.exports = class JenkinsPluginVersion extends BaseService {
           return previous
         }, {}),
     })
-  }
-
-  static render({ version }) {
-    return renderVersionBadge({ version })
   }
 
   async handle({ plugin }) {

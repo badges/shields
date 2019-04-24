@@ -10,17 +10,17 @@ module.exports = class Debug extends NonMemoryCachingBaseService {
     return 'debug'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'debug',
-      color: 'blue',
-    }
-  }
-
   static get route() {
     return {
       base: 'debug',
       pattern: ':which(time|starttime|flip)',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'debug',
+      color: 'blue',
     }
   }
 

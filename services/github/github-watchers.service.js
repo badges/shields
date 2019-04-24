@@ -43,6 +43,13 @@ module.exports = class GithubWatchers extends GithubAuthService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'watchers',
+      namedLogo: 'github',
+    }
+  }
+
   static render({ watchers, user, repo }) {
     return {
       message: metric(watchers),
@@ -51,13 +58,6 @@ module.exports = class GithubWatchers extends GithubAuthService {
         `https://github.com/${user}/${repo}`,
         `https://github.com/${user}/${repo}/watchers`,
       ],
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'watchers',
-      namedLogo: 'github',
     }
   }
 

@@ -22,12 +22,6 @@ module.exports = class NodePingStatus extends BaseJsonService {
     return 'monitoring'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'Status',
-    }
-  }
-
   static get route() {
     return {
       base: 'nodeping/status',
@@ -47,6 +41,12 @@ module.exports = class NodePingStatus extends BaseJsonService {
         staticPreview: renderWebsiteStatus({ isUp: true }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'Status',
+    }
   }
 
   async fetch({ checkUuid }) {

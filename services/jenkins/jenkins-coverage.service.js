@@ -51,17 +51,6 @@ const formatMap = {
 }
 
 module.exports = class JenkinsCoverage extends JenkinsBase {
-  static render({ coverage }) {
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
-
   static get category() {
     return 'coverage'
   }
@@ -87,6 +76,17 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
         staticPreview: this.render({ coverage: 95 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   async handle({ format, protocol, host, job }, { disableStrictSSL }) {

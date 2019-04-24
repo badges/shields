@@ -39,23 +39,6 @@ module.exports = class Luarocks extends BaseJsonService {
     ]
   }
 
-  async fetch({ user, moduleName }) {
-    const { repository } = await this._requestJson({
-      url: `https://luarocks.org/manifests/${encodeURIComponent(
-        user
-      )}/manifest.json`,
-      schema,
-      errorMessages: {
-        404: 'user not found',
-      },
-    })
-    const moduleData = repository[moduleName]
-    if (!moduleData) {
-      throw new NotFound({ prettyMessage: 'module not found' })
-    }
-    return moduleData
-  }
-
   static get defaultBadgeData() {
     return {
       label: 'luarocks',
@@ -77,6 +60,23 @@ module.exports = class Luarocks extends BaseJsonService {
     }
 
     return { message: addv(version), color }
+  }
+
+  async fetch({ user, moduleName }) {
+    const { repository } = await this._requestJson({
+      url: `https://luarocks.org/manifests/${encodeURIComponent(
+        user
+      )}/manifest.json`,
+      schema,
+      errorMessages: {
+        404: 'user not found',
+      },
+    })
+    const moduleData = repository[moduleName]
+    if (!moduleData) {
+      throw new NotFound({ prettyMessage: 'module not found' })
+    }
+    return moduleData
   }
 
   async handle({ user, moduleName, version: requestedVersion }) {

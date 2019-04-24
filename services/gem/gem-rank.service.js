@@ -31,46 +31,6 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  async fetch({ period, gem }) {
-    let endpoint, schema
-    if (period === 'rt') {
-      endpoint = 'total_ranking.json'
-      schema = totalSchema
-    } else {
-      endpoint = 'daily_ranking.json'
-      schema = dailySchema
-    }
-
-    return this._requestJson({
-      url: `http://bestgems.org/api/v1/gems/${gem}/${endpoint}`,
-      schema,
-    })
-  }
-
-  static render({ period, rank }) {
-    const count = Math.floor(100000 / rank)
-    let message = ordinalNumber(rank)
-    message += period === 'rt' ? '' : ' daily'
-    return {
-      message,
-      color: floorCount(count, 10, 50, 100),
-    }
-  }
-
-  async handle({ period, gem }) {
-    const json = await this.fetch({ period, gem })
-    const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
-    if (rank == null) {
-      throw new InvalidResponse({ prettyMessage: 'invalid rank' })
-    }
-    return this.constructor.render({ period, rank })
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return { label: 'rank' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -103,5 +63,44 @@ module.exports = class GemRank extends BaseJsonService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'rank' }
+  }
+
+  static render({ period, rank }) {
+    const count = Math.floor(100000 / rank)
+    let message = ordinalNumber(rank)
+    message += period === 'rt' ? '' : ' daily'
+    return {
+      message,
+      color: floorCount(count, 10, 50, 100),
+    }
+  }
+
+  async fetch({ period, gem }) {
+    let endpoint, schema
+    if (period === 'rt') {
+      endpoint = 'total_ranking.json'
+      schema = totalSchema
+    } else {
+      endpoint = 'daily_ranking.json'
+      schema = dailySchema
+    }
+
+    return this._requestJson({
+      url: `http://bestgems.org/api/v1/gems/${gem}/${endpoint}`,
+      schema,
+    })
+  }
+
+  async handle({ period, gem }) {
+    const json = await this.fetch({ period, gem })
+    const rank = period === 'rt' ? json[0].total_ranking : json[0].daily_ranking
+    if (rank == null) {
+      throw new InvalidResponse({ prettyMessage: 'invalid rank' })
+    }
+    return this.constructor.render({ period, rank })
   }
 }

@@ -10,19 +10,15 @@ const bookSummarySchema = Joi.object({
 }).required()
 
 module.exports = class LeanpubBookSummaryService extends BaseJsonService {
-  static render({ label, message }) {
-    return {
-      label,
-      message,
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { color: 'blue', label: 'leanpub' }
-  }
-
   static get category() {
     return 'funding'
+  }
+
+  static get route() {
+    return {
+      base: 'leanpub/book',
+      pattern: ':metric(pages|sold)/:book',
+    }
   }
 
   static get examples() {
@@ -46,10 +42,14 @@ module.exports = class LeanpubBookSummaryService extends BaseJsonService {
     ]
   }
 
-  static get route() {
+  static get defaultBadgeData() {
+    return { color: 'blue', label: 'leanpub' }
+  }
+
+  static render({ label, message }) {
     return {
-      base: 'leanpub/book',
-      pattern: ':metric(pages|sold)/:book',
+      label,
+      message,
     }
   }
 
