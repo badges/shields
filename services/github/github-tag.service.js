@@ -1,23 +1,27 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const { addv: versionText } = require('../text-formatters')
+const Joi = require('joi')
+const { NotFound } = require('..')
+const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
-const { latest: latestVersion } = require('../version')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const { latest } = require('../version')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubTag extends LegacyService {
+const schema = Joi.alternatives()
+  .try(
+    Joi.array()
+      .items(
+        Joi.object({
+          name: Joi.string().required(),
+        })
+      )
+      .required(),
+    Joi.array().length(0)
+  )
+  .required()
+
+module.exports = class GithubTag extends GithubAuthService {
   static get category() {
     return 'version'
   }
@@ -76,42 +80,43 @@ module.exports = class GithubTag extends LegacyService {
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/(tag-pre|tag-date|tag)\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const includePre = match[1].includes('pre')
-        const sortOrder = match[1] === 'tag-date' ? 'date' : 'semver'
-        const user = match[2] // eg, expressjs/express
-        const repo = match[3]
-        const format = match[4]
-        const apiUrl = `/repos/${user}/${repo}/tags`
-        const badgeData = getBadgeData('tag', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            const versions = data.map(e => e.name)
-            const tag =
-              sortOrder === 'date'
-                ? versions[0]
-                : latestVersion(versions, { pre: includePre })
-            badgeData.text[1] = versionText(tag)
-            badgeData.colorscheme =
-              sortOrder === 'date' ? 'blue' : versionColor(tag)
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'none'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static get defaultBadgeData() {
+    return { label: 'tag' }
+  }
+
+  static render({ usingSemver, version }) {
+    return {
+      message: addv(version),
+      color: usingSemver ? versionColor(version) : 'blue',
+    }
+  }
+
+  static transform({ usingSemver, includePre, json }) {
+    const versions = json.map(({ name }) => name)
+    if (usingSemver) {
+      return latest(versions, { pre: includePre })
+    } else {
+      return versions[0]
+    }
+  }
+
+  async handle({ which, user, repo }) {
+    const usingSemver = which !== 'tag-date'
+    const includePre = which === 'tag-pre'
+
+    const json = await this._requestJson({
+      url: `/repos/${user}/${repo}/tags`,
+      schema,
+      errorMessages: errorMessagesFor(),
+    })
+    if (json.length === 0) {
+      throw new NotFound({ prettyMessage: 'none' })
+    }
+    const version = this.constructor.transform({
+      usingSemver,
+      includePre,
+      json,
+    })
+    return this.constructor.render({ usingSemver, version })
   }
 }
