@@ -1,21 +1,26 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const log = require('../../core/server/log')
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
 const {
-  minorVersion: phpMinorVersion,
-  versionReduction: phpVersionReduction,
+  minorVersion,
+  versionReduction,
   getPhpReleases,
 } = require('../php-version')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class TravisPhpVersion extends LegacyService {
+const optionalNumberOrString = Joi.alternatives(Joi.string(), Joi.number())
+const schema = Joi.object({
+  branch: Joi.object({
+    config: Joi.object({
+      php: Joi.array().items(optionalNumberOrString),
+      matrix: Joi.object({
+        include: Joi.array().items(Joi.object({ php: optionalNumberOrString })),
+      }),
+    }).required(),
+  }).required(),
+}).required()
+
+module.exports = class TravisPhpVersion extends BaseJsonService {
   static get category() {
     return 'platform-support'
   }
@@ -23,13 +28,7 @@ module.exports = class TravisPhpVersion extends LegacyService {
   static get route() {
     return {
       base: 'travis/php-v',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'php',
+      pattern: ':user/:repo/:branch*',
     }
   }
 
@@ -38,83 +37,65 @@ module.exports = class TravisPhpVersion extends LegacyService {
       {
         title: 'PHP from Travis config',
         namedParams: { user: 'symfony', repo: 'symfony' },
-        staticPreview: { message: '^7.1.3', color: 'blue' },
+        staticPreview: this.render({ reduction: ['^7.1.3'] }),
       },
     ]
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/travis(?:-ci)?\/php-v\/([^/]+\/[^/]+)(?:\/([^/]+))?\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const userRepo = match[1] // eg, espadrine/sc
-        const version = match[2] || 'master'
-        const format = match[3]
-        const options = {
-          method: 'GET',
-          uri: `https://api.travis-ci.org/repos/${userRepo}/branches/${version}`,
-        }
-        const badgeData = getBadgeData('php', data)
-        getPhpReleases(githubApiProvider)
-          // Switch to async/await when this is refactored.
-          // eslint-disable-next-line promise/prefer-await-to-then
-          .then(phpReleases => {
-            request(options, (err, res, buffer) => {
-              if (err !== null) {
-                log.error(`Travis CI error: ${err.stack}`)
-                if (res) {
-                  log.error(`${res}`)
-                }
-                badgeData.text[1] = 'invalid'
-                sendBadge(format, badgeData)
-                return
-              }
+  static get defaultBadgeData() {
+    return {
+      label: 'php',
+    }
+  }
 
-              try {
-                const data = JSON.parse(buffer)
-                let travisVersions = []
+  static render({ reduction, hasHhvm }) {
+    return {
+      message: reduction.concat(hasHhvm ? ['HHVM'] : []).join(', '),
+      color: 'blue',
+    }
+  }
 
-                // from php
-                if (typeof data.branch.config.php !== 'undefined') {
-                  travisVersions = travisVersions.concat(
-                    data.branch.config.php.map(v => v.toString())
-                  )
-                }
-                // from matrix
-                if (typeof data.branch.config.matrix.include !== 'undefined') {
-                  travisVersions = travisVersions.concat(
-                    data.branch.config.matrix.include.map(v => v.php.toString())
-                  )
-                }
+  constructor(context, config) {
+    super(context, config)
+    this._githubApiProvider = context.githubApiProvider
+  }
 
-                const hasHhvm = travisVersions.find(v => v.startsWith('hhvm'))
-                const versions = travisVersions
-                  .map(v => phpMinorVersion(v))
-                  .filter(v => v.indexOf('.') !== -1)
-                let reduction = phpVersionReduction(versions, phpReleases)
+  async transform({ branch: { config } }) {
+    let travisVersions = []
 
-                if (hasHhvm) {
-                  reduction += reduction ? ', ' : ''
-                  reduction += 'HHVM'
-                }
+    // from php
+    if (config.php) {
+      travisVersions = travisVersions.concat(config.php.map(v => v.toString()))
+    }
+    // from matrix
+    if (config.matrix && config.matrix.include) {
+      travisVersions = travisVersions.concat(
+        config.matrix.include.filter(v => 'php' in v).map(v => v.php.toString())
+      )
+    }
 
-                if (reduction) {
-                  badgeData.colorscheme = 'blue'
-                  badgeData.text[1] = reduction
-                } else {
-                  badgeData.text[1] = 'invalid'
-                }
-              } catch (e) {
-                badgeData.text[1] = 'invalid'
-              }
-              sendBadge(format, badgeData)
-            })
-          })
-          .catch(() => {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          })
-      })
-    )
+    const versions = travisVersions
+      .map(v => minorVersion(v))
+      .filter(v => v.includes('.'))
+
+    return {
+      reduction: versionReduction(
+        versions,
+        await getPhpReleases(this._githubApiProvider)
+      ),
+      hasHhvm: travisVersions.find(v => v.startsWith('hhvm')),
+    }
+  }
+
+  async handle({ user, repo, branch = 'master' }) {
+    const travisConfig = await this._requestJson({
+      schema,
+      url: `https://api.travis-ci.org/repos/${user}/${repo}/branches/${branch}`,
+      errorMessages: {
+        404: 'repo not found',
+      },
+    })
+    const { reduction, hasHhvm } = await this.transform(travisConfig)
+    return this.constructor.render({ reduction, hasHhvm })
   }
 }
