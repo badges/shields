@@ -47,14 +47,14 @@ const gradeColors = {
 }
 
 class SymfonyInsightBase extends BaseXmlService {
+  static get category() {
+    return 'analysis'
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'symfony insight',
     }
-  }
-
-  static get category() {
-    return 'analysis'
   }
 
   async fetch({ projectUuid }) {

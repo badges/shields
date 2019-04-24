@@ -40,18 +40,6 @@ module.exports = function redirector(attrs) {
   } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
 
   return class Redirector extends BaseService {
-    static get category() {
-      return category
-    }
-
-    static get route() {
-      return route
-    }
-
-    static get isDeprecated() {
-      return true
-    }
-
     static get name() {
       if (name) {
         return name
@@ -60,6 +48,18 @@ module.exports = function redirector(attrs) {
           pascalCase: true,
         })}Redirect`
       }
+    }
+
+    static get category() {
+      return category
+    }
+
+    static get isDeprecated() {
+      return true
+    }
+
+    static get route() {
+      return route
     }
 
     static register({ camp, requestCounter }) {

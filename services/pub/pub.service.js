@@ -22,10 +22,6 @@ module.exports = class PubVersion extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'pub' }
-  }
-
   static get examples() {
     return [
       {
@@ -43,6 +39,10 @@ module.exports = class PubVersion extends BaseJsonService {
         keywords: ['dart', 'dartlang'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'pub' }
   }
 
   async fetch({ packageName }) {
