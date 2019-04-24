@@ -21,11 +21,6 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class TravisPhpVersion extends BaseJsonService {
-  constructor(context, config) {
-    super(context, config)
-    this._githubApiProvider = context.githubApiProvider
-  }
-
   static get category() {
     return 'platform-support'
   }
@@ -34,12 +29,6 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
     return {
       base: 'travis/php-v',
       pattern: ':user/:repo/:branch*',
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'php',
     }
   }
 
@@ -53,11 +42,22 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'php',
+    }
+  }
+
   static render({ reduction, hasHhvm }) {
     return {
       message: reduction.concat(hasHhvm ? ['HHVM'] : []).join(', '),
       color: 'blue',
     }
+  }
+
+  constructor(context, config) {
+    super(context, config)
+    this._githubApiProvider = context.githubApiProvider
   }
 
   async transform({ branch: { config } }) {
