@@ -1,33 +1,45 @@
 'use strict'
 
 const Joi = require('joi')
-const {
-  colorScale,
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
+const { colorScale, coveragePercentage } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
-const ciiBestPracticesSchema = Joi.object({
+const schema = Joi.object({
   badge_level: Joi.string().required(),
   tiered_percentage: Joi.number().required(),
 }).required()
 
 const keywords = ['core infrastructure initiative']
 
+const summaryColorScale = colorScale(
+  [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300],
+  [
+    'brightred',
+    '#C45A1D',
+    '#C4601D',
+    '#B86C11',
+    '#C47E1D',
+    '#C4881D',
+    '#C4941D',
+    '#C4A41D',
+    '#B9A612',
+    '#C4C21D',
+    'brightgreen',
+    '#BBBBBB',
+    '#E9C504',
+  ]
+)
+
 module.exports = class CIIBestPracticesService extends BaseJsonService {
-  static render({ message, color }) {
-    return {
-      message,
-      color,
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { color: 'blue', label: 'cii' }
-  }
-
   static get category() {
     return 'analysis'
+  }
+
+  static get route() {
+    return {
+      base: 'cii',
+      pattern: ':metric(level|percentage|summary)/:projectId',
+    }
   }
 
   static get examples() {
@@ -38,10 +50,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
         namedParams: {
           projectId: '1',
         },
-        staticPreview: this.render({
-          message: 'gold',
-          color: '#E9C504',
-        }),
+        staticPreview: this.renderLevelBadge({ level: 'gold' }),
         keywords,
       },
       {
@@ -50,10 +59,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
         namedParams: {
           projectId: '29',
         },
-        staticPreview: this.render({
-          message: '107%',
-          color: 'brightgreen',
-        }),
+        staticPreview: this.renderTieredPercentageBadge({ percentage: 107 }),
         keywords,
       },
       {
@@ -62,10 +68,7 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
         namedParams: {
           projectId: '33',
         },
-        staticPreview: this.render({
-          message: 'in progress 94%',
-          color: '#C4C21D',
-        }),
+        staticPreview: this.renderSummaryBadge({ percentage: 94 }),
         keywords,
         documentation:
           'This badge uses the same message and color scale as the native CII one, but with all the configuration and goodness that Shields provides!',
@@ -73,16 +76,15 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
     ]
   }
 
-  static get route() {
+  static get defaultBadgeData() {
     return {
-      base: 'cii',
-      pattern: ':metric(level|percentage|summary)/:projectId',
+      label: 'cii',
     }
   }
 
-  buildLevelBadge(level) {
-    let color
+  static renderLevelBadge({ level }) {
     let message = level
+    let color
     if (level === 'in_progress') {
       color = 'orange'
       message = 'in progress'
@@ -93,35 +95,18 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
     } else {
       color = '#E9C504'
     }
-    return this.constructor.render({ message, color })
+    return { message, color }
   }
 
-  buildTieredPercentageBadge(percentage) {
-    const color = coveragePercentageColor(percentage)
-    const message = `${percentage.toFixed(0)}%`
-    return this.constructor.render({ message, color })
+  static renderTieredPercentageBadge({ percentage }) {
+    return {
+      message: `${percentage.toFixed(0)}%`,
+      color: coveragePercentage(percentage),
+    }
   }
 
-  buildSummaryBadge(percentage) {
+  static renderSummaryBadge({ percentage }) {
     let message
-    const steps = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300]
-    const colors = [
-      'brightred',
-      '#C45A1D',
-      '#C4601D',
-      '#B86C11',
-      '#C47E1D',
-      '#C4881D',
-      '#C4941D',
-      '#C4A41D',
-      '#B9A612',
-      '#C4C21D',
-      'brightgreen',
-      '#BBBBBB',
-      '#E9C504',
-    ]
-    const color = colorScale(steps, colors)(percentage)
-
     if (percentage < 100) {
       message = `in progress ${percentage}%`
     } else if (percentage < 200) {
@@ -131,27 +116,31 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
     } else {
       message = 'gold'
     }
-
-    return this.constructor.render({ message, color })
+    return {
+      message,
+      color: summaryColorScale(percentage),
+    }
   }
 
   async handle({ metric, projectId }) {
-    // No official API documentation available
-    const url = `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`
-    const json = await this._requestJson({
-      schema: ciiBestPracticesSchema,
-      url,
+    // No official API documentation is available.
+    const {
+      badge_level: level,
+      tiered_percentage: percentage,
+    } = await this._requestJson({
+      schema,
+      url: `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`,
       errorMessages: {
         404: 'project not found',
       },
     })
 
     if (metric === 'level') {
-      return this.buildLevelBadge(json.badge_level)
+      return this.constructor.renderLevelBadge({ level })
     } else if (metric === 'percentage') {
-      return this.buildTieredPercentageBadge(json.tiered_percentage)
+      return this.constructor.renderTieredPercentageBadge({ percentage })
     } else {
-      return this.buildSummaryBadge(json.tiered_percentage)
+      return this.constructor.renderSummaryBadge({ percentage })
     }
   }
 }
