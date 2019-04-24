@@ -53,10 +53,6 @@ module.exports = class David extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'dependencies' }
-  }
-
   static get examples() {
     return [
       {
@@ -71,6 +67,10 @@ module.exports = class David extends BaseJsonService {
         staticPreview: this.render({ status: 'uptodate' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
   }
 
   static render({ status, kind }) {
