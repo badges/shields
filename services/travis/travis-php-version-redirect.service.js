@@ -11,6 +11,6 @@ module.exports = redirector({
   transformPath: ({ user, repo, branch }) =>
     branch
       ? `/travis/php-v/${user}/${repo}/${branch}`
-      : `/travis/php-v/${user}/${repo}/`,
+      : `/travis/php-v/${user}/${repo}`,
   dateAdded: new Date('2019-04-22'),
 })
