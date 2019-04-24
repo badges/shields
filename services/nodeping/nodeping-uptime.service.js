@@ -3,6 +3,7 @@
 const { BaseJsonService } = require('..')
 const Joi = require('joi')
 const { colorScale } = require('../color-formatters')
+
 const colorFormatter = colorScale([99, 99.5, 100])
 
 const rowSchema = Joi.object().keys({
@@ -27,21 +28,21 @@ const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 // TODO: support for custom '100%' label
 // TODO: support for custom # of decimal places
 
-class NodePingUptime extends BaseJsonService {
+module.exports = class NodePingUptime extends BaseJsonService {
   static get category() {
     return 'monitoring'
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'Uptime',
-    }
   }
 
   static get route() {
     return {
       base: 'nodeping/uptime',
       pattern: ':checkUuid',
+    }
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'Uptime',
     }
   }
 
@@ -55,6 +56,20 @@ class NodePingUptime extends BaseJsonService {
         staticPreview: this.render({ uptime: 99.999 }),
       },
     ]
+  }
+
+  static formatPercentage(uptime) {
+    if (uptime === 100.0) {
+      return '100%'
+    }
+    return `${uptime.toFixed(3)}%`
+  }
+
+  static render({ uptime }) {
+    return {
+      message: NodePingUptime.formatPercentage(uptime),
+      color: colorFormatter(uptime),
+    }
   }
 
   async fetch({ checkUuid }) {
@@ -81,20 +96,4 @@ class NodePingUptime extends BaseJsonService {
     const { uptime } = await this.fetch({ checkUuid })
     return this.constructor.render({ uptime })
   }
-
-  static formatPercentage(uptime) {
-    if (uptime === 100.0) {
-      return '100%'
-    }
-    return `${uptime.toFixed(3)}%`
-  }
-
-  static render({ uptime }) {
-    return {
-      message: NodePingUptime.formatPercentage(uptime),
-      color: colorFormatter(uptime),
-    }
-  }
 }
-
-module.exports = NodePingUptime
