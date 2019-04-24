@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, forCases, given } = require('sazerac')
-const ScrutinizerCoverage = require('./scrutinizer-coverage.service')
+const [ScrutinizerCoverage] = require('./scrutinizer-coverage.service')
 
 describe('ScrutinizerCoverage', function() {
   test(ScrutinizerCoverage.render, () => {

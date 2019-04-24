@@ -18,7 +18,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-class BaseScrutinizerBuild extends ScrutinizerBase {
+class ScrutinizerBuildBase extends ScrutinizerBase {
   static get category() {
     return 'build'
   }
@@ -41,7 +41,7 @@ class BaseScrutinizerBuild extends ScrutinizerBase {
   }
 }
 
-class ScrutinizerBuild extends BaseScrutinizerBuild {
+class ScrutinizerBuild extends ScrutinizerBuildBase {
   static get route() {
     return {
       base: 'scrutinizer/build',
@@ -53,11 +53,12 @@ class ScrutinizerBuild extends BaseScrutinizerBuild {
     return [
       {
         title: 'Scrutinizer build (GitHub/Bitbucket)',
-        pattern: ':vcs(g|b)/:user/:repo',
+        pattern: ':vcs(g|b)/:user/:repo/:branch?',
         namedParams: {
           vcs: 'g',
           user: 'filp',
           repo: 'whoops',
+          branch: 'master',
         },
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
@@ -73,7 +74,7 @@ class ScrutinizerBuild extends BaseScrutinizerBuild {
   }
 }
 
-class ScrutinizerGitLabBuild extends BaseScrutinizerBuild {
+class ScrutinizerGitLabBuild extends ScrutinizerBuildBase {
   static get route() {
     return {
       base: 'scrutinizer/build/gl',
@@ -88,28 +89,29 @@ class ScrutinizerGitLabBuild extends BaseScrutinizerBuild {
     // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
     return [
       {
-        title: 'Scrutinizer build (GitHub/Bitbucket)',
-        pattern: ':instance/:user/:repo',
+        title: 'Scrutinizer build (GitLab)',
+        pattern: ':instance/:user/:repo/:branch?',
         namedParams: {
           instance: 'propertywindow',
           user: 'propertywindow',
           repo: 'client',
+          branch: 'master',
         },
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
     ]
   }
 
-  async handle({ vcs, instance, user, repo, branch }) {
+  async handle({ instance, user, repo, branch }) {
     return this.makeBadge({
-      vcs,
+      vcs: 'gl',
       slug: `${instance}/${user}/${repo}`,
       branch,
     })
   }
 }
 
-class ScrutinizerPlainGitBuild extends BaseScrutinizerBuild {
+class ScrutinizerPlainGitBuild extends ScrutinizerBuildBase {
   static get route() {
     return {
       base: 'scrutinizer/build/gp',
@@ -117,8 +119,8 @@ class ScrutinizerPlainGitBuild extends BaseScrutinizerBuild {
     }
   }
 
-  async handle({ vcs, slug, branch }) {
-    return this.makeBadge({ vcs, slug, branch })
+  async handle({ slug, branch }) {
+    return this.makeBadge({ vcs: 'gp', slug, branch })
   }
 }
 

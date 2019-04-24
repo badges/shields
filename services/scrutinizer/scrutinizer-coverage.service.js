@@ -30,7 +30,7 @@ const schema = Joi.object({
 // > 60% brightgreen
 const scale = colorScale([40, 61], ['red', 'yellow', 'brightgreen'])
 
-module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
+class ScrutinizerCoverageBase extends ScrutinizerBase {
   static get category() {
     return 'coverage'
   }
@@ -38,13 +38,6 @@ module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
   static get defaultBadgeData() {
     return {
       label: 'coverage',
-    }
-  }
-
-  static get route() {
-    return {
-      base: 'scrutinizer/coverage',
-      pattern: ':vcs/:user/:repo/:branch*',
     }
   }
 
@@ -60,32 +53,6 @@ module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
     }
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Scrutinizer coverage',
-        pattern: ':vcs/:user/:repo',
-        namedParams: {
-          vcs: 'g',
-          user: 'filp',
-          repo: 'whoops',
-        },
-        staticPreview: this.render({ coverage: 56 }),
-      },
-      {
-        title: 'Scrutinizer coverage (branch)',
-        pattern: ':vcs/:user/:repo/:branch',
-        namedParams: {
-          vcs: 'g',
-          user: 'doctrine',
-          repo: 'orm',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 73 }),
-      },
-    ]
-  }
-
   transform({ json, branch }) {
     branch = this.transformBranch({ json, branch })
     const project = json.applications[branch].index._embedded.project
@@ -93,9 +60,98 @@ module.exports = class ScrutinizerCoverage extends ScrutinizerBase {
     return { coverage }
   }
 
-  async handle({ vcs, user, repo, branch }) {
-    const json = await this.fetch({ schema, vcs, user, repo })
+  async makeBadge({ vcs, slug, branch }) {
+    const json = await this.fetch({ schema, vcs, slug })
     const { coverage } = this.transform({ json, branch })
     return this.constructor.render({ coverage })
   }
 }
+
+class ScrutinizerCoverage extends ScrutinizerCoverageBase {
+  static get route() {
+    return {
+      base: 'scrutinizer/coverage',
+      pattern: ':vcs(g|b)/:user/:repo/:branch*',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Scrutinizer coverage (GitHub/BitBucket)',
+        pattern: ':vcs/:user/:repo/:branch?',
+        namedParams: {
+          vcs: 'g',
+          user: 'filp',
+          repo: 'whoops',
+          branch: 'master',
+        },
+        staticPreview: this.render({ coverage: 86 }),
+      },
+    ]
+  }
+
+  async handle({ vcs, user, repo, branch }) {
+    return this.makeBadge({
+      vcs,
+      slug: `${user}/${repo}`,
+      branch,
+    })
+  }
+}
+
+class ScrutinizerCoverageGitLab extends ScrutinizerCoverageBase {
+  static get route() {
+    return {
+      base: 'scrutinizer/coverage/gl',
+      pattern: ':instance/:user/:repo/:branch*',
+    }
+  }
+
+  static get examples() {
+    // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
+    // The example used is valid, but the project will not be accessible if Shields users try to use it.
+    // https://gitlab.propertywindow.nl/propertywindow/client
+    // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
+    return [
+      {
+        title: 'Scrutinizer coverage (GitLab)',
+        pattern: ':instance/:user/:repo/:branch?',
+        namedParams: {
+          instance: 'propertywindow',
+          user: 'propertywindow',
+          repo: 'client',
+          branch: 'master',
+        },
+        staticPreview: this.render({ coverage: 94 }),
+      },
+    ]
+  }
+
+  async handle({ instance, user, repo, branch }) {
+    return this.makeBadge({
+      vcs: 'gl',
+      slug: `${instance}/${user}/${repo}`,
+      branch,
+    })
+  }
+}
+
+class ScrutinizerCoveragePlainGit extends ScrutinizerCoverageBase {
+  static get route() {
+    return {
+      base: 'scrutinizer/coverage/gp',
+      pattern: ':slug/:branch*',
+    }
+  }
+
+  async handle({ slug, branch }) {
+    return this.makeBadge({ vcs: 'gp', slug, branch })
+  }
+}
+
+module.exports = [
+  ScrutinizerCoverage,
+  ScrutinizerCoverageGitLab,
+  ScrutinizerCoveragePlainGit,
+]
