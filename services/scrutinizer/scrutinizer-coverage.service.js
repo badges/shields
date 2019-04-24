@@ -54,8 +54,8 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
   }
 
   transform({ json, branch }) {
-    branch = this.transformBranch({ json, branch })
-    const project = json.applications[branch].index._embedded.project
+    branch = this.transformBranch({ json, wantedBranch: branch })
+    const project = branch.index._embedded.project
     const coverage = project.metric_values['scrutinizer.test_coverage'] * 100
     return { coverage }
   }
@@ -79,7 +79,7 @@ class ScrutinizerCoverage extends ScrutinizerCoverageBase {
     return [
       {
         title: 'Scrutinizer coverage (GitHub/BitBucket)',
-        pattern: ':vcs/:user/:repo/:branch?',
+        pattern: ':vcs(g|b)/:user/:repo/:branch?',
         namedParams: {
           vcs: 'g',
           user: 'filp',

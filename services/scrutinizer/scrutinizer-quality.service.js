@@ -48,8 +48,8 @@ class ScrutinizerQualityBase extends ScrutinizerBase {
   }
 
   transform({ json, branch }) {
-    branch = this.transformBranch({ json, branch })
-    const project = json.applications[branch].index._embedded.project
+    branch = this.transformBranch({ json, wantedBranch: branch })
+    const project = branch.index._embedded.project
     const score = project.metric_values['scrutinizer.quality']
     return { score }
   }
@@ -73,7 +73,7 @@ class ScrutinizerQuality extends ScrutinizerQualityBase {
     return [
       {
         title: 'Scrutinizer code quality (GitHub/Bitbucket)',
-        pattern: ':vcs/:user/:repo/:branch?',
+        pattern: ':vcs(g|b)/:user/:repo/:branch?',
         namedParams: {
           vcs: 'g',
           user: 'filp',

@@ -30,8 +30,8 @@ class ScrutinizerBuildBase extends ScrutinizerBase {
   }
 
   transform({ json, branch }) {
-    branch = this.transformBranch({ json, branch })
-    return { status: json.applications[branch].build_status.status }
+    branch = this.transformBranch({ json, wantedBranch: branch })
+    return { status: branch.build_status.status }
   }
 
   async makeBadge({ vcs, slug, branch }) {

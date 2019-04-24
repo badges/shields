@@ -65,3 +65,10 @@ t.create('build nonexistent project')
     label: 'build',
     message: 'project not found',
   })
+
+t.create('build nonexistent branch')
+  .get('/g/phpmyadmin/phpmyadmin/super-fake/not-real-branch.json')
+  .expectBadge({
+    label: 'build',
+    message: 'branch not found',
+  })

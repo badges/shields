@@ -1,6 +1,6 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
+const { BaseJsonService, NotFound } = require('..')
 
 module.exports = class ScrutinizerBase extends BaseJsonService {
   // https://scrutinizer-ci.com/docs/api/#repository-details
@@ -15,9 +15,14 @@ module.exports = class ScrutinizerBase extends BaseJsonService {
     })
   }
 
-  transformBranch({ json, branch }) {
+  transformBranch({ json, wantedBranch }) {
+    if (!wantedBranch) {
+      return json.applications[json.default_branch]
+    }
+
+    const branch = json.applications[wantedBranch]
     if (!branch) {
-      branch = json.default_branch
+      throw new NotFound({ prettyMessage: ' branch not found' })
     }
 
     return branch
