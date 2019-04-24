@@ -4,12 +4,13 @@ const { BaseJsonService } = require('..')
 
 module.exports = class ScrutinizerBase extends BaseJsonService {
   // https://scrutinizer-ci.com/docs/api/#repository-details
-  async fetch({ schema, vcs, user, repo }) {
+  async fetch({ schema, vcs, slug }) {
     return this._requestJson({
       schema,
-      url: `https://scrutinizer-ci.com/api/repositories/${vcs}/${user}/${repo}`,
+      url: `https://scrutinizer-ci.com/api/repositories/${vcs}/${slug}`,
       errorMessages: {
-        404: 'project or branch not found',
+        401: 'not authorized to access project',
+        404: 'project not found',
       },
     })
   }
