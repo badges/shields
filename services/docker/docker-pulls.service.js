@@ -15,32 +15,6 @@ const pullsSchema = Joi.object({
 }).required()
 
 module.exports = class DockerPulls extends BaseJsonService {
-  async fetch({ user, repo }) {
-    return this._requestJson({
-      schema: pullsSchema,
-      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
-      )}/${repo}`,
-      errorMessages: { 404: 'repo not found' },
-    })
-  }
-
-  static render({ count }) {
-    return {
-      message: metric(count),
-      color: dockerBlue,
-    }
-  }
-
-  async handle({ user, repo }) {
-    const data = await this.fetch({ user, repo })
-    return this.constructor.render({ count: data.pull_count })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'docker pulls' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -60,5 +34,31 @@ module.exports = class DockerPulls extends BaseJsonService {
         staticPreview: this.render({ count: 765400000 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'docker pulls' }
+  }
+
+  static render({ count }) {
+    return {
+      message: metric(count),
+      color: dockerBlue,
+    }
+  }
+
+  async fetch({ user, repo }) {
+    return this._requestJson({
+      schema: pullsSchema,
+      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+        user
+      )}/${repo}`,
+      errorMessages: { 404: 'repo not found' },
+    })
+  }
+
+  async handle({ user, repo }) {
+    const data = await this.fetch({ user, repo })
+    return this.constructor.render({ count: data.pull_count })
   }
 }

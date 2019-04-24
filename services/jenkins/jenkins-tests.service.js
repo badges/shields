@@ -40,12 +40,6 @@ module.exports = class JenkinsTests extends JenkinsBase {
     return 'build'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'tests',
-    }
-  }
-
   static get route() {
     return {
       base: 'jenkins/tests',
@@ -80,6 +74,12 @@ module.exports = class JenkinsTests extends JenkinsBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'tests',
+    }
   }
 
   static render({

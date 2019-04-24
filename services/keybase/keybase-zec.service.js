@@ -29,10 +29,6 @@ const zcachAddressSchema = Joi.object({
 }).required()
 
 module.exports = class KeybaseZEC extends KeybaseProfile {
-  static get apiVersion() {
-    return '1.0'
-  }
-
   static get route() {
     return {
       base: 'keybase/zec',
@@ -40,11 +36,34 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Keybase ZEC',
+        namedParams: { username: 'skyplabs' },
+        staticPreview: this.render({
+          address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
+        }),
+        keywords: ['zcash'],
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'zec',
       color: 'informational',
     }
+  }
+
+  static render({ address }) {
+    return {
+      message: address,
+    }
+  }
+
+  static get apiVersion() {
+    return '1.0'
   }
 
   async handle({ username }) {
@@ -71,24 +90,5 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
     }
 
     return this.constructor.render({ address: zcashAddresses[0].address })
-  }
-
-  static render({ address }) {
-    return {
-      message: address,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Keybase ZEC',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({
-          address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
-        }),
-        keywords: ['zcash'],
-      },
-    ]
   }
 }

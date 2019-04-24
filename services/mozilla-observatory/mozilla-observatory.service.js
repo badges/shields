@@ -87,23 +87,6 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     }
   }
 
-  async fetch({ host, publish }) {
-    return this._requestJson({
-      schema,
-      url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
-      options: {
-        method: 'POST',
-        qs: { host },
-        form: { hidden: !publish },
-      },
-    })
-  }
-
-  async handle({ which, host }, { publish }) {
-    const { state, grade, score } = await this.fetch({ host, publish })
-    return this.constructor.render({ which, state, grade, score })
-  }
-
   static render({ which, state, grade, score }) {
     if (state !== 'FINISHED') {
       return {
@@ -124,5 +107,22 @@ module.exports = class MozillaObservatory extends BaseJsonService {
       message: which === 'grade' ? grade : `${grade} (${score}/100)`,
       color: colorMap[letter],
     }
+  }
+
+  async fetch({ host, publish }) {
+    return this._requestJson({
+      schema,
+      url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
+      options: {
+        method: 'POST',
+        qs: { host },
+        form: { hidden: !publish },
+      },
+    })
+  }
+
+  async handle({ which, host }, { publish }) {
+    const { state, grade, score } = await this.fetch({ host, publish })
+    return this.constructor.render({ which, state, grade, score })
   }
 }

@@ -64,7 +64,7 @@ module.exports = class SonarTechDebt extends SonarBase {
       protocol,
       host,
       component,
-      //special condition for backwards compatibility
+      // Special condition for backwards compatibility.
       metricName: 'sqale_debt_ratio',
     })
     const { metricValue: debt } = this.transform({ json, sonarVersion })

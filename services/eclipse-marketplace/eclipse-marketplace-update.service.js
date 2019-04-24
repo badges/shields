@@ -19,8 +19,8 @@ module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
     return 'activity'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'updated' }
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/last-update')
   }
 
   static get examples() {
@@ -33,8 +33,8 @@ module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
     ]
   }
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/last-update')
+  static get defaultBadgeData() {
+    return { label: 'updated' }
   }
 
   static render({ date }) {

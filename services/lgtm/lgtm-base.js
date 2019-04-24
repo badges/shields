@@ -17,6 +17,10 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class LgtmBaseService extends BaseJsonService {
+  static get category() {
+    return 'analysis'
+  }
+
   static get defaultBadgeData() {
     return { label: 'lgtm' }
   }
@@ -31,9 +35,5 @@ module.exports = class LgtmBaseService extends BaseJsonService {
         404: 'project not found',
       },
     })
-  }
-
-  static get category() {
-    return 'analysis'
   }
 }

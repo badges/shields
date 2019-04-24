@@ -46,6 +46,10 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
+    static get route() {
+      return this.buildRoute(base)
+    }
+
     static get examples() {
       return [
         {
@@ -54,10 +58,6 @@ function DownloadsForInterval(interval) {
           staticPreview: this.render({ downloads: 30000 }),
         },
       ]
-    }
-
-    static get route() {
-      return this.buildRoute(base)
     }
 
     static render({ downloads }) {

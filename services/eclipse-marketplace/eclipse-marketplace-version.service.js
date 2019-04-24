@@ -17,8 +17,8 @@ module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase 
     return 'version'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'eclipse marketplace' }
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/v')
   }
 
   static get examples() {
@@ -31,8 +31,8 @@ module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase 
     ]
   }
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/v')
+  static get defaultBadgeData() {
+    return { label: 'eclipse marketplace' }
   }
 
   static render({ version }) {

@@ -31,6 +31,7 @@ overrides:
                 'isDeprecated',
                 'route',
                 'examples',
+                '_cacheLength',
                 'defaultBadgeData',
                 'render',
                 'constructor',

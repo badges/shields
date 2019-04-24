@@ -27,6 +27,13 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
     return 'downloads'
   }
 
+  static get route() {
+    return {
+      base: 'jetbrains/plugin/d',
+      pattern: ':pluginId',
+    }
+  }
+
   static get examples() {
     return [
       {
@@ -37,13 +44,6 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
         staticPreview: this.render({ downloads: 10200000 }),
       },
     ]
-  }
-
-  static get route() {
-    return {
-      base: 'jetbrains/plugin/d',
-      pattern: ':pluginId',
-    }
   }
 
   static render({ downloads }) {

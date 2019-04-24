@@ -10,13 +10,13 @@ const schema = Joi.object({
 }).required()
 
 class BaseCranService extends BaseJsonService {
+  static get defaultBadgeData() {
+    return { label: 'cran' }
+  }
+
   async fetch({ packageName }) {
     const url = `http://crandb.r-pkg.org/${packageName}`
     return this._requestJson({ schema, url })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'cran' }
   }
 }
 

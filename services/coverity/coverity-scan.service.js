@@ -11,33 +11,8 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CoverityScan extends BaseJsonService {
-  static render({ message }) {
-    let color
-    if (message === 'passed') {
-      color = 'brightgreen'
-      message = 'passing'
-    } else if (/^passed .* new defects$/.test(message)) {
-      color = 'yellow'
-    } else if (message === 'pending') {
-      color = 'orange'
-    } else {
-      color = 'red'
-    }
-
-    return {
-      message,
-      color,
-    }
-  }
-
   static get category() {
     return 'analysis'
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'coverity',
-    }
   }
 
   static get route() {
@@ -59,6 +34,31 @@ module.exports = class CoverityScan extends BaseJsonService {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'coverity',
+    }
+  }
+
+  static render({ message }) {
+    let color
+    if (message === 'passed') {
+      color = 'brightgreen'
+      message = 'passing'
+    } else if (/^passed .* new defects$/.test(message)) {
+      color = 'yellow'
+    } else if (message === 'pending') {
+      color = 'orange'
+    } else {
+      color = 'red'
+    }
+
+    return {
+      message,
+      color,
+    }
   }
 
   async handle({ projectId }) {

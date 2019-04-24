@@ -38,12 +38,6 @@ module.exports = class JenkinsBuild extends JenkinsBase {
     return 'build'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
-  }
-
   static get route() {
     return {
       base: 'jenkins/build',
@@ -65,6 +59,12 @@ module.exports = class JenkinsBuild extends JenkinsBase {
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'build',
+    }
   }
 
   static render({ status }) {

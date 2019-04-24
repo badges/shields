@@ -29,37 +29,6 @@ module.exports = class DroneBuild extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
-  }
-
-  async handle({ user, repo, branch }, { server }) {
-    const options = {
-      qs: {
-        ref: branch ? `refs/heads/${branch}` : undefined,
-      },
-    }
-    if (serverSecrets.drone_token) {
-      options.headers = {
-        Authorization: `Bearer ${serverSecrets.drone_token}`,
-      }
-    }
-    if (!server) {
-      server = 'https://cloud.drone.io'
-    }
-    const json = await this._requestJson({
-      options,
-      schema: DroneBuildSchema,
-      url: `${server}/api/repos/${user}/${repo}/builds/latest`,
-      errorMessages: {
-        401: 'repo not found or not authorized',
-      },
-    })
-    return renderBuildStatusBadge({ status: json.status })
-  }
-
   static get examples() {
     return [
       {
@@ -103,5 +72,36 @@ module.exports = class DroneBuild extends BaseJsonService {
         staticPreview: renderBuildStatusBadge({ status: 'success' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'build',
+    }
+  }
+
+  async handle({ user, repo, branch }, { server }) {
+    const options = {
+      qs: {
+        ref: branch ? `refs/heads/${branch}` : undefined,
+      },
+    }
+    if (serverSecrets.drone_token) {
+      options.headers = {
+        Authorization: `Bearer ${serverSecrets.drone_token}`,
+      }
+    }
+    if (!server) {
+      server = 'https://cloud.drone.io'
+    }
+    const json = await this._requestJson({
+      options,
+      schema: DroneBuildSchema,
+      url: `${server}/api/repos/${user}/${repo}/builds/latest`,
+      errorMessages: {
+        401: 'repo not found or not authorized',
+      },
+    })
+    return renderBuildStatusBadge({ status: json.status })
   }
 }

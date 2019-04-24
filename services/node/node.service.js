@@ -10,10 +10,6 @@ module.exports = class NodeVersion extends NPMBase {
     return 'platform-support'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'node' }
-  }
-
   static get route() {
     return this.buildRoute('node/v', { withTag: true })
   }
@@ -70,6 +66,10 @@ module.exports = class NodeVersion extends NPMBase {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'node' }
   }
 
   static renderStaticPreview({ tag, nodeVersionRange }) {

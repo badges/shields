@@ -16,17 +16,6 @@ module.exports = class Coveralls extends BaseJsonService {
     return 'coverage'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
-
-  static render({ coverage }) {
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
-    }
-  }
-
   static get route() {
     return {
       base: 'coveralls',
@@ -71,6 +60,17 @@ module.exports = class Coveralls extends BaseJsonService {
         staticPreview: this.render({ coverage: 96 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   async fetch({ vcsType, user, repo, branch }) {

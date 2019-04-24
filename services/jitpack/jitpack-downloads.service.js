@@ -23,6 +23,17 @@ const periodMap = {
 }
 
 module.exports = class JitpackDownloads extends BaseJsonService {
+  static get category() {
+    return 'downloads'
+  }
+
+  static get route() {
+    return {
+      base: 'jitpack',
+      pattern: ':period(dw|dm)/:vcs(github|bitbucket|gitlab)/:user/:repo',
+    }
+  }
+
   static get examples() {
     return [
       {
@@ -42,27 +53,15 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     ]
   }
 
-  static get category() {
-    return 'downloads'
-  }
-
   static get defaultBadgeData() {
     return { label: 'downloads' }
   }
 
-  static get route() {
+  static render({ downloads, period }) {
     return {
-      base: 'jitpack',
-      pattern: ':period(dw|dm)/:vcs(github|bitbucket|gitlab)/:user/:repo',
+      message: `${metric(downloads)}${periodMap[period].suffix}`,
+      color: downloadCount(downloads),
     }
-  }
-
-  async handle({ period, vcs, user, repo }) {
-    const json = await this.fetch({ vcs, user, repo })
-    return this.constructor.render({
-      downloads: json[periodMap[period].api_field],
-      period,
-    })
   }
 
   async fetch({ vcs, user, repo }) {
@@ -73,10 +72,11 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     })
   }
 
-  static render({ downloads, period }) {
-    return {
-      message: `${metric(downloads)}${periodMap[period].suffix}`,
-      color: downloadCount(downloads),
-    }
+  async handle({ period, vcs, user, repo }) {
+    const json = await this.fetch({ vcs, user, repo })
+    return this.constructor.render({
+      downloads: json[periodMap[period].api_field],
+      period,
+    })
   }
 }
