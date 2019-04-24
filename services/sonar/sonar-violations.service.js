@@ -30,6 +30,61 @@ module.exports = class SonarViolations extends SonarBase {
     return 'analysis'
   }
 
+  static get route() {
+    return {
+      base: 'sonar',
+      pattern: `${patternBase}/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)`,
+      queryParamSchema: queryParamWithFormatSchema,
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Sonar Violations (short format)',
+        namedParams: {
+          protocol: 'https',
+          host: 'sonarcloud.io',
+          component: 'swellaby:azdo-shellcheck',
+          metric: 'violations',
+        },
+        queryParams: {
+          format: 'short',
+          sonarVersion: '4.2',
+        },
+        staticPreview: this.render({
+          violations: 0,
+          metricName: 'violations',
+          format: 'short',
+        }),
+        keywords,
+        documentation,
+      },
+      {
+        title: 'Sonar Violations (long format)',
+        namedParams: {
+          protocol: 'http',
+          host: 'sonar.petalslink.com',
+          component: 'org.ow2.petals:petals-se-ase',
+          metric: 'violations',
+        },
+        queryParams: {
+          format: 'long',
+        },
+        staticPreview: this.render({
+          violations: {
+            info_violations: 2,
+            minor_violations: 1,
+          },
+          metricName: 'violations',
+          format: 'long',
+        }),
+        keywords,
+        documentation,
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return { label: 'violations' }
   }
@@ -91,61 +146,6 @@ module.exports = class SonarViolations extends SonarBase {
       message: `${metric(violations)}`,
       color,
     }
-  }
-
-  static get route() {
-    return {
-      base: 'sonar',
-      pattern: `${patternBase}/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)`,
-      queryParamSchema: queryParamWithFormatSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Violations (short format)',
-        namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
-          component: 'swellaby:azdo-shellcheck',
-          metric: 'violations',
-        },
-        queryParams: {
-          format: 'short',
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({
-          violations: 0,
-          metricName: 'violations',
-          format: 'short',
-        }),
-        keywords,
-        documentation,
-      },
-      {
-        title: 'Sonar Violations (long format)',
-        namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
-          component: 'org.ow2.petals:petals-se-ase',
-          metric: 'violations',
-        },
-        queryParams: {
-          format: 'long',
-        },
-        staticPreview: this.render({
-          violations: {
-            info_violations: 2,
-            minor_violations: 1,
-          },
-          metricName: 'violations',
-          format: 'long',
-        }),
-        keywords,
-        documentation,
-      },
-    ]
   }
 
   transformViolations({ json, sonarVersion, metric, format }) {

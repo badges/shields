@@ -111,16 +111,6 @@ module.exports = class BaseService {
     throw new Error(`Route not defined for ${this.name}`)
   }
 
-  static get _cacheLength() {
-    const cacheLengths = {
-      build: 30,
-      license: 3600,
-      version: 300,
-      debug: 60,
-    }
-    return cacheLengths[this.category]
-  }
-
   /**
    * Example URLs for this service. These should use the format
    * specified in `route`, and can be used to demonstrate how to use badges for
@@ -153,6 +143,16 @@ module.exports = class BaseService {
     return []
   }
 
+  static get _cacheLength() {
+    const cacheLengths = {
+      build: 30,
+      license: 3600,
+      version: 300,
+      debug: 60,
+    }
+    return cacheLengths[this.category]
+  }
+
   /**
    * Default data for the badge. Can include label, logo, and color. These
    * defaults are used if the value is neither included in the service data
@@ -160,6 +160,10 @@ module.exports = class BaseService {
    */
   static get defaultBadgeData() {
     return {}
+  }
+
+  static render(props) {
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   static validateDefinition() {
@@ -207,10 +211,6 @@ module.exports = class BaseService {
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 
     return result
-  }
-
-  static render(props) {
-    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   constructor({ sendAndCacheRequest }, { handleInternalErrors }) {

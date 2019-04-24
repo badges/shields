@@ -17,17 +17,6 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
     return 'analysis'
   }
 
-  static get defaultBadgeData() {
-    return { label: getLabel({ metric }) }
-  }
-
-  static render({ density }) {
-    return {
-      message: `${density}%`,
-      color: positiveMetricColorScale(density),
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -53,6 +42,17 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: getLabel({ metric }) }
+  }
+
+  static render({ density }) {
+    return {
+      message: `${density}%`,
+      color: positiveMetricColorScale(density),
+    }
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {

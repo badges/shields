@@ -117,6 +117,14 @@ module.exports = class SonarGeneric extends SonarBase {
     return 'analysis'
   }
 
+  static get route() {
+    return {
+      base: 'sonar',
+      pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
+      queryParamSchema,
+    }
+  }
+
   static get defaultBadgeData() {
     return { label: 'sonar' }
   }
@@ -126,14 +134,6 @@ module.exports = class SonarGeneric extends SonarBase {
       label: getLabel({ metric: metricName }),
       message: metric(metricValue),
       color: 'informational',
-    }
-  }
-
-  static get route() {
-    return {
-      base: 'sonar',
-      pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
-      queryParamSchema,
     }
   }
 

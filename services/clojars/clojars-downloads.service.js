@@ -5,23 +5,6 @@ const { downloadCount: downloadsColor } = require('../color-formatters')
 const { BaseClojarsService } = require('./clojars-base')
 
 module.exports = class ClojarsDownloads extends BaseClojarsService {
-  static render({ downloads }) {
-    return {
-      label: 'downloads',
-      message: metric(downloads),
-      color: downloadsColor(downloads),
-    }
-  }
-
-  async handle({ clojar }) {
-    const json = await this.fetch({ clojar })
-    return this.constructor.render({ downloads: json.downloads })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
-
   static get category() {
     return 'downloads'
   }
@@ -40,5 +23,22 @@ module.exports = class ClojarsDownloads extends BaseClojarsService {
         staticPreview: this.render({ downloads: 117 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'downloads' }
+  }
+
+  static render({ downloads }) {
+    return {
+      label: 'downloads',
+      message: metric(downloads),
+      color: downloadsColor(downloads),
+    }
+  }
+
+  async handle({ clojar }) {
+    const json = await this.fetch({ clojar })
+    return this.constructor.render({ downloads: json.downloads })
   }
 }

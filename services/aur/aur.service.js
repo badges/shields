@@ -22,14 +22,6 @@ const aurSchema = Joi.object({
 }).required()
 
 class BaseAurService extends BaseJsonService {
-  async fetch({ packageName }) {
-    return this._requestJson({
-      schema: aurSchema,
-      url: 'https://aur.archlinux.org/rpc.php',
-      options: { qs: { type: 'info', arg: packageName } },
-    })
-  }
-
   static get defaultBadgeData() {
     return { label: 'aur' }
   }
@@ -43,22 +35,17 @@ class BaseAurService extends BaseJsonService {
     }
     return super._validate(data, schema)
   }
+
+  async fetch({ packageName }) {
+    return this._requestJson({
+      schema: aurSchema,
+      url: 'https://aur.archlinux.org/rpc.php',
+      options: { qs: { type: 'info', arg: packageName } },
+    })
+  }
 }
 
 class AurLicense extends BaseAurService {
-  static render({ license }) {
-    return { message: license, color: 'blue' }
-  }
-
-  async handle({ packageName }) {
-    const json = await this.fetch({ packageName })
-    return this.constructor.render({ license: json.results.License })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
-
   static get category() {
     return 'license'
   }
@@ -79,29 +66,25 @@ class AurLicense extends BaseAurService {
       },
     ]
   }
-}
 
-class AurVotes extends BaseAurService {
-  static render({ votes }) {
-    return {
-      message: metric(votes),
-      color: floorCountColor(votes, 2, 20, 60),
-    }
+  static get defaultBadgeData() {
+    return { label: 'license' }
+  }
+
+  static render({ license }) {
+    return { message: license, color: 'blue' }
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ votes: json.results.NumVotes })
+    return this.constructor.render({ license: json.results.License })
   }
+}
 
-  static get defaultBadgeData() {
-    return { label: 'votes' }
-  }
-
+class AurVotes extends BaseAurService {
   static get category() {
     return 'rating'
   }
-
   static get route() {
     return {
       base: 'aur/votes',
@@ -118,22 +101,25 @@ class AurVotes extends BaseAurService {
       },
     ]
   }
-}
 
-class AurVersion extends BaseAurService {
-  static render({ version, outOfDate }) {
-    const color = outOfDate === null ? 'blue' : 'orange'
-    return { message: addv(version), color }
+  static get defaultBadgeData() {
+    return { label: 'votes' }
+  }
+
+  static render({ votes }) {
+    return {
+      message: metric(votes),
+      color: floorCountColor(votes, 2, 20, 60),
+    }
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({
-      version: json.results.Version,
-      outOfDate: json.results.OutOfDate,
-    })
+    return this.constructor.render({ votes: json.results.NumVotes })
   }
+}
 
+class AurVersion extends BaseAurService {
   static get category() {
     return 'version'
   }
@@ -153,6 +139,19 @@ class AurVersion extends BaseAurService {
         staticPreview: this.render({ version: 'v1.9-1', outOfDate: null }),
       },
     ]
+  }
+
+  static render({ version, outOfDate }) {
+    const color = outOfDate === null ? 'blue' : 'orange'
+    return { message: addv(version), color }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({
+      version: json.results.Version,
+      outOfDate: json.results.OutOfDate,
+    })
   }
 }
 

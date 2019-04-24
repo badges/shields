@@ -17,25 +17,10 @@ module.exports = class Bundlephobia extends BaseJsonService {
     return 'size'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'bundlephobia',
-      color: 'informational',
-    }
-  }
-
   static get route() {
     return {
       base: 'bundlephobia',
       pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
-    }
-  }
-
-  static render({ format, size }) {
-    const label = format === 'min' ? 'minified size' : 'minzipped size'
-    return {
-      label,
-      message: prettyBytes(size),
     }
   }
 
@@ -86,6 +71,21 @@ module.exports = class Bundlephobia extends BaseJsonService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'bundlephobia',
+      color: 'informational',
+    }
+  }
+
+  static render({ format, size }) {
+    const label = format === 'min' ? 'minified size' : 'minzipped size'
+    return {
+      label,
+      message: prettyBytes(size),
+    }
   }
 
   async fetch({ scope, packageName, version }) {

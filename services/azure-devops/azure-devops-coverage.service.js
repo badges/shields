@@ -47,19 +47,15 @@ const buildCodeCoverageSchema = Joi.object({
 }).required()
 
 module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
-  static render({ coverage }) {
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentageColor(coverage),
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
-
   static get category() {
     return 'coverage'
+  }
+
+  static get route() {
+    return {
+      base: 'azure-devops/coverage',
+      pattern: ':organization/:project/:definitionId/:branch*',
+    }
   }
 
   static get examples() {
@@ -92,10 +88,14 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
     ]
   }
 
-  static get route() {
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
+  }
+
+  static render({ coverage }) {
     return {
-      base: 'azure-devops/coverage',
-      pattern: ':organization/:project/:definitionId/:branch*',
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentageColor(coverage),
     }
   }
 

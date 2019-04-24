@@ -14,10 +14,6 @@ module.exports = class OssTracker extends BaseService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'oss lifecycle' }
-  }
-
   static get examples() {
     return [
       {
@@ -35,10 +31,8 @@ module.exports = class OssTracker extends BaseService {
     ]
   }
 
-  async fetch({ user, repo, branch }) {
-    return this._request({
-      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
-    })
+  static get defaultBadgeData() {
+    return { label: 'oss lifecycle' }
   }
 
   static render({ status }) {
@@ -46,6 +40,12 @@ module.exports = class OssTracker extends BaseService {
       message: status,
       color: 'lightgrey',
     }
+  }
+
+  async fetch({ user, repo, branch }) {
+    return this._request({
+      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
+    })
   }
 
   async handle({ user, repo, branch }) {

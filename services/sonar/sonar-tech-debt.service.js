@@ -15,18 +15,6 @@ module.exports = class SonarTechDebt extends SonarBase {
     return 'analysis'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'tech debt' }
-  }
-
-  static render({ debt, metric }) {
-    return {
-      label: getLabel({ metric }),
-      message: `${debt}%`,
-      color: negativeMetricColorScale(debt),
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -56,6 +44,18 @@ module.exports = class SonarTechDebt extends SonarBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'tech debt' }
+  }
+
+  static render({ debt, metric }) {
+    return {
+      label: getLabel({ metric }),
+      message: `${debt}%`,
+      color: negativeMetricColorScale(debt),
+    }
   }
 
   async handle({ protocol, host, component, metric }, { sonarVersion }) {

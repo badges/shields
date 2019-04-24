@@ -25,6 +25,10 @@ module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'price' }
+  }
+
   static render({ priceCurrency, price }) {
     return {
       message: `${currencyFromCode(priceCurrency) + price}`,
@@ -35,9 +39,5 @@ module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
   async handle({ storeId }) {
     const { priceCurrency, price } = await this.fetch({ storeId })
     return this.constructor.render({ priceCurrency, price })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'price' }
   }
 }
