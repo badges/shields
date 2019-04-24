@@ -15,6 +15,7 @@ module.exports = class PuppetForgeReleaseCountService extends BasePuppetForgeUse
       pattern: ':user',
     }
   }
+
   static get examples() {
     return [
       {
