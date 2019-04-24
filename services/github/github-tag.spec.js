@@ -31,7 +31,7 @@ describe('GithubTag', function() {
     })
     given({ usingSemver: true, version: '2.0.0' }).expect({
       message: addv('2.0.0'),
-      versionColor: versionColor('2.0.0'),
+      color: versionColor('2.0.0'),
     })
   })
 })
