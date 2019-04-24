@@ -46,7 +46,7 @@ module.exports = class JenkinsBuild extends JenkinsBase {
 
   static get route() {
     return {
-      base: 'jenkins/s',
+      base: 'jenkins/build',
       pattern: ':protocol(http|https)/:host/:job+',
       queryParamSchema,
     }
