@@ -11,11 +11,6 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Sourcegraph extends BaseJsonService {
-  static render({ projectsCount }) {
-    return {
-      message: projectsCount,
-    }
-  }
   static get category() {
     return 'other'
   }
@@ -25,10 +20,6 @@ module.exports = class Sourcegraph extends BaseJsonService {
       base: 'sourcegraph/rrc',
       pattern: ':repo(.*)',
     }
-  }
-
-  static get defaultBadgeData() {
-    return { color: 'brightgreen', label: 'used by' }
   }
 
   static get examples() {
@@ -42,6 +33,16 @@ module.exports = class Sourcegraph extends BaseJsonService {
         staticPreview: this.render({ projectsCount: '9.9k projects' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { color: 'brightgreen', label: 'used by' }
+  }
+
+  static render({ projectsCount }) {
+    return {
+      message: projectsCount,
+    }
   }
 
   async handle({ repo }) {

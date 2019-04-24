@@ -3,6 +3,10 @@
 const OpencollectiveBase = require('./opencollective-base')
 
 module.exports = class OpencollectiveBackers extends OpencollectiveBase {
+  static get route() {
+    return this.buildRoute('backers')
+  }
+
   static get examples() {
     return [
       {
@@ -18,10 +22,6 @@ module.exports = class OpencollectiveBackers extends OpencollectiveBase {
     return {
       label: 'backers',
     }
-  }
-
-  static get route() {
-    return this.buildRoute('backers')
   }
 
   async handle({ collective }) {

@@ -14,6 +14,20 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Spiget tested server versions',
+        namedParams: {
+          resourceId: '9089',
+        },
+        staticPreview: this.render({ versions: '1.7-1.13' }),
+        documentation,
+        keywords,
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'tested versions',
@@ -21,10 +35,10 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
     }
   }
 
-  async handle({ resourceId }) {
-    const { testedVersions } = await this.fetch({ resourceId })
-    const { versions } = this.transform({ testedVersions })
-    return this.constructor.render({ versions })
+  static render({ versions }) {
+    return {
+      message: versions,
+    }
   }
 
   transform({ testedVersions }) {
@@ -39,23 +53,9 @@ module.exports = class SpigetTestedVersions extends BaseSpigetService {
     return { versions }
   }
 
-  static render({ versions }) {
-    return {
-      message: versions,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Spiget tested server versions',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({ versions: '1.7-1.13' }),
-        documentation,
-        keywords,
-      },
-    ]
+  async handle({ resourceId }) {
+    const { testedVersions } = await this.fetch({ resourceId })
+    const { versions } = this.transform({ testedVersions })
+    return this.constructor.render({ versions })
   }
 }
