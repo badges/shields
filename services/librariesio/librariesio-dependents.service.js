@@ -10,12 +10,6 @@ module.exports = class LibrariesIoDependents extends BaseJsonService {
     return 'other'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'dependents',
-    }
-  }
-
   static get route() {
     return {
       base: 'librariesio/dependents',
@@ -34,6 +28,12 @@ module.exports = class LibrariesIoDependents extends BaseJsonService {
         staticPreview: this.render({ dependentCount: 2000 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'dependents',
+    }
   }
 
   static render({ dependentCount }) {

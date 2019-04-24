@@ -40,12 +40,6 @@ module.exports = class NodePingUptime extends BaseJsonService {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'Uptime',
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -56,6 +50,12 @@ module.exports = class NodePingUptime extends BaseJsonService {
         staticPreview: this.render({ uptime: 99.999 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'Uptime',
+    }
   }
 
   static formatPercentage(uptime) {

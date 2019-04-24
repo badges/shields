@@ -11,12 +11,6 @@ module.exports = class LibrariesIoSourcerank extends BaseJsonService {
     return 'rating'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'sourcerank',
-    }
-  }
-
   static get route() {
     return {
       base: 'librariesio/sourcerank',
@@ -35,6 +29,12 @@ module.exports = class LibrariesIoSourcerank extends BaseJsonService {
         staticPreview: this.render({ rank: 25 }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'sourcerank',
+    }
   }
 
   static render({ rank }) {

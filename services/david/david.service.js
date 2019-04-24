@@ -45,24 +45,16 @@ module.exports = class David extends BaseJsonService {
     return 'dependencies'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'dependencies' }
-  }
-
-  static render({ status, kind }) {
-    return {
-      message: statusMap[status].message,
-      color: statusMap[status].color,
-      label: `${kind ? `${kind} ` : ''}dependencies`,
-    }
-  }
-
   static get route() {
     return {
       base: 'david',
       pattern: ':kind(dev|optional|peer)?/:user/:repo',
       queryParamSchema,
     }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
   }
 
   static get examples() {
@@ -79,6 +71,14 @@ module.exports = class David extends BaseJsonService {
         staticPreview: this.render({ status: 'uptodate' }),
       },
     ]
+  }
+
+  static render({ status, kind }) {
+    return {
+      message: statusMap[status].message,
+      color: statusMap[status].color,
+      label: `${kind ? `${kind} ` : ''}dependencies`,
+    }
   }
 
   async fetch({ kind, user, repo, path }) {

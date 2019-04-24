@@ -35,13 +35,6 @@ const resolveApiSchema = Joi.object({
 }).required()
 
 module.exports = class Nexus extends BaseJsonService {
-  static render({ version }) {
-    return {
-      message: addv(version),
-      color: versionColor(version),
-    }
-  }
-
   static get category() {
     return 'version'
   }
@@ -54,10 +47,6 @@ module.exports = class Nexus extends BaseJsonService {
       pattern:
         ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+):queryOpt(:.+)?',
     }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'nexus' }
   }
 
   static get examples() {
@@ -129,49 +118,15 @@ module.exports = class Nexus extends BaseJsonService {
     ]
   }
 
-  transform({ repo, json }) {
-    if (json.data.length === 0) {
-      throw new NotFound({ prettyMessage: 'artifact or version not found' })
-    }
-    if (repo === 'r') {
-      const version = json.data[0].latestRelease
-      if (!version) {
-        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
-      }
-      return { version }
-    } else if (repo === 's') {
-      // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
-      // 'latestSnapshot' so check 'version' as well before continuing to next entry
-      for (const artifact of json.data) {
-        if (isSnapshotVersion(artifact.latestSnapshot)) {
-          return { version: artifact.latestSnapshot }
-        }
-        if (isSnapshotVersion(artifact.version)) {
-          return { version: artifact.version }
-        }
-      }
-      throw new InvalidResponse({ prettyMessage: 'no snapshot versions found' })
-    } else {
-      const version = json.data.baseVersion || json.data.version
-      if (!version) {
-        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
-      }
-      return { version }
-    }
+  static get defaultBadgeData() {
+    return { label: 'nexus' }
   }
 
-  async handle({ repo, scheme, hostAndPath, groupId, artifactId, queryOpt }) {
-    const { json } = await this.fetch({
-      repo,
-      scheme,
-      hostAndPath,
-      groupId,
-      artifactId,
-      queryOpt,
-    })
-
-    const { version } = this.transform({ repo, json })
-    return this.constructor.render({ version })
+  static render({ version }) {
+    return {
+      message: addv(version),
+      color: versionColor(version),
+    }
   }
 
   addQueryParamsToQueryString({ qs, queryOpt }) {
@@ -231,5 +186,50 @@ module.exports = class Nexus extends BaseJsonService {
     })
 
     return { json }
+  }
+
+  transform({ repo, json }) {
+    if (json.data.length === 0) {
+      throw new NotFound({ prettyMessage: 'artifact or version not found' })
+    }
+    if (repo === 'r') {
+      const version = json.data[0].latestRelease
+      if (!version) {
+        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+      }
+      return { version }
+    } else if (repo === 's') {
+      // only want to match 1.2.3-SNAPSHOT style versions, which may not always be in
+      // 'latestSnapshot' so check 'version' as well before continuing to next entry
+      for (const artifact of json.data) {
+        if (isSnapshotVersion(artifact.latestSnapshot)) {
+          return { version: artifact.latestSnapshot }
+        }
+        if (isSnapshotVersion(artifact.version)) {
+          return { version: artifact.version }
+        }
+      }
+      throw new InvalidResponse({ prettyMessage: 'no snapshot versions found' })
+    } else {
+      const version = json.data.baseVersion || json.data.version
+      if (!version) {
+        throw new InvalidResponse({ prettyMessage: 'invalid artifact version' })
+      }
+      return { version }
+    }
+  }
+
+  async handle({ repo, scheme, hostAndPath, groupId, artifactId, queryOpt }) {
+    const { json } = await this.fetch({
+      repo,
+      scheme,
+      hostAndPath,
+      groupId,
+      artifactId,
+      queryOpt,
+    })
+
+    const { version } = this.transform({ repo, json })
+    return this.constructor.render({ version })
   }
 }
