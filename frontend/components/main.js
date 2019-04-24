@@ -104,10 +104,18 @@ export default class Main extends React.Component {
   renderCategory(category, definitions) {
     const { id } = category
 
-    const flattened = definitions.reduce((accum, current) => {
-      const { examples } = current
-      return accum.concat(examples)
-    }, [])
+    const flattened = definitions
+      .reduce((accum, current) => {
+        const { examples } = current
+        return accum.concat(examples)
+      }, [])
+      .map(({ title, link, example, preview, documentation }) => ({
+        title,
+        link,
+        example,
+        preview,
+        documentation,
+      }))
 
     return (
       <div key={id}>

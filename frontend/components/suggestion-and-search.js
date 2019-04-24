@@ -61,16 +61,21 @@ export default class SuggestionAndSearch extends React.Component {
 
   renderSuggestions() {
     const { baseUrl } = this.props
-    const { suggestions } = this.state
+    let { suggestions } = this.state
 
     if (suggestions.length === 0) {
       return null
     }
 
-    suggestions.forEach(example => {
-      example.preview = { ...example.preview, buildFromExample: true }
-      example.keywords = []
-    })
+    suggestions = suggestions.map(
+      ({ title, link, example, preview, documentation }) => ({
+        title,
+        link,
+        example,
+        preview: { ...preview, buildFromExample: true },
+        documentation,
+      })
+    )
 
     return (
       <BadgeExamples

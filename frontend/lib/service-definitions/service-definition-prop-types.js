@@ -10,7 +10,6 @@ const objectOfKeyValuesPropType = PropTypes.objectOf(PropTypes.string)
 
 const examplePropType = PropTypes.exact({
   title: PropTypes.string.isRequired,
-  link: PropTypes.string,
   example: PropTypes.exact({
     pattern: PropTypes.string.isRequired,
     namedParams: objectOfKeyValuesPropType,
@@ -18,12 +17,11 @@ const examplePropType = PropTypes.exact({
   }).isRequired,
   preview: PropTypes.exact({
     label: PropTypes.string,
-    message: PropTypes.string,
-    color: PropTypes.string,
+    message: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
     style: PropTypes.string,
     namedLogo: PropTypes.string,
-    buildFromExample: PropTypes.bool,
-  }),
+  }).isRequired,
   keywords: arrayOfStringsPropType,
   documentation: PropTypes.exact({
     __html: PropTypes.string.isRequired,
@@ -51,6 +49,5 @@ const serviceDefinitionPropType = PropTypes.exact({
 export {
   arrayOfStringsPropType,
   objectOfKeyValuesPropType,
-  examplePropType,
   serviceDefinitionPropType,
 }

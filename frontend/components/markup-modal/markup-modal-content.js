@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { examplePropType } from '../../lib/service-definitions/service-definition-prop-types'
+import { examplePropType } from '../../lib/service-definitions/example-prop-types'
 import { H3 } from '../common'
 import Customizer from '../customizer/customizer'
 

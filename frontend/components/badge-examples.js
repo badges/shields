@@ -5,7 +5,7 @@ import {
   badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import { examplePropType } from '../lib/service-definitions/service-definition-prop-types'
+import { examplePropType } from '../lib/service-definitions/example-prop-types'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
