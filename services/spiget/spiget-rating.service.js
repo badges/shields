@@ -5,39 +5,15 @@ const { floorCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetRatings extends BaseSpigetService {
+  static get category() {
+    return 'rating'
+  }
+
   static get route() {
     return {
       base: 'spiget',
       pattern: ':format(rating|stars)/:resourceId',
     }
-  }
-
-  async handle({ format, resourceId }) {
-    const { rating } = await this.fetch({ resourceId })
-    return this.constructor.render({
-      format,
-      total: rating.count,
-      average: rating.average,
-    })
-  }
-
-  static render({ format, total, average }) {
-    const message =
-      format === 'stars'
-        ? starRating(average)
-        : `${average}/5 (${metric(total)})`
-    return {
-      message,
-      color: floorCount(average, 2, 3, 4),
-    }
-  }
-
-  static get category() {
-    return 'rating'
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'rating' }
   }
 
   static get examples() {
@@ -66,5 +42,29 @@ module.exports = class SpigetRatings extends BaseSpigetService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'rating' }
+  }
+
+  static render({ format, total, average }) {
+    const message =
+      format === 'stars'
+        ? starRating(average)
+        : `${average}/5 (${metric(total)})`
+    return {
+      message,
+      color: floorCount(average, 2, 3, 4),
+    }
+  }
+
+  async handle({ format, resourceId }) {
+    const { rating } = await this.fetch({ resourceId })
+    return this.constructor.render({
+      format,
+      total: rating.count,
+      average: rating.average,
+    })
   }
 }

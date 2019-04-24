@@ -13,23 +13,6 @@ module.exports = class SonarQualityGate extends SonarBase {
     return 'analysis'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'quality gate' }
-  }
-
-  static render({ qualityState }) {
-    if (qualityState === 'OK') {
-      return {
-        message: 'passed',
-        color: 'success',
-      }
-    }
-    return {
-      message: 'failed',
-      color: 'critical',
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -56,6 +39,23 @@ module.exports = class SonarQualityGate extends SonarBase {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'quality gate' }
+  }
+
+  static render({ qualityState }) {
+    if (qualityState === 'OK') {
+      return {
+        message: 'passed',
+        color: 'success',
+      }
+    }
+    return {
+      message: 'failed',
+      color: 'critical',
+    }
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {
