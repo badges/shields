@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const { InvalidResponse } = require('..')
 const {
-  getDocumentation,
+  documentation,
   testResultQueryParamSchema,
   renderTestResultBadge,
 } = require('../test-results')
@@ -77,10 +77,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
           total: 479,
           isCompact: false,
         }),
-        documentation: getDocumentation({
-          route:
-            '/jenkins/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
-        }),
+        documentation,
       },
     ]
   }

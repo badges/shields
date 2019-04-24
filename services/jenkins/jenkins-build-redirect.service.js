@@ -2,12 +2,10 @@
 
 const { redirector } = require('..')
 
-const transformPath = ({ protocol, host, job }) =>
-  `/jenkins/build/${protocol}/${host}/${job}`
-
 const commonProps = {
   category: 'build',
-  transformPath,
+  transformPath: ({ protocol, host, job }) =>
+    `/jenkins/build/${protocol}/${host}/${job}`,
   dateAdded: new Date('2019-04-20'),
 }
 
