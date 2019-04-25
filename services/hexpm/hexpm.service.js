@@ -27,43 +27,19 @@ const hexSchema = Joi.object({
 }).required()
 
 class BaseHexPmService extends BaseJsonService {
+  static get defaultBadgeData() {
+    return { label: 'hex' }
+  }
+
   async fetch({ packageName }) {
     return this._requestJson({
       schema: hexSchema,
       url: `https://hex.pm/api/packages/${packageName}`,
     })
   }
-
-  static get defaultBadgeData() {
-    return { label: 'hex' }
-  }
 }
 
 class HexPmLicense extends BaseHexPmService {
-  static render({ licenses }) {
-    if (licenses.length === 0) {
-      return {
-        label: 'license',
-        message: 'Unknown',
-        color: 'lightgrey',
-      }
-    }
-    return {
-      label: maybePluralize('license', licenses),
-      message: licenses.join(', '),
-      color: 'blue',
-    }
-  }
-
-  async handle({ packageName }) {
-    const json = await this.fetch({ packageName })
-    return this.constructor.render({ licenses: json.meta.licenses })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
-
   static get category() {
     return 'license'
   }
@@ -84,18 +60,33 @@ class HexPmLicense extends BaseHexPmService {
       },
     ]
   }
-}
 
-class HexPmVersion extends BaseHexPmService {
-  static render({ version }) {
-    return { message: addv(version), color: versionColor(version) }
+  static get defaultBadgeData() {
+    return { label: 'license' }
+  }
+
+  static render({ licenses }) {
+    if (licenses.length === 0) {
+      return {
+        label: 'license',
+        message: 'Unknown',
+        color: 'lightgrey',
+      }
+    }
+    return {
+      label: maybePluralize('license', licenses),
+      message: licenses.join(', '),
+      color: 'blue',
+    }
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ version: json.releases[0].version })
+    return this.constructor.render({ licenses: json.meta.licenses })
   }
+}
 
+class HexPmVersion extends BaseHexPmService {
   static get category() {
     return 'version'
   }
@@ -115,6 +106,15 @@ class HexPmVersion extends BaseHexPmService {
         staticPreview: this.render({ version: '1.6.4' }),
       },
     ]
+  }
+
+  static render({ version }) {
+    return { message: addv(version), color: versionColor(version) }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({ version: json.releases[0].version })
   }
 }
 
@@ -142,22 +142,6 @@ function DownloadsForInterval(interval) {
       return name
     }
 
-    static render({ downloads }) {
-      return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCount(downloads),
-      }
-    }
-
-    async handle({ packageName }) {
-      const json = await this.fetch({ packageName })
-      return this.constructor.render({ downloads: json.downloads[interval] })
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'downloads' }
-    }
-
     static get category() {
       return 'downloads'
     }
@@ -177,6 +161,22 @@ function DownloadsForInterval(interval) {
           staticPreview: this.render({ downloads: 85000 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'downloads' }
+    }
+
+    static render({ downloads }) {
+      return {
+        message: `${metric(downloads)}${messageSuffix}`,
+        color: downloadCount(downloads),
+      }
+    }
+
+    async handle({ packageName }) {
+      const json = await this.fetch({ packageName })
+      return this.constructor.render({ downloads: json.downloads[interval] })
     }
   }
 }

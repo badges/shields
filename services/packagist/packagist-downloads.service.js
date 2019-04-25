@@ -31,6 +31,10 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PackagistDownloads extends BasePackagistService {
+  static get category() {
+    return 'downloads'
+  }
+
   static get route() {
     return {
       base: 'packagist',
@@ -38,33 +42,6 @@ module.exports = class PackagistDownloads extends BasePackagistService {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'downloads',
-    }
-  }
-
-  async handle({ interval, user, repo }) {
-    const {
-      package: { downloads },
-    } = await this.fetch({ user, repo, schema })
-
-    return this.constructor.render({
-      downloads: downloads[periodMap[interval].field],
-      interval,
-    })
-  }
-
-  static render({ downloads, interval }) {
-    return {
-      message: metric(downloads) + periodMap[interval].suffix,
-      color: downloadCount(downloads),
-    }
-  }
-
-  static get category() {
-    return 'downloads'
-  }
   static get examples() {
     return [
       {
@@ -81,5 +58,29 @@ module.exports = class PackagistDownloads extends BasePackagistService {
         keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'downloads',
+    }
+  }
+
+  static render({ downloads, interval }) {
+    return {
+      message: metric(downloads) + periodMap[interval].suffix,
+      color: downloadCount(downloads),
+    }
+  }
+
+  async handle({ interval, user, repo }) {
+    const {
+      package: { downloads },
+    } = await this.fetch({ user, repo, schema })
+
+    return this.constructor.render({
+      downloads: downloads[periodMap[interval].field],
+      interval,
+    })
   }
 }

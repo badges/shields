@@ -27,6 +27,10 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'users' }
+  }
+
   static render({ downloads }) {
     return {
       message: `${metric(downloads)}`,
@@ -39,10 +43,6 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     return this.constructor.render({
       downloads: data.interactionCount.UserDownloads,
     })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'users' }
   }
 }
 

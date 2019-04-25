@@ -11,33 +11,8 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CoverityScan extends BaseJsonService {
-  static render({ message }) {
-    let color
-    if (message === 'passed') {
-      color = 'brightgreen'
-      message = 'passing'
-    } else if (/^passed .* new defects$/.test(message)) {
-      color = 'yellow'
-    } else if (message === 'pending') {
-      color = 'orange'
-    } else {
-      color = 'red'
-    }
-
-    return {
-      message,
-      color,
-    }
-  }
-
   static get category() {
     return 'analysis'
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'coverity',
-    }
   }
 
   static get route() {
@@ -61,11 +36,44 @@ module.exports = class CoverityScan extends BaseJsonService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'coverity',
+    }
+  }
+
+  static render({ message }) {
+    let color
+    if (message === 'passed') {
+      color = 'brightgreen'
+      message = 'passing'
+    } else if (/^passed .* new defects$/.test(message)) {
+      color = 'yellow'
+    } else if (message === 'pending') {
+      color = 'orange'
+    } else {
+      color = 'red'
+    }
+
+    return {
+      message,
+      color,
+    }
+  }
+
   async handle({ projectId }) {
     const url = `https://scan.coverity.com/projects/${projectId}/badge.json`
     const json = await this._requestJson({
       url,
       schema,
+      options: {
+        // Coverity has an issue in their certificate chain that requires
+        // disabling the default strict SSL check in order to call their API.
+        // For more information see:
+        // https://github.com/badges/shields/issues/3334
+        // https://github.com/badges/shields/pull/3336
+        strictSSL: false,
+      },
       errorMessages: {
         // At the moment Coverity returns an HTTP 200 with an HTML page
         // displaying the text 404 when project is not found.

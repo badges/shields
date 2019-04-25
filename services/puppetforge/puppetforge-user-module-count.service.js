@@ -9,10 +9,6 @@ module.exports = class PuppetForgeModuleCountService extends BasePuppetForgeUser
     return 'other'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'modules' }
-  }
-
   static get route() {
     return {
       base: 'puppetforge/mc',
@@ -32,9 +28,8 @@ module.exports = class PuppetForgeModuleCountService extends BasePuppetForgeUser
     ]
   }
 
-  async handle({ user }) {
-    const data = await this.fetch({ user })
-    return this.constructor.render({ modules: data.module_count })
+  static get defaultBadgeData() {
+    return { label: 'modules' }
   }
 
   static render({ modules }) {
@@ -42,5 +37,10 @@ module.exports = class PuppetForgeModuleCountService extends BasePuppetForgeUser
       message: metric(modules),
       color: floorCountColor(modules, 5, 10, 50),
     }
+  }
+
+  async handle({ user }) {
+    const data = await this.fetch({ user })
+    return this.constructor.render({ modules: data.module_count })
   }
 }

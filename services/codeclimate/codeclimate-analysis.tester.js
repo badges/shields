@@ -1,58 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { ServiceTester } = require('../tester')
 const { isIntegerPercentage } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 
-const t = (module.exports = new ServiceTester({
-  id: 'codeclimate',
-  title: 'Code Climate',
-}))
-
-// Tests based on Code Climate's test reports endpoint.
-t.create('test coverage percentage')
-  .get('/c/jekyll/jekyll.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
-
-t.create('test coverage percentage alternative coverage URL')
-  .get('/coverage/jekyll/jekyll.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
-
-t.create('test coverage percentage alternative top-level URL')
-  .get('/jekyll/jekyll.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
-
-t.create('test coverage letter')
-  .get('/c-letter/jekyll/jekyll.json')
-  .expectBadge({
-    label: 'coverage',
-    message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
-  })
-
-t.create('test coverage percentage for non-existent repo')
-  .get('/c/unknown/unknown.json')
-  .expectBadge({
-    label: 'coverage',
-    message: 'not found',
-  })
-
-t.create('test coverage percentage for repo without test reports')
-  .get('/c/angular/angular.js.json')
-  .expectBadge({
-    label: 'coverage',
-    message: 'unknown',
-  })
-
-// Tests based on Code Climate's snapshots endpoint.
 t.create('issues count')
   .get('/issues/angular/angular.js.json')
   .expectBadge({
@@ -86,29 +37,29 @@ t.create('maintainability letter')
 t.create('maintainability letter for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectBadge({
-    label: 'maintainability',
-    message: 'not found',
+    label: 'analysis',
+    message: 'repo not found',
   })
 
 t.create('maintainability letter for repo without snapshots')
   .get('/maintainability/kabisaict/flow.json')
   .expectBadge({
-    label: 'maintainability',
-    message: 'unknown',
+    label: 'analysis',
+    message: 'snapshot not found',
   })
 
 t.create('malformed response for outer user repos query')
   .get('/maintainability/angular/angular.js.json')
   .intercept(nock =>
     nock('https://api.codeclimate.com')
-      .get('/v1/repos?github_slug=angular/angular.js')
+      .get('/v1/repos?github_slug=angular%2Fangular.js')
       .reply(200, {
         data: [{}], // No relationships in the list of data elements.
       })
   )
   .expectBadge({
-    label: 'maintainability',
-    message: 'invalid',
+    label: 'analysis',
+    message: 'invalid response data',
   })
 
 t.create('malformed response for inner specific repo query')
@@ -120,6 +71,6 @@ t.create('malformed response for inner specific repo query')
   ) // No data.
   .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
   .expectBadge({
-    label: 'maintainability',
-    message: 'invalid',
+    label: 'analysis',
+    message: 'invalid response data',
   })

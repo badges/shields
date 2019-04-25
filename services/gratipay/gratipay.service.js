@@ -12,14 +12,14 @@ module.exports = [
   deprecatedService({
     route: {
       base: 'gittip',
-      format: '(?:/user|/team|/project)?/(?:.*)',
+      pattern: ':various*',
     },
     ...commonAttrs,
   }),
   deprecatedService({
     route: {
       base: 'gratipay',
-      format: '(?:/user|/team|/project)?/(?:.*)',
+      pattern: ':various*',
     },
     ...commonAttrs,
   }),

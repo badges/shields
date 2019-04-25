@@ -27,10 +27,6 @@ const stellarAddressSchema = Joi.object({
 }).required()
 
 module.exports = class KeybaseXLM extends KeybaseProfile {
-  static get apiVersion() {
-    return '1.0'
-  }
-
   static get route() {
     return {
       base: 'keybase/xlm',
@@ -38,11 +34,34 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Keybase XLM',
+        namedParams: { username: 'skyplabs' },
+        staticPreview: this.render({
+          address: 'GCGH37DYONEBPGAZGCHJEZZF3J2Q3EFYZBQBE6UJL5QKTULCMEA6MXLA',
+        }),
+        keywords: ['stellar'],
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'xlm',
       color: 'informational',
     }
+  }
+
+  static render({ address }) {
+    return {
+      message: address,
+    }
+  }
+
+  static get apiVersion() {
+    return '1.0'
   }
 
   async handle({ username }) {
@@ -69,24 +88,5 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
     }
 
     return this.constructor.render({ address: accountId })
-  }
-
-  static render({ address }) {
-    return {
-      message: address,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Keybase XLM',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({
-          address: 'GCGH37DYONEBPGAZGCHJEZZF3J2Q3EFYZBQBE6UJL5QKTULCMEA6MXLA',
-        }),
-        keywords: ['stellar'],
-      },
-    ]
   }
 }

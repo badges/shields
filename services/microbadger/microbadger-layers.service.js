@@ -10,10 +10,6 @@ module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'layers' }
-  }
-
   static get examples() {
     return [
       {
@@ -31,6 +27,10 @@ module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
         keywords: ['docker'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'layers' }
   }
 
   static render({ layers }) {

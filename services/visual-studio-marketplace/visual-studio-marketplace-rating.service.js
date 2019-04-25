@@ -17,23 +17,6 @@ module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketp
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'rating',
-    }
-  }
-
-  static render({ format, averageRating, ratingCount }) {
-    const message =
-      format === 'r'
-        ? `${averageRating.toFixed(1)}/5 (${ratingCount})`
-        : starRating(averageRating)
-    return {
-      message,
-      color: floorCount(averageRating, 2, 3, 4),
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -58,6 +41,23 @@ module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketp
         keywords: this.keywords,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'rating',
+    }
+  }
+
+  static render({ format, averageRating, ratingCount }) {
+    const message =
+      format === 'r'
+        ? `${averageRating.toFixed(1)}/5 (${ratingCount})`
+        : starRating(averageRating)
+    return {
+      message,
+      color: floorCount(averageRating, 2, 3, 4),
+    }
   }
 
   async handle({ format, extensionId }) {

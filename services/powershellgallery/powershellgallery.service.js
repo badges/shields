@@ -33,12 +33,6 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
     return 'platform-support'
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'platform',
-    }
-  }
-
   static get route() {
     return {
       base: 'powershellgallery/p',
@@ -56,6 +50,12 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'platform',
+    }
   }
 
   static render({ platforms }) {

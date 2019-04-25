@@ -26,6 +26,10 @@ module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'platform' }
+  }
+
   static render({ platforms }) {
     return {
       message: platforms.join(' | '),
@@ -37,9 +41,5 @@ module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
   async handle({ spec }) {
     const { platforms } = await this.fetch({ spec })
     return this.constructor.render({ platforms: Object.keys(platforms) })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'platform' }
   }
 }

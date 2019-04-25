@@ -29,10 +29,6 @@ const bitcoinAddressSchema = Joi.object({
 }).required()
 
 module.exports = class KeybaseBTC extends KeybaseProfile {
-  static get apiVersion() {
-    return '1.0'
-  }
-
   static get route() {
     return {
       base: 'keybase/btc',
@@ -40,11 +36,34 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
     }
   }
 
+  static get examples() {
+    return [
+      {
+        title: 'Keybase BTC',
+        namedParams: { username: 'skyplabs' },
+        staticPreview: this.render({
+          address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
+        }),
+        keywords: ['bitcoin'],
+      },
+    ]
+  }
+
   static get defaultBadgeData() {
     return {
       label: 'btc',
       color: 'informational',
     }
+  }
+
+  static render({ address }) {
+    return {
+      message: address,
+    }
+  }
+
+  static get apiVersion() {
+    return '1.0'
   }
 
   async handle({ username }) {
@@ -71,24 +90,5 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
     }
 
     return this.constructor.render({ address: bitcoinAddresses[0].address })
-  }
-
-  static render({ address }) {
-    return {
-      message: address,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Keybase BTC',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({
-          address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
-        }),
-        keywords: ['bitcoin'],
-      },
-    ]
   }
 }

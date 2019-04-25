@@ -188,7 +188,7 @@ function minorVersion(version) {
 
 function versionReduction(versions, phpReleases) {
   if (!versions.length) {
-    return ''
+    return []
   }
 
   // versions intersect
@@ -198,7 +198,7 @@ function versionReduction(versions, phpReleases) {
 
   // nothing to reduction
   if (versions.length < 2) {
-    return versions.length ? versions[0] : ''
+    return versions
   }
 
   const first = phpReleases.indexOf(versions[0])
@@ -207,16 +207,16 @@ function versionReduction(versions, phpReleases) {
   // no missed versions
   if (first + versions.length - 1 === last) {
     if (last === phpReleases.length - 1) {
-      return `>= ${versions[0][2] === '0' ? versions[0][0] : versions[0]}` // 7.0 -> 7
+      return [`>= ${versions[0][2] === '0' ? versions[0][0] : versions[0]}`] // 7.0 -> 7
     }
 
-    return `${versions[0]} - ${versions[versions.length - 1]}`
+    return [`${versions[0]} - ${versions[versions.length - 1]}`]
   }
 
-  return versions.join(', ')
+  return versions
 }
 
-function getPhpReleases(githubApiProvider) {
+async function getPhpReleases(githubApiProvider) {
   return promisify(regularUpdate)({
     url: '/repos/php/php-src/git/refs/tags',
     intervalMillis: 24 * 3600 * 1000, // 1 day

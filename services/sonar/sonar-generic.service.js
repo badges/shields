@@ -1,0 +1,152 @@
+'use strict'
+
+const { metric } = require('../text-formatters')
+const SonarBase = require('./sonar-base')
+const { patternBase, queryParamSchema, getLabel } = require('./sonar-helpers')
+
+// This service is intended to be a temporary solution to avoid breaking
+// any existing users/badges that were utilizing the "other" Sonar metrics
+// with the Legacy Shields service implementation for Sonar badges.
+// The legacy implementation simply rendered a brightgreen badge with the value,
+// regardless of what the value actually was.
+//
+// See https://github.com/badges/shields/issues/3236 for more information.
+//
+// This service should gradually be replaced by services that handle
+// their respective metrics by providing badges with more context
+// (i.e. a red/error badge when there are multiple security issues)
+//
+// https://docs.sonarqube.org/latest/user-guide/metric-definitions
+const complexityMetricNames = ['complexity', 'cognitive_complexity']
+const duplicationMetricNames = [
+  'duplicated_blocks',
+  'duplicated_files',
+  'duplicated_lines',
+  'duplicated_lines_density',
+]
+// Sonar seemingly has used the terms 'issues' and 'violations' interchangeably
+// so it's possible users are using both/either for badges
+const issuesMetricNames = [
+  'new_violations',
+  'new_blocker_violations',
+  'new_critical_violations',
+  'new_major_violations',
+  'new_minor_violations',
+  'new_info_violations',
+  'blocker_issues',
+  'critical_issues',
+  'major_issues',
+  'minor_issues',
+  'info_issues',
+  'false_positive_issues',
+  'open_issues',
+  'confirmed_issues',
+  'reopened_issues',
+]
+const maintainabilityMetricNames = [
+  'code_smells',
+  'new_code_smells',
+  'sqale_rating',
+  'sqale_index',
+  'sqale_index',
+  'new_technical_debt',
+  'new_sqale_debt_ratio',
+]
+const reliabilityMetricNames = [
+  'bugs',
+  'new_bugs',
+  'reliability_rating',
+  'reliability_remediation_effort',
+  'new_reliability_remediation_effort',
+]
+const securityMetricNames = [
+  'vulnerabilities',
+  'new_vulnerabilities',
+  'security_rating',
+  'security_remediation_effort',
+  'new_security_remediation_effort',
+]
+const sizeMetricNames = [
+  'classes',
+  'comment_lines',
+  'comment_lines_density',
+  'directories',
+  'files',
+  'lines',
+  'nloc',
+  'projects',
+  'statements',
+]
+const testsMetricNames = [
+  'branch_coverage',
+  'new_branch_coverage',
+  'branch_coverage_hits_data',
+  'conditions_by_line',
+  'covered_conditions_by_line',
+  'new_coverage',
+  'line_coverage',
+  'new_line_coverage',
+  'coverage_line_hits_data',
+  'lines_to_cover',
+  'new_lines_to_cover',
+  'skipped_tests',
+  'uncovered_conditions',
+  'new_uncovered_conditions',
+  'uncovered_lines',
+  'new_uncovered_lines',
+  'tests',
+  'test_execution_time',
+  'test_errors',
+  'test_failures',
+  'test_success_density',
+]
+const metricNames = [
+  ...complexityMetricNames,
+  ...duplicationMetricNames,
+  ...issuesMetricNames,
+  ...maintainabilityMetricNames,
+  ...reliabilityMetricNames,
+  ...securityMetricNames,
+  ...sizeMetricNames,
+  ...testsMetricNames,
+]
+const metricNameRouteParam = metricNames.join('|')
+
+module.exports = class SonarGeneric extends SonarBase {
+  static get category() {
+    return 'analysis'
+  }
+
+  static get route() {
+    return {
+      base: 'sonar',
+      pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
+      queryParamSchema,
+    }
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'sonar' }
+  }
+
+  static render({ metricName, metricValue }) {
+    return {
+      label: getLabel({ metric: metricName }),
+      message: metric(metricValue),
+      color: 'informational',
+    }
+  }
+
+  async handle({ protocol, host, component, metricName }, { sonarVersion }) {
+    const json = await this.fetch({
+      sonarVersion,
+      protocol,
+      host,
+      component,
+      metricName,
+    })
+
+    const { metricValue } = this.transform({ json, sonarVersion })
+    return this.constructor.render({ metricName, metricValue })
+  }
+}

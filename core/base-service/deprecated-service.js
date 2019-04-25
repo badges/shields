@@ -38,20 +38,20 @@ function deprecatedService(attrs) {
       return category
     }
 
-    static get route() {
-      return route
-    }
-
     static get isDeprecated() {
       return true
     }
 
-    static get defaultBadgeData() {
-      return { label }
+    static get route() {
+      return route
     }
 
     static get examples() {
       return examples
+    }
+
+    static get defaultBadgeData() {
+      return { label }
     }
 
     async handle() {

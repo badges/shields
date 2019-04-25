@@ -32,20 +32,8 @@ const intervalMap = {
 }
 
 module.exports = class Sourceforge extends BaseJsonService {
-  static render({ downloads, interval }) {
-    return {
-      label: 'downloads',
-      message: `${metric(downloads)}${intervalMap[interval].suffix}`,
-      color: downloadCount(downloads),
-    }
-  }
-
   static get category() {
     return 'downloads'
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'sourceforge' }
   }
 
   static get route() {
@@ -83,6 +71,18 @@ module.exports = class Sourceforge extends BaseJsonService {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'sourceforge' }
+  }
+
+  static render({ downloads, interval }) {
+    return {
+      label: 'downloads',
+      message: `${metric(downloads)}${intervalMap[interval].suffix}`,
+      color: downloadCount(downloads),
+    }
   }
 
   async fetch({ interval, project, folder }) {

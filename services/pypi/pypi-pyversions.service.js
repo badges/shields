@@ -12,10 +12,6 @@ module.exports = class PypiPythonVersions extends PypiBase {
     return this.buildRoute('pypi/pyversions')
   }
 
-  static get defaultBadgeData() {
-    return { label: 'python' }
-  }
-
   static get examples() {
     return [
       {
@@ -25,6 +21,10 @@ module.exports = class PypiPythonVersions extends PypiBase {
         staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'python' }
   }
 
   static render({ versions }) {

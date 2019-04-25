@@ -12,10 +12,6 @@ module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'image size' }
-  }
-
   static get examples() {
     return [
       {
@@ -33,6 +29,10 @@ module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
         keywords: ['docker'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'image size' }
   }
 
   static render({ size }) {

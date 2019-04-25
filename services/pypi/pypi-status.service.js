@@ -12,10 +12,6 @@ module.exports = class PypiStatus extends PypiBase {
     return this.buildRoute('pypi/status')
   }
 
-  static get defaultBadgeData() {
-    return { label: 'status' }
-  }
-
   static get examples() {
     return [
       {
@@ -26,6 +22,10 @@ module.exports = class PypiStatus extends PypiBase {
         keywords: ['python'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'status' }
   }
 
   static render({ status = '' }) {

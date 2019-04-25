@@ -14,6 +14,7 @@ const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
 const attrSchema = Joi.object({
+  name: Joi.string().min(3),
   category: isValidCategory,
   route: isValidRoute,
   transformPath: Joi.func()
@@ -30,6 +31,7 @@ const attrSchema = Joi.object({
 
 module.exports = function redirector(attrs) {
   const {
+    name,
     category,
     route,
     transformPath,
@@ -38,22 +40,26 @@ module.exports = function redirector(attrs) {
   } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
 
   return class Redirector extends BaseService {
-    static get category() {
-      return category
+    static get name() {
+      if (name) {
+        return name
+      } else {
+        return `${camelcase(route.base.replace(/\//g, '_'), {
+          pascalCase: true,
+        })}Redirect`
+      }
     }
 
-    static get route() {
-      return route
+    static get category() {
+      return category
     }
 
     static get isDeprecated() {
       return true
     }
 
-    static get name() {
-      return `${camelcase(route.base.replace(/\//g, '_'), {
-        pascalCase: true,
-      })}Redirect`
+    static get route() {
+      return route
     }
 
     static register({ camp, requestCounter }) {

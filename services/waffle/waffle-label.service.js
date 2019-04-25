@@ -23,33 +23,15 @@ module.exports = class WaffleLabel extends BaseJsonService {
     return 'issue-tracking'
   }
 
-  static get route() {
-    return {
-      base: 'waffle/label',
-      pattern: ':user/:repo/:label',
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'waffle' }
-  }
-
   static get isDeprecated() {
     const now = new Date()
     return now.getTime() >= new Date('2019-05-16')
   }
 
-  static render({ label, color, count }) {
-    if (count === 'absent') {
-      return { message: count }
-    }
-    if (count === 0 || !color) {
-      color = '78bdf2'
-    }
+  static get route() {
     return {
-      label,
-      message: metric(count),
-      color,
+      base: 'waffle/label',
+      pattern: ':user/:repo/:label',
     }
   }
 
@@ -69,6 +51,24 @@ module.exports = class WaffleLabel extends BaseJsonService {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'waffle' }
+  }
+
+  static render({ label, color, count }) {
+    if (count === 'absent') {
+      return { message: count }
+    }
+    if (count === 0 || !color) {
+      color = '78bdf2'
+    }
+    return {
+      label,
+      message: metric(count),
+      color,
+    }
   }
 
   async fetch({ user, repo }) {

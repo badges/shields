@@ -46,11 +46,7 @@ const factory = superclass =>
       if (typeof expected === 'string') {
         expect(json[name], `${name} mismatch`).to.equal(expected)
       } else if (typeof expected === 'object') {
-        Joi.validate(json[name], expected, err => {
-          if (err) {
-            throw err
-          }
-        })
+        Joi.attempt(json[name], expected, `${name} mismatch:`)
       }
     }
   }

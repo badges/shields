@@ -16,23 +16,6 @@ const gradeStars = {
 }
 
 module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
-  static render({ status, grade }) {
-    const label = 'stars'
-    if (status !== 'finished' && status !== '') {
-      return {
-        label,
-        message: 'pending',
-        color: 'lightgrey',
-      }
-    }
-    const numStars = gradeStars[grade]
-    return {
-      label,
-      message: starRating(numStars, 4),
-      color: gradeColors[grade],
-    }
-  }
-
   static get route() {
     return {
       base: 'symfony/i/stars',
@@ -54,6 +37,23 @@ module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
         keywords,
       },
     ]
+  }
+
+  static render({ status, grade }) {
+    const label = 'stars'
+    if (status !== 'finished' && status !== '') {
+      return {
+        label,
+        message: 'pending',
+        color: 'lightgrey',
+      }
+    }
+    const numStars = gradeStars[grade]
+    return {
+      label,
+      message: starRating(numStars, 4),
+      color: gradeColors[grade],
+    }
   }
 
   async handle({ projectUuid }) {

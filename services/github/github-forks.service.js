@@ -1,20 +1,16 @@
 'use strict'
 
-const LegacyService = require('../legacy-service')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
-const { makeLogo: getLogo } = require('../../lib/logos')
-const {
-  documentation,
-  checkErrorResponse: githubCheckErrorResponse,
-} = require('./github-helpers')
+const Joi = require('joi')
+const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
+const { GithubAuthService } = require('./github-auth-service')
+const { documentation, errorMessagesFor } = require('./github-helpers')
 
-// This legacy service should be rewritten to use e.g. BaseJsonService.
-//
-// Tips for rewriting:
-// https://github.com/badges/shields/blob/master/doc/rewriting-services.md
-//
-// Do not base new services on this code.
-module.exports = class GithubForks extends LegacyService {
+const schema = Joi.object({
+  forks_count: nonNegativeInteger,
+}).required()
+
+module.exports = class GithubForks extends GithubAuthService {
   static get category() {
     return 'social'
   }
@@ -34,11 +30,18 @@ module.exports = class GithubForks extends LegacyService {
           user: 'badges',
           repo: 'shields',
         },
+        // TODO: This is currently a literal, as `staticPreview` doesn't
+        // support `link`.
         staticPreview: {
           label: 'Fork',
-          message: '1639',
+          message: '150',
           style: 'social',
         },
+        // staticPreview: {
+        //   ...this.render({ user: 'badges', repo: 'shields', forkCount: 150 }),
+        //   label: 'fork',
+        //   style: 'social',
+        // },
         queryParams: { label: 'Fork' },
         documentation,
       },
@@ -47,44 +50,27 @@ module.exports = class GithubForks extends LegacyService {
 
   static get defaultBadgeData() {
     return {
+      label: 'forks',
       namedLogo: 'github',
     }
   }
 
-  static registerLegacyRouteHandler({ camp, cache, githubApiProvider }) {
-    camp.route(
-      /^\/github\/forks\/([^/]+)\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-      cache((data, match, sendBadge, request) => {
-        const user = match[1] // eg, qubyte/rubidium
-        const repo = match[2]
-        const format = match[3]
-        const apiUrl = `/repos/${user}/${repo}`
-        const badgeData = getBadgeData('forks', data)
-        if (badgeData.template === 'social') {
-          badgeData.logo = getLogo('github', data)
-          badgeData.links = [
-            `https://github.com/${user}/${repo}/fork`,
-            `https://github.com/${user}/${repo}/network`,
-          ]
-        }
-        githubApiProvider.request(request, apiUrl, {}, (err, res, buffer) => {
-          if (githubCheckErrorResponse(badgeData, err, res)) {
-            sendBadge(format, badgeData)
-            return
-          }
-          try {
-            const data = JSON.parse(buffer)
-            const forks = data.forks_count
-            badgeData.text[1] = forks
-            badgeData.colorscheme = undefined
-            badgeData.colorB = '#4183C4'
-            sendBadge(format, badgeData)
-          } catch (e) {
-            badgeData.text[1] = 'invalid'
-            sendBadge(format, badgeData)
-          }
-        })
-      })
-    )
+  static render({ user, repo, forkCount }) {
+    return {
+      message: metric(forkCount),
+      link: [
+        `https://github.com/${user}/${repo}/fork`,
+        `https://github.com/${user}/${repo}/network`,
+      ],
+    }
+  }
+
+  async handle({ user, repo }) {
+    const { forks_count: forkCount } = await this._requestJson({
+      url: `/repos/${user}/${repo}`,
+      schema,
+      errorMessages: errorMessagesFor(),
+    })
+    return this.constructor.render({ user, repo, forkCount })
   }
 }

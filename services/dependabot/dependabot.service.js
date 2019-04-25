@@ -10,19 +10,6 @@ const schema = Joi.object({
 })
 
 module.exports = class DependabotSemverCompatibility extends BaseJsonService {
-  async fetch({ packageManager, dependencyName }) {
-    const url = `https://api.dependabot.com/badges/compatibility_score`
-    return this._requestJson({
-      schema,
-      url,
-      options: { qs: this._getQuery({ packageManager, dependencyName }) },
-    })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'semver stability' }
-  }
-
   static get category() {
     return 'analysis'
   }
@@ -32,21 +19,6 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
       base: 'dependabot/semver',
       pattern: ':packageManager/:dependencyName',
     }
-  }
-
-  _getQuery({ packageManager, dependencyName }) {
-    return {
-      'package-manager': packageManager,
-      'dependency-name': dependencyName,
-      'version-scheme': 'semver',
-    }
-  }
-
-  _getLink({ packageManager, dependencyName }) {
-    const qs = new url.URLSearchParams(
-      this._getQuery({ packageManager, dependencyName })
-    )
-    return `https://dependabot.com/compatibility-score.html?${qs.toString()}`
   }
 
   static get examples() {
@@ -60,6 +32,34 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
         },
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'semver stability' }
+  }
+
+  _getQuery({ packageManager, dependencyName }) {
+    return {
+      'package-manager': packageManager,
+      'dependency-name': dependencyName,
+      'version-scheme': 'semver',
+    }
+  }
+
+  async fetch({ packageManager, dependencyName }) {
+    const url = `https://api.dependabot.com/badges/compatibility_score`
+    return this._requestJson({
+      schema,
+      url,
+      options: { qs: this._getQuery({ packageManager, dependencyName }) },
+    })
+  }
+
+  _getLink({ packageManager, dependencyName }) {
+    const qs = new url.URLSearchParams(
+      this._getQuery({ packageManager, dependencyName })
+    )
+    return `https://dependabot.com/compatibility-score.html?${qs.toString()}`
   }
 
   async handle({ packageManager, dependencyName }) {
