@@ -6,7 +6,7 @@ module.exports = class LgtmGrade extends LgtmBaseService {
   static get route() {
     return {
       base: 'lgtm/grade',
-      pattern: ':language/g/:user/:repo',
+      pattern: ':language/:host/:user/:repo',
     }
   }
 
@@ -16,6 +16,7 @@ module.exports = class LgtmGrade extends LgtmBaseService {
         title: 'LGTM Grade',
         namedParams: {
           language: 'java',
+          host: 'g',
           user: 'apache',
           repo: 'cloudstack',
         },
@@ -86,8 +87,8 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     }
   }
 
-  async handle({ language, user, repo }) {
-    const data = await this.fetch({ user, repo })
+  async handle({ language, host, user, repo }) {
+    const data = await this.fetch({ host, user, repo })
     return this.constructor.render({ language, data })
   }
 }

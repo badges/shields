@@ -25,8 +25,8 @@ module.exports = class LgtmBaseService extends BaseJsonService {
     return { label: 'lgtm' }
   }
 
-  async fetch({ user, repo }) {
-    const url = `https://lgtm.com/api/v0.1/project/g/${user}/${repo}/details`
+  async fetch({ host, user, repo }) {
+    const url = `https://lgtm.com/api/v0.1/project/${host}/${user}/${repo}/details`
 
     return this._requestJson({
       schema,
