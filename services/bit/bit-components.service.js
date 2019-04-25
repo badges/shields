@@ -12,7 +12,37 @@ const collectionSchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class bitComponents extends BaseJsonService {
+module.exports = class BitComponents extends BaseJsonService {
+  static get category() {
+    return 'other'
+  }
+
+  static get route() {
+    return {
+      base: 'bit/collection/total-components',
+      pattern: ':owner/:collection',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'bit',
+        namedParams: { owner: 'ramda', collection: 'ramda' },
+        staticPreview: this.render({ count: 330 }),
+        keywords: ['components'],
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'components' }
+  }
+
+  static render({ count }) {
+    return { message: metric(count), color: downloadCount(count) }
+  }
+
   async fetch({ owner, collection }) {
     const url = `https://api.bit.dev/scope/${owner}/${collection}/`
     return this._requestJson({
@@ -24,37 +54,8 @@ module.exports = class bitComponents extends BaseJsonService {
     })
   }
 
-  static render({ count }) {
-    return { message: metric(count), color: downloadCount(count) }
-  }
-
   async handle({ owner, collection }) {
     const json = await this.fetch({ owner, collection })
     return this.constructor.render({ count: json.payload.totalComponents })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'components' }
-  }
-
-  static get category() {
-    return 'other'
-  }
-
-  static get route() {
-    return {
-      base: 'bit/collection/total-components',
-      pattern: ':owner/:collection',
-    }
-  }
-  static get examples() {
-    return [
-      {
-        title: 'bit',
-        namedParams: { owner: 'ramda', collection: 'ramda' },
-        staticPreview: this.render({ count: 330 }),
-        keywords: ['components'],
-      },
-    ]
   }
 }

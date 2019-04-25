@@ -18,19 +18,6 @@ module.exports = class ContinuousPhp extends BaseJsonService {
     return 'build'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'continuousphp' }
-  }
-
-  static render({ status }) {
-    const badge = renderBuildStatusBadge({ label: 'build', status })
-    const customColor = statusMap[status]
-    if (customColor) {
-      badge.color = customColor
-    }
-    return badge
-  }
-
   static get route() {
     return {
       base: 'continuousphp',
@@ -62,6 +49,19 @@ module.exports = class ContinuousPhp extends BaseJsonService {
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'continuousphp' }
+  }
+
+  static render({ status }) {
+    const badge = renderBuildStatusBadge({ label: 'build', status })
+    const customColor = statusMap[status]
+    if (customColor) {
+      badge.color = customColor
+    }
+    return badge
   }
 
   async fetch({ provider, user, repo, branch }) {

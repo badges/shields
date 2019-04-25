@@ -36,11 +36,8 @@ module.exports = class CocoapodsDocs extends BaseJsonService {
     ]
   }
 
-  async fetch({ spec }) {
-    return this._requestJson({
-      schema,
-      url: `https://metrics.cocoapods.org/api/v1/pods/${spec}`,
-    })
+  static get defaultBadgeData() {
+    return { label: 'docs' }
   }
 
   static render({ percentage }) {
@@ -50,13 +47,16 @@ module.exports = class CocoapodsDocs extends BaseJsonService {
     }
   }
 
+  async fetch({ spec }) {
+    return this._requestJson({
+      schema,
+      url: `https://metrics.cocoapods.org/api/v1/pods/${spec}`,
+    })
+  }
+
   async handle({ spec }) {
     const data = await this.fetch({ spec })
     const percentage = data.cocoadocs.doc_percent || 0
     return this.constructor.render({ percentage })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'docs' }
   }
 }

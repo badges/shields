@@ -42,19 +42,6 @@ module.exports = class Bitrise extends BaseJsonService {
     }
   }
 
-  async fetch({ appId, branch, token }) {
-    return this._requestJson({
-      url: `https://app.bitrise.io/app/${encodeURIComponent(
-        appId
-      )}/status.json`,
-      options: { qs: { token, branch } },
-      schema,
-      errorMessages: {
-        403: 'app not found or invalid token',
-      },
-    })
-  }
-
   static render({ status }) {
     const color = {
       success: 'brightgreen',
@@ -72,6 +59,19 @@ module.exports = class Bitrise extends BaseJsonService {
     }
 
     return { message, color }
+  }
+
+  async fetch({ appId, branch, token }) {
+    return this._requestJson({
+      url: `https://app.bitrise.io/app/${encodeURIComponent(
+        appId
+      )}/status.json`,
+      options: { qs: { token, branch } },
+      schema,
+      errorMessages: {
+        403: 'app not found or invalid token',
+      },
+    })
   }
 
   async handle({ appId, branch }, { token }) {
