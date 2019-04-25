@@ -53,17 +53,14 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
     }
   }
 
-  transform({ json, branch }) {
-    branch = this.transformBranch({ json, wantedBranch: branch })
-    const project = branch.index._embedded.project
-    const coverage = project.metric_values['scrutinizer.test_coverage'] * 100
-    return { coverage }
-  }
-
   async makeBadge({ vcs, slug, branch }) {
     const json = await this.fetch({ schema, vcs, slug })
-    const { coverage } = this.transform({ json, branch })
-    return this.constructor.render({ coverage })
+    const { value: rawCoverage } = this.transformBranchInfoMetricValue({
+      json,
+      branch,
+      metric: 'scrutinizer.test_coverage',
+    })
+    return this.constructor.render({ coverage: rawCoverage * 100 })
   }
 }
 

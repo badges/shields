@@ -47,16 +47,13 @@ class ScrutinizerQualityBase extends ScrutinizerBase {
     }
   }
 
-  transform({ json, branch }) {
-    branch = this.transformBranch({ json, wantedBranch: branch })
-    const project = branch.index._embedded.project
-    const score = project.metric_values['scrutinizer.quality']
-    return { score }
-  }
-
   async makeBadge({ vcs, slug, branch }) {
     const json = await this.fetch({ schema, vcs, slug })
-    const { score } = this.transform({ json, branch })
+    const { value: score } = this.transformBranchInfoMetricValue({
+      json,
+      branch,
+      metric: 'scrutinizer.quality',
+    })
     return this.constructor.render({ score })
   }
 }

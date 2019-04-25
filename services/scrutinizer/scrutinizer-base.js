@@ -15,7 +15,7 @@ module.exports = class ScrutinizerBase extends BaseJsonService {
     })
   }
 
-  transformBranch({ json, wantedBranch }) {
+  transformBranchInfo({ json, wantedBranch }) {
     if (!wantedBranch) {
       return json.applications[json.default_branch]
     }
@@ -26,5 +26,17 @@ module.exports = class ScrutinizerBase extends BaseJsonService {
     }
 
     return branch
+  }
+
+  transformBranchInfoMetricValue({ json, branch, metric }) {
+    const {
+      index: {
+        _embedded: {
+          project: { metric_values: metricValues },
+        },
+      },
+    } = this.transformBranchInfo({ json, wantedBranch: branch })
+
+    return { value: metricValues[metric] }
   }
 }

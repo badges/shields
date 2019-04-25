@@ -29,14 +29,11 @@ class ScrutinizerBuildBase extends ScrutinizerBase {
     }
   }
 
-  transform({ json, branch }) {
-    branch = this.transformBranch({ json, wantedBranch: branch })
-    return { status: branch.build_status.status }
-  }
-
   async makeBadge({ vcs, slug, branch }) {
     const json = await this.fetch({ schema, vcs, slug })
-    const { status } = this.transform({ json, branch })
+    const {
+      build_status: { status },
+    } = this.transformBranchInfo({ json, wantedBranch: branch })
     return renderBuildStatusBadge({ status })
   }
 }
