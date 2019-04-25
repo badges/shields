@@ -5,7 +5,6 @@ const objectOfKeyValuesPropType = PropTypes.objectOf(PropTypes.string)
 
 const examplePropType = PropTypes.exact({
   title: PropTypes.string.isRequired,
-  link: PropTypes.string,
   example: PropTypes.exact({
     pattern: PropTypes.string.isRequired,
     namedParams: objectOfKeyValuesPropType,

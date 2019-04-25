@@ -13,7 +13,7 @@ describe('Main page', function() {
   })
 
   it('Suggest badges', function() {
-    const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg`
+    const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg?link=https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues`
     cy.visit('/')
 
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
@@ -46,7 +46,7 @@ describe('Main page', function() {
     cy.get('table input[name="color"]').type('orange')
 
     cy.get(
-      `img[src='${backendUrl}/github/issues/badges/shields.svg?color=orange']`
+      `img[src='${backendUrl}/github/issues/badges/shields.svg?color=orange&link=https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues']`
     )
   })
 })

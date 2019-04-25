@@ -49,15 +49,20 @@ export default class QueryStringBuilder extends React.Component {
 
     // Create empty values in `this.state.queryParams` for each of the custom
     // query params defined in `this.props.exampleParams`.
-    const queryParams = {}
-    Object.entries(exampleParams).forEach(([name, value]) => {
-      // Custom query params are either string or boolean. Inspect the example
-      // value to infer which one, and set empty values accordingly.
-      // Throughout the component, these two types are supported in the same
-      // manner: by inspecting this value type.
-      const isStringParam = typeof value === 'string'
-      queryParams[name] = isStringParam ? '' : true
-    })
+    let queryParams = {}
+    if (this.props.isPrefilled) {
+      queryParams = exampleParams
+    } else {
+      queryParams = {}
+      Object.entries(exampleParams).forEach(([name, value]) => {
+        // Custom query params are either string or boolean. Inspect the example
+        // value to infer which one, and set empty values accordingly.
+        // Throughout the component, these two types are supported in the same
+        // manner: by inspecting this value type.
+        const isStringParam = typeof value === 'string'
+        queryParams[name] = isStringParam ? '' : true
+      })
+    }
 
     // Create empty values in `this.state.badgeOptions` for each of the
     // standard badge options. When `this.props.initialStyle` has been
@@ -166,7 +171,7 @@ export default class QueryStringBuilder extends React.Component {
           </QueryParamLabel>
         </td>
         <td>
-          {isStringParam && (
+          {isStringParam && !this.props.isPrefilled && (
             <QueryParamCaption>
               {stringParamCount === 0 ? `e.g. ${exampleValue}` : exampleValue}
             </QueryParamCaption>
@@ -175,10 +180,11 @@ export default class QueryStringBuilder extends React.Component {
         <td>
           {isStringParam ? (
             <QueryParamInput
-              checked={value}
               name={name}
               onChange={this.handleServiceQueryParamChange}
+              size={30}
               type="text"
+              value={value}
               {...noAutocorrect}
             />
           ) : (
@@ -283,6 +289,7 @@ export default class QueryStringBuilder extends React.Component {
 QueryStringBuilder.propTypes = {
   exampleParams: objectOfKeyValuesPropType,
   initialStyle: PropTypes.string,
+  isPrefilled: PropTypes.bool,
   onChange: PropTypes.func,
 }
 QueryStringBuilder.defaultProps = {
