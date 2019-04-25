@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { NotFound } = require('..')
 const { colorScale } = require('../color-formatters')
 const ScrutinizerBase = require('./scrutinizer-base')
 
@@ -42,25 +43,30 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
   }
 
   static render({ coverage }) {
-    if (isNaN(coverage)) {
-      return {
-        message: 'unknown',
-      }
-    }
     return {
       message: `${coverage.toFixed(0)}%`,
       color: scale(coverage),
     }
   }
 
-  async makeBadge({ vcs, slug, branch }) {
-    const json = await this.fetch({ schema, vcs, slug })
+  transform({ json, branch }) {
     const { value: rawCoverage } = this.transformBranchInfoMetricValue({
       json,
       branch,
       metric: 'scrutinizer.test_coverage',
     })
-    return this.constructor.render({ coverage: rawCoverage * 100 })
+
+    if (!rawCoverage) {
+      throw new NotFound({ prettyMessage: 'coverage not found' })
+    }
+
+    return { coverage: rawCoverage * 100 }
+  }
+
+  async makeBadge({ vcs, slug, branch }) {
+    const json = await this.fetch({ schema, vcs, slug })
+    const { coverage } = this.transform({ json, branch })
+    return this.constructor.render({ coverage })
   }
 }
 
