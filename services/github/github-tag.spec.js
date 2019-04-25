@@ -1,7 +1,6 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { version: versionColor } = require('../color-formatters')
 const GithubTag = require('./github-tag.service')
 
 describe('GithubTag', function() {
@@ -30,7 +29,7 @@ describe('GithubTag', function() {
     })
     given({ usingSemver: true, version: '2.0.0' }).expect({
       message: 'v2.0.0',
-      color: versionColor('2.0.0'),
+      color: 'blue',
     })
   })
 })
