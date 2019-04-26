@@ -62,51 +62,56 @@ describe('GitHub badge suggestions', function() {
         suggestions: [
           {
             title: 'GitHub issues',
-            link: 'https://github.com/atom/atom/issues',
             example: {
               pattern: '/github/issues/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
-              queryParams: {},
+              queryParams: {
+                link: 'https://github.com/atom/atom/issues',
+              },
             },
           },
           {
             title: 'GitHub forks',
-            link: 'https://github.com/atom/atom/network',
             example: {
               pattern: '/github/forks/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
-              queryParams: {},
+              queryParams: {
+                link: 'https://github.com/atom/atom/network',
+              },
             },
           },
           {
             title: 'GitHub stars',
-            link: 'https://github.com/atom/atom/stargazers',
             example: {
               pattern: '/github/stars/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
-              queryParams: {},
+              queryParams: {
+                link: 'https://github.com/atom/atom/stargazers',
+              },
             },
           },
           {
             title: 'GitHub license',
-            link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
             example: {
               pattern: '/github/license/:user/:repo',
               namedParams: { user: 'atom', repo: 'atom' },
-              queryParams: {},
+              queryParams: {
+                link: 'https://github.com/atom/atom/blob/master/LICENSE.md',
+              },
             },
           },
           {
             title: 'Twitter',
-            link:
-              'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
             example: {
               pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
               namedParams: {
                 protocol: 'https',
                 hostAndPath: 'github.com/atom/atom',
               },
-              queryParams: {},
+              queryParams: {
+                link:
+                  'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
+              },
             },
             preview: {
               style: 'social',
