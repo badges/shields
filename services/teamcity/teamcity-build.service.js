@@ -15,31 +15,6 @@ const buildStatusSchema = Joi.object({
 }).required()
 
 module.exports = class TeamCityBuild extends TeamCityBase {
-  static render({ status, statusText, useVerbose }) {
-    if (status === 'SUCCESS') {
-      return {
-        message: 'passing',
-        color: 'brightgreen',
-      }
-    } else if (statusText && useVerbose) {
-      return {
-        message: statusText.toLowerCase(),
-        color: 'red',
-      }
-    } else {
-      return {
-        message: status.toLowerCase(),
-        color: 'red',
-      }
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
-  }
-
   static get category() {
     return 'build'
   }
@@ -92,6 +67,31 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         keywords: ['test', 'test results'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'build',
+    }
+  }
+
+  static render({ status, statusText, useVerbose }) {
+    if (status === 'SUCCESS') {
+      return {
+        message: 'passing',
+        color: 'brightgreen',
+      }
+    } else if (statusText && useVerbose) {
+      return {
+        message: statusText.toLowerCase(),
+        color: 'red',
+      }
+    } else {
+      return {
+        message: status.toLowerCase(),
+        color: 'red',
+      }
+    }
   }
 
   async handle({ protocol, hostAndPath, verbosity, buildId }) {

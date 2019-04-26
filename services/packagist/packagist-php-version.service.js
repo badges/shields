@@ -4,6 +4,10 @@ const { allVersionsSchema, BasePackagistService } = require('./packagist-base')
 const { NotFound } = require('..')
 
 module.exports = class PackagistPhpVersion extends BasePackagistService {
+  static get category() {
+    return 'platform-support'
+  }
+
   static get route() {
     return {
       base: 'packagist/php-v',
@@ -11,38 +15,6 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'php',
-      color: 'blue',
-    }
-  }
-
-  async handle({ user, repo, version = 'dev-master' }) {
-    const allData = await this.fetch({
-      user,
-      repo,
-      schema: allVersionsSchema,
-    })
-
-    if (!allData.package.versions.hasOwnProperty(version)) {
-      throw new NotFound({ prettyMessage: 'invalid version' })
-    }
-
-    return this.constructor.render({
-      php: allData.package.versions[version].require.php,
-    })
-  }
-
-  static render({ php }) {
-    return {
-      message: php,
-    }
-  }
-
-  static get category() {
-    return 'platform-support'
-  }
   static get examples() {
     return [
       {
@@ -65,5 +37,34 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
         staticPreview: this.render({ php: '>=5.3.9' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return {
+      label: 'php',
+      color: 'blue',
+    }
+  }
+
+  static render({ php }) {
+    return {
+      message: php,
+    }
+  }
+
+  async handle({ user, repo, version = 'dev-master' }) {
+    const allData = await this.fetch({
+      user,
+      repo,
+      schema: allVersionsSchema,
+    })
+
+    if (!allData.package.versions.hasOwnProperty(version)) {
+      throw new NotFound({ prettyMessage: 'invalid version' })
+    }
+
+    return this.constructor.render({
+      php: allData.package.versions[version].require.php,
+    })
   }
 }

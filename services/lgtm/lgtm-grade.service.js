@@ -10,19 +10,28 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     }
   }
 
-  async handle({ language, user, repo }) {
-    const data = await this.fetch({ user, repo })
-    return this.constructor.render({ language, data })
-  }
-
-  static render({ language, data }) {
-    const { grade, color } = this.getGradeAndColor({ language, data })
-
-    return {
-      label: `code quality: ${this.getLabel({ language })}`,
-      message: grade,
-      color,
-    }
+  static get examples() {
+    return [
+      {
+        title: 'LGTM Grade',
+        namedParams: {
+          language: 'java',
+          user: 'apache',
+          repo: 'cloudstack',
+        },
+        staticPreview: this.render({
+          language: 'java',
+          data: {
+            languages: [
+              {
+                lang: 'java',
+                grade: 'C',
+              },
+            ],
+          },
+        }),
+      },
+    ]
   }
 
   static getLabel({ language }) {
@@ -67,27 +76,18 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     return { grade, color }
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'LGTM Grade',
-        namedParams: {
-          language: 'java',
-          user: 'apache',
-          repo: 'cloudstack',
-        },
-        staticPreview: this.render({
-          language: 'java',
-          data: {
-            languages: [
-              {
-                lang: 'java',
-                grade: 'C',
-              },
-            ],
-          },
-        }),
-      },
-    ]
+  static render({ language, data }) {
+    const { grade, color } = this.getGradeAndColor({ language, data })
+
+    return {
+      label: `code quality: ${this.getLabel({ language })}`,
+      message: grade,
+      color,
+    }
+  }
+
+  async handle({ language, user, repo }) {
+    const data = await this.fetch({ user, repo })
+    return this.constructor.render({ language, data })
   }
 }

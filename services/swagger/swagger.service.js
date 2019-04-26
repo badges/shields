@@ -15,8 +15,8 @@ const validatorSchema = Joi.object()
   .required()
 
 module.exports = class SwaggerValidatorService extends BaseJsonService {
-  static render({ message, clr }) {
-    return { message, color: clr }
+  static get category() {
+    return 'other'
   }
 
   static get route() {
@@ -24,38 +24,6 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
       base: 'swagger/valid/2.0',
       pattern: ':scheme(http|https)?/:url*',
     }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'swagger' }
-  }
-
-  async handle({ scheme, url }) {
-    const json = await this.fetch({ scheme, urlF: url })
-    const valMessages = json.schemaValidationMessages
-
-    if (!valMessages || valMessages.length === 0) {
-      return this.constructor.render({ message: 'valid', clr: 'brightgreen' })
-    } else {
-      return this.constructor.render({ message: 'invalid', clr: 'red' })
-    }
-  }
-
-  async fetch({ scheme, urlF }) {
-    const url = 'http://online.swagger.io/validator/debug'
-    return this._requestJson({
-      url,
-      schema: validatorSchema,
-      options: {
-        qs: {
-          url: `${scheme}://${urlF}`,
-        },
-      },
-    })
-  }
-
-  static get category() {
-    return 'other'
   }
 
   static get examples() {
@@ -71,5 +39,37 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
         },
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'swagger' }
+  }
+
+  static render({ message, clr }) {
+    return { message, color: clr }
+  }
+
+  async fetch({ scheme, urlF }) {
+    const url = 'http://online.swagger.io/validator/debug'
+    return this._requestJson({
+      url,
+      schema: validatorSchema,
+      options: {
+        qs: {
+          url: `${scheme}://${urlF}`,
+        },
+      },
+    })
+  }
+
+  async handle({ scheme, url }) {
+    const json = await this.fetch({ scheme, urlF: url })
+    const valMessages = json.schemaValidationMessages
+
+    if (!valMessages || valMessages.length === 0) {
+      return this.constructor.render({ message: 'valid', clr: 'brightgreen' })
+    } else {
+      return this.constructor.render({ message: 'invalid', clr: 'red' })
+    }
   }
 }

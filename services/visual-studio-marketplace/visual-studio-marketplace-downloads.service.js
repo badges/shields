@@ -26,16 +26,6 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
     }
   }
 
-  static render({ measure, count }) {
-    const label = measure === 'd' ? 'downloads' : 'installs'
-
-    return {
-      label,
-      message: metric(count),
-      color: downloadCount(count),
-    }
-  }
-
   static get examples() {
     return [
       {
@@ -55,6 +45,16 @@ module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMark
         documentation,
       },
     ]
+  }
+
+  static render({ measure, count }) {
+    const label = measure === 'd' ? 'downloads' : 'installs'
+
+    return {
+      label,
+      message: metric(count),
+      color: downloadCount(count),
+    }
   }
 
   async handle({ measure, extensionId }) {

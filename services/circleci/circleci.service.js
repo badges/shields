@@ -21,42 +21,6 @@ const documentation = `
   `
 
 module.exports = class CircleCi extends BaseJsonService {
-  async fetch({ token, vcsType, userRepo, branch }) {
-    let url = `https://circleci.com/api/v1.1/project/${vcsType}/${userRepo}`
-    if (branch != null) {
-      url += `/tree/${branch}`
-    }
-    const query = { filter: 'completed', limit: 1 }
-    if (token) {
-      query['circle-token'] = token
-    }
-    return this._requestJson({
-      url,
-      schema: circleSchema,
-      options: { qs: query },
-      errorMessages: { 404: 'project not found' },
-    })
-  }
-
-  static render({ status }) {
-    return renderBuildStatusBadge({ status: status.replace('_', ' ') })
-  }
-
-  async handle({ token, vcsType, userRepo, branch }) {
-    const json = await this.fetch({
-      token,
-      vcsType: vcsType || 'github',
-      userRepo,
-      branch,
-    })
-    return this.constructor.render({ status: json[0].status })
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
-
   static get category() {
     return 'build'
   }
@@ -107,5 +71,40 @@ module.exports = class CircleCi extends BaseJsonService {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'build' }
+  }
+
+  static render({ status }) {
+    return renderBuildStatusBadge({ status: status.replace('_', ' ') })
+  }
+
+  async fetch({ token, vcsType, userRepo, branch }) {
+    let url = `https://circleci.com/api/v1.1/project/${vcsType}/${userRepo}`
+    if (branch != null) {
+      url += `/tree/${branch}`
+    }
+    const query = { filter: 'completed', limit: 1 }
+    if (token) {
+      query['circle-token'] = token
+    }
+    return this._requestJson({
+      url,
+      schema: circleSchema,
+      options: { qs: query },
+      errorMessages: { 404: 'project not found' },
+    })
+  }
+
+  async handle({ token, vcsType, userRepo, branch }) {
+    const json = await this.fetch({
+      token,
+      vcsType: vcsType || 'github',
+      userRepo,
+      branch,
+    })
+    return this.constructor.render({ status: json[0].status })
   }
 }

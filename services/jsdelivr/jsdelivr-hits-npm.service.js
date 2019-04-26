@@ -10,20 +10,6 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
     }
   }
 
-  async handle({ period, packageName }) {
-    const { total } = await this.fetch({ period, packageName })
-    return this.constructor.render({ period, hits: total })
-  }
-
-  async fetch({ period, packageName }) {
-    return this._requestJson({
-      schema,
-      url: `https://data.jsdelivr.com/v1/package/npm/${packageName}/stats/date/${
-        periodMap[period]
-      }`,
-    })
-  }
-
   static get examples() {
     return [
       {
@@ -35,5 +21,19 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
         staticPreview: this.render({ period: 'hm', hits: 920101789 }),
       },
     ]
+  }
+
+  async fetch({ period, packageName }) {
+    return this._requestJson({
+      schema,
+      url: `https://data.jsdelivr.com/v1/package/npm/${packageName}/stats/date/${
+        periodMap[period]
+      }`,
+    })
+  }
+
+  async handle({ period, packageName }) {
+    const { total } = await this.fetch({ period, packageName })
+    return this.constructor.render({ period, hits: total })
   }
 }

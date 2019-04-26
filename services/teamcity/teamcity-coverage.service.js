@@ -17,19 +17,6 @@ const buildStatisticsSchema = Joi.object({
 }).required()
 
 module.exports = class TeamCityCoverage extends TeamCityBase {
-  static render({ coverage }) {
-    return {
-      message: `${coverage.toFixed(0)}%`,
-      color: coveragePercentage(coverage),
-    }
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'coverage',
-    }
-  }
-
   static get category() {
     return 'coverage'
   }
@@ -69,21 +56,17 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
     ]
   }
 
-  async handle({ protocol, hostAndPath, buildId }) {
-    // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-Statistics
-    const buildLocator = `buildType:(id:${buildId})`
-    const apiPath = `app/rest/builds/${encodeURIComponent(
-      buildLocator
-    )}/statistics`
-    const data = await this.fetch({
-      protocol,
-      hostAndPath,
-      apiPath,
-      schema: buildStatisticsSchema,
-    })
+  static get defaultBadgeData() {
+    return {
+      label: 'coverage',
+    }
+  }
 
-    const { coverage } = this.transform({ data })
-    return this.constructor.render({ coverage })
+  static render({ coverage }) {
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
   }
 
   transform({ data }) {
@@ -103,5 +86,22 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
     }
 
     throw new InvalidResponse({ prettyMessage: 'no coverage data available' })
+  }
+
+  async handle({ protocol, hostAndPath, buildId }) {
+    // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-Statistics
+    const buildLocator = `buildType:(id:${buildId})`
+    const apiPath = `app/rest/builds/${encodeURIComponent(
+      buildLocator
+    )}/statistics`
+    const data = await this.fetch({
+      protocol,
+      hostAndPath,
+      apiPath,
+      schema: buildStatisticsSchema,
+    })
+
+    const { coverage } = this.transform({ data })
+    return this.constructor.render({ coverage })
   }
 }

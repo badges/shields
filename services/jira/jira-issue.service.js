@@ -15,31 +15,6 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JiraIssue extends JiraBase {
-  static render({ issueKey, statusName, statusColor }) {
-    let color = 'lightgrey'
-    if (statusColor) {
-      // map JIRA status color names to closest shields color schemes
-      const colorMap = {
-        'medium-gray': 'lightgrey',
-        green: 'green',
-        yellow: 'yellow',
-        brown: 'orange',
-        'warm-red': 'red',
-        'blue-gray': 'blue',
-      }
-      color = colorMap[statusColor]
-    }
-    return {
-      label: issueKey,
-      message: statusName,
-      color,
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { color: 'lightgrey', label: 'jira' }
-  }
-
   static get route() {
     return {
       base: 'jira/issue',
@@ -64,6 +39,31 @@ module.exports = class JiraIssue extends JiraBase {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { color: 'lightgrey', label: 'jira' }
+  }
+
+  static render({ issueKey, statusName, statusColor }) {
+    let color = 'lightgrey'
+    if (statusColor) {
+      // map JIRA status color names to closest shields color schemes
+      const colorMap = {
+        'medium-gray': 'lightgrey',
+        green: 'green',
+        yellow: 'yellow',
+        brown: 'orange',
+        'warm-red': 'red',
+        'blue-gray': 'blue',
+      }
+      color = colorMap[statusColor]
+    }
+    return {
+      label: issueKey,
+      message: statusName,
+      color,
+    }
   }
 
   async handle({ protocol, hostAndPath, issueKey }) {

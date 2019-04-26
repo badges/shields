@@ -40,15 +40,15 @@ const errorSchema = Joi.object({
 const schema = Joi.alternatives(crateSchema, versionSchema, errorSchema)
 
 class BaseCratesService extends BaseJsonService {
+  static get defaultBadgeData() {
+    return { label: 'crates.io' }
+  }
+
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
       : `https://crates.io/api/v1/crates/${crate}`
     return this._requestJson({ schema, url })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'crates.io' }
   }
 }
 

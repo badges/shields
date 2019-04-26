@@ -70,32 +70,16 @@ const serviceDataSchema = Joi.object({
   .required()
 
 module.exports = class BaseService {
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._requestFetcher = sendAndCacheRequest
-    this._handleInternalErrors = handleInternalErrors
-  }
-
-  static render(props) {
-    throw new Error(`render() function not implemented for ${this.name}`)
-  }
-
-  /**
-   * Asynchronous function to handle requests for this service. Take the route
-   * parameters (as defined in the `route` property), perform a request using
-   * `this._sendAndCacheRequest`, and return the badge data.
-   */
-  async handle(namedParams, queryParams) {
-    throw new Error(`Handler not implemented for ${this.constructor.name}`)
-  }
-
-  // Metadata
-
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
    * the badges on the main shields.io website.
    */
   static get category() {
     throw new Error(`Category not set for ${this.name}`)
+  }
+
+  static get isDeprecated() {
+    return false
   }
 
   /**
@@ -125,19 +109,6 @@ module.exports = class BaseService {
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
-  }
-
-  static get isDeprecated() {
-    return false
-  }
-
-  /**
-   * Default data for the badge. Can include label, logo, and color. These
-   * defaults are used if the value is neither included in the service data
-   * from the handler nor overridden by the user via query parameters.
-   */
-  static get defaultBadgeData() {
-    return {}
   }
 
   /**
@@ -170,6 +141,29 @@ module.exports = class BaseService {
    */
   static get examples() {
     return []
+  }
+
+  static get _cacheLength() {
+    const cacheLengths = {
+      build: 30,
+      license: 3600,
+      version: 300,
+      debug: 60,
+    }
+    return cacheLengths[this.category]
+  }
+
+  /**
+   * Default data for the badge. Can include label, logo, and color. These
+   * defaults are used if the value is neither included in the service data
+   * from the handler nor overridden by the user via query parameters.
+   */
+  static get defaultBadgeData() {
+    return {}
+  }
+
+  static render(props) {
+    throw new Error(`render() function not implemented for ${this.name}`)
   }
 
   static validateDefinition() {
@@ -219,14 +213,49 @@ module.exports = class BaseService {
     return result
   }
 
-  static get _cacheLength() {
-    const cacheLengths = {
-      build: 30,
-      license: 3600,
-      version: 300,
-      debug: 60,
-    }
-    return cacheLengths[this.category]
+  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
+    this._requestFetcher = sendAndCacheRequest
+    this._handleInternalErrors = handleInternalErrors
+  }
+
+  async _request({ url, options = {}, errorMessages = {} }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    const { res, buffer } = await this._requestFetcher(url, options)
+    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
+  }
+
+  static _validate(
+    data,
+    schema,
+    {
+      prettyErrorMessage = 'invalid response data',
+      includeKeys = false,
+      allowAndStripUnknownKeys = true,
+    } = {}
+  ) {
+    return validate(
+      {
+        ErrorClass: InvalidResponse,
+        prettyErrorMessage,
+        includeKeys,
+        traceErrorMessage: 'Response did not match schema',
+        traceSuccessMessage: 'Response after validation',
+        allowAndStripUnknownKeys,
+      },
+      data,
+      schema
+    )
+  }
+
+  /**
+   * Asynchronous function to handle requests for this service. Take the route
+   * parameters (as defined in the `route` property), perform a request using
+   * `this._sendAndCacheRequest`, and return the badge data.
+   */
+  async handle(namedParams, queryParams) {
+    throw new Error(`Handler not implemented for ${this.constructor.name}`)
   }
 
   _handleError(error) {
@@ -397,36 +426,5 @@ module.exports = class BaseService {
         fetchLimitBytes,
       })
     )
-  }
-
-  static _validate(
-    data,
-    schema,
-    {
-      prettyErrorMessage = 'invalid response data',
-      includeKeys = false,
-      allowAndStripUnknownKeys = true,
-    } = {}
-  ) {
-    return validate(
-      {
-        ErrorClass: InvalidResponse,
-        prettyErrorMessage,
-        includeKeys,
-        traceErrorMessage: 'Response did not match schema',
-        traceSuccessMessage: 'Response after validation',
-        allowAndStripUnknownKeys,
-      },
-      data,
-      schema
-    )
-  }
-
-  async _request({ url, options = {}, errorMessages = {} }) {
-    const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
-    const { res, buffer } = await this._requestFetcher(url, options)
-    logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
   }
 }

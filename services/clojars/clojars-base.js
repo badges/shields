@@ -23,17 +23,6 @@ class BaseClojarsService extends BaseJsonService {
 }
 
 class BaseClojarsVersionService extends BaseClojarsService {
-  static render({ clojar, version }) {
-    return {
-      message: `[${clojar} "${version}"]`,
-      color: versionColor(version),
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'clojars' }
-  }
-
   static get category() {
     return 'version'
   }
@@ -45,6 +34,17 @@ class BaseClojarsVersionService extends BaseClojarsService {
         staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'clojars' }
+  }
+
+  static render({ clojar, version }) {
+    return {
+      message: `[${clojar} "${version}"]`,
+      color: versionColor(version),
+    }
   }
 }
 

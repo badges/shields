@@ -63,34 +63,16 @@ const buildTestResultSummarySchema = Joi.object({
 }).required()
 
 module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
-  static render({
-    passed,
-    failed,
-    skipped,
-    total,
-    passedLabel,
-    failedLabel,
-    skippedLabel,
-    isCompact,
-  }) {
-    return renderTestResultBadge({
-      passed,
-      failed,
-      skipped,
-      total,
-      passedLabel,
-      failedLabel,
-      skippedLabel,
-      isCompact,
-    })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'tests' }
-  }
-
   static get category() {
     return 'build'
+  }
+
+  static get route() {
+    return {
+      base: 'azure-devops/tests',
+      pattern: ':organization/:project/:definitionId/:branch*',
+      queryParamSchema: testResultQueryParamSchema,
+    }
   }
 
   static get examples() {
@@ -175,12 +157,30 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
     ]
   }
 
-  static get route() {
-    return {
-      base: 'azure-devops/tests',
-      pattern: ':organization/:project/:definitionId/:branch*',
-      queryParamSchema: testResultQueryParamSchema,
-    }
+  static get defaultBadgeData() {
+    return { label: 'tests' }
+  }
+
+  static render({
+    passed,
+    failed,
+    skipped,
+    total,
+    passedLabel,
+    failedLabel,
+    skippedLabel,
+    isCompact,
+  }) {
+    return renderTestResultBadge({
+      passed,
+      failed,
+      skipped,
+      total,
+      passedLabel,
+      failedLabel,
+      skippedLabel,
+      isCompact,
+    })
   }
 
   async handle(

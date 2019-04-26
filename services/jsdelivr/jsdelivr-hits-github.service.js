@@ -10,20 +10,6 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
     }
   }
 
-  async handle({ period, user, repo }) {
-    const { total } = await this.fetch({ period, user, repo })
-    return this.constructor.render({ period, hits: total })
-  }
-
-  async fetch({ period, user, repo }) {
-    return this._requestJson({
-      schema,
-      url: `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${
-        periodMap[period]
-      }`,
-    })
-  }
-
   static get examples() {
     return [
       {
@@ -36,5 +22,19 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
         staticPreview: this.render({ period: 'hm', hits: 9809876 }),
       },
     ]
+  }
+
+  async fetch({ period, user, repo }) {
+    return this._requestJson({
+      schema,
+      url: `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${
+        periodMap[period]
+      }`,
+    })
+  }
+
+  async handle({ period, user, repo }) {
+    const { total } = await this.fetch({ period, user, repo })
+    return this.constructor.render({ period, hits: total })
   }
 }

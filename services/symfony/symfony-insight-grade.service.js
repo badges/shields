@@ -7,24 +7,6 @@ const {
 } = require('./symfony-insight-base')
 
 module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
-  static render({ status, grade }) {
-    const label = 'grade'
-    if (status !== 'finished' && status !== '') {
-      return {
-        label,
-        message: 'pending',
-        color: 'lightgrey',
-      }
-    }
-
-    const message = grade === 'none' ? 'no medal' : grade
-    return {
-      label,
-      message,
-      color: gradeColors[grade],
-    }
-  }
-
   static get route() {
     return {
       base: 'symfony/i/grade',
@@ -46,6 +28,24 @@ module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
         keywords,
       },
     ]
+  }
+
+  static render({ status, grade }) {
+    const label = 'grade'
+    if (status !== 'finished' && status !== '') {
+      return {
+        label,
+        message: 'pending',
+        color: 'lightgrey',
+      }
+    }
+
+    const message = grade === 'none' ? 'no medal' : grade
+    return {
+      label,
+      message,
+      color: gradeColors[grade],
+    }
   }
 
   async handle({ projectUuid }) {

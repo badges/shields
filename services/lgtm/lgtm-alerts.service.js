@@ -11,26 +11,6 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
     }
   }
 
-  async handle({ user, repo }) {
-    const { alerts } = await this.fetch({ user, repo })
-    return this.constructor.render({ alerts })
-  }
-
-  static render({ alerts }) {
-    return {
-      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
-      color: this.getColor({ alerts }),
-    }
-  }
-
-  static getColor({ alerts }) {
-    let color = 'yellow'
-    if (alerts === 0) {
-      color = 'brightgreen'
-    }
-    return color
-  }
-
   static get examples() {
     return [
       {
@@ -42,5 +22,25 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
         staticPreview: this.render({ alerts: 2488 }),
       },
     ]
+  }
+
+  static getColor({ alerts }) {
+    let color = 'yellow'
+    if (alerts === 0) {
+      color = 'brightgreen'
+    }
+    return color
+  }
+
+  static render({ alerts }) {
+    return {
+      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
+      color: this.getColor({ alerts }),
+    }
+  }
+
+  async handle({ user, repo }) {
+    const { alerts } = await this.fetch({ user, repo })
+    return this.constructor.render({ alerts })
   }
 }

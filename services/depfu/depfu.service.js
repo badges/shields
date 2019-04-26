@@ -9,27 +9,6 @@ const depfuSchema = Joi.object({
 }).required()
 
 module.exports = class Depfu extends BaseJsonService {
-  async fetch({ user, repo }) {
-    const url = `https://depfu.com/github/shields/${user}/${repo}`
-    return this._requestJson({ url, schema: depfuSchema })
-  }
-
-  static render({ text, colorscheme }) {
-    return {
-      message: text,
-      color: colorscheme,
-    }
-  }
-
-  async handle({ user, repo }) {
-    const { text, colorscheme } = await this.fetch({ user, repo })
-    return this.constructor.render({ text, colorscheme })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'dependencies' }
-  }
-
   static get category() {
     return 'dependencies'
   }
@@ -52,5 +31,26 @@ module.exports = class Depfu extends BaseJsonService {
         }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'dependencies' }
+  }
+
+  static render({ text, colorscheme }) {
+    return {
+      message: text,
+      color: colorscheme,
+    }
+  }
+
+  async fetch({ user, repo }) {
+    const url = `https://depfu.com/github/shields/${user}/${repo}`
+    return this._requestJson({ url, schema: depfuSchema })
+  }
+
+  async handle({ user, repo }) {
+    const { text, colorscheme } = await this.fetch({ user, repo })
+    return this.constructor.render({ text, colorscheme })
   }
 }

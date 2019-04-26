@@ -15,10 +15,6 @@ module.exports = class PuppetforgeModuleVersion extends BasePuppetForgeModulesSe
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'puppetforge' }
-  }
-
   static get examples() {
     return [
       {
@@ -30,6 +26,10 @@ module.exports = class PuppetforgeModuleVersion extends BasePuppetForgeModulesSe
         staticPreview: renderVersionBadge({ version: '1.3.3' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'puppetforge' }
   }
 
   async handle({ user, moduleName }) {

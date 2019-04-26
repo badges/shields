@@ -31,15 +31,6 @@ module.exports = class Codeship extends BaseSvgScrapingService {
     return 'build'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
-
-  static render({ status }) {
-    status = statusMap[status] || status
-    return renderBuildStatusBadge({ status })
-  }
-
   static get route() {
     return {
       base: 'codeship',
@@ -67,6 +58,15 @@ module.exports = class Codeship extends BaseSvgScrapingService {
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'build' }
+  }
+
+  static render({ status }) {
+    status = statusMap[status] || status
+    return renderBuildStatusBadge({ status })
   }
 
   async fetch({ projectId, branch }) {

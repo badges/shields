@@ -29,19 +29,8 @@ function DownloadsForExtensionType(extensionType) {
       return `Wordpress${capt}Downloads`
     }
 
-    static render({ response }) {
-      return {
-        message: metric(response.downloaded),
-        color: downloadCount(response.downloaded),
-      }
-    }
-
     static get category() {
       return 'downloads'
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'downloads' }
     }
 
     static get route() {
@@ -50,18 +39,34 @@ function DownloadsForExtensionType(extensionType) {
         pattern: ':slug',
       }
     }
-    static get extensionType() {
-      return extensionType
-    }
 
     static get examples() {
       return [
         {
           title: `Wordpress ${capt} Downloads`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { downloaded: 200000 } }),
+          staticPreview: this.render({ downloads: 200000 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'downloads' }
+    }
+
+    static render({ downloads }) {
+      return {
+        message: metric(downloads),
+        color: downloadCount(downloads),
+      }
+    }
+
+    async handle({ slug }) {
+      const { downloaded: downloads } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ downloads })
     }
   }
 }
@@ -74,23 +79,8 @@ function InstallsForExtensionType(extensionType) {
       return `Wordpress${capt}Installs`
     }
 
-    static get extensionType() {
-      return extensionType
-    }
-
     static get category() {
       return 'downloads'
-    }
-
-    static render({ response }) {
-      return {
-        message: `${metric(response.active_installs)}+`,
-        color: downloadCount(response.active_installs),
-      }
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'active installs' }
     }
 
     static get route() {
@@ -105,9 +95,28 @@ function InstallsForExtensionType(extensionType) {
         {
           title: `Wordpress ${capt} Active Installs`,
           namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ response: { active_installs: 300000 } }),
+          staticPreview: this.render({ installCount: 300000 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'active installs' }
+    }
+
+    static render({ installCount }) {
+      return {
+        message: metric(installCount),
+        color: downloadCount(installCount),
+      }
+    }
+
+    async handle({ slug }) {
+      const { active_installs: installCount } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ installCount })
     }
   }
 }
@@ -149,10 +158,6 @@ function DownloadsForInterval(interval) {
       return 'downloads'
     }
 
-    static get defaultBadgeData() {
-      return { label: 'downloads' }
-    }
-
     static get route() {
       return {
         base,
@@ -168,6 +173,10 @@ function DownloadsForInterval(interval) {
           staticPreview: this.render({ downloads: 30000 }),
         },
       ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'downloads' }
     }
 
     static render({ downloads }) {

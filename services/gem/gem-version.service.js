@@ -11,27 +11,6 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GemVersion extends BaseJsonService {
-  async fetch({ gem }) {
-    return this._requestJson({
-      schema,
-      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
-    })
-  }
-
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ gem }) {
-    const { version } = await this.fetch({ gem })
-    return this.constructor.render({ version })
-  }
-
-  // Metadata
-  static get defaultBadgeData() {
-    return { label: 'gem' }
-  }
-
   static get category() {
     return 'version'
   }
@@ -52,5 +31,25 @@ module.exports = class GemVersion extends BaseJsonService {
         keywords: ['ruby'],
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'gem' }
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  async fetch({ gem }) {
+    return this._requestJson({
+      schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
+    })
+  }
+
+  async handle({ gem }) {
+    const { version } = await this.fetch({ gem })
+    return this.constructor.render({ version })
   }
 }

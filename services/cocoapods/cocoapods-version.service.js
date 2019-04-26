@@ -25,12 +25,12 @@ module.exports = class CocoapodsVersion extends BaseCocoaPodsService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return { label: 'pod' }
+  }
+
   async handle({ spec }) {
     const { version } = await this.fetch({ spec })
     return renderVersionBadge({ version })
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'pod' }
   }
 }

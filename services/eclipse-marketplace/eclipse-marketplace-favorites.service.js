@@ -17,8 +17,8 @@ module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBas
     return 'other'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'favorites' }
+  static get route() {
+    return this.buildRoute('eclipse-marketplace/favorites')
   }
 
   static get examples() {
@@ -31,8 +31,8 @@ module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBas
     ]
   }
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/favorites')
+  static get defaultBadgeData() {
+    return { label: 'favorites' }
   }
 
   static render({ favorited }) {

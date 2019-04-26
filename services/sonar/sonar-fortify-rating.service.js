@@ -22,17 +22,6 @@ module.exports = class SonarFortifyRating extends SonarBase {
     return 'analysis'
   }
 
-  static get defaultBadgeData() {
-    return { label: 'fortify-security-rating' }
-  }
-
-  static render({ rating }) {
-    return {
-      message: `${rating}/5`,
-      color: colorMap[rating],
-    }
-  }
-
   static get route() {
     return {
       base: 'sonar',
@@ -64,6 +53,17 @@ module.exports = class SonarFortifyRating extends SonarBase {
       `,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'fortify-security-rating' }
+  }
+
+  static render({ rating }) {
+    return {
+      message: `${rating}/5`,
+      color: colorMap[rating],
+    }
   }
 
   async handle({ protocol, host, component }, { sonarVersion }) {

@@ -9,11 +9,27 @@ const schema = Joi.array()
   .required()
 
 module.exports = class BStatsPlayers extends BaseJsonService {
+  static get category() {
+    return 'other'
+  }
+
   static get route() {
     return {
       base: 'bstats/players',
       pattern: ':pluginid',
     }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'bStats Players',
+        namedParams: {
+          pluginid: '1',
+        },
+        staticPreview: this.render({ players: 74299 }),
+      },
+    ]
   }
 
   static get defaultBadgeData() {
@@ -23,15 +39,10 @@ module.exports = class BStatsPlayers extends BaseJsonService {
     }
   }
 
-  async handle({ pluginid }) {
-    const json = await this.fetch({ pluginid })
-    const { players } = this.transform({ json })
-    return this.constructor.render({ players })
-  }
-
-  transform({ json }) {
-    const players = json[0][1]
-    return { players }
+  static render({ players }) {
+    return {
+      message: metric(players),
+    }
   }
 
   async fetch({ pluginid }) {
@@ -48,24 +59,14 @@ module.exports = class BStatsPlayers extends BaseJsonService {
     })
   }
 
-  static render({ players }) {
-    return {
-      message: metric(players),
-    }
+  transform({ json }) {
+    const players = json[0][1]
+    return { players }
   }
 
-  static get category() {
-    return 'other'
-  }
-  static get examples() {
-    return [
-      {
-        title: 'bStats Players',
-        namedParams: {
-          pluginid: '1',
-        },
-        staticPreview: this.render({ players: 74299 }),
-      },
-    ]
+  async handle({ pluginid }) {
+    const json = await this.fetch({ pluginid })
+    const { players } = this.transform({ json })
+    return this.constructor.render({ players })
   }
 }

@@ -15,10 +15,6 @@ module.exports = class HackageVersion extends BaseService {
     }
   }
 
-  static get defaultBadgeData() {
-    return { label: 'hackage' }
-  }
-
   static get examples() {
     return [
       {
@@ -27,6 +23,10 @@ module.exports = class HackageVersion extends BaseService {
         staticPreview: renderVersionBadge({ version: '4.1.7' }),
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'hackage' }
   }
 
   async fetch({ packageName }) {
