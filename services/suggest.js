@@ -120,8 +120,13 @@ async function findSuggestions(githubApiProvider, url) {
 // end: function(json), with json of the form:
 //  - suggestions: list of objects of the form:
 //    - title: string
-//    - link: target as a string URL.
-//    - queryParams: Object containing query params (Optional)
+//    - example: object
+//      - pattern: string
+//      - namedParams: object
+//      - queryParams: object (optional)
+//        - link: target as a string URL
+//    - preview: object (optional)
+//      - style: string
 function setRoutes(allowedOrigin, githubApiProvider, server) {
   server.ajax.on('suggest/v1', (data, end, ask) => {
     // The typical dev and production setups are cross-origin. However, in
