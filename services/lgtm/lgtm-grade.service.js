@@ -6,7 +6,7 @@ module.exports = class LgtmGrade extends LgtmBaseService {
   static get route() {
     return {
       base: 'lgtm/grade',
-      pattern: ':language/:host/:user/:repo',
+      pattern: `:language/${this.pattern}`,
     }
   }
 
@@ -14,9 +14,10 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     return [
       {
         title: 'LGTM Grade',
+        pattern: `:language/${this.examplePattern}`,
         namedParams: {
           language: 'java',
-          host: 'g',
+          host: 'github',
           user: 'apache',
           repo: 'cloudstack',
         },

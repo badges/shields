@@ -68,6 +68,20 @@ t.create('alerts: single alert for a bitbucket project')
   )
   .expectBadge({ label: 'lgtm', message: '1 alert' })
 
+t.create('alerts: total alerts for a project with a github mapped host')
+  .get('/alerts/github/apache/cloudstack.json')
+  .expectBadge({
+    label: 'lgtm',
+    message: Joi.string().regex(/^[0-9kM.]+ alerts?$/),
+  })
+
+t.create('alerts: total alerts for a project with a bitbucket mapped host')
+  .get('/alerts/bitbucket/atlassian/confluence-business-blueprints.json')
+  .expectBadge({
+    label: 'lgtm',
+    message: Joi.string().regex(/^[0-9kM.]+ alerts?$/),
+  })
+
 // Grade Badge
 
 t.create('grade: missing project')
@@ -98,6 +112,13 @@ t.create('grade: grade for missing language')
   .expectBadge({
     label: 'code quality: foo',
     message: 'no language data',
+  })
+
+t.create('grade: grade for a project with a mapped host')
+  .get('/grade/java/github/apache/cloudstack.json')
+  .expectBadge({
+    label: 'code quality: java',
+    message: Joi.string().regex(/^(?:A\+)|A|B|C|D|E$/),
   })
 
 // Test display of languages

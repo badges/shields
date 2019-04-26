@@ -7,7 +7,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
   static get route() {
     return {
       base: 'lgtm/alerts',
-      pattern: ':host/:user/:repo',
+      pattern: this.pattern,
     }
   }
 
@@ -15,8 +15,9 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
     return [
       {
         title: 'LGTM Alerts',
+        pattern: this.examplePattern,
         namedParams: {
-          host: 'g',
+          host: 'github',
           user: 'apache',
           repo: 'cloudstack',
         },
