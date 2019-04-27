@@ -1,4 +1,4 @@
-***WARNING: all legacy services have been rewritten, this document may contain outdated information.***
+**_WARNING: all legacy services have been rewritten, this document may contain outdated information._**
 
 # Tips for rewriting legacy services
 
