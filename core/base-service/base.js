@@ -223,7 +223,7 @@ module.exports = class BaseService {
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
+    return checkErrorResponse(errorMessages)({ buffer, res })
   }
 
   static _validate(
