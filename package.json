@@ -110,7 +110,6 @@
     "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server http://localhost:8080 test:e2e",
-    "refactoring-report": "node scripts/refactoring-cli.js",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js"
   },
   "lint-staged": {
