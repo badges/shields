@@ -186,12 +186,8 @@ module.exports = class BaseService {
     const { category, name, isDeprecated } = this
 
     let base, format, pattern, queryParams
-    try {
-      ;({ base, format, pattern } = this.route)
-      queryParams = getQueryParamNames(this.route)
-    } catch (e) {
-      // Legacy services do not have a route.
-    }
+    ;({ base, format, pattern } = this.route)
+    queryParams = getQueryParamNames(this.route)
 
     const examples = this.examples.map((example, index) =>
       transformExample(example, index, this)
