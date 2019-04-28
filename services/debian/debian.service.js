@@ -13,6 +13,7 @@ const schema = Joi.array()
         .required()
     ) // Optional, missing means not found
   )
+  .max(1)
   .required()
 
 const defaultDistribution = 'stable'
