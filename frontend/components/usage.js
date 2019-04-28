@@ -267,6 +267,16 @@ export default function Usage({ baseUrl }) {
       <p>
         <StyledCode>
           {baseUrl}
+          /badge/dynamic/html.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+          <a href="http://xpather.com" target="_BLANK" title="XPath syntax">
+            //data/subdata
+          </a>
+          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+        </StyledCode>
+      </p>
+      <p>
+        <StyledCode>
+          {baseUrl}
           /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
             href="https://jsonpath.com"

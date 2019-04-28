@@ -61,6 +61,7 @@ export default function DynamicBadgeMaker({
         <option value="json">json</option>
         <option value="xml">xml</option>
         <option value="yaml">yaml</option>
+        <option value="html">html</option>
       </select>{' '}
       {inputs.map(({ name, placeholder = name }) => (
         <InlineInput
