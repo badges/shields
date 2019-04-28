@@ -8,6 +8,10 @@ t.create('Forks')
   .expectBadge({
     label: 'forks',
     message: isMetric,
+    link: [
+      'https://github.com/badges/shields/fork',
+      'https://github.com/badges/shields/network',
+    ],
   })
 
 t.create('Forks (repo not found)')

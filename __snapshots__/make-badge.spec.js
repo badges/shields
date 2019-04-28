@@ -8,7 +8,8 @@ exports['The badge generator JSON should always produce the same JSON (unless we
   "label": "cactus",
   "value": "grown",
   "message": "grown",
-  "color": null
+  "color": null,
+  "link": ["https://example.com/","https://other.example.com/"]
 }
 `
 
