@@ -19,6 +19,7 @@ export default class Customizer extends React.Component {
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
     isPrefilled: PropTypes.bool,
+    link: PropTypes.string,
   }
 
   indicatorRef = React.createRef()
@@ -126,9 +127,8 @@ export default class Customizer extends React.Component {
 
   constructor(props) {
     super(props)
-    const { link } = { ...this.props.exampleQueryParams }
     this.state = {
-      link: link || '',
+      link: this.props.link || '',
       message: undefined,
       path: '',
     }
@@ -154,7 +154,6 @@ export default class Customizer extends React.Component {
         <QueryStringBuilder
           exampleParams={exampleQueryParams}
           initialStyle={initialStyle}
-          isPrefilled={isPrefilled}
           onChange={this.handleQueryStringChange}
         />
         <div>{this.renderMarkupAndLivePreview()}</div>

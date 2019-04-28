@@ -68,8 +68,9 @@ export default class SuggestionAndSearch extends React.Component {
     }
 
     suggestions = suggestions.map(
-      ({ title, example, preview, documentation }) => ({
+      ({ title, link, example, preview, documentation }) => ({
         title,
+        link,
         example,
         preview: { ...preview, buildFromExample: true },
         documentation,

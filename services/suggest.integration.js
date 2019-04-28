@@ -134,56 +134,51 @@ describe('GitHub badge suggestions', function() {
         suggestions: [
           {
             title: 'GitHub issues',
+            link: 'https://github.com/badges/not-a-real-project/issues',
             example: {
               pattern: '/github/issues/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
-              queryParams: {
-                link: 'https://github.com/badges/not-a-real-project/issues',
-              },
+              queryParams: {},
             },
           },
           {
             title: 'GitHub forks',
+            link: 'https://github.com/badges/not-a-real-project/network',
             example: {
               pattern: '/github/forks/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
-              queryParams: {
-                link: 'https://github.com/badges/not-a-real-project/network',
-              },
+              queryParams: {},
             },
           },
           {
             title: 'GitHub stars',
+            link: 'https://github.com/badges/not-a-real-project/stargazers',
             example: {
               pattern: '/github/stars/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
-              queryParams: {
-                link: 'https://github.com/badges/not-a-real-project/stargazers',
-              },
+              queryParams: {},
             },
           },
           {
             title: 'GitHub license',
+            link: 'https://github.com/badges/not-a-real-project',
             example: {
               pattern: '/github/license/:user/:repo',
               namedParams: { user: 'badges', repo: 'not-a-real-project' },
-              queryParams: {
-                link: 'https://github.com/badges/not-a-real-project',
-              },
+              queryParams: {},
             },
           },
           {
             title: 'Twitter',
+            link:
+              'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
             example: {
               pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
               namedParams: {
                 protocol: 'https',
                 hostAndPath: 'github.com/badges/not-a-real-project',
               },
-              queryParams: {
-                link:
-                  'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
-              },
+              queryParams: {},
             },
             preview: {
               style: 'social',

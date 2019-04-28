@@ -19,14 +19,13 @@ function twitterPage(url) {
   const path = url.pathname
   return {
     title: 'Twitter',
+    link: `https://twitter.com/intent/tweet?text=Wow:&url=${encodeURIComponent(
+      url.href
+    )}`,
     example: {
       pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
       namedParams: { protocol: `${schema}`, hostAndPath: `${host}${path}` },
-      queryParams: {
-        link: `https://twitter.com/intent/tweet?text=Wow:&url=${encodeURIComponent(
-          url.href
-        )}`,
-      },
+      queryParams: {},
     },
     preview: {
       style: 'social',
@@ -38,10 +37,11 @@ function githubIssues(user, repo) {
   const repoSlug = `${user}/${repo}`
   return {
     title: 'GitHub issues',
+    link: `https://github.com/${repoSlug}/issues`,
     example: {
       pattern: '/github/issues/:user/:repo',
       namedParams: { user, repo },
-      queryParams: { link: `https://github.com/${repoSlug}/issues` },
+      queryParams: {},
     },
   }
 }
@@ -50,10 +50,11 @@ function githubForks(user, repo) {
   const repoSlug = `${user}/${repo}`
   return {
     title: 'GitHub forks',
+    link: `https://github.com/${repoSlug}/network`,
     example: {
       pattern: '/github/forks/:user/:repo',
       namedParams: { user, repo },
-      queryParams: { link: `https://github.com/${repoSlug}/network` },
+      queryParams: {},
     },
   }
 }
@@ -62,10 +63,11 @@ function githubStars(user, repo) {
   const repoSlug = `${user}/${repo}`
   return {
     title: 'GitHub stars',
+    link: `https://github.com/${repoSlug}/stargazers`,
     example: {
       pattern: '/github/stars/:user/:repo',
       namedParams: { user, repo },
-      queryParams: { link: `https://github.com/${repoSlug}/stargazers` },
+      queryParams: {},
     },
   }
 }
@@ -88,10 +90,11 @@ async function githubLicense(githubApiProvider, user, repo) {
 
   return {
     title: 'GitHub license',
+    link,
     example: {
       pattern: '/github/license/:user/:repo',
       namedParams: { user, repo },
-      queryParams: { link },
+      queryParams: {},
     },
   }
 }

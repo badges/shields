@@ -109,8 +109,9 @@ export default class Main extends React.Component {
         const { examples } = current
         return accum.concat(examples)
       }, [])
-      .map(({ title, example, preview, documentation }) => ({
+      .map(({ title, link, example, preview, documentation }) => ({
         title,
+        link,
         example,
         preview,
         documentation,
