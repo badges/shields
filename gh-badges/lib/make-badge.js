@@ -107,18 +107,22 @@ module.exports = function makeBadge({
   // String coercion and whitespace removal.
   text = text.map(value => `${value}`.trim())
 
+  const [left, right] = text
+
+  color = normalizeColor(color || colorB || colorscheme)
+  labelColor = normalizeColor(labelColor || colorA)
+
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
-    const [label, message] = text
     return JSON.stringify({
-      label,
-      message,
+      label: left,
+      message: right,
       logoWidth,
       color,
       labelColor,
       link: links,
-      name: label,
-      value: message,
+      name: left,
+      value: right,
     })
   }
 
@@ -140,7 +144,6 @@ module.exports = function makeBadge({
     text = text.map(value => value.toUpperCase())
   }
 
-  const [left, right] = text
   let leftWidth = (anafanafo(left) / 10) | 0
   // Increase chances of pixel grid alignment.
   if (leftWidth % 2 === 0) {
@@ -161,9 +164,6 @@ module.exports = function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
-  color = color || colorB || colorscheme
-  labelColor = labelColor || colorA
-
   const context = {
     text: [left, right],
     escapedText: text.map(escapeXml),
@@ -173,9 +173,6 @@ module.exports = function makeBadge({
     logoPosition,
     logoWidth,
     logoPadding,
-    // `color` and `labelColor` are included for the `default` JSON template.
-    color: normalizeColor(color),
-    labelColor: normalizeColor(labelColor),
     colorA: toSvgColor(labelColor),
     colorB: toSvgColor(color),
     escapeXml,
