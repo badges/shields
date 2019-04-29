@@ -8,6 +8,7 @@
     "**/*.integration.js",
     "**/test-helpers.js",
     "**/*-test-helpers.js",
+    "**/*-fixtures.js",
     "dangerfile.js",
     "gatsby-*.js",
     "core/service-test-runner",
