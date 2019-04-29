@@ -49,6 +49,5 @@ const serviceDefinitionPropType = PropTypes.exact({
 export {
   arrayOfStringsPropType,
   objectOfKeyValuesPropType,
-  examplePropType,
   serviceDefinitionPropType,
 }
