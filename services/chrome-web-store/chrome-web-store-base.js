@@ -17,7 +17,7 @@ module.exports = class BaseChromeWebStoreService extends BaseService {
       `statusCode` property so we can pass `e` to `checkErrorResponse`
       to throw the correct `ShieldsRuntimeError` for us.
       */
-      return checkErrorResponse.asPromise({})({ buffer: '', res: e })
+      return checkErrorResponse({})({ buffer: '', res: e })
     }
   }
 }

@@ -58,6 +58,7 @@ module.exports = class GithubForks extends GithubAuthService {
   static render({ user, repo, forkCount }) {
     return {
       message: metric(forkCount),
+      color: '4183C4',
       link: [
         `https://github.com/${user}/${repo}/fork`,
         `https://github.com/${user}/${repo}/network`,

@@ -58,6 +58,14 @@ jobs:
           command: npm run test:core
 
       - run:
+          name: Entrypoint tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/entrypoint/results.xml
+          command: npm run test:entrypoint
+
+      - run:
           name: Tests for gh-badges package
           when: always
           environment:
@@ -102,6 +110,14 @@ jobs:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/core/results.xml
           command: npm run test:core
+
+      - run:
+          name: Entrypoint tests
+          when: always
+          environment:
+            mocha_reporter: mocha-junit-reporter
+            MOCHA_FILE: junit/entrypoint/results.xml
+          command: npm run test:entrypoint
 
       - run:
           name: Tests for gh-badges package
@@ -314,7 +330,7 @@ jobs:
 
       - run:
           name: Frontend build
-          command: npm run build
+          command: GATSBY_BASE_URL=http://localhost:8080 npm run build
 
       - run:
           name: Run tests
