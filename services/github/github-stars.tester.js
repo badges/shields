@@ -8,6 +8,10 @@ t.create('Stars')
   .expectBadge({
     label: 'stars',
     message: Joi.string().regex(/^\w+$/),
+    link: [
+      'https://github.com/badges/shields',
+      'https://github.com/badges/shields/stargazers',
+    ],
   })
 
 t.create('Stars (repo not found)')

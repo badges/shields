@@ -10,6 +10,10 @@ t.create('Watchers')
     message: Joi.number()
       .integer()
       .positive(),
+    link: [
+      'https://github.com/badges/shields',
+      'https://github.com/badges/shields/watchers',
+    ],
   })
 
 t.create('Watchers (repo not found)')
