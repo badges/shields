@@ -92,7 +92,7 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function makeBadge({
+module.exports = function makeBadge({
   format,
   template,
   text,
@@ -109,12 +109,23 @@ function makeBadge({
   // String coercion and whitespace removal.
   text = text.map(value => `${value}`.trim())
 
-  if (format !== 'json') {
-    format = 'svg'
+  // This ought to be the responsibility of the server, not `makeBadge`.
+  if (format === 'json') {
+    const [label, message] = text
+    return JSON.stringify({
+      label,
+      message,
+      logoWidth,
+      color,
+      labelColor,
+      link: links,
+      name: label,
+      value: message,
+    })
   }
 
-  if (!(`${template}-${format}` in templates)) {
-    template = format === 'svg' ? 'flat' : 'default'
+  if (!(`${template}-svg` in templates)) {
+    template = 'flat'
   }
   if (template.startsWith('popout')) {
     if (logo) {
@@ -172,10 +183,8 @@ function makeBadge({
     escapeXml,
   }
 
-  const templateFn = templates[`${template}-${format}`]
+  const templateFn = templates[`${template}-svg`]
 
   // The call to template() can raise an exception.
   return templateFn(context)
 }
-
-module.exports = makeBadge
