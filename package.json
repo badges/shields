@@ -171,7 +171,7 @@
     "gatsby-plugin-catch-links": "^2.0.13",
     "gatsby-plugin-page-creator": "^2.0.12",
     "gatsby-plugin-react-helmet": "^3.0.12",
-    "gatsby-plugin-remove-trailing-slashes": "^2.0.10",
+    "gatsby-plugin-remove-trailing-slashes": "^2.0.11",
     "gatsby-plugin-styled-components": "^3.0.7",
     "got": "^9.6.0",
     "humanize-string": "^2.1.0",
