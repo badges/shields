@@ -207,7 +207,7 @@
     "react-helmet": "^5.2.0",
     "react-modal": "^3.8.1",
     "react-pose": "^4.0.8",
-    "react-select": "^2.4.2",
+    "react-select": "^2.4.3",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
     "require-hacker": "^3.0.1",
