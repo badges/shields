@@ -160,7 +160,9 @@ module.exports = class GithubDownloads extends GithubAuthService {
       const filteredAssets =
         assetName === 'total'
           ? assets
-          : assets.filter(({ name }) => name.toLowerCase() === assetName)
+          : assets.filter(
+              ({ name }) => name.toLowerCase() === assetName.toLowerCase()
+            )
       return (
         accum1 +
         filteredAssets.reduce(
