@@ -123,6 +123,7 @@ async function findSuggestions(githubApiProvider, url) {
 // end: function(json), with json of the form:
 //  - suggestions: list of objects of the form:
 //    - title: string
+//    - link: target as a string URL
 //    - example: object
 //      - pattern: string
 //      - namedParams: object
