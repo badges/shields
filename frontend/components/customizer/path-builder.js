@@ -177,11 +177,15 @@ export default class PathBuilder extends React.Component {
           onChange={this.handleTokenChange}
           value={value}
         >
-          <option key="empty" value="">
+          <option disabled={this.props.isPrefilled} key="empty" value="">
             {' '}
           </option>
           {options.map(option => (
-            <option key={option} value={option}>
+            <option
+              disabled={this.props.isPrefilled}
+              key={option}
+              value={option}
+            >
               {option}
             </option>
           ))}
@@ -190,6 +194,7 @@ export default class PathBuilder extends React.Component {
     } else {
       return (
         <NamedParamInput
+          disabled={this.props.isPrefilled}
           name={name}
           onChange={this.handleTokenChange}
           type="text"
