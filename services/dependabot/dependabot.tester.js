@@ -8,6 +8,9 @@ t.create('semver stability (valid)')
   .expectBadge({
     label: 'semver stability',
     message: isIntegerPercentage,
+    link: [
+      'https://dependabot.com/compatibility-score.html?package-manager=bundler&amp;dependency-name=puma&amp;version-scheme=semver',
+    ],
   })
 
 t.create('semver stability (invalid error)')
