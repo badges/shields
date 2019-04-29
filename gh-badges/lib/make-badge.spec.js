@@ -3,7 +3,6 @@
 const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
-const eol = require('eol')
 const isSvg = require('is-svg')
 const makeBadge = require('./make-badge')
 
