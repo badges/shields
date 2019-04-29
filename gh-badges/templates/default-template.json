@@ -5,5 +5,6 @@
   "message": {{=JSON.stringify(it.text[1])}},{{?it.logoWidth}}
   "logoWidth": {{=JSON.stringify(it.logoWidth)}},{{?}}{{?it.labelColor}}
   "labelColor": {{=JSON.stringify(it.labelColor)}},{{?}}
-  "color": {{=JSON.stringify(it.color || null)}}
+  "color": {{=JSON.stringify(it.color || null)}}{{?(it.links[0] && it.links[0].length || it.links[1] && it.links[1].length)}},
+  "link": {{=JSON.stringify(it.links)}}{{?}}
 }
