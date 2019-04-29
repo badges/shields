@@ -94,7 +94,11 @@ describe('The badge generator', function() {
 
   describe('JSON', function() {
     it('should always produce the same JSON (unless we have changed something!)', function() {
-      const json = makeBadge({ text: ['cactus', 'grown'], format: 'json' })
+      const json = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'json',
+        links: ['https://example.com/', 'https://other.example.com/'],
+      })
       const jsonWithLFEndings = eol.lf(json)
       snapshot(jsonWithLFEndings)
     })

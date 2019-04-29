@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import styled from 'styled-components'
-import { examplePropType } from '../../lib/service-definitions/service-definition-prop-types'
+import { examplePropType } from '../../lib/service-definitions/example-prop-types'
 import { BaseFont } from '../common'
 import MarkupModalContent from './markup-modal-content'
 
