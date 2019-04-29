@@ -330,7 +330,7 @@ jobs:
 
       - run:
           name: Frontend build
-          command: npm run build
+          command: GATSBY_BASE_URL=http://localhost:8080 npm run build
 
       - run:
           name: Run tests

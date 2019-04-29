@@ -18,15 +18,11 @@ export default class Customizer extends React.Component {
     exampleNamedParams: objectOfKeyValuesPropType,
     exampleQueryParams: objectOfKeyValuesPropType,
     initialStyle: PropTypes.string,
+    isPrefilled: PropTypes.bool,
+    link: PropTypes.string,
   }
 
   indicatorRef = React.createRef()
-
-  state = {
-    path: '',
-    link: '',
-    message: undefined,
-  }
 
   get baseUrl() {
     const { baseUrl } = this.props
@@ -129,18 +125,29 @@ export default class Customizer extends React.Component {
     this.setState({ queryString })
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      link: this.props.link || '',
+      message: undefined,
+      path: '',
+    }
+  }
+
   render() {
     const {
       pattern,
       exampleNamedParams,
       exampleQueryParams,
       initialStyle,
+      isPrefilled,
     } = this.props
 
     return (
       <form action="">
         <PathBuilder
           exampleParams={exampleNamedParams}
+          isPrefilled={isPrefilled}
           onChange={this.handlePathChange}
           pattern={pattern}
         />
