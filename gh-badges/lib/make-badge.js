@@ -21,58 +21,56 @@ templateFiles.forEach(async filename => {
   const extension = path.extname(filename).slice(1)
   const style = filename.slice(0, -`-template.${extension}`.length)
   // Compile the template. Necessary to always have a working template.
-  templates[`${style}-${extension}`] = dot.template(templateData)
-  if (extension === 'svg') {
-    // Substitute dot code.
-    const mapping = new Map()
-    let mappingIndex = 1
-    const untemplatedSvg = templateData.replace(/{{.*?}}/g, match => {
-      // Weird substitution that currently works for all templates.
-      const mapKey = `99999990${mappingIndex}.1`
-      mappingIndex++
-      mapping.set(mapKey, match)
-      return mapKey
-    })
+  templates[style] = dot.template(templateData)
+  // Substitute dot code.
+  const mapping = new Map()
+  let mappingIndex = 1
+  const untemplatedSvg = templateData.replace(/{{.*?}}/g, match => {
+    // Weird substitution that currently works for all templates.
+    const mapKey = `99999990${mappingIndex}.1`
+    mappingIndex++
+    mapping.set(mapKey, match)
+    return mapKey
+  })
 
-    const svgo = new SVGO()
-    const { data, error } = await svgo.optimize(untemplatedSvg)
+  const svgo = new SVGO()
+  const { data, error } = await svgo.optimize(untemplatedSvg)
 
-    if (error !== undefined) {
-      console.error(
-        `Template ${filename}: ${error}\n` +
-          '  Generated untemplated SVG:\n' +
-          `---\n${untemplatedSvg}---\n`
-      )
-      return
-    }
-
-    // Substitute dot code back.
-    let svg = data
-    const unmappedKeys = []
-    mapping.forEach((value, key) => {
-      let keySubstituted = false
-      svg = svg.replace(RegExp(key, 'g'), () => {
-        keySubstituted = true
-        return value
-      })
-      if (!keySubstituted) {
-        unmappedKeys.push(key)
-      }
-    })
-    if (unmappedKeys.length > 0) {
-      console.error(
-        `Template ${filename} has unmapped keys ` +
-          `${unmappedKeys.join(', ')}.\n` +
-          '  Generated untemplated SVG:\n' +
-          `---\n${untemplatedSvg}\n---\n` +
-          '  Generated template:\n' +
-          `---\n${svg}\n---\n`
-      )
-      return
-    }
-
-    templates[`${style}-${extension}`] = dot.template(svg)
+  if (error !== undefined) {
+    console.error(
+      `Template ${filename}: ${error}\n` +
+        '  Generated untemplated SVG:\n' +
+        `---\n${untemplatedSvg}---\n`
+    )
+    return
   }
+
+  // Substitute dot code back.
+  let svg = data
+  const unmappedKeys = []
+  mapping.forEach((value, key) => {
+    let keySubstituted = false
+    svg = svg.replace(RegExp(key, 'g'), () => {
+      keySubstituted = true
+      return value
+    })
+    if (!keySubstituted) {
+      unmappedKeys.push(key)
+    }
+  })
+  if (unmappedKeys.length > 0) {
+    console.error(
+      `Template ${filename} has unmapped keys ` +
+        `${unmappedKeys.join(', ')}.\n` +
+        '  Generated untemplated SVG:\n' +
+        `---\n${untemplatedSvg}\n---\n` +
+        '  Generated template:\n' +
+        `---\n${svg}\n---\n`
+    )
+    return
+  }
+
+  templates[style] = dot.template(svg)
 })
 
 function escapeXml(s) {
@@ -124,7 +122,7 @@ module.exports = function makeBadge({
     })
   }
 
-  if (!(`${template}-svg` in templates)) {
+  if (!(template in templates)) {
     template = 'flat'
   }
   if (template.startsWith('popout')) {
@@ -183,7 +181,7 @@ module.exports = function makeBadge({
     escapeXml,
   }
 
-  const templateFn = templates[`${template}-svg`]
+  const templateFn = templates[template]
 
   // The call to template() can raise an exception.
   return templateFn(context)
