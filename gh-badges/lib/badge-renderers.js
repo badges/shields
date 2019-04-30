@@ -3,9 +3,11 @@
 const anafanafo = require('anafanafo')
 
 const fontFamily = 'font-family="DejaVu Sans,Verdana,Geneva,sans-serif"'
+const socialFontFamily =
+  'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 
 function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
 }
 
 function escapeXml(s) {
@@ -35,7 +37,12 @@ function computeWidths({ label, message }) {
   return { labelWidth, messageWidth }
 }
 
-function badgeLinks([leftLink, rightLink] = [], leftWidth, rightWidth, height) {
+function renderLinks(
+  [leftLink, rightLink] = [],
+  labelWidth,
+  messageWidth,
+  height
+) {
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
   const hasLeftLink = leftLink && leftLink.length
@@ -45,7 +52,7 @@ function badgeLinks([leftLink, rightLink] = [], leftWidth, rightWidth, height) {
     hasLeftLink
       ? `<a target="_blank" xlink:href="${leftLink}">
       <rect width="${
-        hasRightLink ? leftWidth : leftWidth + rightWidth
+        hasRightLink ? labelWidth : labelWidth + messageWidth
       }" height="${height}" fill="rgba(0,0,0,0)"/>
     </a>`
       : ''
@@ -53,26 +60,20 @@ function badgeLinks([leftLink, rightLink] = [], leftWidth, rightWidth, height) {
   ${
     hasRightLink
       ? `<a target="_blank" xlink:href="${rightLink}">
-      <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
+      <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
     </a>`
       : ''
   }
   `
 }
 
-function createBadge(badgeData, leftWidth, rightWidth, height, body) {
-  const width = leftWidth + rightWidth
+function renderBadge({ labelWidth, messageWidth, height, links }, main) {
+  const width = labelWidth + messageWidth
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
-  ${body}
-  ${badgeLinks(badgeData.links, leftWidth, rightWidth, height)}
+  ${main}
+  ${renderLinks(links, labelWidth, messageWidth, height)}
   </svg>`
 }
-
-/*
-    let { labelWidth, messageWidth } = computeWidths({ label, message })
-    labelWidth += 10 + logoWidth + logoPadding
-    messageWidth += 10
-*/
 
 module.exports = {
   plastic({
@@ -124,11 +125,13 @@ module.exports = {
          </text>`
     }
 
-    return createBadge(
-      { links },
-      labelWidth,
-      messageWidth,
-      height,
+    return renderBadge(
+      {
+        links,
+        labelWidth,
+        messageWidth,
+        height,
+      },
       `
       <linearGradient id="smooth" x2="0" y2="100%">
         <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
@@ -206,11 +209,13 @@ module.exports = {
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
 
-    return createBadge(
-      { links },
-      labelWidth,
-      messageWidth,
-      height,
+    return renderBadge(
+      {
+        links,
+        labelWidth,
+        messageWidth,
+        height,
+      },
       `
       <linearGradient id="smooth" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
@@ -281,11 +286,13 @@ module.exports = {
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
 
-    return createBadge(
-      { links },
-      labelWidth,
-      messageWidth,
-      height,
+    return renderBadge(
+      {
+        links,
+        labelWidth,
+        messageWidth,
+        height,
+      },
       `
       <g shape-rendering="crispEdges">
         <rect width="${labelWidth}" height="20" fill="${labelColor}"/>
@@ -418,22 +425,66 @@ module.exports = {
     )
   },
 
-  social(it) {
-    it.text[0] = capitalize(it.text[0])
-    it.escapedText = it.text.map(escapeXml)
+  social({
+    label,
+    message,
+    links,
+    logo,
+    logoWidth,
+    logoPadding,
+    color = '#4c1',
+    labelColor = '#555',
+  }) {
+    // Social label is styled with a leading capital. Convert to caps here so
+    // width can be measured using the correct characaters.
+    label = capitalize(label)
 
-    it.widths[1] -= 4
-
-    const [leftWidth, rightWidth] = it.widths
     const height = 20
-    const hasLogo = !!it.logo
-    const hasMessage = it.text[1] && it.text[1].length
+    const hasLogo = Boolean(logo)
+    const hasMessage = message.length
 
-    return createBadge(
-      it,
-      leftWidth + 1,
-      hasMessage ? rightWidth + 6 : 0,
-      height,
+    let { labelWidth, messageWidth } = computeWidths({ label, message })
+    labelWidth += 10 + logoWidth + logoPadding
+    messageWidth += 10
+    messageWidth -= 4
+
+    function renderLogo() {
+      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
+    }
+
+    function renderMessageBubble() {
+      const messageBubbleMainX = labelWidth + 6.5
+      const messageBubbleNotchX = labelWidth + 6
+      return `<rect
+                 x="${messageBubbleMainX}" y="0.5"
+                 width="${messageWidth}" height="19" rx="2" fill="#fafafa"/>
+               <rect
+                 x="${messageBubbleNotchX}" y="7.5"
+                 width="0.5" height="5" stroke="#fafafa"/>
+               <path
+                 d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3"
+                 stroke="d5d5d5" fill="#fafafa"/>`
+    }
+
+    function renderMessageText() {
+      const messageTextX = (labelWidth + messageWidth / 2 + 6) * 10
+      const messageTextLength = (messageWidth - 8) * 10
+      const escapedMessage = escapeXml(message)
+      return `<text x="${messageTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
+              <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
+    }
+
+    const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2) * 10
+    const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
+    const escapedLabel = escapeXml(label)
+
+    return renderBadge(
+      {
+        links,
+        labelWidth: labelWidth + 1,
+        messageWidth: hasMessage ? messageWidth + 6 : 0,
+        height,
+      },
       `
       <linearGradient id="a" x2="0" y2="100%">
         <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
@@ -444,46 +495,15 @@ module.exports = {
         <stop offset="1" stop-opacity=".1"/>
       </linearGradient>
       <g stroke="#d5d5d5">
-        <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="${leftWidth}" height="19" rx="2"/>
-        <rect stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="${leftWidth}" height="19" rx="2"/>
-        ${
-          hasMessage
-            ? `<rect y="0.5" x="${leftWidth +
-                6.5}" width="${rightWidth}" height="19" rx="2" fill="#fafafa"/>
-        <rect x="${leftWidth +
-          6}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
-        <path d="M${leftWidth +
-          6.5} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>`
-            : ''
-        }
+        <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="${labelWidth}" height="19" rx="2"/>
+        <rect stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="${labelWidth}" height="19" rx="2"/>
+        ${hasMessage ? renderMessageBubble() : ''}
       </g>
-      ${
-        hasLogo
-          ? `<image x="5" y="3" width="${
-              it.logoWidth
-            }" height="14" xlink:href="${it.logo}"/>`
-          : ''
-      }
-      <g fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="110px" line-height="14px">
-        <text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2) *
-          10}" y="150" fill="#fff" transform="scale(0.1)" textLength="${(leftWidth -
-        (10 + it.logoWidth + it.logoPadding)) *
-        10}" lengthAdjust="spacing">${it.escapedText[0]}</text>
-        <text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2) *
-          10}" y="140" transform="scale(0.1)" textLength="${(leftWidth -
-        (10 + it.logoWidth + it.logoPadding)) *
-        10}" lengthAdjust="spacing">${it.escapedText[0]}</text>
-        ${
-          hasMessage
-            ? `<text x="${(leftWidth + rightWidth / 2 + 6) *
-                10}" y="150" fill="#fff" transform="scale(0.1)" textLength="${(rightWidth -
-                8) *
-                10}" lengthAdjust="spacing">${it.escapedText[1]}</text>
-          <text x="${(leftWidth + rightWidth / 2 + 6) *
-            10}" y="140" transform="scale(0.1)" textLength="${(rightWidth - 8) *
-                10}" lengthAdjust="spacing">${it.escapedText[1]}</text>`
-            : ''
-        }
+      ${hasLogo ? renderLogo() : ''}
+      <g fill="#333" text-anchor="middle" ${socialFontFamily} font-weight="700" font-size="110px" line-height="14px">
+        <text x="${labelTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+        <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+        ${hasMessage ? renderMessageText() : ''}
       </g>`
     )
   },
@@ -538,11 +558,13 @@ module.exports = {
               </text>`
     }
 
-    return createBadge(
-      { links },
-      labelWidth,
-      messageWidth,
-      height,
+    return renderBadge(
+      {
+        links,
+        labelWidth,
+        messageWidth,
+        height,
+      },
       `
       <g shape-rendering="crispEdges">
         <rect width="${labelWidth}" height="${height}" fill="${labelColor}"/>
