@@ -2,6 +2,10 @@
 
 const fontFamily = 'DejaVu Sans,Verdana,Geneva,sans-serif'
 
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
 function badgeLinks(
   [leftLink, rightLink] = [],
   leftWidth,
@@ -348,6 +352,8 @@ module.exports = {
   },
 
   social(it) {
+    it.text[0] = capitalize(it.text[0])
+
     it.widths[1] -= 4
 
     const [leftWidth, rightWidth] = it.widths
@@ -414,6 +420,8 @@ module.exports = {
   },
 
   forTheBadge(it) {
+    it.text = it.text.map(value => value.toUpperCase())
+
     it.widths[0] -= it.text[0].length
       ? -(10 + it.text[0].length * 1.5)
       : it.logo

@@ -88,10 +88,6 @@ function escapeXml(s) {
   }
 }
 
-function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
 module.exports = function makeBadge({
   format,
   template = 'flat',
@@ -128,11 +124,7 @@ module.exports = function makeBadge({
     })
   }
 
-  let templateFn = templateFunctions[camelcase(template)]
-  if (!templateFn) {
-    template = 'flat'
-    templateFn = templateFunctions.flat
-  }
+  template = camelcase(template)
 
   if (template.startsWith('popout')) {
     if (logo) {
@@ -143,10 +135,11 @@ module.exports = function makeBadge({
       template = template.replace('popout', 'flat')
     }
   }
-  if (template === 'social') {
-    text[0] = capitalize(text[0])
-  } else if (template === 'for-the-badge') {
-    text = text.map(value => value.toUpperCase())
+
+  let templateFn = templateFunctions[template]
+  if (!templateFn) {
+    template = 'flat'
+    templateFn = templateFunctions.flat
   }
 
   let leftWidth = (anafanafo(left) / 10) | 0
