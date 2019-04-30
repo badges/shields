@@ -15,7 +15,6 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
     return [
       {
         title: 'LGTM Alerts',
-        pattern: this.examplePattern,
         namedParams: {
           host: 'github',
           user: 'apache',

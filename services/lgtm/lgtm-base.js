@@ -32,10 +32,6 @@ module.exports = class LgtmBaseService extends BaseJsonService {
   }
 
   static get pattern() {
-    return ':host/:user/:repo'
-  }
-
-  static get examplePattern() {
     return `:host(${Object.keys(hostMappings).join('|')})/:user/:repo`
   }
 

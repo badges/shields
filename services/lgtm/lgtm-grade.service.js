@@ -14,7 +14,6 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     return [
       {
         title: 'LGTM Grade',
-        pattern: `:language/${this.examplePattern}`,
         namedParams: {
           language: 'java',
           host: 'github',

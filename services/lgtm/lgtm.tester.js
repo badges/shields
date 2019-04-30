@@ -57,17 +57,6 @@ t.create('alerts: json missing alerts')
   )
   .expectBadge({ label: 'lgtm', message: 'invalid response data' })
 
-t.create('alerts: single alert for a bitbucket project')
-  .get('/alerts/b/atlassian/confluence-business-blueprints.json')
-  .intercept(nock =>
-    nock('https://lgtm.com')
-      .get(
-        '/api/v0.1/project/b/atlassian/confluence-business-blueprints/details'
-      )
-      .reply(200, { alerts: 1, languages: data.languages })
-  )
-  .expectBadge({ label: 'lgtm', message: '1 alert' })
-
 t.create('alerts: total alerts for a project with a github mapped host')
   .get('/alerts/github/apache/cloudstack.json')
   .expectBadge({
