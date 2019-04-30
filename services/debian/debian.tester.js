@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
+  isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -9,7 +9,7 @@ t.create('Debian package (default distribution, valid)')
   .get('/apt.json')
   .expectBadge({
     label: 'debian',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+    message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
 t.create('Debian package (valid, mocked response)')
