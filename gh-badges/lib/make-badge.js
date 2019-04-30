@@ -112,21 +112,19 @@ module.exports = function makeBadge({
   }
 
   template = camelcase(template)
-
-  if (template.startsWith('popout')) {
-    if (logo) {
-      logoPosition =
-        logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
-      logoWidth = +logoWidth || 32
-    } else {
-      template = template.replace('popout', 'flat')
-    }
+  if (template.startsWith('popout') && logo) {
+    template = template.replace('popout', 'flat')
   }
 
   let templateFn = templateFunctions[template]
   if (!templateFn) {
     template = 'flat'
     templateFn = templateFunctions.flat
+  }
+
+  if (template.startsWith('popout')) {
+    logoPosition = logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
+    logoWidth = +logoWidth || 32
   }
 
   let leftWidth = (anafanafo(left) / 10) | 0
@@ -152,8 +150,8 @@ module.exports = function makeBadge({
   leftWidth = leftWidth + 10 + logoWidth + logoPadding
   rightWidth = rightWidth + 10
 
-  labelColor = toSvgColor(labelColor)
   color = toSvgColor(color)
+  labelColor = toSvgColor(labelColor)
 
   return templateFn({
     label: left,
