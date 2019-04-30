@@ -98,7 +98,7 @@ You can read a [tutorial on how to add a badge][tutorial].
    Tests need to pass in Node 8 and 10.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
-4. Run `npm start` to start the server.
+4. Run `npm start` to start the badge server and the Gatsby dev server.
 5. Open `http://localhost:3000/` to view the frontend.
 
 To debug a badge from the command line, run `npm run badge -- /npm/v/nock.svg`.
