@@ -42,7 +42,9 @@ module.exports = class Fedora extends BaseJsonService {
   async handle({ branch = defaultBranch, packageName }) {
     const data = await this._requestJson({
       schema,
-      url: `https://apps.fedoraproject.org/mdapi/${branch}/pkg/${packageName}`,
+      url: `https://apps.fedoraproject.org/mdapi/${encodeURIComponent(
+        branch
+      )}/pkg/${encodeURIComponent(packageName)}`,
       errorMessages: {
         400: 'branch not found',
       },
