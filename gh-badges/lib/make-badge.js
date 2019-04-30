@@ -1,14 +1,10 @@
 'use strict'
 
-const fs = require('fs')
-const path = require('path')
-const SVGO = require('svgo')
-const dot = require('dot')
 const camelcase = require('camelcase')
-const anafanafo = require('anafanafo')
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 
+// const SVGO = require('svgo')
 // const svgo = new SVGO()
 // const { data, error } = await svgo.optimize(untemplatedSvg)
 

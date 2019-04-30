@@ -37,6 +37,26 @@ function computeWidths({ label, message }) {
   return { labelWidth, messageWidth }
 }
 
+function renderLogo({ logo, logoWidth, extraPadding = 0 }) {
+  const x = 5 + extraPadding
+  const y = 3 + extraPadding
+  return `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
+}
+
+function renderTextWithShadow({ x, textLength, content, verticalMargin = 0 }) {
+  if (content.length) {
+    const escapedContent = escapeXml(content)
+    const shadowMargin = 150 + verticalMargin
+    const textMargin = 140 + verticalMargin
+    return `
+    <text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
+    <text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
+  `
+  } else {
+    return ''
+  }
+}
+
 function renderLinks(
   [leftLink, rightLink] = [],
   labelWidth,
@@ -69,10 +89,12 @@ function renderLinks(
 
 function renderBadge({ labelWidth, messageWidth, height, links }, main) {
   const width = labelWidth + messageWidth
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
-  ${main}
-  ${renderLinks(links, labelWidth, messageWidth, height)}
-  </svg>`
+  return `
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
+    ${main}
+    ${renderLinks(links, labelWidth, messageWidth, height)}
+    </svg>
+  `
 }
 
 module.exports = {
@@ -98,32 +120,10 @@ module.exports = {
 
     const width = labelWidth + messageWidth
     const height = 18
-    const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10
-    const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
-    const messageTextX =
-      (labelWidth + messageWidth / 2 - (hasLabel ? 1 : 0)) * 10
-    const messageTextLength = (messageWidth - 10) * 10
-
-    const escapedLabel = escapeXml(label)
-    const escapedMessage = escapeXml(message)
 
     // TODO Validate the color externally so it's not necessary to escape it.
     color = escapeXml(color)
     labelColor = escapeXml(labelColor)
-
-    function renderLogo() {
-      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
-    }
-
-    function renderLabelText() {
-      return `<text x="${labelTextX}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing"
-         >
-           ${escapedLabel}
-         </text>
-         <text x="${labelTextX}" y="130" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">
-           ${escapedLabel}
-         </text>`
-    }
 
     return renderBadge(
       {
@@ -151,14 +151,20 @@ module.exports = {
       </g>
 
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-        ${hasLogo ? renderLogo() : ''}
-        ${hasLabel ? renderLabelText() : ''}
-        <text x="${messageTextX}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">
-          ${escapedMessage}
-        </text>
-        <text x="${messageTextX}" y="130" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">
-          ${escapedMessage}
-        </text>
+        ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
+        ${renderTextWithShadow({
+          x: ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10,
+          textLength: (labelWidth - (10 + logoWidth + logoPadding)) * 10,
+          content: label,
+          // The plastic badge is a little bit shorter.
+          margin: -10,
+        })}
+        ${renderTextWithShadow({
+          x: (labelWidth + messageWidth / 2 - (hasLabel ? 1 : 0)) * 10,
+          textLength: (messageWidth - 10) * 10,
+          content: message,
+          margin: -10,
+        })}
       </g>`
     )
   },
@@ -184,27 +190,7 @@ module.exports = {
 
     labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
 
-    function renderLogo() {
-      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
-    }
-
-    function renderLabelText() {
-      const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10
-      const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
-
-      const escapedLabel = escapeXml(label)
-
-      return `
-        <text x="${labelTextX}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
-        <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
-      `
-    }
-
     const width = labelWidth + messageWidth
-    const messageTextX =
-      (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10
-    const messageTextLength = (messageWidth - 10) * 10
-    const escapedMessage = escapeXml(message)
 
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
@@ -233,10 +219,17 @@ module.exports = {
       </g>
 
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-        ${hasLogo ? renderLogo() : ''}
-        ${hasLabel ? renderLabelText() : ''}
-        <text x="${messageTextX}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
-        <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
+        ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
+        ${renderTextWithShadow({
+          x: ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10,
+          textLength: (labelWidth - (10 + logoWidth + logoPadding)) * 10,
+          content: label,
+        })}
+        ${renderTextWithShadow({
+          x: (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10,
+          textLength: (messageWidth - 10) * 10,
+          content: message,
+        })}
       </g>`
     )
   },
@@ -262,16 +255,10 @@ module.exports = {
 
     labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
 
-    function renderLogo() {
-      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
-    }
-
     function renderLabelText() {
       const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10
       const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
-
       const escapedLabel = escapeXml(label)
-
       return `
         <text x="${labelTextX}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
         <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
@@ -299,7 +286,7 @@ module.exports = {
         <rect x="${labelWidth}" width="${messageWidth}" height="20" fill="${color}"/>
       </g>
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-        ${hasLogo ? renderLogo() : ''}
+        ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
         ${hasLabel ? renderLabelText() : ''}
         <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
       </g>`
@@ -436,7 +423,7 @@ module.exports = {
     labelColor = '#555',
   }) {
     // Social label is styled with a leading capital. Convert to caps here so
-    // width can be measured using the correct characaters.
+    // width can be measured using the correct characters.
     label = capitalize(label)
 
     const height = 20
@@ -448,30 +435,24 @@ module.exports = {
     messageWidth += 10
     messageWidth -= 4
 
-    function renderLogo() {
-      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
-    }
-
     function renderMessageBubble() {
       const messageBubbleMainX = labelWidth + 6.5
       const messageBubbleNotchX = labelWidth + 6
-      return `<rect
-                 x="${messageBubbleMainX}" y="0.5"
-                 width="${messageWidth}" height="19" rx="2" fill="#fafafa"/>
-               <rect
-                 x="${messageBubbleNotchX}" y="7.5"
-                 width="0.5" height="5" stroke="#fafafa"/>
-               <path
-                 d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3"
-                 stroke="d5d5d5" fill="#fafafa"/>`
+      return `
+        <rect x="${messageBubbleMainX}" y="0.5" width="${messageWidth}" height="19" rx="2" fill="#fafafa"/>
+        <rect x="${messageBubbleNotchX}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
+        <path d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
+      `
     }
 
     function renderMessageText() {
       const messageTextX = (labelWidth + messageWidth / 2 + 6) * 10
       const messageTextLength = (messageWidth - 8) * 10
       const escapedMessage = escapeXml(message)
-      return `<text x="${messageTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
-              <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
+      return `
+        <text x="${messageTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
+        <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
+      `
     }
 
     const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2) * 10
@@ -499,7 +480,7 @@ module.exports = {
         <rect stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="${labelWidth}" height="19" rx="2"/>
         ${hasMessage ? renderMessageBubble() : ''}
       </g>
-      ${hasLogo ? renderLogo() : ''}
+      ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
       <g fill="#333" text-anchor="middle" ${socialFontFamily} font-weight="700" font-size="110px" line-height="14px">
         <text x="${labelTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
         <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
@@ -520,7 +501,7 @@ module.exports = {
     labelColor = '#555',
   }) {
     // For the Badge is styled in all caps. Convert to caps here so widths can
-    // be measured using the correct characaters.
+    // be measured using the correct characters.
     label = label.toUpperCase()
     message = message.toUpperCase()
 
@@ -545,17 +526,13 @@ module.exports = {
     color = escapeXml(color)
     labelColor = escapeXml(labelColor)
 
-    function renderLogo() {
-      return `<image x="9" y="7" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
-    }
-
     function renderLabelText() {
       const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2) * 10
       const labelTextLength = (labelWidth - (24 + logoWidth + logoPadding)) * 10
       const escapedLabel = escapeXml(label)
-      return `<text x="${labelTextX}" y="175" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">
-                ${escapedLabel}
-              </text>`
+      return `
+        <text x="${labelTextX}" y="175" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+      `
     }
 
     return renderBadge(
@@ -571,11 +548,11 @@ module.exports = {
         <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
       </g>
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="100">
-        ${hasLogo ? renderLogo() : ''}
+        ${hasLogo ? renderLogo({ logo, logoWidth, extraPadding: 4 }) : ''}
         ${hasLabel ? renderLabelText() : ''}
         <text
-          x="${(labelWidth + messageWidth / 2) * 10}" y="175"
-          font-weight="bold" transform="scale(0.1)"
+          x="${(labelWidth + messageWidth / 2) * 10}"
+          y="175" font-weight="bold" transform="scale(0.1)"
           textLength="${(messageWidth - 24) * 10}" lengthAdjust="spacing">
             ${escapeXml(message)}
           </text>
