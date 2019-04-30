@@ -147,7 +147,6 @@
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "eol": "^0.9.1",
     "escape-string-regexp": "^2.0.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",

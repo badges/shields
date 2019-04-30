@@ -32,7 +32,7 @@ t.create('URL')
     label: 'tweet',
     message: '',
     link: [
-      'https://twitter.com/intent/tweet?text=Wow:&amp;url=https%3A%2F%2Fshields.io',
+      'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fshields.io',
       'https://twitter.com/search?q=https%3A%2F%2Fshields.io',
     ],
   })

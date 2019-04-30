@@ -109,6 +109,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
   })
@@ -130,6 +131,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
   })
@@ -158,6 +160,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
 
@@ -174,6 +177,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: 'Maximum response size exceeded',
         color: 'lightgrey',
+        link: [],
       })
     })
 
