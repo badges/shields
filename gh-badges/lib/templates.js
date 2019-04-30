@@ -236,51 +236,65 @@ module.exports = {
     )
   },
 
-  flatSquare(it) {
-    it.escapedText = it.text.map(escapeXml)
-    it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
-
-    const [leftWidth, rightWidth] = it.widths
-    const leftColor = escapeXml(
-      it.text[0].length || (it.logo && it.colorA)
-        ? it.colorA || '#555'
-        : it.colorB || '#4c1'
-    )
-    const rightColor = escapeXml(it.colorB || '#4c1')
+  flatSquare({
+    label,
+    message,
+    links,
+    logo,
+    logoWidth,
+    logoPadding,
+    color = '#4c1',
+    labelColor = '#555',
+  }) {
     const height = 20
-    const hasLogo = !!it.logo
-    const hasLabel = it.text[0] && it.text[0].length
+    const hasLogo = Boolean(logo)
+    const hasLabel = label.length
+
+    let { labelWidth, messageWidth } = computeWidths({ label, message })
+    labelWidth += 10 + logoWidth + logoPadding
+    labelWidth -= label.length ? 0 : logo ? (labelColor ? 0 : 7) : 11
+    messageWidth += 10
+
+    labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
+
+    function renderLogo() {
+      return `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
+    }
+
+    function renderLabelText() {
+      const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10
+      const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
+
+      const escapedLabel = escapeXml(label)
+
+      return `
+        <text x="${labelTextX}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+        <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+      `
+    }
+
+    const messageTextX =
+      (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10
+    const messageTextLength = (messageWidth - 10) * 10
+    const escapedMessage = escapeXml(message)
+
+    labelColor = escapeXml(labelColor)
+    color = escapeXml(color)
 
     return createBadge(
-      it,
-      leftWidth,
-      rightWidth,
+      { links },
+      labelWidth,
+      messageWidth,
       height,
       `
       <g shape-rendering="crispEdges">
-        <rect width="${leftWidth}" height="20" fill="${leftColor}"/>
-        <rect x="${leftWidth}" width="${rightWidth}" height="20" fill="${rightColor}"/>
+        <rect width="${labelWidth}" height="20" fill="${labelColor}"/>
+        <rect x="${labelWidth}" width="${messageWidth}" height="20" fill="${color}"/>
       </g>
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-        ${
-          hasLogo
-            ? `<image x="5" y="3" width="${
-                it.logoWidth
-              }" height="14" xlink:href="${it.logo}"/>`
-            : ''
-        }
-        ${
-          hasLabel
-            ? `<text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2 +
-                1) *
-                10}" y="140" transform="scale(0.1)" textLength="${(leftWidth -
-                (10 + it.logoWidth + it.logoPadding)) *
-                10}" lengthAdjust="spacing">${it.escapedText[0]}</text>`
-            : ''
-        }
-        <text x="${(leftWidth + rightWidth / 2 - (it.text[0].length ? 1 : 0)) *
-          10}" y="140" transform="scale(0.1)" textLength="${(rightWidth - 10) *
-        10}" lengthAdjust="spacing">${it.escapedText[1]}</text>
+        ${hasLogo ? renderLogo() : ''}
+        ${hasLabel ? renderLabelText() : ''}
+        <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
       </g>`
     )
   },
