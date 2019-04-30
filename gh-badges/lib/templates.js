@@ -30,6 +30,20 @@ function badgeLinks(
   `
 }
 
+function createBadge(
+  badgeData,
+  leftWidth,
+  rightWidth,
+  badgeHeight,
+  badgeString
+) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${leftWidth +
+    rightWidth}" height="${badgeHeight}">
+  ${badgeString}
+  ${badgeLinks(badgeData.links, leftWidth, rightWidth, badgeHeight)}
+  </svg>`
+}
+
 module.exports = {
   plastic(it) {
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
@@ -453,18 +467,4 @@ module.exports = {
   </g>`
     )
   },
-}
-
-function createBadge(
-  badgeData,
-  leftWidth,
-  rightWidth,
-  badgeHeight,
-  badgeString
-) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${leftWidth +
-    rightWidth}" height="${badgeHeight}">
-  ${badgeString}
-  ${badgeLinks(badgeData.links, leftWidth, rightWidth, badgeHeight)}
-  </svg>`
 }

@@ -4,8 +4,10 @@ const fs = require('fs')
 const path = require('path')
 const SVGO = require('svgo')
 const dot = require('dot')
+const camelcase = require('camelcase')
 const anafanafo = require('anafanafo')
 const { normalizeColor, toSvgColor } = require('./color')
+const templateFunctions = require('./templates')
 
 // cache templates.
 const templates = {}
@@ -92,7 +94,7 @@ function capitalize(s) {
 
 module.exports = function makeBadge({
   format,
-  template,
+  template = 'flat',
   text,
   colorscheme,
   color,
@@ -126,9 +128,12 @@ module.exports = function makeBadge({
     })
   }
 
-  if (!(template in templates)) {
+  let templateFn = templateFunctions[camelcase(template)]
+  if (!templateFn) {
     template = 'flat'
+    templateFn = templateFunctions.flat
   }
+
   if (template.startsWith('popout')) {
     if (logo) {
       logoPosition =
@@ -164,7 +169,7 @@ module.exports = function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
-  const context = {
+  return templateFn({
     text: [left, right],
     escapedText: text.map(escapeXml),
     widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
@@ -176,10 +181,5 @@ module.exports = function makeBadge({
     colorA: toSvgColor(labelColor),
     colorB: toSvgColor(color),
     escapeXml,
-  }
-
-  const templateFn = templates[template]
-
-  // The call to template() can raise an exception.
-  return templateFn(context)
+  })
 }
