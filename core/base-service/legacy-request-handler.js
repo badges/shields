@@ -6,7 +6,6 @@ const request = require('request')
 const queryString = require('query-string')
 const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
 const log = require('../server/log')
 const { setCacheHeaders } = require('./cache-headers')
 const {
@@ -15,6 +14,7 @@ const {
   ShieldsRuntimeError,
 } = require('./errors')
 const { makeSend } = require('./legacy-result-sender')
+const coalesceBadge = require('./coalesce-badge')
 
 // We avoid calling the vendor's server for computation of the information in a
 // number of badges.
@@ -38,8 +38,8 @@ vendorDomain.on('error', err => {
   log.error('Vendor hook error:', err.stack)
 })
 
-// These query parameters are available to any badge. For the most part they
-// are used by makeBadgeData (see `lib/badge-data.js`) and related functions.
+// These query parameters are available to any badge. They are handled by
+// `coalesceBadge`.
 const globalQueryParams = new Set([
   'label',
   'style',
@@ -169,15 +169,18 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         return
       }
       ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-      const badgeData = getBadgeData('vendor', filteredQueryParams)
-      badgeData.text[1] = 'unresponsive'
+      const badgeData = coalesceBadge(
+        filteredQueryParams,
+        { label: 'vendor', message: 'unresponsive' },
+        {}
+      )
+      const svg = makeBadge(badgeData)
       let extension
       try {
         extension = match[0].split('.').pop()
       } catch (e) {
         extension = 'svg'
       }
-      const svg = makeBadge(badgeData)
       setCacheHeadersOnResponse(ask.res)
       makeSend(extension, ask.res, end)(svg)
     }, 25000)

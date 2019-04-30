@@ -3,7 +3,6 @@
 const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
-const eol = require('eol')
 const isSvg = require('is-svg')
 const makeBadge = require('./make-badge')
 
@@ -63,7 +62,7 @@ describe('The badge generator', function() {
         given('almostred'),
         given('brightmaroon'),
         given('cactus')
-      ).expect(null)
+      ).expect(undefined)
     })
   })
 
@@ -93,34 +92,18 @@ describe('The badge generator', function() {
   })
 
   describe('JSON', function() {
-    it('should always produce the same JSON (unless we have changed something!)', function() {
+    it('should produce the expected JSON', function() {
       const json = makeBadge({
         text: ['cactus', 'grown'],
         format: 'json',
         links: ['https://example.com/', 'https://other.example.com/'],
       })
-      const jsonWithLFEndings = eol.lf(json)
-      snapshot(jsonWithLFEndings)
-    })
-
-    it('should replace unknown json template with "default"', function() {
-      const jsonBadgeWithUnknownStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'json',
-        template: 'unknown_style',
-      })
-      const jsonBadgeWithDefaultStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'json',
-        template: 'default',
-      })
-      expect(jsonBadgeWithUnknownStyle).to.equal(jsonBadgeWithDefaultStyle)
-      expect(JSON.parse(jsonBadgeWithUnknownStyle)).to.deep.equal({
-        name: 'name',
-        value: 'Bob',
-        label: 'name',
-        message: 'Bob',
-        color: null,
+      expect(JSON.parse(json)).to.deep.equal({
+        name: 'cactus',
+        label: 'cactus',
+        value: 'grown',
+        message: 'grown',
+        link: ['https://example.com/', 'https://other.example.com/'],
       })
     })
 

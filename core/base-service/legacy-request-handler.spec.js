@@ -5,7 +5,7 @@ const fetch = require('node-fetch')
 const nock = require('nock')
 const portfinder = require('portfinder')
 const Camp = require('camp')
-const { makeBadgeData: getBadgeData } = require('../../lib/badge-data')
+const coalesceBadge = require('./coalesce-badge')
 const {
   handleRequest,
   clearRequestCache,
@@ -19,17 +19,31 @@ async function performTwoRequests(baseUrl, first, second) {
 
 function fakeHandler(queryParams, match, sendBadge, request) {
   const [, someValue, format] = match
-  const badgeData = getBadgeData('testing', queryParams)
-  badgeData.text[1] = someValue
+  const badgeData = coalesceBadge(
+    queryParams,
+    {
+      label: 'testing',
+      message: someValue,
+    },
+    {}
+  )
   sendBadge(format, badgeData)
 }
 
 function createFakeHandlerWithCacheLength(cacheLengthSeconds) {
   return function fakeHandler(queryParams, match, sendBadge, request) {
     const [, someValue, format] = match
-    const badgeData = getBadgeData('testing', queryParams)
-    badgeData.text[1] = someValue
-    badgeData.cacheLengthSeconds = cacheLengthSeconds
+    const badgeData = coalesceBadge(
+      queryParams,
+      {
+        label: 'testing',
+        message: someValue,
+      },
+      {},
+      {
+        _cacheLength: cacheLengthSeconds,
+      }
+    )
     sendBadge(format, badgeData)
   }
 }
@@ -37,13 +51,21 @@ function createFakeHandlerWithCacheLength(cacheLengthSeconds) {
 function fakeHandlerWithNetworkIo(queryParams, match, sendBadge, request) {
   const [, someValue, format] = match
   request('https://www.google.com/foo/bar', (err, res, buffer) => {
-    const badgeData = getBadgeData('testing', queryParams)
+    let message
     if (err) {
-      badgeData.text[1] = err.prettyMessage
-      sendBadge(format, badgeData)
-      return
+      message = err.prettyMessage
+    } else {
+      message = someValue
     }
-    badgeData.text[1] = someValue
+    const badgeData = coalesceBadge(
+      queryParams,
+      {
+        label: 'testing',
+        message,
+        format,
+      },
+      {}
+    )
     sendBadge(format, badgeData)
   })
 }
@@ -87,6 +109,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
   })
@@ -108,6 +131,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
   })
@@ -136,6 +160,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: '123',
         color: 'lightgrey',
+        link: [],
       })
     })
 
@@ -152,6 +177,7 @@ describe('The request handler', function() {
         label: 'testing',
         message: 'Maximum response size exceeded',
         color: 'lightgrey',
+        link: [],
       })
     })
 

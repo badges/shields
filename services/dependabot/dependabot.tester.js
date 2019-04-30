@@ -9,7 +9,7 @@ t.create('semver stability (valid)')
     label: 'semver stability',
     message: isIntegerPercentage,
     link: [
-      'https://dependabot.com/compatibility-score.html?package-manager=bundler&amp;dependency-name=puma&amp;version-scheme=semver',
+      'https://dependabot.com/compatibility-score.html?package-manager=bundler&dependency-name=puma&version-scheme=semver',
     ],
   })
 
