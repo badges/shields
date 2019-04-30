@@ -26,6 +26,12 @@ const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
   /^v\d+(\.\d+)*([-+~].*)?$/
 )
 
+// same as above, but also accepts an optional 'epoch' prefix that can be
+// found e.g. in distro package versions, like 4:6.3.0-4
+const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
+  /^v(\d+:)?\d+(\.\d+)*([-+~].*)?$/
+)
+
 // Simple regex for test Composer versions rule
 // https://getcomposer.org/doc/articles/versions.md
 // Examples:
@@ -130,6 +136,7 @@ module.exports = {
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClauses,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
+  isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   isComposerVersion,
   isPhpVersionReduction,
   isStarRating,
