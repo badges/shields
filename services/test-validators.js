@@ -27,7 +27,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
 )
 
 // same as above, but also accepts an optional 'epoch' prefix that can be
-// found e.g. in distro package versions
+// found e.g. in distro package versions, like 4:6.3.0-4
 const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
   /^v(\d+:)?\d+(\.\d+)*([-+~].*)?$/
 )
