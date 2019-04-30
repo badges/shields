@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
+  isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
@@ -9,7 +9,7 @@ t.create('Fedora package (default branch, valid)')
   .get('/rpm.json')
   .expectBadge({
     label: 'fedora',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+    message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
 t.create('Fedora package (valid, mocked response)')
