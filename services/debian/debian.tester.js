@@ -12,6 +12,13 @@ t.create('Debian package (default distribution, valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
+t.create('Debian package (default distribution, valid, query unsafe chars)')
+  .get('/g++.json')
+  .expectBadge({
+    label: 'debian',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
+  })
+
 t.create('Debian package (valid, mocked response)')
   .get('/unstable/apt.json')
   .intercept(nock =>
