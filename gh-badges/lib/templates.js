@@ -19,12 +19,7 @@ function escapeXml(s) {
   }
 }
 
-function badgeLinks(
-  [leftLink, rightLink] = [],
-  leftWidth,
-  rightWidth,
-  badgeHeight
-) {
+function badgeLinks([leftLink, rightLink] = [], leftWidth, rightWidth, height) {
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
   const hasLeftLink = leftLink && leftLink.length
@@ -35,103 +30,107 @@ function badgeLinks(
       ? `<a target="_blank" xlink:href="${leftLink}">
       <rect width="${
         hasRightLink ? leftWidth : leftWidth + rightWidth
-      }" height="${badgeHeight}" fill="rgba(0,0,0,0)"/>
+      }" height="${height}" fill="rgba(0,0,0,0)"/>
     </a>`
       : ''
   }
   ${
     hasRightLink
       ? `<a target="_blank" xlink:href="${rightLink}">
-      <rect x="${leftWidth}" width="${rightWidth}" height="${badgeHeight}" fill="rgba(0,0,0,0)"/>
+      <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
     </a>`
       : ''
   }
   `
 }
 
-function createBadge(
-  badgeData,
-  leftWidth,
-  rightWidth,
-  badgeHeight,
-  badgeString
-) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${leftWidth +
-    rightWidth}" height="${badgeHeight}">
-  ${badgeString}
-  ${badgeLinks(badgeData.links, leftWidth, rightWidth, badgeHeight)}
+function createBadge(badgeData, leftWidth, rightWidth, height, body) {
+  const width = leftWidth + rightWidth
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
+  ${body}
+  ${badgeLinks(badgeData.links, leftWidth, rightWidth, height)}
   </svg>`
 }
 
 module.exports = {
-  plastic(it) {
-    it.escapedText = it.text.map(escapeXml)
-    it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
+  plastic({
+    label,
+    message,
+    leftWidth,
+    rightWidth,
+    links,
+    logo,
+    logoWidth,
+    logoPadding,
+    color = '#4c1',
+    labelColor = '#555',
+  }) {
+    const hasLabel = label.length
+    const hasLogo = !!logo
 
-    const [leftWidth, rightWidth] = it.widths
-    const leftColor = escapeXml(
-      it.text[0].length || (it.logo && it.colorA)
-        ? it.colorA || '#555'
-        : it.colorB || '#4c1'
-    )
-    const rightColor = escapeXml(it.colorB || '#4c1')
-    const badgeHeight = 18
-    const hasLogo = !!it.logo
-    const hasLabel = it.text[0] && it.text[0].length
+    labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
+    leftWidth -= hasLabel ? 0 : logo ? (labelColor ? 0 : 7) : 11
+
+    const width = leftWidth + rightWidth
+    const height = 18
+    const labelTextX = ((leftWidth + logoWidth + logoPadding) / 2 + 1) * 10
+    const labelTextLength = (leftWidth - (10 + logoWidth + logoPadding)) * 10
+    const messageTextX = (leftWidth + rightWidth / 2 - (hasLabel ? 1 : 0)) * 10
+    const messageTextLength = (rightWidth - 10) * 10
+
+    label = escapeXml(label)
+    message = escapeXml(message)
+    color = escapeXml(color)
+    labelColor = escapeXml(labelColor)
+
+    const logoSvg = hasLogo
+      ? `<image x="5" y="3" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
+      : ''
+
+    const labelSvg = hasLabel
+      ? `<text x="${labelTextX}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing"
+         >
+           ${label}
+         </text>
+         <text x="${labelTextX}" y="130" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">
+           ${label}
+         </text>`
+      : ''
 
     return createBadge(
-      it,
+      { links },
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
-  <linearGradient id="smooth" x2="0" y2="100%">
-    <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
-    <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
-    <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
-    <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
-  </linearGradient>
+<linearGradient id="smooth" x2="0" y2="100%">
+  <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
+  <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
+  <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
+  <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
+</linearGradient>
 
-  <clipPath id="round">
-    <rect width="${leftWidth +
-      rightWidth}" height="${badgeHeight}" rx="4" fill="#fff"/>
-  </clipPath>
+<clipPath id="round">
+  <rect width="${width}" height="${height}" rx="4" fill="#fff"/>
+</clipPath>
 
-  <g clip-path="url(#round)">
-    <rect width="${leftWidth}" height="${badgeHeight}" fill="${leftColor}"/>
-    <rect x="${leftWidth}" width="${rightWidth}" height="${badgeHeight}" fill="${rightColor}"/>
-    <rect width="${leftWidth +
-      rightWidth}" height="${badgeHeight}" fill="url(#smooth)"/>
-  </g>
+<g clip-path="url(#round)">
+  <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
+  <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${messageColor}"/>
+  <rect width="${width}" height="${height}" fill="url(#smooth)"/>
+</g>
 
-  <g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="110">
-    ${
-      hasLogo
-        ? `<image x="5" y="3" width="${it.logoWidth}" height="14" xlink:href="${
-            it.logo
-          }"/>`
-        : ''
-    }
-    ${
-      hasLabel
-        ? `<text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2 + 1) *
-            10}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${(leftWidth -
-            (10 + it.logoWidth + it.logoPadding)) *
-            10}" lengthAdjust="spacing">${it.escapedText[0]}</text>
-        <text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2 + 1) *
-          10}" y="130" transform="scale(0.1)" textLength="${(leftWidth -
-            (10 + it.logoWidth + it.logoPadding)) *
-            10}" lengthAdjust="spacing">${it.escapedText[0]}</text>`
-        : ''
-    }
-    <text x="${(leftWidth + rightWidth / 2 - (it.text[0].length ? 1 : 0)) *
-      10}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${(rightWidth -
-        10) *
-        10}" lengthAdjust="spacing">${it.escapedText[1]}</text>
-    <text x="${(leftWidth + rightWidth / 2 - (it.text[0].length ? 1 : 0)) *
-      10}" y="130" transform="scale(0.1)" textLength="${(rightWidth - 10) *
-        10}" lengthAdjust="spacing">${it.escapedText[1]}</text>
-  </g>`
+<g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="110">
+  ${logoSvg}
+  ${labelSvg}
+  <text x="${messageTextX}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">
+    ${message}
+  </text>
+  <text x="${messageTextX}" y="130" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">
+    ${message}
+  </text>
+</g>
+`
     )
   },
 
@@ -146,7 +145,7 @@ module.exports = {
         : it.colorB || '#4c1'
     )
     const rightColor = escapeXml(it.colorB || '#4c1')
-    const badgeHeight = 20
+    const height = 20
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
 
@@ -154,7 +153,7 @@ module.exports = {
       it,
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
   <linearGradient id="smooth" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
@@ -163,14 +162,14 @@ module.exports = {
 
   <clipPath id="round">
     <rect width="${leftWidth +
-      rightWidth}" height="${badgeHeight}" rx="3" fill="#fff"/>
+      rightWidth}" height="${height}" rx="3" fill="#fff"/>
   </clipPath>
 
   <g clip-path="url(#round)">
-    <rect width="${leftWidth}" height="${badgeHeight}" fill="${leftColor}"/>
-    <rect x="${leftWidth}" width="${rightWidth}" height="${badgeHeight}" fill="${rightColor}"/>
+    <rect width="${leftWidth}" height="${height}" fill="${leftColor}"/>
+    <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${rightColor}"/>
     <rect width="${leftWidth +
-      rightWidth}" height="${badgeHeight}" fill="url(#smooth)"/>
+      rightWidth}" height="${height}" fill="url(#smooth)"/>
   </g>
 
   <g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="110">
@@ -215,7 +214,7 @@ module.exports = {
         : it.colorB || '#4c1'
     )
     const rightColor = escapeXml(it.colorB || '#4c1')
-    const badgeHeight = 20
+    const height = 20
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
 
@@ -223,7 +222,7 @@ module.exports = {
       it,
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
   <g shape-rendering="crispEdges">
     <rect width="${leftWidth}" height="20" fill="${leftColor}"/>
@@ -263,14 +262,14 @@ module.exports = {
         : it.colorB || '#4c1'
     )
     const rightColor = escapeXml(it.colorB || '#4c1')
-    const badgeHeight = 40
+    const height = 40
     const hasLogo = !!it.logo
 
     return createBadge(
       it,
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
   <linearGradient id="smooth" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
@@ -279,17 +278,17 @@ module.exports = {
 
   <clipPath id="round">
     <rect width="${leftWidth + rightWidth}" y="${10 -
-        it.logoPosition}" height="${badgeHeight / 2}" rx="3" fill="#fff"/>
+        it.logoPosition}" height="${height / 2}" rx="3" fill="#fff"/>
   </clipPath>
 
   <g clip-path="url(#round)">
-    <rect width="${leftWidth}" y="${10 -
-        it.logoPosition}" height="${badgeHeight / 2}" fill="${leftColor}"/>
+    <rect width="${leftWidth}" y="${10 - it.logoPosition}" height="${height /
+        2}" fill="${leftColor}"/>
     <rect x="${leftWidth}" y="${10 -
-        it.logoPosition}" width="${rightWidth}" height="${badgeHeight /
+        it.logoPosition}" width="${rightWidth}" height="${height /
         2}" fill="${rightColor}"/>
     <rect width="${leftWidth + rightWidth}" y="${10 -
-        it.logoPosition}" height="${badgeHeight / 2}" fill="url(#smooth)"/>
+        it.logoPosition}" height="${height / 2}" fill="url(#smooth)"/>
   </g>
 
   <g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="110">
@@ -334,20 +333,20 @@ module.exports = {
         : it.colorB || '#4c1'
     )
     const rightColor = escapeXml(it.colorB || '#4c1')
-    const badgeHeight = 40
+    const height = 40
     const hasLogo = !!it.logo
 
     return createBadge(
       it,
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
   <g shape-rendering="crispEdges">
-    <rect width="${leftWidth}" y="${10 -
-        it.logoPosition}" height="${badgeHeight / 2}" fill="${leftColor}"/>
+    <rect width="${leftWidth}" y="${10 - it.logoPosition}" height="${height /
+        2}" fill="${leftColor}"/>
     <rect x="${leftWidth}" y="${10 -
-        it.logoPosition}" width="${rightWidth}" height="${badgeHeight /
+        it.logoPosition}" width="${rightWidth}" height="${height /
         2}" fill="${rightColor}"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="110">
@@ -378,7 +377,7 @@ module.exports = {
     it.widths[1] -= 4
 
     const [leftWidth, rightWidth] = it.widths
-    const badgeHeight = 20
+    const height = 20
     const hasLogo = !!it.logo
     const hasMessage = it.text[1] && it.text[1].length
 
@@ -386,7 +385,7 @@ module.exports = {
       it,
       leftWidth + 1,
       hasMessage ? rightWidth + 6 : 0,
-      badgeHeight,
+      height,
       `
   <linearGradient id="a" x2="0" y2="100%">
     <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
@@ -462,17 +461,17 @@ module.exports = {
     const rightColor = escapeXml(it.colorB || '#4c1')
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
-    const badgeHeight = 28
+    const height = 28
 
     return createBadge(
       it,
       leftWidth,
       rightWidth,
-      badgeHeight,
+      height,
       `
   <g shape-rendering="crispEdges">
-    <rect width="${leftWidth}" height="${badgeHeight}" fill="${leftColor}"/>
-    <rect x="${leftWidth}" width="${rightWidth}" height="${badgeHeight}" fill="${rightColor}"/>
+    <rect width="${leftWidth}" height="${height}" fill="${leftColor}"/>
+    <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${rightColor}"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="${fontFamily}" font-size="100">
     ${

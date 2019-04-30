@@ -8,7 +8,6 @@ const camelcase = require('camelcase')
 const anafanafo = require('anafanafo')
 const { normalizeColor, toSvgColor } = require('./color')
 const templateFunctions = require('./templates')
-const { escapeXml } = require('./templates')
 
 // cache templates.
 const templates = {}
@@ -150,15 +149,27 @@ module.exports = function makeBadge({
     logoPadding = logo ? 3 : 0
   }
 
+  leftWidth = leftWidth + 10 + logoWidth + logoPadding
+  rightWidth = rightWidth + 10
+
+  labelColor = toSvgColor(labelColor)
+  color = toSvgColor(color)
+
   return templateFn({
+    label: left,
+    message: right,
     text: [left, right],
     widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
+    leftWidth,
+    rightWidth,
     links,
     logo,
     logoPosition,
     logoWidth,
     logoPadding,
-    colorA: toSvgColor(labelColor),
-    colorB: toSvgColor(color),
+    color,
+    labelColor,
+    colorB: color,
+    colorA: labelColor,
   })
 }
