@@ -116,7 +116,7 @@ module.exports = {
 
 <g clip-path="url(#round)">
   <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
-  <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${messageColor}"/>
+  <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${color}"/>
   <rect width="${width}" height="${height}" fill="url(#smooth)"/>
 </g>
 
