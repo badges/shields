@@ -8,7 +8,6 @@ const Joi = require('joi')
 const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
-const { makeBadgeData } = require('../../lib/badge-data')
 const suggest = require('../../services/suggest')
 const { loadServiceClasses } = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
@@ -165,13 +164,12 @@ module.exports = class Server {
     const { camp } = this
 
     camp.notfound(/\.(svg|png|gif|jpg|json)/, (query, match, end, request) => {
-      const format = match[1]
-      const badgeData = makeBadgeData('404', query)
-      badgeData.text[1] = 'badge not found'
-      badgeData.colorB = 'red'
-      // Add format to badge data.
-      badgeData.format = format
-      const svg = makeBadge(badgeData)
+      const [, format] = match
+      const svg = makeBadge({
+        text: ['404', 'badge not found'],
+        color: 'red',
+        format,
+      })
       makeSend(format, request.res, end)(svg)
     })
 

@@ -159,7 +159,7 @@ module.exports = function makeBadge({
     label: left,
     message: right,
     text: [left, right],
-    widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
+    widths: [leftWidth, rightWidth],
     leftWidth,
     rightWidth,
     links,
