@@ -8,6 +8,7 @@ const camelcase = require('camelcase')
 const anafanafo = require('anafanafo')
 const { normalizeColor, toSvgColor } = require('./color')
 const templateFunctions = require('./templates')
+const { escapeXml } = require('./templates')
 
 // cache templates.
 const templates = {}
@@ -74,19 +75,6 @@ templateFiles.forEach(async filename => {
 
   templates[style] = dot.template(svg)
 })
-
-function escapeXml(s) {
-  if (s === undefined || typeof s !== 'string') {
-    return undefined
-  } else {
-    return s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;')
-  }
-}
 
 module.exports = function makeBadge({
   format,
@@ -164,15 +152,13 @@ module.exports = function makeBadge({
 
   return templateFn({
     text: [left, right],
-    escapedText: text.map(escapeXml),
     widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
-    links: links.map(escapeXml),
+    links,
     logo,
     logoPosition,
     logoWidth,
     logoPadding,
     colorA: toSvgColor(labelColor),
     colorB: toSvgColor(color),
-    escapeXml,
   })
 }

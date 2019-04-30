@@ -6,12 +6,27 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
+function escapeXml(s) {
+  if (s === undefined || typeof s !== 'string') {
+    return undefined
+  } else {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;')
+  }
+}
+
 function badgeLinks(
   [leftLink, rightLink] = [],
   leftWidth,
   rightWidth,
   badgeHeight
 ) {
+  leftLink = escapeXml(leftLink)
+  rightLink = escapeXml(rightLink)
   const hasLeftLink = leftLink && leftLink.length
   const hasRightLink = rightLink && rightLink.length
   return `
@@ -50,15 +65,16 @@ function createBadge(
 
 module.exports = {
   plastic(it) {
+    it.escapedText = it.text.map(escapeXml)
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const badgeHeight = 18
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
@@ -120,15 +136,16 @@ module.exports = {
   },
 
   flat(it) {
+    it.escapedText = it.text.map(escapeXml)
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const badgeHeight = 20
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
@@ -188,15 +205,16 @@ module.exports = {
   },
 
   flatSquare(it) {
+    it.escapedText = it.text.map(escapeXml)
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 7) : 11
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const badgeHeight = 20
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
@@ -235,15 +253,16 @@ module.exports = {
   },
 
   popout(it) {
+    it.escapedText = it.text.map(escapeXml)
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 6) : 11
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const badgeHeight = 40
     const hasLogo = !!it.logo
 
@@ -305,15 +324,16 @@ module.exports = {
   },
 
   popoutSquar(it) {
+    it.escapedText = it.text.map(escapeXml)
     it.widths[0] -= it.text[0].length ? 0 : it.logo ? (it.colorA ? 0 : 6) : 11
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const badgeHeight = 40
     const hasLogo = !!it.logo
 
@@ -353,6 +373,7 @@ module.exports = {
 
   social(it) {
     it.text[0] = capitalize(it.text[0])
+    it.escapedText = it.text.map(escapeXml)
 
     it.widths[1] -= 4
 
@@ -421,6 +442,7 @@ module.exports = {
 
   forTheBadge(it) {
     it.text = it.text.map(value => value.toUpperCase())
+    it.escapedText = it.text.map(escapeXml)
 
     it.widths[0] -= it.text[0].length
       ? -(10 + it.text[0].length * 1.5)
@@ -432,12 +454,12 @@ module.exports = {
     it.widths[1] += 10 + it.text[1].length * 2
 
     const [leftWidth, rightWidth] = it.widths
-    const leftColor = it.escapeXml(
+    const leftColor = escapeXml(
       it.text[0].length || (it.logo && it.colorA)
         ? it.colorA || '#555'
         : it.colorB || '#4c1'
     )
-    const rightColor = it.escapeXml(it.colorB || '#4c1')
+    const rightColor = escapeXml(it.colorB || '#4c1')
     const hasLogo = !!it.logo
     const hasLabel = it.text[0] && it.text[0].length
     const badgeHeight = 28
