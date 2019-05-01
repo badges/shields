@@ -87,7 +87,7 @@ const EndpointPage = () => (
     <GlobalStyle />
     <Meta />
     <Header />
-    <H3>Endpoint (Beta)</H3>
+    <H3>Endpoint</H3>
     <Snippet snippet={`${baseUrl}/endpoint.svg?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
@@ -157,8 +157,7 @@ const EndpointPage = () => (
     <h4>Schema</h4>
     <Explanation>
       <p>
-        The schema may change during the beta period. Any changes will be posted
-        here. After launch, breaking changes will trigger an increment to the
+        Breaking changes to the schema will trigger an increment to the
         `schemaVersion`.
       </p>
     </Explanation>
