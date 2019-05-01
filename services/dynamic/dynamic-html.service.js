@@ -36,7 +36,9 @@ module.exports = class DynamicHtml extends BaseService {
       errorMessages,
     })
 
-    const parsed = libxmljs.parseHtml(buffer)
+    const parsed = libxmljs.parseHtml(buffer, {
+      nonet: true,
+    })
 
     const values = (parsed.find(pathExpression) || []).map((node, i) =>
       pathIsAttr ? node.value() : node.child(0).text()
