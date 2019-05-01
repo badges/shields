@@ -38,9 +38,9 @@ module.exports = class DynamicHtml extends BaseService {
 
     const parsed = libxmljs.parseHtml(buffer)
 
-    const values = parsed
-      .find(pathExpression)
-      .map((node, i) => (pathIsAttr ? node.value() : node.child(0).text()))
+    const values = (parsed.find(pathExpression) || []).map((node, i) =>
+      pathIsAttr ? node.value() : node.child(0).text()
+    )
 
     if (!values.length) {
       throw new InvalidResponse({ prettyMessage: 'no result' })
