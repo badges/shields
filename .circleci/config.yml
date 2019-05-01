@@ -1,5 +1,114 @@
 version: 2
 
+main_steps: &main_steps
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          # https://github.com/badges/shields/issues/1937
+          - v2-dependencies-
+
+    - run:
+        name: Install dependencies
+        command: npm ci
+
+    - save_cache:
+        paths:
+          - node_modules
+        key: v2-dependencies-{{ checksum "package-lock.json" }}
+
+    - run:
+        name: Linter
+        when: always
+        command: npm run lint
+
+    - run:
+        name: Core tests
+        when: always
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/core/results.xml
+        command: npm run test:core
+
+    - run:
+        name: Entrypoint tests
+        when: always
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/entrypoint/results.xml
+        command: npm run test:entrypoint
+
+    - run:
+        name: Tests for gh-badges package
+        when: always
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/results.xml
+        command: npm run test:package
+
+    - store_test_results:
+        path: junit
+
+    - run:
+        name: 'Prettier check (quick fix: `npm run prettier`)'
+        when: always
+        command: npm run prettier:check
+
+integration_steps: &integration_steps
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          # https://github.com/badges/shields/issues/1937
+          - v2-dependencies-
+
+    - run:
+        name: Install dependencies
+        command: npm ci
+
+    - run:
+        name: Integration tests
+        when: always
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/integration/results.xml
+        command: npm run test:integration
+
+    - store_test_results:
+        path: junit
+
+services_steps: &services_steps
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          # https://github.com/badges/shields/issues/1937
+          - v2-dependencies-
+
+    - run:
+        name: Install dependencies
+        command: npm ci
+
+    - run:
+        name: Identify services tagged in the PR title
+        command: npm run test:services:pr:prepare
+
+    - run:
+        name: Run tests for tagged services
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/services/results.xml
+        command: npm run test:services:pr:run
+
+    - store_test_results:
+        path: junit
+
 jobs:
   npm-install:
     docker:
@@ -26,172 +135,27 @@ jobs:
     docker:
       - image: circleci/node:8
 
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package-lock.json" }}
-
-      - run:
-          name: Linter
-          when: always
-          command: npm run lint
-
-      - run:
-          name: Core tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/core/results.xml
-          command: npm run test:core
-
-      - run:
-          name: Entrypoint tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/entrypoint/results.xml
-          command: npm run test:entrypoint
-
-      - run:
-          name: Tests for gh-badges package
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/gh-badges/results.xml
-          command: npm run test:package
-
-      - store_test_results:
-          path: junit
-
-      - run:
-          name: 'Prettier check (quick fix: `npm run prettier`)'
-          when: always
-          command: npm run prettier:check
+    <<: *main_steps
 
   main@node-latest:
     docker:
       - image: circleci/node:latest
 
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - run:
-          name: Linter
-          when: always
-          command: npm run lint
-
-      - run:
-          name: Core tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/core/results.xml
-          command: npm run test:core
-
-      - run:
-          name: Entrypoint tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/entrypoint/results.xml
-          command: npm run test:entrypoint
-
-      - run:
-          name: Tests for gh-badges package
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/gh-badges/results.xml
-          command: npm run test:package
-
-      - store_test_results:
-          path: junit
-
-      - run:
-          name: 'Prettier check (quick fix: `npm run prettier`)'
-          when: always
-          command: npm run prettier:check
+    <<: *main_steps
 
   integration:
     docker:
       - image: circleci/node:8
       - image: redis
 
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration/results.xml
-          command: npm run test:integration
-
-      - store_test_results:
-          path: junit
+    <<: *integration_steps
 
   integration@node-latest:
     docker:
       - image: circleci/node:latest
       - image: redis
 
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - run:
-          name: Integration tests
-          when: always
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/integration/results.xml
-          command: npm run test:integration
-
-      - store_test_results:
-          path: junit
+    <<: *integration_steps
 
   danger:
     docker:
@@ -255,62 +219,14 @@ jobs:
   services:
     docker:
       - image: circleci/node:8
-    steps:
-      - checkout
 
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - run:
-          name: Identify services tagged in the PR title
-          command: npm run test:services:pr:prepare
-
-      - run:
-          name: Run tests for tagged services
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/services/results.xml
-          command: npm run test:services:pr:run
-
-      - store_test_results:
-          path: junit
+    <<: *services_steps
 
   services@node-latest:
     docker:
       - image: circleci/node:latest
-    steps:
-      - checkout
 
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - run:
-          name: Identify services tagged in the PR title
-          command: npm run test:services:pr:prepare
-
-      - run:
-          name: Run tests for tagged services
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/services/results.xml
-          command: npm run test:services:pr:run
-
-      - store_test_results:
-          path: junit
+    <<: *services_steps
 
   e2e:
     docker:

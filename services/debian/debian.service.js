@@ -47,7 +47,14 @@ module.exports = class Debian extends BaseJsonService {
   async handle({ distribution = defaultDistribution, packageName }) {
     const data = await this._requestJson({
       schema,
-      url: `https://api.ftp-master.debian.org/madison?f=json&s=${distribution}&package=${packageName}`,
+      url: 'https://api.ftp-master.debian.org/madison',
+      options: {
+        qs: {
+          f: 'json',
+          s: distribution,
+          package: packageName,
+        },
+      },
     })
     if (!data.length) {
       throw new NotFound()
