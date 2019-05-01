@@ -61,6 +61,9 @@ module.exports = class Ubuntu extends BaseJsonService {
           ...seriesParam,
         },
       },
+      errorMessages: {
+        400: 'series not found',
+      },
     })
     if (!data.entries.length) {
       throw new NotFound()

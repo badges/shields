@@ -34,6 +34,6 @@ t.create('Ubuntu package (not found)')
   .get('/not-a-package.json')
   .expectBadge({ label: 'ubuntu', message: 'not found' })
 
-t.create('Ubuntu package (invalid series)')
+t.create('Ubuntu package (series not found)')
   .get('/not-a-series/apt.json')
-  .expectBadge({ label: 'ubuntu', message: 'invalid' })
+  .expectBadge({ label: 'ubuntu', message: 'series not found' })
