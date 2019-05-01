@@ -133,7 +133,9 @@
        "**/*.tester.js",
        "**/*.integration.js",
        "frontend/",
-       "public/"
+       "public/",
+       "build/",
+       "cypress/"
     ]
   },
   "devDependencies": {
