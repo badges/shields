@@ -172,10 +172,10 @@ sudo node server
 ### Prometheus
 
 Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
-You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable. Moreover access to metrics resource is blocked for requests from any IP address by default. You can provide a regular expression with allowed IP addresses by `METRICS_PROMETHEUS_ALLOWED_IPS` environment variable.
+You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable.
 
 ```bash
-METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ALLOWED_IPS="^127\.0\.0\.1$" npm start
+METRICS_PROMETHEUS_ENABLED=true npm start
 ```
 
 Metrics are available at `/metrics` resource.
