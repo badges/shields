@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus } = require('../build-status')
+const { optionalAuth } = require('../auth')
 
 const keywords = ['vso', 'vsts', 'azure-devops']
 
@@ -23,15 +23,8 @@ async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
   return { status }
 }
 
-function getHeaders() {
-  const headers = {}
-  if (serverSecrets.azure_devops_token) {
-    const pat = serverSecrets.azure_devops_token
-    const auth = Buffer.from(`:${pat}`).toString('base64')
-    headers.Authorization = `basic ${auth}`
-  }
-
-  return headers
+function auth(serviceInstance) {
+  return optionalAuth(serviceInstance, undefined, 'azure_devops_token')
 }
 
-module.exports = { keywords, fetch, getHeaders }
+module.exports = { keywords, fetch, auth }

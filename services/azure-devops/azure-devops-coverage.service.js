@@ -5,7 +5,7 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../color-formatters')
 const AzureDevOpsBase = require('./azure-devops-base')
-const { keywords, getHeaders } = require('./azure-devops-helpers')
+const { keywords, auth } = require('./azure-devops-helpers')
 
 const documentation = `
 <p>
@@ -100,7 +100,6 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
   }
 
   async handle({ organization, project, definitionId, branch }) {
-    const headers = getHeaders()
     const errorMessages = {
       404: 'build pipeline or coverage not found',
     }
@@ -109,7 +108,6 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      headers,
       errorMessages
     )
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
@@ -119,7 +117,7 @@ module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
         buildId,
         'api-version': '5.0-preview.1',
       },
-      headers,
+      auth: auth(this),
     }
     const json = await this.fetch({
       url,

@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
+const { optionalAuth } = require('../auth')
 const { renderVersionBadge } = require('../version')
-const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object()
@@ -42,19 +42,13 @@ module.exports = class Bintray extends BaseJsonService {
   }
 
   async fetch({ subject, repo, packageName }) {
-    const options = {}
-    if (serverSecrets.bintray_user) {
-      options.auth = {
-        user: serverSecrets.bintray_user,
-        pass: serverSecrets.bintray_apikey,
-      }
-    }
-
     // https://bintray.com/docs/api/#_get_version
     return this._requestJson({
       schema,
       url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
-      options,
+      options: {
+        auth: optionalAuth(this, 'bintray_user', 'bintray_apikey'),
+      },
     })
   }
 

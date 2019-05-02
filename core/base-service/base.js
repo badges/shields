@@ -207,9 +207,33 @@ module.exports = class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
+  constructor(
+    { sendAndCacheRequest },
+    { handleInternalErrors, private: privateConfig }
+  ) {
     this._requestFetcher = sendAndCacheRequest
     this._handleInternalErrors = handleInternalErrors
+    this._privateConfig = privateConfig
+  }
+
+  /**
+   * Get the specified secret key from configuration. If the key doesn't
+   * exist, throw an Inaccessible exception.
+   */
+  getSecret(key) {
+    const result = this._privateConfig[key]
+    if (!result) {
+      throw Inaccessible({ prettyMessage: 'auth not configured' })
+    }
+    return result
+  }
+
+  /**
+   * Get the specified secret key from configuration. If the key doesn't
+   * exist, return `undefined`.
+   */
+  tryGetSecret(key) {
+    return this._privateConfig[key]
   }
 
   async _request({ url, options = {}, errorMessages = {} }) {

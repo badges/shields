@@ -2,6 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
+const { auth } = require('./azure-devops-helpers')
 
 const latestBuildSchema = Joi.object({
   count: Joi.number().required(),
@@ -29,7 +30,6 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
     project,
     definitionId,
     branch,
-    headers,
     errorMessages
   ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
@@ -40,12 +40,9 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
         $top: 1,
         statusFilter: 'completed',
         'api-version': '5.0-preview.4',
+        branchName: branch ? `refs/heads/${branch}` : undefined,
       },
-      headers,
-    }
-
-    if (branch) {
-      options.qs.branchName = `refs/heads/${branch}`
+      auth: auth(this),
     }
 
     const json = await this.fetch({

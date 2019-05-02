@@ -191,6 +191,7 @@ module.exports = class Server {
           cacheHeaders: config.public.cacheHeaders,
           profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
+          private: config.private,
         }
       )
     )
