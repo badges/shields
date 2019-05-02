@@ -1,6 +1,6 @@
 'use strict'
 
-const BaseJsonService = require('../core/base-service/base-json')
+const BaseJsonService = require('../base-json')
 
 class GoodService extends BaseJsonService {
   static get category() {
