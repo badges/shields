@@ -19,7 +19,7 @@ module.exports = class Fedora extends BaseJsonService {
   static get route() {
     return {
       base: 'fedora/v',
-      pattern: ':branch?/:packageName',
+      pattern: ':packageName/:branch?',
     }
   }
 
@@ -27,7 +27,7 @@ module.exports = class Fedora extends BaseJsonService {
     return [
       {
         title: 'Fedora package',
-        namedParams: { branch: 'rawhide', packageName: 'rpm' },
+        namedParams: { packageName: 'rpm', branch: 'rawhide' },
         staticPreview: renderVersionBadge({ version: '4.14.2.1' }),
         documentation:
           'See <a href="https://apps.fedoraproject.org/mdapi/">mdapi docs</a> for information on valid branches.',
@@ -39,7 +39,7 @@ module.exports = class Fedora extends BaseJsonService {
     return { label: 'fedora' }
   }
 
-  async handle({ branch = defaultBranch, packageName }) {
+  async handle({ packageName, branch = defaultBranch }) {
     const data = await this._requestJson({
       schema,
       url: `https://apps.fedoraproject.org/mdapi/${encodeURIComponent(

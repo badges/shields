@@ -13,9 +13,9 @@ t.create('Fedora package (default branch, valid)')
   })
 
 t.create('Fedora package (not found)')
-  .get('/rawhide/not-a-package.json')
+  .get('/not-a-package/rawhide.json')
   .expectBadge({ label: 'fedora', message: 'not found' })
 
 t.create('Fedora package (branch not found)')
-  .get('/not-a-branch/not-a-package.json')
+  .get('/not-a-package/not-a-branch.json')
   .expectBadge({ label: 'fedora', message: 'branch not found' })
