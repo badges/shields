@@ -26,7 +26,7 @@ module.exports = class Debian extends BaseJsonService {
   static get route() {
     return {
       base: 'debian/v',
-      pattern: ':distribution?/:packageName',
+      pattern: ':packageName/:distribution?',
     }
   }
 
@@ -34,7 +34,7 @@ module.exports = class Debian extends BaseJsonService {
     return [
       {
         title: 'Debian package',
-        namedParams: { distribution: 'unstable', packageName: 'apt' },
+        namedParams: { packageName: 'apt', distribution: 'unstable' },
         staticPreview: renderVersionBadge({ version: '1.8.0' }),
       },
     ]
@@ -44,7 +44,7 @@ module.exports = class Debian extends BaseJsonService {
     return { label: 'debian' }
   }
 
-  async handle({ distribution = defaultDistribution, packageName }) {
+  async handle({ packageName, distribution = defaultDistribution }) {
     const data = await this._requestJson({
       schema,
       url: 'https://api.ftp-master.debian.org/madison',
