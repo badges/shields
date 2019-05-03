@@ -2,13 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
-  badgeUrlFromPath,
+  badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import {
-  serviceDefinitionPropType,
-  examplePropType,
-} from '../lib/service-definitions/service-definition-prop-types'
+import { examplePropType } from '../lib/service-definitions/example-prop-types'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -33,23 +30,28 @@ const ClickableCode = styled(StyledCode)`
 function Example({ baseUrl, onClick, exampleData }) {
   const { title, example, preview } = exampleData
 
-  const { label, message, color, style, namedLogo } = preview
-  const previewUrl = staticBadgeUrl({
-    baseUrl,
-    label,
-    message,
-    color,
-    style,
-    namedLogo,
-  })
-
   const { pattern, namedParams, queryParams } = example
-  const exampleUrl = badgeUrlFromPath({
+  const exampleUrl = badgeUrlFromPattern({
     baseUrl,
-    path: pattern,
+    pattern,
     namedParams,
     queryParams,
   })
+
+  let previewUrl
+  if (preview.buildFromExample) {
+    previewUrl = exampleUrl
+  } else {
+    const { label, message, color, style, namedLogo } = preview
+    previewUrl = staticBadgeUrl({
+      baseUrl,
+      label,
+      message,
+      color,
+      style,
+      namedLogo,
+    })
+  }
 
   const handleClick = () => onClick(exampleData)
 
@@ -71,16 +73,11 @@ Example.propTypes = {
   onClick: PropTypes.func.isRequired,
 }
 
-export default function BadgeExamples({ definitions, baseUrl, onClick }) {
-  const flattened = definitions.reduce((accum, current) => {
-    const { examples } = current
-    return accum.concat(examples)
-  }, [])
-
+export default function BadgeExamples({ examples, baseUrl, onClick }) {
   return (
     <ExampleTable>
       <tbody>
-        {flattened.map(exampleData => (
+        {examples.map(exampleData => (
           <Example
             baseUrl={baseUrl}
             exampleData={exampleData}
@@ -93,7 +90,7 @@ export default function BadgeExamples({ definitions, baseUrl, onClick }) {
   )
 }
 BadgeExamples.propTypes = {
-  definitions: PropTypes.arrayOf(serviceDefinitionPropType).isRequired,
+  examples: PropTypes.arrayOf(examplePropType).isRequired,
   baseUrl: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 }

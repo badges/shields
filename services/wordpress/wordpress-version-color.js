@@ -30,17 +30,21 @@ function getOfferedVersions() {
   })
 }
 
+function toSemver(version) {
+  if (version.split('.').length === 2) {
+    return `${version}.0`
+  } else {
+    return version
+  }
+}
+
 async function versionColorForWordpressVersion(version) {
   const offeredVersions = await getOfferedVersions()
 
-  // What is this?
-  let latestVersion = offeredVersions[0]
-  const svVersion =
-    latestVersion.split('.').length === 2
-      ? (latestVersion += '.0')
-      : latestVersion
+  const latestVersion = toSemver(offeredVersions[0])
+  version = toSemver(version)
 
-  if (version === latestVersion || semver.gtr(version, svVersion)) {
+  if (version === latestVersion || semver.gtr(version, latestVersion)) {
     return 'brightgreen'
   } else if (offeredVersions.includes(version)) {
     return 'orange'

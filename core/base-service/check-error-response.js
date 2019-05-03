@@ -1,34 +1,12 @@
 'use strict'
 
-const {
-  NotFound,
-  InvalidResponse,
-  Inaccessible,
-} = require('../core/base-service/errors')
+const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+
 const defaultErrorMessages = {
   404: 'not found',
 }
 
-function checkErrorResponse(badgeData, err, res, errorMessages = {}) {
-  errorMessages = { ...defaultErrorMessages, ...errorMessages }
-  if (err != null) {
-    badgeData.text[1] = 'inaccessible'
-    badgeData.colorscheme = 'red'
-    return true
-  } else if (errorMessages[res.statusCode] !== undefined) {
-    badgeData.text[1] = errorMessages[res.statusCode]
-    badgeData.colorscheme = 'lightgrey'
-    return true
-  } else if (res.statusCode !== 200) {
-    badgeData.text[1] = 'invalid'
-    badgeData.colorscheme = 'lightgrey'
-    return true
-  } else {
-    return false
-  }
-}
-
-checkErrorResponse.asPromise = function(errorMessages = {}) {
+module.exports = function checkErrorResponse(errorMessages = {}) {
   return async function({ buffer, res }) {
     let error
     errorMessages = { ...defaultErrorMessages, ...errorMessages }
@@ -56,8 +34,4 @@ checkErrorResponse.asPromise = function(errorMessages = {}) {
       return { buffer, res }
     }
   }
-}
-
-module.exports = {
-  checkErrorResponse,
 }

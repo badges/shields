@@ -61,27 +61,26 @@ export default class SuggestionAndSearch extends React.Component {
 
   renderSuggestions() {
     const { baseUrl } = this.props
-    const { suggestions } = this.state
+    let { suggestions } = this.state
 
     if (suggestions.length === 0) {
       return null
     }
 
-    const transformed = [
-      {
-        examples: suggestions.map(({ title, path, link, queryParams }) => ({
-          title,
-          preview: { path, queryParams },
-          example: { path, queryParams },
-          link,
-        })),
-      },
-    ]
+    suggestions = suggestions.map(
+      ({ title, link, example, preview, documentation }) => ({
+        title,
+        link,
+        example,
+        preview: { ...preview, buildFromExample: true },
+        documentation,
+      })
+    )
 
     return (
       <BadgeExamples
         baseUrl={baseUrl}
-        definitions={transformed}
+        examples={suggestions}
         onClick={this.props.onBadgeClick}
       />
     )

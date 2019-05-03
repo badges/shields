@@ -32,19 +32,22 @@ const factory = superclass =>
       return this
     }
 
-    expectBadge({ label, message, logoWidth, labelColor, color }) {
+    expectBadge({ label, message, logoWidth, labelColor, color, link }) {
       return this.afterJSON(json => {
         this.constructor._expectField(json, 'label', label)
         this.constructor._expectField(json, 'message', message)
         this.constructor._expectField(json, 'logoWidth', logoWidth)
         this.constructor._expectField(json, 'labelColor', labelColor)
         this.constructor._expectField(json, 'color', color)
+        this.constructor._expectField(json, 'link', link)
       })
     }
 
     static _expectField(json, name, expected) {
       if (typeof expected === 'string') {
         expect(json[name], `${name} mismatch`).to.equal(expected)
+      } else if (Array.isArray(expected)) {
+        expect(json[name], `${name} mismatch`).to.deep.equal(expected)
       } else if (typeof expected === 'object') {
         Joi.attempt(json[name], expected, `${name} mismatch:`)
       }
