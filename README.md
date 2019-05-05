@@ -112,7 +112,7 @@ It also works with full URLs like
 `npm run badge -- https://img.shields.io/npm/v/nock.svg`.
 
 Use `npm run debug:server` to start server in debug mode.
-[This recipe](nodemon debug) shows how to debug Node.js application in [VS Code]().
+[This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
 
 Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
