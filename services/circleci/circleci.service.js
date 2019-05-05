@@ -2,25 +2,21 @@
 
 const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService } = require('..')
+const { BaseSvgScrapingService } = require('..')
 
-const circleSchema = Joi.array()
-  .items(Joi.object({ status: isBuildStatus }))
-  .min(1)
-  .max(1)
-  .required()
+const circleSchema = Joi.object({ message: isBuildStatus }).required()
 
 const documentation = `
   <p>
-    Please note that <code>status</code> tokens will not work. Instead, you should generate an <code>all</code> scoped token.
-    <br />
-    For the sake of security, please use <b>Project Tokens</b> and never <b>Personal Tokens</b> as they grant full read write permissions to your projects.
+    If you need to use a token, please use a <b>Project Token</b> and only assign your token the 'Status' permission. Never use a <b>Personal Token</b> as they grant full read write permissions to your projects.
     <br />
     For more information about managing Circle CI tokens, please read this <a target="_blank" href="https://circleci.com/docs/2.0/managing-api-tokens">article</a>.
   </p>
   `
 
-module.exports = class CircleCi extends BaseJsonService {
+const vcsTypeMap = { gh: 'gh', github: 'gh', bb: 'bb', bitbucket: 'bb' }
+
+module.exports = class CircleCi extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
@@ -81,30 +77,15 @@ module.exports = class CircleCi extends BaseJsonService {
     return renderBuildStatusBadge({ status: status.replace('_', ' ') })
   }
 
-  async fetch({ token, vcsType, userRepo, branch }) {
-    let url = `https://circleci.com/api/v1.1/project/${vcsType}/${userRepo}`
-    if (branch != null) {
-      url += `/tree/${branch}`
-    }
-    const query = { filter: 'completed', limit: 1 }
-    if (token) {
-      query['circle-token'] = token
-    }
-    return this._requestJson({
-      url,
+  async handle({ token, vcsType, userRepo, branch }) {
+    const branchClause = branch ? `/tree/${branch}` : ''
+    const vcs = vcsTypeMap[vcsType] || 'gh'
+    const { message } = await this._requestSvg({
       schema: circleSchema,
-      options: { qs: query },
+      url: `https://circleci.com/${vcs}/${userRepo}${branchClause}.svg`,
+      options: { qs: { style: 'shield', token } },
       errorMessages: { 404: 'project not found' },
     })
-  }
-
-  async handle({ token, vcsType, userRepo, branch }) {
-    const json = await this.fetch({
-      token,
-      vcsType: vcsType || 'github',
-      userRepo,
-      branch,
-    })
-    return this.constructor.render({ status: json[0].status })
+    return this.constructor.render({ status: message })
   }
 }

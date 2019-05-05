@@ -15,11 +15,18 @@ t.create('circle ci (valid, without branch)')
     message: isBuildStatus,
   })
 
-t.create('circle ci (valid, with branch)')
+t.create('circle ci (valid repo, valid branch)')
   .get('/project/github/RedSparr0w/node-csgo-parser/master.json')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
+  })
+
+t.create('circle ci (valid repo, invalid branch)')
+  .get('/project/github/RedSparr0w/node-csgo-parser/not-a-real-branch.json')
+  .expectBadge({
+    label: 'build',
+    message: 'no builds',
   })
 
 t.create('build status with "github" as a default VCS')
@@ -41,30 +48,3 @@ t.create('circle ci (valid, with token)')
 t.create('circle ci (not found)')
   .get('/project/github/PyvesB/EmptyRepo.json')
   .expectBadge({ label: 'build', message: 'project not found' })
-
-t.create('circle ci (no response data)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .intercept(nock =>
-    nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
-      .reply(200)
-  )
-  .expectBadge({ label: 'build', message: 'unparseable json response' })
-
-// we're passing &limit=1 so we expect exactly one array element
-t.create('circle ci (invalid json)')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .intercept(nock =>
-    nock('https://circleci.com')
-      .get(
-        '/api/v1.1/project/github/RedSparr0w/node-csgo-parser?filter=completed&limit=1'
-      )
-      .reply(200, [{ status: 'success' }, { status: 'fixed' }])
-  )
-  .expectBadge({
-    label: 'build',
-    message: 'invalid response data',
-    color: 'lightgrey',
-  })
