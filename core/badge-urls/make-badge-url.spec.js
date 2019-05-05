@@ -80,6 +80,11 @@ describe('Badge URL generation functions', function() {
       message: 'blue',
       color: 'blue',
     }).expect('/badge/-blue-blue.svg')
+    given({
+      label: 1,
+      message: 2,
+      color: 3,
+    }).expect('/badge/1-2-3.svg')
   })
 
   test(queryStringStaticBadgeUrl, () => {

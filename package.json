@@ -107,6 +107,7 @@
     "now-start": "npm run start:server:prod",
     "start:server:e2e-on-build": "node server 8080",
     "start:server": "cross-env NODE_CONFIG_ENV=development nodemon server 8080",
+    "debug:server": "cross-env NODE_CONFIG_ENV=development nodemon --inspect server.js 8080",
     "prestart": "run-s --silent depcheck defs features",
     "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
@@ -128,14 +129,14 @@
     "verbose": true,
     "ext": "js",
     "ignore": [
-       "package.json",
-       "**/*.spec.js",
-       "**/*.tester.js",
-       "**/*.integration.js",
-       "frontend/",
-       "public/",
-       "build/",
-       "cypress/"
+      "package.json",
+      "**/*.spec.js",
+      "**/*.tester.js",
+      "**/*.integration.js",
+      "frontend/",
+      "public/",
+      "build/",
+      "cypress/"
     ]
   },
   "devDependencies": {

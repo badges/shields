@@ -111,6 +111,9 @@ To debug a badge from the command line, run `npm run badge -- /npm/v/nock.svg`.
 It also works with full URLs like
 `npm run badge -- https://img.shields.io/npm/v/nock.svg`.
 
+Use `npm run debug:server` to start server in debug mode.
+[This recipe](nodemon debug) shows how to debug Node.js application in [VS Code]().
+
 Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
 sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
@@ -137,6 +140,8 @@ Daily tests, including a full run of the service tests and overall code coverage
 [sentry configuration]: doc/self-hosting.md#sentry
 [daily-tests]: https://github.com/badges/daily-tests
 [nodemon]: https://nodemon.io/
+[nodemon debug]: https://github.com/Microsoft/vscode-recipes/tree/master/nodemon
+[vs code]: https://code.visualstudio.com/
 
 ## Hosting your own server
 
