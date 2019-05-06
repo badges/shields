@@ -2,8 +2,8 @@
 
 const { expect } = require('chai')
 const nock = require('nock')
-const [BitbucketPullRequest] = require('./bitbucket-pull-request.service')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
+const [BitbucketPullRequest] = require('./bitbucket-pull-request.service')
 
 describe('BitbucketPullRequest', function() {
   cleanUpNockAfterEach()

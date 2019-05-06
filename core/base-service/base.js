@@ -223,7 +223,7 @@ module.exports = class BaseService {
   getSecret(key) {
     const result = this._privateConfig[key]
     if (!result) {
-      throw Inaccessible({ prettyMessage: 'auth not configured' })
+      throw new Inaccessible({ prettyMessage: 'auth not configured' })
     }
     return result
   }
