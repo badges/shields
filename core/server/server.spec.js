@@ -3,8 +3,8 @@
 const fs = require('fs')
 const path = require('path')
 const { expect } = require('chai')
-const fetch = require('node-fetch')
-const got = require('got')
+// https://github.com/nock/nock/issues/1523
+const got = require('got').extend({ retry: 0 })
 const isPng = require('is-png')
 const isSvg = require('is-svg')
 const sinon = require('sinon')
@@ -30,77 +30,93 @@ describe('The server', function() {
   })
 
   it('should produce colorscheme badges', async function() {
-    const res = await fetch(`${baseUrl}:fruit-apple-green.svg`)
-    expect(res.ok).to.be.true
-    expect(await res.text())
+    const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.svg`)
+    expect(statusCode).to.equal(200)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('fruit')
       .and.to.include('apple')
   })
 
   it('should produce colorscheme PNG badges', async function() {
-    const res = await fetch(`${baseUrl}:fruit-apple-green.png`)
-    expect(res.ok).to.be.true
-    expect(await res.buffer()).to.satisfy(isPng)
+    const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.png`, {
+      encoding: null,
+    })
+    expect(statusCode).to.equal(200)
+    expect(body).to.satisfy(isPng)
   })
 
   it('should preserve label case', async function() {
-    const res = await fetch(`${baseUrl}:fRuiT-apple-green.svg`)
-    expect(res.ok).to.be.true
-    expect(await res.text())
+    const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
+    expect(statusCode).to.equal(200)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('fRuiT')
   })
 
   // https://github.com/badges/shields/pull/1319
   it('should not crash with a numeric logo', async function() {
-    const res = await fetch(`${baseUrl}:fruit-apple-green.svg?logo=1`)
-    expect(res.ok).to.be.true
-    expect(await res.text())
+    const { statusCode, body } = await got(
+      `${baseUrl}:fruit-apple-green.svg?logo=1`
+    )
+    expect(statusCode).to.equal(200)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('fruit')
       .and.to.include('apple')
   })
 
   it('should not crash with a numeric link', async function() {
-    const res = await fetch(`${baseUrl}:fruit-apple-green.svg?link=1`)
-    expect(res.ok).to.be.true
-    expect(await res.text())
+    const { statusCode, body } = await got(
+      `${baseUrl}:fruit-apple-green.svg?link=1`
+    )
+    expect(statusCode).to.equal(200)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('fruit')
       .and.to.include('apple')
   })
 
   it('should not crash with a boolean link', async function() {
-    const res = await fetch(`${baseUrl}:fruit-apple-green.svg?link=true`)
-    expect(res.ok).to.be.true
-    expect(await res.text())
+    const { statusCode, body } = await got(
+      `${baseUrl}:fruit-apple-green.svg?link=true`
+    )
+    expect(statusCode).to.equal(200)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('fruit')
       .and.to.include('apple')
   })
 
   it('should return the 404 badge for unknown badges', async function() {
-    const res = await fetch(`${baseUrl}this/is/not/a/badge.svg`)
-    expect(res.status).to.equal(404)
-    expect(await res.text())
+    const { statusCode, body } = await got(
+      `${baseUrl}this/is/not/a/badge.svg`,
+      { throwHttpErrors: false }
+    )
+    expect(statusCode).to.equal(404)
+    expect(body)
       .to.satisfy(isSvg)
       .and.to.include('404')
       .and.to.include('badge not found')
   })
 
   it('should return the 404 html page for rando links', async function() {
-    const res = await fetch(`${baseUrl}this/is/most/definitely/not/a/badge.js`)
-    expect(res.status).to.equal(404)
-    expect(await res.text()).to.include('blood, toil, tears and sweat')
+    const { statusCode, body } = await got(
+      `${baseUrl}this/is/most/definitely/not/a/badge.js`,
+      { throwHttpErrors: false }
+    )
+    expect(statusCode).to.equal(404)
+    expect(body).to.include('blood, toil, tears and sweat')
   })
 
   it('should redirect the root as configured', async function() {
-    const res = await got(baseUrl, { followRedirect: false })
+    const { statusCode, headers } = await got(baseUrl, {
+      followRedirect: false,
+    })
 
-    expect(res.statusCode).to.equal(302)
+    expect(statusCode).to.equal(302)
     // This value is set in `config/test.yml`
-    expect(res.headers.location).to.equal('http://badge-server.example.com')
+    expect(headers.location).to.equal('http://badge-server.example.com')
   })
 
   context('with svg2img error', function() {
@@ -119,10 +135,12 @@ describe('The server', function() {
     })
 
     it('should emit the 500 message', async function() {
-      const res = await fetch(`${baseUrl}:some_new-badge-green.png`)
+      const { statusCode, body } = await got(
+        `${baseUrl}:some_new-badge-green.png`
+      )
       // This emits status code 200, though 500 would be preferable.
-      expect(res.status).to.equal(200)
-      expect(await res.text()).to.include(expectedError)
+      expect(statusCode).to.equal(200)
+      expect(body).to.include(expectedError)
     })
   })
 })

@@ -3,18 +3,12 @@
 const { expect } = require('chai')
 const sinon = require('sinon')
 const Camp = require('camp')
-const fetch = require('node-fetch')
+// https://github.com/nock/nock/issues/1523
+const got = require('got').extend({ retry: 0 })
 const portfinder = require('portfinder')
 const serverSecrets = require('../../../lib/server-secrets')
 const GithubApiProvider = require('../github-api-provider')
 const { setRoutes } = require('./admin')
-
-function createAuthHeader({ username, password }) {
-  const headers = new fetch.Headers()
-  const encoded = Buffer.from(`${username}:${password}`).toString('base64')
-  headers.append('authorization', `Basic ${encoded}`)
-  return headers
-}
 
 describe('GitHub admin route', function() {
   const validCredentials = {
@@ -60,11 +54,13 @@ describe('GitHub admin route', function() {
 
   context('the password is correct', function() {
     it('returns a valid JSON response', async function() {
-      const res = await fetch(`${baseUrl}/$github-auth/tokens`, {
-        headers: createAuthHeader(validCredentials),
+      const { username, password } = validCredentials
+      const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`, {
+        auth: `${username}:${password}`,
+        json: true,
       })
-      expect(res.ok).to.be.true
-      expect(await res.json()).to.be.ok
+      expect(statusCode).to.equal(200)
+      expect(body).to.be.ok
     })
   })
 
