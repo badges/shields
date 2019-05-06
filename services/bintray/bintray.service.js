@@ -47,7 +47,10 @@ module.exports = class Bintray extends BaseJsonService {
       schema,
       url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
       options: {
-        auth: optionalAuth(this, 'bintray_user', 'bintray_apikey'),
+        auth: optionalAuth(this, {
+          userKey: 'bintray_user',
+          passKey: 'bintray_apikey',
+        }),
       },
     })
   }

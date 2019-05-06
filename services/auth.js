@@ -2,7 +2,7 @@
 
 const { BaseService } = require('.')
 
-function requiredAuth(serviceInstance, userKey, passKey) {
+function requiredAuth(serviceInstance, { userKey, passKey }) {
   if (!(serviceInstance instanceof BaseService)) {
     throw Error('serviceInstance should be an instance of BaseService')
   }
@@ -13,7 +13,7 @@ function requiredAuth(serviceInstance, userKey, passKey) {
   }
 }
 
-function optionalAuth(serviceInstance, userKey, passKey) {
+function optionalAuth(serviceInstance, { userKey, passKey }) {
   if (!(serviceInstance instanceof BaseService)) {
     throw Error('serviceInstance should be an instance of BaseService')
   }

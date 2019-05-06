@@ -80,7 +80,10 @@ function pullRequestClassGenerator(raw) {
         schema,
         options: {
           qs: { state: 'OPEN', limit: 0 },
-          auth: optionalAuth(this, 'bitbucket_username', 'bitbucket_password'),
+          auth: optionalAuth(this, {
+            userKey: 'bitbucket_username',
+            passKey: 'bitbucket_password',
+          }),
         },
         errorMessages,
       })
@@ -98,11 +101,10 @@ function pullRequestClassGenerator(raw) {
             withProperties: false,
             withAttributes: false,
           },
-          auth: optionalAuth(
-            this,
-            'bitbucket_server_username',
-            'bitbucket_server_password'
-          ),
+          auth: optionalAuth(this, {
+            userKey: 'bitbucket_server_username',
+            passKey: 'bitbucket_server_password',
+          }),
         },
         errorMessages,
       })

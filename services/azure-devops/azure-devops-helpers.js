@@ -24,7 +24,7 @@ async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
 }
 
 function auth(serviceInstance) {
-  return optionalAuth(serviceInstance, undefined, 'azure_devops_token')
+  return optionalAuth(serviceInstance, { passKey: 'azure_devops_token' })
 }
 
 module.exports = { keywords, fetch, auth }
