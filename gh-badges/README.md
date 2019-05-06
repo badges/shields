@@ -34,6 +34,13 @@ const format = {
 const svg = bf.create(format)
 ```
 
+### Node version support
+
+The latest version of gh-badges supports all currently maintained Node
+versions. See the [Node Release Schedule][].
+
+[node release schedule]: https://github.com/nodejs/Release#release-schedule
+
 ## Format
 
 The format is the following:
