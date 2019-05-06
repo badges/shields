@@ -62,10 +62,7 @@ function staticBadgeUrl({
   namedLogo,
   format = 'svg',
 }) {
-  const path = [label, message, color]
-    .map(s => s.toString())
-    .map(encodeField)
-    .join('-')
+  const path = [label, message, color].map(encodeField).join('-')
   const outQueryString = queryString.stringify({
     style,
     logo: namedLogo,

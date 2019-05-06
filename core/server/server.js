@@ -207,7 +207,7 @@ module.exports = class Server {
       const redirectUrl = staticBadgeUrl({
         label,
         message,
-        color,
+        color: color && color.toString(),
         format: 'png',
       })
 
