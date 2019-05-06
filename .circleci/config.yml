@@ -158,12 +158,18 @@ jobs:
 
   main:
     docker:
+      # When changing the base image, be sure that `test:package` is still being run for
+      # all currently maintained Node versions.
+      # https://github.com/nodejs/Release#release-schedule
       - image: circleci/node:8
 
     <<: *main_steps
 
   main@node-latest:
     docker:
+      # When changing the base image, be sure that `test:package` is still being run for
+      # all currently maintained Node versions.
+      # https://github.com/nodejs/Release#release-schedule
       - image: circleci/node:latest
 
     <<: *main_steps
