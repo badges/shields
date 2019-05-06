@@ -109,27 +109,52 @@ services_steps: &services_steps
     - store_test_results:
         path: junit
 
+package_steps: &package_steps
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          # https://github.com/badges/shields/issues/1937
+          - v2-dependencies-
+
+    - run:
+        name: Install dependencies
+        command: npm ci
+
+    - run:
+        name: Tests for gh-badges package
+        when: always
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/results.xml
+        command: npm run test:package
+
+    - store_test_results:
+        path: junit
+
 jobs:
-  npm-install:
-    docker:
-      - image: circleci/node:8
-    steps:
-      - checkout
+  # npm-install:
+  #   docker:
+  #     - image: circleci/node:8
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+  #     - restore_cache:
+  #         keys:
+  #           - v2-dependencies-{{ checksum "package-lock.json" }}
+  #           # fallback to using the latest cache if no exact match is found
+  #           - v2-dependencies-
 
-      - run:
-          name: Install dependencies
-          command: npm ci
+  #     - run:
+  #         name: Install dependencies
+  #         command: npm ci
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package-lock.json" }}
+  #     - save_cache:
+  #         paths:
+  #           - node_modules
+  #         key: v2-dependencies-{{ checksum "package-lock.json" }}
 
   main:
     docker:
@@ -156,6 +181,12 @@ jobs:
       - image: redis
 
     <<: *integration_steps
+
+  package@node-10:
+    docker:
+      - image: circleci/node:10
+
+    <<: *package_steps
 
   danger:
     docker:
