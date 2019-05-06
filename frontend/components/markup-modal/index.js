@@ -10,34 +10,26 @@ const ContentContainer = styled(BaseFont)`
   text-align: center;
 `
 
-export default class MarkupModal extends React.Component {
-  static propTypes = {
-    example: examplePropType,
-    baseUrl: PropTypes.string.isRequired,
-    onRequestClose: PropTypes.func.isRequired,
-  }
+export default function MarkupModal({ example, baseUrl, onRequestClose }) {
+  const isOpen = example !== undefined
 
-  get isOpen() {
-    return this.props.example !== undefined
-  }
-
-  render() {
-    const { isOpen } = this
-    const { onRequestClose, example, baseUrl } = this.props
-
-    return (
-      <Modal
-        ariaHideApp={false}
-        contentLabel="Example Modal"
-        isOpen={isOpen}
-        onRequestClose={onRequestClose}
-      >
-        {isOpen && (
-          <ContentContainer>
-            <MarkupModalContent baseUrl={baseUrl} example={example} />
-          </ContentContainer>
-        )}
-      </Modal>
-    )
-  }
+  return (
+    <Modal
+      ariaHideApp={false}
+      contentLabel="Example Modal"
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+    >
+      {isOpen && (
+        <ContentContainer>
+          <MarkupModalContent baseUrl={baseUrl} example={example} />
+        </ContentContainer>
+      )}
+    </Modal>
+  )
+}
+MarkupModal.propTypes = {
+  example: examplePropType,
+  baseUrl: PropTypes.string.isRequired,
+  onRequestClose: PropTypes.func.isRequired,
 }
