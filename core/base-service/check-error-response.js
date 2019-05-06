@@ -1,16 +1,12 @@
 'use strict'
 
-const {
-  NotFound,
-  InvalidResponse,
-  Inaccessible,
-} = require('../core/base-service/errors')
+const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
 
 const defaultErrorMessages = {
   404: 'not found',
 }
 
-function checkErrorResponse(errorMessages = {}) {
+module.exports = function checkErrorResponse(errorMessages = {}) {
   return async function({ buffer, res }) {
     let error
     errorMessages = { ...defaultErrorMessages, ...errorMessages }
@@ -38,8 +34,4 @@ function checkErrorResponse(errorMessages = {}) {
       return { buffer, res }
     }
   }
-}
-
-module.exports = {
-  checkErrorResponse,
 }

@@ -1,12 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const {
-  NotFound,
-  InvalidResponse,
-  Inaccessible,
-} = require('../core/base-service/errors')
-const { checkErrorResponse } = require('./error-helper')
+const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+const checkErrorResponse = require('./check-error-response')
 
 describe('async error handler', function() {
   const buffer = Buffer.from('some stuff')

@@ -226,7 +226,7 @@ export default function Usage({ baseUrl }) {
         />
       </p>
 
-      <H3>Endpoint (Beta)</H3>
+      <H3>Endpoint</H3>
 
       <p>
         <Snippet snippet={`${baseUrl}/endpoint.svg?url=<URL>&style<STYLE>`} />
