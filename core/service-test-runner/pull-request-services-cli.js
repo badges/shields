@@ -15,22 +15,21 @@
 
 'use strict'
 
-const fetch = require('node-fetch')
+const got = require('got')
 const { inferPullRequest } = require('./infer-pull-request')
 const servicesForTitle = require('./services-for-title')
 
 async function getTitle(owner, repo, pullRequest) {
-  let uri = `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`
-  if (process.env.GITHUB_TOKEN) {
-    uri += `?access_token=${process.env.GITHUB_TOKEN}`
-  }
-  const options = { headers: { 'User-Agent': 'badges/shields' } }
-  const res = await fetch(uri, options)
-  if (!res.ok) {
-    throw Error(`${res.status} ${res.statusText}`)
-  }
-
-  const { title } = await res.json()
+  const {
+    body: { title },
+  } = await got(
+    `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`,
+    {
+      headers: { 'User-Agent': 'badges/shields' },
+      query: { access_token: process.env.GITHUB_TOKEN },
+      json: true,
+    }
+  )
   return title
 }
 

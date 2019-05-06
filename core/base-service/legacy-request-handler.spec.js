@@ -1,7 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const fetch = require('node-fetch')
+// https://github.com/nock/nock/issues/1523
+const got = require('got').extend({ retry: 0 })
 const nock = require('nock')
 const portfinder = require('portfinder')
 const Camp = require('camp')
@@ -13,8 +14,8 @@ const {
 } = require('./legacy-request-handler')
 
 async function performTwoRequests(baseUrl, first, second) {
-  expect((await fetch(`${baseUrl}${first}`)).ok).to.be.true
-  expect((await fetch(`${baseUrl}${second}`)).ok).to.be.true
+  expect((await got(`${baseUrl}${first}`)).statusCode).to.equal(200)
+  expect((await got(`${baseUrl}${second}`)).statusCode).to.equal(200)
 }
 
 function fakeHandler(queryParams, match, sendBadge, request) {
@@ -101,9 +102,11 @@ describe('The request handler', function() {
     })
 
     it('should return the expected response', async function() {
-      const res = await fetch(`${baseUrl}/testing/123.json`)
-      expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({
+      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
+        json: true,
+      })
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
         name: 'testing',
         value: '123',
         label: 'testing',
@@ -123,9 +126,11 @@ describe('The request handler', function() {
     })
 
     it('should return the expected response', async function() {
-      const res = await fetch(`${baseUrl}/testing/123.json`)
-      expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({
+      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
+        json: true,
+      })
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
         name: 'testing',
         value: '123',
         label: 'testing',
@@ -152,9 +157,11 @@ describe('The request handler', function() {
         .get('/foo/bar')
         .once()
         .reply(200, 'x'.repeat(100))
-      const res = await fetch(`${baseUrl}/testing/123.json`)
-      expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({
+      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
+        json: true,
+      })
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
         name: 'testing',
         value: '123',
         label: 'testing',
@@ -169,9 +176,11 @@ describe('The request handler', function() {
         .get('/foo/bar')
         .once()
         .reply(200, 'x'.repeat(101))
-      const res = await fetch(`${baseUrl}/testing/123.json`)
-      expect(res.ok).to.be.true
-      expect(await res.json()).to.deep.equal({
+      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
+        json: true,
+      })
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
         name: 'testing',
         value: 'Maximum response size exceeded',
         label: 'testing',
@@ -241,26 +250,26 @@ describe('The request handler', function() {
 
       it('should set the expires header to current time + defaultCacheLengthSeconds', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
-        const res = await fetch(`${baseUrl}/testing/123.json`)
+        const { headers } = await got(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
-          +new Date(res.headers.get('date')) + 900000
+          +new Date(headers.date) + 900000
         ).toGMTString()
-        expect(res.headers.get('expires')).to.equal(expectedExpiry)
-        expect(res.headers.get('cache-control')).to.equal('max-age=900')
+        expect(headers.expires).to.equal(expectedExpiry)
+        expect(headers['cache-control']).to.equal('max-age=900')
       })
 
       it('should set the expected cache headers on cached responses', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
 
         // Make first request.
-        await fetch(`${baseUrl}/testing/123.json`)
+        await got(`${baseUrl}/testing/123.json`)
 
-        const res = await fetch(`${baseUrl}/testing/123.json`)
+        const { headers } = await got(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
-          +new Date(res.headers.get('date')) + 900000
+          +new Date(headers.date) + 900000
         ).toGMTString()
-        expect(res.headers.get('expires')).to.equal(expectedExpiry)
-        expect(res.headers.get('cache-control')).to.equal('max-age=900')
+        expect(headers.expires).to.equal(expectedExpiry)
+        expect(headers['cache-control']).to.equal('max-age=900')
       })
 
       it('should let live service data override the default cache headers with longer value', async function() {
@@ -280,8 +289,8 @@ describe('The request handler', function() {
           )
         )
 
-        const res = await fetch(`${baseUrl}/testing/123.json`)
-        expect(res.headers.get('cache-control')).to.equal('max-age=400')
+        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        expect(headers['cache-control']).to.equal('max-age=400')
       })
 
       it('should not let live service data override the default cache headers with shorter value', async function() {
@@ -301,35 +310,39 @@ describe('The request handler', function() {
           )
         )
 
-        const res = await fetch(`${baseUrl}/testing/123.json`)
-        expect(res.headers.get('cache-control')).to.equal('max-age=300')
+        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        expect(headers['cache-control']).to.equal('max-age=300')
       })
 
       it('should set the expires header to current time + cacheSeconds', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
-        const res = await fetch(`${baseUrl}/testing/123.json?cacheSeconds=3600`)
+        const { headers } = await got(
+          `${baseUrl}/testing/123.json?cacheSeconds=3600`
+        )
         const expectedExpiry = new Date(
-          +new Date(res.headers.get('date')) + 3600000
+          +new Date(headers.date) + 3600000
         ).toGMTString()
-        expect(res.headers.get('expires')).to.equal(expectedExpiry)
-        expect(res.headers.get('cache-control')).to.equal('max-age=3600')
+        expect(headers.expires).to.equal(expectedExpiry)
+        expect(headers['cache-control']).to.equal('max-age=3600')
       })
 
       it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 600 } })
-        const res = await fetch(`${baseUrl}/testing/123.json?cacheSeconds=300`)
+        const { headers } = await got(
+          `${baseUrl}/testing/123.json?cacheSeconds=300`
+        )
         const expectedExpiry = new Date(
-          +new Date(res.headers.get('date')) + 600000
+          +new Date(headers.date) + 600000
         ).toGMTString()
-        expect(res.headers.get('expires')).to.equal(expectedExpiry)
-        expect(res.headers.get('cache-control')).to.equal('max-age=600')
+        expect(headers.expires).to.equal(expectedExpiry)
+        expect(headers['cache-control']).to.equal('max-age=600')
       })
 
       it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function() {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
-        const res = await fetch(`${baseUrl}/testing/123.json`)
-        expect(res.headers.get('expires')).to.equal(res.headers.get('date'))
-        expect(res.headers.get('cache-control')).to.equal(
+        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        expect(headers.expires).to.equal(headers.date)
+        expect(headers['cache-control']).to.equal(
           'no-cache, no-store, must-revalidate'
         )
       })
@@ -340,17 +353,11 @@ describe('The request handler', function() {
         })
         const expectedCacheKey = '/testing/123.json?color=123&label=foo'
         it('should match expected and use canonical order - 1', async function() {
-          const res = await fetch(
-            `${baseUrl}/testing/123.json?color=123&label=foo`
-          )
-          expect(res.ok).to.be.true
+          await got(`${baseUrl}/testing/123.json?color=123&label=foo`)
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)
         })
         it('should match expected and use canonical order - 2', async function() {
-          const res = await fetch(
-            `${baseUrl}/testing/123.json?label=foo&color=123`
-          )
-          expect(res.ok).to.be.true
+          await got(`${baseUrl}/testing/123.json?label=foo&color=123`)
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)
         })
       })
