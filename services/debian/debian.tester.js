@@ -20,7 +20,7 @@ t.create('Debian package (default distribution, valid, query unsafe chars)')
   })
 
 t.create('Debian package (valid, mocked response)')
-  .get('/unstable/apt.json')
+  .get('/apt/unstable.json')
   .intercept(nock =>
     nock('https://api.ftp-master.debian.org')
       .get('/madison?f=json&s=unstable&package=apt')
@@ -33,7 +33,7 @@ t.create('Debian package (valid, mocked response)')
   .expectBadge({ label: 'debian', message: 'v1.8.0' })
 
 t.create('Debian package (invalid, more than one result)')
-  .get('/unstable/apt.json')
+  .get('/apt/unstable.json')
   .intercept(nock =>
     nock('https://api.ftp-master.debian.org')
       .get('/madison?f=json&s=unstable&package=apt')
@@ -49,9 +49,9 @@ t.create('Debian package (invalid, more than one result)')
   .expectBadge({ label: 'debian', message: 'invalid response data' })
 
 t.create('Debian package (not found)')
-  .get('/stable/not-a-package.json')
+  .get('/not-a-package/stable.json')
   .expectBadge({ label: 'debian', message: 'not found' })
 
 t.create('Debian package (distribution not found)')
-  .get('/not-a-distribution/apt.json')
+  .get('/apt/not-a-distribution.json')
   .expectBadge({ label: 'debian', message: 'not found' })

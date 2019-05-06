@@ -13,7 +13,7 @@ t.create('Ubuntu package (default distribution, valid)')
   })
 
 t.create('Ubuntu package (valid, mocked response)')
-  .get('/bionic/ubuntu-wallpapers.json')
+  .get('/ubuntu-wallpapers/bionic.json')
   .intercept(nock =>
     nock('https://api.launchpad.net')
       .get(
@@ -35,5 +35,5 @@ t.create('Ubuntu package (not found)')
   .expectBadge({ label: 'ubuntu', message: 'not found' })
 
 t.create('Ubuntu package (series not found)')
-  .get('/not-a-series/apt.json')
+  .get('/apt/not-a-series.json')
   .expectBadge({ label: 'ubuntu', message: 'series not found' })

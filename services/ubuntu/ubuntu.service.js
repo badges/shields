@@ -22,7 +22,7 @@ module.exports = class Ubuntu extends BaseJsonService {
   static get route() {
     return {
       base: 'ubuntu/v',
-      pattern: ':series?/:packageName',
+      pattern: ':packageName/:series?',
     }
   }
 
@@ -40,7 +40,7 @@ module.exports = class Ubuntu extends BaseJsonService {
     return { label: 'ubuntu' }
   }
 
-  async fetch({ series, packageName }) {
+  async fetch({ packageName, series }) {
     const seriesParam = series
       ? {
           distro_series: `https://api.launchpad.net/1.0/ubuntu/${encodeURIComponent(
@@ -67,8 +67,8 @@ module.exports = class Ubuntu extends BaseJsonService {
     })
   }
 
-  async handle({ series, packageName }) {
-    const data = await this.fetch({ series, packageName })
+  async handle({ packageName, series }) {
+    const data = await this.fetch({ packageName, series })
     if (!data.entries.length) {
       throw new NotFound()
     }

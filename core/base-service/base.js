@@ -4,8 +4,8 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
-const { checkErrorResponse } = require('../../lib/error-helper')
 const { assertValidCategory } = require('./categories')
+const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
 const {
   NotFound,

@@ -2,7 +2,7 @@
 
 const { BaseService, Inaccessible } = require('..')
 const chromeWebStore = require('chrome-web-store-item-property')
-const { checkErrorResponse } = require('../../lib/error-helper')
+const checkErrorResponse = require('../../core/base-service/check-error-response')
 
 module.exports = class BaseChromeWebStoreService extends BaseService {
   async fetch({ storeId }) {
