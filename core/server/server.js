@@ -207,6 +207,7 @@ module.exports = class Server {
       const redirectUrl = staticBadgeUrl({
         label,
         message,
+        // Fixes https://github.com/badges/shields/issues/3260
         color: color && color.toString(),
         format: 'png',
       })
