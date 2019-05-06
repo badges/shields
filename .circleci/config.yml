@@ -188,6 +188,12 @@ jobs:
 
     <<: *package_steps
 
+  package@node-11:
+    docker:
+      - image: circleci/node:11
+
+    <<: *package_steps
+
   danger:
     docker:
       - image: circleci/node:8
