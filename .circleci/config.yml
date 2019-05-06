@@ -340,6 +340,14 @@ workflows:
               ignore:
                 - master
                 - gh-pages
+      - package@node-10:
+          filters:
+            branches:
+              ignore: gh-pages
+      - package@node-11:
+          filters:
+            branches:
+              ignore: gh-pages
       - danger:
           filters:
             branches:
