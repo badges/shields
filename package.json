@@ -31,7 +31,7 @@
     "config": "^3.1.0",
     "cross-env": "^5.2.0",
     "decamelize": "^3.2.0",
-    "dotenv": "^7.0.0",
+    "dotenv": "^8.0.0",
     "emojic": "^1.1.15",
     "fast-xml-parser": "^3.12.16",
     "fsos": "^1.1.3",
