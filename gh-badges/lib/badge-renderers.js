@@ -23,68 +23,85 @@ function escapeXml(s) {
   }
 }
 
+function roundUpToOdd(val) {
+  // Increase chances of pixel grid alignment.
+  return val % 2 === 0 ? val + 1 : val
+}
+
+function preferredWithOf(str) {
+  return roundUpToOdd((anafanafo(str) / 10) | 0)
+}
+
 function computeWidths({ label, message }) {
-  let labelWidth = (anafanafo(label) / 10) | 0
-  // Increase chances of pixel grid alignment.
-  if (labelWidth % 2 === 0) {
-    labelWidth++
+  return {
+    labelWidth: preferredWithOf(label),
+    messageWidth: preferredWithOf(message),
   }
-  let messageWidth = (anafanafo(message) / 10) | 0
-  // Increase chances of pixel grid alignment.
-  if (messageWidth % 2 === 0) {
-    messageWidth++
-  }
-  return { labelWidth, messageWidth }
 }
 
-function renderLogo({ logo, logoWidth, extraPadding = 0 }) {
-  const x = 5 + extraPadding
-  const y = 3 + extraPadding
-  return `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${logo}"/>`
+function renderLogo({
+  logo,
+  logoWidth = 14,
+  logoPadding = 0,
+  extraPadding = 0,
+}) {
+  if (logo) {
+    const x = 5 + extraPadding
+    const y = 3 + extraPadding
+    return {
+      hasLogo: true,
+      logoWidth: logoWidth + logoPadding,
+      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${logo}"/>`,
+    }
+  } else {
+    return {
+      hasLogo: false,
+      logoWidth: 0,
+      renderedLogo: '',
+    }
+  }
 }
 
-function renderTextWithShadow({ x, textLength, content, verticalMargin = 0 }) {
+function renderTextWithShadow({ leftMargin, content, verticalMargin = 0 }) {
   if (content.length) {
+    const textLength = 10 * preferredWidthOf(content)
     const escapedContent = escapeXml(content)
+
     const shadowMargin = 150 + verticalMargin
     const textMargin = 140 + verticalMargin
-    return `
+
+    const x = 10 * leftMargin + 0.5 * textLength
+
+    return {
+      renderedText: `
     <text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
     <text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
-  `
-  } else {
-    return ''
+  `,
+      width: textLength,
+    }
   }
 }
 
-function renderLinks(
-  [leftLink, rightLink] = [],
+function renderLinks({
+  links: [leftLink, rightLink] = [],
   labelWidth,
   messageWidth,
-  height
-) {
+  height,
+}) {
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
   const hasLeftLink = leftLink && leftLink.length
   const hasRightLink = rightLink && rightLink.length
-  return `
-  ${
-    hasLeftLink
-      ? `<a target="_blank" xlink:href="${leftLink}">
-      <rect width="${
-        hasRightLink ? labelWidth : labelWidth + messageWidth
-      }" height="${height}" fill="rgba(0,0,0,0)"/>
-    </a>`
-      : ''
+  const leftLinkWidth = hasRightLink ? labelWidth : labelWidth + messageWidth
+
+  function render({ link, width }) {
+    return `<a target="_blank" xlink:href="${link}"><rect width="${width}" height="${height}" fill="rgba(0,0,0,0)"/></a>`
   }
-  ${
-    hasRightLink
-      ? `<a target="_blank" xlink:href="${rightLink}">
-      <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
-    </a>`
-      : ''
-  }
-  `
+
+  return (
+    (hasLeftLink ? render({ link: leftLink, width: leftLinkWidth }) : '') +
+    (hasRightLink ? render({ link: rightLink, width: messageWidth }) : '')
+  )
 }
 
 function renderBadge({ labelWidth, messageWidth, height, links }, main) {
@@ -92,7 +109,7 @@ function renderBadge({ labelWidth, messageWidth, height, links }, main) {
   return `
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
     ${main}
-    ${renderLinks(links, labelWidth, messageWidth, height)}
+    ${renderLinks({ links, labelWidth, messageWidth, height })}
     </svg>
   `
 }
@@ -103,20 +120,40 @@ module.exports = {
     message,
     links,
     logo,
-    logoWidth,
+    logoWidth: inLogoWidth,
     logoPadding,
     color = '#4c1',
     labelColor = '#555',
   }) {
-    const hasLabel = label.length
-    const hasLogo = !!logo
+    const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+      logo,
+      logoWidth: inLogoWidth,
+      logoPadding,
+    })
 
+    const hasLabel = label.length
     labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
 
-    let { labelWidth, messageWidth } = computeWidths({ label, message })
-    labelWidth += 10 + logoWidth + logoPadding
-    messageWidth += 10
-    labelWidth -= hasLabel ? 0 : logo ? (labelColor ? 0 : 7) : 11
+    const { labelWidth, messageWidth } = computeWidths({ label, message })
+
+    // const leftWidth =
+
+    // if (hasLabel) {
+    //   labelWidth += 10
+    //   messageWidth += 10
+    // } else {
+    //   if (!logo) {
+    //     // No left.
+    //     labelWidth -= 1
+    //   } else if (logo && !labelColor) {
+    //     // Just the logo on the left.
+    //     labelWidth += 3
+    //   } else {
+    //     // Show logo with label color.
+    //     labelWidth += 10
+    //     messageWidth += 10
+    //   }
+    // }
 
     const width = labelWidth + messageWidth
     const height = 18
@@ -151,19 +188,17 @@ module.exports = {
       </g>
 
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-        ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
+        ${renderedLogo}
         ${renderTextWithShadow({
-          x: ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10,
-          textLength: (labelWidth - (10 + logoWidth + logoPadding)) * 10,
+          x: ((labelWidth + logoWidth) / 2 + 1) * 10,
           content: label,
           // The plastic badge is a little bit shorter.
-          margin: -10,
+          verticalMargin: -10,
         })}
         ${renderTextWithShadow({
           x: (labelWidth + messageWidth / 2 - (hasLabel ? 1 : 0)) * 10,
-          textLength: (messageWidth - 10) * 10,
           content: message,
-          margin: -10,
+          verticalMargin: -10,
         })}
       </g>`
     )
@@ -222,12 +257,10 @@ module.exports = {
         ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
         ${renderTextWithShadow({
           x: ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10,
-          textLength: (labelWidth - (10 + logoWidth + logoPadding)) * 10,
           content: label,
         })}
         ${renderTextWithShadow({
           x: (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10,
-          textLength: (messageWidth - 10) * 10,
           content: message,
         })}
       </g>`
