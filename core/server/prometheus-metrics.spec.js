@@ -1,9 +1,10 @@
 'use strict'
 
 const { expect } = require('chai')
+// https://github.com/nock/nock/issues/1523
+const got = require('got').extend({ retry: 0 })
 const Camp = require('camp')
 const portfinder = require('portfinder')
-const fetch = require('node-fetch')
 const Metrics = require('./prometheus-metrics')
 
 describe('Prometheus metrics route', function() {
@@ -28,9 +29,9 @@ describe('Prometheus metrics route', function() {
   it('returns metrics', async function() {
     new Metrics({ enabled: true }).initialize(camp)
 
-    const res = await fetch(`${baseUrl}/metrics`)
+    const { statusCode, body } = await got(`${baseUrl}/metrics`)
 
-    expect(res.status).to.be.equal(200)
-    expect(await res.text()).to.contains('nodejs_version_info')
+    expect(statusCode).to.be.equal(200)
+    expect(body).to.contain('nodejs_version_info')
   })
 })

@@ -19,59 +19,62 @@ const StyledTable = styled.table`
   }
 `
 
-const NamedLogoTable = ({ logoNames }) => (
-  <StyledTable>
-    <thead>
-      <tr>
-        <td>Flat</td>
-        <td>Social</td>
-      </tr>
-    </thead>
-    <tbody>
-      {logoNames.map(name => (
-        <tr key={name}>
-          <td>
-            <Badge
-              alt={`logo: ${name}`}
-              src={staticBadgeUrl({
-                baseUrl,
-                label: 'named logo',
-                message: name,
-                color: 'blue',
-                namedLogo: name,
-              })}
-            />
-          </td>
-          <td>
-            <Badge
-              alt={`logo: ${name}`}
-              src={staticBadgeUrl({
-                baseUrl,
-                label: 'Named Logo',
-                message: name,
-                color: 'blue',
-                namedLogo: name,
-                style: 'social',
-              })}
-            />
-          </td>
+function NamedLogoTable({ logoNames }) {
+  return (
+    <StyledTable>
+      <thead>
+        <tr>
+          <td>Flat</td>
+          <td>Social</td>
         </tr>
-      ))}
-    </tbody>
-  </StyledTable>
-)
+      </thead>
+      <tbody>
+        {logoNames.map(name => (
+          <tr key={name}>
+            <td>
+              <Badge
+                alt={`logo: ${name}`}
+                src={staticBadgeUrl({
+                  baseUrl,
+                  label: 'named logo',
+                  message: name,
+                  color: 'blue',
+                  namedLogo: name,
+                })}
+              />
+            </td>
+            <td>
+              <Badge
+                alt={`logo: ${name}`}
+                src={staticBadgeUrl({
+                  baseUrl,
+                  label: 'Named Logo',
+                  message: name,
+                  color: 'blue',
+                  namedLogo: name,
+                  style: 'social',
+                })}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </StyledTable>
+  )
+}
 NamedLogoTable.propTypes = {
   logoNames: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
-const LogoPage = () => (
-  <div>
-    <Meta />
-    <Header />
-    <H3>Named logos</H3>
-    <NamedLogoTable logoNames={shieldsLogos} />
-    <H3>Simple-icons</H3>
-    <NamedLogoTable logoNames={simpleIcons} />
-  </div>
-)
-export default LogoPage
+export default function LogoPage() {
+  return (
+    <div>
+      <Meta />
+      <Header />
+      <H3>Named logos</H3>
+      <NamedLogoTable logoNames={shieldsLogos} />
+      <H3>Simple-icons</H3>
+      <NamedLogoTable logoNames={simpleIcons} />
+    </div>
+  )
+}
