@@ -128,14 +128,14 @@
     "verbose": true,
     "ext": "js",
     "ignore": [
-       "package.json",
-       "**/*.spec.js",
-       "**/*.tester.js",
-       "**/*.integration.js",
-       "frontend/",
-       "public/",
-       "build/",
-       "cypress/"
+      "package.json",
+      "**/*.spec.js",
+      "**/*.tester.js",
+      "**/*.integration.js",
+      "frontend/",
+      "public/",
+      "build/",
+      "cypress/"
     ]
   },
   "devDependencies": {
@@ -215,7 +215,6 @@
     "opn-cli": "^4.1.0",
     "portfinder": "^1.0.20",
     "prettier": "1.16.4",
-    "pretty": "^2.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.5",
     "react-dom": "^16.8.6",
