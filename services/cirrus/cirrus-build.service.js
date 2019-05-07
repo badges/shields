@@ -23,33 +23,17 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
     const { staticPreview } = this
     return [
       {
-        title: 'Travis (.org)',
+        title: 'Cirrus CI Build Status',
         pattern: ':user/:repo',
-        namedParams: { user: 'rust-lang', repo: 'rust' },
+        namedParams: { user: 'flutter', repo: 'flutter' },
         staticPreview,
       },
       {
-        title: 'Travis (.org) branch',
+        title: 'Cirrus CI Branch Build Status',
         pattern: ':user/:repo/:branch',
-        namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
+        namedParams: { user: 'flutter', repo: 'flutter', branch: 'master' },
         staticPreview,
-      },
-      {
-        title: 'Travis (.com)',
-        pattern: 'com/:user/:repo',
-        namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-        staticPreview,
-      },
-      {
-        title: 'Travis (.com) branch',
-        pattern: 'com/:user/:repo/:branch',
-        namedParams: {
-          user: 'ivandelabeldad',
-          repo: 'rackian-gateway',
-          branch: 'master',
-        },
-        staticPreview,
-      },
+      }
     ]
   }
 
@@ -68,10 +52,9 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
   }
 
   async handle({ comDomain, userRepo, branch }) {
-    const domain = comDomain || 'org'
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.travis-ci.${domain}/${userRepo}.svg`,
+      url: `https://api.cirrus-ci.com/${userRepo}.svg`,
       options: { qs: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
