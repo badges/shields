@@ -12,6 +12,15 @@ describe('Main page', function() {
     cy.contains('PyPI - License')
   })
 
+  it('Shows badge from category', function() {
+    cy.visit('/category/build')
+
+    cy.contains('tr', 'AppVeyor:').find(
+      'img[src="http://localhost:8080/badge/build-passing-brightgreen.svg"]'
+    )
+    cy.contains('http://localhost:8080/appveyor/ci/:user/:repo.svg')
+  })
+
   it('Suggest badges', function() {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg`
     cy.visit('/')
