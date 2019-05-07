@@ -38,9 +38,10 @@ install node and npm: https://nodejs.org/en/download/
 5. Run the badge server and the frontend dev server
    `npm start`
 6. Visit the website to check the front-end is loaded:
-   [http://localhost:3000/](http://localhost:3000/).
-   If you get _"Error: getaddrinfo ENOTFOUND localhost"_, add the next line to the /etc/host file:
-   `127.0.0.1 localhost`
+   [http://localhost:3000/](http://localhost:3000/) or [http://127.0.0.1:3000/](http://127.0.0.1:3000/).
+
+If you get _"Error: getaddrinfo ENOTFOUND localhost"_ with localhost, add the next line into the /etc/host file:
+`127.0.0.1 localhost`
 
 You may also want to install
 [ImageMagick](https://www.imagemagick.org/script/download.php).
