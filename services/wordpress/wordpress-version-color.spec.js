@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { versionColorForWordpressVersion } = require('./wordpress-version-color')
 
-describe('Wordpress version color helpers', function() {
+describe('WordPress version color helpers', function() {
   it('versionColorForWordpressVersion()', async function() {
     expect(await versionColorForWordpressVersion('11.2.0')).to.equal(
       'brightgreen'
