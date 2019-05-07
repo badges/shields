@@ -67,7 +67,6 @@ Object.keys(licenseTypes).forEach(licenseType => {
     licenseToColorMap[license] = { color, priority }
   })
 })
-const defaultLicenseColor = 'lightgrey'
 
 function licenseToColor(licenses) {
   if (!Array.isArray(licenses)) {
@@ -77,12 +76,7 @@ function licenseToColor(licenses) {
   const [{ color }] = licenses
     .map(license => licenseToColorMap[license])
     .filter(Boolean)
-    .concat([
-      {
-        color: defaultLicenseColor,
-        priority: 0,
-      },
-    ])
+    .concat([{ color: 'lightgrey', priority: 0 }])
     .sort((a, b) => b.priority - a.priority)
 
   return color
