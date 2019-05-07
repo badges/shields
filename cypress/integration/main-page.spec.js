@@ -18,7 +18,9 @@ describe('Main page', function() {
     cy.contains('tr', 'AppVeyor:').find(
       'img[src="http://localhost:8080/badge/build-passing-brightgreen.svg"]'
     )
-    cy.contains('http://localhost:8080/appveyor/ci/:user/:repo.svg')
+    cy.contains('tr', 'AppVeyor:').contains(
+      'http://localhost:8080/appveyor/ci/:user/:repo.svg'
+    )
   })
 
   it('Suggest badges', function() {
