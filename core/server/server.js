@@ -208,7 +208,7 @@ module.exports = class Server {
         label,
         message,
         // Fixes https://github.com/badges/shields/issues/3260
-        color: color && color.toString(),
+        color: color ? color.toString() : undefined,
         format: 'png',
       })
 
