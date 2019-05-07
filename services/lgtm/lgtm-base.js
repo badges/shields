@@ -36,7 +36,7 @@ module.exports = class LgtmBaseService extends BaseJsonService {
   }
 
   async fetch({ host, user, repo }) {
-    const mappedHost = host in hostMappings ? hostMappings[host] : host
+    const mappedHost = hostMappings[host]
     const url = `https://lgtm.com/api/v0.1/project/${mappedHost}/${user}/${repo}/details`
 
     return this._requestJson({
