@@ -5,7 +5,7 @@ const { isStarRating } = require('../test-validators')
 
 const t = new ServiceTester({
   id: 'wordpress',
-  title: 'Wordpress Rating Tests',
+  title: 'WordPress Rating Tests',
 })
 module.exports = t
 
