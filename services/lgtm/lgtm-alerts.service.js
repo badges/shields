@@ -6,8 +6,8 @@ const LgtmBaseService = require('./lgtm-base')
 module.exports = class LgtmAlerts extends LgtmBaseService {
   static get route() {
     return {
-      base: 'lgtm/alerts/g',
-      pattern: ':user/:repo',
+      base: 'lgtm/alerts',
+      pattern: this.pattern,
     }
   }
 
@@ -16,6 +16,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
       {
         title: 'LGTM Alerts',
         namedParams: {
+          host: 'github',
           user: 'apache',
           repo: 'cloudstack',
         },
@@ -39,8 +40,8 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
     }
   }
 
-  async handle({ user, repo }) {
-    const { alerts } = await this.fetch({ user, repo })
+  async handle({ host, user, repo }) {
+    const { alerts } = await this.fetch({ host, user, repo })
     return this.constructor.render({ alerts })
   }
 }
