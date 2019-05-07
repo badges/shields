@@ -35,7 +35,7 @@ install node and npm: https://nodejs.org/en/download/
 3. `cd shields`
 4. Install project dependencies
    `npm ci`
-5. Run the server
+5. Run the badge server and the frontend dev server
    `npm start`
 6. Visit the website to check the front-end is loaded:
    [http://localhost:3000/](http://localhost:3000/)
@@ -152,10 +152,9 @@ The process of turning this object into an image is handled automatically by the
 To try out this example badge:
 
 1. Copy and paste this code into a new file in `/services/example/example.service.js`
-2. Quit the running server with `Control+C`.
-3. Start the server again.
-   `npm start`
-4. Visit the badge at <http://localhost:8080/example/foo.svg>.
+2. The server should restart on its own. (If it doesn't for some reason, quit
+   the running server with `Control+C`, then start it again with `npm start`.)
+3. Visit the badge at <http://localhost:8080/example/foo.svg>.
    It should look like this: ![](https://img.shields.io/badge/example-foo-blue.svg)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters

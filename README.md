@@ -16,9 +16,6 @@
     <a href="https://circleci.com/gh/badges/daily-tests">
         <img src="https://img.shields.io/circleci/project/github/badges/daily-tests.svg?label=service%20tests"
             alt="service-test status"></a>
-    <a href="https://docs.google.com/spreadsheets/d/1cHIUSVaiKrIFw3KIu0yt-EMNlMkIfU5alE7YKZ4PeOE/edit#gid=0">
-        <img src="https://img.shields.io/github/search/badges/shields/extends%20LegacyService.svg?label=legacy%20services%20needing%20refactor"
-            alt="legacy services needing refactor"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields.svg"
             alt="coverage"></a>
@@ -101,8 +98,14 @@ You can read a [tutorial on how to add a badge][tutorial].
    Tests need to pass in Node 8 and 10.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
-4. Run `npm start` to start the server.
+4. Run `npm start` to start the badge server and the frontend dev server.
 5. Open `http://localhost:3000/` to view the frontend.
+
+When server source files change, the badge server should automatically restart
+itself (using [nodemon][]). When the frontend files change, the frontend dev
+server (`gatsby dev`) should also automatically reload. However the badge
+definitions are built only before the server first starts. To regenerate those,
+either run `npm run defs` or manually restart the server.
 
 To debug a badge from the command line, run `npm run badge -- /npm/v/nock.svg`.
 It also works with full URLs like
@@ -133,6 +136,7 @@ Daily tests, including a full run of the service tests and overall code coverage
 [sentry]: https://sentry.io/
 [sentry configuration]: doc/self-hosting.md#sentry
 [daily-tests]: https://github.com/badges/daily-tests
+[nodemon]: https://nodemon.io/
 
 ## Hosting your own server
 

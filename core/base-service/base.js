@@ -4,8 +4,8 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('joi')
-const { checkErrorResponse } = require('../../lib/error-helper')
 const { assertValidCategory } = require('./categories')
+const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
 const {
   NotFound,
@@ -184,14 +184,8 @@ module.exports = class BaseService {
 
   static getDefinition() {
     const { category, name, isDeprecated } = this
-
-    let base, format, pattern, queryParams
-    try {
-      ;({ base, format, pattern } = this.route)
-      queryParams = getQueryParamNames(this.route)
-    } catch (e) {
-      // Legacy services do not have a route.
-    }
+    const { base, format, pattern } = this.route
+    const queryParams = getQueryParamNames(this.route)
 
     const examples = this.examples.map((example, index) =>
       transformExample(example, index, this)
@@ -223,7 +217,7 @@ module.exports = class BaseService {
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse.asPromise(errorMessages)({ buffer, res })
+    return checkErrorResponse(errorMessages)({ buffer, res })
   }
 
   static _validate(

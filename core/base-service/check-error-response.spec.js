@@ -1,55 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const {
-  NotFound,
-  InvalidResponse,
-  Inaccessible,
-} = require('../core/base-service/errors')
-const { checkErrorResponse } = require('./error-helper')
-
-describe('Standard Error Handler', function() {
-  it('makes inaccessible badge', function() {
-    const badgeData = { text: [] }
-    expect(checkErrorResponse(badgeData, 'something other than null', {})).to.be
-      .true
-    expect(badgeData.text[1]).to.equal('inaccessible')
-    expect(badgeData.colorscheme).to.equal('red')
-  })
-
-  it('makes not found badge', function() {
-    const badgeData = { text: [] }
-    expect(checkErrorResponse(badgeData, null, { statusCode: 404 })).to.be.true
-    expect(badgeData.text[1]).to.equal('not found')
-    expect(badgeData.colorscheme).to.equal('lightgrey')
-  })
-
-  it('makes not found badge with custom error', function() {
-    const badgeData = { text: [] }
-    expect(
-      checkErrorResponse(
-        badgeData,
-        null,
-        { statusCode: 404 },
-        { 404: 'custom message' }
-      )
-    ).to.be.true
-    expect(badgeData.text[1]).to.equal('custom message')
-    expect(badgeData.colorscheme).to.equal('lightgrey')
-  })
-
-  it('makes invalid badge', function() {
-    const badgeData = { text: [] }
-    expect(checkErrorResponse(badgeData, null, { statusCode: 500 })).to.be.true
-    expect(badgeData.text[1]).to.equal('invalid')
-    expect(badgeData.colorscheme).to.equal('lightgrey')
-  })
-
-  it('return false on 200 status', function() {
-    expect(checkErrorResponse({ text: [] }, null, { statusCode: 200 })).to.be
-      .false
-  })
-})
+const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+const checkErrorResponse = require('./check-error-response')
 
 describe('async error handler', function() {
   const buffer = Buffer.from('some stuff')
@@ -57,9 +10,10 @@ describe('async error handler', function() {
   context('when status is 200', function() {
     it('passes through the inputs', async function() {
       const res = { statusCode: 200 }
-      expect(
-        await checkErrorResponse.asPromise()({ res, buffer })
-      ).to.deep.equal({ res, buffer })
+      expect(await checkErrorResponse()({ res, buffer })).to.deep.equal({
+        res,
+        buffer,
+      })
     })
   })
 
@@ -69,7 +23,7 @@ describe('async error handler', function() {
 
     it('throws NotFound', async function() {
       try {
-        await checkErrorResponse.asPromise()({ res, buffer })
+        await checkErrorResponse()({ res, buffer })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(NotFound)
@@ -83,9 +37,7 @@ describe('async error handler', function() {
     it('displays the custom not found message', async function() {
       const notFoundMessage = 'no goblins found'
       try {
-        await checkErrorResponse.asPromise({
-          404: notFoundMessage,
-        })({ res, buffer })
+        await checkErrorResponse({ 404: notFoundMessage })({ res, buffer })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(NotFound)
@@ -99,7 +51,7 @@ describe('async error handler', function() {
     it('throws InvalidResponse', async function() {
       const res = { statusCode: 499 }
       try {
-        await checkErrorResponse.asPromise()({ res, buffer })
+        await checkErrorResponse()({ res, buffer })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
@@ -115,9 +67,7 @@ describe('async error handler', function() {
     it('displays the custom error message', async function() {
       const res = { statusCode: 403 }
       try {
-        await checkErrorResponse.asPromise({
-          403: 'access denied',
-        })({ res })
+        await checkErrorResponse({ 403: 'access denied' })({ res })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
@@ -133,7 +83,7 @@ describe('async error handler', function() {
     it('throws Inaccessible', async function() {
       const res = { statusCode: 503 }
       try {
-        await checkErrorResponse.asPromise()({ res, buffer })
+        await checkErrorResponse()({ res, buffer })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(Inaccessible)
@@ -149,9 +99,7 @@ describe('async error handler', function() {
     it('displays the custom error message', async function() {
       const res = { statusCode: 500 }
       try {
-        await checkErrorResponse.asPromise({
-          500: 'server overloaded',
-        })({ res, buffer })
+        await checkErrorResponse({ 500: 'server overloaded' })({ res, buffer })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(Inaccessible)

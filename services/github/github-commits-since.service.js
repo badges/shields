@@ -17,7 +17,7 @@ module.exports = class GithubCommitsSince extends GithubAuthService {
   static get route() {
     return {
       base: 'github/commits-since',
-      pattern: ':user/:repo/:version',
+      pattern: ':user/:repo/:version/:branch*',
     }
   }
 
@@ -37,11 +37,39 @@ module.exports = class GithubCommitsSince extends GithubAuthService {
         documentation,
       },
       {
+        title: 'GitHub commits since tagged version (branch)',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: '3.4.7',
+          branch: 'master',
+        },
+        staticPreview: this.render({
+          version: '3.4.7',
+          commitCount: 4225,
+        }),
+        documentation,
+      },
+      {
         title: 'GitHub commits since latest release',
         namedParams: {
           user: 'SubtitleEdit',
           repo: 'subtitleedit',
           version: 'latest',
+        },
+        staticPreview: this.render({
+          version: '3.5.7',
+          commitCount: 157,
+        }),
+        documentation,
+      },
+      {
+        title: 'GitHub commits since latest release (branch)',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: 'latest',
+          branch: 'master',
         },
         staticPreview: this.render({
           version: '3.5.7',
@@ -67,7 +95,7 @@ module.exports = class GithubCommitsSince extends GithubAuthService {
     }
   }
 
-  async handle({ user, repo, version }) {
+  async handle({ user, repo, version, branch }) {
     if (version === 'latest') {
       ;({ tag_name: version } = await fetchLatestRelease(this, {
         user,
@@ -75,10 +103,13 @@ module.exports = class GithubCommitsSince extends GithubAuthService {
       }))
     }
 
+    const notFoundMessage = branch
+      ? 'repo, branch or version not found'
+      : 'repo or version not found'
     const { ahead_by: commitCount } = await this._requestJson({
       schema,
-      url: `/repos/${user}/${repo}/compare/${version}...master`,
-      errorMessages: errorMessagesFor('repo or version not found'),
+      url: `/repos/${user}/${repo}/compare/${version}...${branch || 'master'}`,
+      errorMessages: errorMessagesFor(notFoundMessage),
     })
 
     return this.constructor.render({ version, commitCount })
