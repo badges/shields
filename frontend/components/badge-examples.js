@@ -29,12 +29,12 @@ const ClickableCode = styled(StyledCode)`
 `
 
 function Example({ baseUrl, onClick, exampleData }) {
-  const { title, example, preview } = exampleData
+  const { title, example, preview, realBadge } = exampleData
   const { pattern, namedParams, queryParams } = example
   let exampleUrl
   let previewUrl
 
-  if (preview.buildFromExample) {
+  if (realBadge) {
     exampleUrl = badgeUrlFromPattern({
       baseUrl,
       pattern,

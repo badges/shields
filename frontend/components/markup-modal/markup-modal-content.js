@@ -16,7 +16,8 @@ export default function MarkupModalContent({ example, baseUrl }) {
     documentation,
     example: { pattern, namedParams, queryParams },
     link,
-    preview: { style: initialStyle, buildFromExample } = {},
+    preview: { style: initialStyle } = {},
+    realBadge,
   } = example
 
   return (
@@ -30,7 +31,7 @@ export default function MarkupModalContent({ example, baseUrl }) {
         exampleNamedParams={namedParams}
         exampleQueryParams={queryParams}
         initialStyle={initialStyle}
-        isPrefilled={buildFromExample}
+        isPrefilled={realBadge}
         link={link}
         pattern={pattern}
         title={title}

@@ -17,8 +17,8 @@ const examplePropType = PropTypes.exact({
     color: PropTypes.string,
     namedLogo: PropTypes.string,
     style: PropTypes.string,
-    buildFromExample: PropTypes.bool,
   }),
+  realBadge: PropTypes.bool,
   documentation: PropTypes.exact({
     __html: PropTypes.string.isRequired,
   }),
