@@ -14,14 +14,14 @@ module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
     return [
       {
         title: 'MicroBadger Layers',
-        pattern: 'layers/:imageId+',
+        pattern: ':imageId+',
         namedParams: { imageId: '_/alpine' },
         staticPreview: this.render({ layers: 15 }),
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Layers (tag)',
-        pattern: 'layers/:imageId+/:tag',
+        pattern: ':imageId+/:tag',
         namedParams: { imageId: '_/alpine', tag: '2.7' },
         staticPreview: this.render({ layers: 12 }),
         keywords: ['docker'],
