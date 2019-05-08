@@ -4,11 +4,11 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('license (valid, package version in request)')
   .get('/requests/2.18.4.json')
-  .expectBadge({ label: 'license', message: 'Apache 2.0' })
+  .expectBadge({ label: 'license', message: 'Apache 2.0', color: 'green' })
 
 t.create('license (valid, no package version specified)')
   .get('/requests.json')
-  .expectBadge({ label: 'license', message: 'Apache 2.0' })
+  .expectBadge({ label: 'license', message: 'Apache 2.0', color: 'green' })
 
 t.create('license (invalid)')
   .get('/not-a-package.json')
@@ -31,6 +31,7 @@ t.create('license (from trove classifier)')
   .expectBadge({
     label: 'license',
     message: 'MIT',
+    color: 'green',
   })
 
 t.create('license (as acronym from trove classifier)')
@@ -52,4 +53,5 @@ t.create('license (as acronym from trove classifier)')
   .expectBadge({
     label: 'license',
     message: 'GPL',
+    color: 'orange',
   })
