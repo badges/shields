@@ -43,7 +43,7 @@ function DownloadsForExtensionType(extensionType) {
     static get examples() {
       return [
         {
-          title: `Wordpress ${capt} Downloads`,
+          title: `WordPress ${capt} Downloads`,
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({ downloads: 200000 }),
         },
@@ -93,7 +93,7 @@ function InstallsForExtensionType(extensionType) {
     static get examples() {
       return [
         {
-          title: `Wordpress ${capt} Active Installs`,
+          title: `WordPress ${capt} Active Installs`,
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({ installCount: 300000 }),
         },
