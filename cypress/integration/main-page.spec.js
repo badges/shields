@@ -31,7 +31,7 @@ describe('Main page', function() {
     expectBadgeExample(
       'AppVeyor',
       'http://localhost:8080/badge/build-passing-brightgreen.svg',
-      'http://localhost:8080/appveyor/ci/:user/:repo.svg'
+      '/appveyor/ci/:user/:repo.svg'
     )
   })
 

@@ -53,7 +53,6 @@ function Example({ baseUrl, onClick, exampleData }) {
       namedLogo,
     })
     exampleUrl = badgeUrlFromPath({
-      baseUrl,
       path: pattern,
       namedParams,
       queryParams,
