@@ -17,7 +17,7 @@ const documentation = `
   </p>
   `
 
-const vcsTypeMap = { github: 'gh', bitbucket: 'bb' }
+const vcsTypeMap = { gh: 'gh', github: 'gh', bb: 'bb', bitbucket: 'bb' }
 
 class CircleCi extends BaseSvgScrapingService {
   static get category() {
@@ -27,7 +27,7 @@ class CircleCi extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'circleci/build',
-      pattern: ':vcsType(gh|bb)/:user/:repo/:branch*',
+      pattern: ':vcsType(github|gh|bitbucket|bb)/:user/:repo/:branch*',
       queryParamSchema,
     }
   }
@@ -37,7 +37,7 @@ class CircleCi extends BaseSvgScrapingService {
       {
         title: 'CircleCI',
         namedParams: {
-          vcsType: 'gh',
+          vcsType: 'github',
           user: 'RedSparr0w',
           repo: 'node-csgo-parser',
           branch: 'master',
@@ -61,9 +61,10 @@ class CircleCi extends BaseSvgScrapingService {
 
   async handle({ vcsType, user, repo, branch }, { token }) {
     const branchClause = branch ? `/tree/${branch}` : ''
+    const vcs = vcsTypeMap[vcsType]
     const { message } = await this._requestSvg({
       schema: circleSchema,
-      url: `https://circleci.com/${vcsType}/${user}/${repo}${branchClause}.svg`,
+      url: `https://circleci.com/${vcs}/${user}/${repo}${branchClause}.svg`,
       options: { qs: { style: 'shield', token } },
       errorMessages: { 404: 'project not found' },
     })
@@ -80,7 +81,7 @@ const legacyRoutes = [
         ':token/project/:vcsType(github|bitbucket)?/:user/:repo/:branch*',
     },
     transformPath: ({ vcsType, user, repo, branch }) => {
-      const vcs = vcsTypeMap[vcsType] || 'gh'
+      const vcs = vcsType || 'gh'
       return `/circleci/build/${vcs}/${user}/${repo}${
         branch ? `/${branch}` : ''
       }`
@@ -95,7 +96,7 @@ const legacyRoutes = [
       pattern: ':vcsType(github|bitbucket)?/:user/:repo/:branch*',
     },
     transformPath: ({ vcsType, user, repo, branch }) => {
-      const vcs = vcsTypeMap[vcsType] || 'gh'
+      const vcs = vcsType || 'gh'
       return `/circleci/build/${vcs}/${user}/${repo}${
         branch ? `/${branch}` : ''
       }`
