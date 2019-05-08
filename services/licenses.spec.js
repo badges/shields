@@ -5,11 +5,10 @@ const { licenseToColor, renderLicenseBadge } = require('./licenses')
 
 describe('license helpers', function() {
   test(licenseToColor, () => {
-    given('MIT').expect('green')
-    given('MPL-2.0').expect('orange')
-    given('Unlicense').expect('7cd958')
-    given('unknown-license').expect('lightgrey')
-    given(null).expect('lightgrey')
+    forCases([given('MIT'), given('BSD')]).expect('green')
+    forCases([given('MPL-2.0'), given('MPL')]).expect('orange')
+    forCases([given('Unlicense'), given('CC0')]).expect('7cd958')
+    forCases([given('unknown-license'), given(null)]).expect('lightgrey')
 
     given(['CC0-1.0', 'MPL-2.0']).expect('7cd958')
     given(['MPL-2.0', 'CC0-1.0']).expect('7cd958')
