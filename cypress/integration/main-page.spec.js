@@ -7,14 +7,10 @@ describe('Main page', function() {
   function expectBadgeExample(title, previewUrl, pattern) {
     cy.contains('tr', `${title}:`)
       .find('code')
-      .should(badgeUrlHolder => {
-        expect(badgeUrlHolder).to.have.text(pattern)
-      })
+      .should('have.text', pattern)
     cy.contains('tr', `${title}:`)
       .find('img')
-      .should(badgeImg => {
-        expect(badgeImg).to.have.attr('src', previewUrl)
-      })
+      .should('have.attr', 'src', previewUrl)
   }
 
   it('Search for badges', function() {
