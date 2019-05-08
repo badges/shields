@@ -4,6 +4,19 @@ describe('Main page', function() {
   const backendUrl = Cypress.env('backend_url')
   const SEARCH_INPUT = 'input[placeholder="search / project URL"]'
 
+  function expectBadgeExample(title, previewUrl, pattern) {
+    cy.contains('tr', `${title}:`)
+      .find('code')
+      .should(badgeUrlHolder => {
+        expect(badgeUrlHolder).to.have.text(pattern)
+      })
+    cy.contains('tr', `${title}:`)
+      .find('img')
+      .should(badgeImg => {
+        expect(badgeImg).to.have.attr('src', previewUrl)
+      })
+  }
+
   it('Search for badges', function() {
     cy.visit('/')
 
@@ -15,10 +28,9 @@ describe('Main page', function() {
   it('Shows badge from category', function() {
     cy.visit('/category/build')
 
-    cy.contains('tr', 'AppVeyor:').find(
-      'img[src="http://localhost:8080/badge/build-passing-brightgreen.svg"]'
-    )
-    cy.contains('tr', 'AppVeyor:').contains(
+    expectBadgeExample(
+      'AppVeyor',
+      'http://localhost:8080/badge/build-passing-brightgreen.svg',
       'http://localhost:8080/appveyor/ci/:user/:repo.svg'
     )
   })
@@ -30,9 +42,7 @@ describe('Main page', function() {
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
 
-    cy.contains('GitHub issues')
-    cy.get(`img[src='${badgeUrl}']`)
-    cy.contains(badgeUrl)
+    expectBadgeExample('GitHub issues', badgeUrl, badgeUrl)
   })
 
   it('Customization form is filled with suggested badge details', function() {
