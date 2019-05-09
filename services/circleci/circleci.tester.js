@@ -43,24 +43,43 @@ t.create('circle ci (valid, with token)')
   })
 
 t.create('legacy route with VCS')
-  .get('/project/github/RedSparr0w/node-csgo-parser.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
+  .get('/project/github/RedSparr0w/node-csgo-parser.json', {
+    followRedirect: false,
   })
+  .expectStatus(301)
+  .expectHeader(
+    'Location',
+    '/circleci/build/github/redsparr0w/node-csgo-parser.json'
+  )
 
 t.create('legacy route (assume "github" as a default VCS)')
-  .get('/project/RedSparr0w/node-csgo-parser/master.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
+  .get('/project/RedSparr0w/node-csgo-parser/master.json', {
+    followRedirect: false,
   })
-
-t.create('legacy route with token')
-  .get(
-    '/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master.json'
+  .expectStatus(301)
+  .expectHeader(
+    'Location',
+    '/circleci/build/gh/redsparr0w/node-csgo-parser/master.json'
   )
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
-  })
+
+t.create('legacy route with token and VCS')
+  .get(
+    '/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/github/RedSparr0w/node-csgo-parser/master.json',
+    { followRedirect: false }
+  )
+  .expectStatus(301)
+  .expectHeader(
+    'Location',
+    '/circleci/build/github/redsparr0w/node-csgo-parser/master.json?token=b90b5c49e59a4c67ba3a92f7992587ac7a0408c2'
+  )
+
+t.create('legacy route with token (assume "github" as a default VCS)')
+  .get(
+    '/token/b90b5c49e59a4c67ba3a92f7992587ac7a0408c2/project/RedSparr0w/node-csgo-parser/master.json',
+    { followRedirect: false }
+  )
+  .expectStatus(301)
+  .expectHeader(
+    'Location',
+    '/circleci/build/gh/redsparr0w/node-csgo-parser/master.json?token=b90b5c49e59a4c67ba3a92f7992587ac7a0408c2'
+  )
