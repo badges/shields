@@ -111,6 +111,10 @@ const { BaseService } = require('..')
 
 // (3)
 module.exports = class Example extends BaseService {
+  static get category() {
+    return 'build'
+  }
+
   // (4)
   static get route() {
     return {
