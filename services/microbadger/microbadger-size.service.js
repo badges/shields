@@ -16,15 +16,15 @@ module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
     return [
       {
         title: 'MicroBadger Size',
-        pattern: 'image-size/:imageId+',
-        namedParams: { imageId: 'fedora/apache' },
+        pattern: ':user/:repo',
+        namedParams: { user: 'fedora', repo: 'apache' },
         staticPreview: this.render({ size: 126000000 }),
         keywords: ['docker'],
       },
       {
         title: 'MicroBadger Size (tag)',
-        pattern: 'image-size/:imageId+/:tag',
-        namedParams: { imageId: 'fedora/apache', tag: 'latest' },
+        pattern: ':user/:repo/:tag',
+        namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
         staticPreview: this.render({ size: 103000000 }),
         keywords: ['docker'],
       },
