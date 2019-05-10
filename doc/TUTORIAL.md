@@ -37,7 +37,9 @@ install node and npm: https://nodejs.org/en/download/
    `npm ci`
 5. Run the badge server and the frontend dev server
    `npm start`
-6. Visit the website to check the front-end is loaded: [http://127.0.0.1:3000/](http://127.0.0.1:3000/).
+6. Visit the website to check the front-end is loaded: [http://localhost:3000/](http://localhost:3000/).
+
+In case you can't see the front-end page, visit [http://127.0.0.1:3000/](http://localhost:3000) instead or take a look at [this issue](https://github.com/angular/angular-cli/issues/2227#issuecomment-358036526).
 
 You may also want to install
 [ImageMagick](https://www.imagemagick.org/script/download.php).
