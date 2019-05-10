@@ -73,7 +73,7 @@ export default class SuggestionAndSearch extends React.Component {
         link,
         example,
         preview,
-        realBadge: true,
+        isBadgeSuggestion: true,
         documentation,
       })
     )
