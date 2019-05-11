@@ -31,7 +31,7 @@ module.exports = class SubredditSubscribers extends BaseJsonService {
 
   static get defaultBadgeData() {
     return {
-      label: 'defaultBadge',
+      label: 'reddit',
     }
   }
 
