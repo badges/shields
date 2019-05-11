@@ -20,7 +20,7 @@ class WordpressPluginRequiresVersion extends BaseWordpress {
   static get examples() {
     return [
       {
-        title: 'Wordpress Plugin: Required WP Version',
+        title: 'WordPress Plugin: Required WP Version',
         namedParams: { slug: 'bbpress' },
         staticPreview: this.render({ wordpressVersion: '4.8' }),
       },
@@ -62,7 +62,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
   static get examples() {
     return [
       {
-        title: 'Wordpress Plugin: Tested WP Version',
+        title: 'WordPress Plugin: Tested WP Version',
         namedParams: { slug: 'bbpress' },
         staticPreview: this.renderStaticPreview({
           testedVersion: '4.9.8',

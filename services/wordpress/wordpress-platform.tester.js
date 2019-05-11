@@ -6,7 +6,7 @@ const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'WordpressPlatform',
-  title: 'Wordpress Platform Tests',
+  title: 'WordPress Platform Tests',
   pathPrefix: '/wordpress',
 }))
 

@@ -35,7 +35,7 @@ function VersionForExtensionType(extensionType) {
     static get examples() {
       return [
         {
-          title: `Wordpress ${capt} Version`,
+          title: `WordPress ${capt} Version`,
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({ version: 2.5 }),
         },
