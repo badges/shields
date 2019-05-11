@@ -22,12 +22,12 @@ describe('Main page', function() {
   })
 
   it('Shows badge from category', function() {
-    cy.visit('/category/build')
+    cy.visit('/category/chat')
 
     expectBadgeExample(
-      'AppVeyor',
-      'http://localhost:8080/badge/build-passing-brightgreen.svg',
-      '/appveyor/ci/:user/:repo.svg'
+      'Discourse status',
+      'http://localhost:8080/badge/discourse-online-brightgreen.svg',
+      '/discourse/:scheme/:host/status.svg'
     )
   })
 

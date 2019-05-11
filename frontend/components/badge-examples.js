@@ -7,6 +7,7 @@ import {
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
 import { examplePropType } from '../lib/service-definitions/example-prop-types'
+import { removeRegexpFromPattern } from '../lib/pattern-helpers'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -53,7 +54,7 @@ function Example({ baseUrl, onClick, exampleData }) {
       namedLogo,
     })
     exampleUrl = badgeUrlFromPath({
-      path: pattern,
+      path: removeRegexpFromPattern(pattern),
       namedParams,
       queryParams,
     })
