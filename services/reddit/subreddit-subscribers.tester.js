@@ -11,7 +11,7 @@ t.create('subreddit-subscribers (valid subreddit)')
   })
 
 t.create('subreddit-subscribers (invalid subreddit)')
-  .get('/not-a-real-subreddit.json')
+  .get('/fake-subreddit-1012.json')
   .expectBadge({
     label: 'reddit',
     message: 'not found',
