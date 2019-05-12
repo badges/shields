@@ -4,7 +4,7 @@ const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('subreddit-subscribers (valid subreddit)')
-  .get('/subreddit-subscribers/drums.json')
+  .get('/drums.json')
   .expectBadge({
     label: 'follow r/drums',
     message: isMetric,
