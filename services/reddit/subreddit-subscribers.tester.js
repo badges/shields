@@ -1,22 +1,17 @@
 'use strict'
 
 const { isMetric } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'subreddit-subscribers',
-  title: 'Subreddit subscribers',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('subreddit-subscribers (valid subreddit)')
-  .get('/subreddit-subscribers/drums.svg')
+  .get('/subreddit-subscribers/drums.json')
   .expectBadge({
     label: 'follow r/drums',
     message: isMetric,
   })
 
 t.create('subreddit-subscribers (invalid subreddit)')
-  .get('/subreddit-subscribers/not-a-real-subreddit.svg')
+  .get('/subreddit-subscribers/not-a-real-subreddit.json')
   .expectBadge({
     label: 'reddit',
     message: 'not found',
