@@ -5,7 +5,11 @@ const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { metric } = require('../text-formatters')
 
-const schema = Joi.object({ subscribers: nonNegativeInteger })
+const schema = Joi.object({
+  data: Joi.object({
+    subscribers: nonNegativeInteger,
+  }).required(),
+}).required()
 
 module.exports = class SubredditSubscribers extends BaseJsonService {
   static get category() {
@@ -24,7 +28,12 @@ module.exports = class SubredditSubscribers extends BaseJsonService {
       {
         title: 'Subreddit subscribers',
         namedParams: { subreddit: 'drums' },
-        staticPreview: this.render({ subreddit: 'drums', subscribers: 14500 }),
+        staticPreview: {
+          label: 'follow r/drums',
+          message: '77k',
+          color: 'red',
+          style: 'social',
+        },
       },
     ]
   }
@@ -40,6 +49,7 @@ module.exports = class SubredditSubscribers extends BaseJsonService {
       label: `follow r/${subreddit}`,
       message: metric(subscribers),
       color: 'red',
+      link: [`https://www.reddit.com/r/${subreddit}`],
     }
   }
 
