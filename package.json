@@ -73,7 +73,7 @@
     "precoverage:test": "run-s --silent coverage:clean defs features",
     "coverage:test": "run-s --silent --continue-on-error coverage:test:server coverage:test:package coverage:test:entrypoint coverage:test:frontend coverage:test:integration",
     "coverage:report:generate": "nyc report",
-    "coverage:report:open": "opn coverage/lcov-report/index.html",
+    "coverage:report:open": "open-cli coverage/lcov-report/index.html",
     "coverage:report": "run-s --silent coverage:report:generate coverage:report:open",
     "lint": "eslint \"**/*.js\"",
     "prettier": "prettier --write \"**/*.@(js|md|json|yml)\"",
