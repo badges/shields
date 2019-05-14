@@ -46,7 +46,7 @@ Feel free to reach out to one of the [maintainers][]
 if you need help getting started.
 
 [service badge pr tag]: https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Aservice-badge
-[code review guidelines]: http://amyciavolino.com/assets/MindfulCommunicationInCodeReviews.pdf
+[code review guidelines]: https://kickstarter.engineering/a-guide-to-mindful-communication-in-code-reviews-48aab5282e5e
 [issues]: https://github.com/badges/shields/issues
 [chat room]: https://discordapp.com/invite/HjJCwm5
 [maintainers]: https://github.com/badges/shields#project-leaders
