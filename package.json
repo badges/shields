@@ -216,7 +216,7 @@
     "portfinder": "^1.0.20",
     "prettier": "1.16.4",
     "prop-types": "^15.7.2",
-    "react": "^16.8.5",
+    "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-error-overlay": "^5.1.4",
     "react-helmet": "^5.2.1",
