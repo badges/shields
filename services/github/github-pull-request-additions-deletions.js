@@ -1,9 +1,8 @@
 'use strict'
 
-const { BaseJsonService} = require('..')
+const { BaseJsonService, NotFound } = require('..')
 const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
-const { metric } = require('../text-formatters')
 
 const schema = Joi.object({
   additions: nonNegativeInteger,
@@ -11,7 +10,6 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PullAdditionsDeletions extends BaseJsonService {
-
   static get category() {
     return 'issue-tracking'
   }
@@ -26,26 +24,26 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Github PR\'s additions-deletions',
+        title: "Github PR's additions-deletions",
         namedParams: {
           owner: 'badges',
           repo: 'shields',
-          pr: '3443'
+          pr: '3443',
         },
         staticPreview: {
           label: '+654',
           message: '-43',
           color: 'red',
           labelColor: 'brightgreen',
-        }, 
-      }, 
-    ] 
-  } 
+        },
+      },
+    ]
+  }
 
-  static get defaultBadgeData() { 
-  	return { 
-  		label: 'reddit', 
-  	}
+  static get defaultBadgeData() {
+    return {
+      label: 'reddit',
+    }
   }
 
   static render({ owner, repo, pull, additions, deletions }) {
@@ -71,18 +69,18 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
   transform(json) {
     const additions = json.additions
     const deletions = json.deletions
-    if (additions  === undefined && deleitions === udefined) {
+    if (additions === undefined && deletions === undefined) {
       throw new NotFound({ prettyMessage: 'Repo or PR not found' })
     }
     return {
       additions,
-      deletions
+      deletions,
     }
   }
 
   async handle({ owner, repo, pull }) {
     const json = await this.fetch({ owner, repo, pull })
-    const { additions, deletions} = this.transform(json)
+    const { additions, deletions } = this.transform(json)
     return this.constructor.render({
       additions,
       deletions,
