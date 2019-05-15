@@ -27,7 +27,7 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
     return [
       {
         title: 'Github PR\'s additions-deletions',
-        namedParams: { 
+        namedParams: {
           owner: 'badges',
           repo: 'shields',
           pr: '3443'
@@ -37,15 +37,15 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
           message: '-43',
           color: 'red',
           labelColor: 'brightgreen',
-        },
-      },
-    ]
-  }
+        }, 
+      }, 
+    ] 
+  } 
 
-  static get defaultBadgeData() {
-    return {
-      label: 'reddit',
-    }
+  static get defaultBadgeData() { 
+  	return { 
+  		label: 'reddit', 
+  	}
   }
 
   static render({ owner, repo, pull, additions, deletions }) {
@@ -54,7 +54,7 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
       message: `-${deletions}`,
       color: 'red',
       labelColor: 'brightgreen',
-      link: [`https://www.github.com/${owner}/${repo}/pulls/${pull}],
+      link: [`https://www.github.com/${owner}/${repo}/pulls/${pull}`],
     }
   }
 
@@ -75,17 +75,17 @@ module.exports = class PullAdditionsDeletions extends BaseJsonService {
       throw new NotFound({ prettyMessage: 'Repo or PR not found' })
     }
     return {
-      additions: additions,
-      deletions: deletions
+      additions,
+      deletions
     }
   }
 
   async handle({ owner, repo, pull }) {
     const json = await this.fetch({ owner, repo, pull })
-    const { info } = this.transform(json)
+    const { additions, deletions} = this.transform(json)
     return this.constructor.render({
-      info.additions,
-      info.deletions,
+      additions,
+      deletions,
     })
   }
 }
