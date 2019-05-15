@@ -46,10 +46,8 @@ function RatingForExtensionType(extensionType) {
           title: `WordPress ${capt} Rating`,
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({
-            response: {
-              rating: 80,
-              num_ratings: 100,
-            },
+            rating: 80,
+            numRatings: 100,
           }),
         },
       ]
@@ -95,10 +93,7 @@ function StarsForExtensionType(extensionType) {
           pattern: 'stars/:slug',
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({
-            response: {
-              rating: 80,
-              num_ratings: 100,
-            },
+            rating: 80,
           }),
           documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
         },
