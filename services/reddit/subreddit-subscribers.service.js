@@ -1,13 +1,13 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
+const { BaseJsonService, NotFound } = require('..')
 const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
+const { optionalNonNegativeInteger } = require('../validators')
 const { metric } = require('../text-formatters')
 
 const schema = Joi.object({
   data: Joi.object({
-    subscribers: nonNegativeInteger,
+    subscribers: optionalNonNegativeInteger,
   }).required(),
 }).required()
 
@@ -57,14 +57,26 @@ module.exports = class SubredditSubscribers extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.reddit.com/r/${subreddit}/about.json`,
+      errorMessages: {
+        404: 'subreddit not found',
+      },
     })
+  }
+
+  transform(json) {
+    const subscribers = json.data.subscribers
+    if (subscribers === undefined) {
+      throw new NotFound({ prettyMessage: 'subreddit not found' })
+    }
+    return { subscribers }
   }
 
   async handle({ subreddit }) {
     const json = await this.fetch({ subreddit })
+    const { subscribers } = this.transform(json)
     return this.constructor.render({
       subreddit,
-      subscribers: json.data.subscribers,
+      subscribers,
     })
   }
 }
