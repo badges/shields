@@ -197,7 +197,7 @@ const schema = Joi.object({
 module.exports = class GemVersion extends BaseJsonService {
   // (6)
   static get category() {
-    return 'build'
+    return 'version'
   }
 
   // (7)
