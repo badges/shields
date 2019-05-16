@@ -59,9 +59,9 @@ t.create('Test status with compact message and custom labels')
   })
 
 t.create('Test status on job with no tests')
-  .get('/https/jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x.json')
+  .get('/https/ci.eclipse.org/openj9/job/Build-Doc-Push_to_ghpages.json')
   .expectBadge({ label: 'tests', message: 'no tests found' })
 
 t.create('Test status on non-existent job')
-  .get('/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .get('/https/ci.eclipse.org/openj9/job/does-not-exist.json')
   .expectBadge({ label: 'tests', message: 'instance or job not found' })
