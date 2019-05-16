@@ -60,6 +60,7 @@ t.create('Test status with compact message and custom labels')
 
 t.create('Test status on job with no tests')
   .get('/https/jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x.json')
+  .timeout(10000)
   .expectBadge({ label: 'tests', message: 'no tests found' })
 
 t.create('Test status on non-existent job')
