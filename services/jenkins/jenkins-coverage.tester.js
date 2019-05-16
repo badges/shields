@@ -9,21 +9,17 @@ const t = (module.exports = require('../tester').createServiceTester())
 // https://wiki.jenkins.io/pages/viewpage.action?pageId=58001258
 
 t.create('jacoco: job found')
-  .get('/jacoco/https/wso2.org/jenkins/view/All%20Builds/job/archetypes.json')
-  .timeout(10000)
+  .get('/jacoco/https/builds.apache.org/job/Derby-JaCoCo.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('jacoco: job not found')
-  .get('/jacoco/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .timeout(10000)
+  .get('/jacoco/https/builds.apache.org/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job not found')
-  .get('/cobertura/https/updates.jenkins-ci.org/job/does-not-exist.json')
-  .timeout(10000)
+  .get('/cobertura/https/builds.apache.org/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')
-  .get('/cobertura/https/jenkins.sqlalchemy.org/alembic_coverage.json')
-  .timeout(10000)
+  .get('/cobertura/https/builds.apache.org/job/olingo-odata4-cobertura.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
