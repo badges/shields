@@ -15,10 +15,12 @@ t.create('jacoco: job found')
 
 t.create('jacoco: job not found')
   .get('/jacoco/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .timeout(10000)
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job not found')
   .get('/cobertura/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .timeout(10000)
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')

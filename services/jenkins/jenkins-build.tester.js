@@ -12,6 +12,7 @@ const isJenkinsBuildStatus = Joi.alternatives(
 )
 
 t.create('build job not found')
+  .timeout(10000)
   .get('/https/updates.jenkins-ci.org/job/does-not-exist.json')
   .expectBadge({ label: 'build', message: 'instance or job not found' })
 
@@ -19,10 +20,12 @@ t.create('build found (view)')
   .get(
     '/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.json'
   )
+  .timeout(10000)
   .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
 
 t.create('build found (job)')
   .get('/https/jenkins.ubuntu.com/server/curtin-vmtest-daily-x.json')
+  .timeout(10000)
   .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
 
 const user = 'admin'
