@@ -73,6 +73,7 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
           host: 'jenkins.sqlalchemy.org',
           job: 'job/alembic_coverage',
         },
+        keywords: ['jacoco', 'cobertura'],
         staticPreview: this.render({ coverage: 95 }),
       },
     ]
