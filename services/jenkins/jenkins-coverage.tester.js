@@ -9,17 +9,17 @@ const t = (module.exports = require('../tester').createServiceTester())
 // https://wiki.jenkins.io/pages/viewpage.action?pageId=58001258
 
 t.create('jacoco: job found')
-  .get('/jacoco/https/builds.apache.org/job/Derby-JaCoCo.json')
+  .get('/jacoco/https/wso2.org/jenkins/view/All%20Builds/job/archetypes.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('jacoco: job not found')
-  .get('/jacoco/https/builds.apache.org/job/does-not-exist.json')
+  .get('/jacoco/https/wso2.org/jenkins/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job not found')
-  .get('/cobertura/https/builds.apache.org/job/does-not-exist.json')
+  .get('/cobertura/https/jenkins.sqlalchemy.org/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')
-  .get('/cobertura/https/builds.apache.org/job/olingo-odata4-cobertura.json')
+  .get('/cobertura/https/jenkins.sqlalchemy.org/alembic_coverage.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
