@@ -159,7 +159,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^3.0.0",
     "concurrently": "^4.1.0",
-    "cypress": "^3.2.0",
+    "cypress": "^3.3.0",
     "danger": "^7.1.2",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.9.0",
