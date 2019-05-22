@@ -12,7 +12,7 @@ const isJenkinsBuildStatus = Joi.alternatives(
 )
 
 t.create('build job not found')
-  .get('/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .get('/https/ci.eclipse.org/jgit/job/does-not-exist.json')
   .expectBadge({ label: 'build', message: 'instance or job not found' })
 
 t.create('build found (view)')
@@ -22,7 +22,7 @@ t.create('build found (view)')
   .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
 
 t.create('build found (job)')
-  .get('/https/jenkins.ubuntu.com/server/curtin-vmtest-daily-x.json')
+  .get('/https/ci.eclipse.org/jgit/job/jgit.json')
   .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
 
 const user = 'admin'

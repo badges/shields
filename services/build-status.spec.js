@@ -70,6 +70,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'cancelled' }),
     given({ status: 'expired' }),
     given({ status: 'initiated' }),
+    given({ status: 'no builds' }),
     given({ status: 'no tests' }),
     given({ status: 'not built' }),
     given({ status: 'not run' }),

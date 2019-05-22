@@ -27,6 +27,7 @@ const otherStatuses = [
   'cancelled',
   'expired',
   'initiated',
+  'no builds',
   'no tests',
   'not built',
   'not run',
