@@ -61,8 +61,8 @@ class AurLicense extends BaseAurService {
     return [
       {
         title: 'AUR license',
-        namedParams: { packageName: 'yaourt' },
-        staticPreview: this.render({ license: 'GPL' }),
+        namedParams: { packageName: 'pac' },
+        staticPreview: this.render({ license: 'MIT' }),
       },
     ]
   }
@@ -96,8 +96,8 @@ class AurVotes extends BaseAurService {
     return [
       {
         title: 'AUR votes',
-        namedParams: { packageName: 'yaourt' },
-        staticPreview: this.render({ votes: '3029' }),
+        namedParams: { packageName: 'dropbox' },
+        staticPreview: this.render({ votes: '2280' }),
       },
     ]
   }
@@ -135,8 +135,8 @@ class AurVersion extends BaseAurService {
     return [
       {
         title: 'AUR version',
-        namedParams: { packageName: 'yaourt' },
-        staticPreview: this.render({ version: 'v1.9-1', outOfDate: null }),
+        namedParams: { packageName: 'visual-studio-code-bin' },
+        staticPreview: this.render({ version: '1.34.0-2', outOfDate: null }),
       },
     ]
   }
