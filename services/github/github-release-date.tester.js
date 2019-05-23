@@ -4,7 +4,7 @@ const { isFormattedDate } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Release Date. e.g release date|today')
-  .get('/release-date/microsoft/vscode.json')
+  .get('/release-date/mochajs/mocha.json')
   .expectBadge({
     label: 'release date',
     message: isFormattedDate,
@@ -20,7 +20,7 @@ t.create(
   })
 
 t.create('(Pre-)Release Date. e.g release date|today')
-  .get('/release-date-pre/microsoft/vscode.json')
+  .get('/release-date-pre/mochajs/mocha.json')
   .expectBadge({
     label: 'release date',
     message: isFormattedDate,
