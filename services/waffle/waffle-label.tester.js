@@ -1,26 +1,16 @@
 'use strict'
 
-const t = (module.exports = require('../tester').createServiceTester())
-const { nonNegativeInteger } = require('../validators')
+const { ServiceTester } = require('../tester')
 
-t.create('project not found)')
-  .get('/not-a-user/not-a-repo/bug.json')
-  .expectBadge({
-    label: 'waffle',
-    message: 'project not found',
-  })
+const t = (module.exports = new ServiceTester({
+  id: 'Waffle',
+  title: 'WaffleLabel',
+  pathPrefix: '/waffle/label',
+}))
 
-t.create('label not found')
-  .get('/ritwickdey/vscode-live-server/not-a-real-label.json')
-  .expectBadge({
-    label: 'not-a-real-label',
-    message: '0',
-    color: '#78bdf2',
-  })
-
-t.create('specified label found')
+t.create('no longer available')
   .get('/ritwickdey/vscode-live-server/bug.json')
   .expectBadge({
-    label: 'bug',
-    message: nonNegativeInteger,
+    label: 'waffle',
+    message: 'no longer available',
   })

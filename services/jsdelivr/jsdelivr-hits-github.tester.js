@@ -4,7 +4,7 @@ const { isMetricOverTimePeriod } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('jquery/jquery hits/day')
-  .timeout(5000)
+  .timeout(10000)
   .get('/hd/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
@@ -12,7 +12,7 @@ t.create('jquery/jquery hits/day')
   })
 
 t.create('jquery/jquery hits/week')
-  .timeout(5000)
+  .timeout(10000)
   .get('/hw/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
@@ -20,7 +20,7 @@ t.create('jquery/jquery hits/week')
   })
 
 t.create('jquery/jquery hits/month')
-  .timeout(5000)
+  .timeout(10000)
   .get('/hm/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
@@ -28,7 +28,7 @@ t.create('jquery/jquery hits/month')
   })
 
 t.create('jquery/jquery hits/year')
-  .timeout(5000)
+  .timeout(10000)
   .get('/hy/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
@@ -36,7 +36,7 @@ t.create('jquery/jquery hits/year')
   })
 
 t.create('fake package')
-  .timeout(5000)
+  .timeout(10000)
   .get('/hd/somefakepackage/somefakepackage.json')
   .expectBadge({
     label: 'jsdelivr',
