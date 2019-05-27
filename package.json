@@ -218,7 +218,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-error-overlay": "^5.1.4",
+    "react-error-overlay": "^5.1.6",
     "react-helmet": "^5.2.1",
     "react-modal": "^3.8.1",
     "react-pose": "^4.0.8",
