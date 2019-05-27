@@ -166,7 +166,7 @@
     "enzyme-adapter-react-16": "^1.13.1",
     "escape-string-regexp": "^2.0.0",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-prettier": "^4.3.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-jsx": "^6.0.2",
     "eslint-config-standard-react": "^7.0.2",
