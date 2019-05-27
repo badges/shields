@@ -1,19 +1,23 @@
 'use strict'
 
-const t = (module.exports = require('../tester').createServiceTester())
-const { isMetricOverTimePeriod } = require('../test-validators')
+const { ServiceTester } = require('../tester')
 
-t.create('weekly (github)')
+const t = (module.exports = new ServiceTester({
+  id: 'JitpackDownloads',
+  title: 'JitpackDownloads',
+  pathPrefix: '/jitpack',
+}))
+
+t.create('no longer available (was weekly github')
   .get('/dw/github/erayerdin/kappdirs.json')
-  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
-
-t.create('monthly (github)')
-  .get('/dm/github/erayerdin/kappdirs.json')
-  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
-
-t.create('unknown package (github)')
-  .get('/dw/github/some-bogus-user/project.json')
   .expectBadge({
     label: 'downloads',
-    message: 'project not found or private',
+    message: 'temporarily unavailable',
+  })
+
+t.create('no longer available (was monthly github')
+  .get('/dm/github/erayerdin/kappdirs.json')
+  .expectBadge({
+    label: 'downloads',
+    message: 'temporarily unavailable',
   })
