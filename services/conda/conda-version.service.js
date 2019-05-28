@@ -12,7 +12,7 @@ module.exports = class CondaVersion extends BaseCondaService {
   static get route() {
     return {
       base: 'conda',
-      pattern: ':which(v|vn)/:channel/:pkg',
+      pattern: ':variant(v|vn)/:channel/:pkg',
     }
   }
 
@@ -23,7 +23,7 @@ module.exports = class CondaVersion extends BaseCondaService {
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'v/:channel/:package',
         staticPreview: this.render({
-          which: 'v',
+          variant: 'v',
           channel: 'conda-forge',
           version: '3.7.1',
         }),
@@ -33,7 +33,7 @@ module.exports = class CondaVersion extends BaseCondaService {
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'vn/:channel/:package',
         staticPreview: this.render({
-          which: 'vn',
+          variant: 'vn',
           channel: 'conda-forge',
           version: '3.7.1',
         }),
@@ -41,18 +41,18 @@ module.exports = class CondaVersion extends BaseCondaService {
     ]
   }
 
-  static render({ which, channel, version }) {
+  static render({ variant, channel, version }) {
     return {
-      label: which === 'vn' ? channel : `conda|${channel}`,
+      label: variant === 'vn' ? channel : `conda|${channel}`,
       message: versionText(version),
       color: versionColor(version),
     }
   }
 
-  async handle({ which, channel, pkg }) {
+  async handle({ variant, channel, pkg }) {
     const json = await this.fetch({ channel, pkg })
     return this.constructor.render({
-      which,
+      variant,
       channel,
       version: json.latest_version,
     })

@@ -18,7 +18,7 @@ module.exports = class PubVersion extends BaseJsonService {
   static get route() {
     return {
       base: 'pub',
-      pattern: ':which(v|vpre)/:packageName',
+      pattern: ':variant(v|vpre)/:packageName',
     }
   }
 
@@ -52,9 +52,9 @@ module.exports = class PubVersion extends BaseJsonService {
     })
   }
 
-  async handle({ which, packageName }) {
+  async handle({ variant, packageName }) {
     const data = await this.fetch({ packageName })
-    const includePre = which === 'vpre'
+    const includePre = variant === 'vpre'
     const versions = data.versions
     const version = latest(versions, { pre: includePre })
     return renderVersionBadge({ version })

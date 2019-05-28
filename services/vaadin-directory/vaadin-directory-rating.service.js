@@ -12,7 +12,7 @@ module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService 
   static get route() {
     return {
       base: 'vaadin-directory',
-      pattern: ':which(star|stars|rating)/:packageName',
+      pattern: ':format(star|stars|rating)/:packageName',
     }
   }
 
@@ -20,9 +20,9 @@ module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService 
     return [
       {
         title: 'Vaadin Directory',
-        pattern: ':which(stars|rating)/:packageName',
-        namedParams: { which: 'rating', packageName: 'vaadinvaadin-grid' },
-        staticPreview: this.render({ which: 'rating', score: 4.75 }),
+        pattern: ':format(stars|rating)/:packageName',
+        namedParams: { format: 'rating', packageName: 'vaadinvaadin-grid' },
+        staticPreview: this.render({ format: 'rating', score: 4.75 }),
         keywords: ['vaadin-directory', 'rating'],
       },
     ]
@@ -32,9 +32,9 @@ module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService 
     return { label: 'rating' }
   }
 
-  static render({ which, score }) {
+  static render({ format, score }) {
     const rating = (Math.round(score * 10) / 10).toFixed(1)
-    if (which === 'rating') {
+    if (format === 'rating') {
       return {
         label: 'rating',
         message: `${rating}/5`,
@@ -48,8 +48,8 @@ module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService 
     }
   }
 
-  async handle({ which, packageName }) {
+  async handle({ format, packageName }) {
     const { averageRating } = await this.fetch({ packageName })
-    return this.constructor.render({ which, score: averageRating })
+    return this.constructor.render({ format, score: averageRating })
   }
 }

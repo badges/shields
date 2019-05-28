@@ -135,16 +135,16 @@ const ageUpdateMap = {
     created_at: Joi.date().required(),
     updated_at: Joi.date().required(),
   }).required(),
-  transform: ({ json, which }) =>
-    which === 'age' ? json.created_at : json.updated_at,
-  render: ({ which, value }) => ({
+  transform: ({ json, property }) =>
+    property === 'age' ? json.created_at : json.updated_at,
+  render: ({ property, value }) => ({
     color: age(value),
-    label: which === 'age' ? 'created' : 'updated',
+    label: property === 'age' ? 'created' : 'updated',
     message: formatDate(value),
   }),
 }
 
-const whichMap = {
+const propertyMap = {
   state: stateMap,
   title: titleMap,
   author: authorMap,
@@ -163,7 +163,7 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     return {
       base: 'github',
       pattern:
-        ':kind(issues|pulls)/detail/:which(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
+        ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
     }
   }
 
@@ -172,14 +172,14 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
       {
         title: 'GitHub issue/pull request detail',
         namedParams: {
-          kind: 'issues',
-          which: 'state',
+          issueKind: 'issues',
+          property: 'state',
           user: 'badges',
           repo: 'shields',
           number: '979',
         },
         staticPreview: this.render({
-          which: 'state',
+          property: 'state',
           value: { state: 'closed' },
           isPR: false,
           number: '979',
@@ -205,27 +205,27 @@ module.exports = class GithubIssueDetail extends GithubAuthService {
     }
   }
 
-  static render({ which, value, isPR, number }) {
-    return whichMap[which].render({ which, value, isPR, number })
+  static render({ property, value, isPR, number }) {
+    return propertyMap[property].render({ property, value, isPR, number })
   }
 
-  async fetch({ kind, which, user, repo, number }) {
+  async fetch({ issueKind, property, user, repo, number }) {
     return this._requestJson({
-      url: `/repos/${user}/${repo}/${kind}/${number}`,
-      schema: whichMap[which].schema,
+      url: `/repos/${user}/${repo}/${issueKind}/${number}`,
+      schema: propertyMap[property].schema,
       errorMessages: errorMessagesFor('issue, pull request or repo not found'),
     })
   }
 
-  transform({ json, which, kind }) {
-    const value = whichMap[which].transform({ json, which })
-    const isPR = json.hasOwnProperty('pull_request') || kind === 'pulls'
+  transform({ json, property, issueKind }) {
+    const value = propertyMap[property].transform({ json, property })
+    const isPR = json.hasOwnProperty('pull_request') || issueKind === 'pulls'
     return { value, isPR }
   }
 
-  async handle({ kind, which, user, repo, number }) {
-    const json = await this.fetch({ kind, which, user, repo, number })
-    const { value, isPR } = this.transform({ json, which, kind })
-    return this.constructor.render({ which, value, isPR, number })
+  async handle({ issueKind, property, user, repo, number }) {
+    const json = await this.fetch({ issueKind, property, user, repo, number })
+    const { value, isPR } = this.transform({ json, property, issueKind })
+    return this.constructor.render({ property, value, isPR, number })
   }
 }

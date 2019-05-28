@@ -12,7 +12,7 @@ module.exports = class VaadinDirectoryRatingCount extends BaseVaadinDirectorySer
   static get route() {
     return {
       base: 'vaadin-directory',
-      pattern: ':which(rc|rating-count)/:packageName',
+      pattern: ':alias(rc|rating-count)/:packageName',
     }
   }
 
@@ -39,7 +39,7 @@ module.exports = class VaadinDirectoryRatingCount extends BaseVaadinDirectorySer
     }
   }
 
-  async handle({ which, packageName }) {
+  async handle({ alias, packageName }) {
     const { ratingCount } = await this.fetch({ packageName })
     return this.constructor.render({ ratingCount })
   }
