@@ -11,7 +11,7 @@ const { stateColor, commentsColor } = require('./github-helpers')
 describe('GithubIssueDetail', function() {
   test(GithubIssueDetail.render, () => {
     given({
-      which: 'state',
+      property: 'state',
       value: { state: 'open' },
       number: '12',
       isPR: true,
@@ -21,7 +21,7 @@ describe('GithubIssueDetail', function() {
       color: stateColor('open'),
     })
     given({
-      which: 'state',
+      property: 'state',
       value: { state: 'closed' },
       number: '15',
       isPR: false,
@@ -31,7 +31,7 @@ describe('GithubIssueDetail', function() {
       color: stateColor('closed'),
     })
     given({
-      which: 'title',
+      property: 'title',
       value: 'refactor [FooService]',
       number: '232',
       isPR: true,
@@ -40,7 +40,7 @@ describe('GithubIssueDetail', function() {
       message: 'refactor [FooService]',
     })
     given({
-      which: 'title',
+      property: 'title',
       value: 'Packagist: invalid response data',
       number: '345',
       isPR: false,
@@ -49,14 +49,14 @@ describe('GithubIssueDetail', function() {
       message: 'Packagist: invalid response data',
     })
     given({
-      which: 'author',
+      property: 'author',
       value: 'calebcartwright',
     }).expect({
       label: 'author',
       message: 'calebcartwright',
     })
     given({
-      which: 'label',
+      property: 'label',
       value: { names: ['feature'], colors: ['a2eeef'] },
     }).expect({
       color: 'a2eeef',
@@ -64,20 +64,20 @@ describe('GithubIssueDetail', function() {
       label: 'label',
     })
     given({
-      which: 'label',
+      property: 'label',
       value: { names: ['service-badge', 'bug'], colors: ['a2eeef', 'ee0701'] },
     }).expect({
       color: undefined,
       message: 'service-badge | bug',
       label: 'label',
     })
-    given({ which: 'comments', value: 27 }).expect({
+    given({ property: 'comments', value: 27 }).expect({
       label: 'comments',
       message: metric(27),
       color: commentsColor('closed'),
     })
     given({
-      which: 'age',
+      property: 'age',
       value: '2019-04-01T20:09:31Z',
     }).expect({
       label: 'created',
@@ -85,7 +85,7 @@ describe('GithubIssueDetail', function() {
       color: age('2019-04-01T20:09:31Z'),
     })
     given({
-      which: 'last-update',
+      property: 'last-update',
       value: '2019-04-02T20:09:31Z',
     }).expect({
       label: 'updated',
@@ -96,7 +96,7 @@ describe('GithubIssueDetail', function() {
 
   test(GithubIssueDetail.prototype.transform, () => {
     given({
-      which: 'state',
+      property: 'state',
       json: { state: 'closed' },
     }).expect({
       // Since it's a PR, the "merged" value is not crucial here.
@@ -104,37 +104,37 @@ describe('GithubIssueDetail', function() {
       isPR: false,
     })
     given({
-      which: 'state',
-      kind: 'pulls',
+      property: 'state',
+      issueKind: 'pulls',
       json: { state: 'closed', merged_at: null },
     }).expect({
       value: { state: 'closed', merged: false },
       isPR: true,
     })
     given({
-      which: 'state',
-      kind: 'pulls',
+      property: 'state',
+      issueKind: 'pulls',
       json: { state: 'closed', merged_at: 'I am not null' },
     }).expect({
       value: { state: 'closed', merged: true },
       isPR: true,
     })
     given({
-      which: 'title',
+      property: 'title',
       json: { pull_request: {}, title: 'refactor [Codecov]' },
     }).expect({
       value: 'refactor [Codecov]',
       isPR: true,
     })
     given({
-      which: 'author',
+      property: 'author',
       json: { user: { login: 'dependabot' } },
     }).expect({
       value: 'dependabot',
       isPR: false,
     })
     given({
-      which: 'label',
+      property: 'label',
       json: {
         pull_request: {},
         labels: [
@@ -150,7 +150,7 @@ describe('GithubIssueDetail', function() {
       isPR: true,
     })
     given({
-      which: 'label',
+      property: 'label',
       json: { labels: [{ name: 'bug', color: 'ee0701' }] },
     }).expect({
       value: {
@@ -160,21 +160,21 @@ describe('GithubIssueDetail', function() {
       isPR: false,
     })
     given({
-      which: 'comments',
+      property: 'comments',
       json: { comments: 100 },
     }).expect({
       value: 100,
       isPR: false,
     })
     given({
-      which: 'age',
+      property: 'age',
       json: { created_at: '2019-04-01T20:09:31Z' },
     }).expect({
       value: '2019-04-01T20:09:31Z',
       isPR: false,
     })
     given({
-      which: 'last-update',
+      property: 'last-update',
       json: { updated_at: '2019-04-02T20:09:31Z' },
     }).expect({
       value: '2019-04-02T20:09:31Z',
@@ -186,7 +186,7 @@ describe('GithubIssueDetail', function() {
     it('throws InvalidResponse error when issue has no labels', function() {
       try {
         GithubIssueDetail.prototype.transform({
-          which: 'label',
+          property: 'label',
           json: { labels: [] },
         })
         expect.fail('Expected to throw')
