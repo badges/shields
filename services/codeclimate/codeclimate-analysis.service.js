@@ -40,7 +40,7 @@ const issueColorScale = colorScale(
   ['brightgreen', 'green', 'yellowgreen', 'yellow', 'red']
 )
 
-const whichMap = {
+const variantMap = {
   maintainability: {
     transform: data => ({
       maintainabilityLetter: data.attributes.ratings[0].letter,
@@ -96,7 +96,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     return {
       base: 'codeclimate',
       pattern:
-        ':which(maintainability|maintainability-percentage|tech-debt|issues)/:user/:repo',
+        ':variant(maintainability|maintainability-percentage|tech-debt|issues)/:user/:repo',
     }
   }
 
@@ -105,14 +105,14 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
       {
         title: 'Code Climate maintainability',
         pattern:
-          ':which(maintainability|maintainability-percentage)/:user/:repo',
+          ':format(maintainability|maintainability-percentage)/:user/:repo',
         namedParams: {
-          which: 'maintainability',
+          format: 'maintainability',
           user: 'angular',
           repo: 'angular.js',
         },
         staticPreview: this.render({
-          which: 'maintainability',
+          variant: 'maintainability',
           maintainabilityLetter: 'F',
         }),
         keywords,
@@ -122,7 +122,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
         pattern: 'issues/:user/:repo',
         namedParams: { user: 'twbs', repo: 'bootstrap' },
         staticPreview: this.render({
-          which: 'issues',
+          variant: 'issues',
           issueCount: '89',
         }),
         keywords,
@@ -132,7 +132,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
         pattern: 'tech-debt/:user/:repo',
         namedParams: { user: 'jekyll', repo: 'jekyll' },
         staticPreview: this.render({
-          which: 'tech-debt',
+          variant: 'tech-debt',
           techDebtPercentage: 3.0,
         }),
         keywords,
@@ -140,8 +140,8 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     ]
   }
 
-  static render({ which, ...props }) {
-    const { render } = whichMap[which]
+  static render({ variant, ...props }) {
+    const { render } = variantMap[variant]
 
     return render(props)
   }
@@ -165,13 +165,13 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     return data
   }
 
-  async handle({ which, user, repo }) {
-    const { transform } = whichMap[which]
+  async handle({ variant, user, repo }) {
+    const { transform } = variantMap[variant]
 
     const data = await this.fetch({ user, repo })
     const props = transform(data)
     return this.constructor.render({
-      which,
+      variant,
       ...props,
     })
   }
