@@ -142,7 +142,7 @@ Description of the code:
 1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
 2. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
 3. Our module must export a class which extends `BaseService`.
-4. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the badges on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories.
+4. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
 5. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
@@ -246,7 +246,7 @@ Description of the code:
 3. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
 4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'status', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
-6. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the badges on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories.
+6. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
 7. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
 8. We can use `defaultBadgeData()` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData()` here to define it declaratively.
 9. Our badge must implement the `async handle()` function. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
@@ -294,7 +294,7 @@ throw new NotFound({ prettyMessage: 'package not found' })
 
 ### (4.4) Adding an Example to the Front Page
 
-Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding a couple of additional methods to our class.
+Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method `examples()` to our class.
 
 ```js
 module.exports = class GemVersion extends BaseJsonService {
@@ -320,7 +320,7 @@ module.exports = class GemVersion extends BaseJsonService {
 }
 ```
 
-1. The `category()` property defines which heading in the index our example will appear under.
+1. We defined category earlier in the tutorial. The `category()` property defines which heading in the index our example will appear under.
 2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
 3. Our example object should contain the following properties:
    - `title`: Descriptive text that will be shown next to the badge

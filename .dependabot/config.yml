@@ -1,0 +1,11 @@
+version: 1
+update_configs:
+  # shields.io dependencies
+  - package_manager: 'javascript'
+    directory: '/'
+    update_schedule: 'weekly'
+
+  # gh-badges package dependencies
+  - package_manager: 'javascript'
+    directory: '/gh-badges'
+    update_schedule: 'weekly'
