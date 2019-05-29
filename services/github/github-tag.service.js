@@ -29,7 +29,7 @@ module.exports = class GithubTag extends GithubAuthService {
   static get route() {
     return {
       base: 'github',
-      pattern: ':which(tag|tag-pre|tag-date)/:user/:repo',
+      pattern: ':variant(tag|tag-pre|tag-date)/:user/:repo',
     }
   }
 
@@ -100,9 +100,9 @@ module.exports = class GithubTag extends GithubAuthService {
     }
   }
 
-  async handle({ which, user, repo }) {
-    const usingSemver = which !== 'tag-date'
-    const includePre = which === 'tag-pre'
+  async handle({ variant, user, repo }) {
+    const usingSemver = variant !== 'tag-date'
+    const includePre = variant === 'tag-pre'
 
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/tags`,
