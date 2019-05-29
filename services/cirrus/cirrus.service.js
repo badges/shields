@@ -10,7 +10,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class CirrusBuild extends BaseSvgScrapingService {
+module.exports = class Cirrus extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
