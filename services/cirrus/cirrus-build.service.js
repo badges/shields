@@ -16,22 +16,34 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
   }
 
   String route(String reponame) {
-    return 'https://example.com'
+    return 'https://api.cirrus-ci.com'
   }
 
   static get examples() {
     const { staticPreview } = this
     return [
       {
-        title: 'Cirrus CI Build Status',
-        pattern: ':user/:repo',
+        title: 'Cirrus CI - Base Branch Build Status',
+        pattern: '/github/:user/:repo',
         namedParams: { user: 'flutter', repo: 'flutter' },
         staticPreview,
       },
       {
-        title: 'Cirrus CI Branch Build Status',
-        pattern: ':user/:repo/:branch',
+        title: 'Cirrus CI - Specific Branch Build Status',
+        pattern: '/github/:user/:repo/?branch=:branch',
         namedParams: { user: 'flutter', repo: 'flutter', branch: 'master' },
+        staticPreview,
+      },
+      {
+        title: 'Cirrus CI - Specific Task Build Status',
+        pattern: '/github/:user/:repo?task=:task',
+        namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze' },
+        staticPreview,
+      },
+      {
+        title: 'Cirrus CI - Task and Script Build Status',
+        pattern: '/github/:user/:repo?task=:task&script=:script',
+        namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze', script: 'test' },
         staticPreview,
       }
     ]
@@ -43,7 +55,7 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
 
   static get defaultBadgeData() {
     return {
-      label: 'build',
+      label: 'Cirrus CI Build',
     }
   }
 
@@ -54,7 +66,7 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
   async handle({ comDomain, userRepo, branch }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.cirrus-ci.com/${userRepo}.svg`,
+      url: `https://api.cirrus-ci.com/${cirrusCIData}.json`,
       options: { qs: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
