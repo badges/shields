@@ -138,7 +138,7 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/results.xml
+          MOCHA_FILE: junit/gh-badges/v8/results.xml
           NODE_VERSION: v8
         name: Run package tests on Node 8
 
@@ -146,7 +146,7 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/results.xml
+          MOCHA_FILE: junit/gh-badges/v10/results.xml
           NODE_VERSION: v10
         name: Run package tests on Node 10
 
@@ -154,7 +154,7 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/results.xml
+          MOCHA_FILE: junit/gh-badges/v11/results.xml
           NODE_VERSION: v11
         name: Run package tests on Node 11
 
@@ -162,7 +162,7 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/results.xml
+          MOCHA_FILE: junit/gh-badges/v12/results.xml
           NODE_VERSION: v12
         name: Run package tests on Node 12
 
