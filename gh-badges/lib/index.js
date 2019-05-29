@@ -1,6 +1,29 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const makeBadge = require('./make-badge')
+const schema = Joi.object({
+  text: Joi.array()
+    .items(Joi.string())
+    .min(2)
+    .max(2)
+    .required(),
+  labelColor: Joi.string(),
+  color: Joi.string(),
+  colorA: Joi.string(),
+  colorscheme: Joi.string(),
+  colorB: Joi.string(),
+  format: Joi.string().valid('svg', 'json'),
+  template: Joi.string().valid(
+    'plastic',
+    'flat',
+    'flat-square',
+    'for-the-badge',
+    'popout',
+    'popout-square',
+    'social'
+  ),
+}).required()
 
 class BadgeFactory {
   constructor(options) {
@@ -25,7 +48,12 @@ class BadgeFactory {
    * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
    */
   create(format) {
-    return makeBadge(format)
+    const { error, value } = Joi.validate(format, schema, {
+      allowUnknown: true,
+      stripUnknown: true,
+    })
+    if (error) throw error
+    return makeBadge(value)
   }
 }
 
