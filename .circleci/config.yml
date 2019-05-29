@@ -134,6 +134,9 @@ package_steps: &package_steps
           npm install -g npm
           npm ci
 
+    # Run the package tests on each currently supported node version. See:
+    # https://github.com/badges/shields/blob/master/gh-badges/README.md#node-version-support
+
     - run:
         <<: *run_package_tests
         environment:
