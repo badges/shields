@@ -11,7 +11,7 @@ module.exports = class VaadinDirectoryVersion extends BaseVaadinDirectoryService
   static get route() {
     return {
       base: 'vaadin-directory',
-      pattern: ':which(v|version)/:packageName',
+      pattern: ':alias(v|version)/:packageName',
     }
   }
 
@@ -31,7 +31,7 @@ module.exports = class VaadinDirectoryVersion extends BaseVaadinDirectoryService
     return { label: 'vaadin directory' }
   }
 
-  async handle({ which, packageName }) {
+  async handle({ alias, packageName }) {
     const data = await this.fetch({ packageName })
     const lv = data.latestAvailableRelease.name.toLowerCase()
     return renderVersionBadge({ version: lv })

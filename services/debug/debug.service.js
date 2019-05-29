@@ -13,7 +13,7 @@ module.exports = class Debug extends NonMemoryCachingBaseService {
   static get route() {
     return {
       base: 'debug',
-      pattern: ':which(time|starttime|flip)',
+      pattern: ':variant(time|starttime|flip)',
     }
   }
 
@@ -24,8 +24,8 @@ module.exports = class Debug extends NonMemoryCachingBaseService {
     }
   }
 
-  async handle({ which }) {
-    switch (which) {
+  async handle({ variant }) {
+    switch (variant) {
       case 'time':
         return {
           label: 'time',
