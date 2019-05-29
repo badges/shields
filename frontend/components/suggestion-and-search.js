@@ -72,7 +72,8 @@ export default class SuggestionAndSearch extends React.Component {
         title,
         link,
         example,
-        preview: { ...preview, buildFromExample: true },
+        preview,
+        isBadgeSuggestion: true,
         documentation,
       })
     )
