@@ -63,10 +63,10 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ comDomain, userRepo, branch }) {
+  async handle({ userRepo, branch }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.cirrus-ci.com/${cirrusCIData}.json`,
+      url: `https://api.cirrus-ci.com/${userRepo}.json`,
       options: { qs: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
