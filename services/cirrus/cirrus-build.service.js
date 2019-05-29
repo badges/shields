@@ -26,25 +26,25 @@ module.exports = class CirrusBuild extends BaseSvgScrapingService {
         title: 'Cirrus CI - Base Branch Build Status',
         pattern: '/github/:user/:repo',
         namedParams: { user: 'flutter', repo: 'flutter' },
-        staticPreview,
+        staticPreview
       },
       {
         title: 'Cirrus CI - Specific Branch Build Status',
         pattern: '/github/:user/:repo/?branch=:branch',
         namedParams: { user: 'flutter', repo: 'flutter', branch: 'master' },
-        staticPreview,
+        staticPreview
       },
       {
         title: 'Cirrus CI - Specific Task Build Status',
         pattern: '/github/:user/:repo?task=:task',
         namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze' },
-        staticPreview,
+        staticPreview
       },
       {
         title: 'Cirrus CI - Task and Script Build Status',
         pattern: '/github/:user/:repo?task=:task&script=:script',
         namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze', script: 'test' },
-        staticPreview,
+        staticPreview
       }
     ]
   }
