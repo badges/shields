@@ -10,7 +10,7 @@ module.exports = class CondaPlatform extends BaseCondaService {
   static get route() {
     return {
       base: 'conda',
-      pattern: ':which(p|pn)/:channel/:pkg',
+      pattern: ':variant(p|pn)/:channel/:pkg',
     }
   }
 
@@ -21,22 +21,22 @@ module.exports = class CondaPlatform extends BaseCondaService {
         namedParams: { channel: 'conda-forge', package: 'python' },
         pattern: 'pn/:channel/:package',
         staticPreview: this.render({
-          which: 'pn',
+          variant: 'pn',
           platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
         }),
       },
     ]
   }
 
-  static render({ which, platforms }) {
+  static render({ variant, platforms }) {
     return {
-      label: which === 'pn' ? 'platform' : 'conda|platform',
+      label: variant === 'pn' ? 'platform' : 'conda|platform',
       message: platforms.join(' | '),
     }
   }
 
-  async handle({ which, channel, pkg }) {
+  async handle({ variant, channel, pkg }) {
     const json = await this.fetch({ channel, pkg })
-    return this.constructor.render({ which, platforms: json.conda_platforms })
+    return this.constructor.render({ variant, platforms: json.conda_platforms })
   }
 }

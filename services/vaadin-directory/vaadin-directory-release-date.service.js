@@ -12,7 +12,7 @@ module.exports = class VaadinDirectoryReleaseDate extends BaseVaadinDirectorySer
   static get route() {
     return {
       base: 'vaadin-directory',
-      pattern: ':which(rd|release-date)/:packageName',
+      pattern: ':alias(rd|release-date)/:packageName',
     }
   }
 
@@ -36,7 +36,7 @@ module.exports = class VaadinDirectoryReleaseDate extends BaseVaadinDirectorySer
     return { message: formatDate(date), color: ageColor(date) }
   }
 
-  async handle({ which, packageName }) {
+  async handle({ alias, packageName }) {
     const data = await this.fetch({ packageName })
     return this.constructor.render({
       date: data.latestAvailableRelease.publicationDate,

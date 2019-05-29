@@ -40,14 +40,6 @@ main_steps: &main_steps
           MOCHA_FILE: junit/entrypoint/results.xml
         command: npm run test:entrypoint
 
-    - run:
-        name: Tests for gh-badges package
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/results.xml
-        command: npm run test:package
-
     - store_test_results:
         path: junit
 
@@ -105,6 +97,77 @@ services_steps: &services_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/services/results.xml
         command: npm run test:services:pr:run
+
+    - store_test_results:
+        path: junit
+
+run_package_tests: &run_package_tests
+  when: always
+  command: |
+    # https://discuss.circleci.com/t/switch-nodejs-version-on-machine-executor-solved/26675/3
+    set +e
+    export NVM_DIR="/opt/circleci/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install $NODE_VERSION
+    nvm use $NODE_VERSION
+    node --version
+    npm run test:package
+
+package_steps: &package_steps
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          # https://github.com/badges/shields/issues/1937
+          - v2-dependencies-
+
+    - run:
+        name: Install dependencies
+        command: |
+          set +e
+          export NVM_DIR="/opt/circleci/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm install v12
+          nvm use v12
+          npm install -g npm
+          npm ci
+
+    # Run the package tests on each currently supported node version. See:
+    # https://github.com/badges/shields/blob/master/gh-badges/README.md#node-version-support
+
+    - run:
+        <<: *run_package_tests
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/v8/results.xml
+          NODE_VERSION: v8
+        name: Run package tests on Node 8
+
+    - run:
+        <<: *run_package_tests
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/v10/results.xml
+          NODE_VERSION: v10
+        name: Run package tests on Node 10
+
+    - run:
+        <<: *run_package_tests
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/v11/results.xml
+          NODE_VERSION: v11
+        name: Run package tests on Node 11
+
+    - run:
+        <<: *run_package_tests
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/gh-badges/v12/results.xml
+          NODE_VERSION: v12
+        name: Run package tests on Node 12
 
     - store_test_results:
         path: junit
@@ -216,6 +279,11 @@ jobs:
           when: always
           command: npm run build
 
+  package:
+    machine: true
+
+    <<: *package_steps
+
   services:
     docker:
       - image: circleci/node:8
@@ -282,6 +350,10 @@ workflows:
             branches:
               ignore: gh-pages
       - frontend:
+          filters:
+            branches:
+              ignore: gh-pages
+      - package:
           filters:
             branches:
               ignore: gh-pages

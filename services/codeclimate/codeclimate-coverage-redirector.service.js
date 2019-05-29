@@ -10,7 +10,7 @@ module.exports = [
     category: 'coverage',
     route: {
       base: 'codeclimate',
-      pattern: ':which(c|coverage-percentage)/:user/:repo',
+      pattern: ':alias(c|coverage-percentage)/:user/:repo',
     },
     transformPath: ({ user, repo }) => `/codeclimate/coverage/${user}/${repo}`,
     dateAdded: new Date('2019-04-15'),

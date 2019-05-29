@@ -17,7 +17,7 @@ module.exports = class GithubContributors extends GithubAuthService {
   static get route() {
     return {
       base: 'github',
-      pattern: ':which(contributors|contributors-anon)/:user/:repo',
+      pattern: ':variant(contributors|contributors-anon)/:user/:repo',
     }
   }
 
@@ -26,7 +26,7 @@ module.exports = class GithubContributors extends GithubAuthService {
       {
         title: 'GitHub contributors',
         namedParams: {
-          which: 'contributors',
+          variant: 'contributors',
           user: 'cdnjs',
           repo: 'cdnjs',
         },
@@ -44,8 +44,8 @@ module.exports = class GithubContributors extends GithubAuthService {
     return renderContributorBadge({ contributorCount })
   }
 
-  async handle({ which, user, repo }) {
-    const isAnon = which === 'contributors-anon'
+  async handle({ variant, user, repo }) {
+    const isAnon = variant === 'contributors-anon'
 
     const { res, buffer } = await this._request({
       url: `/repos/${user}/${repo}/contributors`,

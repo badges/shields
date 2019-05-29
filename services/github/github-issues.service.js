@@ -6,12 +6,12 @@ const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
-const isWhichPR = {
+const isPRVariant = {
   'issues-pr': true,
   'issues-pr-closed': true,
 }
 
-const isWhichClosed = {
+const isClosedVariant = {
   'issues-closed': true,
   'issues-pr-closed': true,
 }
@@ -29,7 +29,7 @@ module.exports = class GithubIssues extends GithubAuthService {
     return {
       base: 'github',
       pattern:
-        ':which(issues|issues-closed|issues-pr|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
+        ':variant(issues|issues-closed|issues-pr|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
     }
   }
 
@@ -223,8 +223,8 @@ module.exports = class GithubIssues extends GithubAuthService {
     }
   }
 
-  static render({ which, numIssues, raw, label }) {
-    const state = isWhichClosed[which] ? 'closed' : 'open'
+  static render({ variant, numIssues, raw, label }) {
+    const state = isClosedVariant[variant] ? 'closed' : 'open'
 
     let labelPrefix = ''
     let messageSuffix = ''
@@ -238,7 +238,7 @@ module.exports = class GithubIssues extends GithubAuthService {
     const labelText = label
       ? `${isGhLabelMultiWord ? `"${label}"` : label} `
       : ''
-    const labelSuffix = isWhichPR[which] ? 'pull requests' : 'issues'
+    const labelSuffix = isPRVariant[variant] ? 'pull requests' : 'issues'
 
     return {
       label: `${labelPrefix}${labelText}${labelSuffix}`,
@@ -247,9 +247,9 @@ module.exports = class GithubIssues extends GithubAuthService {
     }
   }
 
-  async fetch({ which, user, repo, label }) {
-    const isPR = isWhichPR[which]
-    const isClosed = isWhichClosed[which]
+  async fetch({ variant, user, repo, label }) {
+    const isPR = isPRVariant[variant]
+    const isClosed = isClosedVariant[variant]
     const query = `repo:${user}/${repo}${isPR ? ' is:pr' : ' is:issue'}${
       isClosed ? ' is:closed' : ' is:open'
     }${label ? ` label:"${label}"` : ''}`
@@ -262,10 +262,10 @@ module.exports = class GithubIssues extends GithubAuthService {
     })
   }
 
-  async handle({ which, raw, user, repo, label }) {
-    const json = await this.fetch({ which, user, repo, label })
+  async handle({ variant, raw, user, repo, label }) {
+    const json = await this.fetch({ variant, user, repo, label })
     return this.constructor.render({
-      which,
+      variant,
       numIssues: json.total_count,
       raw,
       label,
