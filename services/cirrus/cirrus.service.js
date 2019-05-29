@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
+const { BaseService } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -10,7 +10,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Cirrus extends BaseSvgScrapingService {
+module.exports = class Cirrus extends BaseService {
   static get category() {
     return 'build'
   }
