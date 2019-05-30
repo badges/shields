@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const countBy = require('lodash.countby')
 const { GithubAuthService } = require('./github-auth-service')
 const { fetchIssue } = require('./github-common-fetch')

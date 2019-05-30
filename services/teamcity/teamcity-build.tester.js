@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 const {

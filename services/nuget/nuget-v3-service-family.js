@@ -1,7 +1,7 @@
 'use strict'
 
 const { promisify } = require('util')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
 const { BaseJsonService, NotFound } = require('..')

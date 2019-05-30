@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
 const { GithubAuthService } = require('./github-auth-service')

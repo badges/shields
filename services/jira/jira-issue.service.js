@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const JiraBase = require('./jira-base')
 
 const schema = Joi.object({

@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const coalesce = require('./coalesce')
 
 const serverStartTimeGMTString = new Date().toGMTString()

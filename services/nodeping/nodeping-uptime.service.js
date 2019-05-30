@@ -1,7 +1,7 @@
 'use strict'
 
 const { BaseJsonService } = require('..')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { colorScale } = require('../color-formatters')
 
 const colorFormatter = colorScale([99, 99.5, 100])

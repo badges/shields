@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 
 const licenseResponseSchema = Joi.object({

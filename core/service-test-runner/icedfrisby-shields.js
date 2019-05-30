@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { expect } = require('chai')
 
 // based on https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js

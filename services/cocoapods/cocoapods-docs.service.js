@@ -3,7 +3,7 @@
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../color-formatters')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({

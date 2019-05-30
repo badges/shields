@@ -188,7 +188,7 @@ const { renderVersionBadge } = require('..//version')
 const { BaseJsonService } = require('..')
 
 // (4)
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const schema = Joi.object({
   version: Joi.string().required(),
 }).required()

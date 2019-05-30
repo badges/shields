@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 // This test will extract the currency value from the

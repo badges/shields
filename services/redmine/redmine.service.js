@@ -2,7 +2,7 @@
 
 const { starRating } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseXmlService } = require('..')
 
 const schema = Joi.object({
