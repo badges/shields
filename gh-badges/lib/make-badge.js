@@ -169,7 +169,7 @@ module.exports = function makeBadge({
     escapedText: text.map(escapeXml),
     widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
     links: links.map(escapeXml),
-    logo,
+    logo: escapeXml(logo),
     logoPosition,
     logoWidth,
     logoPadding,
