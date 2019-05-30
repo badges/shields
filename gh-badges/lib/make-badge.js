@@ -90,6 +90,10 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
+/*
+note: makeBadge() is fairly thinly wrapped so if we are making changes here
+it is likely this will impact on the package's public interface in index.js
+*/
 module.exports = function makeBadge({
   format,
   template,
