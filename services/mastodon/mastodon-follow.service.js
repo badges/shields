@@ -3,11 +3,11 @@
 const Joi = require('joi')
 const { BaseJsonService, NotFound } = require('..')
 const { metric } = require('../text-formatters')
-const { optionalUrl } = require('../validators')
+const { optionalUrl, nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({
   username: Joi.string().required(),
-  followers_count: Joi.number().required(),
+  followers_count: nonNegativeInteger,
 })
 
 const queryParamSchema = Joi.object({
