@@ -19,6 +19,7 @@ export default function MarkupModal({ example, baseUrl, onRequestClose }) {
       contentLabel="Example Modal"
       isOpen={isOpen}
       onRequestClose={onRequestClose}
+      style={{ content: { overflow: 'visible' } }}
     >
       {isOpen && (
         <ContentContainer>
