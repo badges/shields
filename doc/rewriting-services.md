@@ -152,7 +152,7 @@ Once the route is working, fill out `render()` and `handle()`.
 <details>
 
 ```js
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { errorMessagesFor } = require('./github-helpers')
 
 const issueSchema = Joi.object({
@@ -181,7 +181,7 @@ or create an abstract superclass like **PypiBase**:
 <details>
 
 ```js
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const BaseJsonService = require('../base-json')
 
 const schema = Joi.object({

@@ -1,7 +1,7 @@
 'use strict'
 
 const semver = require('semver')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { latest: latestVersion } = require('../version')

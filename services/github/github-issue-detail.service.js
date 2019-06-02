@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const { formatDate, metric } = require('../text-formatters')

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const pathToRegexp = require('path-to-regexp')
 const coalesceBadge = require('./coalesce-badge')
 const { makeFullUrl } = require('./route')

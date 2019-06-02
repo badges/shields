@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 const { isLegacyVersion } = require('./sonar-helpers')

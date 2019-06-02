@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi').extend(require('joi-extension-semver'))
+const Joi = require('@hapi/joi').extend(require('joi-extension-semver'))
 
 const optionalNonNegativeInteger = Joi.number()
   .integer()
