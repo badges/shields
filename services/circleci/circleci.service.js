@@ -65,7 +65,9 @@ class CircleCi extends BaseSvgScrapingService {
     const { message } = await this._requestSvg({
       schema: circleSchema,
       url: `https://circleci.com/${vcs}/${user}/${repo}${branchClause}.svg`,
-      options: { qs: { style: 'shield', token } },
+      // Note that the unusual 'circle-token' query param name is required.
+      // https://circleci.com/docs/api/#get-authenticated
+      options: { qs: { style: 'shield', 'circle-token': token } },
       errorMessages: { 404: 'project not found' },
     })
     return this.constructor.render({ status: message })
