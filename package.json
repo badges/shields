@@ -214,7 +214,7 @@
     "nyc": "^14.1.1",
     "opn-cli": "^5.0.0",
     "portfinder": "^1.0.20",
-    "prettier": "1.16.4",
+    "prettier": "1.17.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
