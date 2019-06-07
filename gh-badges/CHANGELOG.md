@@ -1,6 +1,13 @@
 # Changelog
 
-## 2.2.0
+## 2.2.1
+
+### Fixes
+
+- Escape logos to prevent XSS vulnerability
+- Update docblock for BadgeFactory.create()
+
+## 2.2.0 - 2019-05-29
 
 ### Deprecations
 

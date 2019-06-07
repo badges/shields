@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService, NotFound } = require('..')
 const { colorScale, letterScore } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')

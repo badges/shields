@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const sinon = require('sinon')
 const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus } = require('../build-status')

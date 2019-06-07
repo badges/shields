@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { colorScale } = require('../color-formatters')
 
 const patternBase = ':protocol(http|https)/:host(.+)/:component(.+)'

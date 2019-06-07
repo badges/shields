@@ -44,7 +44,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
     return [
       {
         title: 'PowerShell Gallery',
-        namedParams: { packageName: 'Az.Storage' },
+        namedParams: { packageName: 'DNS.1.1.1.1' },
         staticPreview: this.render({
           platforms: ['windows', 'macos', 'linux'],
         }),

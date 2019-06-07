@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 const {
   transform,
@@ -11,8 +11,12 @@ const schema = Joi.object({
   dependencies: Joi.array()
     .items(
       Joi.object({
-        deprecated: Joi.boolean().required(),
-        outdated: Joi.boolean().required(),
+        deprecated: Joi.boolean()
+          .allow(null)
+          .required(),
+        outdated: Joi.boolean()
+          .allow(null)
+          .required(),
       })
     )
     .default([]),

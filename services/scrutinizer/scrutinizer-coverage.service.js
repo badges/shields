@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { NotFound } = require('..')
 const { colorScale } = require('../color-formatters')
 const ScrutinizerBase = require('./scrutinizer-base')

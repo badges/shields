@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { test, given, forCases } = require('sazerac')
 const {
   prepareRoute,

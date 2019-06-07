@@ -1,7 +1,7 @@
 'use strict'
 
 const { URL } = require('url')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService, InvalidParameter } = require('..')
 const { errorMessages } = require('../dynamic-common')
 const { optionalUrl } = require('../validators')
