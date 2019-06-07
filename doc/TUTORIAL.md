@@ -148,7 +148,7 @@ Description of the code:
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
      regular expressions by [`path-to-regexp`][path-to-regexp]. the list of the valid categories can be seen
-6. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+6. `handle()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
