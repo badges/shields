@@ -56,7 +56,10 @@ function metric(n) {
   for (let i = metricPrefix.length - 1; i >= 0; i--) {
     const limit = metricPower[i]
     if (n >= limit) {
-      n = Math.round(n / limit)
+      const digits = n.toString().length
+      // if number has 7 digits round to 1 decimal place, otherwise to no decimal place
+      n =
+        digits === 7 ? Math.round((n / limit) * 10) / 10 : Math.round(n / limit)
       if (n < 1000) {
         return `${n}${metricPrefix[i]}`
       } else {
