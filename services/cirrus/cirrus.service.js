@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseService } = require('..')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -10,67 +10,67 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Cirrus extends BaseService {
+module.exports = class Cirrus extends BaseJsonService {
   static get category() {
     return 'build'
   }
 
-  String route(String reponame) {
-    return 'https://api.cirrus-ci.com'
+  static get route() {
+    return {
+      base: 'cirrus',
+      pattern: '/github/:user/:repo',
+    }
   }
 
   static get examples() {
-    const { staticPreview } = this
     return [
       {
         title: 'Cirrus CI - Base Branch Build Status',
-        pattern: '/github/:user/:repo',
         namedParams: { user: 'flutter', repo: 'flutter' },
-        staticPreview
+        staticPreview: this.render({ subject: 'Ci', status: 'passing' }),
       },
       {
         title: 'Cirrus CI - Specific Branch Build Status',
-        pattern: '/github/:user/:repo/?branch=:branch',
+        pattern: '/github/:user/:repo?branch=:branch',
         namedParams: { user: 'flutter', repo: 'flutter', branch: 'master' },
-        staticPreview
+        staticPreview: this.render({ subject: 'Ci', status: 'passing' }),
       },
       {
         title: 'Cirrus CI - Specific Task Build Status',
         pattern: '/github/:user/:repo?task=:task',
         namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze' },
-        staticPreview
+        staticPreview: this.render({ subject: 'analyze', status: 'passing' }),
       },
       {
         title: 'Cirrus CI - Task and Script Build Status',
         pattern: '/github/:user/:repo?task=:task&script=:script',
-        namedParams: { user: 'flutter', repo: 'flutter', task: 'analyze', script: 'test' },
-        staticPreview
-      }
+        namedParams: {
+          user: 'flutter',
+          repo: 'flutter',
+          task: 'analyze',
+          script: 'test',
+        },
+        staticPreview: this.render({ subject: 'test', status: 'passing' }),
+      },
     ]
   }
 
-  static get staticPreview() {
-    return { message: 'passing', color: 'brightgreen' }
-  }
-
   static get defaultBadgeData() {
-    return {
-      label: 'Cirrus CI Build',
-    }
+    return { color: 'success', label: 'Cirrus CI' }
   }
 
-  static render({ status }) {
-    return renderBuildStatusBadge({ status })
+  static render({ subject, status }) {
+    return renderBuildStatusBadge({ label: subject, status })
   }
 
-  async handle({ userRepo, branch }) {
-    const { message: status } = await this._requestSvg({
+  async handle({ userRepo, branch, script }) {
+    const json = await this._requestJson({
       schema,
       url: `https://api.cirrus-ci.com/${userRepo}.json`,
-      options: { qs: { branch } },
+      options: { qs: { branch, script } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 
-    return this.constructor.render({ status })
+    return this.constructor.render(json)
   }
 }
