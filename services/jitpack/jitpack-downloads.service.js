@@ -11,7 +11,7 @@ const schema = Joi.object({
   month: nonNegativeInteger,
 }).required()
 
-const variantMap = {
+const intervalMap = {
   dw: {
     api_field: 'week',
     suffix: '/week',
@@ -31,7 +31,7 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     return {
       base: 'jitpack',
       pattern:
-        ':variant(dw|dm)/:vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
+        ':interval(dw|dm)/:vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
     }
   }
 
@@ -40,14 +40,14 @@ module.exports = class JitpackDownloads extends BaseJsonService {
       {
         title: 'JitPack - Downloads',
         namedParams: {
-          variant: 'dm',
+          interval: 'dm',
           vcs: 'github',
           user: 'jitpack',
           repo: 'maven-simple',
         },
         staticPreview: JitpackDownloads.render({
           downloads: 14000,
-          variant: 'dm',
+          interval: 'dm',
         }),
         keywords: ['java', 'maven'],
       },
@@ -58,9 +58,9 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     return { label: 'downloads' }
   }
 
-  static render({ downloads, variant }) {
+  static render({ downloads, interval }) {
     return {
-      message: `${metric(downloads)}${variantMap[variant].suffix}`,
+      message: `${metric(downloads)}${intervalMap[interval].suffix}`,
       color: downloadCount(downloads),
     }
   }
@@ -73,11 +73,11 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     })
   }
 
-  async handle({ variant, vcs, user, repo }) {
+  async handle({ interval, vcs, user, repo }) {
     const json = await this.fetch({ vcs, user, repo })
     return this.constructor.render({
-      downloads: json[variantMap[variant].api_field],
-      variant,
+      downloads: json[intervalMap[interval].api_field],
+      interval,
     })
   }
 }
