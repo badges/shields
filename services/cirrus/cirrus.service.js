@@ -56,7 +56,7 @@ module.exports = class Cirrus extends BaseJsonService {
           task: 'analyze',
           script: 'test',
         },
-        staticPreview: this.render({ subject: 'test', status: 'passing' }),
+        staticPreview: this.constructor.render({ subject: 'test', status: 'passing' }),
       },
     ]
   }
