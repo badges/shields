@@ -5,7 +5,7 @@ const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  message: Joi.alternatives()
+  status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('unknown'))
     .required(),
 }).required()
