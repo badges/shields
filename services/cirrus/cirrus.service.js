@@ -32,7 +32,7 @@ module.exports = class Cirrus extends BaseJsonService {
       {
         title: 'Cirrus CI - Base Branch Build Status',
         namedParams: { user: 'flutter', repo: 'flutter' },
-        staticPreview: this.render({ subject: 'Ci', status: 'passing' }),
+        staticPreview: this.constructor.render({ subject: 'Ci', status: 'passing' }),
       },
       {
         title: 'Cirrus CI - Specific Branch Build Status',
