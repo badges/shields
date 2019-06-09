@@ -56,7 +56,6 @@ module.exports = class Cirrus extends BaseJsonService {
         namedParams: {
           user: 'flutter',
           repo: 'flutter',
-          task: 'analyze',
           script: 'test',
         },
         staticPreview: this.render({ subject: 'test', status: 'passing' }),
