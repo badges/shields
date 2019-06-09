@@ -44,7 +44,7 @@ module.exports = class Cirrus extends BaseJsonService {
       },
       {
         title: 'Cirrus CI - Task and Script Build Status',
-        pattern: '/github/:user/:repo?task=:task&script=:script',
+        pattern: '/github/:user/:repo',
         namedParams: {
           user: 'flutter',
           repo: 'flutter',
