@@ -323,6 +323,7 @@ jobs:
             - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
+            - v2-cypress-dependencies-{{ checksum "package-lock.json" }}
 
       - run:
           name: Install dependencies
@@ -352,7 +353,7 @@ jobs:
           paths:
             # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Binary-cache
             - ~/.cache/Cypress
-          key: v2-dependencies-{{ checksum "package-lock.json" }}
+          key: v2-cypress-dependencies-{{ checksum "package-lock.json" }}
 
 workflows:
   version: 2
