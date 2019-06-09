@@ -56,7 +56,7 @@ module.exports = class Cirrus extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    return { color: 'success', label: 'Cirrus CI' }
+    return { label: 'build' }
   }
 
   static render({ subject, status }) {
