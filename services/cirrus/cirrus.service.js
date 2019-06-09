@@ -9,6 +9,10 @@ const schema = Joi.object({
     .try(isBuildStatus, Joi.equal('unknown'))
     .required(),
 }).required()
+const queryParamSchema = Joi.object({
+  task: Joi.string(),
+  script: Joi.string(),
+}).required()
 
 module.exports = class Cirrus extends BaseJsonService {
   static get category() {
