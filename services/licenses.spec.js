@@ -16,6 +16,7 @@ describe('license helpers', function() {
     given(['MPL-2.0', 'MIT']).expect('green')
     given(['OFL-1.1', 'MPL-2.0']).expect('orange')
     given(['MPL-2.0', 'OFL-1.1']).expect('orange')
+    given(['EPL-1.0', 'EPL-2.0', 'EPL']).expect('orange')
     given(['CC0-1.0', 'MIT', 'MPL-2.0']).expect('7cd958')
     given(['UNKNOWN-1.0', 'MIT']).expect('green')
     given(['UNKNOWN-1.0', 'UNKNOWN-2.0']).expect('lightgrey')
