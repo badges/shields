@@ -69,7 +69,6 @@ module.exports = class Cirrus extends BaseJsonService {
       schema,
       url: `https://api.cirrus-ci.com/${user}/${repo}.json`,
       options: { qs: { branch, script } },
-      valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 
     return this.constructor.render(json)
