@@ -67,7 +67,7 @@ module.exports = class Cirrus extends BaseJsonService {
   async handle({ user, repo, branch}, { script, task }) {
     const json = await this._requestJson({
       schema,
-      url: `https://api.cirrus-ci.com/${userRepo}.json`,
+      url: `https://api.cirrus-ci.com/${user}/${repo}.json`,
       options: { qs: { branch, script } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
