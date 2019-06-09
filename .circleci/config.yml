@@ -13,6 +13,10 @@ main_steps: &main_steps
     - run:
         name: Install dependencies
         command: npm ci
+        environment:
+          # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
+          # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
+          CYPRESS_INSTALL_BINARY: 0
 
     - save_cache:
         paths:
@@ -61,6 +65,8 @@ integration_steps: &integration_steps
     - run:
         name: Install dependencies
         command: npm ci
+        environment:
+          CYPRESS_INSTALL_BINARY: 0
 
     - run:
         name: Integration tests
@@ -86,6 +92,8 @@ services_steps: &services_steps
     - run:
         name: Install dependencies
         command: npm ci
+        environment:
+          CYPRESS_INSTALL_BINARY: 0
 
     - run:
         name: Identify services tagged in the PR title
@@ -133,6 +141,8 @@ package_steps: &package_steps
           nvm use v12
           npm install -g npm
           npm ci
+        environment:
+          CYPRESS_INSTALL_BINARY: 0
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/gh-badges/README.md#node-version-support
@@ -188,6 +198,8 @@ jobs:
       - run:
           name: Install dependencies
           command: npm ci
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
 
       - save_cache:
           paths:
@@ -235,6 +247,8 @@ jobs:
       - run:
           name: Install dependencies
           command: npm ci
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
 
       - run:
           name: Danger
@@ -259,6 +273,8 @@ jobs:
       - run:
           name: Install dependencies
           command: npm ci
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
 
       - run:
           name: Prepare frontend tests
@@ -331,6 +347,12 @@ jobs:
 
       - store_artifacts:
           path: cypress/screenshots
+
+      - save_cache:
+          paths:
+            # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Binary-cache
+            - ~/.cache/Cypress
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
 workflows:
   version: 2
