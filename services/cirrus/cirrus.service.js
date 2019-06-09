@@ -72,7 +72,7 @@ module.exports = class Cirrus extends BaseJsonService {
     const json = await this._requestJson({
       schema,
       url: `https://api.cirrus-ci.com/${user}/${repo}.json`,
-      options: { qs: { branch, script } },
+      options: { qs: { branch, script, task } },
     })
 
     return this.constructor.render(json)
