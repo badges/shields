@@ -78,6 +78,6 @@ module.exports = class Cirrus extends BaseJsonService {
       options: { qs: { branch, script, task } },
     })
 
-    return this.constructor.render({ status: json.message })
+    return this.constructor.render({ status: json.status })
   }
 }
