@@ -64,7 +64,7 @@ module.exports = class Cirrus extends BaseJsonService {
     return renderBuildStatusBadge({ label: subject, status })
   }
 
-  async handle({ userRepo, branch, script }) {
+  async handle({ user, repo, branch}, { script, task }) {
     const json = await this._requestJson({
       schema,
       url: `https://api.cirrus-ci.com/${userRepo}.json`,
