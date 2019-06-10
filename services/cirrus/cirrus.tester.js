@@ -9,7 +9,7 @@ t.create('cirrus bad repo')
   .expectBadge({ label: 'build', message: 'not+found' })
 
 t.create('cirrus fully.valid')
-  .get('/flutter/flutter.json')
+  .get('/github/flutter/flutter.json')
   .expectBadge({
     label: 'build',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
