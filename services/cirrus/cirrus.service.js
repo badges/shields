@@ -22,7 +22,7 @@ module.exports = class Cirrus extends BaseJsonService {
   static get route() {
     return {
       base: 'cirrus',
-      pattern: '/github/:user/:repo/:branch*',
+      pattern: 'github/:user/:repo/:branch*',
       queryParamSchema,
     }
   }
