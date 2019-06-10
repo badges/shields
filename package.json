@@ -34,7 +34,7 @@
     "dotenv": "^8.0.0",
     "emojic": "^1.1.15",
     "fast-xml-parser": "^3.12.16",
-    "fsos": "^1.1.3",
+    "fsos": "^1.1.6",
     "gh-badges": "file:gh-badges",
     "glob": "^7.1.4",
     "@hapi/joi": "^15.0.3",
