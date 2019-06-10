@@ -319,10 +319,15 @@ jobs:
       - checkout
 
       - restore_cache:
+          name: Restore node_modules
           keys:
             - v2-dependencies-{{ checksum "package-lock.json" }}
             # https://github.com/badges/shields/issues/1937
             - v2-dependencies-
+
+      - restore_cache:
+          name: Restore Cypress binary
+          keys:
             - v2-cypress-dependencies-{{ checksum "package-lock.json" }}
 
       - run:
@@ -350,6 +355,7 @@ jobs:
           path: cypress/screenshots
 
       - save_cache:
+          name: Cache Cypress binary
           paths:
             # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Binary-cache
             - ~/.cache/Cypress
