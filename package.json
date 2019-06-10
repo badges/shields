@@ -183,7 +183,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "fetch-ponyfill": "^6.0.0",
     "fs-readfile-promise": "^3.0.1",
-    "gatsby": "2.5.7",
+    "gatsby": "2.8.6",
     "gatsby-plugin-catch-links": "^2.0.13",
     "gatsby-plugin-page-creator": "^2.0.13",
     "gatsby-plugin-react-helmet": "^3.0.12",
