@@ -5,7 +5,7 @@ const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('cirrus bad repo')
-  .get('/unknown-identifier/unknown-repo.json')
+  .get('/github/unknown-identifier/unknown-repo.json')
   .expectBadge({ label: 'build', message: 'not+found' })
 
 t.create('cirrus fully.valid')
