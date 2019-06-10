@@ -6,7 +6,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('cirrus bad repo')
   .get('/github/unknown-identifier/unknown-repo.json')
-  .expectBadge({ label: 'build', message: 'not+found' })
+  .expectBadge({ label: 'build', message: 'unknown' })
 
 t.create('cirrus fully.valid')
   .get('/github/flutter/flutter.json')
