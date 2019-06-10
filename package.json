@@ -232,7 +232,7 @@
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^7.4.4",
     "start-server-and-test": "^1.9.1",
-    "styled-components": "^4.2.0",
+    "styled-components": "^4.3.1",
     "tmp": "0.1.0",
     "url": "^0.11.0",
     "walkdir": "0.4.0"
