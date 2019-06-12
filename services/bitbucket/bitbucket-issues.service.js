@@ -6,7 +6,7 @@ const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 
 const bitbucketIssuesSchema = Joi.object({
-  count: nonNegativeInteger,
+  size: nonNegativeInteger,
 }).required()
 
 function issueClassGenerator(raw) {
@@ -54,13 +54,14 @@ function issueClassGenerator(raw) {
     }
 
     async fetch({ user, repo }) {
-      const url = `https://bitbucket.org/api/1.0/repositories/${user}/${repo}/issues/`
+      // https://developer.atlassian.com/bitbucket/api/2/reference/resource/repositories/%7Busername%7D/%7Brepo_slug%7D/issues#get
+      const url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/issues/`
       return this._requestJson({
         url,
         schema: bitbucketIssuesSchema,
+        // https://developer.atlassian.com/bitbucket/api/2/reference/meta/filtering#query-issues
         options: {
-          qs: { limit: 0, status: ['new', 'open'] },
-          useQuerystring: true,
+          qs: { limit: 0, q: '(state = "new" OR state = "open")' },
         },
         errorMessages: { 403: 'private repo' },
       })
@@ -68,7 +69,7 @@ function issueClassGenerator(raw) {
 
     async handle({ user, repo }) {
       const data = await this.fetch({ user, repo })
-      return this.constructor.render({ issues: data.count })
+      return this.constructor.render({ issues: data.size })
     }
   }
 }
