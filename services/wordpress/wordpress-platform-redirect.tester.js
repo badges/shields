@@ -7,4 +7,4 @@ t.create('Plugin Tested WP Version (Alias)')
     followRedirect: false,
   })
   .expectStatus(301)
-  .expectHeader('Location', '/wordpress/plugin/wp-version/akismet.svg')
+  .expectHeader('Location', '/wordpress/plugin/tested/akismet.svg')
