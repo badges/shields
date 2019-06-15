@@ -6,7 +6,6 @@ const SonarBase = require('./sonar-base')
 const {
   getLabel,
   documentation,
-  // isLegacyVersion,
   keywords,
   patternBase,
   queryParamWithFormatSchema,
