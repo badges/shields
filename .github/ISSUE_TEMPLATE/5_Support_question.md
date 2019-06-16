@@ -1,6 +1,7 @@
 ---
 name: ❓ Support Question
 about: Ask a question about shields.io
+labels: 'question'
 ---
 
 :question: **Question**
