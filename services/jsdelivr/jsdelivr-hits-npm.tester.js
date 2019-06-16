@@ -43,3 +43,11 @@ t.create('fake package')
     // Will return 0 hits/day as the endpoint can't send 404s at present.
     message: '0/day',
   })
+
+t.create('scoped package')
+  .timeout(10000)
+  .get('/hm/@angular/fire.json')
+  .expectBadge({
+    label: 'jsdelivr',
+    message: isMetricOverTimePeriod,
+  })
