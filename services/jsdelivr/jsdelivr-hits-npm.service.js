@@ -37,9 +37,7 @@ module.exports = class jsDelivrHitsNPM extends BaseJsDelivrService {
   async fetch({ period, packageName }) {
     return this._requestJson({
       schema,
-      url: `https://data.jsdelivr.com/v1/package/npm/${packageName}/stats/date/${
-        periodMap[period]
-      }`,
+      url: `https://data.jsdelivr.com/v1/package/npm/${packageName}/stats/date/${periodMap[period]}`,
     })
   }
 

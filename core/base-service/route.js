@@ -55,9 +55,7 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
 
   if (captureNames.length !== captures.length) {
     throw new Error(
-      `Service ${
-        ServiceClass.name
-      } declares incorrect number of named params ` +
+      `Service ${ServiceClass.name} declares incorrect number of named params ` +
         `(expected ${captures.length}, got ${captureNames.length})`
     )
   }
