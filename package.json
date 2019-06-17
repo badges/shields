@@ -51,7 +51,7 @@
     "pretty-bytes": "^5.2.0",
     "priorityqueuejs": "^1.0.0",
     "prom-client": "^11.3.0",
-    "query-string": "^6.5.0",
+    "query-string": "^6.7.0",
     "raven": "^2.4.2",
     "redis": "~2.8.0",
     "request": "~2.88.0",
