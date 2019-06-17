@@ -190,7 +190,7 @@
     "gatsby-plugin-styled-components": "^3.0.7",
     "got": "^9.6.0",
     "humanize-string": "^2.1.0",
-    "husky": "^2.3.0",
+    "husky": "^2.4.1",
     "icedfrisby": "2.0.0",
     "icedfrisby-nock": "^1.1.0",
     "is-png": "^2.0.0",
