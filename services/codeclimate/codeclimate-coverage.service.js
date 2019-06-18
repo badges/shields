@@ -69,9 +69,7 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     }
     const { data } = await this._requestJson({
       schema,
-      url: `https://api.codeclimate.com/v1/repos/${repoId}/test_reports/${
-        testReportInfo.id
-      }`,
+      url: `https://api.codeclimate.com/v1/repos/${repoId}/test_reports/${testReportInfo.id}`,
     })
     return data
   }
