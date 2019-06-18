@@ -1,6 +1,29 @@
 'use strict'
 
+const c = require('rho-contracts-fork')
 const makeBadge = require('./make-badge')
+const schema = c.object({
+  text: c.tuple(c.string, c.string).strict(),
+  labelColor: c.optional(c.string),
+  color: c.optional(c.string),
+  colorA: c.optional(c.string),
+  colorscheme: c.optional(c.string),
+  colorB: c.optional(c.string),
+  format: c.optional(c.oneOf('svg', 'json')),
+  template: c.optional(
+    c.oneOf(
+      'plastic',
+      'flat',
+      'flat-square',
+      'for-the-badge',
+      'popout',
+      'popout-square',
+      'social'
+    )
+  ),
+})
+
+class ValidationError extends Error {}
 
 class BadgeFactory {
   constructor(options) {
@@ -27,10 +50,22 @@ class BadgeFactory {
    * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
    */
   create(format) {
+    try {
+      schema.check(format)
+    } catch (e) {
+      if (e instanceof c.ContractError) {
+        const wrappedError = new ValidationError()
+        Object.assign(wrappedError, e)
+        throw wrappedError
+      }
+      throw e
+    }
+
     return makeBadge(format)
   }
 }
 
 module.exports = {
   BadgeFactory,
+  ValidationError,
 }
