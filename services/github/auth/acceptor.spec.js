@@ -90,7 +90,10 @@ describe('Github token acceptor', function() {
           .post('/login/oauth/access_token')
           .reply((url, requestBody) => {
             expect(queryString.parse(requestBody).code).to.equal(fakeCode)
-            return queryString.stringify({ access_token: fakeAccessToken })
+            return [
+              200,
+              queryString.stringify({ access_token: fakeAccessToken }),
+            ]
           })
       })
 
