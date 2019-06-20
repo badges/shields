@@ -95,6 +95,12 @@ describe('Github token acceptor', function() {
       })
 
       afterEach(function() {
+        // Make sure other tests will make live requests even when this test
+        // fails.
+        nock.enableNetConnect()
+      })
+
+      afterEach(function() {
         if (scope) {
           scope.done()
           scope = null
@@ -102,7 +108,6 @@ describe('Github token acceptor', function() {
       })
 
       afterEach(function() {
-        nock.enableNetConnect()
         nock.cleanAll()
       })
 
