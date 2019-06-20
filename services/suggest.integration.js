@@ -1,10 +1,10 @@
 'use strict'
 
 const { expect } = require('chai')
-const got = require('got')
 const Camp = require('camp')
 const portfinder = require('portfinder')
 const serverSecrets = require('../lib/server-secrets')
+const got = require('../core/got-test-client')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 

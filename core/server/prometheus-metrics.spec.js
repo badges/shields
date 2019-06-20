@@ -1,10 +1,9 @@
 'use strict'
 
 const { expect } = require('chai')
-// https://github.com/nock/nock/issues/1523
-const got = require('got').extend({ retry: 0 })
 const Camp = require('camp')
 const portfinder = require('portfinder')
+const got = require('../got-test-client')
 const Metrics = require('./prometheus-metrics')
 
 describe('Prometheus metrics route', function() {

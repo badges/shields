@@ -2,11 +2,11 @@
 
 const { expect } = require('chai')
 const Camp = require('camp')
-const got = require('got')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
+const got = require('../../../core/got-test-client')
 const serverSecrets = require('../../../lib/server-secrets')
 const acceptor = require('./acceptor')
 

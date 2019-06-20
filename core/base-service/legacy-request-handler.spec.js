@@ -1,11 +1,10 @@
 'use strict'
 
 const { expect } = require('chai')
-// https://github.com/nock/nock/issues/1523
-const got = require('got').extend({ retry: 0 })
 const nock = require('nock')
 const portfinder = require('portfinder')
 const Camp = require('camp')
+const got = require('../got-test-client')
 const coalesceBadge = require('./coalesce-badge')
 const {
   handleRequest,
