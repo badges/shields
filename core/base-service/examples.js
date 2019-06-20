@@ -47,16 +47,12 @@ function validateExample(example, index, ServiceClass) {
 
   if (!pattern && !ServiceClass.route.pattern) {
     throw new Error(
-      `Example for ${
-        ServiceClass.name
-      } at index ${index} does not declare a pattern`
+      `Example for ${ServiceClass.name} at index ${index} does not declare a pattern`
     )
   }
   if (pattern === ServiceClass.route.pattern) {
     throw new Error(
-      `Example for ${
-        ServiceClass.name
-      } at index ${index} declares a redundant pattern which should be removed`
+      `Example for ${ServiceClass.name} at index ${index} declares a redundant pattern which should be removed`
     )
   }
 

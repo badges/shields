@@ -158,9 +158,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
     }
     const { data } = await this._requestJson({
       schema,
-      url: `https://api.codeclimate.com/v1/repos/${repoId}/snapshots/${
-        snapshotInfo.id
-      }`,
+      url: `https://api.codeclimate.com/v1/repos/${repoId}/snapshots/${snapshotInfo.id}`,
     })
     return data
   }
