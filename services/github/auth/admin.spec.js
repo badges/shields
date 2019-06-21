@@ -3,10 +3,9 @@
 const { expect } = require('chai')
 const sinon = require('sinon')
 const Camp = require('camp')
-// https://github.com/nock/nock/issues/1523
-const got = require('got').extend({ retry: 0 })
 const portfinder = require('portfinder')
 const serverSecrets = require('../../../lib/server-secrets')
+const got = require('../../../core/got-test-client')
 const GithubApiProvider = require('../github-api-provider')
 const { setRoutes } = require('./admin')
 
