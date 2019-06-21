@@ -2,11 +2,11 @@
 
 const { expect } = require('chai')
 const Camp = require('camp')
-const got = require('got')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
+const got = require('../../../core/got-test-client')
 const serverSecrets = require('../../../lib/server-secrets')
 const acceptor = require('./acceptor')
 
@@ -90,8 +90,17 @@ describe('Github token acceptor', function() {
           .post('/login/oauth/access_token')
           .reply((url, requestBody) => {
             expect(queryString.parse(requestBody).code).to.equal(fakeCode)
-            return queryString.stringify({ access_token: fakeAccessToken })
+            return [
+              200,
+              queryString.stringify({ access_token: fakeAccessToken }),
+            ]
           })
+      })
+
+      afterEach(function() {
+        // Make sure other tests will make live requests even when this test
+        // fails.
+        nock.enableNetConnect()
       })
 
       afterEach(function() {
@@ -102,7 +111,6 @@ describe('Github token acceptor', function() {
       })
 
       afterEach(function() {
-        nock.enableNetConnect()
         nock.cleanAll()
       })
 

@@ -1,9 +1,9 @@
 'use strict'
 
 const Camp = require('camp')
-const got = require('got')
 const portfinder = require('portfinder')
 const { expect } = require('chai')
+const got = require('../got-test-client')
 const redirector = require('./redirector')
 
 describe('Redirector', function() {

@@ -1,9 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-// https://github.com/nock/nock/issues/1523
-const got = require('got').extend({ retry: 0 })
 const isSvg = require('is-svg')
+const got = require('./core/got-test-client')
 
 let server
 before(function() {
