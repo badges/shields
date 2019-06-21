@@ -3,13 +3,12 @@
 const fs = require('fs')
 const path = require('path')
 const { expect } = require('chai')
-// https://github.com/nock/nock/issues/1523
-const got = require('got').extend({ retry: 0 })
 const isPng = require('is-png')
 const isSvg = require('is-svg')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const svg2img = require('../../gh-badges/lib/svg-to-img')
+const got = require('../got-test-client')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
 describe('The server', function() {
