@@ -1,7 +1,7 @@
 # Tutorial on how to add a badge for a service
 
 This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, Git and GitHub, however, this document 
+You will need to learn to use JavaScript, Git and GitHub, however, this document
 will guide you through that journey if you are a beginner.
 Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
 
@@ -153,7 +153,7 @@ Description of the code:
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
      regular expressions by [`path-to-regexp`][path-to-regexp]. the list of the valid categories can be seen
-   Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
+     Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
 6. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
