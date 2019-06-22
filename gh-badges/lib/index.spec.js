@@ -30,16 +30,31 @@ describe('BadgeFactory class', function() {
   })
 
   it('should throw a ValidationError with invalid inputs', function() {
-    expect(() => bf.create({})).to.throw(ValidationError)
-    expect(() => bf.create({ text: ['build'] })).to.throw(ValidationError)
+    expect(() => bf.create({})).to.throw(
+      ValidationError,
+      'Field `text` required, got {}'
+    )
+    expect(() => bf.create({ text: ['build'] })).to.throw(
+      ValidationError,
+      "Expected tuple of exactly size 2, but got [ 'build' ]\nfor the field `text` of the object\nThe full value being checked was:\n{ text: [ 'build' ] }"
+    )
     expect(() =>
       bf.create({ text: ['build', 'passed', 'something else'] })
-    ).to.throw(ValidationError)
+    ).to.throw(
+      ValidationError,
+      "Expected tuple of exactly size 2, but got [ 'build', 'passed', 'something else' ]\nfor the field `text` of the object\nThe full value being checked was:\n{ text: [ 'build', 'passed', 'something else' ] }"
+    )
     expect(() =>
       bf.create({ text: ['build', 'passed'], format: 'png' })
-    ).to.throw(ValidationError)
+    ).to.throw(
+      ValidationError,
+      "Expected oneOf(svg, json), but got 'png'\nfor the field `format` of the object\nThe full value being checked was:\n{ text: [ 'build', 'passed' ], format: 'png' }"
+    )
     expect(() =>
       bf.create({ text: ['build', 'passed'], template: 'something else' })
-    ).to.throw(ValidationError)
+    ).to.throw(
+      ValidationError,
+      "Expected oneOf(plastic, flat, flat-square, for-the-badge, popout, popout-square, social), but got 'something else'\nfor the field `template` of the object\nThe full value being checked was:\n{ text: [ 'build', 'passed' ], template: 'something else' }"
+    )
   })
 })
