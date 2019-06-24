@@ -161,7 +161,7 @@
     "cypress": "^3.3.1",
     "danger": "^8.0.0",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
-    "enzyme": "^3.9.0",
+    "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "escape-string-regexp": "^2.0.0",
     "eslint": "^5.16.0",
