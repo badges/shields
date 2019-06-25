@@ -98,7 +98,7 @@ files:
 
 [start-shields.sh]: https://github.com/badges/ServerScript/blob/master/start-shields.sh#L7
 [config]: https://github.com/lorenwest/node-config/wiki/Configuration-Files
-[local-shields-io-production.yml]: ../config/local-shields-io-production.example.yml
+[local-shields-io-production.yml]: ../config/local-shields-io-production.template.yml
 [shields-io-production.yml]: ../config/shields-io-production.yml
 [default.yml]: ../config/default.yml
 

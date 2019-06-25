@@ -69,10 +69,19 @@ const serviceDataSchema = Joi.object({
   .oxor('namedLogo', 'logoSvg')
   .required()
 
+/**
+ * BaseService
+ *
+ * Abstract base class which all service classes inherit from.
+ * Concrete implementations of BaseService must implement the methods
+ * category(), route() and handle(namedParams, queryParams)
+ */
 module.exports = class BaseService {
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
    * the badges on the main shields.io website.
+   * @abstract
+   * @return {string}
    */
   static get category() {
     throw new Error(`Category not set for ${this.name}`)
@@ -83,29 +92,41 @@ module.exports = class BaseService {
   }
 
   /**
-   * Returns an object:
-   *  - base: (Optional) The base path of the routes for this service. This is
-   *    used as a prefix.
-   *  - format: Regular expression to use for routes for this service's badges
-   *  - capture: Array of names for the capture groups in the regular
-   *             expression. The handler will be passed an object containing
-   *             the matches.
-   *  - queryParamSchema: (Optional) A Joi schema (`Joi.object({ ... }).required()`)
-   *                      for the query param object. If you know a parameter
-   *                      will never receive a numeric string, you can use
-   *                      `Joi.string()`. Because of quirks in Scoutcamp and Joi,
-   *                      alphanumeric strings should be declared using
-   *                      `Joi.alternatives().try(Joi.string(), Joi.number())`,
-   *                      otherwise a value like `?success_color=999` will fail.
-   *                      A parameter requiring a numeric string can use
-   *                      `Joi.number()`. A parameter that receives only non-numeric
-   *                      strings can use `Joi.string()`. A parameter that never
-   *                      receives numeric can use `Joi.string()`. A boolean
-   *                      parameter should use `Joi.equal('')` and will receive an
-   *                      empty string on e.g. `?compact_message` and undefined
-   *                      when the parameter is absent. (Note that in,
-   *                      `examples.queryParams` boolean query params should be given
-   *                      `null` values.)
+   * Route to mount this service on
+   *
+   * @abstract
+   * @return {object} route
+   * @return {string} route.base
+   *    (Optional) The base path of the routes for this service.
+   *    This is used as a prefix.
+   * @return {string} route.pattern
+   *    A path-to-regexp pattern defining the route pattern and param names
+   *    See https://www.npmjs.com/package/path-to-regexp
+   * @return {Regexp} route.format
+   *    Deprecated: Regular expression to use for routes for this service's badges
+   *    Use `pattern` instead
+   * @return {string[]} route.capture
+   *    Deprecated: Array of names for the capture groups in the regular
+   *    expression. The handler will be passed an object containing
+   *    the matches.
+   *    Use `pattern` instead
+   * @return {Joi.object} route.queryParamSchema
+   *    (Optional) A Joi schema (`Joi.object({ ... }).required()`)
+   *    for the query param object. If you know a parameter
+   *    will never receive a numeric string, you can use
+   *    `Joi.string()`. Because of quirks in Scoutcamp and Joi,
+   *    alphanumeric strings should be declared using
+   *    `Joi.alternatives().try(Joi.string(), Joi.number())`,
+   *    otherwise a value like `?success_color=999` will fail.
+   *    A parameter requiring a numeric string can use
+   *    `Joi.number()`. A parameter that receives only non-numeric
+   *    strings can use `Joi.string()`. A parameter that never
+   *    receives numeric can use `Joi.string()`. A boolean
+   *    parameter should use `Joi.equal('')` and will receive an
+   *    empty string on e.g. `?compact_message` and undefined
+   *    when the parameter is absent. (Note that in,
+   *    `examples.queryParams` boolean query params should be given
+   *    `null` values.)
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
@@ -123,6 +144,7 @@ module.exports = class BaseService {
    * For services which use a route `format`, the `pattern` can be specified as
    * part of the example.
    *
+   * An example object has the following structure:
    * title: Descriptive text that will be shown next to the badge. The default
    *   is to use the service class name, which probably is not what you want.
    * namedParams: An object containing the values of named parameters to
@@ -138,6 +160,9 @@ module.exports = class BaseService {
    * keywords: Additional keywords, other than words in the title. This helps
    *   users locate relevant badges.
    * documentation: An HTML string that is included in the badge popup.
+   *
+   * @abstract
+   * @return {Object[]} Array of Example objects
    */
   static get examples() {
     return []
@@ -154,9 +179,15 @@ module.exports = class BaseService {
   }
 
   /**
-   * Default data for the badge. Can include label, logo, and color. These
-   * defaults are used if the value is neither included in the service data
+   * Default data for the badge.
+   * These defaults are used if the value is neither included in the service data
    * from the handler nor overridden by the user via query parameters.
+   *
+   * @return {object} defaultBadgeData
+   * @return {string} defaultBadgeData.label (Optional)
+   * @return {string} defaultBadgeData.color (Optional)
+   * @return {string} defaultBadgeData.labelColor (Optional)
+   * @return {string} defaultBadgeData.namedLogo (Optional)
    */
   static get defaultBadgeData() {
     return {}
@@ -247,6 +278,17 @@ module.exports = class BaseService {
    * Asynchronous function to handle requests for this service. Take the route
    * parameters (as defined in the `route` property), perform a request using
    * `this._sendAndCacheRequest`, and return the badge data.
+   *
+   * @abstract
+   * @param {object} namedParams Params parsed from route pattern
+   *    defined in this.route.pattern or this.route.capture
+   * @param {object} queryParams Params parsed from the query string
+   * @returns {object} badge Object validated against serviceDataSchema
+   * @return {boolean} badge.isError (Optional)
+   * @return {string} badge.label (Optional)
+   * @return {(string|number)} badge.message
+   * @return {string} badge.color (Optional)
+   * @return {string[]} badge.link (Optional)
    */
   async handle(namedParams, queryParams) {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
