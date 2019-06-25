@@ -56,7 +56,7 @@ export default class QueryStringBuilder extends React.Component {
       // Throughout the component, these two types are supported in the same
       // manner: by inspecting this value type.
       const isStringParam = typeof value === 'string'
-      queryParams[name] = isStringParam ? '' : true
+      queryParams[name] = isStringParam ? value : true
     })
 
     // Create empty values in `this.state.badgeOptions` for each of the
@@ -175,10 +175,10 @@ export default class QueryStringBuilder extends React.Component {
         <td>
           {isStringParam ? (
             <QueryParamInput
-              checked={value}
               name={name}
               onChange={this.handleServiceQueryParamChange}
               type="text"
+              value={value}
               {...noAutocorrect}
             />
           ) : (
