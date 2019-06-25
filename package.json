@@ -229,7 +229,7 @@
     "sazerac": "^1.0.0",
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0",
-    "snap-shot-it": "^7.7.0",
+    "snap-shot-it": "^7.8.0",
     "start-server-and-test": "^1.9.1",
     "styled-components": "^4.3.1",
     "tmp": "0.1.0",
