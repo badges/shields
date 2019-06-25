@@ -1,12 +1,19 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { NotFound } = require('..')
+const { NotFound, redirector } = require('..')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+
+const queryParamSchema = Joi.object({
+  include_prereleases: Joi.equal(''),
+  sort: Joi.string()
+    .valid('date', 'semver')
+    .default('date'),
+}).required()
 
 const schema = Joi.alternatives()
   .try(
@@ -21,60 +28,45 @@ const schema = Joi.alternatives()
   )
   .required()
 
-module.exports = class GithubTag extends GithubAuthService {
+class GithubTag extends GithubAuthService {
   static get category() {
     return 'version'
   }
 
   static get route() {
     return {
-      base: 'github',
-      pattern: ':variant(tag|tag-pre|tag-date)/:user/:repo',
+      base: 'github/v/tag',
+      pattern: ':user/:repo',
+      queryParamSchema,
     }
   }
 
   static get examples() {
     return [
       {
+        title: 'GitHub tag (latest by date)',
+        namedParams: { user: 'expressjs', repo: 'express' },
+        staticPreview: this.render({
+          version: 'v5.0.0-alpha.7',
+          sort: 'date',
+        }),
+        documentation,
+      },
+      {
         title: 'GitHub tag (latest SemVer)',
-        pattern: 'tag/:user/:repo',
-        namedParams: {
-          user: 'expressjs',
-          repo: 'express',
-        },
-        staticPreview: {
-          label: 'tag',
-          message: 'v4.16.4',
-          color: 'blue',
-        },
+        namedParams: { user: 'expressjs', repo: 'express' },
+        queryParams: { sort: 'semver' },
+        staticPreview: this.render({ version: 'v4.16.4', sort: 'semver' }),
         documentation,
       },
       {
         title: 'GitHub tag (latest SemVer pre-release)',
-        pattern: 'tag-pre/:user/:repo',
-        namedParams: {
-          user: 'expressjs',
-          repo: 'express',
-        },
-        staticPreview: {
-          label: 'tag',
-          message: 'v5.0.0-alpha.7',
-          color: 'orange',
-        },
-        documentation,
-      },
-      {
-        title: 'GitHub tag (latest by date)',
-        pattern: 'tag-date/:user/:repo',
-        namedParams: {
-          user: 'expressjs',
-          repo: 'express',
-        },
-        staticPreview: {
-          label: 'tag',
-          message: 'v5.0.0-alpha.7',
-          color: 'blue',
-        },
+        namedParams: { user: 'expressjs', repo: 'express' },
+        queryParams: { sort: 'semver', include_prereleases: null },
+        staticPreview: this.render({
+          version: 'v5.0.0-alpha.7',
+          sort: 'semver',
+        }),
         documentation,
       },
     ]
@@ -84,39 +76,81 @@ module.exports = class GithubTag extends GithubAuthService {
     return { label: 'tag' }
   }
 
-  static render({ usingSemver, version }) {
+  static render({ version, sort }) {
     return {
       message: addv(version),
-      color: usingSemver ? versionColor(version) : 'blue',
+      color: sort === 'semver' ? versionColor(version) : 'blue',
     }
   }
 
-  static transform({ usingSemver, includePre, json }) {
-    const versions = json.map(({ name }) => name)
-    if (usingSemver) {
-      return latest(versions, { pre: includePre })
-    } else {
-      return versions[0]
-    }
-  }
-
-  async handle({ variant, user, repo }) {
-    const usingSemver = variant !== 'tag-date'
-    const includePre = variant === 'tag-pre'
-
-    const json = await this._requestJson({
+  async fetch({ user, repo }) {
+    return this._requestJson({
       url: `/repos/${user}/${repo}/tags`,
       schema,
-      errorMessages: errorMessagesFor(),
+      errorMessages: errorMessagesFor('repo not found'),
     })
-    if (json.length === 0) {
-      throw new NotFound({ prettyMessage: 'none' })
-    }
-    const version = this.constructor.transform({
-      usingSemver,
-      includePre,
-      json,
-    })
-    return this.constructor.render({ usingSemver, version })
   }
+
+  static getLatestTag({ tags, sort, includePrereleases }) {
+    if (sort === 'semver') {
+      return latest(tags.map(tag => tag.name), { pre: includePrereleases })
+    }
+    return tags[0].name
+  }
+
+  async handle({ user, repo }, queryParams) {
+    const sort = queryParams.sort
+    const includePrereleases = queryParams.include_prereleases !== undefined
+
+    const tags = await this.fetch({ user, repo })
+    if (tags.length === 0) throw new NotFound({ prettyMessage: 'none' })
+    return this.constructor.render({
+      version: this.constructor.getLatestTag({
+        tags,
+        sort,
+        includePrereleases,
+      }),
+      sort,
+    })
+  }
+}
+
+const redirects = {
+  GithubTagRedirect: redirector({
+    category: 'version',
+    route: {
+      base: 'github/tag',
+      pattern: ':user/:repo',
+    },
+    transformPath: ({ user, repo }) => `/github/v/tag/${user}/${repo}`,
+    transformQueryParams: params => ({ sort: 'semver' }),
+    dateAdded: new Date('2019-06-25'),
+  }),
+  GithubTagPreRedirect: redirector({
+    category: 'version',
+    route: {
+      base: 'github/tag-pre',
+      pattern: ':user/:repo',
+    },
+    transformPath: ({ user, repo }) => `/github/v/tag/${user}/${repo}`,
+    transformQueryParams: params => ({
+      sort: 'semver',
+      include_prereleases: null,
+    }),
+    dateAdded: new Date('2019-06-25'),
+  }),
+  GithubTagDateRedirect: redirector({
+    category: 'version',
+    route: {
+      base: 'github/tag-date',
+      pattern: ':user/:repo',
+    },
+    transformPath: ({ user, repo }) => `/github/v/tag/${user}/${repo}`,
+    dateAdded: new Date('2019-06-25'),
+  }),
+}
+
+module.exports = {
+  GithubTag,
+  ...redirects,
 }
