@@ -1,7 +1,8 @@
 # Tutorial on how to add a badge for a service
 
 This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, Git and GitHub.
+You will need to learn to use JavaScript, Git and GitHub, however, this document
+will guide you through that journey if you are a beginner.
 Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
 
 ## (1) Reading
@@ -48,7 +49,7 @@ but you can get a dev copy running without it.
 
 ## (3) Open an Issue
 
-Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=2_Badge_request.md) and describe what you have in mind:
+Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.md) and describe what you have in mind:
 
 - What is the badge for?
 - Which API do you want to use?
@@ -98,6 +99,10 @@ Other classes implement useful behavior on top of [BaseService].
   implements methods for performing requests to a JSON API and schema validation.
 - [BaseXmlService](https://github.com/badges/shields/blob/master/core/base-service/base-xml.js)
   implements methods for performing requests to an XML API and schema validation.
+- [BaseYamlService](https://github.com/badges/shields/blob/master/core/base-service/base-yaml.js)
+  implements methods for performing requests to a YAML API and schema validation.
+- [BaseSvgScrapingService](https://github.com/badges/shields/blob/master/core/base-service/base-svg-scraping.js)
+  implements methods for retrieving information from existing third-party badges.
 - If you are contributing to a _service family_, you may define a common super
   class for the badges or one may already exist.
 
@@ -147,14 +152,9 @@ Description of the code:
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
-     regular expressions by [`path-to-regexp`][path-to-regexp]. the list of the valid categories can be seen
-6. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
-   - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
-   - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
-     number of named parameters. These are converted into
      regular expressions by [`path-to-regexp`][path-to-regexp].
-7. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
-8. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
+     Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
+6. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
    - `color`: the background color of the right side of the badge
@@ -283,7 +283,7 @@ Specifically `BaseJsonService` will handle the following errors for us:
 
 Sometimes it may be necessary to manually throw an exception to deal with a
 non-standard error condition. If so, there are several standard exceptions that can be used. These exceptions are defined in
-[errors.js](https://github.com/badges/shields/blob/master/services/errors.js)
+[errors.js](https://github.com/badges/shields/blob/master/core/base-service/errors.js)
 and can be imported via the import shortcut and then thrown:
 
 ```js
