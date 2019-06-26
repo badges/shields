@@ -1,6 +1,6 @@
 'use strict'
 
-const c = require('rho-contracts-fork')
+const c = require('@rho-contracts/rho-contracts')
 const makeBadge = require('./make-badge')
 const schema = c.object({
   text: c.tuple(c.string, c.string).strict(),
