@@ -56,6 +56,7 @@ class BadgeFactory {
       if (e instanceof c.ContractError) {
         const wrappedError = new ValidationError()
         Object.assign(wrappedError, e)
+        wrappedError.name = 'ValidationError'
         throw wrappedError
       }
       throw e
