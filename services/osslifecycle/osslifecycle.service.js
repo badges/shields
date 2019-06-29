@@ -17,13 +17,13 @@ module.exports = class OssTracker extends BaseService {
   static get examples() {
     return [
       {
-        title: 'NetflixOSS Lifecycle',
+        title: 'OSS Lifecycle',
         pattern: ':user/:repo',
         namedParams: { user: 'Netflix', repo: 'osstracker' },
         staticPreview: this.render({ status: 'active' }),
       },
       {
-        title: 'NetflixOSS Lifecycle (branch)',
+        title: 'OSS Lifecycle (branch)',
         pattern: ':user/:repo/:branch',
         namedParams: { user: 'Netflix', repo: 'osstracker', branch: 'master' },
         staticPreview: this.render({ status: 'active' }),
