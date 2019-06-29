@@ -103,7 +103,8 @@ class GithubTag extends GithubAuthService {
     const includePrereleases = queryParams.include_prereleases !== undefined
 
     const tags = await this.fetch({ user, repo })
-    if (tags.length === 0) throw new NotFound({ prettyMessage: 'none' })
+    if (tags.length === 0)
+      throw new NotFound({ prettyMessage: 'no tags found' })
     return this.constructor.render({
       version: this.constructor.getLatestTag({
         tags,

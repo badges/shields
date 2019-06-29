@@ -26,7 +26,7 @@ t.create('Tag (inc pre-release)')
 
 t.create('Tag (no tags)')
   .get('/v/tag/badges/daily-tests.json')
-  .expectBadge({ label: 'tag', message: 'none' })
+  .expectBadge({ label: 'tag', message: 'no tags found' })
 
 t.create('Tag (repo not found)')
   .get('/v/tag/badges/helmets.json')

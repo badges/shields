@@ -103,7 +103,7 @@ class GithubRelease extends GithubAuthService {
     return this._requestJson({
       url: `/repos/${user}/${repo}/releases`,
       schema: releaseInfoArraySchema,
-      errorMessages: errorMessagesFor('no releases or repo not found'),
+      errorMessages: errorMessagesFor('repo not found'),
     })
   }
 
@@ -142,7 +142,8 @@ class GithubRelease extends GithubAuthService {
     }
 
     const releases = await this.fetchReleases({ user, repo })
-    if (releases.length === 0) throw new NotFound({ prettyMessage: 'none' })
+    if (releases.length === 0)
+      throw new NotFound({ prettyMessage: 'no releases found' })
     latestRelease = this.constructor.getLatestRelease({
       releases,
       sort,
