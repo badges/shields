@@ -88,12 +88,12 @@ class SonarTestsSummary extends SonarBase {
     })
   }
 
-  transformTestResults({ json, sonarVersion }) {
+  transform({ json, sonarVersion }) {
     const {
       tests: total,
       skipped_tests: skipped,
       test_failures: failed,
-    } = this.transform({
+    } = super.transform({
       json,
       sonarVersion,
     })
@@ -123,7 +123,7 @@ class SonarTestsSummary extends SonarBase {
       component,
       metricName: 'tests,test_failures,skipped_tests',
     })
-    const { total, passed, failed, skipped } = this.transformTestResults({
+    const { total, passed, failed, skipped } = this.transform({
       json,
       sonarVersion,
     })
