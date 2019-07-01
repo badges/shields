@@ -63,7 +63,7 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
       component,
       metricName: metric,
     })
-    const { metricValue: density } = this.transform({ json, sonarVersion })
-    return this.constructor.render({ density })
+    const metrics = this.transform({ json, sonarVersion })
+    return this.constructor.render({ density: metrics[metric] })
   }
 }

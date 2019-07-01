@@ -89,16 +89,10 @@ const testsMetricNames = [
   'coverage_line_hits_data',
   'lines_to_cover',
   'new_lines_to_cover',
-  'skipped_tests',
   'uncovered_conditions',
   'new_uncovered_conditions',
   'uncovered_lines',
   'new_uncovered_lines',
-  'tests',
-  'test_execution_time',
-  'test_errors',
-  'test_failures',
-  'test_success_density',
 ]
 const metricNames = [
   ...complexityMetricNames,
@@ -146,7 +140,10 @@ module.exports = class SonarGeneric extends SonarBase {
       metricName,
     })
 
-    const { metricValue } = this.transform({ json, sonarVersion })
-    return this.constructor.render({ metricName, metricValue })
+    const metrics = this.transform({ json, sonarVersion })
+    return this.constructor.render({
+      metricName,
+      metricValue: metrics[metricName],
+    })
   }
 }
