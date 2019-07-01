@@ -29,7 +29,7 @@ module.exports = class Bugzilla extends BaseJsonService {
   static get route() {
     return {
       base: 'bugzilla',
-      pattern: ':bugNumber',
+      pattern: ':protocol(http|https)?/:host?/:path*/:bugNumber',
     }
   }
 
@@ -37,11 +37,30 @@ module.exports = class Bugzilla extends BaseJsonService {
     return [
       {
         title: 'Bugzilla bug status',
-        namedParams: { bugNumber: '996038' },
+        namedParams: {
+          protocol: 'https',
+          host: 'bugzilla.mozilla.org',
+          bugNumber: '996038',
+        },
         staticPreview: this.render({
           bugNumber: 996038,
           status: 'FIXED',
           resolution: '',
+        }),
+        documentation,
+      },
+      {
+        title: 'Bugzilla bug status (with path)',
+        namedParams: {
+          protocol: 'https',
+          host: 'bugs.eclipse.org',
+          path: 'bugs',
+          bugNumber: '545424',
+        },
+        staticPreview: this.render({
+          bugNumber: 545424,
+          status: 'RESOLVED',
+          resolution: 'FIXED',
         }),
         documentation,
       },
@@ -92,15 +111,17 @@ module.exports = class Bugzilla extends BaseJsonService {
     }
   }
 
-  async fetch({ bugNumber }) {
+  async fetch({ protocol, host, path, bugNumber }) {
     return this._requestJson({
       schema,
-      url: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
+      url: `${protocol}://${host}${
+        path ? '/' + path : ''
+      }/rest/bug/${bugNumber}`,
     })
   }
 
-  async handle({ bugNumber }) {
-    const data = await this.fetch({ bugNumber })
+  async handle({ protocol, host, path, bugNumber }) {
+    const data = await this.fetch({ protocol, host, path, bugNumber })
     return this.constructor.render({
       bugNumber,
       status: data.bugs[0].status,
