@@ -56,7 +56,7 @@
     "redis": "~2.8.0",
     "request": "~2.88.0",
     "semver": "~6.1.2",
-    "simple-icons": "1.9.28",
+    "simple-icons": "1.10.0",
     "xmldom": "~0.1.27",
     "xpath": "~0.0.27"
   },
