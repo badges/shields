@@ -112,11 +112,10 @@ module.exports = class Bugzilla extends BaseJsonService {
   }
 
   async fetch({ protocol, host, path, bugNumber }) {
+    const optionalPath = path ? `/${path}` : ''
     return this._requestJson({
       schema,
-      url: `${protocol}://${host}${
-        path ? '/' + path : ''
-      }/rest/bug/${bugNumber}`,
+      url: `${protocol}://${host}${optionalPath}/rest/bug/${bugNumber}`,
     })
   }
 
