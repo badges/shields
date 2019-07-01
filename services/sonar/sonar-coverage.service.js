@@ -60,7 +60,7 @@ module.exports = class SonarCoverage extends SonarBase {
       component,
       metricName: 'coverage',
     })
-    const { metricValue: coverage } = this.transform({
+    const { coverage } = this.transform({
       json,
       sonarVersion,
     })
