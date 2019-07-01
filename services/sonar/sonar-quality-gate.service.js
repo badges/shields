@@ -66,7 +66,10 @@ module.exports = class SonarQualityGate extends SonarBase {
       component,
       metricName: 'alert_status',
     })
-    const { metricValue: qualityState } = this.transform({ json, sonarVersion })
+    const { alert_status: qualityState } = this.transform({
+      json,
+      sonarVersion,
+    })
     return this.constructor.render({ qualityState })
   }
 }
