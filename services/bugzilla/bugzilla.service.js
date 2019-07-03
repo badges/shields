@@ -2,6 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
+const { optionalUrl } = require('../validators')
+
+const queryParamSchema = Joi.object({
+  baseUrl: optionalUrl,
+}).required()
 
 const schema = Joi.object({
   bugs: Joi.array()
@@ -29,17 +34,16 @@ module.exports = class Bugzilla extends BaseJsonService {
   static get route() {
     return {
       base: 'bugzilla',
-      pattern: ':protocol(http|https)?/:host?/:path*/:bugNumber',
+      pattern: ':bugNumber',
+      queryParamSchema,
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Bugzilla bug status',
+        title: 'Bugzilla bug status (Mozilla)',
         namedParams: {
-          protocol: 'https',
-          host: 'bugzilla.mozilla.org',
           bugNumber: '996038',
         },
         staticPreview: this.render({
@@ -50,13 +54,11 @@ module.exports = class Bugzilla extends BaseJsonService {
         documentation,
       },
       {
-        title: 'Bugzilla bug status (with path)',
+        title: 'Bugzilla bug status (non-Mozilla)',
         namedParams: {
-          protocol: 'https',
-          host: 'bugs.eclipse.org',
-          path: 'bugs',
           bugNumber: '545424',
         },
+        queryParams: { baseUrl: 'https://bugs.eclipse.org/bugs' },
         staticPreview: this.render({
           bugNumber: 545424,
           status: 'RESOLVED',
@@ -111,16 +113,15 @@ module.exports = class Bugzilla extends BaseJsonService {
     }
   }
 
-  async fetch({ protocol, host, path, bugNumber }) {
-    const optionalPath = path ? `/${path}` : ''
+  async fetch({ bugNumber, baseUrl }) {
     return this._requestJson({
       schema,
-      url: `${protocol}://${host}${optionalPath}/rest/bug/${bugNumber}`,
+      url: `${baseUrl}/rest/bug/${bugNumber}`,
     })
   }
 
-  async handle({ protocol, host, path, bugNumber }) {
-    const data = await this.fetch({ protocol, host, path, bugNumber })
+  async handle({ bugNumber }, { baseUrl = 'https://bugzilla.mozilla.org' }) {
+    const data = await this.fetch({ bugNumber, baseUrl })
     return this.constructor.render({
       bugNumber,
       status: data.bugs[0].status,
