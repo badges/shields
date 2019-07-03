@@ -28,14 +28,14 @@ function roundUpToOdd(val) {
   return val % 2 === 0 ? val + 1 : val
 }
 
-function preferredWithOf(str) {
+function preferredWidthOf(str) {
   return roundUpToOdd((anafanafo(str) / 10) | 0)
 }
 
 function computeWidths({ label, message }) {
   return {
-    labelWidth: preferredWithOf(label),
-    messageWidth: preferredWithOf(message),
+    labelWidth: preferredWidthOf(label),
+    messageWidth: preferredWidthOf(message),
   }
 }
 
