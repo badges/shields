@@ -51,7 +51,9 @@ function renderLogo({
     return {
       hasLogo: true,
       logoWidth: logoWidth + logoPadding,
-      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${logo}"/>`,
+      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
+        logo
+      )}"/>`,
     }
   } else {
     return {
@@ -369,9 +371,7 @@ module.exports = {
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
         ${
           hasLogo
-            ? `<image x="5" y="3" width="${
-                it.logoWidth
-              }" height="32" xlink:href="${it.logo}"/>`
+            ? `<image x="5" y="3" width="${it.logoWidth}" height="32" xlink:href="${it.logo}"/>`
             : ''
         }
         <text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2 + 1) *
@@ -427,9 +427,7 @@ module.exports = {
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
         ${
           hasLogo
-            ? `<image x="5" y="3" width="${
-                it.logoWidth
-              }" height="32" xlink:href="${it.logo}"/>`
+            ? `<image x="5" y="3" width="${it.logoWidth}" height="32" xlink:href="${it.logo}"/>`
             : ''
         }
         <text x="${((leftWidth + it.logoWidth + it.logoPadding) / 2 + 1) *
