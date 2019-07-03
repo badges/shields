@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 const { isLegacyVersion } = require('./sonar-helpers')
@@ -80,12 +80,20 @@ module.exports = class SonarBase extends BaseJsonService {
 
   transform({ json, sonarVersion }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
-    const rawValue = useLegacyApi
-      ? json[0].msr[0].val
-      : json.component.measures[0].value
-    const value = parseInt(rawValue)
+    const metrics = {}
 
-    // Most values are numeric, but not all of them.
-    return { metricValue: value || rawValue }
+    if (useLegacyApi) {
+      json[0].msr.forEach(measure => {
+        // Most values are numeric, but not all of them.
+        metrics[measure.key] = parseInt(measure.val) || measure.val
+      })
+    } else {
+      json.component.measures.forEach(measure => {
+        // Most values are numeric, but not all of them.
+        metrics[measure.metric] = parseInt(measure.value) || measure.value
+      })
+    }
+
+    return metrics
   }
 }

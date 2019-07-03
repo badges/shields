@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const greenStatuses = [
   'fixed',
@@ -27,6 +27,7 @@ const otherStatuses = [
   'cancelled',
   'expired',
   'initiated',
+  'no builds',
   'no tests',
   'not built',
   'not run',

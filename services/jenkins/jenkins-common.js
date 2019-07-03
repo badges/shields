@@ -1,15 +1,21 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const queryParamSchema = Joi.object({
   disableStrictSSL: Joi.equal(''),
 }).required()
 
-const buildUrl = ({ protocol, host, job, lastBuild = true, plugin }) => {
+const buildUrl = ({
+  protocol,
+  host,
+  job,
+  lastCompletedBuild = true,
+  plugin,
+}) => {
   const jobPrefix = job.indexOf('/') > -1 ? '' : 'job/'
   return `${protocol}://${host}/${jobPrefix}${job}/${
-    lastBuild ? 'lastBuild/' : ''
+    lastCompletedBuild ? 'lastCompletedBuild/' : ''
   }${plugin ? `${plugin}/` : ''}api/json`
 }
 

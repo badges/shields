@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
 const { GithubAuthService } = require('./github-auth-service')
@@ -28,7 +28,7 @@ module.exports = class GithubReleaseDate extends GithubAuthService {
   static get route() {
     return {
       base: 'github',
-      pattern: ':which(release-date|release-date-pre)/:user/:repo',
+      pattern: ':variant(release-date|release-date-pre)/:user/:repo',
     }
   }
 
@@ -71,9 +71,9 @@ module.exports = class GithubReleaseDate extends GithubAuthService {
     }
   }
 
-  async fetch({ which, user, repo }) {
+  async fetch({ variant, user, repo }) {
     const url =
-      which === 'release-date'
+      variant === 'release-date'
         ? `/repos/${user}/${repo}/releases/latest`
         : `/repos/${user}/${repo}/releases`
     return this._requestJson({
@@ -83,8 +83,8 @@ module.exports = class GithubReleaseDate extends GithubAuthService {
     })
   }
 
-  async handle({ which, user, repo }) {
-    const body = await this.fetch({ which, user, repo })
+  async handle({ variant, user, repo }) {
+    const body = await this.fetch({ variant, user, repo })
     if (Array.isArray(body)) {
       return this.constructor.render({ date: body[0].created_at })
     }

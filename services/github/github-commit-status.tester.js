@@ -1,6 +1,6 @@
 'use strict'
 
-const { invalidJSON } = require('../response-fixtures')
+const { invalidJSONString } = require('../response-fixtures')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit status - commit in branch')
@@ -71,7 +71,7 @@ t.create('commit status - 404 with invalid JSON form github')
       .get(
         '/repos/badges/shields/compare/master...5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c'
       )
-      .reply(404, invalidJSON)
+      .reply(404, invalidJSONString)
   )
   .expectBadge({
     label: 'commit status',

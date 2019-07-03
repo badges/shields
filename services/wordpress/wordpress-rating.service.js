@@ -43,13 +43,11 @@ function RatingForExtensionType(extensionType) {
     static get examples() {
       return [
         {
-          title: `Wordpress ${capt} Rating`,
+          title: `WordPress ${capt} Rating`,
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({
-            response: {
-              rating: 80,
-              num_ratings: 100,
-            },
+            rating: 80,
+            numRatings: 100,
           }),
         },
       ]
@@ -91,14 +89,11 @@ function StarsForExtensionType(extensionType) {
     static get examples() {
       return [
         {
-          title: `Wordpress ${capt} Rating`,
+          title: `WordPress ${capt} Rating`,
           pattern: 'stars/:slug',
           namedParams: { slug: exampleSlug },
           staticPreview: this.render({
-            response: {
-              rating: 80,
-              num_ratings: 100,
-            },
+            rating: 80,
           }),
           documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
         },

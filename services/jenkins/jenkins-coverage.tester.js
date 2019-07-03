@@ -10,18 +10,16 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('jacoco: job found')
   .get('/jacoco/https/wso2.org/jenkins/view/All%20Builds/job/archetypes.json')
-  .timeout(10000)
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('jacoco: job not found')
-  .get('/jacoco/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .get('/jacoco/https/wso2.org/jenkins/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job not found')
-  .get('/cobertura/https/updates.jenkins-ci.org/job/does-not-exist.json')
+  .get('/cobertura/https/jenkins.sqlalchemy.org/job/does-not-exist.json')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('cobertura: job found')
   .get('/cobertura/https/jenkins.sqlalchemy.org/alembic_coverage.json')
-  .timeout(10000)
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })

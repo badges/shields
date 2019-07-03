@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService, BaseXmlService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const {
@@ -128,7 +128,7 @@ function createServiceFamily({
     static get route() {
       return {
         base: serviceBaseUrl,
-        pattern: ':which(v|vpre)/:packageName',
+        pattern: ':variant(v|vpre)/:packageName',
       }
     }
 
@@ -161,12 +161,12 @@ function createServiceFamily({
       return renderVersionBadge(props)
     }
 
-    async handle({ which, packageName }) {
+    async handle({ variant, packageName }) {
       const packageData = await fetch(this, {
         odataFormat,
         baseUrl: apiBaseUrl,
         packageName,
-        includePrereleases: which === 'vpre',
+        includePrereleases: variant === 'vpre',
       })
       const version = packageData.NormalizedVersion || packageData.Version
       return this.constructor.render({ version })

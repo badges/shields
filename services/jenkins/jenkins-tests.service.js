@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { InvalidResponse } = require('..')
 const {
   documentation,
@@ -22,7 +22,7 @@ const {
 //
 // Sample data set for the `actions` array:
 // "actions":[{"_class":"hudson.model.ParametersAction"},{"_class":"hudson.model.CauseAction"},{"_class":"hudson.tasks.junit.TestResultAction","failCount":15,"skipCount":0,"totalCount":753},{},{}]
-// https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily/lastBuild/api/json?tree=actions[failCount,skipCount,totalCount]
+// https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily/lastCompletedBuild/api/json?tree=actions[failCount,skipCount,totalCount]
 const schema = Joi.object({
   actions: Joi.array()
     .items(

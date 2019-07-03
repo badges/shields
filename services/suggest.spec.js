@@ -2,9 +2,9 @@
 
 const Camp = require('camp')
 const { expect } = require('chai')
-const got = require('got')
 const nock = require('nock')
 const portfinder = require('portfinder')
+const got = require('../core/got-test-client')
 const { setRoutes, githubLicense } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 

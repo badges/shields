@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { InvalidParameter } = require('.')
 
 const isDependencyMap = Joi.object()

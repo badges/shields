@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const Camp = require('camp')
 const portfinder = require('portfinder')
-const fetch = require('node-fetch')
+const got = require('../got-test-client')
 const Metrics = require('./prometheus-metrics')
 
 describe('Prometheus metrics route', function() {
@@ -28,9 +28,9 @@ describe('Prometheus metrics route', function() {
   it('returns metrics', async function() {
     new Metrics({ enabled: true }).initialize(camp)
 
-    const res = await fetch(`${baseUrl}/metrics`)
+    const { statusCode, body } = await got(`${baseUrl}/metrics`)
 
-    expect(res.status).to.be.equal(200)
-    expect(await res.text()).to.contains('nodejs_version_info')
+    expect(statusCode).to.be.equal(200)
+    expect(body).to.contain('nodejs_version_info')
   })
 })

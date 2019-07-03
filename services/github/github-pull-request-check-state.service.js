@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const countBy = require('lodash.countby')
 const { GithubAuthService } = require('./github-auth-service')
 const { fetchIssue } = require('./github-common-fetch')
@@ -27,7 +27,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
   static get route() {
     return {
       base: 'github/status',
-      pattern: ':which(s|contexts)/pulls/:user/:repo/:number(\\d+)',
+      pattern: ':variant(s|contexts)/pulls/:user/:repo/:number(\\d+)',
     }
   }
 
@@ -41,7 +41,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
           repo: 'shields',
           number: '1110',
         },
-        staticPreview: this.render({ which: 's', state: 'pending' }),
+        staticPreview: this.render({ variant: 's', state: 'pending' }),
         keywords,
         documentation,
       },
@@ -54,7 +54,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
           number: '1110',
         },
         staticPreview: this.render({
-          which: 'contexts',
+          variant: 'contexts',
           state: 'pending',
           stateCounts: { passed: 5, pending: 1 },
         }),
@@ -71,9 +71,9 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     }
   }
 
-  static render({ which, state, stateCounts }) {
+  static render({ variant, state, stateCounts }) {
     let message
-    if (which === 'contexts') {
+    if (variant === 'contexts') {
       message = Object.entries(stateCounts)
         .map(([state, count]) => `${count} ${state}`)
         .join(', ')
@@ -97,7 +97,7 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     }
   }
 
-  async handle({ which, user, repo, number }) {
+  async handle({ variant, user, repo, number }) {
     const {
       head: { sha: ref },
     } = await fetchIssue(this, { user, repo, number })
@@ -110,6 +110,6 @@ module.exports = class GithubPullRequestCheckState extends GithubAuthService {
     })
     const { state, stateCounts } = this.constructor.transform(json)
 
-    return this.constructor.render({ which, state, stateCounts })
+    return this.constructor.render({ variant, state, stateCounts })
   }
 }

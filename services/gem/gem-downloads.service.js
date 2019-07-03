@@ -1,7 +1,7 @@
 'use strict'
 
 const semver = require('semver')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { latest: latestVersion } = require('../version')
@@ -34,7 +34,7 @@ module.exports = class GemDownloads extends BaseJsonService {
   static get route() {
     return {
       base: 'gem',
-      pattern: ':which(dt|dtv|dv)/:gem/:version?',
+      pattern: ':variant(dt|dtv|dv)/:gem/:version?',
     }
   }
 
@@ -48,7 +48,7 @@ module.exports = class GemDownloads extends BaseJsonService {
           version: 'stable',
         },
         staticPreview: this.render({
-          which: 'dv',
+          variant: 'dv',
           version: 'stable',
           downloads: 70000,
         }),
@@ -62,7 +62,7 @@ module.exports = class GemDownloads extends BaseJsonService {
           version: '4.1.0',
         },
         staticPreview: this.render({
-          which: 'dv',
+          variant: 'dv',
           version: '4.1.0',
           downloads: 50000,
         }),
@@ -73,7 +73,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         pattern: 'dtv/:gem',
         namedParams: { gem: 'rails' },
         staticPreview: this.render({
-          which: 'dtv',
+          variant: 'dtv',
           downloads: 70000,
         }),
         keywords,
@@ -83,7 +83,7 @@ module.exports = class GemDownloads extends BaseJsonService {
         pattern: 'dt/:gem',
         namedParams: { gem: 'rails' },
         staticPreview: this.render({
-          which: 'dt',
+          variant: 'dt',
           downloads: 900000,
         }),
         keywords,
@@ -95,11 +95,11 @@ module.exports = class GemDownloads extends BaseJsonService {
     return { label: 'downloads' }
   }
 
-  static render({ which, version, downloads }) {
+  static render({ variant, version, downloads }) {
     let label
     if (version) {
       label = `downloads@${version}`
-    } else if (which === 'dtv') {
+    } else if (variant === 'dtv') {
       label = 'downloads@latest'
     }
 
@@ -152,9 +152,9 @@ module.exports = class GemDownloads extends BaseJsonService {
     return { totalDownloads, versionDownloads }
   }
 
-  async handle({ which, gem, version }) {
+  async handle({ variant, gem, version }) {
     let downloads
-    if (which === 'dv') {
+    if (variant === 'dv') {
       if (!version) {
         throw new InvalidParameter({
           prettyMessage: 'version downloads requires a version',
@@ -170,9 +170,9 @@ module.exports = class GemDownloads extends BaseJsonService {
       const {
         totalDownloads,
         versionDownloads,
-      } = await this.fetchDownloadCountForGem({ gem, which })
-      downloads = which === 'dtv' ? versionDownloads : totalDownloads
+      } = await this.fetchDownloadCountForGem({ gem, variant })
+      downloads = variant === 'dtv' ? versionDownloads : totalDownloads
     }
-    return this.constructor.render({ which, version, downloads })
+    return this.constructor.render({ variant, version, downloads })
   }
 }

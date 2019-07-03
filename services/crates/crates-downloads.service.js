@@ -12,7 +12,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
   static get route() {
     return {
       base: 'crates',
-      pattern: ':which(d|dv)/:crate/:version?',
+      pattern: ':variant(d|dv)/:crate/:version?',
     }
   }
 
@@ -20,16 +20,16 @@ module.exports = class CratesDownloads extends BaseCratesService {
     return [
       {
         title: 'Crates.io',
-        pattern: ':which(d|dv)/:crate',
-        namedParams: { which: 'd', crate: 'rustc-serialize' },
+        pattern: ':variant(d|dv)/:crate',
+        namedParams: { variant: 'd', crate: 'rustc-serialize' },
         staticPreview: this.render({ downloads: 5000000 }),
         keywords,
       },
       {
         title: 'Crates.io',
-        pattern: ':which(d|dv)/:crate/:version',
+        pattern: ':variant(d|dv)/:crate/:version',
         namedParams: {
-          which: 'd',
+          variant: 'd',
           crate: 'rustc-serialize',
           version: '0.3.24',
         },
@@ -39,11 +39,11 @@ module.exports = class CratesDownloads extends BaseCratesService {
     ]
   }
 
-  static _getLabel(version, which) {
+  static _getLabel(version, variant) {
     if (version) {
       return `downloads@${version}`
     } else {
-      if (which === 'dv') {
+      if (variant === 'dv') {
         return 'downloads@latest'
       } else {
         return 'downloads'
@@ -51,15 +51,15 @@ module.exports = class CratesDownloads extends BaseCratesService {
     }
   }
 
-  static render({ which, downloads, version }) {
+  static render({ variant, downloads, version }) {
     return {
-      label: this._getLabel(version, which),
+      label: this._getLabel(version, variant),
       message: metric(downloads),
       color: downloadCountColor(downloads),
     }
   }
 
-  async handle({ which, crate, version }) {
+  async handle({ variant, crate, version }) {
     const json = await this.fetch({ crate, version })
 
     if (json.errors) {
@@ -72,13 +72,13 @@ module.exports = class CratesDownloads extends BaseCratesService {
     }
 
     let downloads
-    if (which === 'dv') {
+    if (variant === 'dv') {
       downloads = json.version
         ? json.version.downloads
         : json.versions[0].downloads
     } else {
       downloads = json.crate ? json.crate.downloads : json.version.downloads
     }
-    return this.constructor.render({ which, downloads, version })
+    return this.constructor.render({ variant, downloads, version })
   }
 }

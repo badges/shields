@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { renderBuildStatusBadge } = require('../build-status')
 const JenkinsBase = require('./jenkins-base')
 const {
@@ -84,7 +84,7 @@ module.exports = class JenkinsBuild extends JenkinsBase {
 
   async handle({ protocol, host, job }, { disableStrictSSL }) {
     const json = await this.fetch({
-      url: buildUrl({ protocol, host, job, lastBuild: false }),
+      url: buildUrl({ protocol, host, job, lastCompletedBuild: false }),
       schema,
       qs: buildTreeParamQueryString('color'),
       disableStrictSSL,

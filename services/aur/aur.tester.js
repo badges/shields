@@ -14,7 +14,7 @@ const t = (module.exports = new ServiceTester({
 // version tests
 
 t.create('version (valid)')
-  .get('/version/yaourt.json')
+  .get('/version/dropbox.json')
   .expectBadge({
     label: 'aur',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -36,7 +36,7 @@ t.create('version (not found)')
 // votes tests
 
 t.create('votes (valid)')
-  .get('/votes/yaourt.json')
+  .get('/votes/discord.json')
   .expectBadge({
     label: 'votes',
     message: isMetric,
@@ -49,8 +49,8 @@ t.create('votes (not found)')
 // license tests
 
 t.create('license (valid)')
-  .get('/license/yaourt.json')
-  .expectBadge({ label: 'license', message: 'GPL' })
+  .get('/license/pac.json')
+  .expectBadge({ label: 'license', message: 'MIT' })
 
 t.create('license (not found)')
   .get('/license/not-a-package.json')

@@ -22,6 +22,7 @@ const licenseTypes = {
       'PostgreSQL',
       'Zlib',
     ],
+    aliases: ['BSD', 'Apache 2.0'],
     color: 'green',
     priority: '2',
   },
@@ -32,6 +33,7 @@ const licenseTypes = {
       'AGPL-3.0',
       'CC-BY-SA-4.0',
       'EPL-1.0',
+      'EPL-2.0',
       'EUPL-1.1',
       'GPL-2.0',
       'GPL-3.0',
@@ -43,12 +45,14 @@ const licenseTypes = {
       'OFL-1.1',
       'OSL-3.0',
     ],
+    aliases: ['GPL', 'LGPL', 'MPL', 'MPL 1.1', 'MPL 2.0', 'EPL'],
     color: 'orange',
     priority: '1',
   },
   // public domain licenses do not require 'License and copyright notice' (https://choosealicense.com/appendix/#include-copyright)
   'public-domain': {
     spdxLicenseIds: ['CC0-1.0', 'Unlicense', 'WTFPL'],
+    aliases: ['CC0'],
     color: '7cd958',
     priority: '3',
   },
@@ -56,27 +60,27 @@ const licenseTypes = {
 
 const licenseToColorMap = {}
 Object.keys(licenseTypes).forEach(licenseType => {
-  const { spdxLicenseIds, color, priority } = licenseTypes[licenseType]
+  const { spdxLicenseIds, aliases, color, priority } = licenseTypes[licenseType]
   spdxLicenseIds.forEach(license => {
     licenseToColorMap[license] = { color, priority }
   })
+  aliases.forEach(license => {
+    licenseToColorMap[license] = { color, priority }
+  })
 })
-const defaultLicenseColor = 'lightgrey'
-const licenseToColor = spdxId => {
-  if (!Array.isArray(spdxId)) {
-    return (
-      (licenseToColorMap[spdxId] && licenseToColorMap[spdxId].color) ||
-      defaultLicenseColor
-    )
+
+function licenseToColor(licenses) {
+  if (!Array.isArray(licenses)) {
+    licenses = [licenses]
   }
-  const licenseType = spdxId
-    .filter(i => licenseToColorMap[i])
-    .map(i => licenseToColorMap[i])
-    .reduce((a, b) => (a.priority > b.priority ? a : b), {
-      color: defaultLicenseColor,
-      priority: 0,
-    })
-  return licenseType.color
+
+  const [{ color }] = licenses
+    .map(license => licenseToColorMap[license])
+    .filter(Boolean)
+    .concat([{ color: 'lightgrey', priority: 0 }])
+    .sort((a, b) => b.priority - a.priority)
+
+  return color
 }
 
 function renderLicenseBadge({ license, licenses }) {

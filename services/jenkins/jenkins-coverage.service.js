@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { coveragePercentage } = require('../color-formatters')
 const JenkinsBase = require('./jenkins-base')
 const {
@@ -73,6 +73,7 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
           host: 'jenkins.sqlalchemy.org',
           job: 'job/alembic_coverage',
         },
+        keywords: ['jacoco', 'cobertura'],
         staticPreview: this.render({ coverage: 95 }),
       },
     ]

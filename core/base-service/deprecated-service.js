@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const camelcase = require('camelcase')
 const BaseService = require('./base')
 const { isValidCategory } = require('./categories')

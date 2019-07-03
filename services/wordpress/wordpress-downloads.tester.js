@@ -1,12 +1,12 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
 const t = new ServiceTester({
   id: 'wordpress',
-  title: 'Wordpress Download Tests',
+  title: 'WordPress Download Tests',
 })
 module.exports = t
 

@@ -27,9 +27,7 @@ module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
   async fetch({ period, user, repo }) {
     return this._requestJson({
       schema,
-      url: `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${
-        periodMap[period]
-      }`,
+      url: `https://data.jsdelivr.com/v1/package/gh/${user}/${repo}/stats/date/${periodMap[period]}`,
     })
   }
 

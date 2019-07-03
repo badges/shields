@@ -8,6 +8,10 @@ const badgeRenderers = require('./badge-renderers')
 // const svgo = new SVGO()
 // const { data, error } = await svgo.optimize(untemplatedSvg)
 
+/*
+note: makeBadge() is fairly thinly wrapped so if we are making changes here
+it is likely this will impact on the package's public interface in index.js
+*/
 module.exports = function makeBadge({
   format,
   template = 'flat',
