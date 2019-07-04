@@ -162,7 +162,6 @@ module.exports = class BaseService {
    *   users locate relevant badges.
    * documentation: An HTML string that is included in the badge popup.
    *
-   * @abstract
    * @returns {object[]} Array of Example objects
    */
   static get examples() {
