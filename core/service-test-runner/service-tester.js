@@ -63,6 +63,7 @@ class ServiceTester {
    */
   beforeEach() {}
 
+  /* eslint-disable jsdoc/no-undefined-types */
   /**
    * Create a new test. The hard work is delegated to IcedFrisby.
    * https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
@@ -73,6 +74,7 @@ class ServiceTester {
    * @param {string} msg The name of the test
    * @returns {IcedFrisby} IcedFrisby instance
    */
+  /* eslint-enable jsdoc/no-undefined-types */
   create(msg) {
     const spec = frisby
       .create(msg)
