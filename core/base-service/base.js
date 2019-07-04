@@ -80,8 +80,9 @@ module.exports = class BaseService {
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
    * the badges on the main shields.io website.
+   *
    * @abstract
-   * @return {string}
+   * @returns {string}
    */
   static get category() {
     throw new Error(`Category not set for ${this.name}`)
@@ -95,22 +96,22 @@ module.exports = class BaseService {
    * Route to mount this service on
    *
    * @abstract
-   * @return {object} route
-   * @return {string} route.base
+   * @returns {object} route
+   * @returns {string} route.base
    *    (Optional) The base path of the routes for this service.
    *    This is used as a prefix.
-   * @return {string} route.pattern
+   * @returns {string} route.pattern
    *    A path-to-regexp pattern defining the route pattern and param names
    *    See https://www.npmjs.com/package/path-to-regexp
-   * @return {Regexp} route.format
+   * @returns {RegExp} route.format
    *    Deprecated: Regular expression to use for routes for this service's badges
    *    Use `pattern` instead
-   * @return {string[]} route.capture
+   * @returns {string[]} route.capture
    *    Deprecated: Array of names for the capture groups in the regular
    *    expression. The handler will be passed an object containing
    *    the matches.
    *    Use `pattern` instead
-   * @return {Joi.object} route.queryParamSchema
+   * @returns {Joi.object} route.queryParamSchema
    *    (Optional) A Joi schema (`Joi.object({ ... }).required()`)
    *    for the query param object. If you know a parameter
    *    will never receive a numeric string, you can use
@@ -162,7 +163,7 @@ module.exports = class BaseService {
    * documentation: An HTML string that is included in the badge popup.
    *
    * @abstract
-   * @return {Object[]} Array of Example objects
+   * @returns {object[]} Array of Example objects
    */
   static get examples() {
     return []
@@ -183,11 +184,11 @@ module.exports = class BaseService {
    * These defaults are used if the value is neither included in the service data
    * from the handler nor overridden by the user via query parameters.
    *
-   * @return {object} defaultBadgeData
-   * @return {string} defaultBadgeData.label (Optional)
-   * @return {string} defaultBadgeData.color (Optional)
-   * @return {string} defaultBadgeData.labelColor (Optional)
-   * @return {string} defaultBadgeData.namedLogo (Optional)
+   * @returns {object} defaultBadgeData
+   * @returns {string} defaultBadgeData.label (Optional)
+   * @returns {string} defaultBadgeData.color (Optional)
+   * @returns {string} defaultBadgeData.labelColor (Optional)
+   * @returns {string} defaultBadgeData.namedLogo (Optional)
    */
   static get defaultBadgeData() {
     return {}
@@ -284,11 +285,11 @@ module.exports = class BaseService {
    *    defined in this.route.pattern or this.route.capture
    * @param {object} queryParams Params parsed from the query string
    * @returns {object} badge Object validated against serviceDataSchema
-   * @return {boolean} badge.isError (Optional)
-   * @return {string} badge.label (Optional)
-   * @return {(string|number)} badge.message
-   * @return {string} badge.color (Optional)
-   * @return {string[]} badge.link (Optional)
+   * @returns {boolean} badge.isError (Optional)
+   * @returns {string} badge.label (Optional)
+   * @returns {(string|number)} badge.message
+   * @returns {string} badge.color (Optional)
+   * @returns {string[]} badge.link (Optional)
    */
   async handle(namedParams, queryParams) {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)

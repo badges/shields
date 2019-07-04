@@ -8,7 +8,7 @@ const difference = require('lodash.difference')
  * extract the list of service names in square brackets
  * as an array of strings.
  *
- * @return {string[]}
+ * @returns {string[]}
  */
 module.exports = function servicesForTitle(title) {
   const bracketed = /\[([^\]]+)\]/g

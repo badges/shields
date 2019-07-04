@@ -23,7 +23,7 @@ class BadgeFactory {
    * @param {string} format.colorB - deprecated: alias for `color`
    * @param {string} format.format
    * @param {string} format.template
-   * @return {string} Badge in SVG or JSON format
+   * @returns {string} Badge in SVG or JSON format
    * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
    */
   create(format) {

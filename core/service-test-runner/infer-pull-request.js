@@ -65,12 +65,12 @@ function _inferPullRequestFromCircleEnv(env) {
  * of a pull request from the environment variables.
  *
  * @param {object} [env=process.env]
- * @return {object} pr
- * @return {string} pr.baseUrl (returned for travis CI only)
- * @return {string} pr.owner
- * @return {string} pr.repo
- * @return {string} pr.pullRequest PR/issue number
- * @return {string} pr.slug owner/repo/#pullRequest
+ * @returns {object} pr
+ * @returns {string} pr.baseUrl (returned for travis CI only)
+ * @returns {string} pr.owner
+ * @returns {string} pr.repo
+ * @returns {string} pr.pullRequest PR/issue number
+ * @returns {string} pr.slug owner/repo/#pullRequest
  */
 function inferPullRequest(env = process.env) {
   if (env.TRAVIS) {

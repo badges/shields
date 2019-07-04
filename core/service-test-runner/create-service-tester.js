@@ -13,7 +13,7 @@ const ServiceTester = require('./service-tester')
  * This can't be used for `.service.js` files which export more than one
  * service.
  *
- * @return {ServiceTester} ServiceTester instance
+ * @returns {ServiceTester} ServiceTester instance
  */
 function createServiceTester() {
   const servicePath = caller().replace('.tester.js', '.service.js')

@@ -71,7 +71,7 @@ class ServiceTester {
    * invoked automatically by the tester.
    *
    * @param {string} msg The name of the test
-   * @return {IcedFrisby} IcedFrisby instance
+   * @returns {IcedFrisby} IcedFrisby instance
    */
   create(msg) {
     const spec = frisby

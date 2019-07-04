@@ -6,7 +6,7 @@ const PriorityQueue = require('priorityqueuejs')
 /**
  * Compute a one-way hash of the input string.
  *
- * @return {string}
+ * @returns {string}
  */
 function sanitizeToken(id) {
   return crypto
@@ -188,7 +188,7 @@ class TokenPool {
    *
    * @param {Token} first
    * @param {Token} second
-   * @return {Token} The token whose current rate allotment is expiring soonest.
+   * @returns {Token} The token whose current rate allotment is expiring soonest.
    */
   static compareTokens(first, second) {
     return second.nextReset - first.nextReset
@@ -207,7 +207,7 @@ class TokenPool {
    * @param {number} nextReset
    *    Time when the token can be used again even if it's exhausted (unix timestamp)
    *
-   * @return {boolean} Was the token added to the pool?
+   * @returns {boolean} Was the token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
     if (this.tokenIds.has(id)) {
@@ -289,7 +289,7 @@ class TokenPool {
    * new use-remaining count and next-reset time. Invoke `invalidate()` to
    * indicate it should not be reused.
    *
-   * @return {Token}
+   * @returns {Token}
    */
   next() {
     let token = this.currentBatch.token
