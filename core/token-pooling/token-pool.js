@@ -6,6 +6,7 @@ const PriorityQueue = require('priorityqueuejs')
 /**
  * Compute a one-way hash of the input string.
  *
+ * @param {string} id token
  * @returns {string}
  */
 function sanitizeToken(id) {
@@ -186,8 +187,8 @@ class TokenPool {
   /**
    * compareTokens
    *
-   * @param {Token} first
-   * @param {Token} second
+   * @param {Token} first first token to compare
+   * @param {Token} second second token to compare
    * @returns {Token} The token whose current rate allotment is expiring soonest.
    */
   static compareTokens(first, second) {
@@ -314,7 +315,7 @@ class TokenPool {
   /**
    * Iterate over all valid tokens.
    *
-   * @param {Function} callback
+   * @param {Function} callback function to execute on each valid token
    */
   forEach(callback) {
     function visit(item) {
