@@ -82,7 +82,7 @@ module.exports = class BaseService {
    * the badges on the main shields.io website.
    *
    * @abstract
-   * @returns {string}
+   * @returns {string} category
    */
   static get category() {
     throw new Error(`Category not set for ${this.name}`)

@@ -10,6 +10,7 @@ const { expect } = require('chai')
  *
  * @param {Function} superclass class to extend
  * @see https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
+ * @returns {Function} wrapped class
  */
 const factory = superclass =>
   class IcedFrisbyNock extends superclass {

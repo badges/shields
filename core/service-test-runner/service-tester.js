@@ -44,6 +44,7 @@ class ServiceTester {
    *
    * @param {Function} ServiceClass
    *    A class that extends base-service/base.BaseService
+   * @returns {ServiceTester} ServiceTester for ServiceClass
    */
   static forServiceClass(ServiceClass) {
     const id = ServiceClass.name

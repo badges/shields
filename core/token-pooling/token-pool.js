@@ -7,7 +7,7 @@ const PriorityQueue = require('priorityqueuejs')
  * Compute a one-way hash of the input string.
  *
  * @param {string} id token
- * @returns {string}
+ * @returns {string} hash
  */
 function sanitizeToken(id) {
   return crypto
@@ -290,7 +290,7 @@ class TokenPool {
    * new use-remaining count and next-reset time. Invoke `invalidate()` to
    * indicate it should not be reused.
    *
-   * @returns {Token}
+   * @returns {Token} token
    */
   next() {
     let token = this.currentBatch.token
