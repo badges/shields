@@ -8,6 +8,7 @@ const { expect } = require('chai')
  * - check if a request was intercepted
  * - set expectations on the badge JSON response
  *
+ * @param {Function} superclass class to extend
  * @see https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
  */
 const factory = superclass =>

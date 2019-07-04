@@ -64,7 +64,7 @@ function _inferPullRequestFromCircleEnv(env) {
  * When called inside a CI build, infer the details
  * of a pull request from the environment variables.
  *
- * @param {object} [env=process.env]
+ * @param {object} [env=process.env] Environment variables
  * @returns {object} pr
  * @returns {string} pr.baseUrl (returned for travis CI only)
  * @returns {string} pr.owner
