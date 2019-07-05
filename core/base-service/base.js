@@ -4,6 +4,7 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
+const { AuthHelper } = require('./auth-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -133,6 +134,30 @@ module.exports = class BaseService {
   }
 
   /**
+   * Configuration for the authentication helper that prepares credentials
+   * for upstream requests.
+   *
+   * @abstract
+   * @return {object} authConfig
+   * @return {string} authConfig.userKey
+   *    (Optional) The key from `privateConfig` to use for the HTTP Basic username.
+   * @return {string} authConfig.passKey
+   *    (Optional) The key from `privateConfig` to use for the HTTP Basic password.
+   *    One of `userKey` or `passKey` must be specified.
+   * @return {string} authConfig.isRequired
+   *    (Optional) If `true`, the requested `userKey` and `passKey` must be
+   *    provided. Otherwise the server will start, but if the servce is invoked, it
+   *
+   * See also the config schema in `./server.js` and `doc/server-secrets.md`.
+   *
+   * To use the configured auth in the handler or fetch method, pass
+   * `{ options: { auth: this.authHelper.auth } }` when making the request.
+   */
+  static get auth() {
+    return undefined
+  }
+
+  /**
    * Example URLs for this service. These should use the format
    * specified in `route`, and can be used to demonstrate how to use badges for
    * this service.
@@ -238,8 +263,9 @@ module.exports = class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
+  constructor({ sendAndCacheRequest, authHelper }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
+    this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
   }
 
@@ -421,13 +447,22 @@ module.exports = class BaseService {
     { camp, handleRequest, githubApiProvider, requestCounter },
     serviceConfig
   ) {
-    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const {
+      cacheHeaders: cacheHeaderConfig,
+      fetchLimitBytes,
+      private: privateConfig,
+    } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
     const serviceRequestCounter = this._createServiceRequestCounter({
       requestCounter,
     })
+
+    let authHelper
+    if (this.auth) {
+      authHelper = new AuthHelper(this.auth, privateConfig)
+    }
 
     camp.route(
       regex,
@@ -440,6 +475,7 @@ module.exports = class BaseService {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
+              authHelper,
             },
             serviceConfig,
             namedParams,
