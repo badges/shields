@@ -14,9 +14,9 @@
 | Badge servers                 | Deployment                  | @espadrine, @paulmelnikow                                                                  |
 | Badge servers                 | Admin endpoints             | @espadrine, @paulmelnikow                                                                  |
 | Zeit Now                      | Team owner                  | @paulmelnikow                                                                              |
-| Zeit Now                      | Team members                | @paulmelnikow, @chris48s, @calebcartwright                                                 |
-| Raster server                 | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright                                                 |
-| shields-server.com redirector | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright                                                 |
+| Zeit Now                      | Team members                | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
+| Raster server                 | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
+| shields-server.com redirector | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
 | Cloudflare                    | Account owner               | @espadrine                                                                                 |
 | Cloudflare                    | Admin access                | @espadrine, @paulmelnikow                                                                  |
 | GitHub                        | OAuth app                   | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
