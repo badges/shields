@@ -49,7 +49,7 @@ module.exports = class Bintray extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
-      options: { auth: this.authHelper.auth },
+      options: { auth: this.authHelper.basicAuth },
     })
   }
 

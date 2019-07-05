@@ -152,7 +152,7 @@ module.exports = class BaseService {
    * See also the config schema in `./server.js` and `doc/server-secrets.md`.
    *
    * To use the configured auth in the handler or fetch method, pass
-   * `{ options: { auth: this.authHelper.auth } }` when making the request.
+   * `{ options: { auth: this.authHelper.basicAuth } }` when making the request.
    */
   static get auth() {
     return undefined

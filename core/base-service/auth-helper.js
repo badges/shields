@@ -29,7 +29,7 @@ class AuthHelper {
     }
   }
 
-  get auth() {
+  get basicAuth() {
     return this.isConfigured
       ? { user: this._user, pass: this._pass }
       : undefined
