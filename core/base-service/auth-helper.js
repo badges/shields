@@ -34,6 +34,12 @@ class AuthHelper {
       ? { user: this._user, pass: this._pass }
       : undefined
   }
+
+  get bearerAuthHeader() {
+    return this.isConfigured
+      ? { Authorization: `Bearer ${this._pass}` }
+      : undefined
+  }
 }
 
 module.exports = { AuthHelper }
