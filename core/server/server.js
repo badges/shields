@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const url = require('url')
 const bytes = require('bytes')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
@@ -110,24 +110,7 @@ const privateConfigSchema = Joi.object({
   wheelmap_token: Joi.string(),
 }).required()
 
-/**
- * Badge Server
- *
- * The Server is based on the web framework Scoutcamp. It creates
- * an http server, sets up helpers for token persistence and monitoring.
- * Then it loads all the services, injecting dependencies as it
- * asks each one to register its route with Scoutcamp.
- */
 module.exports = class Server {
-  /**
-   * Badge Server Constructor
-   *
-   * @param {object} config Configuration object read from config yaml files
-   *    by https://www.npmjs.com/package/config and validated against
-   *    publicConfigSchema and privateConfigSchema
-   * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
-   * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
-   */
   constructor(config) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
     let privateConfig
@@ -177,11 +160,6 @@ module.exports = class Server {
     })
   }
 
-  /**
-   * Register Error Handlers
-   *
-   * Set up Scoutcamp routes for 404/not found responses
-   */
   registerErrorHandlers() {
     const { camp } = this
 
@@ -200,12 +178,6 @@ module.exports = class Server {
     })
   }
 
-  /**
-   * Register Services
-   *
-   * Iterate all the service classes defined in /services,
-   * load each service and register a Scoutcamp route for each service.
-   */
   registerServices() {
     const { config, camp } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -219,19 +191,12 @@ module.exports = class Server {
           cacheHeaders: config.public.cacheHeaders,
           profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
+          private: config.private,
         }
       )
     )
   }
 
-  /**
-   * Register Redirects
-   *
-   * Set up a couple of redirects which have to be registered last:
-   * One for the legacy static badge route.
-   * Another to redirect the base URL /
-   * (we use this to redirect https://img.shields.io/ to https://shields.io/ )
-   */
   registerRedirects() {
     const { config, camp } = this
 
@@ -243,8 +208,7 @@ module.exports = class Server {
       const redirectUrl = staticBadgeUrl({
         label,
         message,
-        // Fixes https://github.com/badges/shields/issues/3260
-        color: color ? color.toString() : undefined,
+        color,
         format: 'png',
       })
 
@@ -267,13 +231,6 @@ module.exports = class Server {
     }
   }
 
-  /**
-   * Start the HTTP server
-   *
-   * Bootstrap Scoutcamp,
-   * Register handlers,
-   * Start listening for requests on this.baseUrl()
-   */
   async start() {
     const {
       bind: { port, address: hostname },
@@ -322,9 +279,6 @@ module.exports = class Server {
     this.constructor.resetGlobalState()
   }
 
-  /**
-   * Stop the HTTP server and clean up helpers
-   */
   async stop() {
     if (this.camp) {
       await new Promise(resolve => this.camp.close(resolve))
