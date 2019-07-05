@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require('path')
+const isPng = require('is-png')
 const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
 const { expect, use } = require('chai')
@@ -37,5 +38,20 @@ describe('The CLI', function() {
     expect(stdout)
       .to.satisfy(isSvg)
       .and.to.include('#abcdef')
+  })
+
+  it('should produce PNG badges', async function() {
+    const child = runCli(['cactus', 'grown', '.png'])
+
+    // The buffering done by `child-process-promise` doesn't seem correctly to
+    // handle binary data.
+    let chunk
+    child.childProcess.stdout.once('data', data => {
+      chunk = data
+    })
+
+    await child
+
+    expect(chunk).to.satisfy(isPng)
   })
 })
