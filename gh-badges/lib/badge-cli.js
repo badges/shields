@@ -3,7 +3,6 @@
 'use strict'
 
 const makeBadge = require('./make-badge')
-const svg2img = require('./svg-to-img')
 const { namedColors } = require('./color')
 
 if (process.argv.length < 4) {
@@ -70,8 +69,7 @@ async function main() {
   const svg = makeBadge(badgeData)
 
   if (/png|jpg|gif/.test(format)) {
-    const data = await svg2img(svg, format)
-    process.stdout.write(data)
+    throw Error(`${format} is no longer supported`)
   } else {
     console.log(svg)
   }

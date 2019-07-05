@@ -193,7 +193,6 @@
     "husky": "^2.4.1",
     "icedfrisby": "2.2.1",
     "icedfrisby-nock": "^2.0.0",
-    "is-png": "^2.0.0",
     "is-svg": "^4.2.0",
     "js-yaml-loader": "^1.2.2",
     "lint-staged": "^8.1.7",
