@@ -17,9 +17,9 @@ class ServiceTester {
   /**
    * Service Tester Constructor
    *
-   * @param {object} attrs
+   * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.id
-   *    Secifies which tests to run from the CLI or pull requests
+   *    Specifies which tests to run from the CLI or pull requests
    * @param {string} attrs.title
    *    Prints in the Mocha output
    * @param {string} attrs.path
@@ -110,7 +110,7 @@ class ServiceTester {
   /**
    * Register the tests with Mocha.
    *
-   * @param {object} attrs
+   * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.baseUrl base URL for test server
    * @param {boolean} attrs.skipIntercepted skip tests which intercept requests
    */
