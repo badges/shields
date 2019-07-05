@@ -1,5 +1,6 @@
 'use strict'
 
+const { URL } = require('url')
 const queryString = require('query-string')
 const pathToRegexp = require('path-to-regexp')
 
