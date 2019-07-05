@@ -3,6 +3,7 @@
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const { AuthHelper } = require('./auth-helper')
 const trace = require('./trace')
 const {
   NotFound,
@@ -480,6 +481,30 @@ describe('BaseService', function() {
         expect(e.message).to.equal('Not Found')
         expect(e.prettyMessage).to.equal('not found')
       }
+    })
+  })
+
+  describe('auth', function() {
+    // This seems very difficult to test without mocking a bunch of Scoutcamp
+    // internals. Since that code will be rewritten soon, deferring for now.
+    // authHelper is tested in service unit tests, which suffices for now.
+    it('TODO: register() sets authHelper')
+
+    it('returns inacessible when auth is not configured properly', async function() {
+      const authHelper = new AuthHelper(
+        { passKey: 'myci_pass', isRequired: true },
+        {}
+      )
+
+      expect(
+        await DummyService.invoke({ authHelper }, defaultConfig, {
+          namedParamA: 'bar.bar.bar',
+        })
+      ).to.deep.equal({
+        color: 'red',
+        isError: true,
+        message: 'service auth improperly configured',
+      })
     })
   })
 })

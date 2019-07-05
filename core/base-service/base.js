@@ -147,6 +147,7 @@ module.exports = class BaseService {
    * @return {string} authConfig.isRequired
    *    (Optional) If `true`, the requested `userKey` and `passKey` must be
    *    provided. Otherwise the server will start, but if the servce is invoked, it
+   *    will return `NotFound`.
    *
    * See also the config schema in `./server.js` and `doc/server-secrets.md`.
    *
@@ -382,9 +383,15 @@ module.exports = class BaseService {
     const serviceInstance = new this(context, config)
 
     let serviceError
+    if (context.authHelper && !context.authHelper.isValid) {
+      serviceError = new NotFound({
+        prettyMessage: 'service auth improperly configured',
+      })
+    }
+
     const { queryParamSchema } = this.route
     let transformedQueryParams
-    if (queryParamSchema) {
+    if (!serviceError && queryParamSchema) {
       try {
         transformedQueryParams = validate(
           {
