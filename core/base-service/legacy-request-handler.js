@@ -63,6 +63,27 @@ function flattenQueryParams(queryParams) {
   return Array.from(union).sort()
 }
 
+// Wrapper around `cachingRequest` that returns a promise rather than needing
+// to pass a callback.
+function promisify(cachingRequest) {
+  return (uri, options) =>
+    new Promise((resolve, reject) => {
+      cachingRequest(uri, options, (err, res, buffer) => {
+        if (err) {
+          if (err instanceof ShieldsRuntimeError) {
+            reject(err)
+          } else {
+            // Wrap the error in an Inaccessible so it can be identified
+            // by the BaseService handler.
+            reject(new Inaccessible({ underlyingError: err }))
+          }
+        } else {
+          resolve({ res, buffer })
+        }
+      })
+    })
+}
+
 // handlerOptions can contain:
 // - handler: The service's request handler function
 // - queryParams: An array of the field names of any custom query parameters
@@ -231,24 +252,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       })
     }
 
-    // Wrapper around `cachingRequest` that returns a promise rather than
-    // needing to pass a callback.
-    cachingRequest.asPromise = (uri, options) =>
-      new Promise((resolve, reject) => {
-        cachingRequest(uri, options, (err, res, buffer) => {
-          if (err) {
-            if (err instanceof ShieldsRuntimeError) {
-              reject(err)
-            } else {
-              // Wrap the error in an Inaccessible so it can be identified
-              // by the BaseService handler.
-              reject(new Inaccessible({ underlyingError: err }))
-            }
-          } else {
-            resolve({ res, buffer })
-          }
-        })
-      })
+    cachingRequest.asPromise = promisify(cachingRequest)
 
     vendorDomain.run(() => {
       const result = handlerOptions.handler(
@@ -304,6 +308,7 @@ function clearRequestCache() {
 
 module.exports = {
   handleRequest,
+  promisify,
   clearRequestCache,
   // Expose for testing.
   _requestCache: requestCache,
