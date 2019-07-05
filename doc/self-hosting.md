@@ -93,6 +93,23 @@ machine.
 
 [shields.example.env]: ../shields.example.env
 
+## Raster server
+
+If you want to host PNG badges, you can also self-host a [raster server][]
+which points to your badge server.
+
+- In your raster instance, set `BASE_URL` to your Shields instance, e.g.
+  `https://shields.example.co`.
+- Optionally, in your Shields, instance, configure `RASTER_URL` to the base
+  URL, e.g. `https://raster.example.co`. This will send 301 redirects
+  for the legacy raster URLs instead of 404's.
+
+If anyone has set this up, more documentation on how to do this would be
+welcome! It would also be nice to ship a Docker image that includes a
+preconfigured raster server.
+
+[raster server]: https://github.com/badges/svg-to-image-proxy
+
 ## Zeit Now
 
 To deploy using Zeit Now:
