@@ -31,7 +31,7 @@ class Token {
    * Token Constructor
    *
    * @param {string} id token string
-   * @param data
+   * @param {*} data reserved for future use
    * @param {number} usesRemaining
    *    Number of uses remaining until the token is exhausted
    * @param {number} nextReset
@@ -198,11 +198,8 @@ class TokenPool {
   /**
    * Add a token with user-provided ID and data.
    *
-   * @param id
-   *    The ID can be a primitive value or an object reference, and is used
-   *    (with `Set`) for deduplication. If a token already exists with a
-   *    given id, it will be ignored.
-   * @param data
+   * @param {string} id token string
+   * @param {*} data reserved for future use
    * @param {number} usesRemaining
    *    Number of uses remaining until the token is exhausted
    * @param {number} nextReset
