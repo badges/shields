@@ -3,12 +3,6 @@
 const Joi = require('@hapi/joi')
 const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
-const {
-  mockTeamCityCreds,
-  pass,
-  user,
-  restore,
-} = require('./teamcity-test-helpers')
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?/
@@ -137,31 +131,5 @@ t.create('full build status with failed build')
   .expectBadge({
     label: 'build',
     message: 'tests failed: 10 (2 new), passed: 99',
-    color: 'red',
-  })
-
-t.create('with auth')
-  .before(mockTeamCityCreds)
-  .get('/https/selfhosted.teamcity.com/e/bt678.json')
-  .intercept(nock =>
-    nock('https://selfhosted.teamcity.com/app/rest/builds')
-      .get(`/${encodeURIComponent('buildType:(id:bt678)')}`)
-      .query({})
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user,
-        pass,
-      })
-      .reply(200, {
-        status: 'FAILURE',
-        statusText:
-          'Tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
-      })
-  )
-  .finally(restore)
-  .expectBadge({
-    label: 'build',
-    message: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
     color: 'red',
   })

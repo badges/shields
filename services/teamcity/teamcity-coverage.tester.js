@@ -2,12 +2,6 @@
 
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
-const {
-  mockTeamCityCreds,
-  pass,
-  user,
-  restore,
-} = require('./teamcity-test-helpers')
 
 t.create('live: valid buildId')
   .get('/ReactJSNet_PullRequests.json')
@@ -74,37 +68,4 @@ t.create('zero lines covered')
     label: 'coverage',
     message: '0%',
     color: 'red',
-  })
-
-t.create('with auth, lines covered')
-  .before(mockTeamCityCreds)
-  .get('/https/selfhosted.teamcity.com/bt678.json')
-  .intercept(nock =>
-    nock('https://selfhosted.teamcity.com/app/rest/builds')
-      .get(`/${encodeURIComponent('buildType:(id:bt678)')}/statistics`)
-      .query({})
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user,
-        pass,
-      })
-      .reply(200, {
-        property: [
-          {
-            name: 'CodeCoverageAbsSCovered',
-            value: '82',
-          },
-          {
-            name: 'CodeCoverageAbsSTotal',
-            value: '100',
-          },
-        ],
-      })
-  )
-  .finally(restore)
-  .expectBadge({
-    label: 'coverage',
-    message: '82%',
-    color: 'yellowgreen',
   })
