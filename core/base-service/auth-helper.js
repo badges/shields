@@ -8,15 +8,15 @@ class AuthHelper {
 
     this._userKey = userKey
     this._passKey = passKey
-    this._user = userKey ? privateConfig[userKey] : undefined
-    this._pass = passKey ? privateConfig[passKey] : undefined
+    this.user = userKey ? privateConfig[userKey] : undefined
+    this.pass = passKey ? privateConfig[passKey] : undefined
     this._isRequired = isRequired
   }
 
   get isConfigured() {
     return (
-      (this._userKey ? Boolean(this._user) : true) &&
-      (this._passKey ? Boolean(this._pass) : true)
+      (this._userKey ? Boolean(this.user) : true) &&
+      (this._passKey ? Boolean(this.pass) : true)
     )
   }
 
@@ -24,21 +24,19 @@ class AuthHelper {
     if (this._isRequired) {
       return this.isConfigured
     } else {
-      const configIsEmpty = !this._user && !this._pass
+      const configIsEmpty = !this.user && !this.pass
       return this.isConfigured || configIsEmpty
     }
   }
 
   get basicAuth() {
-    return this.isConfigured
-      ? { user: this._user, pass: this._pass }
-      : undefined
+    const { user, pass } = this
+    return this.isConfigured ? { user, pass } : undefined
   }
 
   get bearerAuthHeader() {
-    return this.isConfigured
-      ? { Authorization: `Bearer ${this._pass}` }
-      : undefined
+    const { pass } = this
+    return this.isConfigured ? { Authorization: `Bearer ${pass}` } : undefined
   }
 }
 

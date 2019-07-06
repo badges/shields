@@ -495,7 +495,7 @@ describe('BaseService', function() {
 
       async handle() {
         return {
-          message: `The CI password is ${this.authHelper._pass}`,
+          message: `The CI password is ${this.authHelper.pass}`,
         }
       }
     }

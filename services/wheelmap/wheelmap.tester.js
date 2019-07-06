@@ -5,29 +5,17 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 const noToken = !serverSecrets.wheelmap_token
 function logTokenWarning() {
+  // TODO: For some reason this warning message isn't printing.
   if (noToken) {
-    console.warn(
-      "No token provided, this test will mock Wheelmap's API responses."
-    )
+    console.warn('No token provided. Wheelmap tests will be skipped.')
   }
 }
 
 t.create('node with accessibility')
   .before(logTokenWarning)
+  .skipIf(noToken)
   .get('/26699541.json')
   .timeout(7500)
-  .interceptIf(noToken, nock =>
-    nock('https://wheelmap.org/')
-      .get('/api/nodes/26699541')
-      .reply(
-        200,
-        JSON.stringify({
-          node: {
-            wheelchair: 'yes',
-          },
-        })
-      )
-  )
   .expectBadge({
     label: 'accessibility',
     message: 'yes',
@@ -36,20 +24,9 @@ t.create('node with accessibility')
 
 t.create('node with limited accessibility')
   .before(logTokenWarning)
+  .skipIf(noToken)
   .get('/2034868974.json')
   .timeout(7500)
-  .interceptIf(noToken, nock =>
-    nock('https://wheelmap.org/')
-      .get('/api/nodes/2034868974')
-      .reply(
-        200,
-        JSON.stringify({
-          node: {
-            wheelchair: 'limited',
-          },
-        })
-      )
-  )
   .expectBadge({
     label: 'accessibility',
     message: 'limited',
@@ -58,20 +35,9 @@ t.create('node with limited accessibility')
 
 t.create('node without accessibility')
   .before(logTokenWarning)
+  .skipIf(noToken)
   .get('/-147495158.json')
   .timeout(7500)
-  .interceptIf(noToken, nock =>
-    nock('https://wheelmap.org/')
-      .get('/api/nodes/-147495158')
-      .reply(
-        200,
-        JSON.stringify({
-          node: {
-            wheelchair: 'no',
-          },
-        })
-      )
-  )
   .expectBadge({
     label: 'accessibility',
     message: 'no',
@@ -80,13 +46,9 @@ t.create('node without accessibility')
 
 t.create('node not found')
   .before(logTokenWarning)
+  .skipIf(noToken)
   .get('/0.json')
   .timeout(7500)
-  .interceptIf(noToken, nock =>
-    nock('https://wheelmap.org/')
-      .get('/api/nodes/0')
-      .reply(404)
-  )
   .expectBadge({
     label: 'accessibility',
     message: 'node not found',
