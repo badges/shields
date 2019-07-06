@@ -108,10 +108,10 @@ if (allFiles.length > 100) {
   allFiles.forEach(file => {
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
-      if (/serverSecrets/.test(diff) && !secretsDocs.modified) {
+      if (/authHelper/.test(diff) && !secretsDocs.modified) {
         warn(
           [
-            `:books: Remember to ensure any changes to \`serverSecrets\` `,
+            `:books: Remember to ensure any changes to \`config.private\` `,
             `in \`${file}\` are reflected in the [server secrets documentation]`,
             '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
           ].join('')
