@@ -80,6 +80,7 @@ export default function Footer({ baseUrl }) {
 
       <p>
         <SpacedA href="https://status.shields.io/">Status</SpacedA>
+        <SpacedA href="https://metrics.shields.io">Metrics</SpacedA>
         <SpacedA href="https://github.com/badges/shields">GitHub</SpacedA>
       </p>
     </section>
