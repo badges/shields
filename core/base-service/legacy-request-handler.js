@@ -63,8 +63,6 @@ function flattenQueryParams(queryParams) {
   return Array.from(union).sort()
 }
 
-// Wrapper around `cachingRequest` that returns a promise rather than needing
-// to pass a callback.
 function promisify(cachingRequest) {
   return (uri, options) =>
     new Promise((resolve, reject) => {
@@ -252,6 +250,8 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       })
     }
 
+    // Wrapper around `cachingRequest` that returns a promise rather than needing
+    // to pass a callback.
     cachingRequest.asPromise = promisify(cachingRequest)
 
     vendorDomain.run(() => {
