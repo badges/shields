@@ -410,10 +410,16 @@ module.exports = class BaseService {
     if (requestCounter) {
       const { category, serviceFamily, name } = this
       const service = decamelize(name)
-      return requestCounter.labels(category, serviceFamily, service)
+      return {
+        inc({ style, format }) {
+          requestCounter
+            .labels(category, serviceFamily, service, style, format)
+            .inc()
+        },
+      }
     } else {
       // When metrics are disabled, return a mock counter.
-      return { inc: () => {} }
+      return { inc() {} }
     }
   }
 
@@ -456,7 +462,8 @@ module.exports = class BaseService {
           const format = match.slice(-1)[0]
           sendBadge(format, badgeData)
 
-          serviceRequestCounter.inc()
+          const { style } = badgeData
+          serviceRequestCounter.inc({ style, format })
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

@@ -8,7 +8,7 @@ module.exports = class PrometheusMetrics {
     this.requestCounter = new prometheus.Counter({
       name: 'service_requests_total',
       help: 'Total service requests',
-      labelNames: ['category', 'family', 'service'],
+      labelNames: ['category', 'family', 'service', 'style', 'format'],
       registers: [this.register],
     })
   }

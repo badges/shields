@@ -60,7 +60,8 @@ module.exports = class BaseStaticService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      serviceRequestCounter.inc()
+      const { style } = badgeData
+      serviceRequestCounter.inc({ style, format })
     })
   }
 }

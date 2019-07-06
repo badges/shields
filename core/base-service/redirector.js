@@ -116,7 +116,7 @@ module.exports = function redirector(attrs) {
 
         ask.res.end()
 
-        serviceRequestCounter.inc()
+        serviceRequestCounter.inc({ style: 'redirect', format: 'redirect' })
       })
     }
   }

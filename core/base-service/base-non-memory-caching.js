@@ -64,7 +64,8 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      serviceRequestCounter.inc()
+      const { style } = badgeData
+      serviceRequestCounter.inc({ style, format })
     })
   }
 }
