@@ -259,8 +259,8 @@ module.exports = class Server {
   /**
    * Register Redirects
    *
-   * Set up a couple of redirects which have to be registered last:
-   * One for the legacy static badge route.
+   * Set up a couple of redirects:
+   * One for the raster badges.
    * Another to redirect the base URL /
    * (we use this to redirect https://img.shields.io/ to https://shields.io/ )
    */
@@ -283,31 +283,6 @@ module.exports = class Server {
         // cache time in case we've made mistakes.
         // const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
         const cacheDuration = 3600 | 0 // 1 hour
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-
-        ask.res.end()
-      })
-
-      // Any badge, old version. This needs to be registered last.
-      // This route isn't working at present. Will anyone notice?
-      camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
-        const [, label, message] = match
-        const { color } = queryParams
-
-        const redirectUrl = staticBadgeUrl({
-          baseUrl: rasterUrl,
-          label,
-          message,
-          // Fixes https://github.com/badges/shields/issues/3260
-          color: color ? color.toString() : undefined,
-          format: 'png',
-        })
-
-        ask.res.statusCode = 301
-        ask.res.setHeader('Location', redirectUrl)
-
-        // The redirect is permanent.
-        const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
         ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
         ask.res.end()
