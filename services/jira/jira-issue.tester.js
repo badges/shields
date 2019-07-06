@@ -1,7 +1,6 @@
 'use strict'
 
 const t = (module.exports = require('../tester').createServiceTester())
-const { mockJiraCreds, restore, user, pass } = require('./jira-test-helpers')
 
 t.create('live: unknown issue')
   .get('/https/issues.apache.org/jira/notArealIssue-000.json')
@@ -161,26 +160,3 @@ t.create('blue-gray status color')
     message: 'cloudy',
     color: 'blue',
   })
-
-t.create('with mock credentials')
-  .before(mockJiraCreds)
-  .get('/https/myprivatejira.com/secure-234.json')
-  .intercept(nock =>
-    nock('https://myprivatejira.com/rest/api/2/issue')
-      .get(`/${encodeURIComponent('secure-234')}`)
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user,
-        pass,
-      })
-      .reply(200, {
-        fields: {
-          status: {
-            name: 'in progress',
-          },
-        },
-      })
-  )
-  .finally(restore)
-  .expectBadge({ label: 'secure-234', message: 'in progress' })
