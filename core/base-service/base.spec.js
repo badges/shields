@@ -504,13 +504,9 @@ describe('BaseService', function() {
         await AuthService.invoke(
           {},
           { defaultConfig, private: { myci_pass: 'abc123' } },
-          {
-            namedParamA: 'bar.bar.bar',
-          }
+          { namedParamA: 'bar.bar.bar' }
         )
-      ).to.deep.equal({
-        message: 'The CI password is abc123',
-      })
+      ).to.deep.equal({ message: 'The CI password is abc123' })
     })
 
     it('when auth is not configured properly, invoke() returns inacessible', async function() {
