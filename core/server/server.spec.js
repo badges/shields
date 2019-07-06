@@ -41,7 +41,7 @@ describe('The server', function() {
     )
     expect(statusCode).to.equal(301)
     expect(headers.location).to.equal(
-      'http://raster.example.com/:fruit-apple-green.png'
+      'http://raster.example.test/:fruit-apple-green.png'
     )
   })
 
@@ -51,7 +51,7 @@ describe('The server', function() {
     })
     expect(statusCode).to.equal(301)
     expect(headers.location).to.equal(
-      'http://raster.example.com/npm/v/express.png'
+      'http://raster.example.test/npm/v/express.png'
     )
   })
 
@@ -125,7 +125,7 @@ describe('The server', function() {
 
     expect(statusCode).to.equal(302)
     // This value is set in `config/test.yml`
-    expect(headers.location).to.equal('http://badge-server.example.com')
+    expect(headers.location).to.equal('http://frontend.example.test')
   })
 
   it('should return the 410 badge for obsolete formats', async function() {
