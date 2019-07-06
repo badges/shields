@@ -1,7 +1,10 @@
 'use strict'
 
+const { expect } = require('chai')
+const nock = require('nock')
 const { test, forCases, given } = require('sazerac')
 const { renderBuildStatusBadge } = require('../build-status')
+const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const JenkinsBuild = require('./jenkins-build.service')
 
 describe('JenkinsBuild', function() {
@@ -53,5 +56,36 @@ describe('JenkinsBuild', function() {
     given({ status: 'not built' }).expect(
       renderBuildStatusBadge({ status: 'not built' })
     )
+  })
+
+  describe('auth', function() {
+    cleanUpNockAfterEach()
+
+    const user = 'admin'
+    const pass = 'password'
+    const config = { private: { jenkins_user: user, jenkins_pass: pass } }
+
+    it('sends the auth information as configured', async function() {
+      const scope = nock('https://jenkins.ubuntu.com')
+        .get('/server/job/curtin-vmtest-daily-x/api/json?tree=color')
+        // This ensures that the expected credentials are actually being sent with the HTTP request.
+        // Without this the request wouldn't match and the test would fail.
+        .basicAuth({ user, pass })
+        .reply(200, { color: 'blue' })
+
+      expect(
+        await JenkinsBuild.invoke(defaultContext, config, {
+          protocol: 'https',
+          host: 'jenkins.ubuntu.com',
+          job: 'server/job/curtin-vmtest-daily-x',
+        })
+      ).to.deep.equal({
+        label: undefined,
+        message: 'passing',
+        color: 'brightgreen',
+      })
+
+      scope.done()
+    })
   })
 })
