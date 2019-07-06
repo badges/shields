@@ -380,10 +380,16 @@ module.exports = class BaseService {
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-    const serviceInstance = new this(context, config)
+    // It would be nice to instantiate this once in the life of the service,
+    // though it complicates testing.
+    const authHelper = this.auth
+      ? new AuthHelper(this.auth, config.private)
+      : undefined
+
+    const serviceInstance = new this({ ...context, authHelper }, config)
 
     let serviceError
-    if (context.authHelper && !context.authHelper.isValid) {
+    if (authHelper && !authHelper.isValid) {
       serviceError = new NotFound({
         prettyMessage: 'service auth improperly configured',
       })
@@ -466,11 +472,6 @@ module.exports = class BaseService {
       requestCounter,
     })
 
-    let authHelper
-    if (this.auth) {
-      authHelper = new AuthHelper(this.auth, privateConfig)
-    }
-
     camp.route(
       regex,
       handleRequest(cacheHeaderConfig, {
@@ -482,7 +483,6 @@ module.exports = class BaseService {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
-              authHelper,
             },
             serviceConfig,
             namedParams,

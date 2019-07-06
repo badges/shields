@@ -65,7 +65,7 @@ class DummyService extends BaseService {
 }
 
 describe('BaseService', function() {
-  const defaultConfig = { handleInternalErrors: false }
+  const defaultConfig = { handleInternalErrors: false, private: {} }
 
   it('Invokes the handler as expected', async function() {
     expect(
@@ -485,19 +485,38 @@ describe('BaseService', function() {
   })
 
   describe('auth', function() {
-    // This seems very difficult to test without mocking a bunch of Scoutcamp
-    // internals. Since that code will be rewritten soon, deferring for now.
-    // authHelper is tested in service unit tests, which suffices for now.
-    it('TODO: register() sets authHelper')
+    class AuthService extends DummyService {
+      static get auth() {
+        return {
+          passKey: 'myci_pass',
+          isRequired: true,
+        }
+      }
 
-    it('returns inacessible when auth is not configured properly', async function() {
-      const authHelper = new AuthHelper(
-        { passKey: 'myci_pass', isRequired: true },
-        {}
-      )
+      async handle() {
+        return {
+          message: `The CI password is ${this.authHelper._pass}`,
+        }
+      }
+    }
 
+    it('when auth is configured properly, invoke() sets authHelper', async function() {
       expect(
-        await DummyService.invoke({ authHelper }, defaultConfig, {
+        await AuthService.invoke(
+          {},
+          { defaultConfig, private: { myci_pass: 'abc123' } },
+          {
+            namedParamA: 'bar.bar.bar',
+          }
+        )
+      ).to.deep.equal({
+        message: 'The CI password is abc123',
+      })
+    })
+
+    it('when auth is not configured properly, invoke() returns inacessible', async function() {
+      expect(
+        await AuthService.invoke({}, defaultConfig, {
           namedParamA: 'bar.bar.bar',
         })
       ).to.deep.equal({
