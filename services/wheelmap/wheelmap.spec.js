@@ -8,27 +8,54 @@ const Wheelmap = require('./wheelmap.service')
 describe('Wheelmap', function() {
   cleanUpNockAfterEach()
 
-  it('Sends auth headers to cloud instance', async function() {
-    const token = 'abc123'
+  const token = 'abc123'
+  const config = { private: { wheelmap_token: token } }
 
+  function createMock({ nodeId, wheelchair }) {
     const scope = nock('https://wheelmap.org')
-      .get(/.*/)
+      .get(`/api/nodes/${nodeId}`)
       .query({ api_key: token })
-      .reply(200, { node: { wheelchair: 'yes' } })
 
+    if (wheelchair) {
+      return scope.reply(200, { node: { wheelchair } })
+    } else {
+      return scope.reply(404)
+    }
+  }
+
+  it('node with accessibility', async function() {
+    const nodeId = '26699541'
+    const scope = createMock({ nodeId, wheelchair: 'yes' })
     expect(
-      await Wheelmap.invoke(
-        defaultContext,
-        {
-          private: { wheelmap_token: token },
-        },
-        { nodeId: '12345' }
-      )
-    ).to.deep.equal({
-      message: 'yes',
-      color: 'brightgreen',
-    })
+      await Wheelmap.invoke(defaultContext, config, { nodeId })
+    ).to.deep.equal({ message: 'yes', color: 'brightgreen' })
+    scope.done()
+  })
 
+  it('node with limited accessibility', async function() {
+    const nodeId = '2034868974'
+    const scope = createMock({ nodeId, wheelchair: 'limited' })
+    expect(
+      await Wheelmap.invoke(defaultContext, config, { nodeId })
+    ).to.deep.equal({ message: 'limited', color: 'yellow' })
+    scope.done()
+  })
+
+  it('node without accessibility', async function() {
+    const nodeId = '-147495158'
+    const scope = createMock({ nodeId, wheelchair: 'no' })
+    expect(
+      await Wheelmap.invoke(defaultContext, config, { nodeId })
+    ).to.deep.equal({ message: 'no', color: 'red' })
+    scope.done()
+  })
+
+  it('node not found', async function() {
+    const nodeId = '0'
+    const scope = createMock({ nodeId })
+    expect(
+      await Wheelmap.invoke(defaultContext, config, { nodeId })
+    ).to.deep.equal({ message: 'node not found', color: 'red', isError: true })
     scope.done()
   })
 })

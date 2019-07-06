@@ -12,6 +12,7 @@ const {
   NotFound,
   InvalidResponse,
   Inaccessible,
+  ImproperlyConfigured,
   InvalidParameter,
   Deprecated,
 } = require('./errors')
@@ -138,21 +139,23 @@ module.exports = class BaseService {
    * for upstream requests.
    *
    * @abstract
-   * @return {object} authConfig
-   * @return {string} authConfig.userKey
-   *    (Optional) The key from `privateConfig` to use for the HTTP Basic username.
-   * @return {string} authConfig.passKey
-   *    (Optional) The key from `privateConfig` to use for the HTTP Basic password.
-   *    One of `userKey` or `passKey` must be specified.
-   * @return {string} authConfig.isRequired
-   *    (Optional) If `true`, the requested `userKey` and `passKey` must be
-   *    provided. Otherwise the server will start, but if the servce is invoked, it
-   *    will return `NotFound`.
+   * @return {object} auth
+   * @return {string} auth.userKey
+   *    (Optional) The key from `privateConfig` to use as the username.
+   * @return {string} auth.passKey
+   *    (Optional) The key from `privateConfig` to use as the password.
+   *    If auth is configured, either `userKey` or `passKey` is required.
+   * @return {string} auth.isRequired
+   *    (Optional) If `true`, the service will return `NotFound` unless the
+   *    configured credentials are present.
    *
    * See also the config schema in `./server.js` and `doc/server-secrets.md`.
    *
-   * To use the configured auth in the handler or fetch method, pass
-   * `{ options: { auth: this.authHelper.basicAuth } }` when making the request.
+   * To use the configured auth in the handler or fetch method, pass the
+   * credentials to the request. For example:
+   * `{ options: { auth: this.authHelper.basicAuth } }`
+   * `{ options: { headers: this.authHelper.bearerAuthHeader } }`
+   * `{ options: { qs: { token: this.authHelper.pass } } }`
    */
   static get auth() {
     return undefined
@@ -330,6 +333,7 @@ module.exports = class BaseService {
         color: 'red',
       }
     } else if (
+      error instanceof ImproperlyConfigured ||
       error instanceof InvalidResponse ||
       error instanceof Inaccessible ||
       error instanceof Deprecated
@@ -380,8 +384,9 @@ module.exports = class BaseService {
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-    // It would be nice to instantiate this once in the life of the service,
-    // though it complicates testing.
+    // Like the service instance, the auth helper could be reused for each request.
+    // However, moving its instantiation to `register()` makes `invoke()` harder
+    // to test.
     const authHelper = this.auth
       ? new AuthHelper(this.auth, config.private)
       : undefined
@@ -390,9 +395,10 @@ module.exports = class BaseService {
 
     let serviceError
     if (authHelper && !authHelper.isValid) {
-      serviceError = new NotFound({
-        prettyMessage: 'service auth improperly configured',
-      })
+      const prettyMessage = authHelper.isRequired
+        ? 'credentials have not been configured'
+        : 'credentials are misconfigured'
+      serviceError = new ImproperlyConfigured({ prettyMessage })
     }
 
     const { queryParamSchema } = this.route

@@ -519,9 +519,9 @@ describe('BaseService', function() {
           namedParamA: 'bar.bar.bar',
         })
       ).to.deep.equal({
-        color: 'red',
+        color: 'lightgray',
         isError: true,
-        message: 'service auth improperly configured',
+        message: 'credentials have not been configured',
       })
     })
   })

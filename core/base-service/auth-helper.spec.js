@@ -65,7 +65,7 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('auth', function() {
+  describe('basicAuth', function() {
     function validate(config, privateConfig) {
       return new AuthHelper(config, privateConfig).basicAuth
     }

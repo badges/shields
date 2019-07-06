@@ -10,7 +10,7 @@ class AuthHelper {
     this._passKey = passKey
     this.user = userKey ? privateConfig[userKey] : undefined
     this.pass = passKey ? privateConfig[passKey] : undefined
-    this._isRequired = isRequired
+    this.isRequired = isRequired
   }
 
   get isConfigured() {
@@ -21,7 +21,7 @@ class AuthHelper {
   }
 
   get isValid() {
-    if (this._isRequired) {
+    if (this.isRequired) {
       return this.isConfigured
     } else {
       const configIsEmpty = !this.user && !this.pass
