@@ -26,18 +26,16 @@ function assertValidRoute(route, message = undefined) {
   Joi.assert(route, isValidRoute, message)
 }
 
-function prepareRoute({ base, pattern, format, capture }) {
+function prepareRoute({ base, pattern, format, capture, withPng }) {
+  const extensionRegex = ['svg', 'json']
+    .concat(withPng ? ['png'] : [])
+    .join('|')
   let regex, captureNames
   if (pattern === undefined) {
-    regex = new RegExp(
-      `^${makeFullUrl(base, format)}\\.(svg|png|gif|jpg|json)$`
-    )
+    regex = new RegExp(`^${makeFullUrl(base, format)}\\.(${extensionRegex})$`)
     captureNames = capture || []
   } else {
-    const fullPattern = `${makeFullUrl(
-      base,
-      pattern
-    )}.:ext(svg|png|gif|jpg|json)`
+    const fullPattern = `${makeFullUrl(base, pattern)}.:ext(${extensionRegex})`
     const keys = []
     regex = pathToRegexp(fullPattern, keys, {
       strict: true,

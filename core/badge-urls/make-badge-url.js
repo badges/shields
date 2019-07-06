@@ -1,5 +1,6 @@
 'use strict'
 
+const { URL } = require('url')
 const queryString = require('query-string')
 const pathToRegexp = require('path-to-regexp')
 
@@ -134,6 +135,15 @@ function dynamicBadgeUrl({
   return `${baseUrl}/badge/dynamic/${datatype}.${format}?${outQueryString}`
 }
 
+function rasterRedirectUrl({ rasterUrl }, badgeUrl) {
+  // Ensure we're always using the `rasterUrl` by using just the path from
+  // the request URL.
+  const { pathname, search } = new URL(badgeUrl, 'https://bogus.test')
+  const result = new URL(pathname, rasterUrl)
+  result.search = search
+  return result
+}
+
 module.exports = {
   badgeUrlFromPath,
   badgeUrlFromPattern,
@@ -141,4 +151,5 @@ module.exports = {
   staticBadgeUrl,
   queryStringStaticBadgeUrl,
   dynamicBadgeUrl,
+  rasterRedirectUrl,
 }

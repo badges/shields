@@ -73,12 +73,10 @@ Shields has mercifully little persistent state:
     inspectable.
     - The [request cache][]
     - The [regular-update cache][]
-    - The [raster cache][]
 
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
 [request cache]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js#L29-L30
 [regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
-[raster cache]: https://github.com/badges/shields/blob/master/gh-badges/lib/svg-to-img.js#L9-L10
 [oauth transfer]: https://developer.github.com/apps/managing-oauth-apps/transferring-ownership-of-an-oauth-app/
 
 ## Configuration
