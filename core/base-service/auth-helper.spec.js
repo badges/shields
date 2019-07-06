@@ -1,8 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const { AuthHelper } = require('./auth-helper')
 const { test, given, forCases } = require('sazerac')
+const { AuthHelper } = require('./auth-helper')
 
 describe('AuthHelper', function() {
   it('throws without userKey or passKey', function() {

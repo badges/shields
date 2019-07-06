@@ -3,7 +3,6 @@
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
-const { AuthHelper } = require('./auth-helper')
 const trace = require('./trace')
 const {
   NotFound,

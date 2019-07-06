@@ -460,11 +460,7 @@ module.exports = class BaseService {
     { camp, handleRequest, githubApiProvider, requestCounter },
     serviceConfig
   ) {
-    const {
-      cacheHeaders: cacheHeaderConfig,
-      fetchLimitBytes,
-      private: privateConfig,
-    } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
