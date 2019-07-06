@@ -3,7 +3,6 @@
 const Joi = require('@hapi/joi')
 const { version: versionColor } = require('../color-formatters')
 const { addv } = require('../text-formatters')
-const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const {
   optionalDottedVersionNClausesWithOptionalSuffix,
