@@ -19,7 +19,7 @@ describe('JiraSprint', function() {
     const scope = nock('https://myprivatejira.test')
       .get('/jira/rest/api/2/search')
       .query(sprintQueryString)
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
+      // This ensures that the expected credentials are actually being sent with the HTTP request.
       // Without this the request wouldn't match and the test would fail.
       .basicAuth({ user, pass })
       .reply(200, {
