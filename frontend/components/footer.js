@@ -70,10 +70,10 @@ export default function Footer({ baseUrl }) {
       </p>
 
       <p>
-        What is your favorite badge service to use?
+        Have an idea for an awesome new badge?
         <br />
-        <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">
-          Tell us
+        <a href="https://github.com/badges/shields/issues/new?labels=service-badge&template=3_Badge_request.md">
+          Tell us about it
         </a>{' '}
         and we might bring it to you!
       </p>
