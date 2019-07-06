@@ -178,6 +178,7 @@ module.exports = class BaseService {
     return cacheLengths[this.category]
   }
 
+  /* eslint-disable jsdoc/require-returns */
   /**
    * Default data for the badge.
    * These defaults are used if the value is neither included in the service data
@@ -189,6 +190,7 @@ module.exports = class BaseService {
    * @returns {string} defaultBadgeData.labelColor (Optional)
    * @returns {string} defaultBadgeData.namedLogo (Optional)
    */
+  /* eslint-disable jsdoc/require-returns */
   static get defaultBadgeData() {
     return {}
   }

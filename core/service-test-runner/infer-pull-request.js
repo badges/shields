@@ -60,6 +60,7 @@ function _inferPullRequestFromCircleEnv(env) {
   return parseGithubPullRequestUrl(env.CI_PULL_REQUEST)
 }
 
+/* eslint-disable jsdoc/require-returns */
 /**
  * When called inside a CI build, infer the details
  * of a pull request from the environment variables.
@@ -72,6 +73,7 @@ function _inferPullRequestFromCircleEnv(env) {
  * @returns {string} pr.pullRequest PR/issue number
  * @returns {string} pr.slug owner/repo/#pullRequest
  */
+/* eslint-enable jsdoc/require-returns */
 function inferPullRequest(env = process.env) {
   if (env.TRAVIS) {
     return _inferPullRequestFromTravisEnv(env)
