@@ -45,6 +45,29 @@ describe('The server', function() {
     )
   })
 
+  it('should redirect modern PNG badges as configured', async function() {
+    const { statusCode, headers } = await got(`${baseUrl}npm/v/express.png`, {
+      followRedirect: false,
+    })
+    expect(statusCode).to.equal(301)
+    expect(headers.location).to.equal(
+      'http://raster.example.com/npm/v/express.png'
+    )
+  })
+
+  it.skip('should redirect the legacy static badge as configured', async function() {
+    const { statusCode, headers } = await got(
+      `${baseUrl}/fruit/apple.png?color=green`,
+      {
+        followRedirect: false,
+      }
+    )
+    expect(statusCode).to.equal(301)
+    expect(headers.location).to.equal(
+      'http://raster.example.com/badge/fruit-apple-green.png'
+    )
+  })
+
   it('should preserve label case', async function() {
     const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
     expect(statusCode).to.equal(200)

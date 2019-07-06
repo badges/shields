@@ -271,7 +271,25 @@ module.exports = class Server {
     } = config
 
     if (rasterUrl) {
-      // Any badge, old version.
+      // Redirect to the raster server for raster versions of modern badges.
+      camp.route(/\.png$/, (queryParams, match, end, ask) => {
+        ask.res.statusCode = 301
+        ask.res.setHeader(
+          'Location',
+          rasterRedirectUrl({ rasterUrl }, ask.req.url)
+        )
+
+        // The redirect is permanent, though let's start off with a shorter
+        // cache time in case we've made mistakes.
+        // const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
+        const cacheDuration = 3600 | 0 // 1 hour
+        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+
+        ask.res.end()
+      })
+
+      // Any badge, old version. This needs to be registered last.
+      // This route isn't working at present. Will anyone notice?
       camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
         const [, label, message] = match
         const { color } = queryParams
@@ -290,23 +308,6 @@ module.exports = class Server {
 
         // The redirect is permanent.
         const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-
-        ask.res.end()
-      })
-
-      // Redirect to the raster server for raster versions of modern badges.
-      camp.route(/\.png$/, (queryParams, match, end, ask) => {
-        ask.res.statusCode = 301
-        ask.res.setHeader(
-          'Location',
-          rasterRedirectUrl({ rasterUrl }, ask.req.url)
-        )
-
-        // The redirect is permanent, though let's start off with a shorter
-        // cache time in case we've made mistakes.
-        // const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
-        const cacheDuration = 3600 | 0 // 1 hour
         ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
         ask.res.end()
