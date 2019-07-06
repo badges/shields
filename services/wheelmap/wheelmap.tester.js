@@ -3,17 +3,18 @@
 const serverSecrets = require('../../lib/server-secrets')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const noToken = !serverSecrets.wheelmap_token
-function logTokenWarning() {
-  // TODO: For some reason this warning message isn't printing.
+function checkShouldSkip() {
+  const noToken = !serverSecrets.wheelmap_token
   if (noToken) {
-    console.warn('No token provided. Wheelmap tests will be skipped.')
+    console.warn(
+      'No Wheelmap token configured. Service tests will be skipped. Add a token in local.yml to run these tests.'
+    )
   }
+  return noToken
 }
 
 t.create('node with accessibility')
-  .before(logTokenWarning)
-  .skipIf(noToken)
+  .skipWhen(checkShouldSkip)
   .get('/26699541.json')
   .timeout(7500)
   .expectBadge({
@@ -23,8 +24,7 @@ t.create('node with accessibility')
   })
 
 t.create('node with limited accessibility')
-  .before(logTokenWarning)
-  .skipIf(noToken)
+  .skipWhen(checkShouldSkip)
   .get('/2034868974.json')
   .timeout(7500)
   .expectBadge({
@@ -34,8 +34,7 @@ t.create('node with limited accessibility')
   })
 
 t.create('node without accessibility')
-  .before(logTokenWarning)
-  .skipIf(noToken)
+  .skipWhen(checkShouldSkip)
   .get('/-147495158.json')
   .timeout(7500)
   .expectBadge({
@@ -45,8 +44,7 @@ t.create('node without accessibility')
   })
 
 t.create('node not found')
-  .before(logTokenWarning)
-  .skipIf(noToken)
+  .skipWhen(checkShouldSkip)
   .get('/0.json')
   .timeout(7500)
   .expectBadge({
