@@ -1,21 +1,9 @@
 'use strict'
 
-const sinon = require('sinon')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
-const serverSecrets = require('../../lib/server-secrets')
-
-const user = 'admin'
-const pass = 'password'
-
-function mockNexusCreds() {
-  serverSecrets['nexus_user'] = undefined
-  serverSecrets['nexus_pass'] = undefined
-  sinon.stub(serverSecrets, 'nexus_user').value(user)
-  sinon.stub(serverSecrets, 'nexus_pass').value(pass)
-}
 
 t.create('live: search release version valid artifact')
   .timeout(15000)
@@ -206,27 +194,5 @@ t.create('user query params')
   .expectBadge({
     label: 'nexus',
     message: 'v3.2.1',
-    color: 'blue',
-  })
-
-t.create('auth')
-  .before(mockNexusCreds)
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
-      .get('/service/local/lucene/search')
-      .query({ g: 'jboss', a: 'jboss-client' })
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user,
-        pass,
-      })
-      .reply(200, { data: [{ latestRelease: '2.3.4' }] })
-  )
-  .finally(sinon.restore)
-  .expectBadge({
-    label: 'nexus',
-    message: 'v2.3.4',
     color: 'blue',
   })

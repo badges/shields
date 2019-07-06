@@ -49,6 +49,10 @@ module.exports = class Nexus extends BaseJsonService {
     }
   }
 
+  static get auth() {
+    return { userKey: 'nexus_user', passKey: 'nexus_pass' }
+  }
+
   static get examples() {
     return [
       {
@@ -167,19 +171,10 @@ module.exports = class Nexus extends BaseJsonService {
       this.addQueryParamsToQueryString({ qs, queryOpt })
     }
 
-    const options = { qs }
-
-    if (serverSecrets.nexus_user) {
-      options.auth = {
-        user: serverSecrets.nexus_user,
-        pass: serverSecrets.nexus_pass,
-      }
-    }
-
     const json = await this._requestJson({
       schema,
       url,
-      options,
+      options: { qs, auth: this.authHelper.basicAuth },
       errorMessages: {
         404: 'artifact not found',
       },
