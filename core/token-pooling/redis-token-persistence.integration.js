@@ -61,18 +61,18 @@ describe('Redis token persistence', function() {
     const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
 
     beforeEach(async function() {
-      const rpush = promisify(client.rpush).bind(client)
-      await rpush(key, initialTokens)
+      const sadd = promisify(client.sadd).bind(client)
+      await sadd(key, initialTokens)
     })
 
-    let lrange
+    let smembers
     beforeEach(function() {
-      lrange = promisify(client.lrange).bind(client)
+      smembers = promisify(client.smembers).bind(client)
     })
 
     it('loads the contents', async function() {
       const tokens = await persistence.initialize()
-      expect(tokens).to.deep.equal(initialTokens)
+      expect(tokens.sort()).to.deep.equal(initialTokens)
     })
 
     context('when tokens are added', function() {
@@ -84,8 +84,8 @@ describe('Redis token persistence', function() {
         await persistence.initialize()
         await persistence.noteTokenAdded(newToken)
 
-        const savedTokens = await lrange(key, 0, -1)
-        expect(savedTokens).to.deep.equal(expected)
+        const savedTokens = await smembers(key)
+        expect(savedTokens.sort()).to.deep.equal(expected)
       })
     })
 
@@ -98,8 +98,8 @@ describe('Redis token persistence', function() {
 
         await persistence.noteTokenRemoved(toRemove)
 
-        const savedTokens = await lrange(key, 0, -1)
-        expect(savedTokens).to.deep.equal(expected)
+        const savedTokens = await smembers(key)
+        expect(savedTokens.sort()).to.deep.equal(expected)
       })
     })
   })
