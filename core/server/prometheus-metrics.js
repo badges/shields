@@ -16,7 +16,7 @@ module.exports = class PrometheusMetrics {
         name: 'service_response_bytes',
         help: 'Service response size in bytes',
         labelNames: ['type'],
-        // buckets form 64kB to 8MB
+        // buckets from 64kB to 8MB
         buckets: prometheus.exponentialBuckets(64 * 1024, 2, 8),
         registers: [this.register],
       }),
