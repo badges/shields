@@ -27,6 +27,14 @@ module.exports = class DynamicXml extends BaseService {
     }
   }
 
+  constructor(context, config) {
+    super(context, config)
+    this._metrics.serviceResponseSize = this.constructor._createMetric(
+      (context.metrics || {}).serviceResponseSize,
+      ['dynamic-xml']
+    )
+  }
+
   async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
     // e.g. //book[2]/@id
     const pathIsAttr = (

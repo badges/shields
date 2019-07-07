@@ -21,6 +21,14 @@ module.exports = class DynamicJson extends BaseJsonService {
     }
   }
 
+  constructor(context, config) {
+    super(context, config)
+    this._metrics.serviceResponseSize = this.constructor._createMetric(
+      (context.metrics || {}).serviceResponseSize,
+      ['dynamic-json']
+    )
+  }
+
   async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
     const data = await this._requestJson({
       schema: Joi.any(),

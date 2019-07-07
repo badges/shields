@@ -24,14 +24,14 @@ const { prepareRoute, namedParamsForMatch } = require('./route')
 // configured by the service, the user's request, and the server's default
 // cache length.
 module.exports = class NonMemoryCachingBaseService extends BaseService {
-  static register({ camp, requestCounter }, serviceConfig) {
+  static register({ camp, metrics = {} }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { _cacheLength: serviceDefaultCacheLengthSeconds } = this
     const { regex, captureNames } = prepareRoute(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
-    })
+    const serviceRequestCounter = this._createServiceRequestMetric(
+      metrics.requestCounter
+    )
 
     camp.route(regex, async (queryParams, match, end, ask) => {
       const namedParams = namedParamsForMatch(captureNames, match, this)

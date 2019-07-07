@@ -62,12 +62,12 @@ module.exports = function redirector(attrs) {
       return route
     }
 
-    static register({ camp, requestCounter }) {
+    static register({ camp, metrics = {} }) {
       const { regex, captureNames } = prepareRoute(this.route)
 
-      const serviceRequestCounter = this._createServiceRequestCounter({
-        requestCounter,
-      })
+      const serviceRequestCounter = this._createServiceRequestMetric(
+        metrics.requestCounter
+      )
 
       camp.route(regex, async (queryParams, match, end, ask) => {
         if (serverHasBeenUpSinceResourceCached(ask.req)) {

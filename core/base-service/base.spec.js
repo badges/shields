@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const prometheus = require('prom-client')
 const trace = require('./trace')
 const {
   NotFound,
@@ -459,6 +460,43 @@ describe('BaseService', function() {
         sinon.match.string,
         'Response status code',
         200
+      )
+    })
+
+    it('meters service response size', async function() {
+      const registry = new prometheus.Registry()
+      const metrics = {
+        serviceResponseSize: new prometheus.Histogram({
+          name: 'service_response_bytes',
+          help: 'Service response size in bytes',
+          labelNames: ['type'],
+          buckets: [1, 2, 4],
+          registers: [registry],
+        }),
+      }
+      const sendAndCacheRequest = async () => ({
+        buffer: 'xy',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest, metrics },
+        defaultConfig
+      )
+
+      const url = 'some-url'
+      await serviceInstance._request({ url })
+
+      expect(
+        registry.getSingleMetricAsString('service_response_bytes')
+      ).to.be.equal(
+        '# HELP service_response_bytes Service response size in bytes\n' +
+          '# TYPE service_response_bytes histogram\n' +
+          'service_response_bytes_bucket{le="1",type="base"} 0\n' +
+          'service_response_bytes_bucket{le="2",type="base"} 1\n' +
+          'service_response_bytes_bucket{le="4",type="base"} 1\n' +
+          'service_response_bytes_bucket{le="+Inf",type="base"} 1\n' +
+          'service_response_bytes_sum{type="base"} 2\n' +
+          'service_response_bytes_count{type="base"} 1'
       )
     })
 

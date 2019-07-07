@@ -21,6 +21,14 @@ module.exports = class DynamicYaml extends BaseYamlService {
     }
   }
 
+  constructor(context, config) {
+    super(context, config)
+    this._metrics.serviceResponseSize = this.constructor._createMetric(
+      (context.metrics || {}).serviceResponseSize,
+      ['dynamic-yaml']
+    )
+  }
+
   async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
     const data = await this._requestYaml({
       schema: Joi.any(),

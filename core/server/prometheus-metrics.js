@@ -5,12 +5,22 @@ const prometheus = require('prom-client')
 module.exports = class PrometheusMetrics {
   constructor() {
     this.register = new prometheus.Registry()
-    this.requestCounter = new prometheus.Counter({
-      name: 'service_requests_total',
-      help: 'Total service requests',
-      labelNames: ['category', 'family', 'service'],
-      registers: [this.register],
-    })
+    this.metrics = {
+      requestCounter: new prometheus.Counter({
+        name: 'service_requests_total',
+        help: 'Total service requests',
+        labelNames: ['category', 'family', 'service'],
+        registers: [this.register],
+      }),
+      serviceResponseSize: new prometheus.Histogram({
+        name: 'service_response_bytes',
+        help: 'Service response size in bytes',
+        labelNames: ['type'],
+        // buckets form 64kB to 8MB
+        buckets: prometheus.exponentialBuckets(64 * 1024, 2, 8),
+        registers: [this.register],
+      }),
+    }
   }
 
   async initialize(server) {

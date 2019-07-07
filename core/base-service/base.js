@@ -207,9 +207,14 @@ module.exports = class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
-    this._requestFetcher = sendAndCacheRequest
+  constructor(context, { handleInternalErrors }) {
+    this._requestFetcher = context.sendAndCacheRequest
     this._handleInternalErrors = handleInternalErrors
+    this._metrics = {}
+    this._metrics.serviceResponseSize = this.constructor._createMetric(
+      (context.metrics || {}).serviceResponseSize,
+      ['base']
+    )
   }
 
   async _request({ url, options = {}, errorMessages = {} }) {
@@ -217,7 +222,14 @@ module.exports = class BaseService {
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
+    await this._meterResponse(res, buffer)
     return checkErrorResponse(errorMessages)({ buffer, res })
+  }
+
+  async _meterResponse(res, buffer) {
+    if (res.statusCode === 200) {
+      this._metrics.serviceResponseSize.observe(buffer.length)
+    }
   }
 
   static _validate(
@@ -364,28 +376,31 @@ module.exports = class BaseService {
     return serviceData
   }
 
-  static _createServiceRequestCounter({ requestCounter }) {
-    if (requestCounter) {
-      const { category, serviceFamily, name } = this
-      const service = decamelize(name)
-      return requestCounter.labels(category, serviceFamily, service)
+  static _createServiceRequestMetric(metric) {
+    const { category, serviceFamily, name } = this
+    const service = decamelize(name)
+    return this._createMetric(metric, [category, serviceFamily, service])
+  }
+
+  static _createMetric(metric, labels) {
+    if (metric) {
+      return metric.labels(...labels)
     } else {
-      // When metrics are disabled, return a mock counter.
-      return { inc: () => {} }
+      // When metrics are disabled, return a mock metric.
+      return { inc: () => {}, observe: () => {} }
     }
   }
 
   static register(
-    { camp, handleRequest, githubApiProvider, requestCounter },
+    { camp, handleRequest, githubApiProvider, metrics = {} },
     serviceConfig
   ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
-
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
-    })
+    const serviceRequestCounter = this._createServiceRequestMetric(
+      metrics.requestCounter
+    )
 
     camp.route(
       regex,
@@ -398,6 +413,7 @@ module.exports = class BaseService {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
+              metrics,
             },
             serviceConfig,
             namedParams,

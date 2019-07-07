@@ -11,15 +11,15 @@ const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
-  static register({ camp, requestCounter }, serviceConfig) {
+  static register({ camp, metrics = {} }, serviceConfig) {
     const {
       profiling: { makeBadge: shouldProfileMakeBadge },
     } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
-    })
+    const serviceRequestCounter = this._createServiceRequestMetric(
+      metrics.requestCounter
+    )
 
     camp.route(regex, async (queryParams, match, end, ask) => {
       if (serverHasBeenUpSinceResourceCached(ask.req)) {

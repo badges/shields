@@ -181,11 +181,11 @@ module.exports = class Server {
   registerServices() {
     const { config, camp } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    const { requestCounter } = this.metrics || {}
+    const { metrics = {} } = this.metrics || {}
 
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider, requestCounter },
+        { camp, handleRequest, githubApiProvider, metrics },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
