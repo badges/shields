@@ -19,7 +19,7 @@ t.create('Debian package (default distribution, valid, query unsafe chars)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
-t.create('Debian package (valid, mocked response)')
+t.create('Debian package (valid)')
   .get('/apt/unstable.json')
   .intercept(nock =>
     nock('https://api.ftp-master.debian.org')
