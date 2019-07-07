@@ -16,10 +16,7 @@ const {
   clearRequestCache,
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
-const {
-  staticBadgeUrl,
-  rasterRedirectUrl,
-} = require('../badge-urls/make-badge-url')
+const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
