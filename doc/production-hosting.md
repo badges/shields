@@ -36,9 +36,9 @@ There are three public badge servers on OVH VPS’s.
 
 | Cname                       | Hostname             | Type | IP             | Location           |
 | --------------------------- | -------------------- | ---- | -------------- | ------------------ |
-| [s0.shields-server.com][s0] | vps71670.vps.ovh.ca  | VPS  | 192.99.59.72   | Quebec, Canada     |
-| [s1.shields-server.com][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
-| [s2.shields-server.com][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
+| [s0.servers.shields.io][s0] | vps71670.vps.ovh.ca  | VPS  | 192.99.59.72   | Quebec, Canada     |
+| [s1.servers.shields.io][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
+| [s2.servers.shields.io][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
 
 - These are single-core virtual hosts with 2 GB RAM [VPS SSD 1][].
 - The Node version (v9.4.0 at time of writing) and dependency versions on the
@@ -56,9 +56,9 @@ There are three public badge servers on OVH VPS’s.
 - The public servers _do not_ use docker. The `Dockerfile` is included for
   self-hosting (including on a Docker-capable PaaS).
 
-[s0]: https://s0.shields-server.com/index.html
-[s1]: https://s1.shields-server.com/index.html
-[s2]: https://s2.shields-server.com/index.html
+[s0]: https://s0.servers.shields.io/index.html
+[s1]: https://s1.servers.shields.io/index.html
+[s2]: https://s2.servers.shields.io/index.html
 [vps ssd 1]: https://www.ovh.com/world/vps/vps-ssd.xml
 [issue 1460]: https://github.com/badges/shields/issues/1460
 [serverscript]: https://github.com/badges/ServerScript
@@ -149,9 +149,9 @@ To set things up for deployment:
 3.  Add remotes:
 
 ```sh
-git remote add s0 root@s0.shields-server.com:/home/m/shields.git
-git remote add s1 root@s1.shields-server.com:/home/m/shields.git
-git remote add s2 root@s2.shields-server.com:/home/m/shields.git
+git remote add s0 root@s0.servers.shields.io:/home/m/shields.git
+git remote add s1 root@s1.servers.shields.io:/home/m/shields.git
+git remote add s2 root@s2.servers.shields.io:/home/m/shields.git
 ```
 
 `origin` should point to GitHub as usual.
