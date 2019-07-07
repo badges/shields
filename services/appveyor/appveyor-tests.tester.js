@@ -1,7 +1,7 @@
 'use strict'
 
 const queryString = require('querystring')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const isAppveyorTestTotals = Joi.string().regex(

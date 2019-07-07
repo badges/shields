@@ -2,7 +2,7 @@
 
 const camelcase = require('camelcase')
 const emojic = require('emojic')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const queryString = require('query-string')
 const BaseService = require('./base')
 const {
@@ -62,8 +62,11 @@ module.exports = function redirector(attrs) {
       return route
     }
 
-    static register({ camp, metrics = {} }) {
-      const { regex, captureNames } = prepareRoute(this.route)
+    static register({ camp, metrics = {} }, { rasterUrl }) {
+      const { regex, captureNames } = prepareRoute({
+        ...this.route,
+        withPng: Boolean(rasterUrl),
+      })
 
       const serviceRequestCounter = this._createServiceRequestMetric(
         metrics.requestCounter
@@ -104,7 +107,9 @@ module.exports = function redirector(attrs) {
 
         // The final capture group is the extension.
         const format = match.slice(-1)[0]
-        const redirectUrl = `${targetPath}.${format}${urlSuffix}`
+        const redirectUrl = `${
+          format === 'png' ? rasterUrl : ''
+        }${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301

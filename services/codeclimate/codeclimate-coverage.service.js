@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService, NotFound } = require('..')
 const { coveragePercentage, letterScore } = require('../color-formatters')
 const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
@@ -24,7 +24,7 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
   static get route() {
     return {
       base: 'codeclimate',
-      pattern: ':which(coverage|coverage-letter)/:user/:repo',
+      pattern: ':format(coverage|coverage-letter)/:user/:repo',
     }
   }
 
@@ -32,9 +32,9 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     return [
       {
         title: 'Code Climate coverage',
-        namedParams: { which: 'coverage', user: 'jekyll', repo: 'jekyll' },
+        namedParams: { format: 'coverage', user: 'jekyll', repo: 'jekyll' },
         staticPreview: this.render({
-          which: 'coverage',
+          format: 'coverage',
           percentage: 95.123,
           letter: 'A',
         }),
@@ -76,7 +76,7 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     return data
   }
 
-  async handle({ which, user, repo }) {
+  async handle({ format, user, repo }) {
     const {
       attributes: {
         rating: { letter },
@@ -85,7 +85,7 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     } = await this.fetch({ user, repo })
 
     return this.constructor.render({
-      wantLetter: which === 'coverage-letter',
+      wantLetter: format === 'coverage-letter',
       letter,
       percentage,
     })

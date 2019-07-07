@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 const { downloadCount } = require('../color-formatters')
@@ -11,7 +11,7 @@ const schema = Joi.object({
   month: nonNegativeInteger,
 }).required()
 
-const periodMap = {
+const intervalMap = {
   dw: {
     api_field: 'week',
     suffix: '/week',
@@ -30,7 +30,8 @@ module.exports = class JitpackDownloads extends BaseJsonService {
   static get route() {
     return {
       base: 'jitpack',
-      pattern: ':period(dw|dm)/:vcs(github|bitbucket|gitlab)/:user/:repo',
+      pattern:
+        ':interval(dw|dm)/:vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
     }
   }
 
@@ -39,14 +40,14 @@ module.exports = class JitpackDownloads extends BaseJsonService {
       {
         title: 'JitPack - Downloads',
         namedParams: {
-          period: 'dm',
+          interval: 'dm',
           vcs: 'github',
           user: 'jitpack',
           repo: 'maven-simple',
         },
         staticPreview: JitpackDownloads.render({
           downloads: 14000,
-          period: 'dm',
+          interval: 'dm',
         }),
         keywords: ['java', 'maven'],
       },
@@ -57,9 +58,9 @@ module.exports = class JitpackDownloads extends BaseJsonService {
     return { label: 'downloads' }
   }
 
-  static render({ downloads, period }) {
+  static render({ downloads, interval }) {
     return {
-      message: `${metric(downloads)}${periodMap[period].suffix}`,
+      message: `${metric(downloads)}${intervalMap[interval].suffix}`,
       color: downloadCount(downloads),
     }
   }
@@ -67,16 +68,16 @@ module.exports = class JitpackDownloads extends BaseJsonService {
   async fetch({ vcs, user, repo }) {
     return this._requestJson({
       schema,
-      url: `https://jitpack.io/api/stats/com.${vcs}.${user}/${repo}`,
+      url: `https://jitpack.io/api/downloads/com.${vcs}.${user}/${repo}`,
       errorMessages: { 401: 'project not found or private' },
     })
   }
 
-  async handle({ period, vcs, user, repo }) {
+  async handle({ interval, vcs, user, repo }) {
     const json = await this.fetch({ vcs, user, repo })
     return this.constructor.render({
-      downloads: json[periodMap[period].api_field],
-      period,
+      downloads: json[intervalMap[interval].api_field],
+      interval,
     })
   }
 }

@@ -6,7 +6,7 @@ t.create('license')
   .get('/notepad4e.json')
   .expectBadge({
     label: 'license',
-    message: 'GPL',
+    message: 'EPL 2.0',
   })
 
 t.create('unspecified license')

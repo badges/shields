@@ -75,7 +75,9 @@ module.exports = class SonarFortifyRating extends SonarBase {
       metricName: 'fortify-security-rating',
     })
 
-    const { metricValue: rating } = this.transform({ json, sonarVersion })
-    return this.constructor.render({ rating })
+    const metrics = this.transform({ json, sonarVersion })
+    return this.constructor.render({
+      rating: metrics['fortify-security-rating'],
+    })
   }
 }

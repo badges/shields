@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 const { renderVersionBadge } = require('../version')
 
@@ -19,7 +19,7 @@ module.exports = class JitPackVersion extends BaseJsonService {
   static get route() {
     return {
       base: 'jitpack/v',
-      pattern: ':vcs(github|bitbucket|gitlab)/:user/:repo',
+      pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
     }
   }
 

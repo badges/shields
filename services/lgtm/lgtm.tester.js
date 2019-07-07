@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { ServiceTester } = require('../tester')
 const t = new ServiceTester({ id: 'lgtm', title: 'LGTM' })
 module.exports = t

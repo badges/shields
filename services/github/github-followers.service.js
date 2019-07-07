@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthService } = require('./github-auth-service')

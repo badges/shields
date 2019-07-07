@@ -2,6 +2,14 @@
 
 const difference = require('lodash.difference')
 
+/**
+ * Given a pull request title like
+ * '[Travis Sonar] Support user token authentication'
+ * extract the list of service names in square brackets
+ * as an array of strings.
+ *
+ * @return {string[]}
+ */
 module.exports = function servicesForTitle(title) {
   const bracketed = /\[([^\]]+)\]/g
 

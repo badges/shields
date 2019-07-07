@@ -1,7 +1,7 @@
 'use strict'
 
 const emojic = require('emojic')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const trace = require('./trace')
 
 function validate(

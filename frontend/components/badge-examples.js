@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
+  badgeUrlFromPath,
   badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
 import { examplePropType } from '../lib/service-definitions/example-prop-types'
+import { removeRegexpFromPattern } from '../lib/pattern-helpers'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
@@ -28,18 +30,18 @@ const ClickableCode = styled(StyledCode)`
 `
 
 function Example({ baseUrl, onClick, exampleData }) {
-  const { title, example, preview } = exampleData
-
+  const { title, example, preview, isBadgeSuggestion } = exampleData
   const { pattern, namedParams, queryParams } = example
-  const exampleUrl = badgeUrlFromPattern({
-    baseUrl,
-    pattern,
-    namedParams,
-    queryParams,
-  })
-
+  let exampleUrl
   let previewUrl
-  if (preview.buildFromExample) {
+
+  if (isBadgeSuggestion) {
+    exampleUrl = badgeUrlFromPattern({
+      baseUrl,
+      pattern,
+      namedParams,
+      queryParams,
+    })
     previewUrl = exampleUrl
   } else {
     const { label, message, color, style, namedLogo } = preview
@@ -50,6 +52,11 @@ function Example({ baseUrl, onClick, exampleData }) {
       color,
       style,
       namedLogo,
+    })
+    exampleUrl = badgeUrlFromPath({
+      path: removeRegexpFromPattern(pattern),
+      namedParams,
+      queryParams,
     })
   }
 

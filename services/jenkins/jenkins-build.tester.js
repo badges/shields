@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const sinon = require('sinon')
 const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus } = require('../build-status')
@@ -16,9 +16,7 @@ t.create('build job not found')
   .expectBadge({ label: 'build', message: 'instance or job not found' })
 
 t.create('build found (view)')
-  .get(
-    '/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.json'
-  )
+  .get('/https/wso2.org/jenkins/view/All%20Builds/job/archetypes.json')
   .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
 
 t.create('build found (job)')

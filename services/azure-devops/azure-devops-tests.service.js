@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const {
   testResultQueryParamSchema,
   renderTestResultBadge,
@@ -206,17 +206,13 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`
-    const options = {
-      qs: {
-        buildId,
-      },
-      headers,
-    }
 
     const json = await this.fetch({
-      url,
-      options,
+      url: `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`,
+      options: {
+        qs: { buildId },
+        headers,
+      },
       schema: buildTestResultSummarySchema,
       errorMessages,
     })

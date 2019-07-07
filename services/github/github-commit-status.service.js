@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { NotFound, InvalidParameter } = require('..')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
@@ -74,7 +74,7 @@ module.exports = class GithubCommitStatus extends GithubAuthService {
     } catch (e) {
       if (e instanceof NotFound) {
         const { message } = this._parseJson(e.buffer)
-        if (message.startsWith('No common ancestor between')) {
+        if (message && message.startsWith('No common ancestor between')) {
           throw new InvalidParameter({ prettyMessage: 'no common ancestor' })
         }
       }

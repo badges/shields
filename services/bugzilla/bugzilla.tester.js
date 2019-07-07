@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const bzBugStatus = Joi.equal(
@@ -22,6 +22,13 @@ t.create('Bugzilla valid bug status')
     message: bzBugStatus,
   })
 
+t.create('Bugzilla valid bug status with custom baseUrl')
+  .get('/545424.json?baseUrl=https://bugs.eclipse.org/bugs')
+  .expectBadge({
+    label: 'bug 545424',
+    message: bzBugStatus,
+  })
+
 t.create('Bugzilla invalid bug status')
-  .get('/83548978974387943879.json')
+  .get('/102.json?baseUrl=https://bugzilla.gnome.org')
   .expectBadge({ label: 'bugzilla', message: 'not found' })

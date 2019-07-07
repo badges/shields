@@ -8,6 +8,6 @@ module.exports = redirector({
     base: 'wordpress/v',
     pattern: ':slug',
   },
-  transformPath: ({ slug }) => `/wordpress/plugin/wp-version/${slug}`,
+  transformPath: ({ slug }) => `/wordpress/plugin/tested/${slug}`,
   dateAdded: new Date('2019-04-17'),
 })

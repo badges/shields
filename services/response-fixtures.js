@@ -1,9 +1,12 @@
 'use strict'
 
+const invalidJSONString = '{{{{{invalid json}}'
+
 module.exports = {
   invalidJSON: () => [
     200,
-    '{{{{{invalid json}}',
+    invalidJSONString,
     { 'Content-Type': 'application/json' },
   ],
+  invalidJSONString,
 }

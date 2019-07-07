@@ -1,6 +1,7 @@
 ---
-name: :green_heart: Failing service test
+name: 💚 Failing service test
 about: Note failing service tests
+labels: 'keep-service-tests-green'
 ---
 
 :clock11: **When did the problem start?**

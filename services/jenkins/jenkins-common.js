@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const queryParamSchema = Joi.object({
   disableStrictSSL: Joi.equal(''),

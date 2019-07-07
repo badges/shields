@@ -13,7 +13,7 @@ module.exports = class GithubRelease extends GithubAuthService {
   static get route() {
     return {
       base: 'github',
-      pattern: ':which(release|release-pre)/:user/:repo',
+      pattern: ':variant(release|release-pre)/:user/:repo',
     }
   }
 
@@ -22,7 +22,7 @@ module.exports = class GithubRelease extends GithubAuthService {
       {
         title: 'GitHub release',
         namedParams: {
-          which: 'release',
+          variant: 'release',
           user: 'qubyte',
           repo: 'rubidium',
         },
@@ -46,14 +46,14 @@ module.exports = class GithubRelease extends GithubAuthService {
     }
   }
 
-  async handle({ which, user, repo }) {
+  async handle({ variant, user, repo }) {
     const {
       tag_name: version,
       prerelease: isPrerelease,
     } = await fetchLatestRelease(this, {
       user,
       repo,
-      includePre: which === 'release-pre',
+      includePre: variant === 'release-pre',
     })
     return this.constructor.render({ version, isPrerelease })
   }

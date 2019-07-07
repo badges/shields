@@ -1,7 +1,12 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
+const { optionalUrl } = require('../validators')
+
+const queryParamSchema = Joi.object({
+  baseUrl: optionalUrl,
+}).required()
 
 const schema = Joi.object({
   bugs: Joi.array()
@@ -30,18 +35,34 @@ module.exports = class Bugzilla extends BaseJsonService {
     return {
       base: 'bugzilla',
       pattern: ':bugNumber',
+      queryParamSchema,
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Bugzilla bug status',
-        namedParams: { bugNumber: '996038' },
+        title: 'Bugzilla bug status (Mozilla)',
+        namedParams: {
+          bugNumber: '996038',
+        },
         staticPreview: this.render({
           bugNumber: 996038,
           status: 'FIXED',
           resolution: '',
+        }),
+        documentation,
+      },
+      {
+        title: 'Bugzilla bug status (non-Mozilla)',
+        namedParams: {
+          bugNumber: '545424',
+        },
+        queryParams: { baseUrl: 'https://bugs.eclipse.org/bugs' },
+        staticPreview: this.render({
+          bugNumber: 545424,
+          status: 'RESOLVED',
+          resolution: 'FIXED',
         }),
         documentation,
       },
@@ -92,15 +113,15 @@ module.exports = class Bugzilla extends BaseJsonService {
     }
   }
 
-  async fetch({ bugNumber }) {
+  async fetch({ bugNumber, baseUrl }) {
     return this._requestJson({
       schema,
-      url: `https://bugzilla.mozilla.org/rest/bug/${bugNumber}`,
+      url: `${baseUrl}/rest/bug/${bugNumber}`,
     })
   }
 
-  async handle({ bugNumber }) {
-    const data = await this.fetch({ bugNumber })
+  async handle({ bugNumber }, { baseUrl = 'https://bugzilla.mozilla.org' }) {
+    const data = await this.fetch({ bugNumber, baseUrl })
     return this.constructor.render({
       bugNumber,
       status: data.bugs[0].status,

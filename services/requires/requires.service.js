@@ -1,7 +1,7 @@
 'use strict'
 
 const { BaseJsonService } = require('..')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const statusSchema = Joi.object({
   status: Joi.string().required(),

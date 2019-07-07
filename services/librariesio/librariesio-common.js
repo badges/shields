@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { nonNegativeInteger, anyInteger } = require('../validators')
 
 // API doc: https://libraries.io/api#project

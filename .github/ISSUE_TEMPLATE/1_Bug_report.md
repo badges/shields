@@ -1,6 +1,7 @@
 ---
 name: 🐛 Bug Report
 about: Report errors and problems
+labels: 'question'
 ---
 
 Are you experiencing an issue with...

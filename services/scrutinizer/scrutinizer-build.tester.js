@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { isBuildStatus } = require('../build-status')
 const { ServiceTester } = require('../tester')
 const t = (module.exports = new ServiceTester({

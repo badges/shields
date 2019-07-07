@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const jp = require('jsonpath')
 const { BaseJsonService, InvalidResponse } = require('..')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')

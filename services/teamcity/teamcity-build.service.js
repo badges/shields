@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const TeamCityBase = require('./teamcity-base')
 
 // The statusText field will start with a summary, potentially including test details, followed by an optional suffix.

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const prometheus = require('prom-client')
@@ -317,7 +317,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|json)$/
 
     let mockCamp
     let mockHandleRequest

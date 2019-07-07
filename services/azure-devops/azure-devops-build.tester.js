@@ -7,14 +7,14 @@ const t = (module.exports = require('../tester').createServiceTester())
 // solely created for Shields.io testing.
 
 t.create('default branch')
-  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')
+  .get('/totodem/shields.io/2.json')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
   })
 
 t.create('named branch')
-  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
+  .get('/totodem/shields.io/2/master.json')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
@@ -34,5 +34,5 @@ t.create('unknown user')
 
 // The following build definition has always a partially succeeded status
 t.create('partially succeeded build')
-  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/4.json')
+  .get('/totodem/shields.io/4/master.json')
   .expectBadge({ label: 'build', message: 'passing', color: 'orange' })
