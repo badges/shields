@@ -93,34 +93,34 @@ t.create('Invalid Host')
   )
   .expectBadge({ label: 'discourse', message: 'not found' })
 
-t.create('Topics (live)')
+t.create('Topics')
   .get('/https/meta.discourse.org/topics.json')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? topics$/),
   })
 
-t.create('Posts (live)')
+t.create('Posts')
   .get('/https/meta.discourse.org/posts.json')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? posts$/),
   })
 
-t.create('Users (live)')
+t.create('Users')
   .get('/https/meta.discourse.org/users.json')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? users$/),
   })
 
-t.create('Likes (live)')
+t.create('Likes')
   .get('/https/meta.discourse.org/likes.json')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? likes$/),
   })
 
-t.create('Status (live)')
+t.create('Status')
   .get('/https/meta.discourse.org/status.json')
   .expectBadge({ label: 'discourse', message: 'online' })

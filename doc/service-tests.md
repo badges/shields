@@ -221,7 +221,7 @@ static render({ status, result }) {
 We can also use nock to intercept API calls to return a known response body.
 
 ```js
-t.create('Build passed (mocked)')
+t.create('Build passed')
   .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
@@ -234,7 +234,7 @@ t.create('Build passed (mocked)')
     color: 'brightgreen',
   })
 
-t.create('Build failed (mocked)')
+t.create('Build failed')
   .get('/build/wercker/go-wercker-api.json')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
