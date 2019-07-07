@@ -1,7 +1,13 @@
 'use strict'
+/**
+ * @module gh-badges
+ */
 
 const makeBadge = require('./make-badge')
 
+/**
+ * BadgeFactory
+ */
 class BadgeFactory {
   constructor(options) {
     if (options !== undefined) {
@@ -23,7 +29,7 @@ class BadgeFactory {
    * @param {string} format.colorB (Deprecated, Optional) alias for `color`
    * @param {string} format.format (Optional) Output format: 'svg' or 'json'
    * @param {string} format.template (Optional) Visual template e.g: 'flat'
-   *    see https://github.com/badges/shields/tree/master/gh-badges/templates
+   *    see {@link https://github.com/badges/shields/tree/master/gh-badges/templates}
    * @returns {string} Badge in SVG or JSON format
    * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
    */

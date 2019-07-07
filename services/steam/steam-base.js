@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const { BaseJsonService } = require('..')
 
@@ -7,7 +10,7 @@ const { BaseJsonService } = require('..')
  *
  * @see https://partner.steamgames.com/doc/webapi_overview#2
  */
-module.exports = class BaseSteamAPI extends BaseJsonService {
+class BaseSteamAPI extends BaseJsonService {
   /**
    * Steam API Interface
    *
@@ -50,3 +53,5 @@ module.exports = class BaseSteamAPI extends BaseJsonService {
     })
   }
 }
+
+module.exports = BaseSteamAPI

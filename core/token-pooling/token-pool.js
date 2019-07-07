@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const crypto = require('crypto')
 const PriorityQueue = require('priorityqueuejs')
@@ -187,9 +190,9 @@ class TokenPool {
   /**
    * compareTokens
    *
-   * @param {Token} first first token to compare
-   * @param {Token} second second token to compare
-   * @returns {Token} The token whose current rate allotment is expiring soonest.
+   * @param {module:core/token-pooling/token-pool~Token} first first token to compare
+   * @param {module:core/token-pooling/token-pool~Token} second second token to compare
+   * @returns {module:core/token-pooling/token-pool~Token} The token whose current rate allotment is expiring soonest.
    */
   static compareTokens(first, second) {
     return second.nextReset - first.nextReset
@@ -287,7 +290,7 @@ class TokenPool {
    * new use-remaining count and next-reset time. Invoke `invalidate()` to
    * indicate it should not be reused.
    *
-   * @returns {Token} token
+   * @returns {module:core/token-pooling/token-pool~Token} token
    */
   next() {
     let token = this.currentBatch.token

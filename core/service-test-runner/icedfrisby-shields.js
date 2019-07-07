@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')

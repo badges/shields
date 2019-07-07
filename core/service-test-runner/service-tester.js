@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const emojic = require('emojic')
 const trace = require('../base-service/trace')
@@ -44,7 +47,8 @@ class ServiceTester {
    *
    * @param {Function} ServiceClass
    *    A class that extends base-service/base.BaseService
-   * @returns {ServiceTester} ServiceTester for ServiceClass
+   * @returns {module:core/service-test-runner/service-tester~ServiceTester}
+   *    ServiceTester for ServiceClass
    */
   static forServiceClass(ServiceClass) {
     const id = ServiceClass.name
@@ -64,18 +68,16 @@ class ServiceTester {
    */
   beforeEach() {}
 
-  /* eslint-disable jsdoc/no-undefined-types */
   /**
    * Create a new test. The hard work is delegated to IcedFrisby.
-   * https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
+   * {@link https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code}
    *
    * Note: The caller should not invoke toss() on the Frisby chain, as it's
    * invoked automatically by the tester.
    *
    * @param {string} msg The name of the test
-   * @returns {IcedFrisby} IcedFrisby instance
+   * @returns {module:icedfrisby~IcedFrisby} IcedFrisby instance
    */
-  /* eslint-enable jsdoc/no-undefined-types */
   create(msg) {
     const spec = frisby
       .create(msg)
@@ -130,4 +132,5 @@ class ServiceTester {
     })
   }
 }
+
 module.exports = ServiceTester

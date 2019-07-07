@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const fs = require('fs')
 const path = require('path')
@@ -115,14 +118,12 @@ const privateConfigSchema = Joi.object({
 }).required()
 
 /**
- * Badge Server
- *
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
  * Then it loads all the services, injecting dependencies as it
  * asks each one to register its route with Scoutcamp.
  */
-module.exports = class Server {
+class Server {
   /**
    * Badge Server Constructor
    *
@@ -182,8 +183,6 @@ module.exports = class Server {
   }
 
   /**
-   * Register Error Handlers
-   *
    * Set up Scoutcamp routes for 404/not found responses
    */
   registerErrorHandlers() {
@@ -232,8 +231,6 @@ module.exports = class Server {
   }
 
   /**
-   * Register Services
-   *
    * Iterate all the service classes defined in /services,
    * load each service and register a Scoutcamp route for each service.
    */
@@ -257,12 +254,11 @@ module.exports = class Server {
   }
 
   /**
-   * Register Redirects
-   *
    * Set up a couple of redirects which have to be registered last:
    * One for the legacy static badge route.
    * Another to redirect the base URL /
-   * (we use this to redirect https://img.shields.io/ to https://shields.io/ )
+   * (we use this to redirect {@link https://img.shields.io/}
+   * to {@link https://shields.io/} )
    */
   registerRedirects() {
     const { config, camp } = this
@@ -323,8 +319,7 @@ module.exports = class Server {
   }
 
   /**
-   * Start the HTTP server
-   *
+   * Start the HTTP server:
    * Bootstrap Scoutcamp,
    * Register handlers,
    * Start listening for requests on this.baseUrl()
@@ -401,3 +396,5 @@ module.exports = class Server {
     }
   }
 }
+
+module.exports = Server
