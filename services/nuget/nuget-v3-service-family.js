@@ -4,8 +4,8 @@ const { promisify } = require('util')
 const Joi = require('@hapi/joi')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
-const { BaseJsonService, NotFound } = require('..')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
+const { BaseJsonService, NotFound } = require('..')
 
 /*
  * Build the Shields service URL object for the given service configuration. Return

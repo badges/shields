@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseSvgScrapingService } = require('..')
 const { letterGrades } = require('./codefactor-helpers')
+const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
   message: Joi.allow(...Object.keys(letterGrades)),

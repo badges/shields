@@ -3,8 +3,8 @@
 const Joi = require('@hapi/joi')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { metric } = require('../text-formatters')
-const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const schemaInstallations = Joi.object()
   .keys({
