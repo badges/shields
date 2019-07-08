@@ -2,10 +2,10 @@
 
 const { URL } = require('url')
 const Joi = require('@hapi/joi')
-const { BaseJsonService, InvalidParameter } = require('..')
 const { errorMessages } = require('../dynamic-common')
 const { optionalUrl } = require('../validators')
 const { fetchEndpointData } = require('../endpoint-common')
+const { BaseJsonService, InvalidParameter } = require('..')
 
 const blockedDomains = ['github.com', 'shields.io']
 

@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { NotFound } = require('..')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
 const { GithubAuthService } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+const { NotFound } = require('..')
 
 const schema = Joi.alternatives()
   .try(

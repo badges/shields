@@ -3,8 +3,8 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const keywords = ['sublime', 'sublimetext', 'packagecontrol']
 

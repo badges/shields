@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({

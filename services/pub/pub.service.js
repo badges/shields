@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { latest, renderVersionBadge } = require('../version')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   versions: Joi.array()

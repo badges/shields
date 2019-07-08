@@ -5,8 +5,8 @@ const Joi = require('@hapi/joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { latest: latestVersion } = require('../version')
-const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 
 const keywords = ['ruby']
 
