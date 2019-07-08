@@ -1,8 +1,7 @@
 'use strict'
 
-const { promisify } = require('util')
 const RedisServer = require('redis-server')
-const redis = require('redis')
+const Redis = require('ioredis')
 const { expect } = require('chai')
 const RedisTokenPersistence = require('./redis-token-persistence')
 
@@ -18,17 +17,15 @@ describe('Redis token persistence', function() {
 
   const key = 'tokenPersistenceIntegrationTest'
 
-  let client
+  let redis
   beforeEach(async function() {
-    client = redis.createClient()
-    const del = promisify(client.del).bind(client)
-    await del(key)
+    redis = new Redis()
+    await redis.del(key)
   })
   afterEach(async function() {
-    if (client) {
-      const quit = promisify(client.quit).bind(client)
-      await quit()
-      client = undefined
+    if (redis) {
+      await redis.quit()
+      redis = undefined
     }
   })
 
@@ -61,13 +58,7 @@ describe('Redis token persistence', function() {
     const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
 
     beforeEach(async function() {
-      const sadd = promisify(client.sadd).bind(client)
-      await sadd(key, initialTokens)
-    })
-
-    let smembers
-    beforeEach(function() {
-      smembers = promisify(client.smembers).bind(client)
+      await redis.sadd(key, initialTokens)
     })
 
     it('loads the contents', async function() {
@@ -84,7 +75,7 @@ describe('Redis token persistence', function() {
         await persistence.initialize()
         await persistence.noteTokenAdded(newToken)
 
-        const savedTokens = await smembers(key)
+        const savedTokens = await redis.smembers(key)
         expect(savedTokens.sort()).to.deep.equal(expected)
       })
     })
@@ -98,7 +89,7 @@ describe('Redis token persistence', function() {
 
         await persistence.noteTokenRemoved(toRemove)
 
-        const savedTokens = await smembers(key)
+        const savedTokens = await redis.smembers(key)
         expect(savedTokens.sort()).to.deep.equal(expected)
       })
     })

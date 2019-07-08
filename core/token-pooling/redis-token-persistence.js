@@ -1,7 +1,6 @@
 'use strict'
 
-const { promisify } = require('util')
-const redis = require('redis')
+const Redis = require('ioredis')
 const log = require('../server/log')
 const TokenPersistence = require('./token-persistence')
 
@@ -20,28 +19,24 @@ module.exports = class RedisTokenPersistence extends TokenPersistence {
             tls: { servername: new URL(this.url).hostname },
           }
         : undefined
-    this.client = redis.createClient(this.url, options)
-    this.client.on('error', e => {
+    this.redis = new Redis(this.url, options)
+    this.redis.on('error', e => {
       log.error(e)
     })
 
-    const smembers = promisify(this.client.smembers).bind(this.client)
-    const tokens = await smembers(this.key)
+    const tokens = await this.redis.smembers(this.key)
     return tokens
   }
 
   async stop() {
-    const quit = promisify(this.client.quit).bind(this.client)
-    await quit()
+    await this.redis.quit()
   }
 
   async onTokenAdded(token) {
-    const sadd = promisify(this.client.sadd).bind(this.client)
-    await sadd(this.key, token)
+    await this.redis.sadd(this.key, token)
   }
 
   async onTokenRemoved(token) {
-    const srem = promisify(this.client.srem).bind(this.client)
-    await srem(this.key, token)
+    await this.redis.srem(this.key, token)
   }
 }

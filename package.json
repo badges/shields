@@ -22,6 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
     "camp": "~17.2.4",
@@ -37,7 +38,7 @@
     "fsos": "^1.1.6",
     "gh-badges": "file:gh-badges",
     "glob": "^7.1.4",
-    "@hapi/joi": "^15.1.0",
+    "ioredis": "^4.11.1",
     "joi-extension-semver": "3.0.0",
     "js-yaml": "^3.13.1",
     "jsonpath": "~1.0.2",
@@ -53,7 +54,6 @@
     "prom-client": "^11.5.2",
     "query-string": "^6.7.0",
     "raven": "^2.4.2",
-    "redis": "~2.8.0",
     "request": "~2.88.0",
     "semver": "~6.1.2",
     "simple-icons": "1.10.0",
