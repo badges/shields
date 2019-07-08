@@ -6,13 +6,19 @@ const { metric } = require('../text-formatters')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
-const bitbucketPullRequestSchema = Joi.object({
+const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
+
+const errorMessages = {
+  401: 'invalid credentials',
+  403: 'private repo',
+  404: 'not found',
+}
 
 function pullRequestClassGenerator(raw) {
   const routePrefix = raw ? 'pr-raw' : 'pr'
@@ -68,9 +74,15 @@ function pullRequestClassGenerator(raw) {
       }
     }
 
-    async fetchCloud({ args, user, repo }) {
-      args.url = `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`
-      args.options = { qs: { state: 'OPEN', limit: 0 } }
+    async fetchCloud({ user, repo }) {
+      const args = {
+        url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
+        schema,
+        options: {
+          qs: { state: 'OPEN', limit: 0 },
+        },
+        errorMessages,
+      }
 
       if (
         serverSecrets.bitbucket_username &&
@@ -86,15 +98,19 @@ function pullRequestClassGenerator(raw) {
     }
 
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
-    async fetchServer({ args, server, user, repo }) {
-      args.url = `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`
-      args.options = {
-        qs: {
-          state: 'OPEN',
-          limit: 100,
-          withProperties: false,
-          withAttributes: false,
+    async fetchServer({ server, user, repo }) {
+      const args = {
+        url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
+        schema,
+        options: {
+          qs: {
+            state: 'OPEN',
+            limit: 100,
+            withProperties: false,
+            withAttributes: false,
+          },
         },
+        errorMessages,
       }
 
       if (
@@ -111,19 +127,10 @@ function pullRequestClassGenerator(raw) {
     }
 
     async fetch({ server, user, repo }) {
-      const args = {
-        schema: bitbucketPullRequestSchema,
-        errorMessages: {
-          401: 'invalid credentials',
-          403: 'private repo',
-          404: 'not found',
-        },
-      }
-
       if (server !== undefined) {
-        return this.fetchServer({ args, server, user, repo })
+        return this.fetchServer({ server, user, repo })
       } else {
-        return this.fetchCloud({ args, user, repo })
+        return this.fetchCloud({ user, repo })
       }
     }
 

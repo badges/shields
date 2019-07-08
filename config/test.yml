@@ -7,4 +7,6 @@ public:
 
   redirectUrl: 'http://badge-server.example.com'
 
+  rasterUrl: 'http://raster.example.com'
+
   handleInternalErrors: false
