@@ -55,3 +55,6 @@ async function list() {
     process.exit(1)
   }
 })()
+
+// Appease the linter.
+module.exports = { load, list }
