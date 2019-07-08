@@ -133,7 +133,6 @@ class BaseService {
     return cacheLengths[this.category]
   }
 
-  /* eslint-disable jsdoc/require-returns */
   /**
    * Default data for the badge.
    * These defaults are used if the value is neither included in the service data
@@ -141,7 +140,6 @@ class BaseService {
    *
    * @type {module:core/base-service/base~DefaultBadgeData}
    */
-  /* eslint-disable jsdoc/require-returns */
   static get defaultBadgeData() {
     return {}
   }
