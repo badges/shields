@@ -159,7 +159,7 @@
     "clipboard-copy": "^3.0.0",
     "concurrently": "^4.1.1",
     "cypress": "^3.3.2",
-    "danger": "^8.0.0",
+    "danger": "^9.0.3",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
