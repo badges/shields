@@ -2,13 +2,13 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
+const { BaseJsonService } = require('..')
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,

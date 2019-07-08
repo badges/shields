@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const condaSchema = Joi.object({
   latest_version: Joi.string().required(),

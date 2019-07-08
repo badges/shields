@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
-const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   resultCount: nonNegativeInteger,

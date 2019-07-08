@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseXmlService, NotFound } = require('..')
 const { renderVersionBadge } = require('../version')
+const { BaseXmlService, NotFound } = require('..')
 
 const schema = Joi.object({
   metadata: Joi.object({
