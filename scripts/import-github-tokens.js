@@ -22,7 +22,6 @@ function createClient() {
   return redis
 }
 
-// eslint-disable-next-line no-unused-vars
 async function load() {
   const redis = createClient()
   const tokens = await loadTokens()
