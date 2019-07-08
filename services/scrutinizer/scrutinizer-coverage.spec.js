@@ -2,8 +2,8 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
-const { NotFound } = require('..')
 const [ScrutinizerCoverage] = require('./scrutinizer-coverage.service')
+const { NotFound } = require('..')
 
 describe('ScrutinizerCoverage', function() {
   test(ScrutinizerCoverage.render, () => {

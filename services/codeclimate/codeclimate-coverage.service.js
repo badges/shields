@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService, NotFound } = require('..')
 const { coveragePercentage, letterScore } = require('../color-formatters')
 const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   data: Joi.object({

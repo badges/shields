@@ -2,9 +2,9 @@
 
 const moment = require('moment')
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const renderQuestionsBadge = require('./stackexchange-helpers')
+const { BaseJsonService } = require('..')
 
 const tagSchema = Joi.object({
   total: nonNegativeInteger,
