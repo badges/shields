@@ -106,6 +106,10 @@ if (allFiles.length > 100) {
   warn("Lots 'o changes. Skipping diff-based checks.")
 } else {
   allFiles.forEach(file => {
+    if (file === 'dangerfile.js') {
+      return
+    }
+
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
       if (diff.includes('serverSecrets') && !secretsDocs.modified) {
