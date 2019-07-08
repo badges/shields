@@ -4,8 +4,8 @@ const Joi = require('@hapi/joi')
 const { renderLicenseBadge } = require('../licenses')
 const { renderVersionBadge } = require('../version')
 const { metric } = require('../text-formatters')
-const { BaseJsonService, InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 const keywords = ['atom']
 

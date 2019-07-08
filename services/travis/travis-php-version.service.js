@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const {
   minorVersion,
   versionReduction,
   getPhpReleases,
 } = require('../php-version')
+const { BaseJsonService } = require('..')
 
 const optionalNumberOrString = Joi.alternatives(Joi.string(), Joi.number())
 const schema = Joi.object({

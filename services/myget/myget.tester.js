@@ -77,7 +77,7 @@ t.create('total downloads (tenant)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('version (mocked, yellow badge)')
+t.create('version (yellow badge)')
   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
@@ -97,7 +97,7 @@ t.create('version (mocked, yellow badge)')
     color: 'yellow',
   })
 
-t.create('version (mocked, orange badge)')
+t.create('version (orange badge)')
   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
@@ -117,7 +117,7 @@ t.create('version (mocked, orange badge)')
     color: 'orange',
   })
 
-t.create('version (mocked, blue badge)')
+t.create('version (blue badge)')
   .get('/myget/mongodb/v/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
@@ -150,7 +150,7 @@ t.create('version (pre) (valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('version (pre) (mocked, yellow badge)')
+t.create('version (pre) (yellow badge)')
   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
@@ -170,7 +170,7 @@ t.create('version (pre) (mocked, yellow badge)')
     color: 'yellow',
   })
 
-t.create('version (pre) (mocked, orange badge)')
+t.create('version (pre) (orange badge)')
   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')
@@ -190,7 +190,7 @@ t.create('version (pre) (mocked, orange badge)')
     color: 'orange',
   })
 
-t.create('version (pre) (mocked, blue badge)')
+t.create('version (pre) (blue badge)')
   .get('/myget/mongodb/vpre/MongoDB.Driver.Core.json')
   .intercept(nock =>
     nock('https://www.myget.org')

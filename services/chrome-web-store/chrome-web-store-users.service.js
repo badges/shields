@@ -2,8 +2,8 @@
 
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const { redirector } = require('..')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
+const { redirector } = require('..')
 
 class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static get category() {

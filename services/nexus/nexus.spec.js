@@ -1,8 +1,8 @@
 'use strict'
 
 const { expect } = require('chai')
-const { InvalidResponse, NotFound } = require('..')
 const Nexus = require('./nexus.service')
+const { InvalidResponse, NotFound } = require('..')
 
 describe('Nexus', function() {
   context('transform()', function() {

@@ -11,7 +11,7 @@ set shields_secret $argv[1]
 
 function do_backup
   set server $argv[1]
-  curl --insecure -u ":$shields_secret" "https://$server.shields-server.com/\$github-auth/tokens" > "$server""_tokens.json"
+  curl --insecure -u ":$shields_secret" "https://$server.servers.shields.io/\$github-auth/tokens" > "$server""_tokens.json"
 end
 
 for server in s0 s1 s2

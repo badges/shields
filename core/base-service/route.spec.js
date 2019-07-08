@@ -33,9 +33,6 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({ namedParamA: 'bar.bar.bar' })
     })
@@ -64,9 +61,6 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({ namedParamA: 'bar.bar.bar' })
     })
@@ -83,9 +77,6 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({})
     })

@@ -1,7 +1,5 @@
 FROM node:8-alpine
 
-RUN apk add --no-cache gettext imagemagick librsvg git
-
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
 WORKDIR /usr/src/app

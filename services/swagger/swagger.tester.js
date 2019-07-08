@@ -7,7 +7,7 @@ const apiGetQueryParams = { url: 'https://example.com/example.json' }
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Valid (mocked)')
+t.create('Valid')
   .get(getURL)
   .intercept(nock =>
     nock(apiURL)
@@ -21,7 +21,7 @@ t.create('Valid (mocked)')
     color: 'brightgreen',
   })
 
-t.create('Invalid (mocked)')
+t.create('Invalid')
   .get(getURL)
   .intercept(nock =>
     nock(apiURL)

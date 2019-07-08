@@ -1,12 +1,12 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
 const Joi = require('@hapi/joi')
 const {
   queryParamSchema,
   exampleQueryParams,
   renderWebsiteStatus,
 } = require('../website-status')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))
