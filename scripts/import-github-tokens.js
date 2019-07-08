@@ -1,8 +1,7 @@
 'use strict'
 
 const { promises: fs } = require('fs')
-const { promisify } = require('util')
-const redis = require('redis')
+const Redis = require('ioredis')
 
 const key = 'githubUserTokens'
 
@@ -14,36 +13,28 @@ async function loadTokens() {
 }
 
 function createClient() {
-  const client = redis.createClient(process.env.REDIS_URL, {
+  const redis = new Redis(process.env.REDIS_URL, {
     tls: { servername: new URL(process.env.REDIS_URL).hostname },
   })
-  client.on('error', err => {
+  redis.on('error', err => {
     console.error(err)
   })
-  return client
+  return redis
 }
 
 // eslint-disable-next-line no-unused-vars
 async function load() {
-  const client = createClient()
-
+  const redis = createClient()
   const tokens = await loadTokens()
-
-  const sadd = promisify(client.sadd).bind(client)
-  await sadd(key, tokens)
-
-  await promisify(client.quit).bind(client)()
+  await redis.sadd(key, tokens)
+  await redis.quit()
 }
 
 async function list() {
-  const client = createClient()
-
-  const smembers = promisify(client.smembers).bind(client)
-
-  const tokens = await smembers(key)
+  const redis = createClient()
+  const tokens = await redis.smembers(key)
   console.log(`${tokens.length} tokens loaded`)
-
-  await promisify(client.quit).bind(client)()
+  await redis.quit()
 }
 
 ;(async () => {
