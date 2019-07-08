@@ -108,7 +108,7 @@ if (allFiles.length > 100) {
   allFiles.forEach(file => {
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
-      if (/serverSecrets/.test(diff) && !secretsDocs.modified) {
+      if (diff.includes('serverSecrets') && !secretsDocs.modified) {
         warn(
           [
             `:books: Remember to ensure any changes to \`serverSecrets\` `,
@@ -118,12 +118,21 @@ if (allFiles.length > 100) {
         )
       }
 
-      if (/\+.*assert[(.]/.test(diff)) {
+      if (diff.includes('.assert(')) {
         warn(
           [
             `Found 'assert' statement added in \`${file}\`. <br>`,
             'Please ensure tests are written using Chai ',
             '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+          ].join('')
+        )
+      }
+
+      if (diff.includes("require('joi')")) {
+        fail(
+          [
+            `Found import of 'joi' in \`${file}\`. <br>`,
+            "Joi must be imported as '@hapi/joi'.",
           ].join('')
         )
       }
