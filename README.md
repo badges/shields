@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./frontend/images/logo.svg"
+    <img src="https://raw.githubusercontent.com/badges/shields/master/frontend/images/logo.svg?sanitize=true"
         height="130">
 </p>
 <p align="center">
