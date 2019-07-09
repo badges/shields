@@ -112,7 +112,10 @@ if (allFiles.length > 100) {
 
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
-      if (diff.includes('authHelper') && !secretsDocs.modified) {
+      if (
+        (diff.includes('authHelper') || diff.includes('serverSecrets')) &&
+        !secretsDocs.modified
+      ) {
         warn(
           [
             `:books: Remember to ensure any changes to \`config.private\` `,
