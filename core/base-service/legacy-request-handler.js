@@ -4,7 +4,6 @@
 const domain = require('domain')
 const request = require('request')
 const queryString = require('query-string')
-const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const log = require('../server/log')
 const { setCacheHeaders } = require('./cache-headers')
@@ -14,6 +13,7 @@ const {
   ShieldsRuntimeError,
 } = require('./errors')
 const { makeSend } = require('./legacy-result-sender')
+const LruCache = require('./lru-cache')
 const coalesceBadge = require('./coalesce-badge')
 
 // We avoid calling the vendor's server for computation of the information in a

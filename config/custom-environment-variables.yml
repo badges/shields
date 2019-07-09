@@ -14,6 +14,8 @@ public:
 
   redirectUri: 'REDIRECT_URI'
 
+  rasterUrl: 'RASTER_URL'
+
   cors:
     allowedOrigin:
       __name: 'ALLOWED_ORIGIN'

@@ -1,13 +1,13 @@
 'use strict'
 
 const { metric } = require('../text-formatters')
-const { BaseService } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
+const { BaseService } = require('..')
 
 module.exports = class DockerStars extends BaseService {
   static get category() {

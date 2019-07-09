@@ -18,7 +18,7 @@ t.create('downloads (user friendly plugin id)')
   .get('/plugin/d/1347-scala.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
-t.create('downloads (mocked)')
+t.create('downloads')
   .get('/plugin/d/9435.json')
   .intercept(
     nock =>
@@ -275,7 +275,7 @@ t.create('version (number as a plugin id)')
     message: isVPlusDottedVersionNClauses,
   })
 
-t.create('version (mocked)')
+t.create('version)')
   .get('/plugin/v/9435.json')
   .intercept(
     nock =>

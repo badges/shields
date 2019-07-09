@@ -10,7 +10,7 @@ t.create('homebrew (valid)')
     message: isVPlusTripleDottedVersion,
   })
 
-t.create('homebrew (valid, mocked response)')
+t.create('homebrew (valid)')
   .get('/cake.json')
   .intercept(nock =>
     nock('https://formulae.brew.sh')

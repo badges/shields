@@ -2,8 +2,8 @@
 
 const { expect } = require('chai')
 const nock = require('nock')
-const { InvalidResponse, NotFound } = require('..')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
+const { InvalidResponse, NotFound } = require('..')
 const Nexus = require('./nexus.service')
 
 describe('Nexus', function() {

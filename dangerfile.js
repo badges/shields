@@ -106,9 +106,13 @@ if (allFiles.length > 100) {
   warn("Lots 'o changes. Skipping diff-based checks.")
 } else {
   allFiles.forEach(file => {
+    if (file === 'dangerfile.js') {
+      return
+    }
+
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
-      if (/authHelper/.test(diff) && !secretsDocs.modified) {
+      if (diff.includes('authHelper') && !secretsDocs.modified) {
         warn(
           [
             `:books: Remember to ensure any changes to \`config.private\` `,
@@ -118,12 +122,21 @@ if (allFiles.length > 100) {
         )
       }
 
-      if (/\+.*assert[(.]/.test(diff)) {
+      if (diff.includes('.assert(')) {
         warn(
           [
             `Found 'assert' statement added in \`${file}\`. <br>`,
             'Please ensure tests are written using Chai ',
             '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+          ].join('')
+        )
+      }
+
+      if (diff.includes("require('joi')")) {
+        fail(
+          [
+            `Found import of 'joi' in \`${file}\`. <br>`,
+            "Joi must be imported as '@hapi/joi'.",
           ].join('')
         )
       }

@@ -1,9 +1,9 @@
 'use strict'
 
-const { BaseJsonService, NotFound } = require('..')
 const Joi = require('@hapi/joi')
 const { optionalNonNegativeInteger } = require('../validators')
 const { metric } = require('../text-formatters')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   data: Joi.object({

@@ -167,14 +167,6 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/v11/results.xml
-          NODE_VERSION: v11
-        name: Run package tests on Node 11
-
-    - run:
-        <<: *run_package_tests
-        environment:
-          mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/gh-badges/v12/results.xml
           NODE_VERSION: v12
         name: Run package tests on Node 12

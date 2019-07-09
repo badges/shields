@@ -5,6 +5,8 @@ public:
 
   rateLimit: false
 
-  redirectUrl: 'http://badge-server.example.com'
+  redirectUrl: 'http://frontend.example.test'
+
+  rasterUrl: 'http://raster.example.test'
 
   handleInternalErrors: false

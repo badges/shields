@@ -2,9 +2,9 @@
 
 const camelcase = require('camelcase')
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   topic_count: nonNegativeInteger,
