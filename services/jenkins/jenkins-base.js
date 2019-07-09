@@ -1,7 +1,7 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService } = require('..')
 
 module.exports = class JenkinsBase extends BaseJsonService {
   async fetch({

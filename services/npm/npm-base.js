@@ -2,9 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const { optionalUrl } = require('../validators')
 const { isDependencyMap } = require('../package-json-helpers')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),

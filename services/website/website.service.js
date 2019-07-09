@@ -1,11 +1,11 @@
 'use strict'
 
-const { BaseService } = require('..')
 const {
   queryParamSchema,
   exampleQueryParams,
   renderWebsiteStatus,
 } = require('../website-status')
+const { BaseService } = require('..')
 
 const documentation = `
 <p>

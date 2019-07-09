@@ -1,7 +1,7 @@
 'use strict'
 
-const { NotFound } = require('..')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
+const { NotFound } = require('..')
 
 module.exports = class PuppetforgeModuleEndorsement extends BasePuppetForgeModulesService {
   static get category() {

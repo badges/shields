@@ -2,9 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const jp = require('jsonpath')
-const { BaseJsonService, InvalidResponse } = require('..')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 module.exports = class DynamicJson extends BaseJsonService {
   static get category() {

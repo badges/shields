@@ -2,9 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
 const { colorScale } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   npatrons: nonNegativeInteger,

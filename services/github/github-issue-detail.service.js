@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { InvalidResponse } = require('..')
 const { nonNegativeInteger } = require('../validators')
 const { formatDate, metric } = require('../text-formatters')
 const { age } = require('../color-formatters')
@@ -12,6 +11,7 @@ const {
   stateColor,
   commentsColor,
 } = require('./github-helpers')
+const { InvalidResponse } = require('..')
 
 const commonSchemaFields = {
   number: nonNegativeInteger,

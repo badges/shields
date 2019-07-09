@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
 const { semver } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({ version: semver }).required()
 
