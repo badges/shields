@@ -141,6 +141,13 @@ Create an account, sign in and obtain a uuid and token from your
 to give your self-hosted Shields installation access to a
 private SonarQube instance or private project on a public instance.
 
+## Twitch
+
+- `TWITCH_CLIENT_ID` (yml: `twitch_client_id`)
+
+Register an application in the [Twitch developer console](https://dev.twitch.tv/console)
+in order to obtain a client id for making Twitch API calls.
+
 ## Wheelmap
 
 - `WHEELMAP_TOKEN` (yml: `wheelmap_token`)
