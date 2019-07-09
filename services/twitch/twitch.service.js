@@ -23,6 +23,7 @@ class TwitchStatus extends BaseJsonService {
       user: 'andyonthewings',
       isLive: true,
     })
+    // link[] is not allowed in examples
     delete preview.link
     return [
       {
@@ -30,8 +31,6 @@ class TwitchStatus extends BaseJsonService {
         namedParams: {
           user: 'andyonthewings',
         },
-        // hard code the static preview
-        // because link[] is not allowed in examples
         staticPreview: preview,
       },
     ]
@@ -53,6 +52,12 @@ class TwitchStatus extends BaseJsonService {
 
   async fetch({ user }) {
     const headers = { 'Client-ID': serverSecrets.twitch_client_id }
+
+    // If `user` does not exist on Twitch,
+    // https://api.twitch.tv/helix/streams returns an empty array,
+    // which is the same as when a user is offline.
+    // So we check for whether a user exists first and give proper error
+    // message if needed.
     const users = await this._requestJson({
       schema,
       url: `https://api.twitch.tv/helix/users`,
@@ -64,6 +69,7 @@ class TwitchStatus extends BaseJsonService {
     if (users.data.length < 1) {
       throw new NotFound({ prettyMessage: 'invalid user' })
     }
+
     return this._requestJson({
       schema,
       url: `https://api.twitch.tv/helix/streams`,
