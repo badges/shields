@@ -4,7 +4,9 @@ const Joi = require('@hapi/joi')
 const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService, NotFound } = require('..')
 
-const schema = Joi.any()
+const schema = Joi.object({
+  data: Joi.array().required(),
+})
 
 class TwitchStatus extends BaseJsonService {
   static get category() {
