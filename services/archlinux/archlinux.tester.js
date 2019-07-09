@@ -12,7 +12,7 @@ t.create('Arch Linux package (valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
-t.create('Arch Linux package (valid, mocked response)')
+t.create('Arch Linux package (valid)')
   .get('/core/x86_64/pacman.json')
   .intercept(nock =>
     nock('https://www.archlinux.org')

@@ -3,8 +3,8 @@
 const Joi = require('@hapi/joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const ansibleRoleSchema = Joi.object({
   download_count: nonNegativeInteger,

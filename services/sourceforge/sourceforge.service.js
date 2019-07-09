@@ -2,10 +2,10 @@
 
 const Joi = require('@hapi/joi')
 const moment = require('moment')
-const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   total: nonNegativeInteger,

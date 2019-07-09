@@ -2,11 +2,11 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
-const { InvalidResponse } = require('..')
 const { age } = require('../color-formatters')
 const { formatDate, metric } = require('../text-formatters')
 const GithubIssueDetail = require('./github-issue-detail.service')
 const { stateColor, commentsColor } = require('./github-helpers')
+const { InvalidResponse } = require('..')
 
 describe('GithubIssueDetail', function() {
   test(GithubIssueDetail.render, () => {

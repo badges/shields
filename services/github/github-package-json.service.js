@@ -171,6 +171,8 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
   }
 }
 
+// This must be exported after GithubPackageJsonVersion in order for the
+// former to work correctly.
 class DynamicGithubPackageJson extends ConditionalGithubAuthService {
   static get category() {
     return 'other'
@@ -179,8 +181,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
   static get route() {
     return {
       base: 'github/package-json',
-      format: '(?!v)([^/]+)/([^/]+)/([^/]+)/?([^/]+)?',
-      capture: ['key', 'user', 'repo', 'branch'],
+      pattern: ':key/:user/:repo/:branch*',
     }
   }
 
@@ -252,8 +253,8 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthService {
   }
 }
 
-module.exports = {
+module.exports = [
   GithubPackageJsonVersion,
   GithubPackageJsonDependencyVersion,
   DynamicGithubPackageJson,
-}
+]

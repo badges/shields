@@ -1,10 +1,10 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { downloadCount } = require('../color-formatters')
+const { BaseJsonService } = require('..')
 
 const collectionSchema = Joi.object({
   payload: Joi.object({

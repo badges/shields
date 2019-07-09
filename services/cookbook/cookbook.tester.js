@@ -10,7 +10,7 @@ t.create('version')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
-t.create('version (mocked)')
+t.create('version')
   .get('/chef-sugar.json')
   .intercept(nock =>
     nock('https://supermarket.getchef.com')

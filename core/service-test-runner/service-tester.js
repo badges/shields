@@ -124,6 +124,9 @@ class ServiceTester {
     // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function() {
       specs.forEach(spec => {
+        spec._message = `[${spec.hasIntercept ? 'mocked' : 'live'}] ${
+          spec._message
+        }`
         if (!skipIntercepted || !spec.intercepted) {
           spec.baseUri(testerBaseUrl)
           spec.toss()

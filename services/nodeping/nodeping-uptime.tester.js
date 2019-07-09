@@ -3,14 +3,14 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isPercentage } = require('../test-validators')
 
-t.create('NodePing uptime - live')
+t.create('NodePing uptime')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .expectBadge({
     label: 'Uptime',
     message: isPercentage,
   })
 
-t.create('NodePing uptime - 100% (mock)')
+t.create('NodePing uptime - 100%')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
@@ -29,7 +29,7 @@ t.create('NodePing uptime - 100% (mock)')
     color: 'brightgreen',
   })
 
-t.create('NodePing uptime - 99.999% (mock)')
+t.create('NodePing uptime - 99.999%')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
@@ -48,7 +48,7 @@ t.create('NodePing uptime - 99.999% (mock)')
     color: 'green',
   })
 
-t.create('NodePing uptime - 99.001% (mock)')
+t.create('NodePing uptime - 99.001%')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
@@ -67,7 +67,7 @@ t.create('NodePing uptime - 99.001% (mock)')
     color: 'yellow',
   })
 
-t.create('NodePing uptime - 90.001% (mock)')
+t.create('NodePing uptime - 90.001%')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')

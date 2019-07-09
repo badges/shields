@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService, NotFound } = require('..')
 const { addv } = require('../text-formatters')
 const { latestVersion } = require('./luarocks-version-helpers')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   repository: Joi.object()

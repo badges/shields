@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
+const { BaseJsonService } = require('..')
 
 // unknown is a valid 'other' status for Buildkite
 const schema = Joi.object({

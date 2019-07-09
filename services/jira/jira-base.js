@@ -1,7 +1,7 @@
 'use strict'
 
-const { BaseJsonService } = require('..')
 const serverSecrets = require('../../lib/server-secrets')
+const { BaseJsonService } = require('..')
 
 module.exports = class JiraBase extends BaseJsonService {
   static get category() {

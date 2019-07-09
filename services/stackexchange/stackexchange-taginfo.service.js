@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const renderQuestionsBadge = require('./stackexchange-helpers')
+const { BaseJsonService } = require('..')
 
 const tagSchema = Joi.object({
   items: Joi.array()

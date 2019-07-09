@@ -19,10 +19,7 @@ const {
   clearRequestCache,
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
-const {
-  staticBadgeUrl,
-  rasterRedirectUrl,
-} = require('../badge-urls/make-badge-url')
+const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -254,8 +251,8 @@ class Server {
   }
 
   /**
-   * Set up a couple of redirects which have to be registered last:
-   * One for the legacy static badge route.
+   * Set up a couple of redirects:
+   * One for the raster badges.
    * Another to redirect the base URL /
    * (we use this to redirect {@link https://img.shields.io/}
    * to {@link https://shields.io/} )
@@ -267,30 +264,6 @@ class Server {
     } = config
 
     if (rasterUrl) {
-      // Any badge, old version.
-      camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
-        const [, label, message] = match
-        const { color } = queryParams
-
-        const redirectUrl = staticBadgeUrl({
-          baseUrl: rasterUrl,
-          label,
-          message,
-          // Fixes https://github.com/badges/shields/issues/3260
-          color: color ? color.toString() : undefined,
-          format: 'png',
-        })
-
-        ask.res.statusCode = 301
-        ask.res.setHeader('Location', redirectUrl)
-
-        // The redirect is permanent.
-        const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-
-        ask.res.end()
-      })
-
       // Redirect to the raster server for raster versions of modern badges.
       camp.route(/\.png$/, (queryParams, match, end, ask) => {
         ask.res.statusCode = 301
