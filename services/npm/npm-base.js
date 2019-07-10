@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const { optionalUrl } = require('../validators')
 const { isDependencyMap } = require('../package-json-helpers')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),

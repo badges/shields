@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { authConfig } = require('./jira-common')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   total: Joi.number(),

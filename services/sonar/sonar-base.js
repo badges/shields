@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { isLegacyVersion } = require('./sonar-helpers')
+const { BaseJsonService } = require('..')
 
 const modernSchema = Joi.object({
   component: Joi.object({
