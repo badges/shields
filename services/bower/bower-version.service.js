@@ -1,7 +1,7 @@
 'use strict'
 
-const BaseBowerService = require('./bower-base')
 const { renderVersionBadge } = require('../version')
+const BaseBowerService = require('./bower-base')
 const { InvalidResponse } = require('..')
 
 module.exports = class BowerVersion extends BaseBowerService {

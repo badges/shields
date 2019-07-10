@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseService, BaseJsonService, NotFound } = require('..')
 const { metric } = require('../text-formatters')
+const { BaseService, BaseJsonService, NotFound } = require('..')
 
 class TwitterUrl extends BaseService {
   static get category() {

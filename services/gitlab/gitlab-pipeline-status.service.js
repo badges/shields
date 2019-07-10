@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService, NotFound } = require('..')
 const { optionalUrl } = require('../validators')
+const { BaseSvgScrapingService, NotFound } = require('..')
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()

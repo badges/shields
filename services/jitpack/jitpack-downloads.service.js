@@ -2,9 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   week: nonNegativeInteger,

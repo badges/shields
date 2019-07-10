@@ -1,13 +1,8 @@
 'use strict'
 
-const fs = require('fs')
-const path = require('path')
 const { expect } = require('chai')
-const isPng = require('is-png')
 const isSvg = require('is-svg')
-const sinon = require('sinon')
 const portfinder = require('portfinder')
-const svg2img = require('../../gh-badges/lib/svg-to-img')
 const got = require('../got-test-client')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
@@ -37,12 +32,27 @@ describe('The server', function() {
       .and.to.include('apple')
   })
 
-  it('should produce colorscheme PNG badges', async function() {
-    const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.png`, {
-      encoding: null,
+  it('should redirect colorscheme PNG badges as configured', async function() {
+    const { statusCode, headers } = await got(
+      `${baseUrl}:fruit-apple-green.png`,
+      {
+        followRedirect: false,
+      }
+    )
+    expect(statusCode).to.equal(301)
+    expect(headers.location).to.equal(
+      'http://raster.example.test/:fruit-apple-green.png'
+    )
+  })
+
+  it('should redirect modern PNG badges as configured', async function() {
+    const { statusCode, headers } = await got(`${baseUrl}npm/v/express.png`, {
+      followRedirect: false,
     })
-    expect(statusCode).to.equal(200)
-    expect(body).to.satisfy(isPng)
+    expect(statusCode).to.equal(301)
+    expect(headers.location).to.equal(
+      'http://raster.example.test/npm/v/express.png'
+    )
   })
 
   it('should preserve label case', async function() {
@@ -115,31 +125,17 @@ describe('The server', function() {
 
     expect(statusCode).to.equal(302)
     // This value is set in `config/test.yml`
-    expect(headers.location).to.equal('http://badge-server.example.com')
+    expect(headers.location).to.equal('http://frontend.example.test')
   })
 
-  context('with svg2img error', function() {
-    const expectedError = fs.readFileSync(
-      path.resolve(__dirname, 'error-pages', '500.html')
-    )
-
-    let toBufferStub
-    beforeEach(function() {
-      toBufferStub = sinon
-        .stub(svg2img._imageMagick.prototype, 'toBuffer')
-        .callsArgWith(1, Error('whoops'))
+  it('should return the 410 badge for obsolete formats', async function() {
+    const { statusCode, body } = await got(`${baseUrl}npm/v/express.jpg`, {
+      throwHttpErrors: false,
     })
-    afterEach(function() {
-      toBufferStub.restore()
-    })
-
-    it('should emit the 500 message', async function() {
-      const { statusCode, body } = await got(
-        `${baseUrl}:some_new-badge-green.png`
-      )
-      // This emits status code 200, though 500 would be preferable.
-      expect(statusCode).to.equal(200)
-      expect(body).to.include(expectedError)
-    })
+    expect(statusCode).to.equal(404)
+    expect(body)
+      .to.satisfy(isSvg)
+      .and.to.include('410')
+      .and.to.include('jpg no longer available')
   })
 })

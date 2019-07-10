@@ -29,28 +29,28 @@ const mockResponse = {
   ],
 }
 
-t.create('live: Azure DevOps Extension total installs')
+t.create('Azure DevOps Extension total installs')
   .get('/total/swellaby.mirror-git-repository.json')
   .expectBadge({
     label: 'installs',
     message: isMetric,
   })
 
-t.create('live: Azure DevOps Extension services installs')
+t.create('Azure DevOps Extension services installs')
   .get('/services/swellaby.mirror-git-repository.json')
   .expectBadge({
     label: 'installs',
     message: isMetric,
   })
 
-t.create('live: invalid extension id')
+t.create('invalid extension id')
   .get('/services/badges-shields.json')
   .expectBadge({
     label: 'installs',
     message: 'invalid extension id',
   })
 
-t.create('live: non existent extension')
+t.create('non existent extension')
   .get('/total/badges.shields-io-fake.json')
   .expectBadge({
     label: 'installs',

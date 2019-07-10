@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { coveragePercentage } = require('../color-formatters')
-const { InvalidResponse } = require('..')
 const TeamCityBase = require('./teamcity-base')
+const { InvalidResponse } = require('..')
 
 const buildStatisticsSchema = Joi.object({
   property: Joi.array()

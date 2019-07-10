@@ -54,7 +54,7 @@ t.create('version (valid)')
     message: isVPlusDottedVersionNClauses,
   })
 
-t.create('version (mocked, yellow badge)')
+t.create('version (yellow badge)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
@@ -74,7 +74,7 @@ t.create('version (mocked, yellow badge)')
     color: 'yellow',
   })
 
-t.create('version (mocked, orange badge)')
+t.create('version (orange badge)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
@@ -94,7 +94,7 @@ t.create('version (mocked, orange badge)')
     color: 'orange',
   })
 
-t.create('version (mocked, blue badge)')
+t.create('version (blue badge)')
   .get('/v/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
@@ -143,7 +143,7 @@ t.create('version (pre) (valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('version (pre) (mocked, yellow badge)')
+t.create('version (pre) (yellow badge)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
@@ -163,7 +163,7 @@ t.create('version (pre) (mocked, yellow badge)')
     color: 'yellow',
   })
 
-t.create('version (pre) (mocked, orange badge)')
+t.create('version (pre) (orange badge)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')
@@ -183,7 +183,7 @@ t.create('version (pre) (mocked, orange badge)')
     color: 'orange',
   })
 
-t.create('version (pre) (mocked, blue badge)')
+t.create('version (pre) (blue badge)')
   .get('/vpre/Microsoft.AspNetCore.Mvc.json')
   .intercept(nock =>
     nock('https://api.nuget.org')

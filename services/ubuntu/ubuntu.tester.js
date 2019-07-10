@@ -12,7 +12,7 @@ t.create('Ubuntu package (default distribution, valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
-t.create('Ubuntu package (valid, mocked response)')
+t.create('Ubuntu package (valid)')
   .get('/ubuntu-wallpapers/bionic.json')
   .intercept(nock =>
     nock('https://api.launchpad.net')

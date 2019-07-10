@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseSvgScrapingService } = require('..')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
+const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()

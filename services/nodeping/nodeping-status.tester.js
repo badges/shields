@@ -3,14 +3,14 @@
 const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('NodePing status - live')
+t.create('NodePing status')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .expectBadge({
     label: 'Status',
     message: Joi.equal('up', 'down').required(),
   })
 
-t.create('NodePing status - up (mock)')
+t.create('NodePing status - up')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
@@ -24,7 +24,7 @@ t.create('NodePing status - up (mock)')
     message: 'up',
   })
 
-t.create('NodePing status - down (mock)')
+t.create('NodePing status - down')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
   .intercept(nock =>
     nock('https://nodeping.com')
