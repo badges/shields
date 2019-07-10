@@ -109,6 +109,7 @@ const privateConfigSchema = Joi.object({
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),
   twitch_client_id: Joi.string(),
+  twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
 }).required()
 

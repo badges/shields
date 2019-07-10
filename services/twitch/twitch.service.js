@@ -1,14 +1,14 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService, NotFound } = require('..')
+const TwitchBase = require('./twitch-base')
+const { NotFound } = require('..')
 
-const schema = Joi.object({
+const helixSchema = Joi.object({
   data: Joi.array().required(),
 })
 
-class TwitchStatus extends BaseJsonService {
+class TwitchStatus extends TwitchBase {
   static get category() {
     return 'activity'
   }
@@ -53,18 +53,15 @@ class TwitchStatus extends BaseJsonService {
   }
 
   async fetch({ user }) {
-    const headers = { 'Client-ID': serverSecrets.twitch_client_id }
-
     // If `user` does not exist on Twitch,
     // https://api.twitch.tv/helix/streams returns an empty array,
     // which is the same as when a user is offline.
     // So we check for whether a user exists first and give proper error
     // message if needed.
     const users = await this._requestJson({
-      schema,
+      schema: helixSchema,
       url: `https://api.twitch.tv/helix/users`,
       options: {
-        headers,
         qs: { login: user },
       },
     })
@@ -73,10 +70,9 @@ class TwitchStatus extends BaseJsonService {
     }
 
     return this._requestJson({
-      schema,
+      schema: helixSchema,
       url: `https://api.twitch.tv/helix/streams`,
       options: {
-        headers,
         qs: { user_login: user },
       },
     })
