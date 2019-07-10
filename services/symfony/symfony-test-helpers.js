@@ -91,7 +91,7 @@ function checkShouldSkip() {
     !serverSecrets.sl_insight_userUuid || !serverSecrets.sl_insight_apiToken
   if (noToken) {
     console.warn(
-      'No Symfony credetnials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
+      'No Symfony credentials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
     )
   }
   return noToken
