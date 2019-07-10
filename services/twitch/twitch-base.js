@@ -12,6 +12,10 @@ const tokenSchema = Joi.object({
   token_type: Joi.string(),
 })
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 // Abstract class for Twitch badges
 module.exports = class TwitchBase extends BaseJsonService {
   async _twitchToken() {
@@ -51,18 +55,32 @@ module.exports = class TwitchBase extends BaseJsonService {
       },
     }
 
-    try {
-      return await super._requestJson(request)
-    } catch (err) {
-      // if API limit is exceeded
-      // https://dev.twitch.tv/docs/api/guide/#rate-limits
-      if (err.name === 'InvalidResponse' && err.response.statusCode === 429) {
-        await this._getNewToken()
-        return super._requestJson(request)
-      }
+    for (let i = 0; i < 3; i++) {
+      // 3 trials
+      try {
+        return await super._requestJson(request)
+      } catch (err) {
+        // if the token expire or is revoked
+        // https://dev.twitch.tv/docs/authentication/#refresh-in-response-to-server-rejection-for-bad-authentication
+        if (err.name === 'InvalidResponse' && err.response.statusCode === 401) {
+          await this._getNewToken()
+          continue
+        }
 
-      // cannot recover
-      throw err
+        // if API limit is exceeded
+        // https://dev.twitch.tv/docs/api/guide/#rate-limits
+        if (err.name === 'InvalidResponse' && err.response.statusCode === 429) {
+          const resetTimestamp = err.response.headers['ratelimit-reset']
+          await sleep(Math.abs(resetTimestamp - Date.now()) + 100)
+          continue
+        }
+
+        // cannot recover
+        throw err
+      }
     }
+
+    // one last time
+    return super._requestJson(request)
   }
 }
