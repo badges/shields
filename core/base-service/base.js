@@ -7,6 +7,7 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
+const { AuthHelper } = require('./auth-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -14,6 +15,7 @@ const {
   NotFound,
   InvalidResponse,
   Inaccessible,
+  ImproperlyConfigured,
   InvalidParameter,
   Deprecated,
 } = require('./errors')
@@ -104,6 +106,25 @@ class BaseService {
   }
 
   /**
+   * Configuration for the authentication helper that prepares credentials
+   * for upstream requests.
+   *
+   * See also the config schema in `./server.js` and `doc/server-secrets.md`.
+   *
+   * To use the configured auth in the handler or fetch method, pass the
+   * credentials to the request. For example:
+   * - `{ options: { auth: this.authHelper.basicAuth } }`
+   * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
+   * - `{ options: { qs: { token: this.authHelper.pass } } }`
+   *
+   * @abstract
+   * @type {module:core/base-service/base~Auth}
+   */
+  static get auth() {
+    return undefined
+  }
+
+  /**
    * Array of Example objects describing example URLs for this service.
    * These should use the format specified in `route`,
    * and can be used to demonstrate how to use badges for this service.
@@ -189,8 +210,9 @@ class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
+  constructor({ sendAndCacheRequest, authHelper }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
+    this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
   }
 
@@ -250,6 +272,7 @@ class BaseService {
         color: 'red',
       }
     } else if (
+      error instanceof ImproperlyConfigured ||
       error instanceof InvalidResponse ||
       error instanceof Inaccessible ||
       error instanceof Deprecated
@@ -300,12 +323,26 @@ class BaseService {
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-    const serviceInstance = new this(context, config)
+    // Like the service instance, the auth helper could be reused for each request.
+    // However, moving its instantiation to `register()` makes `invoke()` harder
+    // to test.
+    const authHelper = this.auth
+      ? new AuthHelper(this.auth, config.private)
+      : undefined
+
+    const serviceInstance = new this({ ...context, authHelper }, config)
 
     let serviceError
+    if (authHelper && !authHelper.isValid) {
+      const prettyMessage = authHelper.isRequired
+        ? 'credentials have not been configured'
+        : 'credentials are misconfigured'
+      serviceError = new ImproperlyConfigured({ prettyMessage })
+    }
+
     const { queryParamSchema } = this.route
     let transformedQueryParams
-    if (queryParamSchema) {
+    if (!serviceError && queryParamSchema) {
       try {
         transformedQueryParams = validate(
           {
@@ -466,6 +503,18 @@ class BaseService {
  *    when the parameter is absent. (Note that in,
  *    `examples.queryParams` boolean query params should be given
  *    `null` values.)
+ */
+
+/**
+ * @typedef {object} Auth
+ * @property {string} userKey
+ *    (Optional) The key from `privateConfig` to use as the username.
+ * @property {string} passKey
+ *    (Optional) The key from `privateConfig` to use as the password.
+ *    If auth is configured, either `userKey` or `passKey` is required.
+ * @property {string} isRequired
+ *    (Optional) If `true`, the service will return `NotFound` unless the
+ *    configured credentials are present.
  */
 
 /**

@@ -1,9 +1,12 @@
 'use strict'
 
-const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 
 module.exports = class TeamCityBase extends BaseJsonService {
+  static get auth() {
+    return { userKey: 'teamcity_user', passKey: 'teamcity_pass' }
+  }
+
   async fetch({
     protocol,
     hostAndPath,
@@ -17,28 +20,20 @@ module.exports = class TeamCityBase extends BaseJsonService {
       protocol = 'https'
       hostAndPath = 'teamcity.jetbrains.com'
     }
-    const url = `${protocol}://${hostAndPath}/${apiPath}`
-    const options = { qs }
     // JetBrains API Auth Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-RESTAuthentication
-    if (serverSecrets.teamcity_user) {
-      options.auth = {
-        user: serverSecrets.teamcity_user,
-        pass: serverSecrets.teamcity_pass,
-      }
+    const options = { qs }
+    const auth = this.authHelper.basicAuth
+    if (auth) {
+      options.auth = auth
     } else {
       qs.guest = 1
     }
 
-    const defaultErrorMessages = {
-      404: 'build not found',
-    }
-    const errors = { ...defaultErrorMessages, ...errorMessages }
-
     return this._requestJson({
-      url,
+      url: `${protocol}://${hostAndPath}/${apiPath}`,
       schema,
       options,
-      errorMessages: errors,
+      errorMessages: { 404: 'build not found', ...errorMessages },
     })
   }
 }
