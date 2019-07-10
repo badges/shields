@@ -112,7 +112,7 @@
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
-    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && mkdir -p ./api-docs/frontend/images/ && cp ./frontend/images/logo.svg ./api-docs/frontend/images/logo.svg"
+    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json ."
   },
   "lint-staged": {
     "**/*.js": [
