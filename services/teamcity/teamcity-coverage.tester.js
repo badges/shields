@@ -3,25 +3,25 @@
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('live: valid buildId')
+t.create('valid buildId')
   .get('/ReactJSNet_PullRequests.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
-t.create('live: specified instance valid buildId')
+t.create('specified instance valid buildId')
   .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
-t.create('live: invalid buildId')
+t.create('invalid buildId')
   .get('/btABC999.json')
   .expectBadge({ label: 'coverage', message: 'build not found' })
 
-t.create('live: specified instance invalid buildId')
+t.create('specified instance invalid buildId')
   .get('/https/teamcity.jetbrains.com/btABC000.json')
   .expectBadge({ label: 'coverage', message: 'build not found' })
 

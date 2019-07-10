@@ -4,11 +4,11 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { isIntegerPercentage } = require('../test-validators')
 const { sprintId, sprintQueryString } = require('./jira-test-helpers')
 
-t.create('live: unknown sprint')
+t.create('unknown sprint')
   .get('/https/jira.spring.io/abc.json')
   .expectBadge({ label: 'jira', message: 'sprint not found' })
 
-t.create('live: known sprint')
+t.create('known sprint')
   .get('/https/jira.spring.io/94.json')
   .expectBadge({
     label: 'completion',

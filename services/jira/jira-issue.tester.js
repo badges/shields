@@ -2,11 +2,11 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('live: unknown issue')
+t.create('unknown issue')
   .get('/https/issues.apache.org/jira/notArealIssue-000.json')
   .expectBadge({ label: 'jira', message: 'issue not found' })
 
-t.create('live: known issue')
+t.create('known issue')
   .get('/https/issues.apache.org/jira/kafka-2896.json')
   .expectBadge({ label: 'kafka-2896', message: 'Resolved' })
 

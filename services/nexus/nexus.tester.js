@@ -5,7 +5,7 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('live: search release version valid artifact')
+t.create('search release version valid artifact')
   .timeout(15000)
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
@@ -13,7 +13,7 @@ t.create('live: search release version valid artifact')
     message: isVersion,
   })
 
-t.create('live: search release version of an nonexistent artifact')
+t.create('search release version of an nonexistent artifact')
   .timeout(10000)
   .get(
     '/r/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
@@ -23,7 +23,7 @@ t.create('live: search release version of an nonexistent artifact')
     message: 'artifact or version not found',
   })
 
-t.create('live: search snapshot version valid snapshot artifact')
+t.create('search snapshot version valid snapshot artifact')
   .timeout(10000)
   .get('/s/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
@@ -31,7 +31,7 @@ t.create('live: search snapshot version valid snapshot artifact')
     message: isVersion,
   })
 
-t.create('live: search snapshot version of an nonexistent artifact')
+t.create('search snapshot version of an nonexistent artifact')
   .timeout(10000)
   .get(
     '/s/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
@@ -42,14 +42,14 @@ t.create('live: search snapshot version of an nonexistent artifact')
     color: 'red',
   })
 
-t.create('live: repository version')
+t.create('repository version')
   .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
-t.create('live: repository version with query')
+t.create('repository version with query')
   .get(
     '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json'
   )
@@ -58,7 +58,7 @@ t.create('live: repository version with query')
     message: isVersion,
   })
 
-t.create('live: repository version of an nonexistent artifact')
+t.create('repository version of an nonexistent artifact')
   .get(
     '/developer/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json'
   )

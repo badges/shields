@@ -7,25 +7,25 @@ const t = (module.exports = require('../tester').createServiceTester())
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?/
 
-t.create('live: codebetter unknown build')
+t.create('codebetter unknown build')
   .get('/codebetter/btabc.json')
   .expectBadge({ label: 'build', message: 'build not found' })
 
-t.create('live: codebetter known build')
+t.create('codebetter known build')
   .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.json')
   .expectBadge({
     label: 'build',
     message: buildStatusValues,
   })
 
-t.create('live: simple status for known build')
+t.create('simple status for known build')
   .get('/https/teamcity.jetbrains.com/s/bt345.json')
   .expectBadge({
     label: 'build',
     message: buildStatusValues,
   })
 
-t.create('live: full status for known build')
+t.create('full status for known build')
   .get('/https/teamcity.jetbrains.com/e/bt345.json')
   .expectBadge({
     label: 'build',

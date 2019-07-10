@@ -4,7 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 const { sampleProjectUuid, checkShouldSkip } = require('./symfony-test-helpers')
 
-t.create('live: valid project violations')
+t.create('valid project violations')
   .skipWhen(checkShouldSkip)
   .get(`/${sampleProjectUuid}.json`)
   .timeout(15000)
