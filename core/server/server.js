@@ -248,6 +248,7 @@ module.exports = class Server {
           profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
+          private: config.private,
         }
       )
     )

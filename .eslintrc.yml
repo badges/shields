@@ -30,6 +30,7 @@ overrides:
                 'category',
                 'isDeprecated',
                 'route',
+                'auth',
                 'examples',
                 '_cacheLength',
                 'defaultBadgeData',

@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 
-const wheelmapSchema = Joi.object({
+const schema = Joi.object({
   node: Joi.object({
     wheelchair: Joi.string().required(),
   }).required(),
@@ -20,6 +19,10 @@ module.exports = class Wheelmap extends BaseJsonService {
       base: 'wheelmap/a',
       pattern: ':nodeId(-?[0-9]+)',
     }
+  }
+
+  static get auth() {
+    return { passKey: 'wheelmap_token', isRequired: true }
   }
 
   static get examples() {
@@ -49,19 +52,10 @@ module.exports = class Wheelmap extends BaseJsonService {
   }
 
   async fetch({ nodeId }) {
-    let options
-    if (serverSecrets.wheelmap_token) {
-      options = {
-        qs: {
-          api_key: `${serverSecrets.wheelmap_token}`,
-        },
-      }
-    }
-
     return this._requestJson({
-      schema: wheelmapSchema,
+      schema,
       url: `https://wheelmap.org/api/nodes/${nodeId}`,
-      options,
+      options: { qs: { api_key: this.authHelper.pass } },
       errorMessages: {
         401: 'invalid token',
         404: 'node not found',
