@@ -50,10 +50,28 @@ module.exports = class OssTracker extends BaseService {
     return { label: 'oss lifecycle' }
   }
 
+  /**
+   * Return color for active, maintenance and archived statuses, which were the three
+   * example keywords used in Netflix's open-source meetup.
+   * See https://slideshare.net/aspyker/netflix-open-source-meetup-season-4-episode-1
+   * Other keywords are possible, but will appear in grey.
+   */
+  static getColor({ status }) {
+    if (status === 'active') {
+      return 'brightgreen'
+    } else if (status === 'maintenance') {
+      return 'yellow'
+    } else if (status === 'archived') {
+      return 'red'
+    }
+    return 'lightgrey'
+  }
+
   static render({ status }) {
+    const color = this.getColor({ status })
     return {
       message: status,
-      color: 'lightgrey',
+      color,
     }
   }
 
