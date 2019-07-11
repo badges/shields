@@ -1,10 +1,10 @@
 'use strict'
 
-const serverSecrets = require('../../lib/server-secrets')
+const config = require('config').util.toObject()
 const t = (module.exports = require('../tester').createServiceTester())
 
 function checkShouldSkip() {
-  const noToken = !serverSecrets.wheelmap_token
+  const noToken = !config.private.wheelmap_token
   if (noToken) {
     console.warn(
       'No Wheelmap token configured. Service tests will be skipped. Add a token in local.yml to run these tests.'
