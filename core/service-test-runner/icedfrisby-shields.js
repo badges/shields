@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')
@@ -7,7 +10,10 @@ const { expect } = require('chai')
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
  * - check if a request was intercepted
  * - set expectations on the badge JSON response
+ *
+ * @param {Function} superclass class to extend
  * @see https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
+ * @returns {Function} wrapped class
  */
 const factory = superclass =>
   class IcedFrisbyNock extends superclass {
