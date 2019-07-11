@@ -38,7 +38,11 @@ module.exports = class OssTracker extends BaseService {
       {
         title: 'OSS Lifecycle (branch)',
         pattern: ':user/:repo/:branch',
-        namedParams: { user: 'Netflix', repo: 'osstracker', branch: 'documentation' },
+        namedParams: {
+          user: 'Netflix',
+          repo: 'osstracker',
+          branch: 'documentation',
+        },
         staticPreview: this.render({ status: 'active' }),
         keywords: ['Netflix'],
         documentation,
