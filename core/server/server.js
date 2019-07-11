@@ -273,10 +273,7 @@ class Server {
           rasterRedirectUrl({ rasterUrl }, ask.req.url)
         )
 
-        // The redirect is permanent, though let's start off with a shorter
-        // cache time in case we've made mistakes.
-        // const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
-        const cacheDuration = 3600 | 0 // 1 hour
+        const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
         ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
         ask.res.end()
