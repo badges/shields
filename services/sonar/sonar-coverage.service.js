@@ -27,11 +27,10 @@ module.exports = class SonarCoverage extends SonarBase {
       {
         title: 'Sonar Coverage',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({ coverage: 63 }),
@@ -52,11 +51,10 @@ module.exports = class SonarCoverage extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { sonarVersion }) {
+  async handle({ component }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: 'coverage',
     })

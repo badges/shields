@@ -33,11 +33,10 @@ class SonarTestsSummary extends SonarBase {
       {
         title: 'Sonar Tests',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
           compact_message: null,
           passed_label: 'passed',
@@ -107,8 +106,9 @@ class SonarTestsSummary extends SonarBase {
   }
 
   async handle(
-    { protocol, host, component },
+    { component },
     {
+      server,
       sonarVersion,
       compact_message: compactMessage,
       passed_label: passedLabel,
@@ -118,8 +118,7 @@ class SonarTestsSummary extends SonarBase {
   ) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: 'tests,test_failures,skipped_tests',
     })
@@ -159,12 +158,11 @@ class SonarTests extends SonarBase {
         title: 'Sonar Test Count',
         pattern: `${patternBase}/:metric(total_tests|skipped_tests|test_failures|test_errors)`,
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-log',
           metric: 'total_tests',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -178,11 +176,10 @@ class SonarTests extends SonarBase {
         title: 'Sonar Test Execution Time',
         pattern: `${patternBase}/test_execution_time`,
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azure-pipelines-templates',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -196,11 +193,10 @@ class SonarTests extends SonarBase {
         title: 'Sonar Test Success Rate',
         pattern: `${patternBase}/test_success_density`,
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azure-pipelines-templates',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -239,11 +235,10 @@ class SonarTests extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component, metric }, { sonarVersion }) {
+  async handle({ component, metric }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       // We're using 'tests' as the metric key to provide our standard
       // formatted test badge (passed, failed, skipped) that exists for other

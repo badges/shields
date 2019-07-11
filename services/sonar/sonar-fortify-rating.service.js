@@ -35,11 +35,10 @@ module.exports = class SonarFortifyRating extends SonarBase {
       {
         title: 'Sonar Fortify Security Rating',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({ rating: 4 }),
@@ -66,11 +65,10 @@ module.exports = class SonarFortifyRating extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { sonarVersion }) {
+  async handle({ component }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: 'fortify-security-rating',
     })

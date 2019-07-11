@@ -2,8 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const { colorScale } = require('../color-formatters')
+const { optionalUrl } = require('../validators')
 
-const patternBase = ':protocol(http|https)/:host(.+)/:component(.+)'
+const patternBase = ':component'
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
   'brightgreen',
@@ -39,10 +40,12 @@ const sonarVersionSchema = Joi.alternatives(
 
 const queryParamSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
+  server: optionalUrl,
 }).required()
 
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
+  server: optionalUrl,
   format: Joi.string()
     .allow('short', 'long')
     .optional(),

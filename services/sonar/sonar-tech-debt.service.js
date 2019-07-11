@@ -28,12 +28,11 @@ module.exports = class SonarTechDebt extends SonarBase {
       {
         title: 'Sonar Tech Debt',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
           metric: 'tech_debt',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -58,11 +57,10 @@ module.exports = class SonarTechDebt extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component, metric }, { sonarVersion }) {
+  async handle({ component, metric }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       // Special condition for backwards compatibility.
       metricName: 'sqale_debt_ratio',
