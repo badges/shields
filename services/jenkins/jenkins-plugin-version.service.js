@@ -1,9 +1,9 @@
 'use strict'
 
-const { BaseService, NotFound } = require('..')
 const { promisify } = require('util')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const { renderVersionBadge } = require('../version')
+const { BaseService, NotFound } = require('..')
 
 module.exports = class JenkinsPluginVersion extends BaseService {
   static get category() {

@@ -1,11 +1,10 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService } = require('..')
 const { isLegacyVersion } = require('./sonar-helpers')
+const { BaseJsonService } = require('..')
 
-const schema = Joi.object({
+const modernSchema = Joi.object({
   component: Joi.object({
     measures: Joi.array()
       .items(
@@ -21,7 +20,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const legacyApiSchema = Joi.array()
+const legacySchema = Joi.array()
   .items(
     Joi.object({
       msr: Joi.array()
@@ -40,11 +39,16 @@ const legacyApiSchema = Joi.array()
   .required()
 
 module.exports = class SonarBase extends BaseJsonService {
+  static get auth() {
+    return { userKey: 'sonarqube_token' }
+  }
+
   async fetch({ sonarVersion, protocol, host, component, metricName }) {
-    let qs, url
+    let qs, url, schema
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
     if (useLegacyApi) {
+      schema = legacySchema
       url = `${protocol}://${host}/api/resources`
       qs = {
         resource: component,
@@ -53,6 +57,7 @@ module.exports = class SonarBase extends BaseJsonService {
         includeTrends: true,
       }
     } else {
+      schema = modernSchema
       url = `${protocol}://${host}/api/measures/component`
       qs = {
         componentKey: component,
@@ -60,18 +65,13 @@ module.exports = class SonarBase extends BaseJsonService {
       }
     }
 
-    const options = { qs }
-
-    if (serverSecrets.sonarqube_token) {
-      options.auth = {
-        user: serverSecrets.sonarqube_token,
-      }
-    }
-
     return this._requestJson({
-      schema: useLegacyApi ? legacyApiSchema : schema,
+      schema,
       url,
-      options,
+      options: {
+        qs,
+        auth: this.authHelper.basicAuth,
+      },
       errorMessages: {
         404: 'component or metric not found, or legacy API not supported',
       },
@@ -80,12 +80,20 @@ module.exports = class SonarBase extends BaseJsonService {
 
   transform({ json, sonarVersion }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
-    const rawValue = useLegacyApi
-      ? json[0].msr[0].val
-      : json.component.measures[0].value
-    const value = parseInt(rawValue)
+    const metrics = {}
 
-    // Most values are numeric, but not all of them.
-    return { metricValue: value || rawValue }
+    if (useLegacyApi) {
+      json[0].msr.forEach(measure => {
+        // Most values are numeric, but not all of them.
+        metrics[measure.key] = parseInt(measure.val) || measure.val
+      })
+    } else {
+      json.component.measures.forEach(measure => {
+        // Most values are numeric, but not all of them.
+        metrics[measure.metric] = parseInt(measure.value) || measure.value
+      })
+    }
+
+    return metrics
   }
 }

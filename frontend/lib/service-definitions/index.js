@@ -1,4 +1,5 @@
 import groupBy from 'lodash.groupby'
+// load using js-yaml-loader
 import { services, categories } from '../../../service-definitions.yml'
 export { services, categories } from '../../../service-definitions.yml'
 

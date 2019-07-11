@@ -5,14 +5,14 @@ const { withRegex, isStarRating } = require('../test-validators')
 
 const isVscodeRating = withRegex(/[0-5]\.[0-9]{1}\/5?\s*\([0-9]*\)$/)
 
-t.create('live: rating')
+t.create('rating')
   .get('/visual-studio-marketplace/r/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'rating',
     message: isVscodeRating,
   })
 
-t.create('live: stars')
+t.create('stars')
   .get('/visual-studio-marketplace/stars/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'rating',
@@ -121,14 +121,14 @@ t.create('stars')
     color: 'brightgreen',
   })
 
-t.create('live: rating (legacy)')
+t.create('rating (legacy)')
   .get('/vscode-marketplace/r/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'rating',
     message: isVscodeRating,
   })
 
-t.create('live: stars (legacy)')
+t.create('stars (legacy)')
   .get('/vscode-marketplace/stars/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'rating',

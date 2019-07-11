@@ -29,28 +29,28 @@ const mockResponse = {
   ],
 }
 
-t.create('live: installs')
+t.create('installs')
   .get('/visual-studio-marketplace/i/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'installs',
     message: isMetric,
   })
 
-t.create('live: downloads')
+t.create('downloads')
   .get('/visual-studio-marketplace/d/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'downloads',
     message: isMetric,
   })
 
-t.create('live: invalid extension id')
+t.create('invalid extension id')
   .get('/visual-studio-marketplace/d/badges-shields.json')
   .expectBadge({
     label: 'vs marketplace',
     message: 'invalid extension id',
   })
 
-t.create('live: non existent extension')
+t.create('non existent extension')
   .get('/visual-studio-marketplace/d/badges.shields-io-fake.json')
   .expectBadge({
     label: 'vs marketplace',
@@ -111,14 +111,14 @@ t.create('downloads')
     color: 'yellowgreen',
   })
 
-t.create('live: installs (legacy)')
+t.create('installs (legacy)')
   .get('/vscode-marketplace/i/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'installs',
     message: isMetric,
   })
 
-t.create('live: downloads (legacy)')
+t.create('downloads (legacy)')
   .get('/vscode-marketplace/d/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'downloads',

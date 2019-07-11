@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   size: nonNegativeInteger,

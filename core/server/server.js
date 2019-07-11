@@ -16,7 +16,7 @@ const {
   clearRequestCache,
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
-const { staticBadgeUrl } = require('../badge-urls/make-badge-url')
+const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -52,6 +52,7 @@ const publicConfigSchema = Joi.object({
     cert: Joi.string(),
   },
   redirectUrl: optionalUrl,
+  rasterUrl: optionalUrl,
   cors: {
     allowedOrigin: Joi.array()
       .items(optionalUrl)
@@ -183,16 +184,43 @@ module.exports = class Server {
    * Set up Scoutcamp routes for 404/not found responses
    */
   registerErrorHandlers() {
-    const { camp } = this
+    const { camp, config } = this
+    const {
+      public: { rasterUrl },
+    } = config
 
-    camp.notfound(/\.(svg|png|gif|jpg|json)/, (query, match, end, request) => {
+    camp.notfound(/\.(gif|jpg)$/, (query, match, end, request) => {
       const [, format] = match
-      const svg = makeBadge({
-        text: ['404', 'badge not found'],
-        color: 'red',
-        format,
+      makeSend('svg', request.res, end)(
+        makeBadge({
+          text: ['410', `${format} no longer available`],
+          color: 'lightgray',
+          format: 'svg',
+        })
+      )
+    })
+
+    if (!rasterUrl) {
+      camp.notfound(/\.png$/, (query, match, end, request) => {
+        makeSend('svg', request.res, end)(
+          makeBadge({
+            text: ['404', 'raster badges not available'],
+            color: 'lightgray',
+            format: 'svg',
+          })
+        )
       })
-      makeSend(format, request.res, end)(svg)
+    }
+
+    camp.notfound(/\.(svg|json)$/, (query, match, end, request) => {
+      const [, format] = match
+      makeSend(format, request.res, end)(
+        makeBadge({
+          text: ['404', 'badge not found'],
+          color: 'red',
+          format,
+        })
+      )
     })
 
     camp.notfound(/.*/, (query, match, end, request) => {
@@ -219,6 +247,8 @@ module.exports = class Server {
           cacheHeaders: config.public.cacheHeaders,
           profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
+          rasterUrl: config.public.rasterUrl,
+          private: config.private,
         }
       )
     )
@@ -227,41 +257,40 @@ module.exports = class Server {
   /**
    * Register Redirects
    *
-   * Set up a couple of redirects which have to be registered last:
-   * One for the legacy static badge route.
+   * Set up a couple of redirects:
+   * One for the raster badges.
    * Another to redirect the base URL /
    * (we use this to redirect https://img.shields.io/ to https://shields.io/ )
    */
   registerRedirects() {
     const { config, camp } = this
+    const {
+      public: { rasterUrl, redirectUrl },
+    } = config
 
-    // Any badge, old version. This route must be registered last.
-    camp.route(/^\/([^/]+)\/(.+).png$/, (queryParams, match, end, ask) => {
-      const [, label, message] = match
-      const { color } = queryParams
+    if (rasterUrl) {
+      // Redirect to the raster server for raster versions of modern badges.
+      camp.route(/\.png$/, (queryParams, match, end, ask) => {
+        ask.res.statusCode = 301
+        ask.res.setHeader(
+          'Location',
+          rasterRedirectUrl({ rasterUrl }, ask.req.url)
+        )
 
-      const redirectUrl = staticBadgeUrl({
-        label,
-        message,
-        // Fixes https://github.com/badges/shields/issues/3260
-        color: color ? color.toString() : undefined,
-        format: 'png',
+        // The redirect is permanent, though let's start off with a shorter
+        // cache time in case we've made mistakes.
+        // const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
+        const cacheDuration = 3600 | 0 // 1 hour
+        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+
+        ask.res.end()
       })
+    }
 
-      ask.res.statusCode = 301
-      ask.res.setHeader('Location', redirectUrl)
-
-      // The redirect is permanent.
-      const cacheDuration = (365 * 24 * 3600) | 0 // 1 year
-      ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
-
-      ask.res.end()
-    })
-
-    if (config.public.redirectUrl) {
+    if (redirectUrl) {
       camp.route(/^\/$/, (data, match, end, ask) => {
         ask.res.statusCode = 302
-        ask.res.setHeader('Location', config.public.redirectUrl)
+        ask.res.setHeader('Location', redirectUrl)
         ask.res.end()
       })
     }

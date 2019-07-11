@@ -6,7 +6,6 @@ const SonarBase = require('./sonar-base')
 const {
   getLabel,
   documentation,
-  isLegacyVersion,
   keywords,
   patternBase,
   queryParamWithFormatSchema,
@@ -149,26 +148,12 @@ module.exports = class SonarViolations extends SonarBase {
   }
 
   transformViolations({ json, sonarVersion, metric, format }) {
-    // We can use the standard transform function in all cases
-    // except when the requested badge is the long format of violations
+    const metrics = this.transform({ json, sonarVersion })
     if (metric !== 'violations' || format !== 'long') {
-      const { metricValue: violations } = this.transform({ json, sonarVersion })
-      return { violations }
+      return { violations: metrics[metric] }
     }
 
-    const useLegacyApi = isLegacyVersion({ sonarVersion })
-    const measures = useLegacyApi ? json[0].msr : json.component.measures
-    const violations = {}
-
-    measures.forEach(measure => {
-      if (useLegacyApi) {
-        violations[measure.key] = measure.val
-      } else {
-        violations[measure.metric] = measure.value
-      }
-    })
-
-    return { violations }
+    return { violations: metrics }
   }
 
   async handle(

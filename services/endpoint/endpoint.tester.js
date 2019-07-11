@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Valid schema (mocked)')
+t.create('Valid schema')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
@@ -133,7 +133,7 @@ t.create('logoWidth')
     logoWidth: 30,
   })
 
-t.create('Invalid schema (mocked)')
+t.create('Invalid schema)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')
@@ -147,7 +147,7 @@ t.create('Invalid schema (mocked)')
     message: 'invalid properties: schemaVersion',
   })
 
-t.create('Invalid schema (mocked)')
+t.create('Invalid schema)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/')

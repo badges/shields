@@ -4,7 +4,6 @@
 const domain = require('domain')
 const request = require('request')
 const queryString = require('query-string')
-const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const log = require('../server/log')
 const { setCacheHeaders } = require('./cache-headers')
@@ -14,6 +13,7 @@ const {
   ShieldsRuntimeError,
 } = require('./errors')
 const { makeSend } = require('./legacy-result-sender')
+const LruCache = require('./lru-cache')
 const coalesceBadge = require('./coalesce-badge')
 
 // We avoid calling the vendor's server for computation of the information in a
@@ -61,6 +61,25 @@ function flattenQueryParams(queryParams) {
     union.add(name)
   })
   return Array.from(union).sort()
+}
+
+function promisify(cachingRequest) {
+  return (uri, options) =>
+    new Promise((resolve, reject) => {
+      cachingRequest(uri, options, (err, res, buffer) => {
+        if (err) {
+          if (err instanceof ShieldsRuntimeError) {
+            reject(err)
+          } else {
+            // Wrap the error in an Inaccessible so it can be identified
+            // by the BaseService handler.
+            reject(new Inaccessible({ underlyingError: err }))
+          }
+        } else {
+          resolve({ res, buffer })
+        }
+      })
+    })
 }
 
 // handlerOptions can contain:
@@ -231,24 +250,9 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       })
     }
 
-    // Wrapper around `cachingRequest` that returns a promise rather than
-    // needing to pass a callback.
-    cachingRequest.asPromise = (uri, options) =>
-      new Promise((resolve, reject) => {
-        cachingRequest(uri, options, (err, res, buffer) => {
-          if (err) {
-            if (err instanceof ShieldsRuntimeError) {
-              reject(err)
-            } else {
-              // Wrap the error in an Inaccessible so it can be identified
-              // by the BaseService handler.
-              reject(new Inaccessible({ underlyingError: err }))
-            }
-          } else {
-            resolve({ res, buffer })
-          }
-        })
-      })
+    // Wrapper around `cachingRequest` that returns a promise rather than needing
+    // to pass a callback.
+    cachingRequest.asPromise = promisify(cachingRequest)
 
     vendorDomain.run(() => {
       const result = handlerOptions.handler(
@@ -304,6 +308,7 @@ function clearRequestCache() {
 
 module.exports = {
   handleRequest,
+  promisify,
   clearRequestCache,
   // Expose for testing.
   _requestCache: requestCache,

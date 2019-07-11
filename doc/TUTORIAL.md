@@ -42,11 +42,6 @@ install node and npm: https://nodejs.org/en/download/
 
 In case you get the _"getaddrinfo ENOTFOUND localhost"_ error, visit [http://127.0.0.1:3000/](http://127.0.0.1:3000) instead or take a look at [this issue](https://github.com/angular/angular-cli/issues/2227#issuecomment-358036526).
 
-You may also want to install
-[ImageMagick](https://www.imagemagick.org/script/download.php).
-This is an optional dependency needed for generating badges in raster format,
-but you can get a dev copy running without it.
-
 ## (3) Open an Issue
 
 Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.md) and describe what you have in mind:

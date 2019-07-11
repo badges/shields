@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService, NotFound } = require('..')
 const { metric } = require('../text-formatters')
 const { optionalUrl, nonNegativeInteger } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   username: Joi.string().required(),
