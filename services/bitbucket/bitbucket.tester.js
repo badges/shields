@@ -3,13 +3,6 @@
 const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOpenIssues } = require('../test-validators')
 const { isBuildStatus } = require('../build-status')
-const {
-  mockBitbucketCreds,
-  mockBitbucketServerCreds,
-  restore,
-  user,
-  pass,
-} = require('./bitbucket-test-helpers')
 
 const t = (module.exports = new ServiceTester({
   id: 'bitbucket',
@@ -152,35 +145,6 @@ t.create('pr (server, not found)')
     message: 'not found',
   })
 
-t.create('pr (auth)')
-  .before(mockBitbucketCreds)
-  .get('/pr/atlassian/python-bitbucket.json')
-  .intercept(nock =>
-    nock('https://bitbucket.org/api/2.0/repositories/')
-      .get(/.*/)
-      .basicAuth({ user, pass })
-      .reply(200, { size: 42 })
-  )
-  .finally(restore)
-  .expectBadge({
-    label: 'pull requests',
-    message: isMetricOpenIssues,
-  })
-
-t.create('pr (server, auth)')
-  .before(mockBitbucketServerCreds)
-  .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')
-  .intercept(nock =>
-    nock('https://bitbucket.mydomain.net/rest/api/1.0/projects')
-      .get(/.*/)
-      .basicAuth({ user, pass })
-      .reply(200, { size: 42 })
-  )
-  .finally(restore)
-  .expectBadge({
-    label: 'pull requests',
-    message: isMetricOpenIssues,
-  })
 // tests for Bitbucket Pipelines
 
 function bitbucketApiResponse(status) {
