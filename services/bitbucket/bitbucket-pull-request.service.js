@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
+const { AuthHelper } = require('../../core/base-service/auth-helper')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
@@ -74,32 +74,40 @@ function pullRequestClassGenerator(raw) {
       }
     }
 
+    constructor(context, config) {
+      super(context, config)
+
+      this.bitbucketAuthHelper = new AuthHelper(
+        {
+          userKey: 'bitbucket_username',
+          passKey: 'bitbucket_password',
+        },
+        config.private
+      )
+      this.bitbucketServerAuthHelper = new AuthHelper(
+        {
+          userKey: 'bitbucket_server_username',
+          passKey: 'bitbucket_server_password',
+        },
+        config.private
+      )
+    }
+
     async fetchCloud({ user, repo }) {
-      const args = {
+      return this._requestJson({
         url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
         schema,
         options: {
           qs: { state: 'OPEN', limit: 0 },
+          auth: this.bitbucketAuthHelper.basicAuth,
         },
         errorMessages,
-      }
-
-      if (
-        serverSecrets.bitbucket_username &&
-        serverSecrets.bitbucket_password
-      ) {
-        args.options.auth = {
-          user: serverSecrets.bitbucket_username,
-          pass: serverSecrets.bitbucket_password,
-        }
-      }
-
-      return this._requestJson(args)
+      })
     }
 
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
     async fetchServer({ server, user, repo }) {
-      const args = {
+      return this._requestJson({
         url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
         schema,
         options: {
@@ -109,21 +117,10 @@ function pullRequestClassGenerator(raw) {
             withProperties: false,
             withAttributes: false,
           },
+          auth: this.bitbucketServerAuthHelper.basicAuth,
         },
         errorMessages,
-      }
-
-      if (
-        serverSecrets.bitbucket_server_username &&
-        serverSecrets.bitbucket_server_password
-      ) {
-        args.options.auth = {
-          user: serverSecrets.bitbucket_server_username,
-          pass: serverSecrets.bitbucket_server_password,
-        }
-      }
-
-      return this._requestJson(args)
+      })
     }
 
     async fetch({ server, user, repo }) {
