@@ -8,19 +8,21 @@ const queryString = require('query-string')
 const nock = require('nock')
 const got = require('../../../core/got-test-client')
 const serverSecrets = require('../../../lib/server-secrets')
+const GithubConstellation = require('../github-constellation')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'
 const fakeShieldsSecret = 'letmeinplz'
 
 describe('Github token acceptor', function() {
+  const oauthHelper = GithubConstellation._createOauthHelper({
+    gh_client_id: fakeClientId,
+  })
   before(function() {
     // Make sure properties exist.
     // https://github.com/sinonjs/sinon/pull/1557
-    serverSecrets.gh_client_id = undefined
     serverSecrets.shields_ips = undefined
     serverSecrets.shields_secret = undefined
-    sinon.stub(serverSecrets, 'gh_client_id').value(fakeClientId)
     sinon.stub(serverSecrets, 'shields_ips').value([])
     sinon.stub(serverSecrets, 'shields_secret').value(fakeShieldsSecret)
   })
@@ -51,6 +53,7 @@ describe('Github token acceptor', function() {
     onTokenAccepted = sinon.stub()
     acceptor.setRoutes({
       server: camp,
+      authHelper: oauthHelper,
       onTokenAccepted,
     })
   })
