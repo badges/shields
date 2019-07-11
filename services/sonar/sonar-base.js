@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { isLegacyVersion } = require('./sonar-helpers')
-const { BaseJsonService, InvalidParameter } = require('..')
+const { BaseJsonService } = require('..')
 
 const modernSchema = Joi.object({
   component: Joi.object({

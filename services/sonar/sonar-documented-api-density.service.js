@@ -2,7 +2,6 @@
 
 const SonarBase = require('./sonar-base')
 const {
-  patternBase,
   queryParamSchema,
   getLabel,
   positiveMetricColorScale,
@@ -20,7 +19,7 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/${metric}`,
+      pattern: `:component/${metric}`,
       queryParamSchema,
     }
   }

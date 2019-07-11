@@ -2,7 +2,7 @@
 
 const { metric } = require('../text-formatters')
 const SonarBase = require('./sonar-base')
-const { patternBase, queryParamSchema, getLabel } = require('./sonar-helpers')
+const { queryParamSchema, getLabel } = require('./sonar-helpers')
 
 // This service is intended to be a temporary solution to avoid breaking
 // any existing users/badges that were utilizing the "other" Sonar metrics
@@ -114,7 +114,7 @@ module.exports = class SonarGeneric extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
+      pattern: `:component/:metricName(${metricNameRouteParam})`,
       queryParamSchema,
     }
   }

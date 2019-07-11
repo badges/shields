@@ -6,7 +6,6 @@ const {
   getLabel,
   documentation,
   keywords,
-  patternBase,
   queryParamSchema,
 } = require('./sonar-helpers')
 
@@ -18,7 +17,7 @@ module.exports = class SonarTechDebt extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(tech_debt|sqale_debt_ratio)`,
+      pattern: ':component/:metric(tech_debt|sqale_debt_ratio)',
       queryParamSchema,
     }
   }

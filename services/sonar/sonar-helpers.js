@@ -4,7 +4,6 @@ const Joi = require('@hapi/joi')
 const { colorScale } = require('../color-formatters')
 const { optionalUrl } = require('../validators')
 
-const patternBase = ':component'
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
   'brightgreen',
@@ -64,7 +63,6 @@ const documentation = `
 `
 
 module.exports = {
-  patternBase,
   getLabel,
   isLegacyVersion,
   queryParamSchema,

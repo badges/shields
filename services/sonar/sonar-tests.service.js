@@ -10,7 +10,6 @@ const SonarBase = require('./sonar-base')
 const {
   documentation,
   keywords,
-  patternBase,
   queryParamSchema,
   getLabel,
 } = require('./sonar-helpers')
@@ -23,7 +22,7 @@ class SonarTestsSummary extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/tests`,
+      pattern: ':component/tests',
       queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
     }
   }
@@ -147,7 +146,8 @@ class SonarTests extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)`,
+      pattern:
+        ':component/:metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)',
       queryParamSchema,
     }
   }
@@ -156,7 +156,8 @@ class SonarTests extends SonarBase {
     return [
       {
         title: 'Sonar Test Count',
-        pattern: `${patternBase}/:metric(total_tests|skipped_tests|test_failures|test_errors)`,
+        pattern:
+          ':component/:metric(total_tests|skipped_tests|test_failures|test_errors)',
         namedParams: {
           component: 'org.ow2.petals:petals-log',
           metric: 'total_tests',
@@ -174,7 +175,7 @@ class SonarTests extends SonarBase {
       },
       {
         title: 'Sonar Test Execution Time',
-        pattern: `${patternBase}/test_execution_time`,
+        pattern: ':component/test_execution_time',
         namedParams: {
           component: 'swellaby:azure-pipelines-templates',
         },
@@ -191,7 +192,7 @@ class SonarTests extends SonarBase {
       },
       {
         title: 'Sonar Test Success Rate',
-        pattern: `${patternBase}/test_success_density`,
+        pattern: ':component/test_success_density',
         namedParams: {
           component: 'swellaby:azure-pipelines-templates',
         },

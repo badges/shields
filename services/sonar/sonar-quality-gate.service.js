@@ -1,12 +1,7 @@
 'use strict'
 
 const SonarBase = require('./sonar-base')
-const {
-  documentation,
-  keywords,
-  patternBase,
-  queryParamSchema,
-} = require('./sonar-helpers')
+const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
 module.exports = class SonarQualityGate extends SonarBase {
   static get category() {
@@ -16,7 +11,7 @@ module.exports = class SonarQualityGate extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(quality_gate|alert_status)`,
+      pattern: ':component/:metric(quality_gate|alert_status)',
       queryParamSchema,
     }
   }

@@ -1,12 +1,7 @@
 'use strict'
 
 const SonarBase = require('./sonar-base')
-const {
-  patternBase,
-  queryParamSchema,
-  keywords,
-  documentation,
-} = require('./sonar-helpers')
+const { queryParamSchema, keywords, documentation } = require('./sonar-helpers')
 
 const colorMap = {
   0: 'red',
@@ -25,7 +20,7 @@ module.exports = class SonarFortifyRating extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/fortify-security-rating`,
+      pattern: ':component/fortify-security-rating',
       queryParamSchema,
     }
   }

@@ -7,7 +7,6 @@ const {
   getLabel,
   documentation,
   keywords,
-  patternBase,
   queryParamWithFormatSchema,
 } = require('./sonar-helpers')
 
@@ -32,7 +31,8 @@ module.exports = class SonarViolations extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)`,
+      pattern:
+        ':component/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)',
       queryParamSchema: queryParamWithFormatSchema,
     }
   }
