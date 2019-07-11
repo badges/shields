@@ -40,12 +40,12 @@ const sonarVersionSchema = Joi.alternatives(
 
 const queryParamSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
-  server: optionalUrl,
+  server: optionalUrl.required(),
 }).required()
 
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
-  server: optionalUrl,
+  server: optionalUrl.required(),
   format: Joi.string()
     .allow('short', 'long')
     .optional(),

@@ -44,10 +44,6 @@ module.exports = class SonarBase extends BaseJsonService {
   }
 
   async fetch({ sonarVersion, server, component, metricName }) {
-    if (!server) {
-      throw new InvalidParameter({ prettyMessage: 'server is required' })
-    }
-
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
     let qs, url, schema
