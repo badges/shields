@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const difference = require('lodash.difference')
 
@@ -8,9 +11,10 @@ const difference = require('lodash.difference')
  * extract the list of service names in square brackets
  * as an array of strings.
  *
- * @return {string[]}
+ * @param {string} title Pull Request title
+ * @returns {string[]} Array of service names
  */
-module.exports = function servicesForTitle(title) {
+function servicesForTitle(title) {
   const bracketed = /\[([^\]]+)\]/g
 
   const preNormalized = title.toLowerCase()
@@ -26,3 +30,5 @@ module.exports = function servicesForTitle(title) {
   const ignored = ['wip', 'rfc', 'security']
   return difference(services, ignored)
 }
+
+module.exports = servicesForTitle

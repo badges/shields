@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const emojic = require('emojic')
 const trace = require('../base-service/trace')
@@ -17,9 +20,9 @@ class ServiceTester {
   /**
    * Service Tester Constructor
    *
-   * @param {object} attrs
+   * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.id
-   *    Secifies which tests to run from the CLI or pull requests
+   *    Specifies which tests to run from the CLI or pull requests
    * @param {string} attrs.title
    *    Prints in the Mocha output
    * @param {string} attrs.path
@@ -44,6 +47,8 @@ class ServiceTester {
    *
    * @param {Function} ServiceClass
    *    A class that extends base-service/base.BaseService
+   * @returns {module:core/service-test-runner/service-tester~ServiceTester}
+   *    ServiceTester for ServiceClass
    */
   static forServiceClass(ServiceClass) {
     const id = ServiceClass.name
@@ -65,13 +70,13 @@ class ServiceTester {
 
   /**
    * Create a new test. The hard work is delegated to IcedFrisby.
-   * https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code
+   * {@link https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code}
    *
    * Note: The caller should not invoke toss() on the Frisby chain, as it's
    * invoked automatically by the tester.
    *
    * @param {string} msg The name of the test
-   * @return {IcedFrisby} IcedFrisby instance
+   * @returns {module:icedfrisby~IcedFrisby} IcedFrisby instance
    */
   create(msg) {
     const spec = frisby
@@ -107,7 +112,7 @@ class ServiceTester {
   /**
    * Register the tests with Mocha.
    *
-   * @param {object} attrs
+   * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.baseUrl base URL for test server
    * @param {boolean} attrs.skipIntercepted skip tests which intercept requests
    */
@@ -130,4 +135,5 @@ class ServiceTester {
     })
   }
 }
+
 module.exports = ServiceTester
