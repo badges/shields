@@ -1,6 +1,7 @@
 extends:
   - standard
   - prettier
+  - plugin:jsdoc/recommended
 
 env:
   node: true
@@ -30,6 +31,7 @@ overrides:
                 'category',
                 'isDeprecated',
                 'route',
+                'auth',
                 'examples',
                 '_cacheLength',
                 'defaultBadgeData',
@@ -43,9 +45,10 @@ overrides:
         ]
 
 plugins:
+  - chai-friendly
+  - jsdoc
   - mocha
   - no-extension-in-require
-  - chai-friendly
   - sort-class-members
 
 rules:
@@ -82,3 +85,6 @@ rules:
   # Chai friendly.
   no-unused-expressions: 'off'
   chai-friendly/no-unused-expressions: 'error'
+
+  # Disable some rules from jsdoc/recommended.
+  jsdoc/require-jsdoc: 0

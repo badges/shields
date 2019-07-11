@@ -3,14 +3,14 @@
 const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('live: known project id')
+t.create('known project id')
   .get('/3997.json')
   .expectBadge({
     label: 'coverity',
     message: Joi.string().regex(/passing|passed .* new defects|pending|failed/),
   })
 
-t.create('live: unknown project id')
+t.create('unknown project id')
   .get('/abc.json')
   // Coverity actually returns an HTTP 200 status with an HTML page when the project is not found.
   .expectBadge({ label: 'coverity', message: 'unparseable json response' })

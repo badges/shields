@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { coveragePercentage } = require('../color-formatters')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   covered_percent: Joi.number()

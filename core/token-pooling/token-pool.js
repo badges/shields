@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const crypto = require('crypto')
 const PriorityQueue = require('priorityqueuejs')
@@ -6,7 +9,8 @@ const PriorityQueue = require('priorityqueuejs')
 /**
  * Compute a one-way hash of the input string.
  *
- * @return {string}
+ * @param {string} id token
+ * @returns {string} hash
  */
 function sanitizeToken(id) {
   return crypto
@@ -30,7 +34,7 @@ class Token {
    * Token Constructor
    *
    * @param {string} id token string
-   * @param data
+   * @param {*} data reserved for future use
    * @param {number} usesRemaining
    *    Number of uses remaining until the token is exhausted
    * @param {number} nextReset
@@ -186,9 +190,9 @@ class TokenPool {
   /**
    * compareTokens
    *
-   * @param {Token} first
-   * @param {Token} second
-   * @return {Token} The token whose current rate allotment is expiring soonest.
+   * @param {module:core/token-pooling/token-pool~Token} first first token to compare
+   * @param {module:core/token-pooling/token-pool~Token} second second token to compare
+   * @returns {module:core/token-pooling/token-pool~Token} The token whose current rate allotment is expiring soonest.
    */
   static compareTokens(first, second) {
     return second.nextReset - first.nextReset
@@ -197,17 +201,14 @@ class TokenPool {
   /**
    * Add a token with user-provided ID and data.
    *
-   * @param id
-   *    The ID can be a primitive value or an object reference, and is used
-   *    (with `Set`) for deduplication. If a token already exists with a
-   *    given id, it will be ignored.
-   * @param data
+   * @param {string} id token string
+   * @param {*} data reserved for future use
    * @param {number} usesRemaining
    *    Number of uses remaining until the token is exhausted
    * @param {number} nextReset
    *    Time when the token can be used again even if it's exhausted (unix timestamp)
    *
-   * @return {boolean} Was the token added to the pool?
+   * @returns {boolean} Was the token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
     if (this.tokenIds.has(id)) {
@@ -289,7 +290,7 @@ class TokenPool {
    * new use-remaining count and next-reset time. Invoke `invalidate()` to
    * indicate it should not be reused.
    *
-   * @return {Token}
+   * @returns {module:core/token-pooling/token-pool~Token} token
    */
   next() {
     let token = this.currentBatch.token
@@ -314,7 +315,7 @@ class TokenPool {
   /**
    * Iterate over all valid tokens.
    *
-   * @param {Function} callback
+   * @param {Function} callback function to execute on each valid token
    */
   forEach(callback) {
     function visit(item) {

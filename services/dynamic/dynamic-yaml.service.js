@@ -2,9 +2,9 @@
 
 const Joi = require('@hapi/joi')
 const jp = require('jsonpath')
-const { BaseYamlService, InvalidResponse } = require('..')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
+const { BaseYamlService, InvalidResponse } = require('..')
 
 module.exports = class DynamicYaml extends BaseYamlService {
   static get category() {

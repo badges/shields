@@ -1,8 +1,8 @@
 'use strict'
 
 const { renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
 const { keywords, fetch } = require('./azure-devops-helpers')
+const { BaseSvgScrapingService } = require('..')
 
 const documentation = `
 <p>

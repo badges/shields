@@ -5,7 +5,7 @@ const { withRegex } = require('../test-validators')
 
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
-t.create('live: rating')
+t.create('rating')
   .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'version',
@@ -68,7 +68,7 @@ t.create('pre-release version')
     color: 'orange',
   })
 
-t.create('live: version (legacy)')
+t.create('version (legacy)')
   .get('/vscode-marketplace/v/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'version',

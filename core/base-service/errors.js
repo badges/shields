@@ -72,6 +72,23 @@ class Inaccessible extends ShieldsRuntimeError {
   }
 }
 
+class ImproperlyConfigured extends ShieldsRuntimeError {
+  get name() {
+    return 'ImproperlyConfigured'
+  }
+  get defaultPrettyMessage() {
+    return 'improperly configured'
+  }
+
+  constructor(props = {}) {
+    const message = props.underlyingError
+      ? `ImproperlyConfigured: ${props.underlyingError.message}`
+      : 'ImproperlyConfigured'
+    super(props, message)
+    this.response = props.response
+  }
+}
+
 class InvalidParameter extends ShieldsRuntimeError {
   get name() {
     return 'InvalidParameter'
@@ -106,6 +123,7 @@ class Deprecated extends ShieldsRuntimeError {
 module.exports = {
   ShieldsRuntimeError,
   NotFound,
+  ImproperlyConfigured,
   InvalidResponse,
   Inaccessible,
   InvalidParameter,

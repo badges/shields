@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { NotFound } = require('..')
 const { colorScale } = require('../color-formatters')
 const ScrutinizerBase = require('./scrutinizer-base')
+const { NotFound } = require('..')
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
