@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
 const { BaseJsonService } = require('..')
 
 const tokenSchema = Joi.object({
@@ -18,6 +17,14 @@ function sleep(ms) {
 
 // Abstract class for Twitch badges
 module.exports = class TwitchBase extends BaseJsonService {
+  static get auth() {
+    return {
+      userKey: 'twitch_client_id',
+      passKey: 'twitch_client_secret',
+      isRequired: true,
+    }
+  }
+
   constructor(...args) {
     super(...args)
     if (!TwitchBase.__twitchToken) {
@@ -36,8 +43,8 @@ module.exports = class TwitchBase extends BaseJsonService {
       options: {
         method: 'POST',
         qs: {
-          client_id: serverSecrets.twitch_client_id,
-          client_secret: serverSecrets.twitch_client_secret,
+          client_id: this.authHelper.user,
+          client_secret: this.authHelper.pass,
           grant_type: 'client_credentials',
         },
       },
@@ -66,7 +73,7 @@ module.exports = class TwitchBase extends BaseJsonService {
       options: {
         ...request.options,
         headers: {
-          'Client-ID': serverSecrets.twitch_client_id,
+          'Client-ID': this.authHelper.user,
           Authorization: `Bearer ${await this._twitchToken()}`,
           ...(request.options && request.options.headers),
         },
