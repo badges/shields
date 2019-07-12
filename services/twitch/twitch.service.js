@@ -58,24 +58,25 @@ class TwitchStatus extends TwitchBase {
     // which is the same as when a user is offline.
     // So we check for whether a user exists first and give proper error
     // message if needed.
-    const users = await this._requestJson({
+    const users = this._requestJson({
       schema: helixSchema,
       url: `https://api.twitch.tv/helix/users`,
       options: {
         qs: { login: user },
       },
     })
-    if (users.data.length < 1) {
-      throw new NotFound({ prettyMessage: 'invalid user' })
-    }
-
-    return this._requestJson({
+    const streams = this._requestJson({
       schema: helixSchema,
       url: `https://api.twitch.tv/helix/streams`,
       options: {
         qs: { user_login: user },
       },
     })
+    if ((await users).data.length < 1) {
+      throw new NotFound({ prettyMessage: 'invalid user' })
+    }
+
+    return streams
   }
 
   async handle({ user }) {
