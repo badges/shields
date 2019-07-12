@@ -27,7 +27,7 @@ module.exports = [
       pattern: ':protocol(http|https)/:host(.+)/:component(.+)/:metric',
     },
     transformPath: ({ component, metric }) => `/sonar/${component}/${metric}`,
-    transformQueryParams: ({ protocol, host, sonarVersion }) => ({
+    transformQueryParams: ({ protocol, host }) => ({
       server: `${protocol}://${host}`,
       sonarVersion,
     }),
