@@ -42,7 +42,7 @@ t.create('sonar host parameter')
         server: 'http://sonar.petalslink.com',
       }
     )}`
-   )
+  )
 
 t.create('sonar host parameter with version')
   .get(
