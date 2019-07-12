@@ -7,7 +7,7 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
-const log = require('../sesrver/log')
+const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
