@@ -151,6 +151,7 @@ class Server {
     this.githubConstellation = new GithubConstellation({
       persistence: publicConfig.persistence,
       service: publicConfig.services.github,
+      private: privateConfig,
     })
     if (publicConfig.metrics.prometheus.enabled) {
       this.metrics = new PrometheusMetrics()
