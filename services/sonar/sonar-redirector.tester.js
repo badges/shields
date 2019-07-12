@@ -42,4 +42,22 @@ t.create('sonar host parameter')
         server: 'http://sonar.petalslink.com',
       }
     )}`
+   )
+
+t.create('sonar host parameter with version')
+  .get(
+    '/http/sonar.petalslink.com/org.ow2.petals:petals-se-ase/alert_status.svg?sonarVersion=4.2',
+    {
+      followRedirect: false,
+    }
+  )
+  .expectStatus(301)
+  .expectHeader(
+    'Location',
+    `/sonar/org.ow2.petals:petals-se-ase/alert_status.svg?${queryString.stringify(
+      {
+        server: 'http://sonar.petalslink.com',
+        sonarVersion: '4.2',
+      }
+    )}`
   )
