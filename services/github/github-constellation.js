@@ -30,7 +30,7 @@ class GithubConstellation {
 
     const { redis_url: redisUrl } = config.private
     const { dir: persistenceDir } = config.persistence
-    if (config.persistence.redisUrl) {
+    if (redisUrl) {
       log('RedisTokenPersistence configured with redisUrl')
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
