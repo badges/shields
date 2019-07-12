@@ -20,6 +20,7 @@ const {
   Deprecated,
 } = require('./errors')
 const { validateExample, transformExample } = require('./examples')
+const log = require('./log')
 const {
   makeFullUrl,
   assertValidRoute,
@@ -293,8 +294,8 @@ class BaseService {
         )
       ) {
         // This is where we end up if an unhandled exception is thrown in
-        // production. Send the error to the logs.
-        console.log(error)
+        // production. Send the error to Sentry and the logs.
+        log.error(error)
       }
       return {
         isError: true,
