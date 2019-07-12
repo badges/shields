@@ -7,6 +7,7 @@ const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
+const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
@@ -293,8 +294,8 @@ class BaseService {
         )
       ) {
         // This is where we end up if an unhandled exception is thrown in
-        // production. Send the error to the logs.
-        console.log(error)
+        // production. Send the error to Sentry and the logs.
+        log.error(error)
       }
       return {
         isError: true,
