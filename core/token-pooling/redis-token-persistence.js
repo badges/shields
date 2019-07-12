@@ -1,5 +1,6 @@
 'use strict'
 
+const { URL } = require('url')
 const Redis = require('ioredis')
 const log = require('../server/log')
 const TokenPersistence = require('./token-persistence')
