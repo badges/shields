@@ -104,7 +104,7 @@ const privateConfigSchema = Joi.object({
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
-  redis_url: optionalUrl,
+  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
   shields_ips: Joi.array().items(Joi.string().ip()),
   shields_secret: Joi.string(),
