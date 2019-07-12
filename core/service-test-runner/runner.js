@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const { loadTesters } = require('../base-service/loader')
 

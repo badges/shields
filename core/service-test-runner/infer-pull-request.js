@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * @module
+ */
 
 const { URL, format: urlFormat } = require('url')
 
@@ -64,13 +67,9 @@ function _inferPullRequestFromCircleEnv(env) {
  * When called inside a CI build, infer the details
  * of a pull request from the environment variables.
  *
- * @param {object} [env=process.env]
- * @return {object} pr
- * @return {string} pr.baseUrl (returned for travis CI only)
- * @return {string} pr.owner
- * @return {string} pr.repo
- * @return {string} pr.pullRequest PR/issue number
- * @return {string} pr.slug owner/repo/#pullRequest
+ * @param {object} [env=process.env] Environment variables
+ * @returns {module:core/service-test-runner/infer-pull-request~PullRequest}
+ *    Pull Request
  */
 function inferPullRequest(env = process.env) {
   if (env.TRAVIS) {
@@ -87,6 +86,17 @@ function inferPullRequest(env = process.env) {
     )
   }
 }
+
+/**
+ * Pull Request
+ *
+ * @typedef PullRequest
+ * @property {string} pr.baseUrl (returned for travis CI only)
+ * @property {string} owner
+ * @property {string} repo
+ * @property {string} pullRequest PR/issue number
+ * @property {string} slug owner/repo/#pullRequest
+ */
 
 module.exports = {
   parseGithubPullRequestUrl,

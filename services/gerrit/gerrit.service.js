@@ -65,7 +65,7 @@ module.exports = class Gerrit extends BaseJsonService {
     }
   }
 
-  /**
+  /*
    * To prevent against Cross Site Script Inclusion (XSSI) attacks, Gerrit's
    * JSON response body starts with a magic prefix line that must be stripped
    * before feeding the rest of the response body to a JSON parser.

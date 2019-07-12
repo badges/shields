@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const Camp = require('camp')
 const portfinder = require('portfinder')
-const serverSecrets = require('../lib/server-secrets')
+const config = require('config').util.toObject()
 const got = require('../core/got-test-client')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
@@ -13,7 +13,7 @@ describe('GitHub badge suggestions', function() {
 
   let token, apiProvider
   before(function() {
-    token = serverSecrets.gh_token
+    token = config.private.gh_token
     if (!token) {
       throw Error('The integration tests require a gh_token to be set')
     }

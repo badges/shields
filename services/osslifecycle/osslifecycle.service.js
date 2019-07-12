@@ -2,6 +2,17 @@
 
 const { BaseService, InvalidResponse } = require('..')
 
+const documentation = `
+<p>
+  OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
+  and clearly identify which projects are active and which ones are retired. To enable this badge, 
+  simply create an OSSMETADATA tagging file at the root of your GitHub repository containing a 
+  single line similar to the following: <code>osslifecycle=active</code>. Other suggested values are 
+  <code>osslifecycle=maintenance</code> and <code>osslifecycle=archived</code>. A working example 
+  can be viewed on the <a href="https://github.com/Netflix/osstracker">OSS Tracker repository</a>.
+</p>
+`
+
 module.exports = class OssTracker extends BaseService {
   static get category() {
     return 'other'
@@ -17,16 +28,24 @@ module.exports = class OssTracker extends BaseService {
   static get examples() {
     return [
       {
-        title: 'NetflixOSS Lifecycle',
+        title: 'OSS Lifecycle',
         pattern: ':user/:repo',
-        namedParams: { user: 'Netflix', repo: 'osstracker' },
+        namedParams: { user: 'Teevity', repo: 'ice' },
         staticPreview: this.render({ status: 'active' }),
+        keywords: ['Netflix'],
+        documentation,
       },
       {
-        title: 'NetflixOSS Lifecycle (branch)',
+        title: 'OSS Lifecycle (branch)',
         pattern: ':user/:repo/:branch',
-        namedParams: { user: 'Netflix', repo: 'osstracker', branch: 'master' },
+        namedParams: {
+          user: 'Netflix',
+          repo: 'osstracker',
+          branch: 'documentation',
+        },
         staticPreview: this.render({ status: 'active' }),
+        keywords: ['Netflix'],
+        documentation,
       },
     ]
   }
@@ -35,10 +54,28 @@ module.exports = class OssTracker extends BaseService {
     return { label: 'oss lifecycle' }
   }
 
+  /**
+   * Return color for active, maintenance and archived statuses, which were the three
+   * example keywords used in Netflix's open-source meetup.
+   * See https://slideshare.net/aspyker/netflix-open-source-meetup-season-4-episode-1
+   * Other keywords are possible, but will appear in grey.
+   */
+  static getColor({ status }) {
+    if (status === 'active') {
+      return 'brightgreen'
+    } else if (status === 'maintenance') {
+      return 'yellow'
+    } else if (status === 'archived') {
+      return 'red'
+    }
+    return 'lightgrey'
+  }
+
   static render({ status }) {
+    const color = this.getColor({ status })
     return {
       message: status,
-      color: 'lightgrey',
+      color,
     }
   }
 
