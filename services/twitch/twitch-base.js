@@ -18,10 +18,14 @@ function sleep(ms) {
 
 // Abstract class for Twitch badges
 module.exports = class TwitchBase extends BaseJsonService {
-  async _twitchToken() {
+  constructor(...args) {
+    super(...args)
     if (!TwitchBase.__twitchToken) {
-      await this._getNewToken()
+      TwitchBase.__twitchToken = this._getNewToken()
     }
+  }
+
+  async _twitchToken() {
     return TwitchBase.__twitchToken
   }
 
@@ -38,7 +42,7 @@ module.exports = class TwitchBase extends BaseJsonService {
         },
       },
     })
-    TwitchBase.__twitchToken = tokenRes.access_token
+    return tokenRes.access_token
   }
 
   async _requestJson(request) {
@@ -63,7 +67,7 @@ module.exports = class TwitchBase extends BaseJsonService {
         // if the token expire or is revoked
         // https://dev.twitch.tv/docs/authentication/#refresh-in-response-to-server-rejection-for-bad-authentication
         if (err.name === 'InvalidResponse' && err.response.statusCode === 401) {
-          await this._getNewToken()
+          TwitchBase.__twitchToken = this._getNewToken()
           continue
         }
 
