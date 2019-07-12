@@ -1,5 +1,6 @@
 'use strict'
 
+const runnerConfig = require('config').util.toObject()
 const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
@@ -7,7 +8,20 @@ const t = (module.exports = new ServiceTester({
   title: 'Twitch',
 }))
 
+function checkShouldSkip() {
+  const noToken =
+    !runnerConfig.private.twitch_client_id ||
+    !runnerConfig.private.twitch_client_secret
+  if (noToken) {
+    console.warn(
+      'No Twitch client credentials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
+    )
+  }
+  return noToken
+}
+
 t.create('Status')
+  .skipWhen(checkShouldSkip)
   .get('/status/andyonthewings.json')
   .expectBadge({
     label: 'twitch',
@@ -18,6 +32,7 @@ t.create('Status')
   })
 
 t.create('Invalid Username Specified')
+  .skipWhen(checkShouldSkip)
   .get('/status/invalidusernamethatshouldnotexist.json?label=Follow')
   .expectBadge({
     label: 'Follow',
