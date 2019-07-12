@@ -20,7 +20,8 @@ function checkShouldSkip() {
   return noToken
 }
 
-t.create('Status')
+// the first request would take longer since we need to wait for a token
+t.create('Status of andyonthewings')
   .skipWhen(checkShouldSkip)
   .get('/status/andyonthewings.json')
   .expectBadge({
@@ -29,6 +30,18 @@ t.create('Status')
       return ['live', 'offline'].indexOf(v) >= 0
     },
     link: ['https://www.twitch.tv/andyonthewings'],
+  })
+
+// the second request should take shorter time since we can reuse the previous token
+t.create('Status of noopkat')
+  .skipWhen(checkShouldSkip)
+  .get('/status/noopkat.json')
+  .expectBadge({
+    label: 'twitch',
+    message: function(v) {
+      return ['live', 'offline'].indexOf(v) >= 0
+    },
+    link: ['https://www.twitch.tv/noopkat'],
   })
 
 t.create('Invalid Username Specified')
