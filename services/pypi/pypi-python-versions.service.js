@@ -3,7 +3,7 @@
 const PypiBase = require('./pypi-base')
 const { parseClassifiers } = require('./pypi-helpers')
 
-module.exports = class PypiPyVersions extends PypiBase {
+module.exports = class PypiPythonVersions extends PypiBase {
   static get category() {
     return 'platform-support'
   }

@@ -3,7 +3,7 @@
 const PypiBase = require('./pypi-base')
 const { sortDjangoVersions, parseClassifiers } = require('./pypi-helpers')
 
-module.exports = class PypiDjVersions extends PypiBase {
+module.exports = class PypiDjangoVersions extends PypiBase {
   static get category() {
     return 'platform-support'
   }
