@@ -28,9 +28,10 @@ class GithubConstellation {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
 
-    const { redisUrl, dir: persistenceDir } = config.persistence
-    if (config.persistence.redisUrl) {
-      log(`RedisTokenPersistence configured with ${redisUrl}`)
+    const { redis_url: redisUrl } = config.private
+    const { dir: persistenceDir } = config.persistence
+    if (redisUrl) {
+      log('RedisTokenPersistence configured with redisUrl')
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
         key: 'githubUserTokens',
