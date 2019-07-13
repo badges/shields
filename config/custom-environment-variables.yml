@@ -23,7 +23,6 @@ public:
 
   persistence:
     dir: 'PERSISTENCE_DIR'
-    redisUrl: 'REDIS_URL'
 
   services:
     github:
@@ -58,6 +57,7 @@ private:
   nexus_user: 'NEXUS_USER'
   nexus_pass: 'NEXUS_PASS'
   npm_token: 'NPM_TOKEN'
+  redis_url: 'REDIS_URL'
   sentry_dsn: 'SENTRY_DSN'
   shields_secret: 'SHIELDS_SECRET'
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
