@@ -56,8 +56,10 @@ describe('Composer version comparison', function() {
     given('1.0.0-alpha2', '1.0.0-beta').expect(-1)
     given('1.0.0-beta', '1.0.0-beta2').expect(-1)
     given('1.0.0-beta2', '1.0.0-RC').expect(-1)
+    given('1.0.0-B2', '1.0.0-RC').expect(-1)
     given('1.0.0-RC', '1.0.0-RC2').expect(-1)
     given('1.0.0-RC2', '1.0.0').expect(-1)
+    given('1.0.0-rc', '1.0.0').expect(-1)
     given('1.0.0', '1.0.0-patch').expect(-1)
     given('1.0.0-patch', '1.0.0-dev').expect(-1)
     given('1.0.0-dev', '1.0.1').expect(-1)
@@ -66,9 +68,11 @@ describe('Composer version comparison', function() {
     // short versions should compare equal to long versions
     given('1.0.0-p', '1.0.0-patch').expect(0)
     given('1.0.0-a', '1.0.0-alpha').expect(0)
+    given('1.0.0-A', '1.0.0-alpha').expect(0)
     given('1.0.0-a2', '1.0.0-alpha2').expect(0)
     given('1.0.0-b', '1.0.0-beta').expect(0)
     given('1.0.0-b2', '1.0.0-beta2').expect(0)
+    given('1.0.0-B2', '1.0.0-beta2').expect(0)
 
     // numeric suffixes
     given('1.0.0-b1', '1.0.0-b2').expect(-1)
@@ -77,5 +81,6 @@ describe('Composer version comparison', function() {
     given('1.0.0-a10', '1.0.0-a11').expect(-1)
     given('1.0.0-RC1', '1.0.0-RC2').expect(-1)
     given('1.0.0-RC10', '1.0.0-RC11').expect(-1)
+    given('1.0.0-rc10', '1.0.0-RC11').expect(-1)
   })
 })

@@ -44,30 +44,33 @@ function numberedVersionData(version) {
   let modifierLevel = 3
   let modifierLevelCount = 0
 
+  // Normalization based on
+  // https://github.com/composer/semver/blob/1.5.0/src/VersionParser.php
+
   if (parts.length > 1) {
     const modifier = parts[parts.length - 1]
     const firstLetter = modifier.charCodeAt(0)
     let modifierLevelCountString
 
     // Modifiers: alpha < beta < RC < normal < patch < dev
-    if (firstLetter === 97) {
-      // a
+    if (firstLetter === 97 || firstLetter === 65) {
+      // a / A
       modifierLevel = 0
-      if (/^alpha/.test(modifier)) {
+      if (/^alpha/i.test(modifier)) {
         modifierLevelCountString = +modifier.slice(5)
       } else {
         modifierLevelCountString = +modifier.slice(1)
       }
-    } else if (firstLetter === 98) {
-      // b
+    } else if (firstLetter === 98 || firstLetter === 66) {
+      // b / B
       modifierLevel = 1
-      if (/^beta/.test(modifier)) {
+      if (/^beta/i.test(modifier)) {
         modifierLevelCountString = +modifier.slice(4)
       } else {
         modifierLevelCountString = +modifier.slice(1)
       }
-    } else if (firstLetter === 82) {
-      // R
+    } else if (firstLetter === 82 || firstLetter === 114) {
+      // R / r
       modifierLevel = 2
       modifierLevelCountString = +modifier.slice(2)
     } else if (firstLetter === 112) {
