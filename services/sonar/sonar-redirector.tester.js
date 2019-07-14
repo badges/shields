@@ -19,7 +19,7 @@ t.create('sonar version')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/sonar/org.ow2.petals:petals-se-ase/alert_status.svg?${queryString.stringify(
+    `/sonar/alert_status/org.ow2.petals:petals-se-ase.svg?${queryString.stringify(
       {
         server: 'http://sonar.petalslink.com',
         sonarVersion: '4.2',
