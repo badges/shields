@@ -27,6 +27,8 @@ module.exports = class MavenMetadata extends BaseXmlService {
   static get route() {
     return {
       base: 'maven-metadata/v',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath+',
     }
   }

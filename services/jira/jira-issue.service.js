@@ -23,6 +23,8 @@ module.exports = class JiraIssue extends BaseJsonService {
   static get route() {
     return {
       base: 'jira/issue',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath(.+)/:issueKey',
     }
   }
