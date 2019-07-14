@@ -41,7 +41,7 @@ export default class Customizer extends React.Component {
     const { path, queryString } = this.state
 
     const suffix = queryString ? `?${queryString}` : ''
-    return `${baseUrl}${path}.svg${suffix}`
+    return `${baseUrl}${path}${suffix}`
   }
 
   renderLivePreview() {

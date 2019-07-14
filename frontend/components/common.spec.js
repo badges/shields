@@ -32,14 +32,12 @@ describe('Common modules', function() {
 
   describe('<Badge />', function() {
     it('renders', function() {
-      shallow(<common.Badge src="/badge/foo-bar-blue.svg" />)
+      shallow(<common.Badge src="/badge/foo-bar-blue" />)
     })
 
     it('contains a link to the image', function() {
-      const wrapper = render(<common.Badge src="/badge/foo-bar-blue.svg" />)
-      expect(wrapper.html()).to.contain(
-        '<img alt src="/badge/foo-bar-blue.svg">'
-      )
+      const wrapper = render(<common.Badge src="/badge/foo-bar-blue" />)
+      expect(wrapper.html()).to.contain('<img alt src="/badge/foo-bar-blue">')
     })
   })
 
