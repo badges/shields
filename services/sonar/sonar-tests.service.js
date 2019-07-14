@@ -10,7 +10,6 @@ const SonarBase = require('./sonar-base')
 const {
   documentation,
   keywords,
-  patternBase,
   queryParamSchema,
   getLabel,
 } = require('./sonar-helpers')
@@ -22,8 +21,8 @@ class SonarTestsSummary extends SonarBase {
 
   static get route() {
     return {
-      base: 'sonar',
-      pattern: `${patternBase}/tests`,
+      base: 'sonar/tests',
+      pattern: ':component',
       queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
     }
   }
@@ -33,11 +32,10 @@ class SonarTestsSummary extends SonarBase {
       {
         title: 'Sonar Tests',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
           compact_message: null,
           passed_label: 'passed',
@@ -107,8 +105,9 @@ class SonarTestsSummary extends SonarBase {
   }
 
   async handle(
-    { protocol, host, component },
+    { component },
     {
+      server,
       sonarVersion,
       compact_message: compactMessage,
       passed_label: passedLabel,
@@ -118,8 +117,7 @@ class SonarTestsSummary extends SonarBase {
   ) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: 'tests,test_failures,skipped_tests',
     })
@@ -148,7 +146,8 @@ class SonarTests extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)`,
+      pattern:
+        ':metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)/:component',
       queryParamSchema,
     }
   }
@@ -157,14 +156,14 @@ class SonarTests extends SonarBase {
     return [
       {
         title: 'Sonar Test Count',
-        pattern: `${patternBase}/:metric(total_tests|skipped_tests|test_failures|test_errors)`,
+        pattern:
+          ':metric(total_tests|skipped_tests|test_failures|test_errors)/:component',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-log',
           metric: 'total_tests',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -176,13 +175,12 @@ class SonarTests extends SonarBase {
       },
       {
         title: 'Sonar Test Execution Time',
-        pattern: `${patternBase}/test_execution_time`,
+        pattern: 'test_execution_time/:component',
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azure-pipelines-templates',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -194,13 +192,12 @@ class SonarTests extends SonarBase {
       },
       {
         title: 'Sonar Test Success Rate',
-        pattern: `${patternBase}/test_success_density`,
+        pattern: 'test_success_density/:component',
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azure-pipelines-templates',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({
@@ -239,11 +236,10 @@ class SonarTests extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component, metric }, { sonarVersion }) {
+  async handle({ component, metric }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       // We're using 'tests' as the metric key to provide our standard
       // formatted test badge (passed, failed, skipped) that exists for other

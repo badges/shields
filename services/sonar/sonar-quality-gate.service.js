@@ -1,12 +1,7 @@
 'use strict'
 
 const SonarBase = require('./sonar-base')
-const {
-  documentation,
-  keywords,
-  patternBase,
-  queryParamSchema,
-} = require('./sonar-helpers')
+const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
 module.exports = class SonarQualityGate extends SonarBase {
   static get category() {
@@ -16,7 +11,7 @@ module.exports = class SonarQualityGate extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(quality_gate|alert_status)`,
+      pattern: ':metric(quality_gate|alert_status)/:component',
       queryParamSchema,
     }
   }
@@ -26,12 +21,11 @@ module.exports = class SonarQualityGate extends SonarBase {
       {
         title: 'Sonar Quality Gate',
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azdo-shellcheck',
           metric: 'quality_gate',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({ qualityState: 'OK' }),
@@ -58,11 +52,10 @@ module.exports = class SonarQualityGate extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { sonarVersion }) {
+  async handle({ component }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: 'alert_status',
     })
