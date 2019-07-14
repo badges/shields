@@ -7,11 +7,36 @@ const t = (module.exports = new ServiceTester({
   title: 'OSS Lifecycle',
 }))
 
-t.create('osslifecycle status')
-  .get('/Netflix/osstracker.json')
+t.create('osslifecycle active status')
+  .get('/zalando/ghe-backup.json')
   .expectBadge({
     label: 'oss lifecycle',
     message: 'active',
+    color: 'brightgreen',
+  })
+
+t.create('osslifecycle maintenance status')
+  .get('/Teevity/ice.json')
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'maintenance',
+    color: 'yellow',
+  })
+
+t.create('osslifecycle archived status')
+  .get('/Netflix/rx-aws-java-sdk.json')
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'archived',
+    color: 'red',
+  })
+
+t.create('osslifecycle other status')
+  .get('/Netflix/metacat.json')
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'private',
+    color: 'lightgrey',
   })
 
 t.create('osslifecycle status (branch)')

@@ -57,13 +57,3 @@ t.create('Override color with a number')
 t.create('Override label')
   .get('/badge/label-message-blue.json?label=mylabel')
   .expectBadge({ label: 'mylabel', message: 'message', color: 'blue' })
-
-t.create('Old static badge')
-  .get('/foo/bar.png?color=blue', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader('Location', '/badge/foo-bar-blue.png')
-
-t.create('Old static badge without a color')
-  .get('/foo/bar.png', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader('Location', '/badge/foo-bar-lightgray.png')

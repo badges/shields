@@ -63,7 +63,6 @@ const publicConfigSchema = Joi.object({
   },
   persistence: {
     dir: Joi.string().required(),
-    redisUrl: optionalUrl,
   },
   services: {
     github: {
@@ -105,6 +104,7 @@ const privateConfigSchema = Joi.object({
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
+  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
   shields_ips: Joi.array().items(Joi.string().ip()),
   shields_secret: Joi.string(),
@@ -151,6 +151,7 @@ class Server {
     this.githubConstellation = new GithubConstellation({
       persistence: publicConfig.persistence,
       service: publicConfig.services.github,
+      private: privateConfig,
     })
     if (publicConfig.metrics.prometheus.enabled) {
       this.metrics = new PrometheusMetrics()
