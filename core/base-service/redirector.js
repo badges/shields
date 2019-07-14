@@ -106,7 +106,7 @@ module.exports = function redirector(attrs) {
         }
 
         // The final capture group is the extension.
-        const format = match.slice(-1)[0]
+        const format = match.slice(-1)[0].replace(/^\./, '')
         const redirectUrl = `${
           format === 'png' ? rasterUrl : ''
         }${targetPath}.${format}${urlSuffix}`

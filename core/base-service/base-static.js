@@ -44,8 +44,7 @@ module.exports = class BaseStaticService extends BaseService {
         this
       )
 
-      // The final capture group is the extension.
-      const format = match.slice(-1)[0]
+      const format = (namedParams.ext || '.svg').replace(/^\./, '')
       badgeData.format = format
 
       if (shouldProfileMakeBadge) {
