@@ -55,6 +55,15 @@ describe('The server', function() {
     )
   })
 
+  it('should produce json badges', async function() {
+    const { statusCode, body, headers } = await got(
+      `${baseUrl}npm/v/express.json`
+    )
+    expect(statusCode).to.equal(200)
+    expect(headers['content-type']).to.equal('application/json')
+    expect(() => JSON.parse(body)).not.to.throw()
+  })
+
   it('should preserve label case', async function() {
     const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
     expect(statusCode).to.equal(200)
