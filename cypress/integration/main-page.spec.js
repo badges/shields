@@ -26,13 +26,13 @@ describe('Main page', function() {
 
     expectBadgeExample(
       'Discourse status',
-      'http://localhost:8080/badge/discourse-online-brightgreen.svg',
-      '/discourse/:scheme/:host/status.svg'
+      'http://localhost:8080/badge/discourse-online-brightgreen',
+      '/discourse/:scheme/:host/status'
     )
   })
 
   it('Suggest badges', function() {
-    const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg`
+    const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
 
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
@@ -42,7 +42,7 @@ describe('Main page', function() {
   })
 
   it('Customization form is filled with suggested badge details', function() {
-    const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg`
+    const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
@@ -54,7 +54,7 @@ describe('Main page', function() {
   })
 
   it('Customizate suggested badge', function() {
-    const badgeUrl = `${backendUrl}/github/issues/badges/shields.svg`
+    const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
@@ -63,7 +63,7 @@ describe('Main page', function() {
     cy.get('table input[name="color"]').type('orange')
 
     cy.get(
-      `img[src='${backendUrl}/github/issues/badges/shields.svg?color=orange']`
+      `img[src='${backendUrl}/github/issues/badges/shields?color=orange']`
     )
   })
 })
