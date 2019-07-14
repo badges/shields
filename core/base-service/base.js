@@ -437,7 +437,8 @@ class BaseService {
             this.defaultBadgeData,
             this
           )
-          const format = (namedParams.ext || '.svg').replace(/^\./, '')
+          // The final capture group is the extension.
+          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
           sendBadge(format, badgeData)
 
           serviceRequestCounter.inc()
