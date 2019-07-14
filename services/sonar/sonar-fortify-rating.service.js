@@ -19,8 +19,8 @@ module.exports = class SonarFortifyRating extends SonarBase {
 
   static get route() {
     return {
-      base: 'sonar',
-      pattern: ':component/fortify-security-rating',
+      base: 'sonar/fortify-security-rating',
+      pattern: ':component',
       queryParamSchema,
     }
   }

@@ -18,8 +18,8 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
 
   static get route() {
     return {
-      base: 'sonar',
-      pattern: `:component/${metric}`,
+      base: `sonar/${metric}`,
+      pattern: ':component',
       queryParamSchema,
     }
   }

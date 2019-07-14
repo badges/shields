@@ -7,7 +7,7 @@ const isQualityGateStatus = Joi.allow('passed', 'failed')
 
 t.create('Quality Gate')
   .get(
-    '/swellaby%3Aazdo-shellcheck/quality_gate.json?server=https://sonarcloud.io'
+    '/quality_gate/swellaby%3Aazdo-shellcheck.json?server=https://sonarcloud.io'
   )
   .expectBadge({
     label: 'quality gate',
@@ -16,7 +16,7 @@ t.create('Quality Gate')
 
 t.create('Quality Gate (Alert Status)')
   .get(
-    '/org.ow2.petals%3Apetals-se-ase/alert_status.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/alert_status/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
   )
   .expectBadge({
     label: 'quality gate',

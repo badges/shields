@@ -11,8 +11,8 @@ module.exports = class SonarCoverage extends SonarBase {
 
   static get route() {
     return {
-      base: 'sonar',
-      pattern: ':component/coverage',
+      base: 'sonar/coverage',
+      pattern: ':component',
       queryParamSchema,
     }
   }

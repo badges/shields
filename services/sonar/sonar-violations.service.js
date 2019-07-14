@@ -32,7 +32,7 @@ module.exports = class SonarViolations extends SonarBase {
     return {
       base: 'sonar',
       pattern:
-        ':component/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)',
+        ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component',
       queryParamSchema: queryParamWithFormatSchema,
     }
   }

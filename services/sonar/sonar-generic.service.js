@@ -114,7 +114,7 @@ module.exports = class SonarGeneric extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `:component/:metricName(${metricNameRouteParam})`,
+      pattern: `:metricName(${metricNameRouteParam})/:component`,
       queryParamSchema,
     }
   }

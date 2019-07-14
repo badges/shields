@@ -17,7 +17,7 @@ module.exports = class SonarTechDebt extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: ':component/:metric(tech_debt|sqale_debt_ratio)',
+      pattern: ':metric(tech_debt|sqale_debt_ratio)/:component',
       queryParamSchema,
     }
   }

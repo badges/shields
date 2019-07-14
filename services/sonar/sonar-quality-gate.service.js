@@ -11,7 +11,7 @@ module.exports = class SonarQualityGate extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: ':component/:metric(quality_gate|alert_status)',
+      pattern: ':metric(quality_gate|alert_status)/:component',
       queryParamSchema,
     }
   }
