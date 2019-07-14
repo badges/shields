@@ -35,6 +35,8 @@ module.exports = class JiraSprint extends BaseJsonService {
   static get route() {
     return {
       base: 'jira/sprint',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath(.+)/:sprintId',
     }
   }

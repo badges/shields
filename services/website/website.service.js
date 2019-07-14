@@ -35,6 +35,8 @@ module.exports = class Website extends BaseService {
   static get route() {
     return {
       base: 'website',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(https|http)/:hostAndPath+',
       queryParamSchema,
     }
