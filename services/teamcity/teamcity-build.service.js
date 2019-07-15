@@ -22,7 +22,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
   static get route() {
     return {
       base: 'teamcity',
-      format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+)',
+      format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+?)',
       capture: ['protocol', 'hostAndPath', 'verbosity', 'buildId'],
     }
   }

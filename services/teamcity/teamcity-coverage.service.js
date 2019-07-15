@@ -24,7 +24,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
   static get route() {
     return {
       base: 'teamcity/coverage',
-      format: '(?:(http|https)/(.+)/)?([^/]+)',
+      format: '(?:(http|https)/(.+)/)?([^/]+?)',
       capture: ['protocol', 'hostAndPath', 'buildId'],
     }
   }
