@@ -8,7 +8,7 @@ t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')
   .expectBadge({
     label: 'pull requests',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/),
+    message: Joi.string().regex(/^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/),
   })
 
 t.create('GitHub closed pull requests raw')
@@ -36,7 +36,7 @@ t.create('GitHub closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectBadge({
     label: 'issues',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? closed$/),
+    message: Joi.string().regex(/^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/),
   })
 
 t.create('GitHub closed issues raw')
