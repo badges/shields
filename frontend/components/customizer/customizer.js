@@ -34,11 +34,9 @@ export default function Customizer({
   const [markup, setMarkup] = useState()
   const [message, setMessage] = useState()
 
-  baseUrl = baseUrl || getBaseUrlFromWindowLocation()
-
   function generateBuiltBadgeUrl() {
     const suffix = queryString ? `?${queryString}` : ''
-    return `${baseUrl}${path}.svg${suffix}`
+    return `${baseUrl || getBaseUrlFromWindowLocation()}${path}.svg${suffix}`
   }
 
   function renderLivePreview() {
