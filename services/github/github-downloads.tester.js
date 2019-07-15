@@ -40,21 +40,27 @@ t.create('downloads for specific asset without slash')
   .get('/downloads/atom/atom/v0.190.0/atom-amd64.deb.json')
   .expectBadge({
     label: 'downloads@v0.190.0',
-    message: Joi.string().regex(/^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+    ),
   })
 
 t.create('downloads for specific asset from latest release')
   .get('/downloads/atom/atom/latest/atom-amd64.deb.json')
   .expectBadge({
     label: 'downloads@latest',
-    message: Joi.string().regex(/^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+    ),
   })
 
 t.create('downloads-pre for specific asset from latest release')
   .get('/downloads-pre/atom/atom/latest/atom-amd64.deb.json')
   .expectBadge({
     label: 'downloads@latest',
-    message: Joi.string().regex(/^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+    ),
   })
 
 t.create('downloads for release with slash')
