@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const BuilderOuterContainer = styled.div`
@@ -17,16 +16,16 @@ const BuilderInnerContainer = styled.div`
   background: #eef;
 `
 
-const BuilderContainer = ({ children }) => (
-  <BuilderOuterContainer>
-    <BuilderInnerContainer>{children}</BuilderInnerContainer>
-  </BuilderOuterContainer>
-)
-BuilderContainer.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+export function BuilderContainer({
+  children,
+}: {
+  children: JSX.Element[] | JSX.Element
+}) {
+  return (
+    <BuilderOuterContainer>
+      <BuilderInnerContainer>{children}</BuilderInnerContainer>
+    </BuilderOuterContainer>
+  )
 }
 
 const labelFont = `
@@ -34,16 +33,14 @@ const labelFont = `
   font-size: 11px;
 `
 
-const BuilderLabel = styled.label`
+export const BuilderLabel = styled.label`
   ${labelFont}
 
   text-transform: lowercase;
 `
 
-const BuilderCaption = styled.span`
+export const BuilderCaption = styled.span`
   ${labelFont}
 
   color: #999;
 `
-
-export { BuilderContainer, BuilderLabel, BuilderCaption }

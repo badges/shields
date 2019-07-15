@@ -4,7 +4,7 @@ import pathToRegexp from 'path-to-regexp'
 // `foo|bar|baz`, return an array with the options. If it can't be described
 // as multiple-choice options, return `undefined`.
 const basicChars = /^[A-za-z0-9-]+$/
-export function patternToOptions(pattern) {
+export function patternToOptions(pattern: string): string[] | undefined {
   const split = pattern.split('|')
   if (split.some(part => !part.match(basicChars))) {
     return undefined
@@ -14,7 +14,7 @@ export function patternToOptions(pattern) {
 }
 
 // Removes regexp for named parameters.
-export function removeRegexpFromPattern(pattern) {
+export function removeRegexpFromPattern(pattern: string): string {
   const tokens = pathToRegexp.parse(pattern)
   const simplePattern = tokens
     .map(token => {
