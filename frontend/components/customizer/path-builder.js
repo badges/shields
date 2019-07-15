@@ -68,7 +68,7 @@ const NamedParamCaption = styled(BuilderCaption)`
   text-align: center;
 `
 
-function constructPath({ tokens, namedParams }) {
+export function constructPath({ tokens, namedParams }) {
   let isComplete = true
   const path = tokens
     .map(token => {
