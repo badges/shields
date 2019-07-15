@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import pathToRegexp from 'path-to-regexp'
@@ -68,25 +68,41 @@ const NamedParamCaption = styled(BuilderCaption)`
   text-align: center;
 `
 
-export default class PathBuilder extends React.Component {
-  static propTypes = {
-    pattern: PropTypes.string.isRequired,
-    exampleParams: objectOfKeyValuesPropType,
-    onChange: PropTypes.func,
-    isPrefilled: PropTypes.bool,
-  }
+function constructPath({ tokens, namedParams }) {
+  let isComplete = true
+  const path = tokens
+    .map(token => {
+      if (typeof token === 'string') {
+        return token
+      } else {
+        const { delimiter, name, optional } = token
+        const value = namedParams[name]
+        if (value) {
+          return `${delimiter}${value}`
+        } else if (optional) {
+          return ''
+        } else {
+          isComplete = false
+          return `${delimiter}:${name}`
+        }
+      }
+    })
+    .join('')
+  return { path, isComplete }
+}
 
-  constructor(props) {
-    super(props)
-
-    const { pattern } = props
-    const tokens = pathToRegexp.parse(pattern)
-
-    let namedParams
-    if (this.props.isPrefilled) {
-      namedParams = this.props.exampleParams
+export default function PathBuilder({
+  pattern,
+  exampleParams,
+  onChange,
+  isPrefilled,
+}) {
+  const [tokens] = useState(() => pathToRegexp.parse(pattern))
+  const [namedParams, setNamedParams] = useState(() => {
+    if (isPrefilled) {
+      return exampleParams
     } else {
-      namedParams = {}
+      const namedParams = {}
       // `pathToRegexp.parse()` returns a mixed array of strings for literals
       // and  objects for parameters. Filter out the literals and work with the
       // objects.
@@ -95,67 +111,28 @@ export default class PathBuilder extends React.Component {
         .forEach(({ name }) => {
           namedParams[name] = ''
         })
+      return namedParams
     }
-    this.state = {
-      tokens,
-      namedParams,
-    }
-  }
+  })
 
-  static constructPath({ tokens, namedParams }) {
-    let isComplete = true
-    const path = tokens
-      .map(token => {
-        if (typeof token === 'string') {
-          return token
-        } else {
-          const { delimiter, name, optional } = token
-          const value = namedParams[name]
-          if (value) {
-            return `${delimiter}${value}`
-          } else if (optional) {
-            return ''
-          } else {
-            isComplete = false
-            return `${delimiter}:${name}`
-          }
-        }
-      })
-      .join('')
-    return { path, isComplete }
-  }
-
-  notePathChanged({ tokens, namedParams }) {
-    const { onChange } = this.props
+  useEffect(() => {
+    // Ensure the default style is applied right away.
     if (onChange) {
-      const { path, isComplete } = this.constructor.constructPath({
-        tokens,
-        namedParams,
-      })
+      const { path, isComplete } = constructPath({ tokens, namedParams })
       onChange({ path, isComplete })
     }
-  }
+  }, [tokens, namedParams, onChange])
 
-  componentDidMount() {
-    // Ensure the default style is applied right away.
-    const { tokens, namedParams } = this.state
-    this.notePathChanged({ tokens, namedParams })
-  }
-
-  handleTokenChange = evt => {
+  function handleTokenChange(evt) {
     const { name, value } = evt.target
-    const { tokens, namedParams: oldNamedParams } = this.state
 
-    const namedParams = {
-      ...oldNamedParams,
+    setNamedParams({
+      ...namedParams,
       [name]: value,
-    }
-
-    this.setState({ namedParams })
-    this.notePathChanged({ tokens, namedParams })
+    })
   }
 
-  renderLiteral(literal, tokenIndex) {
+  function renderLiteral(literal, tokenIndex) {
     return (
       <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
         <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
@@ -163,29 +140,24 @@ export default class PathBuilder extends React.Component {
     )
   }
 
-  renderNamedParamInput(token) {
+  function renderNamedParamInput(token) {
     const { name, pattern } = token
     const options = patternToOptions(pattern)
 
-    const { namedParams } = this.state
     const value = namedParams[name]
 
     if (options) {
       return (
         <NamedParamSelect
           name={name}
-          onChange={this.handleTokenChange}
+          onChange={handleTokenChange}
           value={value}
         >
-          <option disabled={this.props.isPrefilled} key="empty" value="">
+          <option disabled={isPrefilled} key="empty" value="">
             {' '}
           </option>
           {options.map(option => (
-            <option
-              disabled={this.props.isPrefilled}
-              key={option}
-              value={option}
-            >
+            <option disabled={isPrefilled} key={option} value={option}>
               {option}
             </option>
           ))}
@@ -194,9 +166,9 @@ export default class PathBuilder extends React.Component {
     } else {
       return (
         <NamedParamInput
-          disabled={this.props.isPrefilled}
+          disabled={isPrefilled}
           name={name}
-          onChange={this.handleTokenChange}
+          onChange={handleTokenChange}
           type="text"
           value={value}
           {...noAutocorrect}
@@ -205,22 +177,21 @@ export default class PathBuilder extends React.Component {
     }
   }
 
-  renderNamedParam(token, tokenIndex, namedParamIndex) {
+  function renderNamedParam(token, tokenIndex, namedParamIndex) {
     const { delimiter, name, optional } = token
 
-    const { exampleParams } = this.props
     const exampleValue = exampleParams[name] || '(not set)'
 
     return (
       <React.Fragment key={token.name}>
-        {this.renderLiteral(delimiter, tokenIndex)}
+        {renderLiteral(delimiter, tokenIndex)}
         <PathBuilderColumn withHorizPadding>
           <NamedParamLabelContainer>
             <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
           </NamedParamLabelContainer>
-          {this.renderNamedParamInput(token)}
-          {!this.props.isPrefilled && (
+          {renderNamedParamInput(token)}
+          {!isPrefilled && (
             <NamedParamCaption>
               {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
             </NamedParamCaption>
@@ -230,17 +201,20 @@ export default class PathBuilder extends React.Component {
     )
   }
 
-  render() {
-    const { tokens } = this.state
-    let namedParamIndex = 0
-    return (
-      <BuilderContainer>
-        {tokens.map((token, tokenIndex) =>
-          typeof token === 'string'
-            ? this.renderLiteral(token, tokenIndex)
-            : this.renderNamedParam(token, tokenIndex, namedParamIndex++)
-        )}
-      </BuilderContainer>
-    )
-  }
+  let namedParamIndex = 0
+  return (
+    <BuilderContainer>
+      {tokens.map((token, tokenIndex) =>
+        typeof token === 'string'
+          ? renderLiteral(token, tokenIndex)
+          : renderNamedParam(token, tokenIndex, namedParamIndex++)
+      )}
+    </BuilderContainer>
+  )
+}
+PathBuilder.propTypes = {
+  pattern: PropTypes.string.isRequired,
+  exampleParams: objectOfKeyValuesPropType,
+  onChange: PropTypes.func,
+  isPrefilled: PropTypes.bool,
 }
