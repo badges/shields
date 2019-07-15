@@ -62,8 +62,6 @@ describe('Main page', function() {
 
     cy.get('table input[name="color"]').type('orange')
 
-    cy.get(
-      `img[src='${backendUrl}/github/issues/badges/shields?color=orange']`
-    )
+    cy.get(`img[src='${backendUrl}/github/issues/badges/shields?color=orange']`)
   })
 })
