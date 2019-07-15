@@ -395,7 +395,7 @@ export default function Usage({ baseUrl }) {
 
       <p>
         We support <code>.svg</code> and <code>.json</code>. The default is
-        <code>.svg</code> and can be omitted.
+        <code>.svg</code>, which can be omitted from the URL.
       </p>
 
       <p>
