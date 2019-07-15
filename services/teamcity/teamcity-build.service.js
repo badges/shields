@@ -22,6 +22,8 @@ module.exports = class TeamCityBuild extends TeamCityBase {
   static get route() {
     return {
       base: 'teamcity',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+?)',
       capture: ['protocol', 'hostAndPath', 'verbosity', 'buildId'],
     }
