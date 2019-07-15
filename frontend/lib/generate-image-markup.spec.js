@@ -23,10 +23,10 @@ test(html, () => {
     'https://example.com/example',
     'Example'
   ).expect(
-    '<a href="https://example.com/example"><img alt="Example" src="https://img.shields.io/badge'
+    '<a href="https://example.com/example"><img alt="Example" src="https://img.shields.io/badge">'
   )
   given('https://img.shields.io/badge', undefined, undefined).expect(
-    '<img src="https://img.shields.io/badge'
+    '<img src="https://img.shields.io/badge">'
   )
 })
 
