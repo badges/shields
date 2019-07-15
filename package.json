@@ -15,7 +15,7 @@
     "url": "https://github.com/badges/shields/issues",
     "email": "thaddee.tyl@gmail.com"
   },
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "repository": {
     "type": "git",

@@ -208,11 +208,16 @@ Alumni:
 
 ## License
 
-All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
-domain unless specified otherwise.
+This project is licensed under the Apache 2.0 License.
+
+It incorporates portions from earlier released licensed under [CC0][]. Though
+Shields no longer provides a universal grant of copyright, the project remains
+in spirit dedicated to the public.
 
 The assets in `logo/` are trademarks of their respective companies and are
 under their terms and license.
+
+[cc0]: https://creativecommons.org/publicdomain/zero/1.0/
 
 ## Contributors
 
