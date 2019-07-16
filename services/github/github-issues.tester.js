@@ -17,7 +17,7 @@ t.create('GitHub closed pull requests raw')
   .get('/issues-pr-closed-raw/badges/shields.json')
   .expectBadge({
     label: 'closed pull requests',
-    message: Joi.string().regex(/^\w+?$/),
+    message: isMetric,
   })
 
 t.create('GitHub pull requests')
@@ -47,7 +47,7 @@ t.create('GitHub closed issues raw')
   .get('/issues-closed-raw/badges/shields.json')
   .expectBadge({
     label: 'closed issues',
-    message: Joi.string().regex(/^\w+\+?$/),
+    message: isMetric,
   })
 
 t.create('GitHub open issues')
