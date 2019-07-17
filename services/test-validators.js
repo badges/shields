@@ -62,12 +62,14 @@ const isStarRating = withRegex(
 )
 
 // Required to be > 0, because accepting zero masks many problems.
-const isMetric = withRegex(/^[1-9][0-9]*[kMGTPEZY]?$/)
+const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
-const isMetricOpenIssues = withRegex(/^[1-9][0-9]*[kMGTPEZY]? open$/)
+const isMetricOpenIssues = withRegex(
+  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) open$/
+)
 
 const isMetricOverTimePeriod = withRegex(
-  /^[1-9][0-9]*[kMGTPEZY]?\/(year|month|four weeks|week|day)$/
+  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|week|day)$/
 )
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
