@@ -5,7 +5,7 @@
     "target": "esnext",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "lib",
+    "outDir": "unused_ts_output",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
