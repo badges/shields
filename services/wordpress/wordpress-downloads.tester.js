@@ -1,6 +1,5 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
 const { ServiceTester } = require('../tester')
 const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
 
@@ -20,7 +19,7 @@ t.create('Plugin Downloads - Active')
   .get('/plugin/installs/akismet.json')
   .expectBadge({
     label: 'active installs',
-    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]\+?$/),
+    message: isMetric,
   })
 
 t.create('Plugin Downloads - Day')
@@ -54,7 +53,7 @@ t.create('Theme Downloads - Active')
   .get('/theme/installs/twentyseventeen.json')
   .expectBadge({
     label: 'active installs',
-    message: Joi.string().regex(/^[1-9][0-9]*[kMGTPEZY]\+?$/),
+    message: isMetric,
   })
 
 t.create('Plugin Downloads - Total | Not Found')
