@@ -56,7 +56,7 @@
     "raven": "^2.4.2",
     "request": "~2.88.0",
     "semver": "~6.2.0",
-    "simple-icons": "1.10.0",
+    "simple-icons": "1.11.0",
     "xmldom": "~0.1.27",
     "xpath": "~0.0.27"
   },
