@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useImperativeHandle, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import posed from 'react-pose'
 import styled from 'styled-components'
@@ -29,39 +29,34 @@ const PosedContentContainer = posed(ContentContainer)({
 
 // When `trigger()` is called, render copied content that floats up, then
 // disappears.
-export default class CopiedContentIndicator extends React.Component {
-  state = {
-    pose: 'hidden',
-  }
+function CopiedContentIndicator({ copiedContent, children }, ref) {
+  const [pose, setPose] = useState('hidden')
 
-  trigger() {
-    this.setState({ pose: 'effectStart' })
-  }
+  useImperativeHandle(ref, () => ({
+    trigger() {
+      setPose('effectStart')
+    },
+  }))
 
-  handlePoseComplete = () => {
-    const { pose } = this.state
+  function handlePoseComplete() {
     if (pose === 'effectStart') {
-      this.setState({ pose: 'effectEnd' })
+      setPose('effectEnd')
     } else {
-      this.setState({ pose: 'hidden' })
+      setPose('hidden')
     }
   }
 
-  render() {
-    const { pose } = this.state
-    return (
-      <ContentAnchor>
-        <PosedContentContainer
-          onPoseComplete={this.handlePoseComplete}
-          pose={pose}
-        >
-          {this.props.copiedContent}
-        </PosedContentContainer>
-        {this.props.children}
-      </ContentAnchor>
-    )
-  }
+  return (
+    <ContentAnchor>
+      <PosedContentContainer onPoseComplete={handlePoseComplete} pose={pose}>
+        {copiedContent}
+      </PosedContentContainer>
+      {children}
+    </ContentAnchor>
+  )
 }
+// eslint-disable-next-line no-func-assign
+CopiedContentIndicator = forwardRef(CopiedContentIndicator)
 CopiedContentIndicator.propTypes = {
   copiedContent: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -72,3 +67,4 @@ CopiedContentIndicator.propTypes = {
     PropTypes.node,
   ]),
 }
+export default CopiedContentIndicator
