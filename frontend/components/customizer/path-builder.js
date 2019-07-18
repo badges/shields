@@ -98,22 +98,19 @@ export default function PathBuilder({
   isPrefilled,
 }) {
   const [tokens] = useState(() => pathToRegexp.parse(pattern))
-  const [namedParams, setNamedParams] = useState(() => {
-    if (isPrefilled) {
-      return exampleParams
-    } else {
-      const namedParams = {}
-      // `pathToRegexp.parse()` returns a mixed array of strings for literals
-      // and  objects for parameters. Filter out the literals and work with the
-      // objects.
-      tokens
-        .filter(t => typeof t !== 'string')
-        .forEach(({ name }) => {
-          namedParams[name] = ''
-        })
-      return namedParams
-    }
-  })
+  const [namedParams, setNamedParams] = useState(() =>
+    isPrefilled
+      ? exampleParams
+      : // `pathToRegexp.parse()` returns a mixed array of strings for literals
+        // and  objects for parameters. Filter out the literals and work with the
+        // objects.
+        tokens
+          .filter(t => typeof t !== 'string')
+          .reduce((accum, { name }) => {
+            accum[name] = ''
+            return accum
+          }, {})
+  )
 
   useEffect(() => {
     // Ensure the default style is applied right away.
