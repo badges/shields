@@ -1,22 +1,61 @@
 extends:
-  - standard
-  - prettier
+  - standard-jsx
+  - standard-react
   - plugin:jsdoc/recommended
-
-env:
-  node: true
-  mocha: true
+  - plugin:@typescript-eslint/recommended
+  - prettier/@typescript-eslint
+  - prettier/standard
 
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
   # though that setting is only for ES6 modules, not CommonJS modules.
   sourceType: 'script'
 
+settings:
+  react:
+    version: '16.8'
+
+plugins:
+  - chai-friendly
+  - jsdoc
+  - mocha
+  - no-extension-in-require
+  - sort-class-members
+  - import
+  - react-hooks
+  - promise
+
 overrides:
   - files:
-      - gatsby-browser.js
+      - '**/*.js'
+      - '!frontend/**/*.js'
+    env:
+      node: true
+    rules:
+      no-console: 'off'
+      '@typescript-eslint/no-var-requires': off
+
+  - files:
+      - '**/*.@(ts|tsx)'
     parserOptions:
       sourceType: 'module'
+    parser: '@typescript-eslint/parser'
+    rules:
+      # Argh.
+      '@typescript-eslint/explicit-function-return-type': 'off'
+      '@typescript-eslint/no-object-literal-type-assertion': 'off'
+
+  - files:
+      - gatsby-browser.js
+      - 'frontend/**/*.@(js|ts|tsx)'
+    parserOptions:
+      sourceType: 'module'
+    env:
+      browser: true
+    rules:
+      import/extensions:
+        ['error', 'never', { 'json': 'always', 'yml': 'always' }]
+
   - files:
       - 'core/base-service/**/*.js'
       - 'services/**/*.js'
@@ -44,25 +83,29 @@ overrides:
           },
         ]
 
-plugins:
-  - chai-friendly
-  - jsdoc
-  - mocha
-  - no-extension-in-require
-  - sort-class-members
+  - files:
+      - '**/*.spec.@(js|ts|tsx)'
+      - '**/*.integration.js'
+    env:
+      mocha: true
+    rules:
+      mocha/no-exclusive-tests: 'error'
+      mocha/no-mocha-arrows: 'error'
+      mocha/prefer-arrow-callback: 'error'
 
 rules:
   # Disable some rules from eslint:recommended.
-  no-console: 'off'
   no-empty: ['error', { 'allowEmptyCatch': true }]
+
   # Allow unused parameters. In callbacks, removing them seems to obscure
   # what the functions are doing.
-  no-unused-vars: ['error', { 'args': 'none' }]
+  '@typescript-eslint/no-unused-vars': ['error', { 'args': 'none' }]
+  no-unused-vars: off
+
+  '@typescript-eslint/no-var-requires': error
 
   # These should be disabled by eslint-config-prettier, but are not.
   spaced-comment: 'off'
-  standard/object-curly-even-spacing: 'off'
-  one-var: 'off'
 
   # Shields additions.
   no-var: 'error'
@@ -77,14 +120,17 @@ rules:
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
 
-  # Mocha-related.
-  mocha/no-exclusive-tests: 'error'
-  mocha/no-mocha-arrows: 'error'
-  mocha/prefer-arrow-callback: 'error'
-
   # Chai friendly.
   no-unused-expressions: 'off'
   chai-friendly/no-unused-expressions: 'error'
 
   # Disable some rules from jsdoc/recommended.
-  jsdoc/require-jsdoc: 0
+  jsdoc/require-jsdoc: off
+
+  # Disable some from TypeScript.
+  '@typescript-eslint/camelcase': off
+
+  react/jsx-sort-props: 'error'
+  react-hooks/rules-of-hooks: 'error'
+  react-hooks/exhaustive-deps: 'error'
+  jsx-quotes: ['error', 'prefer-double']
