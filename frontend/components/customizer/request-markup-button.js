@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Select, { components } from 'react-select'
@@ -68,52 +68,41 @@ const markupOptions = [
   { value: 'html', label: 'Copy HTML' },
 ]
 
-class GetMarkupButton extends React.PureComponent {
-  selectRef = React.createRef()
+export default function GetMarkupButton({ onMarkupRequested, isDisabled }) {
+  const selectRef = useRef()
 
-  onControlMouseDown = async event => {
-    const { selectRef } = this
-    const { onMarkupRequested } = this.props
-
+  async function onControlMouseDown(event) {
     if (onMarkupRequested) {
       await onMarkupRequested('link')
     }
     selectRef.current.blur()
   }
 
-  onOptionClick = async ({ value: markupFormat }) => {
-    const { onMarkupRequested } = this.props
+  async function onOptionClick({ value: markupFormat }) {
     if (onMarkupRequested) {
       await onMarkupRequested(markupFormat)
     }
   }
 
-  render() {
-    const { isDisabled } = this.props
-
-    return (
-      <MarkupFormatSelect
-        blurInputOnSelect
-        classNamePrefix="markup-format"
-        closeMenuOnScroll
-        components={{
-          Control: ClickableControl,
-        }}
-        isDisabled={isDisabled}
-        isSearchable={false}
-        menuPlacement="auto"
-        onChange={this.onOptionClick}
-        onControlMouseDown={this.onControlMouseDown}
-        options={markupOptions}
-        placeholder="Copy Badge URL"
-        ref={this.selectRef}
-        value=""
-      />
-    )
-  }
+  return (
+    <MarkupFormatSelect
+      blurInputOnSelect
+      classNamePrefix="markup-format"
+      closeMenuOnScroll
+      components={{ Control: ClickableControl }}
+      isDisabled={isDisabled}
+      isSearchable={false}
+      menuPlacement="auto"
+      onChange={onOptionClick}
+      onControlMouseDown={onControlMouseDown}
+      options={markupOptions}
+      placeholder="Copy Badge URL"
+      ref={selectRef}
+      value=""
+    />
+  )
 }
 GetMarkupButton.propTypes = {
   onMarkupRequested: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool,
 }
-export default GetMarkupButton
