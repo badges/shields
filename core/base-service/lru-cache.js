@@ -7,6 +7,23 @@ const typeEnum = {
   heap: 1,
 }
 
+// In bytes.
+let heapSize
+function computeHeapSize() {
+  return (heapSize = process.memoryUsage().heapTotal)
+}
+
+let heapSizeTimeout
+function getHeapSize() {
+  if (heapSizeTimeout == null) {
+    // Compute the heap size every 60 seconds.
+    heapSizeTimeout = setInterval(computeHeapSize, 60 * 1000)
+    return computeHeapSize()
+  } else {
+    return heapSize
+  }
+}
+
 function CacheSlot(key, value) {
   this.key = key
   this.value = value
@@ -14,7 +31,7 @@ function CacheSlot(key, value) {
   this.newer = null // Oldest slot that is newer than this slot.
 }
 
-function Cache(capacity, type) {
+module.exports = function Cache(capacity, type) {
   type = type || 'unit'
   this.capacity = capacity
   this.type = typeEnum[type]
@@ -115,21 +132,3 @@ Cache.prototype = {
     this.oldest = null
   },
 }
-
-// In bytes.
-let heapSize
-let heapSizeTimeout
-function getHeapSize() {
-  if (heapSizeTimeout == null) {
-    // Compute the heap size every 60 seconds.
-    heapSizeTimeout = setInterval(computeHeapSize, 60 * 1000)
-    return computeHeapSize()
-  } else {
-    return heapSize
-  }
-}
-function computeHeapSize() {
-  return (heapSize = process.memoryUsage().heapTotal)
-}
-
-module.exports = Cache
