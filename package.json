@@ -247,7 +247,7 @@
     "ts-mocha": "^6.0.0",
     "typescript": "^3.5.3",
     "url": "^0.11.0",
-    "walkdir": "0.4.0"
+    "walkdir": "0.4.1"
   },
   "engines": {
     "node": ">= 8",
