@@ -31,7 +31,7 @@ function CacheSlot(key, value) {
   this.newer = null // Oldest slot that is newer than this slot.
 }
 
-module.exports = function Cache(capacity, type) {
+function Cache(capacity, type) {
   type = type || 'unit'
   this.capacity = capacity
   this.type = typeEnum[type]
@@ -132,3 +132,5 @@ Cache.prototype = {
     this.oldest = null
   },
 }
+
+module.exports = Cache
