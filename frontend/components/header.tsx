@@ -1,8 +1,9 @@
 import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
-import Logo from '../images/logo.svg'
 import { VerticalSpace } from './common'
+
+const Logo = require('../images/logo.svg') as string
 
 const Highlights = styled.p`
   font-style: italic;
