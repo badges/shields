@@ -14,6 +14,11 @@ parserOptions:
 
 overrides:
   - files:
+      - core/**/*.ts
+    parserOptions:
+      sourceType: 'module'
+    parser: '@typescript-eslint/parser'
+  - files:
       - gatsby-browser.js
     parserOptions:
       sourceType: 'module'
