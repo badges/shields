@@ -26,6 +26,10 @@ plugins:
   - promise
 
 overrides:
+  # For simplicity's sake, when possible prefer to add rules to the top-level
+  # list of rules, even if they only apply to certain files. That way the
+  # rules listed here are only ones which conflict.
+
   - files:
       - '**/*.js'
       - '!frontend/**/*.js'
