@@ -2,7 +2,6 @@ import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
 import { VerticalSpace } from './common'
-
 const Logo = require('../images/logo.svg') as string
 
 const Highlights = styled.p`
