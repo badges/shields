@@ -1,9 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ClickToSelect from '@mapbox/react-click-to-select'
 import styled, { css } from 'styled-components'
 
-const CodeContainer = styled.span`
+interface CodeContainerProps {
+  truncate?: boolean
+}
+
+const CodeContainer = styled.span<CodeContainerProps>`
   position: relative;
 
   vertical-align: middle;
@@ -15,22 +18,39 @@ const CodeContainer = styled.span`
       max-width: 40%;
       overflow: hidden;
       text-overflow: ellipsis;
-    `};
+    `}
 `
 
-export const StyledCode = styled.code`
+export interface StyledCodeProps {
+  fontSize?: string
+}
+
+export const StyledCode = styled.code<StyledCodeProps>`
   line-height: 1.2em;
   padding: 0.1em 0.3em;
 
   border-radius: 4px;
   background: #eef;
   font-family: Lekton;
-  font-size: ${({ fontSize }) => fontSize};
+
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
+    `}
 
   white-space: nowrap;
 `
 
-export function Snippet({ snippet, truncate = false, fontSize }) {
+export function Snippet({
+  snippet,
+  truncate = false,
+  fontSize,
+}: {
+  snippet: string
+  truncate?: boolean
+  fontSize?: string
+}) {
   return (
     <CodeContainer truncate={truncate}>
       <ClickToSelect>
@@ -38,9 +58,4 @@ export function Snippet({ snippet, truncate = false, fontSize }) {
       </ClickToSelect>
     </CodeContainer>
   )
-}
-Snippet.propTypes = {
-  snippet: PropTypes.string.isRequired,
-  truncate: PropTypes.bool,
-  fontSize: PropTypes.string,
 }

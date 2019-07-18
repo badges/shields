@@ -149,6 +149,7 @@
     "@babel/register": "7.4.4",
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.1.7",
+    "@types/chai-enzyme": "^0.6.6",
     "@types/enzyme": "^3.10.2",
     "@types/mocha": "^5.2.7",
     "@types/react-helmet": "^5.0.8",

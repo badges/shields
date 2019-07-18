@@ -12,6 +12,6 @@ describe('<Header />', function() {
 
   it('contains the word Hackable', function() {
     const wrapper = shallow(<Header />)
-    expect(wrapper).to.contain('Hackable')
+    expect(wrapper).to.contain.text('Hackable')
   })
 })
