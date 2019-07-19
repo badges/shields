@@ -17,34 +17,34 @@ export function predicateFromQuery(query: string) {
 export default class ServiceDefinitionSetHelper {
   private readonly definitionData: ServiceDefinition[]
 
-  constructor(definitionData: ServiceDefinition[]) {
+  public constructor(definitionData: ServiceDefinition[]) {
     this.definitionData = definitionData
   }
 
-  static create(definitionData: ServiceDefinition[]) {
+  public static create(definitionData: ServiceDefinition[]) {
     return new ServiceDefinitionSetHelper(definitionData)
   }
 
-  getCategory(wantedCategory: string) {
+  public getCategory(wantedCategory: string) {
     return ServiceDefinitionSetHelper.create(
       this.definitionData.filter(({ category }) => category === wantedCategory)
     )
   }
 
-  search(query: string) {
+  public search(query: string) {
     const predicate = predicateFromQuery(query)
     return ServiceDefinitionSetHelper.create(
       this.definitionData.filter(predicate)
     )
   }
 
-  notDeprecated() {
+  public notDeprecated() {
     return ServiceDefinitionSetHelper.create(
       this.definitionData.filter(({ isDeprecated }) => !isDeprecated)
     )
   }
 
-  toArray() {
+  public toArray() {
     return this.definitionData
   }
 }
