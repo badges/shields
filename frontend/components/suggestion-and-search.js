@@ -1,73 +1,59 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
 import BadgeExamples from './badge-examples'
 import { BlockInput } from './common'
 
-export default class SuggestionAndSearch extends React.Component {
-  static propTypes = {
-    queryChanged: PropTypes.func.isRequired,
-    onBadgeClick: PropTypes.func.isRequired,
-    baseUrl: PropTypes.string.isRequired,
-  }
+export default function SuggestionAndSearch({
+  queryChanged,
+  onBadgeClick,
+  baseUrl,
+}) {
+  const queryChangedDebounced = useRef(
+    debounce(queryChanged, 50, { leading: true })
+  )
+  const [isUrl, setIsUrl] = useState(false)
+  const [inProgress, setInProgress] = useState(false)
+  const [projectUrl, setProjectUrl] = useState(undefined)
+  const [suggestions, setSuggestions] = useState([])
 
-  constructor(props) {
-    super(props)
-    this.queryChangedDebounced = debounce(props.queryChanged, 50, {
-      leading: true,
-    })
-  }
-
-  state = {
-    isUrl: false,
-    inProgress: false,
-    projectUrl: null,
-    suggestions: [],
-  }
-
-  queryChanged(query) {
+  function onQueryChanged(event) {
+    const query = event.target.value
     const isUrl = query.startsWith('https://') || query.startsWith('http://')
-    this.setState({
-      isUrl,
-      projectUrl: isUrl ? query : null,
-    })
+    setIsUrl(isUrl)
+    setProjectUrl(isUrl ? query : undefined)
 
-    this.queryChangedDebounced(query)
+    queryChangedDebounced.current(query)
   }
 
-  getSuggestions() {
-    this.setState({ inProgress: true }, async () => {
-      const { baseUrl } = this.props
-      const { projectUrl } = this.state
+  async function getSuggestions() {
+    setInProgress(true)
 
-      const url = `${baseUrl}/$suggest/v1?url=${encodeURIComponent(projectUrl)}`
+    const fetch = window.fetch || fetchPonyfill
+    const res = await fetch(
+      `${baseUrl}/$suggest/v1?url=${encodeURIComponent(projectUrl)}`
+    )
+    let suggestions
+    try {
+      const json = await res.json()
+      // This doesn't validate the response. The default value here prevents
+      // a crash if the server returns {"err":"Disallowed"}.
+      suggestions = json.suggestions || []
+    } catch (e) {
+      suggestions = []
+    }
 
-      const fetch = window.fetch || fetchPonyfill
-      const res = await fetch(url)
-      let suggestions
-      try {
-        const json = await res.json()
-        // This doesn't validate the response. The default value here prevents
-        // a crash if the server returns {"err":"Disallowed"}.
-        suggestions = json.suggestions || []
-      } catch (e) {
-        suggestions = []
-      }
-
-      this.setState({ inProgress: false, suggestions })
-    })
+    setInProgress(false)
+    setSuggestions(suggestions)
   }
 
-  renderSuggestions() {
-    const { baseUrl } = this.props
-    let { suggestions } = this.state
-
+  function renderSuggestions() {
     if (suggestions.length === 0) {
       return null
     }
 
-    suggestions = suggestions.map(
+    const transformed = suggestions.map(
       ({ title, link, example, preview, documentation }) => ({
         title,
         link,
@@ -81,33 +67,32 @@ export default class SuggestionAndSearch extends React.Component {
     return (
       <BadgeExamples
         baseUrl={baseUrl}
-        examples={suggestions}
-        onClick={this.props.onBadgeClick}
+        examples={transformed}
+        onClick={onBadgeClick}
       />
     )
   }
 
-  render() {
-    return (
-      <section>
-        <form action="javascript:void 0" autoComplete="off">
-          <BlockInput
-            autoFocus
-            autofill="off"
-            onChange={event => this.queryChanged(event.target.value)}
-            placeholder="search / project URL"
-          />
-          <br />
-          <button
-            disabled={this.state.inProgress}
-            hidden={!this.state.isUrl}
-            onClick={event => this.getSuggestions(event.target.value)}
-          >
-            Suggest badges
-          </button>
-        </form>
-        {this.renderSuggestions()}
-      </section>
-    )
-  }
+  return (
+    <section>
+      <form action="javascript:void 0" autoComplete="off">
+        <BlockInput
+          autoFocus
+          autofill="off"
+          onChange={onQueryChanged}
+          placeholder="search / project URL"
+        />
+        <br />
+        <button disabled={inProgress} hidden={!isUrl} onClick={getSuggestions}>
+          Suggest badges
+        </button>
+      </form>
+      {renderSuggestions()}
+    </section>
+  )
+}
+SuggestionAndSearch.propTypes = {
+  queryChanged: PropTypes.func.isRequired,
+  onBadgeClick: PropTypes.func.isRequired,
+  baseUrl: PropTypes.string.isRequired,
 }
