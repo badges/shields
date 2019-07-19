@@ -5,7 +5,7 @@ plugins:
   - import
   - react-hooks
 
-parser: 'babel-eslint'
+parser: '@typescript-eslint/parser'
 
 parserOptions:
   sourceType: 'module'
@@ -14,10 +14,12 @@ extends:
   - 'standard-jsx'
   - 'standard-react'
   - './.eslintrc.yml'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'prettier/@typescript-eslint'
 
 settings:
   react:
-    version: '16.4'
+    version: '16.8'
 
 rules:
   no-console: 'error'
@@ -26,3 +28,9 @@ rules:
   react/jsx-sort-props: 'error'
   react-hooks/rules-of-hooks: 'error'
   react-hooks/exhaustive-deps: 'error'
+
+  '@typescript-eslint/no-unused-vars': ['error', { 'args': 'none' }]
+
+  # Argh.
+  '@typescript-eslint/explicit-function-return-type': 'off'
+  '@typescript-eslint/no-object-literal-type-assertion': 'off'

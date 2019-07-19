@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css, createGlobalStyle } from 'styled-components'
 
 export const noAutocorrect = Object.freeze({
@@ -41,7 +40,13 @@ export const H3 = styled.h3`
   font-style: italic;
 `
 
-const BadgeWrapper = styled.span`
+interface BadgeWrapperProps {
+  height: string
+  display: string
+  clickable: boolean
+}
+
+const BadgeWrapper = styled.span<BadgeWrapperProps>`
   padding: 2px;
   height: ${({ height }) => height};
   vertical-align: middle;
@@ -61,19 +66,18 @@ export function Badge({
   height = '20px',
   clickable = false,
   ...rest
+}: {
+  src: string
+  alt?: string
+  display?: 'inline' | 'block' | 'inline-block'
+  height?: string
+  clickable?: boolean
 }) {
   return (
     <BadgeWrapper clickable={clickable} display={display} height={height}>
       {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}
     </BadgeWrapper>
   )
-}
-Badge.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string,
-  display: PropTypes.oneOf(['inline', 'block', 'inline-block']),
-  height: PropTypes.string,
-  clickable: PropTypes.bool,
 }
 
 export const StyledInput = styled.input`

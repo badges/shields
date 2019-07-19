@@ -3,6 +3,7 @@ import { shallow, render } from 'enzyme'
 import { expect } from 'chai'
 import * as common from './common'
 
+// @ts-ignore
 import '../enzyme-conf.spec'
 
 describe('Common modules', function() {

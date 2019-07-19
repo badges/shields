@@ -1,5 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+// @ts-ignore
 import favicon from '../images/favicon.png'
 
 const description = `We serve fast and scalable informational images as badges
