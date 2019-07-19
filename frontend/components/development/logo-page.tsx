@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../../constants'
+import { shieldsLogos, simpleIcons } from '../../lib/supported-features'
 import Meta from '../meta'
 import Header from '../header'
 import { H3, Badge } from '../common'
-import { shieldsLogos, simpleIcons } from '../../../supported-features.json'
 
 const StyledTable = styled.table`
   border: 1px solid #ccc;
@@ -19,7 +19,7 @@ const StyledTable = styled.table`
   }
 `
 
-function NamedLogoTable({ logoNames }) {
+function NamedLogoTable({ logoNames }: { logoNames: string[] }) {
   return (
     <StyledTable>
       <thead>
@@ -61,9 +61,6 @@ function NamedLogoTable({ logoNames }) {
       </tbody>
     </StyledTable>
   )
-}
-NamedLogoTable.propTypes = {
-  logoNames: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 export default function LogoPage() {

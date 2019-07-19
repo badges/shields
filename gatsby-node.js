@@ -23,7 +23,9 @@ async function createPages({ actions: { createPage } }) {
   if (includeDevPages) {
     createPage({
       path: '/dev/logos',
-      component: require.resolve('./frontend/components/development/logo-page'),
+      component: require.resolve(
+        './frontend/components/development/logo-page.tsx'
+      ),
     })
   }
 

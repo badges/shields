@@ -1,34 +1,37 @@
 import escapeStringRegexp from 'escape-string-regexp'
+import { Example, ServiceDefinition } from '.'
 
-export function exampleMatchesRegex(example, regex) {
+export function exampleMatchesRegex(example: Example, regex: RegExp) {
   const { title, keywords } = example
   const haystack = [title].concat(keywords).join(' ')
   return regex.test(haystack)
 }
 
-export function predicateFromQuery(query) {
+export function predicateFromQuery(query: string) {
   const escaped = escapeStringRegexp(query)
   const regex = new RegExp(escaped, 'i') // Case-insensitive.
-  return ({ examples }) =>
+  return ({ examples }: { examples: Example[] }) =>
     examples.some(example => exampleMatchesRegex(example, regex))
 }
 
 export default class ServiceDefinitionSetHelper {
-  constructor(definitionData) {
+  private readonly definitionData: ServiceDefinition[]
+
+  constructor(definitionData: ServiceDefinition[]) {
     this.definitionData = definitionData
   }
 
-  static create(definitionData) {
+  static create(definitionData: ServiceDefinition[]) {
     return new ServiceDefinitionSetHelper(definitionData)
   }
 
-  getCategory(wantedCategory) {
+  getCategory(wantedCategory: string) {
     return ServiceDefinitionSetHelper.create(
       this.definitionData.filter(({ category }) => category === wantedCategory)
     )
   }
 
-  search(query) {
+  search(query: string) {
     const predicate = predicateFromQuery(query)
     return ServiceDefinitionSetHelper.create(
       this.definitionData.filter(predicate)
