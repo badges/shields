@@ -273,10 +273,15 @@ jobs:
           command: npm run defs && npm run features
 
       - run:
+          name: Check types
+          command: npm run check-types:frontend
+
+      - run:
           name: Frontend unit tests
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/frontend/results.xml
+          when: always
           command: npm run test:frontend
 
       - store_test_results:
