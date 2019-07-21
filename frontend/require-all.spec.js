@@ -1,4 +1,4 @@
-const walk = require('walkdir')
+import walk from 'walkdir'
 
 // Ensure all the frontend files get instrumented. Because `all: true` does
 // not work correctly unless `nyc` does the instrumentation.

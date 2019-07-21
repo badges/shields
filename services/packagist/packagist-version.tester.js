@@ -22,6 +22,14 @@ t.create('version (valid)')
     message: isPackagistVersion,
   })
 
+t.create('version (no releases)')
+  .get('/v/wsg/hello.json')
+  .expectBadge({
+    label: 'packagist',
+    message: 'no released version found',
+    color: 'red',
+  })
+
 t.create('version (invalid package name)')
   .get('/v/frodo/is-not-a-package.json')
   .expectBadge({ label: 'packagist', message: 'not found' })
