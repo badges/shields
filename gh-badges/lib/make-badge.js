@@ -133,15 +133,6 @@ module.exports = function makeBadge({
   if (!(template in templates)) {
     template = 'flat'
   }
-  if (template.startsWith('popout')) {
-    if (logo) {
-      logoPosition =
-        logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
-      logoWidth = +logoWidth || 32
-    } else {
-      template = template.replace('popout', 'flat')
-    }
-  }
   if (template === 'social') {
     left = capitalize(left)
   } else if (template === 'for-the-badge') {
