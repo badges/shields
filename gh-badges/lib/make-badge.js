@@ -131,7 +131,11 @@ module.exports = function makeBadge({
   }
 
   if (!(template in templates)) {
-    template = 'flat'
+    if (template && template.endsWith('-square')) {
+      template = 'flat-square'
+    } else {
+      template = 'flat'
+    }
   }
   if (template === 'social') {
     left = capitalize(left)
