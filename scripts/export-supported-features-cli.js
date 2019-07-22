@@ -17,8 +17,6 @@ const supportedFeatures = {
     'flat',
     'flat-square',
     'for-the-badge',
-    'popout',
-    'popout-square',
     'social',
   ],
 }
