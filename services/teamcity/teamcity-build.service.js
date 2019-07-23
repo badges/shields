@@ -46,7 +46,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         pattern: ':protocol/:hostAndPath/s/:buildId',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'https/teamcity.jetbrains.com',
+          hostAndPath: 'teamcity.jetbrains.com',
           buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
         },
         staticPreview: this.render({
@@ -58,7 +58,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         pattern: ':protocol/:hostAndPath/e/:buildId',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'https/teamcity.jetbrains.com',
+          hostAndPath: 'teamcity.jetbrains.com',
           buildId: 'bt345',
         },
         staticPreview: this.render({

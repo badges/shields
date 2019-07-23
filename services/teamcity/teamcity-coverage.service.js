@@ -48,7 +48,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
         pattern: ':protocol/:hostAndPath/s/:buildId',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'https/teamcity.jetbrains.com',
+          hostAndPath: 'teamcity.jetbrains.com',
           buildId: 'ReactJSNet_PullRequests',
         },
         staticPreview: this.render({
