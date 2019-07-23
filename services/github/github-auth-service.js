@@ -16,7 +16,7 @@ function createRequestFetcher(context, config) {
     )
 }
 
-class GithubAuthService extends BaseJsonService {
+class GithubAuthV3Service extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
     this._requestFetcher = createRequestFetcher(context, config)
@@ -25,11 +25,11 @@ class GithubAuthService extends BaseJsonService {
 }
 
 // Use Github auth, but only when static auth is configured. By using this
-// class, in production it will behave like GithubAuthService, and in self-
+// class, in production it will behave like GithubAuthV3Service, and in self-
 // hosting (i.e. with a configured token) like BaseJsonService. This is
 // useful when consuming GitHub endpoints which are not rate-limited: it
 // avoids wasting API quota on them in production.
-class ConditionalGithubAuthService extends BaseJsonService {
+class ConditionalGithubAuthV3Service extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
     if (staticAuthConfigured()) {
@@ -68,7 +68,7 @@ class GithubAuthV4Service extends BaseGraphqlService {
 }
 
 module.exports = {
-  GithubAuthService,
-  ConditionalGithubAuthService,
+  GithubAuthV3Service,
+  ConditionalGithubAuthV3Service,
   GithubAuthV4Service,
 }
