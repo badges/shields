@@ -135,6 +135,7 @@ rules:
   '@typescript-eslint/camelcase': off
 
   react/jsx-sort-props: 'error'
+  react/prop-types: 'off'
   react-hooks/rules-of-hooks: 'error'
   react-hooks/exhaustive-deps: 'error'
   jsx-quotes: ['error', 'prefer-double']
