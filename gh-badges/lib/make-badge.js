@@ -131,15 +131,10 @@ module.exports = function makeBadge({
   }
 
   if (!(template in templates)) {
-    template = 'flat'
-  }
-  if (template.startsWith('popout')) {
-    if (logo) {
-      logoPosition =
-        logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
-      logoWidth = +logoWidth || 32
+    if (template === 'popout-square') {
+      template = 'flat-square'
     } else {
-      template = template.replace('popout', 'flat')
+      template = 'flat'
     }
   }
   if (template === 'social') {

@@ -2,7 +2,7 @@
 
 const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
 
-module.exports = class jsDelivrHitsGitHub extends BaseJsDelivrService {
+module.exports = class JsDelivrHitsGitHub extends BaseJsDelivrService {
   static get route() {
     return {
       base: 'jsdelivr/gh',
