@@ -8,6 +8,7 @@ const {
   keywords,
   BasePackagistService,
 } = require('./packagist-base')
+const { NotFound } = require('..')
 
 const schema = Joi.object({
   package: Joi.object({
@@ -68,6 +69,13 @@ module.exports = class PackagistVersion extends BasePackagistService {
     }
   }
 
+  static render({ version }) {
+    if (version === undefined) {
+      throw new NotFound({ prettyMessage: 'no released version found' })
+    }
+    return renderVersionBadge({ version })
+  }
+
   transform({ type, json }) {
     const versionsData = json.package.versions
     let versions = Object.keys(versionsData)
@@ -108,6 +116,6 @@ module.exports = class PackagistVersion extends BasePackagistService {
       schema: type === 'v' ? allVersionsSchema : schema,
     })
     const { version } = this.transform({ type, json })
-    return renderVersionBadge({ version })
+    return this.constructor.render({ version })
   }
 }
