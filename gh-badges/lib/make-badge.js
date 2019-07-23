@@ -131,7 +131,7 @@ module.exports = function makeBadge({
   }
 
   if (!(template in templates)) {
-    if (template && template.endsWith('-square')) {
+    if (template === 'popout-square') {
       template = 'flat-square'
     } else {
       template = 'flat'
