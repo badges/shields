@@ -11,6 +11,61 @@ const semver = require('semver')
 const { addv } = require('./text-formatters')
 const { version: versionColor } = require('./color-formatters')
 
+function listCompare(a, b) {
+  const alen = a.length,
+    blen = b.length
+  for (let i = 0; i < alen; i++) {
+    if (a[i] < b[i]) {
+      return -1
+    } else if (a[i] > b[i]) {
+      return 1
+    }
+  }
+  return alen - blen
+}
+
+// Take string versions.
+// -1 if v1 < v2, 1 if v1 > v2, 0 otherwise.
+function compareDottedVersion(v1, v2) {
+  const parts1 = /([0-9.]+)(.*)$/.exec(v1)
+  const parts2 = /([0-9.]+)(.*)$/.exec(v2)
+  if (parts1 != null && parts2 != null) {
+    const numbers1 = parts1[1]
+    const numbers2 = parts2[1]
+    const distinguisher1 = parts1[2]
+    const distinguisher2 = parts2[2]
+    const numlist1 = numbers1.split('.').map(e => +e)
+    const numlist2 = numbers2.split('.').map(e => +e)
+    const cmp = listCompare(numlist1, numlist2)
+    if (cmp !== 0) {
+      return cmp
+    } else {
+      return distinguisher1 < distinguisher2
+        ? -1
+        : distinguisher1 > distinguisher2
+        ? 1
+        : 0
+    }
+  }
+  return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
+}
+
+// Take a list of string versions.
+// Return the latest, or undefined, if there are none.
+function latestDottedVersion(versions) {
+  const len = versions.length
+  if (len === 0) {
+    return
+  }
+  let version = versions[0]
+  for (let i = 1; i < len; i++) {
+    if (compareDottedVersion(version, versions[i]) < 0) {
+      version = versions[i]
+    }
+  }
+  return version
+}
+
 // Given a list of versions (as strings), return the latest version.
 // Return undefined if no version could be found.
 function latest(versions, { pre = false } = {}) {
@@ -43,63 +98,6 @@ function latest(versions, { pre = false } = {}) {
     version = origVersions[origVersions.length - 1]
   }
   return version
-}
-
-function listCompare(a, b) {
-  const alen = a.length,
-    blen = b.length
-  for (let i = 0; i < alen; i++) {
-    if (a[i] < b[i]) {
-      return -1
-    } else if (a[i] > b[i]) {
-      return 1
-    }
-  }
-  return alen - blen
-}
-
-// === Private helper functions ===
-
-// Take a list of string versions.
-// Return the latest, or undefined, if there are none.
-function latestDottedVersion(versions) {
-  const len = versions.length
-  if (len === 0) {
-    return
-  }
-  let version = versions[0]
-  for (let i = 1; i < len; i++) {
-    if (compareDottedVersion(version, versions[i]) < 0) {
-      version = versions[i]
-    }
-  }
-  return version
-}
-
-// Take string versions.
-// -1 if v1 < v2, 1 if v1 > v2, 0 otherwise.
-function compareDottedVersion(v1, v2) {
-  const parts1 = /([0-9.]+)(.*)$/.exec(v1)
-  const parts2 = /([0-9.]+)(.*)$/.exec(v2)
-  if (parts1 != null && parts2 != null) {
-    const numbers1 = parts1[1]
-    const numbers2 = parts2[1]
-    const distinguisher1 = parts1[2]
-    const distinguisher2 = parts2[2]
-    const numlist1 = numbers1.split('.').map(e => +e)
-    const numlist2 = numbers2.split('.').map(e => +e)
-    const cmp = listCompare(numlist1, numlist2)
-    if (cmp !== 0) {
-      return cmp
-    } else {
-      return distinguisher1 < distinguisher2
-        ? -1
-        : distinguisher1 > distinguisher2
-        ? 1
-        : 0
-    }
-  }
-  return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
 }
 
 // Slice the specified number of dotted parts from the given semver version.
