@@ -36,7 +36,7 @@ export default function Customizer({
 
   function generateBuiltBadgeUrl() {
     const suffix = queryString ? `?${queryString}` : ''
-    return `${baseUrl || getBaseUrlFromWindowLocation()}${path}.svg${suffix}`
+    return `${baseUrl || getBaseUrlFromWindowLocation()}${path}${suffix}`
   }
 
   function renderLivePreview() {
