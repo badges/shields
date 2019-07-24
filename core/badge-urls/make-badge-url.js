@@ -9,7 +9,7 @@ function badgeUrlFromPath({
   path,
   queryParams,
   style,
-  format = 'svg',
+  format = '',
   longCache = false,
 }) {
   const outExt = format.length ? `.${format}` : ''
@@ -30,7 +30,7 @@ function badgeUrlFromPattern({
   namedParams,
   queryParams,
   style,
-  format = 'svg',
+  format = '',
   longCache = false,
 }) {
   const toPath = pathToRegexp.compile(pattern, {
@@ -61,15 +61,16 @@ function staticBadgeUrl({
   color = 'lightgray',
   style,
   namedLogo,
-  format = 'svg',
+  format = '',
 }) {
   const path = [label, message, color].map(encodeField).join('-')
   const outQueryString = queryString.stringify({
     style,
     logo: namedLogo,
   })
+  const outExt = format.length ? `.${format}` : ''
   const suffix = outQueryString ? `?${outQueryString}` : ''
-  return `${baseUrl}/badge/${path}.${format}${suffix}`
+  return `${baseUrl}/badge/${path}${outExt}${suffix}`
 }
 
 function queryStringStaticBadgeUrl({
@@ -83,7 +84,7 @@ function queryStringStaticBadgeUrl({
   logoColor,
   logoWidth,
   logoPosition,
-  format = 'svg',
+  format = '',
 }) {
   // schemaVersion could be a parameter if we iterate on it,
   // for now it's hardcoded to the only supported version.
@@ -99,7 +100,8 @@ function queryStringStaticBadgeUrl({
     logoWidth,
     logoPosition,
   })}`
-  return `${baseUrl}/static/v${schemaVersion}.${format}${suffix}`
+  const outExt = format.length ? `.${format}` : ''
+  return `${baseUrl}/static/v${schemaVersion}${outExt}${suffix}`
 }
 
 function dynamicBadgeUrl({
@@ -112,8 +114,10 @@ function dynamicBadgeUrl({
   suffix,
   color,
   style,
-  format = 'svg',
+  format = '',
 }) {
+  const outExt = format.length ? `.${format}` : ''
+
   const queryParams = {
     label,
     url: dataUrl,
@@ -132,7 +136,7 @@ function dynamicBadgeUrl({
   }
 
   const outQueryString = queryString.stringify(queryParams)
-  return `${baseUrl}/badge/dynamic/${datatype}.${format}?${outQueryString}`
+  return `${baseUrl}/badge/dynamic/${datatype}${outExt}?${outQueryString}`
 }
 
 function rasterRedirectUrl({ rasterUrl }, badgeUrl) {

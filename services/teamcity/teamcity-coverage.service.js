@@ -26,7 +26,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
       // Do not base new services on this route pattern.
       // See https://github.com/badges/shields/issues/3714
       base: 'teamcity/coverage',
-      format: '(?:(http|https)/(.+)/)?([^/]+)',
+      format: '(?:(http|https)/(.+)/)?([^/]+?)',
       capture: ['protocol', 'hostAndPath', 'buildId'],
     }
   }
