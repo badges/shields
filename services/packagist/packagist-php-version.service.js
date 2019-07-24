@@ -63,8 +63,13 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
+    const packageVersion = allData.package.versions[version]
+    if (!packageVersion.require || !packageVersion.require.php) {
+      throw new NotFound({ prettyMessage: 'version requirement not found' })
+    }
+
     return this.constructor.render({
-      php: allData.package.versions[version].require.php,
+      php: packageVersion.require.php,
     })
   }
 }
