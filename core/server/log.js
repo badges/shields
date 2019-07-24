@@ -29,11 +29,11 @@ module.exports = function log(...msg) {
   console.log(d, ...msg)
 }
 
-module.exports.error = function error(...msg) {
+module.exports.error = function error(err) {
   const d = date()
-  listeners.forEach(f => f(d, ...msg))
-  Sentry.captureException(msg)
-  console.error(d, ...msg)
+  listeners.forEach(f => f(d, err))
+  Sentry.captureException(err)
+  console.error(d, err)
 }
 
 module.exports.addListener = function addListener(func) {

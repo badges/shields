@@ -9,7 +9,11 @@ require('dotenv').config()
 // Set up Sentry reporting as early in the process as possible.
 const config = require('config').util.toObject()
 const Sentry = require('@sentry/node')
-Sentry.init({ dsn: process.env.SENTRY_DSN || config.private.sentry_dsn })
+Sentry.init({
+  dsn: process.env.SENTRY_DSN || config.private.sentry_dsn,
+  integrations: integrations =>
+    integrations.filter(integration => integration.name !== 'Console'),
+})
 
 if (+process.argv[2]) {
   config.public.bind.port = +process.argv[2]
