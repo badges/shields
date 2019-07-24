@@ -144,7 +144,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.2",
     "@babel/register": "7.4.4",
