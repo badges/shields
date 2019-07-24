@@ -22,14 +22,6 @@ function version(version) {
   }
 }
 
-function downloadCount(downloads) {
-  return floorCount(downloads, 10, 100, 1000)
-}
-
-function coveragePercentage(percentage) {
-  return floorCount(percentage, 80, 90, 100)
-}
-
 function floorCount(value, yellow, yellowgreen, green) {
   if (value <= 0) {
     return 'red'
@@ -42,6 +34,14 @@ function floorCount(value, yellow, yellowgreen, green) {
   } else {
     return 'brightgreen'
   }
+}
+
+function downloadCount(downloads) {
+  return floorCount(downloads, 10, 100, 1000)
+}
+
+function coveragePercentage(percentage) {
+  return floorCount(percentage, 80, 90, 100)
 }
 
 function letterScore(score) {
