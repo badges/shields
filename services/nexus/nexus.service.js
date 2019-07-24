@@ -46,7 +46,7 @@ module.exports = class Nexus extends BaseJsonService {
       pattern:
         // Do not base new services on this route pattern.
         // See https://github.com/badges/shields/issues/3714
-        ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+):queryOpt(:.+)?',
+        ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+?):queryOpt(:.+?)?',
     }
   }
 

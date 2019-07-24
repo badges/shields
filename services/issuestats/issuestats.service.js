@@ -6,7 +6,7 @@ module.exports = deprecatedService({
   category: 'issue-tracking',
   route: {
     base: 'issuestats',
-    format: '(?:[^/]+)(?:/long)?/(?:[^/]+)/(?:.+)',
+    format: '(?:.*?)',
   },
   label: 'issue stats',
   dateAdded: new Date('2018-09-01'),

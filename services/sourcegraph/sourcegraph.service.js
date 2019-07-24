@@ -18,7 +18,7 @@ module.exports = class Sourcegraph extends BaseJsonService {
   static get route() {
     return {
       base: 'sourcegraph/rrc',
-      pattern: ':repo(.*)',
+      pattern: ':repo(.*?)',
     }
   }
 
