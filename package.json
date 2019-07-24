@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^15.1.0",
+    "@sentry/node": "^5.5.0",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
     "camp": "~17.2.4",
@@ -54,7 +55,6 @@
     "priorityqueuejs": "^1.0.0",
     "prom-client": "^11.5.3",
     "query-string": "^6.7.0",
-    "raven": "^2.4.2",
     "request": "~2.88.0",
     "semver": "~6.2.0",
     "simple-icons": "1.11.0",
