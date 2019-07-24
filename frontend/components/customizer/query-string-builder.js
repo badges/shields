@@ -252,7 +252,6 @@ export default function QueryStringBuilder({
                   />
                 )
               })}
-              )}
             </tbody>
           </table>
         </BuilderContainer>
