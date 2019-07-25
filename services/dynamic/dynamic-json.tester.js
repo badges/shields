@@ -139,3 +139,13 @@ t.create('JSON from url | request should set Accept header')
   .after(() => {
     expect(headers).to.have.property('accept', 'application/json')
   })
+
+t.create('JSON from url | invalid query')
+  .get(
+    '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$[?'
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'unparseable jsonpath query',
+    color: 'red',
+  })
