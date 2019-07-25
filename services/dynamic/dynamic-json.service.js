@@ -32,7 +32,11 @@ module.exports = class DynamicJson extends BaseJsonService {
     try {
       values = jp.query(data, pathExpression)
     } catch (e) {
-      if (e.message.startsWith('Lexical error')) {
+      const { message } = e
+      if (
+        message.startsWith('Lexical error') ||
+        message.startsWith('Parse error')
+      ) {
         throw new InvalidParameter({
           prettyMessage: 'unparseable jsonpath query',
         })
