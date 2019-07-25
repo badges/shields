@@ -185,12 +185,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         {}
       )
       const svg = makeBadge(badgeData)
-      let extension
-      try {
-        extension = match[0].split('.').pop()
-      } catch (e) {
-        extension = 'svg'
-      }
+      const extension = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
       setCacheHeadersOnResponse(ask.res)
       makeSend(extension, ask.res, end)(svg)
     }, 25000)
