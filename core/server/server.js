@@ -206,7 +206,7 @@ class Server {
       })
     }
 
-    camp.notfound(/(.svg|.json|)$/, (query, match, end, request) => {
+    camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
       const [, extension] = match
       const format = (extension || '.svg').replace(/^\./, '')
 
