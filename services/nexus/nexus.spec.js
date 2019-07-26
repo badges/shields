@@ -88,13 +88,18 @@ describe('Nexus', function() {
         .reply(200, { data: [{ latestRelease: '2.3.4' }] })
 
       expect(
-        await Nexus.invoke(defaultContext, config, {
-          repo: 'r',
-          groupId: 'jboss',
-          artifactId: 'jboss-client',
-        },{
-          server: 'https://repository.jboss.org/nexus'
-        })
+        await Nexus.invoke(
+          defaultContext,
+          config,
+          {
+            repo: 'r',
+            groupId: 'jboss',
+            artifactId: 'jboss-client',
+          },
+          {
+            server: 'https://repository.jboss.org/nexus',
+          }
+        )
       ).to.deep.equal({
         message: 'v2.3.4',
         color: 'blue',
