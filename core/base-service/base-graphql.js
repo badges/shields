@@ -1,6 +1,6 @@
 'use strict'
 
-const { parse } = require('graphql')
+const { print } = require('graphql/language/printer')
 const BaseJsonService = require('./base-json')
 const { InvalidResponse } = require('./errors')
 
@@ -9,12 +9,6 @@ function defaultGraphqlErrorHandler(errors) {
 }
 
 class BaseGraphqlService extends BaseJsonService {
-  _validateQuery(query) {
-    // Attempting to parse the query string
-    // will throw a descriptive exception if it isn't valid
-    parse(query)
-  }
-
   async _requestGraphql({
     schema,
     url,
@@ -24,14 +18,12 @@ class BaseGraphqlService extends BaseJsonService {
     httpErrorMessages = {},
     graphqlErrorHandler = defaultGraphqlErrorHandler,
   }) {
-    this._validateQuery(query)
-
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
     }
     mergedOptions.method = 'POST'
-    mergedOptions.body = JSON.stringify({ query, variables })
+    mergedOptions.body = JSON.stringify({ query: print(query), variables })
     const { buffer } = await this._request({
       url,
       options: mergedOptions,

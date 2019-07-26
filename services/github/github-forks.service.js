@@ -1,5 +1,6 @@
 'use strict'
 
+const gql = require('graphql-tag')
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
@@ -74,8 +75,15 @@ module.exports = class GithubForks extends GithubAuthV4Service {
 
   async handle({ user, repo }) {
     const json = await this._requestGraphql({
-      query:
-        'query ($user: String!, $repo: String!) { repository(owner: $user, name: $repo) { forks { totalCount } } }',
+      query: gql`
+        query($user: String!, $repo: String!) {
+          repository(owner: $user, name: $repo) {
+            forks {
+              totalCount
+            }
+          }
+        }
+      `,
       variables: { user, repo },
       schema,
       graphqlErrorHandler,

@@ -3,17 +3,14 @@
  * @module
  */
 
-const { parse } = require('graphql')
-const { print } = require('graphql/language/printer')
-
 /**
  * Utility function to merge two graphql queries together
  * This is basically copied from
  * [graphql-query-merge](https://www.npmjs.com/package/graphql-query-merge)
  * but can't use that due to incorrect packaging.
  *
- * @param {...string} queries queries to merge
- * @returns {string} merged query
+ * @param {...object} queries queries to merge
+ * @returns {object} merged query
  */
 function mergeQueries(...queries) {
   const merged = {
@@ -30,7 +27,7 @@ function mergeQueries(...queries) {
   }
 
   queries.forEach(query => {
-    const parsedQuery = parse(query)
+    const parsedQuery = query
     parsedQuery.definitions.forEach(definition => {
       merged.definitions[0].directives = [
         ...merged.definitions[0].directives,
@@ -49,7 +46,7 @@ function mergeQueries(...queries) {
     })
   })
 
-  return print(merged)
+  return merged
 }
 
 module.exports = { mergeQueries }

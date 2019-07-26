@@ -2,6 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')
+const gql = require('graphql-tag')
 const sinon = require('sinon')
 const BaseGraphqlService = require('./base-graphql')
 const { InvalidResponse } = require('./errors')
@@ -25,7 +26,11 @@ class DummyGraphqlService extends BaseGraphqlService {
     const { requiredString } = await this._requestGraphql({
       schema: dummySchema,
       url: 'http://example.com/graphql',
-      query: 'query { requiredString }',
+      query: gql`
+        query {
+          requiredString
+        }
+      `,
     })
     return { message: requiredString }
   }
@@ -52,7 +57,7 @@ describe('BaseGraphqlService', function() {
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/graphql',
         {
-          body: '{"query":"query { requiredString }","variables":{}}',
+          body: '{"query":"{\\n  requiredString\\n}\\n","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
         }
@@ -65,7 +70,11 @@ describe('BaseGraphqlService', function() {
           const { value } = await this._requestGraphql({
             schema: dummySchema,
             url: 'http://example.com/graphql',
-            query: 'query { requiredString }',
+            query: gql`
+              query {
+                requiredString
+              }
+            `,
             options: { qs: { queryParam: 123 } },
           })
           return { message: value }
@@ -80,7 +89,7 @@ describe('BaseGraphqlService', function() {
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/graphql',
         {
-          body: '{"query":"query { requiredString }","variables":{}}',
+          body: '{"query":"{\\n  requiredString\\n}\\n","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
           qs: { queryParam: 123 },
@@ -164,7 +173,11 @@ describe('BaseGraphqlService', function() {
           const { requiredString } = await this._requestGraphql({
             schema: dummySchema,
             url: 'http://example.com/graphql',
-            query: 'query { requiredString }',
+            query: gql`
+              query {
+                requiredString
+              }
+            `,
             graphqlErrorHandler: function(errors) {
               if (errors[0].message === 'oh noes!!') {
                 throw new InvalidResponse({

@@ -1,5 +1,6 @@
 'use strict'
 
+const gql = require('graphql-tag')
 const { mergeQueries } = require('../../core/base-service/graphql')
 const { staticAuthConfigured } = require('./github-helpers')
 const { BaseJsonService } = require('..')
@@ -60,7 +61,16 @@ class GithubAuthV4Service extends BaseGraphqlService {
     */
     const query = mergeQueries(
       attrs.query,
-      'query { rateLimit { limit cost remaining resetAt } }'
+      gql`
+        query {
+          rateLimit {
+            limit
+            cost
+            remaining
+            resetAt
+          }
+        }
+      `
     )
 
     return super._requestGraphql({ ...attrs, ...{ url, query } })
