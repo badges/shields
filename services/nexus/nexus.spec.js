@@ -90,10 +90,10 @@ describe('Nexus', function() {
       expect(
         await Nexus.invoke(defaultContext, config, {
           repo: 'r',
-          scheme: 'https',
-          hostAndPath: 'repository.jboss.org/nexus',
           groupId: 'jboss',
           artifactId: 'jboss-client',
+        },{
+          server: 'https://repository.jboss.org/nexus'
         })
       ).to.deep.equal({
         message: 'v2.3.4',
