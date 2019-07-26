@@ -77,7 +77,7 @@ class GithubApiProvider {
     }
   }
 
-  getRateLimitFromHeaders(headers) {
+  getV3RateLimitFromHeaders(headers) {
     const h = Joi.attempt(headers, headerSchema)
     return {
       rateLimit: h['x-ratelimit-limit'],
@@ -86,7 +86,7 @@ class GithubApiProvider {
     }
   }
 
-  getRateLimitFromBody(body) {
+  getV4RateLimitFromBody(body) {
     const parsedBody = JSON.parse(body)
     const b = Joi.attempt(parsedBody, bodySchema)
     return {
@@ -104,7 +104,7 @@ class GithubApiProvider {
           rateLimit,
           totalUsesRemaining,
           nextReset,
-        } = this.getRateLimitFromBody(res.body))
+        } = this.getV4RateLimitFromBody(res.body))
       } catch (e) {
         console.error(
           `Could not extract rate limit info from response body ${res.body}`
@@ -118,7 +118,7 @@ class GithubApiProvider {
           rateLimit,
           totalUsesRemaining,
           nextReset,
-        } = this.getRateLimitFromHeaders(res.headers))
+        } = this.getV3RateLimitFromHeaders(res.headers))
       } catch (e) {
         const logHeaders = {
           'x-ratelimit-limit': res.headers['x-ratelimit-limit'],
