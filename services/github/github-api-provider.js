@@ -178,15 +178,20 @@ class GithubApiProvider {
       tokenString = this.globalToken
     }
 
-    options.url = url
-    options.baseUrl = baseUrl
-    options.headers = {
-      'User-Agent': 'Shields.io',
-      Accept: 'application/vnd.github.v3+json',
-      Authorization: `token ${tokenString}`,
+    const mergedOptions = {
+      ...options,
+      ...{
+        url,
+        baseUrl,
+        headers: {
+          'User-Agent': 'Shields.io',
+          Accept: 'application/vnd.github.v3+json',
+          Authorization: `token ${tokenString}`,
+        },
+      },
     }
 
-    request(options, (err, res, buffer) => {
+    request(mergedOptions, (err, res, buffer) => {
       if (err === null) {
         if (this.withPooling) {
           if (res.statusCode === 401) {

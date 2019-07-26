@@ -49,7 +49,7 @@ class GithubAuthV4Service extends BaseGraphqlService {
   }
 
   async _requestGraphql(attrs) {
-    attrs.url = `/graphql`
+    const url = `/graphql`
 
     /*
     The Github v4 API requires us to query the rateLimit object to return
@@ -58,12 +58,12 @@ class GithubAuthV4Service extends BaseGraphqlService {
     This appends the relevant rateLimit query clause to each
     call to the GH v4 API so we can keep track of token usage.
     */
-    attrs.query = mergeQueries(
+    const query = mergeQueries(
       attrs.query,
       'query { rateLimit { limit cost remaining resetAt } }'
     )
 
-    return super._requestGraphql(attrs)
+    return super._requestGraphql({ ...attrs, ...{ url, query } })
   }
 }
 
