@@ -1,5 +1,6 @@
 'use strict'
 
+const escapeStringRegexp = require('escape-string-regexp')
 const Joi = require('@hapi/joi')
 const pathToRegexp = require('path-to-regexp')
 
@@ -27,15 +28,16 @@ function assertValidRoute(route, message = undefined) {
 }
 
 function prepareRoute({ base, pattern, format, capture, withPng }) {
-  const extensionRegex = ['svg', 'json']
-    .concat(withPng ? ['png'] : [])
+  const extensionRegex = ['', '.svg', '.json']
+    .concat(withPng ? ['.png'] : [])
+    .map(escapeStringRegexp)
     .join('|')
   let regex, captureNames
   if (pattern === undefined) {
-    regex = new RegExp(`^${makeFullUrl(base, format)}\\.(${extensionRegex})$`)
+    regex = new RegExp(`^${makeFullUrl(base, format)}(${extensionRegex})$`)
     captureNames = capture || []
   } else {
-    const fullPattern = `${makeFullUrl(base, pattern)}.:ext(${extensionRegex})`
+    const fullPattern = `${makeFullUrl(base, pattern)}:ext(${extensionRegex})`
     const keys = []
     regex = pathToRegexp(fullPattern, keys, {
       strict: true,

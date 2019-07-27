@@ -316,7 +316,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest

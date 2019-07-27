@@ -12,7 +12,7 @@ describe('<Usage />', function() {
 
   it('contains some of the expected text', function() {
     const wrapper = shallow(<Usage baseUrl="https://example.shields.io" />)
-    expect(wrapper).to.contain.text('use them responsibly')
+    expect(wrapper).to.contain.text('For backward compatibility')
   })
 
   // This test requires Link to be mocked.

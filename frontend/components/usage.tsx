@@ -192,13 +192,13 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
 
       <p>Using dash "-" separator</p>
       <p>
-        <Snippet snippet={`${baseUrl}/badge/<LABEL>-<MESSAGE>-<COLOR>.svg`} />
+        <Snippet snippet={`${baseUrl}/badge/<LABEL>-<MESSAGE>-<COLOR>`} />
       </p>
       <StaticBadgeEscapingRules />
       <p>Using query string parameters</p>
       <p>
         <Snippet
-          snippet={`${baseUrl}/static/v1.svg?label=<LABEL>&message=<MESSAGE>&color=<COLOR>`}
+          snippet={`${baseUrl}/static/v1?label=<LABEL>&message=<MESSAGE>&color=<COLOR>`}
         />
       </p>
 
@@ -238,7 +238,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       <H3>Endpoint</H3>
 
       <p>
-        <Snippet snippet={`${baseUrl}/endpoint.svg?url=<URL>&style<STYLE>`} />
+        <Snippet snippet={`${baseUrl}/endpoint?url=<URL>&style<STYLE>`} />
       </p>
 
       <p>
@@ -252,7 +252,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       <p>
         <StyledCode>
           {baseUrl}
-          /badge/dynamic/json.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+          /badge/dynamic/json?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
             href="https://jsonpath.com"
             target="_BLANK"
@@ -266,7 +266,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       <p>
         <StyledCode>
           {baseUrl}
-          /badge/dynamic/xml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+          /badge/dynamic/xml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a href="http://xpather.com" target="_BLANK" title="XPath syntax">
             //data/subdata
           </a>
@@ -276,7 +276,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       <p>
         <StyledCode>
           {baseUrl}
-          /badge/dynamic/yaml.svg?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
+          /badge/dynamic/yaml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
             href="https://jsonpath.com"
             target="_BLANK"
@@ -403,8 +403,19 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       </QueryParamTable>
 
       <p>
-        We support <code>.svg</code>, <code>.json</code>, <code>.png</code> and
-        a few others, but use them responsibly.
+        We support <code>.svg</code> and <code>.json</code>. The default is
+        <code>.svg</code>, which can be omitted from the URL.
+      </p>
+
+      <p>
+        While we highly recommend using SVG, we also support <code>.png</code>
+        for use cases where SVG will not work. These requests should be made to
+        our raster server <code>https://raster.shields.io</code>. For example,
+        the raster equivalent of
+        <code>https://img.shields.io/v/npm/express</code> is
+        <code>https://raster.shields.io/v/npm/express</code>. For backward
+        compatibility, the badge server will redirect <code>.png</code> badges
+        to the raster server.
       </p>
     </section>
   )

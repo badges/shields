@@ -12,6 +12,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Codetally')
   .get('/triggerman722/colorstrap.json')
+  .timeout(10000)
   .expectBadge({
     label: 'codetally',
     message: Joi.string().regex(/\b\d+(?:.\d+)?/),
