@@ -77,6 +77,20 @@ class GithubAuthV4Service extends BaseGraphqlService {
   }
 }
 
+/*
+Choosing between the Github V3 and V4 APIs when creating a new badge:
+
+With the V3 API, one request = one point off the usage limit.
+With the V4 API one request may be many points off the usage limit depending
+on the query (but will be a minimum of one).
+https://developer.github.com/v4/guides/resource-limitations/#calculating-nodes-in-a-call
+
+If we can save ourselves some usage limit it may be worth going with a
+REST (V3) call over a graphql query.
+All other things being equal, a graphql query will almost always be a smaller
+number of bytes over the wire and a smaller/simpler object to parse.
+*/
+
 module.exports = {
   GithubAuthV3Service,
   ConditionalGithubAuthV3Service,
