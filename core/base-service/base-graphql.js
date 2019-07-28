@@ -1,14 +1,19 @@
 'use strict'
 
 const { print } = require('graphql/language/printer')
-const BaseJsonService = require('./base-json')
+const BaseService = require('./base')
 const { InvalidResponse, ShieldsRuntimeError } = require('./errors')
+const { parseJson } = require('./json')
 
 function defaultTransformErrors(errors) {
   return new InvalidResponse({ prettyMessage: errors[0].message })
 }
 
-class BaseGraphqlService extends BaseJsonService {
+class BaseGraphqlService extends BaseService {
+  _parseJson(buffer) {
+    return parseJson(buffer)
+  }
+
   async _requestGraphql({
     schema,
     url,
