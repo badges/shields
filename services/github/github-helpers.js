@@ -25,11 +25,11 @@ function errorMessagesFor(notFoundMessage = 'repo not found') {
   }
 }
 
-function graphqlErrorHandler(errors) {
+function transformErrors(errors) {
   if (errors[0].type === 'NOT_FOUND') {
-    throw new NotFound({ prettyMessage: 'repo not found' })
+    return new NotFound({ prettyMessage: 'repo not found' })
   } else {
-    throw new InvalidResponse({ prettyMessage: errors[0].message })
+    return new InvalidResponse({ prettyMessage: errors[0].message })
   }
 }
 
@@ -44,6 +44,6 @@ module.exports = {
   stateColor,
   commentsColor,
   errorMessagesFor,
-  graphqlErrorHandler,
+  transformErrors,
   staticAuthConfigured,
 }

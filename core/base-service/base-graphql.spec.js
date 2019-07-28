@@ -178,9 +178,9 @@ describe('BaseGraphqlService', function() {
                 requiredString
               }
             `,
-            graphqlErrorHandler: function(errors) {
+            transformErrors: function(errors) {
               if (errors[0].message === 'oh noes!!') {
-                throw new InvalidResponse({
+                return new InvalidResponse({
                   prettyMessage: 'a terrible thing has happened',
                 })
               }

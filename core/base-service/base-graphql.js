@@ -2,10 +2,10 @@
 
 const { print } = require('graphql/language/printer')
 const BaseJsonService = require('./base-json')
-const { InvalidResponse } = require('./errors')
+const { InvalidResponse, ShieldsRuntimeError } = require('./errors')
 
-function defaultGraphqlErrorHandler(errors) {
-  throw new InvalidResponse({ prettyMessage: errors[0].message })
+function defaultTransformErrors(errors) {
+  return new InvalidResponse({ prettyMessage: errors[0].message })
 }
 
 class BaseGraphqlService extends BaseJsonService {
@@ -16,7 +16,7 @@ class BaseGraphqlService extends BaseJsonService {
     variables = {},
     options = {},
     httpErrorMessages = {},
-    graphqlErrorHandler = defaultGraphqlErrorHandler,
+    transformErrors = defaultTransformErrors,
   }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
@@ -31,7 +31,14 @@ class BaseGraphqlService extends BaseJsonService {
     })
     const json = this._parseJson(buffer)
     if (json.errors) {
-      graphqlErrorHandler(json.errors)
+      const exception = transformErrors(json.errors)
+      if (exception instanceof ShieldsRuntimeError) {
+        throw exception
+      } else {
+        throw Error(
+          `transformErrors() must return a ShieldsRuntimeError; got ${exception}`
+        )
+      }
     }
     return this.constructor._validate(json, schema)
   }

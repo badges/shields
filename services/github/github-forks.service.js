@@ -5,7 +5,7 @@ const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV4Service } = require('./github-auth-service')
-const { documentation, graphqlErrorHandler } = require('./github-helpers')
+const { documentation, transformErrors } = require('./github-helpers')
 
 const schema = Joi.object({
   data: Joi.object({
@@ -86,7 +86,7 @@ module.exports = class GithubForks extends GithubAuthV4Service {
       `,
       variables: { user, repo },
       schema,
-      graphqlErrorHandler,
+      transformErrors,
     })
     return this.constructor.render({
       user,
