@@ -153,7 +153,7 @@
     "@types/enzyme": "^3.10.3",
     "@types/mocha": "^5.2.7",
     "@types/react-helmet": "^5.0.8",
-    "@types/styled-components": "4.1.8",
+    "@types/styled-components": "4.1.17",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "babel-plugin-inline-react-svg": "^1.1.0",
