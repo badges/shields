@@ -7,7 +7,7 @@ const {
   transformAndValidate,
   renderDynamicBadge,
 } = require('../dynamic-common')
-const { ConditionalGithubAuthService } = require('./github-auth-service')
+const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 
@@ -17,7 +17,7 @@ const schema = Joi.object({
 
 const flexibleSchema = Joi.object().required()
 
-class GithubManifestVersion extends ConditionalGithubAuthService {
+class GithubManifestVersion extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'version'
   }
@@ -75,7 +75,7 @@ class GithubManifestVersion extends ConditionalGithubAuthService {
   }
 }
 
-class DynamicGithubManifest extends ConditionalGithubAuthService {
+class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'other'
   }
