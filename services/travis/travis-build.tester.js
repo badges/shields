@@ -2,13 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'travis-build',
-  title: 'Travis CI',
-  pathPrefix: '/travis',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 // Travis (.org) CI
 

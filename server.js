@@ -8,9 +8,24 @@ require('dotenv').config()
 
 // Set up Sentry reporting as early in the process as possible.
 const config = require('config').util.toObject()
-const Raven = require('raven')
-Raven.config(process.env.SENTRY_DSN || config.private.sentry_dsn).install()
-Raven.disableConsoleAlerts()
+const Sentry = require('@sentry/node')
+const disabledIntegrations = ['Console', 'Http']
+Sentry.init({
+  dsn: process.env.SENTRY_DSN || config.private.sentry_dsn,
+  integrations: integrations => {
+    const filtered = integrations.filter(
+      integration => !disabledIntegrations.includes(integration.name)
+    )
+    if (filtered.length != integrations.length - disabledIntegrations.length) {
+      throw Error(
+        `An error occurred while filtering integrations. The following inetgrations were found: ${integrations.map(
+          ({ name }) => name
+        )}`
+      )
+    }
+    return filtered
+  },
+})
 
 if (+process.argv[2]) {
   config.public.bind.port = +process.argv[2]

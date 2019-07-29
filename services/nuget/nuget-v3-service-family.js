@@ -156,7 +156,7 @@ function createServiceFamily({
     static get route() {
       return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('(v|vpre)', 'which')
-        .push('(.*)', 'packageName')
+        .push('(.+?)', 'packageName')
         .toObject()
     }
 
@@ -207,7 +207,7 @@ function createServiceFamily({
     static get route() {
       return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('dt')
-        .push('(.*)', 'packageName')
+        .push('(.+?)', 'packageName')
         .toObject()
     }
 
