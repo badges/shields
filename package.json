@@ -149,7 +149,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
-    "@babel/register": "7.4.4",
+    "@babel/register": "7.5.5",
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.1.7",
     "@types/enzyme": "^3.10.3",
