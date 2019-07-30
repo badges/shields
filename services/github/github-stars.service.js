@@ -3,14 +3,14 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({
   stargazers_count: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubStars extends GithubAuthService {
+module.exports = class GithubStars extends GithubAuthV3Service {
   static get category() {
     return 'social'
   }

@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const isPRVariant = {
@@ -20,7 +20,7 @@ const schema = Joi.object({
   total_count: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubIssues extends GithubAuthService {
+module.exports = class GithubIssues extends GithubAuthV3Service {
   static get category() {
     return 'issue-tracking'
   }

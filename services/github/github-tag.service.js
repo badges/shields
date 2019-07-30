@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 const { NotFound } = require('..')
 
@@ -21,7 +21,7 @@ const schema = Joi.alternatives()
   )
   .required()
 
-module.exports = class GithubTag extends GithubAuthService {
+module.exports = class GithubTag extends GithubAuthV3Service {
   static get category() {
     return 'version'
   }
