@@ -38,18 +38,18 @@ t.create('Invalid version')
   .intercept(nock =>
     nock('https://atom.io')
       .get('/api/packages/vim-mode')
-      .reply([200, '{"releases":{}}'])
+      .reply(200, '{"releases":{}}')
   )
-  .expectBadge({ label: 'downloads', message: 'unparseable json response' })
+  .expectBadge({ label: 'downloads', message: 'invalid response data' })
 
 t.create('Invalid License')
   .get('/l/vim-mode.json')
   .intercept(nock =>
     nock('https://atom.io')
       .get('/api/packages/vim-mode')
-      .reply([200, '{"metadata":{}}'])
+      .reply(200, '{"metadata":{}}')
   )
-  .expectBadge({ label: 'license', message: 'unparseable json response' })
+  .expectBadge({ label: 'license', message: 'invalid response data' })
 
 t.create('Unexpected response')
   .get('/dm/vim-mode.json')

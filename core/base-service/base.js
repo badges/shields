@@ -1,9 +1,14 @@
 'use strict'
+/**
+ * @module
+ */
 
 const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
+const log = require('../server/log')
+const { AuthHelper } = require('./auth-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -11,6 +16,7 @@ const {
   NotFound,
   InvalidResponse,
   Inaccessible,
+  ImproperlyConfigured,
   InvalidParameter,
   Deprecated,
 } = require('./errors')
@@ -69,10 +75,18 @@ const serviceDataSchema = Joi.object({
   .oxor('namedLogo', 'logoSvg')
   .required()
 
-module.exports = class BaseService {
+/**
+ * Abstract base class which all service classes inherit from.
+ * Concrete implementations of BaseService must implement the methods
+ * category(), route() and handle(namedParams, queryParams)
+ */
+class BaseService {
   /**
    * Name of the category to sort this badge into (eg. "build"). Used to sort
    * the badges on the main shields.io website.
+   *
+   * @abstract
+   * @type {string}
    */
   static get category() {
     throw new Error(`Category not set for ${this.name}`)
@@ -83,38 +97,38 @@ module.exports = class BaseService {
   }
 
   /**
-   * Returns an object:
-   *  - base: (Optional) The base path of the routes for this service. This is
-   *    used as a prefix.
-   *  - format: Regular expression to use for routes for this service's badges
-   *  - capture: Array of names for the capture groups in the regular
-   *             expression. The handler will be passed an object containing
-   *             the matches.
-   *  - queryParamSchema: (Optional) A Joi schema (`Joi.object({ ... }).required()`)
-   *                      for the query param object. If you know a parameter
-   *                      will never receive a numeric string, you can use
-   *                      `Joi.string()`. Because of quirks in Scoutcamp and Joi,
-   *                      alphanumeric strings should be declared using
-   *                      `Joi.alternatives().try(Joi.string(), Joi.number())`,
-   *                      otherwise a value like `?success_color=999` will fail.
-   *                      A parameter requiring a numeric string can use
-   *                      `Joi.number()`. A parameter that receives only non-numeric
-   *                      strings can use `Joi.string()`. A parameter that never
-   *                      receives numeric can use `Joi.string()`. A boolean
-   *                      parameter should use `Joi.equal('')` and will receive an
-   *                      empty string on e.g. `?compact_message` and undefined
-   *                      when the parameter is absent. (Note that in,
-   *                      `examples.queryParams` boolean query params should be given
-   *                      `null` values.)
+   * Route to mount this service on
+   *
+   * @abstract
+   * @type {module:core/base-service/base~Route}
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
   }
 
   /**
-   * Example URLs for this service. These should use the format
-   * specified in `route`, and can be used to demonstrate how to use badges for
-   * this service.
+   * Configuration for the authentication helper that prepares credentials
+   * for upstream requests.
+   *
+   * See also the config schema in `./server.js` and `doc/server-secrets.md`.
+   *
+   * To use the configured auth in the handler or fetch method, pass the
+   * credentials to the request. For example:
+   * - `{ options: { auth: this.authHelper.basicAuth } }`
+   * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
+   * - `{ options: { qs: { token: this.authHelper.pass } } }`
+   *
+   * @abstract
+   * @type {module:core/base-service/base~Auth}
+   */
+  static get auth() {
+    return undefined
+  }
+
+  /**
+   * Array of Example objects describing example URLs for this service.
+   * These should use the format specified in `route`,
+   * and can be used to demonstrate how to use badges for this service.
    *
    * The preferred way to specify an example is with `namedParams` which are
    * substituted into the service's compiled route pattern. The rendered badge
@@ -123,21 +137,9 @@ module.exports = class BaseService {
    * For services which use a route `format`, the `pattern` can be specified as
    * part of the example.
    *
-   * title: Descriptive text that will be shown next to the badge. The default
-   *   is to use the service class name, which probably is not what you want.
-   * namedParams: An object containing the values of named parameters to
-   *   substitute into the compiled route pattern.
-   * queryParams: An object containing query parameters to include in the
-   *   example URLs. For alphanumeric query parameters, specify a string value.
-   *   For boolean query parameters, specify `null`.
-   * pattern: The route pattern to compile. Defaults to `this.route.pattern`.
-   * staticPreview: A rendered badge of the sort returned by `handle()` or
-   *   `render()`: an object containing `message` and optional `label` and
-   *   `color`. This is usually generated by invoking `this.render()` with some
-   *   explicit props.
-   * keywords: Additional keywords, other than words in the title. This helps
-   *   users locate relevant badges.
-   * documentation: An HTML string that is included in the badge popup.
+   * @see {@link module:core/base-service/base~Example}
+   * @abstract
+   * @type {module:core/base-service/base~Example[]}
    */
   static get examples() {
     return []
@@ -154,9 +156,11 @@ module.exports = class BaseService {
   }
 
   /**
-   * Default data for the badge. Can include label, logo, and color. These
-   * defaults are used if the value is neither included in the service data
+   * Default data for the badge.
+   * These defaults are used if the value is neither included in the service data
    * from the handler nor overridden by the user via query parameters.
+   *
+   * @type {module:core/base-service/base~DefaultBadgeData}
    */
   static get defaultBadgeData() {
     return {}
@@ -207,8 +211,9 @@ module.exports = class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest }, { handleInternalErrors }) {
+  constructor({ sendAndCacheRequest, authHelper }, { handleInternalErrors }) {
     this._requestFetcher = sendAndCacheRequest
+    this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
   }
 
@@ -247,6 +252,13 @@ module.exports = class BaseService {
    * Asynchronous function to handle requests for this service. Take the route
    * parameters (as defined in the `route` property), perform a request using
    * `this._sendAndCacheRequest`, and return the badge data.
+   *
+   * @abstract
+   * @param {object} namedParams Params parsed from route pattern
+   *    defined in this.route.pattern or this.route.capture
+   * @param {object} queryParams Params parsed from the query string
+   * @returns {module:core/base-service/base~Badge}
+   *    badge Object validated against serviceDataSchema
    */
   async handle(namedParams, queryParams) {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
@@ -261,6 +273,7 @@ module.exports = class BaseService {
         color: 'red',
       }
     } else if (
+      error instanceof ImproperlyConfigured ||
       error instanceof InvalidResponse ||
       error instanceof Inaccessible ||
       error instanceof Deprecated
@@ -281,8 +294,8 @@ module.exports = class BaseService {
         )
       ) {
         // This is where we end up if an unhandled exception is thrown in
-        // production. Send the error to the logs.
-        console.log(error)
+        // production. Send the error to Sentry and the logs.
+        log.error(error)
       }
       return {
         isError: true,
@@ -311,12 +324,26 @@ module.exports = class BaseService {
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
     trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-    const serviceInstance = new this(context, config)
+    // Like the service instance, the auth helper could be reused for each request.
+    // However, moving its instantiation to `register()` makes `invoke()` harder
+    // to test.
+    const authHelper = this.auth
+      ? new AuthHelper(this.auth, config.private)
+      : undefined
+
+    const serviceInstance = new this({ ...context, authHelper }, config)
 
     let serviceError
+    if (authHelper && !authHelper.isValid) {
+      const prettyMessage = authHelper.isRequired
+        ? 'credentials have not been configured'
+        : 'credentials are misconfigured'
+      serviceError = new ImproperlyConfigured({ prettyMessage })
+    }
+
     const { queryParamSchema } = this.route
     let transformedQueryParams
-    if (queryParamSchema) {
+    if (!serviceError && queryParamSchema) {
       try {
         transformedQueryParams = validate(
           {
@@ -411,7 +438,7 @@ module.exports = class BaseService {
             this
           )
           // The final capture group is the extension.
-          const format = match.slice(-1)[0]
+          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
           sendBadge(format, badgeData)
 
           serviceRequestCounter.inc()
@@ -422,3 +449,99 @@ module.exports = class BaseService {
     )
   }
 }
+
+/**
+ * Default badge properties, validated against defaultBadgeDataSchema
+ *
+ * @typedef {object} DefaultBadgeData
+ * @property {string} label (Optional)
+ * @property {string} color (Optional)
+ * @property {string} labelColor (Optional)
+ * @property {string} namedLogo (Optional)
+ */
+
+/**
+ * Badge Object, validated against serviceDataSchema
+ *
+ * @typedef {object} Badge
+ * @property {boolean} isError (Optional)
+ * @property {string} label (Optional)
+ * @property {(string|number)} message
+ * @property {string} color (Optional)
+ * @property {string[]} link (Optional)
+ */
+
+/**
+ * @typedef {object} Route
+ * @property {string} base
+ *    (Optional) The base path of the routes for this service.
+ *    This is used as a prefix.
+ * @property {string} pattern
+ *    A path-to-regexp pattern defining the route pattern and param names
+ *    See {@link https://www.npmjs.com/package/path-to-regexp}
+ * @property {RegExp} format
+ *    Deprecated: Regular expression to use for routes for this service's badges
+ *    Use `pattern` instead
+ * @property {string[]} capture
+ *    Deprecated: Array of names for the capture groups in the regular
+ *    expression. The handler will be passed an object containing
+ *    the matches.
+ *    Use `pattern` instead
+ * @property {Joi.object} queryParamSchema
+ *    (Optional) A Joi schema (`Joi.object({ ... }).required()`)
+ *    for the query param object. If you know a parameter
+ *    will never receive a numeric string, you can use
+ *    `Joi.string()`. Because of quirks in Scoutcamp and Joi,
+ *    alphanumeric strings should be declared using
+ *    `Joi.alternatives().try(Joi.string(), Joi.number())`,
+ *    otherwise a value like `?success_color=999` will fail.
+ *    A parameter requiring a numeric string can use
+ *    `Joi.number()`. A parameter that receives only non-numeric
+ *    strings can use `Joi.string()`. A parameter that never
+ *    receives numeric can use `Joi.string()`. A boolean
+ *    parameter should use `Joi.equal('')` and will receive an
+ *    empty string on e.g. `?compact_message` and undefined
+ *    when the parameter is absent. (Note that in,
+ *    `examples.queryParams` boolean query params should be given
+ *    `null` values.)
+ */
+
+/**
+ * @typedef {object} Auth
+ * @property {string} userKey
+ *    (Optional) The key from `privateConfig` to use as the username.
+ * @property {string} passKey
+ *    (Optional) The key from `privateConfig` to use as the password.
+ *    If auth is configured, either `userKey` or `passKey` is required.
+ * @property {string} isRequired
+ *    (Optional) If `true`, the service will return `NotFound` unless the
+ *    configured credentials are present.
+ */
+
+/**
+ * @typedef {object} Example
+ * @property {string} title
+ *    Descriptive text that will be shown next to the badge. The default
+ *    is to use the service class name, which probably is not what you want.
+ * @property {object} namedParams
+ *    An object containing the values of named parameters to
+ *    substitute into the compiled route pattern.
+ * @property {object} queryParams
+ *    An object containing query parameters to include in the
+ *    example URLs. For alphanumeric query parameters, specify a string value.
+ *    For boolean query parameters, specify `null`.
+ * @property {string} pattern
+ *    The route pattern to compile. Defaults to `this.route.pattern`.
+ * @property {object} staticPreview
+ *    A rendered badge of the sort returned by `handle()` or
+ *    `render()`: an object containing `message` and optional `label` and
+ *    `color`. This is usually generated by invoking `this.render()` with some
+ *    explicit props.
+ * @property {string[]} keywords
+ *    Additional keywords, other than words in the title. This helps
+ *    users locate relevant badges.
+ * @property {string} documentation
+ *    An HTML string that is included in the badge popup.
+ */
+
+module.exports = BaseService

@@ -15,6 +15,10 @@ const latestBuildSchema = Joi.object({
 }).required()
 
 module.exports = class AzureDevOpsBase extends BaseJsonService {
+  static get auth() {
+    return { passKey: 'azure_devops_token' }
+  }
+
   async fetch({ url, options, schema, errorMessages }) {
     return this._requestJson({
       schema,
@@ -29,7 +33,7 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
     project,
     definitionId,
     branch,
-    headers,
+    auth,
     errorMessages
   ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
@@ -41,7 +45,7 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
         statusFilter: 'completed',
         'api-version': '5.0-preview.4',
       },
-      headers,
+      auth,
     }
 
     if (branch) {

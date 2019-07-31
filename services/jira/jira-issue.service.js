@@ -1,7 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const JiraBase = require('./jira-base')
+const { authConfig } = require('./jira-common')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   fields: Joi.object({
@@ -14,12 +15,22 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JiraIssue extends JiraBase {
+module.exports = class JiraIssue extends BaseJsonService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
   static get route() {
     return {
       base: 'jira/issue',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath(.+)/:issueKey',
     }
+  }
+
+  static get auth() {
+    return authConfig
   }
 
   static get examples() {
@@ -68,16 +79,15 @@ module.exports = class JiraIssue extends JiraBase {
 
   async handle({ protocol, hostAndPath, issueKey }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
-    const url = `${protocol}://${hostAndPath}/rest/api/2/issue/${encodeURIComponent(
-      issueKey
-    )}`
-    const json = await this.fetch({
-      url,
+    const json = await this._requestJson({
       schema,
-      errorMessages: {
-        404: 'issue not found',
-      },
+      url: `${protocol}://${hostAndPath}/rest/api/2/issue/${encodeURIComponent(
+        issueKey
+      )}`,
+      options: { auth: this.authHelper.basicAuth },
+      errorMessages: { 404: 'issue not found' },
     })
+
     const issueStatus = json.fields.status
     const statusName = issueStatus.name
     let statusColor

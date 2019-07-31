@@ -1,12 +1,8 @@
 'use strict'
 
-// eslint-disable-next-line node/no-deprecated-api
-const domain = require('domain')
 const request = require('request')
 const queryString = require('query-string')
-const LruCache = require('../../gh-badges/lib/lru-cache')
 const makeBadge = require('../../gh-badges/lib/make-badge')
-const log = require('../server/log')
 const { setCacheHeaders } = require('./cache-headers')
 const {
   Inaccessible,
@@ -14,6 +10,7 @@ const {
   ShieldsRuntimeError,
 } = require('./errors')
 const { makeSend } = require('./legacy-result-sender')
+const LruCache = require('./lru-cache')
 const coalesceBadge = require('./coalesce-badge')
 
 // We avoid calling the vendor's server for computation of the information in a
@@ -31,12 +28,6 @@ const freqRatioMax = 1 - minAccuracy
 
 // Request cache size of 5MB (~5000 bytes/image).
 const requestCache = new LruCache(1000)
-
-// Deep error handling for vendor hooks.
-const vendorDomain = domain.create()
-vendorDomain.on('error', err => {
-  log.error('Vendor hook error:', err.stack)
-})
 
 // These query parameters are available to any badge. They are handled by
 // `coalesceBadge`.
@@ -61,6 +52,25 @@ function flattenQueryParams(queryParams) {
     union.add(name)
   })
   return Array.from(union).sort()
+}
+
+function promisify(cachingRequest) {
+  return (uri, options) =>
+    new Promise((resolve, reject) => {
+      cachingRequest(uri, options, (err, res, buffer) => {
+        if (err) {
+          if (err instanceof ShieldsRuntimeError) {
+            reject(err)
+          } else {
+            // Wrap the error in an Inaccessible so it can be identified
+            // by the BaseService handler.
+            reject(new Inaccessible({ underlyingError: err }))
+          }
+        } else {
+          resolve({ res, buffer })
+        }
+      })
+    })
 }
 
 // handlerOptions can contain:
@@ -175,12 +185,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         {}
       )
       const svg = makeBadge(badgeData)
-      let extension
-      try {
-        extension = match[0].split('.').pop()
-      } catch (e) {
-        extension = 'svg'
-      }
+      const extension = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
       setCacheHeadersOnResponse(ask.res)
       makeSend(extension, ask.res, end)(svg)
     }, 25000)
@@ -231,70 +236,51 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       })
     }
 
-    // Wrapper around `cachingRequest` that returns a promise rather than
-    // needing to pass a callback.
-    cachingRequest.asPromise = (uri, options) =>
-      new Promise((resolve, reject) => {
-        cachingRequest(uri, options, (err, res, buffer) => {
-          if (err) {
-            if (err instanceof ShieldsRuntimeError) {
-              reject(err)
-            } else {
-              // Wrap the error in an Inaccessible so it can be identified
-              // by the BaseService handler.
-              reject(new Inaccessible({ underlyingError: err }))
-            }
-          } else {
-            resolve({ res, buffer })
-          }
-        })
-      })
+    // Wrapper around `cachingRequest` that returns a promise rather than needing
+    // to pass a callback.
+    cachingRequest.asPromise = promisify(cachingRequest)
 
-    vendorDomain.run(() => {
-      const result = handlerOptions.handler(
-        filteredQueryParams,
-        match,
-        // eslint-disable-next-line mocha/prefer-arrow-callback
-        function sendBadge(format, badgeData) {
-          if (serverUnresponsive) {
-            return
-          }
-          clearTimeout(serverResponsive)
-          // Check for a change in the data.
-          let dataHasChanged = false
-          if (
-            cached !== undefined &&
-            cached.data.badgeData.text[1] !== badgeData.text[1]
-          ) {
-            dataHasChanged = true
-          }
-          // Add format to badge data.
-          badgeData.format = format
-          // Update information in the cache.
-          const updatedCache = {
-            reqs: cached ? cached.reqs + 1 : 1,
-            dataChange: cached
-              ? cached.dataChange + (dataHasChanged ? 1 : 0)
-              : 1,
-            time: +reqTime,
-            interval: cacheInterval,
-            data: { format, badgeData },
-          }
-          requestCache.set(cacheIndex, updatedCache)
-          if (!cachedVersionSent) {
-            const svg = makeBadge(badgeData)
-            setCacheHeadersOnResponse(ask.res, badgeData.cacheLengthSeconds)
-            makeSend(format, ask.res, end)(svg)
-          }
-        },
-        cachingRequest
-      )
-      if (result && result.catch) {
-        result.catch(err => {
-          throw err
-        })
-      }
-    })
+    const result = handlerOptions.handler(
+      filteredQueryParams,
+      match,
+      // eslint-disable-next-line mocha/prefer-arrow-callback
+      function sendBadge(format, badgeData) {
+        if (serverUnresponsive) {
+          return
+        }
+        clearTimeout(serverResponsive)
+        // Check for a change in the data.
+        let dataHasChanged = false
+        if (
+          cached !== undefined &&
+          cached.data.badgeData.text[1] !== badgeData.text[1]
+        ) {
+          dataHasChanged = true
+        }
+        // Add format to badge data.
+        badgeData.format = format
+        // Update information in the cache.
+        const updatedCache = {
+          reqs: cached ? cached.reqs + 1 : 1,
+          dataChange: cached ? cached.dataChange + (dataHasChanged ? 1 : 0) : 1,
+          time: +reqTime,
+          interval: cacheInterval,
+          data: { format, badgeData },
+        }
+        requestCache.set(cacheIndex, updatedCache)
+        if (!cachedVersionSent) {
+          const svg = makeBadge(badgeData)
+          setCacheHeadersOnResponse(ask.res, badgeData.cacheLengthSeconds)
+          makeSend(format, ask.res, end)(svg)
+        }
+      },
+      cachingRequest
+    )
+    if (result && result.catch) {
+      result.catch(err => {
+        throw err
+      })
+    }
   }
 }
 
@@ -304,6 +290,7 @@ function clearRequestCache() {
 
 module.exports = {
   handleRequest,
+  promisify,
   clearRequestCache,
   // Expose for testing.
   _requestCache: requestCache,

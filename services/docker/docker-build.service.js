@@ -1,13 +1,13 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { anyInteger } = require('../validators')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
+const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   results: Joi.array()

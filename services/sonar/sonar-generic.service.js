@@ -2,7 +2,7 @@
 
 const { metric } = require('../text-formatters')
 const SonarBase = require('./sonar-base')
-const { patternBase, queryParamSchema, getLabel } = require('./sonar-helpers')
+const { queryParamSchema, getLabel } = require('./sonar-helpers')
 
 // This service is intended to be a temporary solution to avoid breaking
 // any existing users/badges that were utilizing the "other" Sonar metrics
@@ -89,16 +89,10 @@ const testsMetricNames = [
   'coverage_line_hits_data',
   'lines_to_cover',
   'new_lines_to_cover',
-  'skipped_tests',
   'uncovered_conditions',
   'new_uncovered_conditions',
   'uncovered_lines',
   'new_uncovered_lines',
-  'tests',
-  'test_execution_time',
-  'test_errors',
-  'test_failures',
-  'test_success_density',
 ]
 const metricNames = [
   ...complexityMetricNames,
@@ -120,7 +114,7 @@ module.exports = class SonarGeneric extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metricName(${metricNameRouteParam})`,
+      pattern: `:metricName(${metricNameRouteParam})/:component`,
       queryParamSchema,
     }
   }
@@ -137,16 +131,18 @@ module.exports = class SonarGeneric extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component, metricName }, { sonarVersion }) {
+  async handle({ component, metricName }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName,
     })
 
-    const { metricValue } = this.transform({ json, sonarVersion })
-    return this.constructor.render({ metricName, metricValue })
+    const metrics = this.transform({ json, sonarVersion })
+    return this.constructor.render({
+      metricName,
+      metricValue: metrics[metricName],
+    })
   }
 }

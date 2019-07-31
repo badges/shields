@@ -64,7 +64,7 @@ class DummyService extends BaseService {
 }
 
 describe('BaseService', function() {
-  const defaultConfig = { handleInternalErrors: false }
+  const defaultConfig = { handleInternalErrors: false, private: {} }
 
   it('Invokes the handler as expected', async function() {
     expect(
@@ -316,7 +316,7 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+?)\.(svg|png|gif|jpg|json)$/
+    const expectedRouteRegex = /^\/foo\/([^/]+?)(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -480,6 +480,45 @@ describe('BaseService', function() {
         expect(e.message).to.equal('Not Found')
         expect(e.prettyMessage).to.equal('not found')
       }
+    })
+  })
+
+  describe('auth', function() {
+    class AuthService extends DummyService {
+      static get auth() {
+        return {
+          passKey: 'myci_pass',
+          isRequired: true,
+        }
+      }
+
+      async handle() {
+        return {
+          message: `The CI password is ${this.authHelper.pass}`,
+        }
+      }
+    }
+
+    it('when auth is configured properly, invoke() sets authHelper', async function() {
+      expect(
+        await AuthService.invoke(
+          {},
+          { defaultConfig, private: { myci_pass: 'abc123' } },
+          { namedParamA: 'bar.bar.bar' }
+        )
+      ).to.deep.equal({ message: 'The CI password is abc123' })
+    })
+
+    it('when auth is not configured properly, invoke() returns inacessible', async function() {
+      expect(
+        await AuthService.invoke({}, defaultConfig, {
+          namedParamA: 'bar.bar.bar',
+        })
+      ).to.deep.equal({
+        color: 'lightgray',
+        isError: true,
+        message: 'credentials have not been configured',
+      })
     })
   })
 })

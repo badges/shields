@@ -3,28 +3,28 @@
 const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('live: level known project')
+t.create('level known project')
   .get(`/level/1.json`)
   .expectBadge({
     label: 'cii',
     message: withRegex(/in progress|passing|silver|gold/),
   })
 
-t.create('live: percentage known project')
+t.create('percentage known project')
   .get(`/percentage/29.json`)
   .expectBadge({
     label: 'cii',
     message: withRegex(/([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-9][0-9]|300)%/),
   })
 
-t.create('live: summary known project')
+t.create('summary known project')
   .get(`/summary/33.json`)
   .expectBadge({
     label: 'cii',
     message: withRegex(/(in progress [0-9]|[1-9][0-9]%)|passing|silver|gold/),
   })
 
-t.create('live: unknown project')
+t.create('unknown project')
   .get(`/level/abc.json`)
   .expectBadge({ label: 'cii', message: 'project not found' })
 

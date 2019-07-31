@@ -1,7 +1,6 @@
 'use strict'
 
-const sinon = require('sinon')
-const serverSecrets = require('../../lib/server-secrets')
+const runnerConfig = require('config').util.toObject()
 
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
@@ -78,53 +77,25 @@ const multipleViolations = createMockResponse({
   ],
 })
 
-const mockSymfonyUser = 'admin'
-const mockSymfonyToken = 'password'
-const originalUuid = serverSecrets.sl_insight_userUuid
-const originalApiToken = serverSecrets.sl_insight_apiToken
-
-function setSymfonyInsightCredsToFalsy() {
-  serverSecrets['sl_insight_userUuid'] = undefined
-  serverSecrets['sl_insight_apiToken'] = undefined
+const user = 'admin'
+const token = 'password'
+const config = {
+  private: {
+    sl_insight_userUuid: user,
+    sl_insight_apiToken: token,
+  },
 }
 
-function mockSymfonyInsightCreds() {
-  // ensure that the fields exists  before attempting to stub
-  setSymfonyInsightCredsToFalsy()
-  sinon.stub(serverSecrets, 'sl_insight_userUuid').value(mockSymfonyUser)
-  sinon.stub(serverSecrets, 'sl_insight_apiToken').value(mockSymfonyToken)
-}
-
-function restore() {
-  sinon.restore()
-  serverSecrets['sl_insight_userUuid'] = originalUuid
-  serverSecrets['sl_insight_apiToken'] = originalApiToken
-}
-
-function prepLiveTest() {
-  // Since the service implementation will throw an error if the creds
-  // are missing, we need to ensure that creds are available for each test.
-  // In the case of the live tests we want to use the "real" creds if they
-  // exist otherwise we need to use the same stubbed creds as all the mocked tests.
-  if (!originalUuid) {
+function checkShouldSkip() {
+  const noToken =
+    !runnerConfig.private.sl_insight_userUuid ||
+    !runnerConfig.private.sl_insight_apiToken
+  if (noToken) {
     console.warn(
-      'No token provided, this test will mock Symfony Insight API responses.'
+      'No Symfony credentials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
     )
-    mockSymfonyInsightCreds()
   }
-}
-
-function createTest(
-  t,
-  title,
-  { withMockCreds = true } = { withMockCreds: true }
-) {
-  const result = t.create(title)
-  if (withMockCreds) {
-    result.before(mockSymfonyInsightCreds)
-    result.finally(restore)
-  }
-  return result
+  return noToken
 }
 
 module.exports = {
@@ -135,17 +106,13 @@ module.exports = {
   silverMockResponse,
   bronzeMockResponse,
   noMedalMockResponse,
-  mockSymfonyUser,
-  mockSymfonyToken,
-  mockSymfonyInsightCreds,
-  setSymfonyInsightCredsToFalsy,
-  restore,
-  realTokenExists: originalUuid,
-  prepLiveTest,
   criticalViolation,
   majorViolation,
   minorViolation,
   infoViolation,
   multipleViolations,
-  createTest,
+  user,
+  token,
+  config,
+  checkShouldSkip,
 }

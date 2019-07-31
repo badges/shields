@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseService, BaseJsonService, NotFound } = require('..')
 const { metric } = require('../text-formatters')
+const { BaseService, BaseJsonService, NotFound } = require('..')
 
 class TwitterUrl extends BaseService {
   static get category() {
@@ -12,6 +12,8 @@ class TwitterUrl extends BaseService {
   static get route() {
     return {
       base: 'twitter/url',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(https|http)/:hostAndPath+',
     }
   }

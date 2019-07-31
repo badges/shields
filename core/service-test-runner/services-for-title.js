@@ -1,8 +1,20 @@
 'use strict'
+/**
+ * @module
+ */
 
 const difference = require('lodash.difference')
 
-module.exports = function servicesForTitle(title) {
+/**
+ * Given a pull request title like
+ * '[Travis Sonar] Support user token authentication'
+ * extract the list of service names in square brackets
+ * as an array of strings.
+ *
+ * @param {string} title Pull Request title
+ * @returns {string[]} Array of service names
+ */
+function servicesForTitle(title) {
   const bracketed = /\[([^\]]+)\]/g
 
   const preNormalized = title.toLowerCase()
@@ -18,3 +30,5 @@ module.exports = function servicesForTitle(title) {
   const ignored = ['wip', 'rfc', 'security']
   return difference(services, ignored)
 }
+
+module.exports = servicesForTitle

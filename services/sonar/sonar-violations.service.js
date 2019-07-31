@@ -6,9 +6,7 @@ const SonarBase = require('./sonar-base')
 const {
   getLabel,
   documentation,
-  isLegacyVersion,
   keywords,
-  patternBase,
   queryParamWithFormatSchema,
 } = require('./sonar-helpers')
 
@@ -33,7 +31,8 @@ module.exports = class SonarViolations extends SonarBase {
   static get route() {
     return {
       base: 'sonar',
-      pattern: `${patternBase}/:metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)`,
+      pattern:
+        ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component',
       queryParamSchema: queryParamWithFormatSchema,
     }
   }
@@ -43,12 +42,11 @@ module.exports = class SonarViolations extends SonarBase {
       {
         title: 'Sonar Violations (short format)',
         namedParams: {
-          protocol: 'https',
-          host: 'sonarcloud.io',
           component: 'swellaby:azdo-shellcheck',
           metric: 'violations',
         },
         queryParams: {
+          server: 'https://sonarcloud.io',
           format: 'short',
           sonarVersion: '4.2',
         },
@@ -63,12 +61,11 @@ module.exports = class SonarViolations extends SonarBase {
       {
         title: 'Sonar Violations (long format)',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
           metric: 'violations',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           format: 'long',
         },
         staticPreview: this.render({
@@ -149,32 +146,15 @@ module.exports = class SonarViolations extends SonarBase {
   }
 
   transformViolations({ json, sonarVersion, metric, format }) {
-    // We can use the standard transform function in all cases
-    // except when the requested badge is the long format of violations
+    const metrics = this.transform({ json, sonarVersion })
     if (metric !== 'violations' || format !== 'long') {
-      const { metricValue: violations } = this.transform({ json, sonarVersion })
-      return { violations }
+      return { violations: metrics[metric] }
     }
 
-    const useLegacyApi = isLegacyVersion({ sonarVersion })
-    const measures = useLegacyApi ? json[0].msr : json.component.measures
-    const violations = {}
-
-    measures.forEach(measure => {
-      if (useLegacyApi) {
-        violations[measure.key] = measure.val
-      } else {
-        violations[measure.metric] = measure.value
-      }
-    })
-
-    return { violations }
+    return { violations: metrics }
   }
 
-  async handle(
-    { protocol, host, component, metric },
-    { sonarVersion, format }
-  ) {
+  async handle({ component, metric }, { server, sonarVersion, format }) {
     // If the user has requested the long format for the violations badge
     // then we need to include each individual violation metric in the call to the API
     // in order to get the count breakdown per each violation category.
@@ -184,8 +164,7 @@ module.exports = class SonarViolations extends SonarBase {
         : metric
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: metricKeys,
     })

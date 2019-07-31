@@ -111,7 +111,7 @@ module.exports = function makeBadge({
   // String coercion and whitespace removal.
   text = text.map(value => `${value}`.trim())
 
-  const [left, right] = text
+  let [left, right] = text
 
   color = normalizeColor(color || colorB || colorscheme)
   labelColor = normalizeColor(labelColor || colorA)
@@ -131,21 +131,17 @@ module.exports = function makeBadge({
   }
 
   if (!(template in templates)) {
-    template = 'flat'
-  }
-  if (template.startsWith('popout')) {
-    if (logo) {
-      logoPosition =
-        logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
-      logoWidth = +logoWidth || 32
+    if (template === 'popout-square') {
+      template = 'flat-square'
     } else {
-      template = template.replace('popout', 'flat')
+      template = 'flat'
     }
   }
   if (template === 'social') {
-    text[0] = capitalize(text[0])
+    left = capitalize(left)
   } else if (template === 'for-the-badge') {
-    text = text.map(value => value.toUpperCase())
+    left = left.toUpperCase()
+    right = right.toUpperCase()
   }
 
   let leftWidth = (anafanafo(left) / 10) | 0
@@ -170,7 +166,7 @@ module.exports = function makeBadge({
 
   const context = {
     text: [left, right],
-    escapedText: text.map(escapeXml),
+    escapedText: [left, right].map(escapeXml),
     widths: [leftWidth + 10 + logoWidth + logoPadding, rightWidth + 10],
     links: links.map(escapeXml),
     logo: escapeXml(logo),

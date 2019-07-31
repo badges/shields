@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const log = require('../../core/server/log')
 const { TokenPool } = require('../../core/token-pooling/token-pool')
 const { nonNegativeInteger } = require('../validators')
 
@@ -8,6 +9,22 @@ const headerSchema = Joi.object({
   'x-ratelimit-limit': nonNegativeInteger,
   'x-ratelimit-remaining': nonNegativeInteger,
   'x-ratelimit-reset': nonNegativeInteger,
+})
+  .required()
+  .unknown(true)
+
+const bodySchema = Joi.object({
+  data: Joi.object({
+    rateLimit: Joi.object({
+      limit: nonNegativeInteger,
+      remaining: nonNegativeInteger,
+      resetAt: Joi.date().iso(),
+    })
+      .required()
+      .unknown(true),
+  })
+    .required()
+    .unknown(true),
 })
   .required()
   .unknown(true)
@@ -34,6 +51,7 @@ class GithubApiProvider {
     if (this.withPooling) {
       this.standardTokens = new TokenPool({ batchSize: 25 })
       this.searchTokens = new TokenPool({ batchSize: 5 })
+      this.graphqlTokens = new TokenPool({ batchSize: 25 })
     }
   }
 
@@ -42,6 +60,7 @@ class GithubApiProvider {
       return {
         standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
         searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+        graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
       }
     } else {
       return {}
@@ -52,33 +71,70 @@ class GithubApiProvider {
     if (this.withPooling) {
       this.standardTokens.add(tokenString)
       this.searchTokens.add(tokenString)
+      this.graphqlTokens.add(tokenString)
     } else {
       throw Error('When not using a token pool, do not provide tokens')
     }
   }
 
-  updateToken(token, headers) {
+  getV3RateLimitFromHeaders(headers) {
+    const h = Joi.attempt(headers, headerSchema)
+    return {
+      rateLimit: h['x-ratelimit-limit'],
+      totalUsesRemaining: h['x-ratelimit-remaining'],
+      nextReset: h['x-ratelimit-reset'],
+    }
+  }
+
+  getV4RateLimitFromBody(body) {
+    const parsedBody = JSON.parse(body)
+    const b = Joi.attempt(parsedBody, bodySchema)
+    return {
+      rateLimit: b.data.rateLimit.limit,
+      totalUsesRemaining: b.data.rateLimit.remaining,
+      nextReset: Date.parse(b.data.rateLimit.resetAt) / 1000,
+    }
+  }
+
+  updateToken({ token, url, res }) {
     let rateLimit, totalUsesRemaining, nextReset
-    try {
-      ;({
-        'x-ratelimit-limit': rateLimit,
-        'x-ratelimit-remaining': totalUsesRemaining,
-        'x-ratelimit-reset': nextReset,
-      } = Joi.attempt(headers, headerSchema))
-    } catch (e) {
-      const logHeaders = {
-        'x-ratelimit-limit': headers['x-ratelimit-limit'],
-        'x-ratelimit-remaining': headers['x-ratelimit-remaining'],
-        'x-ratelimit-reset': headers['x-ratelimit-reset'],
+    if (url.startsWith('/graphql')) {
+      try {
+        ;({
+          rateLimit,
+          totalUsesRemaining,
+          nextReset,
+        } = this.getV4RateLimitFromBody(res.body))
+      } catch (e) {
+        console.error(
+          `Could not extract rate limit info from response body ${res.body}`
+        )
+        log.error(e)
+        return
       }
-      console.log(
-        `Invalid GitHub rate limit headers ${JSON.stringify(
-          logHeaders,
-          undefined,
-          2
-        )}`
-      )
-      return
+    } else {
+      try {
+        ;({
+          rateLimit,
+          totalUsesRemaining,
+          nextReset,
+        } = this.getV3RateLimitFromHeaders(res.headers))
+      } catch (e) {
+        const logHeaders = {
+          'x-ratelimit-limit': res.headers['x-ratelimit-limit'],
+          'x-ratelimit-remaining': res.headers['x-ratelimit-remaining'],
+          'x-ratelimit-reset': res.headers['x-ratelimit-reset'],
+        }
+        console.error(
+          `Invalid GitHub rate limit headers ${JSON.stringify(
+            logHeaders,
+            undefined,
+            2
+          )}`
+        )
+        log.error(e)
+        return
+      }
     }
 
     const reserve = Math.ceil(this.reserveFraction * rateLimit)
@@ -95,6 +151,8 @@ class GithubApiProvider {
   tokenForUrl(url) {
     if (url.startsWith('/search')) {
       return this.searchTokens.next()
+    } else if (url.startsWith('/graphql')) {
+      return this.graphqlTokens.next()
     } else {
       return this.standardTokens.next()
     }
@@ -103,7 +161,7 @@ class GithubApiProvider {
   // Act like request(), but tweak headers and query to avoid hitting a rate
   // limit. Inject `request` so we can pass in `cachingRequest` from
   // `request-handler.js`.
-  request(request, url, query, callback) {
+  request(request, url, options = {}, callback) {
     const { baseUrl } = this
 
     let token
@@ -120,24 +178,26 @@ class GithubApiProvider {
       tokenString = this.globalToken
     }
 
-    const options = {
-      url,
-      baseUrl,
-      qs: query,
-      headers: {
-        'User-Agent': 'Shields.io',
-        Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${tokenString}`,
+    const mergedOptions = {
+      ...options,
+      ...{
+        url,
+        baseUrl,
+        headers: {
+          'User-Agent': 'Shields.io',
+          Accept: 'application/vnd.github.v3+json',
+          Authorization: `token ${tokenString}`,
+        },
       },
     }
 
-    request(options, (err, res, buffer) => {
+    request(mergedOptions, (err, res, buffer) => {
       if (err === null) {
         if (this.withPooling) {
           if (res.statusCode === 401) {
             this.invalidateToken(token)
           } else if (res.statusCode < 500) {
-            this.updateToken(token, res.headers)
+            this.updateToken({ token, url, res })
           }
         }
       }
@@ -145,9 +205,9 @@ class GithubApiProvider {
     })
   }
 
-  requestAsPromise(request, url, query) {
+  requestAsPromise(request, url, options) {
     return new Promise((resolve, reject) => {
-      this.request(request, url, query, (err, res, buffer) => {
+      this.request(request, url, options, (err, res, buffer) => {
         if (err) {
           reject(err)
         } else {

@@ -1,23 +1,11 @@
 'use strict'
 
-const sinon = require('sinon')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
-const serverSecrets = require('../../lib/server-secrets')
 
-const user = 'admin'
-const pass = 'password'
-
-function mockNexusCreds() {
-  serverSecrets['nexus_user'] = undefined
-  serverSecrets['nexus_pass'] = undefined
-  sinon.stub(serverSecrets, 'nexus_user').value(user)
-  sinon.stub(serverSecrets, 'nexus_pass').value(pass)
-}
-
-t.create('live: search release version valid artifact')
+t.create('search release version valid artifact')
   .timeout(15000)
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
@@ -25,7 +13,7 @@ t.create('live: search release version valid artifact')
     message: isVersion,
   })
 
-t.create('live: search release version of an nonexistent artifact')
+t.create('search release version of an nonexistent artifact')
   .timeout(10000)
   .get(
     '/r/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
@@ -35,7 +23,7 @@ t.create('live: search release version of an nonexistent artifact')
     message: 'artifact or version not found',
   })
 
-t.create('live: search snapshot version valid snapshot artifact')
+t.create('search snapshot version valid snapshot artifact')
   .timeout(10000)
   .get('/s/https/oss.sonatype.org/com.google.guava/guava.json')
   .expectBadge({
@@ -43,7 +31,7 @@ t.create('live: search snapshot version valid snapshot artifact')
     message: isVersion,
   })
 
-t.create('live: search snapshot version of an nonexistent artifact')
+t.create('search snapshot version of an nonexistent artifact')
   .timeout(10000)
   .get(
     '/s/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
@@ -54,14 +42,14 @@ t.create('live: search snapshot version of an nonexistent artifact')
     color: 'red',
   })
 
-t.create('live: repository version')
+t.create('repository version')
   .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
-t.create('live: repository version with query')
+t.create('repository version with query')
   .get(
     '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json'
   )
@@ -70,7 +58,7 @@ t.create('live: repository version with query')
     message: isVersion,
   })
 
-t.create('live: repository version of an nonexistent artifact')
+t.create('repository version of an nonexistent artifact')
   .get(
     '/developer/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json'
   )
@@ -206,27 +194,5 @@ t.create('user query params')
   .expectBadge({
     label: 'nexus',
     message: 'v3.2.1',
-    color: 'blue',
-  })
-
-t.create('auth')
-  .before(mockNexusCreds)
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
-  .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
-      .get('/service/local/lucene/search')
-      .query({ g: 'jboss', a: 'jboss-client' })
-      // This ensures that the expected credentials from serverSecrets are actually being sent with the HTTP request.
-      // Without this the request wouldn't match and the test would fail.
-      .basicAuth({
-        user,
-        pass,
-      })
-      .reply(200, { data: [{ latestRelease: '2.3.4' }] })
-  )
-  .finally(sinon.restore)
-  .expectBadge({
-    label: 'nexus',
-    message: 'v2.3.4',
     color: 'blue',
   })

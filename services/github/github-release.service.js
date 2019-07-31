@@ -1,16 +1,16 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { NotFound, redirector } = require('..')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   fetchLatestRelease,
   releaseInfoSchema,
 } = require('./github-common-fetch')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+const { NotFound, redirector } = require('..')
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
@@ -23,7 +23,7 @@ const releaseInfoArraySchema = Joi.array()
   .items(releaseInfoSchema)
   .required()
 
-class GithubRelease extends GithubAuthService {
+class GithubRelease extends GithubAuthV3Service {
   static get category() {
     return 'version'
   }

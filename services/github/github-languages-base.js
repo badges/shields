@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { errorMessagesFor } = require('./github-helpers')
 
 /*
@@ -11,7 +11,7 @@ The keys could be anything and {} is a valid response (e.g: for an empty repo)
 */
 const schema = Joi.object().pattern(/./, nonNegativeInteger)
 
-class BaseGithubLanguage extends GithubAuthService {
+class BaseGithubLanguage extends GithubAuthV3Service {
   async fetch({ user, repo }) {
     return this._requestJson({
       url: `/repos/${user}/${repo}/languages`,

@@ -1,10 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const { optionalUrl } = require('../validators')
 const { isDependencyMap } = require('../package-json-helpers')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
@@ -38,6 +37,10 @@ const queryParamSchema = Joi.object({
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
+  static get auth() {
+    return { passKey: 'npm_token' }
+  }
+
   static buildRoute(base, { withTag } = {}) {
     if (withTag) {
       return {
@@ -74,15 +77,16 @@ module.exports = class NpmBase extends BaseJsonService {
   }
 
   async _requestJson(data) {
-    // Use a custom Accept header because of this bug:
-    // <https://github.com/npm/npmjs.org/issues/163>
-    const headers = { Accept: '*/*' }
-    if (serverSecrets.npm_token) {
-      headers.Authorization = `Bearer ${serverSecrets.npm_token}`
-    }
     return super._requestJson({
       ...data,
-      options: { headers },
+      options: {
+        headers: {
+          // Use a custom Accept header because of this bug:
+          // <https://github.com/npm/npmjs.org/issues/163>
+          Accept: '*/*',
+          ...this.authHelper.bearerAuthHeader,
+        },
+      },
     })
   }
 

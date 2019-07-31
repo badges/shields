@@ -75,7 +75,10 @@ describe('Redirector', function() {
         transformPath,
         dateAdded,
       })
-      ServiceClass.register({ camp }, {})
+      ServiceClass.register(
+        { camp },
+        { rasterUrl: 'http://raster.example.test' }
+      )
     })
 
     it('should redirect as configured', async function() {
@@ -90,7 +93,7 @@ describe('Redirector', function() {
       expect(headers.location).to.equal('/new/service/hello-world.svg')
     })
 
-    it('should preserve the extension', async function() {
+    it('should redirect raster extensions to the canonical path as configured', async function() {
       const { statusCode, headers } = await got(
         `${baseUrl}/very/old/service/hello-world.png`,
         {
@@ -99,7 +102,9 @@ describe('Redirector', function() {
       )
 
       expect(statusCode).to.equal(301)
-      expect(headers.location).to.equal('/new/service/hello-world.png')
+      expect(headers.location).to.equal(
+        'http://raster.example.test/new/service/hello-world.png'
+      )
     })
 
     it('should forward the query params', async function() {

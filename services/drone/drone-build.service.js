@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
@@ -27,6 +26,10 @@ module.exports = class DroneBuild extends BaseJsonService {
       base: 'drone/build',
       pattern: ':user/:repo/:branch*',
     }
+  }
+
+  static get auth() {
+    return { passKey: 'drone_token' }
   }
 
   static get examples() {
@@ -85,11 +88,7 @@ module.exports = class DroneBuild extends BaseJsonService {
       qs: {
         ref: branch ? `refs/heads/${branch}` : undefined,
       },
-    }
-    if (serverSecrets.drone_token) {
-      options.headers = {
-        Authorization: `Bearer ${serverSecrets.drone_token}`,
-      }
+      headers: this.authHelper.bearerAuthHeader,
     }
     if (!server) {
       server = 'https://cloud.drone.io'

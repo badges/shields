@@ -22,7 +22,9 @@ module.exports = class TeamCityBuild extends TeamCityBase {
   static get route() {
     return {
       base: 'teamcity',
-      format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+)',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
+      format: '(?:codebetter|(http|https)/(.+)/(s|e))/([^/]+?)',
       capture: ['protocol', 'hostAndPath', 'verbosity', 'buildId'],
     }
   }
@@ -44,7 +46,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         pattern: ':protocol/:hostAndPath/s/:buildId',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'https/teamcity.jetbrains.com',
+          hostAndPath: 'teamcity.jetbrains.com',
           buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
         },
         staticPreview: this.render({
@@ -56,7 +58,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
         pattern: ':protocol/:hostAndPath/e/:buildId',
         namedParams: {
           protocol: 'https',
-          hostAndPath: 'https/teamcity.jetbrains.com',
+          hostAndPath: 'teamcity.jetbrains.com',
           buildId: 'bt345',
         },
         staticPreview: this.render({

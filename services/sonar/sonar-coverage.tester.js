@@ -5,7 +5,7 @@ const { isIntegerPercentage } = require('../test-validators')
 
 t.create('Coverage')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json'
+    '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com'
   )
   .expectBadge({
     label: 'coverage',
@@ -14,7 +14,7 @@ t.create('Coverage')
 
 t.create('Coverage (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/coverage.json?sonarVersion=4.2'
+    '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
   )
   .expectBadge({
     label: 'coverage',

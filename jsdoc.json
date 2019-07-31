@@ -1,0 +1,20 @@
+{
+  "source": {
+    "exclude": [
+      "__snapshots__",
+      "build",
+      "coverage",
+      "logo",
+      "node_modules",
+      "private",
+      "public"
+    ]
+  },
+  "plugins": ["plugins/markdown"],
+  "opts": {
+    "destination": "api-docs/",
+    "readme": "README.md",
+    "recurse": true,
+    "tutorials": "doc/"
+  }
+}

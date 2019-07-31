@@ -3,12 +3,11 @@
 const Joi = require('@hapi/joi')
 const { version: versionColor } = require('../color-formatters')
 const { addv } = require('../text-formatters')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 const {
   optionalDottedVersionNClausesWithOptionalSuffix,
 } = require('../validators')
 const { isSnapshotVersion } = require('./nexus-version')
+const { BaseJsonService, InvalidResponse, NotFound } = require('..')
 
 const searchApiSchema = Joi.object({
   data: Joi.array()
@@ -45,8 +44,14 @@ module.exports = class Nexus extends BaseJsonService {
       // API pattern:
       // /nexus/(r|s|<repo-name>)/(http|https)/<nexus.host>[:port][/<entry-path>]/<group>/<artifact>[:k1=v1[:k2=v2[...]]]
       pattern:
-        ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+):queryOpt(:.+)?',
+        // Do not base new services on this route pattern.
+        // See https://github.com/badges/shields/issues/3714
+        ':repo(r|s|[^/]+)/:scheme(http|https)/:hostAndPath+/:groupId/:artifactId([^/:]+?):queryOpt(:.+?)?',
     }
+  }
+
+  static get auth() {
+    return { userKey: 'nexus_user', passKey: 'nexus_pass' }
   }
 
   static get examples() {
@@ -167,19 +172,10 @@ module.exports = class Nexus extends BaseJsonService {
       this.addQueryParamsToQueryString({ qs, queryOpt })
     }
 
-    const options = { qs }
-
-    if (serverSecrets.nexus_user) {
-      options.auth = {
-        user: serverSecrets.nexus_user,
-        pass: serverSecrets.nexus_pass,
-      }
-    }
-
     const json = await this._requestJson({
       schema,
       url,
-      options,
+      options: { qs, auth: this.authHelper.basicAuth },
       errorMessages: {
         404: 'artifact not found',
       },
