@@ -10,7 +10,7 @@ const crateSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
     max_version: Joi.string().required(),
-  }),
+  }).required(),
   versions: Joi.array()
     .items(
       Joi.object({
