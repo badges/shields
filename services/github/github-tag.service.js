@@ -1,11 +1,12 @@
 'use strict'
 
+const gql = require('graphql-tag')
 const Joi = require('@hapi/joi')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+const { GithubAuthV4Service } = require('./github-auth-service')
+const { documentation, transformErrors } = require('./github-helpers')
 const { NotFound, redirector } = require('..')
 
 const queryParamSchema = Joi.object({
@@ -15,20 +16,23 @@ const queryParamSchema = Joi.object({
     .default('date'),
 }).required()
 
-const schema = Joi.alternatives()
-  .try(
-    Joi.array()
-      .items(
-        Joi.object({
-          name: Joi.string().required(),
-        })
-      )
-      .required(),
-    Joi.array().length(0)
-  )
-  .required()
+const schema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      refs: Joi.object({
+        edges: Joi.array()
+          .items({
+            node: Joi.object({
+              name: Joi.string().required(),
+            }).required(),
+          })
+          .required(),
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
-class GithubTag extends GithubAuthV3Service {
+class GithubTag extends GithubAuthV4Service {
   static get category() {
     return 'version'
   }
@@ -83,26 +87,45 @@ class GithubTag extends GithubAuthV3Service {
     }
   }
 
-  async fetch({ user, repo }) {
-    return this._requestJson({
-      url: `/repos/${user}/${repo}/tags`,
+  async fetch({ user, repo, sort }) {
+    const limit = sort === 'semver' ? 100 : 1
+    return await this._requestGraphql({
+      query: gql`
+        query($user: String!, $repo: String!, $limit: Int!) {
+          repository(owner: $user, name: $repo) {
+            refs(
+              refPrefix: "refs/tags/"
+              first: $limit
+              orderBy: { field: TAG_COMMIT_DATE, direction: DESC }
+            ) {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { user, repo, limit },
       schema,
-      errorMessages: errorMessagesFor('repo not found'),
+      transformErrors,
     })
   }
 
   static getLatestTag({ tags, sort, includePrereleases }) {
     if (sort === 'semver') {
-      return latest(tags.map(tag => tag.name), { pre: includePrereleases })
+      return latest(tags, { pre: includePrereleases })
     }
-    return tags[0].name
+    return tags[0]
   }
 
   async handle({ user, repo }, queryParams) {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
 
-    const tags = await this.fetch({ user, repo })
+    const json = await this.fetch({ user, repo, sort })
+    const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0)
       throw new NotFound({ prettyMessage: 'no tags found' })
     return this.constructor.render({

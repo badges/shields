@@ -6,9 +6,9 @@ const { GithubTag } = require('./github-tag.service')
 describe('GithubTag', function() {
   test(GithubTag.getLatestTag, () => {
     const tagFixture = [
-      { name: 'cheese' }, // any old string
-      { name: 'v1.2' }, // semver release
-      { name: 'v1.3-beta3' }, // semver pre-release
+      'cheese', // any old string
+      'v1.2', // semver release
+      'v1.3-beta3', // semver pre-release
     ]
     given({
       tags: tagFixture,
@@ -34,12 +34,12 @@ describe('GithubTag', function() {
     // if there are only pre-releases to choose from
     // return a pre-release anyway in preference to nothing
     given({
-      tags: [{ name: '1.2.0-beta' }],
+      tags: ['1.2.0-beta'],
       sort: 'semver',
       includePrereleases: false,
     }).expect('1.2.0-beta')
     given({
-      tags: [{ name: '1.2.0-beta' }],
+      tags: ['1.2.0-beta'],
       sort: 'date',
       includePrereleases: false,
     }).expect('1.2.0-beta')
