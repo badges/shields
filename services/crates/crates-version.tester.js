@@ -1,6 +1,5 @@
 'use strict'
 
-// const { ServiceTester } = require('../tester')
 const { isSemver } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
