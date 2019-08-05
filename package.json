@@ -239,7 +239,7 @@
     "redis-server": "^1.2.2",
     "require-hacker": "^3.0.1",
     "rimraf": "^2.6.3",
-    "sazerac": "^1.0.0",
+    "sazerac": "^1.1.0",
     "sinon": "^7.4.0",
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^7.8.0",
