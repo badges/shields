@@ -187,7 +187,7 @@
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.6.1",
     "eslint-plugin-sort-class-members": "^1.5.0",
     "eslint-plugin-standard": "^4.0.0",
