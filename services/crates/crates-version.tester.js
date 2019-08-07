@@ -1,13 +1,7 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
 const { isSemver } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'crates',
-  title: 'crates.io',
-  pathPrefix: '/crates/v',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version')
   .get('/libc.json')
