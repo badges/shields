@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseXmlService } = require('..')
 const { renderVersionBadge } = require('../version')
+const { BaseXmlService } = require('..')
 
 const schema = Joi.object({
   metadata: Joi.object({
@@ -27,6 +27,8 @@ module.exports = class MavenMetadata extends BaseXmlService {
   static get route() {
     return {
       base: 'maven-metadata/v',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath+',
     }
   }

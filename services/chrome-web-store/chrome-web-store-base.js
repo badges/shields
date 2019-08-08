@@ -1,8 +1,8 @@
 'use strict'
 
-const { BaseService, Inaccessible } = require('..')
 const chromeWebStore = require('chrome-web-store-item-property')
 const checkErrorResponse = require('../../core/base-service/check-error-response')
+const { BaseService, Inaccessible } = require('..')
 
 module.exports = class BaseChromeWebStoreService extends BaseService {
   async fetch({ storeId }) {

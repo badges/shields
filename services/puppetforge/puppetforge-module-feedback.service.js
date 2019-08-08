@@ -1,10 +1,10 @@
 'use strict'
 
-const { NotFound } = require('..')
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../color-formatters')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
+const { NotFound } = require('..')
 
 module.exports = class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
   static get category() {

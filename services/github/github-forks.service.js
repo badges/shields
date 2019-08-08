@@ -1,16 +1,23 @@
 'use strict'
 
+const gql = require('graphql-tag')
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+const { GithubAuthV4Service } = require('./github-auth-service')
+const { documentation, transformErrors } = require('./github-helpers')
 
 const schema = Joi.object({
-  forks_count: nonNegativeInteger,
+  data: Joi.object({
+    repository: Joi.object({
+      forks: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
 }).required()
 
-module.exports = class GithubForks extends GithubAuthService {
+module.exports = class GithubForks extends GithubAuthV4Service {
   static get category() {
     return 'social'
   }
@@ -67,11 +74,24 @@ module.exports = class GithubForks extends GithubAuthService {
   }
 
   async handle({ user, repo }) {
-    const { forks_count: forkCount } = await this._requestJson({
-      url: `/repos/${user}/${repo}`,
+    const json = await this._requestGraphql({
+      query: gql`
+        query($user: String!, $repo: String!) {
+          repository(owner: $user, name: $repo) {
+            forks {
+              totalCount
+            }
+          }
+        }
+      `,
+      variables: { user, repo },
       schema,
-      errorMessages: errorMessagesFor(),
+      transformErrors,
     })
-    return this.constructor.render({ user, repo, forkCount })
+    return this.constructor.render({
+      user,
+      repo,
+      forkCount: json.data.repository.forks.totalCount,
+    })
   }
 }

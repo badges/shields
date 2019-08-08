@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 
 const keywords = ['Rust']
 
@@ -10,7 +10,7 @@ const crateSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
     max_version: Joi.string().required(),
-  }),
+  }).required(),
   versions: Joi.array()
     .items(
       Joi.object({

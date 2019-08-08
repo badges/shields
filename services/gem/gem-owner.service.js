@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
 const { floorCount: floorCountColor } = require('../color-formatters')
+const { BaseJsonService } = require('..')
 
 const ownerSchema = Joi.array().required()
 

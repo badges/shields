@@ -49,7 +49,7 @@ module.exports = function makeBadge({
   }
 
   template = camelcase(template)
-  if (template.startsWith('popout') && !logo) {
+  if (template.startsWith('popout')) {
     template = template.replace('popout', 'flat')
   }
 
@@ -57,12 +57,6 @@ module.exports = function makeBadge({
   if (render === undefined) {
     template = 'flat'
     render = badgeRenderers.flat
-  }
-
-  // TODO: Move to render function.
-  if (template.startsWith('popout')) {
-    logoPosition = logoPosition <= 10 && logoPosition >= -10 ? logoPosition : 0
-    logoWidth = +logoWidth || 32
   }
 
   logoWidth = +logoWidth || (logo ? 14 : 0)

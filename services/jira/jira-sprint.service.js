@@ -1,7 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const JiraBase = require('./jira-base')
+const { authConfig } = require('./jira-common')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   total: Joi.number(),
@@ -26,12 +27,22 @@ const documentation = `
 </p>
 `
 
-module.exports = class JiraSprint extends JiraBase {
+module.exports = class JiraSprint extends BaseJsonService {
+  static get category() {
+    return 'issue-tracking'
+  }
+
   static get route() {
     return {
       base: 'jira/sprint',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(http|https)/:hostAndPath(.+)/:sprintId',
     }
+  }
+
+  static get auth() {
+    return authConfig
   }
 
   static get examples() {
@@ -79,21 +90,23 @@ module.exports = class JiraSprint extends JiraBase {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-group-Search
     // There are other sprint-specific APIs but those require authentication. The search API
     // allows us to get the needed data without being forced to authenticate.
-    const url = `${protocol}://${hostAndPath}/rest/api/2/search`
-    const qs = {
-      jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
-      fields: 'resolution',
-      maxResults: 500,
-    }
-    const json = await this.fetch({
-      url,
+    const json = await this._requestJson({
+      url: `${protocol}://${hostAndPath}/rest/api/2/search`,
       schema,
-      qs,
+      options: {
+        qs: {
+          jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
+          fields: 'resolution',
+          maxResults: 500,
+        },
+        auth: this.authHelper.basicAuth,
+      },
       errorMessages: {
         400: 'sprint not found',
         404: 'sprint not found',
       },
     })
+
     const numTotalIssues = json.total
     const numCompletedIssues = json.issues.filter(issue => {
       if (issue.fields.resolution != null) {

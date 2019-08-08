@@ -50,7 +50,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
       )
 
       // The final capture group is the extension.
-      const format = match.slice(-1)[0]
+      const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
       badgeData.format = format
 
       const svg = makeBadge(badgeData)

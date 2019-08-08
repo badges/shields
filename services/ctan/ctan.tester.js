@@ -55,7 +55,7 @@ t.create('version')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
-t.create('version (mocked)')
+t.create('version')
   .get('/v/novel.json')
   .intercept(nock =>
     nock('http://www.ctan.org')

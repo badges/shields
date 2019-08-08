@@ -18,7 +18,7 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'travis',
-      format: '(?:(com)/)?(?!php-v)([^/]+/[^/]+)(?:/(.+))?',
+      format: '(?:(com)/)?(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
       capture: ['comDomain', 'userRepo', 'branch'],
     }
   }

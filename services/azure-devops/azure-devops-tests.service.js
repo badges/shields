@@ -6,7 +6,6 @@ const {
   renderTestResultBadge,
 } = require('../test-results')
 const AzureDevOpsBase = require('./azure-devops-base')
-const { getHeaders } = require('./azure-devops-helpers')
 
 const commonAttrs = {
   keywords: ['vso', 'vsts', 'azure-devops'],
@@ -192,7 +191,7 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       skipped_label: skippedLabel,
     }
   ) {
-    const headers = getHeaders()
+    const auth = this.authHelper.basicAuth
     const errorMessages = {
       404: 'build pipeline or test result summary not found',
     }
@@ -201,22 +200,18 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      headers,
+      auth,
       errorMessages
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
-    const url = `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`
-    const options = {
-      qs: {
-        buildId,
-      },
-      headers,
-    }
 
     const json = await this.fetch({
-      url,
-      options,
+      url: `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`,
+      options: {
+        qs: { buildId },
+        auth,
+      },
       schema: buildTestResultSummarySchema,
       errorMessages,
     })

@@ -1,11 +1,10 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseJsonService } = require('..')
 const { isLegacyVersion } = require('./sonar-helpers')
+const { BaseJsonService } = require('..')
 
-const schema = Joi.object({
+const modernSchema = Joi.object({
   component: Joi.object({
     measures: Joi.array()
       .items(
@@ -21,7 +20,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const legacyApiSchema = Joi.array()
+const legacySchema = Joi.array()
   .items(
     Joi.object({
       msr: Joi.array()
@@ -40,12 +39,17 @@ const legacyApiSchema = Joi.array()
   .required()
 
 module.exports = class SonarBase extends BaseJsonService {
-  async fetch({ sonarVersion, protocol, host, component, metricName }) {
-    let qs, url
+  static get auth() {
+    return { userKey: 'sonarqube_token' }
+  }
+
+  async fetch({ sonarVersion, server, component, metricName }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
+    let qs, url, schema
     if (useLegacyApi) {
-      url = `${protocol}://${host}/api/resources`
+      schema = legacySchema
+      url = `${server}/api/resources`
       qs = {
         resource: component,
         depth: 0,
@@ -53,25 +57,21 @@ module.exports = class SonarBase extends BaseJsonService {
         includeTrends: true,
       }
     } else {
-      url = `${protocol}://${host}/api/measures/component`
+      schema = modernSchema
+      url = `${server}/api/measures/component`
       qs = {
         componentKey: component,
         metricKeys: metricName,
       }
     }
 
-    const options = { qs }
-
-    if (serverSecrets.sonarqube_token) {
-      options.auth = {
-        user: serverSecrets.sonarqube_token,
-      }
-    }
-
     return this._requestJson({
-      schema: useLegacyApi ? legacyApiSchema : schema,
+      schema,
       url,
-      options,
+      options: {
+        qs,
+        auth: this.authHelper.basicAuth,
+      },
       errorMessages: {
         404: 'component or metric not found, or legacy API not supported',
       },

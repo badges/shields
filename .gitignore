@@ -110,3 +110,6 @@ service-definitions.yml
 # Cypress
 /cypress/videos/
 /cypress/screenshots/
+
+# Rendered API docs
+/api-docs/

@@ -2,8 +2,8 @@
 
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const { redirector } = require('..')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
+const { redirector, NotFound } = require('..')
 
 class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static get category() {
@@ -40,6 +40,9 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
 
   async handle({ storeId }) {
     const data = await this.fetch({ storeId })
+    if (!data.interactionCount || !data.interactionCount.UserDownloads) {
+      throw new NotFound({ prettyMessage: 'count not found' })
+    }
     return this.constructor.render({
       downloads: data.interactionCount.UserDownloads,
     })

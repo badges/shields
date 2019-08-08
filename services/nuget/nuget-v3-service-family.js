@@ -4,8 +4,8 @@ const { promisify } = require('util')
 const Joi = require('@hapi/joi')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
-const { BaseJsonService, NotFound } = require('..')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
+const { BaseJsonService, NotFound } = require('..')
 
 /*
  * Build the Shields service URL object for the given service configuration. Return
@@ -156,7 +156,7 @@ function createServiceFamily({
     static get route() {
       return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('(v|vpre)', 'which')
-        .push('(.*)', 'packageName')
+        .push('(.+?)', 'packageName')
         .toObject()
     }
 
@@ -207,7 +207,7 @@ function createServiceFamily({
     static get route() {
       return buildRoute({ serviceBaseUrl, withTenant, withFeed })
         .push('dt')
-        .push('(.*)', 'packageName')
+        .push('(.+?)', 'packageName')
         .toObject()
     }
 

@@ -1,8 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const serverSecrets = require('../../lib/server-secrets')
-const { BaseXmlService, Inaccessible } = require('..')
+const { BaseXmlService } = require('..')
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
@@ -40,15 +39,23 @@ const keywords = ['sensiolabs', 'sensio']
 
 const gradeColors = {
   none: 'red',
-  bronze: '#C88F6A',
-  silver: '#C0C0C0',
-  gold: '#EBC760',
-  platinum: '#E5E4E2',
+  bronze: '#c88f6a',
+  silver: '#c0c0c0',
+  gold: '#ebc760',
+  platinum: '#e5e4e2',
 }
 
 class SymfonyInsightBase extends BaseXmlService {
   static get category() {
     return 'analysis'
+  }
+
+  static get auth() {
+    return {
+      userKey: 'sl_insight_userUuid',
+      passKey: 'sl_insight_apiToken',
+      isRequired: true,
+    }
   }
 
   static get defaultBadgeData() {
@@ -58,31 +65,15 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 
   async fetch({ projectUuid }) {
-    const url = `https://insight.symfony.com/api/projects/${projectUuid}`
-    const options = {
-      headers: {
-        Accept: 'application/vnd.com.sensiolabs.insight+xml',
-      },
-    }
-
-    if (
-      !serverSecrets.sl_insight_userUuid ||
-      !serverSecrets.sl_insight_apiToken
-    ) {
-      throw new Inaccessible({
-        prettyMessage: 'required API tokens not found in config',
-      })
-    }
-
-    options.auth = {
-      user: serverSecrets.sl_insight_userUuid,
-      pass: serverSecrets.sl_insight_apiToken,
-    }
-
     return this._requestXml({
-      url,
-      options,
       schema,
+      url: `https://insight.symfony.com/api/projects/${projectUuid}`,
+      options: {
+        headers: {
+          Accept: 'application/vnd.com.sensiolabs.insight+xml',
+        },
+        auth: this.authHelper.basicAuth,
+      },
       errorMessages: {
         401: 'not authorized to access project',
         404: 'project not found',

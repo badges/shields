@@ -1,16 +1,16 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { NotFound, InvalidParameter } = require('..')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+const { NotFound, InvalidParameter } = require('..')
 
 const schema = Joi.object({
   // https://stackoverflow.com/a/23969867/893113
   status: Joi.equal('identical', 'ahead', 'behind', 'diverged'),
 }).required()
 
-module.exports = class GithubCommitStatus extends GithubAuthService {
+module.exports = class GithubCommitStatus extends GithubAuthV3Service {
   static get category() {
     return 'issue-tracking'
   }

@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 const { NotFound } = require('..')
 
@@ -14,7 +14,7 @@ const schema = Joi.alternatives(
   Joi.array().required()
 )
 
-module.exports = class GithubSize extends GithubAuthService {
+module.exports = class GithubSize extends GithubAuthV3Service {
   static get category() {
     return 'size'
   }

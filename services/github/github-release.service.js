@@ -2,10 +2,10 @@
 
 const { addv } = require('../text-formatters')
 const { fetchLatestRelease } = require('./github-common-fetch')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation } = require('./github-helpers')
 
-module.exports = class GithubRelease extends GithubAuthService {
+module.exports = class GithubRelease extends GithubAuthV3Service {
   static get category() {
     return 'version'
   }

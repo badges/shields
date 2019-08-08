@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService, NotFound } = require('..')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const foundSchema = Joi.object()
   .keys({

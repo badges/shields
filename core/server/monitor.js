@@ -1,6 +1,6 @@
 'use strict'
 
-const serverSecrets = require('../../lib/server-secrets')
+const config = require('config').util.toObject()
 const secretIsValid = require('./secret-is-valid')
 const RateLimit = require('./rate-limit')
 const log = require('./log')
@@ -58,7 +58,7 @@ function setRoutes({ rateLimit }, server) {
   })
 
   server.get('/sys/network', (req, res) => {
-    res.json({ ips: serverSecrets.shields_ips })
+    res.json({ ips: config.public.shields_ips })
   })
 
   server.ws('/sys/logs', socket => {

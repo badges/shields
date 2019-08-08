@@ -19,13 +19,7 @@ describe('Route helpers', function() {
 
     const regexExec = str => regex.exec(str)
     test(regexExec, () => {
-      forCases([
-        given('/foo/bar.bar.bar.zip'),
-        given('/foo/bar/bar.svg'),
-        // This is a valid example with the wrong extension separator, to
-        // test that we only accept a `.`.
-        given('/foo/bar.bar.bar_svg'),
-      ]).expect(null)
+      given('/foo/bar/bar.svg').expect(null)
     })
 
     const namedParams = str =>
@@ -33,30 +27,25 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({ namedParamA: 'bar.bar.bar' })
+
+      // This pattern catches bugs related to escaping the extension separator.
+      given('/foo/bar.bar.bar_svg').expect({ namedParamA: 'bar.bar.bar_svg' })
+      given('/foo/bar.bar.bar.zip').expect({ namedParamA: 'bar.bar.bar.zip' })
     })
   })
 
   context('A `format` with a named param is declared', function() {
     const { regex, captureNames } = prepareRoute({
       base: 'foo',
-      format: '([^/]+)',
+      format: '([^/]+?)',
       capture: ['namedParamA'],
     })
 
     const regexExec = str => regex.exec(str)
     test(regexExec, () => {
-      forCases([
-        given('/foo/bar.bar.bar.zip'),
-        given('/foo/bar/bar.svg'),
-        // This is a valid example with the wrong extension separator, to
-        // test that we only accept a `.`.
-        given('/foo/bar.bar.bar_svg'),
-      ]).expect(null)
+      given('/foo/bar/bar.svg').expect(null)
     })
 
     const namedParams = str =>
@@ -64,11 +53,12 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({ namedParamA: 'bar.bar.bar' })
+
+      // This pattern catches bugs related to escaping the extension separator.
+      given('/foo/bar.bar.bar_svg').expect({ namedParamA: 'bar.bar.bar_svg' })
+      given('/foo/bar.bar.bar.zip').expect({ namedParamA: 'bar.bar.bar.zip' })
     })
   })
 
@@ -83,9 +73,6 @@ describe('Route helpers', function() {
     test(namedParams, () => {
       forCases([
         given('/foo/bar.bar.bar.svg'),
-        given('/foo/bar.bar.bar.png'),
-        given('/foo/bar.bar.bar.gif'),
-        given('/foo/bar.bar.bar.jpg'),
         given('/foo/bar.bar.bar.json'),
       ]).expect({})
     })

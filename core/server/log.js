@@ -1,6 +1,5 @@
 'use strict'
-const Raven = require('raven')
-const throttle = require('lodash.throttle')
+const Sentry = require('@sentry/node')
 
 const listeners = []
 
@@ -30,22 +29,11 @@ module.exports = function log(...msg) {
   console.log(d, ...msg)
 }
 
-const throttledConsoleError = throttle(console.error, 10000, {
-  trailing: false,
-})
-
-module.exports.error = function error(...msg) {
+module.exports.error = function error(err) {
   const d = date()
-  listeners.forEach(f => f(d, ...msg))
-  Raven.captureException(msg, sendErr => {
-    if (sendErr) {
-      throttledConsoleError(
-        'Failed to send captured exception to Sentry',
-        sendErr.message
-      )
-    }
-  })
-  console.error(d, ...msg)
+  listeners.forEach(f => f(d, err))
+  Sentry.captureException(err)
+  console.error(d, err)
 }
 
 module.exports.addListener = function addListener(func) {

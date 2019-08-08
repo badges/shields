@@ -167,14 +167,6 @@ package_steps: &package_steps
         <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/gh-badges/v11/results.xml
-          NODE_VERSION: v11
-        name: Run package tests on Node 11
-
-    - run:
-        <<: *run_package_tests
-        environment:
-          mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/gh-badges/v12/results.xml
           NODE_VERSION: v12
         name: Run package tests on Node 12
@@ -281,10 +273,15 @@ jobs:
           command: npm run defs && npm run features
 
       - run:
+          name: Check types
+          command: npm run check-types:frontend
+
+      - run:
           name: Frontend unit tests
           environment:
             mocha_reporter: mocha-junit-reporter
             MOCHA_FILE: junit/frontend/results.xml
+          when: always
           command: npm run test:frontend
 
       - store_test_results:

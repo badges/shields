@@ -22,7 +22,7 @@ module.exports = deprecatedService({
   category: 'size',
   route: {
     base: 'imagelayers',
-    format: '(?:.+)',
+    format: '(?:.+?)',
   },
   label: 'imagelayers',
   dateAdded: new Date('2019-xx-xx'), // Be sure to update this with today's date!
