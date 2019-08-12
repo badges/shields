@@ -36,7 +36,7 @@ t.create('version (not found)')
 // votes tests
 
 t.create('votes (valid)')
-  .get('/votes/discord.json')
+  .get('/votes/google-chrome.json')
   .expectBadge({
     label: 'votes',
     message: isMetric,
