@@ -167,7 +167,7 @@
     "chai-enzyme": "^1.0.0-beta.1",
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
-    "clipboard-copy": "^3.0.0",
+    "clipboard-copy": "^3.1.0",
     "concurrently": "^4.1.1",
     "cypress": "^3.4.1",
     "danger": "^9.0.3",
