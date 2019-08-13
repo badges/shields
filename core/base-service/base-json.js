@@ -33,7 +33,9 @@ class BaseJsonService extends BaseService {
    * @param {object} [attrs.options={}] Options to pass to request. See
    *    [documentation](https://github.com/request/request#requestoptions-callback)
    * @param {object} [attrs.errorMessages={}] Key-value map of status codes
-   *    and custom error messages e.g: `{ 404: 'package not found' }`
+   *    and custom error messages e.g: `{ 404: 'package not found' }`.
+   *    This can be used to extend or override the
+   *    [default](https://github.com/badges/shields/blob/77cb8a87ea474049f9aa518b8b7d124360e3f8cc/core/base-service/check-error-response.js#L5)
    * @returns {object} Parsed response
    * @see https://github.com/request/request#requestoptions-callback
    */
