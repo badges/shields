@@ -47,7 +47,9 @@ class BaseGraphqlService extends BaseService {
    *    [default](https://github.com/badges/shields/blob/77cb8a87ea474049f9aa518b8b7d124360e3f8cc/core/base-service/check-error-response.js#L5)
    * @param {Function} [attrs.transformErrors=defaultTransformErrors]
    *    Function which takes an errors object from a GraphQL
-   *    response and returns an instance of ShieldsRuntimeError
+   *    response and returns an instance of ShieldsRuntimeError.
+   *    The default is to return the first entry of the `errors` array as
+   *    an InvalidResponse.
    * @returns {object} Parsed response
    * @see https://github.com/request/request#requestoptions-callback
    */
