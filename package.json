@@ -230,7 +230,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-error-overlay": "^5.1.6",
+    "react-error-overlay": "^6.0.1",
     "react-helmet": "^5.2.1",
     "react-modal": "^3.9.1",
     "react-pose": "^4.0.8",
