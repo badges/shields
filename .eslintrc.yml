@@ -130,7 +130,7 @@ rules:
 
   # Disable some rules from jsdoc/recommended.
   jsdoc/require-jsdoc: off
-  jsdoc/no-undefined-types: [1, { definedTypes: ['Joi'] }]
+  jsdoc/no-undefined-types: ['warn', { definedTypes: ['Joi'] }]
 
   # Disable some from TypeScript.
   '@typescript-eslint/camelcase': off
