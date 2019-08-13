@@ -38,6 +38,7 @@ class BaseGraphqlService extends BaseService {
    * @param {string} attrs.url URL to request
    * @param {object} attrs.query Parsed GraphQL object
    *    representing the query clause of GraphQL POST body
+   *    e.g. gql`{ query { ... } }`
    * @param {object} attrs.variables Variables clause of GraphQL POST body
    * @param {object} [attrs.options={}] Options to pass to request. See
    *    [documentation](https://github.com/request/request#requestoptions-callback)
