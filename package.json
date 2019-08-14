@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^15.1.0",
-    "@sentry/node": "^5.5.0",
+    "@sentry/node": "^5.6.1",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
     "camp": "~17.2.4",
