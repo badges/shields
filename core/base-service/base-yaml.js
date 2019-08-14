@@ -28,7 +28,7 @@ class BaseYamlService extends BaseService {
    * @param {object} [attrs.errorMessages={}] Key-value map of status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
-   *    [default](https://github.com/badges/shields/blob/77cb8a87ea474049f9aa518b8b7d124360e3f8cc/core/base-service/check-error-response.js#L5)
+   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
    * @param {object} [attrs.encoding='utf8'] Character encoding
    * @returns {object} Parsed response
    * @see https://github.com/request/request#requestoptions-callback
