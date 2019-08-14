@@ -151,7 +151,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "7.5.5",
     "@mapbox/react-click-to-select": "^2.2.0",
-    "@types/chai": "^4.1.7",
+    "@types/chai": "^4.2.0",
     "@types/enzyme": "^3.10.3",
     "@types/mocha": "^5.2.7",
     "@types/react-helmet": "^5.0.8",
