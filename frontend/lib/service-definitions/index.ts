@@ -27,7 +27,7 @@ export interface Example {
   }
 }
 
-export interface ModernRoute {
+export interface Route {
   pattern: string
   queryParams: string[]
 }
@@ -41,7 +41,7 @@ export interface ServiceDefinition {
   category: string
   name: string
   isDeprecated: boolean
-  route: ModernRoute | LegacyRoute
+  route: Route | LegacyRoute
   examples: Example[]
 }
 
