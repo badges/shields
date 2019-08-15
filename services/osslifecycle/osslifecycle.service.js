@@ -5,10 +5,10 @@ const { BaseService, InvalidResponse } = require('..')
 const documentation = `
 <p>
   OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
-  and clearly identify which projects are active and which ones are retired. To enable this badge, 
-  simply create an OSSMETADATA tagging file at the root of your GitHub repository containing a 
-  single line similar to the following: <code>osslifecycle=active</code>. Other suggested values are 
-  <code>osslifecycle=maintenance</code> and <code>osslifecycle=archived</code>. A working example 
+  and clearly identify which projects are active and which ones are retired. To enable this badge,
+  simply create an OSSMETADATA tagging file at the root of your GitHub repository containing a
+  single line similar to the following: <code>osslifecycle=active</code>. Other suggested values are
+  <code>osslifecycle=maintenance</code> and <code>osslifecycle=archived</code>. A working example
   can be viewed on the <a href="https://github.com/Netflix/osstracker">OSS Tracker repository</a>.
 </p>
 `
@@ -59,6 +59,10 @@ module.exports = class OssTracker extends BaseService {
    * example keywords used in Netflix's open-source meetup.
    * See https://slideshare.net/aspyker/netflix-open-source-meetup-season-4-episode-1
    * Other keywords are possible, but will appear in grey.
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.status Specifies the current maintenance status
+   * @returns {string} color
    */
   static getColor({ status }) {
     if (status === 'active') {

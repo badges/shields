@@ -5,7 +5,7 @@ const { letterGrades } = require('./codefactor-helpers')
 const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
-  message: Joi.allow(...Object.keys(letterGrades)),
+  message: Joi.allow(...Object.keys(letterGrades)).required(),
 }).required()
 
 module.exports = class CodeFactorGrade extends BaseSvgScrapingService {

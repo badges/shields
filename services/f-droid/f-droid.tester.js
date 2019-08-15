@@ -129,6 +129,20 @@ t.create('Package is found with fallback yml matadata format')
   )
   .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
+t.create('Trailing 0 in yml format')
+  .get('/v/axp.tool.apkextractor.json')
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.txt`)
+      .reply(404)
+  )
+  .intercept(nock =>
+    nock(base)
+      .get(`${path}.yml`)
+      .reply(200, "CurrentVersion: '1.4000'")
+  )
+  .expectBadge({ label: 'f-droid', message: 'v1.4000' })
+
 t.create('Package is found with yml matadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
   .intercept(nock =>

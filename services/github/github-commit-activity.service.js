@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { errorMessagesFor, documentation } = require('./github-helpers')
 
 const schema = Joi.array()
@@ -14,7 +14,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubCommitActivity extends GithubAuthService {
+module.exports = class GithubCommitActivity extends GithubAuthV3Service {
   static get category() {
     return 'activity'
   }

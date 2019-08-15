@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { renderLicenseBadge } = require('../licenses')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({
@@ -10,7 +10,7 @@ const schema = Joi.object({
   license: Joi.object({ spdx_id: Joi.string().required() }).allow(null),
 }).required()
 
-module.exports = class GithubLicense extends GithubAuthService {
+module.exports = class GithubLicense extends GithubAuthV3Service {
   static get category() {
     return 'license'
   }
