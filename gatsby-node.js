@@ -24,7 +24,7 @@ async function createPages({ actions: { createPage } }) {
     createPage({
       path: '/dev/styles',
       component: require.resolve(
-        './frontend/components/development/style-page'
+        './frontend/components/development/style-page.tsx'
       ),
     })
     createPage({

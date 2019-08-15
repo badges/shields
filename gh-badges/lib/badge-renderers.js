@@ -64,20 +64,26 @@ function renderLogo({
   }
 }
 
-function renderTextWithShadow({ leftMargin, content, verticalMargin = 0 }) {
+function renderTextWithShadow({
+  leftMargin,
+  horizPadding = 0,
+  content,
+  verticalMargin = 0,
+}) {
   if (content.length) {
-    const textLength = 10 * preferredWidthOf(content)
+    const textLength = preferredWidthOf(content)
     const escapedContent = escapeXml(content)
 
     const shadowMargin = 150 + verticalMargin
     const textMargin = 140 + verticalMargin
 
-    const x = 10 * leftMargin + 0.5 * textLength
+    const outTextLength = 10 * textLength
+    const x = 10 * (leftMargin + 0.5 * textLength + 0.5 * horizPadding)
 
     return {
       renderedText: `
-    <text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
-    <text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${textLength}" lengthAdjust="spacing">${escapedContent}</text>
+    <text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>
+    <text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>
   `,
       width: textLength,
     }
@@ -127,6 +133,8 @@ module.exports = {
     color = '#4c1',
     labelColor = '#555',
   }) {
+    const height = 18
+
     const { hasLogo, logoWidth, renderedLogo } = renderLogo({
       logo,
       logoWidth: inLogoWidth,
@@ -136,9 +144,9 @@ module.exports = {
     const hasLabel = label.length
     labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
 
-    const { labelWidth, messageWidth } = computeWidths({ label, message })
-
-    // const leftWidth =
+    // TODO Validate the color externally so it's not necessary to escape it.
+    color = escapeXml(color)
+    labelColor = escapeXml(labelColor)
 
     // if (hasLabel) {
     //   labelWidth += 10
@@ -157,12 +165,26 @@ module.exports = {
     //   }
     // }
 
-    const width = labelWidth + messageWidth
-    const height = 18
+    const {
+      renderedText: renderedLabel,
+      width: labelWidth,
+    } = renderTextWithShadow({
+      leftMargin: logoWidth / 2 + 6,
+      content: label,
+      // The plastic badge is a little bit shorter.
+      verticalMargin: -10,
+    })
 
-    // TODO Validate the color externally so it's not necessary to escape it.
-    color = escapeXml(color)
-    labelColor = escapeXml(labelColor)
+    const width = labelWidth + messageWidth
+
+    const {
+      renderedText: renderedMessage,
+      width: messageWidth,
+    } = renderTextWithShadow({
+      leftMargin: labelWidth / 2 - (hasLabel ? 1 : 0),
+      content: message,
+      verticalMargin: -10,
+    })
 
     return renderBadge(
       {
@@ -191,17 +213,8 @@ module.exports = {
 
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
         ${renderedLogo}
-        ${renderTextWithShadow({
-          x: ((labelWidth + logoWidth) / 2 + 1) * 10,
-          content: label,
-          // The plastic badge is a little bit shorter.
-          verticalMargin: -10,
-        })}
-        ${renderTextWithShadow({
-          x: (labelWidth + messageWidth / 2 - (hasLabel ? 1 : 0)) * 10,
-          content: message,
-          verticalMargin: -10,
-        })}
+        ${renderedLabel}
+        ${renderedMessage}
       </g>`
     )
   },
@@ -220,17 +233,31 @@ module.exports = {
     const hasLogo = Boolean(logo)
     const hasLabel = label.length
 
-    let { labelWidth, messageWidth } = computeWidths({ label, message })
-    labelWidth += 10 + logoWidth + logoPadding
-    labelWidth -= label.length ? 0 : logo ? (labelColor ? 0 : 7) : 11
-    messageWidth += 10
-
     labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
-
-    const width = labelWidth + messageWidth
-
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
+
+    const horizPadding = 5
+    const {
+      renderedText: renderedLabel,
+      width: labelWidth,
+    } = renderTextWithShadow({
+      leftMargin: (logoWidth + logoPadding) / 2 + 1,
+      horizPadding,
+      content: label,
+    })
+
+    const {
+      renderedText: renderedMessage,
+      width: messageWidth,
+    } = renderTextWithShadow({
+      leftMargin:
+        (logoWidth + logoPadding) / 2 + labelWidth - (message.length ? 1 : 0),
+      content: message,
+    })
+
+    const leftWidth = labelWidth + 2 * horizPadding
+    const width = labelWidth + messageWidth
 
     return renderBadge(
       {
@@ -250,21 +277,15 @@ module.exports = {
       </clipPath>
 
       <g clip-path="url(#round)">
-        <rect width="${labelWidth}" height="${height}" fill="${labelColor}"/>
-        <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
+        <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
+        <rect x="${leftWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
         <rect width="${width}" height="${height}" fill="url(#smooth)"/>
       </g>
 
       <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
         ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
-        ${renderTextWithShadow({
-          x: ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10,
-          content: label,
-        })}
-        ${renderTextWithShadow({
-          x: (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10,
-          content: message,
-        })}
+        ${renderedLabel}
+        ${renderedMessage}
       </g>`
     )
   },

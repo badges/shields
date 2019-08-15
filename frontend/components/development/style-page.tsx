@@ -38,11 +38,18 @@ function Badges({
 }) {
   return (
     <Fragment>
-      {badges.map(({ label, message, color }) => (
-        <Fragment>
+      {badges.map(({ label, message, color, namedLogo }) => (
+        <Fragment key={`${label}-${message}-${color}-${namedLogo}`}>
           <Badge
             alt="build"
-            src={staticBadgeUrl({ baseUrl, label, message, color, style })}
+            src={staticBadgeUrl({
+              baseUrl,
+              label,
+              message,
+              color,
+              namedLogo,
+              style,
+            })}
           />
           <br />
         </Fragment>
@@ -129,7 +136,7 @@ export default function StylePage() {
       <Meta />
       <Header />
       {styles.map(style => (
-        <Fragment>
+        <Fragment key={style}>
           <H3>{style}</H3>
           <StyleTable style={style} />
         </Fragment>
