@@ -6,10 +6,26 @@ import {
   badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import { examplePropType } from '../lib/service-definitions/example-prop-types'
 import { removeRegexpFromPattern } from '../lib/pattern-helpers'
+import {
+  ExampleSignature,
+  Example as ExampleData,
+} from '../lib/service-definitions'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
+
+interface ExampleWithoutFlag extends ExampleData {
+  isBadgeSuggestion?: boolean
+}
+
+export interface SuggestionData {
+  title: string
+  link?: string
+  example: ExampleSignature
+  isBadgeSuggestion: true
+}
+
+type RenderableExampleData = ExampleWithoutFlag | SuggestionData
 
 const ExampleTable = styled.table`
   min-width: 50%;
@@ -29,8 +45,16 @@ const ClickableCode = styled(StyledCode)`
   cursor: pointer;
 `
 
-function Example({ baseUrl, onClick, exampleData }) {
-  const { title, example, preview, isBadgeSuggestion } = exampleData
+function Example({
+  baseUrl,
+  onClick,
+  exampleData,
+}: {
+  baseUrl?: string
+  onClick: (exampleData: RenderableExampleData) => void
+  exampleData: RenderableExampleData
+}) {
+  const { title, example, isBadgeSuggestion } = exampleData
   const { pattern, namedParams, queryParams } = example
   let exampleUrl
   let previewUrl
@@ -44,10 +68,12 @@ function Example({ baseUrl, onClick, exampleData }) {
     })
     previewUrl = exampleUrl
   } else {
-    const { label, message, color, style, namedLogo } = preview
+    const {
+      preview: { label, message, color, style, namedLogo },
+    } = exampleData as ExampleWithoutFlag
     previewUrl = staticBadgeUrl({
       baseUrl,
-      label,
+      label: label || '',
       message,
       color,
       style,
@@ -55,12 +81,13 @@ function Example({ baseUrl, onClick, exampleData }) {
     })
     exampleUrl = badgeUrlFromPath({
       path: removeRegexpFromPattern(pattern),
-      namedParams,
       queryParams,
     })
   }
 
-  const handleClick = () => onClick(exampleData)
+  function handleClick() {
+    onClick(exampleData)
+  }
 
   return (
     <tr>
@@ -74,13 +101,16 @@ function Example({ baseUrl, onClick, exampleData }) {
     </tr>
   )
 }
-Example.propTypes = {
-  exampleData: examplePropType.isRequired,
-  baseUrl: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-}
 
-export default function BadgeExamples({ examples, baseUrl, onClick }) {
+export default function BadgeExamples({
+  examples,
+  baseUrl,
+  onClick,
+}: {
+  examples: RenderableExampleData[]
+  baseUrl?: string
+  onClick: (exampleData: RenderableExampleData) => void
+}) {
   return (
     <ExampleTable>
       <tbody>
@@ -95,9 +125,4 @@ export default function BadgeExamples({ examples, baseUrl, onClick }) {
       </tbody>
     </ExampleTable>
   )
-}
-BadgeExamples.propTypes = {
-  examples: PropTypes.arrayOf(examplePropType).isRequired,
-  baseUrl: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
 }

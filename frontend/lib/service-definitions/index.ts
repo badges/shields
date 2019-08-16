@@ -7,20 +7,24 @@ export interface Category {
   name: string
 }
 
+export interface ExampleSignature {
+  pattern: string
+  namedParams: { [k: string]: string }
+  queryParams: { [k: string]: string }
+}
+
+export interface Preview {
+  label?: string
+  message: string
+  color: string
+  style?: string
+  namedLogo?: string
+}
+
 export interface Example {
   title: string
-  example: {
-    pattern: string
-    namedParams: { [k: string]: string }
-    queryParams: { [k: string]: string }
-  }
-  preview: {
-    label?: string
-    message: string
-    color: string
-    style?: string
-    namedLogo?: string
-  }
+  example: ExampleSignature
+  preview: Preview
   keywords: string[]
   documentation?: {
     __html: string
