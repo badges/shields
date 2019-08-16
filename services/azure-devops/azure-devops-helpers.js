@@ -7,7 +7,12 @@ const keywords = ['vso', 'vsts', 'azure-devops']
 
 const schema = Joi.object({
   message: Joi.alternatives()
-    .try(isBuildStatus, Joi.equal('unknown'), Joi.equal('set up now'))
+    .try(
+      isBuildStatus,
+      Joi.equal('unknown'),
+      Joi.equal('set up now'),
+      Joi.equal('never built')
+    )
     .required(),
 }).required()
 

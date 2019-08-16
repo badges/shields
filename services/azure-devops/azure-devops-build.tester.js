@@ -20,6 +20,10 @@ t.create('named branch')
     message: isBuildStatus,
   })
 
+t.create('never built definition')
+  .get('/swellaby/opensource/112.json')
+  .expectBadge({ label: 'build', message: 'never built' })
+
 t.create('unknown definition')
   .get('/larsbrinkhoff/953a34b9-5966-4923-a48a-c41874cfb5f5/515.json')
   .expectBadge({ label: 'build', message: 'definition not found' })

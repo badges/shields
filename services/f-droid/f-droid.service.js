@@ -7,7 +7,7 @@ const { BaseYamlService, InvalidResponse } = require('..')
 
 const schema = Joi.object({
   CurrentVersion: Joi.alternatives()
-    .try(Joi.number(), Joi.string())
+    .try(Joi.string(), Joi.number())
     .required(),
 }).required()
 

@@ -50,6 +50,11 @@ overrides:
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
 
   - files:
+      - core/**/*.ts
+    parserOptions:
+      sourceType: 'module'
+    parser: '@typescript-eslint/parser'
+  - files:
       - gatsby-browser.js
       - 'frontend/**/*.@(js|ts|tsx)'
     parserOptions:
@@ -130,6 +135,7 @@ rules:
 
   # Disable some rules from jsdoc/recommended.
   jsdoc/require-jsdoc: off
+  jsdoc/no-undefined-types: ['warn', { definedTypes: ['Joi'] }]
 
   # Disable some from TypeScript.
   '@typescript-eslint/camelcase': off

@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict'
 
 const emojic = require('emojic')
@@ -6,7 +10,29 @@ const BaseService = require('./base')
 const { InvalidResponse } = require('./errors')
 const trace = require('./trace')
 
+/**
+ * Services which query a YAML endpoint should extend BaseYamlService
+ *
+ * @abstract
+ */
 class BaseYamlService extends BaseService {
+  /**
+   * Request data from an upstream API serving YAML,
+   * parse it and validate against a schema
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {Joi} attrs.schema Joi schema to validate the response against
+   * @param {string} attrs.url URL to request
+   * @param {object} [attrs.options={}] Options to pass to request. See
+   *    [documentation](https://github.com/request/request#requestoptions-callback)
+   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
+   *    and custom error messages e.g: `{ 404: 'package not found' }`.
+   *    This can be used to extend or override the
+   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.encoding='utf8'] Character encoding
+   * @returns {object} Parsed response
+   * @see https://github.com/request/request#requestoptions-callback
+   */
   async _requestYaml({
     schema,
     url,
