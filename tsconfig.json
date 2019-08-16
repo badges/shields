@@ -9,6 +9,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "typeRoots": ["node_modules/@types", "frontend/types"]
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { badgeUrlFromPath } from '../../core/badge-urls/make-badge-url'
 import { H2 } from './common'
@@ -9,14 +8,13 @@ const SpacedA = styled.a`
   margin-right: 10px;
 `
 
-export default function Footer({ baseUrl }) {
+export default function Footer({ baseUrl }: { baseUrl: string }) {
   return (
     <section>
       <H2 id="like-this">Like This?</H2>
 
       <p>
         <object
-          alt="Follow @shields_io"
           data={badgeUrlFromPath({
             baseUrl,
             path: '/twitter/follow/shields_io',
@@ -26,7 +24,6 @@ export default function Footer({ baseUrl }) {
         />{' '}
         {}
         <object
-          alt="Donate to us!"
           data={badgeUrlFromPath({
             baseUrl,
             path: '/opencollective/backers/shields',
@@ -36,7 +33,6 @@ export default function Footer({ baseUrl }) {
         />{' '}
         {}
         <object
-          alt="Donate to us!"
           data={badgeUrlFromPath({
             baseUrl,
             path: '/opencollective/sponsors/shields',
@@ -46,7 +42,6 @@ export default function Footer({ baseUrl }) {
         />{' '}
         {}
         <object
-          alt="Fork on GitHub"
           data={badgeUrlFromPath({
             baseUrl,
             path: '/github/forks/badges/shields',
@@ -56,7 +51,6 @@ export default function Footer({ baseUrl }) {
         />{' '}
         {}
         <object
-          alt="chat on Discord"
           data={badgeUrlFromPath({
             baseUrl,
             path: '/discord/308323056592486420',
@@ -85,7 +79,4 @@ export default function Footer({ baseUrl }) {
       </p>
     </section>
   )
-}
-Footer.propTypes = {
-  baseUrl: PropTypes.string.isRequired,
 }
