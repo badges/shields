@@ -24,7 +24,7 @@ describe('BadgeFactory class', function() {
     expect(
       bf.create({
         text: ['build', 'passed'],
-        foo: 'bar',
+        foo: 'bar', // extra key
       })
     ).to.satisfy(isSvg)
   })
