@@ -1,25 +1,48 @@
-import React, { useRef, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useRef, useState, ChangeEvent } from 'react'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
-import BadgeExamples from './badge-examples'
+import { BadgeExamples } from './badge-examples'
 import { BlockInput } from './common'
+
+interface SuggestionItem {
+  title: string
+  link: string
+  example: {
+    pattern: string
+    namedParams: { [k: string]: string }
+    queryParams?: { [k: string]: string }
+  }
+  preview:
+    | {
+        style?: string
+      }
+    | undefined
+}
+
+interface SuggestionResponse {
+  suggestions: SuggestionItem[]
+}
 
 export default function SuggestionAndSearch({
   queryChanged,
   onBadgeClick,
   baseUrl,
+}: {
+  queryChanged: (query: string) => void
+  onBadgeClick: () => void
+  baseUrl: string
 }) {
   const queryChangedDebounced = useRef(
     debounce(queryChanged, 50, { leading: true })
   )
   const [isUrl, setIsUrl] = useState(false)
   const [inProgress, setInProgress] = useState(false)
-  const [projectUrl, setProjectUrl] = useState(undefined)
-  const [suggestions, setSuggestions] = useState([])
+  const [projectUrl, setProjectUrl] = useState<string>()
+  const [suggestions, setSuggestions] = useState<SuggestionItem[]>([])
 
-  function onQueryChanged(event) {
-    const query = event.target.value
+  function onQueryChanged({
+    target: { value: query },
+  }: ChangeEvent<HTMLInputElement>) {
     const isUrl = query.startsWith('https://') || query.startsWith('http://')
     setIsUrl(isUrl)
     setProjectUrl(isUrl ? query : undefined)
@@ -28,15 +51,20 @@ export default function SuggestionAndSearch({
   }
 
   async function getSuggestions() {
+    if (!projectUrl) {
+      setSuggestions([])
+      return
+    }
+
     setInProgress(true)
 
     const fetch = window.fetch || fetchPonyfill
     const res = await fetch(
       `${baseUrl}/$suggest/v1?url=${encodeURIComponent(projectUrl)}`
     )
-    let suggestions
+    let suggestions = [] as SuggestionItem[]
     try {
-      const json = await res.json()
+      const json = (await res.json()) as SuggestionResponse
       // This doesn't validate the response. The default value here prevents
       // a crash if the server returns {"err":"Disallowed"}.
       suggestions = json.suggestions || []
@@ -54,13 +82,15 @@ export default function SuggestionAndSearch({
     }
 
     const transformed = suggestions.map(
-      ({ title, link, example, preview, documentation }) => ({
+      ({ title, link, example, preview }) => ({
         title,
         link,
-        example,
-        preview,
+        example: {
+          ...example,
+          queryParams: example.queryParams || {},
+        },
+        preview: preview || {},
         isBadgeSuggestion: true,
-        documentation,
       })
     )
 
@@ -68,6 +98,7 @@ export default function SuggestionAndSearch({
       <BadgeExamples
         baseUrl={baseUrl}
         examples={transformed}
+        areBadgeSuggestions
         onClick={onBadgeClick}
       />
     )
@@ -78,7 +109,7 @@ export default function SuggestionAndSearch({
       <form action="javascript:void 0" autoComplete="off">
         <BlockInput
           autoFocus
-          autofill="off"
+          autoComplete="off"
           onChange={onQueryChanged}
           placeholder="search / project URL"
         />
@@ -90,9 +121,4 @@ export default function SuggestionAndSearch({
       {renderSuggestions()}
     </section>
   )
-}
-SuggestionAndSearch.propTypes = {
-  queryChanged: PropTypes.func.isRequired,
-  onBadgeClick: PropTypes.func.isRequired,
-  baseUrl: PropTypes.string.isRequired,
 }

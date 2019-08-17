@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
   badgeUrlFromPath,
@@ -14,18 +13,16 @@ import {
 import { Badge } from './common'
 import { StyledCode } from './snippet'
 
-interface ExampleWithoutFlag extends ExampleData {
-  isBadgeSuggestion?: boolean
-}
-
 export interface SuggestionData {
   title: string
-  link?: string
+  link: string
   example: ExampleSignature
-  isBadgeSuggestion: true
+  preview: {
+    style?: string
+  }
 }
 
-type RenderableExampleData = ExampleWithoutFlag | SuggestionData
+type RenderableExampleData = ExampleData | SuggestionData
 
 const ExampleTable = styled.table`
   min-width: 50%;
@@ -49,28 +46,33 @@ function Example({
   baseUrl,
   onClick,
   exampleData,
+  isBadgeSuggestion,
 }: {
   baseUrl?: string
   onClick: (exampleData: RenderableExampleData) => void
   exampleData: RenderableExampleData
+  isBadgeSuggestion: boolean
 }) {
-  const { title, example, isBadgeSuggestion } = exampleData
-  const { pattern, namedParams, queryParams } = example
-  let exampleUrl
-  let previewUrl
+  function handleClick() {
+    onClick(exampleData)
+  }
 
+  let exampleUrl, previewUrl
   if (isBadgeSuggestion) {
-    exampleUrl = badgeUrlFromPattern({
+    const {
+      example: { pattern, namedParams, queryParams },
+    } = exampleData as SuggestionData
+    exampleUrl = previewUrl = badgeUrlFromPattern({
       baseUrl,
       pattern,
       namedParams,
       queryParams,
     })
-    previewUrl = exampleUrl
   } else {
     const {
+      example: { pattern, queryParams },
       preview: { label, message, color, style, namedLogo },
-    } = exampleData as ExampleWithoutFlag
+    } = exampleData as ExampleData
     previewUrl = staticBadgeUrl({
       baseUrl,
       label: label || '',
@@ -85,10 +87,7 @@ function Example({
     })
   }
 
-  function handleClick() {
-    onClick(exampleData)
-  }
-
+  const { title } = exampleData
   return (
     <tr>
       <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
@@ -102,12 +101,14 @@ function Example({
   )
 }
 
-export default function BadgeExamples({
+export function BadgeExamples({
   examples,
+  areBadgeSuggestions,
   baseUrl,
   onClick,
 }: {
   examples: RenderableExampleData[]
+  areBadgeSuggestions: boolean
   baseUrl?: string
   onClick: (exampleData: RenderableExampleData) => void
 }) {
@@ -118,6 +119,7 @@ export default function BadgeExamples({
           <Example
             baseUrl={baseUrl}
             exampleData={exampleData}
+            isBadgeSuggestion={areBadgeSuggestions}
             key={`${exampleData.title} ${exampleData.example.pattern}`}
             onClick={onClick}
           />
