@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { test, given } from 'sazerac'
-import { findCategory, getDefinitionsForCategory } from './index'
+import { findCategory, getDefinitionsForCategory } from '.'
 
 describe('Service definition helpers', function() {
   test(findCategory, () => {
