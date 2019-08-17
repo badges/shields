@@ -96,7 +96,7 @@ class GithubRelease extends GithubAuthV3Service {
     let color = 'blue'
     color = sort === 'semver' ? versionColor(version) : color
     color = isPrerelease ? 'orange' : color
-    return { label: 'release', message: addv(version), color }
+    return { message: addv(version), color }
   }
 
   async fetchReleases({ user, repo }) {
