@@ -148,7 +148,7 @@ const redirects = {
     },
     transformPath: ({ user, repo }) => `/github/v/tag/${user}/${repo}`,
     transformQueryParams: params => ({ sort: 'semver' }),
-    dateAdded: new Date('2019-06-25'),
+    dateAdded: new Date('2019-08-17'),
   }),
   GithubTagPreRedirect: redirector({
     category: 'version',
@@ -161,7 +161,7 @@ const redirects = {
       sort: 'semver',
       include_prereleases: null,
     }),
-    dateAdded: new Date('2019-06-25'),
+    dateAdded: new Date('2019-08-17'),
   }),
   GithubTagDateRedirect: redirector({
     category: 'version',
@@ -170,7 +170,7 @@ const redirects = {
       pattern: ':user/:repo',
     },
     transformPath: ({ user, repo }) => `/github/v/tag/${user}/${repo}`,
-    dateAdded: new Date('2019-06-25'),
+    dateAdded: new Date('2019-08-17'),
   }),
 }
 

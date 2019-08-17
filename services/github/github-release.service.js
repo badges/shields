@@ -167,7 +167,7 @@ const redirects = {
       pattern: ':user/:repo',
     },
     transformPath: ({ user, repo }) => `/github/v/release/${user}/${repo}`,
-    dateAdded: new Date('2019-06-25'),
+    dateAdded: new Date('2019-08-17'),
   }),
   GithubReleasePreRedirect: redirector({
     category: 'version',
@@ -177,7 +177,7 @@ const redirects = {
     },
     transformPath: ({ user, repo }) => `/github/v/release/${user}/${repo}`,
     transformQueryParams: params => ({ include_prereleases: null }),
-    dateAdded: new Date('2019-06-25'),
+    dateAdded: new Date('2019-08-17'),
   }),
   GithubReleaseRedirectAll: redirector({
     name: 'GithubReleaseRedirectAll',
@@ -188,7 +188,7 @@ const redirects = {
     },
     transformPath: ({ user, repo }) => `/github/v/release/${user}/${repo}`,
     transformQueryParams: params => ({ include_prereleases: null }),
-    dateAdded: new Date('2019-02-24'),
+    dateAdded: new Date('2019-08-17'),
   }),
 }
 
