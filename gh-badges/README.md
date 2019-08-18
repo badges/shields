@@ -58,11 +58,6 @@ The format is the following:
   // See templates/ for a list of available templates.
   // Each offers a different visual design.
   template: 'flat',
-
-  // Deprecated attributes:
-  colorscheme: 'green', // Now an alias for `color`.
-  colorB: '#4c1', // Now an alias for `color`.
-  colorA: '#555', // Now an alias for `labelColor`.
 }
 ```
 
