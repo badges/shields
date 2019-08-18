@@ -64,9 +64,7 @@ const releaseInfoSchema = Joi.object({
   prerelease: Joi.boolean().required(),
 }).required()
 
-/**
- * Fetch the 'latest' release (as defined by the GitHub API)
- */
+// Fetch the 'latest' release (as defined by the GitHub API)
 async function fetchLatestRelease(serviceInstance, { user, repo }) {
   const commonAttrs = {
     errorMessages: errorMessagesFor('no releases or repo not found'),
