@@ -6,7 +6,7 @@ const snapshot = require('snap-shot-it')
 const isSvg = require('is-svg')
 const makeBadge = require('./make-badge')
 
-function testColor(color = '', colorAttr = 'colorB') {
+function testColor(color = '', colorAttr = 'color') {
   return JSON.parse(
     makeBadge({
       text: ['name', 'Bob'],
@@ -45,6 +45,9 @@ describe('The badge generator', function() {
       given('green').expect('green')
       given('blue').expect('blue')
       given('yellow').expect('yellow')
+      // Semantic color alias
+      given('success').expect('brightgreen')
+      given('informational').expect('blue')
 
       forCases(
         // invalid hex
@@ -68,11 +71,7 @@ describe('The badge generator', function() {
 
   describe('color aliases', function() {
     test(testColor, () => {
-      forCases([
-        given('#4c1', 'color'),
-        given('#4c1', 'colorB'),
-        given('#4c1', 'colorscheme'),
-      ]).expect('#4c1')
+      forCases([given('#4c1', 'color')]).expect('#4c1')
     })
   })
 

@@ -44,7 +44,7 @@ for (let i = 4; i < process.argv.length; i++) {
 const subject = process.argv[2]
 const status = process.argv[3]
 let color = process.argv[4] || ':green'
-const colorA = process.argv[5]
+const labelColor = process.argv[5]
 
 const badgeData = { text: [subject, status], format }
 if (style) {
@@ -58,11 +58,11 @@ if (color[0] === ':') {
     console.error('Invalid color scheme.')
     process.exit(1)
   }
-  badgeData.colorscheme = color
+  badgeData.color = color
 } else {
-  badgeData.colorB = color
-  if (colorA) {
-    badgeData.colorA = colorA
+  badgeData.color = color
+  if (labelColor) {
+    badgeData.labelColor = labelColor
   }
 }
 

@@ -98,10 +98,7 @@ module.exports = function makeBadge({
   format,
   template,
   text,
-  colorscheme,
   color,
-  colorA,
-  colorB,
   labelColor,
   logo,
   logoPosition,
@@ -113,8 +110,8 @@ module.exports = function makeBadge({
 
   let [left, right] = text
 
-  color = normalizeColor(color || colorB || colorscheme)
-  labelColor = normalizeColor(labelColor || colorA)
+  color = normalizeColor(color)
+  labelColor = normalizeColor(labelColor)
 
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
