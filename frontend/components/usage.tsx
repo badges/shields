@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
-import { advertisedStyles, shieldsLogos } from '../../supported-features.json'
+import { advertisedStyles, shieldsLogos } from '../lib/supported-features'
+// @ts-ignore
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
@@ -38,7 +38,13 @@ const QueryParamDocumentation = styled.td`
   text-align: left;
 `
 
-function QueryParam({ snippet, documentation }) {
+function QueryParam({
+  snippet,
+  documentation,
+}: {
+  snippet: string
+  documentation: JSX.Element | JSX.Element[]
+}) {
   return (
     <tr>
       <QueryParamSyntax>
@@ -48,12 +54,14 @@ function QueryParam({ snippet, documentation }) {
     </tr>
   )
 }
-QueryParam.propTypes = {
-  snippet: PropTypes.string.isRequired,
-  documentation: PropTypes.element.isRequired,
-}
 
-function EscapingConversion({ lhs, rhs }) {
+function EscapingConversion({
+  lhs,
+  rhs,
+}: {
+  lhs: JSX.Element
+  rhs: JSX.Element
+}) {
   return (
     <tr>
       <Lhs>{lhs}</Lhs>
@@ -62,12 +70,14 @@ function EscapingConversion({ lhs, rhs }) {
     </tr>
   )
 }
-EscapingConversion.propTypes = {
-  lhs: PropTypes.element.isRequired,
-  rhs: PropTypes.element.isRequired,
-}
 
-function ColorExamples({ baseUrl, colors }) {
+function ColorExamples({
+  baseUrl,
+  colors,
+}: {
+  baseUrl: string
+  colors: string[]
+}) {
   return (
     <span>
       {colors.map((color, i) => (
@@ -80,12 +90,8 @@ function ColorExamples({ baseUrl, colors }) {
     </span>
   )
 }
-ColorExamples.propTypes = {
-  baseUrl: PropTypes.string.isRequired,
-  colors: PropTypes.array.isRequired,
-}
 
-function StyleExamples({ baseUrl }) {
+function StyleExamples({ baseUrl }: { baseUrl: string }) {
   return (
     <QueryParamTable>
       <tbody>
@@ -111,16 +117,19 @@ function StyleExamples({ baseUrl }) {
     </QueryParamTable>
   )
 }
-StyleExamples.propTypes = {
-  baseUrl: PropTypes.string.isRequired,
-}
 
 function NamedLogos() {
-  const renderLogo = logo => <LogoName key={logo}>{logo}</LogoName>
-  const [first, ...rest] = shieldsLogos
-  return [renderLogo(first)].concat(
-    rest.reduce((result, logo) => result.concat([', ', renderLogo(logo)]), [])
+  const renderLogo = (logo: string): JSX.Element => (
+    <LogoName key={logo}>{logo}</LogoName>
   )
+  const [first, ...rest] = shieldsLogos
+  const result = ([renderLogo(first)] as (JSX.Element | string)[]).concat(
+    rest.reduce(
+      (result, logo) => result.concat([', ', renderLogo(logo)]),
+      [] as (JSX.Element | string)[]
+    )
+  )
+  return <>{result}</>
 }
 
 function StaticBadgeEscapingRules() {
@@ -171,7 +180,7 @@ function StaticBadgeEscapingRules() {
   )
 }
 
-export default function Usage({ baseUrl }) {
+export default function Usage({ baseUrl }: { baseUrl: string }) {
   return (
     <section>
       <H2 id="your-badge">Your Badge</H2>
@@ -410,7 +419,4 @@ export default function Usage({ baseUrl }) {
       </p>
     </section>
   )
-}
-Usage.propTypes = {
-  baseUrl: PropTypes.string.isRequired,
 }

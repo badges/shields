@@ -1,5 +1,4 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react'
-import PropTypes from 'prop-types'
 import posed from 'react-pose'
 import styled from 'styled-components'
 
@@ -27,9 +26,19 @@ const PosedContentContainer = posed(ContentContainer)({
   effectEnd: { top: '-75px', opacity: 0.5 },
 })
 
+export interface CopiedContentIndicatorHandle {
+  trigger: () => void
+}
+
 // When `trigger()` is called, render copied content that floats up, then
 // disappears.
-function CopiedContentIndicator({ copiedContent, children }, ref) {
+function _CopiedContentIndicator(
+  {
+    copiedContent,
+    children,
+  }: { copiedContent: JSX.Element; children: JSX.Element | JSX.Element[] },
+  ref: React.Ref<CopiedContentIndicatorHandle>
+) {
   const [pose, setPose] = useState('hidden')
 
   useImperativeHandle(ref, () => ({
@@ -55,16 +64,5 @@ function CopiedContentIndicator({ copiedContent, children }, ref) {
     </ContentAnchor>
   )
 }
-// eslint-disable-next-line no-func-assign
-CopiedContentIndicator = forwardRef(CopiedContentIndicator)
-CopiedContentIndicator.propTypes = {
-  copiedContent: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-}
+const CopiedContentIndicator = forwardRef(_CopiedContentIndicator)
 export default CopiedContentIndicator
