@@ -33,13 +33,7 @@ class BadgeFactory {
       throw new ValidationError('Field `text` must be an array of 2 strings')
     }
 
-    const stringFields = [
-      'labelColor',
-      'color',
-      'colorA',
-      'colorscheme',
-      'colorB',
-    ]
+    const stringFields = ['labelColor', 'color']
     stringFields.forEach(function(field) {
       if (field in format && typeof format[field] !== 'string') {
         throw new ValidationError(`Field \`${field}\` must be of type string`)
@@ -76,9 +70,6 @@ class BadgeFactory {
    * @param {string[]} format.text Badge text in an array e.g: ['build', 'passing']
    * @param {string} format.labelColor (Optional) Label color
    * @param {string} format.color (Optional) Message color
-   * @param {string} format.colorA (Deprecated, Optional) alias for `labelColor`
-   * @param {string} format.colorscheme (Deprecated, Optional) alias for `color`
-   * @param {string} format.colorB (Deprecated, Optional) alias for `color`
    * @param {string} format.format (Optional) Output format: 'svg' or 'json'
    * @param {string} format.template (Optional) Visual template e.g: 'flat'
    *    see {@link https://github.com/badges/shields/tree/master/gh-badges/templates}
