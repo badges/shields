@@ -22,3 +22,6 @@ github:
     addBadge: false
     # add a label once the prebuild is ready to pull requests (defaults to false)
     addLabel: false
+vscode:
+  extensions:
+    - esbenp.prettier-vscode@1.7.0:EbyqFvwe32qQBptkOgfQpQ==
