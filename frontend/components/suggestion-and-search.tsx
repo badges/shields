@@ -96,9 +96,9 @@ export default function SuggestionAndSearch({
 
     return (
       <BadgeExamples
+        areBadgeSuggestions
         baseUrl={baseUrl}
         examples={transformed}
-        areBadgeSuggestions
         onClick={onBadgeClick}
       />
     )
@@ -108,8 +108,8 @@ export default function SuggestionAndSearch({
     <section>
       <form action="javascript:void 0" autoComplete="off">
         <BlockInput
-          autoFocus
           autoComplete="off"
+          autoFocus
           onChange={onQueryChanged}
           placeholder="search / project URL"
         />
