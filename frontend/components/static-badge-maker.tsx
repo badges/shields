@@ -1,29 +1,33 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, ChangeEvent } from 'react'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
 
+type StateKey = 'label' | 'message' | 'color'
+type State = Record<StateKey, string>
+
 export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<State>({
     label: '',
     message: '',
     color: '',
   })
 
-  const isValid = ['message', 'color'].every(k => values[k])
+  const isValid = values.message && values.color
 
-  const onChange = ({ target: { name, value } }) => {
+  function onChange({
+    target: { name, value },
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setValues({
       ...values,
       [name]: value,
     })
   }
 
-  const onSubmit = e => {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault()
 
     const { label, message, color } = values
-    document.location = staticBadgeUrl({ baseUrl, label, message, color })
+    window.location.href = staticBadgeUrl({ baseUrl, label, message, color })
   }
 
   return (
@@ -60,7 +64,4 @@ export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
       <button disabled={!isValid}>Make Badge</button>
     </form>
   )
-}
-StaticBadgeMaker.propTypes = {
-  baseUrl: PropTypes.string,
 }
