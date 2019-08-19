@@ -1,25 +1,48 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const GithubTag = require('./github-tag.service')
+const { GithubTag } = require('./github-tag.service')
 
 describe('GithubTag', function() {
-  const tagFixture = [
-    { name: 'cheese' }, // any old string
-    { name: 'v1.3-beta3' }, // semver pre-release
-    { name: 'v1.2' }, // semver release
-  ]
+  test(GithubTag.getLatestTag, () => {
+    const tagFixture = [
+      'cheese', // any old string
+      'v1.2', // semver release
+      'v1.3-beta3', // semver pre-release
+    ]
+    given({
+      tags: tagFixture,
+      sort: 'semver',
+      includePrereleases: true,
+    }).expect('v1.3-beta3')
+    given({
+      tags: tagFixture,
+      sort: 'semver',
+      includePrereleases: false,
+    }).expect('v1.2')
+    given({
+      tags: tagFixture,
+      sort: 'date',
+      includePrereleases: true,
+    }).expect('cheese')
+    given({
+      tags: tagFixture,
+      sort: 'date',
+      includePrereleases: false,
+    }).expect('cheese')
 
-  test(GithubTag.transform, () => {
-    given({ json: tagFixture, usingSemver: true, includePre: false }).expect(
-      'v1.2'
-    )
-    given({ json: tagFixture, usingSemver: true, includePre: true }).expect(
-      'v1.3-beta3'
-    )
-    given({ json: tagFixture, usingSemver: false, includePre: false }).expect(
-      'cheese'
-    )
+    // if there are only pre-releases to choose from
+    // return a pre-release anyway in preference to nothing
+    given({
+      tags: ['1.2.0-beta'],
+      sort: 'semver',
+      includePrereleases: false,
+    }).expect('1.2.0-beta')
+    given({
+      tags: ['1.2.0-beta'],
+      sort: 'date',
+      includePrereleases: false,
+    }).expect('1.2.0-beta')
   })
 
   test(GithubTag.render, () => {
