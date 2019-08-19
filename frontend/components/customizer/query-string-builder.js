@@ -187,7 +187,7 @@ export default function QueryStringBuilder({
       // Throughout the component, these two types are supported in the same
       // manner: by inspecting this value type.
       const isStringParam = typeof value === 'string'
-      result[name] = isStringParam ? '' : true
+      result[name] = isStringParam ? value : true
     })
     return result
   })
