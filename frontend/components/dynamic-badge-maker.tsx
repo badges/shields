@@ -1,12 +1,35 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, ChangeEvent } from 'react'
 import { dynamicBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { InlineInput } from './common'
+
+type StateKey =
+  | 'datatype'
+  | 'label'
+  | 'dataUrl'
+  | 'query'
+  | 'color'
+  | 'prefix'
+  | 'suffix'
+type State = Record<StateKey, string>
+
+interface InputDef {
+  name: StateKey
+  placeholder?: string
+}
+
+const inputs = [
+  { name: 'label' },
+  { name: 'dataUrl', placeholder: 'data url' },
+  { name: 'query' },
+  { name: 'color' },
+  { name: 'prefix' },
+  { name: 'suffix' },
+] as InputDef[]
 
 export default function DynamicBadgeMaker({
   baseUrl = document.location.href,
 }) {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<State>({
     datatype: '',
     label: '',
     dataUrl: '',
@@ -16,22 +39,23 @@ export default function DynamicBadgeMaker({
     suffix: '',
   })
 
-  const isValid = ['datatype', 'label', 'dataUrl', 'query'].every(
-    k => values[k]
-  )
+  const isValid =
+    values.datatype && values.label && values.dataUrl && values.query
 
-  const onChange = ({ target: { name, value } }) => {
+  function onChange({
+    target: { name, value },
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setValues({
       ...values,
       [name]: value,
     })
   }
 
-  const onSubmit = e => {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault()
 
     const { datatype, label, dataUrl, query, color, prefix, suffix } = values
-    document.location = dynamicBadgeUrl({
+    window.location.href = dynamicBadgeUrl({
       baseUrl,
       datatype,
       label,
@@ -42,15 +66,6 @@ export default function DynamicBadgeMaker({
       suffix,
     })
   }
-
-  const inputs = [
-    { name: 'label' },
-    { name: 'dataUrl', placeholder: 'data url' },
-    { name: 'query' },
-    { name: 'color' },
-    { name: 'prefix' },
-    { name: 'suffix' },
-  ]
 
   return (
     <form onSubmit={onSubmit}>
@@ -74,7 +89,4 @@ export default function DynamicBadgeMaker({
       <button disabled={!isValid}>Make Badge</button>
     </form>
   )
-}
-DynamicBadgeMaker.propTypes = {
-  baseUrl: PropTypes.string,
 }

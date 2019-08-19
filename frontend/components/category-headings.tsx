@@ -1,24 +1,26 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { H3 } from './common'
 
-export function CategoryHeading({ category: { id, name } }) {
+export interface Category {
+  id: string
+  name: string
+}
+
+export function CategoryHeading({
+  category: { id, name },
+}: {
+  category: Category
+}) {
   return (
     <Link to={`/category/${id}`}>
       <H3 id={id}>{name}</H3>
     </Link>
   )
 }
-CategoryHeading.propTypes = {
-  category: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-}
 
-export function CategoryHeadings({ categories }) {
+export function CategoryHeadings({ categories }: { categories: Category[] }) {
   return (
     <div>
       {categories.map(category => (
@@ -26,9 +28,6 @@ export function CategoryHeadings({ categories }) {
       ))}
     </div>
   )
-}
-CategoryHeadings.propTypes = {
-  categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
 }
 
 const StyledNav = styled.nav`
@@ -62,7 +61,7 @@ const StyledNav = styled.nav`
   }
 `
 
-export function CategoryNav({ categories }) {
+export function CategoryNav({ categories }: { categories: Category[] }) {
   return (
     <StyledNav>
       <ul>
@@ -74,7 +73,4 @@ export function CategoryNav({ categories }) {
       </ul>
     </StyledNav>
   )
-}
-CategoryNav.propTypes = {
-  categories: PropTypes.arrayOf(CategoryHeading.propTypes.category).isRequired,
 }

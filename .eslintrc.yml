@@ -1,7 +1,6 @@
 extends:
   - standard-jsx
   - standard-react
-  - plugin:jsdoc/recommended
   - plugin:@typescript-eslint/recommended
   - prettier/@typescript-eslint
   - prettier/standard
@@ -49,6 +48,11 @@ overrides:
       '@typescript-eslint/explicit-function-return-type': 'off'
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
 
+  - files:
+      - core/**/*.ts
+    parserOptions:
+      sourceType: 'module'
+    parser: '@typescript-eslint/parser'
   - files:
       - gatsby-browser.js
       - 'frontend/**/*.@(js|ts|tsx)'
@@ -128,8 +132,29 @@ rules:
   no-unused-expressions: 'off'
   chai-friendly/no-unused-expressions: 'error'
 
-  # Disable some rules from jsdoc/recommended.
-  jsdoc/require-jsdoc: off
+  # jsdoc plugin:
+  # don't require every class/function to have a docblock
+  jsdoc/require-jsdoc: 'off'
+
+  # allow Joi as an undefined type
+  jsdoc/no-undefined-types: ['error', { definedTypes: ['Joi'] }]
+
+  # all the other reccomended rules as errors (not warnings)
+  jsdoc/check-alignment: 'error'
+  jsdoc/check-param-names: 'error'
+  jsdoc/check-tag-names: 'error'
+  jsdoc/check-types: 'error'
+  jsdoc/implements-on-classes: 'error'
+  jsdoc/newline-after-description: 'error'
+  jsdoc/require-param: 'error'
+  jsdoc/require-param-description: 'error'
+  jsdoc/require-param-name: 'error'
+  jsdoc/require-param-type: 'error'
+  jsdoc/require-returns: 'error'
+  jsdoc/require-returns-check: 'error'
+  jsdoc/require-returns-description: 'error'
+  jsdoc/require-returns-type: 'error'
+  jsdoc/valid-types: 'error'
 
   # Disable some from TypeScript.
   '@typescript-eslint/camelcase': off
