@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  ChangeEventHandler,
+} from 'react'
 import styled from 'styled-components'
 import humanizeString from 'humanize-string'
 import { stringify as stringifyQueryString } from 'query-string'
-import { advertisedStyles } from '../../../supported-features.json'
-import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
+import { advertisedStyles } from '../../lib/supported-features'
 import { noAutocorrect, StyledInput } from '../common'
 import {
   BuilderContainer,
@@ -24,20 +27,44 @@ const QueryParamCaption = styled(BuilderCaption)`
   margin: 5px;
 `
 
+type BadgeOptionName = 'style' | 'label' | 'color' | 'logo' | 'logoColor'
+
+interface BadgeOptionInfo {
+  name: BadgeOptionName
+  label?: string
+  shieldsDefaultValue?: string
+}
+
 const supportedBadgeOptions = [
   { name: 'style', shieldsDefaultValue: 'flat' },
   { name: 'label', label: 'override label' },
   { name: 'color', label: 'override color' },
   { name: 'logo', label: 'named logo' },
   { name: 'logoColor', label: 'override logo color' },
-]
+] as BadgeOptionInfo[]
 
-function getBadgeOption(name) {
-  return supportedBadgeOptions.find(opt => opt.name === name)
+function getBadgeOption(name: BadgeOptionName): BadgeOptionInfo {
+  const result = supportedBadgeOptions.find(opt => opt.name === name)
+  if (!result) {
+    throw Error(`Unknown badge option: ${name}`)
+  }
+  return result
 }
 
-function getQueryString({ queryParams, badgeOptions }) {
-  const outQuery = {}
+function getQueryString({
+  queryParams,
+  badgeOptions,
+}: {
+  queryParams: Record<string, string | boolean>
+  badgeOptions: Record<BadgeOptionName, string | undefined>
+}): {
+  queryString: string
+  isComplete: boolean
+} {
+  // Use `string | null`, because `query-string` renders e.g.
+  // `{ compact_message: null }` as `?compact_message`. This is
+  // what we want for boolean params that are true (see below).
+  const outQuery = {} as Record<string, string | boolean | null>
   let isComplete = true
 
   Object.entries(queryParams).forEach(([name, value]) => {
@@ -62,7 +89,7 @@ function getQueryString({ queryParams, badgeOptions }) {
   })
 
   Object.entries(badgeOptions).forEach(([name, value]) => {
-    const { shieldsDefaultValue } = getBadgeOption(name)
+    const { shieldsDefaultValue } = getBadgeOption(name as BadgeOptionName)
     if (value && value !== shieldsDefaultValue) {
       outQuery[name] = value
     }
@@ -80,6 +107,13 @@ function ServiceQueryParam({
   isStringParam,
   stringParamCount,
   handleServiceQueryParamChange,
+}: {
+  name: string
+  value: string | boolean
+  exampleValue: string
+  isStringParam: boolean
+  stringParamCount?: number
+  handleServiceQueryParamChange: ChangeEventHandler<HTMLInputElement>
 }) {
   return (
     <tr>
@@ -101,12 +135,12 @@ function ServiceQueryParam({
             name={name}
             onChange={handleServiceQueryParamChange}
             type="text"
-            value={value}
+            value={value as string}
             {...noAutocorrect}
           />
         ) : (
           <input
-            checked={value}
+            checked={value as boolean}
             name={name}
             onChange={handleServiceQueryParamChange}
             type="checkbox"
@@ -117,7 +151,17 @@ function ServiceQueryParam({
   )
 }
 
-function BadgeOptionInput({ name, value, handleBadgeOptionChange }) {
+function BadgeOptionInput({
+  name,
+  value,
+  handleBadgeOptionChange,
+}: {
+  name: BadgeOptionName
+  value: string
+  handleBadgeOptionChange: ChangeEventHandler<
+    HTMLSelectElement | HTMLInputElement
+  >
+}) {
   if (name === 'style') {
     return (
       <select name="style" onChange={handleBadgeOptionChange} value={value}>
@@ -141,7 +185,15 @@ function BadgeOptionInput({ name, value, handleBadgeOptionChange }) {
   }
 }
 
-function BadgeOption({ name, value, handleBadgeOptionChange }) {
+function BadgeOption({
+  name,
+  value,
+  handleBadgeOptionChange,
+}: {
+  name: BadgeOptionName
+  value: string
+  handleBadgeOptionChange: ChangeEventHandler<HTMLInputElement>
+}) {
   const {
     label = humanizeString(name),
     shieldsDefaultValue: hasShieldsDefaultValue,
@@ -176,43 +228,59 @@ export default function QueryStringBuilder({
   exampleParams,
   initialStyle = 'flat',
   onChange,
+}: {
+  exampleParams: { [k: string]: string }
+  initialStyle?: string
+  onChange: ({
+    queryString,
+    isComplete,
+  }: {
+    queryString: string
+    isComplete: boolean
+  }) => void
 }) {
   const [queryParams, setQueryParams] = useState(() => {
     // For each of the custom query params defined in `exampleParams`,
     // create empty values in `queryParams`.
-    const result = {}
-    Object.entries(exampleParams).forEach(([name, value]) => {
-      // Custom query params are either string or boolean. Inspect the example
-      // value to infer which one, and set empty values accordingly.
-      // Throughout the component, these two types are supported in the same
-      // manner: by inspecting this value type.
-      const isStringParam = typeof value === 'string'
-      result[name] = isStringParam ? '' : true
-    })
-    return result
+    return Object.entries(exampleParams).reduce(
+      (accum, [name, value]) => {
+        // Custom query params are either string or boolean. Inspect the example
+        // value to infer which one, and set empty values accordingly.
+        // Throughout the component, these two types are supported in the same
+        // manner: by inspecting this value type.
+        const isStringParam = typeof value === 'string'
+        accum[name] = isStringParam ? '' : true
+        return accum
+      },
+      {} as { [k: string]: string | boolean }
+    )
   })
   // For each of the standard badge options, create empty values in
   // `badgeOptions`. When `initialStyle` has been provided, use it.
   const [badgeOptions, setBadgeOptions] = useState(() =>
-    supportedBadgeOptions.reduce((accum, { name }) => {
-      if (name === 'style') {
-        accum[name] = initialStyle
-      } else {
-        accum[name] = ''
-      }
-      return accum
-    }, {})
+    supportedBadgeOptions.reduce(
+      (accum, { name }) => {
+        if (name === 'style') {
+          accum[name] = initialStyle
+        } else {
+          accum[name] = ''
+        }
+        return accum
+      },
+      {} as Record<BadgeOptionName, string>
+    )
   )
 
-  function handleServiceQueryParamChange(event) {
-    const { name, type } = event.target
-    const value =
-      type === 'checkbox' ? event.target.checked : event.target.value
-    setQueryParams({ ...queryParams, [name]: value })
+  function handleServiceQueryParamChange({
+    target: { name, type, checked, value },
+  }: ChangeEvent<HTMLInputElement>) {
+    const outValue = type === 'checkbox' ? checked : value
+    setQueryParams({ ...queryParams, [name]: outValue })
   }
 
-  function handleBadgeOptionChange(event) {
-    const { name, value } = event.target
+  function handleBadgeOptionChange({
+    target: { name, value },
+  }: ChangeEvent<HTMLInputElement>) {
     setBadgeOptions({ ...badgeOptions, [name]: value })
   }
 
@@ -263,7 +331,7 @@ export default function QueryStringBuilder({
               <BadgeOption
                 handleBadgeOptionChange={handleBadgeOptionChange}
                 key={name}
-                name={name}
+                name={name as BadgeOptionName}
                 value={value}
               />
             ))}
@@ -272,9 +340,4 @@ export default function QueryStringBuilder({
       </BuilderContainer>
     </>
   )
-}
-QueryStringBuilder.propTypes = {
-  exampleParams: objectOfKeyValuesPropType,
-  initialStyle: PropTypes.string,
-  onChange: PropTypes.func,
 }
