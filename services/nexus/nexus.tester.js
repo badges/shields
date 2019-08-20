@@ -7,16 +7,16 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('search release version valid artifact')
   .timeout(15000)
-  .get('/r/https/oss.sonatype.org/com.google.guava/guava.json')
+  .get('/r/com.google/bitcoinj.json?server=https://oss.sonatype.org')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
 t.create('search release version of an nonexistent artifact')
-  .timeout(10000)
+  .timeout(15000)
   .get(
-    '/r/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
+    '/r/com.google.guava/nonexistent-artifact-id.json?server=https://oss.sonatype.org'
   )
   .expectBadge({
     label: 'nexus',
@@ -24,17 +24,17 @@ t.create('search release version of an nonexistent artifact')
   })
 
 t.create('search snapshot version valid snapshot artifact')
-  .timeout(10000)
-  .get('/s/https/oss.sonatype.org/com.google.guava/guava.json')
+  .timeout(15000)
+  .get('/s/com.google.guava/guava.json?server=https://oss.sonatype.org')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
 t.create('search snapshot version of an nonexistent artifact')
-  .timeout(10000)
+  .timeout(15000)
   .get(
-    '/s/https/oss.sonatype.org/com.google.guava/nonexistent-artifact-id.json'
+    '/s/com.google.guava/nonexistent-artifact-id.json?server=https://oss.sonatype.org'
   )
   .expectBadge({
     label: 'nexus',
@@ -43,15 +43,21 @@ t.create('search snapshot version of an nonexistent artifact')
   })
 
 t.create('repository version')
-  .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
+  .timeout(15000)
+  .get(
+    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
+  )
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
 t.create('repository version with query')
+  .timeout(15000)
   .get(
-    '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json'
+    `/fs-public-snapshots/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus&queryOpt=${encodeURIComponent(
+      ':p=tar.gz:c=agent-apple-osx'
+    )}`
   )
   .expectBadge({
     label: 'nexus',
@@ -59,8 +65,9 @@ t.create('repository version with query')
   })
 
 t.create('repository version of an nonexistent artifact')
+  .timeout(15000)
   .get(
-    '/developer/https/repository.jboss.org/nexus/jboss/nonexistent-artifact-id.json'
+    '/developer/jboss/nonexistent-artifact-id.json?server=https://repository.jboss.org/nexus'
   )
   .expectBadge({
     label: 'nexus',
