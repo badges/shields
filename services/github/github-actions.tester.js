@@ -17,7 +17,7 @@ t.create('nonexistent workflow')
     message: 'repo or workflow not found',
   })
 
-t.create('nonexistent workflow')
+t.create('valid workflow')
   .get('/actions/toolkit/Main%20workflow.json')
   .expectBadge({
     label: 'build',
