@@ -22,7 +22,7 @@ import {
   CategoryHeadings,
   CategoryNav,
 } from './category-headings'
-import BadgeExamples from './badge-examples'
+import { BadgeExamples } from './badge-examples'
 import { BaseFont, GlobalStyle } from './common'
 
 const AppContainer = styled(BaseFont)`
