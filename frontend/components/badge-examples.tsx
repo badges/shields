@@ -1,15 +1,28 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   staticBadgeUrl,
 } from '../../core/badge-urls/make-badge-url'
-import { examplePropType } from '../lib/service-definitions/example-prop-types'
 import { removeRegexpFromPattern } from '../lib/pattern-helpers'
+import {
+  ExampleSignature,
+  Example as ExampleData,
+} from '../lib/service-definitions'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
+
+export interface SuggestionData {
+  title: string
+  link: string
+  example: ExampleSignature
+  preview: {
+    style?: string
+  }
+}
+
+type RenderableExampleData = ExampleData | SuggestionData
 
 const ExampleTable = styled.table`
   min-width: 50%;
@@ -29,25 +42,40 @@ const ClickableCode = styled(StyledCode)`
   cursor: pointer;
 `
 
-function Example({ baseUrl, onClick, exampleData }) {
-  const { title, example, preview, isBadgeSuggestion } = exampleData
-  const { pattern, namedParams, queryParams } = example
-  let exampleUrl
-  let previewUrl
+function Example({
+  baseUrl,
+  onClick,
+  exampleData,
+  isBadgeSuggestion,
+}: {
+  baseUrl?: string
+  onClick: (exampleData: RenderableExampleData) => void
+  exampleData: RenderableExampleData
+  isBadgeSuggestion: boolean
+}) {
+  function handleClick() {
+    onClick(exampleData)
+  }
 
+  let exampleUrl, previewUrl
   if (isBadgeSuggestion) {
-    exampleUrl = badgeUrlFromPattern({
+    const {
+      example: { pattern, namedParams, queryParams },
+    } = exampleData as SuggestionData
+    exampleUrl = previewUrl = badgeUrlFromPattern({
       baseUrl,
       pattern,
       namedParams,
       queryParams,
     })
-    previewUrl = exampleUrl
   } else {
-    const { label, message, color, style, namedLogo } = preview
+    const {
+      example: { pattern, queryParams },
+      preview: { label, message, color, style, namedLogo },
+    } = exampleData as ExampleData
     previewUrl = staticBadgeUrl({
       baseUrl,
-      label,
+      label: label || '',
       message,
       color,
       style,
@@ -55,13 +83,11 @@ function Example({ baseUrl, onClick, exampleData }) {
     })
     exampleUrl = badgeUrlFromPath({
       path: removeRegexpFromPattern(pattern),
-      namedParams,
       queryParams,
     })
   }
 
-  const handleClick = () => onClick(exampleData)
-
+  const { title } = exampleData
   return (
     <tr>
       <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
@@ -74,13 +100,18 @@ function Example({ baseUrl, onClick, exampleData }) {
     </tr>
   )
 }
-Example.propTypes = {
-  exampleData: examplePropType.isRequired,
-  baseUrl: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-}
 
-export default function BadgeExamples({ examples, baseUrl, onClick }) {
+export function BadgeExamples({
+  examples,
+  areBadgeSuggestions,
+  baseUrl,
+  onClick,
+}: {
+  examples: RenderableExampleData[]
+  areBadgeSuggestions: boolean
+  baseUrl?: string
+  onClick: (exampleData: RenderableExampleData) => void
+}) {
   return (
     <ExampleTable>
       <tbody>
@@ -88,6 +119,7 @@ export default function BadgeExamples({ examples, baseUrl, onClick }) {
           <Example
             baseUrl={baseUrl}
             exampleData={exampleData}
+            isBadgeSuggestion={areBadgeSuggestions}
             key={`${exampleData.title} ${exampleData.example.pattern}`}
             onClick={onClick}
           />
@@ -95,9 +127,4 @@ export default function BadgeExamples({ examples, baseUrl, onClick }) {
       </tbody>
     </ExampleTable>
   )
-}
-BadgeExamples.propTypes = {
-  examples: PropTypes.arrayOf(examplePropType).isRequired,
-  baseUrl: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
 }
