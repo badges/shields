@@ -25,7 +25,9 @@ t.create('search release version of an nonexistent artifact')
 
 t.create('search snapshot version valid snapshot artifact')
   .timeout(15000)
-  .get('/s/com.google.guava/guava.json?server=https://oss.sonatype.org')
+  .get(
+    '/s/org.fusesource.apollo/apollo-karaf-feature.json?server=https://repository.jboss.org/nexus'
+  )
   .expectBadge({
     label: 'nexus',
     message: isVersion,
