@@ -38,7 +38,7 @@
     "escape-string-regexp": "^2.0.0",
     "fast-xml-parser": "^3.12.20",
     "fsos": "^1.1.6",
-    "gh-badges": "file:gh-badges",
+    "gh-badges": "file:./gh-badges",
     "glob": "^7.1.4",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
