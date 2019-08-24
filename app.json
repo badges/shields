@@ -8,12 +8,12 @@
   "env": {
     "CYPRESS_INSTALL_BINARY": {
       "description": "Disable the cypress binary installation",
-      "value": 0,
+      "value": "0",
       "required": false
     },
     "HUSKY_SKIP_INSTALL": {
       "description": "Skip the husky git hook setup",
-      "value": 1,
+      "value": "1",
       "required": false
     },
     "WHEELMAP_TOKEN": {
