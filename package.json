@@ -256,8 +256,8 @@
     "walkdir": "0.4.1"
   },
   "engines": {
-    "node": "10.16",
-    "npm": "^6.10"
+    "node": "^10.16.3",
+    "npm": "6.10.3"
   },
   "babel": {
     "plugins": [
