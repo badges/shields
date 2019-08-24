@@ -21,9 +21,9 @@ t.create('total downloads (valid)')
   })
 
 t.create('total downloads, specific version (valid)')
-  .get('/dt/vibe-d/0.8.4.json')
+  .get('/dt/dub/1.16.0.json')
   .expectBadge({
-    label: 'downloads@0.8.4',
+    label: 'downloads@1.16.0',
     message: isMetric,
     color: isDownloadsColor,
   })
