@@ -10,7 +10,7 @@ const schema = Joi.object({
 
 module.exports = class GithubLabels extends GithubAuthV3Service {
   static get category() {
-    return 'other'
+    return 'issue-tracking'
   }
 
   static get route() {
