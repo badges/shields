@@ -5,7 +5,7 @@ const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({
-  color: Joi.string(),
+  color: Joi.string().hex().required(),
 }).required()
 
 module.exports = class GithubLabels extends GithubAuthV3Service {
