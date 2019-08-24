@@ -59,6 +59,14 @@ const BadgeWrapper = styled.span<BadgeWrapperProps>`
     `};
 `
 
+interface BadgeProps extends React.HTMLAttributes<HTMLImageElement> {
+  src: string
+  alt?: string
+  display?: 'inline' | 'block' | 'inline-block'
+  height?: string
+  clickable?: boolean
+}
+
 export function Badge({
   src,
   alt = '',
@@ -66,13 +74,7 @@ export function Badge({
   height = '20px',
   clickable = false,
   ...rest
-}: {
-  src: string
-  alt?: string
-  display?: 'inline' | 'block' | 'inline-block'
-  height?: string
-  clickable?: boolean
-}) {
+}: BadgeProps) {
   return (
     <BadgeWrapper clickable={clickable} display={display} height={height}>
       {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}
