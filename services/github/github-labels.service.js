@@ -5,7 +5,9 @@ const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({
-  color: Joi.string().hex().required(),
+  color: Joi.string()
+    .hex()
+    .required(),
 }).required()
 
 module.exports = class GithubLabels extends GithubAuthV3Service {
@@ -52,7 +54,7 @@ module.exports = class GithubLabels extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/labels/${name}`,
       schema,
-      errorMessages: errorMessagesFor(`${name} (repo or label not found)`),
+      errorMessages: errorMessagesFor(`repo or label not found`),
     })
   }
 

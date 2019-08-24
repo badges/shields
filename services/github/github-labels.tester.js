@@ -12,6 +12,5 @@ t.create('labels')
 t.create('labels (repo or label not found)')
   .get('/badges/shields/somenonexistentlabelthatwouldneverexist.json')
   .expectBadge({
-    message:
-      'somenonexistentlabelthatwouldneverexist (repo or label not found)',
+    message: 'repo or label not found',
   })
