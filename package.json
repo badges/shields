@@ -106,7 +106,7 @@
     "ghbadges": "cd gh-badges && npm i",
     "defs": "node scripts/export-service-definitions-cli.js > service-definitions.yml",
     "build": "run-s defs features && gatsby build",
-    "heroku-postbuild": "run-s --silent build",
+    "heroku-postbuild": "node --version; npm --version; npm run build",
     "start:server:prod": "node server",
     "now-start": "npm run start:server:prod",
     "start:server:e2e-on-build": "node server 8080",
