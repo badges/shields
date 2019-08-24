@@ -100,7 +100,7 @@
     "test": "run-s --silent --continue-on-error lint test:frontend test:package test:server test:entrypoint prettier:check",
     "check-types:frontend": "tsc --noEmit --project .",
     "depcheck": "check-node-version --node \">= 8.0\"",
-    "postinstall": "run-s --silent ghbadges depcheck",
+    "postinstall": "run-s --silent depcheck",
     "prebuild": "run-s --silent depcheck",
     "features": "node scripts/export-supported-features-cli.js > supported-features.json",
     "ghbadges": "cd gh-badges && npm i",
@@ -256,8 +256,8 @@
     "walkdir": "0.4.1"
   },
   "engines": {
-    "node": ">= 8",
-    "npm": ">= 5"
+    "node": "10.16",
+    "npm": "^6.10"
   },
   "babel": {
     "plugins": [
