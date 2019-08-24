@@ -1,9 +1,12 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService, NotFound } = require('..')
 
-const schema = Joi.any()
+const schema = Joi.array().items({
+  result: isBuildStatus.required(),
+})
 
 const keywords = [
   'visual-studio',
@@ -11,6 +14,9 @@ const keywords = [
   'visual-studio-app-center',
   'app-center',
 ]
+
+const documentation =
+  "You will need to create a <b>read-only</b> API token <a target='_blank' href='https://appcenter.ms/settings/apitokens'>here</a>."
 
 module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
   static get category() {
@@ -34,8 +40,9 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
           branch: 'master',
           token: 'ac70cv...',
         },
-        staticPreview: this.render({ result: 'succeeded' }),
+        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
         keywords,
+        documentation,
       },
     ]
   }
@@ -43,13 +50,6 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
   static get defaultBadgeData() {
     return {
       label: 'build',
-    }
-  }
-
-  static render({ result }) {
-    return {
-      message: result,
-      color: result == 'succeeded' ? 'brightgreen' : 'red',
     }
   }
 
@@ -74,6 +74,6 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
     const json = await this.fetch({ owner, app, branch, token })
     if (json[0] == undefined)
       throw new NotFound({ prettyMessage: 'no builds found' })
-    return this.constructor.render({ result: json[0].result })
+    return renderBuildStatusBadge({ status: json[0].result })
   }
 }

@@ -6,7 +6,7 @@ t.create('Succeeded Build')
   .get('/jct/test-1/master/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json')
   .expectBadge({
     label: 'build',
-    message: 'succeeded',
+    message: 'passing',
   })
 
 t.create('Failed Build')
@@ -15,7 +15,7 @@ t.create('Failed Build')
   )
   .expectBadge({
     label: 'build',
-    message: 'failed',
+    message: 'failing',
   })
 
 t.create('Invalid Branch')
