@@ -271,9 +271,9 @@ export default function QueryStringBuilder({
   )
 
   function handleServiceQueryParamChange({
-    target: { name, type, checked, value },
+    target: { name, type: targetType, checked, value },
   }: ChangeEvent<HTMLInputElement>) {
-    const outValue = type === 'checkbox' ? checked : value
+    const outValue = targetType === 'checkbox' ? checked : value
     setQueryParams({ ...queryParams, [name]: outValue })
   }
 
