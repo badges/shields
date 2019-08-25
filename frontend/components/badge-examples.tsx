@@ -92,7 +92,12 @@ function Example({
     <tr>
       <ClickableTh onClick={handleClick}>{title}:</ClickableTh>
       <td>
-        <Badge clickable onClick={handleClick} src={previewUrl} />
+        <Badge
+          alt={`${title} badge`}
+          clickable
+          onClick={handleClick}
+          src={previewUrl}
+        />
       </td>
       <td>
         <ClickableCode onClick={handleClick}>{exampleUrl}</ClickableCode>
