@@ -185,7 +185,8 @@ class GithubApiProvider {
         baseUrl,
         headers: {
           'User-Agent': 'Shields.io',
-          Accept: 'application/vnd.github.v3+json',
+          Accept:
+            'application/vnd.github.v3+json, application/vnd.github.antiope-preview+json',
           Authorization: `token ${tokenString}`,
         },
       },
