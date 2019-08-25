@@ -21,9 +21,7 @@ badge build passed :green .png > mybadge.png
 ### As a library
 
 ```js
-const { BadgeFactory, ValidationError } = require('gh-badges')
-
-const bf = new BadgeFactory()
+const { makeBadge, ValidationError } = require('gh-badges')
 
 const format = {
   text: ['build', 'passed'],
@@ -31,8 +29,8 @@ const format = {
   template: 'flat',
 }
 
-bf.create(format) //<svg...
-bf.create({}) // ValidationError: Field `text` is required
+makeBadge(format) // <svg...
+makeBadge({}) // ValidationError: Field `text` is required
 ```
 
 ### Node version support
