@@ -64,14 +64,13 @@ function getQueryString({
   // Use `string | null`, because `query-string` renders e.g.
   // `{ compact_message: null }` as `?compact_message`. This is
   // what we want for boolean params that are true (see below).
-  const outQuery = {} as Record<string, string | boolean | null>
+  const outQuery = {} as Record<string, string | null>
   let isComplete = true
 
   Object.entries(queryParams).forEach(([name, value]) => {
     // As above, there are two types of supported params: strings and
     // booleans.
-    const isStringParam = typeof value === 'string'
-    if (isStringParam) {
+    if (typeof value === 'string') {
       if (value) {
         outQuery[name] = value
       } else {
