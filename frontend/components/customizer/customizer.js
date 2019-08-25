@@ -56,7 +56,7 @@ export default function Customizer({
     }
     return (
       <p>
-        <Badge display="block" src={src} />
+        <Badge alt="preview badge" display="block" src={src} />
       </p>
     )
   }

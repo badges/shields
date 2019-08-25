@@ -5,7 +5,7 @@ export const noAutocorrect = Object.freeze({
   autoComplete: 'off',
   autoCorrect: 'off',
   autoCapitalize: 'off',
-  spellCheck: 'false',
+  spellcheck: 'false',
 })
 
 export const nonBreakingSpace = '\u00a0'
