@@ -19,8 +19,15 @@ t.create('Followers')
     ],
   })
 
-t.create('Invalid Username Specified')
+t.create('Invalid Username Specified (non-existent user)')
   .get('/follow/invalidusernamethatshouldnotexist.json?label=Follow')
+  .expectBadge({
+    label: 'Follow',
+    message: 'invalid user',
+  })
+
+t.create('Invalid Username Specified (only spaces)')
+  .get('/follow/%20%20.json?label=Follow')
   .expectBadge({
     label: 'Follow',
     message: 'invalid user',
