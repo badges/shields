@@ -118,7 +118,7 @@ class TwitterFollow extends BaseJsonService {
 
   async handle({ user }) {
     const data = await this.fetch({ user })
-    if (data.length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
       throw new NotFound({ prettyMessage: 'invalid user' })
     }
     return this.constructor.render({ user, followers: data[0].followers_count })
