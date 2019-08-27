@@ -46,6 +46,8 @@ module.exports = class Luarocks extends BaseJsonService {
   }
 
   static render({ version }) {
+    // The badge colors are following the heuristic rule where `scm < dev <
+    // stable` (e.g., `scm-1` < `dev-1` < `0.1.0-1`).
     let color
     switch (version.slice(0, 3).toLowerCase()) {
       case 'dev':
