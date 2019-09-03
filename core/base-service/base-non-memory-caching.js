@@ -36,6 +36,8 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
     })
 
     camp.route(regex, async (queryParams, match, end, ask) => {
+      const metricHandle = metricHelper.startRequest()
+
       const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
@@ -66,7 +68,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      metricHelper.noteResponseSent()
+      metricHandle.noteResponseSent()
     })
   }
 }

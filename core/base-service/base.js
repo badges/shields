@@ -409,6 +409,8 @@ class BaseService {
       handleRequest(cacheHeaderConfig, {
         queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
+          const metricHandle = metricHelper.startRequest()
+
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
@@ -431,7 +433,7 @@ class BaseService {
           const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
           sendBadge(format, badgeData)
 
-          metricHelper.noteResponseSent()
+          metricHandle.noteResponseSent()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

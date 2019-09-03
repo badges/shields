@@ -82,6 +82,8 @@ module.exports = function redirector(attrs) {
           return
         }
 
+        const metricHandle = metricHelper.startRequest()
+
         const namedParams = namedParamsForMatch(captureNames, match, this)
         trace.logTrace(
           'inbound',
@@ -123,7 +125,7 @@ module.exports = function redirector(attrs) {
 
         ask.res.end()
 
-        metricHelper.noteResponseSent()
+        metricHandle.noteResponseSent()
       })
     }
   }

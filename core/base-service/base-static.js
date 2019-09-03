@@ -31,6 +31,8 @@ module.exports = class BaseStaticService extends BaseService {
         return
       }
 
+      const metricHandle = metricHelper.startRequest()
+
       const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
@@ -62,7 +64,7 @@ module.exports = class BaseStaticService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      metricHelper.noteResponseSent()
+      metricHandle.noteResponseSent()
     })
   }
 }
