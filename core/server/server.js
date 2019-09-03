@@ -263,7 +263,7 @@ class Server {
    * load each service and register a Scoutcamp route for each service.
    */
   registerServices() {
-    const { config, camp, metrics: metricInstance } = this
+    const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
 
     loadServiceClasses().forEach(serviceClass =>
