@@ -242,7 +242,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       </p>
 
       <p>
-        Create badges from <Link to={'/endpoint'}>your own JSON endpoint</Link>.
+        Create badges from <Link to="/endpoint">your own JSON endpoint</Link>.
       </p>
 
       <H3 id="dynamic-badge">Dynamic</H3>
@@ -255,7 +255,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
           /badge/dynamic/json?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
             href="https://jsonpath.com"
-            target="_BLANK"
+            rel="noopener noreferrer"
+            target="_blank"
             title="JSONPath syntax"
           >
             $.DATA.SUBDATA
@@ -267,7 +268,12 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
         <StyledCode>
           {baseUrl}
           /badge/dynamic/xml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
-          <a href="http://xpather.com" target="_BLANK" title="XPath syntax">
+          <a
+            href="http://xpather.com"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="XPath syntax"
+          >
             //data/subdata
           </a>
           &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
@@ -279,7 +285,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
           /badge/dynamic/yaml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
           <a
             href="https://jsonpath.com"
-            target="_BLANK"
+            rel="noopener noreferrer"
+            target="_blank"
             title="YAML (JSONPath) syntax"
           >
             $.DATA.SUBDATA
@@ -321,7 +328,11 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
             documentation={
               <span>
                 Insert one of the named logos from ({<NamedLogos />}) or{' '}
-                <a href="https://simpleicons.org/" target="_BLANK">
+                <a
+                  href="https://simpleicons.org/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   simple-icons
                 </a>
                 . Simple-icons are referenced using names as they appear on the
