@@ -6,12 +6,14 @@ const prometheus = require('prom-client')
 module.exports = class PrometheusMetrics {
   constructor() {
     this.register = new prometheus.Registry()
-    this.requestCounter = new prometheus.Counter({
-      name: 'service_requests_total',
-      help: 'Total service requests',
-      labelNames: ['category', 'family', 'service'],
-      registers: [this.register],
-    })
+    this.counters = {
+      numRequests: new prometheus.Counter({
+        name: 'service_requests_total',
+        help: 'Total service requests',
+        labelNames: ['category', 'family', 'service'],
+        registers: [this.register],
+      }),
+    }
   }
 
   async initialize(server) {
@@ -35,8 +37,8 @@ module.exports = class PrometheusMetrics {
   /**
    * @returns {object} `{ inc() {} }`.
    */
-  createServiceRequestCounter({ category, serviceFamily, name }) {
+  createNumRequestCounter({ category, serviceFamily, name }) {
     const service = decamelize(name)
-    return this.requestCounter.labels(category, serviceFamily, service)
+    return this.counters.numRequests.labels(category, serviceFamily, service)
   }
 }

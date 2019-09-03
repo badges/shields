@@ -3,7 +3,7 @@
 class MetricHelper {
   constructor({ metricInstance }, { category, serviceFamily, name }) {
     if (metricInstance) {
-      this.serviceRequestCounter = metricInstance.createServiceRequestCounter({
+      this.serviceRequestCounter = metricInstance.createNumRequestCounter({
         category,
         serviceFamily,
         name,
