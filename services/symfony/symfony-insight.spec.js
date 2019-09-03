@@ -14,6 +14,7 @@ const {
   silverMockResponse,
   bronzeMockResponse,
   noMedalMockResponse,
+  noGradeMockResponse,
   criticalViolation,
   majorViolation,
   minorViolation,
@@ -199,6 +200,16 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function() {
     expectedStarsBadge: {
       label: 'stars',
       message: '☆☆☆☆',
+      color: 'red',
+    },
+  })
+
+  testBadges({
+    description: 'no medal',
+    response: noGradeMockResponse,
+    expectedGradeBadge: {
+      label: 'grade',
+      message: 'no medal',
       color: 'red',
     },
   })
