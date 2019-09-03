@@ -3,12 +3,12 @@
  * @module
  */
 
-const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
 const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
+const { MetricHelper } = require('./metric-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -391,27 +391,17 @@ class BaseService {
     return serviceData
   }
 
-  static _createServiceRequestCounter({ requestCounter }) {
-    if (requestCounter) {
-      const { category, serviceFamily, name } = this
-      const service = decamelize(name)
-      return requestCounter.labels(category, serviceFamily, service)
-    } else {
-      // When metrics are disabled, return a mock counter.
-      return { inc: () => {} }
-    }
-  }
-
   static register(
-    { camp, handleRequest, githubApiProvider, requestCounter },
+    { camp, handleRequest, githubApiProvider, metricInstance },
     serviceConfig
   ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
+    const metricHelper = MetricHelper.create({
+      metricInstance,
+      ServiceClass: this,
     })
 
     camp.route(
@@ -441,7 +431,7 @@ class BaseService {
           const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
           sendBadge(format, badgeData)
 
-          serviceRequestCounter.inc()
+          metricHelper.noteResponseSent()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

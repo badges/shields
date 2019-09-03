@@ -1,5 +1,6 @@
 'use strict'
 
+const decamelize = require('decamelize')
 const prometheus = require('prom-client')
 
 module.exports = class PrometheusMetrics {
@@ -29,5 +30,13 @@ module.exports = class PrometheusMetrics {
       clearInterval(this.interval)
       this.interval = undefined
     }
+  }
+
+  /**
+   * @returns {object} `{ inc() {} }`.
+   */
+  createServiceRequestCounter({ category, serviceFamily, name }) {
+    const service = decamelize(name)
+    return this.requestCounter.labels(category, serviceFamily, service)
   }
 }

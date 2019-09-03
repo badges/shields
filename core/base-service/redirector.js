@@ -10,6 +10,7 @@ const {
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
 const { isValidCategory } = require('./categories')
+const { MetricHelper } = require('./metric-helper')
 const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
 const trace = require('./trace')
 
@@ -62,14 +63,15 @@ module.exports = function redirector(attrs) {
       return route
     }
 
-    static register({ camp, requestCounter }, { rasterUrl }) {
+    static register({ camp, metricInstance }, { rasterUrl }) {
       const { regex, captureNames } = prepareRoute({
         ...this.route,
         withPng: Boolean(rasterUrl),
       })
 
-      const serviceRequestCounter = this._createServiceRequestCounter({
-        requestCounter,
+      const metricHelper = MetricHelper.create({
+        metricInstance,
+        ServiceClass: this,
       })
 
       camp.route(regex, async (queryParams, match, end, ask) => {
@@ -121,7 +123,7 @@ module.exports = function redirector(attrs) {
 
         ask.res.end()
 
-        serviceRequestCounter.inc()
+        metricHelper.noteResponseSent()
       })
     }
   }

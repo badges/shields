@@ -148,7 +148,7 @@ class Server {
       private: privateConfig,
     })
     if (publicConfig.metrics.prometheus.enabled) {
-      this.metrics = new PrometheusMetrics()
+      this.metricInstance = new PrometheusMetrics()
     }
   }
 
@@ -263,13 +263,12 @@ class Server {
    * load each service and register a Scoutcamp route for each service.
    */
   registerServices() {
-    const { config, camp } = this
+    const { config, camp, metrics: metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    const { requestCounter } = this.metrics || {}
 
     loadServiceClasses().forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider, requestCounter },
+        { camp, handleRequest, githubApiProvider, metricInstance },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
@@ -309,10 +308,10 @@ class Server {
 
     this.cleanupMonitor = sysMonitor.setRoutes({ rateLimit }, camp)
 
-    const { githubConstellation, metrics } = this
+    const { githubConstellation, metricInstance } = this
     githubConstellation.initialize(camp)
-    if (metrics) {
-      metrics.initialize(camp)
+    if (metricInstance) {
+      metricInstance.initialize(camp)
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -355,8 +354,8 @@ class Server {
       this.githubConstellation = undefined
     }
 
-    if (this.metrics) {
-      this.metrics.stop()
+    if (this.metricInstance) {
+      this.metricInstance.stop()
     }
   }
 }
