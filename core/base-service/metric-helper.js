@@ -3,14 +3,13 @@
 class MetricHelper {
   constructor({ metricInstance }, { category, serviceFamily, name }) {
     if (metricInstance) {
-      this._serviceRequestCounter = metricInstance.createServiceRequestCounter({
+      this.serviceRequestCounter = metricInstance.createServiceRequestCounter({
         category,
         serviceFamily,
         name,
       })
     } else {
-      // When metrics are disabled, use a mock counter.
-      this._serviceRequestCounter = { inc: () => {} }
+      this.serviceRequestCounter = undefined
     }
   }
 
@@ -20,7 +19,10 @@ class MetricHelper {
   }
 
   noteResponseSent() {
-    this._serviceRequestCounter.inc()
+    const { serviceRequestCounter } = this
+    if (serviceRequestCounter) {
+      serviceRequestCounter.inc()
+    }
   }
 }
 
