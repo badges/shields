@@ -306,9 +306,13 @@ class Server {
       key,
     }))
 
-    this.cleanupMonitor = sysMonitor.setRoutes({ rateLimit }, camp)
+    const { metricInstance } = this
+    this.cleanupMonitor = sysMonitor.setRoutes(
+      { rateLimit },
+      { server: camp, metricInstance }
+    )
 
-    const { githubConstellation, metricInstance } = this
+    const { githubConstellation } = this
     githubConstellation.initialize(camp)
     if (metricInstance) {
       metricInstance.initialize(camp)
