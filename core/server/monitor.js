@@ -18,7 +18,10 @@ function secretInvalid(req, res) {
 
 function setRoutes({ rateLimit }, { server, metricInstance }) {
   const ipRateLimit = new RateLimit({
-    whitelist: /^192\.30\.252\.\d+$/, // Whitelist GitHub IPs.
+    // Exclude IPs for GitHub Camo, determinted experimentally by running
+    // curl --insecure -u ":shields-secret" https://s0.shields-server.com/sys/rate-limit
+    //
+    whitelist: /^(?:192\.30\.252\.\d+)|(?:140\.82\.115\.\d+)$/,
   })
   const badgeTypeRateLimit = new RateLimit({ maxHitsPerPeriod: 3000 })
   const refererRateLimit = new RateLimit({
