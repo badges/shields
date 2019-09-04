@@ -288,7 +288,6 @@ class Server {
    * Start listening for requests on this.baseUrl()
    */
   async start() {
-    const { metricInstance } = this
     const {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
@@ -307,12 +306,13 @@ class Server {
       key,
     }))
 
+    const { metricInstance } = this
     this.cleanupMonitor = sysMonitor.setRoutes(
       { rateLimit },
       { server: camp, metricInstance }
     )
 
-    const { githubConstellation, metricInstance } = this
+    const { githubConstellation } = this
     githubConstellation.initialize(camp)
     if (metricInstance) {
       metricInstance.initialize(camp)
