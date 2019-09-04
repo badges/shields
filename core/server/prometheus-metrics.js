@@ -53,6 +53,12 @@ module.exports = class PrometheusMetrics {
         ],
         registers: [this.register],
       }),
+      rateLimitExceeded: new prometheus.Counter({
+        name: 'rate_limit_exceeded_total',
+        help: 'Count of rate limit exceeded by type',
+        labelNames: ['rate_limit_type'],
+        registers: [this.register],
+      }),
     }
   }
 
@@ -84,5 +90,9 @@ module.exports = class PrometheusMetrics {
 
   noteResponseTime(responseTime) {
     return this.counters.responseTime.observe(responseTime)
+  }
+
+  noteRateLimitExceeded(rateLimitType) {
+    return this.counters.rateLimitExceeded.labels(rateLimitType).inc()
   }
 }
