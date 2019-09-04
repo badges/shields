@@ -18,7 +18,7 @@ function secretInvalid(req, res) {
 
 function setRoutes({ rateLimit }, { server, metricInstance }) {
   const ipRateLimit = new RateLimit({
-    // Exclude IPs for GitHub Camo, determinted experimentally by running e.g.
+    // Exclude IPs for GitHub Camo, determined experimentally by running e.g.
     // `curl --insecure -u ":shields-secret" https://s0.shields-server.com/sys/rate-limit`
     whitelist: /^(?:192\.30\.252\.\d+)|(?:140\.82\.115\.\d+)$/,
   })
