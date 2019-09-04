@@ -4,6 +4,7 @@ extends:
   - plugin:@typescript-eslint/recommended
   - prettier/@typescript-eslint
   - prettier/standard
+  - prettier/react
 
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
