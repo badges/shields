@@ -58,7 +58,11 @@ module.exports = class Netlify extends BaseSvgScrapingService {
 
   static render({ status }) {
     status = statusMap[status] || status
-    return renderBuildStatusBadge({ status })
+    let result = renderBuildStatusBadge({ status })
+    if (result.message === 'building' && !result.color) {
+      result.color = 'yellow'
+    }
+    return result
   }
 
   async fetch({ projectId, branch }) {

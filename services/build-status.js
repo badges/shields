@@ -21,9 +21,8 @@ const redStatuses = [
   'infrastructure_failure',
 ]
 
-const yellowStatuses = ['building']
-
 const otherStatuses = [
+  'building',
   'canceled',
   'cancelled',
   'expired',
@@ -57,9 +56,6 @@ function renderBuildStatusBadge({ label, status }) {
   if (greenStatuses.includes(status)) {
     message = 'passing'
     color = 'brightgreen'
-  } else if (yellowStatuses.includes(status)) {
-    message = 'building'
-    color = 'yellow'
   } else if (orangeStatuses.includes(status)) {
     message = status === 'partially succeeded' ? 'passing' : status
     color = 'orange'

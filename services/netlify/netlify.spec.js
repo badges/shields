@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const Netlify = require('./netlify.service')
 
-const building = { message: 'building', label: undefined, color: undefined }
+const building = { message: 'building', label: undefined, color: 'yellow' }
 const notBuilt = { message: 'not built', label: undefined, color: undefined }
 
 describe('Netlify', function() {
