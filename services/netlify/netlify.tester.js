@@ -12,4 +12,4 @@ t.create('netlify (valid, no branch)')
 
 t.create('netlify (repo not found)')
   .get('/not-a-repo.json')
-  .expectBadge({ label: 'build', message: 'project not found' })
+  .expectBadge({ label: 'netlify', message: 'project not found' })
