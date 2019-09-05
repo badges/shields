@@ -73,7 +73,7 @@ module.exports = class Netlify extends BaseSvgScrapingService {
     if (buffer.includes('#EAFAF9')) return { message: 'passing' }
     if (buffer.includes('#FFF3F4')) return { message: 'failing' }
     if (buffer.includes('#FEFAEA')) return { message: 'building' }
-    return { message: 'project not found' }
+    return { message: 'unknown' }
   }
 
   async handle({ projectId, branch }) {
