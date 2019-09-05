@@ -24,7 +24,7 @@ module.exports = class Netlify extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'netlify',
-      pattern: ':projectId/:branch*',
+      pattern: ':projectId',
     }
   }
 
