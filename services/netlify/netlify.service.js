@@ -50,7 +50,10 @@ module.exports = class Netlify extends BaseSvgScrapingService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'netlify' }
+    return {
+      label: 'netlify',
+      namedLogo: 'netlify',
+    }
   }
 
   static render({ status }) {
