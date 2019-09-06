@@ -34,25 +34,16 @@ module.exports = class Netlify extends BaseSvgScrapingService {
         title: 'Netlify',
         namedParams: {
           projectId: 'e6d5a4e0-dee1-4261-833e-2f47f509c68f',
+          documentation: 'To locate your project id, visit your project settings, scroll to "Status badges" under "General", and copy the ID between "/api/v1/badges/" and "/deploy-status" in the code sample'
         },
         staticPreview: renderBuildStatusBadge({ status: 'passing' }),
-      },
-      // {
-      //   title: 'Netlify (branch)',
-      //   pattern: ':projectId/:branch',
-      //   namedParams: {
-      //     projectId: '0bdb0440-3af5-0133-00ea-0ebda3a33bf6',
-      //     branch: 'master',
-      //   },
-      //   staticPreview: renderBuildStatusBadge({ status: 'passing' }),
-      // },
+      }
     ]
   }
 
   static get defaultBadgeData() {
     return {
-      label: 'netlify',
-      namedLogo: 'netlify',
+      label: 'netlify'
     }
   }
 
