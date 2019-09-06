@@ -12,7 +12,7 @@ const isViolationsLongFormMetric = Joi.alternatives(
 
 t.create('Violations')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/violations.json'
+    '/violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com'
   )
   .expectBadge({
     label: 'violations',
@@ -21,7 +21,7 @@ t.create('Violations')
 
 t.create('Violations (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/violations.json?sonarVersion=4.2'
+    '/violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
   )
   .expectBadge({
     label: 'violations',
@@ -30,7 +30,7 @@ t.create('Violations (legacy API supported)')
 
 t.create('Violations Long Format')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/violations.json?format=long'
+    '/violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&format=long'
   )
   .expectBadge({
     label: 'violations',
@@ -39,7 +39,7 @@ t.create('Violations Long Format')
 
 t.create('Violations Long Format (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/violations.json?sonarVersion=4.2&format=long'
+    '/violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2&format=long'
   )
   .expectBadge({
     label: 'violations',
@@ -48,7 +48,7 @@ t.create('Violations Long Format (legacy API supported)')
 
 t.create('Blocker Violations')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/blocker_violations.json'
+    '/blocker_violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com'
   )
   .expectBadge({
     label: 'blocker violations',
@@ -57,7 +57,7 @@ t.create('Blocker Violations')
 
 t.create('Blocker Violations (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/blocker_violations.json?sonarVersion=4.2'
+    '/blocker_violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
   )
   .expectBadge({
     label: 'blocker violations',
@@ -66,7 +66,7 @@ t.create('Blocker Violations (legacy API supported)')
 
 t.create('Critical Violations')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/critical_violations.json'
+    '/critical_violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com'
   )
   .expectBadge({
     label: 'critical violations',
@@ -75,7 +75,7 @@ t.create('Critical Violations')
 
 t.create('Critical Violations (legacy API supported)')
   .get(
-    '/http/sonar.petalslink.com/org.ow2.petals%3Apetals-se-ase/critical_violations.json?sonarVersion=4.2'
+    '/critical_violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
   )
   .expectBadge({
     label: 'critical violations',

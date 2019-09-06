@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { formatDate, metric } = require('../text-formatters')
 const { age } = require('../color-formatters')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   documentation,
   errorMessagesFor,
@@ -154,7 +154,7 @@ const propertyMap = {
   'last-update': ageUpdateMap,
 }
 
-module.exports = class GithubIssueDetail extends GithubAuthService {
+module.exports = class GithubIssueDetail extends GithubAuthV3Service {
   static get category() {
     return 'issue-tracking'
   }

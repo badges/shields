@@ -11,7 +11,7 @@ const {
   getDependencyVersion,
 } = require('../package-json-helpers')
 const { semver } = require('../validators')
-const { ConditionalGithubAuthService } = require('./github-auth-service')
+const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 
@@ -21,7 +21,7 @@ const versionSchema = Joi.object({
   version: semver,
 }).required()
 
-class GithubPackageJsonVersion extends ConditionalGithubAuthService {
+class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'version'
   }
@@ -78,7 +78,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthService {
   }
 }
 
-class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
+class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'platform-support'
   }
@@ -173,7 +173,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthService {
 
 // This must be exported after GithubPackageJsonVersion in order for the
 // former to work correctly.
-class DynamicGithubPackageJson extends ConditionalGithubAuthService {
+class DynamicGithubPackageJson extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'other'
   }

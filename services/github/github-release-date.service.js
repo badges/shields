@@ -4,7 +4,7 @@ const moment = require('moment')
 const Joi = require('@hapi/joi')
 const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.alternatives(
@@ -20,7 +20,7 @@ const schema = Joi.alternatives(
     .min(1)
 )
 
-module.exports = class GithubReleaseDate extends GithubAuthService {
+module.exports = class GithubReleaseDate extends GithubAuthV3Service {
   static get category() {
     return 'activity'
   }

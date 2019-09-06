@@ -43,13 +43,13 @@ module.exports = class SonarBase extends BaseJsonService {
     return { userKey: 'sonarqube_token' }
   }
 
-  async fetch({ sonarVersion, protocol, host, component, metricName }) {
-    let qs, url, schema
+  async fetch({ sonarVersion, server, component, metricName }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
+    let qs, url, schema
     if (useLegacyApi) {
       schema = legacySchema
-      url = `${protocol}://${host}/api/resources`
+      url = `${server}/api/resources`
       qs = {
         resource: component,
         depth: 0,
@@ -58,7 +58,7 @@ module.exports = class SonarBase extends BaseJsonService {
       }
     } else {
       schema = modernSchema
-      url = `${protocol}://${host}/api/measures/component`
+      url = `${server}/api/measures/component`
       qs = {
         componentKey: component,
         metricKeys: metricName,

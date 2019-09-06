@@ -12,6 +12,8 @@ class TwitterUrl extends BaseService {
   static get route() {
     return {
       base: 'twitter/url',
+      // Do not base new services on this route pattern.
+      // See https://github.com/badges/shields/issues/3714
       pattern: ':protocol(https|http)/:hostAndPath+',
     }
   }
@@ -116,7 +118,7 @@ class TwitterFollow extends BaseJsonService {
 
   async handle({ user }) {
     const data = await this.fetch({ user })
-    if (data.length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
       throw new NotFound({ prettyMessage: 'invalid user' })
     }
     return this.constructor.render({ user, followers: data[0].followers_count })

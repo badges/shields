@@ -10,7 +10,7 @@ module.exports = class OpencollectiveBackers extends OpencollectiveBase {
   static get examples() {
     return [
       {
-        title: 'open collective backers',
+        title: 'Open Collective backers',
         namedParams: { collective: 'shields' },
         staticPreview: this.render(25),
         keywords: ['opencollective'],

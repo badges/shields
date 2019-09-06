@@ -3,13 +3,13 @@
 const Joi = require('@hapi/joi')
 const parseLinkHeader = require('parse-link-header')
 const { renderContributorBadge } = require('../contributor-count')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
 
-module.exports = class GithubContributors extends GithubAuthService {
+module.exports = class GithubContributors extends GithubAuthV3Service {
   static get category() {
     return 'activity'
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
@@ -10,50 +10,43 @@ import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
 import CopiedContentIndicator from './copied-content-indicator'
 
-export default class Customizer extends React.Component {
-  static propTypes = {
-    baseUrl: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    pattern: PropTypes.string.isRequired,
-    exampleNamedParams: objectOfKeyValuesPropType,
-    exampleQueryParams: objectOfKeyValuesPropType,
-    initialStyle: PropTypes.string,
-    isPrefilled: PropTypes.bool,
-    link: PropTypes.string,
-  }
+function getBaseUrlFromWindowLocation() {
+  // Default to the current hostname for when there is no `BASE_URL` set
+  // at build time (as in most PaaS deploys).
+  const { protocol, hostname } = window.location
+  return `${protocol}//${hostname}`
+}
 
-  indicatorRef = React.createRef()
+export default function Customizer({
+  baseUrl,
+  title,
+  pattern,
+  exampleNamedParams,
+  exampleQueryParams,
+  initialStyle,
+  isPrefilled,
+  link = '',
+}) {
+  const indicatorRef = useRef()
+  const [path, setPath] = useState('')
+  const [queryString, setQueryString] = useState()
+  const [pathIsComplete, setPathIsComplete] = useState()
+  const [markup, setMarkup] = useState()
+  const [message, setMessage] = useState()
 
-  get baseUrl() {
-    const { baseUrl } = this.props
-    if (baseUrl) {
-      return baseUrl
-    } else {
-      // Default to the current hostname for when there is no `BASE_URL` set
-      // at build time (as in most PaaS deploys).
-      const { protocol, hostname } = window.location
-      return `${protocol}//${hostname}`
-    }
-  }
-
-  generateBuiltBadgeUrl() {
-    const { baseUrl } = this
-    const { path, queryString } = this.state
-
+  function generateBuiltBadgeUrl() {
     const suffix = queryString ? `?${queryString}` : ''
-    return `${baseUrl}${path}.svg${suffix}`
+    return `${baseUrl || getBaseUrlFromWindowLocation()}${path}${suffix}`
   }
 
-  renderLivePreview() {
+  function renderLivePreview() {
     // There are some usability issues here. It would be better if the message
     // changed from a validation error to a loading message once the
     // parameters were filled in, and also switched back to loading when the
     // parameters changed.
-    const { baseUrl } = this.props
-    const { pathIsComplete } = this.state
     let src
     if (pathIsComplete) {
-      src = this.generateBuiltBadgeUrl()
+      src = generateBuiltBadgeUrl()
     } else {
       src = staticBadgeUrl({
         baseUrl,
@@ -63,16 +56,13 @@ export default class Customizer extends React.Component {
     }
     return (
       <p>
-        <Badge display="block" src={src} />
+        <Badge alt="preview badge" display="block" src={src} />
       </p>
     )
   }
 
-  copyMarkup = async markupFormat => {
-    const { title } = this.props
-    const { link } = this.state
-
-    const builtBadgeUrl = this.generateBuiltBadgeUrl()
+  async function copyMarkup(markupFormat) {
+    const builtBadgeUrl = generateBuiltBadgeUrl()
     const markup = generateMarkup({
       badgeUrl: builtBadgeUrl,
       link,
@@ -83,28 +73,23 @@ export default class Customizer extends React.Component {
     try {
       await clipboardCopy(markup)
     } catch (e) {
-      this.setState({
-        message: 'Copy failed',
-        markup,
-      })
+      setMessage('Copy failed')
+      setMarkup(markup)
       return
     }
 
-    this.setState({ markup })
-    this.indicatorRef.current.trigger()
+    setMarkup(markup)
+    indicatorRef.current.trigger()
   }
 
-  renderMarkupAndLivePreview() {
-    const { indicatorRef } = this
-    const { markup, message, pathIsComplete } = this.state
-
+  function renderMarkupAndLivePreview() {
     return (
       <div>
-        {this.renderLivePreview()}
+        {renderLivePreview()}
         <CopiedContentIndicator copiedContent="Copied" ref={indicatorRef}>
           <RequestMarkupButtom
             isDisabled={!pathIsComplete}
-            onMarkupRequested={this.copyMarkup}
+            onMarkupRequested={copyMarkup}
           />
         </CopiedContentIndicator>
         {message && (
@@ -117,47 +102,39 @@ export default class Customizer extends React.Component {
     )
   }
 
-  handlePathChange = ({ path, isComplete }) => {
-    this.setState({ path, pathIsComplete: isComplete })
+  function handlePathChange({ path, isComplete }) {
+    setPath(path)
+    setPathIsComplete(isComplete)
   }
 
-  handleQueryStringChange = ({ queryString, isComplete }) => {
-    this.setState({ queryString })
+  function handleQueryStringChange({ queryString, isComplete }) {
+    setQueryString(queryString)
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      link: this.props.link || '',
-      message: undefined,
-      path: '',
-    }
-  }
-
-  render() {
-    const {
-      pattern,
-      exampleNamedParams,
-      exampleQueryParams,
-      initialStyle,
-      isPrefilled,
-    } = this.props
-
-    return (
-      <form action="">
-        <PathBuilder
-          exampleParams={exampleNamedParams}
-          isPrefilled={isPrefilled}
-          onChange={this.handlePathChange}
-          pattern={pattern}
-        />
-        <QueryStringBuilder
-          exampleParams={exampleQueryParams}
-          initialStyle={initialStyle}
-          onChange={this.handleQueryStringChange}
-        />
-        <div>{this.renderMarkupAndLivePreview()}</div>
-      </form>
-    )
-  }
+  return (
+    <form action="">
+      <PathBuilder
+        exampleParams={exampleNamedParams}
+        isPrefilled={isPrefilled}
+        onChange={handlePathChange}
+        pattern={pattern}
+      />
+      <QueryStringBuilder
+        exampleParams={exampleQueryParams}
+        initialStyle={initialStyle}
+        onChange={handleQueryStringChange}
+      />
+      <div>{renderMarkupAndLivePreview()}</div>
+    </form>
+  )
+}
+Customizer.propTypes = {
+  baseUrl: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  pattern: PropTypes.string.isRequired,
+  exampleNamedParams: objectOfKeyValuesPropType,
+  exampleQueryParams: objectOfKeyValuesPropType,
+  initialStyle: PropTypes.string,
+  isPrefilled: PropTypes.bool,
+  link: PropTypes.string,
 }

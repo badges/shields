@@ -1,30 +1,44 @@
+/**
+ * @module
+ */
+
 'use strict'
 
-// See available emoji at http://emoji.muan.co/
-const emojic = require('emojic')
 const BaseService = require('./base')
-const trace = require('./trace')
-const { InvalidResponse } = require('./errors')
+const { parseJson } = require('./json')
 
+/**
+ * Services which query a JSON endpoint should extend BaseJsonService
+ *
+ * @abstract
+ */
 class BaseJsonService extends BaseService {
+  /**
+   * Parse data from JSON endpoint
+   *
+   * @param {string} buffer JSON repsonse from upstream API
+   * @returns {object} Parsed response
+   */
   _parseJson(buffer) {
-    const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    let json
-    try {
-      json = JSON.parse(buffer)
-    } catch (err) {
-      logTrace(emojic.dart, 'Response JSON (unparseable)', buffer)
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable json response',
-        underlyingError: err,
-      })
-    }
-    logTrace(emojic.dart, 'Response JSON (before validation)', json, {
-      deep: true,
-    })
-    return json
+    return parseJson(buffer)
   }
 
+  /**
+   * Request data from an upstream API serving JSON,
+   * parse it and validate against a schema
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {Joi} attrs.schema Joi schema to validate the response against
+   * @param {string} attrs.url URL to request
+   * @param {object} [attrs.options={}] Options to pass to request. See
+   *    [documentation](https://github.com/request/request#requestoptions-callback)
+   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
+   *    and custom error messages e.g: `{ 404: 'package not found' }`.
+   *    This can be used to extend or override the
+   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @returns {object} Parsed response
+   * @see https://github.com/request/request#requestoptions-callback
+   */
   async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },

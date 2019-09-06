@@ -86,7 +86,7 @@ module.exports = class Sourceforge extends BaseJsonService {
   }
 
   async fetch({ interval, project, folder }) {
-    const url = `http://sourceforge.net/projects/${project}/files/${
+    const url = `https://sourceforge.net/projects/${project}/files/${
       folder ? `${folder}/` : ''
     }stats/json`
     // get yesterday since today is incomplete

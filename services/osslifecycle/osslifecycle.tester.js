@@ -8,7 +8,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('osslifecycle active status')
-  .get('/zalando/ghe-backup.json')
+  .get('/netflix/sureal.json')
   .expectBadge({
     label: 'oss lifecycle',
     message: 'active',

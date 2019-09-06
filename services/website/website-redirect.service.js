@@ -56,7 +56,7 @@ module.exports = redirector({
   route: {
     base: '',
     format:
-      'website-(([^-/]|--|//)+)-(([^-/]|--|//)+)(-(([^-/]|--|//)+)-(([^-/]|--|//)+))?/([^/]+)/(.+)',
+      'website-(([^-/]|--|//)+)-(([^-/]|--|//)+)(-(([^-/]|--|//)+)-(([^-/]|--|//)+))?/([^/]+)/(.+?)',
     capture: [
       // Some of these could be made into non-capturing groups so these unused
       // params would not need to be declared.

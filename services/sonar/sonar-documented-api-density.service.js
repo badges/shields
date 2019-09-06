@@ -2,7 +2,6 @@
 
 const SonarBase = require('./sonar-base')
 const {
-  patternBase,
   queryParamSchema,
   getLabel,
   positiveMetricColorScale,
@@ -19,8 +18,8 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
 
   static get route() {
     return {
-      base: 'sonar',
-      pattern: `${patternBase}/${metric}`,
+      base: `sonar/${metric}`,
+      pattern: ':component',
       queryParamSchema,
     }
   }
@@ -30,11 +29,10 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
       {
         title: 'Sonar Documented API Density',
         namedParams: {
-          protocol: 'http',
-          host: 'sonar.petalslink.com',
           component: 'org.ow2.petals:petals-se-ase',
         },
         queryParams: {
+          server: 'http://sonar.petalslink.com',
           sonarVersion: '4.2',
         },
         staticPreview: this.render({ density: 82 }),
@@ -55,11 +53,10 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
     }
   }
 
-  async handle({ protocol, host, component }, { sonarVersion }) {
+  async handle({ component }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
-      protocol,
-      host,
+      server,
       component,
       metricName: metric,
     })

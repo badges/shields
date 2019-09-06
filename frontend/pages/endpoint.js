@@ -88,7 +88,7 @@ const EndpointPage = () => (
     <Meta />
     <Header />
     <H3>Endpoint</H3>
-    <Snippet snippet={`${baseUrl}/endpoint.svg?url=...&style=...`} />
+    <Snippet snippet={`${baseUrl}/endpoint?url=...&style=...`} />
     <p>Endpoint response:</p>
     <JsonExample
       data={{

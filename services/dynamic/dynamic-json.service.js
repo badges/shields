@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const jp = require('jsonpath')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
-const { BaseJsonService, InvalidResponse } = require('..')
+const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 
 module.exports = class DynamicJson extends BaseJsonService {
   static get category() {
@@ -28,7 +28,22 @@ module.exports = class DynamicJson extends BaseJsonService {
       errorMessages,
     })
 
-    const values = jp.query(data, pathExpression)
+    let values
+    try {
+      values = jp.query(data, pathExpression)
+    } catch (e) {
+      const { message } = e
+      if (
+        message.startsWith('Lexical error') ||
+        message.startsWith('Parse error')
+      ) {
+        throw new InvalidParameter({
+          prettyMessage: 'unparseable jsonpath query',
+        })
+      } else {
+        throw e
+      }
+    }
 
     if (!values.length) {
       throw new InvalidResponse({ prettyMessage: 'no result' })

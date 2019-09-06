@@ -3,11 +3,12 @@
  * @module
  */
 
-const decamelize = require('decamelize')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
+const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
+const { MetricHelper } = require('./metric-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -293,8 +294,8 @@ class BaseService {
         )
       ) {
         // This is where we end up if an unhandled exception is thrown in
-        // production. Send the error to the logs.
-        console.log(error)
+        // production. Send the error to Sentry and the logs.
+        log.error(error)
       }
       return {
         isError: true,
@@ -390,27 +391,17 @@ class BaseService {
     return serviceData
   }
 
-  static _createServiceRequestCounter({ requestCounter }) {
-    if (requestCounter) {
-      const { category, serviceFamily, name } = this
-      const service = decamelize(name)
-      return requestCounter.labels(category, serviceFamily, service)
-    } else {
-      // When metrics are disabled, return a mock counter.
-      return { inc: () => {} }
-    }
-  }
-
   static register(
-    { camp, handleRequest, githubApiProvider, requestCounter },
+    { camp, handleRequest, githubApiProvider, metricInstance },
     serviceConfig
   ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
+    const metricHelper = MetricHelper.create({
+      metricInstance,
+      ServiceClass: this,
     })
 
     camp.route(
@@ -418,6 +409,8 @@ class BaseService {
       handleRequest(cacheHeaderConfig, {
         queryParams,
         handler: async (queryParams, match, sendBadge, request) => {
+          const metricHandle = metricHelper.startRequest()
+
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
@@ -437,10 +430,10 @@ class BaseService {
             this
           )
           // The final capture group is the extension.
-          const format = match.slice(-1)[0]
+          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
           sendBadge(format, badgeData)
 
-          serviceRequestCounter.inc()
+          metricHandle.noteResponseSent()
         },
         cacheLength: this._cacheLength,
         fetchLimitBytes,

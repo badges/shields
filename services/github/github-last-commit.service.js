@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { formatDate } = require('../text-formatters')
 const { age: ageColor } = require('../color-formatters')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 const commonExampleAttrs = {
   keywords: ['activity', 'latest'],
@@ -22,7 +22,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubLastCommit extends GithubAuthService {
+module.exports = class GithubLastCommit extends GithubAuthV3Service {
   static get category() {
     return 'activity'
   }

@@ -97,28 +97,36 @@ t.create('Topics')
   .get('/https/meta.discourse.org/topics.json')
   .expectBadge({
     label: 'discourse',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? topics$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) topics$/
+    ),
   })
 
 t.create('Posts')
   .get('/https/meta.discourse.org/posts.json')
   .expectBadge({
     label: 'discourse',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? posts$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) posts$/
+    ),
   })
 
 t.create('Users')
   .get('/https/meta.discourse.org/users.json')
   .expectBadge({
     label: 'discourse',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? users$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) users$/
+    ),
   })
 
 t.create('Likes')
   .get('/https/meta.discourse.org/likes.json')
   .expectBadge({
     label: 'discourse',
-    message: Joi.string().regex(/^[0-9]+[kMGTPEZY]? likes$/),
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) likes$/
+    ),
   })
 
 t.create('Status')

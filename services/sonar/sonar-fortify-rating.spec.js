@@ -28,11 +28,12 @@ describe('SonarFortifyRating', function() {
       })
 
     expect(
-      await SonarFortifyRating.invoke(defaultContext, config, {
-        protocol: 'http',
-        host: 'sonar.petalslink.com',
-        component: 'org.ow2.petals:petals-se-ase',
-      })
+      await SonarFortifyRating.invoke(
+        defaultContext,
+        config,
+        { component: 'org.ow2.petals:petals-se-ase' },
+        { server: 'http://sonar.petalslink.com' }
+      )
     ).to.deep.equal({
       color: 'green',
       message: '4/5',

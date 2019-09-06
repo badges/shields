@@ -2,6 +2,7 @@
 
 const serverSecrets = require('../../lib/server-secrets')
 const { colorScale } = require('../color-formatters')
+const { InvalidResponse, NotFound } = require('..')
 
 const documentation = `
 <p>
@@ -24,6 +25,14 @@ function errorMessagesFor(notFoundMessage = 'repo not found') {
   }
 }
 
+function transformErrors(errors) {
+  if (errors[0].type === 'NOT_FOUND') {
+    return new NotFound({ prettyMessage: 'repo not found' })
+  } else {
+    return new InvalidResponse({ prettyMessage: errors[0].message })
+  }
+}
+
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
 function staticAuthConfigured() {
@@ -35,5 +44,6 @@ module.exports = {
   stateColor,
   commentsColor,
   errorMessagesFor,
+  transformErrors,
   staticAuthConfigured,
 }

@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { GithubAuthService } = require('./github-auth-service')
+const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 const { NotFound } = require('..')
 
@@ -24,7 +24,7 @@ const releaseArraySchema = Joi.alternatives().try(
 
 const keywords = ['github download']
 
-module.exports = class GithubDownloads extends GithubAuthService {
+module.exports = class GithubDownloads extends GithubAuthV3Service {
   static get category() {
     return 'downloads'
   }

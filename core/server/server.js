@@ -3,7 +3,6 @@
  * @module
  */
 
-const fs = require('fs')
 const path = require('path')
 const url = require('url')
 const bytes = require('bytes')
@@ -26,11 +25,6 @@ const PrometheusMetrics = require('./prometheus-metrics')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
-
-const notFound = fs.readFileSync(
-  path.resolve(__dirname, 'error-pages', '404.html'),
-  'utf-8'
-)
 
 const publicConfigSchema = Joi.object({
   bind: {
@@ -63,7 +57,6 @@ const publicConfigSchema = Joi.object({
   },
   persistence: {
     dir: Joi.string().required(),
-    redisUrl: optionalUrl,
   },
   services: {
     github: {
@@ -105,6 +98,7 @@ const privateConfigSchema = Joi.object({
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
+  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
   shields_ips: Joi.array().items(Joi.string().ip()),
   shields_secret: Joi.string(),
@@ -156,7 +150,7 @@ class Server {
       private: privateConfig,
     })
     if (publicConfig.metrics.prometheus.enabled) {
-      this.metrics = new PrometheusMetrics()
+      this.metricInstance = new PrometheusMetrics()
     }
   }
 
@@ -191,7 +185,7 @@ class Server {
       public: { rasterUrl },
     } = config
 
-    camp.notfound(/\.(gif|jpg)$/, (query, match, end, request) => {
+    camp.route(/\.(gif|jpg)$/, (query, match, end, request) => {
       const [, format] = match
       makeSend('svg', request.res, end)(
         makeBadge({
@@ -203,7 +197,7 @@ class Server {
     })
 
     if (!rasterUrl) {
-      camp.notfound(/\.png$/, (query, match, end, request) => {
+      camp.route(/\.png$/, (query, match, end, request) => {
         makeSend('svg', request.res, end)(
           makeBadge({
             text: ['404', 'raster badges not available'],
@@ -214,8 +208,10 @@ class Server {
       })
     }
 
-    camp.notfound(/\.(svg|json)$/, (query, match, end, request) => {
-      const [, format] = match
+    camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
+      const [, extension] = match
+      const format = (extension || '.svg').replace(/^\./, '')
+
       makeSend(format, request.res, end)(
         makeBadge({
           text: ['404', 'badge not found'],
@@ -224,34 +220,6 @@ class Server {
         })
       )
     })
-
-    camp.notfound(/.*/, (query, match, end, request) => {
-      end(notFound)
-    })
-  }
-
-  /**
-   * Iterate all the service classes defined in /services,
-   * load each service and register a Scoutcamp route for each service.
-   */
-  registerServices() {
-    const { config, camp } = this
-    const { apiProvider: githubApiProvider } = this.githubConstellation
-    const { requestCounter } = this.metrics || {}
-
-    loadServiceClasses().forEach(serviceClass =>
-      serviceClass.register(
-        { camp, handleRequest, githubApiProvider, requestCounter },
-        {
-          handleInternalErrors: config.public.handleInternalErrors,
-          cacheHeaders: config.public.cacheHeaders,
-          profiling: config.public.profiling,
-          fetchLimitBytes: bytes(config.public.fetchLimit),
-          rasterUrl: config.public.rasterUrl,
-          private: config.private,
-        }
-      )
-    )
   }
 
   /**
@@ -293,6 +261,29 @@ class Server {
   }
 
   /**
+   * Iterate all the service classes defined in /services,
+   * load each service and register a Scoutcamp route for each service.
+   */
+  registerServices() {
+    const { config, camp, metricInstance } = this
+    const { apiProvider: githubApiProvider } = this.githubConstellation
+
+    loadServiceClasses().forEach(serviceClass =>
+      serviceClass.register(
+        { camp, handleRequest, githubApiProvider, metricInstance },
+        {
+          handleInternalErrors: config.public.handleInternalErrors,
+          cacheHeaders: config.public.cacheHeaders,
+          profiling: config.public.profiling,
+          fetchLimitBytes: bytes(config.public.fetchLimit),
+          rasterUrl: config.public.rasterUrl,
+          private: config.private,
+        }
+      )
+    )
+  }
+
+  /**
    * Start the HTTP server:
    * Bootstrap Scoutcamp,
    * Register handlers,
@@ -317,20 +308,24 @@ class Server {
       key,
     }))
 
-    this.cleanupMonitor = sysMonitor.setRoutes({ rateLimit }, camp)
+    const { metricInstance } = this
+    this.cleanupMonitor = sysMonitor.setRoutes(
+      { rateLimit },
+      { server: camp, metricInstance }
+    )
 
-    const { githubConstellation, metrics } = this
+    const { githubConstellation } = this
     githubConstellation.initialize(camp)
-    if (metrics) {
-      metrics.initialize(camp)
+    if (metricInstance) {
+      metricInstance.initialize(camp)
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
 
     this.registerErrorHandlers()
-    this.registerServices()
     this.registerRedirects()
+    this.registerServices()
 
     await new Promise(resolve => camp.on('listening', () => resolve()))
   }
@@ -365,8 +360,8 @@ class Server {
       this.githubConstellation = undefined
     }
 
-    if (this.metrics) {
-      this.metrics.stop()
+    if (this.metricInstance) {
+      this.metricInstance.stop()
     }
   }
 }
