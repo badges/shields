@@ -123,6 +123,34 @@ t.create('query doesnt exist (attribute)')
     color: 'lightgrey',
   })
 
+t.create('Cannot resolve QName')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//a:si',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: 'Cannot resolve QName a',
+    color: 'red',
+  })
+
+t.create('XPath parse error')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//a[contains(@href, "foo"]',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: 'XPath parse error',
+    color: 'red',
+  })
+
 t.create('XML from url | invalid url')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
