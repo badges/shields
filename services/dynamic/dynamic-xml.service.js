@@ -41,9 +41,15 @@ module.exports = class DynamicXml extends BaseService {
 
     const parsed = new DOMParser().parseFromString(buffer)
 
-    const values = xpath
-      .select(pathExpression, parsed)
-      .map((node, i) => (pathIsAttr ? node.value : node.firstChild.data))
+    let values
+    try {
+      values = xpath.select(pathExpression, parsed)
+    } catch (e) {
+      throw new InvalidResponse({ prettyMessage: e.message })
+    }
+    values = values.map((node, i) =>
+      pathIsAttr ? node.value : node.firstChild.data
+    )
 
     if (!values.length) {
       throw new InvalidResponse({ prettyMessage: 'no result' })
