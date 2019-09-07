@@ -4,7 +4,7 @@ const { DOMParser } = require('xmldom')
 const xpath = require('xpath')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
-const { BaseService, InvalidResponse } = require('..')
+const { BaseService, InvalidResponse, InvalidParameter } = require('..')
 
 // This service extends BaseService because it uses a different XML parser
 // than BaseXmlService which can be used with xpath.
@@ -45,7 +45,7 @@ module.exports = class DynamicXml extends BaseService {
     try {
       values = xpath.select(pathExpression, parsed)
     } catch (e) {
-      throw new InvalidResponse({ prettyMessage: e.message })
+      throw new InvalidParameter({ prettyMessage: e.message })
     }
     values = values.map((node, i) =>
       pathIsAttr ? node.value : node.firstChild.data

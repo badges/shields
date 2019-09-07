@@ -134,7 +134,7 @@ t.create('Cannot resolve QName')
   .expectBadge({
     label: 'custom badge',
     message: 'Cannot resolve QName a',
-    color: 'lightgrey',
+    color: 'red',
   })
 
 t.create('XPath parse error')
@@ -148,7 +148,7 @@ t.create('XPath parse error')
   .expectBadge({
     label: 'custom badge',
     message: 'XPath parse error',
-    color: 'lightgrey',
+    color: 'red',
   })
 
 t.create('XML from url | invalid url')
