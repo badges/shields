@@ -30,6 +30,7 @@
 | Metrics server                | Owner                           | @platan                                                                                    |
 | UptimeRobot                   | Account owner                   | @paulmelnikow                                                                              |
 | More metrics                  | Owner                           | @RedSparr0w                                                                                |
+| Netlify (documentation site)  | Owner                           | @chris48s, @paulmelnikow                                                                   |
 
 There are [too many bottlenecks][issue 2577]!
 
