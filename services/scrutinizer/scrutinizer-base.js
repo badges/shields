@@ -16,16 +16,17 @@ module.exports = class ScrutinizerBase extends BaseJsonService {
   }
 
   transformBranchInfo({ json, wantedBranch }) {
-    if (!wantedBranch) {
-      return json.applications[json.default_branch]
+    const branch = wantedBranch || json.default_branch
+    const noBranchInfoMessage = wantedBranch
+      ? 'branch not found'
+      : 'unavailable for default branch'
+
+    const branchInfo = json.applications[branch]
+    if (!branchInfo) {
+      throw new NotFound({ prettyMessage: noBranchInfoMessage })
     }
 
-    const branch = json.applications[wantedBranch]
-    if (!branch) {
-      throw new NotFound({ prettyMessage: ' branch not found' })
-    }
-
-    return branch
+    return branchInfo
   }
 
   transformBranchInfoMetricValue({ json, branch, metric }) {
