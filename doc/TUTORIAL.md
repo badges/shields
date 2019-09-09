@@ -7,11 +7,11 @@ Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/
 
 ## (1) Reading
 
-You should read [CONTRIBUTING.md](../CONTRIBUTING.md)
-
-You can also read previous
-[merged pull-requests with the 'service-badge' label](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr+label%3Aservice-badge+is%3Amerged)
-to see how other people implemented their badges.
+- [Contributing Guidance](../CONTRIBUTING.md)
+- [Documentation](https://contributing.shields.io/index.html) for the Shields Core API
+- You can also read previous
+  [merged pull-requests with the 'service-badge' label](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr+label%3Aservice-badge+is%3Amerged)
+  to see how other people implemented their badges.
 
 ## (2) Setup
 
@@ -90,18 +90,20 @@ Each service has a directory for its files:
 All service badge classes inherit from [BaseService] or another class which extends it.
 Other classes implement useful behavior on top of [BaseService].
 
-- [BaseJsonService](https://github.com/badges/shields/blob/master/core/base-service/base-json.js)
+- [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-basejsonservice)
   implements methods for performing requests to a JSON API and schema validation.
-- [BaseXmlService](https://github.com/badges/shields/blob/master/core/base-service/base-xml.js)
+- [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-basexmlservice)
   implements methods for performing requests to an XML API and schema validation.
-- [BaseYamlService](https://github.com/badges/shields/blob/master/core/base-service/base-yaml.js)
+- [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-baseyamlservice)
   implements methods for performing requests to a YAML API and schema validation.
-- [BaseSvgScrapingService](https://github.com/badges/shields/blob/master/core/base-service/base-svg-scraping.js)
+- [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-basesvgscrapingservice)
   implements methods for retrieving information from existing third-party badges.
+- [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-basegraphqlservice)
+  implements methods for performing requests to a GraphQL API and schema validation.
 - If you are contributing to a _service family_, you may define a common super
   class for the badges or one may already exist.
 
-[baseservice]: https://github.com/badges/shields/blob/master/core/base-service/base.js
+[baseservice]: https://contributing.shields.io/module-core_base-service_base-baseservice
 
 As a first step we will look at the code for an example which generates a badge without contacting an API.
 
@@ -277,8 +279,8 @@ Specifically `BaseJsonService` will handle the following errors for us:
 - API returns a response which doesn't validate against our schema
 
 Sometimes it may be necessary to manually throw an exception to deal with a
-non-standard error condition. If so, there are several standard exceptions that can be used. These exceptions are defined in
-[errors.js](https://github.com/badges/shields/blob/master/core/base-service/errors.js)
+non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at
+[errors](https://contributing.shields.io/module-core_base-service_errors.html)
 and can be imported via the import shortcut and then thrown:
 
 ```js
