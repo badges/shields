@@ -5,7 +5,8 @@ const { BaseService } = require('..')
 const documentation = `
 <p>
   The <a href="https://securityheaders.com/">Security Headers</a>
-  provide a easy mechanism to analyze HTTP response headers and give information on how to deploy missing headers.
+  provide an easy mechanism to analyze HTTP response headers and
+  give information on how to deploy missing headers.
 </p>
 </p>
   The scan result will be hidden from the public result list and follow redirects will be on too.
@@ -42,7 +43,7 @@ module.exports = class SecurityHeaders extends BaseService {
 
   static get defaultBadgeData() {
     return {
-      label: 'securityheaders',
+      label: 'security headers',
     }
   }
 
@@ -71,20 +72,19 @@ module.exports = class SecurityHeaders extends BaseService {
   }
 
   async handle({ protocol, host }) {
-    let grade
-
-    try {
-      const { res } = await this._request({
-        url: `https://securityheaders.com/?q=${protocol}%3A%2F%2F${host}&hide=on&followRedirects=on`,
-        options: {
-          method: 'HEAD',
+    const { res } = await this._request({
+      url: `https://securityheaders.com`,
+      options: {
+        method: 'HEAD',
+        qs: {
+          q: `${protocol}://${host}`,
+          hide: 'on',
+          followRedirects: 'on',
         },
-      })
+      },
+    })
 
-      grade = res.headers['x-grade']
-    } catch (e) {
-      // Catch all errors thrown by the request.
-    }
+    const grade = res.headers['x-grade']
 
     return this.constructor.render({ grade })
   }
