@@ -15,6 +15,6 @@ t.create('grade when no network')
   .networkOff()
   .expectBadge({
     label: 'security headers',
-    message: 'error',
+    message: 'inaccessible',
     color: 'lightgrey',
   })

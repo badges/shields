@@ -48,13 +48,6 @@ module.exports = class SecurityHeaders extends BaseService {
   }
 
   static render({ grade }) {
-    if (!grade) {
-      return {
-        message: 'error',
-        color: 'lightgrey',
-      }
-    }
-
     const colorMap = {
       'A+': 'brightgreen',
       A: 'green',
