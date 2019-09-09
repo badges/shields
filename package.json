@@ -193,7 +193,7 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
     "eslint-plugin-sort-class-members": "^1.5.0",
-    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-standard": "^4.0.1",
     "fetch-ponyfill": "^6.1.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.13.62",
