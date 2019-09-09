@@ -157,6 +157,7 @@
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.4",
     "@types/react-helmet": "^5.0.9",
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -250,7 +251,7 @@
     "styled-components": "^4.3.2",
     "tmp": "0.1.0",
     "ts-mocha": "^6.0.0",
-    "typescript": "^3.5.3",
+    "typescript": "^3.6.2",
     "url": "^0.11.0",
     "walkdir": "0.4.1"
   },
