@@ -43,11 +43,3 @@ t.create('Status of noopkat')
     },
     link: ['https://www.twitch.tv/noopkat'],
   })
-
-t.create('Invalid Username Specified')
-  .skipWhen(checkShouldSkip)
-  .get('/status/invalidusernamethatshouldnotexist.json?label=Follow')
-  .expectBadge({
-    label: 'Follow',
-    message: 'invalid user',
-  })

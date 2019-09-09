@@ -2,7 +2,6 @@
 
 const Joi = require('@hapi/joi')
 const TwitchBase = require('./twitch-base')
-const { NotFound } = require('..')
 
 const helixSchema = Joi.object({
   data: Joi.array().required(),
@@ -56,15 +55,8 @@ class TwitchStatus extends TwitchBase {
     // If `user` does not exist on Twitch,
     // https://api.twitch.tv/helix/streams returns an empty array,
     // which is the same as when a user is offline.
-    // So we check for whether a user exists first and give proper error
-    // message if needed.
-    const users = this._requestJson({
-      schema: helixSchema,
-      url: `https://api.twitch.tv/helix/users`,
-      options: {
-        qs: { login: user },
-      },
-    })
+    // Checking for whether a user exists needs another API call,
+    // which we consider not worth it.
     const streams = this._requestJson({
       schema: helixSchema,
       url: `https://api.twitch.tv/helix/streams`,
@@ -72,9 +64,6 @@ class TwitchStatus extends TwitchBase {
         qs: { user_login: user },
       },
     })
-    if ((await users).data.length < 1) {
-      throw new NotFound({ prettyMessage: 'invalid user' })
-    }
 
     return streams
   }
