@@ -1,6 +1,12 @@
 'use strict'
 
-const { BaseService } = require('..')
+const Joi = require('@hapi/joi')
+const { optionalUrl } = require('../validators')
+const { BaseService, NotFound } = require('..')
+
+const queryParamSchema = Joi.object({
+  url: optionalUrl.required(),
+}).required()
 
 const documentation = `
 <p>
@@ -20,8 +26,9 @@ module.exports = class SecurityHeaders extends BaseService {
 
   static get route() {
     return {
-      base: 'security-headers',
-      pattern: ':protocol(https|http)/:host',
+      base: '',
+      pattern: 'security-headers',
+      queryParamSchema,
     }
   }
 
@@ -29,10 +36,8 @@ module.exports = class SecurityHeaders extends BaseService {
     return [
       {
         title: 'Security Headers',
-        namedParams: {
-          protocol: 'https',
-          host: 'shields.io',
-        },
+        namedParams: {},
+        queryParams: { url: 'https://shields.io' },
         staticPreview: this.render({
           grade: 'A+',
         }),
@@ -64,13 +69,13 @@ module.exports = class SecurityHeaders extends BaseService {
     }
   }
 
-  async handle({ protocol, host }) {
+  async handle({}, { url }) {
     const { res } = await this._request({
       url: `https://securityheaders.com`,
       options: {
         method: 'HEAD',
         qs: {
-          q: `${protocol}://${host}`,
+          q: url,
           hide: 'on',
           followRedirects: 'on',
         },
@@ -78,6 +83,10 @@ module.exports = class SecurityHeaders extends BaseService {
     })
 
     const grade = res.headers['x-grade']
+
+    if (!grade) {
+      throw new NotFound({ prettyMessage: 'not available' })
+    }
 
     return this.constructor.render({ grade })
   }
