@@ -63,4 +63,6 @@ private:
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
   sonarqube_token: 'SONARQUBE_TOKEN'
+  twitch_client_id: 'TWITCH_CLIENT_ID'
+  twitch_client_secret: 'TWITCH_CLIENT_SECRET'
   wheelmap_token: 'WHEELMAP_TOKEN'
