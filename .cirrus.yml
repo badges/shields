@@ -37,6 +37,8 @@ task:
 # Switch to new matrix where container will be modified
 task:
   name: Package Tests
+  env:
+    CYPRESS_INSTALL_BINARY: 0
   always:
     dependencies_cache:
       folder: node_modules
@@ -59,32 +61,20 @@ task:
     - container:
         image: node:12
 
-
-  danger:
-    docker:
-      - image: circleci/node:8
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-          environment:
-            CYPRESS_INSTALL_BINARY: 0
-
-      - run:
-          name: Danger
-          when: always
-          environment:
-            # https://github.com/gatsbyjs/gatsby/pull/11555
-            NODE_ENV: test
-          command: npm run danger ci
+Danger_task:
+  container:
+    image: node:8
+  env:
+    CYPRESS_INSTALL_BINARY: 0
+    NODE_ENV: test
+  always:
+    dependencies_cache:
+      folder: node_modules
+      fingerprint_script: |
+        cat package.json
+        cat package-lock.json
+      populate_script: npm ci
+  script: npm danger ci
 
   frontend:
     docker:
