@@ -15,3 +15,11 @@ t.create('license (invalid, package version in request)')
 t.create('license (invalid)')
   .get('/frodo/is-not-a-package.json')
   .expectBadge({ label: 'license', message: 'not found' })
+
+t.create('license (valid custom server)')
+  .get('/symfony/symfony.json?server=https%3A%2F%2Fpackagist.org')
+  .expectBadge({ label: 'license', message: 'MIT' })
+
+t.create('license (invalid custom server)')
+  .get('/symfony/symfony.json?server=https%3A%2F%2Fpackagist.com')
+  .expectBadge({ label: 'license', message: 'not found' })

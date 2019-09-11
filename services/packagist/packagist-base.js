@@ -22,8 +22,8 @@ const allVersionsSchema = Joi.object({
 const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
-  async fetch({ user, repo, schema }) {
-    const url = `https://packagist.org/packages/${user}/${repo}.json`
+  async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
+    const url = `${server}/packages/${user}/${repo}.json`
 
     return this._requestJson({
       schema,

@@ -40,3 +40,14 @@ t.create('pre-release version (valid)')
     label: 'packagist',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
+
+t.create('version (valid custom server)')
+  .get('/v/symfony/symfony.json?server=https%3A%2F%2Fpackagist.org')
+  .expectBadge({
+    label: 'packagist',
+    message: isPackagistVersion,
+  })
+
+t.create('version (invalid custom server)')
+  .get('/v/symfony/symfony.json?server=https%3A%2F%2Fpackagist.com')
+  .expectBadge({ label: 'packagist', message: 'not found' })
