@@ -3,7 +3,11 @@
 const Joi = require('@hapi/joi')
 const { renderLicenseBadge } = require('../licenses')
 const { optionalUrl } = require('../validators')
-const { keywords, BasePackagistService } = require('./packagist-base')
+const {
+  keywords,
+  BasePackagistService,
+  documentation,
+} = require('./packagist-base')
 
 const schema = Joi.object({
   package: Joi.object({
@@ -46,6 +50,7 @@ module.exports = class PackagistLicense extends BasePackagistService {
         queryParams: { server: 'https://packagist.org' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
         keywords,
+        documentation,
       },
     ]
   }

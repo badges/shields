@@ -32,4 +32,12 @@ class BasePackagistService extends BaseJsonService {
   }
 }
 
-module.exports = { allVersionsSchema, keywords, BasePackagistService }
+const documentation =
+  'Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.'
+
+module.exports = {
+  allVersionsSchema,
+  keywords,
+  BasePackagistService,
+  documentation,
+}

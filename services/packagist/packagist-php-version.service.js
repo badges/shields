@@ -2,7 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
-const { allVersionsSchema, BasePackagistService } = require('./packagist-base')
+const {
+  allVersionsSchema,
+  BasePackagistService,
+  documentation,
+} = require('./packagist-base')
 const { NotFound } = require('..')
 
 const queryParamSchema = Joi.object({
@@ -54,6 +58,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
           server: 'https://packagist.org',
         },
         staticPreview: this.render({ php: '^7.1.3' }),
+        documentation,
       },
     ]
   }
