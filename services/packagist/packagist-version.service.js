@@ -3,10 +3,12 @@
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
 const { compare, isStable, latest } = require('../php-version')
+const { optionalUrl } = require('../validators')
 const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
+  documentation,
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
@@ -26,6 +28,10 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  server: optionalUrl,
+}).required()
+
 module.exports = class PackagistVersion extends BasePackagistService {
   static get category() {
     return 'version'
@@ -35,6 +41,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
     return {
       base: 'packagist',
       pattern: ':type(v|vpre)/:user/:repo',
+      queryParamSchema,
     }
   }
 
@@ -59,6 +66,20 @@ module.exports = class PackagistVersion extends BasePackagistService {
         },
         staticPreview: renderVersionBadge({ version: '4.3-dev' }),
         keywords,
+      },
+      {
+        title: 'Packagist Version (custom server)',
+        pattern: 'v/:user/:repo',
+        namedParams: {
+          user: 'symfony',
+          repo: 'symfony',
+        },
+        queryParams: {
+          server: 'https://packagist.org',
+        },
+        staticPreview: renderVersionBadge({ version: '4.2.2' }),
+        keywords,
+        documentation,
       },
     ]
   }
@@ -109,11 +130,12 @@ module.exports = class PackagistVersion extends BasePackagistService {
     }
   }
 
-  async handle({ type, user, repo }) {
+  async handle({ type, user, repo }, { server }) {
     const json = await this.fetch({
       user,
       repo,
       schema: type === 'v' ? allVersionsSchema : schema,
+      server,
     })
     const { version } = this.transform({ type, json })
     return this.constructor.render({ version })

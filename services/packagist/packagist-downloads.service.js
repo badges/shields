@@ -3,7 +3,12 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const { keywords, BasePackagistService } = require('./packagist-base')
+const { optionalUrl } = require('../validators')
+const {
+  keywords,
+  BasePackagistService,
+  documentation,
+} = require('./packagist-base')
 
 const periodMap = {
   dm: {
@@ -30,6 +35,10 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  server: optionalUrl,
+}).required()
+
 module.exports = class PackagistDownloads extends BasePackagistService {
   static get category() {
     return 'downloads'
@@ -39,6 +48,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
     return {
       base: 'packagist',
       pattern: ':interval(dm|dd|dt)/:user/:repo',
+      queryParamSchema,
     }
   }
 
@@ -57,6 +67,21 @@ module.exports = class PackagistDownloads extends BasePackagistService {
         }),
         keywords,
       },
+      {
+        title: 'Packagist (custom server)',
+        namedParams: {
+          interval: 'dm',
+          user: 'doctrine',
+          repo: 'orm',
+        },
+        staticPreview: this.render({
+          downloads: 1000000,
+          interval: 'dm',
+        }),
+        queryParams: { server: 'https://packagist.org' },
+        keywords,
+        documentation,
+      },
     ]
   }
 
@@ -73,10 +98,10 @@ module.exports = class PackagistDownloads extends BasePackagistService {
     }
   }
 
-  async handle({ interval, user, repo }) {
+  async handle({ interval, user, repo }, { server }) {
     const {
       package: { downloads },
-    } = await this.fetch({ user, repo, schema })
+    } = await this.fetch({ user, repo, schema, server })
 
     return this.constructor.render({
       downloads: downloads[periodMap[interval].field],
