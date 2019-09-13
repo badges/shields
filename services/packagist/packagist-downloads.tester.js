@@ -22,8 +22,8 @@ t.create(
 )
   .get('/dd/doctrine/orm.json?server=https%3A%2F%2Fpackagist.com')
   .expectBadge({
-    label: '404',
-    message: 'badge not found',
+    label: 'downloads',
+    message: 'not found',
   })
 
 t.create('monthly downloads (valid, no package version specified)')
@@ -47,8 +47,8 @@ t.create(
 )
   .get('/dm/doctrine/orm.json?server=https%3A%2F%2Fpackagist.com')
   .expectBadge({
-    label: '404',
-    message: 'badge not found',
+    label: 'downloads',
+    message: 'not found',
   })
 
 t.create('total downloads (valid, no package version specified)')
@@ -70,8 +70,8 @@ t.create(
 )
   .get('/dt/doctrine/orm.json?server=https%3A%2F%2Fpackagist.com')
   .expectBadge({
-    label: '404',
-    message: 'badge not found',
+    label: 'downloads',
+    message: 'not found',
   })
 
 // note: packagist can't give us download stats for a specific version
