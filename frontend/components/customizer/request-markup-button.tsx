@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Select, { components } from 'react-select'
+import { MarkupFormat } from '../../lib/generate-image-markup'
 
-const ClickableControl = props => (
+const ClickableControl = (props: any) => (
   <components.Control
     {...props}
     innerProps={{
@@ -11,9 +11,6 @@ const ClickableControl = props => (
     }}
   />
 )
-ClickableControl.propTypes = {
-  selectProps: PropTypes.object.isRequired,
-}
 
 const MarkupFormatSelect = styled(Select)`
   width: 200px;
@@ -61,6 +58,8 @@ const MarkupFormatSelect = styled(Select)`
   }
 `
 
+// TODO Have the type checker validate that all the `value` options are valid
+// for MarkupFormat.
 const markupOptions = [
   { value: 'markdown', label: 'Copy Markdown' },
   { value: 'rst', label: 'Copy reStructuredText' },
@@ -68,19 +67,27 @@ const markupOptions = [
   { value: 'html', label: 'Copy HTML' },
 ]
 
-export default function GetMarkupButton({ onMarkupRequested, isDisabled }) {
-  const selectRef = useRef()
+export default function GetMarkupButton({
+  onMarkupRequested,
+  isDisabled,
+}: {
+  onMarkupRequested: (markupFormat: MarkupFormat) => Promise<void>
+  isDisabled: boolean
+}) {
+  const selectRef = useRef<HTMLSelectElement>()
 
-  async function onControlMouseDown(event) {
+  async function onControlMouseDown(event: MouseEvent) {
     if (onMarkupRequested) {
       await onMarkupRequested('link')
     }
-    selectRef.current.blur()
+    if (selectRef.current) {
+      selectRef.current.blur()
+    }
   }
 
-  async function onOptionClick({ value: markupFormat }) {
+  async function onOptionClick({ value: markupFormat }: { value?: string }) {
     if (onMarkupRequested) {
-      await onMarkupRequested(markupFormat)
+      await onMarkupRequested(markupFormat as MarkupFormat)
     }
   }
 
@@ -101,8 +108,4 @@ export default function GetMarkupButton({ onMarkupRequested, isDisabled }) {
       value=""
     />
   )
-}
-GetMarkupButton.propTypes = {
-  onMarkupRequested: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
 }
