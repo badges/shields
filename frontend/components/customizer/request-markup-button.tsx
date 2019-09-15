@@ -12,6 +12,11 @@ const ClickableControl = (props: any) => (
   />
 )
 
+interface Option {
+  value: MarkupFormat
+  label: string
+}
+
 const MarkupFormatSelect = styled(Select)`
   width: 200px;
 
@@ -58,9 +63,7 @@ const MarkupFormatSelect = styled(Select)`
   }
 `
 
-// TODO Have the type checker validate that all the `value` options are valid
-// for MarkupFormat.
-const markupOptions = [
+const markupOptions: Option[] = [
   { value: 'markdown', label: 'Copy Markdown' },
   { value: 'rst', label: 'Copy reStructuredText' },
   { value: 'asciidoc', label: 'Copy AsciiDoc' },
@@ -74,22 +77,35 @@ export default function GetMarkupButton({
   onMarkupRequested: (markupFormat: MarkupFormat) => Promise<void>
   isDisabled: boolean
 }) {
-  const selectRef = useRef<HTMLSelectElement>()
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
+  const selectRef = useRef<Select<Option>>() as React.MutableRefObject<
+    Select<Option>
+  >
 
   async function onControlMouseDown(event: MouseEvent) {
     if (onMarkupRequested) {
       await onMarkupRequested('link')
     }
-    selectRef.current.blur()
+    if (selectRef.current) {
+      selectRef.current.blur()
+    }
   }
 
-  async function onOptionClick({ value: markupFormat }: { value?: string }) {
+  async function onOptionClick(
+    // Eeesh.
+    value: Option | readonly Option[] | null | undefined
+  ): Promise<void> {
+    const { value: markupFormat } = value as Option
     if (onMarkupRequested) {
-      await onMarkupRequested(markupFormat as MarkupFormat)
+      await onMarkupRequested(markupFormat)
     }
   }
 
   return (
+    // TODO It doesn't seem to be possible to check the types and wrap with
+    // styled-components at the same time. To check the types, replace
+    // `MarkupFormatSelect` with `Select<Option>`.
     <MarkupFormatSelect
       blurInputOnSelect
       classNamePrefix="markup-format"
@@ -103,7 +119,6 @@ export default function GetMarkupButton({
       options={markupOptions}
       placeholder="Copy Badge URL"
       ref={selectRef}
-      value=""
     />
   )
 }

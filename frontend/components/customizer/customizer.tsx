@@ -37,7 +37,11 @@ export default function Customizer({
   isPrefilled: boolean
   link?: string
 }) {
-  const indicatorRef = useRef<CopiedContentIndicatorHandle>()
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
+  const indicatorRef = useRef<
+    CopiedContentIndicatorHandle
+  >() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
   const [queryString, setQueryString] = useState()
   const [pathIsComplete, setPathIsComplete] = useState()
@@ -89,7 +93,9 @@ export default function Customizer({
     }
 
     setMarkup(markup)
-    indicatorRef.current.trigger()
+    if (indicatorRef.current) {
+      indicatorRef.current.trigger()
+    }
   }
 
   function renderMarkupAndLivePreview() {
