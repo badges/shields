@@ -7,22 +7,12 @@ import {
 } from '../../core/badge-urls/make-badge-url'
 import { removeRegexpFromPattern } from '../lib/pattern-helpers'
 import {
-  ExampleSignature,
   Example as ExampleData,
+  Suggestion,
+  RenderableExample,
 } from '../lib/service-definitions'
 import { Badge } from './common'
 import { StyledCode } from './snippet'
-
-export interface SuggestionData {
-  title: string
-  link: string
-  example: ExampleSignature
-  preview: {
-    style?: string
-  }
-}
-
-type RenderableExampleData = ExampleData | SuggestionData
 
 const ExampleTable = styled.table`
   min-width: 50%;
@@ -49,8 +39,8 @@ function Example({
   isBadgeSuggestion,
 }: {
   baseUrl?: string
-  onClick: (exampleData: RenderableExampleData) => void
-  exampleData: RenderableExampleData
+  onClick: (exampleData: RenderableExample) => void
+  exampleData: RenderableExample
   isBadgeSuggestion: boolean
 }) {
   function handleClick() {
@@ -61,7 +51,7 @@ function Example({
   if (isBadgeSuggestion) {
     const {
       example: { pattern, namedParams, queryParams },
-    } = exampleData as SuggestionData
+    } = exampleData as Suggestion
     exampleUrl = previewUrl = badgeUrlFromPattern({
       baseUrl,
       pattern,
@@ -112,10 +102,10 @@ export function BadgeExamples({
   baseUrl,
   onClick,
 }: {
-  examples: RenderableExampleData[]
+  examples: RenderableExample[]
   areBadgeSuggestions: boolean
   baseUrl?: string
-  onClick: (exampleData: RenderableExampleData) => void
+  onClick: (exampleData: RenderableExample) => void
 }) {
   return (
     <ExampleTable>

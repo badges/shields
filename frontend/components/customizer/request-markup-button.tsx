@@ -80,9 +80,7 @@ export default function GetMarkupButton({
     if (onMarkupRequested) {
       await onMarkupRequested('link')
     }
-    if (selectRef.current) {
-      selectRef.current.blur()
-    }
+    selectRef.current.blur()
   }
 
   async function onOptionClick({ value: markupFormat }: { value?: string }) {
