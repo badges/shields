@@ -7,19 +7,7 @@ module.exports = class TeamCityBase extends BaseJsonService {
     return { userKey: 'teamcity_user', passKey: 'teamcity_pass' }
   }
 
-  async fetch({
-    protocol,
-    hostAndPath,
-    apiPath,
-    schema,
-    qs = {},
-    errorMessages = {},
-  }) {
-    if (!hostAndPath) {
-      // If hostAndPath is undefined then the user specified the legacy default path
-      protocol = 'https'
-      hostAndPath = 'teamcity.jetbrains.com'
-    }
+  async fetch({ url, schema, qs = {}, errorMessages = {} }) {
     // JetBrains API Auth Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-RESTAuthentication
     const options = { qs }
     const auth = this.authHelper.basicAuth
@@ -30,7 +18,7 @@ module.exports = class TeamCityBase extends BaseJsonService {
     }
 
     return this._requestJson({
-      url: `${protocol}://${hostAndPath}/${apiPath}`,
+      url,
       schema,
       options,
       errorMessages: { 404: 'build not found', ...errorMessages },
