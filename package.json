@@ -159,6 +159,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.5",
     "@types/react-helmet": "^5.0.10",
+    "@types/react-modal": "^3.8.3",
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",

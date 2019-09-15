@@ -1,6 +1,7 @@
 import React, { useRef, useState, ChangeEvent } from 'react'
 import fetchPonyfill from 'fetch-ponyfill'
 import debounce from 'lodash.debounce'
+import { RenderableExample } from '../lib/service-definitions'
 import { BadgeExamples } from './badge-examples'
 import { BlockInput } from './common'
 
@@ -29,7 +30,7 @@ export default function SuggestionAndSearch({
   baseUrl,
 }: {
   queryChanged: (query: string) => void
-  onBadgeClick: () => void
+  onBadgeClick: (example: RenderableExample, isSuggestion: boolean) => void
   baseUrl: string
 }) {
   const queryChangedDebounced = useRef(

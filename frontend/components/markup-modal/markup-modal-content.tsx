@@ -13,7 +13,7 @@ const Documentation = styled.div`
   margin: 35px auto 20px;
 `
 
-export default function MarkupModalContent({
+export function MarkupModalContent({
   example,
   isBadgeSuggestion,
   baseUrl,

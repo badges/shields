@@ -39,12 +39,12 @@ function Example({
   isBadgeSuggestion,
 }: {
   baseUrl?: string
-  onClick: (exampleData: RenderableExample) => void
+  onClick: (example: RenderableExample, isSugestion: boolean) => void
   exampleData: RenderableExample
   isBadgeSuggestion: boolean
 }) {
   function handleClick() {
-    onClick(exampleData)
+    onClick(exampleData, isBadgeSuggestion)
   }
 
   let exampleUrl, previewUrl
@@ -105,7 +105,7 @@ export function BadgeExamples({
   examples: RenderableExample[]
   areBadgeSuggestions: boolean
   baseUrl?: string
-  onClick: (exampleData: RenderableExample) => void
+  onClick: (exampleData: RenderableExample, isSugestion: boolean) => void
 }) {
   return (
     <ExampleTable>
