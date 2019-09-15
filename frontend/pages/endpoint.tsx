@@ -239,9 +239,9 @@ const EndpointPage = () => (
       baseUrl={baseUrl}
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+      isPrefilled={false}
       pattern="/endpoint"
       title="Custom badge"
-      isPrefilled={false}
     />
     <Footer baseUrl={baseUrl} />
   </MainContainer>
