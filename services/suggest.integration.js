@@ -104,7 +104,7 @@ describe('GitHub badge suggestions', function() {
               pattern: '/twitter/url',
               namedParams: {},
               queryParams: {
-                url: 'https:/github.com/atom/atom',
+                url: 'https://github.com/atom/atom',
               },
             },
             preview: {
