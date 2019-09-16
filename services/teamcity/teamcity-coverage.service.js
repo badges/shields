@@ -18,7 +18,7 @@ const buildStatisticsSchema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  hostUrl: optionalUrl,
+  server: optionalUrl,
 }).required()
 
 module.exports = class TeamCityCoverage extends TeamCityBase {
@@ -42,7 +42,7 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
           buildId: 'ReactJSNet_PullRequests',
         },
         queryParams: {
-          hostUrl: 'https://teamcity.jetbrains.com',
+          server: 'https://teamcity.jetbrains.com',
         },
         staticPreview: this.render({
           coverage: 82,
@@ -83,14 +83,14 @@ module.exports = class TeamCityCoverage extends TeamCityBase {
     throw new InvalidResponse({ prettyMessage: 'no coverage data available' })
   }
 
-  async handle({ buildId }, { hostUrl = 'https://teamcity.jetbrains.com' }) {
+  async handle({ buildId }, { server = 'https://teamcity.jetbrains.com' }) {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-Statistics
     const buildLocator = `buildType:(id:${buildId})`
     const apiPath = `app/rest/builds/${encodeURIComponent(
       buildLocator
     )}/statistics`
     const data = await this.fetch({
-      url: `${hostUrl}/${apiPath}`,
+      url: `${server}/${apiPath}`,
       schema: buildStatisticsSchema,
     })
 

@@ -15,7 +15,7 @@ t.create('coverage')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/teamcity/coverage/ReactJSNet_PullRequests.svg?hostUrl=${encodeURIComponent(
+    `/teamcity/coverage/ReactJSNet_PullRequests.svg?server=${encodeURIComponent(
       'https://teamcity.jetbrains.com'
     )}`
   )

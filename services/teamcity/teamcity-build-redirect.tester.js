@@ -15,7 +15,7 @@ t.create('codebetter')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/teamcity/build/s/IntelliJIdeaCe_JavaDecompilerEngineTests.svg?hostUrl=${encodeURIComponent(
+    `/teamcity/build/s/IntelliJIdeaCe_JavaDecompilerEngineTests.svg?server=${encodeURIComponent(
       'https://teamcity.jetbrains.com'
     )}`
   )
@@ -27,7 +27,7 @@ t.create('hostAndPath simple build')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/teamcity/build/s/bt345.svg?hostUrl=${encodeURIComponent(
+    `/teamcity/build/s/bt345.svg?server=${encodeURIComponent(
       'https://teamcity.jetbrains.com'
     )}`
   )
@@ -39,7 +39,7 @@ t.create('hostAndPath full build')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/teamcity/build/e/bt345.svg?hostUrl=${encodeURIComponent(
+    `/teamcity/build/e/bt345.svg?server=${encodeURIComponent(
       'https://teamcity.jetbrains.com'
     )}`
   )

@@ -34,7 +34,7 @@ describe('TeamCityCoverage', function() {
         {
           buildId: 'bt678',
         },
-        { hostUrl: 'https://mycompany.teamcity.com' }
+        { server: 'https://mycompany.teamcity.com' }
       )
     ).to.deep.equal({
       message: '82%',

@@ -15,7 +15,7 @@ t.create('valid buildId')
   })
 
 t.create('specified instance valid buildId')
-  .get('/ReactJSNet_PullRequests.json?hostUrl=https://teamcity.jetbrains.com')
+  .get('/ReactJSNet_PullRequests.json?server=https://teamcity.jetbrains.com')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,

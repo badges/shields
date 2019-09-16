@@ -16,7 +16,7 @@ const buildStatusSchema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  hostUrl: optionalUrl,
+  server: optionalUrl,
 }).required()
 
 module.exports = class TeamCityBuild extends TeamCityBase {
@@ -41,7 +41,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
           buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
         },
         queryParams: {
-          hostUrl: 'https://teamcity.jetbrains.com',
+          server: 'https://teamcity.jetbrains.com',
         },
         staticPreview: this.render({
           status: 'SUCCESS',
@@ -54,7 +54,7 @@ module.exports = class TeamCityBuild extends TeamCityBase {
           buildId: 'bt345',
         },
         queryParams: {
-          hostUrl: 'https://teamcity.jetbrains.com',
+          server: 'https://teamcity.jetbrains.com',
         },
         staticPreview: this.render({
           status: 'FAILURE',
@@ -93,13 +93,13 @@ module.exports = class TeamCityBuild extends TeamCityBase {
 
   async handle(
     { verbosity, buildId },
-    { hostUrl = 'https://teamcity.jetbrains.com' }
+    { server = 'https://teamcity.jetbrains.com' }
   ) {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-BuildStatusIcon
     const buildLocator = `buildType:(id:${buildId})`
     const apiPath = `app/rest/builds/${encodeURIComponent(buildLocator)}`
     const json = await this.fetch({
-      url: `${hostUrl}/${apiPath}`,
+      url: `${server}/${apiPath}`,
       schema: buildStatusSchema,
     })
     // If the verbosity is 'e' then the user has requested the verbose (full) build status.

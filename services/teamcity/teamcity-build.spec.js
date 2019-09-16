@@ -29,7 +29,7 @@ describe('TeamCityBuild', function() {
           verbosity: 'e',
           buildId: 'bt678',
         },
-        { hostUrl: 'https://mycompany.teamcity.com' }
+        { server: 'https://mycompany.teamcity.com' }
       )
     ).to.deep.equal({
       message: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',

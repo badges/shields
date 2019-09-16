@@ -17,7 +17,7 @@ module.exports = [
     },
     transformPath: ({ buildId }) => `/teamcity/build/s/${buildId}`,
     transformQueryParams: _params => ({
-      hostUrl: 'https://teamcity.jetbrains.com',
+      server: 'https://teamcity.jetbrains.com',
     }),
   }),
   redirector({
@@ -31,7 +31,7 @@ module.exports = [
     transformPath: ({ verbosity, buildId }) =>
       `/teamcity/build/${verbosity}/${buildId}`,
     transformQueryParams: ({ protocol, hostAndPath }) => ({
-      hostUrl: `${protocol}://${hostAndPath}`,
+      server: `${protocol}://${hostAndPath}`,
     }),
   }),
 ]
