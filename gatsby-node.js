@@ -33,7 +33,7 @@ async function createPages({ actions: { createPage } }) {
     const { id } = category
     createPage({
       path: `/category/${id}`,
-      component: require.resolve('./frontend/components/main'),
+      component: require.resolve('./frontend/components/main.tsx'),
       // `context` provided here becomes `props.pageContext` on the page.
       context: { category },
     })
