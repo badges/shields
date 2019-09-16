@@ -3,6 +3,10 @@
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
+t.create('invalid buildId')
+  .get('/btABC999.json')
+  .expectBadge({ label: 'coverage', message: 'build not found' })
+
 t.create('valid buildId')
   .get('/ReactJSNet_PullRequests.json')
   .expectBadge({
@@ -11,29 +15,11 @@ t.create('valid buildId')
   })
 
 t.create('specified instance valid buildId')
-  .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.json')
+  .get('/ReactJSNet_PullRequests.json?server=https://teamcity.jetbrains.com')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
-
-t.create('invalid buildId')
-  .get('/btABC999.json')
-  .expectBadge({ label: 'coverage', message: 'build not found' })
-
-t.create('specified instance invalid buildId')
-  .get('/https/teamcity.jetbrains.com/btABC000.json')
-  .expectBadge({ label: 'coverage', message: 'build not found' })
-
-t.create('404 latest build error response')
-  .get('/bt123.json')
-  .intercept(nock =>
-    nock('https://teamcity.jetbrains.com/app/rest/builds')
-      .get(`/${encodeURIComponent('buildType:(id:bt123)')}/statistics`)
-      .query({ guest: 1 })
-      .reply(404)
-  )
-  .expectBadge({ label: 'coverage', message: 'build not found' })
 
 t.create('no coverage data for build')
   .get('/bt234.json')
