@@ -18,7 +18,7 @@ const colorMap = {
   F: 'red',
 }
 
-const isValidGrade = Joi.allow(Object.keys(colorMap)).required()
+const isValidGrade = Joi.valid(...Object.keys(colorMap)).required()
 
 function gradeColor(grade) {
   const color = colorMap[grade]
