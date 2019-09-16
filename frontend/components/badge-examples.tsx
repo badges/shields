@@ -39,7 +39,7 @@ function Example({
   isBadgeSuggestion,
 }: {
   baseUrl?: string
-  onClick: (example: RenderableExample, isSugestion: boolean) => void
+  onClick: (example: RenderableExample, isSuggestion: boolean) => void
   exampleData: RenderableExample
   isBadgeSuggestion: boolean
 }) {
@@ -105,7 +105,7 @@ export function BadgeExamples({
   examples: RenderableExample[]
   areBadgeSuggestions: boolean
   baseUrl?: string
-  onClick: (exampleData: RenderableExample, isSugestion: boolean) => void
+  onClick: (exampleData: RenderableExample, isSuggestion: boolean) => void
 }) {
   return (
     <ExampleTable>
