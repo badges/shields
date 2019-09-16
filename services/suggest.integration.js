@@ -101,12 +101,11 @@ describe('GitHub badge suggestions', function() {
             link:
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
             example: {
-              pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
-              namedParams: {
-                protocol: 'https',
-                hostAndPath: 'github.com/atom/atom',
+              pattern: '/twitter/url',
+              namedParams: {},
+              queryParams: {
+                url: 'https://github.com/atom/atom',
               },
-              queryParams: {},
             },
             preview: {
               style: 'social',
@@ -173,12 +172,11 @@ describe('GitHub badge suggestions', function() {
             link:
               'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
             example: {
-              pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
-              namedParams: {
-                protocol: 'https',
-                hostAndPath: 'github.com/badges/not-a-real-project',
+              pattern: '/twitter/url',
+              namedParams: {},
+              queryParams: {
+                url: 'https://github.com/badges/not-a-real-project',
               },
-              queryParams: {},
             },
             preview: {
               style: 'social',
