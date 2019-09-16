@@ -39,7 +39,7 @@ function Example({
   isBadgeSuggestion,
 }: {
   baseUrl?: string
-  onClick: (example: RenderableExample, isSugestion: boolean) => void
+  onClick: (example: RenderableExample, isSuggestion: boolean) => void
   exampleData: RenderableExample
   isBadgeSuggestion: boolean
 }) {
