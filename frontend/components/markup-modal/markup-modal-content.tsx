@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { examplePropType } from '../../lib/service-definitions/example-prop-types'
+import {
+  Example,
+  Suggestion,
+  RenderableExample,
+} from '../../lib/service-definitions'
 import { H3 } from '../common'
 import Customizer from '../customizer/customizer'
 
@@ -10,14 +13,27 @@ const Documentation = styled.div`
   margin: 35px auto 20px;
 `
 
-export default function MarkupModalContent({ example, baseUrl }) {
+export function MarkupModalContent({
+  example,
+  isBadgeSuggestion,
+  baseUrl,
+}: {
+  example: RenderableExample
+  isBadgeSuggestion: boolean
+  baseUrl: string
+}) {
+  let documentation: { __html: string } | undefined
+  let link: string | undefined
+  if (isBadgeSuggestion) {
+    ;({ link } = example as Suggestion)
+  } else {
+    ;({ documentation } = example as Example)
+  }
+
   const {
     title,
-    documentation,
     example: { pattern, namedParams, queryParams },
-    link,
-    preview: { style: initialStyle } = {},
-    isBadgeSuggestion,
+    preview: { style: initialStyle },
   } = example
 
   return (
@@ -38,8 +54,4 @@ export default function MarkupModalContent({ example, baseUrl }) {
       />
     </>
   )
-}
-MarkupModalContent.propTypes = {
-  example: examplePropType,
-  baseUrl: PropTypes.string.isRequired,
 }
