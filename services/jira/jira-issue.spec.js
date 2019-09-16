@@ -24,7 +24,7 @@ describe('JiraIssue', function() {
         {
           issueKey: 'secure-234',
         },
-        { hostUrl: 'https://myprivatejira.test' }
+        { baseUrl: 'https://myprivatejira.test' }
       )
     ).to.deep.equal({
       label: 'secure-234',

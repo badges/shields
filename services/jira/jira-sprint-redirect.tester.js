@@ -15,7 +15,7 @@ t.create('jira sprint')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/jira/sprint/94.svg?hostUrl=${encodeURIComponent(
+    `/jira/sprint/94.svg?baseUrl=${encodeURIComponent(
       'https://jira.spring.io'
     )}`
   )

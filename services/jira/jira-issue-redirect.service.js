@@ -11,7 +11,7 @@ module.exports = [
     },
     transformPath: ({ issueKey }) => `/jira/issue/${issueKey}`,
     transformQueryParams: ({ protocol, hostAndPath }) => ({
-      hostUrl: `${protocol}://${hostAndPath}`,
+      baseUrl: `${protocol}://${hostAndPath}`,
     }),
     dateAdded: new Date('2019-09-14'),
   }),

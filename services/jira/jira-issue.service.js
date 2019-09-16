@@ -6,7 +6,7 @@ const { authConfig } = require('./jira-common')
 const { BaseJsonService } = require('..')
 
 const queryParamSchema = Joi.object({
-  hostUrl: optionalUrl.required(),
+  baseUrl: optionalUrl.required(),
 }).required()
 
 const schema = Joi.object({
@@ -45,7 +45,7 @@ module.exports = class JiraIssue extends BaseJsonService {
           issueKey: 'KAFKA-2896',
         },
         queryParams: {
-          hostUrl: 'https://issues.apache.org/jira',
+          baseUrl: 'https://issues.apache.org/jira',
         },
         staticPreview: this.render({
           issueKey: 'KAFKA-2896',
@@ -81,11 +81,11 @@ module.exports = class JiraIssue extends BaseJsonService {
     }
   }
 
-  async handle({ issueKey }, { hostUrl }) {
+  async handle({ issueKey }, { baseUrl }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
     const json = await this._requestJson({
       schema,
-      url: `${hostUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
+      url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
       options: { auth: this.authHelper.basicAuth },
       errorMessages: { 404: 'issue not found' },
     })

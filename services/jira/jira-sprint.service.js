@@ -6,7 +6,7 @@ const { authConfig } = require('./jira-common')
 const { BaseJsonService } = require('..')
 
 const queryParamSchema = Joi.object({
-  hostUrl: optionalUrl.required(),
+  baseUrl: optionalUrl.required(),
 }).required()
 
 const schema = Joi.object({
@@ -57,7 +57,7 @@ module.exports = class JiraSprint extends BaseJsonService {
           sprintId: '94',
         },
         queryParams: {
-          hostUrl: 'https://jira.spring.io',
+          baseUrl: 'https://jira.spring.io',
         },
         staticPreview: this.render({
           numCompletedIssues: 27,
@@ -90,12 +90,12 @@ module.exports = class JiraSprint extends BaseJsonService {
     }
   }
 
-  async handle({ sprintId }, { hostUrl }) {
+  async handle({ sprintId }, { baseUrl }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-group-Search
     // There are other sprint-specific APIs but those require authentication. The search API
     // allows us to get the needed data without being forced to authenticate.
     const json = await this._requestJson({
-      url: `${hostUrl}/rest/api/2/search`,
+      url: `${baseUrl}/rest/api/2/search`,
       schema,
       options: {
         qs: {

@@ -15,7 +15,7 @@ t.create('jira issue')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/jira/issue/kafka-2896.svg?hostUrl=${encodeURIComponent(
+    `/jira/issue/kafka-2896.svg?baseUrl=${encodeURIComponent(
       'https://issues.apache.org/jira'
     )}`
   )

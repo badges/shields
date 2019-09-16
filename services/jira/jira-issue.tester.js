@@ -3,15 +3,15 @@
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('unknown issue')
-  .get('/notArealIssue-000.json?hostUrl=https://issues.apache.org/jira')
+  .get('/notArealIssue-000.json?baseUrl=https://issues.apache.org/jira')
   .expectBadge({ label: 'jira', message: 'issue not found' })
 
 t.create('known issue')
-  .get('/kafka-2896.json?hostUrl=https://issues.apache.org/jira')
+  .get('/kafka-2896.json?baseUrl=https://issues.apache.org/jira')
   .expectBadge({ label: 'kafka-2896', message: 'Resolved' })
 
 t.create('no status color')
-  .get('/foo-123.json?hostUrl=http://issues.apache.org/jira')
+  .get('/foo-123.json?baseUrl=http://issues.apache.org/jira')
   .intercept(nock =>
     nock('http://issues.apache.org/jira/rest/api/2/issue')
       .get(`/${encodeURIComponent('foo-123')}`)
@@ -30,7 +30,7 @@ t.create('no status color')
   })
 
 t.create('green status color')
-  .get('/bar-345.json?hostUrl=https://issues.apache.org:8000/jira')
+  .get('/bar-345.json?baseUrl=https://issues.apache.org:8000/jira')
   .intercept(nock =>
     nock('https://issues.apache.org:8000/jira/rest/api/2/issue')
       .get(`/${encodeURIComponent('bar-345')}`)
@@ -52,7 +52,7 @@ t.create('green status color')
   })
 
 t.create('medium-gray status color')
-  .get('/abc-123.json?hostUrl=https://issues.apache.org:8080')
+  .get('/abc-123.json?baseUrl=https://issues.apache.org:8080')
   .intercept(nock =>
     nock('https://issues.apache.org:8080/rest/api/2/issue')
       .get(`/${encodeURIComponent('abc-123')}`)
@@ -74,7 +74,7 @@ t.create('medium-gray status color')
   })
 
 t.create('yellow status color')
-  .get('/test-001.json?hostUrl=https://issues.apache.org')
+  .get('/test-001.json?baseUrl=https://issues.apache.org')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('test-001')}`)
@@ -96,7 +96,7 @@ t.create('yellow status color')
   })
 
 t.create('brown status color')
-  .get('/zzz-789.json?hostUrl=https://issues.apache.org')
+  .get('/zzz-789.json?baseUrl=https://issues.apache.org')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('zzz-789')}`)
@@ -118,7 +118,7 @@ t.create('brown status color')
   })
 
 t.create('warm-red status color')
-  .get('/fire-321.json?hostUrl=https://issues.apache.org')
+  .get('/fire-321.json?baseUrl=https://issues.apache.org')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('fire-321')}`)
@@ -140,7 +140,7 @@ t.create('warm-red status color')
   })
 
 t.create('blue-gray status color')
-  .get('/sky-775.json?hostUrl=https://issues.apache.org')
+  .get('/sky-775.json?baseUrl=https://issues.apache.org')
   .intercept(nock =>
     nock('https://issues.apache.org/rest/api/2/issue')
       .get(`/${encodeURIComponent('sky-775')}`)

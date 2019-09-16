@@ -37,7 +37,7 @@ describe('JiraSprint', function() {
         {
           sprintId,
         },
-        { hostUrl: 'https://myprivatejira.test/jira' }
+        { baseUrl: 'https://myprivatejira.test/jira' }
       )
     ).to.deep.equal({
       label: 'completion',
