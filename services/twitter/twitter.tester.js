@@ -34,7 +34,7 @@ t.create('Invalid Username Specified (only spaces)')
   })
 
 t.create('URL')
-  .get('/url/https/shields.io.json')
+  .get('/url.json?url=https://shields.io')
   .expectBadge({
     label: 'tweet',
     message: '',

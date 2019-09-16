@@ -3,25 +3,25 @@
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('status of http://shields.io')
-  .get('/http/shields.io.json')
+  .get('/website.json?url=http://shields.io')
   .expectBadge({ label: 'website', message: 'up', color: 'brightgreen' })
 
 t.create('status of https://shields.io')
-  .get('/https/shields.io.json')
+  .get('/website.json?url=https://shields.io')
   .expectBadge({ label: 'website', message: 'up', color: 'brightgreen' })
 
 t.create('status of nonexistent domain')
-  .get('/https/shields-io.io.json')
+  .get('/website.json?url=http://shields.io.io')
   .expectBadge({ label: 'website', message: 'down', color: 'red' })
 
 t.create('status when network is off')
-  .get('/http/shields.io.json')
+  .get('/website.json?url=http://shields.io')
   .networkOff()
   .expectBadge({ label: 'website', message: 'down', color: 'red' })
 
 t.create('custom online label, online message and online color')
   .get(
-    '/http/online.com.json?up_message=up&down_message=down&up_color=green&down_color=grey'
+    '/website.json?url=http://online.com&up_message=up&down_message=down&up_color=green&down_color=grey'
   )
   .intercept(nock =>
     nock('http://online.com')
@@ -32,7 +32,7 @@ t.create('custom online label, online message and online color')
 
 t.create('custom offline message and offline color')
   .get(
-    '/http/offline.com.json?up_message=up&down_message=down&up_color=green&down_color=grey'
+    '/website.json?url=http://offline.com&up_message=up&down_message=down&up_color=green&down_color=grey'
   )
   .intercept(nock =>
     nock('http://offline.com')
