@@ -119,6 +119,7 @@ export default function GetMarkupButton({
       options={markupOptions}
       placeholder="Copy Badge URL"
       ref={selectRef}
+      value={null}
     />
   )
 }
