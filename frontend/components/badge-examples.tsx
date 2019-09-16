@@ -105,7 +105,7 @@ export function BadgeExamples({
   examples: RenderableExample[]
   areBadgeSuggestions: boolean
   baseUrl?: string
-  onClick: (exampleData: RenderableExample, isSugestion: boolean) => void
+  onClick: (exampleData: RenderableExample, isSuggestion: boolean) => void
 }) {
   return (
     <ExampleTable>
