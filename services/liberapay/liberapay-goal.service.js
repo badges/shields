@@ -36,9 +36,7 @@ module.exports = class LiberapayGoal extends LiberapayBase {
       return { percentAchieved: 0 }
     }
 
-    const percentAchieved = Math.round(
-      (receiving.amount / goal.amount) * 100
-    )
+    const percentAchieved = Math.round((receiving.amount / goal.amount) * 100)
 
     return { percentAchieved }
   }

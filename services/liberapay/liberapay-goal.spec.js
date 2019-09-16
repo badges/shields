@@ -17,7 +17,9 @@ describe('LiberapayGoal', function() {
 
   it('throws InvalidResponse on missing goals', function() {
     expect(() =>
-    LiberapayGoal.prototype.transform({ goal: null, receiving: null })
-    ).to.throw(InvalidResponse).with.property('prettyMessage', 'no public goals')
+      LiberapayGoal.prototype.transform({ goal: null, receiving: null })
+    )
+      .to.throw(InvalidResponse)
+      .with.property('prettyMessage', 'no public goals')
   })
 })
