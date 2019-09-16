@@ -27,7 +27,7 @@ describe('Main page', function() {
     expectBadgeExample(
       'Discourse status',
       'http://localhost:8080/badge/discourse-online-brightgreen',
-      '/discourse/:scheme/:host/status'
+      '/discourse/status?server=https%3A%2F%2Fmeta.discourse.org'
     )
   })
 

@@ -32,6 +32,11 @@ t.create('downloads-pre for latest release')
   .get('/downloads-pre/photonstorm/phaser/latest/total.json')
   .expectBadge({ label: 'downloads@latest', message: isMetric })
 
+// https://github.com/badges/shields/issues/3786
+t.create('downloads-pre for latest release (no-releases)')
+  .get('/downloads-pre/badges/shields/latest/total.json')
+  .expectBadge({ label: 'downloads', message: 'no releases' })
+
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')
   .expectBadge({ label: 'downloads@v0.190.0', message: isMetric })
