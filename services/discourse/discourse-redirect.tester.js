@@ -15,7 +15,7 @@ t.create('discourse status')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/discourse/status.svg?hostUrl=${encodeURIComponent(
+    `/discourse/status.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
   )
@@ -27,7 +27,7 @@ t.create('discourse topics')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/discourse/topics.svg?hostUrl=${encodeURIComponent(
+    `/discourse/topics.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
   )
@@ -39,7 +39,7 @@ t.create('discourse users')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/discourse/users.svg?hostUrl=${encodeURIComponent(
+    `/discourse/users.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
   )
@@ -51,7 +51,7 @@ t.create('discourse likes')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/discourse/likes.svg?hostUrl=${encodeURIComponent(
+    `/discourse/likes.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
   )
@@ -63,7 +63,7 @@ t.create('discourse posts')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    `/discourse/posts.svg?hostUrl=${encodeURIComponent(
+    `/discourse/posts.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
   )

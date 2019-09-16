@@ -11,7 +11,7 @@ module.exports = [
     },
     transformPath: ({ metric }) => `/discourse/${metric}`,
     transformQueryParams: ({ protocol, hostAndPath }) => ({
-      hostUrl: `${protocol}://${hostAndPath}`,
+      server: `${protocol}://${hostAndPath}`,
     }),
     dateAdded: new Date('2019-09-15'),
   }),

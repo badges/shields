@@ -26,7 +26,7 @@ const data = {
 }
 
 t.create('Topics')
-  .get('/topics.json?hostUrl=https://meta.discourse.org')
+  .get('/topics.json?server=https://meta.discourse.org')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
@@ -35,7 +35,7 @@ t.create('Topics')
   .expectBadge({ label: 'discourse', message: '23k topics' })
 
 t.create('Posts')
-  .get('/posts.json?hostUrl=https://meta.discourse.org')
+  .get('/posts.json?server=https://meta.discourse.org')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
@@ -44,7 +44,7 @@ t.create('Posts')
   .expectBadge({ label: 'discourse', message: '338k posts' })
 
 t.create('Users')
-  .get('/users.json?hostUrl=https://meta.discourse.org')
+  .get('/users.json?server=https://meta.discourse.org')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
@@ -53,7 +53,7 @@ t.create('Users')
   .expectBadge({ label: 'discourse', message: '31k users' })
 
 t.create('Likes')
-  .get('/likes.json?hostUrl=https://meta.discourse.org')
+  .get('/likes.json?server=https://meta.discourse.org')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
@@ -62,7 +62,7 @@ t.create('Likes')
   .expectBadge({ label: 'discourse', message: '309k likes' })
 
 t.create('Status')
-  .get('/status.json?hostUrl=https://meta.discourse.org')
+  .get('/status.json?server=https://meta.discourse.org')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
@@ -71,7 +71,7 @@ t.create('Status')
   .expectBadge({ label: 'discourse', message: 'online' })
 
 t.create('Status with http (not https)')
-  .get('/status.json?hostUrl=http://meta.discourse.org')
+  .get('/status.json?server=http://meta.discourse.org')
   .intercept(nock =>
     nock('http://meta.discourse.org')
       .get('/site/statistics.json')
@@ -80,7 +80,7 @@ t.create('Status with http (not https)')
   .expectBadge({ label: 'discourse', message: 'online' })
 
 t.create('Invalid Host')
-  .get('/status.json?hostUrl=https://some.host')
+  .get('/status.json?server=https://some.host')
   .intercept(nock =>
     nock('https://some.host')
       .get('/site/statistics.json')
@@ -89,7 +89,7 @@ t.create('Invalid Host')
   .expectBadge({ label: 'discourse', message: 'not found' })
 
 t.create('Topics')
-  .get('/topics.json?hostUrl=https://meta.discourse.org')
+  .get('/topics.json?server=https://meta.discourse.org')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
@@ -98,7 +98,7 @@ t.create('Topics')
   })
 
 t.create('Posts')
-  .get('/posts.json?hostUrl=https://meta.discourse.org')
+  .get('/posts.json?server=https://meta.discourse.org')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
@@ -107,7 +107,7 @@ t.create('Posts')
   })
 
 t.create('Users')
-  .get('/users.json?hostUrl=https://meta.discourse.org')
+  .get('/users.json?server=https://meta.discourse.org')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
@@ -116,7 +116,7 @@ t.create('Users')
   })
 
 t.create('Likes')
-  .get('/likes.json?hostUrl=https://meta.discourse.org')
+  .get('/likes.json?server=https://meta.discourse.org')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
@@ -125,5 +125,5 @@ t.create('Likes')
   })
 
 t.create('Status')
-  .get('/status.json?hostUrl=https://meta.discourse.org')
+  .get('/status.json?server=https://meta.discourse.org')
   .expectBadge({ label: 'discourse', message: 'online' })

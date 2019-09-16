@@ -14,7 +14,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  hostUrl: optionalUrl.required(),
+  server: optionalUrl.required(),
 }).required()
 
 class DiscourseBase extends BaseJsonService {
@@ -25,7 +25,7 @@ class DiscourseBase extends BaseJsonService {
   static buildRoute(metric) {
     return {
       base: 'discourse',
-      pattern: `${metric}`,
+      pattern: metric,
       queryParamSchema,
     }
   }
@@ -34,10 +34,10 @@ class DiscourseBase extends BaseJsonService {
     return { label: 'discourse' }
   }
 
-  async fetch({ scheme, hostUrl }) {
+  async fetch({ server }) {
     return this._requestJson({
       schema,
-      url: `${hostUrl}/site/statistics.json`,
+      url: `${server}/site/statistics.json`,
     })
   }
 }
@@ -60,7 +60,7 @@ function DiscourseMetricIntegrationFactory({ metricName, property }) {
           title: `Discourse ${metricName}`,
           namedParams: {},
           queryParams: {
-            hostUrl: 'https://meta.discourse.org',
+            server: 'https://meta.discourse.org',
           },
           staticPreview: this.render({ stat: 100 }),
         },
@@ -74,8 +74,8 @@ function DiscourseMetricIntegrationFactory({ metricName, property }) {
       }
     }
 
-    async handle({ scheme }, { hostUrl }) {
-      const data = await this.fetch({ scheme, hostUrl })
+    async handle(_routeParams, { server }) {
+      const data = await this.fetch({ server })
       return this.constructor.render({ stat: data[property] })
     }
   }
@@ -92,7 +92,7 @@ class DiscourseStatus extends DiscourseBase {
         title: `Discourse status`,
         namedParams: {},
         queryParams: {
-          hostUrl: 'https://meta.discourse.org',
+          server: 'https://meta.discourse.org',
         },
         staticPreview: this.render(),
       },
@@ -106,8 +106,8 @@ class DiscourseStatus extends DiscourseBase {
     }
   }
 
-  async handle({ scheme }, { hostUrl }) {
-    await this.fetch({ scheme, hostUrl })
+  async handle(_routeParams, { server }) {
+    await this.fetch({ server })
     // if fetch() worked, the server is up
     // if it failed, we'll show an error e.g: 'inaccessible'
     return this.constructor.render()
