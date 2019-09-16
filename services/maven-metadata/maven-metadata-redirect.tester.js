@@ -1,14 +1,8 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
+const t = (module.exports = require('../tester').createServiceTester())
 
-const t = (module.exports = new ServiceTester({
-  id: 'Maven-MetadataRedirect',
-  title: 'Maven-MetadataRedirect',
-  pathPrefix: '/maven-metadata/v',
-}))
-
-t.create('maven metadata (extension)')
+t.create('maven metadata (badge extension)')
   .get(
     '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml.json',
     {
@@ -23,7 +17,7 @@ t.create('maven metadata (extension)')
     )}`
   )
 
-t.create('maven metadata (no extension)')
+t.create('maven metadata (no badge extension)')
   .get(
     '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
     {
