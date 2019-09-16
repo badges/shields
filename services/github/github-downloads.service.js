@@ -191,6 +191,11 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
         options: { qs: { per_page: 1 } },
         errorMessages: errorMessagesFor('repo not found'),
       })
+      // Note that the API will return an empty array if there are no releases
+      // https://github.com/badges/shields/issues/3786
+      if (!latestReleaseIncludingPrereleases) {
+        throw new NotFound({ prettyMessage: 'no releases' })
+      }
       releases = [latestReleaseIncludingPrereleases]
     } else if (tag) {
       const wantedRelease = await this._requestJson({
