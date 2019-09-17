@@ -6,7 +6,7 @@ const { NotFound } = require('..')
 
 const documentation = `
 <p>
-  The MicroBadger API can sometimes be a bit temparemental when it comes to retrieving the size of your image. 
+  The MicroBadger API can sometimes be a bit temparamental when it comes to retrieving the size of your image. 
   If the website indicates "Layer information not yet retrieved" for your image, Shields.io will display the size as unknown in its badge. 
   In some cases, the size is also reported as 0.
 </p>
