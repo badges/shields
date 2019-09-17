@@ -106,8 +106,10 @@ class TwitterFollow extends BaseJsonService {
       message: metric(followers),
       style: 'social',
       link: [
-        `https://twitter.com/intent/follow?screen_name=${user}`,
-        `https://twitter.com/${user}/followers`,
+        `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
+          user
+        )}`,
+        `https://twitter.com/${encodeURIComponent(user)}/followers`,
       ],
     }
   }
