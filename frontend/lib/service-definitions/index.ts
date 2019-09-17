@@ -60,3 +60,14 @@ const byCategory = groupBy(services, 'category')
 export function getDefinitionsForCategory(category: string) {
   return byCategory[category]
 }
+
+export interface Suggestion {
+  title: string
+  link: string
+  example: ExampleSignature
+  preview: {
+    style?: string
+  }
+}
+
+export type RenderableExample = Example | Suggestion

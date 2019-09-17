@@ -18,11 +18,14 @@ describe('JiraIssue', function() {
       .reply(200, { fields: { status: { name: 'in progress' } } })
 
     expect(
-      await JiraIssue.invoke(defaultContext, config, {
-        protocol: 'https',
-        hostAndPath: 'myprivatejira.test',
-        issueKey: 'secure-234',
-      })
+      await JiraIssue.invoke(
+        defaultContext,
+        config,
+        {
+          issueKey: 'secure-234',
+        },
+        { baseUrl: 'https://myprivatejira.test' }
+      )
     ).to.deep.equal({
       label: 'secure-234',
       message: 'in progress',

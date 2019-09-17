@@ -31,11 +31,14 @@ describe('JiraSprint', function() {
       })
 
     expect(
-      await JiraSprint.invoke(defaultContext, config, {
-        protocol: 'https',
-        hostAndPath: 'myprivatejira.test/jira',
-        sprintId,
-      })
+      await JiraSprint.invoke(
+        defaultContext,
+        config,
+        {
+          sprintId,
+        },
+        { baseUrl: 'https://myprivatejira.test/jira' }
+      )
     ).to.deep.equal({
       label: 'completion',
       message: '50%',

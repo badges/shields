@@ -2,7 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
+const { optionalUrl } = require('../validators')
 const { BaseService, BaseJsonService, NotFound } = require('..')
+
+const queryParamSchema = Joi.object({
+  url: optionalUrl.required(),
+}).required()
 
 class TwitterUrl extends BaseService {
   static get category() {
@@ -11,10 +16,9 @@ class TwitterUrl extends BaseService {
 
   static get route() {
     return {
-      base: 'twitter/url',
-      // Do not base new services on this route pattern.
-      // See https://github.com/badges/shields/issues/3714
-      pattern: ':protocol(https|http)/:hostAndPath+',
+      base: 'twitter',
+      pattern: 'url',
+      queryParamSchema,
     }
   }
 
@@ -22,9 +26,9 @@ class TwitterUrl extends BaseService {
     return [
       {
         title: 'Twitter URL',
-        namedParams: {
-          protocol: 'http',
-          hostAndPath: 'shields.io',
+        namedParams: {},
+        queryParams: {
+          url: 'https://shields.io',
         },
         // hard code the static preview
         // because link[] is not allowed in examples
@@ -43,8 +47,8 @@ class TwitterUrl extends BaseService {
     }
   }
 
-  async handle({ protocol, hostAndPath }) {
-    const page = encodeURIComponent(`${protocol}://${hostAndPath}`)
+  async handle(_routeParams, { url }) {
+    const page = encodeURIComponent(`${url}`)
     return {
       label: 'tweet',
       message: '',
