@@ -23,6 +23,8 @@
 | Cloudflare                    | Account owner                   | @espadrine                                                                                 |
 | Cloudflare                    | Admin access                    | @espadrine, @paulmelnikow                                                                  |
 | GitHub                        | OAuth app                       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
+| Twitch                        | OAuth app                       | @PyvesB                                                                                    |
+| OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                                              |
 | DNS                           | Account owner                   | @olivierlacan                                                                              |
 | DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                                                       |
 | Sentry                        | Error reports                   | @espadrine, @paulmelnikow                                                                  |
