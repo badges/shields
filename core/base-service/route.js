@@ -69,8 +69,8 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
 
 function getQueryParamNames({ queryParamSchema }) {
   if (queryParamSchema) {
-    const { children, renames = [] } = Joi.describe(queryParamSchema)
-    return Object.keys(children).concat(renames.map(({ from }) => from))
+    const { keys, renames = [] } = queryParamSchema.describe()
+    return Object.keys(keys).concat(renames.map(({ from }) => from))
   } else {
     return []
   }
