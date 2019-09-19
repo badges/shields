@@ -27,6 +27,39 @@ module.exports = class DynamicXml extends BaseService {
     }
   }
 
+  transform({ pathExpression, buffer, pathIsAttr }) {
+    const parsed = new DOMParser().parseFromString(buffer)
+
+    let values
+    try {
+      values = xpath.select(pathExpression, parsed)
+    } catch (e) {
+      throw new InvalidParameter({ prettyMessage: e.message })
+    }
+
+    if (!Array.isArray(values)) {
+      throw new InvalidResponse({
+        prettyMessage: 'must be a collection of elements',
+      })
+    }
+
+    values = values.reduce((accum, node) => {
+      if (pathIsAttr) {
+        accum.push(node.value)
+      } else if (node.firstChild) {
+        accum.push(node.firstChild.data)
+      }
+
+      return accum
+    }, [])
+
+    if (!values.length) {
+      throw new InvalidResponse({ prettyMessage: 'no result' })
+    }
+
+    return { values }
+  }
+
   async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
     // e.g. //book[2]/@id
     const pathIsAttr = (
@@ -39,22 +72,12 @@ module.exports = class DynamicXml extends BaseService {
       errorMessages,
     })
 
-    const parsed = new DOMParser().parseFromString(buffer)
+    const { values: value } = this.transform({
+      pathExpression,
+      buffer,
+      pathIsAttr,
+    })
 
-    let values
-    try {
-      values = xpath.select(pathExpression, parsed)
-    } catch (e) {
-      throw new InvalidParameter({ prettyMessage: e.message })
-    }
-    values = values.map((node, i) =>
-      pathIsAttr ? node.value : node.firstChild.data
-    )
-
-    if (!values.length) {
-      throw new InvalidResponse({ prettyMessage: 'no result' })
-    }
-
-    return renderDynamicBadge({ value: values, prefix, suffix })
+    return renderDynamicBadge({ value, prefix, suffix })
   }
 }
