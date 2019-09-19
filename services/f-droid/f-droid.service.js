@@ -12,7 +12,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  metadata_format: Joi.string().valid(['yml', 'txt']),
+  metadata_format: Joi.string().valid('yml', 'txt'),
 }).required()
 
 module.exports = class FDroid extends BaseYamlService {
