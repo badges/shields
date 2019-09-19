@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const validate = require('../core/base-service/validate')
 const { InvalidResponse } = require('.')
 
-const optionalStringWhenNamedLogoPresent = Joi.alternatives().when(
+const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   'namedLogo',
   {
     is: Joi.string().required(),
@@ -13,8 +13,8 @@ const optionalStringWhenNamedLogoPresent = Joi.alternatives().when(
 )
 
 const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
-  .when('namedLogo', { is: Joi.string().required(), then: Joi.number() })
-  .when('logoSvg', { is: Joi.string().required(), then: Joi.number() })
+  .conditional('namedLogo', { is: Joi.string().required(), then: Joi.number() })
+  .conditional('logoSvg', { is: Joi.string().required(), then: Joi.number() })
 
 const endpointSchema = Joi.object({
   schemaVersion: 1,

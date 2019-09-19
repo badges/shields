@@ -14,7 +14,7 @@ const isValidRoute = Joi.object({
     .required(),
   pattern: Joi.string().allow(''),
   format: Joi.string(),
-  capture: Joi.alternatives().when('format', {
+  capture: Joi.alternatives().conditional('format', {
     is: Joi.string().required(),
     then: Joi.array().items(Joi.string().required()),
   }),
