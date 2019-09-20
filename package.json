@@ -209,7 +209,7 @@
     "got": "^9.6.0",
     "humanize-string": "^2.1.0",
     "husky": "^3.0.5",
-    "icedfrisby": "2.2.1",
+    "icedfrisby": "3.0.0",
     "icedfrisby-nock": "^2.0.0",
     "is-png": "^2.0.0",
     "is-svg": "^4.2.0",
