@@ -100,7 +100,12 @@ t.create('Test Failures Count')
   )
   .expectBadge({
     label: 'test failures',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Test Failures Count (legacy API supported)')
@@ -110,7 +115,12 @@ t.create('Test Failures Count (legacy API supported)')
   )
   .expectBadge({
     label: 'test failures',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Test Errors Count')
@@ -120,7 +130,12 @@ t.create('Test Errors Count')
   )
   .expectBadge({
     label: 'test errors',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Test Errors Count (legacy API supported)')
@@ -130,7 +145,12 @@ t.create('Test Errors Count (legacy API supported)')
   )
   .expectBadge({
     label: 'test errors',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Skipped Tests Count')
@@ -140,7 +160,12 @@ t.create('Skipped Tests Count')
   )
   .expectBadge({
     label: 'skipped tests',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Skipped Tests Count (legacy API supported)')
@@ -150,7 +175,12 @@ t.create('Skipped Tests Count (legacy API supported)')
   )
   .expectBadge({
     label: 'skipped tests',
-    message: Joi.alternatives(isMetric, 0),
+    message: Joi.alternatives(
+      isMetric,
+      Joi.number()
+        .valid(0)
+        .required()
+    ),
   })
 
 t.create('Test Success Rate')
