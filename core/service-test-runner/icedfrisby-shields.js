@@ -52,12 +52,17 @@ const factory = superclass =>
     }
 
     static _expectField(json, name, expected) {
-      if (typeof expected === 'string') {
+      if (typeof expected === 'undefined') return
+      if (typeof expected === 'string' || typeof expected === 'number') {
         expect(json[name], `${name} mismatch`).to.equal(expected)
       } else if (Array.isArray(expected)) {
         expect(json[name], `${name} mismatch`).to.deep.equal(expected)
-      } else if (typeof expected === 'object') {
+      } else if (Joi.isSchema(expected)) {
         Joi.attempt(json[name], expected, `${name} mismatch:`)
+      } else {
+        throw new Error(
+          "'expected' must be a string, a number, an array or a Joi schema"
+        )
       }
     }
   }
