@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } = require('../test-validators')
@@ -50,4 +51,9 @@ t.create('version ending with zero')
       `
       )
   )
-  .expectBadge({ label: 'maven-central', message: /^v1\.30$/ })
+  .expectBadge({
+    label: 'maven-central',
+    message: Joi.string()
+      .regex(/^v1\.30$/)
+      .required(),
+  })
