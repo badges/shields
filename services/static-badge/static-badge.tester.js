@@ -24,7 +24,11 @@ t.create('All one color')
 
 t.create('Not a valid color')
   .get('/badge/label-message-notacolor.json')
-  .expectBadge({ label: 'label', message: 'message', color: null })
+  .expectBadge({
+    label: 'label',
+    message: 'message',
+    color: undefined,
+  })
 
 t.create('Missing message')
   .get('/badge/label--blue.json')
