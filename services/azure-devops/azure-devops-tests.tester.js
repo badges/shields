@@ -87,7 +87,7 @@ function isAzureDevOpsTestTotals(
   ]
 
   return Joi.alternatives().try(
-    regexStrings.map(regexStr => Joi.string().regex(new RegExp(regexStr)))
+    ...regexStrings.map(regexStr => Joi.string().regex(new RegExp(regexStr)))
   )
 }
 
