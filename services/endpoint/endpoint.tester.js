@@ -144,7 +144,7 @@ t.create('Invalid schema)')
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'invalid properties: schemaVersion',
+    message: 'invalid properties: schemaVersion, label, message',
   })
 
 t.create('Invalid schema)')
