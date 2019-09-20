@@ -39,7 +39,7 @@ const defaultBadgeDataSchema = Joi.object({
   namedLogo: Joi.string(),
 }).required()
 
-const optionalStringWhenNamedLogoPrsent = Joi.alternatives().conditional(
+const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   'namedLogo',
   {
     is: Joi.string().required(),
@@ -67,7 +67,7 @@ const serviceDataSchema = Joi.object({
   labelColor: Joi.string(),
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
-  logoColor: optionalStringWhenNamedLogoPrsent,
+  logoColor: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
   logoPosition: optionalNumberWhenAnyLogoPresent,
   cacheSeconds: Joi.number()
