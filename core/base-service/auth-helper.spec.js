@@ -91,6 +91,13 @@ describe('AuthHelper', function() {
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
         undefined
       )
+      given(
+        { passKey: 'myci_pass', defaultToEmptyStringForUser: true },
+        { myci_pass: 'abc123' }
+      ).expect({
+        user: '',
+        pass: 'abc123',
+      })
     })
   })
 })
