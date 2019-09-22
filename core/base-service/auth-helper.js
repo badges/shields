@@ -2,7 +2,12 @@
 
 class AuthHelper {
   constructor(
-    { userKey, passKey, isRequired = false, useEmptyStringForUser = false },
+    {
+      userKey,
+      passKey,
+      isRequired = false,
+      defaultToEmptyStringForUser = false,
+    },
     privateConfig
   ) {
     if (!userKey && !passKey) {
@@ -14,7 +19,7 @@ class AuthHelper {
     if (userKey) {
       this.user = privateConfig[userKey]
     } else {
-      this.user = useEmptyStringForUser ? '' : undefined
+      this.user = defaultToEmptyStringForUser ? '' : undefined
     }
     this.pass = passKey ? privateConfig[passKey] : undefined
     this.isRequired = isRequired

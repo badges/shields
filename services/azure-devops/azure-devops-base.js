@@ -18,7 +18,7 @@ module.exports = class AzureDevOpsBase extends BaseJsonService {
   static get auth() {
     return {
       passKey: 'azure_devops_token',
-      useEmptyStringForUser: true,
+      defaultToEmptyStringForUser: true,
     }
   }
 
