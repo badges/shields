@@ -7,7 +7,7 @@ const Joi = require('@hapi/joi')
 
 const arrayOfStrings = Joi.array()
   .items(Joi.string())
-  .allow([])
+  .min(0)
   .required()
 
 const objectOfKeyValues = Joi.object()

@@ -14,7 +14,7 @@ const isValidRoute = Joi.object({
     .required(),
   pattern: Joi.string().allow(''),
   format: Joi.string(),
-  capture: Joi.alternatives().when('format', {
+  capture: Joi.alternatives().conditional('format', {
     is: Joi.string().required(),
     then: Joi.array().items(Joi.string().required()),
   }),
@@ -69,8 +69,8 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
 
 function getQueryParamNames({ queryParamSchema }) {
   if (queryParamSchema) {
-    const { children, renames = [] } = Joi.describe(queryParamSchema)
-    return Object.keys(children).concat(renames.map(({ from }) => from))
+    const { keys, renames = [] } = queryParamSchema.describe()
+    return Object.keys(keys).concat(renames.map(({ from }) => from))
   } else {
     return []
   }

@@ -5,7 +5,7 @@ const { metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.array()
-  .items(Joi.array().items([Joi.number().required(), Joi.number().required()]))
+  .items(Joi.array().items(Joi.number().required(), Joi.number().required()))
   .required()
 
 module.exports = class BStatsServers extends BaseJsonService {
