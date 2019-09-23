@@ -286,3 +286,11 @@ t.create('Bad scheme')
 t.create('Blocked domain')
   .get('.json?url=https://img.shields.io/badge/foo-bar-blue.json')
   .expectBadge({ label: 'custom badge', message: 'domain is blocked' })
+
+// https://github.com/badges/shields/issues/3780
+t.create('Invalid url')
+  .get('.json?url=https:/')
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid query parameter: url',
+  })
