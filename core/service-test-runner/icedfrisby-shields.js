@@ -59,9 +59,15 @@ const factory = superclass =>
         expect(json[name], `${name} mismatch`).to.deep.equal(expected)
       } else if (Joi.isSchema(expected)) {
         Joi.attempt(json[name], expected, `${name} mismatch:`)
+      } else if (expected instanceof RegExp) {
+        Joi.attempt(
+          json[name],
+          Joi.string().regex(expected),
+          `${name} mismatch:`
+        )
       } else {
         throw new Error(
-          "'expected' must be a string, a number, an array or a Joi schema"
+          "'expected' must be a string, a number, a regex, an array or a Joi schema"
         )
       }
     }
