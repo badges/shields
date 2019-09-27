@@ -35,7 +35,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
         keywords,
       },
       {
-        title: 'GitHub package.json version (branch)',
+        title: 'GitHub Pipenv locked Python version (branch)',
         pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'metabolize',
@@ -106,22 +106,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
         keywords,
       },
       {
-        title: 'GitHub Pipenv locked dev dependency version',
-        pattern: ':user/:repo/:kind(dev)?/:packageName',
-        namedParams: {
-          user: 'metabolize',
-          repo: 'rq-dashboard-on-heroku',
-          packageName: 'rq-dashboard',
-        },
-        staticPreview: this.render({
-          dependency: 'rq-dashboard',
-          version: '2.0.0-alpha.2',
-        }),
-        documentation,
-        keywords,
-      },
-      {
-        title: 'GitHub package.json version (branch)',
+        title: 'GitHub Pipenv locked dev dependency version (branch)',
         pattern: ':user/:repo/:kind(dev)?/:packageName/:branch',
         namedParams: {
           user: 'metabolize',
