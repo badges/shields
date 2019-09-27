@@ -9,6 +9,7 @@ const {
 
 // e.g. v19.3b0
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)
+const isShortSha = Joi.string().regex(/[0-9a-f]{7}/)
 
 const t = (module.exports = new ServiceTester({
   id: 'GithubPipenv',
@@ -28,6 +29,14 @@ t.create('Locked Python version (no pipfile.lock)')
   .expectBadge({
     label: 'python',
     message: 'repo not found, branch not found, or Pipfile.lock missing',
+  })
+
+t.create('Locked Python version (pipfile.lock has no python version)')
+  .get('/locked/python-version/fikovnik/ShiftIt.json')
+  .only()
+  .expectBadge({
+    label: 'python',
+    message: 'version not specified',
   })
 
 t.create('Locked version of default dependency')
@@ -66,11 +75,20 @@ t.create('Locked version of dev dependency (branch)')
     message: isBlackVersion,
   })
 
-t.create('Unknown dependency')
+t.create('Locked version of unknown dependency')
   .get(
     '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/i-made-this-up.json'
   )
   .expectBadge({
     label: 'dependency',
     message: 'dev dependency not found',
+  })
+
+t.create('Locked version of VCS dependency')
+  .get(
+    '/locked/dependency-version/DemocracyClub/aggregator-api/dc-base-theme.json'
+  )
+  .expectBadge({
+    label: 'dc-base-theme',
+    message: isShortSha,
   })

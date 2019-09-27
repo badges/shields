@@ -3,14 +3,19 @@
 const Joi = require('@hapi/joi')
 const { InvalidParameter } = require('.')
 
-const isDependency = Joi.object({
-  version: Joi.string().required(),
-}).required()
+const isDependency = Joi.alternatives(
+  Joi.object({
+    version: Joi.string().required(),
+  }).required(),
+  Joi.object({
+    ref: Joi.string().required(),
+  }).required()
+)
 
 const isLockfile = Joi.object({
   _meta: Joi.object({
     requires: Joi.object({
-      python_version: Joi.string().required(),
+      python_version: Joi.string(),
     }).required(),
   }).required(),
   default: Joi.object().pattern(Joi.string().required(), isDependency),
@@ -37,10 +42,14 @@ function getDependencyVersion({
     })
   }
 
-  const { version: range } = dependenciesOfKind[wantedDependency]
+  const { version, ref } = dependenciesOfKind[wantedDependency]
 
-  // Strip the `==` which is always present.
-  return range.replace('==', '')
+  if (version) {
+    // Strip the `==` which is always present.
+    return { version: version.replace('==', '') }
+  } else {
+    return { ref: ref.substring(1, 8) }
+  }
 }
 
 module.exports = {

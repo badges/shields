@@ -6,6 +6,7 @@ const { addv } = require('../text-formatters')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
+const { NotFound } = require('..')
 
 const keywords = ['pipfile']
 
@@ -75,6 +76,9 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
       branch,
       filename: 'Pipfile.lock',
     })
+    if (version === undefined) {
+      throw new NotFound({ prettyMessage: 'version not specified' })
+    }
     return this.constructor.render({ version, branch })
   }
 }
@@ -128,15 +132,15 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
     }
   }
 
-  static render({ dependency, version, branch }) {
+  static render({ dependency, version, ref }) {
     return {
       label: dependency,
-      message: addv(version),
+      message: version ? addv(version) : ref,
       color: 'blue',
     }
   }
 
-  async handle({ user, repo, kind, branch, scope, packageName }) {
+  async handle({ user, repo, kind, branch, packageName }) {
     const lockfileData = await fetchJsonFromRepo(this, {
       schema: isLockfile,
       user,
@@ -144,7 +148,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
       branch,
       filename: 'Pipfile.lock',
     })
-    const version = getDependencyVersion({
+    const { version, ref } = getDependencyVersion({
       kind,
       wantedDependency: packageName,
       lockfileData,
@@ -152,7 +156,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
     return this.constructor.render({
       dependency: packageName,
       version,
-      branch,
+      ref,
     })
   }
 }
