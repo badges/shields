@@ -24,9 +24,9 @@ const contentSchema = Joi.object({
   encoding: Joi.equal('base64').required(),
 }).required()
 
-async function fetchJsonFromRepo(
+async function fetchRepoContent(
   serviceInstance,
-  { schema, user, repo, branch = 'master', filename }
+  { user, repo, branch = 'master', filename }
 ) {
   const errorMessages = errorMessagesFor(
     `repo not found, branch not found, or ${filename} missing`
@@ -41,12 +41,31 @@ async function fetchJsonFromRepo(
       errorMessages,
     })
 
-    let decoded
     try {
-      decoded = Buffer.from(content, 'base64').toString('utf-8')
+      return Buffer.from(content, 'base64').toString('utf-8')
     } catch (e) {
       throw new InvalidResponse({ prettyMessage: 'undecodable content' })
     }
+  } else {
+    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
+    return serviceInstance._request({
+      url,
+      errorMessages,
+    })
+  }
+}
+
+async function fetchJsonFromRepo(
+  serviceInstance,
+  { schema, user, repo, branch = 'master', filename }
+) {
+  if (serviceInstance.staticAuthConfigured) {
+    const decoded = await fetchRepoContent(serviceInstance, {
+      user,
+      repo,
+      branch,
+      filename,
+    })
     const json = serviceInstance._parseJson(decoded)
     return serviceInstance.constructor._validate(json, schema)
   } else {
