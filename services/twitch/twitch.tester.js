@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const runnerConfig = require('config').util.toObject()
 const { ServiceTester } = require('../tester')
 
@@ -26,9 +27,7 @@ t.create('Status of andyonthewings')
   .get('/status/andyonthewings.json')
   .expectBadge({
     label: 'twitch',
-    message: function(v) {
-      return ['live', 'offline'].indexOf(v) >= 0
-    },
+    message: Joi.equal('live', 'offline').required(),
     link: ['https://www.twitch.tv/andyonthewings'],
   })
 
@@ -38,8 +37,6 @@ t.create('Status of noopkat')
   .get('/status/noopkat.json')
   .expectBadge({
     label: 'twitch',
-    message: function(v) {
-      return ['live', 'offline'].indexOf(v) >= 0
-    },
+    message: Joi.equal('live', 'offline').required(),
     link: ['https://www.twitch.tv/noopkat'],
   })

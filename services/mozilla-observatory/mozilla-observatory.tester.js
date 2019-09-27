@@ -12,7 +12,7 @@ const isMessage = Joi.alternatives()
   .required()
 
 const isColor = Joi.string()
-  .valid(validColors)
+  .valid(...validColors)
   .required()
 
 t.create('request on observatory.mozilla.org')

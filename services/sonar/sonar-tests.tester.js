@@ -14,6 +14,12 @@ const {
   isCustomCompactTestTotals,
 } = require('../test-validators')
 const { isIntegerPercentage, isMetric } = require('../test-validators')
+const isMetricAllowZero = Joi.alternatives(
+  isMetric,
+  Joi.number()
+    .valid(0)
+    .required()
+)
 
 t.create('Tests')
   .timeout(10000)
@@ -100,7 +106,7 @@ t.create('Test Failures Count')
   )
   .expectBadge({
     label: 'test failures',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Test Failures Count (legacy API supported)')
@@ -110,7 +116,7 @@ t.create('Test Failures Count (legacy API supported)')
   )
   .expectBadge({
     label: 'test failures',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Test Errors Count')
@@ -120,7 +126,7 @@ t.create('Test Errors Count')
   )
   .expectBadge({
     label: 'test errors',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Test Errors Count (legacy API supported)')
@@ -130,7 +136,7 @@ t.create('Test Errors Count (legacy API supported)')
   )
   .expectBadge({
     label: 'test errors',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Skipped Tests Count')
@@ -140,7 +146,7 @@ t.create('Skipped Tests Count')
   )
   .expectBadge({
     label: 'skipped tests',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Skipped Tests Count (legacy API supported)')
@@ -150,7 +156,7 @@ t.create('Skipped Tests Count (legacy API supported)')
   )
   .expectBadge({
     label: 'skipped tests',
-    message: Joi.alternatives(isMetric, 0),
+    message: isMetricAllowZero,
   })
 
 t.create('Test Success Rate')

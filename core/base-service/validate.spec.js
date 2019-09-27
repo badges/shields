@@ -72,7 +72,7 @@ describe('validate', function() {
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidParameter)
         expect(e.message).to.equal(
-          'Invalid Parameter: child "requiredString" fails because ["requiredString" must be a string]'
+          'Invalid Parameter: "requiredString" must be a string'
         )
         expect(e.prettyMessage).to.equal(prettyErrorMessage)
       }
@@ -80,7 +80,7 @@ describe('validate', function() {
         'validate',
         sinon.match.string,
         traceErrorMessage,
-        'child "requiredString" fails because ["requiredString" must be a string]'
+        '"requiredString" must be a string'
       )
     })
 
@@ -98,7 +98,7 @@ describe('validate', function() {
         } catch (e) {
           expect(e).to.be.an.instanceof(InvalidParameter)
           expect(e.message).to.equal(
-            'Invalid Parameter: child "requiredString" fails because ["requiredString" must be a string]'
+            'Invalid Parameter: "requiredString" must be a string'
           )
           expect(e.prettyMessage).to.equal(
             `${prettyErrorMessage}: requiredString`
