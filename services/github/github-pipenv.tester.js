@@ -30,7 +30,7 @@ t.create('Locked Python version (no pipfile.lock)')
     message: 'repo not found, branch not found, or Pipfile.lock missing',
   })
 
-t.create('Locked version of prod dependency')
+t.create('Locked version of default dependency')
   .get(
     '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard.json'
   )
@@ -39,7 +39,7 @@ t.create('Locked version of prod dependency')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('Locked version of prod dependency (branch)')
+t.create('Locked version of default dependency (branch)')
   .get(
     '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard/master.json'
   )

@@ -18,14 +18,14 @@ const isLockfile = Joi.object({
 }).required()
 
 function getDependencyVersion({
-  kind = 'prod',
+  kind = 'default',
   wantedDependency,
   lockfileData,
 }) {
   let dependenciesOfKind
   if (kind === 'dev') {
     dependenciesOfKind = lockfileData.develop
-  } else if (kind === 'prod') {
+  } else if (kind === 'default') {
     dependenciesOfKind = lockfileData.default
   } else {
     throw Error(`Not very kind: ${kind}`)
