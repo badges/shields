@@ -33,7 +33,6 @@ t.create('Locked Python version (no pipfile.lock)')
 
 t.create('Locked Python version (pipfile.lock has no python version)')
   .get('/locked/python-version/fikovnik/ShiftIt.json')
-  .only()
   .expectBadge({
     label: 'python',
     message: 'version not specified',
