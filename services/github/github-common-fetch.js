@@ -60,13 +60,13 @@ async function fetchJsonFromRepo(
   { schema, user, repo, branch = 'master', filename }
 ) {
   if (serviceInstance.staticAuthConfigured) {
-    const decoded = await fetchRepoContent(serviceInstance, {
+    const buffer = await fetchRepoContent(serviceInstance, {
       user,
       repo,
       branch,
       filename,
     })
-    const json = serviceInstance._parseJson(decoded)
+    const json = serviceInstance._parseJson(buffer)
     return serviceInstance.constructor._validate(json, schema)
   } else {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
