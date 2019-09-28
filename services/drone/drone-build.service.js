@@ -7,7 +7,7 @@ const { BaseJsonService } = require('..')
 
 const DroneBuildSchema = Joi.object({
   status: Joi.alternatives()
-    .try(isBuildStatus, Joi.equal('none'))
+    .try(isBuildStatus, Joi.equal('none'), Joi.equal('killed'))
     .required(),
 }).required()
 
