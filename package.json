@@ -204,7 +204,7 @@
     "gatsby-plugin-page-creator": "^2.1.23",
     "gatsby-plugin-react-helmet": "^3.1.10",
     "gatsby-plugin-remove-trailing-slashes": "^2.1.9",
-    "gatsby-plugin-styled-components": "^3.1.6",
+    "gatsby-plugin-styled-components": "^3.1.8",
     "gatsby-plugin-typescript": "^2.1.11",
     "got": "^9.6.0",
     "humanize-string": "^2.1.0",
