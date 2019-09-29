@@ -5,10 +5,42 @@ const { isLockfile, getDependencyVersion } = require('../pipenv-helpers')
 const { addv } = require('../text-formatters')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation } = require('./github-helpers')
+const { documentation: githubDocumentation } = require('./github-helpers')
 const { NotFound } = require('..')
 
 const keywords = ['pipfile']
+
+const documentation = `
+<p>
+  <a href="https://github.com/pypa/pipenv">Pipenv</a> is a dependency
+  manager for Python which manages a
+  <a href="https://virtualenv.pypa.io/en/latest/">virtualenv</a> for
+  projects. It adds/removes packages from your <code>Pipfile</code> as
+  you install/uninstall packages and generates the ever-important
+  <code>Pipfile.lock</code>, which can be checked in to source control
+  in order to produce deterministic builds.
+</p>
+
+<p>
+  The GitHub Pipenv badges are intended for applications using Pipenv
+  which are hosted on GitHub.
+</p>
+
+<p>
+  When <code>Pipfile.lock</code> is checked in, the <strong>GitHub Pipenv
+  locked dependency version</strong> badge displays the locked version of
+  a dependency listed in <code>[packages]</code> or
+  <code>[dev-packages]</code> (or any of their transitive dependencies).
+</p>
+
+<p>
+  Usually a Python version is specified in the <code>Pipfile</code>, which
+  <code>pipenv lock</code> then places in <code>Pipfile.lock</code>. The
+  <strong>GitHub Pipenv Python version</strong> badge displays that version.
+</p>
+
+${githubDocumentation}
+`
 
 class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
   static get category() {
@@ -98,7 +130,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
   static get examples() {
     return [
       {
-        title: 'GitHub Pipenv locked prod dependency version',
+        title: 'GitHub Pipenv locked dependency version',
         pattern: ':user/:repo/:kind(dev)?/:packageName',
         namedParams: {
           user: 'metabolize',
@@ -107,10 +139,10 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
         },
         staticPreview: this.render({ version: '2.0.0-alpha.2' }),
         documentation,
-        keywords,
+        keywords: ['python', ...keywords],
       },
       {
-        title: 'GitHub Pipenv locked dev dependency version (branch)',
+        title: 'GitHub Pipenv locked dependency version (branch)',
         pattern: ':user/:repo/:kind(dev)?/:packageName/:branch',
         namedParams: {
           user: 'metabolize',
@@ -121,7 +153,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
         },
         staticPreview: this.render({ dependency: 'black', version: '19.3b0' }),
         documentation,
-        keywords,
+        keywords: ['python', ...keywords],
       },
     ]
   }
