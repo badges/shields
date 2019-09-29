@@ -75,7 +75,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
           repo: 'rq-dashboard-on-heroku',
           branch: 'master',
         },
-        staticPreview: this.render({ version: '3.7' }),
+        staticPreview: this.render({ version: '3.7', branch: 'master' }),
         documentation,
         keywords,
       },
@@ -135,9 +135,12 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
         namedParams: {
           user: 'metabolize',
           repo: 'rq-dashboard-on-heroku',
-          packageName: 'rq-dashboard',
+          packageName: 'flask',
         },
-        staticPreview: this.render({ version: '2.0.0-alpha.2' }),
+        staticPreview: this.render({
+          dependency: 'flask',
+          version: '1.1.1',
+        }),
         documentation,
         keywords: ['python', ...keywords],
       },
