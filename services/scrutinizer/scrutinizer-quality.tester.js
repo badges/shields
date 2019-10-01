@@ -44,3 +44,30 @@ t.create('code quality nonexistent project')
     label: 'code quality',
     message: 'project not found',
   })
+
+t.create('code quality data missing for default branch')
+  .get('/g/filp/whoops.json')
+  .intercept(nock =>
+    nock('https://scrutinizer-ci.com')
+      .get('/api/repositories/g/filp/whoops')
+      .reply(200, {
+        default_branch: 'master',
+        applications: {
+          'some-other-branch': {
+            index: {
+              _embedded: {
+                project: {
+                  metric_values: {
+                    'scrutinizer.quality': 3.4395604395604398,
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+  )
+  .expectBadge({
+    label: 'code quality',
+    message: 'unavailable for default branch',
+  })

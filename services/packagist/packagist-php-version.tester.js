@@ -26,3 +26,11 @@ t.create('invalid package name')
 t.create('invalid version')
   .get('/symfony/symfony/invalid.json')
   .expectBadge({ label: 'php', message: 'invalid version' })
+
+t.create('custom server')
+  .get('/symfony/symfony.json?server=https%3A%2F%2Fpackagist.org')
+  .expectBadge({ label: 'php', message: isComposerVersion })
+
+t.create('invalid custom server')
+  .get('/symfony/symfony.json?server=https%3A%2F%2Fpackagist.com')
+  .expectBadge({ label: 'php', message: 'not found' })

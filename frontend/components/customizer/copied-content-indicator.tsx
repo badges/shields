@@ -36,7 +36,10 @@ function _CopiedContentIndicator(
   {
     copiedContent,
     children,
-  }: { copiedContent: JSX.Element; children: JSX.Element | JSX.Element[] },
+  }: {
+    copiedContent: JSX.Element | string
+    children: JSX.Element | JSX.Element[]
+  },
   ref: React.Ref<CopiedContentIndicatorHandle>
 ) {
   const [pose, setPose] = useState('hidden')
@@ -64,5 +67,4 @@ function _CopiedContentIndicator(
     </ContentAnchor>
   )
 }
-const CopiedContentIndicator = forwardRef(_CopiedContentIndicator)
-export default CopiedContentIndicator
+export const CopiedContentIndicator = forwardRef(_CopiedContentIndicator)

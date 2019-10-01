@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import clipboardCopy from 'clipboard-copy'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
-import { generateMarkup } from '../../lib/generate-image-markup'
-import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
+import { generateMarkup, MarkupFormat } from '../../lib/generate-image-markup'
 import { Badge } from '../common'
 import PathBuilder from './path-builder'
 import QueryStringBuilder from './query-string-builder'
 import RequestMarkupButtom from './request-markup-button'
-import CopiedContentIndicator from './copied-content-indicator'
+import {
+  CopiedContentIndicator,
+  CopiedContentIndicatorHandle,
+} from './copied-content-indicator'
 
-function getBaseUrlFromWindowLocation() {
+function getBaseUrlFromWindowLocation(): string {
   // Default to the current hostname for when there is no `BASE_URL` set
   // at build time (as in most PaaS deploys).
   const { protocol, hostname } = window.location
@@ -26,8 +27,21 @@ export default function Customizer({
   initialStyle,
   isPrefilled,
   link = '',
+}: {
+  baseUrl: string
+  title: string
+  pattern: string
+  exampleNamedParams: { [k: string]: string }
+  exampleQueryParams: { [k: string]: string }
+  initialStyle?: string
+  isPrefilled: boolean
+  link?: string
 }) {
-  const indicatorRef = useRef()
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
+  const indicatorRef = useRef<
+    CopiedContentIndicatorHandle
+  >() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
   const [queryString, setQueryString] = useState()
   const [pathIsComplete, setPathIsComplete] = useState()
@@ -56,12 +70,12 @@ export default function Customizer({
     }
     return (
       <p>
-        <Badge display="block" src={src} />
+        <Badge alt="preview badge" display="block" src={src} />
       </p>
     )
   }
 
-  async function copyMarkup(markupFormat) {
+  async function copyMarkup(markupFormat: MarkupFormat) {
     const builtBadgeUrl = generateBuiltBadgeUrl()
     const markup = generateMarkup({
       badgeUrl: builtBadgeUrl,
@@ -79,7 +93,9 @@ export default function Customizer({
     }
 
     setMarkup(markup)
-    indicatorRef.current.trigger()
+    if (indicatorRef.current) {
+      indicatorRef.current.trigger()
+    }
   }
 
   function renderMarkupAndLivePreview() {
@@ -102,12 +118,24 @@ export default function Customizer({
     )
   }
 
-  function handlePathChange({ path, isComplete }) {
+  function handlePathChange({
+    path,
+    isComplete,
+  }: {
+    path: string
+    isComplete: boolean
+  }) {
     setPath(path)
     setPathIsComplete(isComplete)
   }
 
-  function handleQueryStringChange({ queryString, isComplete }) {
+  function handleQueryStringChange({
+    queryString,
+    isComplete,
+  }: {
+    queryString: string
+    isComplete: boolean
+  }) {
     setQueryString(queryString)
   }
 
@@ -127,14 +155,4 @@ export default function Customizer({
       <div>{renderMarkupAndLivePreview()}</div>
     </form>
   )
-}
-Customizer.propTypes = {
-  baseUrl: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  pattern: PropTypes.string.isRequired,
-  exampleNamedParams: objectOfKeyValuesPropType,
-  exampleQueryParams: objectOfKeyValuesPropType,
-  initialStyle: PropTypes.string,
-  isPrefilled: PropTypes.bool,
-  link: PropTypes.string,
 }

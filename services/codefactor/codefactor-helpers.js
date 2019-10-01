@@ -1,43 +1,31 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
+
 // https://support.codefactor.io/i14-glossary
-const letterGrades = {
-  A: {
-    color: 'brightgreen',
-  },
-  'A-': {
-    color: 'green',
-  },
-  'B+': {
-    color: 'yellowgreen',
-  },
-  B: {
-    color: 'yellowgreen',
-  },
-  'B-': {
-    color: 'yellowgreen',
-  },
-  'C+': {
-    color: 'yellow',
-  },
-  C: {
-    color: 'yellow',
-  },
-  'C-': {
-    color: 'yellow',
-  },
-  'D+': {
-    color: 'orange',
-  },
-  D: {
-    color: 'orange',
-  },
-  'D-': {
-    color: 'orange',
-  },
-  F: {
-    color: 'red',
-  },
+const colorMap = {
+  A: 'brightgreen',
+  'A-': 'green',
+  'B+': 'yellowgreen',
+  B: 'yellowgreen',
+  'B-': 'yellowgreen',
+  'C+': 'yellow',
+  C: 'yellow',
+  'C-': 'yellow',
+  'D+': 'orange',
+  D: 'orange',
+  'D-': 'orange',
+  F: 'red',
 }
 
-module.exports = { letterGrades }
+const isValidGrade = Joi.valid(...Object.keys(colorMap)).required()
+
+function gradeColor(grade) {
+  const color = colorMap[grade]
+  if (color === undefined) {
+    throw Error(`Unknown grade: ${grade}`)
+  }
+  return color
+}
+
+module.exports = { isValidGrade, gradeColor }

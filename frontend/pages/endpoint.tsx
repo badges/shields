@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { baseUrl } from '../constants'
 import Meta from '../components/meta'
@@ -21,7 +21,11 @@ const Explanation = styled.div`
   text-align: left;
 `
 
-const JsonExampleBlock = styled.code`
+interface JsonExampleBlockProps {
+  fontSize?: string
+}
+
+const JsonExampleBlock = styled.code<JsonExampleBlockProps>`
   display: inline-block;
 
   text-align: left;
@@ -32,12 +36,15 @@ const JsonExampleBlock = styled.code`
   background: #eef;
 
   font-family: Lekton;
-  font-size: ${({ fontSize }) => fontSize};
+  ${({ fontSize }) =>
+    css`
+      font-size: ${fontSize};
+    `};
 
   white-space: pre;
 `
 
-const JsonExample = ({ data }) => (
+const JsonExample = ({ data }: { [k: string]: any }) => (
   <JsonExampleBlock>{JSON.stringify(data, undefined, 2)}</JsonExampleBlock>
 )
 JsonExample.propTypes = {
@@ -232,6 +239,7 @@ const EndpointPage = () => (
       baseUrl={baseUrl}
       exampleNamedParams={{}}
       exampleQueryParams={{ url: 'https://shields.redsparr0w.com/2473/monday' }}
+      isPrefilled={false}
       pattern="/endpoint"
       title="Custom badge"
     />

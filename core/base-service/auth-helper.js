@@ -1,14 +1,26 @@
 'use strict'
 
 class AuthHelper {
-  constructor({ userKey, passKey, isRequired = false }, privateConfig) {
+  constructor(
+    {
+      userKey,
+      passKey,
+      isRequired = false,
+      defaultToEmptyStringForUser = false,
+    },
+    privateConfig
+  ) {
     if (!userKey && !passKey) {
       throw Error('Expected userKey or passKey to be set')
     }
 
     this._userKey = userKey
     this._passKey = passKey
-    this.user = userKey ? privateConfig[userKey] : undefined
+    if (userKey) {
+      this.user = privateConfig[userKey]
+    } else {
+      this.user = defaultToEmptyStringForUser ? '' : undefined
+    }
     this.pass = passKey ? privateConfig[passKey] : undefined
     this.isRequired = isRequired
   }

@@ -22,12 +22,15 @@ describe('TeamCityBuild', function() {
       })
 
     expect(
-      await TeamCityBuild.invoke(defaultContext, config, {
-        protocol: 'https',
-        hostAndPath: 'mycompany.teamcity.com',
-        verbosity: 'e',
-        buildId: 'bt678',
-      })
+      await TeamCityBuild.invoke(
+        defaultContext,
+        config,
+        {
+          verbosity: 'e',
+          buildId: 'bt678',
+        },
+        { server: 'https://mycompany.teamcity.com' }
+      )
     ).to.deep.equal({
       message: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
       color: 'red',

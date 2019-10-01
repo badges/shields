@@ -49,3 +49,16 @@ t.create(
 t.create('invalid package name')
   .get('/frodo-is-not-a-package.json')
   .expectBadge({ label: 'npm', message: 'package not found' })
+
+t.create("Response doesn't include a 'latest' key")
+  .intercept(nock =>
+    nock('https://registry.npmjs.org')
+      .get('/-/package/npm/dist-tags')
+      .reply(200, { next: 'v4.5.6' })
+  )
+  .get('/npm.json')
+  .expectBadge({
+    label: 'npm',
+    message: 'invalid response data',
+    color: 'lightgrey',
+  })

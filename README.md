@@ -114,7 +114,7 @@ It also works with full URLs like
 Use `npm run debug:server` to start server in debug mode.
 [This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
 
-Shields has experimental support for [Gitpod Beta][gitpod], a pre-configured development
+Shields has experimental support for [Gitpod][gitpod], a pre-configured development
 environment that runs in your browser. To use Gitpod, click the button below and
 sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
 Please report any Gitpod bugs, questions, or suggestions in issue

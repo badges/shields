@@ -42,7 +42,7 @@ t.create('JSON from url')
     color: 'blue',
   })
 
-t.create('JSON from uri (support uri query parameter)')
+t.create('support uri query parameter')
   .get(
     '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.name'
   )
@@ -52,13 +52,13 @@ t.create('JSON from uri (support uri query parameter)')
     color: 'blue',
   })
 
-t.create('JSON from url | multiple results')
+t.create('multiple results')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$..keywords[0:2:1]'
   )
   .expectBadge({ label: 'custom badge', message: 'GitHub, badge' })
 
-t.create('JSON from url | caching with new query params')
+t.create('caching with new query params')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.version'
   )
@@ -67,7 +67,7 @@ t.create('JSON from url | caching with new query params')
     message: Joi.string().regex(/^\d+(\.\d+)?(\.\d+)?$/),
   })
 
-t.create('JSON from url | with prefix & suffix & label')
+t.create('prefix & suffix & label')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.version&prefix=v&suffix= dev&label=Shields'
   )
@@ -76,7 +76,7 @@ t.create('JSON from url | with prefix & suffix & label')
     message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)?\sdev$/),
   })
 
-t.create('JSON from url | object doesnt exist')
+t.create("key doesn't exist")
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.does_not_exist'
   )
@@ -86,7 +86,7 @@ t.create('JSON from url | object doesnt exist')
     color: 'lightgrey',
   })
 
-t.create('JSON from url | invalid url')
+t.create('invalid url')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version'
   )
@@ -96,7 +96,7 @@ t.create('JSON from url | invalid url')
     color: 'red',
   })
 
-t.create('JSON from url | user color overrides default')
+t.create('user color overrides default')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.name&color=10ADED'
   )
@@ -106,7 +106,7 @@ t.create('JSON from url | user color overrides default')
     color: '#10aded',
   })
 
-t.create('JSON from url | error color overrides default')
+t.create('error color overrides default')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.json&query=$.version'
   )
@@ -116,7 +116,7 @@ t.create('JSON from url | error color overrides default')
     color: 'red',
   })
 
-t.create('JSON from url | error color overrides user specified')
+t.create('error color overrides user specified')
   .get('.json?query=$.version&color=10ADED')
   .expectBadge({
     label: 'custom badge',
@@ -125,7 +125,7 @@ t.create('JSON from url | error color overrides user specified')
   })
 
 let headers
-t.create('JSON from url | request should set Accept header')
+t.create('request should set Accept header')
   .get('.json?url=https://json-test/api.json&query=$.name')
   .intercept(nock =>
     nock('https://json-test')
@@ -140,7 +140,7 @@ t.create('JSON from url | request should set Accept header')
     expect(headers).to.have.property('accept', 'application/json')
   })
 
-t.create('JSON from url | query with lexical error')
+t.create('query with lexical error')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$[?'
   )
@@ -150,7 +150,7 @@ t.create('JSON from url | query with lexical error')
     color: 'red',
   })
 
-t.create('JSON from url | query with parse error')
+t.create('query with parse error')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/package.json&query=$.foo,'
   )
@@ -158,4 +158,29 @@ t.create('JSON from url | query with parse error')
     label: 'custom badge',
     message: 'unparseable jsonpath query',
     color: 'red',
+  })
+
+t.create('JSON contains an array')
+  .get('.json?url=https://example.test/json&query=$[0]')
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/json')
+      .reply(200, '["foo"]')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'foo',
+  })
+
+t.create('JSON contains a string')
+  .get('.json?url=https://example.test/json&query=$.foo,')
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/json')
+      .reply(200, '"foo"')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'json must contain an object or array',
+    color: 'lightgrey',
   })
