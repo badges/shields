@@ -22,7 +22,7 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().length(0)
 )
 
-const keywords = ['github download']
+const keywords = ['github']
 
 module.exports = class GithubDownloads extends GithubAuthV3Service {
   static get category() {

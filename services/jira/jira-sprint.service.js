@@ -64,7 +64,6 @@ module.exports = class JiraSprint extends BaseJsonService {
           numTotalIssues: 28,
         }),
         documentation,
-        keywords: ['issues'],
       },
     ]
   }
