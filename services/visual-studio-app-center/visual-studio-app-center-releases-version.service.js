@@ -21,7 +21,7 @@ const documentation =
 
 module.exports = class VisualStudioAppCenterReleasesVersion extends BaseJsonService {
   static get category() {
-    return 'build'
+    return 'version'
   }
 
   static get route() {
