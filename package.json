@@ -249,7 +249,7 @@
     "sinon-chai": "^3.3.0",
     "snap-shot-it": "^7.8.0",
     "start-server-and-test": "^1.10.2",
-    "styled-components": "^4.3.2",
+    "styled-components": "^4.4.0",
     "tmp": "0.1.0",
     "ts-mocha": "^6.0.0",
     "typescript": "^3.6.3",
