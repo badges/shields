@@ -5,6 +5,7 @@ import definitions from '../../../service-definitions.yml'
 export interface Category {
   id: string
   name: string
+  keywords: string[]
 }
 
 export interface ExampleSignature {
