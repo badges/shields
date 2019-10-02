@@ -2,23 +2,18 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService, NotFound } = require('..')
+const {
+  BaseVisualStudioAppCenterService,
+  keywords,
+  documentation,
+} = require('./visual-studio-app-center-base')
+const { NotFound } = require('..')
 
 const schema = Joi.array().items({
   result: isBuildStatus.required(),
 })
 
-const keywords = [
-  'visual-studio',
-  'vsac',
-  'visual-studio-app-center',
-  'app-center',
-]
-
-const documentation =
-  "You will need to create a <b>read-only</b> API token <a target='_blank' href='https://appcenter.ms/settings/apitokens'>here</a>."
-
-module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
+module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCenterService {
   static get category() {
     return 'build'
   }
@@ -73,6 +68,7 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseJsonService {
   async handle({ owner, app, branch, token }) {
     const json = await this.fetch({ owner, app, branch, token })
     if (json[0] == undefined)
+      // Fetch will return a 200 with no data if no builds were found.
       throw new NotFound({ prettyMessage: 'no builds found' })
     return renderBuildStatusBadge({ status: json[0].result })
   }

@@ -2,24 +2,18 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+const {
+  BaseVisualStudioAppCenterService,
+  keywords,
+  documentation,
+} = require('./visual-studio-app-center-base')
 
 const schema = Joi.object({
   version: Joi.string().required(),
   short_version: Joi.string().required(),
 }).required()
 
-const keywords = [
-  'visual-studio',
-  'vsac',
-  'visual-studio-app-center',
-  'app-center',
-]
-
-const documentation =
-  "You will need to create a <b>read-only</b> API token <a target='_blank' href='https://appcenter.ms/settings/apitokens'>here</a>."
-
-module.exports = class VisualStudioAppCenterReleasesVersion extends BaseJsonService {
+module.exports = class VisualStudioAppCenterReleasesVersion extends BaseVisualStudioAppCenterService {
   static get category() {
     return 'version'
   }
@@ -53,27 +47,8 @@ module.exports = class VisualStudioAppCenterReleasesVersion extends BaseJsonServ
     }
   }
 
-  async fetch({ owner, app, token }) {
-    const url = `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/releases/latest`
-
-    return this._requestJson({
-      schema,
-      options: {
-        headers: {
-          'X-API-Token': token,
-        },
-      },
-      errorMessages: {
-        401: 'invalid token',
-        403: 'project not found',
-        404: 'project not found',
-      },
-      url,
-    })
-  }
-
-  async handle({ owner, app, branch, token }) {
-    const json = await this.fetch({ owner, app, branch, token })
+  async handle({ owner, app, token }) {
+    const json = await this.fetch({ owner, app, token, schema })
     return renderVersionBadge({
       version: `${json.short_version} (${json.version})`,
     })
