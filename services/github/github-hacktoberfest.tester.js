@@ -14,7 +14,7 @@ t.create('GitHub Hacktoberfest combined status')
     message: isHactoberfestCombinedStatus,
   })
 
-t.create('GitHub Hacktoberfest combined status (suggestion label override')
+t.create('GitHub Hacktoberfest combined status (suggestion label override)')
   .get(
     `/badges/shields.json?suggestion_label=${encodeURIComponent(
       'good first issue'
