@@ -18,7 +18,7 @@ const documentation = `
     <a href="https://hacktoberfest.digitalocean.com">Hacktoberfest</a>,
     an initiative to encourage participatin in open-source projects. The
     badge can be added to the project readme to encourage potential
-    contributors to to review the suggested issues and to celebrate the
+    contributors to review the suggested issues and to celebrate the
     contributions that have already landed.
 
     The badge displays three pieces of information:
