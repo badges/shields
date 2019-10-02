@@ -32,12 +32,10 @@ async function fetchRepoContent(
     `repo not found, branch not found, or ${filename} missing`
   )
   if (serviceInstance.staticAuthConfigured) {
-    const url = `/repos/${user}/${repo}/contents/${filename}`
-    const options = { qs: { ref: branch } }
     const { content } = await serviceInstance._requestJson({
       schema: contentSchema,
-      url,
-      options,
+      url: `/repos/${user}/${repo}/contents/${filename}`,
+      options: { qs: { ref: branch } },
       errorMessages,
     })
 
@@ -47,9 +45,8 @@ async function fetchRepoContent(
       throw new InvalidResponse({ prettyMessage: 'undecodable content' })
     }
   } else {
-    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
     return serviceInstance._request({
-      url,
+      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
       errorMessages,
     })
   }
@@ -69,11 +66,12 @@ async function fetchJsonFromRepo(
     const json = serviceInstance._parseJson(buffer)
     return serviceInstance.constructor._validate(json, schema)
   } else {
-    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`
     return serviceInstance._requestJson({
       schema,
-      url,
-      errorMessages,
+      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
+      errorMessages: errorMessagesFor(
+        `repo not found, branch not found, or ${filename} missing`
+      ),
     })
   }
 }
