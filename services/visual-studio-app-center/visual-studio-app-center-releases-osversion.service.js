@@ -19,7 +19,7 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends BaseVisual
 
   static get route() {
     return {
-      base: 'vsac/releases/osver',
+      base: 'visual-studio-app-center/releases/osver',
       pattern: ':owner/:app/:token',
     }
   }

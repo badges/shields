@@ -18,7 +18,7 @@ module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudi
 
   static get route() {
     return {
-      base: 'vsac/releases/size',
+      base: 'visual-studio-app-center/releases/size',
       pattern: ':owner/:app/:token',
     }
   }

@@ -20,7 +20,7 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCe
 
   static get route() {
     return {
-      base: 'vsac/builds',
+      base: 'visual-studio-app-center/builds',
       pattern: ':owner/:app/:branch/:token',
     }
   }
