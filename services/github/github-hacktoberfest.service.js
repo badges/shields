@@ -30,13 +30,10 @@ const documentation = `
         <code>?suggestion_label=good%20first%20issue</code>).
       </li>
       <li>
-        The number of merged pull requests opened in October. By default
-        this displays all merged PRs, however if you prefer to manually
-        label your Hacktoberfest PRs you can filter by that label.
-        (e.g.
-        <code>?contribution_label=hacktoberfest</code>.
+        The number of pull requests opened in October. This excludes any
+        PR with the <strong>invalid</strong> label.
       </li>
-      <li>The number of days left in October.</li>
+      <li>The number of days left of October.</li>
     </ul>
 
   </p>
@@ -59,7 +56,6 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   suggestion_label: Joi.string(),
-  contribution_label: Joi.string(),
 }).required()
 
 module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Service {
@@ -85,7 +81,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         },
         staticPreview: this.render({
           suggestedIssueCount: 12,
-          mergedContributionCount: 8,
+          contributionCount: 8,
           daysLeft: 15,
         }),
         documentation,
@@ -103,24 +99,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         },
         staticPreview: this.render({
           suggestedIssueCount: 12,
-          mergedContributionCount: 8,
-          daysLeft: 15,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Hacktoberfest combined status (contribution label)',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        queryParams: {
-          suggestion_label: 'help wanted',
-          contribution_label: 'hacktoberfest',
-        },
-        staticPreview: this.render({
-          suggestedIssueCount: 12,
-          mergedContributionCount: 8,
+          contributionCount: 8,
           daysLeft: 15,
         }),
         documentation,
@@ -135,17 +114,15 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
     }
   }
 
-  static render({ suggestedIssueCount, mergedContributionCount, daysLeft }) {
+  static render({ suggestedIssueCount, contributionCount, daysLeft }) {
     if (daysLeft === undefined) {
       daysLeft = moment('2019-11-01').diff(moment(), 'days')
     }
 
     const message =
       [
-        suggestedIssueCount ? `${metric(suggestedIssueCount)} open` : '',
-        mergedContributionCount
-          ? `${metric(mergedContributionCount)} merged`
-          : '',
+        suggestedIssueCount ? `${metric(suggestedIssueCount)} open issues` : '',
+        contributionCount ? `${metric(contributionCount)} PRs` : '',
         daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : '',
       ]
         .filter(Boolean)
@@ -154,18 +131,12 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
     return { message }
   }
 
-  async fetch({
-    user,
-    repo,
-    suggestionLabel = 'hacktoberfest',
-    contributionLabel,
-  }) {
-    const isMergedHacktoberfestPR = [
+  async fetch({ user, repo, suggestionLabel = 'hacktoberfest' }) {
+    const isValidOctoberPR = [
       `repo:${user}/${repo}`,
-      contributionLabel ? `tag:"${contributionLabel}"` : '',
       'is:pr',
-      'is:merged',
       'created:>2019-10-01',
+      `-label:invalid`,
     ]
       .filter(Boolean)
       .join(' ')
@@ -174,7 +145,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         repository: {
           issues: { totalCount: suggestedIssueCount },
         },
-        search: { issueCount: mergedContributionCount },
+        search: { issueCount: contributionCount },
       },
     } = await this._requestGraphql({
       query: gql`
@@ -182,14 +153,14 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
           $user: String!
           $repo: String!
           $suggestionLabel: String!
-          $isMergedHacktoberfestPR: String!
+          $isValidOctoberPR: String!
         ) {
           repository(owner: $user, name: $repo) {
             issues(states: [OPEN], labels: [$suggestionLabel]) {
               totalCount
             }
           }
-          search(query: $isMergedHacktoberfestPR, type: ISSUE, last: 0) {
+          search(query: $isValidOctoberPR, type: ISSUE, last: 0) {
             issueCount
           }
         }
@@ -198,30 +169,26 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         user,
         repo,
         suggestionLabel,
-        isMergedHacktoberfestPR,
+        isValidOctoberPR,
       },
       schema,
       transformErrors,
     })
     return {
       suggestedIssueCount,
-      mergedContributionCount,
+      contributionCount,
     }
   }
 
-  async handle(
-    { user, repo },
-    { suggestion_label: suggestionLabel, contribution_label: contributionLabel }
-  ) {
-    const { suggestedIssueCount, mergedContributionCount } = await this.fetch({
+  async handle({ user, repo }, { suggestion_label: suggestionLabel }) {
+    const { suggestedIssueCount, contributionCount } = await this.fetch({
       user,
       repo,
       suggestionLabel,
-      contributionLabel,
     })
     return this.constructor.render({
       suggestedIssueCount,
-      mergedContributionCount,
+      contributionCount,
     })
   }
 }
