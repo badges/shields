@@ -97,8 +97,8 @@ overrides:
   - files:
       - '**/*.spec.@(js|ts|tsx)'
       - '**/*.integration.js'
-      - "**/test-helpers.js"
-      - "core/service-test-runner/**/*.js"
+      - '**/test-helpers.js'
+      - 'core/service-test-runner/**/*.js'
     env:
       mocha: true
     rules:
@@ -118,7 +118,7 @@ rules:
   '@typescript-eslint/no-var-requires': error
 
   # These should be disabled by eslint-config-prettier, but are not.
-  no-extra-semi: "off"
+  no-extra-semi: 'off'
 
   # Shields additions.
   no-var: 'error'
