@@ -117,7 +117,8 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
     if (daysLeft === undefined) {
       // The global cutoff time is 11/1 noon UTC.
       // https://github.com/badges/shields/pull/4109#discussion_r330782093
-      daysLeft = moment('2019-11-01 12:00:00 Z').diff(moment(), 'days')
+      // We want to show "1 day left" on the last day so we add 1.
+      daysLeft = moment('2019-11-01 12:00:00 Z').diff(moment(), 'days') + 1
     }
 
     const message =
