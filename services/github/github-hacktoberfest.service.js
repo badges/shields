@@ -16,7 +16,7 @@ const documentation = `
     This badge is designed for projects hosted on GitHub which are
     participating in
     <a href="https://hacktoberfest.digitalocean.com">Hacktoberfest</a>,
-    an initiative to encourage participatin in open-source projects. The
+    an initiative to encourage participating in open-source projects. The
     badge can be added to the project readme to encourage potential
     contributors to review the suggested issues and to celebrate the
     contributions that have already landed.
