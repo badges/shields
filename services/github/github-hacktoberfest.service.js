@@ -19,7 +19,7 @@ const documentation = `
     an initiative to encourage participating in open-source projects. The
     badge can be added to the project readme to encourage potential
     contributors to review the suggested issues and to celebrate the
-    contributions that have already landed.
+    contributions that have already been made.
 
     The badge displays three pieces of information:
     <ul>
@@ -95,7 +95,6 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         },
         queryParams: {
           suggestion_label: 'help wanted',
-          contribution_label: undefined,
         },
         staticPreview: this.render({
           suggestedIssueCount: 12,
