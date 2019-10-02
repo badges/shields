@@ -48,9 +48,14 @@ module.exports = class VisualStudioAppCenterReleasesVersion extends BaseVisualSt
   }
 
   async handle({ owner, app, token }) {
-    const json = await this.fetch({ owner, app, token, schema })
+    const { version, short_version } = await this.fetch({
+      owner,
+      app,
+      token,
+      schema,
+    })
     return renderVersionBadge({
-      version: `${json.short_version} (${json.version})`,
+      version: `${short_version} (${version})`,
     })
   }
 }

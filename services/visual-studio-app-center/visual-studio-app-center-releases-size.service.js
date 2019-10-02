@@ -53,7 +53,7 @@ module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudi
   }
 
   async handle({ owner, app, token }) {
-    const json = await this.fetch({ owner, app, token, schema })
-    return this.constructor.render({ size: json.size })
+    const { size } = await this.fetch({ owner, app, token, schema })
+    return this.constructor.render({ size })
   }
 }
