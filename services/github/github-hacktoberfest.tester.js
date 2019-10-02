@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const isHactoberfestCombinedStatus = Joi.string().regex(
-  /^[0-9]+ open issues(, [0-9]+ PRs)?(, [0-9]+ days left)?$/
+  /^[0-9]+ open issues?(, [0-9]+ PRs?)?(, [0-9]+ days? left)?$/
 )
 
 t.create('GitHub Hacktoberfest combined status')
