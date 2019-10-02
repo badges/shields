@@ -65,7 +65,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
 
   static get route() {
     return {
-      base: 'github/hacktoberfest/combined',
+      base: 'github/hacktoberfest/2019',
       pattern: ':user/:repo',
       queryParamSchema,
     }
