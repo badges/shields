@@ -3,7 +3,7 @@
 const gql = require('graphql-tag')
 const Joi = require('@hapi/joi')
 const moment = require('moment')
-const { metric } = require('../text-formatters')
+const { metric, maybePluralize } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const {
@@ -123,9 +123,21 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
 
     const message =
       [
-        suggestedIssueCount ? `${metric(suggestedIssueCount)} open issues` : '',
-        contributionCount ? `${metric(contributionCount)} PRs` : '',
-        daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : '',
+        suggestedIssueCount
+          ? `${metric(suggestedIssueCount)} ${maybePluralize(
+              'open issue',
+              suggestedIssueCount
+            )}`
+          : '',
+        contributionCount
+          ? `${metric(contributionCount)} ${maybePluralize(
+              'PR',
+              contributionCount
+            )}`
+          : '',
+        daysLeft > 0
+          ? `${daysLeft} ${maybePluralize('day', daysLeft)} left`
+          : '',
       ]
         .filter(Boolean)
         .join(', ') || 'is done!'
