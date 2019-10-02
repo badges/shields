@@ -135,7 +135,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
     const isValidOctoberPR = [
       `repo:${user}/${repo}`,
       'is:pr',
-      'created:>2019-10-01',
+      'created:2019-10-01..2019-10-31',
       `-label:invalid`,
     ]
       .filter(Boolean)
