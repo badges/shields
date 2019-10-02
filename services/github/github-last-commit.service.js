@@ -6,7 +6,7 @@ const { age: ageColor } = require('../color-formatters')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 const commonExampleAttrs = {
-  keywords: ['activity', 'latest'],
+  keywords: ['latest'],
   documentation,
 }
 

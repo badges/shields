@@ -66,6 +66,7 @@ const serviceDefinitionExport = Joi.object({
       Joi.object({
         id: Joi.string().required(),
         name: Joi.string().required(),
+        keywords: arrayOfStrings,
       })
     )
     .required(),

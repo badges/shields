@@ -3,7 +3,6 @@
 const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
-// These regexes are the same, but declared separately for clarity.
 const isPipeSeparatedPythonVersions = Joi.string().regex(
   /^([0-9]+\.[0-9]+(?: \| )?)+$/
 )

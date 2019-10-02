@@ -2,6 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const pathToRegexp = require('path-to-regexp')
+const categories = require('../../services/categories')
 const coalesceBadge = require('./coalesce-badge')
 const { makeFullUrl } = require('./route')
 
@@ -154,7 +155,9 @@ function transformExample(inExample, index, ServiceClass) {
       style: style === 'flat' ? undefined : style,
       namedLogo,
     },
-    keywords,
+    keywords: keywords.concat(
+      categories.find(c => c.id === ServiceClass.category).keywords
+    ),
     documentation: documentation ? { __html: documentation } : undefined,
   }
 }

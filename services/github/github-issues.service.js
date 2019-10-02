@@ -1,10 +1,31 @@
 'use strict'
 
+const gql = require('graphql-tag')
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+const { GithubAuthV4Service } = require('./github-auth-service')
+const { documentation, transformErrors } = require('./github-helpers')
+
+const issueCountSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      issues: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
+
+const pullRequestCountSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      pullRequests: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
 const isPRVariant = {
   'issues-pr': true,
@@ -16,11 +37,7 @@ const isClosedVariant = {
   'issues-pr-closed': true,
 }
 
-const schema = Joi.object({
-  total_count: nonNegativeInteger,
-}).required()
-
-module.exports = class GithubIssues extends GithubAuthV3Service {
+module.exports = class GithubIssues extends GithubAuthV4Service {
   static get category() {
     return 'issue-tracking'
   }
@@ -223,8 +240,8 @@ module.exports = class GithubIssues extends GithubAuthV3Service {
     }
   }
 
-  static render({ variant, numIssues, raw, label }) {
-    const state = isClosedVariant[variant] ? 'closed' : 'open'
+  static render({ isPR, isClosed, issueCount, raw, label }) {
+    const state = isClosed ? 'closed' : 'open'
 
     let labelPrefix = ''
     let messageSuffix = ''
@@ -238,35 +255,98 @@ module.exports = class GithubIssues extends GithubAuthV3Service {
     const labelText = label
       ? `${isGhLabelMultiWord ? `"${label}"` : label} `
       : ''
-    const labelSuffix = isPRVariant[variant] ? 'pull requests' : 'issues'
+    const labelSuffix = isPR ? 'pull requests' : 'issues'
 
     return {
       label: `${labelPrefix}${labelText}${labelSuffix}`,
-      message: `${metric(numIssues)} ${messageSuffix}`,
-      color: numIssues > 0 ? 'yellow' : 'brightgreen',
+      message: `${metric(issueCount)} ${messageSuffix}`,
+      color: issueCount > 0 ? 'yellow' : 'brightgreen',
     }
   }
 
-  async fetch({ variant, user, repo, label }) {
-    const isPR = isPRVariant[variant]
-    const isClosed = isClosedVariant[variant]
-    const query = `repo:${user}/${repo}${isPR ? ' is:pr' : ' is:issue'}${
-      isClosed ? ' is:closed' : ' is:open'
-    }${label ? ` label:"${label}"` : ''}`
-    const options = { qs: { q: query } }
-    return this._requestJson({
-      url: `/search/issues`,
-      options,
-      schema,
-      errorMessages: errorMessagesFor('repo not found'),
-    })
+  async fetch({ isPR, isClosed, user, repo, label }) {
+    const commonVariables = {
+      user,
+      repo,
+      labels: label ? [label] : undefined,
+    }
+    if (isPR) {
+      const {
+        data: {
+          repository: {
+            pullRequests: { totalCount },
+          },
+        },
+      } = await this._requestGraphql({
+        query: gql`
+          query(
+            $user: String!
+            $repo: String!
+            $states: [PullRequestState!]
+            $labels: [String!]
+          ) {
+            repository(owner: $user, name: $repo) {
+              pullRequests(states: $states, labels: $labels) {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          ...commonVariables,
+          states: isClosed ? ['MERGED', 'CLOSED'] : ['OPEN'],
+        },
+        schema: pullRequestCountSchema,
+        transformErrors,
+      })
+      return { issueCount: totalCount }
+    } else {
+      const {
+        data: {
+          repository: {
+            issues: { totalCount },
+          },
+        },
+      } = await this._requestGraphql({
+        query: gql`
+          query(
+            $user: String!
+            $repo: String!
+            $states: [IssueState!]
+            $labels: [String!]
+          ) {
+            repository(owner: $user, name: $repo) {
+              issues(states: $states, labels: $labels) {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          ...commonVariables,
+          states: isClosed ? ['CLOSED'] : ['OPEN'],
+        },
+        schema: issueCountSchema,
+        transformErrors,
+      })
+      return { issueCount: totalCount }
+    }
   }
 
   async handle({ variant, raw, user, repo, label }) {
-    const json = await this.fetch({ variant, user, repo, label })
+    const isPR = isPRVariant[variant]
+    const isClosed = isClosedVariant[variant]
+    const { issueCount } = await this.fetch({
+      isPR,
+      isClosed,
+      user,
+      repo,
+      label,
+    })
     return this.constructor.render({
-      variant,
-      numIssues: json.total_count,
+      isPR,
+      isClosed,
+      issueCount,
       raw,
       label,
     })
