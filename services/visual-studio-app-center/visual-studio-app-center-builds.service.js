@@ -48,25 +48,12 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCe
     }
   }
 
-  async fetch({ owner, app, branch, token }) {
-    const url = `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/branches/${branch}/builds`
-
-    return this._requestJson({
-      schema,
-      options: {
-        headers: {
-          'X-API-Token': token,
-        },
-      },
-      errorMessages: {
-        401: 'invalid token',
-      },
-      url,
-    })
-  }
-
   async handle({ owner, app, branch, token }) {
-    const json = await this.fetch({ owner, app, branch, token })
+    const json = await this.fetch({
+      token,
+      schema,
+      url: `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/branches/${branch}/builds`,
+    })
     if (json[0] == undefined)
       // Fetch will return a 200 with no data if no builds were found.
       throw new NotFound({ prettyMessage: 'no builds found' })

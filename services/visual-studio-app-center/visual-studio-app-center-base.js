@@ -13,9 +13,13 @@ const documentation =
   "You will need to create a <b>read-only</b> API token <a target='_blank' href='https://appcenter.ms/settings/apitokens'>here</a>."
 
 class BaseVisualStudioAppCenterService extends BaseJsonService {
-  async fetch({ owner, app, token, schema }) {
-    const url = `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/releases/latest`
-
+  async fetch({
+    owner,
+    app,
+    token,
+    schema,
+    url = `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/releases/latest`,
+  }) {
     return this._requestJson({
       schema,
       options: {
