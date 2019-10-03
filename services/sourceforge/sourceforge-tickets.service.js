@@ -2,10 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  count: Joi.number().required(),
+  count: nonNegativeInteger,
 }).required()
 
 module.exports = class SourceforgeTickets extends BaseJsonService {
@@ -47,7 +48,7 @@ module.exports = class SourceforgeTickets extends BaseJsonService {
   }
 
   async fetch({ type, project }) {
-    const url = `https://sourceforge.net/rest/p/${project}/${type}/search?limit=1&q=status:open`
+    const url = `https://sourceforge.net/rest/p/${project}/${type}/search?limit=1&q=status%3Aopen`
 
     return this._requestJson({
       schema,
