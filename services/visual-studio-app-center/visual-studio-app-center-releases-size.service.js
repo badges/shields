@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const prettyBytes = require('pretty-bytes')
 const {
   BaseVisualStudioAppCenterService,
   keywords,
@@ -48,7 +49,8 @@ module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudi
 
   static render({ size }) {
     return {
-      message: `${(size / 1048576).toString().substring(0, 4)} MB`,
+      // AppCenter displays in mebibytes.
+      message: prettyBytes(size / 1.048576),
     }
   }
 
