@@ -414,16 +414,16 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
       </QueryParamTable>
 
       <p>
-        We support <code>.svg</code> and <code>.json</code>. The default is
+        We support <code>.svg</code> and <code>.json</code>. The default is{' '}
         <code>.svg</code>, which can be omitted from the URL.
       </p>
 
       <p>
-        While we highly recommend using SVG, we also support <code>.png</code>
+        While we highly recommend using SVG, we also support <code>.png</code>{' '}
         for use cases where SVG will not work. These requests should be made to
         our raster server <code>https://raster.shields.io</code>. For example,
-        the raster equivalent of
-        <code>https://img.shields.io/v/npm/express</code> is
+        the raster equivalent of{' '}
+        <code>https://img.shields.io/v/npm/express</code> is{' '}
         <code>https://raster.shields.io/v/npm/express</code>. For backward
         compatibility, the badge server will redirect <code>.png</code> badges
         to the raster server.
