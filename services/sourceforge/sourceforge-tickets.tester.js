@@ -9,6 +9,7 @@ t.create('bugs')
     label: 'open tickets',
     message: isMetric,
   })
+  .timeout(10000)
 
 t.create('feature requests')
   .get('/feature-requests/sevenzip.json')
@@ -16,6 +17,7 @@ t.create('feature requests')
     label: 'open tickets',
     message: isMetric,
   })
+  .timeout(10000)
 
 t.create('invalid project')
   .get('/bugs/invalid.json')
