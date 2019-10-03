@@ -6,7 +6,7 @@ const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  count: nonNegativeInteger,
+  count: nonNegativeInteger.required(),
 }).required()
 
 module.exports = class SourceforgeTickets extends BaseJsonService {
