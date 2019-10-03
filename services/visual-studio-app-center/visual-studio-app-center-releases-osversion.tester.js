@@ -16,21 +16,6 @@ t.create('[fixed] Example Release')
     message: 'Android 4.1',
   })
 
-t.create('[fixed] Example Release')
-  .get('/nock/nock/nock.json')
-  .intercept(nock =>
-    nock('https://api.appcenter.ms/v0.1/apps/')
-      .get('/nock/nock/releases/latest')
-      .reply(200, {
-        app_os: 'Android',
-        min_os: '4.1',
-      })
-  )
-  .expectBadge({
-    label: 'min version',
-    message: 'Android 4.1',
-  })
-
 t.create('Valid user, invalid project, valid API token')
   .get('/jcx/invalid/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json')
   .expectBadge({

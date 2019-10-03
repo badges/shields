@@ -2,6 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
+const { nonNegativeInteger } = require('../validators')
 const {
   BaseVisualStudioAppCenterService,
   keywords,
@@ -9,7 +10,7 @@ const {
 } = require('./visual-studio-app-center-base')
 
 const schema = Joi.object({
-  size: Joi.number().required(),
+  size: nonNegativeInteger.required(),
 }).required()
 
 module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
