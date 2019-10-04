@@ -327,7 +327,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }) {
           <QueryParam
             documentation={
               <span>
-                Insert one of the named logos from ({<NamedLogos />}) or{' '}
+                Insert one of the named logos from (<NamedLogos />) or{' '}
                 <a
                   href="https://simpleicons.org/"
                   rel="noopener noreferrer"
