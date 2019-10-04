@@ -22,7 +22,7 @@ module.exports = class VaadinDirectoryVersion extends BaseVaadinDirectoryService
         pattern: 'v/:packageName',
         namedParams: { packageName: 'vaadinvaadin-grid' },
         staticPreview: renderVersionBadge({ version: 'v5.3.0-alpha4' }),
-        keywords: ['vaadin-directory', 'version', 'latest version'],
+        keywords: ['vaadin-directory', 'latest'],
       },
     ]
   }
