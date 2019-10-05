@@ -108,8 +108,7 @@ There are three places to get help:
   `/SERVICE/NOUN/PARAMETERS/QUALIFIERS`. For instance,
   `/gitter/room/nwjs/nw.js`. The vendor is gitter, the
   badge is for rooms, and the parameter is nwjs/nw.js.
-- Services which require a url/hostname parameter should use a query parameter to accept
-  `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS`. For instance,
+- Services which require a url/hostname parameter should use a query parameter to accept that value. For instance,
   `/discourse/topics?server=https://meta.discourse.org`.
 
 ## Coding guidelines
