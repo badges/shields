@@ -235,7 +235,7 @@
     "prettier": "1.18.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-error-overlay": "^6.0.2",
+    "react-error-overlay": "^6.0.3",
     "react-helmet": "^5.2.1",
     "react-modal": "^3.10.1",
     "react-pose": "^4.0.8",
