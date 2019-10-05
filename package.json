@@ -234,7 +234,7 @@
     "portfinder": "^1.0.24",
     "prettier": "1.18.2",
     "react": "^16.10.2",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.10.2",
     "react-error-overlay": "^6.0.2",
     "react-helmet": "^5.2.1",
     "react-modal": "^3.10.1",
