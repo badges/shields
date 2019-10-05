@@ -80,7 +80,7 @@ class AurLicense extends BaseAurService {
   transform(json) {
     const license = json.results.License
     if (!license) {
-      throw new NotFound({ prettyMessage: 'license not found' })
+      throw new NotFound({ prettyMessage: 'not specified' })
     }
 
     return { license }

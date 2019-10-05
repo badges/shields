@@ -54,7 +54,7 @@ t.create('license (valid)')
 
 t.create('license (no license)')
   .get('/license/dns-zone-blacklist-git.json')
-  .expectBadge({ label: 'license', message: 'license not found' })
+  .expectBadge({ label: 'license', message: 'not specified' })
 
 t.create('license (package not found)')
   .get('/license/not-a-package.json')
