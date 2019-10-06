@@ -8,7 +8,7 @@ t.create('layers without a specified tag')
   .timeout(150000)
   .expectBadge({
     label: 'layers',
-    message: nonNegativeInteger
+    message: nonNegativeInteger,
   })
 
 t.create('layers with a specified tag')
