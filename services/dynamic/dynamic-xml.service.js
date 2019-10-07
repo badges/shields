@@ -27,7 +27,11 @@ module.exports = class DynamicXml extends BaseService {
     }
   }
 
-  transform({ pathExpression, buffer, pathIsAttr }) {
+  transform({ pathExpression, buffer }) {
+    // e.g. //book[2]/@id
+    const pathIsAttr = (
+      pathExpression.split('/').slice(-1)[0] || ''
+    ).startsWith('@')
     const parsed = new DOMParser().parseFromString(buffer)
 
     let values
@@ -39,7 +43,7 @@ module.exports = class DynamicXml extends BaseService {
 
     if (!Array.isArray(values)) {
       throw new InvalidResponse({
-        prettyMessage: 'must be a collection of elements',
+        prettyMessage: 'unsupported query',
       })
     }
 
@@ -60,12 +64,7 @@ module.exports = class DynamicXml extends BaseService {
     return { values }
   }
 
-  async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
-    // e.g. //book[2]/@id
-    const pathIsAttr = (
-      pathExpression.split('/').slice(-1)[0] || ''
-    ).startsWith('@')
-
+  async handle(_namedParams, { url, query: pathExpression, prefix, suffix }) {
     const { buffer } = await this._request({
       url,
       options: { headers: { Accept: 'application/xml, text/xml' } },
@@ -75,7 +74,6 @@ module.exports = class DynamicXml extends BaseService {
     const { values: value } = this.transform({
       pathExpression,
       buffer,
-      pathIsAttr,
     })
 
     return renderDynamicBadge({ value, prefix, suffix })
