@@ -69,7 +69,7 @@ module.exports = class SecurityHeaders extends BaseService {
     }
   }
 
-  async handle({}, { url }) {
+  async handle(namedParams, { url }) {
     const { res } = await this._request({
       url: `https://securityheaders.com`,
       options: {

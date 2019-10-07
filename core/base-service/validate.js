@@ -16,16 +16,15 @@ function validate(
   data,
   schema
 ) {
-  if (!schema || !schema.isJoi) {
+  if (!schema || !Joi.isSchema(schema)) {
     throw Error('A Joi schema is required')
   }
-  const options = allowAndStripUnknownKeys
-    ? {
-        allowUnknown: true,
-        stripUnknown: true,
-      }
-    : undefined
-  const { error, value } = Joi.validate(data, schema, options)
+  const options = { abortEarly: false }
+  if (allowAndStripUnknownKeys) {
+    options['allowUnknown'] = true
+    options['stripUnknown'] = true
+  }
+  const { error, value } = schema.validate(data, options)
   if (error) {
     trace.logTrace(
       'validate',
