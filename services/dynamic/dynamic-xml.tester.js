@@ -191,3 +191,18 @@ t.create('no result')
     message: 'no result',
     color: 'lightgrey',
   })
+
+// https://github.com/badges/shields/issues/4017
+t.create('unsupported query')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: 'string(//book[1]/title)',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: 'unsupported query',
+    color: 'lightgrey',
+  })
