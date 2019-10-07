@@ -105,12 +105,11 @@ There are three places to get help:
 ## Badge URLs
 
 - The format of new badges should be of the form
-  `/SERVICE/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
-  `/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
-  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
-- For services which require a hostname, the badge should be of the form
-  `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
-  `/discourse/https/discourse.example.com/topics.svg`.
+  `/SERVICE/NOUN/PARAMETERS/QUALIFIERS`. For instance,
+  `/gitter/room/nwjs/nw.js`. The vendor is gitter, the
+  badge is for rooms, and the parameter is nwjs/nw.js.
+- Services which require a url/hostname parameter should use a query parameter to accept that value. For instance,
+  `/discourse/topics?server=https://meta.discourse.org`.
 
 ## Coding guidelines
 
