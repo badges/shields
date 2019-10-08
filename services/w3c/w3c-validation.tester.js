@@ -4,7 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('W3C Validation page conforms to standards with no preset and parser')
   .get(
-    '/doc.json?doc=https://hsivonen.com/test/moz/messages-types/no-message.html&preset=&parser='
+    '/default.json?targetUrl=https://hsivonen.com/test/moz/messages-types/no-message.html&preset='
   )
   .expectBadge({
     label: 'w3c',
@@ -13,10 +13,10 @@ t.create('W3C Validation page conforms to standards with no preset and parser')
   })
 
 t.create(
-  'W3C Validation page conforms to standards with no HTML5 preset and HTML parser'
+  'W3C Validation page conforms to standards with no HTML4 preset and HTML parser'
 )
   .get(
-    '/doc.json?doc=https://hsivonen.com/test/moz/messages-types/no-message.html&preset=HTML, SVG 1.1, MathML 3.0&parser=html'
+    '/html.json?targetUrl=https://hsivonen.com/test/moz/messages-types/no-message.html&preset=HTML,%20SVG%201.1,%20MathML%203.0'
   )
   .expectBadge({
     label: 'w3c',
@@ -26,7 +26,7 @@ t.create(
 
 t.create('W3C Validation fatal document error')
   .get(
-    '/doc.json?doc=http://hsivonen.com/test/moz/messages-types/404.html&preset=&parser='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/404.html&preset='
   )
   .expectBadge({
     label: 'w3c',
@@ -36,7 +36,7 @@ t.create('W3C Validation fatal document error')
 
 t.create('W3C Validation page has 1 validation error')
   .get(
-    '/doc.json?doc=http://hsivonen.com/test/moz/messages-types/warning.html&preset=&parser='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html&preset='
   )
   .expectBadge({
     label: 'w3c',
@@ -48,7 +48,7 @@ t.create(
   'W3C Validation page has 3 validation error using HTML 4.01 Frameset preset'
 )
   .get(
-    '/doc.json?doc=http://hsivonen.com/test/moz/messages-types/warning.html&preset=HTML 4.01 Frameset, URL / XHTML 1.0 Frameset, URL&parser=html'
+    '/html.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html&preset=HTML 4.01 Frameset, URL / XHTML 1.0 Frameset, URL'
   )
   .expectBadge({
     label: 'w3c',
@@ -58,7 +58,7 @@ t.create(
 
 t.create('W3C Validation page has 1 validation warning')
   .get(
-    '/doc.json?doc=http://hsivonen.com/test/moz/messages-types/info.svg&preset=&parser='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/info.svg&preset='
   )
   .expectBadge({
     label: 'w3c',
@@ -68,7 +68,7 @@ t.create('W3C Validation page has 1 validation warning')
 
 t.create('W3C Validation page has multiple of validation errors')
   .get(
-    '/doc.json?doc=http://hsivonen.com/test/moz/messages-types/range-error.html&preset=&parser='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/range-error.html&preset='
   )
   .expectBadge({
     label: 'w3c',
@@ -79,7 +79,7 @@ t.create('W3C Validation page has multiple of validation errors')
 t.create(
   'W3C Validation page has a combination of validation errors and warnings'
 )
-  .get('/doc.json?doc=https://shields.io&preset=&parser')
+  .get('/default.json?targetUrl=https://shields.io&preset=')
   .expectBadge({
     label: 'w3c',
     message: '45 errors, 4 warnings',
