@@ -22,6 +22,20 @@ t.create('dependencies for package with version')
     message: isDependencyState,
   })
 
+t.create('dependencies for scoped npm package')
+  .get('/release/npm/@babel/core.json')
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
+
+t.create('dependencies for scoped npm package with version')
+  .get('/release/npm/@babel/core/7.0.0-rc.0.json')
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
+
 t.create('version not found')
   .get('/release/hex/phoenix/9.9.99.json')
   .expectBadge({

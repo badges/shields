@@ -10,6 +10,13 @@ t.create('dependent repo count')
     message: isMetric,
   })
 
+t.create('dependent repo count (scoped npm package)')
+  .get('/npm/@babel/core.json')
+  .expectBadge({
+    label: 'dependent repos',
+    message: isMetric,
+  })
+
 t.create('dependent repo count (not a package)')
   .get('/npm/foobar-is-not-package.json')
   .timeout(10000)

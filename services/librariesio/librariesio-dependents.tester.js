@@ -10,6 +10,13 @@ t.create('dependent count')
     message: isMetric,
   })
 
+t.create('dependent count (scoped npm package)')
+  .get('/npm/@babel/core.json')
+  .expectBadge({
+    label: 'dependents',
+    message: isMetric,
+  })
+
 t.create('dependent count (nonexistent package)')
   .get('/npm/foobar-is-not-package.json')
   .timeout(10000)

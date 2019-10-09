@@ -10,7 +10,15 @@ t.create('sourcerank')
     message: anyInteger,
   })
 
-t.create('dependent count (not a package)')
+t.create('sourcerank (scoped npm package)')
+  .get('/npm/@babel/core.json')
+  .expectBadge({
+    label: 'sourcerank',
+    message: anyInteger,
+  })
+
+t.create('sourcerank (not a package)')
+  .timeout(10000)
   .get('/npm/foobar-is-not-package.json')
   .expectBadge({
     label: 'sourcerank',
