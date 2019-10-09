@@ -40,7 +40,7 @@ const getColor = messageTypes => {
 }
 
 const getSchema = preset => {
-  if (!preset) return ''
+  if (!preset) return undefined
   const schema = []
   const decodedPreset = decodeURI(preset)
   if (new RegExp(html4Expression, 'i').test(decodedPreset)) {

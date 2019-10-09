@@ -201,12 +201,21 @@ describe('w3c-validation-helper', function() {
   })
 
   describe('getSchema', function() {
+    const emptyPresetTests = [undefined, null, '']
+    emptyPresetTests.forEach(preset => {
+      it(`should return "undefined" for ${preset}`, function() {
+        const actualResult = getSchema(preset)
+
+        expect(actualResult).to.equal(undefined)
+      })
+    })
+
     it('returns an empty schema if no preset is provided', function() {
       const preset = ''
 
       const actualResult = getSchema(preset)
 
-      expect(actualResult).to.equal('')
+      expect(actualResult).to.equal(undefined)
     })
 
     it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0" preset', function() {

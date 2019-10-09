@@ -15,7 +15,7 @@ const schema = Joi.object({
     .required()
     .items(
       Joi.object({
-        type: Joi.any()
+        type: Joi.string()
           .allow('info', 'error', 'non-document-error')
           .required(),
       })
@@ -72,14 +72,16 @@ module.exports = class W3cValidation extends BaseJsonService {
   }
 
   async fetch(targetUrl, preset, parser) {
-    const qs = { doc: targetUrl, out: 'json' }
-    if (preset) qs['schema'] = getSchema(preset)
-    if (parser && parser.toLowerCase() != 'default') qs['parser'] = parser
     return this._requestJson({
       url: 'http://validator.nu',
       schema,
       options: {
-        qs,
+        qs: {
+          schema: getSchema(preset),
+          parser: parser === 'default' ? undefined : parser,
+          doc: targetUrl,
+          out: 'json',
+        },
       },
     })
   }
@@ -105,11 +107,8 @@ module.exports = class W3cValidation extends BaseJsonService {
 
   async handle({ parser }, { targetUrl, preset }) {
     const { messages } = await this.fetch(targetUrl, preset, parser)
-
-    const messageTypes = this.transform(messages)
-    const badge = this.constructor.render({
-      messageTypes,
+    return this.constructor.render({
+      messageTypes: this.transform(messages),
     })
-    return badge
   }
 }
