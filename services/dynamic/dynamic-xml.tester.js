@@ -192,8 +192,8 @@ t.create('no result')
     color: 'lightgrey',
   })
 
-// https://github.com/badges/shields/issues/4017
-t.create('unsupported query')
+// https://github.com/badges/shields/pull/4041
+t.create('query with type convertion')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -203,6 +203,6 @@ t.create('unsupported query')
   .intercept(withExampleXml)
   .expectBadge({
     label: 'custom badge',
-    message: 'unsupported query',
-    color: 'lightgrey',
+    message: "XML Developer's Guide",
+    color: 'blue',
   })

@@ -41,21 +41,19 @@ module.exports = class DynamicXml extends BaseService {
       throw new InvalidParameter({ prettyMessage: e.message })
     }
 
-    if (!Array.isArray(values)) {
-      throw new InvalidResponse({
-        prettyMessage: 'unsupported query',
-      })
+    if (typeof values === 'string') {
+      values = [values]
+    } else {
+      values = values.reduce((accum, node) => {
+        if (pathIsAttr) {
+          accum.push(node.value)
+        } else if (node.firstChild) {
+          accum.push(node.firstChild.data)
+        }
+
+        return accum
+      }, [])
     }
-
-    values = values.reduce((accum, node) => {
-      if (pathIsAttr) {
-        accum.push(node.value)
-      } else if (node.firstChild) {
-        accum.push(node.firstChild.data)
-      }
-
-      return accum
-    }, [])
 
     if (!values.length) {
       throw new InvalidResponse({ prettyMessage: 'no result' })
