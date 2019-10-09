@@ -13,7 +13,13 @@ const { BaseJsonService } = require('..')
 const schema = Joi.object({
   messages: Joi.array()
     .required()
-    .items(Joi.object()),
+    .items(
+      Joi.object({
+        type: Joi.any()
+          .allow('info', 'error', 'non-document-error')
+          .required(),
+      })
+    ),
 }).required()
 
 const presetDecode = regExpression => (preset, helpers) => {
@@ -91,9 +97,8 @@ module.exports = class W3cValidation extends BaseJsonService {
     })
   }
 
-  async handle({ parser }, { targetUrl, preset }) {
-    const data = await this.fetch(targetUrl, preset, parser)
-    const reducer = (accumulator, message) => {
+  transform(messages) {
+    return messages.reduce((accumulator, message) => {
       let { type } = message
       if (type === 'info') {
         type = 'warning'
@@ -108,8 +113,13 @@ module.exports = class W3cValidation extends BaseJsonService {
       }
       accumulator[type] += 1
       return accumulator
-    }
-    const messageTypes = data.messages.reduce(reducer, {})
+    }, {})
+  }
+
+  async handle({ parser }, { targetUrl, preset }) {
+    const { messages } = await this.fetch(targetUrl, preset, parser)
+
+    const messageTypes = this.transform(messages)
     const badge = this.constructor.render({
       messageTypes,
     })
