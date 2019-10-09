@@ -22,24 +22,11 @@ const schema = Joi.object({
     ),
 }).required()
 
-const presetDecode = regExpression => (preset, helpers) => {
-  if (!preset) {
-    return ''
-  }
-
-  if (regExpression && !regExpression.test(decodeURI(preset))) {
-    return helpers.error('regex')
-  }
-
-  // Return the value unchanged
-  return preset
-}
-
 const queryParamSchema = Joi.object({
   targetUrl: optionalUrl.required(),
   preset: Joi.string()
-    .allow('')
-    .custom(presetDecode(presetRegex), 'preset validation'),
+    .regex(presetRegex)
+    .allow(''),
 }).required()
 
 module.exports = class W3cValidation extends BaseJsonService {
