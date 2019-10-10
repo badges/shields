@@ -49,6 +49,8 @@ module.exports = class DynamicXml extends BaseService {
           accum.push(node.value)
         } else if (node.firstChild) {
           accum.push(node.firstChild.data)
+        } else {
+          accum.push(node.data)
         }
 
         return accum

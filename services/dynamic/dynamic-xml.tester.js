@@ -177,7 +177,7 @@ t.create('request should set Accept header')
   )
   .expectBadge({ label: 'custom badge', message: 'Midnight Rain' })
 
-// https://github.com/badges/shields/issues/3814
+// https://github.com/badges/shields/pull/4041
 t.create('no result')
   .get(
     `.json?${queryString.stringify({
@@ -188,8 +188,8 @@ t.create('no result')
   .intercept(withExampleXml)
   .expectBadge({
     label: 'custom badge',
-    message: 'no result',
-    color: 'lightgrey',
+    message: "XML Developer's Guide",
+    color: 'blue',
   })
 
 // https://github.com/badges/shields/pull/4041
