@@ -177,8 +177,7 @@ t.create('request should set Accept header')
   )
   .expectBadge({ label: 'custom badge', message: 'Midnight Rain' })
 
-// https://github.com/badges/shields/pull/4041
-t.create('no result')
+t.create('query with node function')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -192,8 +191,7 @@ t.create('no result')
     color: 'blue',
   })
 
-// https://github.com/badges/shields/pull/4041
-t.create('query with type convertion')
+t.create('query with type convertion to string')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -204,5 +202,19 @@ t.create('query with type convertion')
   .expectBadge({
     label: 'custom badge',
     message: "XML Developer's Guide",
+    color: 'blue',
+  })
+
+t.create('query with type convertion to number')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: 'number(//book[1]/price)',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: '44.95',
     color: 'blue',
   })

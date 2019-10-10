@@ -41,7 +41,11 @@ module.exports = class DynamicXml extends BaseService {
       throw new InvalidParameter({ prettyMessage: e.message })
     }
 
-    if (typeof values === 'string') {
+    if (
+      typeof values === 'string' ||
+      typeof values === 'number' ||
+      typeof values === 'boolean'
+    ) {
       values = [values]
     } else {
       values = values.reduce((accum, node) => {
