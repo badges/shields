@@ -4,7 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('W3C Validation page conforms to standards with no preset and parser')
   .get(
-    '/default.json?targetUrl=https://hsivonen.com/test/moz/messages-types/no-message.html&preset='
+    '/default.json?targetUrl=https://hsivonen.com/test/moz/messages-types/no-message.html'
   )
   .expectBadge({
     label: 'w3c',
@@ -26,7 +26,7 @@ t.create(
 
 t.create('W3C Validation fatal document error')
   .get(
-    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/404.html&preset='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/404.html'
   )
   .expectBadge({
     label: 'w3c',
@@ -36,7 +36,7 @@ t.create('W3C Validation fatal document error')
 
 t.create('W3C Validation page has 1 validation error')
   .get(
-    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html&preset='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html'
   )
   .expectBadge({
     label: 'w3c',
@@ -58,7 +58,7 @@ t.create(
 
 t.create('W3C Validation page has 1 validation warning')
   .get(
-    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/info.svg&preset='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/info.svg'
   )
   .expectBadge({
     label: 'w3c',
@@ -68,7 +68,7 @@ t.create('W3C Validation page has 1 validation warning')
 
 t.create('W3C Validation page has multiple of validation errors')
   .get(
-    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/range-error.html&preset='
+    '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/range-error.html'
   )
   .expectBadge({
     label: 'w3c',
@@ -79,7 +79,7 @@ t.create('W3C Validation page has multiple of validation errors')
 t.create(
   'W3C Validation page has a combination of validation errors and warnings'
 )
-  .get('/default.json?targetUrl=https://shields.io&preset=')
+  .get('/default.json?targetUrl=https://shields.io')
   .expectBadge({
     label: 'w3c',
     message: '45 errors, 4 warnings',

@@ -65,7 +65,6 @@ module.exports = class W3cValidation extends BaseJsonService {
 
   static render({ messageTypes }) {
     return {
-      label: 'w3c',
       message: getMessage(messageTypes),
       color: getColor(messageTypes),
     }
