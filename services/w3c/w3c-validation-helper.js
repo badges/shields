@@ -41,8 +41,8 @@ const getColor = messageTypes => {
 
 const getSchema = preset => {
   if (!preset) return undefined
-  const schema = []
   const decodedPreset = decodeURI(preset)
+  const schema = []
   if (new RegExp(html4Expression, 'i').test(decodedPreset)) {
     if (/Strict/i.test(decodedPreset)) {
       schema.push('http://s.validator.nu/xhtml10/xhtml-strict.rnc')
@@ -78,7 +78,7 @@ const getSchema = preset => {
     schema.push('http://s.validator.nu/html5/assertions.sch')
     schema.push('http://c.validator.nu/all/')
   }
-  return schema.join(' ')
+  return schema.map(url => encodeURI(url)).join(' ')
 }
 
 const documentation = `

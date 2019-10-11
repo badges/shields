@@ -78,7 +78,7 @@ module.exports = class W3cValidation extends BaseJsonService {
         qs: {
           schema: getSchema(preset),
           parser: parser === 'default' ? undefined : parser,
-          doc: targetUrl,
+          doc: encodeURI(targetUrl),
           out: 'json',
         },
       },
