@@ -166,7 +166,7 @@
     "@typescript-eslint/parser": "^1.13.0",
     "babel-plugin-inline-react-svg": "^1.1.0",
     "babel-plugin-istanbul": "^5.2.0",
-    "babel-preset-gatsby": "^0.2.17",
+    "babel-preset-gatsby": "^0.2.18",
     "caller": "^1.0.1",
     "chai": "^4.1.2",
     "chai-datetime": "^1.5.0",
