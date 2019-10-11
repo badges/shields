@@ -17,7 +17,7 @@ const getMessage = messageTypes => {
   const messageTypeKeys = Object.keys(messageTypes)
   messageTypeKeys.sort() // Sort to make the order error, warning for display
 
-  if (Object.keys(messageTypes).length === 0) {
+  if (messageTypeKeys.length === 0) {
     return 'validated'
   }
 
@@ -111,8 +111,9 @@ const documentation = `
         Path:
         <ul>  
           <li>
-            parser (Optional can be left as blank): The parser that is used for validation. This is a passthru value to the service
+            parser: The parser that is used for validation. This is a passthru value to the service
             <ul>
+              <li>default <i>(This will not pass a parser to the API and make the API choose the parser based on the validated content)</i></li>
               <li>html <i>(HTML)</i></li>
               <li>xml <i>(XML; don’t load external entities)</i></li>
               <li>xmldtd <i>(XML; load external entities)</i></li>
