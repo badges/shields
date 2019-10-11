@@ -1,6 +1,14 @@
 'use strict'
-
+const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
+
+const isErrorOnly = Joi.string().regex(/^[0-9]+ errors?$/)
+
+const isWarningOnly = Joi.string().regex(/^[0-9]+ warnings?$/)
+
+const isErrorAndWarning = Joi.string().regex(
+  /^[0-9]+ errors?, [0-9]+ warnings?$/
+)
 
 t.create('W3C Validation page conforms to standards with no preset and parser')
   .get(
@@ -30,7 +38,7 @@ t.create('W3C Validation fatal document error')
   )
   .expectBadge({
     label: 'w3c',
-    message: '1 error',
+    message: isErrorOnly,
     color: 'red',
   })
 
@@ -40,7 +48,7 @@ t.create('W3C Validation page has 1 validation error')
   )
   .expectBadge({
     label: 'w3c',
-    message: '1 error',
+    message: isErrorOnly,
     color: 'red',
   })
 
@@ -52,7 +60,7 @@ t.create(
   )
   .expectBadge({
     label: 'w3c',
-    message: '3 errors',
+    message: isErrorOnly,
     color: 'red',
   })
 
@@ -62,7 +70,7 @@ t.create('W3C Validation page has 1 validation warning')
   )
   .expectBadge({
     label: 'w3c',
-    message: '1 warning',
+    message: isWarningOnly,
     color: 'yellow',
   })
 
@@ -72,7 +80,7 @@ t.create('W3C Validation page has multiple of validation errors')
   )
   .expectBadge({
     label: 'w3c',
-    message: '2 errors',
+    message: isErrorOnly,
     color: 'red',
   })
 
@@ -82,6 +90,6 @@ t.create(
   .get('/default.json?targetUrl=https://shields.io')
   .expectBadge({
     label: 'w3c',
-    message: '45 errors, 4 warnings',
+    message: isErrorAndWarning,
     color: 'red',
   })
