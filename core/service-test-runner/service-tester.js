@@ -116,7 +116,7 @@ class ServiceTester {
    * @param {string} attrs.baseUrl base URL for test server
    * @param {boolean} attrs.skipIntercepted skip tests which intercept requests
    */
-  toss({ baseUrl, skipIntercepted }) {
+  toss({ baseUrl, skipIntercepted, retry }) {
     const { specs, pathPrefix } = this
     const testerBaseUrl = `${baseUrl}${pathPrefix}`
 
@@ -129,6 +129,7 @@ class ServiceTester {
         }`
         if (!skipIntercepted || !spec.intercepted) {
           spec.baseUri(testerBaseUrl)
+          spec.retry(retry.count, retry.backoff)
           spec.toss()
         }
       })
