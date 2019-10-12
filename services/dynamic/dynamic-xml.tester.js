@@ -177,8 +177,7 @@ t.create('request should set Accept header')
   )
   .expectBadge({ label: 'custom badge', message: 'Midnight Rain' })
 
-// https://github.com/badges/shields/issues/3814
-t.create('no result')
+t.create('query with node function')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -188,12 +187,11 @@ t.create('no result')
   .intercept(withExampleXml)
   .expectBadge({
     label: 'custom badge',
-    message: 'no result',
-    color: 'lightgrey',
+    message: "XML Developer's Guide",
+    color: 'blue',
   })
 
-// https://github.com/badges/shields/issues/4017
-t.create('unsupported query')
+t.create('query with type convertion to string')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -203,6 +201,20 @@ t.create('unsupported query')
   .intercept(withExampleXml)
   .expectBadge({
     label: 'custom badge',
-    message: 'unsupported query',
-    color: 'lightgrey',
+    message: "XML Developer's Guide",
+    color: 'blue',
+  })
+
+t.create('query with type convertion to number')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: 'number(//book[1]/price)',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: '44.95',
+    color: 'blue',
   })
