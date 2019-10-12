@@ -47,7 +47,7 @@ module.exports = class DynamicXml extends BaseService {
       typeof values === 'boolean'
     ) {
       values = [values]
-    } else {
+    } else if (Array.isArray(values)) {
       values = values.reduce((accum, node) => {
         if (pathIsAttr) {
           accum.push(node.value)
@@ -59,6 +59,10 @@ module.exports = class DynamicXml extends BaseService {
 
         return accum
       }, [])
+    } else {
+      throw new InvalidResponse({
+        prettyMessage: 'unsupported query',
+      })
     }
 
     if (!values.length) {
