@@ -220,11 +220,6 @@ class Server {
         })
       )
     })
-
-    camp.handle((req, res, next) => {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      next()
-    })
   }
 
   /**
@@ -327,6 +322,11 @@ class Server {
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
+
+    camp.handle((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      next()
+    })
 
     this.registerErrorHandlers()
     this.registerRedirects()
