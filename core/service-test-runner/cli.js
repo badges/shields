@@ -65,8 +65,8 @@ const Runner = require('./runner')
 require('../unhandled-rejection.spec')
 
 const retry = {}
-retry.count = process.env.RETRY_COUNT || 0
-retry.backoff = process.env.RETRY_BACKOFF || 0
+retry.count = parseInt(process.env.RETRY_COUNT) || 0
+retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {
   baseUrl = process.env.TESTED_SERVER_URL
