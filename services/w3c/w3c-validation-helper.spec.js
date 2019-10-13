@@ -1,5 +1,6 @@
 'use strict'
 const { expect } = require('chai')
+const { test, given, forCases } = require('sazerac')
 const {
   presetRegex,
   getMessage,
@@ -9,102 +10,54 @@ const {
 
 describe('w3c-validation-helper', function() {
   describe('presetRegex', function() {
-    const presetTests = [
-      { preset: 'html,svg 1.1,mathml 3.0', expectedResult: true },
-      { preset: 'HTML,SVG 1.1,MathML 3.0', expectedResult: true },
-      { preset: 'HTML, SVG 1.1, MathML 3.0', expectedResult: true },
-      { preset: 'HTML , SVG 1.1 , MathML 3.0', expectedResult: true },
-      { preset: 'HTML,SVG 1.1,MathML 3.0,ITS 2.0', expectedResult: true },
-      { preset: 'HTML, SVG 1.1, MathML 3.0, ITS 2.0', expectedResult: true },
-      { preset: 'HTML , SVG 1.1 , MathML 3.0 , ITS 2.0', expectedResult: true },
-      { preset: 'HTML,SVG 1.1,MathML 3.0,RDFa Lite 1.1', expectedResult: true },
-      {
-        preset: 'HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML , SVG 1.1 , MathML 3.0 , RDFa Lite 1.1',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Strict,URL/XHTML 1.0 Strict,URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Strict, URL/ XHTML 1.0 Strict, URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Strict , URL / XHTML 1.0 Strict , URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Transitional,URL/XHTML 1.0 Transitional,URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Transitional, URL/ XHTML 1.0 Transitional, URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Transitional , URL / XHTML 1.0 Transitional , URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Frameset,URL/XHTML 1.0 Frameset,URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Frameset, URL/ XHTML 1.0 Frameset, URL',
-        expectedResult: true,
-      },
-      {
-        preset: 'HTML 4.01 Frameset , URL / XHTML 1.0 Frameset , URL',
-        expectedResult: true,
-      },
-      { preset: 'XHTML,SVG 1.1,MathML 3.0', expectedResult: true },
-      { preset: 'XHTML, SVG 1.1, MathML 3.0', expectedResult: true },
-      { preset: 'XHTML , SVG 1.1 , MathML 3.0', expectedResult: true },
-      {
-        preset: 'XHTML,SVG 1.1,MathML 3.0,RDFa Lite 1.1',
-        expectedResult: true,
-      },
-      {
-        preset: 'XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1',
-        expectedResult: true,
-      },
-      {
-        preset: 'XHTML , SVG 1.1 , MathML 3.0 , RDFa Lite 1.1',
-        expectedResult: true,
-      },
-      {
-        preset: 'XHTML 1.0 Strict,URL,Ruby,SVG 1.1,MathML 3.0',
-        expectedResult: true,
-      },
-      {
-        preset: 'XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0',
-        expectedResult: true,
-      },
-      {
-        preset: 'XHTML 1.0 Strict , URL , Ruby , SVG 1.1 , MathML 3.0',
-        expectedResult: true,
-      },
-      { preset: 'SVG 1.1,URL,XHTML,MathML 3.0', expectedResult: true },
-      { preset: 'SVG 1.1, URL, XHTML, MathML 3.0', expectedResult: true },
-      { preset: 'SVG 1.1 , URL , XHTML , MathML 3.0', expectedResult: true },
-      { preset: undefined, expectedResult: false },
-      { preset: null, expectedResult: false },
-      { preset: '', expectedResult: false },
-      { preset: 'html', expectedResult: false },
-    ]
+    function testing(preset) {
+      return presetRegex.test(preset)
+    }
 
-    presetTests.forEach(test => {
-      const { preset, expectedResult } = test
-      it(`should return ${expectedResult} for ${preset}`, function() {
-        const actualResult = presetRegex.test(preset)
+    test(testing, () => {
+      forCases([
+        given('html,svg 1.1,mathml 3.0'),
+        given('HTML,SVG 1.1,MathML 3.0'),
+        given('HTML, SVG 1.1, MathML 3.0'),
+        given('HTML , SVG 1.1 , MathML 3.0'),
+        given('HTML,SVG 1.1,MathML 3.0,ITS 2.0'),
+        given('HTML, SVG 1.1, MathML 3.0, ITS 2.0'),
+        given('HTML , SVG 1.1 , MathML 3.0 , ITS 2.0'),
+        given('HTML,SVG 1.1,MathML 3.0,RDFa Lite 1.1'),
+        given('HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1'),
+        given('HTML , SVG 1.1 , MathML 3.0 , RDFa Lite 1.1'),
+        given('HTML 4.01 Strict,URL/XHTML 1.0 Strict,URL'),
+        given('HTML 4.01 Strict, URL/ XHTML 1.0 Strict, URL'),
+        given('HTML 4.01 Strict , URL / XHTML 1.0 Strict , URL'),
+        given('HTML 4.01 Transitional,URL/XHTML 1.0 Transitional,URL'),
+        given('HTML 4.01 Transitional, URL/ XHTML 1.0 Transitional, URL'),
+        given('HTML 4.01 Transitional , URL / XHTML 1.0 Transitional , URL'),
+        given('HTML 4.01 Frameset,URL/XHTML 1.0 Frameset,URL'),
+        given('HTML 4.01 Frameset, URL/ XHTML 1.0 Frameset, URL'),
+        given('HTML 4.01 Frameset , URL / XHTML 1.0 Frameset , URL'),
+        given('XHTML,SVG 1.1,MathML 3.0'),
+        given('XHTML, SVG 1.1, MathML 3.0'),
+        given('XHTML , SVG 1.1 , MathML 3.0'),
+        given('XHTML,SVG 1.1,MathML 3.0,RDFa Lite 1.1'),
+        given('XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1'),
+        given('XHTML , SVG 1.1 , MathML 3.0 , RDFa Lite 1.1'),
+        given('XHTML 1.0 Strict,URL,Ruby,SVG 1.1,MathML 3.0'),
+        given('XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0'),
+        given('XHTML 1.0 Strict , URL , Ruby , SVG 1.1 , MathML 3.0'),
+        given('SVG 1.1,URL,XHTML,MathML 3.0'),
+        given('SVG 1.1, URL, XHTML, MathML 3.0'),
+        given('SVG 1.1 , URL , XHTML , MathML 3.0'),
+      ]).expect(true)
+    })
 
-        expect(actualResult).to.equal(expectedResult)
-      })
+    test(testing, () => {
+      forCases([
+        given(undefined),
+        given(null),
+        given(''),
+        given('   '),
+        given('HTML'),
+      ]).expect(false)
     })
   })
 
@@ -201,21 +154,12 @@ describe('w3c-validation-helper', function() {
   })
 
   describe('getSchema', function() {
-    const emptyPresetTests = [undefined, null, '']
-    emptyPresetTests.forEach(preset => {
-      it(`should return "undefined" for ${preset}`, function() {
-        const actualResult = getSchema(preset)
+    function execution(preset) {
+      return getSchema(preset)
+    }
 
-        expect(actualResult).to.equal(undefined)
-      })
-    })
-
-    it('returns an empty schema if no preset is provided', function() {
-      const preset = ''
-
-      const actualResult = getSchema(preset)
-
-      expect(actualResult).to.equal(undefined)
+    test(execution, () => {
+      forCases([given(undefined), given(null), given('')]).expect(undefined)
     })
 
     it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0" preset', function() {
