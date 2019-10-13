@@ -41,14 +41,13 @@ t.create(
     color: isW3CColors,
   })
 
-t.create('W3C Validation fatal document error with red badge')
+t.create('W3C Validation target url not found error')
   .get(
     '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/404.html'
   )
   .expectBadge({
     label: 'w3c',
-    message: isW3CMessage,
-    color: isW3CColors,
+    message: 'target url not found',
   })
 
 t.create('W3C Validation page has 1 validation error with red badge')
