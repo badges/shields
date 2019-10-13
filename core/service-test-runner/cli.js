@@ -15,7 +15,7 @@
 // Run tests on a given instance:
 //   SKIP_INTERCEPTED=TRUE TESTED_SERVER_URL=https://test.shields.io npm run test:services --
 //
-// Run tests with given number of retries and backoff:
+// Run tests with given number of retries and backoff (in milliseconds):
 //   RETRY_COUNT=3 RETRY_BACKOFF=100 npm run test:services --
 // Retry option documentation:
 // https://github.com/IcedFrisby/IcedFrisby/blob/master/API.md#retrycount-backoff
