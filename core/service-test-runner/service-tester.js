@@ -115,6 +115,9 @@ class ServiceTester {
    * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.baseUrl base URL for test server
    * @param {boolean} attrs.skipIntercepted skip tests which intercept requests
+   * @param {object} attrs.retry retry configuration
+   * @param {number} attrs.retry.count number of times to retry test
+   * @param {number} attrs.retry.backoff number of milliseconds to add to the wait between each retry
    */
   toss({ baseUrl, skipIntercepted, retry }) {
     const { specs, pathPrefix } = this
