@@ -15,6 +15,11 @@
 // Run tests on a given instance:
 //   SKIP_INTERCEPTED=TRUE TESTED_SERVER_URL=https://test.shields.io npm run test:services --
 //
+// Run tests with given number of retries and backoff (in milliseconds):
+//   RETRY_COUNT=3 RETRY_BACKOFF=100 npm run test:services --
+// Retry option documentation:
+// https://github.com/IcedFrisby/IcedFrisby/blob/master/API.md#retrycount-backoff
+//
 // Service tests are run in CI in two cases: scheduled builds and pull
 // requests. The scheduled builds run _all_ the service tests, whereas the
 // pull requests run service tests designated in the PR title. In this way,
@@ -59,6 +64,9 @@ const Runner = require('./runner')
 
 require('../unhandled-rejection.spec')
 
+const retry = {}
+retry.count = parseInt(process.env.RETRY_COUNT) || 0
+retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {
   baseUrl = process.env.TESTED_SERVER_URL
@@ -77,7 +85,7 @@ if (process.env.TESTED_SERVER_URL) {
 }
 
 const skipIntercepted = envFlag(process.env.SKIP_INTERCEPTED, false)
-const runner = new Runner({ baseUrl, skipIntercepted })
+const runner = new Runner({ baseUrl, skipIntercepted, retry })
 runner.prepare()
 
 // The server's request cache causes side effects between tests.
