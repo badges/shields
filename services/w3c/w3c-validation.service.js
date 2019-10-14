@@ -8,8 +8,7 @@ const {
   getMessage,
   getSchema,
 } = require('./w3c-validation-helper')
-const { BaseJsonService } = require('..')
-const { NotFound } = require('..')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   messages: Joi.array()
@@ -50,7 +49,7 @@ module.exports = class W3cValidation extends BaseJsonService {
         title: 'W3C Validation',
         namedParams: { parser: 'html' },
         queryParams: {
-          targetUrl: 'https://validator.w3.org/nu/',
+          targetUrl: 'https://validator.nu/',
           preset: 'HTML, SVG 1.1, MathML 3.0',
         },
         staticPreview: this.render({ messageTypes: {} }),
@@ -74,7 +73,7 @@ module.exports = class W3cValidation extends BaseJsonService {
 
   async fetch(targetUrl, preset, parser) {
     return this._requestJson({
-      url: 'https://validator.w3.org/nu/',
+      url: 'https://validator.nu/',
       schema,
       options: {
         qs: {
@@ -88,29 +87,24 @@ module.exports = class W3cValidation extends BaseJsonService {
   }
 
   transform(messages) {
-    return messages.reduce((accumulator, item) => {
-      const { type, message } = item
-      let mappedType = type
-      if (
-        mappedType === 'non-document-error' &&
-        message ===
-          'HTTP resource not retrievable. The HTTP status from the remote server was: 404.'
-      ) {
+    return messages.reduce((accumulator, message) => {
+      let { type } = message
+      if (type === 'non-document-error') {
         throw new NotFound({ prettyMessage: 'target url not found' })
       }
 
-      if (mappedType === 'info') {
-        mappedType = 'warning'
+      if (type === 'info') {
+        type = 'warning'
       } else {
         // All messages are suppose to have a type and there can only be info, error or non-document
         // If a new type gets introduce this will flag them as errors
-        mappedType = 'error'
+        type = 'error'
       }
 
-      if (!(mappedType in accumulator)) {
-        accumulator[mappedType] = 0
+      if (!(type in accumulator)) {
+        accumulator[type] = 0
       }
-      accumulator[mappedType] += 1
+      accumulator[type] += 1
       return accumulator
     }, {})
   }

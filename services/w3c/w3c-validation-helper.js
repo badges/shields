@@ -51,11 +51,9 @@ const getSchema = preset => {
     } else {
       schema.push('http://s.validator.nu/xhtml10/xhtml-frameset.rnc')
     }
-    schema.push('http://s.validator.nu/html4/assertions.sch')
     schema.push('http://c.validator.nu/all-html4/')
   } else if (/1\.0 Strict, URL, Ruby, SVG 1\.1/i.test(decodedPreset)) {
     schema.push('http://s.validator.nu/xhtml1-ruby-rdf-svg-mathml.rnc')
-    schema.push('http://s.validator.nu/html4/assertions.sch')
     schema.push('http://c.validator.nu/all-html4/')
   } else {
     if (new RegExp(html5Expression, 'i').test(decodedPreset)) {
@@ -103,7 +101,7 @@ const documentation = `
     </ul>
   </p>
   <p>
-    This badge relies on the https://validator.w3.org/nu/ service to perform the validation. Please refer to https://github.com/validator/validator/wiki/Service-%C2%BB-HTTP-interface for the full documentation and Terms of service.
+    This badge relies on the https://validator.nu/ service to perform the validation. Please refer to https://about.validator.nu/ for the full documentation and Terms of service.
     The following are required from the consumer for the badge to function.
 
     <ul class="note">

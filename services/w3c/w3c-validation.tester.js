@@ -50,6 +50,13 @@ t.create('W3C Validation target url not found error')
     message: 'target url not found',
   })
 
+t.create('W3C Validation target url host not found error')
+  .get('/default.json?targetUrl=https://adfasdfasdfasdfadfadfadfasdfadf.com')
+  .expectBadge({
+    label: 'w3c',
+    message: 'target url not found',
+  })
+
 t.create('W3C Validation page has 1 validation error with red badge')
   .get(
     '/default.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html'

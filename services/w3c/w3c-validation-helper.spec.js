@@ -198,7 +198,7 @@ describe('w3c-validation-helper', function() {
       const actualResult = getSchema(preset)
 
       expect(actualResult).to.equal(
-        'http://s.validator.nu/xhtml10/xhtml-strict.rnc http://s.validator.nu/html4/assertions.sch http://c.validator.nu/all-html4/'
+        'http://s.validator.nu/xhtml10/xhtml-strict.rnc http://c.validator.nu/all-html4/'
       )
     })
 
@@ -208,7 +208,7 @@ describe('w3c-validation-helper', function() {
       const actualResult = getSchema(preset)
 
       expect(actualResult).to.equal(
-        'http://s.validator.nu/xhtml10/xhtml-transitional.rnc http://s.validator.nu/html4/assertions.sch http://c.validator.nu/all-html4/'
+        'http://s.validator.nu/xhtml10/xhtml-transitional.rnc http://c.validator.nu/all-html4/'
       )
     })
 
@@ -218,7 +218,7 @@ describe('w3c-validation-helper', function() {
       const actualResult = getSchema(preset)
 
       expect(actualResult).to.equal(
-        'http://s.validator.nu/xhtml10/xhtml-frameset.rnc http://s.validator.nu/html4/assertions.sch http://c.validator.nu/all-html4/'
+        'http://s.validator.nu/xhtml10/xhtml-frameset.rnc http://c.validator.nu/all-html4/'
       )
     })
 
@@ -248,7 +248,7 @@ describe('w3c-validation-helper', function() {
       const actualResult = getSchema(preset)
 
       expect(actualResult).to.equal(
-        'http://s.validator.nu/xhtml1-ruby-rdf-svg-mathml.rnc http://s.validator.nu/html4/assertions.sch http://c.validator.nu/all-html4/'
+        'http://s.validator.nu/xhtml1-ruby-rdf-svg-mathml.rnc http://c.validator.nu/all-html4/'
       )
     })
 
