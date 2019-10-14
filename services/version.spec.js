@@ -102,6 +102,9 @@ describe('Version helpers', function() {
     given(['1.0.0', '1.0.2', '1.1', '1.0', 'notaversion2', '12bcde4']).expect(
       '1.1'
     )
+
+    // build qualifiers - https://github.com/badges/shields/issues/4172
+    given(['0.3.9', '0.4.0+1', '0.4.0+9']).expect('0.4.0+9')
   })
 
   test(slice, () => {
