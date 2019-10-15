@@ -114,7 +114,9 @@ function DownloadsForExtensionType(extensionType) {
         // This check is for non-existent and brand-new plugins both having new stats.
         // Non-Existent plugins results are the same as a brandspanking new plugin with no downloads.
         if (downloads <= 0 && size <= 1) {
-          throw new NotFound({ prettyMessage: 'plugin not found or too new' })
+          throw new NotFound({
+            prettyMessage: `${extensionType} not found or too new`,
+          })
         }
       }
 
