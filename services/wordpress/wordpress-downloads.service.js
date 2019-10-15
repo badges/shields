@@ -90,7 +90,7 @@ function DownloadsForExtensionType(extensionType) {
       const { limit } = intervalMap[interval]
       let downloads
       if (limit === null) {
-        const { downloaded: _downloads } = await super.fetch({
+        const { downloaded: _downloads } = await this.fetch({
           extensionType,
           slug,
         })
