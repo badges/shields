@@ -2,8 +2,8 @@
 
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { metric } = require('../text-formatters')
-const { InvalidParameter, NotFound } = require('../../core/base-service/errors')
 const { BaseCratesService, keywords } = require('./crates-base')
+const { InvalidParameter, NotFound } = require('..')
 
 module.exports = class CratesDownloads extends BaseCratesService {
   static get category() {
