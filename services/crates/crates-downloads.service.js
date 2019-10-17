@@ -81,7 +81,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
     }
   }
 
-  _extractDownloads({ variant, json }) {
+  transform({ variant, json }) {
     switch (variant) {
       case 'dv':
         return json.crate ? json.versions[0].downloads : json.version.downloads
@@ -111,7 +111,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
       return { message: json.errors[0].detail }
     }
 
-    const downloads = this._extractDownloads({ variant, json })
+    const downloads = this.transform({ variant, json })
 
     return this.constructor.render({ variant, downloads, version })
   }
