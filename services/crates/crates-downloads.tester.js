@@ -41,11 +41,11 @@ t.create('recent downloads')
     message: isMetric,
   })
 
-t.create('recent downloads (missing data)')
+t.create('recent downloads (with version)')
   .get('/dr/libc/0.2.31.json')
   .expectBadge({
     label: 'crates.io',
-    message: 'no data',
+    message: 'recent downloads not supported for specific versions',
   })
 
 t.create('downloads (invalid version)')

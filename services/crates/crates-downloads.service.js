@@ -2,6 +2,7 @@
 
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { metric } = require('../text-formatters')
+const { InvalidParameter, NotFound } = require('../../core/base-service/errors')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesDownloads extends BaseCratesService {
@@ -97,7 +98,9 @@ module.exports = class CratesDownloads extends BaseCratesService {
       /* crates.io doesn't currently expose
          recent download counts for individual
          versions */
-      return { message: 'no data' }
+      throw new InvalidParameter({
+        prettyMessage: 'recent downloads not supported for specific versions',
+      })
     }
 
     const json = await this.fetch({ crate, version })
@@ -108,7 +111,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
          or
          https://crates.io/api/v1/crates/libc/0.1.76
          returns a 200 OK with an errors object */
-      return { message: json.errors[0].detail }
+      throw new NotFound({ prettyMessage: json.errors[0].detail })
     }
 
     const downloads = this.transform({ variant, json })
