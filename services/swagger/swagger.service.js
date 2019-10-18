@@ -50,7 +50,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
   }
 
   async fetch({ scheme, urlF }) {
-    const url = 'http://online.swagger.io/validator/debug'
+    const url = 'http://validator.swagger.io/validator/debug'
     return this._requestJson({
       url,
       schema: validatorSchema,
