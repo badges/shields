@@ -23,7 +23,11 @@ module.exports = class Bintray extends BaseJsonService {
   }
 
   static get auth() {
-    return { userKey: 'bintray_user', passKey: 'bintray_apikey' }
+    return {
+      userKey: 'bintray_user',
+      passKey: 'bintray_apikey',
+      defaultToEmptyStringForUser: true,
+    }
   }
 
   static get examples() {
