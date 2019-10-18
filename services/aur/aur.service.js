@@ -63,8 +63,8 @@ class AurLicense extends BaseAurService {
     return [
       {
         title: 'AUR license',
-        namedParams: { packageName: 'pac' },
-        staticPreview: this.render({ license: 'MIT' }),
+        namedParams: { packageName: 'android-studio' },
+        staticPreview: this.render({ license: 'Apache' }),
       },
     ]
   }
