@@ -1,7 +1,7 @@
 'use strict'
 
 const getURL = '/https/example.com/example.json.json'
-const apiURL = 'http://online.swagger.io'
+const apiURL = 'http://validator.swagger.io'
 const apiGetURL = '/validator/debug'
 const apiGetQueryParams = { url: 'https://example.com/example.json' }
 
