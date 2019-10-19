@@ -5,7 +5,7 @@ const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('issues count')
-  .get('/issues/angular/angular.js.json')
+  .get('/issues/angular/angular.json')
   .expectBadge({
     label: 'issues',
     message: Joi.number()
@@ -14,21 +14,21 @@ t.create('issues count')
   })
 
 t.create('technical debt percentage')
-  .get('/tech-debt/angular/angular.js.json')
+  .get('/tech-debt/angular/angular.json')
   .expectBadge({
     label: 'technical debt',
     message: isIntegerPercentage,
   })
 
 t.create('maintainability percentage')
-  .get('/maintainability-percentage/angular/angular.js.json')
+  .get('/maintainability-percentage/angular/angular.json')
   .expectBadge({
     label: 'maintainability',
     message: isIntegerPercentage,
   })
 
 t.create('maintainability letter')
-  .get('/maintainability/angular/angular.js.json')
+  .get('/maintainability/angular/angular.json')
   .expectBadge({
     label: 'maintainability',
     message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
@@ -49,10 +49,10 @@ t.create('maintainability letter for repo without snapshots')
   })
 
 t.create('malformed response for outer user repos query')
-  .get('/maintainability/angular/angular.js.json')
+  .get('/maintainability/angular/angular.json')
   .intercept(nock =>
     nock('https://api.codeclimate.com')
-      .get('/v1/repos?github_slug=angular%2Fangular.js')
+      .get('/v1/repos?github_slug=angular%2Fangular')
       .reply(200, {
         data: [{}], // No relationships in the list of data elements.
       })
@@ -63,7 +63,7 @@ t.create('malformed response for outer user repos query')
   })
 
 t.create('malformed response for inner specific repo query')
-  .get('/maintainability/angular/angular.js.json')
+  .get('/maintainability/angular/angular.json')
   .intercept(nock =>
     nock('https://api.codeclimate.com', { allowUnmocked: true })
       .get(/\/v1\/repos\/[a-z0-9]+\/snapshots\/[a-z0-9]+/)
