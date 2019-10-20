@@ -214,18 +214,29 @@ class BaseService {
     return result
   }
 
-  constructor({ sendAndCacheRequest, authHelper }, { handleInternalErrors }) {
+  constructor(
+    { sendAndCacheRequest, authHelper, metricHelper },
+    { handleInternalErrors }
+  ) {
     this._requestFetcher = sendAndCacheRequest
     this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
+    this._metricHelper = metricHelper
   }
 
   async _request({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
+    await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
     return checkErrorResponse(errorMessages)({ buffer, res })
+  }
+
+  async _meterResponse(res, buffer) {
+    if (this._metricHelper && res.statusCode === 200) {
+      this._metricHelper.noteServiceResponseSize(buffer.length)
+    }
   }
 
   static _validate(
@@ -401,10 +412,12 @@ class BaseService {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
+    const metrics = this.metrics
 
     const metricHelper = MetricHelper.create({
       metricInstance,
       ServiceClass: this,
+      metrics,
     })
 
     camp.route(
@@ -420,6 +433,7 @@ class BaseService {
               sendAndCacheRequest: request.asPromise,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
+              metricHelper,
             },
             serviceConfig,
             namedParams,

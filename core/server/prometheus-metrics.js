@@ -59,6 +59,14 @@ module.exports = class PrometheusMetrics {
         labelNames: ['rate_limit_type'],
         registers: [this.register],
       }),
+      serviceResponseSize: new prometheus.Histogram({
+        name: 'service_response_bytes',
+        help: 'Service response size in bytes',
+        labelNames: ['category', 'family', 'service'],
+        // buckets from 64kB to 8MB
+        buckets: prometheus.exponentialBuckets(64 * 1024, 2, 8),
+        registers: [this.register],
+      }),
     }
   }
 
@@ -94,5 +102,17 @@ module.exports = class PrometheusMetrics {
 
   noteRateLimitExceeded(rateLimitType) {
     return this.counters.rateLimitExceeded.labels(rateLimitType).inc()
+  }
+
+  /**
+   * @returns {object} `{ observe() {} }`.
+   */
+  createServiceResponseSizeHistogram({ category, serviceFamily, name }) {
+    const service = decamelize(name)
+    return this.counters.serviceResponseSize.labels(
+      category,
+      serviceFamily,
+      service
+    )
   }
 }

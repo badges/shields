@@ -11,9 +11,17 @@ class MetricHelper {
         serviceFamily,
         name,
       })
+      this.serviceResponseSizeHistogram = metricInstance.createServiceResponseSizeHistogram(
+        {
+          category,
+          serviceFamily,
+          name,
+        }
+      )
     } else {
       this.metricInstance = undefined
       this.serviceRequestCounter = undefined
+      this.serviceResponseSizeHistogram = undefined
     }
   }
 
@@ -38,6 +46,12 @@ class MetricHelper {
           serviceRequestCounter.inc()
         }
       },
+    }
+  }
+
+  noteServiceResponseSize(size) {
+    if (this.serviceResponseSizeHistogram) {
+      return this.serviceResponseSizeHistogram.observe(size)
     }
   }
 }
