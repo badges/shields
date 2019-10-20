@@ -21,7 +21,7 @@ const documentation = `
   <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
 </p>
 <p>
-  Check, if your pipelines are publicly visible as well.<br />
+  Check if your pipelines are publicly visible as well.<br />
   Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
   Then tick the setting Public pipelines.
 </p>
