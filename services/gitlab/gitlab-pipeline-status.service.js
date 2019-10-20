@@ -28,7 +28,7 @@ const documentation = `
 <p>
   Now your settings should look like this:
 </p>
-<img src="https://user-images.githubusercontent.com/12065866/67144347-bf887f80-f275-11e9-881d-c7b30f5492f1.png" alt="Setting Public pipelines set"/>
+<img src="https://user-images.githubusercontent.com/12065866/67156911-e225a180-f324-11e9-93ad-10aafbb3e69e.png" alt="Setting Public pipelines set"/>
 <p>
   Your badge should be working fine now.
 </p>
