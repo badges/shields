@@ -109,7 +109,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
         namedParams: {
           format: 'maintainability',
           user: 'angular',
-          repo: 'angular.js',
+          repo: 'angular',
         },
         staticPreview: this.render({
           variant: 'maintainability',
@@ -130,7 +130,7 @@ module.exports = class CodeclimateAnalysis extends BaseJsonService {
       {
         title: 'Code Climate technical debt',
         pattern: 'tech-debt/:user/:repo',
-        namedParams: { user: 'jekyll', repo: 'jekyll' },
+        namedParams: { user: 'angular', repo: 'angular' },
         staticPreview: this.render({
           variant: 'tech-debt',
           techDebtPercentage: 3.0,

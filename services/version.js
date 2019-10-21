@@ -84,12 +84,12 @@ function latest(versions, { pre = false } = {}) {
   try {
     // coerce to string then lowercase otherwise alpha > RC
     version = versions.sort((a, b) =>
-      semver.rcompare(
+      semver.compareBuild(
         `${a}`.toLowerCase(),
         `${b}`.toLowerCase(),
         /* loose */ true
       )
-    )[0]
+    )[versions.length - 1]
   } catch (e) {
     version = latestDottedVersion(versions)
   }

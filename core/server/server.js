@@ -323,6 +323,12 @@ class Server {
     const { apiProvider: githubApiProvider } = this.githubConstellation
     suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
 
+    // https://github.com/badges/shields/issues/3273
+    camp.handle((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      next()
+    })
+
     this.registerErrorHandlers()
     this.registerRedirects()
     this.registerServices()
