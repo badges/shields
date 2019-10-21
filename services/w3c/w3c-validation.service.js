@@ -11,6 +11,7 @@ const {
 const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
+  url: Joi.string().optional(),
   messages: Joi.array()
     .required()
     .items(
@@ -18,6 +19,7 @@ const schema = Joi.object({
         type: Joi.string()
           .allow('info', 'error', 'non-document-error')
           .required(),
+        subType: Joi.string().optional(),
         message: Joi.string().required(),
       })
     ),
@@ -86,13 +88,29 @@ module.exports = class W3cValidation extends BaseJsonService {
     })
   }
 
-  transform(messages) {
+  transform(url, messages) {
+    if (messages.length === 1) {
+      const { subType, type, message } = messages[0]
+      if (type === 'non-document-error' && subType === 'io') {
+        let notFound = false
+        if (
+          message ===
+          'HTTP resource not retrievable. The HTTP status from the remote server was: 404.'
+        ) {
+          notFound = true
+        } else if (message.endsWith('Name or service not known')) {
+          const domain = message.split(':')[0].trim()
+          notFound = url.indexOf(domain) !== -1
+        }
+
+        if (notFound) {
+          throw new NotFound({ prettyMessage: 'target url not found' })
+        }
+      }
+    }
+
     return messages.reduce((accumulator, message) => {
       let { type } = message
-      if (type === 'non-document-error') {
-        throw new NotFound({ prettyMessage: 'target url not found' })
-      }
-
       if (type === 'info') {
         type = 'warning'
       } else {
@@ -110,9 +128,9 @@ module.exports = class W3cValidation extends BaseJsonService {
   }
 
   async handle({ parser }, { targetUrl, preset }) {
-    const { messages } = await this.fetch(targetUrl, preset, parser)
+    const { url, messages } = await this.fetch(targetUrl, preset, parser)
     return this.constructor.render({
-      messageTypes: this.transform(messages),
+      messageTypes: this.transform(url, messages),
     })
   }
 }
