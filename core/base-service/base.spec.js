@@ -3,6 +3,8 @@
 const Joi = require('@hapi/joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const prometheus = require('prom-client')
+const PrometheusMetrics = require('../server/prometheus-metrics')
 const trace = require('./trace')
 const {
   NotFound,
@@ -12,7 +14,7 @@ const {
   Deprecated,
 } = require('./errors')
 const BaseService = require('./base')
-
+const { MetricHelper } = require('./metric-helper')
 require('../register-chai-plugins.spec')
 
 const queryParamSchema = Joi.object({
@@ -462,6 +464,33 @@ describe('BaseService', function() {
         'Response status code',
         200
       )
+    })
+
+    it('meters service response size', async function() {
+      const register = new prometheus.Registry()
+      const metricHelper = MetricHelper.create({
+        metricInstance: new PrometheusMetrics({ register }),
+        ServiceClass: DummyService,
+      })
+      const sendAndCacheRequest = async () => ({
+        buffer: 'x'.repeat(65536 + 1),
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest, metricHelper },
+        defaultConfig
+      )
+      const url = 'some-url'
+
+      await serviceInstance._request({ url })
+
+      expect(register.getSingleMetricAsString('service_response_bytes'))
+        .to.contain(
+          'service_response_bytes_bucket{le="65536",category="other",family="undefined",service="dummy_service"} 0\n'
+        )
+        .and.to.contain(
+          'service_response_bytes_bucket{le="131072",category="other",family="undefined",service="dummy_service"} 1\n'
+        )
     })
 
     it('handles errors', async function() {
