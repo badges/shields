@@ -412,12 +412,10 @@ class BaseService {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
-    const metrics = this.metrics
 
     const metricHelper = MetricHelper.create({
       metricInstance,
       ServiceClass: this,
-      metrics,
     })
 
     camp.route(
