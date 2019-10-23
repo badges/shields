@@ -187,3 +187,107 @@ describe('GitHub badge suggestions', function() {
     })
   })
 })
+
+describe('GitLab badge suggestions', function() {
+  let port, baseUrl
+  before(async function() {
+    port = await portfinder.getPortPromise()
+    baseUrl = `http://127.0.0.1:${port}`
+  })
+
+  let camp
+  before(async function() {
+    camp = Camp.start({ port, hostname: '::' })
+    await new Promise(resolve => camp.on('listening', () => resolve()))
+  })
+  after(async function() {
+    if (camp) {
+      await new Promise(resolve => camp.close(resolve))
+      camp = undefined
+    }
+  })
+
+  context('with an existing project', function() {
+    it('returns the expected suggestions', async function() {
+      const { statusCode, body } = await got(
+        `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+          'https://gitlab.com/gitlab-org/gitlab'
+        )}`,
+        {
+          json: true,
+        }
+      )
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
+        suggestions: [
+          {
+            title: 'GitLab pipeline',
+            link: 'https://gitlab.com/gitlab-org/gitlab/builds',
+            example: {
+              pattern: '/gitlab/pipeline/:user/:repo',
+              namedParams: { user: 'gitlab-org', repo: 'gitlab' },
+              queryParams: {},
+            },
+          },
+          {
+            title: 'Twitter',
+            link:
+              'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fgitlab',
+            example: {
+              pattern: '/twitter/url',
+              namedParams: {},
+              queryParams: {
+                url: 'https://gitlab.com/gitlab-org/gitlab',
+              },
+            },
+            preview: {
+              style: 'social',
+            },
+          },
+        ],
+      })
+    })
+  })
+
+  context('with an nonexisting project', function() {
+    it('returns the expected suggestions', async function() {
+      const { statusCode, body } = await got(
+        `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+          'https://gitlab.com/gitlab-org/not-gitlab'
+        )}`,
+        {
+          json: true,
+        }
+      )
+      expect(statusCode).to.equal(200)
+      expect(body).to.deep.equal({
+        suggestions: [
+          {
+            title: 'GitLab pipeline',
+            link: 'https://gitlab.com/gitlab-org/not-gitlab/builds',
+            example: {
+              pattern: '/gitlab/pipeline/:user/:repo',
+              namedParams: { user: 'gitlab-org', repo: 'not-gitlab' },
+              queryParams: {},
+            },
+          },
+          {
+            title: 'Twitter',
+            link:
+              'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fnot-gitlab',
+            example: {
+              pattern: '/twitter/url',
+              namedParams: {},
+              queryParams: {
+                url: 'https://gitlab.com/gitlab-org/not-gitlab',
+              },
+            },
+            preview: {
+              style: 'social',
+            },
+          },
+        ],
+      })
+    })
+  })
+})
