@@ -29,6 +29,30 @@ class BasePackagistService extends BaseJsonService {
       url,
     })
   }
+
+  /**
+   * It is highly recommended to use base fetch method!
+   *
+   * JSON API includes additional information about downloads, dependents count, github info, etc.
+   * However, responses from JSON API are cached for twelve hours by packagist servers,
+   * so data fetch from this method might be outdated.
+   * For more information refer to https://packagist.org/apidoc#get-package-data.
+   *
+   * @returns {object} Parsed response
+   */
+  async fetchByJsonAPI({
+    user,
+    repo,
+    schema,
+    server = 'https://packagist.org',
+  }) {
+    const url = `${server}/packages/${user}/${repo}.json`
+
+    return this._requestJson({
+      schema,
+      url,
+    })
+  }
 }
 
 const documentation =

@@ -101,7 +101,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   async handle({ interval, user, repo }, { server }) {
     const {
       package: { downloads },
-    } = await this.fetch({ user, repo, schema, server })
+    } = await this.fetchByJsonAPI({ user, repo, schema, server })
 
     return this.constructor.render({
       downloads: downloads[periodMap[interval].field],
