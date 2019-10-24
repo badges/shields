@@ -84,11 +84,11 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
       server,
     })
 
-    if (!allData.package.versions.hasOwnProperty(version)) {
+    if (!allData.packages[`${user}/${repo}`].hasOwnProperty(version)) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
-    const packageVersion = allData.package.versions[version]
+    const packageVersion = allData.packages[`${user}/${repo}`][version]
     if (!packageVersion.require || !packageVersion.require.php) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
