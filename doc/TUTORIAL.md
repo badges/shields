@@ -241,7 +241,7 @@ Description of the code:
    - [text-formatters.js](https://github.com/badges/shields/blob/master/services/text-formatters.js)
    - [version.js](https://github.com/badges/shields/blob/master/services/version.js)
 3. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
-4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'status', which is a string.
+4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string.
 5. Our module exports a class which extends `BaseJsonService`
 6. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
 7. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
@@ -339,7 +339,7 @@ should be included. They serve several purposes:
 
 1. They speed up future contributors when they are debugging or improving a
    badge.
-2. If a contributors like to change your badge, chances are, they forget
+2. If the contributors would like to change your badge, chances are, they forget
    edge cases and break your code.
    Tests may give hints in such cases.
 3. The contributor and reviewer can easily verify the code works as
@@ -352,7 +352,7 @@ Please follow it to include tests on your pull-request.
 
 ### (4.6) Update the Docs
 
-If your submission require an API token or authentication credentials, please
+If your submission requires an API token or authentication credentials, please
 update [server-secrets.md](./server-secrets.md). You should explain what the
 token or credentials are for and how to obtain them.
 
