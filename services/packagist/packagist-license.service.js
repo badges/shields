@@ -9,14 +9,14 @@ const {
   documentation,
 } = require('./packagist-base')
 
-const schema = Joi.object({
-  package: Joi.object({
-    versions: Joi.object({
-      'dev-master': Joi.object({
-        license: Joi.array().required(),
-      }).required(),
-    }).required(),
+const packageSchema = Joi.object({
+  'dev-master': Joi.object({
+    license: Joi.array().required(),
   }).required(),
+}).required()
+
+const schema = Joi.object({
+  packages: Joi.object().pattern(Joi.string().required(), packageSchema),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -61,13 +61,13 @@ module.exports = class PackagistLicense extends BasePackagistService {
     }
   }
 
-  transform({ json }) {
-    return { license: json.package.versions['dev-master'].license }
+  transform({ json, user, repo }) {
+    return { license: json.packages[`${user}/${repo}`]['dev-master'].license }
   }
 
   async handle({ user, repo }, { server }) {
     const json = await this.fetch({ user, repo, schema, server })
-    const { license } = this.transform({ json })
+    const { license } = this.transform({ json, user, repo })
     return renderLicenseBadge({ license })
   }
 }

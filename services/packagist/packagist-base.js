@@ -23,7 +23,7 @@ const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
-    const url = `${server}/packages/${user}/${repo}.json`
+    const url = `${server}/p/${user}/${repo}.json`
 
     return this._requestJson({
       schema,
