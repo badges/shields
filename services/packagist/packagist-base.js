@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 
-const versionSchema = Joi.object()
+const packageSchema = Joi.object()
   .pattern(
     /^/,
     Joi.object({
@@ -16,7 +16,9 @@ const versionSchema = Joi.object()
   .required()
 
 const allVersionsSchema = Joi.object({
-  packages: Joi.object().pattern(/^/, versionSchema),
+  packages: Joi.object()
+    .pattern(/^/, packageSchema)
+    .required(),
 }).required()
 const keywords = ['PHP']
 
@@ -36,7 +38,7 @@ class BasePackagistService extends BaseJsonService {
    * JSON API includes additional information about downloads, dependents count, github info, etc.
    * However, responses from JSON API are cached for twelve hours by packagist servers,
    * so data fetch from this method might be outdated.
-   * For more information refer to https://packagist.org/apidoc#get-package-data.
+   * For more information please refer to https://packagist.org/apidoc#get-package-data.
    *
    * @returns {object} Parsed response
    */

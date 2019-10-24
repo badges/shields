@@ -12,7 +12,7 @@ const {
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
-const versionSchema = Joi.object()
+const packageSchema = Joi.object()
   .pattern(
     /^/,
     Joi.object({
@@ -26,7 +26,7 @@ const versionSchema = Joi.object()
 
 const schema = Joi.object({
   packages: Joi.object()
-    .pattern(/^/, versionSchema)
+    .pattern(/^/, packageSchema)
     .required(),
 }).required()
 
