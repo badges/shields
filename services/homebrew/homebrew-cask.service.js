@@ -16,7 +16,7 @@ module.exports = class HomebrewCask extends BaseJsonService {
   static get route() {
     return {
       base: 'homebrew/cask/v',
-      pattern: ':formula',
+      pattern: ':cask',
     }
   }
 
@@ -24,7 +24,7 @@ module.exports = class HomebrewCask extends BaseJsonService {
     return [
       {
         title: 'homebrew cask',
-        namedParams: { formula: 'iterm2' },
+        namedParams: { cask: 'iterm2' },
         staticPreview: renderVersionBadge({ version: 'v3.2.5' }),
       },
     ]
@@ -34,15 +34,15 @@ module.exports = class HomebrewCask extends BaseJsonService {
     return { label: 'homebrew cask' }
   }
 
-  async fetch({ formula }) {
+  async fetch({ cask }) {
     return this._requestJson({
       schema,
-      url: `https://formulae.brew.sh/api/cask/${formula}.json`,
+      url: `https://formulae.brew.sh/api/cask/${cask}.json`,
     })
   }
 
-  async handle({ formula }) {
-    const data = await this.fetch({ formula })
+  async handle({ cask }) {
+    const data = await this.fetch({ cask })
     return renderVersionBadge({ version: data.version })
   }
 }
