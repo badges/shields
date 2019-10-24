@@ -55,6 +55,10 @@ class BasePackagistService extends BaseJsonService {
       url,
     })
   }
+
+  getPackageName(user, repo) {
+    return `${user}/${repo}`
+  }
 }
 
 const documentation =

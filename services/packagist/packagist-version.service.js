@@ -100,7 +100,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
   }
 
   transform({ type, json, user, repo }) {
-    const versionsData = json.packages[`${user}/${repo}`]
+    const versionsData = json.packages[this.getPackageName(user, repo)]
     let versions = Object.keys(versionsData)
     const aliasesMap = {}
     versions.forEach(version => {

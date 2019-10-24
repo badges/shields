@@ -64,7 +64,10 @@ module.exports = class PackagistLicense extends BasePackagistService {
   }
 
   transform({ json, user, repo }) {
-    return { license: json.packages[`${user}/${repo}`]['dev-master'].license }
+    return {
+      license:
+        json.packages[this.getPackageName(user, repo)]['dev-master'].license,
+    }
   }
 
   async handle({ user, repo }, { server }) {
