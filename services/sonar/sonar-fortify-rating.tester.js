@@ -2,7 +2,13 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-// The below tests are using a mocked API response because
+// The service tests targeting the legacy SonarQube API are mocked
+// because of the lack of publicly accessible, self-hosted, legacy SonarQube instances
+// See https://github.com/badges/shields/issues/4221#issuecomment-546611598 for more details
+// This is an uncommon scenario Shields has to support for Sonar, and should not be used as a model
+// for other service tests.
+
+// The below tests are all using a mocked API response because
 // neither SonarCloud.io nor any known public SonarQube deployments
 // have the Fortify plugin installed and in use, so there are no
 // available live endpoints to hit.

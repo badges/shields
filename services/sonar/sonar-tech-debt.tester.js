@@ -3,6 +3,12 @@
 const { isPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
+// The service tests targeting the legacy SonarQube API are mocked
+// because of the lack of publicly accessible, self-hosted, legacy SonarQube instances
+// See https://github.com/badges/shields/issues/4221#issuecomment-546611598 for more details
+// This is an uncommon scenario Shields has to support for Sonar, and should not be used as a model
+// for other service tests.
+
 t.create('Tech Debt')
   .get(
     '/tech_debt/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
