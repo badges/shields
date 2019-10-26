@@ -4,6 +4,18 @@ const Joi = require('@hapi/joi')
 const { isLegacyVersion } = require('./sonar-helpers')
 const { BaseJsonService, NotFound } = require('..')
 
+// It is possible to see HTTP 404 response codes and HTTP 200 responses
+// with empty arrays of metric values, with both the legacy (pre v5.3) and modern APIs.
+//
+// 404 responses can occur with non-existent component keys, as well as unknown/unsupported metrics.
+//
+// 200 responses with empty arrays can occur when the metric key is valid, but the data
+// is unavailable for the specified component, for example using the metric key `tests` with a
+// component that is not capturing test results.
+// It can also happen when using an older/deprecated
+// metric key with a newer version of Sonar, for example using the metric key
+// `public_documented_api_density` with SonarQube v7.x or higher
+
 const modernSchema = Joi.object({
   component: Joi.object({
     measures: Joi.array()
