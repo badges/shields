@@ -75,3 +75,27 @@ t.create('Fortify Security Rating (nonexistent component)')
     label: 'fortify-security-rating',
     message: 'component or metric not found, or legacy API not supported',
   })
+
+t.create('Fortify Security Rating (legacy API metric not found)')
+  .get(
+    '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+  )
+  .intercept(nock =>
+    nock('http://sonar.petalslink.com/api')
+      .get('/resources')
+      .query({
+        resource: 'org.ow2.petals:petals-se-ase',
+        depth: 0,
+        metrics: 'fortify-security-rating',
+        includeTrends: true,
+      })
+      .reply(200, [
+        {
+          msr: [],
+        },
+      ])
+  )
+  .expectBadge({
+    label: 'fortify-security-rating',
+    message: 'metric not found',
+  })
