@@ -17,6 +17,13 @@ t.create('Go version (from branch)')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
+t.create('Go version (mongorepo)')
+  .get(`/golang/go.json?filename=${encodeURIComponent('src/go.mod')}`)
+  .expectBadge({
+    label: 'Go',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
 t.create('Go version (repo not found)')
   .get('/badges/not-existing-repo.json')
   .expectBadge({

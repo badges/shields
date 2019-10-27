@@ -1,10 +1,15 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchRepoContent } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 const { InvalidResponse } = require('..')
+
+const queryParamSchema = Joi.object({
+  filename: Joi.string(),
+}).required()
 
 const goVersionRegExp = new RegExp('^go (.+)$', 'm')
 
@@ -17,6 +22,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
     return {
       base: 'github/go-mod/go-version',
       pattern: ':user/:repo/:branch*',
+      queryParamSchema,
     }
   }
 
@@ -40,6 +46,14 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
         staticPreview: this.render({ version: '1.12', branch: 'master' }),
         documentation,
       },
+      {
+        title: 'GitHub go.mod Go version (subfolder of monorepo)',
+        pattern: ':user/:repo',
+        namedParams: { user: 'golang', repo: 'go' },
+        queryParams: { filename: 'src/go.mod' },
+        staticPreview: this.render({ version: '1.14' }),
+        documentation,
+      },
     ]
   }
 
@@ -55,12 +69,12 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
     })
   }
 
-  async handle({ user, repo, branch }) {
+  async handle({ user, repo, branch }, { filename = 'go.mod' }) {
     const content = await fetchRepoContent(this, {
       user,
       repo,
       branch,
-      filename: 'go.mod',
+      filename,
     })
     const { go } = this.constructor.parseContent(content)
     return this.constructor.render({ version: go, branch })
