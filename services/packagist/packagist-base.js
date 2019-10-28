@@ -23,6 +23,16 @@ const allVersionsSchema = Joi.object({
 const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
+  /**
+   * Default fetch method.
+   *
+   * This method utilize composer metadata API which
+   * "... is the preferred way to access the data as it is always up to date,
+   * and dumped to static files so it is very efficient on our end." (comment from official documentation).
+   * For more information please refer to https://packagist.org/apidoc#get-package-data.
+   *
+   * @returns {object} Parsed response
+   */
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
     const url = `${server}/p/${user}/${repo}.json`
 
