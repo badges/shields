@@ -219,7 +219,7 @@ describe('BaseService', function() {
 
       // Ensure debuggabillity.
       // https://github.com/badges/shields/issues/3784
-      it('Includes the service class is present in the stack trace', async function() {
+      it('Includes the service class in the stack trace', async function() {
         try {
           await ThrowingService.invoke(
             {},
