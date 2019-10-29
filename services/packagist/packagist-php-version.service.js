@@ -5,7 +5,7 @@ const { optionalUrl } = require('../validators')
 const {
   allVersionsSchema,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
@@ -58,7 +58,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
           server: 'https://packagist.org',
         },
         staticPreview: this.render({ php: '^7.1.3' }),
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }

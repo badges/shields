@@ -6,7 +6,7 @@ const { optionalUrl } = require('../validators')
 const {
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 
 const packageSchema = Joi.object({
@@ -52,7 +52,7 @@ module.exports = class PackagistLicense extends BasePackagistService {
         queryParams: { server: 'https://packagist.org' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
         keywords,
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }

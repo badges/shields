@@ -71,12 +71,24 @@ class BasePackagistService extends BaseJsonService {
   }
 }
 
-const documentation =
-  'Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.'
+const customServerDocumentationFragment = `
+    <p>
+        Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.
+    </p>
+    `
+
+const cacheDocumentationFragment = `
+  <p>
+      Displayed data may be slightly outdated.
+      Due to performance reasons, data fetched from packagist JSON API is cached for twelve hours on packagist infrastructure.
+      For more information please refer to <a target="_blank" href="https://packagist.org/apidoc#get-package-data">official packagist documentation</a>.
+  </p>
+  `
 
 module.exports = {
   allVersionsSchema,
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
+  cacheDocumentationFragment,
 }

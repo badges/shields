@@ -8,7 +8,7 @@ const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
@@ -81,7 +81,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
         },
         staticPreview: renderVersionBadge({ version: '4.2.2' }),
         keywords,
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }
