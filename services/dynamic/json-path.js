@@ -7,6 +7,16 @@ const { InvalidParameter, InvalidResponse } = require('..')
 
 module.exports = superclass =>
   class extends superclass {
+    static get category() {
+      return 'dynamic'
+    }
+
+    static get defaultBadgeData() {
+      return {
+        label: 'custom badge',
+      }
+    }
+
     async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
       const data = await this._getData({
         schema: Joi.any(),

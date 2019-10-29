@@ -5,18 +5,8 @@ const jsonPath = require('./json-path')
 const { BaseJsonService } = require('..')
 
 module.exports = class DynamicJson extends jsonPath(BaseJsonService) {
-  static get category() {
-    return 'dynamic'
-  }
-
   static get route() {
     return createRoute('json')
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'custom badge',
-    }
   }
 
   async _getData({ schema, url, errorMessages }) {
