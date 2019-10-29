@@ -17,6 +17,12 @@ module.exports = superclass =>
       }
     }
 
+    async _getData({ schema, url, errorMessages }) {
+      throw new Error(
+        `_getData() function not implemented for ${this.constructor.name}`
+      )
+    }
+
     async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
       const data = await this._getData({
         schema: Joi.any(),
