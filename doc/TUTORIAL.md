@@ -210,10 +210,9 @@ module.exports = class GemVersion extends BaseJsonService {
     return { label: 'gem' }
   }
 
-  // (9)
-  async handle({ gem }) {
-    const { version } = await this.fetch({ gem })
-    return this.constructor.render({ version })
+  // (11)
+  static render({ version }) {
+    return renderVersionBadge({ version })
   }
 
   // (10)
@@ -224,9 +223,10 @@ module.exports = class GemVersion extends BaseJsonService {
     })
   }
 
-  // (11)
-  static render({ version }) {
-    return renderVersionBadge({ version })
+  // (9)
+  async handle({ gem }) {
+    const { version } = await this.fetch({ gem })
+    return this.constructor.render({ version })
   }
 }
 ```
