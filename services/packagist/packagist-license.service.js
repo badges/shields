@@ -6,17 +6,22 @@ const { optionalUrl } = require('../validators')
 const {
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 
+const packageSchema = Joi.object()
+  .pattern(
+    /^/,
+    Joi.object({
+      license: Joi.array().required(),
+    }).required()
+  )
+  .required()
+
 const schema = Joi.object({
-  package: Joi.object({
-    versions: Joi.object({
-      'dev-master': Joi.object({
-        license: Joi.array().required(),
-      }).required(),
-    }).required(),
-  }).required(),
+  packages: Joi.object()
+    .pattern(/^/, packageSchema)
+    .required(),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -50,7 +55,7 @@ module.exports = class PackagistLicense extends BasePackagistService {
         queryParams: { server: 'https://packagist.org' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
         keywords,
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }
@@ -61,13 +66,16 @@ module.exports = class PackagistLicense extends BasePackagistService {
     }
   }
 
-  transform({ json }) {
-    return { license: json.package.versions['dev-master'].license }
+  transform({ json, user, repo }) {
+    return {
+      license:
+        json.packages[this.getPackageName(user, repo)]['dev-master'].license,
+    }
   }
 
   async handle({ user, repo }, { server }) {
     const json = await this.fetch({ user, repo, schema, server })
-    const { license } = this.transform({ json })
+    const { license } = this.transform({ json, user, repo })
     return renderLicenseBadge({ license })
   }
 }
