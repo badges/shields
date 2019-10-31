@@ -56,7 +56,7 @@ module.exports = superclass =>
       // https://github.com/badges/shields/issues/4018
       if (typeof data !== 'object') {
         throw new InvalidResponse({
-          prettyMessage: 'json must contain an object or array',
+          prettyMessage: 'resource must contain an object or array',
         })
       }
 
