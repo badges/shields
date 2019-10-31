@@ -13,6 +13,8 @@ const queryParamSchema = Joi.object({
 
 const goVersionRegExp = new RegExp('^go (.+)$', 'm')
 
+const keywords = ['golang']
+
 module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'version'
@@ -34,6 +36,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
         namedParams: { user: 'gohugoio', repo: 'hugo' },
         staticPreview: this.render({ version: '1.12' }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub go.mod Go version (branch)',
@@ -45,6 +48,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
         },
         staticPreview: this.render({ version: '1.12', branch: 'master' }),
         documentation,
+        keywords,
       },
       {
         title: 'GitHub go.mod Go version (subfolder of monorepo)',
@@ -53,6 +57,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
         queryParams: { filename: 'src/go.mod' },
         staticPreview: this.render({ version: '1.14' }),
         documentation,
+        keywords,
       },
     ]
   }
