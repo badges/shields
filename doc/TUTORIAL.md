@@ -249,21 +249,21 @@ Description of the code:
 9. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
 10. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
 
-- `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
-- `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
-- Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
-- A more complex call to `_requestJson()` might look like this:
-  ```js
-  return this._requestJson({
-    schema: mySchema,
-    url,
-    options: { qs: { branch: 'master' } },
-    errorMessages: {
-      401: 'private application not supported',
-      404: 'application not found',
-    },
-  })
-  ```
+    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
+    - `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
+    - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
+    - A more complex call to `_requestJson()` might look like this:
+      ```js
+      return this._requestJson({
+        schema: mySchema,
+        url,
+        options: { qs: { branch: 'master' } },
+        errorMessages: {
+          401: 'private application not supported',
+          404: 'application not found',
+        },
+      })
+      ```
 
 11. Upward still, the `static render()` method is responsible for formatting the data for display. `render()` is a pure function so we can make it a `static` method. By convention we declare functions which don't reference `this` as `static`. We could explicitly return an object here, as we did in the previous example. In this case, we will hand the version string off to `renderVersionBadge()` which will format it consistently and set an appropriate color. Because `renderVersionBadge()` doesn't return a `label` key, the default label we defined in `defaultBadgeData()` will be used when we generate the badge.
 
