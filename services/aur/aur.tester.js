@@ -49,7 +49,7 @@ t.create('votes (not found)')
 // license tests
 
 t.create('license (valid)')
-  .get('/license/pac.json')
+  .get('/license/vscodium-bin.json')
   .expectBadge({ label: 'license', message: 'MIT' })
 
 t.create('license (no license)')

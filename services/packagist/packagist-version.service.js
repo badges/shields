@@ -8,24 +8,26 @@ const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
+const packageSchema = Joi.object()
+  .pattern(
+    /^/,
+    Joi.object({
+      version: Joi.string(),
+      extra: Joi.object({
+        'branch-alias': Joi.object().pattern(/^/, Joi.string()),
+      }),
+    }).required()
+  )
+  .required()
+
 const schema = Joi.object({
-  package: Joi.object({
-    versions: Joi.object()
-      .pattern(
-        /^/,
-        Joi.object({
-          version: Joi.string().required(),
-          extra: Joi.object({
-            'branch-alias': Joi.object().pattern(/^/, Joi.string()),
-          }),
-        })
-      )
-      .required(),
-  }).required(),
+  packages: Joi.object()
+    .pattern(/^/, packageSchema)
+    .required(),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -79,7 +81,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
         },
         staticPreview: renderVersionBadge({ version: '4.2.2' }),
         keywords,
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }
@@ -97,8 +99,8 @@ module.exports = class PackagistVersion extends BasePackagistService {
     return renderVersionBadge({ version })
   }
 
-  transform({ type, json }) {
-    const versionsData = json.package.versions
+  transform({ type, json, user, repo }) {
+    const versionsData = json.packages[this.getPackageName(user, repo)]
     let versions = Object.keys(versionsData)
     const aliasesMap = {}
     versions.forEach(version => {
@@ -137,7 +139,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
       schema: type === 'v' ? allVersionsSchema : schema,
       server,
     })
-    const { version } = this.transform({ type, json })
+    const { version } = this.transform({ type, json, user, repo })
     return this.constructor.render({ version })
   }
 }

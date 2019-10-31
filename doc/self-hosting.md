@@ -69,7 +69,7 @@ Successfully built 4471b442c220
 ```
 
 Optionally, create a file called `shields.env` that contains the needed
-configuration. See [server-secrets.md](server-secrets.md) and [../config/custom-environment-variables.yml](config/custom-environment-variables.yml) for examples.
+configuration. See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for examples.
 
 Then run the container:
 
