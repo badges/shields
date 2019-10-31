@@ -11,6 +11,7 @@ import Customizer from '../customizer/customizer'
 const Documentation = styled.div`
   max-width: 800px;
   margin: 35px auto 20px;
+  text-align: left;
 `
 
 export function MarkupModalContent({
