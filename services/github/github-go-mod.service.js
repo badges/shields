@@ -74,18 +74,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
     })
   }
 
-  async handle({ user, repo, branch }, { filename = 'go.mod' }) {
-    const content = await fetchRepoContent(this, {
-      user,
-      repo,
-      branch,
-      filename,
-    })
-    const { go } = this.constructor.parseContent(content)
-    return this.constructor.render({ version: go, branch })
-  }
-
-  static parseContent(content) {
+  static transform(content) {
     const match = goVersionRegExp.exec(content)
     if (!match) {
       throw new InvalidResponse({
@@ -96,5 +85,16 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
     return {
       go: match[1],
     }
+  }
+
+  async handle({ user, repo, branch }, { filename = 'go.mod' }) {
+    const content = await fetchRepoContent(this, {
+      user,
+      repo,
+      branch,
+      filename,
+    })
+    const { go } = this.constructor.transform(content)
+    return this.constructor.render({ version: go, branch })
   }
 }
