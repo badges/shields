@@ -45,8 +45,12 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return { label: 'swagger' }
   }
 
-  static render({ message, clr }) {
-    return { message, color: clr }
+  static render({ message }) {
+    if (message === 'valid') {
+      return { message, color: 'brightgreen' }
+    } else {
+      return { message, color: 'red' }
+    }
   }
 
   async fetch({ scheme, urlF }) {
@@ -61,24 +65,23 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
       },
     })
   }
+
+  transform(valMessages) {
+    if (
+      !valMessages ||
+      valMessages.length === 0 ||
+      valMessages.forEach(msg => msg.level === 'warning')
+    ) {
+      return 'valid'
+    } else {
+      return 'invalid'
+    }
+  }
+
   async handle({ scheme, url }) {
     const json = await this.fetch({ scheme, urlF: url })
     const valMessages = json.schemaValidationMessages
 
-    if (
-      !valMessages ||
-      valMessages.length === 0 ||
-      this.onlyWarnings(valMessages)
-    ) {
-      return this.constructor.render({ message: 'valid', clr: 'brightgreen' })
-    } else {
-      return this.constructor.render({ message: 'invalid', clr: 'red' })
-    }
-  }
-
-  onlyWarnings(valMessages) {
-    let result = true
-    valMessages.forEach(msg => (result = msg.level === 'warning' && result))
-    return result
+    return this.constructor.render({ message: this.transform(valMessages) })
   }
 }
