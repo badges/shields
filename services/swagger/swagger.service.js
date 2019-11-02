@@ -61,15 +61,24 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
       },
     })
   }
-
   async handle({ scheme, url }) {
     const json = await this.fetch({ scheme, urlF: url })
     const valMessages = json.schemaValidationMessages
 
-    if (!valMessages || valMessages.length === 0) {
+    if (
+      !valMessages ||
+      valMessages.length === 0 ||
+      this.onlyWarnings(valMessages)
+    ) {
       return this.constructor.render({ message: 'valid', clr: 'brightgreen' })
     } else {
       return this.constructor.render({ message: 'invalid', clr: 'red' })
     }
+  }
+
+  onlyWarnings(valMessages) {
+    let result = true
+    valMessages.forEach(msg => (result = msg.level === 'warning' && result))
+    return result
   }
 }

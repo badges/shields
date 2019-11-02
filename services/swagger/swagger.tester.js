@@ -21,6 +21,27 @@ t.create('Valid')
     color: 'brightgreen',
   })
 
+t.create('Valid with Warnings')
+  .get(getURL)
+  .intercept(nock =>
+    nock(apiURL)
+      .get(apiGetURL)
+      .query(apiGetQueryParams)
+      .reply(200, {
+        schemaValidationMessages: [
+          {
+            level: 'warning',
+            message: 'warning',
+          },
+        ],
+      })
+  )
+  .expectBadge({
+    label: 'swagger',
+    message: 'valid',
+    color: 'brightgreen',
+  })
+
 t.create('Invalid')
   .get(getURL)
   .intercept(nock =>
