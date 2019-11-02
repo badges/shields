@@ -70,7 +70,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     if (
       !valMessages ||
       valMessages.length === 0 ||
-      valMessages.forEach(msg => msg.level === 'warning')
+      valMessages.every(msg => msg.level === 'warning')
     ) {
       return 'valid'
     } else {
