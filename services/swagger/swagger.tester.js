@@ -3,7 +3,10 @@
 const getURL = '/https/example.com/example.json.json'
 const apiURL = 'http://validator.swagger.io'
 const apiGetURL = '/validator/debug'
-const apiGetQueryParams = { url: 'https://example.com/example.json' }
+const apiGetQueryParams = {
+  fileExtension: 'json',
+  url: 'https://example.com/example',
+}
 
 const t = (module.exports = require('../tester').createServiceTester())
 

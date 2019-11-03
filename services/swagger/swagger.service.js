@@ -22,7 +22,7 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
   static get route() {
     return {
       base: 'swagger/valid/2.0',
-      pattern: ':scheme(http|https)?/:url*',
+      pattern: ':scheme(http|https)?/:fileExtension(json|yaml)?/:url*',
     }
   }
 
@@ -30,12 +30,13 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
-        pattern: ':scheme/:url',
+        pattern: ':scheme/:fileExtension/:url',
         staticPreview: this.render({ message: 'valid', clr: 'brightgreen' }),
         namedParams: {
           scheme: 'https',
+          fileExtension: 'json',
           url:
-            'raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+            'raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded',
         },
       },
     ]
@@ -53,14 +54,14 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     }
   }
 
-  async fetch({ scheme, urlF }) {
+  async fetch({ scheme, fileExtension, urlF }) {
     const url = 'http://validator.swagger.io/validator/debug'
     return this._requestJson({
       url,
       schema: validatorSchema,
       options: {
         qs: {
-          url: `${scheme}://${urlF}`,
+          url: `${scheme}://${urlF}.${fileExtension}`,
         },
       },
     })
@@ -78,8 +79,8 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     }
   }
 
-  async handle({ scheme, url }) {
-    const json = await this.fetch({ scheme, urlF: url })
+  async handle({ scheme, fileExtension, url }) {
+    const json = await this.fetch({ scheme, fileExtension, urlF: url })
     const valMessages = json.schemaValidationMessages
 
     return this.constructor.render({ message: this.transform(valMessages) })
