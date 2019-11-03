@@ -201,7 +201,7 @@
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.17.7",
     "gatsby-plugin-catch-links": "^2.1.15",
-    "gatsby-plugin-page-creator": "^2.1.27",
+    "gatsby-plugin-page-creator": "^2.1.28",
     "gatsby-plugin-react-helmet": "^3.1.13",
     "gatsby-plugin-remove-trailing-slashes": "^2.1.12",
     "gatsby-plugin-styled-components": "^3.1.11",
