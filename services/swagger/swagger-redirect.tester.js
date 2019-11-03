@@ -3,7 +3,7 @@
 const { ServiceTester } = require('../tester')
 
 const t = (module.exports = new ServiceTester({
-  id: 'SwaggerZrlRedirect',
+  id: 'SwaggerUrlRedirect',
   title: 'SwaggerUrlRedirect',
   pathPrefix: '/swagger/valid/2.0',
 }))

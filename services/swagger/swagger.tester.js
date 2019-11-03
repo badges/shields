@@ -1,6 +1,6 @@
 'use strict'
 
-const getURL = '/swagger/valid/3.0/spec?url=https://example.com/example.json'
+const getURL = '/spec.json?url=https://example.com/example.json'
 const apiURL = 'http://validator.swagger.io'
 const apiGetURL = '/validator/debug'
 const apiGetQueryParams = {
