@@ -8,6 +8,7 @@ const {
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
+const { NotFound } = require('..')
 
 const packageSchema = Joi.object()
   .pattern(
@@ -67,10 +68,13 @@ module.exports = class PackagistLicense extends BasePackagistService {
   }
 
   transform({ json, user, repo }) {
-    return {
-      license:
-        json.packages[this.getPackageName(user, repo)]['dev-master'].license,
+    const packageName = this.getPackageName(user, repo)
+    const branch = json.packages[packageName]['dev-master']
+    if (!branch) {
+      throw new NotFound({ prettyMessage: 'default branch not found' })
     }
+    const { license } = branch
+    return { license }
   }
 
   async handle({ user, repo }, { server }) {
