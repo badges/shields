@@ -16,8 +16,8 @@ module.exports = class SourceforgeTickets extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'sourceforge/tickets',
-      pattern: ':type(bugs|feature-requests)/:project',
+      base: 'sourceforge/open-tickets',
+      pattern: ':project/:type(bugs|feature-requests)',
     }
   }
 

@@ -4,7 +4,7 @@ const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('bugs')
-  .get('/bugs/sevenzip.json')
+  .get('/sevenzip/bugs.json')
   .expectBadge({
     label: 'open tickets',
     message: isMetric,
@@ -12,7 +12,7 @@ t.create('bugs')
   .timeout(10000)
 
 t.create('feature requests')
-  .get('/feature-requests/sevenzip.json')
+  .get('/sevenzip/feature-requests.json')
   .expectBadge({
     label: 'open tickets',
     message: isMetric,
@@ -20,7 +20,7 @@ t.create('feature requests')
   .timeout(10000)
 
 t.create('invalid project')
-  .get('/bugs/invalid.json')
+  .get('/invalid/bugs.json')
   .expectBadge({
     label: 'open tickets',
     message: 'project not found',
