@@ -1,11 +1,10 @@
 'use strict'
 
-const getURL = '/https/example.com/example.json.json'
+const getURL = '/swagger/valid/3.0/spec?url=https://example.com/example.json'
 const apiURL = 'http://validator.swagger.io'
 const apiGetURL = '/validator/debug'
 const apiGetQueryParams = {
-  fileExtension: 'json',
-  url: 'https://example.com/example',
+  url: 'https://example.com/example.json',
 }
 
 const t = (module.exports = require('../tester').createServiceTester())
@@ -63,5 +62,26 @@ t.create('Invalid')
   .expectBadge({
     label: 'swagger',
     message: 'invalid',
+    color: 'red',
+  })
+
+t.create('Not found')
+  .get(getURL)
+  .intercept(nock =>
+    nock(apiURL)
+      .get(apiGetURL)
+      .query(apiGetQueryParams)
+      .reply(200, {
+        schemaValidationMessages: [
+          {
+            level: 'error',
+            message: "Can't read from file https://example.com/example.json",
+          },
+        ],
+      })
+  )
+  .expectBadge({
+    label: 'swagger',
+    message: 'spec not found',
     color: 'red',
   })

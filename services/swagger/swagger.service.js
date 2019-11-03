@@ -1,7 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseJsonService } = require('..')
+const { optionalUrl } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 
 const validatorSchema = Joi.object()
   .keys({
@@ -14,6 +15,10 @@ const validatorSchema = Joi.object()
   })
   .required()
 
+const queryParamSchema = Joi.object({
+  url: optionalUrl.required(),
+}).required()
+
 module.exports = class SwaggerValidatorService extends BaseJsonService {
   static get category() {
     return 'other'
@@ -21,8 +26,9 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'swagger/valid/2.0',
-      pattern: ':scheme(http|https)?/:fileExtension(json|yaml)?/:url*',
+      base: 'swagger/valid/3.0',
+      pattern: 'spec',
+      queryParamSchema,
     }
   }
 
@@ -30,13 +36,11 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
-        pattern: ':scheme/:fileExtension/:url',
         staticPreview: this.render({ message: 'valid', clr: 'brightgreen' }),
-        namedParams: {
-          scheme: 'https',
-          fileExtension: 'json',
+        namedParams: {},
+        queryParams: {
           url:
-            'raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded',
+            'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
         },
       },
     ]
@@ -54,14 +58,14 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     }
   }
 
-  async fetch({ scheme, fileExtension, urlF }) {
+  async fetch({ urlF }) {
     const url = 'http://validator.swagger.io/validator/debug'
     return this._requestJson({
       url,
       schema: validatorSchema,
       options: {
         qs: {
-          url: `${scheme}://${urlF}.${fileExtension}`,
+          url: urlF,
         },
       },
     })
@@ -74,13 +78,19 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
       valMessages.every(msg => msg.level === 'warning')
     ) {
       return 'valid'
+    } else if (
+      valMessages.length === 1 &&
+      valMessages[0].level === 'error' &&
+      valMessages[0].message.includes("Can't read from file")
+    ) {
+      throw new NotFound({ prettyMessage: 'spec not found' })
     } else {
       return 'invalid'
     }
   }
 
-  async handle({ scheme, fileExtension, url }) {
-    const json = await this.fetch({ scheme, fileExtension, urlF: url })
+  async handle(_routeParams, { url }) {
+    const json = await this.fetch({ urlF: url })
     const valMessages = json.schemaValidationMessages
 
     return this.constructor.render({ message: this.transform(valMessages) })
