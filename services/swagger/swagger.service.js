@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 
-const validatorSchema = Joi.object()
+const schema = Joi.object()
   .keys({
     schemaValidationMessages: Joi.array().items(
       Joi.object({
@@ -16,7 +16,7 @@ const validatorSchema = Joi.object()
   .required()
 
 const queryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  specUrl: optionalUrl.required(),
 }).required()
 
 module.exports = class SwaggerValidatorService extends BaseJsonService {
@@ -26,8 +26,8 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'swagger/valid/3.0',
-      pattern: 'spec',
+      base: 'swagger/valid',
+      pattern: '3.0',
       queryParamSchema,
     }
   }
@@ -36,10 +36,10 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return [
       {
         title: 'Swagger Validator',
-        staticPreview: this.render({ message: 'valid', clr: 'brightgreen' }),
+        staticPreview: this.render({ status: 'valid' }),
         namedParams: {},
         queryParams: {
-          url:
+          specUrl:
             'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
         },
       },
@@ -50,49 +50,45 @@ module.exports = class SwaggerValidatorService extends BaseJsonService {
     return { label: 'swagger' }
   }
 
-  static render({ message }) {
-    if (message === 'valid') {
-      return { message, color: 'brightgreen' }
+  static render({ status }) {
+    if (status === 'valid') {
+      return { message: status, color: 'brightgreen' }
     } else {
-      return { message, color: 'red' }
+      return { message: status, color: 'red' }
     }
   }
 
-  async fetch({ urlF }) {
-    const url = 'http://validator.swagger.io/validator/debug'
+  async fetch({ specUrl }) {
     return this._requestJson({
-      url,
-      schema: validatorSchema,
+      url: 'http://validator.swagger.io/validator/debug',
+      schema,
       options: {
         qs: {
-          url: urlF,
+          url: specUrl,
         },
       },
     })
   }
 
-  transform(valMessages) {
-    if (
-      !valMessages ||
-      valMessages.length === 0 ||
-      valMessages.every(msg => msg.level === 'warning')
-    ) {
-      return 'valid'
-    } else if (
-      valMessages.length === 1 &&
-      valMessages[0].level === 'error' &&
-      valMessages[0].message.includes("Can't read from file")
-    ) {
-      throw new NotFound({ prettyMessage: 'spec not found' })
-    } else {
-      return 'invalid'
+  transform({ json, specUrl }) {
+    const valMessages = json.schemaValidationMessages
+    if (!valMessages || valMessages.length === 0) {
+      return { status: 'valid' }
+    } else if (valMessages.length === 1) {
+      const { message, level } = valMessages[0]
+      if (level === 'error' && message === `Can't read from file ${specUrl}`) {
+        throw new NotFound({ prettyMessage: 'spec not found or unreadable ' })
+      }
     }
+    if (valMessages.every(msg => msg.level === 'warning')) {
+      return { status: 'valid' }
+    }
+    return { status: 'invalid' }
   }
 
-  async handle(_routeParams, { url }) {
-    const json = await this.fetch({ urlF: url })
-    const valMessages = json.schemaValidationMessages
-
-    return this.constructor.render({ message: this.transform(valMessages) })
+  async handle(_routeParams, { specUrl }) {
+    const json = await this.fetch({ specUrl })
+    const { status } = this.transform({ json, specUrl })
+    return this.constructor.render({ status })
   }
 }
