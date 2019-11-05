@@ -10,41 +10,6 @@ const apiGetQueryParams = {
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Valid')
-  .get(getURL)
-  .intercept(nock =>
-    nock(apiURL)
-      .get(apiGetURL)
-      .query(apiGetQueryParams)
-      .reply(200, {})
-  )
-  .expectBadge({
-    label: 'swagger',
-    message: 'valid',
-    color: 'brightgreen',
-  })
-
-t.create('Valid with warnings')
-  .get(getURL)
-  .intercept(nock =>
-    nock(apiURL)
-      .get(apiGetURL)
-      .query(apiGetQueryParams)
-      .reply(200, {
-        schemaValidationMessages: [
-          {
-            level: 'warning',
-            message: 'warning',
-          },
-        ],
-      })
-  )
-  .expectBadge({
-    label: 'swagger',
-    message: 'valid',
-    color: 'brightgreen',
-  })
-
 t.create('Invalid')
   .get(getURL)
   .intercept(nock =>
@@ -66,28 +31,7 @@ t.create('Invalid')
     color: 'red',
   })
 
-t.create('Not found')
-  .get(getURL)
-  .intercept(nock =>
-    nock(apiURL)
-      .get(apiGetURL)
-      .query(apiGetQueryParams)
-      .reply(200, {
-        schemaValidationMessages: [
-          {
-            level: 'error',
-            message: "Can't read from file https://example.com/example.json",
-          },
-        ],
-      })
-  )
-  .expectBadge({
-    label: 'swagger',
-    message: 'spec not found or unreadable',
-    color: 'red',
-  })
-
-t.create('Live valid json 2.0')
+t.create('Valid json 2.0')
   .get(
     `${getURLBase}https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json`
   )
@@ -97,7 +41,7 @@ t.create('Live valid json 2.0')
     color: 'brightgreen',
   })
 
-t.create('Live valid yaml 3.0')
+t.create('Valid yaml 3.0')
   .get(
     `${getURLBase}https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml`
   )
@@ -107,7 +51,7 @@ t.create('Live valid yaml 3.0')
     color: 'brightgreen',
   })
 
-t.create('Live valid with warnings')
+t.create('Valid with warnings')
   .get(`${getURLBase}https://petstore3.swagger.io/api/v3/openapi.json`)
   .expectBadge({
     label: 'swagger',
@@ -116,7 +60,7 @@ t.create('Live valid with warnings')
   })
 
 // Isn't a spec, but valid json
-t.create('Live invalid')
+t.create('Invalid')
   .get(
     `${getURLBase}https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/schemas/v3.0/schema.json`
   )
@@ -126,7 +70,7 @@ t.create('Live invalid')
     color: 'red',
   })
 
-t.create('Live not found')
+t.create('Not found')
   .get(
     `${getURLBase}https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/notFound.yaml`
   )
