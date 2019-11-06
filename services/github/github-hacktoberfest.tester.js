@@ -16,7 +16,7 @@ const isHacktoberfestStatus = Joi.alternatives().try(
   isHacktoberfestNoIssuesStatus,
   isHacktoberfestNoPRsStatus,
   isHacktoberfestCombinedStatus,
-  'is done!'
+  /^is over! \([0-9]+ PRs? opened\)$/
 )
 
 t.create('GitHub Hacktoberfest combined status')
