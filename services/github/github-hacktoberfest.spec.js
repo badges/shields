@@ -6,7 +6,7 @@ const GitHubHacktoberfest = require('./github-hacktoberfest.service')
 describe('GitHubHacktoberfest', function() {
   test(GitHubHacktoberfest.render, () => {
     given({
-      daysLeft: 0,
+      daysLeft: -1,
       contributionCount: 12,
     }).expect({
       message: 'is over! (12 PRs opened)',
