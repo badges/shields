@@ -91,6 +91,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
       errorMessages: {
         401: 'repo not found',
+        404: 'repo not found',
       },
     })
     if (status === 'unknown') {
