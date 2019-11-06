@@ -120,7 +120,14 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
       // We want to show "1 day left" on the last day so we add 1.
       daysLeft = moment('2019-11-01 12:00:00 Z').diff(moment(), 'days') + 1
     }
-
+    if (daysLeft < 0) {
+      return {
+        message: `is over! (${metric(contributionCount)} ${maybePluralize(
+          'PR',
+          contributionCount
+        )} opened)`,
+      }
+    }
     const message =
       [
         suggestedIssueCount
@@ -140,7 +147,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
           : '',
       ]
         .filter(Boolean)
-        .join(', ') || 'is done!'
+        .join(', ') || 'is over!'
 
     return { message }
   }
