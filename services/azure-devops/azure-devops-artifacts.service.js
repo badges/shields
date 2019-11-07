@@ -19,7 +19,42 @@ class AzureArtifactsNugetVersionService extends BaseJsonService {
   }
 
   static get examples() {
-    return []
+    return [
+      {
+        title: 'Azure Artifacts',
+        pattern: 'v/:organization/:project/:feed/:packageName',
+        namedParams: {
+          organization: 'dotnet',
+          project: 'RX.Net',
+          feed: 'RxNet',
+          packageName: 'System.Reactive',
+        },
+        staticPreview: this.render({ version: '4.2.1' }),
+      },
+      {
+        title: 'Azure Artifacts (with prereleases)',
+        pattern: 'vpre/:organization/:project/:feed/:packageName',
+        namedParams: {
+          organization: 'dotnet',
+          project: 'RX.Net',
+          feed: 'RxNet',
+          packageName: 'System.Reactive',
+        },
+        staticPreview: this.render({ version: '4.3.0-preview.10' }),
+      },
+      {
+        title: 'Azure Artifacts (with view)',
+        pattern: 'vpre/:organization/:project/:feed/:view/:packageName',
+        namedParams: {
+          organization: 'dotnet',
+          project: 'RX.Net',
+          feed: 'RxNet',
+          view: 'prerelease',
+          packageName: 'System.Reactive',
+        },
+        staticPreview: this.render({ version: '4.3.0-preview.10' }),
+      },
+    ]
   }
 
   static get defaultBadgeData() {
