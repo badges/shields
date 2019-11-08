@@ -147,7 +147,7 @@
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
-    "@babel/polyfill": "^7.6.0",
+    "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "7.6.2",
     "@mapbox/react-click-to-select": "^2.2.0",
