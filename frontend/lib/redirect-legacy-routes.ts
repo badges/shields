@@ -5,11 +5,11 @@ export default function redirectLegacyRoutes() {
   if (hash && hash.startsWith('#/examples/')) {
     const category = hash.replace('#/examples/', '')
     navigate(`category/${category}`, {
-      replace: true
+      replace: true,
     })
   } else if (hash === '#/endpoint') {
     navigate('endpoint', {
-      replace: true
+      replace: true,
     })
   }
 }
