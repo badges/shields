@@ -11,10 +11,12 @@ const projectSchema = Joi.object({
   rank: anyInteger,
 }).required()
 
-async function fetchProject(serviceInstance, { platform, packageName }) {
+async function fetchProject(serviceInstance, { platform, scope, packageName }) {
   return serviceInstance._requestJson({
     schema: projectSchema,
-    url: `https://libraries.io/api/${platform}/${packageName}`,
+    url: `https://libraries.io/api/${encodeURIComponent(platform)}/${
+      scope ? encodeURIComponent(`${scope}/`) : ''
+    }${encodeURIComponent(packageName)}`,
     errorMessages: { 404: 'package not found' },
   })
 }

@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
 const [ScrutinizerCoverage] = require('./scrutinizer-coverage.service')
-const { NotFound } = require('..')
+const { InvalidResponse, NotFound } = require('..')
 
 describe('ScrutinizerCoverage', function() {
   test(ScrutinizerCoverage.render, () => {
@@ -49,6 +49,25 @@ describe('ScrutinizerCoverage', function() {
         expect(e).to.be.an.instanceof(NotFound)
         expect(e.prettyMessage).to.equal('coverage not found')
       }
+    })
+    it('throws InvalidResponse error when branch is missing statistics', function() {
+      expect(() =>
+        ScrutinizerCoverage.prototype.transform({
+          branch: 'gh-pages',
+          json: {
+            applications: {
+              master: { index: {} },
+              'gh-pages': {
+                build_status: {
+                  status: 'unknown',
+                },
+              },
+            },
+          },
+        })
+      )
+        .to.throw(InvalidResponse)
+        .with.property('prettyMessage', 'metrics missing for branch')
     })
   })
 })
