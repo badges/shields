@@ -19,9 +19,10 @@ const queryParamSchema = Joi.object({
     .default('date'),
 }).required()
 
-const releaseInfoArraySchema = Joi.array()
-  .items(releaseInfoSchema)
-  .required()
+const releaseInfoArraySchema = Joi.alternatives().try(
+  Joi.array().items(releaseInfoSchema),
+  Joi.array().length(0)
+)
 
 class GithubRelease extends GithubAuthV3Service {
   static get category() {
@@ -117,13 +118,14 @@ class GithubRelease extends GithubAuthV3Service {
       )
       return { tag_name: latestRelease, prerelease: kvpairs[latestRelease] }
     }
+
     if (!includePrereleases) {
       const stableReleases = releases.filter(release => !release.prerelease)
       if (stableReleases.length > 0) {
         return stableReleases[0]
       }
-      return releases[0]
     }
+
     return releases[0]
   }
 
@@ -131,9 +133,8 @@ class GithubRelease extends GithubAuthV3Service {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
 
-    let latestRelease
     if (!includePrereleases && sort === 'date') {
-      latestRelease = await fetchLatestRelease(this, { user, repo })
+      const latestRelease = await fetchLatestRelease(this, { user, repo })
       return this.constructor.render({
         version: latestRelease.tag_name,
         sort,
@@ -142,9 +143,10 @@ class GithubRelease extends GithubAuthV3Service {
     }
 
     const releases = await this.fetchReleases({ user, repo })
-    if (releases.length === 0)
-      throw new NotFound({ prettyMessage: 'no releases found' })
-    latestRelease = this.constructor.getLatestRelease({
+    if (releases.length === 0) {
+      throw new NotFound({ prettyMessage: 'no releases' })
+    }
+    const latestRelease = this.constructor.getLatestRelease({
       releases,
       sort,
       includePrereleases,

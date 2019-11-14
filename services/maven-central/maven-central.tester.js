@@ -50,4 +50,4 @@ t.create('version ending with zero')
       `
       )
   )
-  .expectBadge({ label: 'maven-central', message: /^v1\.30$/ })
+  .expectBadge({ label: 'maven-central', message: 'v1.30' })

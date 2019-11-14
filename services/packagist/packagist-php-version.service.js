@@ -5,7 +5,7 @@ const { optionalUrl } = require('../validators')
 const {
   allVersionsSchema,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
 const { NotFound } = require('..')
 
@@ -58,7 +58,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
           server: 'https://packagist.org',
         },
         staticPreview: this.render({ php: '^7.1.3' }),
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }
@@ -84,11 +84,14 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
       server,
     })
 
-    if (!allData.package.versions.hasOwnProperty(version)) {
+    if (
+      !allData.packages[this.getPackageName(user, repo)].hasOwnProperty(version)
+    ) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
-    const packageVersion = allData.package.versions[version]
+    const packageVersion =
+      allData.packages[this.getPackageName(user, repo)][version]
     if (!packageVersion.require || !packageVersion.require.php) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
