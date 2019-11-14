@@ -5,6 +5,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('image size without a specified tag')
   .get('/fedora/apache.json')
+  .timeout(150000)
   .expectBadge({
     label: 'image size',
     message: isFileSize,
@@ -12,6 +13,7 @@ t.create('image size without a specified tag')
 
 t.create('image size with a specified tag')
   .get('/fedora/apache/latest.json')
+  .timeout(150000)
   .expectBadge({
     label: 'image size',
     message: isFileSize,

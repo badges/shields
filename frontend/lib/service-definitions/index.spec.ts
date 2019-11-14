@@ -4,7 +4,7 @@ import { findCategory, getDefinitionsForCategory } from '.'
 
 describe('Service definition helpers', function() {
   test(findCategory, () => {
-    given('build').expect({ id: 'build', name: 'Build' })
+    given('build').expect({ id: 'build', name: 'Build', keywords: ['build'] })
     given('foo').expect(undefined)
   })
 

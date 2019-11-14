@@ -48,6 +48,21 @@ t.create('Debian package (invalid, more than one result)')
   )
   .expectBadge({ label: 'debian', message: 'invalid response data' })
 
+t.create('Debian package (invalid, requested package missing from response)')
+  .get('/apt/unstable.json')
+  .intercept(nock =>
+    nock('https://api.ftp-master.debian.org')
+      .get('/madison?f=json&s=unstable&package=apt')
+      .reply(200, [
+        {
+          other: {
+            unstable: { '1.8.0': { source: 'apt', component: 'main' } },
+          },
+        },
+      ])
+  )
+  .expectBadge({ label: 'debian', message: 'invalid response data' })
+
 t.create('Debian package (not found)')
   .get('/not-a-package/stable.json')
   .expectBadge({ label: 'debian', message: 'not found' })

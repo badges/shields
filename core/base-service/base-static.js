@@ -7,18 +7,20 @@ const {
   setCacheHeadersForStaticResource,
 } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
+const { MetricHelper } = require('./metric-helper')
 const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
-  static register({ camp, requestCounter }, serviceConfig) {
+  static register({ camp, metricInstance }, serviceConfig) {
     const {
       profiling: { makeBadge: shouldProfileMakeBadge },
     } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
+    const metricHelper = MetricHelper.create({
+      metricInstance,
+      ServiceClass: this,
     })
 
     camp.route(regex, async (queryParams, match, end, ask) => {
@@ -28,6 +30,8 @@ module.exports = class BaseStaticService extends BaseService {
         ask.res.end()
         return
       }
+
+      const metricHandle = metricHelper.startRequest()
 
       const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
@@ -60,7 +64,7 @@ module.exports = class BaseStaticService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      serviceRequestCounter.inc()
+      metricHandle.noteResponseSent()
     })
   }
 }

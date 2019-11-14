@@ -123,6 +123,34 @@ t.create('query doesnt exist (attribute)')
     color: 'lightgrey',
   })
 
+t.create('Cannot resolve QName')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//a:si',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: 'Cannot resolve QName a',
+    color: 'red',
+  })
+
+t.create('XPath parse error')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//a[contains(@href, "foo"]',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: 'XPath parse error',
+    color: 'red',
+  })
+
 t.create('XML from url | invalid url')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
@@ -148,3 +176,45 @@ t.create('request should set Accept header')
       .reply(200, exampleXml)
   )
   .expectBadge({ label: 'custom badge', message: 'Midnight Rain' })
+
+t.create('query with node function')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//book[1]/title/text()',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: "XML Developer's Guide",
+    color: 'blue',
+  })
+
+t.create('query with type convertion to string')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: 'string(//book[1]/title)',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: "XML Developer's Guide",
+    color: 'blue',
+  })
+
+t.create('query with type convertion to number')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: 'number(//book[1]/price)',
+    })}`
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: '44.95',
+    color: 'blue',
+  })

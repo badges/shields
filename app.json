@@ -23,6 +23,14 @@
     "GH_TOKEN": {
       "description": "Configure the token to be used for the GitHub services.",
       "required": false
+    },
+    "TWITCH_CLIENT_ID": {
+      "description": "Configure the client id to be used for the Twitch service.",
+      "required": false
+    },
+    "TWITCH_CLIENT_SECRET": {
+      "description": "Configure the client secret to be used for the Twitch service.",
+      "required": false
     }
   },
   "formation": {

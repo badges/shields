@@ -28,6 +28,14 @@ module.exports = class DynamicJson extends BaseJsonService {
       errorMessages,
     })
 
+    // JSONPath only works on objects and arrays.
+    // https://github.com/badges/shields/issues/4018
+    if (typeof data !== 'object') {
+      throw new InvalidResponse({
+        prettyMessage: 'json must contain an object or array',
+      })
+    }
+
     let values
     try {
       values = jp.query(data, pathExpression)

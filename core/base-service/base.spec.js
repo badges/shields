@@ -192,7 +192,7 @@ describe('BaseService', function() {
       })
     })
 
-    it('Throws a validation error on invalid data', async function() {
+    context('On invalid data', function() {
       class ThrowingService extends DummyService {
         async handle() {
           return {
@@ -200,19 +200,37 @@ describe('BaseService', function() {
           }
         }
       }
-      try {
-        await ThrowingService.invoke(
-          {},
-          { handleInternalErrors: false },
-          { namedParamA: 'bar.bar.bar' }
-        )
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.name).to.equal('ValidationError')
-        expect(e.details.map(({ message }) => message)).to.deep.equal([
-          '"message" is required',
-        ])
-      }
+
+      it('Throws a validation error on invalid data', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
+      })
+
+      // Ensure debuggabillity.
+      // https://github.com/badges/shields/issues/3784
+      it('Includes the service class in the stack trace', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.stack).to.include('ThrowingService._validateServiceData')
+        }
+      })
     })
   })
 
@@ -316,7 +334,9 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+?)(|\.svg|\.json)$/
+    // TODO Strangly, without the useless escape the regexes do not match in Node 12.
+    // eslint-disable-next-line no-useless-escape
+    const expectedRouteRegex = /^\/foo\/([^\/]+?)(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest

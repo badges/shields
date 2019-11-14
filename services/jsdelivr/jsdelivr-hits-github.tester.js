@@ -28,7 +28,7 @@ t.create('jquery/jquery hits/month')
   })
 
 t.create('jquery/jquery hits/year')
-  .timeout(10000)
+  .timeout(25000)
   .get('/hy/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',

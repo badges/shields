@@ -1,7 +1,28 @@
 /**
- * Utilities relating to Lua 'rocks' version numbers.
- * This compares version numbers using the algorithm
- * followed by luarocks command-line utility
+ * Utilities relating to Lua 'rocks' version numbers. This compares version
+ * numbers using the algorithm followed by luarocks command-line utility.
+ *
+ * Some specific things about LuaRocks package versioning:
+ *
+ * 1. A version string consists of two parts: the package version (version of
+ *    the package _code_) and the revision of `rockspec` file
+ *    https://github.com/luarocks/luarocks/wiki/Rockspec-format
+ *        > **version** (string, mandatory field) - the version of the package,
+ *          plus a suffix indicating the revision of the rockspec. Example:
+ *          "2.0.1-1"
+ * 2. The package version (the first part of the LuaRocks version, the part
+ *    before dash) can be anything, SemVer is not mandatory and is not used
+ *    very often. Non-digit versions are not rare: `scm`, `dev`, `alpha`,
+ *    etc.
+ * 3. `scm` (or `cvs`) is used to indicate dev version built from VCS (e.g.
+ *    `"scm-1"`). `dev` version string is also used sometimes, and I don't
+ *    know what the difference.
+ * 4. LuaRocks API does not tell you which version is the “latest”, and the
+ *    package maintainer cannot mark a specific version as the latest. You
+ *    should figure out it yourself.
+ *
+ * https://github.com/luarocks/luarocks/blob/405ee29ba8444d97646f62e72effeaff2bfe3f79/src/luarocks/search.lua#L182
+ * https://github.com/luarocks/luarocks/blob/405ee29ba8444d97646f62e72effeaff2bfe3f79/src/luarocks/core/vers.lua#L83
  */
 'use strict'
 

@@ -23,7 +23,7 @@ module.exports = class VaadinDirectoryRatingCount extends BaseVaadinDirectorySer
         pattern: 'rating-count/:packageName',
         namedParams: { packageName: 'vaadinvaadin-grid' },
         staticPreview: this.render({ ratingCount: 6 }),
-        keywords: ['vaadin-directory', 'rating-count', 'rating count'],
+        keywords: ['vaadin-directory', 'rating-count'],
       },
     ]
   }

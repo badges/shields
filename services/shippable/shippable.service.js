@@ -23,7 +23,7 @@ const schema = Joi.array()
     Joi.object({
       branchName: Joi.string().required(),
       statusCode: Joi.number()
-        .valid(Object.keys(statusCodes).map(key => parseInt(key)))
+        .valid(...Object.keys(statusCodes).map(key => parseInt(key)))
         .required(),
     }).required()
   )

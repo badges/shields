@@ -22,8 +22,6 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().length(0)
 )
 
-const keywords = ['github download']
-
 module.exports = class GithubDownloads extends GithubAuthV3Service {
   static get category() {
     return 'downloads'
@@ -50,7 +48,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 857000,
         }),
         documentation,
-        keywords,
       },
       {
         title: 'GitHub Releases',
@@ -66,7 +63,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 27000,
         }),
         documentation,
-        keywords,
       },
       {
         title: 'GitHub Pre-Releases',
@@ -82,7 +78,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 2000,
         }),
         documentation,
-        keywords,
       },
       {
         title: 'GitHub Releases (by Release)',
@@ -98,7 +93,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 490000,
         }),
         documentation,
-        keywords,
       },
       {
         title: 'GitHub Releases (by Asset)',
@@ -115,7 +109,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 3000,
         }),
         documentation,
-        keywords,
       },
       {
         title: 'GitHub Pre-Releases (by Asset)',
@@ -132,7 +125,6 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
           downloadCount: 237,
         }),
         documentation,
-        keywords,
       },
     ]
   }
@@ -191,6 +183,11 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
         options: { qs: { per_page: 1 } },
         errorMessages: errorMessagesFor('repo not found'),
       })
+      // Note that the API will return an empty array if there are no releases
+      // https://github.com/badges/shields/issues/3786
+      if (!latestReleaseIncludingPrereleases) {
+        throw new NotFound({ prettyMessage: 'no releases' })
+      }
       releases = [latestReleaseIncludingPrereleases]
     } else if (tag) {
       const wantedRelease = await this._requestJson({

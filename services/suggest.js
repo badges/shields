@@ -23,9 +23,9 @@ function twitterPage(url) {
       url.href
     )}`,
     example: {
-      pattern: '/twitter/url/:protocol(https|http)/:hostAndPath+',
-      namedParams: { protocol: `${schema}`, hostAndPath: `${host}${path}` },
-      queryParams: {},
+      pattern: '/twitter/url',
+      namedParams: {},
+      queryParams: { url: `${schema}://${host}${path}` },
     },
     preview: {
       style: 'social',
@@ -99,18 +99,35 @@ async function githubLicense(githubApiProvider, user, repo) {
   }
 }
 
+function gitlabPipeline(user, repo) {
+  const repoSlug = `${user}/${repo}`
+  return {
+    title: 'GitLab pipeline',
+    link: `https://gitlab.com/${repoSlug}/builds`,
+    example: {
+      pattern: '/gitlab/pipeline/:user/:repo',
+      namedParams: { user, repo },
+      queryParams: {},
+    },
+  }
+}
+
 async function findSuggestions(githubApiProvider, url) {
   let promises = []
-  if (url.hostname === 'github.com') {
+  if (url.hostname === 'github.com' || url.hostname === 'gitlab.com') {
     const userRepo = url.pathname.slice(1).split('/')
     const user = userRepo[0]
     const repo = userRepo[1]
-    promises = promises.concat([
-      githubIssues(user, repo),
-      githubForks(user, repo),
-      githubStars(user, repo),
-      githubLicense(githubApiProvider, user, repo),
-    ])
+    if (url.hostname === 'github.com') {
+      promises = promises.concat([
+        githubIssues(user, repo),
+        githubForks(user, repo),
+        githubStars(user, repo),
+        githubLicense(githubApiProvider, user, repo),
+      ])
+    } else {
+      promises = promises.concat([gitlabPipeline(user, repo)])
+    }
   }
   promises.push(twitterPage(url))
 

@@ -30,7 +30,7 @@ class LibrariesIoProjectDependencies extends BaseJsonService {
   static get route() {
     return {
       base: 'librariesio/release',
-      pattern: ':platform/:packageName/:version?',
+      pattern: ':platform/:scope(@[^/]+)?/:packageName/:version?',
     }
   }
 
@@ -61,13 +61,42 @@ class LibrariesIoProjectDependencies extends BaseJsonService {
           outdatedCount: 3,
         }),
       },
+      {
+        title:
+          'Libraries.io dependency status for latest release, scoped npm package',
+        pattern: ':platform/:scope/:packageName',
+        namedParams: {
+          platform: 'npm',
+          scope: '@babel',
+          packageName: 'core',
+        },
+        staticPreview: renderDependenciesBadge({
+          deprecatedCount: 8,
+          outdatedCount: 0,
+        }),
+      },
+      {
+        title:
+          'Libraries.io dependency status for specific release, scoped npm package',
+        pattern: ':platform/:scope/:packageName/:version',
+        namedParams: {
+          platform: 'npm',
+          scope: '@babel',
+          packageName: 'core',
+          version: '7.0.0',
+        },
+        staticPreview: renderDependenciesBadge({
+          deprecatedCount: 12,
+          outdatedCount: 0,
+        }),
+      },
     ]
   }
 
-  async handle({ platform, packageName, version = 'latest' }) {
-    const url = `https://libraries.io/api/${encodeURIComponent(
-      platform
-    )}/${encodeURIComponent(packageName)}/${encodeURIComponent(
+  async handle({ platform, scope, packageName, version = 'latest' }) {
+    const url = `https://libraries.io/api/${encodeURIComponent(platform)}/${
+      scope ? encodeURIComponent(`${scope}/`) : ''
+    }${encodeURIComponent(packageName)}/${encodeURIComponent(
       version
     )}/dependencies`
     const json = await this._requestJson({

@@ -9,7 +9,7 @@ const { NotFound } = require('..')
 
 const schema = Joi.object({
   message: Joi.alternatives()
-    .try([Joi.string().regex(/^[0-9]+%$/), Joi.equal('!')])
+    .try(Joi.string().regex(/^[0-9]+%$/), Joi.equal('!'))
     .required(),
 }).required()
 
