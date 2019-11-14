@@ -7,7 +7,8 @@ const { optionalUrl } = require('../validators')
 const {
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
+  cacheDocumentationFragment,
 } = require('./packagist-base')
 
 const periodMap = {
@@ -66,6 +67,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
           interval: 'dm',
         }),
         keywords,
+        documentation: cacheDocumentationFragment,
       },
       {
         title: 'Packagist (custom server)',
@@ -80,7 +82,8 @@ module.exports = class PackagistDownloads extends BasePackagistService {
         }),
         queryParams: { server: 'https://packagist.org' },
         keywords,
-        documentation,
+        documentation:
+          customServerDocumentationFragment + cacheDocumentationFragment,
       },
     ]
   }
@@ -101,7 +104,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   async handle({ interval, user, repo }, { server }) {
     const {
       package: { downloads },
-    } = await this.fetch({ user, repo, schema, server })
+    } = await this.fetchByJsonAPI({ user, repo, schema, server })
 
     return this.constructor.render({
       downloads: downloads[periodMap[interval].field],

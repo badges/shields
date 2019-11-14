@@ -34,6 +34,20 @@ t.create('downloads for version (with version)')
     message: isMetric,
   })
 
+t.create('recent downloads')
+  .get('/dr/libc.json')
+  .expectBadge({
+    label: 'recent downloads',
+    message: isMetric,
+  })
+
+t.create('recent downloads (with version)')
+  .get('/dr/libc/0.2.31.json')
+  .expectBadge({
+    label: 'crates.io',
+    message: 'recent downloads not supported for specific versions',
+  })
+
 t.create('downloads (invalid version)')
   .get('/d/libc/7.json')
   .expectBadge({ label: 'crates.io', message: 'invalid semver: 7' })
