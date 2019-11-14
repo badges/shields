@@ -9,9 +9,7 @@ const schema = Joi.object({
     versioning: Joi.object({
       versions: Joi.object({
         version: Joi.array()
-          .items(
-            Joi.alternatives(Joi.string().required(), Joi.number().required())
-          )
+          .items(Joi.string().required())
           .single()
           .required(),
       }).required(),
@@ -71,7 +69,11 @@ module.exports = class MavenCentral extends BaseXmlService {
     const group = encodeURIComponent(groupId).replace(/\./g, '/')
     const artifact = encodeURIComponent(artifactId)
     const url = `https://repo1.maven.org/maven2/${group}/${artifact}/maven-metadata.xml`
-    return this._requestXml({ schema, url })
+    return this._requestXml({
+      schema,
+      url,
+      parserOptions: { parseNodeValue: false },
+    })
   }
 
   async handle({ groupId, artifactId, versionPrefix }) {

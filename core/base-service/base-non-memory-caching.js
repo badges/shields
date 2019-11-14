@@ -2,6 +2,7 @@
 
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const BaseService = require('./base')
+const { MetricHelper } = require('./metric-helper')
 const { setCacheHeaders } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
 const coalesceBadge = require('./coalesce-badge')
@@ -24,16 +25,19 @@ const { prepareRoute, namedParamsForMatch } = require('./route')
 // configured by the service, the user's request, and the server's default
 // cache length.
 module.exports = class NonMemoryCachingBaseService extends BaseService {
-  static register({ camp, requestCounter }, serviceConfig) {
+  static register({ camp, metricInstance }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { _cacheLength: serviceDefaultCacheLengthSeconds } = this
     const { regex, captureNames } = prepareRoute(this.route)
 
-    const serviceRequestCounter = this._createServiceRequestCounter({
-      requestCounter,
+    const metricHelper = MetricHelper.create({
+      metricInstance,
+      ServiceClass: this,
     })
 
     camp.route(regex, async (queryParams, match, end, ask) => {
+      const metricHandle = metricHelper.startRequest()
+
       const namedParams = namedParamsForMatch(captureNames, match, this)
       const serviceData = await this.invoke(
         {},
@@ -64,7 +68,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
 
       makeSend(format, ask.res, end)(svg)
 
-      serviceRequestCounter.inc()
+      metricHandle.noteResponseSent()
     })
   }
 }

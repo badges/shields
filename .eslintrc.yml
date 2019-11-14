@@ -4,6 +4,8 @@ extends:
   - plugin:@typescript-eslint/recommended
   - prettier/@typescript-eslint
   - prettier/standard
+  - prettier/react
+  - eslint:recommended
 
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
@@ -34,6 +36,7 @@ overrides:
       - '!frontend/**/*.js'
     env:
       node: true
+      es6: true
     rules:
       no-console: 'off'
       '@typescript-eslint/no-var-requires': off
@@ -94,6 +97,8 @@ overrides:
   - files:
       - '**/*.spec.@(js|ts|tsx)'
       - '**/*.integration.js'
+      - '**/test-helpers.js'
+      - 'core/service-test-runner/**/*.js'
     env:
       mocha: true
     rules:
@@ -113,7 +118,7 @@ rules:
   '@typescript-eslint/no-var-requires': error
 
   # These should be disabled by eslint-config-prettier, but are not.
-  spaced-comment: 'off'
+  no-extra-semi: 'off'
 
   # Shields additions.
   no-var: 'error'
@@ -160,7 +165,6 @@ rules:
   '@typescript-eslint/camelcase': off
 
   react/jsx-sort-props: 'error'
-  react/prop-types: 'off'
   react-hooks/rules-of-hooks: 'error'
   react-hooks/exhaustive-deps: 'error'
   jsx-quotes: ['error', 'prefer-double']

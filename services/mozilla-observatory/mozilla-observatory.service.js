@@ -8,20 +8,20 @@ const schema = Joi.object({
     .valid('ABORTED', 'FAILED', 'FINISHED', 'PENDING', 'STARTING', 'RUNNING')
     .required(),
   grade: Joi.alternatives()
-    .when('state', {
+    .conditional('state', {
       is: 'FINISHED',
       then: Joi.string().regex(/^[ABCDEF][+-]?$/),
-      otherwise: Joi.only(null),
+      otherwise: Joi.valid(null),
     })
     .required(),
   score: Joi.alternatives()
-    .when('state', {
+    .conditional('state', {
       is: 'FINISHED',
       then: Joi.number()
         .integer()
         .min(0)
         .max(200),
-      otherwise: Joi.only(null),
+      otherwise: Joi.valid(null),
     })
     .required(),
 }).required()

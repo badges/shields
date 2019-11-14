@@ -9,9 +9,10 @@ const { loadTesters } = require('../base-service/loader')
  * Load a collection of ServiceTester objects and register them with Mocha.
  */
 class Runner {
-  constructor({ baseUrl, skipIntercepted }) {
+  constructor({ baseUrl, skipIntercepted, retry }) {
     this.baseUrl = baseUrl
     this.skipIntercepted = skipIntercepted
+    this.retry = retry
   }
 
   /**
@@ -67,8 +68,8 @@ class Runner {
    * Register the tests with Mocha.
    */
   toss() {
-    const { testers, baseUrl, skipIntercepted } = this
-    testers.forEach(tester => tester.toss({ baseUrl, skipIntercepted }))
+    const { testers, baseUrl, skipIntercepted, retry } = this
+    testers.forEach(tester => tester.toss({ baseUrl, skipIntercepted, retry }))
   }
 }
 module.exports = Runner

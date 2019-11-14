@@ -104,7 +104,7 @@ services_steps: &services_steps
         environment:
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/services/results.xml
-        command: npm run test:services:pr:run
+        command: RETRY_COUNT=3 npm run test:services:pr:run
 
     - store_test_results:
         path: junit

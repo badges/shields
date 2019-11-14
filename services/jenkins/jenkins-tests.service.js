@@ -54,9 +54,8 @@ module.exports = class JenkinsTests extends JenkinsBase {
         title: 'Jenkins tests',
         namedParams: {
           protocol: 'https',
-          host: 'jenkins.qa.ubuntu.com',
-          job:
-            'view/Trusty/view/Smoke%20Testing/job/trusty-touch-flo-smoke-daily',
+          host: 'jenkins.sqlalchemy.org',
+          job: 'alembic_coverage',
         },
         queryParams: {
           compact_message: null,

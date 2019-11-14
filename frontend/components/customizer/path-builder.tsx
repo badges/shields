@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled, { css } from 'styled-components'
-import pathToRegexp from 'path-to-regexp'
+import pathToRegexp, { Token, Key } from 'path-to-regexp'
 import humanizeString from 'humanize-string'
-import { objectOfKeyValuesPropType } from '../../lib/service-definitions/service-definition-prop-types'
 import { patternToOptions } from '../../lib/pattern-helpers'
 import { noAutocorrect, StyledInput } from '../common'
 import {
@@ -12,7 +10,11 @@ import {
   BuilderCaption,
 } from './builder-common'
 
-const PathBuilderColumn = styled.span`
+interface PathBuilderColumnProps {
+  withHorizPadding?: boolean
+}
+
+const PathBuilderColumn = styled.span<PathBuilderColumnProps>`
   height: 78px;
 
   float: left;
@@ -28,7 +30,11 @@ const PathBuilderColumn = styled.span`
     `};
 `
 
-const PathLiteral = styled.div`
+interface PathLiteralProps {
+  isFirstToken: boolean
+}
+
+const PathLiteral = styled.div<PathLiteralProps>`
   margin-top: 39px;
   ${({ isFirstToken }) =>
     isFirstToken &&
@@ -68,7 +74,13 @@ const NamedParamCaption = styled(BuilderCaption)`
   text-align: center;
 `
 
-export function constructPath({ tokens, namedParams }) {
+export function constructPath({
+  tokens,
+  namedParams,
+}: {
+  tokens: Token[]
+  namedParams: { [k: string]: string }
+}) {
   let isComplete = true
   const path = tokens
     .map(token => {
@@ -96,6 +108,17 @@ export default function PathBuilder({
   exampleParams,
   onChange,
   isPrefilled,
+}: {
+  pattern: string
+  exampleParams: { [k: string]: string }
+  onChange: ({
+    path,
+    isComplete,
+  }: {
+    path: string
+    isComplete: boolean
+  }) => void
+  isPrefilled: boolean
 }) {
   const [tokens] = useState(() => pathToRegexp.parse(pattern))
   const [namedParams, setNamedParams] = useState(() =>
@@ -106,10 +129,14 @@ export default function PathBuilder({
         // objects.
         tokens
           .filter(t => typeof t !== 'string')
-          .reduce((accum, { name }) => {
-            accum[name] = ''
-            return accum
-          }, {})
+          .map(t => t as Key)
+          .reduce(
+            (accum, { name }) => {
+              accum[name] = ''
+              return accum
+            },
+            {} as { [k: string]: string }
+          )
   )
 
   useEffect(() => {
@@ -120,16 +147,16 @@ export default function PathBuilder({
     }
   }, [tokens, namedParams, onChange])
 
-  function handleTokenChange(evt) {
-    const { name, value } = evt.target
-
+  function handleTokenChange({
+    target: { name, value },
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setNamedParams({
       ...namedParams,
       [name]: value,
     })
   }
 
-  function renderLiteral(literal, tokenIndex) {
+  function renderLiteral(literal: string, tokenIndex: number) {
     return (
       <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
         <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
@@ -137,8 +164,9 @@ export default function PathBuilder({
     )
   }
 
-  function renderNamedParamInput(token) {
-    const { name, pattern } = token
+  function renderNamedParamInput(token: Key) {
+    const { pattern } = token
+    const name = `${token.name}`
     const options = patternToOptions(pattern)
 
     const value = namedParams[name]
@@ -174,8 +202,13 @@ export default function PathBuilder({
     }
   }
 
-  function renderNamedParam(token, tokenIndex, namedParamIndex) {
-    const { delimiter, name, optional } = token
+  function renderNamedParam(
+    token: Key,
+    tokenIndex: number,
+    namedParamIndex: number
+  ) {
+    const { delimiter, optional } = token
+    const name = `${token.name}`
 
     const exampleValue = exampleParams[name] || '(not set)'
 
@@ -208,10 +241,4 @@ export default function PathBuilder({
       )}
     </BuilderContainer>
   )
-}
-PathBuilder.propTypes = {
-  pattern: PropTypes.string.isRequired,
-  exampleParams: objectOfKeyValuesPropType,
-  onChange: PropTypes.func,
-  isPrefilled: PropTypes.bool,
 }

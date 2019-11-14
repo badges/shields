@@ -23,3 +23,13 @@ t.create('cobertura: job not found')
 t.create('cobertura: job found')
   .get('/cobertura/https/jenkins.sqlalchemy.org/alembic_coverage.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+
+t.create('code coverage API: job not found')
+  .get('/api/https/jenkins.library.illinois.edu/job/does-not-exist.json')
+  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
+
+t.create('code coverage API: job found')
+  .get(
+    '/api/https/jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master.json'
+  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })

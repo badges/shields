@@ -15,6 +15,25 @@ const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
 
+const documentation = `
+<p>
+  Important: If your project is publicly visible, but the badge is like this:
+  <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
+</p>
+<p>
+  Check if your pipelines are publicly visible as well.<br />
+  Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
+  Then tick the setting Public pipelines.
+</p>
+<p>
+  Now your settings should look like this:
+</p>
+<img src="https://user-images.githubusercontent.com/12065866/67156911-e225a180-f324-11e9-93ad-10aafbb3e69e.png" alt="Setting Public pipelines set"/>
+<p>
+  Your badge should be working fine now.
+</p>
+`
+
 module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   static get category() {
     return 'build'
@@ -35,6 +54,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
         pattern: ':user/:repo',
         namedParams: { user: 'gitlab-org', repo: 'gitlab-ce' },
         staticPreview: this.render({ status: 'passed' }),
+        documentation,
       },
       {
         title: 'Gitlab pipeline status (branch)',
@@ -45,6 +65,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
           branch: 'master',
         },
         staticPreview: this.render({ status: 'passed' }),
+        documentation,
       },
       {
         title: 'Gitlab pipeline status (self-hosted)',
@@ -52,6 +73,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
         namedParams: { user: 'GNOME', repo: 'pango' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
         staticPreview: this.render({ status: 'passed' }),
+        documentation,
       },
     ]
   }
@@ -69,6 +91,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
       errorMessages: {
         401: 'repo not found',
+        404: 'repo not found',
       },
     })
     if (status === 'unknown') {

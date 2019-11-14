@@ -84,6 +84,7 @@ test(transformExample, function() {
     defaultBadgeData: {
       label: 'downloads',
     },
+    category: 'platform-support',
   }
 
   given(
@@ -109,7 +110,7 @@ test(transformExample, function() {
       namedLogo: undefined,
       style: undefined,
     },
-    keywords: ['hello'],
+    keywords: ['hello', 'platform'],
     documentation: undefined,
   })
 
@@ -135,7 +136,7 @@ test(transformExample, function() {
       namedLogo: undefined,
       style: undefined,
     },
-    keywords: ['hello'],
+    keywords: ['hello', 'platform'],
     documentation: undefined,
   })
 
@@ -162,7 +163,7 @@ test(transformExample, function() {
       namedLogo: undefined,
       style: undefined,
     },
-    keywords: ['hello'],
+    keywords: ['hello', 'platform'],
     documentation: undefined,
   })
 })
