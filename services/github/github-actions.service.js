@@ -17,7 +17,7 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'github/actions',
-      pattern: ':user/:repo/:workflow',
+      pattern: ':user/:repo/:workflow/:branch*',
     }
   }
 
@@ -25,10 +25,25 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
     return [
       {
         title: 'GitHub Actions',
+        pattern: ':user/:repo/:workflow',
         namedParams: {
           user: 'actions',
           repo: 'toolkit',
           workflow: 'Main workflow',
+        },
+        staticPreview: renderBuildStatusBadge({
+          status: 'passing',
+        }),
+        documentation,
+      },
+      {
+        title: 'GitHub Actions (branch)',
+        pattern: ':user/:repo/:workflow/:branch',
+        namedParams: {
+          user: 'actions',
+          repo: 'toolkit',
+          workflow: 'Main workflow',
+          branch: 'master',
         },
         staticPreview: renderBuildStatusBadge({
           status: 'passing',
@@ -44,23 +59,24 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
     }
   }
 
-  async fetch({ user, repo, workflow }) {
+  async fetch({ user, repo, workflow, branch }) {
     const { message: status } = await this._requestSvg({
       schema,
       url: `https://github.com/${user}/${repo}/workflows/${encodeURIComponent(
         workflow
       )}/badge.svg`,
+      options: { qs: { branch } },
       valueMatcher: />([^<>]+)<\/tspan><\/text><\/g><path/,
       errorMessages: {
-        404: 'repo or workflow not found',
+        404: 'repo, branch, or workflow not found',
       },
     })
 
     return { status }
   }
 
-  async handle({ user, repo, workflow }) {
-    const { status } = await this.fetch({ user, repo, workflow })
+  async handle({ user, repo, workflow, branch }) {
+    const { status } = await this.fetch({ user, repo, workflow, branch })
     return renderBuildStatusBadge({ status })
   }
 }
