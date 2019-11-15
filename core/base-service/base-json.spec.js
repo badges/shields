@@ -47,10 +47,11 @@ describe('BaseJsonService', function() {
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
-        'http://example.com/foo.json',
-        { headers: { Accept: 'application/json' } }
-      )
+      expect(
+        sendAndCacheRequest
+      ).to.have.been.calledOnceWith('http://example.com/foo.json', {
+        headers: { Accept: 'application/json' },
+      })
     })
 
     it('forwards options to _sendAndCacheRequest', async function() {

@@ -47,10 +47,11 @@ describe('BaseXmlService', function() {
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
-        'http://example.com/foo.xml',
-        { headers: { Accept: 'application/xml, text/xml' } }
-      )
+      expect(
+        sendAndCacheRequest
+      ).to.have.been.calledOnceWith('http://example.com/foo.xml', {
+        headers: { Accept: 'application/xml, text/xml' },
+      })
     })
 
     it('forwards options to _sendAndCacheRequest', async function() {
