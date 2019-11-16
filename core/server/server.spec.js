@@ -121,7 +121,9 @@ describe('The server', function() {
   it('should return the 404 badge page for rando links', async function() {
     const { statusCode, body } = await got(
       `${baseUrl}this/is/most/definitely/not/a/badge.js`,
-      { throwHttpErrors: false }
+      {
+        throwHttpErrors: false,
+      }
     )
     expect(statusCode).to.equal(404)
     expect(body)

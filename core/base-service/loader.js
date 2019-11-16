@@ -82,9 +82,12 @@ function assertNamesUnique(names, { message }) {
 
 function checkNames() {
   const services = loadServiceClasses()
-  assertNamesUnique(services.map(({ name }) => name), {
-    message: 'Duplicate service names found',
-  })
+  assertNamesUnique(
+    services.map(({ name }) => name),
+    {
+      message: 'Duplicate service names found',
+    }
+  )
 }
 
 function collectDefinitions() {
