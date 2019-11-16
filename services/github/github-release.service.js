@@ -110,9 +110,12 @@ class GithubRelease extends GithubAuthV3Service {
 
   static getLatestRelease({ releases, sort, includePrereleases }) {
     if (sort === 'semver') {
-      const latestRelease = latest(releases.map(release => release.tag_name), {
-        pre: includePrereleases,
-      })
+      const latestRelease = latest(
+        releases.map(release => release.tag_name),
+        {
+          pre: includePrereleases,
+        }
+      )
       const kvpairs = Object.assign(
         ...releases.map(release => ({ [release.tag_name]: release.prerelease }))
       )

@@ -130,13 +130,10 @@ export default function PathBuilder({
         tokens
           .filter(t => typeof t !== 'string')
           .map(t => t as Key)
-          .reduce(
-            (accum, { name }) => {
-              accum[name] = ''
-              return accum
-            },
-            {} as { [k: string]: string }
-          )
+          .reduce((accum, { name }) => {
+            accum[name] = ''
+            return accum
+          }, {} as { [k: string]: string })
   )
 
   useEffect(() => {
