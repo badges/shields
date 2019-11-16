@@ -238,7 +238,7 @@
     "react-error-overlay": "^6.0.3",
     "react-helmet": "^5.2.1",
     "react-modal": "^3.11.1",
-    "react-pose": "^4.0.9",
+    "react-pose": "^4.0.10",
     "react-select": "^3.0.8",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
