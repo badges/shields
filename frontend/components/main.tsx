@@ -99,13 +99,10 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
     category: Category
     definitions: ServiceDefinition[]
   }) {
-    const flattened = definitions.reduce(
-      (accum, current) => {
-        const { examples } = current
-        return accum.concat(examples)
-      },
-      [] as Example[]
-    )
+    const flattened = definitions.reduce((accum, current) => {
+      const { examples } = current
+      return accum.concat(examples)
+    }, [] as Example[])
 
     return (
       <div>
