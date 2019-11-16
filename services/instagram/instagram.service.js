@@ -2,15 +2,14 @@
 
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const instagramSchema = Joi.object({
   graphql: Joi.object({
     user: Joi.object({
       edge_followed_by: Joi.object({
-        count: Joi.number()
-          .positive()
-          .required(),
+        count: nonNegativeInteger,
       }).required(),
     }).required(),
   }).required(),
