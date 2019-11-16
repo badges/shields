@@ -43,11 +43,12 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     }
   }
 
-  static transform({ devDependencies, types, files }) {
+  static transform({ devDependencies, types, typings, files }) {
     const supportedLanguages = []
 
     if (
       types !== undefined ||
+      typings !== undefined ||
       devDependencies.typescript !== undefined ||
       files.includes('index.d.ts')
     ) {
