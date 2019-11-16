@@ -68,7 +68,9 @@ describe('BaseSvgScrapingService', function() {
 
       expect(sendAndCacheRequest).to.have.been.calledOnceWith(
         'http://example.com/foo.svg',
-        { headers: { Accept: 'image/svg+xml' } }
+        {
+          headers: { Accept: 'image/svg+xml' },
+        }
       )
     })
 

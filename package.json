@@ -232,7 +232,7 @@
     "nyc": "^14.1.1",
     "opn-cli": "^5.0.0",
     "portfinder": "^1.0.25",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-error-overlay": "^6.0.3",
