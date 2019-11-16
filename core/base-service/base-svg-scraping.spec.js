@@ -66,11 +66,12 @@ describe('BaseSvgScrapingService', function() {
         { handleInternalErrors: false }
       )
 
-      expect(
-        sendAndCacheRequest
-      ).to.have.been.calledOnceWith('http://example.com/foo.svg', {
-        headers: { Accept: 'image/svg+xml' },
-      })
+      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+        'http://example.com/foo.svg',
+        {
+          headers: { Accept: 'image/svg+xml' },
+        }
+      )
     })
 
     it('forwards options to _sendAndCacheRequest', async function() {
