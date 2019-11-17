@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled, { css } from 'styled-components'
-import pathToRegexp, { Token, Key } from 'path-to-regexp'
+import { Token, Key, parse } from 'path-to-regexp'
 import humanizeString from 'humanize-string'
 import { patternToOptions } from '../../lib/pattern-helpers'
 import { noAutocorrect, StyledInput } from '../common'
@@ -120,7 +120,7 @@ export default function PathBuilder({
   }) => void
   isPrefilled: boolean
 }) {
-  const [tokens] = useState(() => pathToRegexp.parse(pattern))
+  const [tokens] = useState(() => parse(pattern))
   const [namedParams, setNamedParams] = useState(() =>
     isPrefilled
       ? exampleParams
@@ -130,13 +130,10 @@ export default function PathBuilder({
         tokens
           .filter(t => typeof t !== 'string')
           .map(t => t as Key)
-          .reduce(
-            (accum, { name }) => {
-              accum[name] = ''
-              return accum
-            },
-            {} as { [k: string]: string }
-          )
+          .reduce((accum, { name }) => {
+            accum[name] = ''
+            return accum
+          }, {} as { [k: string]: string })
   )
 
   useEffect(() => {
