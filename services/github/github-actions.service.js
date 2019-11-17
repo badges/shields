@@ -6,7 +6,9 @@ const { documentation } = require('./github-helpers')
 const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
-  message: isBuildStatus,
+  message: Joi.alternatives()
+    .try(isBuildStatus, Joi.equal('no status'))
+    .required(),
 }).required()
 
 module.exports = class GithubActions extends BaseSvgScrapingService {
