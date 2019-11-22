@@ -183,7 +183,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-prettier": "^6.7.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-jsx": "^8.1.0",
     "eslint-config-standard-react": "^9.0.0",
