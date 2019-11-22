@@ -151,7 +151,7 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "7.7.0",
     "@mapbox/react-click-to-select": "^2.2.0",
-    "@types/chai": "^4.2.4",
+    "@types/chai": "^4.2.5",
     "@types/chai-enzyme": "^0.6.7",
     "@types/enzyme": "^3.10.3",
     "@types/lodash.debounce": "^4.0.6",
