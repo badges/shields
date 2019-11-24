@@ -13,7 +13,9 @@ const aurSchema = Joi.object({
       .length(0)
       .required(),
     Joi.object({
-      License: Joi.string().required(),
+      License: Joi.string()
+        .required()
+        .allow(null),
       NumVotes: nonNegativeInteger,
       Version: Joi.string().required(),
       OutOfDate: nonNegativeInteger.allow(null),
@@ -61,8 +63,8 @@ class AurLicense extends BaseAurService {
     return [
       {
         title: 'AUR license',
-        namedParams: { packageName: 'pac' },
-        staticPreview: this.render({ license: 'MIT' }),
+        namedParams: { packageName: 'android-studio' },
+        staticPreview: this.render({ license: 'Apache' }),
       },
     ]
   }
@@ -75,9 +77,19 @@ class AurLicense extends BaseAurService {
     return { message: license, color: 'blue' }
   }
 
+  transform(json) {
+    const license = json.results.License
+    if (!license) {
+      throw new NotFound({ prettyMessage: 'not specified' })
+    }
+
+    return { license }
+  }
+
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ license: json.results.License })
+    const { license } = this.transform(json)
+    return this.constructor.render({ license })
   }
 }
 

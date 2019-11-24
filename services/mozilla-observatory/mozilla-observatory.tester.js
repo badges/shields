@@ -3,7 +3,6 @@
 const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const validColors = ['brightgreen', 'green', 'yellow', 'orange', 'red']
 const isMessage = Joi.alternatives()
   .try(
     Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
@@ -11,24 +10,20 @@ const isMessage = Joi.alternatives()
   )
   .required()
 
-const isColor = Joi.string()
-  .valid(...validColors)
-  .required()
-
 t.create('request on observatory.mozilla.org')
+  .timeout(10000)
   .get('/grade-score/observatory.mozilla.org.json')
   .expectBadge({
     label: 'observatory',
     message: isMessage,
-    color: isColor,
   })
 
 t.create('request on observatory.mozilla.org with inclusion in public results')
+  .timeout(10000)
   .get('/grade-score/observatory.mozilla.org.json?publish')
   .expectBadge({
     label: 'observatory',
     message: isMessage,
-    color: isColor,
   })
 
 t.create('grade without score (mock)')

@@ -45,10 +45,11 @@ async function fetchRepoContent(
       throw new InvalidResponse({ prettyMessage: 'undecodable content' })
     }
   } else {
-    return serviceInstance._request({
+    const { buffer } = await serviceInstance._request({
       url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
       errorMessages,
     })
+    return buffer
   }
 }
 
@@ -96,6 +97,7 @@ async function fetchLatestRelease(serviceInstance, { user, repo }) {
 
 module.exports = {
   fetchIssue,
+  fetchRepoContent,
   fetchJsonFromRepo,
   fetchLatestRelease,
   releaseInfoSchema,
