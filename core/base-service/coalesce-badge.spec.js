@@ -15,9 +15,9 @@ describe('coalesceBadge', function() {
 
     // This behavior isn't great and we might want to remove it.
     it('uses the category as a default label', function() {
-      expect(coalesceBadge({}, {}, {}, { category: 'cat' }).text).to.deep.equal(
-        ['cat', 'n/a']
-      )
+      expect(
+        coalesceBadge({}, {}, {}, { category: 'cat' }).text
+      ).to.deep.equal(['cat', 'n/a'])
     })
 
     it('preserves an empty label', function() {

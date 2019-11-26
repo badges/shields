@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const pathToRegexp = require('path-to-regexp')
+const { pathToRegexp, compile } = require('path-to-regexp')
 const categories = require('../../services/categories')
 const coalesceBadge = require('./coalesce-badge')
 const { makeFullUrl } = require('./route')
@@ -59,7 +59,9 @@ function validateExample(example, index, ServiceClass) {
 
   // Make sure we can build the full URL using these patterns.
   try {
-    pathToRegexp.compile(pattern || ServiceClass.route.pattern)(namedParams)
+    compile(pattern || ServiceClass.route.pattern, {
+      encode: encodeURIComponent,
+    })(namedParams)
   } catch (e) {
     throw Error(
       `In example for ${
@@ -69,7 +71,10 @@ function validateExample(example, index, ServiceClass) {
   }
   // Make sure there are no extra keys.
   let keys = []
-  pathToRegexp(pattern || ServiceClass.route.pattern, keys)
+  pathToRegexp(pattern || ServiceClass.route.pattern, keys, {
+    strict: true,
+    sensitive: true,
+  })
   keys = keys.map(({ name }) => name)
   const extraKeys = Object.keys(namedParams).filter(k => !keys.includes(k))
   if (extraKeys.length) {
