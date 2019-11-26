@@ -11,14 +11,16 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class GithubActions extends BaseSvgScrapingService {
+const keywords = ['action', 'actions']
+
+module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
 
   static get route() {
     return {
-      base: 'github/actions',
+      base: 'github/workflow/status',
       pattern: ':user/:repo/:workflow/:branch*',
     }
   }
@@ -26,7 +28,7 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
   static get examples() {
     return [
       {
-        title: 'GitHub Actions',
+        title: 'GitHub Workflow Status',
         pattern: ':user/:repo/:workflow',
         namedParams: {
           user: 'actions',
@@ -37,9 +39,10 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
           status: 'passing',
         }),
         documentation,
+        keywords,
       },
       {
-        title: 'GitHub Actions (branch)',
+        title: 'GitHub Workflow Status (branch)',
         pattern: ':user/:repo/:workflow/:branch',
         namedParams: {
           user: 'actions',
@@ -51,6 +54,7 @@ module.exports = class GithubActions extends BaseSvgScrapingService {
           status: 'passing',
         }),
         documentation,
+        keywords,
       },
     ]
   }
