@@ -9,7 +9,7 @@ module.exports = class DynamicYaml extends jsonPath(BaseYamlService) {
     return createRoute('yaml')
   }
 
-  async _getData({ schema, url, errorMessages }) {
+  async fetch({ schema, url, errorMessages }) {
     return this._requestYaml({
       schema,
       url,

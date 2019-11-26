@@ -39,14 +39,14 @@ module.exports = superclass =>
      *    [default](https://github.com/badges/shields/blob/master/services/dynamic-common.js#L8)
      * @returns {object} Parsed response
      */
-    async _getData({ schema, url, errorMessages }) {
+    async fetch({ schema, url, errorMessages }) {
       throw new Error(
-        `_getData() function not implemented for ${this.constructor.name}`
+        `fetch() function not implemented for ${this.constructor.name}`
       )
     }
 
     async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
-      const data = await this._getData({
+      const data = await this.fetch({
         schema: Joi.any(),
         url,
         errorMessages,

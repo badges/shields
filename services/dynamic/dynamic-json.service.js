@@ -9,7 +9,7 @@ module.exports = class DynamicJson extends jsonPath(BaseJsonService) {
     return createRoute('json')
   }
 
-  async _getData({ schema, url, errorMessages }) {
+  async fetch({ schema, url, errorMessages }) {
     return this._requestJson({
       schema,
       url,
