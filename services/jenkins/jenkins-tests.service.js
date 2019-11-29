@@ -42,8 +42,8 @@ module.exports = class JenkinsTests extends JenkinsBase {
 
   static get route() {
     return {
-      base: 'jenkins/tests',
-      pattern: ':protocol(http|https)/:host/:job+',
+      base: 'jenkins',
+      pattern: 'tests',
       queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
     }
   }
@@ -52,16 +52,13 @@ module.exports = class JenkinsTests extends JenkinsBase {
     return [
       {
         title: 'Jenkins tests',
-        namedParams: {
-          protocol: 'https',
-          host: 'jenkins.sqlalchemy.org',
-          job: 'alembic_coverage',
-        },
+        namedParams: {},
         queryParams: {
           compact_message: null,
           passed_label: 'passed',
           failed_label: 'failed',
           skipped_label: 'skipped',
+          jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
         },
         staticPreview: this.render({
           passed: 477,
@@ -120,9 +117,10 @@ module.exports = class JenkinsTests extends JenkinsBase {
   }
 
   async handle(
-    { protocol, host, job },
+    namedParams,
     {
       disableStrictSSL,
+      jobUrl,
       compact_message: compactMessage,
       passed_label: passedLabel,
       failed_label: failedLabel,
@@ -130,7 +128,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
     }
   ) {
     const json = await this.fetch({
-      url: buildUrl({ protocol, host, job }),
+      url: buildUrl({ jobUrl }),
       schema,
       qs: buildTreeParamQueryString('actions[failCount,skipCount,totalCount]'),
       disableStrictSSL,
