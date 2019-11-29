@@ -34,8 +34,6 @@ class BasePackagistService extends BaseJsonService {
    * @returns {object} Parsed response
    */
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
-    user = user.toLowerCase()
-    repo = repo.toLowerCase()
     const url = `${server}/p/${user}/${repo}.json`
 
     return this._requestJson({
@@ -60,8 +58,6 @@ class BasePackagistService extends BaseJsonService {
     schema,
     server = 'https://packagist.org',
   }) {
-    user = user.toLowerCase()
-    repo = repo.toLowerCase()
     const url = `${server}/packages/${user}/${repo}.json`
 
     return this._requestJson({
@@ -71,7 +67,7 @@ class BasePackagistService extends BaseJsonService {
   }
 
   getPackageName(user, repo) {
-    return `${user}/${repo}`
+    return `${user.toLowerCase()}/${repo.toLowerCase()}`
   }
 }
 
