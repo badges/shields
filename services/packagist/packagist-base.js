@@ -34,7 +34,7 @@ class BasePackagistService extends BaseJsonService {
    * @returns {object} Parsed response
    */
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
-    const url = `${server}/p/${user}/${repo}.json`
+    const url = `${server}/p/${user.toLowerCase()}/${repo.toLowerCase()}.json`
 
     return this._requestJson({
       schema,
