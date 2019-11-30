@@ -1,12 +1,14 @@
 'use strict'
 
+const { buildRedirectUrl } = require('./jenkins-common')
 const { redirector } = require('..')
 
 const commonProps = {
   category: 'build',
-  transformPath: ({ protocol, host, job }) =>
-    `/jenkins/build/${protocol}/${host}/${job}`,
-  dateAdded: new Date('2019-04-20'),
+  transformPath: () => '/jenkins/build',
+  transformQueryParams: ({ protocol, host, job }) => ({
+    jobUrl: buildRedirectUrl({ protocol, host, job }),
+  }),
 }
 
 module.exports = [
@@ -15,6 +17,7 @@ module.exports = [
       base: 'jenkins-ci/s',
       pattern: ':protocol(http|https)/:host/:job+',
     },
+    dateAdded: new Date('2019-04-20'),
     ...commonProps,
   }),
   redirector({
@@ -22,6 +25,15 @@ module.exports = [
       base: 'jenkins/s',
       pattern: ':protocol(http|https)/:host/:job+',
     },
+    dateAdded: new Date('2019-04-20'),
+    ...commonProps,
+  }),
+  redirector({
+    route: {
+      base: 'jenkins/build',
+      pattern: ':protocol(http|https)/:host/:job+',
+    },
+    dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
 ]
