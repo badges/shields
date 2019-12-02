@@ -28,7 +28,7 @@ const requiredUrl = optionalUrl.required()
 
 const publicConfigSchema = Joi.object({
   bind: {
-    port: Joi.number().port(),
+    port: Joi.optional(),
     address: Joi.alternatives().try(
       Joi.string()
         .ip()
