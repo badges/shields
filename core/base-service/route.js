@@ -2,7 +2,7 @@
 
 const escapeStringRegexp = require('escape-string-regexp')
 const Joi = require('@hapi/joi')
-const pathToRegexp = require('path-to-regexp')
+const { pathToRegexp } = require('path-to-regexp')
 
 function makeFullUrl(base, partialUrl) {
   return `/${[base, partialUrl].filter(Boolean).join('/')}`
