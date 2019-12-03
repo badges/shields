@@ -42,7 +42,9 @@ const nuGetV3VersionJsonBuildMetadataWithDash = JSON.stringify({
         {
           version: '1.16.0+388',
         },
-        { version: '1.17.0+1b81349-429' },
+        {
+          version: '1.17.0+1b81349-429',
+        },
       ],
     },
   ],
