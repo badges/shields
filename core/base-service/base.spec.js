@@ -99,13 +99,13 @@ describe('BaseService', function() {
   describe('Required overrides', function() {
     it('Should throw if render() is not overridden', function() {
       expect(() => BaseService.render()).to.throw(
-        'render() function not implemented for BaseService'
+        /^render\(\) function not implemented for BaseService$/
       )
     })
 
     it('Should throw if route is not overridden', function() {
       return expect(BaseService.invoke({}, {}, {})).to.be.rejectedWith(
-        'Route not defined for BaseService'
+        /^Route not defined for BaseService$/
       )
     })
 
@@ -116,13 +116,13 @@ describe('BaseService', function() {
     }
     it('Should throw if handle() is not overridden', function() {
       return expect(WithRoute.invoke({}, {}, {})).to.be.rejectedWith(
-        'Handler not implemented for WithRoute'
+        /^Handler not implemented for WithRoute$/
       )
     })
 
     it('Should throw if category is not overridden', function() {
       expect(() => BaseService.category).to.throw(
-        'Category not set for BaseService'
+        /^Category not set for BaseService$/
       )
     })
   })
