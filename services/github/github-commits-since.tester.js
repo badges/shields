@@ -33,6 +33,20 @@ t.create('Commits since by latest release (branch)')
     message: isMetric,
   })
 
+t.create('Commits since by latest SemVer release')
+  .get('/microsoft/typescript/latest.json?sort=semver')
+  .expectBadge({
+    label: Joi.string().regex(/^(commits since){1}[\s\S]+$/),
+    message: isMetric,
+  })
+
+t.create('Commits since by latest pre-release')
+  .get('/microsoft/typescript/latest/master.json?include_prereleases')
+  .expectBadge({
+    label: Joi.string().regex(/^(commits since){1}[\s\S]+$/),
+    message: isMetric,
+  })
+
 t.create('Commits since (version not found)')
   .get('/badges/shields/not-a-version.json')
   .expectBadge({
