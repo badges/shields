@@ -28,7 +28,7 @@ describe('The server', function() {
     const pipeServer = createTestServer({
       port: '\\\\.\\pipe\\9c137306-7c4d-461e-b7cf-5213a3939ad6',
     })
-    expect(pipeServer).to.not.undefined
+    expect(pipeServer).to.not.be.undefined
   })
 
   it('should produce colorscheme badges', async function() {
