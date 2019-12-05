@@ -11,11 +11,12 @@ import {
 } from './builder-common'
 
 interface PathBuilderColumnProps {
+  height: string
   withHorizPadding?: boolean
 }
 
 const PathBuilderColumn = styled.span<PathBuilderColumnProps>`
-  height: 78px;
+  height: ${({ height }) => height};
 
   float: left;
   display: flex;
@@ -32,10 +33,11 @@ const PathBuilderColumn = styled.span<PathBuilderColumnProps>`
 
 interface PathLiteralProps {
   isFirstToken: boolean
+  marginTop: string
 }
 
 const PathLiteral = styled.div<PathLiteralProps>`
-  margin-top: 39px;
+  margin-top: ${({ marginTop }) => marginTop};
   ${({ isFirstToken }) =>
     isFirstToken &&
     css`
@@ -153,10 +155,22 @@ export default function PathBuilder({
     })
   }
 
-  function renderLiteral(literal: string, tokenIndex: number) {
+  function renderLiteral(
+    literal: string,
+    tokenIndex: number,
+    onlyLiterals: boolean
+  ) {
     return (
-      <PathBuilderColumn key={`${tokenIndex}-${literal}`}>
-        <PathLiteral isFirstToken={tokenIndex === 0}>{literal}</PathLiteral>
+      <PathBuilderColumn
+        height={onlyLiterals ? '18px' : '78px'}
+        key={`${tokenIndex}-${literal}`}
+      >
+        <PathLiteral
+          isFirstToken={tokenIndex === 0}
+          marginTop={onlyLiterals ? '0px' : '39px'}
+        >
+          {literal}
+        </PathLiteral>
       </PathBuilderColumn>
     )
   }
@@ -211,8 +225,8 @@ export default function PathBuilder({
 
     return (
       <React.Fragment key={token.name}>
-        {renderLiteral(delimiter, tokenIndex)}
-        <PathBuilderColumn withHorizPadding>
+        {renderLiteral(delimiter, tokenIndex, false)}
+        <PathBuilderColumn height="78px" withHorizPadding>
           <NamedParamLabelContainer>
             <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
@@ -229,11 +243,13 @@ export default function PathBuilder({
   }
 
   let namedParamIndex = 0
+  const onlyLiterals =
+    tokens.filter(token => typeof token === 'string').length === tokens.length
   return (
     <BuilderContainer>
       {tokens.map((token, tokenIndex) =>
         typeof token === 'string'
-          ? renderLiteral(token, tokenIndex)
+          ? renderLiteral(token, tokenIndex, onlyLiterals)
           : renderNamedParam(token, tokenIndex, namedParamIndex++)
       )}
     </BuilderContainer>
