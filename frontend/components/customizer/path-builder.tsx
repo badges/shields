@@ -243,8 +243,7 @@ export default function PathBuilder({
   }
 
   let namedParamIndex = 0
-  const onlyLiterals =
-    tokens.filter(token => typeof token === 'string').length === tokens.length
+  const onlyLiterals = tokens.every(token => typeof token === 'string')
   return (
     <BuilderContainer>
       {tokens.map((token, tokenIndex) =>
