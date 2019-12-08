@@ -4,7 +4,7 @@ const decamelize = require('decamelize')
 const prometheus = require('prom-client')
 
 module.exports = class PrometheusMetrics {
-  constructor({ register }) {
+  constructor({ register } = {}) {
     this.register = register || new prometheus.Registry()
     this.counters = {
       numRequests: new prometheus.Counter({
