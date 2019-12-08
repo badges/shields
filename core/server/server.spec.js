@@ -121,7 +121,9 @@ describe('The server', function() {
   it('should return the 404 badge page for rando links', async function() {
     const { statusCode, body } = await got(
       `${baseUrl}this/is/most/definitely/not/a/badge.js`,
-      { throwHttpErrors: false }
+      {
+        throwHttpErrors: false,
+      }
     )
     expect(statusCode).to.equal(404)
     expect(body)
@@ -150,11 +152,5 @@ describe('The server', function() {
       .to.satisfy(isSvg)
       .and.to.include('410')
       .and.to.include('jpg no longer available')
-  })
-
-  it('should return cors header for the request', async function() {
-    const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
-    expect(statusCode).to.equal(200)
-    expect(headers['access-control-allow-origin']).to.equal('*')
   })
 })

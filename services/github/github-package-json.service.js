@@ -78,6 +78,10 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
   }
 }
 
+const dependencyQueryParamSchema = Joi.object({
+  filename: Joi.string(),
+}).required()
+
 class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'platform-support'
@@ -88,6 +92,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
       base: 'github/package-json/dependency-version',
       pattern:
         ':user/:repo/:kind(dev|peer)?/:scope(@[^/]+)?/:packageName/:branch*',
+      queryParamSchema: dependencyQueryParamSchema,
     }
   }
 
@@ -125,6 +130,24 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
         documentation,
         keywords,
       },
+      {
+        title: 'GitHub package.json dependency version (subfolder of monorepo)',
+        pattern: ':user/:repo/:packageName',
+        namedParams: {
+          user: 'metabolize',
+          repo: 'anafanafo',
+          packageName: 'puppeteer',
+        },
+        queryParams: {
+          filename: 'packages/char-width-table-builder/package.json',
+        },
+        staticPreview: this.render({
+          dependency: 'puppeteer',
+          range: '^1.14.0',
+        }),
+        documentation,
+        keywords,
+      },
     ]
   }
 
@@ -142,7 +165,10 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     }
   }
 
-  async handle({ user, repo, kind, branch = 'master', scope, packageName }) {
+  async handle(
+    { user, repo, kind, branch = 'master', scope, packageName },
+    { filename = 'package.json' }
+  ) {
     const {
       dependencies,
       devDependencies,
@@ -152,7 +178,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
       user,
       repo,
       branch,
-      filename: 'package.json',
+      filename,
     })
 
     const wantedDependency = scope ? `${scope}/${packageName}` : packageName

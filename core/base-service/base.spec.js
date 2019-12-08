@@ -1,7 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { expect } = require('chai')
+const chai = require('chai')
+const { expect } = chai
 const sinon = require('sinon')
 const prometheus = require('prom-client')
 const PrometheusMetrics = require('../server/prometheus-metrics')
@@ -16,6 +17,7 @@ const {
 const BaseService = require('./base')
 const { MetricHelper } = require('./metric-helper')
 require('../register-chai-plugins.spec')
+chai.use(require('chai-as-promised'))
 
 const queryParamSchema = Joi.object({
   queryParamA: Joi.string(),
@@ -99,17 +101,14 @@ describe('BaseService', function() {
   describe('Required overrides', function() {
     it('Should throw if render() is not overridden', function() {
       expect(() => BaseService.render()).to.throw(
-        'render() function not implemented for BaseService'
+        /^render\(\) function not implemented for BaseService$/
       )
     })
 
-    it('Should throw if route is not overridden', async function() {
-      try {
-        await BaseService.invoke({}, {}, {})
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.message).to.equal('Route not defined for BaseService')
-      }
+    it('Should throw if route is not overridden', function() {
+      return expect(BaseService.invoke({}, {}, {})).to.be.rejectedWith(
+        /^Route not defined for BaseService$/
+      )
     })
 
     class WithRoute extends BaseService {
@@ -117,18 +116,15 @@ describe('BaseService', function() {
         return {}
       }
     }
-    it('Should throw if handle() is not overridden', async function() {
-      try {
-        await WithRoute.invoke({}, {}, {})
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.message).to.equal('Handler not implemented for WithRoute')
-      }
+    it('Should throw if handle() is not overridden', function() {
+      return expect(WithRoute.invoke({}, {}, {})).to.be.rejectedWith(
+        /^Handler not implemented for WithRoute$/
+      )
     })
 
     it('Should throw if category is not overridden', function() {
       expect(() => BaseService.category).to.throw(
-        'Category not set for BaseService'
+        /^Category not set for BaseService$/
       )
     })
   })
@@ -194,7 +190,7 @@ describe('BaseService', function() {
       })
     })
 
-    it('Throws a validation error on invalid data', async function() {
+    context('On invalid data', function() {
       class ThrowingService extends DummyService {
         async handle() {
           return {
@@ -202,19 +198,37 @@ describe('BaseService', function() {
           }
         }
       }
-      try {
-        await ThrowingService.invoke(
-          {},
-          { handleInternalErrors: false },
-          { namedParamA: 'bar.bar.bar' }
-        )
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.name).to.equal('ValidationError')
-        expect(e.details.map(({ message }) => message)).to.deep.equal([
-          '"message" is required',
-        ])
-      }
+
+      it('Throws a validation error on invalid data', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
+      })
+
+      // Ensure debuggabillity.
+      // https://github.com/badges/shields/issues/3784
+      it('Includes the service class in the stack trace', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.stack).to.include('ThrowingService._validateServiceData')
+        }
+      })
     })
   })
 
@@ -411,16 +425,15 @@ describe('BaseService', function() {
       requiredString: Joi.string().required(),
     }).required()
 
-    it('throws error for invalid responses', async function() {
-      try {
+    it('throws error for invalid responses', function() {
+      expect(() =>
         DummyService._validate(
           { requiredString: ['this', "shouldn't", 'work'] },
           dummySchema
         )
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e).to.be.an.instanceof(InvalidResponse)
-      }
+      )
+        .to.throw()
+        .instanceof(InvalidResponse)
     })
   })
 

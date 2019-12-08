@@ -278,6 +278,12 @@ class BaseService {
     throw new Error(`Handler not implemented for ${this.constructor.name}`)
   }
 
+  // Making this an instance method ensures debuggability.
+  // https://github.com/badges/shields/issues/3784
+  _validateServiceData(serviceData) {
+    Joi.assert(serviceData, serviceDataSchema)
+  }
+
   _handleError(error) {
     if (error instanceof NotFound || error instanceof InvalidParameter) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
@@ -390,7 +396,7 @@ class BaseService {
           namedParams,
           transformedQueryParams
         )
-        Joi.assert(serviceData, serviceDataSchema)
+        serviceInstance._validateServiceData(serviceData)
       } catch (error) {
         serviceError = error
       }
