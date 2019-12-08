@@ -26,8 +26,10 @@ async function getTitle(owner, repo, pullRequest) {
     `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`,
     {
       headers: { 'User-Agent': 'badges/shields' },
-      query: { access_token: process.env.GITHUB_TOKEN },
-      json: true,
+      searchParams: new URLSearchParams([
+        ['access_token', process.env.GITHUB_TOKEN],
+      ]),
+      responseType: 'json',
     }
   )
   return title

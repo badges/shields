@@ -17,10 +17,9 @@ function normalizeBadgeUrl(url) {
 async function traceBadge(badgeUrl) {
   const server = new Server(config)
   await server.start()
-  const { body } = await got(
-    `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`,
-    { json: true }
-  )
+  const body = await got(
+    `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`
+  ).json()
   trace.logTrace('outbound', emojic.shield, 'Rendered badge', body)
   await server.stop()
 }

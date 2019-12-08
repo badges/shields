@@ -2,6 +2,7 @@
 
 const { expect } = require('chai')
 const Camp = require('camp')
+const FormData = require('form-data')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const queryString = require('query-string')
@@ -118,9 +119,11 @@ describe('Github token acceptor', function() {
       })
 
       it('should finish the OAuth process', async function() {
-        const res = await got(`${baseUrl}/github-auth/done`, {
-          form: true,
-          body: { code: fakeCode },
+        const form = new FormData()
+        form.append('code', fakeCode)
+
+        const res = await got.post(`${baseUrl}/github-auth/done`, {
+          body: form,
         })
         expect(res.body).to.startWith(
           '<p>Shields.io has received your app-specific GitHub user token.'
@@ -131,10 +134,12 @@ describe('Github token acceptor', function() {
 
   it('should add a received token', async function() {
     const fakeAccessToken = 'its-my-token'
+    const form = new FormData()
+    form.append('shieldsSecret', fakeShieldsSecret)
+    form.append('token', fakeAccessToken)
 
-    const { body } = await got(`${baseUrl}/github-auth/add-token`, {
-      form: true,
-      body: { shieldsSecret: fakeShieldsSecret, token: fakeAccessToken },
+    const { body } = await got.post(`${baseUrl}/github-auth/add-token`, {
+      body: form,
     })
 
     expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)

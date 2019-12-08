@@ -55,8 +55,9 @@ describe('GitHub admin route', function() {
     it('returns a valid JSON response', async function() {
       const { username, password } = validCredentials
       const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`, {
-        auth: `${username}:${password}`,
-        json: true,
+        username,
+        password,
+        responseType: 'json',
       })
       expect(statusCode).to.equal(200)
       expect(body).to.be.ok

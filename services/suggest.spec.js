@@ -108,13 +108,14 @@ describe('Badge suggestions', function() {
             },
           })
 
-        const { statusCode, body } = await got(
+        const {
+          statusCode,
+          body,
+        } = await got(
           `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/atom/atom'
           )}`,
-          {
-            json: true,
-          }
+          { responseType: 'json' }
         )
         expect(statusCode).to.equal(200)
         expect(body).to.deep.equal({

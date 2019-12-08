@@ -201,6 +201,7 @@
     "eslint-plugin-sort-class-members": "^1.6.0",
     "eslint-plugin-standard": "^4.0.1",
     "fetch-ponyfill": "^6.1.0",
+    "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.18.5",
     "gatsby-plugin-catch-links": "^2.1.19",

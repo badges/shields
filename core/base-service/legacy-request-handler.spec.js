@@ -102,7 +102,7 @@ describe('The request handler', function() {
 
     it('should return the expected response', async function() {
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        json: true,
+        responseType: 'json',
       })
       expect(statusCode).to.equal(200)
       expect(body).to.deep.equal({
@@ -126,7 +126,7 @@ describe('The request handler', function() {
 
     it('should return the expected response', async function() {
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        json: true,
+        responseType: 'json',
       })
       expect(statusCode).to.equal(200)
       expect(body).to.deep.equal({
@@ -157,7 +157,7 @@ describe('The request handler', function() {
         .once()
         .reply(200, 'x'.repeat(100))
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        json: true,
+        responseType: 'json',
       })
       expect(statusCode).to.equal(200)
       expect(body).to.deep.equal({
@@ -176,7 +176,7 @@ describe('The request handler', function() {
         .once()
         .reply(200, 'x'.repeat(101))
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        json: true,
+        responseType: 'json',
       })
       expect(statusCode).to.equal(200)
       expect(body).to.deep.equal({

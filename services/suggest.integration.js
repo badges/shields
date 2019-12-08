@@ -54,7 +54,7 @@ describe('Badge suggestions for', function() {
             'https://github.com/atom/atom'
           )}`,
           {
-            json: true,
+            responseType: 'json',
           }
         )
         expect(statusCode).to.equal(200)
@@ -125,7 +125,7 @@ describe('Badge suggestions for', function() {
             'https://github.com/badges/not-a-real-project'
           )}`,
           {
-            json: true,
+            responseType: 'json',
           }
         )
         expect(statusCode).to.equal(200)
@@ -196,7 +196,7 @@ describe('Badge suggestions for', function() {
             'https://gitlab.com/gitlab-org/gitlab'
           )}`,
           {
-            json: true,
+            responseType: 'json',
           }
         )
         expect(statusCode).to.equal(200)
@@ -238,7 +238,7 @@ describe('Badge suggestions for', function() {
             'https://gitlab.com/gitlab-org/not-gitlab'
           )}`,
           {
-            json: true,
+            responseType: 'json',
           }
         )
         expect(statusCode).to.equal(200)
