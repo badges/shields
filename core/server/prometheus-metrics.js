@@ -104,9 +104,6 @@ module.exports = class PrometheusMetrics {
     return this.counters.rateLimitExceeded.labels(rateLimitType).inc()
   }
 
-  /**
-   * @returns {object} `{ observe() {} }`.
-   */
   createServiceResponseSizeHistogram({ category, serviceFamily, name }) {
     const service = decamelize(name)
     return this.counters.serviceResponseSize.labels(
