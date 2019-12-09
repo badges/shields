@@ -8,7 +8,7 @@ const emojic = require('emojic')
 const Joi = require('@hapi/joi')
 const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
-const { MetricHelper } = require('./metric-helper')
+const { MetricHelper, MetricNames } = require('./metric-helper')
 const { assertValidCategory } = require('./categories')
 const checkErrorResponse = require('./check-error-response')
 const coalesceBadge = require('./coalesce-badge')
@@ -233,8 +233,20 @@ class BaseService {
     return checkErrorResponse(errorMessages)({ buffer, res })
   }
 
+  static get enabledMetrics() {
+    return []
+  }
+
+  static isMetricEnabled(metricName) {
+    return this.enabledMetrics.includes(metricName)
+  }
+
   async _meterResponse(res, buffer) {
-    if (this._metricHelper && res.statusCode === 200) {
+    if (
+      this._metricHelper &&
+      this.constructor.isMetricEnabled(MetricNames.SERVICE_RESPONSE_SIZE) &&
+      res.statusCode === 200
+    ) {
       this._metricHelper.noteServiceResponseSize(buffer.length)
     }
   }

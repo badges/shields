@@ -56,4 +56,8 @@ class MetricHelper {
   }
 }
 
-module.exports = { MetricHelper }
+const MetricNames = Object.freeze({
+  SERVICE_RESPONSE_SIZE: Symbol('service-response-size'),
+})
+
+module.exports = { MetricHelper, MetricNames }
