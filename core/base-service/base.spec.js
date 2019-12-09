@@ -514,7 +514,7 @@ describe('BaseService', function() {
     })
     const url = 'some-url'
 
-    it('service response size is optional', async function() {
+    it('service response size metric is optional', async function() {
       const metricHelper = MetricHelper.create({
         metricInstance: new PrometheusMetrics({ register }),
         ServiceClass: DummyServiceWithServiceResponseSizeMetricEnabled,
