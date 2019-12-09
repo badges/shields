@@ -6,7 +6,6 @@ const { expect } = chai
 const sinon = require('sinon')
 const prometheus = require('prom-client')
 const PrometheusMetrics = require('../server/prometheus-metrics')
-const { MetricNames } = require('./metric-helper')
 const trace = require('./trace')
 const {
   NotFound,
@@ -16,7 +15,7 @@ const {
   Deprecated,
 } = require('./errors')
 const BaseService = require('./base')
-const { MetricHelper } = require('./metric-helper')
+const { MetricHelper, MetricNames } = require('./metric-helper')
 require('../register-chai-plugins.spec')
 chai.use(require('chai-as-promised'))
 
