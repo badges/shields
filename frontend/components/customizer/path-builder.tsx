@@ -11,12 +11,13 @@ import {
 } from './builder-common'
 
 interface PathBuilderColumnProps {
-  height: string
+  pathContainsOnlyLiterals: boolean
   withHorizPadding?: boolean
 }
 
 const PathBuilderColumn = styled.span<PathBuilderColumnProps>`
-  height: ${({ height }) => height};
+  height: ${({ pathContainsOnlyLiterals }) =>
+    pathContainsOnlyLiterals ? '18px' : '78px'};
 
   float: left;
   display: flex;
@@ -33,11 +34,12 @@ const PathBuilderColumn = styled.span<PathBuilderColumnProps>`
 
 interface PathLiteralProps {
   isFirstToken: boolean
-  marginTop: string
+  pathContainsOnlyLiterals: boolean
 }
 
 const PathLiteral = styled.div<PathLiteralProps>`
-  margin-top: ${({ marginTop }) => marginTop};
+  margin-top: ${({ pathContainsOnlyLiterals }) =>
+    pathContainsOnlyLiterals ? '0px' : '39px'};
   ${({ isFirstToken }) =>
     isFirstToken &&
     css`
@@ -158,16 +160,16 @@ export default function PathBuilder({
   function renderLiteral(
     literal: string,
     tokenIndex: number,
-    onlyLiterals: boolean
+    pathContainsOnlyLiterals: boolean
   ) {
     return (
       <PathBuilderColumn
-        height={onlyLiterals ? '18px' : '78px'}
         key={`${tokenIndex}-${literal}`}
+        pathContainsOnlyLiterals={pathContainsOnlyLiterals}
       >
         <PathLiteral
           isFirstToken={tokenIndex === 0}
-          marginTop={onlyLiterals ? '0px' : '39px'}
+          pathContainsOnlyLiterals={pathContainsOnlyLiterals}
         >
           {literal}
         </PathLiteral>
@@ -226,7 +228,7 @@ export default function PathBuilder({
     return (
       <React.Fragment key={token.name}>
         {renderLiteral(delimiter, tokenIndex, false)}
-        <PathBuilderColumn height="78px" withHorizPadding>
+        <PathBuilderColumn pathContainsOnlyLiterals={false} withHorizPadding>
           <NamedParamLabelContainer>
             <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
@@ -243,12 +245,14 @@ export default function PathBuilder({
   }
 
   let namedParamIndex = 0
-  const onlyLiterals = tokens.every(token => typeof token === 'string')
+  const pathContainsOnlyLiterals = tokens.every(
+    token => typeof token === 'string'
+  )
   return (
     <BuilderContainer>
       {tokens.map((token, tokenIndex) =>
         typeof token === 'string'
-          ? renderLiteral(token, tokenIndex, onlyLiterals)
+          ? renderLiteral(token, tokenIndex, pathContainsOnlyLiterals)
           : renderNamedParam(token, tokenIndex, namedParamIndex++)
       )}
     </BuilderContainer>
