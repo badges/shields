@@ -1,62 +1,19 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
-const jp = require('jsonpath')
-const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
-const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
+const jsonPath = require('./json-path')
+const { BaseJsonService } = require('..')
 
-module.exports = class DynamicJson extends BaseJsonService {
-  static get category() {
-    return 'dynamic'
-  }
-
+module.exports = class DynamicJson extends jsonPath(BaseJsonService) {
   static get route() {
     return createRoute('json')
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'custom badge',
-    }
-  }
-
-  async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
-    const data = await this._requestJson({
-      schema: Joi.any(),
+  async fetch({ schema, url, errorMessages }) {
+    return this._requestJson({
+      schema,
       url,
       errorMessages,
     })
-
-    // JSONPath only works on objects and arrays.
-    // https://github.com/badges/shields/issues/4018
-    if (typeof data !== 'object') {
-      throw new InvalidResponse({
-        prettyMessage: 'json must contain an object or array',
-      })
-    }
-
-    let values
-    try {
-      values = jp.query(data, pathExpression)
-    } catch (e) {
-      const { message } = e
-      if (
-        message.startsWith('Lexical error') ||
-        message.startsWith('Parse error')
-      ) {
-        throw new InvalidParameter({
-          prettyMessage: 'unparseable jsonpath query',
-        })
-      } else {
-        throw e
-      }
-    }
-
-    if (!values.length) {
-      throw new InvalidResponse({ prettyMessage: 'no result' })
-    }
-
-    return renderDynamicBadge({ value: values, prefix, suffix })
   }
 }
