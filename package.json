@@ -162,7 +162,7 @@
     "@types/react-helmet": "^5.0.14",
     "@types/react-modal": "^3.10.0",
     "@types/react-select": "^3.0.8",
-    "@types/styled-components": "4.1.8",
+    "@types/styled-components": "4.4.1",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "acorn": "^7.1.0",
