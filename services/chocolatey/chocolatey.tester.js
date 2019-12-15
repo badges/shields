@@ -41,12 +41,17 @@ t.create('version (not found)')
 // version (pre)
 
 t.create('version (pre) (valid)')
-  .get('/vpre/scriptcs.json')
+  .get('/v/scriptcs.json?include_prereleases')
   .expectBadge({
     label: 'chocolatey',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
 t.create('version (pre) (not found)')
-  .get('/vpre/not-a-real-package.json')
+  .get('/v/not-a-real-package.json?include_prereleases')
   .expectBadge({ label: 'chocolatey', message: 'not found' })
+
+t.create('version (legacy redirect: vpre)')
+  .get('/vpre/scriptcs.json', { followRedirect: false })
+  .expectStatus(301)
+  .expectHeader('Location', '/chocolatey/v/scriptcs.json?include_prereleases')
