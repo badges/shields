@@ -228,7 +228,7 @@ class BaseService {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
-    await this._meterResponse(res, buffer)
+    this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
     return checkErrorResponse(errorMessages)({ buffer, res })
   }
