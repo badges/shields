@@ -15,7 +15,7 @@ It is convention to use the following standard routes and abbreviations across s
 
 - Coverage: `/coverage`
 - Downloads or Installs:
-  - Total: `/dt` - Use this even for services that only provide the total download/install data 
+  - Total: `/dt` - Use this even for services that only provide the total download/install data
   - Per month: `/dm`
   - Per week: `/dw`
   - Per day: `/dd`
