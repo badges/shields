@@ -19,7 +19,6 @@ It is convention to use the following standard routes and abbreviations across s
   - Per month: `/dm`
   - Per week: `/dw`
   - Per day: `/dd`
-  - For version: `/dv`
 - Rating:
   - Numeric: `/rating`
   - Stars: `/stars`
