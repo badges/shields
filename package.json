@@ -59,7 +59,7 @@
     "prom-client": "^11.5.3",
     "query-string": "^6.9.0",
     "request": "~2.88.0",
-    "semver": "~6.3.0",
+    "semver": "~7.1.1",
     "simple-icons": "2.0.0",
     "xmldom": "~0.1.27",
     "xpath": "~0.0.27"
