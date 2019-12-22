@@ -59,5 +59,4 @@ t.create('Version label should be `no releases` if no pre-release')
 
 t.create('Version (legacy redirect: vpre)')
   .get('/vpre/bootstrap.json', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader('Location', '/bower/v/bootstrap.json?include_prereleases')
+  .expectRedirect('/bower/v/bootstrap.json?include_prereleases')

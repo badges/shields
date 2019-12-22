@@ -52,11 +52,7 @@ t.create('version (pre) (not found)')
 
 t.create('version (legacy redirect: vpre)')
   .get('/vpre/ACMESharp.json', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
-    '/powershellgallery/v/ACMESharp.json?include_prereleases'
-  )
+  .expectRedirect('/powershellgallery/v/ACMESharp.json?include_prereleases')
 
 t.create('platform (valid')
   .get('/p/DNS.1.1.1.1.json')

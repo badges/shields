@@ -53,5 +53,4 @@ t.create('version (pre) (not found)')
 
 t.create('version (legacy redirect: vpre)')
   .get('/vpre/scriptcs.json', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader('Location', '/chocolatey/v/scriptcs.json?include_prereleases')
+  .expectRedirect('/chocolatey/v/scriptcs.json?include_prereleases')

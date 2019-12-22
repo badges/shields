@@ -27,5 +27,4 @@ t.create('clojars version (not found)')
 
 t.create('version (legacy redirect: vpre)')
   .get('/vpre/prismic.json', { followRedirect: false })
-  .expectStatus(301)
-  .expectHeader('Location', '/clojars/v/prismic.json?include_prereleases')
+  .expectRedirect('/clojars/v/prismic.json?include_prereleases')
