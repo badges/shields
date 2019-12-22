@@ -61,7 +61,7 @@
     "request": "~2.88.0",
     "semver": "~7.1.1",
     "simple-icons": "2.0.0",
-    "xmldom": "~0.1.27",
+    "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
   "scripts": {
@@ -206,7 +206,7 @@
     "gatsby-plugin-catch-links": "^2.1.21",
     "gatsby-plugin-page-creator": "^2.1.36",
     "gatsby-plugin-react-helmet": "^3.1.18",
-    "gatsby-plugin-remove-trailing-slashes": "^2.1.15",
+    "gatsby-plugin-remove-trailing-slashes": "^2.1.17",
     "gatsby-plugin-styled-components": "^3.1.14",
     "gatsby-plugin-typescript": "^2.1.20",
     "got": "^9.6.0",
