@@ -51,8 +51,8 @@ t.create('version (pre) (not found)')
   .expectBadge({ label: 'powershell gallery', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/ACMESharp.json', { followRedirect: false })
-  .expectRedirect('/powershellgallery/v/ACMESharp.json?include_prereleases')
+  .get('/vpre/ACMESharp.svg', { followRedirect: false })
+  .expectRedirect('/powershellgallery/v/ACMESharp.svg?include_prereleases')
 
 t.create('platform (valid')
   .get('/p/DNS.1.1.1.1.json')

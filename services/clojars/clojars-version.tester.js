@@ -26,5 +26,5 @@ t.create('clojars version (not found)')
   .expectBadge({ label: 'clojars', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/prismic.json', { followRedirect: false })
-  .expectRedirect('/clojars/v/prismic.json?include_prereleases')
+  .get('/vpre/prismic.svg', { followRedirect: false })
+  .expectRedirect('/clojars/v/prismic.svg?include_prereleases')
