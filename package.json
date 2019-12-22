@@ -61,7 +61,7 @@
     "request": "~2.88.0",
     "semver": "~7.1.1",
     "simple-icons": "2.0.0",
-    "xmldom": "~0.1.27",
+    "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
   "scripts": {
