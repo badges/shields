@@ -452,7 +452,7 @@ function forTheBadge({
   links,
   logo,
   logoColor,
-  logoWidth,
+  logoWidth: inLogoWidth,
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
@@ -463,7 +463,13 @@ function forTheBadge({
   message = message.toUpperCase()
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
-  labelWidth += 10 + logoWidth + logoPadding
+  const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+    logo,
+    logoWidth: inLogoWidth,
+    logoPadding,
+    extraPadding: 4,
+  })
+  labelWidth += 10 + logoWidth
   labelWidth -= label.length
     ? -(10 + label.length * 1.5)
     : logo
@@ -476,7 +482,6 @@ function forTheBadge({
 
   labelColor = label.length || (logo && logoColor) ? labelColor : color
 
-  const hasLogo = Boolean(logo)
   const hasLabel = label.length
   const height = 28
 
@@ -484,8 +489,8 @@ function forTheBadge({
   labelColor = escapeXml(labelColor)
 
   function renderLabelText() {
-    const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2) * 10
-    const labelTextLength = (labelWidth - (24 + logoWidth + logoPadding)) * 10
+    const labelTextX = ((labelWidth + logoWidth) / 2) * 10
+    const labelTextLength = (labelWidth - (24 + logoWidth)) * 10
     const escapedLabel = escapeXml(label)
     return `
       <text x="${labelTextX}" y="175" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
@@ -505,7 +510,7 @@ function forTheBadge({
       <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
     </g>
     <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="100">
-      ${hasLogo ? renderLogo({ logo, logoWidth, extraPadding: 4 }) : ''}
+      ${renderedLogo}
       ${hasLabel ? renderLabelText() : ''}
       <text
         x="${(labelWidth + messageWidth / 2) * 10}"
