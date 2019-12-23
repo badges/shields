@@ -374,7 +374,7 @@ function social({
   message,
   links,
   logo,
-  logoWidth,
+  logoWidth: inLogoWidth,
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
@@ -384,11 +384,15 @@ function social({
   label = capitalize(label)
 
   const height = 20
-  const hasLogo = Boolean(logo)
+  const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+    logo,
+    logoWidth: inLogoWidth,
+    logoPadding,
+  })
   const hasMessage = message.length
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
-  labelWidth += 10 + logoWidth + logoPadding
+  labelWidth += 10 + logoWidth
   messageWidth += 10
   messageWidth -= 4
 
@@ -412,8 +416,8 @@ function social({
     `
   }
 
-  const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2) * 10
-  const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
+  const labelTextX = ((labelWidth + logoWidth) / 2) * 10
+  const labelTextLength = (labelWidth - (10 + logoWidth)) * 10
   const escapedLabel = escapeXml(label)
 
   return renderBadge(
@@ -437,7 +441,7 @@ function social({
       <rect stroke="#d5d5d5" fill="url(#a)" x="0.5" y="0.5" width="${labelWidth}" height="19" rx="2"/>
       ${hasMessage ? renderMessageBubble() : ''}
     </g>
-    ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
+    ${renderedLogo}
     <g fill="#333" text-anchor="middle" ${socialFontFamily} font-weight="700" font-size="110px" line-height="14px">
       <text x="${labelTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
       <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
