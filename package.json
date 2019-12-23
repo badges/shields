@@ -154,7 +154,7 @@
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.2.7",
     "@types/chai-enzyme": "^0.6.7",
-    "@types/enzyme": "^3.10.3",
+    "@types/enzyme": "^3.10.4",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/mocha": "^5.2.7",
