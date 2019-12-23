@@ -145,11 +145,11 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
+    "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
     "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
     "@babel/register": "7.7.4",
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.2.7",
@@ -160,7 +160,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.21",
     "@types/react-helmet": "^5.0.14",
-    "@types/react-modal": "^3.10.0",
+    "@types/react-modal": "^3.10.1",
     "@types/react-select": "^3.0.8",
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
