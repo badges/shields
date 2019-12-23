@@ -64,11 +64,12 @@ function renderLogo({
   }
 }
 
-function renderTextWithShadow({
+function renderText({
   leftMargin,
   horizPadding = 0,
   content,
   verticalMargin = 0,
+  shadow = false,
 }) {
   if (content.length) {
     const textLength = preferredWidthOf(content)
@@ -78,16 +79,20 @@ function renderTextWithShadow({
     const textMargin = 140 + verticalMargin
 
     const outTextLength = 10 * textLength
-    const x = 10 * (leftMargin + 0.5 * textLength + 0.5 * horizPadding)
+    const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
+
+    let renderedText = ''
+    if (shadow) {
+      renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
+    }
+    renderedText += `<text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
 
     return {
-      renderedText: `
-    <text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>
-    <text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>
-  `,
+      renderedText,
       width: textLength,
     }
   }
+  return { renderedText: '', width: 0 }
 }
 
 function renderLinks({
@@ -122,230 +127,246 @@ function renderBadge({ labelWidth, messageWidth, height, links }, main) {
   `
 }
 
-function plastic({
-  label,
-  message,
-  links,
-  logo,
-  logoWidth: inLogoWidth,
-  logoPadding,
-  color = '#4c1',
-  labelColor = '#555',
-}) {
-  const height = 18
+class Badge {
+  static get fontFamily() {
+    throw new Error('Not implemented')
+  }
 
-  const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+  static get height() {
+    throw new Error('Not implemented')
+  }
+
+  static get verticalMargin() {
+    throw new Error('Not implemented')
+  }
+
+  static get shadow() {
+    throw new Error('Not implemented')
+  }
+
+  constructor({
+    label,
+    message,
+    links,
     logo,
     logoWidth: inLogoWidth,
     logoPadding,
-  })
+    color = '#4c1',
+    labelColor = '#555',
+  }) {
+    const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+      logo,
+      logoWidth: inLogoWidth,
+      logoPadding,
+    })
+    const hasLabel = label.length
 
-  const hasLabel = label.length
-  labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
+    labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
+    labelColor = escapeXml(labelColor)
+    color = escapeXml(color)
 
-  // TODO Validate the color externally so it's not necessary to escape it.
-  color = escapeXml(color)
-  labelColor = escapeXml(labelColor)
+    const horizPadding = 5
 
-  // if (hasLabel) {
-  //   labelWidth += 10
-  //   messageWidth += 10
-  // } else {
-  //   if (!logo) {
-  //     // No left.
-  //     labelWidth -= 1
-  //   } else if (logo && !labelColor) {
-  //     // Just the logo on the left.
-  //     labelWidth += 3
-  //   } else {
-  //     // Show logo with label color.
-  //     labelWidth += 10
-  //     messageWidth += 10
-  //   }
-  // }
+    const labelMargin = logoWidth + 1
 
-  const {
-    renderedText: renderedLabel,
-    width: labelWidth,
-  } = renderTextWithShadow({
-    leftMargin: logoWidth / 2 + 6,
-    content: label,
-    // The plastic badge is a little bit shorter.
-    verticalMargin: -10,
-  })
+    const { renderedText: renderedLabel, width: labelWidth } = renderText({
+      leftMargin: labelMargin,
+      horizPadding,
+      content: label,
+      verticalMargin: this.constructor.verticalMargin,
+      shadow: this.constructor.shadow,
+    })
 
-  const width = labelWidth + messageWidth
+    const leftWidth = hasLabel ? labelWidth + 2 * horizPadding + logoWidth : 0
 
-  const {
-    renderedText: renderedMessage,
-    width: messageWidth,
-  } = renderTextWithShadow({
-    leftMargin: labelWidth / 2 - (hasLabel ? 1 : 0),
-    content: message,
-    verticalMargin: -10,
-  })
+    let messageMargin = leftWidth - (message.length ? 1 : 0)
+    if (!hasLabel) {
+      messageMargin = messageMargin + 1
+    }
 
-  return renderBadge(
-    {
-      links,
-      labelWidth,
-      messageWidth,
-      height,
-    },
-    `
-    <linearGradient id="smooth" x2="0" y2="100%">
-      <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
-      <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
-      <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
-      <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
-    </linearGradient>
+    const { renderedText: renderedMessage, width: messageWidth } = renderText({
+      leftMargin: messageMargin,
+      horizPadding,
+      content: message,
+      verticalMargin: this.constructor.verticalMargin,
+      shadow: this.constructor.shadow,
+    })
 
-    <clipPath id="round">
-      <rect width="${width}" height="${height}" rx="4" fill="#fff"/>
-    </clipPath>
+    const rightWidth = messageWidth + 2 * horizPadding
 
-    <g clip-path="url(#round)">
-      <rect width="${labelWidth}" height="${height}" fill="${labelColor}"/>
-      <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
-      <rect width="${width}" height="${height}" fill="url(#smooth)"/>
-    </g>
+    const width = leftWidth + rightWidth
 
-    <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-      ${renderedLogo}
-      ${renderedLabel}
-      ${renderedMessage}
-    </g>`
-  )
-}
-
-function flat({
-  label,
-  message,
-  links,
-  logo,
-  logoWidth,
-  logoPadding,
-  color = '#4c1',
-  labelColor = '#555',
-}) {
-  const height = 20
-  const hasLogo = Boolean(logo)
-  const hasLabel = label.length
-
-  labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
-  labelColor = escapeXml(labelColor)
-  color = escapeXml(color)
-
-  const horizPadding = 5
-  const {
-    renderedText: renderedLabel,
-    width: labelWidth,
-  } = renderTextWithShadow({
-    leftMargin: (logoWidth + logoPadding) / 2 + 1,
-    horizPadding,
-    content: label,
-  })
-
-  const {
-    renderedText: renderedMessage,
-    width: messageWidth,
-  } = renderTextWithShadow({
-    leftMargin:
-      (logoWidth + logoPadding) / 2 + labelWidth - (message.length ? 1 : 0),
-    content: message,
-  })
-
-  const leftWidth = labelWidth + 2 * horizPadding
-  const width = labelWidth + messageWidth
-
-  return renderBadge(
-    {
-      links,
-      labelWidth,
-      messageWidth,
-      height,
-    },
-    `
-    <linearGradient id="smooth" x2="0" y2="100%">
-      <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-      <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-
-    <clipPath id="round">
-      <rect width="${width}" height="${height}" rx="3" fill="#fff"/>
-    </clipPath>
-
-    <g clip-path="url(#round)">
-      <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
-      <rect x="${leftWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
-      <rect width="${width}" height="${height}" fill="url(#smooth)"/>
-    </g>
-
-    <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-      ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
-      ${renderedLabel}
-      ${renderedMessage}
-    </g>`
-  )
-}
-
-function flatSquare({
-  label,
-  message,
-  links,
-  logo,
-  logoWidth,
-  logoPadding,
-  color = '#4c1',
-  labelColor = '#555',
-}) {
-  const height = 20
-  const hasLogo = Boolean(logo)
-  const hasLabel = label.length
-
-  let { labelWidth, messageWidth } = computeWidths({ label, message })
-  labelWidth += 10 + logoWidth + logoPadding
-  labelWidth -= label.length ? 0 : logo ? (labelColor ? 0 : 7) : 11
-  messageWidth += 10
-
-  labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
-
-  function renderLabelText() {
-    const labelTextX = ((labelWidth + logoWidth + logoPadding) / 2 + 1) * 10
-    const labelTextLength = (labelWidth - (10 + logoWidth + logoPadding)) * 10
-    const escapedLabel = escapeXml(label)
-    return `
-      <text x="${labelTextX}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
-      <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
-    `
+    this.links = links
+    this.leftWidth = leftWidth
+    this.rightWidth = rightWidth
+    this.width = width
+    this.labelColor = labelColor
+    this.color = color
+    this.renderedLogo = renderedLogo
+    this.renderedLabel = renderedLabel
+    this.renderedMessage = renderedMessage
   }
 
-  const messageTextX =
-    (labelWidth + messageWidth / 2 - (message.length ? 1 : 0)) * 10
-  const messageTextLength = (messageWidth - 10) * 10
-  const escapedMessage = escapeXml(message)
+  render() {
+    throw new Error('Not implemented')
+  }
+}
 
-  labelColor = escapeXml(labelColor)
-  color = escapeXml(color)
+class Plastic extends Badge {
+  static get fontFamily() {
+    return fontFamily
+  }
 
-  return renderBadge(
-    {
-      links,
-      labelWidth,
-      messageWidth,
-      height,
-    },
-    `
-    <g shape-rendering="crispEdges">
-      <rect width="${labelWidth}" height="20" fill="${labelColor}"/>
-      <rect x="${labelWidth}" width="${messageWidth}" height="20" fill="${color}"/>
-    </g>
-    <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="110">
-      ${hasLogo ? renderLogo({ logo, logoWidth }) : ''}
-      ${hasLabel ? renderLabelText() : ''}
-      <text x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>
-    </g>`
-  )
+  static get height() {
+    return 18
+  }
+
+  static get verticalMargin() {
+    return -10
+  }
+
+  static get shadow() {
+    return true
+  }
+
+  render() {
+    return renderBadge(
+      {
+        links: this.links,
+        labelWidth: this.leftWidth,
+        messageWidth: this.rightWidth,
+        height: this.constructor.height,
+      },
+      `
+      <linearGradient id="smooth" x2="0" y2="100%">
+        <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
+        <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
+        <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
+        <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
+      </linearGradient>
+
+      <clipPath id="round">
+        <rect width="${this.width}" height="${this.constructor.height}" rx="4" fill="#fff"/>
+      </clipPath>
+
+      <g clip-path="url(#round)">
+        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
+        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
+        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#smooth)"/>
+      </g>
+
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+        ${this.renderedLogo}
+        ${this.renderedLabel}
+        ${this.renderedMessage}
+      </g>`
+    )
+  }
+}
+
+class Flat extends Badge {
+  static get fontFamily() {
+    return fontFamily
+  }
+
+  static get height() {
+    return 20
+  }
+
+  static get verticalMargin() {
+    return 0
+  }
+
+  static get shadow() {
+    return true
+  }
+
+  render() {
+    return renderBadge(
+      {
+        links: this.links,
+        labelWidth: this.leftWidth,
+        messageWidth: this.rightWidth,
+        height: this.constructor.height,
+      },
+      `
+      <linearGradient id="smooth" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+      </linearGradient>
+
+      <clipPath id="round">
+        <rect width="${this.width}" height="${this.constructor.height}" rx="3" fill="#fff"/>
+      </clipPath>
+
+      <g clip-path="url(#round)">
+        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
+        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
+        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#smooth)"/>
+      </g>
+
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+        ${this.renderedLogo}
+        ${this.renderedLabel}
+        ${this.renderedMessage}
+      </g>`
+    )
+  }
+}
+
+class FlatSquare extends Badge {
+  static get fontFamily() {
+    return fontFamily
+  }
+
+  static get height() {
+    return 20
+  }
+
+  static get verticalMargin() {
+    return 0
+  }
+
+  static get shadow() {
+    return false
+  }
+
+  render() {
+    return renderBadge(
+      {
+        links: this.links,
+        labelWidth: this.leftWidth,
+        messageWidth: this.rightWidth,
+        height: this.constructor.height,
+      },
+      `
+      <g shape-rendering="crispEdges">
+        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
+        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
+      </g>
+
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+        ${this.renderedLogo}
+        ${this.renderedLabel}
+        ${this.renderedMessage}
+      </g>`
+    )
+  }
+}
+
+function plastic(obj) {
+  const badge = new Plastic(obj)
+  return badge.render()
+}
+
+function flat(obj) {
+  const badge = new Flat(obj)
+  return badge.render()
+}
+
+function flatSquare(obj) {
+  const badge = new FlatSquare(obj)
+  return badge.render()
 }
 
 function social({
