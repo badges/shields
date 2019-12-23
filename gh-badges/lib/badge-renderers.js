@@ -52,7 +52,7 @@ function renderLogo({
       hasLogo: true,
       logoWidth: logoWidth + logoPadding,
       renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
-        logo
+        escapeXml(logo)
       )}"/>`,
     }
   } else {
