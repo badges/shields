@@ -104,12 +104,8 @@ There are three places to get help:
 
 ## Badge URLs
 
-- The format of new badges should be of the form
-  `/SERVICE/NOUN/PARAMETERS/QUALIFIERS`. For instance,
-  `/gitter/room/nwjs/nw.js`. The vendor is gitter, the
-  badge is for rooms, and the parameter is nwjs/nw.js.
-- Services which require a url/hostname parameter should use a query parameter to accept that value. For instance,
-  `/discourse/topics?server=https://meta.discourse.org`.
+- The format of new badges should be of the form `/SERVICE/NOUN/PARAMETERS`.
+- There is further documentation on this in [badge-urls](https://github.com/badges/shields/blob/master/doc/badge-urls.md)
 
 ## Coding guidelines
 
