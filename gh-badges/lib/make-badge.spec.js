@@ -84,7 +84,7 @@ describe('The badge generator', function() {
         .and.to.include('grown')
     })
 
-    it('should always produce the same SVG (unless we have changed something!)', function() {
+    it('should match snapshot', function() {
       const svg = makeBadge({ text: ['cactus', 'grown'], format: 'svg' })
       snapshot(svg)
     })
@@ -139,6 +139,48 @@ describe('The badge generator', function() {
     })
   })
 
+  describe('"flat" template badge generation', function() {
+    it('should match snapshot', function() {
+      const svg = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'svg',
+        template: 'flat',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'javascript',
+      })
+      snapshot(svg)
+    })
+  })
+
+  describe('"flat-square" template badge generation', function() {
+    it('should match snapshot', function() {
+      const svg = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'svg',
+        template: 'flat-square',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'javascript',
+      })
+      snapshot(svg)
+    })
+  })
+
+  describe('"plastic" template badge generation', function() {
+    it('should match snapshot', function() {
+      const svg = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'svg',
+        template: 'plastic',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'javascript',
+      })
+      snapshot(svg)
+    })
+  })
+
   describe('"for-the-badge" template badge generation', function() {
     // https://github.com/badges/shields/issues/1280
     it('numbers should produce a string', function() {
@@ -161,6 +203,18 @@ describe('The badge generator', function() {
       expect(svg)
         .to.include('LABEL')
         .and.to.include('1 STRING')
+    })
+
+    it('should match snapshot', function() {
+      const svg = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'svg',
+        template: 'for-the-badge',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'javascript',
+      })
+      snapshot(svg)
     })
   })
 
@@ -187,7 +241,18 @@ describe('The badge generator', function() {
         .to.include('""')
         .and.to.include('some-value')
     })
+
+    it('should match snapshot', function() {
+      const svg = makeBadge({
+        text: ['cactus', 'grown'],
+        format: 'svg',
+        template: 'social',
+        logo: 'javascript',
+      })
+      snapshot(svg)
+    })
   })
+
   describe('badges with logos should always produce the same badge', function() {
     it('shields GitHub logo default color (#333333)', function() {
       const svg = makeBadge({
