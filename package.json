@@ -178,7 +178,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^3.1.0",
     "concurrently": "^5.0.2",
-    "cypress": "^3.8.0",
+    "cypress": "^3.8.1",
     "danger": "^9.2.9",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "enzyme": "^3.11.0",
@@ -255,7 +255,7 @@
     "styled-components": "^4.4.1",
     "tmp": "0.1.0",
     "ts-mocha": "^6.0.0",
-    "typescript": "^3.7.3",
+    "typescript": "^3.7.4",
     "url": "^0.11.0",
     "walkdir": "0.4.1"
   },
