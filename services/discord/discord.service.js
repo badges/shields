@@ -4,8 +4,7 @@ const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 
 const discordSchema = Joi.object({
-  members: Joi.array()
-    .allow(null)
+  presence_count: Joi.integer()
     .required(),
 }).required()
 
@@ -77,7 +76,6 @@ module.exports = class Discord extends BaseJsonService {
 
   async handle({ serverId }) {
     const data = await this.fetch({ serverId })
-    const members = Array.isArray(data.members) ? data.members : []
-    return this.constructor.render({ members: members.length })
+    return this.constructor.render({ members: data.presence_count })
   }
 }
