@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 
 const discordSchema = Joi.object({
-  presence_count: Joi.integer()
+  presence_count: Joi.number()
     .required(),
 }).required()
 
