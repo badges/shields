@@ -181,7 +181,11 @@ class Badge {
 
     let messageMargin = leftWidth - (message.length ? 1 : 0)
     if (!hasLabel) {
-      messageMargin = messageMargin + 1
+      if (hasLogo) {
+        messageMargin = messageMargin + logoWidth + horizPadding
+      } else {
+        messageMargin = messageMargin + 1
+      }
     }
 
     const { renderedText: renderedMessage, width: messageWidth } = renderText({
@@ -192,7 +196,10 @@ class Badge {
       shadow: this.constructor.shadow,
     })
 
-    const rightWidth = messageWidth + 2 * horizPadding
+    let rightWidth = messageWidth + 2 * horizPadding
+    if (hasLogo && !hasLabel) {
+      rightWidth += logoWidth + horizPadding - 1
+    }
 
     const width = leftWidth + rightWidth
 
@@ -473,21 +480,26 @@ function forTheBadge({
     logoPadding,
     extraPadding: 4,
   })
+  const hasLabel = label.length
+  const height = 28
+
   labelWidth += 10 + logoWidth
-  labelWidth -= label.length
-    ? -(10 + label.length * 1.5)
-    : logo
-    ? labelColor
-      ? -7
-      : 7
-    : 11
+  if (hasLabel) {
+    labelWidth += 10 + label.length * 1.5
+  } else if (hasLogo) {
+    if (hasLabel) {
+      labelWidth += 7
+    } else {
+      labelWidth -= 7
+    }
+  } else {
+    labelWidth -= 11
+  }
+
   messageWidth += 10
   messageWidth += 10 + message.length * 2
 
-  labelColor = label.length || (logo && logoColor) ? labelColor : color
-
-  const hasLabel = label.length
-  const height = 28
+  labelColor = hasLabel || (logo && logoColor) ? labelColor : color
 
   color = escapeXml(color)
   labelColor = escapeXml(labelColor)
