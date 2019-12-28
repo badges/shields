@@ -1,10 +1,11 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const discordSchema = Joi.object({
-  presence_count: Joi.number().required(),
+  presence_count: nonNegativeInteger,
 }).required()
 
 const documentation = `
