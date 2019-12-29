@@ -112,8 +112,10 @@ function renderLinks({
   }
 
   return (
-    (hasLeftLink ? render({ link: leftLink, width: leftLinkWidth }) : '') +
-    (hasRightLink ? render({ link: rightLink, width: messageWidth }) : '')
+    (hasRightLink
+      ? render({ link: rightLink, width: labelWidth + messageWidth })
+      : '') +
+    (hasLeftLink ? render({ link: leftLink, width: leftLinkWidth }) : '')
   )
 }
 
