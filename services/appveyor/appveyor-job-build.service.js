@@ -4,7 +4,7 @@ const { renderBuildStatusBadge } = require('../build-status')
 const AppVeyorBase = require('./appveyor-base')
 const { NotFound } = require('..')
 
-module.exports = class AppVeyorBuildJob extends AppVeyorBase {
+module.exports = class AppVeyorJobBuild extends AppVeyorBase {
   static get route() {
     return {
       base: 'appveyor/job/build',
