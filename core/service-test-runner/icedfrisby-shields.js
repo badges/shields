@@ -51,6 +51,10 @@ const factory = superclass =>
       })
     }
 
+    expectRedirect(location) {
+      return this.expectStatus(301).expectHeader('Location', location)
+    }
+
     static _expectField(json, name, expected) {
       if (typeof expected === 'undefined') return
       if (typeof expected === 'string' || typeof expected === 'number') {
