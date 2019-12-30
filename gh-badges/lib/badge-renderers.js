@@ -83,9 +83,9 @@ function renderText({
 
     let renderedText = ''
     if (shadow) {
-      renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
+      renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
     }
-    renderedText += `<text x="${x}" y="${textMargin}" transform="scale(0.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
+    renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" textLength="${outTextLength}" lengthAdjust="spacing">${escapedContent}</text>`
 
     return {
       renderedText,
@@ -430,8 +430,8 @@ function social({
     const messageTextX = (labelWidth + messageWidth / 2 + 6) * 10
     const messageTextLength = (messageWidth - 8) * 10
     const escapedMessage = escapeXml(message)
-    const shadow = `<text x="${messageTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
-    const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(0.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
+    const shadow = `<text x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
+    const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(.1)" textLength="${messageTextLength}" lengthAdjust="spacing">${escapedMessage}</text>`
     if (hasRightLink) {
       return `
       ${shadow}
@@ -475,8 +475,8 @@ function social({
     </g>
     ${renderedLogo}
     <g fill="#333" text-anchor="middle" ${socialFontFamily} font-weight="700" font-size="110px" line-height="14px">
-      <text x="${labelTextX}" y="150" fill="#fff" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
-      <text x="${labelTextX}" y="140" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+      <text x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+      <text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
       ${hasMessage ? renderMessageText() : ''}
     </g>
     ${renderLeftLink()}
@@ -536,7 +536,7 @@ function forTheBadge({
     const labelTextLength = (labelWidth - (24 + logoWidth)) * 10
     const escapedLabel = escapeXml(label)
     return `
-      <text x="${labelTextX}" y="175" transform="scale(0.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
+      <text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}" lengthAdjust="spacing">${escapedLabel}</text>
     `
   }
 
@@ -557,7 +557,7 @@ function forTheBadge({
       ${hasLabel ? renderLabelText() : ''}
       <text
         x="${(labelWidth + messageWidth / 2) * 10}"
-        y="175" font-weight="bold" transform="scale(0.1)"
+        y="175" font-weight="bold" transform="scale(.1)"
         textLength="${(messageWidth - 24) * 10}" lengthAdjust="spacing">
           ${escapeXml(message)}
         </text>
