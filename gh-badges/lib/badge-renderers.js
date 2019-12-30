@@ -125,8 +125,7 @@ function renderBadge({ links, leftWidth, rightWidth, height }, main) {
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
     ${main}
     ${renderLinks({ links, leftWidth, rightWidth, height })}
-    </svg>
-  `
+    </svg>`
 }
 
 function stripXmlWhitespace(xml) {
@@ -399,7 +398,7 @@ function flatSquare(params) {
 function social({
   label,
   message,
-  links,
+  links = [],
   logo,
   logoWidth,
   logoPadding,
