@@ -129,6 +129,13 @@ function renderBadge({ labelWidth, messageWidth, height, links }, main) {
   `
 }
 
+function stripXmlWhitespace(xml) {
+  return xml
+    .replace(/>\s+/g, '>')
+    .replace(/<\s+/g, '<')
+    .trim()
+}
+
 class Badge {
   static get fontFamily() {
     throw new Error('Not implemented')
@@ -365,16 +372,25 @@ class FlatSquare extends Badge {
 
 function plastic(obj) {
   const badge = new Plastic(obj)
+  if (obj.minify) {
+    return stripXmlWhitespace(badge.render())
+  }
   return badge.render()
 }
 
 function flat(obj) {
   const badge = new Flat(obj)
+  if (obj.minify) {
+    return stripXmlWhitespace(badge.render())
+  }
   return badge.render()
 }
 
 function flatSquare(obj) {
   const badge = new FlatSquare(obj)
+  if (obj.minify) {
+    return stripXmlWhitespace(badge.render())
+  }
   return badge.render()
 }
 
@@ -387,6 +403,7 @@ function social({
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
+  minify,
 }) {
   // Social label is styled with a leading capital. Convert to caps here so
   // width can be measured using the correct characters.
@@ -452,7 +469,7 @@ function social({
     return rect
   }
 
-  return renderBadge(
+  const badge = renderBadge(
     {
       links: [],
       labelWidth: labelWidth + 1,
@@ -482,6 +499,11 @@ function social({
     ${renderLeftLink()}
     `
   )
+
+  if (minify) {
+    return stripXmlWhitespace(badge)
+  }
+  return badge
 }
 
 function forTheBadge({
@@ -494,6 +516,7 @@ function forTheBadge({
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
+  minify,
 }) {
   // For the Badge is styled in all caps. Convert to caps here so widths can
   // be measured using the correct characters.
@@ -540,7 +563,7 @@ function forTheBadge({
     `
   }
 
-  return renderBadge(
+  const badge = renderBadge(
     {
       links,
       labelWidth,
@@ -555,14 +578,18 @@ function forTheBadge({
     <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="100">
       ${renderedLogo}
       ${hasLabel ? renderLabelText() : ''}
-      <text
-        x="${(labelWidth + messageWidth / 2) * 10}"
-        y="175" font-weight="bold" transform="scale(.1)"
-        textLength="${(messageWidth - 24) * 10}">
-          ${escapeXml(message)}
-        </text>
-      </g>`
+      <text x="${(labelWidth + messageWidth / 2) *
+        10}" y="175" font-weight="bold" transform="scale(.1)" textLength="${(messageWidth -
+      24) *
+      10}">
+        ${escapeXml(message)}</text>
+    </g>`
   )
+
+  if (minify) {
+    return stripXmlWhitespace(badge)
+  }
+  return badge
 }
 
 module.exports = { plastic, flat, flatSquare, social, forTheBadge }
