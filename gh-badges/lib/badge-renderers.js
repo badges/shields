@@ -50,7 +50,7 @@ function renderLogo({
     const y = 3 + extraPadding
     return {
       hasLogo: true,
-      logoWidth: logoWidth + logoPadding,
+      totalLogoWidth: logoWidth + logoPadding,
       renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
         escapeXml(logo)
       )}"/>`,
@@ -58,7 +58,7 @@ function renderLogo({
   } else {
     return {
       hasLogo: false,
-      logoWidth: 0,
+      totalLogoWidth: 0,
       renderedLogo: '',
     }
   }
@@ -119,12 +119,12 @@ function renderLinks({
   )
 }
 
-function renderBadge({ labelWidth, messageWidth, height, links }, main) {
-  const width = labelWidth + messageWidth
+function renderBadge({ links, leftWidth, rightWidth, height }, main) {
+  const width = leftWidth + rightWidth
   return `
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
     ${main}
-    ${renderLinks({ links, labelWidth, messageWidth, height })}
+    ${renderLinks({ links, leftWidth, rightWidth, height })}
     </svg>
   `
 }
@@ -158,14 +158,14 @@ class Badge {
     message,
     links,
     logo,
-    logoWidth: inLogoWidth,
+    logoWidth,
     logoPadding,
     color = '#4c1',
     labelColor = '#555',
   }) {
-    const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+    const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
       logo,
-      logoWidth: inLogoWidth,
+      logoWidth,
       logoPadding,
     })
     const hasLabel = label.length
@@ -176,7 +176,7 @@ class Badge {
 
     const horizPadding = 5
 
-    const labelMargin = logoWidth + 1
+    const labelMargin = totalLogoWidth + 1
 
     const { renderedText: renderedLabel, width: labelWidth } = renderText({
       leftMargin: labelMargin,
@@ -186,12 +186,14 @@ class Badge {
       shadow: this.constructor.shadow,
     })
 
-    const leftWidth = hasLabel ? labelWidth + 2 * horizPadding + logoWidth : 0
+    const leftWidth = hasLabel
+      ? labelWidth + 2 * horizPadding + totalLogoWidth
+      : 0
 
     let messageMargin = leftWidth - (message.length ? 1 : 0)
     if (!hasLabel) {
       if (hasLogo) {
-        messageMargin = messageMargin + logoWidth + horizPadding
+        messageMargin = messageMargin + totalLogoWidth + horizPadding
       } else {
         messageMargin = messageMargin + 1
       }
@@ -207,7 +209,7 @@ class Badge {
 
     let rightWidth = messageWidth + 2 * horizPadding
     if (hasLogo && !hasLabel) {
-      rightWidth += logoWidth + horizPadding - 1
+      rightWidth += totalLogoWidth + horizPadding - 1
     }
 
     const width = leftWidth + rightWidth
@@ -249,8 +251,8 @@ class Plastic extends Badge {
     return renderBadge(
       {
         links: this.links,
-        labelWidth: this.leftWidth,
-        messageWidth: this.rightWidth,
+        leftWidth: this.leftWidth,
+        rightWidth: this.rightWidth,
         height: this.constructor.height,
       },
       `
@@ -301,8 +303,8 @@ class Flat extends Badge {
     return renderBadge(
       {
         links: this.links,
-        labelWidth: this.leftWidth,
-        messageWidth: this.rightWidth,
+        leftWidth: this.leftWidth,
+        rightWidth: this.rightWidth,
         height: this.constructor.height,
       },
       `
@@ -351,8 +353,8 @@ class FlatSquare extends Badge {
     return renderBadge(
       {
         links: this.links,
-        labelWidth: this.leftWidth,
-        messageWidth: this.rightWidth,
+        leftWidth: this.leftWidth,
+        rightWidth: this.rightWidth,
         height: this.constructor.height,
       },
       `
@@ -370,25 +372,25 @@ class FlatSquare extends Badge {
   }
 }
 
-function plastic(obj) {
-  const badge = new Plastic(obj)
-  if (obj.minify) {
+function plastic(params) {
+  const badge = new Plastic(params)
+  if (params.minify) {
     return stripXmlWhitespace(badge.render())
   }
   return badge.render()
 }
 
-function flat(obj) {
-  const badge = new Flat(obj)
-  if (obj.minify) {
+function flat(params) {
+  const badge = new Flat(params)
+  if (params.minify) {
     return stripXmlWhitespace(badge.render())
   }
   return badge.render()
 }
 
-function flatSquare(obj) {
-  const badge = new FlatSquare(obj)
-  if (obj.minify) {
+function flatSquare(params) {
+  const badge = new FlatSquare(params)
+  if (params.minify) {
     return stripXmlWhitespace(badge.render())
   }
   return badge.render()
@@ -399,7 +401,7 @@ function social({
   message,
   links,
   logo,
-  logoWidth: inLogoWidth,
+  logoWidth,
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
@@ -411,20 +413,20 @@ function social({
 
   const externalHeight = 20
   const internalHeight = 19
-  const { logoWidth, renderedLogo } = renderLogo({
+  const { totalLogoWidth, renderedLogo } = renderLogo({
     logo,
-    logoWidth: inLogoWidth,
+    logoWidth,
     logoPadding,
   })
   const hasMessage = message.length
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
-  labelWidth += 10 + logoWidth
+  labelWidth += 10 + totalLogoWidth
   messageWidth += 10
   messageWidth -= 4
 
-  const labelTextX = ((labelWidth + logoWidth) / 2) * 10
-  const labelTextLength = (labelWidth - (10 + logoWidth)) * 10
+  const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
+  const labelTextLength = (labelWidth - (10 + totalLogoWidth)) * 10
   const escapedLabel = escapeXml(label)
 
   let [leftLink, rightLink] = links
@@ -472,8 +474,8 @@ function social({
   const badge = renderBadge(
     {
       links: [],
-      labelWidth: labelWidth + 1,
-      messageWidth: hasMessage ? messageWidth + 6 : 0,
+      leftWidth: labelWidth + 1,
+      rightWidth: hasMessage ? messageWidth + 6 : 0,
       height: externalHeight,
     },
     `
@@ -512,7 +514,7 @@ function forTheBadge({
   links,
   logo,
   logoColor,
-  logoWidth: inLogoWidth,
+  logoWidth,
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
@@ -524,16 +526,16 @@ function forTheBadge({
   message = message.toUpperCase()
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
-  const { hasLogo, logoWidth, renderedLogo } = renderLogo({
+  const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
     logo,
-    logoWidth: inLogoWidth,
+    logoWidth,
     logoPadding,
     extraPadding: 4,
   })
   const hasLabel = label.length
   const height = 28
 
-  labelWidth += 10 + logoWidth
+  labelWidth += 10 + totalLogoWidth
   if (hasLabel) {
     labelWidth += 10 + label.length * 1.5
   } else if (hasLogo) {
@@ -555,8 +557,8 @@ function forTheBadge({
   labelColor = escapeXml(labelColor)
 
   function renderLabelText() {
-    const labelTextX = ((labelWidth + logoWidth) / 2) * 10
-    const labelTextLength = (labelWidth - (24 + logoWidth)) * 10
+    const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
+    const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
     return `
       <text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
@@ -566,8 +568,8 @@ function forTheBadge({
   const badge = renderBadge(
     {
       links,
-      labelWidth,
-      messageWidth,
+      leftWidth: labelWidth,
+      rightWidth: messageWidth,
       height,
     },
     `
