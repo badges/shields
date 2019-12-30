@@ -28,7 +28,10 @@ const requiredUrl = optionalUrl.required()
 
 const publicConfigSchema = Joi.object({
   bind: {
-    port: Joi.number().port(),
+    port: Joi.alternatives().try(
+      Joi.number().port(),
+      Joi.string().pattern(/^\\\\\.\\pipe\\.+$/)
+    ),
     address: Joi.alternatives().try(
       Joi.string()
         .ip()
@@ -187,7 +190,11 @@ class Server {
 
     camp.route(/\.(gif|jpg)$/, (query, match, end, request) => {
       const [, format] = match
-      makeSend('svg', request.res, end)(
+      makeSend(
+        'svg',
+        request.res,
+        end
+      )(
         makeBadge({
           text: ['410', `${format} no longer available`],
           color: 'lightgray',
@@ -198,7 +205,11 @@ class Server {
 
     if (!rasterUrl) {
       camp.route(/\.png$/, (query, match, end, request) => {
-        makeSend('svg', request.res, end)(
+        makeSend(
+          'svg',
+          request.res,
+          end
+        )(
           makeBadge({
             text: ['404', 'raster badges not available'],
             color: 'lightgray',
@@ -212,7 +223,11 @@ class Server {
       const [, extension] = match
       const format = (extension || '.svg').replace(/^\./, '')
 
-      makeSend(format, request.res, end)(
+      makeSend(
+        format,
+        request.res,
+        end
+      )(
         makeBadge({
           text: ['404', 'badge not found'],
           color: 'red',

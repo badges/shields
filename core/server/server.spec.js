@@ -23,6 +23,14 @@ describe('The server', function() {
     server = undefined
   })
 
+  it('should allow strings for port', async function() {
+    //fixes #4391 - This allows the app to be run using iisnode, which uses a named pipe for the port.
+    const pipeServer = createTestServer({
+      port: '\\\\.\\pipe\\9c137306-7c4d-461e-b7cf-5213a3939ad6',
+    })
+    expect(pipeServer).to.not.be.undefined
+  })
+
   it('should produce colorscheme badges', async function() {
     const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.svg`)
     expect(statusCode).to.equal(200)
@@ -121,7 +129,9 @@ describe('The server', function() {
   it('should return the 404 badge page for rando links', async function() {
     const { statusCode, body } = await got(
       `${baseUrl}this/is/most/definitely/not/a/badge.js`,
-      { throwHttpErrors: false }
+      {
+        throwHttpErrors: false,
+      }
     )
     expect(statusCode).to.equal(404)
     expect(body)
