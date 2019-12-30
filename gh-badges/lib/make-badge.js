@@ -51,7 +51,6 @@ module.exports = function makeBadge({
 
   let render = badgeRenderers[template]
   if (render === undefined) {
-    template = 'flat'
     render = badgeRenderers.flat
   }
 
