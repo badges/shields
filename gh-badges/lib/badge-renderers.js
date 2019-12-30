@@ -247,21 +247,21 @@ class Plastic extends Badge {
         height: this.constructor.height,
       },
       `
-      <linearGradient id="smooth" x2="0" y2="100%">
+      <linearGradient id="s" x2="0" y2="100%">
         <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
         <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
         <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
         <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
       </linearGradient>
 
-      <clipPath id="round">
+      <clipPath id="r">
         <rect width="${this.width}" height="${this.constructor.height}" rx="4" fill="#fff"/>
       </clipPath>
 
-      <g clip-path="url(#round)">
+      <g clip-path="url(#r)">
         <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
         <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
-        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#smooth)"/>
+        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
       </g>
 
       <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
@@ -299,19 +299,19 @@ class Flat extends Badge {
         height: this.constructor.height,
       },
       `
-      <linearGradient id="smooth" x2="0" y2="100%">
+      <linearGradient id="s" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
         <stop offset="1" stop-opacity=".1"/>
       </linearGradient>
 
-      <clipPath id="round">
+      <clipPath id="r">
         <rect width="${this.width}" height="${this.constructor.height}" rx="3" fill="#fff"/>
       </clipPath>
 
-      <g clip-path="url(#round)">
+      <g clip-path="url(#r)">
         <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
         <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
-        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#smooth)"/>
+        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
       </g>
 
       <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
