@@ -12,7 +12,7 @@ const validMessages = [
   'queued',
   'pending',
 ]
-const isValidMessages = Joi.equal(...validMessages)
+const isValidMessages = Joi.equal(...validMessages).required()
 
 t.create('Deployments')
   .get('/badges/shields/shields-staging.json')
