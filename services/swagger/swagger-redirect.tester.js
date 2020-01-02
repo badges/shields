@@ -9,11 +9,11 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('swagger json')
-  .get('/https/example.com/example.json', {
+  .get('/https/example.com/example.svg', {
     followRedirect: false,
   })
   .expectRedirect(
-    `/swagger/valid/3.0.json?specUrl=${encodeURIComponent(
+    `/swagger/valid/3.0.svg?specUrl=${encodeURIComponent(
       'https://example.com/example.json'
     )}`
   )
