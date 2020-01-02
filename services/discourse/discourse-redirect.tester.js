@@ -12,9 +12,7 @@ t.create('discourse status')
   .get('/https/meta.discourse.org/status.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/discourse/status.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
@@ -24,9 +22,7 @@ t.create('discourse topics')
   .get('/https/meta.discourse.org/topics.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/discourse/topics.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
@@ -36,9 +32,7 @@ t.create('discourse users')
   .get('/https/meta.discourse.org/users.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/discourse/users.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
@@ -48,9 +42,7 @@ t.create('discourse likes')
   .get('/https/meta.discourse.org/likes.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/discourse/likes.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`
@@ -60,9 +52,7 @@ t.create('discourse posts')
   .get('/https/meta.discourse.org/posts.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/discourse/posts.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
     )}`

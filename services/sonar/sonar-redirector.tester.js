@@ -16,9 +16,7 @@ t.create('sonar version')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/sonar/alert_status/org.ow2.petals:petals-se-ase.svg?${queryString.stringify(
       {
         server: 'http://sonar.petalslink.com',
@@ -34,9 +32,7 @@ t.create('sonar host parameter')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/sonar/alert_status/org.ow2.petals:petals-se-ase.svg?${queryString.stringify(
       {
         server: 'http://sonar.petalslink.com',
@@ -51,9 +47,7 @@ t.create('sonar host parameter with version')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/sonar/alert_status/org.ow2.petals:petals-se-ase.svg?${queryString.stringify(
       {
         server: 'http://sonar.petalslink.com',

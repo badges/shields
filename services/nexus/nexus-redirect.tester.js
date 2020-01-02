@@ -12,9 +12,7 @@ t.create('Nexus release')
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.json', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/nexus/r/com.google.guava/guava.json?server=${encodeURIComponent(
       'https://oss.sonatype.org'
     )}`
@@ -24,9 +22,7 @@ t.create('Nexus snapshot')
   .get('/s/https/oss.sonatype.org/com.google.guava/guava.json', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/nexus/s/com.google.guava/guava.json?server=${encodeURIComponent(
       'https://oss.sonatype.org'
     )}`
@@ -39,9 +35,7 @@ t.create('Nexus repository with query opts')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/nexus/fs-public-snapshots/com.progress.fuse/fusehq.json?queryOpt=${encodeURIComponent(
       ':p=tar.gz:c=agent-apple-osx'
     )}&server=${encodeURIComponent('https://repository.jboss.org/nexus')}`

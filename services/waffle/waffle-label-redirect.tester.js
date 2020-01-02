@@ -12,5 +12,4 @@ t.create('waffle label redirect')
   .get('/waffleio/waffle.io.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader('Location', '/waffle/label/waffleio/waffle.io/ready.svg')
+  .expectRedirect('/waffle/label/waffleio/waffle.io/ready.svg')
