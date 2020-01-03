@@ -9,13 +9,11 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('swagger json')
-  .get('/https/example.com/example.json', {
+  .get('/https/example.com/example.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
-    `/swagger/valid/3.0.json?specUrl=${encodeURIComponent(
+  .expectRedirect(
+    `/swagger/valid/3.0.svg?specUrl=${encodeURIComponent(
       'https://example.com/example.json'
     )}`
   )
@@ -24,9 +22,7 @@ t.create('swagger yml')
   .get('/https/example.com/example.yml', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/swagger/valid/3.0.svg?specUrl=${encodeURIComponent(
       'https://example.com/example.yml'
     )}`
@@ -36,9 +32,7 @@ t.create('swagger yaml')
   .get('/https/example.com/example.yaml', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/swagger/valid/3.0.svg?specUrl=${encodeURIComponent(
       'https://example.com/example.yaml'
     )}`
