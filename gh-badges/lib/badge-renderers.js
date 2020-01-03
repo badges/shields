@@ -45,22 +45,22 @@ function renderLogo({
   logoPadding = 0,
   extraPadding = 0,
 }) {
-  if (logo) {
-    const x = 5 + extraPadding
-    const y = 3 + extraPadding
-    return {
-      hasLogo: true,
-      totalLogoWidth: logoWidth + logoPadding,
-      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
-        logo
-      )}"/>`,
-    }
-  } else {
+  if (!logo) {
     return {
       hasLogo: false,
       totalLogoWidth: 0,
       renderedLogo: '',
     }
+  }
+
+  const x = 5 + extraPadding
+  const y = 3 + extraPadding
+  return {
+    hasLogo: true,
+    totalLogoWidth: logoWidth + logoPadding,
+    renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
+      logo
+    )}"/>`,
   }
 }
 
@@ -71,28 +71,29 @@ function renderText({
   verticalMargin = 0,
   shadow = false,
 }) {
-  if (content.length) {
-    const textLength = preferredWidthOf(content)
-    const escapedContent = escapeXml(content)
-
-    const shadowMargin = 150 + verticalMargin
-    const textMargin = 140 + verticalMargin
-
-    const outTextLength = 10 * textLength
-    const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
-
-    let renderedText = ''
-    if (shadow) {
-      renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
-    }
-    renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
-
-    return {
-      renderedText,
-      width: textLength,
-    }
+  if (!content.length) {
+    return { renderedText: '', width: 0 }
   }
-  return { renderedText: '', width: 0 }
+
+  const textLength = preferredWidthOf(content)
+  const escapedContent = escapeXml(content)
+
+  const shadowMargin = 150 + verticalMargin
+  const textMargin = 140 + verticalMargin
+
+  const outTextLength = 10 * textLength
+  const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
+
+  let renderedText = ''
+  if (shadow) {
+    renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
+  }
+  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
+
+  return {
+    renderedText,
+    width: textLength,
+  }
 }
 
 function renderLinks({
