@@ -12,8 +12,6 @@ t.create('twitter')
   .get('/https/shields.io.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/twitter/url.svg?url=${encodeURIComponent('https://shields.io')}`
   )

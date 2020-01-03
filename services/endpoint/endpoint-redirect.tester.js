@@ -12,5 +12,4 @@ t.create('Build: default branch')
   .get('.svg?url=https://example.com/badge.json', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader('Location', '/endpoint.svg?url=https://example.com/badge.json')
+  .expectRedirect('/endpoint.svg?url=https://example.com/badge.json')
