@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Select, { components } from 'react-select'
 import { MarkupFormat } from '../../lib/generate-image-markup'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ClickableControl(props: any): JSX.Element {
   return (
     <components.Control
