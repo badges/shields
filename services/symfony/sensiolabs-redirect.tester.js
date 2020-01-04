@@ -11,8 +11,4 @@ t.create('sensiolabs insight')
   .get('/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
-    '/symfony/i/grade/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg'
-  )
+  .expectRedirect('/symfony/i/grade/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg')

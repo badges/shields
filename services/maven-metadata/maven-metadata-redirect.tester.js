@@ -9,9 +9,7 @@ t.create('maven metadata (badge extension)')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/maven-metadata/v.json?metadataUrl=${encodeURIComponent(
       'http://central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml'
     )}`
@@ -24,9 +22,7 @@ t.create('maven metadata (no badge extension)')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/maven-metadata/v.svg?metadataUrl=${encodeURIComponent(
       'http://central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml'
     )}`

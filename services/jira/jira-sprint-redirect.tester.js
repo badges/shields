@@ -12,9 +12,7 @@ t.create('jira sprint')
   .get('/https/jira.spring.io/94.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/jira/sprint/94.svg?baseUrl=${encodeURIComponent(
       'https://jira.spring.io'
     )}`

@@ -15,9 +15,7 @@ t.create('old tests prefix + job url in path')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/jenkins/tests.svg?jobUrl=${encodeURIComponent(
       'https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily'
     )}`
@@ -30,9 +28,7 @@ t.create('new tests prefix + job url in path')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/jenkins/tests.svg?jobUrl=${encodeURIComponent(
       'https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily'
     )}`

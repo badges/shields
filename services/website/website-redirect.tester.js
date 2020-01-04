@@ -12,9 +12,7 @@ t.create('Website with custom messages')
   .get('/website-up-down/https/www.google.com.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/website.svg?down_message=down&up_message=up&url=${encodeURIComponent(
       'https://www.google.com'
     )}`
@@ -24,9 +22,7 @@ t.create('Website with custom messages and colors')
   .get('/website-up-down-yellow-gray/https/www.google.com.svg', {
     followRedirect: false,
   })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/website.svg?down_color=gray&down_message=down&up_color=yellow&up_message=up&url=${encodeURIComponent(
       'https://www.google.com'
     )}`
@@ -39,9 +35,7 @@ t.create('Website to queryParam with custom messages and colors')
       followRedirect: false,
     }
   )
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .expectRedirect(
     `/website.svg?down_color=gray&down_message=down&up_color=yellow&up_message=up&url=${encodeURIComponent(
       'https://www.google.com'
     )}`
