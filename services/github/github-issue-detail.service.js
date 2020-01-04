@@ -219,7 +219,7 @@ module.exports = class GithubIssueDetail extends GithubAuthV3Service {
 
   transform({ json, property, issueKind }) {
     const value = propertyMap[property].transform({ json, property })
-    const isPR = json.hasOwnProperty('pull_request') || issueKind === 'pulls'
+    const isPR = 'pull_request' in json || issueKind === 'pulls'
     return { value, isPR }
   }
 
