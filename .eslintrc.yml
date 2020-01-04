@@ -51,7 +51,7 @@ overrides:
       '@typescript-eslint/no-empty-function': 'error'
       '@typescript-eslint/no-var-requires': 'error'
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
-      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/no-explicit-any': 'error'
       '@typescript-eslint/ban-ts-ignore': 'off'
 
   - files:
