@@ -38,7 +38,11 @@ interface PageContext {
   category?: Category
 }
 
-export default function Main({ pageContext }: { pageContext: PageContext }) {
+export default function Main({
+  pageContext,
+}: {
+  pageContext: PageContext
+}): JSX.Element {
   const [searchIsInProgress, setSearchIsInProgress] = useState(false)
   const [queryIsTooShort, setQueryIsTooShort] = useState(false)
   const [searchResults, setSearchResults] = useState<{
@@ -51,7 +55,7 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
   ] = useState(false)
   const searchTimeout = useRef(0)
 
-  function performSearch(query: string) {
+  function performSearch(query: string): void {
     setSearchIsInProgress(false)
 
     setQueryIsTooShort(query.length === 1)
@@ -67,7 +71,7 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
     }
   }
 
-  function searchQueryChanged(query: string) {
+  function searchQueryChanged(query: string): void {
     /*
     Add a small delay before showing search results
     so that we wait until the user has stopped typing
@@ -83,12 +87,15 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
     searchTimeout.current = window.setTimeout(() => performSearch(query), 500)
   }
 
-  function exampleClicked(example: RenderableExample, isSuggestion: boolean) {
+  function exampleClicked(
+    example: RenderableExample,
+    isSuggestion: boolean
+  ): void {
     setSelectedExample(example)
     setSelectedExampleIsSuggestion(isSuggestion)
   }
 
-  function dismissMarkupModal() {
+  function dismissMarkupModal(): void {
     setSelectedExample(undefined)
   }
 
@@ -98,7 +105,7 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
   }: {
     category: Category
     definitions: ServiceDefinition[]
-  }) {
+  }): JSX.Element {
     const flattened = definitions.reduce((accum, current) => {
       const { examples } = current
       return accum.concat(examples)
@@ -117,7 +124,7 @@ export default function Main({ pageContext }: { pageContext: PageContext }) {
     )
   }
 
-  function renderMain() {
+  function renderMain(): JSX.Element | JSX.Element[] {
     const { category } = pageContext
 
     if (searchIsInProgress) {

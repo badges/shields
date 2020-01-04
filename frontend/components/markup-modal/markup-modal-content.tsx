@@ -22,7 +22,7 @@ export function MarkupModalContent({
   example: RenderableExample
   isBadgeSuggestion: boolean
   baseUrl: string
-}) {
+}): JSX.Element {
   let documentation: { __html: string } | undefined
   let link: string | undefined
   if (isBadgeSuggestion) {

@@ -8,7 +8,7 @@ const SpacedA = styled.a`
   margin-right: 10px;
 `
 
-export default function Footer({ baseUrl }: { baseUrl: string }) {
+export default function Footer({ baseUrl }: { baseUrl: string }): JSX.Element {
   return (
     <section>
       <H2 id="like-this">Like This?</H2>

@@ -38,9 +38,6 @@ overrides:
       es6: true
     rules:
       no-console: 'off'
-      '@typescript-eslint/no-var-requires': 'off'
-      '@typescript-eslint/explicit-function-return-type': 'off'
-      '@typescript-eslint/no-empty-function': 'off'
 
   - files:
       - '**/*.@(ts|tsx)'
@@ -49,7 +46,10 @@ overrides:
     parser: '@typescript-eslint/parser'
     rules:
       # Argh.
-      '@typescript-eslint/explicit-function-return-type': 'off'
+      '@typescript-eslint/explicit-function-return-type':
+        ['error', { 'allowExpressions': true }]
+      '@typescript-eslint/no-empty-function': 'error'
+      '@typescript-eslint/no-var-requires': 'error'
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
       '@typescript-eslint/no-explicit-any': 'off'
       '@typescript-eslint/ban-ts-ignore': 'off'
@@ -116,9 +116,9 @@ rules:
   # Allow unused parameters. In callbacks, removing them seems to obscure
   # what the functions are doing.
   '@typescript-eslint/no-unused-vars': ['error', { 'args': 'none' }]
-  no-unused-vars: off
+  no-unused-vars: 'off'
 
-  '@typescript-eslint/no-var-requires': error
+  '@typescript-eslint/no-var-requires': 'off'
 
   # These should be disabled by eslint-config-prettier, but are not.
   no-extra-semi: 'off'
@@ -166,6 +166,8 @@ rules:
 
   # Disable some from TypeScript.
   '@typescript-eslint/camelcase': off
+  '@typescript-eslint/explicit-function-return-type': 'off'
+  '@typescript-eslint/no-empty-function': 'off'
 
   react/jsx-sort-props: 'error'
   react-hooks/rules-of-hooks: 'error'
