@@ -50,7 +50,7 @@ export function Snippet({
   snippet: string
   truncate?: boolean
   fontSize?: string
-}) {
+}): JSX.Element {
   return (
     <CodeContainer truncate={truncate}>
       <ClickToSelect>
