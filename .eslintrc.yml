@@ -1,5 +1,4 @@
 extends:
-  - standard-jsx
   - standard-react
   - plugin:@typescript-eslint/recommended
   - prettier/@typescript-eslint
@@ -39,7 +38,10 @@ overrides:
       es6: true
     rules:
       no-console: 'off'
-      '@typescript-eslint/no-var-requires': off
+      no-prototype-builtins: 'off'
+      '@typescript-eslint/no-var-requires': 'off'
+      '@typescript-eslint/explicit-function-return-type': 'off'
+      '@typescript-eslint/no-empty-function': 'off'
 
   - files:
       - '**/*.@(ts|tsx)'
@@ -50,6 +52,8 @@ overrides:
       # Argh.
       '@typescript-eslint/explicit-function-return-type': 'off'
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
+      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/ban-ts-ignore': 'off'
 
   - files:
       - core/**/*.ts
