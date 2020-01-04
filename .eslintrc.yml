@@ -38,7 +38,6 @@ overrides:
       es6: true
     rules:
       no-console: 'off'
-      no-prototype-builtins: 'off'
       '@typescript-eslint/no-var-requires': 'off'
       '@typescript-eslint/explicit-function-return-type': 'off'
       '@typescript-eslint/no-empty-function': 'off'

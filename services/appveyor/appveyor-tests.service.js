@@ -144,7 +144,7 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     const isCompact = compactMessage !== undefined
     const data = await this.fetch({ user, repo, branch })
 
-    if (!data.hasOwnProperty('build')) {
+    if (!('build' in data)) {
       return { message: 'no builds found' }
     }
 
