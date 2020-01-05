@@ -43,8 +43,8 @@ function currencyFromCode(code) {
 }
 
 function ordinalNumber(n) {
-  const s = ['ᵗʰ', 'ˢᵗ', 'ⁿᵈ', 'ʳᵈ'],
-    v = n % 100
+  const s = ['ᵗʰ', 'ˢᵗ', 'ⁿᵈ', 'ʳᵈ']
+  const v = n % 100
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
 
