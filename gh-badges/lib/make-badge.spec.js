@@ -128,7 +128,7 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'unknown_style',
         })
-      ).to.throw(Error, 'render is not a function')
+      ).to.throw(Error, "Unknown template: 'unknown_style'")
     })
   })
 

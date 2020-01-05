@@ -41,8 +41,11 @@ module.exports = function makeBadge({
     })
   }
 
-  template = camelcase(template)
-  const render = badgeRenderers[template]
+  const methodName = camelcase(template)
+  if (!(methodName in badgeRenderers)) {
+    throw new Error(`Unknown template: '${template}'`)
+  }
+  const render = badgeRenderers[methodName]
 
   logoWidth = +logoWidth || (logo ? 14 : 0)
 
