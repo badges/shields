@@ -42,9 +42,6 @@ module.exports = function makeBadge({
   }
 
   template = camelcase(template)
-  if (template.startsWith('popout')) {
-    template = template.replace('popout', 'flat')
-  }
 
   let render = badgeRenderers[template]
   if (render === undefined) {

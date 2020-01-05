@@ -121,22 +121,6 @@ describe('The badge generator', function() {
         .to.equal(jsonBadgeWithDefaultStyle)
         .and.to.satisfy(isSvg)
     })
-
-    it('should replace "popout-square" svg template with "flat-square"', function() {
-      const jsonBadgeWithUnknownStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'svg',
-        template: 'popout-square',
-      })
-      const jsonBadgeWithDefaultStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'svg',
-        template: 'flat-square',
-      })
-      expect(jsonBadgeWithUnknownStyle)
-        .to.equal(jsonBadgeWithDefaultStyle)
-        .and.to.satisfy(isSvg)
-    })
   })
 
   describe('"flat" template badge generation', function() {
