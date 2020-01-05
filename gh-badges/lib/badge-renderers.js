@@ -170,7 +170,7 @@ class Badge {
     })
     const hasLabel = label.length
 
-    labelColor = hasLabel || (hasLogo && labelColor) ? labelColor : color
+    labelColor = hasLabel || hasLogo ? labelColor : color
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
 
@@ -551,7 +551,7 @@ function forTheBadge({
   messageWidth += 10
   messageWidth += 10 + message.length * 2
 
-  labelColor = hasLabel || (logo && logoColor) ? labelColor : color
+  labelColor = hasLabel || hasLogo ? labelColor : color
 
   color = escapeXml(color)
   labelColor = escapeXml(labelColor)
