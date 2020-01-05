@@ -4,10 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('maven metadata (badge extension)')
   .get(
-    '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml.json',
-    {
-      followRedirect: false,
-    }
+    '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml.json'
   )
   .expectRedirect(
     `/maven-metadata/v.json?metadataUrl=${encodeURIComponent(
@@ -17,10 +14,7 @@ t.create('maven metadata (badge extension)')
 
 t.create('maven metadata (no badge extension)')
   .get(
-    '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
-    {
-      followRedirect: false,
-    }
+    '/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml'
   )
   .expectRedirect(
     `/maven-metadata/v.svg?metadataUrl=${encodeURIComponent(

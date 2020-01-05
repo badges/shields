@@ -9,9 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('coverage')
-  .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.svg', {
-    followRedirect: false,
-  })
+  .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.svg')
   .expectRedirect(
     `/teamcity/coverage/ReactJSNet_PullRequests.svg?server=${encodeURIComponent(
       'https://teamcity.jetbrains.com'

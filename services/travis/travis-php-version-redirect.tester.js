@@ -9,13 +9,9 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('travis-ci no branch')
-  .get('/symfony/symfony.svg', {
-    followRedirect: false,
-  })
+  .get('/symfony/symfony.svg')
   .expectRedirect('/travis/php-v/symfony/symfony.svg')
 
 t.create('travis-ci branch')
-  .get('/symfony/symfony/2.8.svg', {
-    followRedirect: false,
-  })
+  .get('/symfony/symfony/2.8.svg')
   .expectRedirect('/travis/php-v/symfony/symfony/2.8.svg')
