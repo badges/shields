@@ -42,11 +42,7 @@ module.exports = function makeBadge({
   }
 
   template = camelcase(template)
-
-  let render = badgeRenderers[template]
-  if (render === undefined) {
-    render = badgeRenderers.flat
-  }
+  const render = badgeRenderers[template]
 
   logoWidth = +logoWidth || (logo ? 14 : 0)
 

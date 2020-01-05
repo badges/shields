@@ -106,11 +106,10 @@ describe('The badge generator', function() {
       })
     })
 
-    it('should replace unknown svg template with "flat"', function() {
+    it('should replace undefined svg template with "flat"', function() {
       const jsonBadgeWithUnknownStyle = makeBadge({
         text: ['name', 'Bob'],
         format: 'svg',
-        template: 'unknown_style',
       })
       const jsonBadgeWithDefaultStyle = makeBadge({
         text: ['name', 'Bob'],
@@ -120,6 +119,16 @@ describe('The badge generator', function() {
       expect(jsonBadgeWithUnknownStyle)
         .to.equal(jsonBadgeWithDefaultStyle)
         .and.to.satisfy(isSvg)
+    })
+
+    it('should fail with unknown svg template', function() {
+      expect(() =>
+        makeBadge({
+          text: ['name', 'Bob'],
+          format: 'svg',
+          template: 'unknown_style',
+        })
+      ).to.throw(Error, 'render is not a function')
     })
   })
 
