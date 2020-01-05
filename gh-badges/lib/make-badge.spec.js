@@ -504,40 +504,11 @@ describe('The badge generator', function() {
   })
 
   describe('badges with logos should always produce the same badge', function() {
-    it('shields GitHub logo default color (#333333)', function() {
+    it('badge with logo', function() {
       const svg = makeBadge({
         text: ['label', 'message'],
         format: 'svg',
-        logo: 'github',
-      })
-      snapshot(svg)
-    })
-
-    it('shields GitHub logo custom color (whitesmoke)', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'github',
-        logoColor: 'whitesmoke',
-      })
-      snapshot(svg)
-    })
-
-    it('simple-icons javascript logo default color (#F7DF1E)', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'javascript',
-      })
-      snapshot(svg)
-    })
-
-    it('simple-icons javascript logo custom color (rgba(46,204,113,0.8))', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'javascript',
-        logoColor: 'rgba(46,204,113,0.8)',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
       snapshot(svg)
     })
