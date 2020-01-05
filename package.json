@@ -48,7 +48,6 @@
     "js-yaml": "^3.13.1",
     "jsonpath": "~1.0.2",
     "lodash.countby": "^4.6.0",
-    "lodash.throttle": "^4.1.1",
     "lodash.times": "^4.3.2",
     "moment": "^2.24.0",
     "node-env-flag": "^0.1.0",

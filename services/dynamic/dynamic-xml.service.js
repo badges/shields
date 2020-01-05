@@ -2,6 +2,7 @@
 
 const { DOMParser } = require('xmldom')
 const xpath = require('xpath')
+const { MetricNames } = require('../../core/base-service/metric-helper')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { createRoute } = require('./dynamic-helpers')
 const { BaseService, InvalidResponse, InvalidParameter } = require('..')
@@ -15,6 +16,10 @@ const { BaseService, InvalidResponse, InvalidParameter } = require('..')
 module.exports = class DynamicXml extends BaseService {
   static get category() {
     return 'dynamic'
+  }
+
+  static get enabledMetrics() {
+    return [MetricNames.SERVICE_RESPONSE_SIZE]
   }
 
   static get route() {
