@@ -513,7 +513,6 @@ function forTheBadge({
   message,
   links,
   logo,
-  logoColor,
   logoWidth,
   logoPadding,
   color = '#4c1',
