@@ -9,9 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('discourse status')
-  .get('/https/meta.discourse.org/status.svg', {
-    followRedirect: false,
-  })
+  .get('/https/meta.discourse.org/status.svg')
   .expectRedirect(
     `/discourse/status.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
@@ -19,9 +17,7 @@ t.create('discourse status')
   )
 
 t.create('discourse topics')
-  .get('/https/meta.discourse.org/topics.svg', {
-    followRedirect: false,
-  })
+  .get('/https/meta.discourse.org/topics.svg')
   .expectRedirect(
     `/discourse/topics.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
@@ -29,9 +25,7 @@ t.create('discourse topics')
   )
 
 t.create('discourse users')
-  .get('/https/meta.discourse.org/users.svg', {
-    followRedirect: false,
-  })
+  .get('/https/meta.discourse.org/users.svg')
   .expectRedirect(
     `/discourse/users.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
@@ -39,9 +33,7 @@ t.create('discourse users')
   )
 
 t.create('discourse likes')
-  .get('/https/meta.discourse.org/likes.svg', {
-    followRedirect: false,
-  })
+  .get('/https/meta.discourse.org/likes.svg')
   .expectRedirect(
     `/discourse/likes.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'
@@ -49,9 +41,7 @@ t.create('discourse likes')
   )
 
 t.create('discourse posts')
-  .get('/https/meta.discourse.org/posts.svg', {
-    followRedirect: false,
-  })
+  .get('/https/meta.discourse.org/posts.svg')
   .expectRedirect(
     `/discourse/posts.svg?server=${encodeURIComponent(
       'https://meta.discourse.org'

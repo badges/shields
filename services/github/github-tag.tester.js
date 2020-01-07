@@ -34,15 +34,15 @@ t.create('Tag (repo not found)')
 
 // redirects
 t.create('Tag (legacy route: tag)')
-  .get('/tag/photonstorm/phaser.svg', { followRedirect: false })
+  .get('/tag/photonstorm/phaser.svg')
   .expectRedirect('/github/v/tag/photonstorm/phaser.svg?sort=semver')
 
 t.create('Tag (legacy route: tag-pre)')
-  .get('/tag-pre/photonstorm/phaser.svg', { followRedirect: false })
+  .get('/tag-pre/photonstorm/phaser.svg')
   .expectRedirect(
     '/github/v/tag/photonstorm/phaser.svg?include_prereleases&sort=semver'
   )
 
 t.create('Tag (legacy route: tag-date)')
-  .get('/tag-date/photonstorm/phaser.svg', { followRedirect: false })
+  .get('/tag-date/photonstorm/phaser.svg')
   .expectRedirect('/github/v/tag/photonstorm/phaser.svg')

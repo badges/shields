@@ -38,17 +38,17 @@ t.create('Release (repo not found)')
 
 //redirects
 t.create('Release (legacy route: release)')
-  .get('/release/photonstorm/phaser.svg', { followRedirect: false })
+  .get('/release/photonstorm/phaser.svg')
   .expectRedirect('/github/v/release/photonstorm/phaser.svg')
 
 t.create('(pre-)Release (legacy route: release/all)')
-  .get('/release/photonstorm/phaser/all.svg', { followRedirect: false })
+  .get('/release/photonstorm/phaser/all.svg')
   .expectRedirect(
     '/github/v/release/photonstorm/phaser.svg?include_prereleases'
   )
 
 t.create('(pre-)Release (legacy route: release-pre)')
-  .get('/release-pre/photonstorm/phaser.svg', { followRedirect: false })
+  .get('/release-pre/photonstorm/phaser.svg')
   .expectRedirect(
     '/github/v/release/photonstorm/phaser.svg?include_prereleases'
   )

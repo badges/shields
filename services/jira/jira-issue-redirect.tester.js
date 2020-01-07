@@ -9,9 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('jira issue')
-  .get('/https/issues.apache.org/jira/kafka-2896.svg', {
-    followRedirect: false,
-  })
+  .get('/https/issues.apache.org/jira/kafka-2896.svg')
   .expectRedirect(
     `/jira/issue/kafka-2896.svg?baseUrl=${encodeURIComponent(
       'https://issues.apache.org/jira'

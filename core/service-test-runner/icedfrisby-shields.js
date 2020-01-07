@@ -22,6 +22,14 @@ const factory = superclass =>
       this.intercepted = false
     }
 
+    get(uri, options = { followRedirect: false }) {
+      if (!options.followRedirect) {
+        options.followRedirect = false
+      }
+      super.get(uri, options)
+      return this
+    }
+
     intercept(setup) {
       super.intercept(setup)
       this.intercepted = true

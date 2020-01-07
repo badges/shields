@@ -9,7 +9,5 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('jitpack version redirect')
-  .get('/jitpack/maven-simple.svg', {
-    followRedirect: false,
-  })
+  .get('/jitpack/maven-simple.svg')
   .expectRedirect('/jitpack/v/github/jitpack/maven-simple.svg')

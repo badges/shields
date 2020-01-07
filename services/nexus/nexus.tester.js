@@ -77,7 +77,9 @@ t.create('repository version of an nonexistent artifact')
   })
 
 t.create('snapshot version with + in version')
-  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
+  .get(
+    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
+  )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -91,7 +93,9 @@ t.create('snapshot version with + in version')
   })
 
 t.create('search snapshot version not in latestSnapshot')
-  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
+  .get(
+    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
+  )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -105,7 +109,9 @@ t.create('search snapshot version not in latestSnapshot')
   })
 
 t.create('search snapshot no snapshot versions')
-  .get('/s/https/repository.jboss.org/nexus/com.progress.fuse/fusehq.json')
+  .get(
+    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
+  )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -119,7 +125,7 @@ t.create('search snapshot no snapshot versions')
   })
 
 t.create('search release version')
-  .get('/r/https/repository.jboss.org/nexus/jboss/jboss-client.json')
+  .get('/r/jboss/jboss-client.json?server=https://repository.jboss.org/nexus')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/lucene/search')
@@ -133,7 +139,9 @@ t.create('search release version')
   })
 
 t.create('repository release version')
-  .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
+  .get(
+    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
+  )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/artifact/maven/resolve')
@@ -157,7 +165,9 @@ t.create('repository release version')
   })
 
 t.create('repository release version')
-  .get('/developer/https/repository.jboss.org/nexus/ai.h2o/h2o-automl.json')
+  .get(
+    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
+  )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
       .get('/service/local/artifact/maven/resolve')
@@ -181,7 +191,7 @@ t.create('repository release version')
 
 t.create('user query params')
   .get(
-    '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:c=agent-apple-osx:p=tar.gz.json'
+    '/fs-public-snapshots/com.progress.fuse/fusehq.json?queryOpt=:c=agent-apple-osx:p=tar.gz&server=https://repository.jboss.org/nexus'
   )
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')

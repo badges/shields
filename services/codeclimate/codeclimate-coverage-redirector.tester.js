@@ -9,25 +9,17 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('Top-level coverage shortcut')
-  .get('/jekyll/jekyll.svg', {
-    followRedirect: false,
-  })
+  .get('/jekyll/jekyll.svg')
   .expectRedirect('/codeclimate/coverage/jekyll/jekyll.svg')
 
 t.create('Coverage shortcut')
-  .get('/c/jekyll/jekyll.svg', {
-    followRedirect: false,
-  })
+  .get('/c/jekyll/jekyll.svg')
   .expectRedirect('/codeclimate/coverage/jekyll/jekyll.svg')
 
 t.create('Coverage letter shortcut')
-  .get('/c-letter/jekyll/jekyll.svg', {
-    followRedirect: false,
-  })
+  .get('/c-letter/jekyll/jekyll.svg')
   .expectRedirect('/codeclimate/coverage-letter/jekyll/jekyll.svg')
 
 t.create('Coverage percentage shortcut')
-  .get('/coverage-percentage/jekyll/jekyll.svg', {
-    followRedirect: false,
-  })
+  .get('/coverage-percentage/jekyll/jekyll.svg')
   .expectRedirect('/codeclimate/coverage/jekyll/jekyll.svg')
