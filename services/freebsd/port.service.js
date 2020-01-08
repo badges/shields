@@ -46,7 +46,7 @@ module.exports = class FreebsdPort extends BaseService {
     try {
       const portversion = buffer.match(/PORTVERSION=\t([0-9.a-zA-Z]+)/im)
       const distversion = buffer.match(/DISTVERSION=\t([0-9.a-zA-Z]+)/im)
-      let v = 'unknown'
+      let v
       if (portversion && portversion.length > 0) {
         v = portversion[1]
       } else if (distversion && distversion.length > 0) {
