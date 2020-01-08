@@ -41,9 +41,10 @@ function computeWidths({ label, message }) {
 
 function renderLogo({
   logo,
+  badgeHeight,
+  horizPadding,
   logoWidth = 14,
   logoPadding = 0,
-  extraPadding = 0,
 }) {
   if (!logo) {
     return {
@@ -52,9 +53,8 @@ function renderLogo({
       renderedLogo: '',
     }
   }
-
-  const x = 5 + extraPadding
-  const y = 3 + extraPadding
+  const y = (badgeHeight - logoWidth) / 2
+  const x = horizPadding
   return {
     hasLogo: true,
     totalLogoWidth: logoWidth + logoPadding,
@@ -163,8 +163,11 @@ class Badge {
     color = '#4c1',
     labelColor = '#555',
   }) {
+    const horizPadding = 5
     const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
       logo,
+      badgeHeight: this.constructor.height,
+      horizPadding,
       logoWidth,
       logoPadding,
     })
@@ -173,8 +176,6 @@ class Badge {
     labelColor = hasLabel || hasLogo ? labelColor : color
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
-
-    const horizPadding = 5
 
     const labelMargin = totalLogoWidth + 1
 
@@ -413,8 +414,11 @@ function social({
 
   const externalHeight = 20
   const internalHeight = 19
+  const horizPadding = 5
   const { totalLogoWidth, renderedLogo } = renderLogo({
     logo,
+    badgeHeight: externalHeight,
+    horizPadding,
     logoWidth,
     logoPadding,
   })
@@ -525,14 +529,16 @@ function forTheBadge({
   message = message.toUpperCase()
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
+  const height = 28
+  const hasLabel = label.length
+  const horizPadding = 9
   const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
     logo,
+    badgeHeight: height,
+    horizPadding,
     logoWidth,
     logoPadding,
-    extraPadding: 4,
   })
-  const hasLabel = label.length
-  const height = 28
 
   labelWidth += 10 + totalLogoWidth
   if (hasLabel) {
