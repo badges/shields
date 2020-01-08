@@ -52,5 +52,5 @@ t.create('version (pre) (not found)')
   .expectBadge({ label: 'resharper', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/ReSharper.Nuke.svg', { followRedirect: false })
+  .get('/vpre/ReSharper.Nuke.svg')
   .expectRedirect('/resharper/v/ReSharper.Nuke.svg?include_prereleases')

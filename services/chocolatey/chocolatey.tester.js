@@ -52,5 +52,5 @@ t.create('version (pre) (not found)')
   .expectBadge({ label: 'chocolatey', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/scriptcs.svg', { followRedirect: false })
+  .get('/vpre/scriptcs.svg')
   .expectRedirect('/chocolatey/v/scriptcs.svg?include_prereleases')

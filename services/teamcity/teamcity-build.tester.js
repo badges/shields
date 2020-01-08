@@ -126,3 +126,20 @@ t.create('full build status with failed build')
     message: 'tests failed: 10 (2 new), passed: 99',
     color: 'red',
   })
+
+t.create('full build status with passed build chain')
+  .get('/e/bt421.json?server=https://selfhosted.teamcity.com:4000')
+  .intercept(nock =>
+    nock('https://selfhosted.teamcity.com:4000/app/rest/builds')
+      .get(`/${encodeURIComponent('buildType:(id:bt421)')}`)
+      .query({ guest: 1 })
+      .reply(200, {
+        status: 'SUCCESS',
+        statusText: 'Build chain finished (success: 9)',
+      })
+  )
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
+    color: 'brightgreen',
+  })

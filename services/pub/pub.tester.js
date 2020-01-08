@@ -30,5 +30,5 @@ t.create('package not found')
   })
 
 t.create('package version (legacy redirect: vpre)')
-  .get('/vpre/box2d.svg', { followRedirect: false })
+  .get('/vpre/box2d.svg')
   .expectRedirect('/pub/v/box2d.svg?include_prereleases')
