@@ -555,6 +555,9 @@ function forTheBadge({
 
   messageWidth += 10
   messageWidth += 10 + message.length * 2
+  const leftWidth = hasLogo && !hasLabel ? 0 : labelWidth
+  const rightWidth =
+    hasLogo && !hasLabel ? messageWidth + labelWidth : messageWidth
 
   labelColor = hasLabel || hasLogo ? labelColor : color
 
@@ -573,14 +576,14 @@ function forTheBadge({
   const badge = renderBadge(
     {
       links,
-      leftWidth: labelWidth,
-      rightWidth: messageWidth,
+      leftWidth,
+      rightWidth,
       height,
     },
     `
     <g shape-rendering="crispEdges">
-      <rect width="${labelWidth}" height="${height}" fill="${labelColor}"/>
-      <rect x="${labelWidth}" width="${messageWidth}" height="${height}" fill="${color}"/>
+      <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
+      <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${color}"/>
     </g>
     <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="100">
       ${renderedLogo}

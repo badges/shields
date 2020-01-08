@@ -75,7 +75,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 `
 
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message only, with logo 1'] = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="91" height="28"><g shape-rendering="crispEdges"><rect width="18" height="28" fill="#0f0"/><rect x="18" width="73" height="28" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="100"><image x="9" y="7" width="14" height="14" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"/><text x="545" y="175" font-weight="bold" transform="scale(.1)" textLength="490">GROWN</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="91" height="28"><g shape-rendering="crispEdges"><rect width="0" height="28" fill="#0f0"/><rect x="0" width="91" height="28" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="100"><image x="9" y="7" width="14" height="14" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"/><text x="545" y="175" font-weight="bold" transform="scale(.1)" textLength="490">GROWN</text></g></svg>
 `
 
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, with links 1'] = `
