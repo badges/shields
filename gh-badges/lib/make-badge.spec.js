@@ -84,7 +84,7 @@ describe('The badge generator', function() {
         .and.to.include('grown')
     })
 
-    it('should always produce the same SVG (unless we have changed something!)', function() {
+    it('should match snapshot', function() {
       const svg = makeBadge({ text: ['cactus', 'grown'], format: 'svg' })
       snapshot(svg)
     })
@@ -106,11 +106,10 @@ describe('The badge generator', function() {
       })
     })
 
-    it('should replace unknown svg template with "flat"', function() {
+    it('should replace undefined svg template with "flat"', function() {
       const jsonBadgeWithUnknownStyle = makeBadge({
         text: ['name', 'Bob'],
         format: 'svg',
-        template: 'unknown_style',
       })
       const jsonBadgeWithDefaultStyle = makeBadge({
         text: ['name', 'Bob'],
@@ -122,20 +121,209 @@ describe('The badge generator', function() {
         .and.to.satisfy(isSvg)
     })
 
-    it('should replace "popout-square" svg template with "flat-square"', function() {
-      const jsonBadgeWithUnknownStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'svg',
-        template: 'popout-square',
-      })
-      const jsonBadgeWithDefaultStyle = makeBadge({
-        text: ['name', 'Bob'],
-        format: 'svg',
-        template: 'flat-square',
-      })
-      expect(jsonBadgeWithUnknownStyle)
-        .to.equal(jsonBadgeWithDefaultStyle)
-        .and.to.satisfy(isSvg)
+    it('should fail with unknown svg template', function() {
+      expect(() =>
+        makeBadge({
+          text: ['name', 'Bob'],
+          format: 'svg',
+          template: 'unknown_style',
+        })
+      ).to.throw(Error, "Unknown template: 'unknown_style'")
+    })
+  })
+
+  describe('"flat" template badge generation', function() {
+    it('should match snapshots: message/label, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with links', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          labelColor: '#0f0',
+          links: ['https://shields.io/', 'https://www.google.co.uk/'],
+        })
+      )
+    })
+  })
+
+  describe('"flat-square" template badge generation', function() {
+    it('should match snapshots: message/label, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with links', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          labelColor: '#0f0',
+          links: ['https://shields.io/', 'https://www.google.co.uk/'],
+        })
+      )
+    })
+  })
+
+  describe('"plastic" template badge generation', function() {
+    it('should match snapshots: message/label, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with links', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          labelColor: '#0f0',
+          links: ['https://shields.io/', 'https://www.google.co.uk/'],
+        })
+      )
     })
   })
 
@@ -162,6 +350,69 @@ describe('The badge generator', function() {
         .to.include('LABEL')
         .and.to.include('1 STRING')
     })
+
+    it('should match snapshots: message/label, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with links', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          labelColor: '#0f0',
+          links: ['https://shields.io/', 'https://www.google.co.uk/'],
+        })
+      )
+    })
   })
 
   describe('"social" template badge generation', function() {
@@ -187,42 +438,77 @@ describe('The badge generator', function() {
         .to.include('""')
         .and.to.include('some-value')
     })
+
+    it('should match snapshots: message/label, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, no logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          labelColor: '#0f0',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          labelColor: '#0f0',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message/label, with links', function() {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          labelColor: '#0f0',
+          links: ['https://shields.io/', 'https://www.google.co.uk/'],
+        })
+      )
+    })
   })
+
   describe('badges with logos should always produce the same badge', function() {
-    it('shields GitHub logo default color (#333333)', function() {
+    it('badge with logo', function() {
       const svg = makeBadge({
         text: ['label', 'message'],
         format: 'svg',
-        logo: 'github',
-      })
-      snapshot(svg)
-    })
-
-    it('shields GitHub logo custom color (whitesmoke)', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'github',
-        logoColor: 'whitesmoke',
-      })
-      snapshot(svg)
-    })
-
-    it('simple-icons javascript logo default color (#F7DF1E)', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'javascript',
-      })
-      snapshot(svg)
-    })
-
-    it('simple-icons javascript logo custom color (rgba(46,204,113,0.8))', function() {
-      const svg = makeBadge({
-        text: ['label', 'message'],
-        format: 'svg',
-        logo: 'javascript',
-        logoColor: 'rgba(46,204,113,0.8)',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
       snapshot(svg)
     })

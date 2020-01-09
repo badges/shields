@@ -104,7 +104,10 @@ module.exports = function coalesceBadge(
     labelColor: defaultLabelColor,
   } = defaultBadgeData
 
-  const style = coalesce(overrideStyle, serviceStyle)
+  let style = coalesce(overrideStyle, serviceStyle)
+  if (typeof style === 'string' && style.startsWith('popout')) {
+    style = style.replace('popout', 'flat')
+  }
 
   let namedLogo, namedLogoColor, logoWidth, logoPosition, logoSvgBase64
   if (overrideLogo) {
