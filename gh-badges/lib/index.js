@@ -40,8 +40,6 @@ function _validate(format) {
     'flat',
     'flat-square',
     'for-the-badge',
-    'popout',
-    'popout-square',
     'social',
   ]
   if ('template' in format && !templateValues.includes(format.template)) {
@@ -71,7 +69,6 @@ function _clean(format) {
  * @param {string} format.color (Optional) Message color
  * @param {string} format.format (Optional) Output format: 'svg' or 'json'
  * @param {string} format.template (Optional) Visual template e.g: 'flat'
- *    see {@link https://github.com/badges/shields/tree/master/gh-badges/templates}
  * @returns {string} Badge in SVG or JSON format
  * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
  */

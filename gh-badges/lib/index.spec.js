@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const isSvg = require('is-svg')
 const { makeBadge, ValidationError } = require('.')
 
-describe('BadgeFactory class', function() {
+describe('makeBadge function', function() {
   it('should produce badge with valid input', function() {
     expect(
       makeBadge({
@@ -49,7 +49,13 @@ describe('BadgeFactory class', function() {
       makeBadge({ text: ['build', 'passed'], template: 'something else' })
     ).to.throw(
       ValidationError,
-      'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,popout,popout-square,social)'
+      'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+    )
+    expect(() =>
+      makeBadge({ text: ['build', 'passed'], template: 'popout' })
+    ).to.throw(
+      ValidationError,
+      'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
     )
   })
 })
