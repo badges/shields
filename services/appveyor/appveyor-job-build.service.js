@@ -39,7 +39,7 @@ module.exports = class AppVeyorJobBuild extends AppVeyorBase {
   }
 
   transform({ data, jobName }) {
-    if (!data.hasOwnProperty('build')) {
+    if (!('build' in data)) {
       // this project exists but no builds have been run on it yet
       return { status: 'no builds found' }
     }
