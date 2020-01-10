@@ -3,6 +3,7 @@
  * @module
  */
 
+const bytes = require('bytes')
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
 const Joi = require('@hapi/joi')
@@ -427,7 +428,8 @@ class BaseService {
     { camp, handleRequest, githubApiProvider, metricInstance },
     serviceConfig
   ) {
-    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig, fetchLimit } = serviceConfig
+    const fetchLimitBytes = bytes.parse(fetchLimit)
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 

@@ -33,6 +33,17 @@ public:
 
   handleInternalErrors: true
 
-  fetchLimit: '10MB'
+  integrations:
+    DynamicJson:
+      fetchLimit: '2MB'
+
+    DynamicXml:
+      fetchLimit: '128KB'
+
+    DynamicYaml:
+      fetchLimit: '64KB'
+
+    default:
+      fetchLimit: '10MB'
 
 private: {}

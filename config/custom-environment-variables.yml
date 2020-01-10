@@ -40,7 +40,9 @@ public:
 
   rateLimit: 'RATE_LIMIT'
 
-  fetchLimit: 'FETCH_LIMIT'
+  integrations:
+    default:
+      fetchLimit: 'FETCH_LIMIT'
 
 private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'

@@ -5,7 +5,6 @@
 
 const path = require('path')
 const url = require('url')
-const bytes = require('bytes')
 const Joi = require('@hapi/joi')
 const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
@@ -25,7 +24,9 @@ const PrometheusMetrics = require('./prometheus-metrics')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
-
+const customIntegration = Joi.object({
+  fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+})
 const publicConfigSchema = Joi.object({
   bind: {
     port: Joi.alternatives().try(
@@ -84,7 +85,11 @@ const publicConfigSchema = Joi.object({
   },
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
-  fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  integrations: Joi.object({
+    default: {
+      fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+    },
+  }).pattern(Joi.string(), customIntegration),
 }).required()
 
 const privateConfigSchema = Joi.object({
@@ -283,19 +288,23 @@ class Server {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
 
-    loadServiceClasses().forEach(serviceClass =>
+    // check there is no extra service config
+    loadServiceClasses().forEach(serviceClass => {
+      // merge default service config with custom service config
+      const serviceConfig = config.public.integrations.default
+      // const serviceConfig = config.public.integrations[serviceClass.name] || config.public.integrations.default
       serviceClass.register(
         { camp, handleRequest, githubApiProvider, metricInstance },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
           profiling: config.public.profiling,
-          fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
           private: config.private,
+          ...serviceConfig,
         }
       )
-    )
+    })
   }
 
   /**
