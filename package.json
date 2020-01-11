@@ -160,7 +160,7 @@
     "@types/node": "^13.1.2",
     "@types/react-helmet": "^5.0.15",
     "@types/react-modal": "^3.10.1",
-    "@types/react-select": "^3.0.8",
+    "@types/react-select": "^3.0.9",
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
