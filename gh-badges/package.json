@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "anafanafo": "^1.0.0",
-    "gm": "^1.23.0",
     "is-css-color": "^1.0.0"
   },
   "scripts": {
