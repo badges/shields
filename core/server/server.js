@@ -18,6 +18,7 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
+const { merge } = require('./config')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -290,9 +291,10 @@ class Server {
 
     // check there is no extra service config
     loadServiceClasses().forEach(serviceClass => {
-      // merge default service config with custom service config
-      const serviceConfig = config.public.integrations.default
-      // const serviceConfig = config.public.integrations[serviceClass.name] || config.public.integrations.default
+      const serviceConfig = merge(
+        config.public.integrations.default,
+        config.public.integrations[serviceClass.name] || {}
+      )
       serviceClass.register(
         { camp, handleRequest, githubApiProvider, metricInstance },
         {
