@@ -1,56 +1,27 @@
 'use strict'
 
-const { expect } = require('chai')
+const { test, given } = require('sazerac')
 const { merge } = require('./config')
 
 describe('configuration', function() {
-  describe('merge', function() {
-    it('copies the default value', function() {
-      const _default = { a: 2 }
-      const custom = {}
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: 2 })
-    })
-
-    it('overrides a primitive value', function() {
-      const _default = { a: 2 }
-      const custom = { a: 3 }
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: 3 })
-    })
-
-    it('merges objects', function() {
-      const _default = { a: { a1: 1, a2: 2 } }
-      const custom = { a: { a1: 2 } }
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: { a1: 2, a2: 2 } })
-    })
-
-    it('overdrives an object with a primitive', function() {
-      const _default = { a: { a1: 1, a2: 2 } }
-      const custom = { a: 3 }
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: 3 })
-    })
-
-    it('does not override an object wit an empty object', function() {
-      const _default = { a: { a1: 1, a2: 2 } }
-      const custom = { a: {} }
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: { a1: 1, a2: 2 } })
-    })
-
-    it('overrides array', function() {
-      const _default = { a: [2, 3, 4] }
-      const custom = { a: [5, 6] }
-
-      const merged = merge(_default, custom)
-      expect(merged).to.deep.equal({ a: [5, 6] })
-    })
+  test(merge, function() {
+    given({ a: 2 }, {})
+      .describe('copies the default value')
+      .expect({ a: 2 })
+    given({ a: 2 }, { a: 3 })
+      .describe('overrides a primitive value')
+      .expect({ a: 3 })
+    given({ a: { a1: 1, a2: 2 } }, { a: { a1: 2 } })
+      .describe('merges objects')
+      .expect({ a: { a1: 2, a2: 2 } })
+    given({ a: { a1: 1, a2: 2 } }, { a: 3 })
+      .describe('overdrives an object with a primitive')
+      .expect({ a: 3 })
+    given({ a: { a1: 1, a2: 2 } }, { a: {} })
+      .describe('does not override an object wit an empty object')
+      .expect({ a: { a1: 1, a2: 2 } })
+    given({ a: [2, 3, 4] }, { a: [5, 6] })
+      .describe('overrides array')
+      .expect({ a: [5, 6] })
   })
 })
