@@ -4,6 +4,7 @@
  */
 
 const _makeBadge = require('./make-badge')
+const svg2img = require('./svg-to-img')
 
 class ValidationError extends Error {}
 
@@ -28,7 +29,17 @@ function _validate(format) {
     }
   })
 
-  const formatValues = ['svg', 'json']
+  try {
+    require('gm')
+  } catch (e) {
+    if ('format' in format && ['png', 'jpg', 'gif'].includes(format.format)) {
+      throw new ValidationError(
+        `peerDependency gm is required for output in .${format.format} format`
+      )
+    }
+  }
+
+  const formatValues = ['svg', 'json', 'png', 'jpg', 'gif']
   if ('format' in format && !formatValues.includes(format.format)) {
     throw new ValidationError(
       `Field \`format\` must be one of (${formatValues.toString()})`
@@ -72,10 +83,14 @@ function _clean(format) {
  * @returns {string} Badge in SVG or JSON format
  * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
  */
-function makeBadge(format) {
+async function makeBadge(format) {
   const cleanedFormat = _clean(format)
   _validate(cleanedFormat)
-  return _makeBadge(cleanedFormat)
+  if (/png|jpg|gif/.test(format.format)) {
+    return await svg2img(_makeBadge(cleanedFormat), format.format)
+  } else {
+    return _makeBadge(cleanedFormat)
+  }
 }
 
 module.exports = {

@@ -2,9 +2,8 @@
 
 'use strict'
 
-const makeBadge = require('./make-badge')
-const svg2img = require('./svg-to-img')
 const { namedColors } = require('./color')
+const { makeBadge } = require('./index')
 
 if (process.argv.length < 4) {
   console.log('Usage: badge subject status [:color] [.output] [@style]')
@@ -66,20 +65,9 @@ if (color[0] === ':') {
   }
 }
 
-async function main() {
-  const svg = makeBadge(badgeData)
-
-  if (/png|jpg|gif/.test(format)) {
-    const data = await svg2img(svg, format)
-    process.stdout.write(data)
-  } else {
-    console.log(svg)
-  }
-}
-
 ;(async () => {
   try {
-    await main()
+    process.stdout.write(await makeBadge(badgeData))
   } catch (e) {
     console.error(e)
     process.exit(1)

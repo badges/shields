@@ -1,11 +1,22 @@
 'use strict'
 
 const { promisify } = require('util')
-const gm = require('gm')
 
-const imageMagick = gm.subClass({ imageMagick: true })
+let imageMagick
+try {
+  const gm = require('gm')
+  imageMagick = gm.subClass({ imageMagick: true })
+} catch (e) {
+  imageMagick = false
+}
 
 async function svgToImg(svg, format) {
+  if (!imageMagick) {
+    throw new Error(
+      `peerDependency gm is required for output in .${format} format`
+    )
+  }
+
   const svgBuffer = Buffer.from(
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>${svg}`
   )

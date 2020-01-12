@@ -29,8 +29,8 @@ const format = {
   template: 'flat',
 }
 
-makeBadge(format) // <svg...
-makeBadge({}) // ValidationError: Field `text` is required
+await makeBadge(format) // <svg...
+await makeBadge({}) // ValidationError: Field `text` is required
 ```
 
 ### Node version support
