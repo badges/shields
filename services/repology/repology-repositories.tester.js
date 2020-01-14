@@ -1,14 +1,14 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
+const { nonNegativeInteger } = require('../validators')
 const { projectWithTwentyRepositories } = require('./repology-test-helpers')
 
 t.create('Existing project')
   .get('/starship.json')
   .expectBadge({
     label: 'in repositories',
-    message: Joi.number().greater(0),
+    message: nonNegativeInteger,
   })
 
 t.create('Non-existent project')

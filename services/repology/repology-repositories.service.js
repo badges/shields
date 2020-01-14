@@ -1,10 +1,11 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { nonNegativeInteger } = require('../validators')
 const { BaseSvgScrapingService } = require('..')
 
 const schema = Joi.object({
-  message: Joi.number(),
+  message: nonNegativeInteger,
 }).required()
 
 module.exports = class RepologyRepositories extends BaseSvgScrapingService {
