@@ -23,7 +23,7 @@ module.exports = class RepologyRepositories extends BaseSvgScrapingService {
   static get examples() {
     return [
       {
-        title: 'Repology',
+        title: 'Repology - Repositories',
         namedParams: { projectName: 'starship' },
         staticPreview: this.render({ repositoryCount: '18' }),
         keywords: ['repositories'],
