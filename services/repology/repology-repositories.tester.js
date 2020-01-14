@@ -15,7 +15,7 @@ t.create('Non-existent project')
   .get('/invalidprojectthatshouldnotexist.json')
   .expectBadge({
     label: 'in repositories',
-    message: 0,
+    message: '0',
   })
 
 t.create('Project with repositories')
