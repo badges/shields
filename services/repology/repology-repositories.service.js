@@ -1,8 +1,13 @@
 'use strict'
 
-const BaseRepologyService = require('./repology-base')
+const Joi = require('@hapi/joi')
+const { BaseSvgScrapingService } = require('..')
 
-module.exports = class RepologyRepositories extends BaseRepologyService {
+const schema = Joi.object({
+  message: Joi.number(),
+}).required()
+
+module.exports = class RepologyRepositories extends BaseSvgScrapingService {
   static get category() {
     return 'platform-support'
   }
@@ -37,7 +42,11 @@ module.exports = class RepologyRepositories extends BaseRepologyService {
   }
 
   async handle({ projectName }) {
-    const repositories = await this.fetch({ projectName })
-    return this.constructor.render({ repositoryCount: repositories.length })
+    const { message: repositoryCount } = await this._requestSvg({
+      schema,
+      url: `https://repology.org/badge/tiny-repos/${projectName}.svg`,
+    })
+
+    return this.constructor.render({ repositoryCount })
   }
 }
