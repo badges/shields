@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { BaseSvgScrapingService } = require('..')
 
@@ -31,13 +32,15 @@ module.exports = class RepologyRepositories extends BaseSvgScrapingService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'in repositories' }
+    return {
+      label: 'in repositories',
+      color: 'blue',
+    }
   }
 
   static render({ repositoryCount }) {
     return {
-      message: repositoryCount,
-      color: 'blue',
+      message: metric(repositoryCount),
     }
   }
 
