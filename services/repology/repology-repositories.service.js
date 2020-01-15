@@ -33,7 +33,7 @@ module.exports = class RepologyRepositories extends BaseSvgScrapingService {
 
   static get defaultBadgeData() {
     return {
-      label: 'in repositories',
+      label: 'repositories',
       color: 'blue',
     }
   }
