@@ -254,7 +254,7 @@
     "styled-components": "^4.4.1",
     "tmp": "0.1.0",
     "ts-mocha": "^6.0.0",
-    "typescript": "^3.7.4",
+    "typescript": "^3.7.5",
     "url": "^0.11.0",
     "walkdir": "0.4.1"
   },
