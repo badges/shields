@@ -18,7 +18,7 @@ describe('configuration', function() {
       .describe('overdrives an object with a primitive')
       .expect({ a: 3 })
     given({ a: { a1: 1, a2: 2 } }, { a: {} })
-      .describe('does not override an object wit an empty object')
+      .describe('does not override an object with an empty object')
       .expect({ a: { a1: 1, a2: 2 } })
     given({ a: [2, 3, 4] }, { a: [5, 6] })
       .describe('overrides array')
