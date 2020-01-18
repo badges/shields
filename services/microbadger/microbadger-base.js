@@ -10,6 +10,7 @@ const schema = Joi.object({
   DownloadSize: Joi.number()
     .integer()
     .min(0),
+  LatestVersion: Joi.string(),
   Versions: Joi.array()
     .items(
       Joi.object({
@@ -34,18 +35,24 @@ module.exports = class BaseMicrobadgerService extends BaseJsonService {
     return 'size'
   }
 
-  async fetch({ user, repo }) {
+  async fetch({ user, repo, tag }) {
     if (user === '_') {
       user = 'library'
     }
+    let url = ''
+    if (!tag) {
+      url = `https://api.microbadger.com/v1/images/${user}/${repo}`
+    } else {
+      url = `https://api.microbadger.com/v1/images/${user}/${repo}:${tag}`
+    }
     return this._requestJson({
       schema,
-      url: `https://api.microbadger.com/v1/images/${user}/${repo}`,
+      url,
     })
   }
 
-  static getImage(response, tag) {
-    if (!tag) {
+  static getImage(response, tag, versionlookup) {
+    if (!tag || versionlookup) {
       return response
     }
     const image =
