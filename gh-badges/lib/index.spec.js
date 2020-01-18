@@ -3,6 +3,7 @@
 const { expect, use } = require('chai')
 const isPng = require('is-png')
 const isSvg = require('is-svg')
+const proxyquire = require('proxyquire')
 const { makeBadge, ValidationError } = require('.')
 use(require('chai-as-promised'))
 
@@ -84,6 +85,17 @@ describe('makeBadge function', function() {
     return expect(makeBadge({ text: ['build', 'passed'], template: 'popout' }))
       .to.eventually.be.rejectedWith(
         'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+      )
+      .and.be.an.instanceOf(ValidationError)
+  })
+
+  it('should throw a ValidationError for raster format without gm dependency', async function() {
+    const proxy = proxyquire('./index', { gm: null })
+    const { makeBadge, ValidationError } = proxy
+
+    return expect(makeBadge({ text: ['build', 'passed'], format: 'png' }))
+      .to.eventually.be.rejectedWith(
+        'peerDependency gm is required for output in .png format'
       )
       .and.be.an.instanceOf(ValidationError)
   })

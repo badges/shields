@@ -5,6 +5,12 @@
 
 const _makeBadge = require('./make-badge')
 const svg2img = require('./svg-to-img')
+let gm
+try {
+  gm = require('gm')
+} catch (e) {
+  gm = null
+}
 
 class ValidationError extends Error {}
 
@@ -29,14 +35,14 @@ function _validate(format) {
     }
   })
 
-  try {
-    require('gm')
-  } catch (e) {
-    if ('format' in format && ['png', 'jpg', 'gif'].includes(format.format)) {
-      throw new ValidationError(
-        `peerDependency gm is required for output in .${format.format} format`
-      )
-    }
+  if (
+    !gm &&
+    'format' in format &&
+    ['png', 'jpg', 'gif'].includes(format.format)
+  ) {
+    throw new ValidationError(
+      `peerDependency gm is required for output in .${format.format} format`
+    )
   }
 
   const formatValues = ['svg', 'json', 'png', 'jpg', 'gif']
