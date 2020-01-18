@@ -32,63 +32,59 @@ describe('makeBadge function', function() {
     ).to.satisfy(isPng)
   })
 
-  it('should throw a ValidationError with invalid inputs', async function() {
-    try {
-      await makeBadge({})
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal('Field `text` is required')
-    }
+  it('should throw a ValidationError with invalid input ("text" missing)', async function() {
+    return expect(makeBadge({}))
+      .to.eventually.be.rejectedWith('Field `text` is required')
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({ text: ['build'] })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal('Field `text` must be an array of 2 strings')
-    }
+  it('should throw a ValidationError with invalid input ("text" invalid)', async function() {
+    return expect(makeBadge({ text: ['build'] }))
+      .to.eventually.be.rejectedWith(
+        'Field `text` must be an array of 2 strings'
+      )
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({ text: ['build', 'passed', 'something else'] })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal('Field `text` must be an array of 2 strings')
-    }
+  it('should throw a ValidationError with invalid input ("text" invalid)', async function() {
+    return expect(makeBadge({ text: ['build', 'passed', 'something else'] }))
+      .to.eventually.be.rejectedWith(
+        'Field `text` must be an array of 2 strings'
+      )
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({ text: ['build', 'passed'], labelColor: 7 })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal('Field `labelColor` must be of type string')
-    }
+  it('should throw a ValidationError with invalid input ("labelColor" invalid)', async function() {
+    return expect(makeBadge({ text: ['build', 'passed'], labelColor: 7 }))
+      .to.eventually.be.rejectedWith(
+        'Field `labelColor` must be of type string'
+      )
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({ text: ['build', 'passed'], format: 'foobar' })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal(
+  it('should throw a ValidationError with invalid input ("format" invalid)', async function() {
+    return expect(makeBadge({ text: ['build', 'passed'], format: 'foobar' }))
+      .to.eventually.be.rejectedWith(
         'Field `format` must be one of (svg,json,png,jpg,gif)'
       )
-    }
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({
-        text: ['build', 'passed'],
-        template: 'something else',
-      })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal(
+  it('should throw a ValidationError with invalid input ("template" invalid)', async function() {
+    return expect(
+      makeBadge({ text: ['build', 'passed'], template: 'something else' })
+    )
+      .to.eventually.be.rejectedWith(
         'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
       )
-    }
+      .and.be.an.instanceOf(ValidationError)
+  })
 
-    try {
-      await makeBadge({ text: ['build', 'passed'], template: 'popout' })
-    } catch (e) {
-      expect(e).to.be.an.instanceof(ValidationError)
-      expect(e.message).to.equal(
+  it('should throw a ValidationError with invalid input ("template" invalid)', async function() {
+    return expect(makeBadge({ text: ['build', 'passed'], template: 'popout' }))
+      .to.eventually.be.rejectedWith(
         'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
       )
-    }
+      .and.be.an.instanceOf(ValidationError)
   })
 })
