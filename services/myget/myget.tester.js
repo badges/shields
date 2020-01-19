@@ -70,7 +70,7 @@ t.create('version (valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('total downloads (tenant)')
+t.create('version (no stable versions)')
   .get('/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.json')
   .expectBadge({
     label: 'dotnet-coreclr',
@@ -87,7 +87,7 @@ t.create('version (yellow badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=false&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonWithDash)
   )
@@ -107,7 +107,7 @@ t.create('version (orange badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=false&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharZero)
   )
@@ -127,7 +127,7 @@ t.create('version (blue badge)')
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=false&semVerLevel=2'
       )
       .reply(200, nuGetV3VersionJsonFirstCharNotZero)
   )

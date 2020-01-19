@@ -2,7 +2,6 @@
 
 const { promisify } = require('util')
 const Joi = require('@hapi/joi')
-const semver = require('semver')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
@@ -82,15 +81,9 @@ const schema = Joi.object({
   data: Joi.array()
     .items(
       Joi.object({
-        versions: Joi.array()
-          .items(
-            Joi.object({
-              version: Joi.string().required(),
-            })
-          )
-          .default([]),
         totalDownloads: Joi.number().integer(),
         totaldownloads: Joi.number().integer(),
+        version: Joi.string().required(),
       })
     )
     .max(1)
@@ -104,14 +97,14 @@ async function fetch(
   serviceInstance,
   { baseUrl, packageName, includePrereleases = false }
 ) {
+  const prerelease = includePrereleases ? 'true' : 'false'
   const json = await serviceInstance._requestJson({
     schema,
     url: await searchQueryServiceUrl(baseUrl),
     options: {
       qs: {
         q: `packageid:${encodeURIComponent(packageName.toLowerCase())}`,
-        // Include prerelease versions.
-        prerelease: 'true',
+        prerelease,
         // Include packages with SemVer 2 version numbers.
         semVerLevel: '2',
       },
@@ -184,21 +177,26 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      const { versions } = await fetch(this, { baseUrl, packageName })
-      let latest = versions.slice(-1).pop()
       const includePrereleases = which === 'vpre'
-      if (!includePrereleases) {
-        const filtered = versions.filter(item => {
-          if (semver.valid(item.version)) {
-            return !semver.prerelease(item.version)
-          }
-          return !item.version.includes('-')
+      let data
+      try {
+        data = await fetch(this, {
+          baseUrl,
+          packageName,
+          includePrereleases,
         })
-        if (filtered.length) {
-          latest = filtered.slice(-1).pop()
+      } catch (e) {
+        if (e instanceof NotFound && !includePrereleases) {
+          data = await fetch(this, {
+            baseUrl,
+            packageName,
+            includePrereleases: true,
+          })
+        } else {
+          throw e
         }
       }
-      const { version } = latest
+      const version = data.version
       return this.constructor.render({ version, feed })
     }
   }
@@ -232,7 +230,11 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      const packageInfo = await fetch(this, { baseUrl, packageName })
+      const packageInfo = await fetch(this, {
+        baseUrl,
+        packageName,
+        includePrereleases: true,
+      })
 
       // Official NuGet server uses "totalDownloads" whereas MyGet uses
       // "totaldownloads" (lowercase D). Ugh.
