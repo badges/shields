@@ -10,7 +10,10 @@ const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const suggest = require('../../services/suggest')
-const { loadServiceClasses } = require('../base-service/loader')
+const {
+  loadServiceClasses,
+  checkCustomIntegrationConfiguration,
+} = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
 const {
   handleRequest,
@@ -289,8 +292,9 @@ class Server {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
 
-    // check there is no extra service config
-    loadServiceClasses().forEach(serviceClass => {
+    const serviceClasses = loadServiceClasses()
+    checkCustomIntegrationConfiguration(config, serviceClasses)
+    serviceClasses.forEach(serviceClass => {
       const serviceConfig = merge(
         config.public.integrations.default,
         config.public.integrations[serviceClass.name] || {}

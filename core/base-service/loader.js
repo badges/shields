@@ -6,7 +6,6 @@ const countBy = require('lodash.countby')
 const categories = require('../../services/categories')
 const BaseService = require('./base')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
-
 const serviceDir = path.join(__dirname, '..', '..', 'services')
 
 class InvalidService extends Error {
@@ -109,10 +108,25 @@ function loadTesters() {
     .map(path => require(path))
 }
 
+function checkCustomIntegrationConfiguration(config, serviceClasses) {
+  const serviceNames = new Set(
+    serviceClasses.map(serviceClass => serviceClass.name)
+  )
+  const redundantConfigurations = Object.keys(config.public.integrations)
+    .filter(configName => configName !== 'default')
+    .filter(configName => !serviceNames.has(configName))
+  if (redundantConfigurations.length) {
+    throw new Error(
+      `Custom configurations found without a corresponding service: ${redundantConfigurations}`
+    )
+  }
+}
+
 module.exports = {
   InvalidService,
   loadServiceClasses,
   checkNames,
   collectDefinitions,
   loadTesters,
+  checkCustomIntegrationConfiguration,
 }
