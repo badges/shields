@@ -25,8 +25,9 @@ const PrometheusMetrics = require('./prometheus-metrics')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
+const bytes = Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
 const customIntegration = Joi.object({
-  fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  fetchLimit: bytes,
 })
 const publicConfigSchema = Joi.object({
   bind: {
@@ -88,7 +89,7 @@ const publicConfigSchema = Joi.object({
   handleInternalErrors: Joi.boolean().required(),
   integrations: Joi.object({
     default: {
-      fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+      fetchLimit: bytes,
     },
   }).pattern(Joi.string(), customIntegration),
 }).required()
