@@ -3,11 +3,11 @@
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('version without a specified tag')
-  .get('/_/alpine.json')
+  .get('/nightah/jenkins.json')
   .timeout(150000)
   .expectBadge({
     label: 'version',
-    message: '3.11.3',
+    message: 'latest',
   })
 
 t.create('version with a specified tag')
@@ -18,14 +18,10 @@ t.create('version with a specified tag')
     message: '3.10.3',
   })
 
-t.create('specified tag when repository has only one')
-  .get('/_/alpine/wrong-tag.json')
-  .expectBadge({ label: 'version', message: 'not found' })
-
 t.create('nonexistent repository')
   .get('/_/not-a-real-repo.json')
   .expectBadge({ label: 'version', message: 'not found' })
 
 t.create('nonexistent tag')
-  .get('/_/unknown/wrong-tag.json')
+  .get('/_/alpine/wrong-tag.json')
   .expectBadge({ label: 'version', message: 'not found' })
