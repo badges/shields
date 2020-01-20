@@ -61,7 +61,7 @@ module.exports = class DockerSize extends BaseJsonService {
 
   async handle({ user, repo, tag = 'latest' }) {
     const data = await this.fetch({ user, repo })
-    const size = data.results.find(el => el.name == tag)
+    const size = data.results.find(r => r.name === tag)
     if (size) return this.constructor.render({ size: size.full_size })
     throw new NotFound({ prettyMessage: 'unknown' })
   }
