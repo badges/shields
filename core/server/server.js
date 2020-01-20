@@ -10,10 +10,7 @@ const Camp = require('camp')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const suggest = require('../../services/suggest')
-const {
-  loadServiceClasses,
-  checkCustomIntegrationConfiguration,
-} = require('../base-service/loader')
+const { loadServiceClasses } = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
 const {
   handleRequest,
@@ -21,7 +18,7 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
-const { merge } = require('./config')
+const { merge, checkCustomIntegrationConfiguration } = require('./config')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')

@@ -1,7 +1,12 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { merge } = require('./config')
+const { expect } = require('chai')
+const {
+  RedundantCustomConfiguration,
+  merge,
+  checkCustomIntegrationConfiguration,
+} = require('./config')
 
 describe('configuration', function() {
   test(merge, function() {
@@ -23,5 +28,34 @@ describe('configuration', function() {
     given({ a: [2, 3, 4] }, { a: [5, 6] })
       .describe('overrides array')
       .expect({ a: [5, 6] })
+  })
+
+  describe('checkCustomIntegrationConfiguration function', function() {
+    it('accept default configuration', function() {
+      const config = { public: { integrations: { default: {} } } }
+      const serviceClasses = [{ name: 'SomeService' }]
+
+      expect(() =>
+        checkCustomIntegrationConfiguration(config, serviceClasses)
+      ).not.throw()
+    })
+
+    it('accept a configuration for an existing service', function() {
+      const config = { public: { integrations: { SomeService: {} } } }
+      const serviceClasses = [{ name: 'SomeService' }]
+
+      expect(() =>
+        checkCustomIntegrationConfiguration(config, serviceClasses)
+      ).not.throw()
+    })
+
+    it('throws an error if a custom config does not have a corresponding service', function() {
+      const config = { public: { integrations: { UnknownService: {} } } }
+      const serviceClasses = [{ name: 'KnownService' }]
+
+      expect(() =>
+        checkCustomIntegrationConfiguration(config, serviceClasses)
+      ).to.throw(RedundantCustomConfiguration)
+    })
   })
 })
