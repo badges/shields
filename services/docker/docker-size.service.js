@@ -3,7 +3,11 @@
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { anyInteger } = require('../validators')
-const { buildDockerUrl, getDockerHubUser } = require('./docker-helpers')
+const {
+  buildDockerUrl,
+  getDockerHubUser,
+  getMultiPageData,
+} = require('./docker-helpers')
 const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
@@ -61,8 +65,13 @@ module.exports = class DockerSize extends BaseJsonService {
   }
 
   async handle({ user, repo, tag = 'latest' }) {
-    const data = await this.fetch({ user, repo })
-    const size = data.results.find(r => r.name === tag)
+    const data = await getMultiPageData({
+      user,
+      repo,
+      fetch: this.fetch.bind(this),
+    })
+    /* Find tag specified from lookup */
+    const size = data.find(r => r.name === tag)
     if (size) return this.constructor.render({ size: size.full_size })
     throw new NotFound({ prettyMessage: 'unknown' })
   }

@@ -2,7 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { anyInteger } = require('../validators')
-const { buildDockerUrl, getDockerHubUser } = require('./docker-helpers')
+const {
+  buildDockerUrl,
+  getDockerHubUser,
+  getMultiPageData,
+} = require('./docker-helpers')
 const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
@@ -72,34 +76,18 @@ module.exports = class DockerVersion extends BaseJsonService {
   }
 
   async handle({ user, repo, tag = 'latest' }) {
-    /* Initial request to get number of pages */
-    const data = []
-    data.push(await this.fetch({ user, repo }))
-    const numberOfPages = Math.ceil(data[0].count / 100)
-    if (numberOfPages) {
-      /* Fetch additional page data */
-      const pageData = []
-      /* Invoke fetch for each page */
-      for (let i = 1; numberOfPages > i; ++i) {
-        pageData.push(this.fetch({ user, repo, page: i + 1 }))
-      }
-      /* await each promise */
-      for (const promise of pageData) {
-        data.push(await promise)
-      }
-    }
-    /* Flatten data.results into a new array */
-    let flat = []
-    data.forEach(page => {
-      flat = flat.concat(page.results)
+    const data = await getMultiPageData({
+      user,
+      repo,
+      fetch: this.fetch.bind(this),
     })
     /* Find tag specified from lookup */
-    const version = flat.find(r => r.name === tag)
+    const version = data.find(r => r.name === tag)
     if (!version) throw new NotFound({ prettyMessage: 'unknown' })
     /* Identify sha digest of specified tag */
     const { digest } = version.images.find(i => i.architecture === 'amd64')
     /* Return all tags/name with specified digest */
-    const versions = flat
+    const versions = data
       .filter(r => r.images.some(i => i.digest === digest))
       .map(result => result.name)
     /* Determine most explicit SemVer of the result set */
