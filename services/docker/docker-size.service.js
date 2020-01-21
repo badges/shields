@@ -50,12 +50,13 @@ module.exports = class DockerSize extends BaseJsonService {
     }
   }
 
-  async fetch({ user, repo }) {
+  async fetch({ user, repo, page }) {
+    page = (page && `&page=${page}`) || ''
     return this._requestJson({
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
-      )}/${repo}/tags?page_size=10000`,
+      )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
     })
   }
 
