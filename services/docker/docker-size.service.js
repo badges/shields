@@ -12,8 +12,14 @@ const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
 const buildSchema = Joi.object({
+  count: anyInteger,
   results: Joi.array()
-    .items(Joi.object({ name: Joi.string(), full_size: anyInteger }).required())
+    .items(
+      Joi.object({
+        name: Joi.string(),
+        full_size: anyInteger,
+      }).required()
+    )
     .required(),
 }).required()
 
@@ -71,7 +77,7 @@ module.exports = class DockerSize extends BaseJsonService {
       fetch: this.fetch.bind(this),
     })
     /* Find tag specified from lookup */
-    const size = data.find(r => r.name === tag)
+    const size = data.find(d => d.name === tag)
     if (size) return this.constructor.render({ size: size.full_size })
     throw new NotFound({ prettyMessage: 'unknown' })
   }

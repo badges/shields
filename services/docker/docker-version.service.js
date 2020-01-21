@@ -16,7 +16,6 @@ const buildSchema = Joi.object({
     .items(
       Joi.object({
         name: Joi.string(),
-        full_size: anyInteger,
         images: Joi.array().items(
           Joi.object({
             digest: Joi.string(),
@@ -82,14 +81,14 @@ module.exports = class DockerVersion extends BaseJsonService {
       fetch: this.fetch.bind(this),
     })
     /* Find tag specified from lookup */
-    const version = data.find(r => r.name === tag)
+    const version = data.find(d => d.name === tag)
     if (!version) throw new NotFound({ prettyMessage: 'unknown' })
     /* Identify sha digest of specified tag */
     const { digest } = version.images.find(i => i.architecture === 'amd64')
     /* Return all tags/name with specified digest */
     const versions = data
-      .filter(r => r.images.some(i => i.digest === digest))
-      .map(result => result.name)
+      .filter(d => d.images.some(i => i.digest === digest))
+      .map(d => d.name)
     /* Determine most explicit SemVer of the result set */
     let explicitSemVer = versions[0]
     versions.forEach(name => {
