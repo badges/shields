@@ -3,24 +3,13 @@
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { anyInteger } = require('../validators')
-const {
-  buildDockerUrl,
-  getDockerHubUser,
-  getMultiPageData,
-} = require('./docker-helpers')
+const { buildDockerUrl, getDockerHubUser } = require('./docker-helpers')
 const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
 const buildSchema = Joi.object({
-  count: anyInteger,
-  results: Joi.array()
-    .items(
-      Joi.object({
-        name: Joi.string(),
-        full_size: anyInteger,
-      }).required()
-    )
-    .required(),
+  name: Joi.string(),
+  full_size: anyInteger,
 }).required()
 
 module.exports = class DockerSize extends BaseJsonService {
@@ -60,25 +49,18 @@ module.exports = class DockerSize extends BaseJsonService {
     }
   }
 
-  async fetch({ user, repo, page }) {
-    page = (page && `&page=${page}`) || ''
+  async fetch({ user, repo, tag }) {
     return this._requestJson({
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
-      )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
+      )}/${repo}/tags/${tag}`,
     })
   }
 
   async handle({ user, repo, tag = 'latest' }) {
-    const data = await getMultiPageData({
-      user,
-      repo,
-      fetch: this.fetch.bind(this),
-    })
-    /* Find tag specified from lookup */
-    const size = data.find(d => d.name === tag)
-    if (size) return this.constructor.render({ size: size.full_size })
+    const data = await this.fetch({ user, repo, tag })
+    if (data) return this.constructor.render({ size: data.full_size })
     throw new NotFound({ prettyMessage: 'unknown' })
   }
 }

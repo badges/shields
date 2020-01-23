@@ -3,24 +3,8 @@
 const { isFileSize } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('docker image size (valid, library with 1 page)')
+t.create('docker image size (valid, library)')
   .get('/_/alpine.json')
-  .expectBadge({
-    label: 'image size',
-    message: isFileSize,
-  })
-
-t.create('docker image size (valid, library with < 5 pages)')
-  .get('/_/ubuntu.json')
-  .timeout(150000)
-  .expectBadge({
-    label: 'image size',
-    message: isFileSize,
-  })
-
-t.create('docker image size (valid, library with > 25 pages)')
-  .get('/_/node.json')
-  .timeout(150000)
   .expectBadge({
     label: 'image size',
     message: isFileSize,
@@ -51,12 +35,12 @@ t.create('docker image size (invalid, incorrect tag)')
   .get('/_/alpine/wrong-tag.json')
   .expectBadge({
     label: 'image size',
-    message: 'unknown',
+    message: 'not found',
   })
 
 t.create('docker image size (invalid, unknown repository)')
   .get('/_/not-a-real-repo.json')
   .expectBadge({
     label: 'image size',
-    message: 'invalid response data',
+    message: 'not found',
   })
