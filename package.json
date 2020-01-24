@@ -165,7 +165,7 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "acorn": "^7.1.0",
-    "babel-plugin-inline-react-svg": "^1.1.0",
+    "babel-plugin-inline-react-svg": "^1.1.1",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-preset-gatsby": "^0.2.27",
     "caller": "^1.0.1",
