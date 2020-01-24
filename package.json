@@ -59,7 +59,7 @@
     "query-string": "^6.10.1",
     "request": "~2.88.0",
     "semver": "~7.1.1",
-    "simple-icons": "2.2.0",
+    "simple-icons": "2.3.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
@@ -225,7 +225,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^6.2.2",
     "mocha-env-reporter": "^4.0.0",
-    "mocha-junit-reporter": "^1.23.1",
+    "mocha-junit-reporter": "^1.23.3",
     "mocha-yaml-loader": "^1.0.3",
     "nock": "11.7.2",
     "node-mocks-http": "^1.8.1",
