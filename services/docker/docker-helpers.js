@@ -2,10 +2,17 @@
 
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
 
-function buildDockerUrl(badgeName) {
-  return {
-    base: `docker/${badgeName}`,
-    pattern: ':user/:repo/:tag*',
+function buildDockerUrl(badgeName, includeTagRoute) {
+  if (includeTagRoute) {
+    return {
+      base: `docker/${badgeName}`,
+      pattern: ':user/:repo/:tag*',
+    }
+  } else {
+    return {
+      base: `docker/${badgeName}`,
+      pattern: ':user/:repo',
+    }
   }
 }
 

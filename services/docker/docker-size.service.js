@@ -18,7 +18,7 @@ module.exports = class DockerSize extends BaseJsonService {
   }
 
   static get route() {
-    return buildDockerUrl('image-size')
+    return buildDockerUrl('image-size', true)
   }
 
   static get examples() {
