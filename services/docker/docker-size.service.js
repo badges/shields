@@ -2,14 +2,13 @@
 
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
-const { anyInteger } = require('../validators')
+const { nonNegativeInteger } = require('../validators')
 const { buildDockerUrl, getDockerHubUser } = require('./docker-helpers')
 const { BaseJsonService } = require('..')
-const { NotFound } = require('..')
 
 const buildSchema = Joi.object({
-  name: Joi.string(),
-  full_size: anyInteger,
+  name: Joi.string().required(),
+  full_size: nonNegativeInteger.required(),
 }).required()
 
 module.exports = class DockerSize extends BaseJsonService {
@@ -39,14 +38,14 @@ module.exports = class DockerSize extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'image size' }
+    return {
+      label: 'image size',
+      color: 'blue',
+    }
   }
 
   static render({ size }) {
-    return {
-      message: prettyBytes(parseInt(size)),
-      color: 'blue',
-    }
+    return { message: prettyBytes(size) }
   }
 
   async fetch({ user, repo, tag }) {
@@ -55,12 +54,12 @@ module.exports = class DockerSize extends BaseJsonService {
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
       )}/${repo}/tags/${tag}`,
+      errorMessages: { 404: 'image or tag not found' },
     })
   }
 
   async handle({ user, repo, tag = 'latest' }) {
     const data = await this.fetch({ user, repo, tag })
-    if (data) return this.constructor.render({ size: data.full_size })
-    throw new NotFound({ prettyMessage: 'unknown' })
+    return this.constructor.render({ size: data.full_size })
   }
 }

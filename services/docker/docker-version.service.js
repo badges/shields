@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { anyInteger } = require('../validators')
+const { nonNegativeInteger } = require('../validators')
 const {
   buildDockerUrl,
   getDockerHubUser,
@@ -11,15 +11,15 @@ const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
 const buildSchema = Joi.object({
-  count: anyInteger,
+  count: nonNegativeInteger.required(),
   results: Joi.array()
     .items(
       Joi.object({
-        name: Joi.string(),
+        name: Joi.string().required(),
         images: Joi.array().items(
           Joi.object({
             digest: Joi.string(),
-            architecture: Joi.string(),
+            architecture: Joi.string().required(),
           })
         ),
       }).required()
@@ -54,23 +54,24 @@ module.exports = class DockerVersion extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'version' }
-  }
-
-  static render({ version }) {
     return {
-      message: version,
+      label: 'version',
       color: 'blue',
     }
   }
 
+  static render({ version }) {
+    return { message: version }
+  }
+
   async fetch({ user, repo, page }) {
-    page = (page && `&page=${page}`) || ''
+    page = page ? `&page=${page}` : ''
     return this._requestJson({
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
+      errorMessages: { 404: 'image or tag not found' },
     })
   }
 
@@ -80,16 +81,12 @@ module.exports = class DockerVersion extends BaseJsonService {
       repo,
       fetch: this.fetch.bind(this),
     })
-    /* Find tag specified from lookup */
     const version = data.find(d => d.name === tag)
     if (!version) throw new NotFound({ prettyMessage: 'unknown' })
-    /* Identify sha digest of specified tag */
-    const { digest } = version.images.find(i => i.architecture === 'amd64')
-    /* Return all tags/name with specified digest */
+    const { digest } = version.images.find(i => i.architecture === 'amd64') // Digest is the unique field that we utilise to match images
     const versions = data
       .filter(d => d.images.some(i => i.digest === digest))
       .map(d => d.name)
-    /* Determine most explicit SemVer of the result set */
     let explicitSemVer = versions[0]
     versions.forEach(name => {
       const dots = (name.match(/\./g) || []).length

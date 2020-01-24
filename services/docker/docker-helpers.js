@@ -21,28 +21,19 @@ function getDockerHubUser(user) {
 }
 
 async function getMultiPageData({ user, repo, fetch }) {
-  /* Initial request to get number of pages */
-  const data = []
-  data.push(await fetch({ user, repo }))
-  const numberOfPages = Math.ceil(data[0].count / 100)
-  if (numberOfPages) {
-    /* Fetch additional page data */
-    const pageData = []
-    /* Invoke fetch for each page */
-    for (let i = 1; numberOfPages > i; ++i) {
-      pageData.push(fetch({ user, repo, page: i + 1 }))
-    }
-    /* Await each promise */
-    for (const promise of pageData) {
-      data.push(await promise)
-    }
+  const data = await fetch({ user, repo })
+  const numberOfPages = Math.ceil(data.count / 100) // Maximum of 100 results can be returned per page
+
+  if (numberOfPages === 1) {
+    return data.results
   }
-  /* Flatten data.results into a new array */
-  let dataset = []
-  data.forEach(page => {
-    dataset = dataset.concat(page.results)
-  })
-  return dataset
+
+  const pageData = await Promise.all(
+    [...Array(numberOfPages - 1).keys()].map((_, i) =>
+      fetch({ user, repo, page: ++i + 1 })
+    )
+  )
+  return [...data.results].concat(...pageData.map(p => p.results))
 }
 
 module.exports = {
