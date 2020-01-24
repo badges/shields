@@ -31,7 +31,7 @@ describe('configuration', function() {
   })
 
   describe('checkCustomIntegrationConfiguration function', function() {
-    it('accept default configuration', function() {
+    it('accepts the default configuration', function() {
       const config = { public: { integrations: { default: {} } } }
       const serviceClasses = [{ name: 'SomeService' }]
 
@@ -40,7 +40,7 @@ describe('configuration', function() {
       ).not.throw()
     })
 
-    it('accept a configuration for an existing service', function() {
+    it('accepts a configuration for an existing service', function() {
       const config = { public: { integrations: { SomeService: {} } } }
       const serviceClasses = [{ name: 'SomeService' }]
 
