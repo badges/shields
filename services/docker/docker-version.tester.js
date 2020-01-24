@@ -10,24 +10,24 @@ t.create('docker version (valid, library with 1 page)')
     message: isSemVer,
   })
 
-t.create('docker version (valid, library with < 5 pages)')
-  .get('/_/ubuntu.json')
-  .timeout(150000)
-  .expectBadge({
-    label: 'version',
-    message: isSemVer,
-  })
-
-t.create('docker version (valid, library with > 25 pages)')
-  .get('/_/node.json')
-  .timeout(150000)
-  .expectBadge({
-    label: 'version',
-    message: isSemVer,
-  })
-
 t.create('docker version (valid, library with tag)')
   .get('/_/alpine/latest.json')
+  .expectBadge({
+    label: 'version',
+    message: isSemVer,
+  })
+
+t.create('docker version (valid, library with tag and < 5 pages)')
+  .get('/_/ubuntu/latest.json')
+  .timeout(150000)
+  .expectBadge({
+    label: 'version',
+    message: isSemVer,
+  })
+
+t.create('docker version (valid, library with tag and > 25 pages)')
+  .get('/_/node/latest.json')
+  .timeout(150000)
   .expectBadge({
     label: 'version',
     message: isSemVer,
@@ -51,7 +51,7 @@ t.create('docker version (invalid, incorrect tag)')
   .get('/_/alpine/wrong-tag.json')
   .expectBadge({
     label: 'version',
-    message: 'unknown',
+    message: 'no tags found',
   })
 
 t.create('docker version (invalid, unknown repository)')

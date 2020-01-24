@@ -1,9 +1,22 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
 
-function buildDockerUrl(badgeName, includeTagRoute) {
-  if (includeTagRoute) {
+const queryParamSchema = Joi.object({
+  sort: Joi.string()
+    .valid('date', 'semver')
+    .default('date'),
+}).required()
+
+function buildDockerUrl(badgeName, includeTagRoute, includeQueryParam) {
+  if (includeTagRoute && includeQueryParam) {
+    return {
+      base: `docker/${badgeName}`,
+      pattern: ':user/:repo/:tag*',
+      queryParamSchema,
+    }
+  } else if (includeTagRoute && !includeQueryParam) {
     return {
       base: `docker/${badgeName}`,
       pattern: ':user/:repo/:tag*',
@@ -36,9 +49,16 @@ async function getMultiPageData({ user, repo, fetch }) {
   return [...data.results].concat(...pageData.map(p => p.results))
 }
 
+function getDigestMatches({ data, digest }) {
+  return data
+    .filter(d => d.images.some(i => i.digest === digest))
+    .map(d => d.name)
+}
+
 module.exports = {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
+  getDigestMatches,
 }
