@@ -6,6 +6,7 @@ const countBy = require('lodash.countby')
 const categories = require('../../services/categories')
 const BaseService = require('./base')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
+
 const serviceDir = path.join(__dirname, '..', '..', 'services')
 
 class InvalidService extends Error {
