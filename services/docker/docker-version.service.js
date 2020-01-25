@@ -7,7 +7,7 @@ const {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
-  getDigestMatches,
+  getDigestSemVerMatches,
 } = require('./docker-helpers')
 const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
@@ -54,16 +54,9 @@ module.exports = class DockerVersion extends BaseJsonService {
         staticPreview: this.render({ version: '3.11.3' }),
       },
       {
-        title: 'Docker Image Version (tag latest by date)',
-        pattern: ':user/:repo/:tag',
-        namedParams: { user: '_', repo: 'alpine', tag: '3.10' },
-        staticPreview: this.render({ version: '3.10.4', sort: 'date' }),
-      },
-      {
         title: 'Docker Image Version (tag latest SemVer)',
         pattern: ':user/:repo/:tag',
         namedParams: { user: '_', repo: 'alpine', tag: '3.6' },
-        queryParams: { sort: 'semver' },
         staticPreview: this.render({ version: '3.6.5' }),
       },
     ]
@@ -93,10 +86,19 @@ module.exports = class DockerVersion extends BaseJsonService {
 
   async handle({ user, repo, tag }, { sort }) {
     let data = []
-    let matches = []
     let version = ''
+
     if (!tag && sort === 'date') {
       data = await this.fetch({ user, repo })
+    } else {
+      data = await getMultiPageData({
+        user,
+        repo,
+        fetch: this.fetch.bind(this),
+      })
+    }
+
+    if (!tag && sort === 'date') {
       version = data.results[0].name
       if (version === 'latest') {
         const { digest } = data.results[0].images.find(
@@ -107,48 +109,18 @@ module.exports = class DockerVersion extends BaseJsonService {
           repo,
           fetch: this.fetch.bind(this),
         })
-        matches = getDigestMatches({ data, digest })
-        version = latest(matches)
+        version = getDigestSemVerMatches({ data, digest })
       }
     } else if (!tag && sort === 'semver') {
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
-      matches = data.map(d => d.name)
-      version = latest(matches)
-    } else if (tag && sort === 'date') {
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
-      version = data.find(d => d.name === tag)
-      if (!version) {
-        throw new NotFound({ prettyMessage: 'no tags found' })
-      }
-      const { digest } = version.images.find(i => i.architecture === 'amd64')
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
-      matches = getDigestMatches({ data, digest })
+      const matches = data.map(d => d.name)
       version = latest(matches)
     } else {
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
       version = data.find(d => d.name === tag)
       if (!version) {
         throw new NotFound({ prettyMessage: 'no tags found' })
       }
       const { digest } = version.images.find(i => i.architecture === 'amd64')
-      matches = getDigestMatches({ data, digest })
-      version = latest(matches)
+      version = getDigestSemVerMatches({ data, digest })
     }
     return this.constructor.render({ version })
   }

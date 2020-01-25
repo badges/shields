@@ -1,7 +1,8 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
+const Joi = require('@hapi/joi')
+const { latest } = require('../version')
 
 const queryParamSchema = Joi.object({
   sort: Joi.string()
@@ -49,10 +50,11 @@ async function getMultiPageData({ user, repo, fetch }) {
   return [...data.results].concat(...pageData.map(p => p.results))
 }
 
-function getDigestMatches({ data, digest }) {
-  return data
+function getDigestSemVerMatches({ data, digest }) {
+  const matches = data
     .filter(d => d.images.some(i => i.digest === digest))
     .map(d => d.name)
+  return latest(matches)
 }
 
 module.exports = {
@@ -60,5 +62,5 @@ module.exports = {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
-  getDigestMatches,
+  getDigestSemVerMatches,
 }
