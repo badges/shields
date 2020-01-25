@@ -21,7 +21,7 @@ t.create('named branch')
   })
 
 t.create('stage badge')
-  .get('/totodem/Shields.io/5.svg?stage=Successful%20Stage')
+  .get('/totodem/Shields.io/5.json?stage=Successful%20Stage')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
@@ -29,7 +29,7 @@ t.create('stage badge')
 
 t.create('job badge')
   .get(
-    '/totodem/Shields.io/5.svg?stage=Successful%20Stage&job=Successful%20Job'
+    '/totodem/Shields.io/5.json?stage=Successful%20Stage&job=Successful%20Job'
   )
   .expectBadge({
     label: 'build',
