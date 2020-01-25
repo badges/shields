@@ -1,8 +1,14 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const { renderBuildStatusBadge } = require('../build-status')
 const { keywords, fetch } = require('./azure-devops-helpers')
 const { BaseSvgScrapingService, NotFound } = require('..')
+
+const queryParamSchema = Joi.object({
+  stage: Joi.string(),
+  job: Joi.string(),
+})
 
 const documentation = `
 <p>
@@ -36,6 +42,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
     return {
       base: 'azure-devops/build',
       pattern: ':organization/:projectId/:definitionId/:branch*',
+      queryParamSchema,
     }
   }
 
@@ -69,11 +76,18 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
     ]
   }
 
-  async handle({ organization, projectId, definitionId, branch }) {
+  async handle(
+    { organization, projectId, definitionId, branch },
+    { stage, job }
+  ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
     const { status } = await fetch(this, {
       url: `https://dev.azure.com/${organization}/${projectId}/_apis/build/status/${definitionId}`,
-      qs: { branchName: branch },
+      qs: {
+        branchName: branch,
+        stageName: stage,
+        jobName: job,
+      },
       errorMessages: {
         404: 'user or project not found',
       },
