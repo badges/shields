@@ -53,7 +53,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
         pattern: ':organization/:projectId/:definitionId',
         namedParams: {
           organization: 'totodem',
-          projectId: 'Shields.io',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
           definitionId: '2',
         },
         staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
@@ -65,7 +65,7 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
         pattern: ':organization/:projectId/:definitionId/:branch',
         namedParams: {
           organization: 'totodem',
-          projectId: 'Shields.io',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
           definitionId: '2',
           branch: 'master',
         },
@@ -75,13 +75,12 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
       },
       {
         title: 'Azure DevOps builds (stage)',
-        pattern:
-          ':organization/:projectId/:definitionId/:branch*\\?stage=:stage',
         namedParams: {
           organization: 'totodem',
-          projectId: 'Shields.io',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
           definitionId: '5',
-          branch: 'master',
+        },
+        queryParams: {
           stage: 'Successful Stage',
         },
         staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
@@ -90,13 +89,12 @@ module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
       },
       {
         title: 'Azure DevOps builds (job)',
-        pattern:
-          ':organization/:projectId/:definitionId/:branch*\\?stage=:stage&job=:job',
         namedParams: {
           organization: 'totodem',
-          projectId: 'Shields.io',
+          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
           definitionId: '5',
-          branch: 'master',
+        },
+        queryParams: {
           stage: 'Successful Stage',
           job: 'Successful Job',
         },
