@@ -20,6 +20,22 @@ t.create('named branch')
     message: isBuildStatus,
   })
 
+t.create('stage badge')
+  .get('/totodem/Shields.io/5.json?stage=Successful%20Stage')
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
+
+t.create('job badge')
+  .get(
+    '/totodem/Shields.io/5.json?stage=Successful%20Stage&job=Successful%20Job'
+  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
+
 t.create('never built definition')
   .get('/swellaby/opensource/112.json')
   .expectBadge({ label: 'build', message: 'never built' })
