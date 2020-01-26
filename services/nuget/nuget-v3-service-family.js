@@ -98,6 +98,15 @@ const schema = Joi.object({
 }).required()
 
 /*
+ * Strip Build MetaData
+ * Nuget versions may include an optional "build metadata" clause,
+ * seperated from the version by a + character.
+ */
+function stripBuildMetadata(version) {
+  return version.split('+')[0]
+}
+
+/*
  * Get information about a single package.
  */
 async function fetch(
@@ -184,7 +193,10 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      const { versions } = await fetch(this, { baseUrl, packageName })
+      let { versions } = await fetch(this, { baseUrl, packageName })
+      versions = versions.map(item => ({
+        version: stripBuildMetadata(item.version),
+      }))
       let latest = versions.slice(-1).pop()
       const includePrereleases = which === 'vpre'
       if (!includePrereleases) {
