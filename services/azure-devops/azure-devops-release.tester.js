@@ -13,6 +13,13 @@ t.create('release status is succeeded')
     message: isBuildStatus,
   })
 
+t.create('never deployed')
+  .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/4.json')
+  .expectBadge({
+    label: 'deployment',
+    message: 'never deployed',
+  })
+
 t.create('unknown environment')
   .get('/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/515.json')
   .expectBadge({
