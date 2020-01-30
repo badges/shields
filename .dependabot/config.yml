@@ -4,6 +4,31 @@ update_configs:
   - package_manager: 'javascript'
     directory: '/'
     update_schedule: 'weekly'
+    automerged_updates:
+      - match:
+          dependency_name: 'chai*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'cypress'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'eslint*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'enzyme*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'mocha*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'sazerac'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'sinon*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'snap-shot-it'
+          update_type: 'semver:minor'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'
