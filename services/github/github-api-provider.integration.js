@@ -95,7 +95,7 @@ describe('Github API provider', function() {
 
       const [token] = tokens
       expect(token.usesRemaining).to.equal(usesRemaining)
-      expect(token.nextReset).to.equal(nextReset)
+      expect(token.nextReset).to.be.within(nextReset - 1, nextReset)
     })
   })
 })

@@ -109,10 +109,8 @@ class Token {
     ) {
       this._nextReset = nextReset
       this._usesRemaining = usesRemaining
-    } else if (nextReset === this._nextReset) {
-      this._usesRemaining = Math.min(this._usesRemaining, usesRemaining)
     } else {
-      // Discard the new update; it's older than the values we have.
+      this._usesRemaining = Math.min(this._usesRemaining, usesRemaining)
     }
   }
 
