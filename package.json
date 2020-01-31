@@ -33,7 +33,7 @@
     "chrome-web-store-item-property": "~1.2.0",
     "config": "^3.2.5",
     "cross-env": "^6.0.3",
-    "decamelize": "^3.2.0",
+    "decamelize": "^4.0.0",
     "dotenv": "^8.2.0",
     "emojic": "^1.1.15",
     "escape-string-regexp": "^2.0.0",
