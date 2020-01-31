@@ -20,7 +20,7 @@ describe('configuration', function() {
       .describe('merges objects')
       .expect({ a: { a1: 2, a2: 2 } })
     given({ a: { a1: 1, a2: 2 } }, { a: 3 })
-      .describe('overdrives an object with a primitive')
+      .describe('overrides an object with a primitive')
       .expect({ a: 3 })
     given({ a: { a1: 1, a2: 2 } }, { a: {} })
       .describe('does not override an object with an empty object')
