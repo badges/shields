@@ -95,6 +95,14 @@ describe('Github API provider', function() {
 
       const [token] = tokens
       expect(token.usesRemaining).to.equal(usesRemaining)
+
+      /*
+      There is some kind of rounding or off-by-one error
+      which causes the GitHub API to return an inconsistent
+      timestamp value for `X-RateLimit-Reset`.
+
+      see https://github.com/badges/shields/pull/4590 for more details
+      */
       expect(token.nextReset).to.be.within(nextReset - 1, nextReset)
     })
   })
