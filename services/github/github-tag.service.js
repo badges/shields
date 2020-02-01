@@ -6,7 +6,7 @@ const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
 const { GithubAuthV4Service } = require('./github-auth-service')
-const { queryParamSchema } = require('./github-common-fetch')
+const { queryParamSchema } = require('./github-common-release')
 const { documentation, transformErrors } = require('./github-helpers')
 const { NotFound, redirector } = require('..')
 

@@ -7,7 +7,7 @@ const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   fetchLatestRelease,
   queryParamSchema,
-} = require('./github-common-fetch')
+} = require('./github-common-release')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()

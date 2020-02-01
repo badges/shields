@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { _getLatestRelease } = require('./github-common-fetch')
+const { _getLatestRelease } = require('./github-common-release')
 
 describe('GithubRelease', function() {
   test(_getLatestRelease, () => {

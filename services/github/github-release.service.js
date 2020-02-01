@@ -6,7 +6,7 @@ const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   fetchLatestRelease,
   queryParamSchema,
-} = require('./github-common-fetch')
+} = require('./github-common-release')
 const { documentation } = require('./github-helpers')
 const { redirector } = require('..')
 
