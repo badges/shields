@@ -176,7 +176,7 @@
     "cheerio": "^1.0.0-rc.3",
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^3.1.0",
-    "concurrently": "^5.0.2",
+    "concurrently": "^5.1.0",
     "cypress": "^3.8.3",
     "danger": "^9.2.10",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
