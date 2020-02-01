@@ -218,7 +218,7 @@ t.create('Nexus 2 - user query params')
 
 t.create('Nexus 3 - search release version valid artifact')
   .get(
-    '/r/org.apache.commons/commons-lang3.json?server=https://nexus.pentaho.org&nexus3'
+    '/r/org.apache.commons/commons-lang3.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -226,7 +226,7 @@ t.create('Nexus 3 - search release version valid artifact')
   })
 
 t.create(
-  'Nexus 3 - search release version valid artifact without explicit nexus3 parameter'
+  'Nexus 3 - search release version valid artifact without explicit nexusVersion parameter'
 )
   .timeout(15000)
   .get(
@@ -239,7 +239,7 @@ t.create(
 
 t.create('Nexus 3 - search release version of an nonexistent artifact')
   .get(
-    '/r/org.apache.commons/nonexistent-artifact-id.json?server=https://nexus.pentaho.org&nexus3'
+    '/r/org.apache.commons/nonexistent-artifact-id.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -248,7 +248,7 @@ t.create('Nexus 3 - search release version of an nonexistent artifact')
 
 t.create('Nexus 3 - search snapshot version valid snapshot artifact')
   .get(
-    '/s/org.pentaho/pentaho-registry.json?server=https://nexus.pentaho.org&nexus3'
+    '/s/org.pentaho/pentaho-registry.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -257,7 +257,7 @@ t.create('Nexus 3 - search snapshot version valid snapshot artifact')
 
 t.create('Nexus 3 - search snapshot version for artifact without snapshots')
   .get(
-    '/s/javax.inject/javax.inject.json?server=https://nexus.pentaho.org&nexus3'
+    '/s/javax.inject/javax.inject.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -267,7 +267,7 @@ t.create('Nexus 3 - search snapshot version for artifact without snapshots')
 
 t.create('Nexus 3 - repository version')
   .get(
-    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org&nexus3'
+    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -276,7 +276,7 @@ t.create('Nexus 3 - repository version')
 
 t.create('Nexus 3 - repository version with query')
   .get(
-    `/proxy-public-3rd-party-release/org.junit.jupiter/junit-jupiter.json?server=https://nexus.pentaho.org&nexus3&queryOpt=${encodeURIComponent(
+    `/proxy-public-3rd-party-release/org.junit.jupiter/junit-jupiter.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
       ':maven.extension=jar:direction=asc'
     )}`
   )

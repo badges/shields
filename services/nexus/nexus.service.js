@@ -50,7 +50,7 @@ const queryParamSchema = Joi.object({
   queryOpt: Joi.string()
     .regex(/(:[\w.]+=[\w-. ]+)+/i)
     .optional(),
-  nexus3: Joi.equal(''),
+  nexusVersion: Joi.equal('2', '3'),
 }).required()
 
 module.exports = class Nexus extends BaseJsonService {
@@ -81,14 +81,14 @@ module.exports = class Nexus extends BaseJsonService {
         },
         queryParams: {
           server: 'https://nexus.pentaho.org',
-          nexus3: null,
+          nexusVersion: '3',
         },
         staticPreview: this.render({
           version: '3.9',
         }),
         documentation: `
         <p>
-          Specifying 'nexus3' when targeting Nexus 3 servers will speed up the badge rendering. 
+          Specifying 'nexusVersion=3' when targeting Nexus 3 servers will speed up the badge rendering. 
           Note that you can use this query parameter with any Nexus badge type (Releases, Snapshots, or Repository).
         </p>
         `,
@@ -182,8 +182,8 @@ module.exports = class Nexus extends BaseJsonService {
     })
   }
 
-  async fetch({ server, repo, groupId, artifactId, queryOpt, nexus3 }) {
-    if (typeof nexus3 !== 'undefined') {
+  async fetch({ server, repo, groupId, artifactId, queryOpt, nexusVersion }) {
+    if (nexusVersion === '3') {
       return this.fetch3({ server, repo, groupId, artifactId, queryOpt })
     }
     // Most servers still use Nexus 2. Fall back to Nexus 3 if the hitting a
@@ -231,7 +231,7 @@ module.exports = class Nexus extends BaseJsonService {
       },
     })
 
-    return { actualNexus3: false, json }
+    return { actualNexusVersion: '2', json }
   }
 
   async fetch3({ server, repo, groupId, artifactId, queryOpt }) {
@@ -263,11 +263,11 @@ module.exports = class Nexus extends BaseJsonService {
       },
     })
 
-    return { actualNexus3: true, json }
+    return { actualNexusVersion: '3', json }
   }
 
-  transform({ repo, json, actualNexus3 }) {
-    return actualNexus3
+  transform({ repo, json, actualNexusVersion }) {
+    return actualNexusVersion === '3'
       ? this.transform3({ repo, json })
       : this.transform2({ repo, json })
   }
@@ -313,17 +313,20 @@ module.exports = class Nexus extends BaseJsonService {
     return { version: json.items[0].version }
   }
 
-  async handle({ repo, groupId, artifactId }, { server, queryOpt, nexus3 }) {
-    const { actualNexus3, json } = await this.fetch({
+  async handle(
+    { repo, groupId, artifactId },
+    { server, queryOpt, nexusVersion }
+  ) {
+    const { actualNexusVersion, json } = await this.fetch({
       repo,
       server,
       groupId,
       artifactId,
       queryOpt,
-      nexus3,
+      nexusVersion,
     })
 
-    const { version } = this.transform({ repo, json, actualNexus3 })
+    const { version } = this.transform({ repo, json, actualNexusVersion })
     return this.constructor.render({ version })
   }
 }
