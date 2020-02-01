@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
-const { latest } = require('../version')
+const { latest, renderVersionBadge } = require('../version')
 const {
   buildDockerUrl,
   getDockerHubUser,
@@ -29,13 +29,19 @@ const buildSchema = Joi.object({
     .required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  sort: Joi.string()
+    .valid('date', 'semver')
+    .default('date'),
+}).required()
+
 module.exports = class DockerVersion extends BaseJsonService {
   static get category() {
     return 'version'
   }
 
   static get route() {
-    return buildDockerUrl('version', true, true)
+    return { ...buildDockerUrl('version', true), queryParamSchema }
   }
 
   static get examples() {
@@ -70,7 +76,7 @@ module.exports = class DockerVersion extends BaseJsonService {
   }
 
   static render({ version }) {
-    return { message: version }
+    return renderVersionBadge({ version })
   }
 
   async fetch({ user, repo, page }) {
@@ -84,19 +90,8 @@ module.exports = class DockerVersion extends BaseJsonService {
     })
   }
 
-  async handle({ user, repo, tag }, { sort }) {
-    let data = []
+  async transform({ user, repo, tag, data }, { sort }) {
     let version = ''
-
-    if (!tag && sort === 'date') {
-      data = await this.fetch({ user, repo })
-    } else {
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
-    }
 
     if (!tag && sort === 'date') {
       version = data.results[0].name
@@ -122,6 +117,23 @@ module.exports = class DockerVersion extends BaseJsonService {
       const { digest } = version.images.find(i => i.architecture === 'amd64')
       version = getDigestSemVerMatches({ data, digest })
     }
+    return version
+  }
+
+  async handle({ user, repo, tag }, { sort }) {
+    let data = []
+
+    if (!tag && sort === 'date') {
+      data = await this.fetch({ user, repo })
+    } else {
+      data = await getMultiPageData({
+        user,
+        repo,
+        fetch: this.fetch.bind(this),
+      })
+    }
+
+    const version = await this.transform({ user, repo, tag, data }, { sort })
     return this.constructor.render({ version })
   }
 }
