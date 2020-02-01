@@ -41,7 +41,7 @@
     "fsos": "^1.1.6",
     "gh-badges": "file:gh-badges",
     "glob": "^7.1.6",
-    "graphql": "^14.5.8",
+    "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
     "ioredis": "4.14.1",
     "joi-extension-semver": "4.0.0",
