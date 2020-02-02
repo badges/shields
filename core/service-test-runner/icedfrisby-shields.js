@@ -22,6 +22,14 @@ const factory = superclass =>
       this.intercepted = false
     }
 
+    get(uri, options = { followRedirect: false }) {
+      if (!options.followRedirect) {
+        options.followRedirect = false
+      }
+      super.get(uri, options)
+      return this
+    }
+
     intercept(setup) {
       super.intercept(setup)
       this.intercepted = true
@@ -49,6 +57,10 @@ const factory = superclass =>
         this.constructor._expectField(json, 'color', color)
         this.constructor._expectField(json, 'link', link)
       })
+    }
+
+    expectRedirect(location) {
+      return this.expectStatus(301).expectHeader('Location', location)
     }
 
     static _expectField(json, name, expected) {

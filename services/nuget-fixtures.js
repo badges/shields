@@ -34,9 +34,26 @@ const nuGetV3VersionJsonFirstCharNotZero = JSON.stringify({
   ],
 })
 
+const nuGetV3VersionJsonBuildMetadataWithDash = JSON.stringify({
+  data: [
+    {
+      totalDownloads: 0,
+      versions: [
+        {
+          version: '1.16.0+388',
+        },
+        {
+          version: '1.17.0+1b81349-429',
+        },
+      ],
+    },
+  ],
+})
+
 module.exports = {
   queryIndex,
   nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,
+  nuGetV3VersionJsonBuildMetadataWithDash,
 }

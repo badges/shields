@@ -1,68 +1,23 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
 
-const knownValidBook = 'juice-shop'
+const t = (module.exports = new ServiceTester({
+  id: 'LeanPub',
+  title: 'LeanPub',
+  pathPrefix: '/leanpub/book',
+}))
 
-t.create('known book pages')
-  .get(`/pages/${knownValidBook}.json`)
-  .expectBadge({
-    label: 'pages',
-    message: Joi.number(),
-  })
-
-t.create('known book sold')
-  .get(`/sold/${knownValidBook}.json`)
-  .expectBadge({
-    label: 'sold',
-    message: Joi.number(),
-  })
-
-t.create('unknown book')
-  .get(`/pages/234uFjAsDf234209.json`)
-  .expectBadge({ label: 'leanpub', message: 'book not found' })
-
-t.create('404 book summary error response')
-  .get(`/pages/${knownValidBook}.json`)
-  .intercept(nock =>
-    nock('https://leanpub.com/')
-      .get(`/${knownValidBook}.json`)
-      .reply(404)
-  )
+t.create('no longer available (previously book pages)')
+  .get('/pages/juice-shop.json')
   .expectBadge({
     label: 'leanpub',
-    message: 'book not found',
+    message: 'no longer available',
   })
 
-t.create('correct page count')
-  .get(`/pages/${knownValidBook}.json`)
-  .intercept(nock =>
-    nock('https://leanpub.com/')
-      .get(`/${knownValidBook}.json`)
-      .reply(200, {
-        id: 12,
-        page_count_published: 190,
-        total_copies_sold: 27,
-      })
-  )
+t.create('no longer available (previously books sold)')
+  .get('/sold/juice-shop.json')
   .expectBadge({
-    label: 'pages',
-    message: '190',
-  })
-
-t.create('correct sold count')
-  .get(`/sold/${knownValidBook}.json`)
-  .intercept(nock =>
-    nock('https://leanpub.com/')
-      .get(`/${knownValidBook}.json`)
-      .reply(200, {
-        id: 7,
-        page_count_published: 351,
-        total_copies_sold: 82347,
-      })
-  )
-  .expectBadge({
-    label: 'sold',
-    message: '82347',
+    label: 'leanpub',
+    message: 'no longer available',
   })

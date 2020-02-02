@@ -4,8 +4,8 @@ const decamelize = require('decamelize')
 const prometheus = require('prom-client')
 
 module.exports = class PrometheusMetrics {
-  constructor() {
-    this.register = new prometheus.Registry()
+  constructor({ register } = {}) {
+    this.register = register || new prometheus.Registry()
     this.counters = {
       numRequests: new prometheus.Counter({
         name: 'service_requests_total',
@@ -59,6 +59,14 @@ module.exports = class PrometheusMetrics {
         labelNames: ['rate_limit_type'],
         registers: [this.register],
       }),
+      serviceResponseSize: new prometheus.Histogram({
+        name: 'service_response_bytes',
+        help: 'Service response size in bytes',
+        labelNames: ['category', 'family', 'service'],
+        // buckets: 64KiB, 128KiB, 256KiB, 512KiB, 1MiB, 2MiB, 4MiB, 8MiB
+        buckets: prometheus.exponentialBuckets(64 * 1024, 2, 8),
+        registers: [this.register],
+      }),
     }
   }
 
@@ -94,5 +102,14 @@ module.exports = class PrometheusMetrics {
 
   noteRateLimitExceeded(rateLimitType) {
     return this.counters.rateLimitExceeded.labels(rateLimitType).inc()
+  }
+
+  createServiceResponseSizeHistogram({ category, serviceFamily, name }) {
+    const service = decamelize(name)
+    return this.counters.serviceResponseSize.labels(
+      category,
+      serviceFamily,
+      service
+    )
   }
 }

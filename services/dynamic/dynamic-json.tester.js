@@ -181,6 +181,6 @@ t.create('JSON contains a string')
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'json must contain an object or array',
+    message: 'resource must contain an object or array',
     color: 'lightgrey',
   })

@@ -2,6 +2,7 @@
 
 const { promisify } = require('util')
 const Joi = require('@hapi/joi')
+const semver = require('semver')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
 const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
@@ -97,6 +98,15 @@ const schema = Joi.object({
 }).required()
 
 /*
+ * Strip Build MetaData
+ * Nuget versions may include an optional "build metadata" clause,
+ * seperated from the version by a + character.
+ */
+function stripBuildMetadata(version) {
+  return version.split('+')[0]
+}
+
+/*
  * Get information about a single package.
  */
 async function fetch(
@@ -183,17 +193,23 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      const { versions } = await fetch(this, { baseUrl, packageName })
-
+      let { versions } = await fetch(this, { baseUrl, packageName })
+      versions = versions.map(item => ({
+        version: stripBuildMetadata(item.version),
+      }))
       let latest = versions.slice(-1).pop()
       const includePrereleases = which === 'vpre'
       if (!includePrereleases) {
-        const filtered = versions.filter(item => !item.version.includes('-'))
+        const filtered = versions.filter(item => {
+          if (semver.valid(item.version)) {
+            return !semver.prerelease(item.version)
+          }
+          return !item.version.includes('-')
+        })
         if (filtered.length) {
           latest = filtered.slice(-1).pop()
         }
       }
-
       const { version } = latest
       return this.constructor.render({ version, feed })
     }

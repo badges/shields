@@ -3,7 +3,9 @@
 const Joi = require('@hapi/joi')
 
 // https://support.codefactor.io/i14-glossary
+// https://github.com/badges/shields/issues/4269
 const colorMap = {
+  'A+': 'brightgreen',
   A: 'brightgreen',
   'A-': 'green',
   'B+': 'yellowgreen',
@@ -16,6 +18,7 @@ const colorMap = {
   D: 'orange',
   'D-': 'orange',
   F: 'red',
+  '-': 'lightgrey',
 }
 
 const isValidGrade = Joi.valid(...Object.keys(colorMap)).required()

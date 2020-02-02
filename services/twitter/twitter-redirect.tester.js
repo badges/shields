@@ -9,11 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('twitter')
-  .get('/https/shields.io.svg', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .get('/https/shields.io.svg')
+  .expectRedirect(
     `/twitter/url.svg?url=${encodeURIComponent('https://shields.io')}`
   )

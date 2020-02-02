@@ -10,6 +10,13 @@ t.create('total downloads')
     message: isMetric,
   })
 
+t.create('total downloads (with subdirs)')
+  .get('/dt/smartmontools/smartmontools/7.1.json')
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
+
 t.create('monthly downloads')
   .get('/dm/sevenzip.json')
   .expectBadge({

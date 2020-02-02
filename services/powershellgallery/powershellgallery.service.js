@@ -14,6 +14,7 @@ const apiBaseUrl = 'https://www.powershellgallery.com/api/v2'
 
 const {
   NugetVersionService: PowershellGalleryVersion,
+  NugetVersionRedirector: PowershellGalleryVersionRedirector,
   NugetDownloadService: PowershellGalleryDownloads,
 } = createServiceFamily({
   name: 'PowershellGallery',
@@ -106,6 +107,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
 
 module.exports = {
   PowershellGalleryVersion,
+  PowershellGalleryVersionRedirector,
   PowershellGalleryDownloads,
   PowershellGalleryPlatformSupport,
 }

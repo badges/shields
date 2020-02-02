@@ -98,8 +98,7 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
   static get route() {
     return {
       base: 'jenkins/coverage',
-      pattern:
-        ':format(jacoco|cobertura|api)/:protocol(http|https)/:host/:job+',
+      pattern: ':format(jacoco|cobertura|api)',
       queryParamSchema,
     }
   }
@@ -110,9 +109,9 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
         title: 'Jenkins Coverage',
         namedParams: {
           format: 'cobertura',
-          protocol: 'https',
-          host: 'jenkins.sqlalchemy.org',
-          job: 'job/alembic_coverage',
+        },
+        queryParams: {
+          jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
         },
         keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
         staticPreview: this.render({ coverage: 95 }),
@@ -132,12 +131,12 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
     }
   }
 
-  async handle({ format, protocol, host, job }, { disableStrictSSL }) {
+  async handle({ format }, { jobUrl, disableStrictSSL }) {
     const { schema, transform, treeQueryParam, pluginSpecificPath } = formatMap[
       format
     ]
     const json = await this.fetch({
-      url: buildUrl({ protocol, host, job, plugin: pluginSpecificPath }),
+      url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
       schema,
       qs: buildTreeParamQueryString(treeQueryParam),
       disableStrictSSL,

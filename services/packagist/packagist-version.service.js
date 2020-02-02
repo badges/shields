@@ -8,39 +8,42 @@ const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
-  documentation,
+  customServerDocumentationFragment,
 } = require('./packagist-base')
-const { NotFound } = require('..')
+const { NotFound, redirector } = require('..')
+
+const packageSchema = Joi.object()
+  .pattern(
+    /^/,
+    Joi.object({
+      version: Joi.string(),
+      extra: Joi.object({
+        'branch-alias': Joi.object().pattern(/^/, Joi.string()),
+      }),
+    }).required()
+  )
+  .required()
 
 const schema = Joi.object({
-  package: Joi.object({
-    versions: Joi.object()
-      .pattern(
-        /^/,
-        Joi.object({
-          version: Joi.string().required(),
-          extra: Joi.object({
-            'branch-alias': Joi.object().pattern(/^/, Joi.string()),
-          }),
-        })
-      )
-      .required(),
-  }).required(),
+  packages: Joi.object()
+    .pattern(/^/, packageSchema)
+    .required(),
 }).required()
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
+  include_prereleases: Joi.equal(''),
 }).required()
 
-module.exports = class PackagistVersion extends BasePackagistService {
+class PackagistVersion extends BasePackagistService {
   static get category() {
     return 'version'
   }
 
   static get route() {
     return {
-      base: 'packagist',
-      pattern: ':type(v|vpre)/:user/:repo',
+      base: 'packagist/v',
+      pattern: ':user/:repo',
       queryParamSchema,
     }
   }
@@ -49,7 +52,6 @@ module.exports = class PackagistVersion extends BasePackagistService {
     return [
       {
         title: 'Packagist Version',
-        pattern: 'v/:user/:repo',
         namedParams: {
           user: 'symfony',
           repo: 'symfony',
@@ -58,18 +60,17 @@ module.exports = class PackagistVersion extends BasePackagistService {
         keywords,
       },
       {
-        title: 'Packagist Pre Release Version',
-        pattern: 'vpre/:user/:repo',
+        title: 'Packagist Version (including pre-releases)',
         namedParams: {
           user: 'symfony',
           repo: 'symfony',
         },
+        queryParams: { include_prereleases: null },
         staticPreview: renderVersionBadge({ version: '4.3-dev' }),
         keywords,
       },
       {
         title: 'Packagist Version (custom server)',
-        pattern: 'v/:user/:repo',
         namedParams: {
           user: 'symfony',
           repo: 'symfony',
@@ -79,7 +80,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
         },
         staticPreview: renderVersionBadge({ version: '4.2.2' }),
         keywords,
-        documentation,
+        documentation: customServerDocumentationFragment,
       },
     ]
   }
@@ -97,8 +98,8 @@ module.exports = class PackagistVersion extends BasePackagistService {
     return renderVersionBadge({ version })
   }
 
-  transform({ type, json }) {
-    const versionsData = json.package.versions
+  transform({ includePrereleases, json, user, repo }) {
+    const versionsData = json.packages[this.getPackageName(user, repo)]
     let versions = Object.keys(versionsData)
     const aliasesMap = {}
     versions.forEach(version => {
@@ -122,7 +123,7 @@ module.exports = class PackagistVersion extends BasePackagistService {
 
     versions = versions.filter(version => !/^dev-/.test(version))
 
-    if (type === 'vpre') {
+    if (includePrereleases) {
       return { version: latest(versions) }
     } else {
       const stableVersion = latest(versions.filter(isStable))
@@ -130,14 +131,28 @@ module.exports = class PackagistVersion extends BasePackagistService {
     }
   }
 
-  async handle({ type, user, repo }, { server }) {
+  async handle({ user, repo }, { include_prereleases, server }) {
+    const includePrereleases = include_prereleases !== undefined
     const json = await this.fetch({
       user,
       repo,
-      schema: type === 'v' ? allVersionsSchema : schema,
+      schema: includePrereleases ? schema : allVersionsSchema,
       server,
     })
-    const { version } = this.transform({ type, json })
+    const { version } = this.transform({ includePrereleases, json, user, repo })
     return this.constructor.render({ version })
   }
 }
+
+const PackagistVersionRedirector = redirector({
+  category: 'version',
+  route: {
+    base: 'packagist/vpre',
+    pattern: ':user/:repo',
+  },
+  transformPath: ({ user, repo }) => `/packagist/v/${user}/${repo}`,
+  transformQueryParams: params => ({ include_prereleases: null }),
+  dateAdded: new Date('2019-12-15'),
+})
+
+module.exports = { PackagistVersion, PackagistVersionRedirector }
