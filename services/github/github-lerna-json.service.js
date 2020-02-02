@@ -8,17 +8,17 @@ const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 
 const versionSchema = Joi.object({
-  version: semver,
+  version: Joi.alternatives().try(semver, Joi.equal('independent').required()),
 }).required()
 
-module.exports = class Lerna extends ConditionalGithubAuthV3Service {
+module.exports = class GithubLernaJson extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'version'
   }
 
   static get route() {
     return {
-      base: 'github/lerna',
+      base: 'github/lerna-json/v',
       pattern: ':user/:repo/:branch*',
     }
   }
