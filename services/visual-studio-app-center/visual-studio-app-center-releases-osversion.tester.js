@@ -12,8 +12,8 @@ t.create('[fixed] Example Release')
     '/jct/test-fixed-android-react/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json'
   )
   .expectBadge({
-    label: 'min version',
-    message: 'Android 4.1',
+    label: 'android',
+    message: '4.1+',
   })
 
 t.create('Valid user, invalid project, valid API token')

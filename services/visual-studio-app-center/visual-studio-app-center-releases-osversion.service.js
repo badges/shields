@@ -49,7 +49,8 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends BaseVisual
 
   static render({ app_os, min_os }) {
     return {
-      message: `${app_os} ${min_os}`,
+      label: `${app_os.toLowerCase()}`,
+      message: `${min_os}+`,
     }
   }
 
