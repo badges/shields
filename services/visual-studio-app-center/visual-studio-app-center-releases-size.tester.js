@@ -3,7 +3,7 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isFileSize } = require('../test-validators')
 
-t.create('8368844 bytes to 7.98 mebibytes')
+t.create('8368844 bytes to 8.37 megabytes')
   .get('/nock/nock/nock.json')
   .intercept(nock =>
     nock('https://api.appcenter.ms/v0.1/apps/')
@@ -14,7 +14,7 @@ t.create('8368844 bytes to 7.98 mebibytes')
   )
   .expectBadge({
     label: 'size',
-    message: '7.98 MB',
+    message: '8.37 MB',
   })
 
 t.create('Valid Release')

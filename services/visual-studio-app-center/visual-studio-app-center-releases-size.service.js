@@ -50,8 +50,7 @@ module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudi
 
   static render({ size }) {
     return {
-      // AppCenter displays in mebibytes.
-      message: prettyBytes(size / 1.048576),
+      message: prettyBytes(size),
     }
   }
 
