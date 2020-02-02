@@ -19,7 +19,7 @@ const schema = Joi.object({
               }).required(),
             }).required(),
           }).required(),
-        }).required(),
+        }),
       })
     )
     .required(),

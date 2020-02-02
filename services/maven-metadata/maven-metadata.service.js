@@ -14,9 +14,7 @@ const schema = Joi.object({
     versioning: Joi.object({
       versions: Joi.object({
         version: Joi.array()
-          .items(
-            Joi.alternatives(Joi.string().required(), Joi.number().required())
-          )
+          .items(Joi.string().required())
           .single()
           .required(),
       }).required(),
@@ -44,7 +42,7 @@ module.exports = class MavenMetadata extends BaseXmlService {
         namedParams: {},
         queryParams: {
           metadataUrl:
-            'http://central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
+            'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
         },
         staticPreview: renderVersionBadge({ version: '2.8.5' }),
       },
@@ -56,7 +54,11 @@ module.exports = class MavenMetadata extends BaseXmlService {
   }
 
   async fetch({ metadataUrl }) {
-    return this._requestXml({ schema, url: metadataUrl })
+    return this._requestXml({
+      schema,
+      url: metadataUrl,
+      parserOptions: { parseNodeValue: false },
+    })
   }
 
   async handle(_namedParams, { metadataUrl }) {

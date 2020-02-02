@@ -5,21 +5,21 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { data } = require('./lgtm-test-helpers')
 
 t.create('alerts: total alerts for a project')
-  .get('/g/apache/cloudstack.json')
+  .get('/github/apache/cloudstack.json')
   .expectBadge({
     label: 'lgtm',
     message: Joi.string().regex(/^[0-9kM.]+ alerts?$/),
   })
 
 t.create('alerts: missing project')
-  .get('/g/some-org/this-project-doesnt-exist.json')
+  .get('/github/some-org/this-project-doesnt-exist.json')
   .expectBadge({
     label: 'lgtm',
     message: 'project not found',
   })
 
 t.create('alerts: no alerts')
-  .get('/g/apache/cloudstack.json')
+  .get('/github/apache/cloudstack.json')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
@@ -28,7 +28,7 @@ t.create('alerts: no alerts')
   .expectBadge({ label: 'lgtm', message: '0 alerts' })
 
 t.create('alerts: single alert')
-  .get('/g/apache/cloudstack.json')
+  .get('/github/apache/cloudstack.json')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
@@ -37,7 +37,7 @@ t.create('alerts: single alert')
   .expectBadge({ label: 'lgtm', message: '1 alert' })
 
 t.create('alerts: multiple alerts')
-  .get('/g/apache/cloudstack.json')
+  .get('/github/apache/cloudstack.json')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')
@@ -46,7 +46,7 @@ t.create('alerts: multiple alerts')
   .expectBadge({ label: 'lgtm', message: '123 alerts' })
 
 t.create('alerts: json missing alerts')
-  .get('/g/apache/cloudstack.json')
+  .get('/github/apache/cloudstack.json')
   .intercept(nock =>
     nock('https://lgtm.com')
       .get('/api/v0.1/project/g/apache/cloudstack/details')

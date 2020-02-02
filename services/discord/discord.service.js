@@ -1,13 +1,28 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const discordSchema = Joi.object({
-  members: Joi.array()
-    .allow(null)
-    .required(),
+  presence_count: nonNegativeInteger,
 }).required()
+
+const documentation = `
+<p>
+  The Discord badge requires the <code>SERVER ID</code> in order access the Discord JSON API.
+</p>
+<p>
+  The <code>SERVER ID</code> can be located in the url of the channel that the badge is accessing.
+</p>
+<img
+  src="https://user-images.githubusercontent.com/6025893/39329897-b08f8290-4997-11e8-8f8f-7b85ff61882f.png"
+  alt="SERVER ID is after the channel part at the end of the url" />
+<p>
+  To use the Discord badge a Discord server admin must enable the widget setting on the server.
+</p>
+<iframe src="https://player.vimeo.com/video/364220040" width="640" height="210" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+`
 
 module.exports = class Discord extends BaseJsonService {
   static get category() {
@@ -27,6 +42,7 @@ module.exports = class Discord extends BaseJsonService {
         title: 'Discord',
         namedParams: { serverId: '102860784329052160' },
         staticPreview: this.render({ members: 23 }),
+        documentation,
       },
     ]
   }
@@ -60,7 +76,6 @@ module.exports = class Discord extends BaseJsonService {
 
   async handle({ serverId }) {
     const data = await this.fetch({ serverId })
-    const members = Array.isArray(data.members) ? data.members : []
-    return this.constructor.render({ members: members.length })
+    return this.constructor.render({ members: data.presence_count })
   }
 }

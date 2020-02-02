@@ -104,13 +104,8 @@ There are three places to get help:
 
 ## Badge URLs
 
-- The format of new badges should be of the form
-  `/SERVICE/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
-  `/gitter/room/nwjs/nw.js.svg`. The vendor is gitter, the
-  badge is for rooms, the parameter is nwjs/nw.js, and the format is svg.
-- For services which require a hostname, the badge should be of the form
-  `/SERVICE/SCHEME/HOST/NOUN/PARAMETERS/QUALIFIERS.format`. For instance,
-  `/discourse/https/discourse.example.com/topics.svg`.
+- The format of new badges should be of the form `/SERVICE/NOUN/PARAMETERS`.
+- There is further documentation on this in [badge-urls](https://github.com/badges/shields/blob/master/doc/badge-urls.md)
 
 ## Coding guidelines
 

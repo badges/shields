@@ -128,9 +128,6 @@ t.create('Plugin Tested WP Version | Not Found')
     message: 'not found',
   })
 
-t.create('Plugin Tested WP Version (Alias) | Not Found')
-  .get('/v/100.json')
-  .expectBadge({
-    label: 'wordpress',
-    message: 'not found',
-  })
+t.create('Plugin Tested WP Version (Alias)')
+  .get('/v/100.svg')
+  .expectRedirect('/wordpress/plugin/tested/100.svg')

@@ -1,8 +1,11 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { expect } = require('chai')
+const chai = require('chai')
+const { expect } = chai
 const sinon = require('sinon')
+const prometheus = require('prom-client')
+const PrometheusMetrics = require('../server/prometheus-metrics')
 const trace = require('./trace')
 const {
   NotFound,
@@ -12,8 +15,9 @@ const {
   Deprecated,
 } = require('./errors')
 const BaseService = require('./base')
-
+const { MetricHelper, MetricNames } = require('./metric-helper')
 require('../register-chai-plugins.spec')
+chai.use(require('chai-as-promised'))
 
 const queryParamSchema = Joi.object({
   queryParamA: Joi.string(),
@@ -63,6 +67,12 @@ class DummyService extends BaseService {
   }
 }
 
+class DummyServiceWithServiceResponseSizeMetricEnabled extends DummyService {
+  static get enabledMetrics() {
+    return [MetricNames.SERVICE_RESPONSE_SIZE]
+  }
+}
+
 describe('BaseService', function() {
   const defaultConfig = { handleInternalErrors: false, private: {} }
 
@@ -97,17 +107,14 @@ describe('BaseService', function() {
   describe('Required overrides', function() {
     it('Should throw if render() is not overridden', function() {
       expect(() => BaseService.render()).to.throw(
-        'render() function not implemented for BaseService'
+        /^render\(\) function not implemented for BaseService$/
       )
     })
 
-    it('Should throw if route is not overridden', async function() {
-      try {
-        await BaseService.invoke({}, {}, {})
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.message).to.equal('Route not defined for BaseService')
-      }
+    it('Should throw if route is not overridden', function() {
+      return expect(BaseService.invoke({}, {}, {})).to.be.rejectedWith(
+        /^Route not defined for BaseService$/
+      )
     })
 
     class WithRoute extends BaseService {
@@ -115,18 +122,15 @@ describe('BaseService', function() {
         return {}
       }
     }
-    it('Should throw if handle() is not overridden', async function() {
-      try {
-        await WithRoute.invoke({}, {}, {})
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.message).to.equal('Handler not implemented for WithRoute')
-      }
+    it('Should throw if handle() is not overridden', function() {
+      return expect(WithRoute.invoke({}, {}, {})).to.be.rejectedWith(
+        /^Handler not implemented for WithRoute$/
+      )
     })
 
     it('Should throw if category is not overridden', function() {
       expect(() => BaseService.category).to.throw(
-        'Category not set for BaseService'
+        /^Category not set for BaseService$/
       )
     })
   })
@@ -192,7 +196,7 @@ describe('BaseService', function() {
       })
     })
 
-    it('Throws a validation error on invalid data', async function() {
+    context('On invalid data', function() {
       class ThrowingService extends DummyService {
         async handle() {
           return {
@@ -200,19 +204,37 @@ describe('BaseService', function() {
           }
         }
       }
-      try {
-        await ThrowingService.invoke(
-          {},
-          { handleInternalErrors: false },
-          { namedParamA: 'bar.bar.bar' }
-        )
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e.name).to.equal('ValidationError')
-        expect(e.details.map(({ message }) => message)).to.deep.equal([
-          '"message" is required',
-        ])
-      }
+
+      it('Throws a validation error on invalid data', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.name).to.equal('ValidationError')
+          expect(e.details.map(({ message }) => message)).to.deep.equal([
+            '"message" is required',
+          ])
+        }
+      })
+
+      // Ensure debuggabillity.
+      // https://github.com/badges/shields/issues/3784
+      it('Includes the service class in the stack trace', async function() {
+        try {
+          await ThrowingService.invoke(
+            {},
+            { handleInternalErrors: false },
+            { namedParamA: 'bar.bar.bar' }
+          )
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e.stack).to.include('ThrowingService._validateServiceData')
+        }
+      })
     })
   })
 
@@ -316,7 +338,9 @@ describe('BaseService', function() {
   })
 
   describe('ScoutCamp integration', function() {
-    const expectedRouteRegex = /^\/foo\/([^/]+?)(|\.svg|\.json)$/
+    // TODO Strangly, without the useless escape the regexes do not match in Node 12.
+    // eslint-disable-next-line no-useless-escape
+    const expectedRouteRegex = /^\/foo\/([^\/]+?)(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -407,16 +431,15 @@ describe('BaseService', function() {
       requiredString: Joi.string().required(),
     }).required()
 
-    it('throws error for invalid responses', async function() {
-      try {
+    it('throws error for invalid responses', function() {
+      expect(() =>
         DummyService._validate(
           { requiredString: ['this', "shouldn't", 'work'] },
           dummySchema
         )
-        expect.fail('Expected to throw')
-      } catch (e) {
-        expect(e).to.be.an.instanceof(InvalidResponse)
-      }
+      )
+        .to.throw()
+        .instanceof(InvalidResponse)
     })
   })
 
@@ -483,6 +506,59 @@ describe('BaseService', function() {
     })
   })
 
+  describe('Metrics', function() {
+    let register
+    beforeEach(function() {
+      register = new prometheus.Registry()
+    })
+    const url = 'some-url'
+
+    it('service response size metric is optional', async function() {
+      const metricHelper = MetricHelper.create({
+        metricInstance: new PrometheusMetrics({ register }),
+        ServiceClass: DummyServiceWithServiceResponseSizeMetricEnabled,
+      })
+      const sendAndCacheRequest = async () => ({
+        buffer: 'x'.repeat(65536 + 1),
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyServiceWithServiceResponseSizeMetricEnabled(
+        { sendAndCacheRequest, metricHelper },
+        defaultConfig
+      )
+
+      await serviceInstance._request({ url })
+
+      expect(register.getSingleMetricAsString('service_response_bytes'))
+        .to.contain(
+          'service_response_bytes_bucket{le="65536",category="other",family="undefined",service="dummy_service_with_service_response_size_metric_enabled"} 0\n'
+        )
+        .and.to.contain(
+          'service_response_bytes_bucket{le="131072",category="other",family="undefined",service="dummy_service_with_service_response_size_metric_enabled"} 1\n'
+        )
+    })
+
+    it('service response size metric is disabled by default', async function() {
+      const metricHelper = MetricHelper.create({
+        metricInstance: new PrometheusMetrics({ register }),
+        ServiceClass: DummyService,
+      })
+      const sendAndCacheRequest = async () => ({
+        buffer: 'x',
+        res: { statusCode: 200 },
+      })
+      const serviceInstance = new DummyService(
+        { sendAndCacheRequest, metricHelper },
+        defaultConfig
+      )
+
+      await serviceInstance._request({ url })
+
+      expect(
+        register.getSingleMetricAsString('service_response_bytes')
+      ).to.not.contain('service_response_bytes_bucket')
+    })
+  })
   describe('auth', function() {
     class AuthService extends DummyService {
       static get auth() {

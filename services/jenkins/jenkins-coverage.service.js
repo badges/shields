@@ -21,6 +21,7 @@ const formatMap = {
     }).required(),
     treeQueryParam: 'instructionCoverage[percentage]',
     transform: json => ({ coverage: json.instructionCoverage.percentage }),
+    pluginSpecificPath: 'jacoco',
   },
   cobertura: {
     schema: Joi.object({
@@ -47,8 +48,47 @@ const formatMap = {
       )
       return { coverage: lineCoverage.ratio }
     },
+    pluginSpecificPath: 'cobertura',
+  },
+  api: {
+    schema: Joi.object({
+      results: Joi.object({
+        elements: Joi.array()
+          .items(
+            Joi.object({
+              name: Joi.string().required(),
+              ratio: Joi.number()
+                .min(0)
+                .max(100)
+                .required(),
+            })
+          )
+          .has(Joi.object({ name: 'Line' }))
+          .min(1)
+          .required(),
+      }).required(),
+    }).required(),
+    treeQueryParam: 'results[elements[name,ratio]]',
+    transform: json => {
+      const lineCoverage = json.results.elements.find(
+        element => element.name === 'Line'
+      )
+      return { coverage: lineCoverage.ratio }
+    },
+    pluginSpecificPath: 'coverage/result',
   },
 }
+
+const documentation = `
+<p>
+  We support coverage metrics from a variety of Jenkins plugins:
+  <ul>
+    <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
+    <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
+    <li>Any plugin which integrates with the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
+  </ul>
+</p>
+`
 
 module.exports = class JenkinsCoverage extends JenkinsBase {
   static get category() {
@@ -58,7 +98,7 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
   static get route() {
     return {
       base: 'jenkins/coverage',
-      pattern: ':format(jacoco|cobertura)/:protocol(http|https)/:host/:job+',
+      pattern: ':format(jacoco|cobertura|api)',
       queryParamSchema,
     }
   }
@@ -69,12 +109,13 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
         title: 'Jenkins Coverage',
         namedParams: {
           format: 'cobertura',
-          protocol: 'https',
-          host: 'jenkins.sqlalchemy.org',
-          job: 'job/alembic_coverage',
         },
-        keywords: ['jacoco', 'cobertura'],
+        queryParams: {
+          jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+        },
+        keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
         staticPreview: this.render({ coverage: 95 }),
+        documentation,
       },
     ]
   }
@@ -90,10 +131,12 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
     }
   }
 
-  async handle({ format, protocol, host, job }, { disableStrictSSL }) {
-    const { schema, transform, treeQueryParam } = formatMap[format]
+  async handle({ format }, { jobUrl, disableStrictSSL }) {
+    const { schema, transform, treeQueryParam, pluginSpecificPath } = formatMap[
+      format
+    ]
     const json = await this.fetch({
-      url: buildUrl({ protocol, host, job, plugin: format }),
+      url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
       schema,
       qs: buildTreeParamQueryString(treeQueryParam),
       disableStrictSSL,
