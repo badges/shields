@@ -10,7 +10,7 @@ const {
 } = require('./visual-studio-app-center-base')
 
 const schema = Joi.object({
-  size: nonNegativeInteger.required(),
+  size: nonNegativeInteger,
 }).required()
 
 module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
