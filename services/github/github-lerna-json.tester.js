@@ -6,14 +6,14 @@ const t = (module.exports = require('../tester').createServiceTester())
 t.create('Lerna version')
   .get('/babel/babel.json')
   .expectBadge({
-    label: 'version',
+    label: 'lerna',
     message: isSemver,
   })
 
 t.create('Lerna version (independent)')
   .get('/jneander/jneander.json')
   .expectBadge({
-    label: 'version',
+    label: 'lerna',
     message: 'independent',
   })
 
@@ -27,6 +27,6 @@ t.create('Lerna version (branch)')
 t.create('Lerna version (lerna.json missing)')
   .get('/PyvesB/empty-repo.json')
   .expectBadge({
-    label: 'version',
+    label: 'lerna',
     message: 'repo not found, branch not found, or lerna.json missing',
   })

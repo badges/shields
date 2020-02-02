@@ -44,6 +44,12 @@ module.exports = class GithubLernaJson extends ConditionalGithubAuthV3Service {
       },
     ]
   }
+  
+  static get defaultBadgeData() {
+    return {
+      label: 'lerna'
+    }
+  }
 
   static render({ version, branch }) {
     return renderVersionBadge({
