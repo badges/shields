@@ -1,15 +1,22 @@
 'use strict'
 
 const t = (module.exports = require('../tester').createServiceTester())
-const { isBuildStatus } = require('../build-status')
 
+// Mocked response rather than real data as old builds are deleted after some time.
 t.create('Valid Build')
-  .get(
-    '/jct/test-fixed-succeeding/master/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json'
+  .get('/nock/nock/master/token.json')
+  .intercept(nock =>
+    nock('https://api.appcenter.ms/v0.1/apps/')
+      .get('/nock/nock/branches/master/builds')
+      .reply(200, [
+        {
+          result: 'succeeded',
+        },
+      ])
   )
   .expectBadge({
     label: 'build',
-    message: isBuildStatus,
+    message: 'passing',
   })
 
 t.create('Invalid Branch')
