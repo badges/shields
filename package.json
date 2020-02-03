@@ -58,7 +58,7 @@
     "prom-client": "^11.5.3",
     "query-string": "^6.10.1",
     "request": "~2.88.0",
-    "semver": "~7.1.1",
+    "semver": "~7.1.2",
     "simple-icons": "2.3.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
@@ -144,11 +144,11 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
     "@babel/register": "7.8.3",
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.2.7",
