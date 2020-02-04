@@ -46,7 +46,7 @@ t.create('Nexus 2 - search snapshot version of an nonexistent artifact')
 
 t.create('Nexus 2 - repository version')
   .get(
-    '/public/checkstyle/checkstyle.json?server=https://repo.fusesource.com/nexus'
+    '/public/asm/asm.json?server=http://repo.e-iceblue.com/nexus'
   )
   .expectBadge({
     label: 'nexus',
