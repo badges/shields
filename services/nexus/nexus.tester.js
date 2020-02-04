@@ -45,9 +45,8 @@ t.create('Nexus 2 - search snapshot version of an nonexistent artifact')
   })
 
 t.create('Nexus 2 - repository version')
-  .timeout(15000)
   .get(
-    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
+    '/public/checkstyle/checkstyle.json?server=https://repo.fusesource.com/nexus'
   )
   .expectBadge({
     label: 'nexus',
