@@ -18,6 +18,7 @@ const colorMap = {
   D: 'orange',
   'D-': 'orange',
   F: 'red',
+  '-': 'lightgrey',
 }
 
 const isValidGrade = Joi.valid(...Object.keys(colorMap)).required()
