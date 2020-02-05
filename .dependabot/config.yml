@@ -54,6 +54,9 @@ update_configs:
       - match:
           dependency_name: start-server-and-test
           version_requirement: '>=10.0.8'
+      - match:
+          dependency_name: mkdirp
+          version_requirement: '>=1.0.4'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'
