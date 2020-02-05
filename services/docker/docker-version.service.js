@@ -90,41 +90,43 @@ module.exports = class DockerVersion extends BaseJsonService {
     })
   }
 
-  async transform({ user, repo, tag, data }, { sort }) {
-    let version = ''
+  async transform({ tag, sort, data, pagedData }) {
+    let version
 
     if (!tag && sort === 'date') {
       version = data.results[0].name
-      if (version === 'latest') {
-        const { digest } = data.results[0].images.find(
-          i => i.architecture === 'amd64'
-        ) // Digest is the unique field that we utilise to match images
-        data = await getMultiPageData({
-          user,
-          repo,
-          fetch: this.fetch.bind(this),
-        })
-        version = getDigestSemVerMatches({ data, digest })
+      if (version !== 'latest') {
+        return { version }
       }
+      const { digest } = data.results[0].images.find(
+        i => i.architecture === 'amd64'
+      ) // Digest is the unique field that we utilise to match images
+      return { version: getDigestSemVerMatches({ data: pagedData, digest }) }
     } else if (!tag && sort === 'semver') {
       const matches = data.map(d => d.name)
-      version = latest(matches)
+      return { version: latest(matches) }
     } else {
       version = data.find(d => d.name === tag)
       if (!version) {
         throw new NotFound({ prettyMessage: 'no tags found' })
       }
       const { digest } = version.images.find(i => i.architecture === 'amd64')
-      version = getDigestSemVerMatches({ data, digest })
+      return { version: getDigestSemVerMatches({ data, digest }) }
     }
-    return version
   }
 
   async handle({ user, repo, tag }, { sort }) {
-    let data = []
+    let data, pagedData
 
     if (!tag && sort === 'date') {
       data = await this.fetch({ user, repo })
+      if (data.results[0].name === 'latest') {
+        pagedData = await getMultiPageData({
+          user,
+          repo,
+          fetch: this.fetch.bind(this),
+        })
+      }
     } else {
       data = await getMultiPageData({
         user,
@@ -133,7 +135,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       })
     }
 
-    const version = await this.transform({ user, repo, tag, data }, { sort })
+    const { version } = await this.transform({ tag, sort, data, pagedData })
     return this.constructor.render({ version })
   }
 }
