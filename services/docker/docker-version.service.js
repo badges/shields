@@ -90,7 +90,7 @@ module.exports = class DockerVersion extends BaseJsonService {
     })
   }
 
-  async transform({ tag, sort, data, pagedData }) {
+  transform({ tag, sort, data, pagedData }) {
     let version
 
     if (!tag && sort === 'date') {
