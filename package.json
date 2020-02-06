@@ -156,7 +156,7 @@
     "@types/enzyme": "^3.10.4",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.groupby": "^4.6.6",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.5.0",
     "@types/react-helmet": "^5.0.15",
     "@types/react-modal": "^3.10.4",
