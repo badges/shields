@@ -42,7 +42,7 @@
     "gh-badges": "file:gh-badges",
     "glob": "^7.1.6",
     "graphql": "^14.6.0",
-    "graphql-tag": "^2.10.1",
+    "graphql-tag": "^2.10.3",
     "ioredis": "4.14.1",
     "joi-extension-semver": "4.0.0",
     "js-yaml": "^3.13.1",
