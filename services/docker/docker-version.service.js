@@ -41,7 +41,7 @@ module.exports = class DockerVersion extends BaseJsonService {
   }
 
   static get route() {
-    return { ...buildDockerUrl('version', true), queryParamSchema }
+    return { ...buildDockerUrl('v', true), queryParamSchema }
   }
 
   static get examples() {
