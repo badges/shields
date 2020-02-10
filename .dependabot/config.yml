@@ -53,7 +53,7 @@ update_configs:
           version_requirement: '>=21.0.0'
       - match:
           dependency_name: start-server-and-test
-          version_requirement: '>=10.0.8'
+          version_requirement: '>=1.10.8'
       - match:
           dependency_name: mkdirp
           version_requirement: '>=1.0.4'
