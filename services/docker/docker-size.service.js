@@ -3,12 +3,35 @@
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
-const { buildDockerUrl, getDockerHubUser } = require('./docker-helpers')
+const { latest } = require('../version')
+const {
+  buildDockerUrl,
+  getDockerHubUser,
+  getMultiPageData,
+} = require('./docker-helpers')
 const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
   full_size: nonNegativeInteger.required(),
+}).required()
+
+const pagedSchema = Joi.object({
+  count: nonNegativeInteger.required(),
+  results: Joi.array()
+    .items(
+      Joi.object({
+        name: Joi.string().required(),
+        full_size: nonNegativeInteger.required(),
+      }).required()
+    )
+    .required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  sort: Joi.string()
+    .valid('date', 'semver')
+    .default('date'),
 }).required()
 
 module.exports = class DockerSize extends BaseJsonService {
@@ -17,16 +40,23 @@ module.exports = class DockerSize extends BaseJsonService {
   }
 
   static get route() {
-    return buildDockerUrl('image-size', true)
+    return { ...buildDockerUrl('image-size', true), queryParamSchema }
   }
 
   static get examples() {
     return [
       {
-        title: 'Docker Image Size',
+        title: 'Docker Image Size (latest by date)',
         pattern: ':user/:repo',
         namedParams: { user: 'fedora', repo: 'apache' },
-        staticPreview: this.render({ size: 126000000 }),
+        staticPreview: this.render({ size: 126000000, sort: 'date' }),
+      },
+      {
+        title: 'Docker Image Size (latest SemVer)',
+        pattern: ':user/:repo',
+        namedParams: { user: 'fedora', repo: 'apache' },
+        queryParams: { sort: 'semver' },
+        staticPreview: this.render({ size: 136000000 }),
       },
       {
         title: 'Docker Image Size (tag)',
@@ -48,18 +78,54 @@ module.exports = class DockerSize extends BaseJsonService {
     return { message: prettyBytes(size) }
   }
 
-  async fetch({ user, repo, tag }) {
+  async fetch({ user, repo, tag, page }) {
+    page = page ? `&page=${page}` : ''
     return this._requestJson({
-      schema: buildSchema,
+      schema: tag ? buildSchema : pagedSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
-      )}/${repo}/tags/${tag}`,
+      )}/${repo}/tags${
+        tag ? `/${tag}` : '?page_size=100&ordering=last_updated'
+      }${page}`,
       errorMessages: { 404: 'image or tag not found' },
     })
   }
 
-  async handle({ user, repo, tag = 'latest' }) {
-    const data = await this.fetch({ user, repo, tag })
-    return this.constructor.render({ size: data.full_size })
+  transform({ tag, sort, data }) {
+    if (!tag && sort === 'date') {
+      return { size: data.results[0].full_size }
+    } else if (!tag && sort === 'semver') {
+      const [matches, versions] = data.reduce(
+        ([m, v], d) => {
+          m.push({ name: d.name, size: d.full_size })
+          v.push(d.name)
+          return [m, v]
+        },
+        [[], []]
+      )
+      const version = latest(versions)
+      return { size: matches.find(m => m.name === version).size }
+    } else {
+      return { size: data.full_size }
+    }
+  }
+
+  async handle({ user, repo, tag }, { sort }) {
+    let data
+
+    if (!tag && sort === 'date') {
+      data = await this.fetch({ user, repo })
+    } else if (!tag && sort === 'semver') {
+      data = await getMultiPageData({
+        user,
+        repo,
+        fetch: this.fetch.bind(this),
+      })
+    } else {
+      data = await this.fetch({ user, repo, tag })
+    }
+
+    const { size } = await this.transform({ tag, sort, data })
+    return this.constructor.render({ size })
   }
 }

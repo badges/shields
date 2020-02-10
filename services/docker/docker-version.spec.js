@@ -3,10 +3,10 @@
 const { test, given } = require('sazerac')
 const DockerVersion = require('./docker-version.service')
 const {
-  dataNoTagDateSort,
-  pagedDataNoTagDateSort,
-  dataNoTagSemVerSort,
-  dataWithTag,
+  versionDataNoTagDateSort,
+  versionPagedDataNoTagDateSort,
+  versionDataNoTagSemVerSort,
+  versionDataWithTag,
 } = require('./docker-fixtures')
 
 describe('DockerVersion', function() {
@@ -28,21 +28,21 @@ describe('DockerVersion', function() {
     given({
       tag: '',
       sort: 'date',
-      data: dataNoTagDateSort,
-      pagedData: pagedDataNoTagDateSort,
+      data: versionDataNoTagDateSort,
+      pagedData: versionPagedDataNoTagDateSort,
     }).expect({
       version: 'amd64-latest',
     })
     given({
       tag: '',
       sort: 'semver',
-      data: dataNoTagSemVerSort,
+      data: versionDataNoTagSemVerSort,
     }).expect({
       version: '3.11.3',
     })
     given({
       tag: '3.10',
-      data: dataWithTag,
+      data: versionDataWithTag,
     }).expect({
       version: '3.10.4',
     })

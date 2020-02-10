@@ -1,6 +1,75 @@
 'use strict'
 
-const dataNoTagDateSort = {
+const sizeDataNoTagSemVerSort = [
+  { name: 'master', full_size: 13449470 },
+  { name: 'feature-smtps-support', full_size: 13449638 },
+  { name: 'latest', full_size: 13448411 },
+  { name: '4', full_size: 13448411 },
+  { name: '4.3', full_size: 13448411 },
+  { name: '4.3.0', full_size: 13448411 },
+  { name: '4.2', full_size: 13443674 },
+  { name: '4.2.0', full_size: 13443674 },
+  { name: '4.1', full_size: 19244435 },
+  { name: '4.1.0', full_size: 19244435 },
+  { name: 'v4.0.0-alpha2', full_size: 10933605 },
+  { name: 'v4.0.0-alpha1', full_size: 10933644 },
+  { name: '4.0.0', full_size: 11512227 },
+  { name: '4.0', full_size: 11512227 },
+  { name: 'v2.1.9', full_size: 29739490 },
+  { name: 'v2.1.10', full_size: 29739842 },
+  { name: 'v3.0.0', full_size: 32882980 },
+  { name: 'v3.0.1', full_size: 32880923 },
+  { name: 'v3.1.0', full_size: 32441549 },
+  { name: 'v3.1.1', full_size: 32441767 },
+  { name: 'v3.1.2', full_size: 32442741 },
+  { name: 'v3.1.3', full_size: 32442629 },
+  { name: 'v3.1.4', full_size: 32478607 },
+  { name: 'v3.2.0', full_size: 33489914 },
+  { name: 'v3.3.0', full_size: 33628545 },
+  { name: 'v3.3.1', full_size: 33629018 },
+  { name: 'v3.3.3', full_size: 33628988 },
+  { name: 'v3.3.4', full_size: 33629019 },
+  { name: 'v3.3.6', full_size: 33628753 },
+  { name: 'v3.3.7', full_size: 33629556 },
+  { name: 'v3.3.8', full_size: 33644261 },
+  { name: 'v3.3.9', full_size: 33644175 },
+  { name: 'v3.3.10', full_size: 33644406 },
+  { name: 'v3.3.11', full_size: 33644430 },
+  { name: 'v3.3.12', full_size: 33644703 },
+  { name: 'v3.3.13', full_size: 33644377 },
+  { name: 'v3.3.15', full_size: 33644581 },
+  { name: 'v3.3.16', full_size: 33644663 },
+  { name: 'v3.3.17', full_size: 33644228 },
+  { name: 'v3.3.18', full_size: 33644466 },
+  { name: 'v3.3.19', full_size: 33644724 },
+  { name: 'v3.4.0', full_size: 34918552 },
+  { name: 'v3.4.2', full_size: 33605129 },
+  { name: 'v3.5.0', full_size: 33582915 },
+  { name: 'v3.6.0', full_size: 34789944 },
+  { name: 'develop', full_size: 38129308 },
+  { name: 'v3.7.0', full_size: 38179583 },
+  { name: 'v3.7.1', full_size: 38614944 },
+  { name: 'v3.8.0', full_size: 42962384 },
+  { name: 'v3.8.1', full_size: 40000713 },
+  { name: 'v3.8.2', full_size: 40000567 },
+  { name: 'v3.8.3', full_size: 40040963 },
+  { name: 'v3.9.0', full_size: 40044357 },
+  { name: 'v3.9.1', full_size: 40048123 },
+  { name: 'v3.9.2', full_size: 40047663 },
+  { name: 'v3.9.3', full_size: 40048204 },
+  { name: 'v3.9.4', full_size: 40049571 },
+  { name: 'v3.9.5', full_size: 40049695 },
+  { name: 'v3.10.0', full_size: 39940736 },
+  { name: 'v3.11.0', full_size: 39928170 },
+  { name: 'v3.12.0', full_size: 39966770 },
+  { name: 'v3.13.0', full_size: 38556045 },
+  { name: 'v3.14.0', full_size: 38574008 },
+  { name: 'v3.15.0', full_size: 38578507 },
+  { name: 'v3.16.0', full_size: 38852598 },
+  { name: 'v3.16.1', full_size: 38851702 },
+  { name: 'v3.16.2', full_size: 38969822 },
+]
+const versionDataNoTagDateSort = {
   count: 4,
   results: [
     {
@@ -55,7 +124,7 @@ const dataNoTagDateSort = {
     },
   ],
 }
-const pagedDataNoTagDateSort = [
+const versionPagedDataNoTagDateSort = [
   {
     name: 'latest',
     images: [
@@ -107,7 +176,7 @@ const pagedDataNoTagDateSort = [
     ],
   },
 ]
-const dataNoTagSemVerSort = [
+const versionDataNoTagSemVerSort = [
   {
     name: '3.9.5',
     images: [
@@ -1486,7 +1555,7 @@ const dataNoTagSemVerSort = [
   { name: '2.7', images: [] },
   { name: '2.6', images: [] },
 ]
-const dataWithTag = [
+const versionDataWithTag = [
   {
     name: '3.9.5',
     images: [
@@ -2867,8 +2936,9 @@ const dataWithTag = [
 ]
 
 module.exports = {
-  dataNoTagDateSort,
-  pagedDataNoTagDateSort,
-  dataNoTagSemVerSort,
-  dataWithTag,
+  sizeDataNoTagSemVerSort,
+  versionDataNoTagDateSort,
+  versionPagedDataNoTagDateSort,
+  versionDataNoTagSemVerSort,
+  versionDataWithTag,
 }
