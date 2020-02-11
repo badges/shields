@@ -35,7 +35,7 @@ t.create('docker version (invalid, incorrect tag)')
   .get('/_/alpine/wrong-tag.json')
   .expectBadge({
     label: 'version',
-    message: 'no tags found',
+    message: 'tag not found',
   })
 
 t.create('docker version (invalid, unknown repository)')

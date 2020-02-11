@@ -35,7 +35,7 @@ t.create('docker image size (invalid, incorrect tag)')
   .get('/_/alpine/wrong-tag.json')
   .expectBadge({
     label: 'image size',
-    message: 'image or tag not found',
+    message: 'repository or tag not found',
   })
 
 t.create('docker image size (invalid, unknown repository)')

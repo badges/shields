@@ -85,7 +85,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-      errorMessages: { 404: 'image or tag not found' },
+      errorMessages: { 404: 'repository or tag not found' },
     })
   }
 
@@ -107,7 +107,7 @@ module.exports = class DockerVersion extends BaseJsonService {
     } else {
       version = data.find(d => d.name === tag)
       if (!version) {
-        throw new NotFound({ prettyMessage: 'no tags found' })
+        throw new NotFound({ prettyMessage: 'tag not found' })
       }
       const { digest } = version.images.find(i => i.architecture === 'amd64')
       return { version: getDigestSemVerMatches({ data, digest }) }
