@@ -10,7 +10,9 @@ function promClientJsonToInflux(metrics) {
               .map(labelEntry => `${labelEntry[0]}=${labelEntry[1]}`)
               .toString()}`
       const optionalTimestamp = value.timestamp ? ` ${value.timestamp}` : ''
-      return `${metric.name}${optionalTags} value=${value.value}${optionalTimestamp}`
+      return `${value.metricName || metric.name}${optionalTags} value=${
+        value.value
+      }${optionalTimestamp}`
     })
   )
 }

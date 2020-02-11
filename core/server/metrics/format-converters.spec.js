@@ -113,5 +113,59 @@ describe('Metric format converters', function() {
         'process_start_time_seconds value=1580576451',
       ])
     })
+
+    it('converts a metric with separate names', function() {
+      const json = [
+        {
+          name: 'service_response_millis',
+          help: 'Service response time in milliseconds',
+          type: 'histogram',
+          values: [
+            {
+              labels: {
+                le: 250,
+              },
+              value: 28,
+              metricName: 'service_response_millis_bucket',
+            },
+            {
+              labels: {
+                le: 500,
+              },
+              value: 29,
+              metricName: 'service_response_millis_bucket',
+            },
+            {
+              labels: {
+                le: '+Inf',
+              },
+              value: 32,
+              metricName: 'service_response_millis_bucket',
+            },
+            {
+              labels: {},
+              value: 3550.5951969996095,
+              metricName: 'service_response_millis_sum',
+            },
+            {
+              labels: {},
+              value: 32,
+              metricName: 'service_response_millis_count',
+            },
+          ],
+          aggregator: 'sum',
+        },
+      ]
+
+      const influx = promClientJsonToInflux(json)
+
+      expect(influx).to.be.deep.equal([
+        'service_response_millis_bucket,le=250 value=28',
+        'service_response_millis_bucket,le=500 value=29',
+        'service_response_millis_bucket,le=+Inf value=32',
+        'service_response_millis_sum value=3550.5951969996095',
+        'service_response_millis_count value=32',
+      ])
+    })
   })
 })
