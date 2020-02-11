@@ -52,7 +52,7 @@ module.exports = class DockerSize extends BaseJsonService {
         staticPreview: this.render({ size: 126000000 }),
       },
       {
-        title: 'Docker Image Size (latest SemVer)',
+        title: 'Docker Image Size (latest semver)',
         pattern: ':user/:repo',
         namedParams: { user: 'fedora', repo: 'apache' },
         queryParams: { sort: 'semver' },

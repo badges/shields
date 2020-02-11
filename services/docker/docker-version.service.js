@@ -52,14 +52,14 @@ module.exports = class DockerVersion extends BaseJsonService {
         staticPreview: this.render({ version: '3.9.5' }),
       },
       {
-        title: 'Docker Image Version (latest SemVer)',
+        title: 'Docker Image Version (latest semver)',
         pattern: ':user/:repo',
         namedParams: { user: '_', repo: 'alpine' },
         queryParams: { sort: 'semver' },
         staticPreview: this.render({ version: '3.11.3' }),
       },
       {
-        title: 'Docker Image Version (tag latest SemVer)',
+        title: 'Docker Image Version (tag latest semver)',
         pattern: ':user/:repo/:tag',
         namedParams: { user: '_', repo: 'alpine', tag: '3.6' },
         staticPreview: this.render({ version: '3.6.5' }),
