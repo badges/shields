@@ -1,6 +1,7 @@
 'use strict'
 
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
+const { NotFound } = require('..')
 
 function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {
@@ -22,6 +23,11 @@ function getDockerHubUser(user) {
 
 async function getMultiPageData({ user, repo, fetch }) {
   const data = await fetch({ user, repo })
+
+  if (data.count === 0) {
+    throw new NotFound({ prettyMessage: 'repository not found' })
+  }
+
   const numberOfPages = Math.ceil(data.count / 100) // Maximum of 100 results can be returned per page
 
   if (numberOfPages === 1) {

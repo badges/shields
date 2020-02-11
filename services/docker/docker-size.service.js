@@ -48,7 +48,8 @@ module.exports = class DockerSize extends BaseJsonService {
         title: 'Docker Image Size (latest by date)',
         pattern: ':user/:repo',
         namedParams: { user: 'fedora', repo: 'apache' },
-        staticPreview: this.render({ size: 126000000, sort: 'date' }),
+        queryParams: { sort: 'date' },
+        staticPreview: this.render({ size: 126000000 }),
       },
       {
         title: 'Docker Image Size (latest SemVer)',

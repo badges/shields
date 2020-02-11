@@ -48,7 +48,8 @@ module.exports = class DockerVersion extends BaseJsonService {
         title: 'Docker Image Version (latest by date)',
         pattern: ':user/:repo',
         namedParams: { user: '_', repo: 'alpine' },
-        staticPreview: this.render({ version: '3.9.5', sort: 'date' }),
+        queryParams: { sort: 'date' },
+        staticPreview: this.render({ version: '3.9.5' }),
       },
       {
         title: 'Docker Image Version (latest SemVer)',
