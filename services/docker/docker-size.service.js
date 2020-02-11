@@ -9,6 +9,7 @@ const {
   getDockerHubUser,
   getMultiPageData,
 } = require('./docker-helpers')
+const { NotFound } = require('..')
 const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
@@ -18,14 +19,12 @@ const buildSchema = Joi.object({
 
 const pagedSchema = Joi.object({
   count: nonNegativeInteger.required(),
-  results: Joi.array()
-    .items(
-      Joi.object({
-        name: Joi.string().required(),
-        full_size: nonNegativeInteger.required(),
-      }).required()
-    )
-    .required(),
+  results: Joi.array().items(
+    Joi.object({
+      name: Joi.string().required(),
+      full_size: nonNegativeInteger.required(),
+    })
+  ),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -93,18 +92,22 @@ module.exports = class DockerSize extends BaseJsonService {
 
   transform({ tag, sort, data }) {
     if (!tag && sort === 'date') {
-      return { size: data.results[0].full_size }
+      if (data.count === 0) {
+        throw new NotFound({ prettyMessage: 'repository not found' })
+      } else {
+        return { size: data.results[0].full_size }
+      }
     } else if (!tag && sort === 'semver') {
       const [matches, versions] = data.reduce(
         ([m, v], d) => {
-          m.push({ name: d.name, size: d.full_size })
+          m[d.name] = d.full_size
           v.push(d.name)
           return [m, v]
         },
-        [[], []]
+        [{}, []]
       )
       const version = latest(versions)
-      return { size: matches.find(m => m.name === version).size }
+      return { size: matches[version] }
     } else {
       return { size: data.full_size }
     }

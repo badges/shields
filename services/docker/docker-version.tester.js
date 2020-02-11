@@ -42,5 +42,5 @@ t.create('docker version (invalid, unknown repository)')
   .get('/_/not-a-real-repo.json')
   .expectBadge({
     label: 'version',
-    message: 'invalid response data',
+    message: 'repository not found',
   })

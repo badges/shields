@@ -42,5 +42,5 @@ t.create('docker image size (invalid, unknown repository)')
   .get('/_/not-a-real-repo.json')
   .expectBadge({
     label: 'image size',
-    message: 'invalid response data',
+    message: 'repository not found',
   })

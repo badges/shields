@@ -9,24 +9,22 @@ const {
   getMultiPageData,
   getDigestSemVerMatches,
 } = require('./docker-helpers')
-const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
+const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
-  results: Joi.array()
-    .items(
-      Joi.object({
-        name: Joi.string().required(),
-        images: Joi.array().items(
-          Joi.object({
-            digest: Joi.string(),
-            architecture: Joi.string().required(),
-          })
-        ),
-      }).required()
-    )
-    .required(),
+  results: Joi.array().items(
+    Joi.object({
+      name: Joi.string().required(),
+      images: Joi.array().items(
+        Joi.object({
+          digest: Joi.string(),
+          architecture: Joi.string().required(),
+        })
+      ),
+    })
+  ),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -120,6 +118,9 @@ module.exports = class DockerVersion extends BaseJsonService {
 
     if (!tag && sort === 'date') {
       data = await this.fetch({ user, repo })
+      if (data.count === 0) {
+        throw new NotFound({ prettyMessage: 'repository not found' })
+      }
       if (data.results[0].name === 'latest') {
         pagedData = await getMultiPageData({
           user,
