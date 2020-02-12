@@ -109,6 +109,9 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (!version) {
         throw new NotFound({ prettyMessage: 'tag not found' })
       }
+      if (Object.keys(version.images).length === 0) {
+        return { version: version.name }
+      }
       const { digest } = version.images.find(i => i.architecture === 'amd64')
       return { version: getDigestSemVerMatches({ data, digest }) }
     }
