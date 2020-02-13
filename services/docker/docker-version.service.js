@@ -9,7 +9,7 @@ const {
   getMultiPageData,
   getDigestSemVerMatches,
 } = require('./docker-helpers')
-const { NotFound } = require('..')
+const { NotFound, InvalidResponse } = require('..')
 const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
@@ -96,6 +96,11 @@ module.exports = class DockerVersion extends BaseJsonService {
       version = data.results[0].name
       if (version !== 'latest') {
         return { version }
+      }
+      if (Object.keys(data.results[0].images).length === 0) {
+        throw new InvalidResponse({
+          prettyMessage: 'digest not found for latest tag',
+        })
       }
       const { digest } = data.results[0].images.find(
         i => i.architecture === 'amd64'
