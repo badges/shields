@@ -57,7 +57,7 @@
     "priorityqueuejs": "^1.0.0",
     "prom-client": "^11.5.3",
     "query-string": "^6.10.1",
-    "request": "~2.88.0",
+    "request": "~2.88.2",
     "semver": "~7.1.2",
     "simple-icons": "2.4.0",
     "xmldom": "~0.2.1",
