@@ -40,15 +40,19 @@ t.create('version (not found)')
   .expectBadge({ label: 'powershell gallery', message: 'not found' })
 
 t.create('version (pre) (valid)')
-  .get('/vpre/ACMESharp.json')
+  .get('/v/ACMESharp.json?include_prereleases')
   .expectBadge({
     label: 'powershell gallery',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
 t.create('version (pre) (not found)')
-  .get('/vpre/not-a-real-package.json')
+  .get('/v/not-a-real-package.json?include_prereleases')
   .expectBadge({ label: 'powershell gallery', message: 'not found' })
+
+t.create('version (legacy redirect: vpre)')
+  .get('/vpre/ACMESharp.svg')
+  .expectRedirect('/powershellgallery/v/ACMESharp.svg?include_prereleases')
 
 t.create('platform (valid')
   .get('/p/DNS.1.1.1.1.json')

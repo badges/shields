@@ -4,6 +4,59 @@ update_configs:
   - package_manager: 'javascript'
     directory: '/'
     update_schedule: 'weekly'
+    automerged_updates:
+      - match:
+          dependency_name: 'chai*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'cypress'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'eslint*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'enzyme*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'mocha*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'sazerac'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'sinon*'
+          update_type: 'semver:minor'
+      - match:
+          dependency_name: 'snap-shot-it'
+          update_type: 'semver:minor'
+    ignored_updates:
+      - match:
+          dependency_name: cross-env
+          version_requirement: '>=7.0.0'
+      - match:
+          dependency_name: decamelize
+          version_requirement: '>=4.0.0'
+      - match:
+          dependency_name: got
+          version_requirement: '>=10.0.0'
+      - match:
+          dependency_name: '@hapi/joi'
+          version_requirement: '>=17.0.0'
+      - match:
+          dependency_name: husky
+          version_requirement: '>=4.0.0'
+      - match:
+          dependency_name: lint-staged
+          version_requirement: '>=10.0.0'
+      - match:
+          dependency_name: eslint-plugin-jsdoc
+          version_requirement: '>=21.0.0'
+      - match:
+          dependency_name: start-server-and-test
+          version_requirement: '>=1.10.8'
+      - match:
+          dependency_name: mkdirp
+          version_requirement: '>=1.0.4'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'

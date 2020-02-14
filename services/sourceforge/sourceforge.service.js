@@ -39,7 +39,7 @@ module.exports = class Sourceforge extends BaseJsonService {
   static get route() {
     return {
       base: 'sourceforge',
-      pattern: ':interval(dt|dm|dw|dd)/:project/:folder?',
+      pattern: ':interval(dt|dm|dw|dd)/:project/:folder*',
     }
   }
 

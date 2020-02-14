@@ -3,9 +3,9 @@
 const { renderBuildStatusBadge } = require('../build-status')
 const AppVeyorBase = require('./appveyor-base')
 
-module.exports = class AppVeyorCi extends AppVeyorBase {
+module.exports = class AppVeyorBuild extends AppVeyorBase {
   static get route() {
-    return this.buildRoute('appveyor/ci')
+    return this.buildRoute('appveyor/build')
   }
 
   static get examples() {

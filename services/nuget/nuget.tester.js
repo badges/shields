@@ -130,8 +130,8 @@ t.create('version (build metadata with -)')
   )
   .expectBadge({
     label: 'nuget',
-    message: 'v1.17.0+1b81349-429',
-    color: 'yellow',
+    message: 'v1.17.0',
+    color: 'blue',
   })
 
 t.create('version (not found)')

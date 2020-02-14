@@ -9,31 +9,19 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('codecov token')
-  .get('/c/token/abc123def456/gh/codecov/private-example.svg', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .get('/c/token/abc123def456/gh/codecov/private-example.svg')
+  .expectRedirect(
     '/codecov/c/github/codecov/private-example.svg?token=abc123def456'
   )
 
 t.create('codecov branch token')
-  .get('/c/token/abc123def456/bb/private-shields/private-badges/master.svg', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .get('/c/token/abc123def456/bb/private-shields/private-badges/master.svg')
+  .expectRedirect(
     '/codecov/c/bitbucket/private-shields/private-badges/master.svg?token=abc123def456'
   )
 
 t.create('codecov gl short form expanded to long form')
-  .get('/c/token/abc123def456/gl/private-shields/private-badges/master.svg', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
+  .get('/c/token/abc123def456/gl/private-shields/private-badges/master.svg')
+  .expectRedirect(
     '/codecov/c/gitlab/private-shields/private-badges/master.svg?token=abc123def456'
   )
