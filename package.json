@@ -245,7 +245,7 @@
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
     "require-hacker": "^3.0.1",
-    "rimraf": "^3.0.1",
+    "rimraf": "^3.0.2",
     "sazerac": "^1.1.0",
     "sinon": "^8.1.1",
     "sinon-chai": "^3.4.0",
