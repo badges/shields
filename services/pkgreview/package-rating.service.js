@@ -8,7 +8,7 @@ const schema = Joi.object({
   type: Joi.string().required(),
   icon: Joi.string().required(),
   starString: [Joi.string().optional(), Joi.allow(null)],
-  reviewsCount: Joi.number(),
+  reviewsCount: nonNegativeInteger,
   rating: [Joi.number().optional(), Joi.allow(null)],
 }).required()
 
