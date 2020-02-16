@@ -83,7 +83,7 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
     }
 
     let message
-    if (state == 'IN_PROGRESS') {
+    if (state === 'IN_PROGRESS') {
       message = 'in progress'
     } else {
       message = state.toLowerCase()
@@ -96,7 +96,7 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
   }
 
   async fetch({ user, repo, environment }) {
-    return await this._requestGraphql({
+    return this._requestGraphql({
       query: gql`
         query($user: String!, $repo: String!, $environment: String!) {
           repository(owner: $user, name: $repo) {
@@ -117,7 +117,7 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
   }
 
   transform({ data }) {
-    if (data.repository.deployments.nodes.length == 0) {
+    if (data.repository.deployments.nodes.length === 0) {
       throw new NotFound({ prettyMessage: 'environment not found' })
     }
     // This happens for the brief moment a deployment is created, but no

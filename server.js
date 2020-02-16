@@ -16,7 +16,7 @@ Sentry.init({
     const filtered = integrations.filter(
       integration => !disabledIntegrations.includes(integration.name)
     )
-    if (filtered.length != integrations.length - disabledIntegrations.length) {
+    if (filtered.length !== integrations.length - disabledIntegrations.length) {
       throw Error(
         `An error occurred while filtering integrations. The following inetgrations were found: ${integrations.map(
           ({ name }) => name

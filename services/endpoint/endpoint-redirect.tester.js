@@ -9,7 +9,5 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('Build: default branch')
-  .get('.svg?url=https://example.com/badge.json', {
-    followRedirect: false,
-  })
+  .get('.svg?url=https://example.com/badge.json')
   .expectRedirect('/endpoint.svg?url=https://example.com/badge.json')

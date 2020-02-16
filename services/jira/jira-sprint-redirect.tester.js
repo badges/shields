@@ -9,9 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('jira sprint')
-  .get('/https/jira.spring.io/94.svg', {
-    followRedirect: false,
-  })
+  .get('/https/jira.spring.io/94.svg')
   .expectRedirect(
     `/jira/sprint/94.svg?baseUrl=${encodeURIComponent(
       'https://jira.spring.io'

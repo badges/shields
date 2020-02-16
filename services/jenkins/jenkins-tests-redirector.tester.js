@@ -10,10 +10,7 @@ const t = (module.exports = new ServiceTester({
 
 t.create('old tests prefix + job url in path')
   .get(
-    '/t/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg',
-    {
-      followRedirect: false,
-    }
+    '/t/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg'
   )
   .expectRedirect(
     `/jenkins/tests.svg?jobUrl=${encodeURIComponent(
@@ -23,10 +20,7 @@ t.create('old tests prefix + job url in path')
 
 t.create('new tests prefix + job url in path')
   .get(
-    '/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg',
-    {
-      followRedirect: false,
-    }
+    '/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg'
   )
   .expectRedirect(
     `/jenkins/tests.svg?jobUrl=${encodeURIComponent(

@@ -58,5 +58,5 @@ t.create('Version label should be `no releases` if no pre-release')
   .expectBadge({ label: 'bower', message: 'no releases' })
 
 t.create('Version (legacy redirect: vpre)')
-  .get('/vpre/bootstrap.svg', { followRedirect: false })
+  .get('/vpre/bootstrap.svg')
   .expectRedirect('/bower/v/bootstrap.svg?include_prereleases')

@@ -12,8 +12,8 @@ const { addv } = require('./text-formatters')
 const { version: versionColor } = require('./color-formatters')
 
 function listCompare(a, b) {
-  const alen = a.length,
-    blen = b.length
+  const alen = a.length
+  const blen = b.length
   for (let i = 0; i < alen; i++) {
     if (a[i] < b[i]) {
       return -1

@@ -58,13 +58,11 @@ t.create('version (invalid custom server)')
   .expectBadge({ label: 'packagist', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/symfony/symfony.svg', { followRedirect: false })
+  .get('/vpre/symfony/symfony.svg')
   .expectRedirect('/packagist/v/symfony/symfony.svg?include_prereleases')
 
 t.create('version (legacy redirect: vpre) (custom server)')
-  .get('/vpre/symfony/symfony.svg?server=https%3A%2F%2Fpackagist.org', {
-    followRedirect: false,
-  })
+  .get('/vpre/symfony/symfony.svg?server=https%3A%2F%2Fpackagist.org')
   .expectRedirect(
     '/packagist/v/symfony/symfony.svg?include_prereleases&server=https%3A%2F%2Fpackagist.org'
   )

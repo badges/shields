@@ -9,13 +9,9 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('alerts')
-  .get('/alerts/g/badges/shields.svg', {
-    followRedirect: false,
-  })
+  .get('/alerts/g/badges/shields.svg')
   .expectRedirect('/lgtm/alerts/github/badges/shields.svg')
 
 t.create('grade')
-  .get('/grade/java/g/apache/cloudstack.svg', {
-    followRedirect: false,
-  })
+  .get('/grade/java/g/apache/cloudstack.svg')
   .expectRedirect('/lgtm/grade/java/github/apache/cloudstack.svg')
