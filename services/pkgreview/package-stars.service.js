@@ -30,7 +30,7 @@ module.exports = class PkgreviewStars extends BaseJsonService {
         title: 'pkgreview.dev Star Ratings',
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: {
-          label: 'pkgreview.dev',
+          label: 'rating',
           message: '★★★★☆',
           color: '#4F78FE',
         },
@@ -40,22 +40,14 @@ module.exports = class PkgreviewStars extends BaseJsonService {
 
   static get defaultBadgeData() {
     return {
-      label: 'pkgreview.dev',
-      color: '#4F78FE',
+      label: 'rating',
     }
   }
 
   static render({ type, name, starString }) {
     return {
-      label: `pkgreview.dev`,
       message: starString || 'Be the first to review',
       color: '#4F78FE',
-      link: [
-        `https://pkgreview.dev/${type}/${encodeURIComponent(name).replace(
-          /%40/g,
-          '@'
-        )}`,
-      ],
     }
   }
 
