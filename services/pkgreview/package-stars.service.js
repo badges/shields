@@ -52,7 +52,7 @@ module.exports = class PkgreviewStars extends BaseJsonService {
       color: '#4F78FE',
       link: [
         `https://pkgreview.dev/${type}/${encodeURIComponent(name).replace(
-          '%40',
+          /%40/g,
           '@'
         )}`,
       ],
