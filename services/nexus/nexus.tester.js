@@ -281,3 +281,15 @@ t.create('Nexus 3 - repository version with query')
     label: 'nexus',
     message: isVersion,
   })
+
+t.create('Nexus 3 - search release version without snapshots')
+  .get(
+    // Limit the version from above, so that any later artifacts don't break this test.
+    `/r/org.pentaho.adaptive/daemon.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
+      ':maven.baseVersion=<8.1.0.1'
+    )}`
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'v8.1.0.0-365',
+  })
