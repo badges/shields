@@ -48,7 +48,7 @@ const nexus2ResolveApiSchema = Joi.object({
 const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
   queryOpt: Joi.string()
-    .regex(/(:[\w.]+=[\w-. ]+)+/i)
+    .regex(/(:[\w.]+=[^:]*)+/i)
     .optional(),
   nexusVersion: Joi.equal('2', '3'),
 }).required()
