@@ -187,11 +187,12 @@ module.exports = class Nexus extends BaseJsonService {
       return this.fetch3({ server, repo, groupId, artifactId, queryOpt })
     }
     // Most servers still use Nexus 2. Fall back to Nexus 3 if the hitting a
-    // Nexus 2 endpoint returns a Bad Request (=> InvalidResponse).
+    // Nexus 2 endpoint returns a Bad Request (=> InvalidResponse, for path /service/local/artifact/maven/resolve)
+    // or a Not Found (for path /service/local/artifact/maven/resolve).
     try {
       return await this.fetch2({ server, repo, groupId, artifactId, queryOpt })
     } catch (e) {
-      if (e instanceof InvalidResponse) {
+      if (e instanceof InvalidResponse || e instanceof NotFound) {
         return this.fetch3({ server, repo, groupId, artifactId, queryOpt })
       }
       throw e
