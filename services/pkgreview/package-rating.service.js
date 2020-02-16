@@ -49,7 +49,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
     return {
       label: `pkgreview.dev`,
       message: rating
-        ? `${rating * 5}/5 (${reviewsCount})`
+        ? `${+parseFloat(rating * 5).toFixed(2)}/5 (${reviewsCount})`
         : 'Be the first to review',
       color: '#4F78FE',
       link: [
