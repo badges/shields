@@ -20,7 +20,7 @@ module.exports = class PkgreviewStars extends BaseJsonService {
   static get route() {
     return {
       base: 'pkgreview/stars',
-      pattern: ':pkgManager/:pkgSlug',
+      pattern: ':pkgManager/:pkgSlug+',
     }
   }
 
@@ -30,7 +30,7 @@ module.exports = class PkgreviewStars extends BaseJsonService {
         title: 'pkgreview.dev Star Ratings',
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: {
-          label: 'stars',
+          label: 'pkgreview.dev',
           message: '★★★★☆',
           color: '#4F78FE',
         },
@@ -40,7 +40,7 @@ module.exports = class PkgreviewStars extends BaseJsonService {
 
   static get defaultBadgeData() {
     return {
-      label: 'stars',
+      label: 'pkgreview.dev',
       color: '#4F78FE',
     }
   }
@@ -50,14 +50,21 @@ module.exports = class PkgreviewStars extends BaseJsonService {
       label: `pkgreview.dev`,
       message: starString || 'Be the first to review',
       color: '#4F78FE',
-      link: [`https://pkgreview.dev/${type}/${name}`],
+      link: [
+        `https://pkgreview.dev/${type}/${encodeURIComponent(name).replace(
+          '%40',
+          '@'
+        )}`,
+      ],
     }
   }
 
   async fetch({ pkgManager, pkgSlug }) {
     return this._requestJson({
       schema,
-      url: `https://pkgreview.dev/api/v1/${pkgManager}/${pkgSlug}`,
+      url: `https://pkgreview.dev/api/v1/${pkgManager}/${encodeURIComponent(
+        pkgSlug
+      )}`,
       errorMessages: {
         400: 'package not found',
       },
