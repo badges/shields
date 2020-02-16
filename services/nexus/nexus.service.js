@@ -240,10 +240,17 @@ module.exports = class Nexus extends BaseJsonService {
       name: artifactId,
       sort: 'version',
     }
-    if (repo === 's') {
-      qs.prerelease = 'true'
-    } else if (repo !== 'r') {
-      qs.repository = repo
+
+    switch (repo) {
+      case 's':
+        qs.prerelease = 'true'
+        break
+      case 'r':
+        qs.prerelease = 'false'
+        break
+      default:
+        qs.repository = repo
+        break
     }
 
     if (queryOpt) {
