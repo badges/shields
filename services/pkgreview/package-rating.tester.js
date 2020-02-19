@@ -3,8 +3,12 @@
 // const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Badge renders')
+t.create('Stars Badge renders')
   .get('/stars/npm/react.json')
+  .expectBadge({ label: 'stars' })
+
+t.create('Rating Badge renders')
+  .get('/rating/npm/react.json')
   .expectBadge({ label: 'rating' })
 
 // t.create('Build status (with branch)')
