@@ -2,9 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { starRating, metric } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
+const { colorScale } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
+
+const pkgReviewColor = colorScale([2, 3, 4])
 
 const schema = Joi.object({
   rating: [
@@ -37,7 +39,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: this.render({
           format: 'rating',
-          rating: 0.845623,
+          rating: 0.7,
           reviewsCount: 237,
         }),
       },
@@ -47,7 +49,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: this.render({
           format: 'stars',
-          rating: 0.6,
+          rating: 0.3,
           reviewsCount: 200,
         }),
       },
@@ -63,7 +65,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
     return {
       message,
       label: format,
-      color: floorCount(rating * 5, 2, 3, 4),
+      color: pkgReviewColor(rating * 5), // floorCount(rating * 5, 2, 3, 4),
     }
   }
 
