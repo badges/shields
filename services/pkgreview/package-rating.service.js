@@ -61,6 +61,9 @@ module.exports = class PkgreviewRating extends BaseJsonService {
       )}`,
       errorMessages: {
         400: 'package not found',
+        408: 'response timed out',
+        502: 'response timed out',
+        500: 'response timed out',
       },
     })
   }
