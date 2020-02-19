@@ -2,16 +2,22 @@
 
 const Joi = require('@hapi/joi')
 const { starRating, metric } = require('../text-formatters')
+const { floorCount } = require('../color-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  reviewsCount: Joi.number(),
-  rating: [Joi.number().optional(), Joi.allow(null)],
+  rating: [
+    Joi.number()
+      .min(1)
+      .max(5)
+      .optional(),
+    Joi.allow(null),
+  ],
+  reviewsCount: nonNegativeInteger,
 }).required()
 
 module.exports = class PkgreviewRating extends BaseJsonService {
-  format = 'rating'
-
   static get category() {
     return 'rating'
   }
@@ -51,13 +57,13 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   static render({ rating, reviewsCount, format }) {
     const message =
       format === 'rating'
-        ? `${+parseFloat(rating * 5).toFixed(2)}/5 (${metric(reviewsCount)})`
+        ? `${+parseFloat(rating * 5).toFixed(1)}/5 (${metric(reviewsCount)})`
         : starRating(rating * 5)
 
     return {
       message,
       label: format,
-      color: '#4F78FE',
+      color: floorCount(rating * 5, 2, 3, 4),
     }
   }
 
@@ -77,18 +83,15 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   transform({ pkgSlug, ...json }) {
     return {
       ...json,
-      format: this.format,
       pkgSlug: encodeURIComponent(pkgSlug),
     }
   }
 
   async handle({ format, pkgManager, pkgSlug }) {
-    this.format = format
-
-    const json = await this.fetch({ format: this.format, pkgManager, pkgSlug })
+    const json = await this.fetch({ pkgManager, pkgSlug })
 
     const transformedJson = this.transform(json)
 
-    return this.constructor.render(transformedJson)
+    return this.constructor.render({ ...transformedJson, format })
   }
 }
