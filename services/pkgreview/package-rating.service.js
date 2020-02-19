@@ -1,26 +1,25 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { starRating, metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  name: Joi.string().required(),
-  type: Joi.string().required(),
-  icon: Joi.string().required(),
-  starString: [Joi.string().optional(), Joi.allow(null)],
   reviewsCount: Joi.number(),
   rating: [Joi.number().optional(), Joi.allow(null)],
 }).required()
 
 module.exports = class PkgreviewRating extends BaseJsonService {
+  format = 'rating'
+
   static get category() {
     return 'rating'
   }
 
   static get route() {
     return {
-      base: 'pkgreview/rating',
-      pattern: ':pkgManager/:pkgSlug+',
+      base: 'pkgreview',
+      pattern: ':format(rating|stars)/:pkgManager/:pkgSlug+',
     }
   }
 
@@ -28,27 +27,36 @@ module.exports = class PkgreviewRating extends BaseJsonService {
     return [
       {
         title: 'pkgreview.dev Package Ratings',
+        pattern: 'rating/:pkgManager/:pkgSlug+',
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
-        staticPreview: {
-          label: 'rating',
-          message: '4/5 (125)',
-          color: '#4F78FE',
-        },
+        staticPreview: this.render({
+          format: 'rating',
+          rating: 0.845623,
+          reviewsCount: 237,
+        }),
+      },
+      {
+        title: 'pkgreview.dev Star Ratings',
+        pattern: 'stars/:pkgManager/:pkgSlug+',
+        namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
+        staticPreview: this.render({
+          format: 'stars',
+          rating: 0.6,
+          reviewsCount: 200,
+        }),
       },
     ]
   }
 
-  static get defaultBadgeData() {
-    return {
-      label: 'rating',
-    }
-  }
+  static render({ rating, reviewsCount, format }) {
+    const message =
+      format === 'rating'
+        ? `${+parseFloat(rating * 5).toFixed(2)}/5 (${metric(reviewsCount)})`
+        : starRating(rating * 5)
 
-  static render({ type, name, rating, reviewsCount }) {
     return {
-      message: rating
-        ? `${+parseFloat(rating * 5).toFixed(2)}/5 (${reviewsCount})`
-        : 'Be the first to review',
+      message,
+      label: format,
       color: '#4F78FE',
     }
   }
@@ -56,9 +64,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   async fetch({ pkgManager, pkgSlug }) {
     return this._requestJson({
       schema,
-      url: `https://pkgreview.dev/api/v1/${pkgManager}/${encodeURIComponent(
-        pkgSlug
-      )}`,
+      url: `https://pkgreview.dev/api/v1/${pkgManager}/${pkgSlug}`,
       errorMessages: {
         400: 'package not found',
         408: 'response timed out',
@@ -68,8 +74,21 @@ module.exports = class PkgreviewRating extends BaseJsonService {
     })
   }
 
-  async handle({ pkgManager, pkgSlug }) {
-    const json = await this.fetch({ pkgManager, pkgSlug })
-    return this.constructor.render(json)
+  transform({ pkgSlug, ...json }) {
+    return {
+      ...json,
+      format: this.format,
+      pkgSlug: encodeURIComponent(pkgSlug),
+    }
+  }
+
+  async handle({ format, pkgManager, pkgSlug }) {
+    this.format = format
+
+    const json = await this.fetch({ format: this.format, pkgManager, pkgSlug })
+
+    const transformedJson = this.transform(json)
+
+    return this.constructor.render(transformedJson)
   }
 }
