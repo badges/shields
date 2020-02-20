@@ -3,7 +3,7 @@
 const { withRegex, isStarRating } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const isRatingWithReviews = withRegex(/[0-5]\.[0-9]{1}\/5?\s*\([0-9]*\)$/)
+const isRatingWithReviews = withRegex(/^[0-5](.?([0-9]))?\/5?\s*\([0-9]*\)$/)
 
 t.create('Stars Badge renders')
   .get('/stars/npm/react.json')
