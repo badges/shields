@@ -9,13 +9,12 @@ const { BaseJsonService } = require('..')
 const pkgReviewColor = colorScale([2, 3, 4])
 
 const schema = Joi.object({
-  rating: [
-    Joi.number()
-      .min(1)
-      .max(5)
-      .optional(),
-    Joi.allow(null),
-  ],
+  rating: Joi.number()
+    .min(0)
+    .max(1)
+    .precision(1)
+    .required()
+    .allow(null),
   reviewsCount: nonNegativeInteger,
 }).required()
 
@@ -39,7 +38,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: this.render({
           format: 'rating',
-          rating: 0.7,
+          rating: 3.5,
           reviewsCount: 237,
         }),
       },
@@ -49,7 +48,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
         namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
         staticPreview: this.render({
           format: 'stars',
-          rating: 0.3,
+          rating: 1.5,
           reviewsCount: 200,
         }),
       },
@@ -59,13 +58,13 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   static render({ rating, reviewsCount, format }) {
     const message =
       format === 'rating'
-        ? `${+parseFloat(rating * 5).toFixed(1)}/5 (${metric(reviewsCount)})`
-        : starRating(rating * 5)
+        ? `${rating}/5 (${metric(reviewsCount)})`
+        : starRating(rating)
 
     return {
       message,
       label: format,
-      color: pkgReviewColor(rating * 5), // floorCount(rating * 5, 2, 3, 4),
+      color: pkgReviewColor(rating), // floorCount(rating * 5, 2, 3, 4),
     }
   }
 
@@ -74,26 +73,22 @@ module.exports = class PkgreviewRating extends BaseJsonService {
       schema,
       url: `https://pkgreview.dev/api/v1/${pkgManager}/${pkgSlug}`,
       errorMessages: {
-        400: 'package not found',
+        400: 'bad request',
+        404: 'package not found',
         408: 'response timed out',
-        502: 'response timed out',
-        500: 'response timed out',
       },
     })
   }
 
-  transform({ pkgSlug, ...json }) {
-    return {
-      ...json,
-      pkgSlug: encodeURIComponent(pkgSlug),
-    }
-  }
-
   async handle({ format, pkgManager, pkgSlug }) {
-    const json = await this.fetch({ pkgManager, pkgSlug })
-
-    const transformedJson = this.transform(json)
-
-    return this.constructor.render({ ...transformedJson, format })
+    const { reviewsCount, rating } = await this.fetch({
+      pkgManager,
+      pkgSlug: encodeURIComponent(pkgSlug),
+    })
+    return this.constructor.render({
+      reviewsCount,
+      format,
+      rating: +parseFloat(rating * 5).toFixed(1),
+    })
   }
 }
