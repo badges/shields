@@ -1,63 +1,30 @@
 'use strict'
 
+const { withRegex, isStarRating } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
+
+const isRatingWithReviews = withRegex(/[0-5]\.[0-9]{1}\/5?\s*\([0-9]*\)$/)
 
 t.create('Stars Badge renders')
   .get('/stars/npm/react.json')
-  .expectBadge({ label: 'stars' })
+  .expectBadge({ label: 'stars', message: isStarRating })
 
 t.create('Rating Badge renders')
   .get('/rating/npm/react.json')
-  .expectBadge({ label: 'rating' })
+  .expectBadge({ label: 'rating', message: isRatingWithReviews })
 
-t.create('Badge fails to render (package not found)')
-  .get('/rating/npm/icuwowgnbneiugvneiurfgrsfghw.json')
+t.create('nonexistent package')
+  .get('/rating/npm/ohlolweallknowthispackagewontexist.json')
   .expectBadge({
     label: 'rating',
     message: 'package not found',
-    color: 'lightgrey',
+    color: 'red',
   })
 
-t.create('Badge fails to render (package not found)')
+t.create('bad request')
   .get('/rating/lol/react.json')
   .expectBadge({
     label: 'rating',
-    message: 'package not found',
+    message: 'bad request',
     color: 'lightgrey',
   })
-
-t.create('Badge renders correctly')
-  .get('/rating/npm/react.json')
-  .intercept(nock =>
-    nock('https://pkgreview.dev/api/v1')
-      .get('/npm/react/')
-      .reply(200, {
-        reviewsCount: 3,
-        rating: 1,
-      })
-  )
-  .expectBadge({ label: 'rating', message: '5/5 (3)', color: 'brightgreen' })
-
-t.create('Badge renders correctly')
-  .get('/stars/npm/react.json')
-  .intercept(nock =>
-    nock('https://pkgreview.dev/api/v1')
-      .get('/npm/react/')
-      .reply(200, {
-        reviewsCount: 3,
-        rating: 1,
-      })
-  )
-  .expectBadge({ label: 'stars', message: '★★★★★', color: 'brightgreen' })
-
-t.create('Badge renders correctly')
-  .get('/stars/npm/lol.json')
-  .intercept(nock =>
-    nock('https://pkgreview.dev/api/v1')
-      .get('/npm/lol/')
-      .reply(200, {
-        reviewsCount: 0,
-        rating: null,
-      })
-  )
-  .expectBadge({ label: 'stars', message: '☆☆☆☆☆', color: 'red' })
