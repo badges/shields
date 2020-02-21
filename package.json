@@ -31,7 +31,7 @@
     "chalk": "^3.0.0",
     "check-node-version": "^4.0.2",
     "chrome-web-store-item-property": "~1.2.0",
-    "config": "^3.2.5",
+    "config": "^3.2.6",
     "cross-env": "^6.0.3",
     "decamelize": "^3.2.0",
     "dotenv": "^8.2.0",
