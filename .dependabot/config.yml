@@ -37,6 +37,9 @@ update_configs:
           dependency_name: decamelize
           version_requirement: '>=4.0.0'
       - match:
+          dependency_name: eslint-plugin-jsdoc
+          version_requirement: '>=21.0.0'
+      - match:
           dependency_name: got
           version_requirement: '>=10.0.0'
       - match:
@@ -49,14 +52,14 @@ update_configs:
           dependency_name: lint-staged
           version_requirement: '>=10.0.0'
       - match:
-          dependency_name: eslint-plugin-jsdoc
-          version_requirement: '>=21.0.0'
+          dependency_name: mkdirp
+          version_requirement: '>=1.0.4'
+      - match:
+          dependency_name: nock
+          version_requirement: '>=12.0.0'
       - match:
           dependency_name: start-server-and-test
           version_requirement: '>=1.10.8'
-      - match:
-          dependency_name: mkdirp
-          version_requirement: '>=1.0.4'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'
