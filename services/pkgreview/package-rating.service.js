@@ -26,7 +26,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   static get route() {
     return {
       base: 'pkgreview',
-      pattern: ':format(rating|stars)/:pkgManager/:pkgSlug+',
+      pattern: ':format(rating|stars)/:pkgManager(npm)/:pkgSlug+',
     }
   }
 
@@ -58,24 +58,25 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   static render({ rating, reviewsCount, format }) {
     const message =
       format === 'rating'
-        ? `${rating}/5 (${metric(reviewsCount)})`
+        ? `${rating.toFixed(1)}/5 (${metric(reviewsCount)})`
         : starRating(rating)
 
     return {
       message,
       label: format,
-      color: pkgReviewColor(rating), // floorCount(rating * 5, 2, 3, 4),
+      color: pkgReviewColor(rating),
     }
   }
 
   async fetch({ pkgManager, pkgSlug }) {
     return this._requestJson({
       schema,
-      url: `https://pkgreview.dev/api/v1/${pkgManager}/${pkgSlug}`,
+      url: `https://pkgreview.dev/api/v1/${pkgManager}/${encodeURIComponent(
+        pkgSlug
+      )}`,
       errorMessages: {
         400: 'bad request',
         404: 'package not found',
-        408: 'response timed out',
       },
     })
   }
@@ -83,12 +84,12 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   async handle({ format, pkgManager, pkgSlug }) {
     const { reviewsCount, rating } = await this.fetch({
       pkgManager,
-      pkgSlug: encodeURIComponent(pkgSlug),
+      pkgSlug,
     })
     return this.constructor.render({
       reviewsCount,
       format,
-      rating: +parseFloat(rating * 5).toFixed(1),
+      rating: +parseFloat(rating * 5),
     })
   }
 }
