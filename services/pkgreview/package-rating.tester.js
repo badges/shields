@@ -3,7 +3,9 @@
 const { withRegex, isStarRating } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const isRatingWithReviews = withRegex(/^[0-5](.?([0-9]))?\/5?\s*\([0-9]*\)$/)
+const isRatingWithReviews = withRegex(
+  /^(([0-4](.?([0-9]))?)|5)\/5?\s*\([0-9]*\)$/
+)
 
 t.create('Stars Badge renders')
   .get('/stars/npm/react.json')
@@ -19,12 +21,4 @@ t.create('nonexistent package')
     label: 'rating',
     message: 'package not found',
     color: 'red',
-  })
-
-t.create('bad request')
-  .get('/rating/lol/react.json')
-  .expectBadge({
-    label: 'rating',
-    message: 'bad request',
-    color: 'lightgrey',
   })

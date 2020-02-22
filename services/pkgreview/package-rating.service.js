@@ -75,7 +75,6 @@ module.exports = class PkgreviewRating extends BaseJsonService {
         pkgSlug
       )}`,
       errorMessages: {
-        400: 'bad request',
         404: 'package not found',
       },
     })
