@@ -58,7 +58,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   static render({ rating, reviewsCount, format }) {
     const message =
       format === 'rating'
-        ? `${rating.toFixed(1)}/5 (${metric(reviewsCount)})`
+        ? `${+parseFloat(rating).toFixed(1)}/5 (${metric(reviewsCount)})`
         : starRating(rating)
 
     return {
@@ -88,7 +88,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
     return this.constructor.render({
       reviewsCount,
       format,
-      rating: +parseFloat(rating * 5),
+      rating: rating * 5,
     })
   }
 }
