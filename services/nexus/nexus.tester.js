@@ -271,6 +271,18 @@ t.create('Nexus 3 - repository version')
     message: isVersion,
   })
 
+t.create(
+  'Nexus 3 - repository version valid artifact without explicit nexusVersion parameter'
+)
+  .timeout(15000)
+  .get(
+    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
 t.create('Nexus 3 - repository version with query')
   .get(
     `/proxy-public-3rd-party-release/org.junit.jupiter/junit-jupiter.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
