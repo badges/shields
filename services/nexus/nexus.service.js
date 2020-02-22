@@ -48,7 +48,7 @@ const nexus2ResolveApiSchema = Joi.object({
 const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
   queryOpt: Joi.string()
-    .regex(/(:[\w.]+=[\w-. ]+)+/i)
+    .regex(/(:[\w.]+=[^:]*)+/i)
     .optional(),
   nexusVersion: Joi.equal('2', '3'),
 }).required()
@@ -187,11 +187,12 @@ module.exports = class Nexus extends BaseJsonService {
       return this.fetch3({ server, repo, groupId, artifactId, queryOpt })
     }
     // Most servers still use Nexus 2. Fall back to Nexus 3 if the hitting a
-    // Nexus 2 endpoint returns a Bad Request (=> InvalidResponse).
+    // Nexus 2 endpoint returns a Bad Request (=> InvalidResponse, for path /service/local/artifact/maven/resolve)
+    // or a Not Found (for path /service/local/artifact/maven/resolve).
     try {
       return await this.fetch2({ server, repo, groupId, artifactId, queryOpt })
     } catch (e) {
-      if (e instanceof InvalidResponse) {
+      if (e instanceof InvalidResponse || e instanceof NotFound) {
         return this.fetch3({ server, repo, groupId, artifactId, queryOpt })
       }
       throw e
@@ -240,10 +241,17 @@ module.exports = class Nexus extends BaseJsonService {
       name: artifactId,
       sort: 'version',
     }
-    if (repo === 's') {
-      qs.prerelease = 'true'
-    } else if (repo !== 'r') {
-      qs.repository = repo
+
+    switch (repo) {
+      case 's':
+        qs.prerelease = 'true'
+        break
+      case 'r':
+        qs.prerelease = 'false'
+        break
+      default:
+        qs.repository = repo
+        break
     }
 
     if (queryOpt) {

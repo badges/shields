@@ -271,6 +271,18 @@ t.create('Nexus 3 - repository version')
     message: isVersion,
   })
 
+t.create(
+  'Nexus 3 - repository version valid artifact without explicit nexusVersion parameter'
+)
+  .timeout(15000)
+  .get(
+    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
 t.create('Nexus 3 - repository version with query')
   .get(
     `/proxy-public-3rd-party-release/org.junit.jupiter/junit-jupiter.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
@@ -280,4 +292,16 @@ t.create('Nexus 3 - repository version with query')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
+  })
+
+t.create('Nexus 3 - search release version without snapshots')
+  .get(
+    // Limit the version from above, so that any later artifacts don't break this test.
+    `/r/org.pentaho.adaptive/daemon.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
+      ':maven.baseVersion=<8.1.0.1'
+    )}`
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'v8.1.0.0-365',
   })
