@@ -25,9 +25,9 @@ t.create('gets the dev dependency version (scoped)')
   })
 
 t.create('gets the dev dependency version (scoped dependency)')
-  .get('/mocha/dev/@mocha/contributors.json')
+  .get('/mocha/dev/@mocha/docdash.json')
   .expectBadge({
-    label: '@mocha/contributors',
+    label: '@mocha/docdash',
     message: semverRange,
   })
 
