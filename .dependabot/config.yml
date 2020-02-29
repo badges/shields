@@ -61,6 +61,9 @@ update_configs:
           dependency_name: prom-client
           version_requirement: '>=12.0.0'
       - match:
+          dependency_name: sinon
+          version_requirement: '>=9.0.0'
+      - match:
           dependency_name: start-server-and-test
           version_requirement: '>=1.10.8'
 
