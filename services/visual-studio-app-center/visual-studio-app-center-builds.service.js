@@ -54,7 +54,7 @@ module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCe
       schema,
       url: `https://api.appcenter.ms/v0.1/apps/${owner}/${app}/branches/${branch}/builds`,
     })
-    if (json[0] == undefined)
+    if (json[0] === undefined)
       // Fetch will return a 200 with no data if no builds were found.
       throw new NotFound({ prettyMessage: 'no builds found' })
     return renderBuildStatusBadge({ status: json[0].result })
