@@ -6,6 +6,9 @@
 // Run some services:
 //   npm run test:services -- --only=service1,service2,service3
 //
+// Run some badges of a service:
+//   npm run test:services -- --only=service1 --badges=badge1,badge2,badge3
+//
 // Alternatively, pass a newline-separated list of services to stdin.
 //   echo "service1\nservice2\nservice3" | npm run test:services -- --stdin
 //
@@ -56,11 +59,11 @@
 
 'use strict'
 
+const { createTestServer } = require('../server/in-process-server-test-helpers')
+const Runner = require('./runner')
 const minimist = require('minimist')
 const envFlag = require('node-env-flag')
 const readAllStdinSync = require('read-all-stdin-sync')
-const { createTestServer } = require('../server/in-process-server-test-helpers')
-const Runner = require('./runner')
 
 require('../unhandled-rejection.spec')
 
@@ -98,8 +101,10 @@ if (!process.env.TESTED_SERVER_URL) {
 const args = minimist(process.argv.slice(3))
 const stdinOption = args.stdin
 const onlyOption = args.only
+const badgesOption = args.badges
 
 let onlyServices
+let onlyBadges = null
 
 if (stdinOption && onlyOption) {
   console.error('Do not use --only with --stdin')
@@ -108,6 +113,8 @@ if (stdinOption && onlyOption) {
   onlyServices = allStdin ? allStdin.split('\n') : []
 } else if (onlyOption) {
   onlyServices = onlyOption.split(',')
+} else if (badgesOption) {
+  console.error('Do not use --badges without --only')
 }
 
 if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
@@ -115,7 +122,24 @@ if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
 } else if (onlyServices.length === 0) {
   console.info('No service tests to run. Exiting.')
   process.exit(0)
+} else if (badgesOption && onlyServices.length === 1) {
+  onlyBadges = badgesOption.split(',')
+
+  const service = onlyServices[0]
+  const prefix = new RegExp(`^${service}-`, 'i')
+  onlyBadges = onlyBadges.map(v => v.replace(prefix, ''))
+
+  console.info(
+    `Running tests for ${onlyBadges.length} badges of service ${service}:` +
+      ` ${onlyBadges.join(', ')}.\n`
+  )
+
+  runner.onlyBadges(service, onlyBadges)
 } else {
+  if (onlyServices.length !== 1) {
+    console.error('Do not use --badges with multiple services')
+  }
+
   console.info(
     `Running tests for ${onlyServices.length} services: ${onlyServices.join(
       ', '

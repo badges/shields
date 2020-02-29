@@ -1,11 +1,11 @@
 'use strict'
 
 const path = require('path')
-const glob = require('glob')
-const countBy = require('lodash.countby')
 const categories = require('../../services/categories')
 const BaseService = require('./base')
 const { assertValidServiceDefinitionExport } = require('./service-definitions')
+const countBy = require('lodash.countby')
+const glob = require('glob')
 
 const serviceDir = path.join(__dirname, '..', '..', 'services')
 
@@ -104,9 +104,11 @@ function collectDefinitions() {
 }
 
 function loadTesters() {
-  return glob
-    .sync(path.join(serviceDir, '**', '*.tester.js'))
-    .map(path => require(path))
+  return glob.sync(path.join(serviceDir, '**', '*.tester.js')).map(path => {
+    const tester = require(path)
+    tester.absolutePath = path
+    return tester
+  })
 }
 
 module.exports = {
