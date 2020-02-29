@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.8",
-    "@sentry/node": "^5.12.4",
+    "@sentry/node": "^5.13.0",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
     "camp": "~17.2.4",
@@ -235,7 +235,7 @@
     "opn-cli": "^5.0.0",
     "portfinder": "^1.0.25",
     "prettier": "1.19.1",
-    "react": "^16.12.0",
+    "react": "^16.13.0",
     "react-dom": "^16.12.0",
     "react-error-overlay": "^6.0.6",
     "react-helmet": "^5.2.1",
