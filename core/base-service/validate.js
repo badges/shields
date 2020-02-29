@@ -21,8 +21,8 @@ function validate(
   }
   const options = { abortEarly: false }
   if (allowAndStripUnknownKeys) {
-    options['allowUnknown'] = true
-    options['stripUnknown'] = true
+    options.allowUnknown = true
+    options.stripUnknown = true
   }
   const { error, value } = schema.validate(data, options)
   if (error) {

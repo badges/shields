@@ -84,7 +84,7 @@ export function constructPath({
 }: {
   tokens: Token[]
   namedParams: { [k: string]: string }
-}) {
+}): { path: string; isComplete: boolean } {
   let isComplete = true
   const path = tokens
     .map(token => {
@@ -123,7 +123,7 @@ export default function PathBuilder({
     isComplete: boolean
   }) => void
   isPrefilled: boolean
-}) {
+}): JSX.Element {
   const [tokens] = useState(() => parse(pattern))
   const [namedParams, setNamedParams] = useState(() =>
     isPrefilled
@@ -150,7 +150,7 @@ export default function PathBuilder({
 
   function handleTokenChange({
     target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
     setNamedParams({
       ...namedParams,
       [name]: value,
@@ -161,7 +161,7 @@ export default function PathBuilder({
     literal: string,
     tokenIndex: number,
     pathContainsOnlyLiterals: boolean
-  ) {
+  ): JSX.Element {
     return (
       <PathBuilderColumn
         key={`${tokenIndex}-${literal}`}
@@ -177,7 +177,7 @@ export default function PathBuilder({
     )
   }
 
-  function renderNamedParamInput(token: Key) {
+  function renderNamedParamInput(token: Key): JSX.Element {
     const { pattern } = token
     const name = `${token.name}`
     const options = patternToOptions(pattern)
@@ -219,7 +219,7 @@ export default function PathBuilder({
     token: Key,
     tokenIndex: number,
     namedParamIndex: number
-  ) {
+  ): JSX.Element {
     const { delimiter, optional } = token
     const name = `${token.name}`
 

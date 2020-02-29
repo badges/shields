@@ -19,7 +19,7 @@ export function MarkupModal({
   isBadgeSuggestion: boolean
   baseUrl: string
   onRequestClose: () => void
-}) {
+}): JSX.Element {
   return (
     <Modal
       ariaHideApp={false}

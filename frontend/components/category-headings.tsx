@@ -12,7 +12,7 @@ export function CategoryHeading({
   category: { id, name },
 }: {
   category: Category
-}) {
+}): JSX.Element {
   return (
     <Link to={`/category/${id}`}>
       <H3 id={id}>{name}</H3>
@@ -20,7 +20,11 @@ export function CategoryHeading({
   )
 }
 
-export function CategoryHeadings({ categories }: { categories: Category[] }) {
+export function CategoryHeadings({
+  categories,
+}: {
+  categories: Category[]
+}): JSX.Element {
   return (
     <div>
       {categories.map(category => (
@@ -61,7 +65,11 @@ const StyledNav = styled.nav`
   }
 `
 
-export function CategoryNav({ categories }: { categories: Category[] }) {
+export function CategoryNav({
+  categories,
+}: {
+  categories: Category[]
+}): JSX.Element {
   return (
     <StyledNav>
       <ul>

@@ -3,10 +3,12 @@ import { predicateFromQuery } from './service-definition-set-helper'
 import { Example } from '.'
 
 describe('Badge example functions', function() {
-  const exampleMatchesQuery = (
+  function exampleMatchesQuery(
     { examples }: { examples: Example[] },
     query: string
-  ) => predicateFromQuery(query)({ examples })
+  ): boolean {
+    return predicateFromQuery(query)({ examples })
+  }
 
   test(exampleMatchesQuery, () => {
     forCases([given({ examples: [{ title: 'node version' }] }, 'npm')]).expect(
