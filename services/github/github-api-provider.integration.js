@@ -79,7 +79,7 @@ describe('Github API provider', function() {
       }
     })
 
-    it('should update the token with the final limit remaining and reset time', function() {
+    it.skip('should update the token with the final limit remaining and reset time', function() {
       const lastHeaders = headers.slice(-1)[0]
       const reserve = reserveFraction * +lastHeaders['x-ratelimit-limit']
       const usesRemaining = +lastHeaders['x-ratelimit-remaining'] - reserve

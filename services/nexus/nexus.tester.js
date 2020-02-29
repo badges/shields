@@ -5,7 +5,7 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('search release version valid artifact')
+t.create('Nexus 2 - search release version valid artifact')
   .timeout(15000)
   .get('/r/com.google/bitcoinj.json?server=https://oss.sonatype.org')
   .expectBadge({
@@ -13,7 +13,7 @@ t.create('search release version valid artifact')
     message: isVersion,
   })
 
-t.create('search release version of an nonexistent artifact')
+t.create('Nexus 2 - search release version of an nonexistent artifact')
   .timeout(15000)
   .get(
     '/r/com.google.guava/nonexistent-artifact-id.json?server=https://oss.sonatype.org'
@@ -23,7 +23,7 @@ t.create('search release version of an nonexistent artifact')
     message: 'artifact or version not found',
   })
 
-t.create('search snapshot version valid snapshot artifact')
+t.create('Nexus 2 - search snapshot version valid snapshot artifact')
   .timeout(15000)
   .get(
     '/s/org.fusesource.apollo/apollo-karaf-feature.json?server=https://repository.jboss.org/nexus'
@@ -33,7 +33,7 @@ t.create('search snapshot version valid snapshot artifact')
     message: isVersion,
   })
 
-t.create('search snapshot version of an nonexistent artifact')
+t.create('Nexus 2 - search snapshot version of an nonexistent artifact')
   .timeout(15000)
   .get(
     '/s/com.google.guava/nonexistent-artifact-id.json?server=https://oss.sonatype.org'
@@ -44,17 +44,14 @@ t.create('search snapshot version of an nonexistent artifact')
     color: 'red',
   })
 
-t.create('repository version')
-  .timeout(15000)
-  .get(
-    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
-  )
+t.create('Nexus 2 - repository version')
+  .get('/public/asm/asm.json?server=http://repo.e-iceblue.com/nexus')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
   })
 
-t.create('repository version with query')
+t.create('Nexus 2 - repository version with query')
   .timeout(15000)
   .get(
     `/fs-public-snapshots/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus&queryOpt=${encodeURIComponent(
@@ -66,7 +63,7 @@ t.create('repository version with query')
     message: isVersion,
   })
 
-t.create('repository version of an nonexistent artifact')
+t.create('Nexus 2 - repository version of an nonexistent artifact')
   .timeout(15000)
   .get(
     '/developer/jboss/nonexistent-artifact-id.json?server=https://repository.jboss.org/nexus'
@@ -76,7 +73,7 @@ t.create('repository version of an nonexistent artifact')
     message: 'artifact not found',
   })
 
-t.create('snapshot version with + in version')
+t.create('Nexus 2 - snapshot version with + in version')
   .get(
     '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
   )
@@ -92,7 +89,7 @@ t.create('snapshot version with + in version')
     message: isVersion,
   })
 
-t.create('search snapshot version not in latestSnapshot')
+t.create('Nexus 2 - search snapshot version not in latestSnapshot')
   .get(
     '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
   )
@@ -108,7 +105,7 @@ t.create('search snapshot version not in latestSnapshot')
     color: 'orange',
   })
 
-t.create('search snapshot no snapshot versions')
+t.create('Nexus 2 - search snapshot no snapshot versions')
   .get(
     '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
   )
@@ -124,7 +121,7 @@ t.create('search snapshot no snapshot versions')
     color: 'lightgrey',
   })
 
-t.create('search release version')
+t.create('Nexus 2 - search release version')
   .get('/r/jboss/jboss-client.json?server=https://repository.jboss.org/nexus')
   .intercept(nock =>
     nock('https://repository.jboss.org/nexus')
@@ -138,7 +135,7 @@ t.create('search release version')
     color: 'blue',
   })
 
-t.create('repository release version')
+t.create('Nexus 2 - repository release version')
   .get(
     '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
   )
@@ -164,7 +161,7 @@ t.create('repository release version')
     color: 'blue',
   })
 
-t.create('repository release version')
+t.create('Nexus 2 - repository release version')
   .get(
     '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
   )
@@ -189,7 +186,7 @@ t.create('repository release version')
     color: 'blue',
   })
 
-t.create('user query params')
+t.create('Nexus 2 - user query params')
   .get(
     '/fs-public-snapshots/com.progress.fuse/fusehq.json?queryOpt=:c=agent-apple-osx:p=tar.gz&server=https://repository.jboss.org/nexus'
   )
@@ -214,4 +211,97 @@ t.create('user query params')
     label: 'nexus',
     message: 'v3.2.1',
     color: 'blue',
+  })
+
+t.create('Nexus 3 - search release version valid artifact')
+  .get(
+    '/r/org.apache.commons/commons-lang3.json?server=https://nexus.pentaho.org&nexusVersion=3'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create(
+  'Nexus 3 - search release version valid artifact without explicit nexusVersion parameter'
+)
+  .timeout(15000)
+  .get(
+    '/r/org.apache.commons/commons-lang3.json?server=https://nexus.pentaho.org'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create('Nexus 3 - search release version of an nonexistent artifact')
+  .get(
+    '/r/org.apache.commons/nonexistent-artifact-id.json?server=https://nexus.pentaho.org&nexusVersion=3'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'artifact or version not found',
+  })
+
+t.create('Nexus 3 - search snapshot version valid snapshot artifact')
+  .get(
+    '/s/org.pentaho/pentaho-registry.json?server=https://nexus.pentaho.org&nexusVersion=3'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create('Nexus 3 - search snapshot version for artifact without snapshots')
+  .get(
+    '/s/javax.inject/javax.inject.json?server=https://nexus.pentaho.org&nexusVersion=3'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'artifact or snapshot version not found',
+    color: 'red',
+  })
+
+t.create('Nexus 3 - repository version')
+  .get(
+    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org&nexusVersion=3'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create(
+  'Nexus 3 - repository version valid artifact without explicit nexusVersion parameter'
+)
+  .timeout(15000)
+  .get(
+    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org'
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create('Nexus 3 - repository version with query')
+  .get(
+    `/proxy-public-3rd-party-release/org.junit.jupiter/junit-jupiter.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
+      ':maven.extension=jar:direction=asc'
+    )}`
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
+t.create('Nexus 3 - search release version without snapshots')
+  .get(
+    // Limit the version from above, so that any later artifacts don't break this test.
+    `/r/org.pentaho.adaptive/daemon.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
+      ':maven.baseVersion=<8.1.0.1'
+    )}`
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'v8.1.0.0-365',
   })
