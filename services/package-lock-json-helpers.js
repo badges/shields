@@ -1,8 +1,8 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const { isNpmVersion } = require('./package-json-helpers')
 const { InvalidParameter } = require('.')
-const Joi = require('@hapi/joi')
 
 const isLockDependencyMap = Joi.object()
   .pattern(

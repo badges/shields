@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const {
   isPackageLockJsonWithDependencies,
   getLockDependencyVersion,
@@ -7,7 +8,6 @@ const {
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 const { BaseJsonService } = require('..')
-const Joi = require('@hapi/joi')
 
 const keywords = ['npm', 'node']
 

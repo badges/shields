@@ -1,7 +1,7 @@
 'use strict'
 
-const { getLockDependencyVersion } = require('./package-lock-json-helpers')
 const { test, given } = require('sazerac')
+const { getLockDependencyVersion } = require('./package-lock-json-helpers')
 
 describe('Contributor count helpers', function() {
   test(getLockDependencyVersion, () => {

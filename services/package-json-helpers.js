@@ -1,7 +1,7 @@
 'use strict'
 
-const { InvalidParameter } = require('.')
 const Joi = require('@hapi/joi')
+const { InvalidParameter } = require('.')
 
 // This accepts a semver range, a URL, and many other possible values.
 const isNpmVersion = Joi.string()
