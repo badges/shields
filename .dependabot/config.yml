@@ -52,14 +52,14 @@ update_configs:
           dependency_name: lint-staged
           version_requirement: '>=10.0.0'
       - match:
-          dependency_name: mkdirp
-          version_requirement: '>=1.0.4'
-      - match:
           dependency_name: nock
           version_requirement: '>=12.0.0'
       - match:
           dependency_name: prom-client
           version_requirement: '>=12.0.0'
+      - match:
+          dependency_name: react-error-overlay
+          version_requirement: '>=3.0.0'
       - match:
           dependency_name: sinon
           version_requirement: '>=9.0.0'
