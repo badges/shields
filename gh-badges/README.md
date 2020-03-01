@@ -15,7 +15,7 @@ npm install gh-badges
 
 ```sh
 npm install -g gh-badges
-badge build passed :green .png > mybadge.png
+badge build passed :green > mybadge.svg
 ```
 
 ### As a library
@@ -53,15 +53,11 @@ The format is the following:
   color: '#4c1',
   labelColor: '#555',
 
-  // See templates/ for a list of available templates.
+  // One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
   template: 'flat',
 }
 ```
-
-### See also
-
-- [templates/](./templates) for the `template` option
 
 ## Colors
 
@@ -120,3 +116,12 @@ There are three ways to specify `color` and `labelColor`:
 [lightslategray]: https://img.shields.io/badge/lightslategray-lightslategray.svg
 [css color]: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
 [css/svg color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
+
+## Raster Formats
+
+Conversion to raster formats is no longer directly supported. In javascript
+code, SVG badges can be converted to raster formats using a library like
+[gm](https://www.npmjs.com/package/gm). On the console, the output of `badge`
+can be piped to a utility like
+[imagemagick](https://imagemagick.org/script/command-line-processing.php)
+e.g: `badge build passed :green | magick svg:- gif:-`.
