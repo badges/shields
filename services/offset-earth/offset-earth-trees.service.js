@@ -21,7 +21,7 @@ const profileSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class OffsetEarth extends BaseJsonService {
+module.exports = class OffsetEarthTrees extends BaseJsonService {
   static get category() {
     return 'other'
   }
