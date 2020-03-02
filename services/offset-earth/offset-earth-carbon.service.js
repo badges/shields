@@ -1,6 +1,7 @@
 'use strict'
 
-const { downloadCount } = require('../color-formatters')
+const { metric } = require('../text-formatters')
+const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 const Joi = require('@hapi/joi')
 
@@ -47,7 +48,8 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
   }
 
   static render({ count }) {
-    return { message: `${count} tonnes`, color: downloadCount(count) }
+    const tonnes = metric(count)
+    return { message: `${tonnes} tonnes`, color: floorCount(count, 0.5, 1, 5) }
   }
 
   async fetch({ owner }) {

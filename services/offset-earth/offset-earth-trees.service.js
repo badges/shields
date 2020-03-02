@@ -1,7 +1,7 @@
 'use strict'
 
 const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
+const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 const Joi = require('@hapi/joi')
 
@@ -48,7 +48,7 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
   }
 
   static render({ count }) {
-    return { message: metric(count), color: downloadCount(count) }
+    return { message: metric(count), color: floorCount(count, 10, 50, 100) }
   }
 
   async fetch({ owner }) {
