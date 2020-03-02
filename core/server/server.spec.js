@@ -3,7 +3,9 @@
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const portfinder = require('portfinder')
+const config = require('config').util.toObject()
 const got = require('../got-test-client')
+const Server = require('./server')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
 describe('The server', function() {
@@ -160,5 +162,10 @@ describe('The server', function() {
       .to.satisfy(isSvg)
       .and.to.include('410')
       .and.to.include('jpg no longer available')
+  })
+
+  it('should return instance id', function() {
+    const server = new Server(config, { id: 'test-instance-id' })
+    expect(server.instanceMetadata.id).to.equal('test-instance-id')
   })
 })

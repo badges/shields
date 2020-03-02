@@ -22,6 +22,7 @@ const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
+const InstanceMetadata = require('./instance-metadata')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
@@ -124,12 +125,14 @@ class Server {
    * Badge Server Constructor
    *
    * @param {object} config Configuration object read from config yaml files
-   *    by https://www.npmjs.com/package/config and validated against
-   *    publicConfigSchema and privateConfigSchema
+   * by https://www.npmjs.com/package/config and validated against
+   * publicConfigSchema and privateConfigSchema
+   * @param {object} instanceMetadata Metadata of a running server instance
+   * @param {string} instanceMetadata.id Identifier of a running server instance
    * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
    * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
    */
-  constructor(config) {
+  constructor(config, instanceMetadata = {}) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
     let privateConfig
     try {
@@ -155,6 +158,7 @@ class Server {
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
     }
+    this._instanceMetadata = new InstanceMetadata(instanceMetadata)
   }
 
   get port() {
@@ -177,6 +181,10 @@ class Server {
       port,
       pathname: '/',
     })
+  }
+
+  get instanceMetadata() {
+    return this._instanceMetadata
   }
 
   /**
