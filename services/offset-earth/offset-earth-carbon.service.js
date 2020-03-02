@@ -67,14 +67,9 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
     const json = await this.fetch({ owner })
     let count = 0
 
-    json.carbonMonths.forEach(function(carbonMonth) {
-      carbonMonth.projects.forEach(function(project) {
-        if (project.numberOfTonnes !== undefined) {
-          count += project.numberOfTonnes
-          return
-        }
-
-        count += 1
+    json.carbonMonths.forEach(carbonMonth => {
+      carbonMonth.projects.forEach(project => {
+        count += project.numberOfTonnes
       })
     })
 

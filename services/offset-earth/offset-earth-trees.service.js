@@ -12,7 +12,13 @@ const profileSchema = Joi.object({
         projects: Joi.array()
           .items(
             Joi.object({
-              trees: Joi.array().required(),
+              trees: Joi.array()
+                .required()
+                .items(
+                  Joi.object({
+                    value: Joi.number().positive(),
+                  })
+                ),
             })
           )
           .required(),
@@ -66,18 +72,16 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
     const json = await this.fetch({ owner })
     let count = 0
 
-    json.treeMonths.forEach(function(treeMonth) {
-      treeMonth.projects.forEach(function(project) {
-        if (project.trees !== undefined && project.trees.length > 0) {
-          project.trees.forEach(function(trees) {
-            if (trees.value !== undefined) {
-              count += trees.value
-              return
-            }
+    json.treeMonths.forEach(treeMonth => {
+      treeMonth.projects.forEach(project => {
+        project.trees.forEach(trees => {
+          if (trees.value !== undefined) {
+            count += trees.value
+            return
+          }
 
-            count += 1
-          })
-        }
+          count += 1
+        })
       })
     })
 
