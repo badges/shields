@@ -13,6 +13,8 @@ const { makeSend } = require('./legacy-result-sender')
 const LruCache = require('./lru-cache')
 const coalesceBadge = require('./coalesce-badge')
 
+const userAgent = 'Shields.io/2003a'
+
 // We avoid calling the vendor's server for computation of the information in a
 // number of badges.
 const minAccuracy = 0.75
@@ -204,8 +206,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         options = uri
       }
       options.headers = options.headers || {}
-      options.headers['User-Agent'] =
-        options.headers['User-Agent'] || 'Shields.io'
+      options.headers['User-Agent'] = userAgent
 
       let bufferLength = 0
       const r = request(options, (err, res, body) => {
@@ -294,4 +295,5 @@ module.exports = {
   clearRequestCache,
   // Expose for testing.
   _requestCache: requestCache,
+  userAgent,
 }

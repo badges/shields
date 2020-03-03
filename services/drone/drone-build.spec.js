@@ -21,7 +21,16 @@ describe('DroneBuild', function() {
       await DroneBuild.invoke(
         defaultContext,
         {
-          private: { drone_token: token },
+          public: {
+            services: {
+              drone: {
+                authorizedOrigins: ['https://cloud.drone.io'],
+              },
+            },
+          },
+          private: {
+            drone_token: token,
+          },
         },
         { user: 'atlassian', repo: 'python-bitbucket' }
       )

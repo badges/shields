@@ -2,6 +2,9 @@
 
 const queryString = require('query-string')
 const request = require('request')
+const {
+  userAgent,
+} = require('../../../core/base-service/legacy-request-handler')
 const log = require('../../../core/server/log')
 const secretIsValid = require('../../../core/server/secret-is-valid')
 const serverSecrets = require('../../../lib/server-secrets')
@@ -50,7 +53,11 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
     ask.res.statusCode = 302 // Found.
     const query = queryString.stringify({
-      client_id: authHelper.user,
+      // TODO The `_user` property bypasses security checks in AuthHelper.
+      // (e.g: enforceStrictSsl and shouldAuthenticateRequest).
+      // Do not use it elsewhere. It would be better to clean this up so
+      // it's not setting a bad example.
+      client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
     })
     ask.res.setHeader(
@@ -71,11 +78,15 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       method: 'POST',
       headers: {
         'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        'User-Agent': 'Shields.io',
+        'User-Agent': userAgent,
       },
       form: queryString.stringify({
-        client_id: authHelper.user,
-        client_secret: authHelper.pass,
+        // TODO The `_user` and `_pass` properties bypass security checks in
+        // AuthHelper (e.g: enforceStrictSsl and shouldAuthenticateRequest).
+        // Do not use them elsewhere. It would be better to clean
+        // this up so it's not setting a bad example.
+        client_id: authHelper._user,
+        client_secret: authHelper._pass,
         code: data.code,
       }),
     }

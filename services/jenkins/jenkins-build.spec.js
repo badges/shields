@@ -63,7 +63,19 @@ describe('JenkinsBuild', function() {
 
     const user = 'admin'
     const pass = 'password'
-    const config = { private: { jenkins_user: user, jenkins_pass: pass } }
+    const config = {
+      public: {
+        services: {
+          jenkins: {
+            authorizedOrigins: ['https://jenkins.ubuntu.com'],
+          },
+        },
+      },
+      private: {
+        jenkins_user: user,
+        jenkins_pass: pass,
+      },
+    }
 
     it('sends the auth information as configured', async function() {
       const scope = nock('https://jenkins.ubuntu.com')
