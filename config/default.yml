@@ -5,6 +5,10 @@ public:
   metrics:
     prometheus:
       enabled: false
+    influx:
+      uri: http://localhost:8081/telegraf
+      timeoutMilliseconds: 1000
+      intervalSeconds: 2000
 
   ssl:
     isSecure: false

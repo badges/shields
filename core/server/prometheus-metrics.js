@@ -88,6 +88,10 @@ module.exports = class PrometheusMetrics {
     }
   }
 
+  metrics() {
+    return this.register.getMetricsAsJSON()
+  }
+
   /**
    * @returns {object} `{ inc() {} }`.
    */

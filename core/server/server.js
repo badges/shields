@@ -22,6 +22,7 @@ const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
+const InfluxMetrics = require('./influx-metrics')
 const InstanceMetadata = require('./instance-metadata')
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
@@ -45,6 +46,19 @@ const publicConfigSchema = Joi.object({
   metrics: {
     prometheus: {
       enabled: Joi.boolean().required(),
+    },
+    influx: {
+      uri: Joi.string()
+        .uri()
+        .required(),
+      timeoutMilliseconds: Joi.number()
+        .integer()
+        .min(1)
+        .required(),
+      intervalSeconds: Joi.number()
+        .integer()
+        .min(1)
+        .required(),
     },
   },
   ssl: {
@@ -155,10 +169,15 @@ class Server {
       service: publicConfig.services.github,
       private: privateConfig,
     })
+    this._instanceMetadata = new InstanceMetadata(instanceMetadata)
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
+      this.influxMetrics = new InfluxMetrics(
+        this.metricInstance,
+        this._instanceMetadata,
+        publicConfig.metrics.influx
+      )
     }
-    this._instanceMetadata = new InstanceMetadata(instanceMetadata)
   }
 
   get port() {
@@ -342,6 +361,8 @@ class Server {
     githubConstellation.initialize(camp)
     if (metricInstance) {
       metricInstance.initialize(camp)
+      this.influxMetrics.registerMetricsEndpoint(this.camp)
+      this.influxMetrics.startMetricsPush()
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -385,6 +406,7 @@ class Server {
     }
 
     if (this.metricInstance) {
+      this.influxMetrics.stop()
       this.metricInstance.stop()
     }
   }
