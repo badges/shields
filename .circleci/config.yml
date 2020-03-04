@@ -4,12 +4,6 @@ main_steps: &main_steps
   steps:
     - checkout
 
-    - restore_cache:
-        keys:
-          - v2-dependencies-{{ checksum "package-lock.json" }}
-          # https://github.com/badges/shields/issues/1937
-          - v2-dependencies-
-
     - run:
         name: Install dependencies
         command: npm ci
@@ -17,11 +11,6 @@ main_steps: &main_steps
           # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
           # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
           CYPRESS_INSTALL_BINARY: 0
-
-    - save_cache:
-        paths:
-          - node_modules
-        key: v2-dependencies-{{ checksum "package-lock.json" }}
 
     - run:
         name: Linter
@@ -56,12 +45,6 @@ integration_steps: &integration_steps
   steps:
     - checkout
 
-    - restore_cache:
-        keys:
-          - v2-dependencies-{{ checksum "package-lock.json" }}
-          # https://github.com/badges/shields/issues/1937
-          - v2-dependencies-
-
     - run:
         name: Install dependencies
         command: npm ci
@@ -82,12 +65,6 @@ integration_steps: &integration_steps
 services_steps: &services_steps
   steps:
     - checkout
-
-    - restore_cache:
-        keys:
-          - v2-dependencies-{{ checksum "package-lock.json" }}
-          # https://github.com/badges/shields/issues/1937
-          - v2-dependencies-
 
     - run:
         name: Install dependencies
@@ -124,12 +101,6 @@ run_package_tests: &run_package_tests
 package_steps: &package_steps
   steps:
     - checkout
-
-    - restore_cache:
-        keys:
-          - v2-dependencies-{{ checksum "package-lock.json" }}
-          # https://github.com/badges/shields/issues/1937
-          - v2-dependencies-
 
     - run:
         name: Install dependencies
@@ -181,22 +152,11 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
-
       - run:
           name: Install dependencies
           command: npm ci
           environment:
             CYPRESS_INSTALL_BINARY: 0
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
   main:
     docker:
@@ -230,12 +190,6 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
-
       - run:
           name: Install dependencies
           command: npm ci
@@ -255,12 +209,6 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
 
       - run:
           name: Install dependencies
@@ -314,13 +262,6 @@ jobs:
       - image: cypress/base:8
     steps:
       - checkout
-
-      - restore_cache:
-          name: Restore node_modules
-          keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # https://github.com/badges/shields/issues/1937
-            - v2-dependencies-
 
       - restore_cache:
           name: Restore Cypress binary
