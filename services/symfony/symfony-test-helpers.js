@@ -81,6 +81,7 @@ const multipleViolations = createMockResponse({
 const user = 'admin'
 const token = 'password'
 const config = {
+  public: { services: {} },
   private: {
     sl_insight_userUuid: user,
     sl_insight_apiToken: token,

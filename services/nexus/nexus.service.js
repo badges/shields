@@ -67,7 +67,7 @@ module.exports = class Nexus extends BaseJsonService {
   }
 
   static get auth() {
-    return { userKey: 'nexus_user', passKey: 'nexus_pass' }
+    return { userKey: 'nexus_user', passKey: 'nexus_pass', serviceKey: 'nexus' }
   }
 
   static get examples() {
@@ -223,14 +223,16 @@ module.exports = class Nexus extends BaseJsonService {
       this.addQueryParamsToQueryString({ qs, queryOpt })
     }
 
-    const json = await this._requestJson({
-      schema,
-      url,
-      options: { qs, auth: this.authHelper.basicAuth },
-      errorMessages: {
-        404: 'artifact not found',
-      },
-    })
+    const json = await this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema,
+        url,
+        options: { qs },
+        errorMessages: {
+          404: 'artifact not found',
+        },
+      })
+    )
 
     return { actualNexusVersion: '2', json }
   }
@@ -262,14 +264,16 @@ module.exports = class Nexus extends BaseJsonService {
       server.slice(-1) === '/' ? '' : '/'
     }service/rest/v1/search`
 
-    const json = await this._requestJson({
-      schema: nexus3SearchApiSchema,
-      url,
-      options: { qs, auth: this.authHelper.basicAuth },
-      errorMessages: {
-        404: 'artifact not found',
-      },
-    })
+    const json = await this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema: nexus3SearchApiSchema,
+        url,
+        options: { qs },
+        errorMessages: {
+          404: 'artifact not found',
+        },
+      })
+    )
 
     return { actualNexusVersion: '3', json }
   }
