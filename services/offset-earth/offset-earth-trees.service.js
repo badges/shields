@@ -5,25 +5,9 @@ const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 const Joi = require('@hapi/joi')
 
-const profileSchema = Joi.object({
-  treeMonths: Joi.array()
-    .items(
-      Joi.object({
-        projects: Joi.array()
-          .items(
-            Joi.object({
-              trees: Joi.array()
-                .required()
-                .items(
-                  Joi.object({
-                    value: Joi.number().positive(),
-                  })
-                ),
-            })
-          )
-          .required(),
-      }).required()
-    )
+const apiSchema = Joi.object({
+  total: Joi.number()
+    .positive()
     .required(),
 }).required()
 
@@ -58,10 +42,10 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
   }
 
   async fetch({ owner }) {
-    const url = `https://api.offset.earth/users/${owner}/profile`
+    const url = `https://public.offset.earth/users/${owner}/trees`
     return this._requestJson({
       url,
-      schema: profileSchema,
+      schema: apiSchema,
       errorMessages: {
         404: 'profile not found',
       },
@@ -69,22 +53,8 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
   }
 
   async handle({ owner }) {
-    const json = await this.fetch({ owner })
-    let count = 0
+    const { total } = await this.fetch({ owner })
 
-    json.treeMonths.forEach(treeMonth => {
-      treeMonth.projects.forEach(project => {
-        project.trees.forEach(trees => {
-          if (trees.value !== undefined) {
-            count += trees.value
-            return
-          }
-
-          count += 1
-        })
-      })
-    })
-
-    return this.constructor.render({ count })
+    return this.constructor.render({ count: total })
   }
 }

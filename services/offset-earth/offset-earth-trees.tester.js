@@ -14,23 +14,9 @@ t.create('request for existing profile')
 t.create('request for existing profile (mock)')
   .get('/offsetearth.json')
   .intercept(nock =>
-    nock('https://api.offset.earth')
-      .get('/users/offsetearth/profile')
-      .reply(200, {
-        treeMonths: [
-          {
-            projects: [
-              {
-                trees: [
-                  {
-                    value: 50,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      })
+    nock('https://public.offset.earth')
+      .get('/users/offsetearth/trees')
+      .reply(200, { total: 50 })
   )
   .expectBadge({
     label: 'trees',
@@ -40,8 +26,8 @@ t.create('request for existing profile (mock)')
 t.create('invalid profile (mock)')
   .get('/non-existent-username.json')
   .intercept(nock =>
-    nock('https://api.offset.earth')
-      .get('/users/non-existent-username/profile')
+    nock('https://public.offset.earth')
+      .get('/users/non-existent-username/trees')
       .reply(404, {})
   )
   .expectBadge({ label: 'trees', message: 'profile not found' })

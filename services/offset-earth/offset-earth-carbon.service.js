@@ -5,19 +5,9 @@ const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 const Joi = require('@hapi/joi')
 
-const profileSchema = Joi.object({
-  carbonMonths: Joi.array()
-    .items(
-      Joi.object({
-        projects: Joi.array()
-          .items(
-            Joi.object({
-              numberOfTonnes: Joi.number().positive(),
-            })
-          )
-          .required(),
-      }).required()
-    )
+const apiSchema = Joi.object({
+  total: Joi.number()
+    .positive()
     .required(),
 }).required()
 
@@ -53,10 +43,10 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
   }
 
   async fetch({ owner }) {
-    const url = `https://api.offset.earth/users/${owner}/profile`
+    const url = `https://public.offset.earth/users/${owner}/carbon-offset`
     return this._requestJson({
       url,
-      schema: profileSchema,
+      schema: apiSchema,
       errorMessages: {
         404: 'profile not found',
       },
@@ -64,15 +54,8 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
   }
 
   async handle({ owner }) {
-    const json = await this.fetch({ owner })
-    let count = 0
+    const { total } = await this.fetch({ owner })
 
-    json.carbonMonths.forEach(carbonMonth => {
-      carbonMonth.projects.forEach(project => {
-        count += project.numberOfTonnes
-      })
-    })
-
-    return this.constructor.render({ count })
+    return this.constructor.render({ count: total })
   }
 }
