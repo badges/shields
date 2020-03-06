@@ -76,6 +76,12 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
         config.matrix.include.filter(v => 'php' in v).map(v => v.php.toString())
       )
     }
+    // from jobs
+    if (config.jobs && config.jobs.include) {
+      travisVersions = travisVersions.concat(
+        config.jobs.include.filter(v => 'php' in v).map(v => v.php.toString())
+      )
+    }
 
     const versions = travisVersions
       .map(v => minorVersion(v))
