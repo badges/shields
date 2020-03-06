@@ -16,6 +16,9 @@ const schema = Joi.object({
       matrix: Joi.object({
         include: Joi.array().items(Joi.object({ php: optionalNumberOrString })),
       }),
+      jobs: Joi.object({
+        include: Joi.array().items(Joi.object({ php: optionalNumberOrString })),
+      }),
     }).required(),
   }).required(),
 }).required()
