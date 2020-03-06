@@ -148,7 +148,7 @@
     "@babel/polyfill": "^7.8.7",
     "@babel/register": "7.8.6",
     "@mapbox/react-click-to-select": "^2.2.0",
-    "@types/chai": "^4.2.9",
+    "@types/chai": "^4.2.10",
     "@types/chai-enzyme": "^0.6.7",
     "@types/enzyme": "^3.10.5",
     "@types/lodash.debounce": "^4.0.6",
