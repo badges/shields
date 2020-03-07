@@ -362,7 +362,7 @@ class Server {
     if (metricInstance) {
       metricInstance.initialize(camp)
       this.influxMetrics.registerMetricsEndpoint(this.camp)
-      this.influxMetrics.startMetricsPush()
+      this.influxMetrics.startPushingMetrics()
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
