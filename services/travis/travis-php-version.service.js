@@ -16,6 +16,9 @@ const schema = Joi.object({
       matrix: Joi.object({
         include: Joi.array().items(Joi.object({ php: optionalNumberOrString })),
       }),
+      jobs: Joi.object({
+        include: Joi.array().items(Joi.object({ php: optionalNumberOrString })),
+      }),
     }).required(),
   }).required(),
 }).required()
@@ -71,6 +74,12 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
     if (config.matrix && config.matrix.include) {
       travisVersions = travisVersions.concat(
         config.matrix.include.filter(v => 'php' in v).map(v => v.php.toString())
+      )
+    }
+    // from jobs
+    if (config.jobs && config.jobs.include) {
+      travisVersions = travisVersions.concat(
+        config.jobs.include.filter(v => 'php' in v).map(v => v.php.toString())
       )
     }
 
