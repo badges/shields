@@ -243,7 +243,7 @@
     "styled-components": "^5.0.1",
     "tmp": "0.1.0",
     "ts-mocha": "^6.0.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": "^10.16.3",
