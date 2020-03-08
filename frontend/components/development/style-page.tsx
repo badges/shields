@@ -34,7 +34,7 @@ function Badges({
   baseUrl: string
   style: string
   badges: BadgeData[]
-}) {
+}): JSX.Element {
   return (
     <>
       {badges.map(({ label, message, color, namedLogo }) => (
@@ -96,7 +96,7 @@ const examples = [
   },
 ]
 
-function StyleTable({ style }: { style: string }) {
+function StyleTable({ style }: { style: string }): JSX.Element {
   return (
     <StyledTable>
       <thead>
@@ -129,7 +129,7 @@ function StyleTable({ style }: { style: string }) {
 
 const styles = ['flat', 'flat-square', 'for-the-badge', 'social', 'plastic']
 
-export default function StylePage() {
+export default function StylePage(): JSX.Element {
   return (
     <div>
       <Meta />
