@@ -66,6 +66,9 @@ update_configs:
       - match:
           dependency_name: start-server-and-test
           version_requirement: '>=1.10.8'
+      - match:
+          dependency_name: xmldom
+          version_requirement: '>=0.3.0'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'

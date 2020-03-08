@@ -89,12 +89,12 @@ export function constructPath({
   const path = tokens
     .map(token => {
       if (typeof token === 'string') {
-        return token
+        return token.trim()
       } else {
         const { delimiter, name, optional } = token
         const value = namedParams[name]
         if (value) {
-          return `${delimiter}${value}`
+          return `${delimiter}${value.trim()}`
         } else if (optional) {
           return ''
         } else {

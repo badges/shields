@@ -72,7 +72,7 @@ function getQueryString({
     // booleans.
     if (typeof value === 'string') {
       if (value) {
-        outQuery[name] = value
+        outQuery[name] = value.trim()
       } else {
         // Skip empty params.
         isComplete = false
