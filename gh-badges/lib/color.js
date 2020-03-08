@@ -2,7 +2,7 @@
 
 const isCSSColor = require('is-css-color')
 
-// When updating these, be sure also to update the list in `gh-badges/README.md`.
+// When updating these, be sure also to update the list in `badge-maker/README.md`.
 const namedColors = {
   brightgreen: '#4c1',
   green: '#97ca00',

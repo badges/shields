@@ -1,5 +1,5 @@
 {
-  "name": "gh-badges",
+  "name": "badge-maker",
   "version": "2.2.1",
   "description": "Shields.io badge library",
   "keywords": [
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",
-    "directory": "gh-badges"
+    "directory": "badge-maker"
   },
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "license": "CC0-1.0",

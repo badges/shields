@@ -1,6 +1,6 @@
 'use strict'
 /**
- * @module gh-badges
+ * @module badge-maker
  */
 
 const _makeBadge = require('./make-badge')
@@ -70,7 +70,7 @@ function _clean(format) {
  * @param {string} format.format (Optional) Output format: 'svg' or 'json'
  * @param {string} format.template (Optional) Visual template e.g: 'flat'
  * @returns {string} Badge in SVG or JSON format
- * @see https://github.com/badges/shields/tree/master/gh-badges/README.md
+ * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */
 function makeBadge(format) {
   const cleanedFormat = _clean(format)

@@ -1,12 +1,12 @@
-# gh-badges
+# badge-maker
 
-[![npm version](https://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-[![npm license](https://img.shields.io/npm/l/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+[![npm version](https://img.shields.io/npm/v/badge-maker.svg)](https://npmjs.org/package/badge-maker)
+[![npm license](https://img.shields.io/npm/l/badge-maker.svg)](https://npmjs.org/package/badge-maker)
 
 ## Installation
 
 ```sh
-npm install gh-badges
+npm install badge-maker
 ```
 
 ## Usage
@@ -14,14 +14,14 @@ npm install gh-badges
 ### On the console
 
 ```sh
-npm install -g gh-badges
+npm install -g badge-maker
 badge build passed :green > mybadge.svg
 ```
 
 ### As a library
 
 ```js
-const { makeBadge, ValidationError } = require('gh-badges')
+const { makeBadge, ValidationError } = require('badge-maker')
 
 const format = {
   text: ['build', 'passed'],
@@ -35,7 +35,7 @@ makeBadge({}) // ValidationError: Field `text` is required
 
 ### Node version support
 
-The latest version of gh-badges supports all currently maintained Node
+The latest version of badge-maker supports all currently maintained Node
 versions. See the [Node Release Schedule][].
 
 [node release schedule]: https://github.com/nodejs/Release#release-schedule
@@ -46,9 +46,9 @@ The format is the following:
 
 ```js
 {
-  text: [ 'build', 'passed' ],  // Textual information shown, in order
+  text: [ 'build', 'passed' ],  // Textual information to be shown on the badge, in order
 
-  format: 'svg',  // Also supports json
+  format: 'svg',  // One of 'svg' or 'json'
 
   color: '#4c1',
   labelColor: '#555',
