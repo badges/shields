@@ -43,10 +43,10 @@ export default function Customizer({
     CopiedContentIndicatorHandle
   >() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
-  const [queryString, setQueryString] = useState()
-  const [pathIsComplete, setPathIsComplete] = useState()
-  const [markup, setMarkup] = useState()
-  const [message, setMessage] = useState()
+  const [queryString, setQueryString] = useState<string>()
+  const [pathIsComplete, setPathIsComplete] = useState<boolean>()
+  const [markup, setMarkup] = useState<string>()
+  const [message, setMessage] = useState<string>()
 
   function generateBuiltBadgeUrl(): string {
     const suffix = queryString ? `?${queryString}` : ''
