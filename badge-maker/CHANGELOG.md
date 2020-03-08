@@ -1,6 +1,55 @@
 # Changelog
 
-## 2.2.1
+## 3.0.0
+
+### Breaking Changes
+
+- Package name has changed to `badge-maker` and moved to https://www.npmjs.com/package/badge-maker
+- `BadgeFactory` class is removed and replaced by `makeBadge()` function.
+  To upgrade from v2.1.1, change your code from:
+  ```js
+  const { BadgeFactory } = require('gh-badges')
+  const bf = new BadgeFactory()
+  const svg = bf.create({ text: ['build', 'passed'] })
+  ```
+  to:
+  ```js
+  const { makeBadge } = require('badge-maker')
+  const svg = makeBadge({ text: ['build', 'passed'] })
+  ```
+- `ValidationError` had been added and inputs are now validated. In previous releases, invalid inputs would be discarded and replaced with defaults. For example, in 2.2.1
+  ```js
+  const { BadgeFactory } = require('gh-badges')
+  const bf = new BadgeFactory()
+  const svg = bf.create({
+    text: ['build', 'passed'],
+    format: 'some invalid value',
+  })
+  ```
+  would generate an SVG badge. In version >=3
+  ```js
+  const { makeBadge } = require('badge-maker')
+  const svg = makeBadge({
+    text: ['build', 'passed'],
+    format: 'some invalid value',
+  })
+  ```
+  will throw a `ValidationError`.
+- Raster support has been removed from the CLI. On the console, the output of `badge` can be piped to a utility like [imagemagick](https://imagemagick.org/script/command-line-processing.php). If you were previously using
+  ```sh
+  badge build passed :green .gif
+  ```
+  this could be replaced by
+  ```sh
+  badge build passed :green | magick svg:- gif:-
+  ```
+- Deprecated parameters have been removed. In version 2.2.0 the `colorA`, `colorB` and `colorscheme` params were deprecated. In version 3.0.0 these have been removed.
+
+### Security
+
+- Removed dependency on doT library which has known vulnerabilities.
+
+## 2.2.1 - 2019-05-30
 
 ### Fixes
 
