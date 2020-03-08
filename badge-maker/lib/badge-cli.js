@@ -17,7 +17,7 @@ if (process.argv.length < 4) {
   console.log('    #xxxxxx (six hex digits)')
   console.log('    color (CSS color)')
   console.log('  output:')
-  console.log('    svg, png, jpg, or gif')
+  console.log('    svg or json')
   console.log()
   console.log('Eg: badge cactus grown :green @flat')
   console.log()
