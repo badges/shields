@@ -7,7 +7,7 @@ The Shields codebase is divided into several parts:
 1.  The frontend (about 7% of the code)
     1. [`frontend`][frontend]
 2.  The badge renderer (which is available as an npm package)
-    1.  [`gh-badges`][gh-badges]
+    1.  [`badge-maker`][badge-maker]
 3.  The base service classes (about 8% of the code, and probably the most important
     code in the codebase)
     1.  [`core/base-service`][base-service]
@@ -24,7 +24,7 @@ The Shields codebase is divided into several parts:
     1.  [`lib/suggest.js`][suggest]
 
 [frontend]: https://github.com/badges/shields/tree/master/frontend
-[gh-badges]: https://github.com/badges/shields/tree/master/gh-badges
+[badge-maker]: https://github.com/badges/shields/tree/master/badge-maker
 [base-service]: https://github.com/badges/shields/tree/master/core/base-service
 [server]: https://github.com/badges/shields/tree/master/core/server
 [token-pooling]: https://github.com/badges/shields/tree/master/core/token-pooling
@@ -36,7 +36,7 @@ The tests are also divided into several parts:
 1.  Unit and functional tests of the frontend
     1.  `frontend/**/*.spec.js`
 2.  Unit and functional tests of the badge renderer
-    1.  `gh-badges/**/*.spec.js`
+    1.  `badge-maker/**/*.spec.js`
 3.  Unit and functional tests of the core code
     1.  `core/**/*.spec.js`
 4.  Unit and functional tests of the service helper functions
