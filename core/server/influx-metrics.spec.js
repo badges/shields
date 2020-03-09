@@ -36,10 +36,12 @@ describe('Influx metrics', function() {
           ]
         },
       }
+      const instanceMetadata = new InstanceMetadata({ id: 'instance2' })
+      const config = {}
       await new InfluxMetrics(
         metricInstance,
-        new InstanceMetadata({ id: 'instance2' }),
-        {}
+        instanceMetadata,
+        config
       ).registerMetricsEndpoint(camp)
 
       const { headers, body, statusCode } = await got(
