@@ -25,11 +25,27 @@ public:
     dir: 'PERSISTENCE_DIR'
 
   services:
+    bitbucketServer:
+      authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
+    drone:
+      authorizedOrigins: 'DRONE_ORIGINS'
     github:
       baseUri: 'GITHUB_URL'
       debug:
         enabled: 'GITHUB_DEBUG_ENABLED'
         intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
+    jenkins:
+      authorizedOrigins: 'JENKINS_ORIGINS'
+    jira:
+      authorizedOrigins: 'JIRA_ORIGINS'
+    nexus:
+      authorizedOrigins: 'NEXUS_ORIGINS'
+    npm:
+      authorizedOrigins: 'NPM_ORIGINS'
+    sonar:
+      authorizedOrigins: 'SONAR_ORIGINS'
+    teamcity:
+      authorizedOrigins: 'TEAMCITY_ORIGINS'
     trace: 'TRACE_SERVICES'
 
   profiling:
@@ -46,6 +62,10 @@ private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bintray_user: 'BINTRAY_USER'
   bintray_apikey: 'BINTRAY_API_KEY'
+  bitbucket_username: 'BITBUCKET_USER'
+  bitbucket_password: 'BITBUCKET_PASS'
+  bitbucket_server_username: 'BITBUCKET_SERVER_USER'
+  bitbucket_server_password: 'BITBUCKET_SERVER_PASS'
   drone_token: 'DRONE_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
@@ -63,6 +83,8 @@ private:
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
   sonarqube_token: 'SONARQUBE_TOKEN'
+  teamcity_user: 'TEAMCITY_USER'
+  teamcity_pass: 'TEAMCITY_PASS'
   twitch_client_id: 'TWITCH_CLIENT_ID'
   twitch_client_secret: 'TWITCH_CLIENT_SECRET'
   wheelmap_token: 'WHEELMAP_TOKEN'

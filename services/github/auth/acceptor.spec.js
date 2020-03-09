@@ -16,7 +16,7 @@ const fakeShieldsSecret = 'letmeinplz'
 
 describe('Github token acceptor', function() {
   const oauthHelper = GithubConstellation._createOauthHelper({
-    gh_client_id: fakeClientId,
+    private: { gh_client_id: fakeClientId },
   })
   before(function() {
     // Make sure properties exist.

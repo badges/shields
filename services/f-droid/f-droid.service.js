@@ -45,6 +45,7 @@ module.exports = class FDroid extends BaseYamlService {
       },
     ]
   }
+
   static get defaultBadgeData() {
     return { label: 'f-droid' }
   }
@@ -62,7 +63,7 @@ module.exports = class FDroid extends BaseYamlService {
       url: `${url}.yml`,
       ...options,
     })
-    return { version: yaml['CurrentVersion'] }
+    return { version: yaml.CurrentVersion }
   }
 
   async fetchText(url, options) {

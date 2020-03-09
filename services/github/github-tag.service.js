@@ -83,7 +83,7 @@ class GithubTag extends GithubAuthV4Service {
 
   async fetch({ user, repo, sort }) {
     const limit = sort === 'semver' ? 100 : 1
-    return await this._requestGraphql({
+    return this._requestGraphql({
       query: gql`
         query($user: String!, $repo: String!, $limit: Int!) {
           repository(owner: $user, name: $repo) {
@@ -120,8 +120,9 @@ class GithubTag extends GithubAuthV4Service {
 
     const json = await this.fetch({ user, repo, sort })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
-    if (tags.length === 0)
+    if (tags.length === 0) {
       throw new NotFound({ prettyMessage: 'no tags found' })
+    }
     return this.constructor.render({
       version: this.constructor.getLatestTag({
         tags,

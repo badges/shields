@@ -28,7 +28,7 @@ const inputs = [
 
 export default function DynamicBadgeMaker({
   baseUrl = document.location.href,
-}) {
+}): JSX.Element {
   const [values, setValues] = useState<State>({
     datatype: '',
     label: '',
@@ -44,14 +44,14 @@ export default function DynamicBadgeMaker({
 
   function onChange({
     target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
     setValues({
       ...values,
       [name]: value,
     })
   }
 
-  function onSubmit(e: React.FormEvent) {
+  function onSubmit(e: React.FormEvent): void {
     e.preventDefault()
 
     const { datatype, label, dataUrl, query, color, prefix, suffix } = values

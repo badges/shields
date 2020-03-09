@@ -20,7 +20,7 @@ export function BuilderContainer({
   children,
 }: {
   children: JSX.Element[] | JSX.Element
-}) {
+}): JSX.Element {
   return (
     <BuilderOuterContainer>
       <BuilderInnerContainer>{children}</BuilderInnerContainer>

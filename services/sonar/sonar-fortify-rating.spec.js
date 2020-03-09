@@ -6,7 +6,16 @@ const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const SonarFortifyRating = require('./sonar-fortify-rating.service')
 
 const token = 'abc123def456'
-const config = { private: { sonarqube_token: token } }
+const config = {
+  public: {
+    services: {
+      sonar: { authorizedOrigins: ['http://sonar.petalslink.com'] },
+    },
+  },
+  private: {
+    sonarqube_token: token,
+  },
+}
 
 describe('SonarFortifyRating', function() {
   cleanUpNockAfterEach()

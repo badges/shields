@@ -36,24 +36,24 @@ export default function Customizer({
   initialStyle?: string
   isPrefilled: boolean
   link?: string
-}) {
+}): JSX.Element {
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
   const indicatorRef = useRef<
     CopiedContentIndicatorHandle
   >() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
-  const [queryString, setQueryString] = useState()
-  const [pathIsComplete, setPathIsComplete] = useState()
-  const [markup, setMarkup] = useState()
-  const [message, setMessage] = useState()
+  const [queryString, setQueryString] = useState<string>()
+  const [pathIsComplete, setPathIsComplete] = useState<boolean>()
+  const [markup, setMarkup] = useState<string>()
+  const [message, setMessage] = useState<string>()
 
-  function generateBuiltBadgeUrl() {
+  function generateBuiltBadgeUrl(): string {
     const suffix = queryString ? `?${queryString}` : ''
     return `${baseUrl || getBaseUrlFromWindowLocation()}${path}${suffix}`
   }
 
-  function renderLivePreview() {
+  function renderLivePreview(): JSX.Element {
     // There are some usability issues here. It would be better if the message
     // changed from a validation error to a loading message once the
     // parameters were filled in, and also switched back to loading when the
@@ -75,7 +75,7 @@ export default function Customizer({
     )
   }
 
-  async function copyMarkup(markupFormat: MarkupFormat) {
+  async function copyMarkup(markupFormat: MarkupFormat): Promise<void> {
     const builtBadgeUrl = generateBuiltBadgeUrl()
     const markup = generateMarkup({
       badgeUrl: builtBadgeUrl,
@@ -98,7 +98,7 @@ export default function Customizer({
     }
   }
 
-  function renderMarkupAndLivePreview() {
+  function renderMarkupAndLivePreview(): JSX.Element {
     return (
       <div>
         {renderLivePreview()}
@@ -124,7 +124,7 @@ export default function Customizer({
   }: {
     path: string
     isComplete: boolean
-  }) {
+  }): void {
     setPath(path)
     setPathIsComplete(isComplete)
   }
@@ -135,7 +135,7 @@ export default function Customizer({
   }: {
     queryString: string
     isComplete: boolean
-  }) {
+  }): void {
     setQueryString(queryString)
   }
 

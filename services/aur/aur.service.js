@@ -97,6 +97,7 @@ class AurVotes extends BaseAurService {
   static get category() {
     return 'rating'
   }
+
   static get route() {
     return {
       base: 'aur/votes',

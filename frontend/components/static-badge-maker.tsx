@@ -5,7 +5,9 @@ import { InlineInput } from './common'
 type StateKey = 'label' | 'message' | 'color'
 type State = Record<StateKey, string>
 
-export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
+export default function StaticBadgeMaker({
+  baseUrl = document.location.href,
+}): JSX.Element {
   const [values, setValues] = useState<State>({
     label: '',
     message: '',
@@ -16,14 +18,14 @@ export default function StaticBadgeMaker({ baseUrl = document.location.href }) {
 
   function onChange({
     target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
     setValues({
       ...values,
       [name]: value,
     })
   }
 
-  function onSubmit(e: React.FormEvent) {
+  function onSubmit(e: React.FormEvent): void {
     e.preventDefault()
 
     const { label, message, color } = values

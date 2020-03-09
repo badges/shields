@@ -119,11 +119,23 @@ describe('Nexus', function() {
 
     const user = 'admin'
     const pass = 'password'
-    const config = { private: { nexus_user: user, nexus_pass: pass } }
+    const config = {
+      public: {
+        services: {
+          nexus: {
+            authorizedOrigins: ['https://repository.jboss.org'],
+          },
+        },
+      },
+      private: {
+        nexus_user: user,
+        nexus_pass: pass,
+      },
+    }
 
     it('sends the auth information as configured', async function() {
-      const scope = nock('https://repository.jboss.org/nexus')
-        .get('/service/local/lucene/search')
+      const scope = nock('https://repository.jboss.org')
+        .get('/nexus/service/local/lucene/search')
         .query({ g: 'jboss', a: 'jboss-client' })
         // This ensures that the expected credentials are actually being sent with the HTTP request.
         // Without this the request wouldn't match and the test would fail.

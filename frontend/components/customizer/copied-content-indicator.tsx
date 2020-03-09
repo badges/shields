@@ -41,7 +41,7 @@ function _CopiedContentIndicator(
     children: JSX.Element | JSX.Element[]
   },
   ref: React.Ref<CopiedContentIndicatorHandle>
-) {
+): JSX.Element {
   const [pose, setPose] = useState('hidden')
 
   useImperativeHandle(ref, () => ({
@@ -50,7 +50,7 @@ function _CopiedContentIndicator(
     },
   }))
 
-  function handlePoseComplete() {
+  function handlePoseComplete(): void {
     if (pose === 'effectStart') {
       setPose('effectEnd')
     } else {
