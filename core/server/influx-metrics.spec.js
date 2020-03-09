@@ -36,7 +36,10 @@ describe('Influx metrics', function() {
           ]
         },
       }
-      const instanceMetadata = new InstanceMetadata({ id: 'instance2' })
+      const instanceMetadata = new InstanceMetadata({
+        id: 'instance2',
+        env: 'test-env',
+      })
       const config = {}
       await new InfluxMetrics(
         metricInstance,
@@ -50,7 +53,7 @@ describe('Influx metrics', function() {
 
       expect(statusCode).to.be.equal(200)
       expect(body).to.contain(
-        'prometheus,env=test,instance=instance2,service=shields counter1=11'
+        'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
       )
       expect(headers).to.have.property('content-type', 'text/plain')
     })

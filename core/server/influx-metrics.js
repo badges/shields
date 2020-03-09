@@ -42,7 +42,7 @@ module.exports = class InfluxMetrics {
 
   prepareMetrics() {
     return promClientJsonToInfluxV2(this._metricInstance.metrics(), {
-      env: process.env.NODE_CONFIG_ENV,
+      env: this._instanceMetadata.env,
       service: 'shields',
       instance: this._instanceMetadata.id,
     })

@@ -18,4 +18,9 @@ describe('The instance metadata', function() {
     const instanceMetadata = new InstanceMetadata({ id: '' })
     expect(instanceMetadata.id).to.not.be.empty
   })
+
+  it('should store passed environment', function() {
+    const instanceMetadata = new InstanceMetadata({ env: 'test-env' })
+    expect(instanceMetadata.env).to.equal('test-env')
+  })
 })
