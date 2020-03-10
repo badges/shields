@@ -29,8 +29,14 @@ const format = {
   template: 'flat',
 }
 
-makeBadge(format) // <svg...
-makeBadge({}) // ValidationError: Field `text` is required
+const svg = makeBadge(format)
+console.log(svg) // <svg...
+
+try {
+  makeBadge({})
+} catch (e) {
+  console.log(e) // ValidationError: Field `text` is required
+}
 ```
 
 ### Node version support
@@ -48,7 +54,7 @@ The format is the following:
 {
   text: [ 'build', 'passed' ],  // Textual information to be shown on the badge, in order
 
-  format: 'svg',  // One of 'svg' or 'json'
+  format: 'svg',  // Either 'svg' or 'json'
 
   color: '#4c1',
   labelColor: '#555',
