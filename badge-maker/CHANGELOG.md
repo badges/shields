@@ -35,7 +35,7 @@
   })
   ```
   will throw a `ValidationError`.
-- Raster support has been removed from the CLI. On the console, the output of `badge` can be piped to a utility like [imagemagick](https://imagemagick.org/script/command-line-processing.php). If you were previously using
+- Raster support has been removed from the CLI. It will now only output SVG. On the console, the output of `badge` can be piped to a utility like [imagemagick](https://imagemagick.org/script/command-line-processing.php). If you were previously using
   ```sh
   badge build passed :green .gif
   ```

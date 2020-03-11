@@ -15,7 +15,7 @@ npm install badge-maker
 
 ```sh
 npm install -g badge-maker
-badge build passed :green .svg > mybadge.svg
+badge build passed :green > mybadge.svg
 ```
 
 ### As a library
