@@ -11,6 +11,26 @@ t.create('.nycrc is default')
   .get('/yargs/yargs.json')
   .expectBadge({ label: 'min coverage', message: isIntegerPercentage })
 
+t.create('.nycrc is default')
+  .get('/yargs/yargs.json?preferredThreshold=lines')
+  .expectBadge({ label: 'min coverage', message: '100%' })
+
+t.create('.nycrc in monorepo')
+  .get('/yargs/yargs.json?config=packages/foo/.nycrc.json')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/yargs/yargs/contents/packages/foo/.nycrc.json?ref=master')
+      .reply(200, {
+        content: Buffer.from(
+          JSON.stringify({
+            lines: 99,
+          })
+        ).toString('base64'),
+        encoding: 'base64',
+      })
+  )
+  .expectBadge({ label: 'min coverage', message: isIntegerPercentage })
+
 t.create('.nycrc with no thresholds')
   .get('/yargs/yargs.json?config=.nycrc')
   .intercept(nock =>
