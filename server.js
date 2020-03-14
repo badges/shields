@@ -3,6 +3,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 
 require('dotenv').config()
 
@@ -49,6 +50,7 @@ const Server = require('./core/server/server')
 const server = (module.exports = new Server(config, {
   id: process.env.INSTANCE_ID,
   env: process.env.NODE_CONFIG_ENV,
+  hostname: os.hostname(),
 }))
 
 ;(async () => {

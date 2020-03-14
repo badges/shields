@@ -9,18 +9,18 @@ describe('The instance metadata', function() {
     expect(instanceMetadata.id).to.equal('test-instance-id')
   })
 
-  it('should generate instance id if id is not passed', function() {
+  it('should return generated instance id', function() {
     const instanceMetadata = new InstanceMetadata()
-    expect(instanceMetadata.id).to.not.be.empty
-  })
-
-  it('should generate instance id if passed id is empty', function() {
-    const instanceMetadata = new InstanceMetadata({ id: '' })
-    expect(instanceMetadata.id).to.not.be.empty
+    expect(instanceMetadata.generatedId).to.not.be.empty
   })
 
   it('should store passed environment', function() {
     const instanceMetadata = new InstanceMetadata({ env: 'test-env' })
     expect(instanceMetadata.env).to.equal('test-env')
+  })
+
+  it('should return hostname', function() {
+    const instanceMetadata = new InstanceMetadata({ hostname: 'test-hostname' })
+    expect(instanceMetadata.hostname).to.equal('test-hostname')
   })
 })

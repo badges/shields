@@ -340,7 +340,7 @@ class Server {
     } = this.config.public
 
     log(`Server is starting up: ${this.baseUrl}`)
-    log(`Instance id: ${this.instanceMetadata.id}`)
+    log(`Instance metadata: ${this.instanceMetadata}`)
 
     const camp = (this.camp = Camp.start({
       documentRoot: path.resolve(__dirname, '..', '..', 'public'),

@@ -8,6 +8,65 @@ const InfluxMetrics = require('./influx-metrics')
 const InstanceMetadata = require('./instance-metadata')
 
 describe('Influx metrics', function() {
+  describe('"metrics" function', function() {
+    it('should add instance id as an instance label', async function() {
+      const metricInstance = {
+        metrics() {
+          return [
+            {
+              help: 'counter 1 help',
+              name: 'counter1',
+              type: 'counter',
+              values: [{ value: 11, labels: {} }],
+              aggregator: 'sum',
+            },
+          ]
+        },
+      }
+      const instanceMetadata = new InstanceMetadata({
+        id: 'instance2',
+        env: 'test-env',
+      })
+      const config = {}
+      const influxMetrics = new InfluxMetrics(
+        metricInstance,
+        instanceMetadata,
+        config
+      )
+
+      expect(influxMetrics.metrics()).to.be.contain('instance=instance2')
+    })
+  })
+
+  it('should ass hostname as an instance label when instance id is empty', async function() {
+    const metricInstance = {
+      metrics() {
+        return [
+          {
+            help: 'counter 1 help',
+            name: 'counter1',
+            type: 'counter',
+            values: [{ value: 11, labels: {} }],
+            aggregator: 'sum',
+          },
+        ]
+      },
+    }
+    const instanceMetadata = new InstanceMetadata({
+      id: '',
+      env: 'test-env',
+      hostname: 'test-hostname',
+    })
+    const config = {}
+    const influxMetrics = new InfluxMetrics(
+      metricInstance,
+      instanceMetadata,
+      config
+    )
+
+    expect(influxMetrics.metrics()).to.be.contain('instance=test-hostname')
+  })
+
   describe('endpoint', function() {
     let baseUrl, camp
     beforeEach(async function() {

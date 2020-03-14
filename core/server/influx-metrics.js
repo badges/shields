@@ -13,7 +13,7 @@ module.exports = class InfluxMetrics {
   async registerMetricsEndpoint(server) {
     server.route(/^\/metrics-influx$/, (data, match, end, ask) => {
       ask.res.setHeader('Content-Type', 'text/plain')
-      ask.res.end(this.prepareMetrics())
+      ask.res.end(this.metrics())
     })
   }
 
@@ -24,7 +24,7 @@ module.exports = class InfluxMetrics {
         {
           uri: this._config.uri,
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.prepareMetrics(),
+          body: this.metrics(),
           timeout: this._config.timeoutMillseconds,
         },
         (err, res, body) => {
@@ -40,11 +40,11 @@ module.exports = class InfluxMetrics {
     )
   }
 
-  prepareMetrics() {
+  metrics() {
     return promClientJsonToInfluxV2(this._metricInstance.metrics(), {
       env: this._instanceMetadata.env,
       service: 'shields',
-      instance: this._instanceMetadata.id,
+      instance: this._instanceMetadata.id || this._instanceMetadata.hostname,
     })
   }
 
