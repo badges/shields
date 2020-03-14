@@ -2,9 +2,11 @@
 
 const Joi = require('@hapi/joi')
 const { coveragePercentage } = require('../color-formatters')
-const { GithubAuthV3Service } = require('../github/github-auth-service')
+const {
+  ConditionalGithubAuthV3Service,
+} = require('../github/github-auth-service')
 const { fetchJsonFromRepo } = require('../github/github-common-fetch')
-const { InvalidParameter } = require('..')
+const { InvalidResponse, NotFound } = require('..')
 
 const nycrcSchema = Joi.object({
   branches: Joi.number()
@@ -40,7 +42,7 @@ const documentation = `<p>
   on GitHub.
 </p>`
 
-module.exports = class Nycrc extends GithubAuthV3Service {
+module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
   static get category() {
     return 'coverage'
   }
@@ -51,7 +53,9 @@ module.exports = class Nycrc extends GithubAuthV3Service {
       // TODO: eventually add support for .yml and .yaml:
       pattern: ':user/:repo',
       queryParamSchema: Joi.object({
-        config: Joi.string().valid('.nycrc', '.nycrc.json', 'package.json'),
+        config: Joi.string()
+          .valid('.nycrc', '.nycrc.json', 'package.json')
+          .default('.nycrc'),
       }).required(),
     }
   }
@@ -73,38 +77,38 @@ module.exports = class Nycrc extends GithubAuthV3Service {
   }
 
   static render({ coverage }) {
-    if (typeof coverage === 'string') {
-      return {
-        message: coverage,
-        color: coveragePercentage(0),
-      }
+    return {
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
+    }
+  }
+
+  transform(config) {
+    const { branches, lines } = config
+    if (branches || lines) {
+      // We favor branches over lines for the coverage badge, if both
+      // thresholds are provided (as branches is the stricter requirement):
+      return branches || lines
     } else {
-      return {
-        message: `${coverage.toFixed(0)}%`,
-        color: coveragePercentage(coverage),
-      }
+      throw new InvalidResponse({
+        prettyMessage: '"branches" or "lines" threshold missing',
+      })
     }
   }
 
   async handle({ user, repo }, queryParams) {
-    let coverage = 'unknown'
+    let coverage = NaN
     const { config } = queryParams
-    const missingFields = new InvalidParameter({
-      prettyMessage: '"branches" or "lines" threshold missing',
-    })
     if (config === '.nycrc' || config === '.nycrc.json') {
-      const { branches, lines } = await fetchJsonFromRepo(this, {
-        schema: nycrcSchema,
-        user,
-        repo,
-        branch: 'master',
-        filename: config,
-      })
-      if (branches || lines) {
-        coverage = branches || lines
-      } else {
-        throw missingFields
-      }
+      coverage = this.transform(
+        await fetchJsonFromRepo(this, {
+          schema: nycrcSchema,
+          user,
+          repo,
+          branch: 'master',
+          filename: config,
+        })
+      )
     } else if (config === 'package.json') {
       const pkgJson = await fetchJsonFromRepo(this, {
         schema: pkgJSONSchema,
@@ -115,13 +119,11 @@ module.exports = class Nycrc extends GithubAuthV3Service {
       })
       const nycConfig = pkgJson.c8 || pkgJson.nyc
       if (!nycConfig) {
-        throw new InvalidParameter({
+        throw new NotFound({
           prettyMessage: 'no nyc or c8 stanza found',
         })
-      } else if (!(nycConfig.branches || nycConfig.lines)) {
-        throw missingFields
       } else {
-        coverage = nycConfig.branches || nycConfig.lines
+        coverage = this.transform(nycConfig)
       }
     }
     return this.constructor.render({ coverage })
