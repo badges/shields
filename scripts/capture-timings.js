@@ -12,7 +12,7 @@ async function main() {
   const warmupIterations = parseInt(args['warmup-iterations']) || 100
   let iterations = 0
   let time = 0.0
-  const timing = /^.*: ([0-9\.]+)ms$/i
+  const timing = /^.*: ([0-9.]+)ms$/i
   for await (const line of rl) {
     const match = timing.exec(line)
     if (match) {
