@@ -26,10 +26,13 @@ module.exports = class InfluxMetrics {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.metrics(),
           timeout: this._config.timeoutMillseconds,
+        },
+        (err, res, body) => {
+          // TODO log errors
+          if (err) {
+            console.log(err)
+          }
         }
-        // (err, res, body) => {
-        // TODO log errors
-        // }
       )
     }
     this._intervalId = setInterval(

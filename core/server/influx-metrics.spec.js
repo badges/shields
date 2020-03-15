@@ -99,6 +99,7 @@ describe('Influx metrics', function() {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       })
+        .persist()
         .post(
           '/metrics',
           'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
