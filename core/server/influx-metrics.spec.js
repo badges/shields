@@ -38,7 +38,7 @@ describe('Influx metrics', function() {
     })
   })
 
-  it('should ass hostname as an instance label when instance id is empty', async function() {
+  it('should add hostname as an instance label when instance id is empty', async function() {
     const metricInstance = {
       metrics() {
         return [
