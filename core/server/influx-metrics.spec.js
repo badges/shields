@@ -1,5 +1,7 @@
 'use strict'
 
+const nock = require('nock')
+const waitForExpect = require('wait-for-expect')
 const { expect } = require('chai')
 const Camp = require('camp')
 const portfinder = require('portfinder')
@@ -83,6 +85,39 @@ describe('Influx metrics', function() {
         'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
       )
       expect(headers).to.have.property('content-type', 'text/plain')
+    })
+  })
+
+  describe('pushing component', function() {
+    let influxMetrics
+    after(function() {
+      influxMetrics.stopPushingMetrics()
+    })
+    it('should send metrics', async function() {
+      const scope = nock('http://shields-metrics.io/', {
+        reqheaders: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .post(
+          '/metrics',
+          'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
+        )
+        .reply(200)
+      influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
+        uri: 'http://shields-metrics.io/metrics',
+        timeoutMillseconds: 100,
+        intervalSeconds: 0,
+      })
+
+      await influxMetrics.startPushingMetrics()
+
+      await waitForExpect(() => {
+        expect(scope.isDone()).to.be.equal(
+          true,
+          `pending mocks: ${scope.pendingMocks()}`
+        )
+      }, 100)
     })
   })
 })

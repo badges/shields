@@ -26,15 +26,15 @@ module.exports = class InfluxMetrics {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.metrics(),
           timeout: this._config.timeoutMillseconds,
-        },
-        (err, res, body) => {
-          // TODO log errors
         }
+        // (err, res, body) => {
+        // TODO log errors
+        // }
       )
     }
     this._intervalId = setInterval(
       sendMetrics,
-      this._config.intervalSeconds,
+      this._config.intervalSeconds * 1000,
       this._metricInstance,
       this._instanceMetadata
     )
@@ -48,7 +48,7 @@ module.exports = class InfluxMetrics {
     })
   }
 
-  stop() {
+  stopPushingMetrics() {
     if (this._intervalId) {
       clearInterval(this._intervalId)
       this._intervalId = undefined
