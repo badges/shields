@@ -26,7 +26,7 @@ describe('The server', function() {
   })
 
   it('should allow strings for port', async function() {
-    //fixes #4391 - This allows the app to be run using iisnode, which uses a named pipe for the port.
+    // fixes #4391 - This allows the app to be run using iisnode, which uses a named pipe for the port.
     const pipeServer = createTestServer({
       port: '\\\\.\\pipe\\9c137306-7c4d-461e-b7cf-5213a3939ad6',
     })
@@ -67,7 +67,7 @@ describe('The server', function() {
 
   it('should produce json badges', async function() {
     const { statusCode, body, headers } = await got(
-      `${baseUrl}npm/v/express.json`
+      `${baseUrl}twitter/follow/_Pyves.json`
     )
     expect(statusCode).to.equal(200)
     expect(headers['content-type']).to.equal('application/json')

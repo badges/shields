@@ -25,8 +25,10 @@ async function getTitle(owner, repo, pullRequest) {
   } = await got(
     `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`,
     {
-      headers: { 'User-Agent': 'badges/shields' },
-      query: { access_token: process.env.GITHUB_TOKEN },
+      headers: {
+        'User-Agent': 'badges/shields',
+        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+      },
       json: true,
     }
   )

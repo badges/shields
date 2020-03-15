@@ -359,9 +359,7 @@ class BaseService {
     // Like the service instance, the auth helper could be reused for each request.
     // However, moving its instantiation to `register()` makes `invoke()` harder
     // to test.
-    const authHelper = this.auth
-      ? new AuthHelper(this.auth, config.private)
-      : undefined
+    const authHelper = this.auth ? new AuthHelper(this.auth, config) : undefined
 
     const serviceInstance = new this({ ...context, authHelper }, config)
 

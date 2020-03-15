@@ -29,7 +29,7 @@ const stateMap = {
   transform: ({ json }) => ({
     state: json.state,
     // Because eslint will not be happy with this snake_case name :(
-    merged: json['merged_at'] !== null,
+    merged: json.merged_at !== null,
   }),
   render: ({ value, isPR, number }) => {
     const state = value.state
@@ -219,7 +219,7 @@ module.exports = class GithubIssueDetail extends GithubAuthV3Service {
 
   transform({ json, property, issueKind }) {
     const value = propertyMap[property].transform({ json, property })
-    const isPR = json.hasOwnProperty('pull_request') || issueKind === 'pulls'
+    const isPR = 'pull_request' in json || issueKind === 'pulls'
     return { value, isPR }
   }
 

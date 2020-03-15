@@ -9,12 +9,23 @@ const sprintQueryString = {
 
 const user = 'admin'
 const pass = 'password'
-const config = { private: { jira_user: user, jira_pass: pass } }
+const host = 'myprivatejira.test'
+const config = {
+  public: {
+    services: {
+      jira: {
+        authorizedOrigins: [`https://${host}`],
+      },
+    },
+  },
+  private: { jira_user: user, jira_pass: pass },
+}
 
 module.exports = {
   sprintId,
   sprintQueryString,
   user,
   pass,
+  host,
   config,
 }

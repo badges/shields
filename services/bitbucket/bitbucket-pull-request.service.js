@@ -81,46 +81,48 @@ function pullRequestClassGenerator(raw) {
         {
           userKey: 'bitbucket_username',
           passKey: 'bitbucket_password',
+          authorizedOrigins: ['https://bitbucket.org'],
         },
-        config.private
+        config
       )
       this.bitbucketServerAuthHelper = new AuthHelper(
         {
           userKey: 'bitbucket_server_username',
           passKey: 'bitbucket_server_password',
+          serviceKey: 'bitbucketServer',
         },
-        config.private
+        config
       )
     }
 
     async fetchCloud({ user, repo }) {
-      return this._requestJson({
-        url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
-        schema,
-        options: {
-          qs: { state: 'OPEN', limit: 0 },
-          auth: this.bitbucketAuthHelper.basicAuth,
-        },
-        errorMessages,
-      })
+      return this._requestJson(
+        this.bitbucketAuthHelper.withBasicAuth({
+          url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
+          schema,
+          options: { qs: { state: 'OPEN', limit: 0 } },
+          errorMessages,
+        })
+      )
     }
 
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
     async fetchServer({ server, user, repo }) {
-      return this._requestJson({
-        url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
-        schema,
-        options: {
-          qs: {
-            state: 'OPEN',
-            limit: 100,
-            withProperties: false,
-            withAttributes: false,
+      return this._requestJson(
+        this.bitbucketServerAuthHelper.withBasicAuth({
+          url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
+          schema,
+          options: {
+            qs: {
+              state: 'OPEN',
+              limit: 100,
+              withProperties: false,
+              withAttributes: false,
+            },
           },
-          auth: this.bitbucketServerAuthHelper.basicAuth,
-        },
-        errorMessages,
-      })
+          errorMessages,
+        })
+      )
     }
 
     async fetch({ server, user, repo }) {

@@ -55,18 +55,23 @@ class Token {
   get id() {
     return this._id
   }
+
   get data() {
     return this._data
   }
+
   get usesRemaining() {
     return this._usesRemaining
   }
+
   get nextReset() {
     return this._nextReset
   }
+
   get isValid() {
     return this._isValid
   }
+
   get isFrozen() {
     return this._isFrozen
   }

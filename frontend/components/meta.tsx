@@ -7,7 +7,7 @@ const description = `We serve fast and scalable informational images as badges
 for GitHub, Travis CI, Jenkins, WordPress and many more services. Use them to
 track the state of your projects, or for promotional purposes.`
 
-export default function Meta() {
+export default function Meta(): JSX.Element {
   return (
     <Helmet>
       <title>

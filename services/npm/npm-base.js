@@ -42,7 +42,7 @@ const queryParamSchema = Joi.object({
 // of a package.
 module.exports = class NpmBase extends BaseJsonService {
   static get auth() {
-    return { passKey: 'npm_token' }
+    return { passKey: 'npm_token', serviceKey: 'npm' }
   }
 
   static buildRoute(base, { withTag } = {}) {
@@ -81,17 +81,18 @@ module.exports = class NpmBase extends BaseJsonService {
   }
 
   async _requestJson(data) {
-    return super._requestJson({
-      ...data,
-      options: {
-        headers: {
-          // Use a custom Accept header because of this bug:
-          // <https://github.com/npm/npmjs.org/issues/163>
-          Accept: '*/*',
-          ...this.authHelper.bearerAuthHeader,
+    return super._requestJson(
+      this.authHelper.withBearerAuthHeader({
+        ...data,
+        options: {
+          headers: {
+            // Use a custom Accept header because of this bug:
+            // <https://github.com/npm/npmjs.org/issues/163>
+            Accept: '*/*',
+          },
         },
-      },
-    })
+      })
+    )
   }
 
   async fetchPackageData({ registryUrl, scope, packageName, tag }) {

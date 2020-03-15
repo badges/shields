@@ -7,6 +7,7 @@ const JiraSprint = require('./jira-sprint.service')
 const {
   user,
   pass,
+  host,
   config,
   sprintId,
   sprintQueryString,
@@ -16,7 +17,7 @@ describe('JiraSprint', function() {
   cleanUpNockAfterEach()
 
   it('sends the auth information as configured', async function() {
-    const scope = nock('https://myprivatejira.test')
+    const scope = nock(`https://${host}`)
       .get('/jira/rest/api/2/search')
       .query(sprintQueryString)
       // This ensures that the expected credentials are actually being sent with the HTTP request.
@@ -37,7 +38,7 @@ describe('JiraSprint', function() {
         {
           sprintId,
         },
-        { baseUrl: 'https://myprivatejira.test/jira' }
+        { baseUrl: `https://${host}/jira` }
       )
     ).to.deep.equal({
       label: 'completion',
