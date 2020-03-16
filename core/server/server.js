@@ -459,7 +459,7 @@ class Server {
     }
 
     if (this.metricInstance) {
-      this.influxMetrics.stop()
+      this.influxMetrics.stopPushingMetrics()
       this.metricInstance.stop()
     }
   }
