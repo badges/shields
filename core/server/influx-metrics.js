@@ -19,26 +19,17 @@ module.exports = class InfluxMetrics {
 
   async startPushingMetrics() {
     const sendMetrics = (metricInstance, instanceMetadata) => {
-      // TODO allow to log metrics in debug mode
       const auth = {
         user: this._config.username,
         pass: this._config.password,
       }
-      request.post(
-        {
-          uri: this._config.uri,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.metrics(),
-          timeout: this._config.timeoutMillseconds,
-          auth,
-        },
-        (err, res, body) => {
-          // TODO log errors
-          if (err) {
-            console.log(err)
-          }
-        }
-      )
+      request.post({
+        uri: this._config.uri,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.metrics(),
+        timeout: this._config.timeoutMillseconds,
+        auth,
+      })
     }
     this._intervalId = setInterval(
       sendMetrics,
