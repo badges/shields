@@ -104,11 +104,14 @@ describe('Influx metrics', function() {
           '/metrics',
           'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
         )
+        .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
         .reply(200)
       influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
         uri: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 100,
         intervalSeconds: 0,
+        username: 'metrics-username',
+        password: 'metrics-password',
       })
 
       await influxMetrics.startPushingMetrics()
