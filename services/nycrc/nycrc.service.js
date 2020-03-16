@@ -6,13 +6,16 @@ const {
   ConditionalGithubAuthV3Service,
 } = require('../github/github-auth-service')
 const { fetchJsonFromRepo } = require('../github/github-common-fetch')
-const { InvalidResponse, NotFound } = require('..')
+const { InvalidParameter, InvalidResponse, NotFound } = require('..')
 
 const nycrcSchema = Joi.object({
   branches: Joi.number()
     .min(0)
     .max(100),
   lines: Joi.number()
+    .min(0)
+    .max(100),
+  functions: Joi.number()
     .min(0)
     .max(100),
 }).required()
@@ -25,12 +28,18 @@ const pkgJSONSchema = Joi.object({
     lines: Joi.number()
       .min(0)
       .max(100),
+    functions: Joi.number()
+      .min(0)
+      .max(100),
   }).optional(),
   nyc: Joi.object({
     branches: Joi.number()
       .min(0)
       .max(100),
     lines: Joi.number()
+      .min(0)
+      .max(100),
+    functions: Joi.number()
       .min(0)
       .max(100),
   }).optional(),
@@ -41,6 +50,8 @@ const documentation = `<p>
   <a href="https://github.com/istanbuljs/nyc#common-configuration-options">.nycrc config file</a>
   on GitHub.
 </p>`
+
+const validThresholds = ['branches', 'lines', 'functions']
 
 module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
   static get category() {
@@ -58,7 +69,9 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
           .default('.nycrc'),
         // Allow the default threshold detection logic to be overridden, .e.g.,
         // favoring lines over branches:
-        preferredThreshold: Joi.string().optional(),
+        preferredThreshold: Joi.string()
+          .optional()
+          .allow(...validThresholds),
       }).required(),
     }
   }
@@ -88,9 +101,19 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
 
   extractThreshold(config, preferredThreshold) {
     const { branches, lines } = config
-    if (preferredThreshold && config[preferredThreshold]) {
+    if (preferredThreshold) {
+      if (!validThresholds.includes(preferredThreshold)) {
+        throw new InvalidParameter({
+          prettyMessage: `threshold must be "branches", "lines", or "functions"`,
+        })
+      }
+      if (!config[preferredThreshold]) {
+        throw new InvalidResponse({
+          prettyMessage: `"${preferredThreshold}" threshold missing`,
+        })
+      }
       return config[preferredThreshold]
-    } else if ((branches || lines) && !preferredThreshold) {
+    } else if (branches || lines) {
       // We favor branches over lines for the coverage badge, if both
       // thresholds are provided (as branches is the stricter requirement):
       return branches || lines

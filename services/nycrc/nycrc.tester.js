@@ -11,9 +11,16 @@ t.create('.nycrc is default')
   .get('/yargs/yargs.json')
   .expectBadge({ label: 'min coverage', message: isIntegerPercentage })
 
-t.create('.nycrc is default')
+t.create('alternate threshold is specified')
   .get('/yargs/yargs.json?preferredThreshold=lines')
   .expectBadge({ label: 'min coverage', message: '100%' })
+
+t.create('invalid threshold is specified')
+  .get('/yargs/yargs.json?preferredThreshold=blerg')
+  .expectBadge({
+    label: 'min coverage',
+    message: 'threshold must be "branches", "lines", or "functions"',
+  })
 
 t.create('.nycrc in monorepo')
   .get('/yargs/yargs.json?config=packages/foo/.nycrc.json')
