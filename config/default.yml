@@ -8,7 +8,7 @@ public:
     influx:
       uri: http://localhost:8081/telegraf
       timeoutMilliseconds: 1000
-      intervalSeconds: 2000
+      intervalSeconds: 15
 
   ssl:
     isSecure: false

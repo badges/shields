@@ -2,6 +2,10 @@ public:
   bind:
     address: 'localhost'
 
+  metrics:
+    influx:
+      intervalSeconds: 2
+
   cors:
     allowedOrigin: ['http://localhost:3000']
 
