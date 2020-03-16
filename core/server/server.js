@@ -151,6 +151,15 @@ const publicConfigSchema = Joi.object({
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
 }).required()
 
+const privateInfluxConfigSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+})
+const privateMetricsInfluxConfigSchema = Joi.object({
+  metrics: Joi.object({
+    influx: privateInfluxConfigSchema.required(),
+  }).required(),
+})
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
   bintray_user: Joi.string(),
@@ -179,10 +188,7 @@ const privateConfigSchema = Joi.object({
   twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
   metrics: {
-    influx: {
-      username: Joi.string().required(),
-      password: Joi.string().required(),
-    },
+    influx: privateInfluxConfigSchema,
   },
 }).required()
 
@@ -206,15 +212,17 @@ class Server {
    */
   constructor(config, instanceMetadata = {}) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
-    let privateConfig
-    try {
-      privateConfig = Joi.attempt(config.private, privateConfigSchema)
-    } catch (e) {
-      const badPaths = e.details.map(({ path }) => path)
-      throw Error(
-        `Private configuration is invalid. Check these paths: ${badPaths.join(
-          ','
-        )}`
+    const privateConfig = this.validatePriveteConfig(
+      config.private,
+      privateConfigSchema
+    )
+    if (
+      publicConfig.metrics.prometheus.enabled &&
+      publicConfig.metrics.influx
+    ) {
+      this.validatePriveteConfig(
+        config.private,
+        privateMetricsInfluxConfigSchema
       )
     }
     this.config = {
@@ -238,6 +246,19 @@ class Server {
           publicConfig.metrics.influx,
           privateConfig.metrics.influx
         )
+      )
+    }
+  }
+
+  validatePriveteConfig(privateConfig, privateConfigSchema) {
+    try {
+      return Joi.attempt(privateConfig, privateConfigSchema)
+    } catch (e) {
+      const badPaths = e.details.map(({ path }) => path)
+      throw Error(
+        `Private configuration is invalid. Check these paths: ${badPaths.join(
+          ','
+        )}`
       )
     }
   }
