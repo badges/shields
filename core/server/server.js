@@ -178,6 +178,12 @@ const privateConfigSchema = Joi.object({
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
+  metrics: {
+    influx: {
+      username: Joi.string().required(),
+      password: Joi.string().required(),
+    },
+  },
 }).required()
 
 /**
@@ -227,7 +233,11 @@ class Server {
       this.influxMetrics = new InfluxMetrics(
         this.metricInstance,
         this._instanceMetadata,
-        publicConfig.metrics.influx
+        Object.assign(
+          {},
+          publicConfig.metrics.influx,
+          privateConfig.metrics.influx
+        )
       )
     }
   }
