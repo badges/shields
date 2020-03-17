@@ -146,11 +146,37 @@ describe('Influx metrics', function() {
       })
 
       influxMetrics.startPushingMetrics()
+
       await waitForExpect(
         () => {
-          expect(console.log).to.be.calledWithMatch(
-            'NetConnectNotAllowedError',
-            'Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+          expect(console.log).to.be.calledWith(
+            'Cannot push metrics. Cause: NetConnectNotAllowedError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+          )
+        },
+        1000,
+        1
+      )
+    })
+
+    it('should log error responses', async function() {
+      nock('http://shields-metrics.io/')
+        .persist()
+        .post('/metrics')
+        .reply(400)
+      influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
+        uri: 'http://shields-metrics.io/metrics',
+        timeoutMillseconds: 50,
+        intervalSeconds: 0,
+        username: 'metrics-username',
+        password: 'metrics-password',
+      })
+
+      influxMetrics.startPushingMetrics()
+
+      await waitForExpect(
+        () => {
+          expect(console.log).to.be.calledWith(
+            'Cannot push metrics. http://shields-metrics.io/metrics responded with status code 400'
           )
         },
         1000,

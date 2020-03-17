@@ -33,7 +33,14 @@ module.exports = class InfluxMetrics {
         },
         function(error, response, body) {
           if (error) {
-            console.log(error.name, error.message)
+            console.log(
+              `Cannot push metrics. Cause: ${error.name}: ${error.message}`
+            )
+          }
+          if (response && response.statusCode >= 300) {
+            console.log(
+              `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
+            )
           }
         }
       )
