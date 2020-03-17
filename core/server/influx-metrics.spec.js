@@ -123,12 +123,16 @@ describe('Influx metrics', function() {
 
       await influxMetrics.startPushingMetrics()
 
-      await waitForExpect(() => {
-        expect(scope.isDone()).to.be.equal(
-          true,
-          `pending mocks: ${scope.pendingMocks()}`
-        )
-      }, 100)
+      await waitForExpect(
+        () => {
+          expect(scope.isDone()).to.be.equal(
+            true,
+            `pending mocks: ${scope.pendingMocks()}`
+          )
+        },
+        1000,
+        1
+      )
     })
 
     it('should log errors', async function() {
@@ -136,7 +140,7 @@ describe('Influx metrics', function() {
       influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
         uri: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 50,
-        intervalSeconds: 0.01,
+        intervalSeconds: 0,
         username: 'metrics-username',
         password: 'metrics-password',
       })
@@ -149,7 +153,7 @@ describe('Influx metrics', function() {
             'Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
           )
         },
-        200,
+        1000,
         1
       )
     })
