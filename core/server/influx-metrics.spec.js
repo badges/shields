@@ -1,6 +1,7 @@
 'use strict'
 
 const nock = require('nock')
+const sinon = require('sinon')
 const waitForExpect = require('wait-for-expect')
 const { expect } = require('chai')
 const Camp = require('camp')
@@ -8,7 +9,7 @@ const portfinder = require('portfinder')
 const got = require('../got-test-client')
 const InfluxMetrics = require('./influx-metrics')
 const InstanceMetadata = require('./instance-metadata')
-
+require('../register-chai-plugins.spec')
 describe('Influx metrics', function() {
   const metricInstance = {
     metrics() {
@@ -90,8 +91,14 @@ describe('Influx metrics', function() {
 
   describe('pushing component', function() {
     let influxMetrics
-    after(function() {
+    beforeEach(function() {
+      sinon.spy(console, 'log')
+    })
+    afterEach(function() {
+      console.log.restore()
       influxMetrics.stopPushingMetrics()
+      nock.cleanAll()
+      nock.enableNetConnect()
     })
     it('should send metrics', async function() {
       const scope = nock('http://shields-metrics.io/', {
@@ -122,6 +129,29 @@ describe('Influx metrics', function() {
           `pending mocks: ${scope.pendingMocks()}`
         )
       }, 100)
+    })
+
+    it('should log errors', async function() {
+      nock.disableNetConnect()
+      influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
+        uri: 'http://shields-metrics.io/metrics',
+        timeoutMillseconds: 50,
+        intervalSeconds: 0.01,
+        username: 'metrics-username',
+        password: 'metrics-password',
+      })
+
+      influxMetrics.startPushingMetrics()
+      await waitForExpect(
+        () => {
+          expect(console.log).to.be.calledWithMatch(
+            'NetConnectNotAllowedError',
+            'Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+          )
+        },
+        200,
+        1
+      )
     })
   })
 })

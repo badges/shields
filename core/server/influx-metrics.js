@@ -23,13 +23,20 @@ module.exports = class InfluxMetrics {
         user: this._config.username,
         pass: this._config.password,
       }
-      request.post({
-        uri: this._config.uri,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: this.metrics(),
-        timeout: this._config.timeoutMillseconds,
-        auth,
-      })
+      request.post(
+        {
+          uri: this._config.uri,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.metrics(),
+          timeout: this._config.timeoutMillseconds,
+          auth,
+        },
+        function(error, response, body) {
+          if (error) {
+            console.log(error.name, error.message)
+          }
+        }
+      )
     }
     this._intervalId = setInterval(
       sendMetrics,
