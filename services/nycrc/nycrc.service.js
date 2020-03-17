@@ -127,18 +127,7 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
   async handle({ user, repo }, queryParams) {
     let coverage = NaN
     const { config, preferredThreshold } = queryParams
-    if (config.includes('.nycrc')) {
-      coverage = this.extractThreshold(
-        await fetchJsonFromRepo(this, {
-          schema: nycrcSchema,
-          user,
-          repo,
-          branch: 'master',
-          filename: config,
-        }),
-        preferredThreshold
-      )
-    } else if (config.includes('package.json')) {
+    if (config.includes('package.json')) {
       const pkgJson = await fetchJsonFromRepo(this, {
         schema: pkgJSONSchema,
         user,
@@ -154,6 +143,17 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
       } else {
         coverage = this.extractThreshold(nycConfig, preferredThreshold)
       }
+    } else {
+      coverage = this.extractThreshold(
+        await fetchJsonFromRepo(this, {
+          schema: nycrcSchema,
+          user,
+          repo,
+          branch: 'master',
+          filename: config,
+        }),
+        preferredThreshold
+      )
     }
     return this.constructor.render({ coverage })
   }

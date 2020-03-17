@@ -100,3 +100,7 @@ t.create('package.json with no nyc stanza')
     label: 'min coverage',
     message: 'no nyc or c8 stanza found',
   })
+
+t.create('arbitrary JSON file, matching .nycrc format')
+  .get('/swellaby/nyc-config.json?config=partial-coverage.json')
+  .expectBadge({ label: 'min coverage', message: isIntegerPercentage })
