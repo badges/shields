@@ -125,8 +125,8 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
   }
 
   async handle({ user, repo }, queryParams) {
-    let coverage = NaN
     const { config, preferredThreshold } = queryParams
+    let coverage
     if (config.includes('package.json')) {
       const pkgJson = await fetchJsonFromRepo(this, {
         schema: pkgJSONSchema,
