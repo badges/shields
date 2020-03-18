@@ -8,7 +8,6 @@ const Camp = require('camp')
 const portfinder = require('portfinder')
 const got = require('../got-test-client')
 const InfluxMetrics = require('./influx-metrics')
-const InstanceMetadata = require('./instance-metadata')
 require('../register-chai-plugins.spec')
 describe('Influx metrics', function() {
   const metricInstance = {
@@ -24,10 +23,10 @@ describe('Influx metrics', function() {
       ]
     },
   }
-  const instanceMetadata = new InstanceMetadata({
+  const instanceMetadata = {
     id: 'instance2',
     env: 'test-env',
-  })
+  }
   const config = {}
   describe('"metrics" function', function() {
     it('should add instance id as an instance label', async function() {
@@ -42,11 +41,11 @@ describe('Influx metrics', function() {
   })
 
   it('should add hostname as an instance label when instance id is empty', async function() {
-    const instanceMetadata = new InstanceMetadata({
+    const instanceMetadata = {
       id: '',
       env: 'test-env',
       hostname: 'test-hostname',
-    })
+    }
     const influxMetrics = new InfluxMetrics(
       metricInstance,
       instanceMetadata,

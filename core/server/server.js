@@ -20,11 +20,11 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
+const generateInstanceId = require('./instance-id-generator')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
 const InfluxMetrics = require('./influx-metrics')
-const InstanceMetadata = require('./instance-metadata')
 
 const Joi = originalJoi
   .extend(base => ({
@@ -235,12 +235,16 @@ class Server {
       service: publicConfig.services.github,
       private: privateConfig,
     })
-    this._instanceMetadata = new InstanceMetadata(instanceMetadata)
+    this.instanceMetadata = {
+      ...instanceMetadata,
+      id: instanceMetadata.id || generateInstanceId(),
+    }
+
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
       this.influxMetrics = new InfluxMetrics(
         this.metricInstance,
-        this._instanceMetadata,
+        this.instanceMetadata,
         Object.assign(
           {},
           publicConfig.metrics.influx,
@@ -283,10 +287,6 @@ class Server {
       port,
       pathname: '/',
     })
-  }
-
-  get instanceMetadata() {
-    return this._instanceMetadata
   }
 
   /**

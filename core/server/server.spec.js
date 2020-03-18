@@ -164,8 +164,13 @@ describe('The server', function() {
       .and.to.include('jpg no longer available')
   })
 
-  it('should return instance id', function() {
+  it('should return passed instance id', function() {
     const server = new Server(config, { id: 'test-instance-id' })
     expect(server.instanceMetadata.id).to.equal('test-instance-id')
+  })
+
+  it('should generate new instance id if none was passed', function() {
+    const server = new Server(config, {})
+    expect(server.instanceMetadata.id).to.not.be.empty
   })
 })
