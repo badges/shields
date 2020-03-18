@@ -6,6 +6,10 @@ public:
   metrics:
     prometheus:
       enabled: 'METRICS_PROMETHEUS_ENABLED'
+    influx:
+      uri: 'METRICS_INFLUX_URI'
+      timeoutMilliseconds: 'METRICS_INFLUX_TIMEOUT_MILLISECONDS'
+      intervalSeconds: 'METRICS_INFLUX_INTERVAL_SECONDS'
 
   ssl:
     isSecure: 'HTTPS'
@@ -88,3 +92,7 @@ private:
   twitch_client_id: 'TWITCH_CLIENT_ID'
   twitch_client_secret: 'TWITCH_CLIENT_SECRET'
   wheelmap_token: 'WHEELMAP_TOKEN'
+  metrics:
+    influx:
+      username: 'METRICS_INFLUX_USERNAME'
+      password: 'METRICS_INFLUX_PASSWORD'
