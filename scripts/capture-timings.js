@@ -22,11 +22,17 @@ async function main() {
       ++iterations
     }
   }
-  const timedIterations = iterations - warmupIterations
-  console.log(
-    `Average time over ${timedIterations} iterations: ${time /
-      timedIterations}ms`
-  )
+  if (iterations == 0) {
+    console.log(
+      `No timings captured. Have you included console.time statements in the badge creation code path?`
+    )
+  } else {
+    const timedIterations = iterations - warmupIterations
+    const averageTime = time / timedIterations
+    console.log(
+      `Average time over ${timedIterations} iterations: ${averageTime}ms`
+    )
+  }
 }
 
 ;(async () => {
