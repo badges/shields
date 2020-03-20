@@ -22,7 +22,7 @@ async function main() {
       ++iterations
     }
   }
-  if (iterations == 0) {
+  if (iterations === 0) {
     console.log(
       `No timings captured. Have you included console.time statements in the badge creation code path?`
     )
