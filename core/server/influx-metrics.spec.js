@@ -82,7 +82,7 @@ describe('Influx metrics', function() {
 
       expect(statusCode).to.be.equal(200)
       expect(body).to.contain(
-        'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
+        'prometheus,application=shields,env=test-env,instance=instance2 counter1=11'
       )
       expect(headers).to.have.property('content-type', 'text/plain')
     })
@@ -108,7 +108,7 @@ describe('Influx metrics', function() {
         .persist()
         .post(
           '/metrics',
-          'prometheus,env=test-env,instance=instance2,service=shields counter1=11'
+          'prometheus,application=shields,env=test-env,instance=instance2 counter1=11'
         )
         .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
         .reply(200)
