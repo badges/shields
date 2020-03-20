@@ -28,9 +28,10 @@ can modify the badge URL in _scripts/benchmark-performance.js_.
 ## Profiling the full code
 
 Want to have an overview of how the entire application is performing? Simply
-run `npm run profile:server` in your terminal. This will start the server
-in profiling mode and any requests you make on `localhost:8080` will generate
-data in a file with a name similar to _isolate-00000244AB6ED3B0-11920-v8.log_.
+run `npm run profile:server` in your terminal. This will start the
+backend server (i.e. without the frontend) in profiling mode and any requests
+you make on `localhost:8080` will generate data in a file with a name
+similar to _isolate-00000244AB6ED3B0-11920-v8.log_.
 
 You can then make use of this profiling data in various tools, for example
 [flamebearer](https://github.com/mapbox/flamebearer):
