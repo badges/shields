@@ -224,7 +224,7 @@
     "opn-cli": "^5.0.0",
     "portfinder": "^1.0.25",
     "prettier": "1.19.1",
-    "react": "^16.13.0",
+    "react": "^16.13.1",
     "react-dom": "^16.13.0",
     "react-error-overlay": "^3.0.0",
     "react-helmet": "^5.2.1",
