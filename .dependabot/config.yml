@@ -31,6 +31,9 @@ update_configs:
           update_type: 'semver:minor'
     ignored_updates:
       - match:
+          dependency_name: babel-preset-gatsby
+          version_requirement: '>=0.3.0'
+      - match:
           dependency_name: cross-env
           version_requirement: '>=7.0.0'
       - match:
