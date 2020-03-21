@@ -40,6 +40,27 @@ update_configs:
           dependency_name: eslint-plugin-jsdoc
           version_requirement: '>=21.0.0'
       - match:
+          dependency_name: gatsby
+          version_requirement: '>=2.20.0'
+      - match:
+          dependency_name: gatsby-plugin-catch-links
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-page-creator
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-react-helmet
+          version_requirement: '>=3.2.0'
+      - match:
+          dependency_name: gatsby-plugin-remove-trailing-slashes
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-styled-components
+          version_requirement: '>=3.2.0'
+      - match:
+          dependency_name: gatsby-plugin-typescript
+          version_requirement: '>=2.3.0'
+      - match:
           dependency_name: got
           version_requirement: '>=10.0.0'
       - match:
