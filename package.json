@@ -242,7 +242,7 @@
     "start-server-and-test": "1.10.7",
     "styled-components": "^5.0.1",
     "tmp": "0.1.0",
-    "ts-mocha": "^6.0.0",
+    "ts-mocha": "^7.0.0",
     "typescript": "^3.8.3"
   },
   "engines": {
