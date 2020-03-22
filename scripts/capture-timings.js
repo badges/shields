@@ -8,7 +8,7 @@ async function captureTimings(warmupIterations) {
     input: process.stdin,
   })
 
-  let times = {}
+  const times = {}
   let timingsCount = 0
   let labelsCount = 0
   const timing = /^(.+): ([0-9.]+)ms$/i
