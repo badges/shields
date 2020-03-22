@@ -106,6 +106,8 @@
     "start:server:e2e-on-build": "node server 8080",
     "start:server": "cross-env NODE_CONFIG_ENV=development nodemon server 8080",
     "debug:server": "cross-env NODE_CONFIG_ENV=development nodemon --inspect server.js 8080",
+    "profile:server": "cross-env NODE_CONFIG_ENV=development node --prof server 8080",
+    "benchmark:badge": "cross-env NODE_CONFIG_ENV=test node scripts/benchmark-performance.js --iterations 10100 | node scripts/capture-timings.js --warmup-iterations 100",
     "prestart": "run-s --silent depcheck defs features",
     "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
