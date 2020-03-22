@@ -3,36 +3,52 @@
 const readline = require('readline')
 const minimist = require('minimist')
 
-async function main() {
+async function captureTimings(warmupIterations) {
   const rl = readline.createInterface({
     input: process.stdin,
   })
 
-  const args = minimist(process.argv)
-  const warmupIterations = parseInt(args['warmup-iterations']) || 100
-  let iterations = 0
-  let time = 0.0
-  const timing = /^.*: ([0-9.]+)ms$/i
+  let times = {}
+  let timingsCount = 0
+  let labelsCount = 0
+  const timing = /^(.+): ([0-9.]+)ms$/i
+
   for await (const line of rl) {
     const match = timing.exec(line)
     if (match) {
-      if (iterations > warmupIterations) {
-        time += parseFloat(match[1])
+      labelsCount = Object.keys(times).length
+      if (timingsCount > warmupIterations * labelsCount) {
+        const label = match[1]
+        const time = parseFloat(match[2])
+        times[label] = time + (times[label] || 0)
       }
-      ++iterations
+      ++timingsCount
     }
   }
-  if (iterations === 0) {
+  return { times, iterations: timingsCount / labelsCount }
+}
+
+function logResults({ times, iterations, warmupIterations }) {
+  if (isNaN(iterations)) {
     console.log(
       `No timings captured. Have you included console.time statements in the badge creation code path?`
     )
   } else {
     const timedIterations = iterations - warmupIterations
-    const averageTime = time / timedIterations
-    console.log(
-      `Average time over ${timedIterations} iterations: ${averageTime}ms`
-    )
+    for (const [label, time] of Object.entries(times)) {
+      const averageTime = time / timedIterations
+      console.log(
+        `Average '${label}' time over ${timedIterations} iterations: ${averageTime}ms`
+      )
+    }
   }
+}
+
+async function main() {
+  const args = minimist(process.argv)
+  const warmupIterations = parseInt(args['warmup-iterations']) || 100
+  const { times, iterations } = await captureTimings(warmupIterations)
+  logResults({ times, iterations, warmupIterations })
 }
 
 ;(async () => {
