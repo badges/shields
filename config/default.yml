@@ -5,7 +5,8 @@ public:
   metrics:
     prometheus:
       enabled: false
-
+    influx:
+      enabled: false
   ssl:
     isSecure: false
 

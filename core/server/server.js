@@ -85,6 +85,7 @@ const publicConfigSchema = Joi.object({
       enabled: Joi.boolean().required(),
     },
     influx: {
+      enabled: Joi.boolean().required(),
       uri: Joi.string()
         .uri()
         .required(),
@@ -216,10 +217,7 @@ class Server {
       config.private,
       privateConfigSchema
     )
-    if (
-      publicConfig.metrics.prometheus.enabled &&
-      publicConfig.metrics.influx
-    ) {
+    if (publicConfig.metrics.influx.enabled) {
       this.validatePriveteConfig(
         config.private,
         privateMetricsInfluxConfigSchema
@@ -242,15 +240,17 @@ class Server {
 
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
-      this.influxMetrics = new InfluxMetrics(
-        this.metricInstance,
-        this.instanceMetadata,
-        Object.assign(
-          {},
-          publicConfig.metrics.influx,
-          privateConfig.metrics.influx
+      if (publicConfig.metrics.influx.enabled) {
+        this.influxMetrics = new InfluxMetrics(
+          this.metricInstance,
+          this.instanceMetadata,
+          Object.assign(
+            {},
+            publicConfig.metrics.influx,
+            privateConfig.metrics.influx
+          )
         )
-      )
+      }
     }
   }
 
@@ -445,8 +445,10 @@ class Server {
     githubConstellation.initialize(camp)
     if (metricInstance) {
       metricInstance.initialize(camp)
-      this.influxMetrics.registerMetricsEndpoint(this.camp)
-      this.influxMetrics.startPushingMetrics()
+      if (this.influxMetrics) {
+        this.influxMetrics.registerMetricsEndpoint(this.camp)
+        this.influxMetrics.startPushingMetrics()
+      }
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -490,7 +492,9 @@ class Server {
     }
 
     if (this.metricInstance) {
-      this.influxMetrics.stopPushingMetrics()
+      if (this.influxMetrics) {
+        this.influxMetrics.stopPushingMetrics()
+      }
       this.metricInstance.stop()
     }
   }
