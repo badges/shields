@@ -26,8 +26,8 @@ module.exports = class TreewareTrees extends BaseJsonService {
     return [
       {
         title: 'Treeware',
-        namedParams: { owner: 'jamesmills', packageName: 'laravel-timezone' },
-        staticPreview: this.render({ count: 50 }),
+        namedParams: { owner: 'stoplightio', packageName: 'spectral' },
+        staticPreview: this.render({ count: 250 }),
       },
     ]
   }
