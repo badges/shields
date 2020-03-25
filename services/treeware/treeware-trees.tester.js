@@ -4,7 +4,6 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { isMetric } = require('../test-validators')
 
 t.create('request for existing package')
-  .timeout(10000)
   .get('/stoplightio/spectral.json')
   .expectBadge({
     label: 'trees',
