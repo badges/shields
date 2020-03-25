@@ -25,7 +25,7 @@ module.exports = class TreewareTrees extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Treeware',
+        title: 'Treeware (Trees)',
         namedParams: { owner: 'stoplightio', packageName: 'spectral' },
         staticPreview: this.render({ count: 250 }),
       },
