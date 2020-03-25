@@ -1,9 +1,9 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
-const Joi = require('@hapi/joi')
 
 const apiSchema = Joi.object({
   total: Joi.number()
