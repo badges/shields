@@ -18,7 +18,7 @@ const documentation = `
 
 const schema = Joi.object({
   response: Joi.object({
-    code: nonNegativeInteger.required(),
+    code: nonNegativeInteger,
     message: Joi.string().required(),
   }).required(),
   result: Joi.object({
