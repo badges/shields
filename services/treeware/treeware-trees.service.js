@@ -41,12 +41,12 @@ module.exports = class TreewareTrees extends BaseJsonService {
   }
 
   async fetch({ reference }) {
-    const url = `https://public.offset.earth/users/treeware/trees?ref=${reference}`
+    const url = `https://public.offset.earth/users/treeware/trees`
     return this._requestJson({
       url,
       schema: apiSchema,
-      errorMessages: {
-        404: 'repository not found',
+      options: {
+        qs: { ref: reference },
       },
     })
   }
