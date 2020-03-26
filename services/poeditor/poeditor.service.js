@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { coveragePercentage } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+const { BaseJsonService, InvalidResponse } = require('..')
 
 const documentation = `
   <p>
@@ -70,14 +70,12 @@ module.exports = class POEditor extends BaseJsonService {
   }
 
   static render({ code, message, language }) {
-    const color = 'red'
-
     if (code !== 200) {
-      return { message, color }
+      throw new InvalidResponse({ prettyMessage: message })
     }
 
     if (language === undefined) {
-      return { message: `Language not in project`, color }
+      throw new InvalidResponse({ prettyMessage: 'Language not in project' })
     }
 
     return {
