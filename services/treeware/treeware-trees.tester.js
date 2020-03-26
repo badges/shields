@@ -20,8 +20,9 @@ t.create('request for existing package (mock)')
   .expectBadge({
     label: 'trees',
     message: '50',
+    color: 'green',
   })
 
 t.create('invalid package')
   .get('/non-existent-user/non-existent-package.json')
-  .expectBadge({ label: 'trees', message: '0' })
+  .expectBadge({ label: 'trees', message: '0', color: 'red' })
