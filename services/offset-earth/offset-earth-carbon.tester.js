@@ -4,7 +4,6 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 
 t.create('request for existing profile')
-  .timeout(10000)
   .get('/offsetearth.json')
   .expectBadge({
     label: 'carbon offset',
@@ -20,7 +19,7 @@ t.create('request for existing profile (mock)')
   )
   .expectBadge({
     label: 'carbon offset',
-    message: withRegex(/[\d.]+ tonnes/),
+    message: '1.2345 tonnes',
   })
 
 t.create('invalid profile (mock)')

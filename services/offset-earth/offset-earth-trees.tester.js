@@ -4,7 +4,6 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { isMetric } = require('../test-validators')
 
 t.create('request for existing profile')
-  .timeout(10000)
   .get('/offsetearth.json')
   .expectBadge({
     label: 'trees',
@@ -20,7 +19,7 @@ t.create('request for existing profile (mock)')
   )
   .expectBadge({
     label: 'trees',
-    message: isMetric,
+    message: '50',
   })
 
 t.create('invalid profile (mock)')
