@@ -20,6 +20,7 @@ t.create('request for existing profile (mock)')
   .expectBadge({
     label: 'trees',
     message: '50',
+    color: 'green',
   })
 
 t.create('invalid profile (mock)')
@@ -29,4 +30,4 @@ t.create('invalid profile (mock)')
       .get('/users/non-existent-username/trees')
       .reply(404, {})
   )
-  .expectBadge({ label: 'trees', message: 'profile not found' })
+  .expectBadge({ label: 'trees', message: 'profile not found', color: 'red' })

@@ -20,6 +20,7 @@ t.create('request for existing profile (mock)')
   .expectBadge({
     label: 'carbon offset',
     message: '1.2345 tonnes',
+    color: 'green',
   })
 
 t.create('invalid profile (mock)')
@@ -29,4 +30,8 @@ t.create('invalid profile (mock)')
       .get('/users/non-existent-username/carbon-offset')
       .reply(404, {})
   )
-  .expectBadge({ label: 'carbon offset', message: 'profile not found' })
+  .expectBadge({
+    label: 'carbon offset',
+    message: 'profile not found',
+    color: 'red',
+  })
