@@ -10,7 +10,7 @@ t.create('request for existing package')
     message: isMetric,
   })
 
-t.create('request for existing profile (mock)')
+t.create('request for existing package (mock)')
   .get('/stoplightio/spectral.json')
   .intercept(nock =>
     nock('https://public.offset.earth')
@@ -19,14 +19,9 @@ t.create('request for existing profile (mock)')
   )
   .expectBadge({
     label: 'trees',
-    message: isMetric,
+    message: '50',
   })
 
-t.create('invalid profile (mock)')
+t.create('invalid package')
   .get('/non-existent-user/non-existent-package.json')
-  .intercept(nock =>
-    nock('https://public.offset.earth')
-      .get('/users/treeware/trees?ref=54a1ec3dccd0c2702084adcf72b4f02b')
-      .reply(200, { total: 0 })
-  )
   .expectBadge({ label: 'trees', message: '0' })
