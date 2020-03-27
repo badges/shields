@@ -232,7 +232,7 @@
     "react-helmet": "^5.2.1",
     "react-modal": "^3.11.2",
     "react-pose": "^4.0.10",
-    "react-select": "^3.0.8",
+    "react-select": "^3.1.0",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
     "require-hacker": "^3.0.1",
