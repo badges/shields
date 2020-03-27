@@ -11,7 +11,7 @@ const documentation = `
   </p>
   <p>
     As per <a href="https://poeditor.com/docs/api">the POEditor API documentation</a>,
-    <q>all requests to the API must contain the parameter api_token. You can get this key from your POEditor account.
+    <q>all requests to the API must contain the parameter api_token. You can get a read-only key from your POEditor account.
     You'll find it in <a href="https://poeditor.com/account/api">My Account > API Access</a>.</q>
   </p>
 `
