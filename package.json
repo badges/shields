@@ -194,7 +194,7 @@
     "fetch-ponyfill": "^6.1.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.19.41",
-    "gatsby-plugin-catch-links": "^2.1.27",
+    "gatsby-plugin-catch-links": "^2.1.28",
     "gatsby-plugin-page-creator": "^2.1.45",
     "gatsby-plugin-react-helmet": "^3.1.24",
     "gatsby-plugin-remove-trailing-slashes": "^2.1.23",
