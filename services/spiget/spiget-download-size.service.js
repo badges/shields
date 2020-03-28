@@ -39,6 +39,7 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
     if (type === 'external') {
       return {
         message: `resource hosted externally`,
+        color: 'lightgrey',
       }
     }
     return {
