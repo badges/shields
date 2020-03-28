@@ -139,9 +139,6 @@ const publicConfigSchema = Joi.object({
     teamcity: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
-  profiling: {
-    makeBadge: Joi.boolean().required(),
-  },
   cacheHeaders: {
     defaultCacheLengthSeconds: Joi.number()
       .integer()
@@ -410,7 +407,6 @@ class Server {
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
-          profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
           private: config.private,

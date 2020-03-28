@@ -13,9 +13,6 @@ const { prepareRoute, namedParamsForMatch } = require('./route')
 
 module.exports = class BaseStaticService extends BaseService {
   static register({ camp, metricInstance }, serviceConfig) {
-    const {
-      profiling: { makeBadge: shouldProfileMakeBadge },
-    } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
 
     const metricHelper = MetricHelper.create({
@@ -52,16 +49,9 @@ module.exports = class BaseStaticService extends BaseService {
       const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
       badgeData.format = format
 
-      if (shouldProfileMakeBadge) {
-        console.time('makeBadge total')
-      }
-      const svg = makeBadge(badgeData)
-      if (shouldProfileMakeBadge) {
-        console.timeEnd('makeBadge total')
-      }
-
       setCacheHeadersForStaticResource(ask.res)
 
+      const svg = makeBadge(badgeData)
       makeSend(format, ask.res, end)(svg)
 
       metricHandle.noteResponseSent()

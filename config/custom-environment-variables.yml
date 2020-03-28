@@ -53,9 +53,6 @@ public:
       authorizedOrigins: 'TEAMCITY_ORIGINS'
     trace: 'TRACE_SERVICES'
 
-  profiling:
-    makeBadge: 'PROFILE_MAKE_BADGE'
-
   cacheHeaders:
     defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
 
