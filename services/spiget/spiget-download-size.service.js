@@ -35,7 +35,12 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
     }
   }
 
-  static render({ size, unit }) {
+  static render({ size, unit, type }) {
+    if (type === 'external') {
+      return {
+        message: `resource hosted externally`,
+      }
+    }
     return {
       message: `${size} ${unit}`,
     }
@@ -43,6 +48,10 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
 
   async handle({ resourceId }) {
     const { file } = await this.fetch({ resourceId })
-    return this.constructor.render({ size: file.size, unit: file.sizeUnit })
+    return this.constructor.render({
+      size: file.size,
+      unit: file.sizeUnit,
+      type: file.type,
+    })
   }
 }
