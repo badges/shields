@@ -193,6 +193,11 @@ const privateConfigSchema = Joi.object({
   },
 }).required()
 
+const instanceMetadataSchema = Joi.object({
+  id: Joi.string(),
+  env: Joi.string().required(),
+  hostname: Joi.string().required(),
+})
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -208,10 +213,12 @@ class Server {
    * publicConfigSchema and privateConfigSchema
    * @param {object} instanceMetadata Metadata of a running server instance
    * @param {string} instanceMetadata.id Identifier of a running server instance
+   * @param {string} instanceMetadata.env Environment of a running server instance
+   * @param {string} instanceMetadata.hostname Hostname of a running server instance
    * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
    * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
    */
-  constructor(config, instanceMetadata = {}) {
+  constructor(config, instanceMetadata) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
     const privateConfig = this.validatePriveteConfig(
       config.private,
@@ -237,6 +244,10 @@ class Server {
       ...instanceMetadata,
       id: instanceMetadata.id || generateInstanceId(),
     }
+    this.instanceMetadata = Joi.attempt(
+      this.instanceMetadata,
+      instanceMetadataSchema
+    )
 
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
