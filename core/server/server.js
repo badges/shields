@@ -88,15 +88,15 @@ const publicConfigSchema = Joi.object({
       enabled: Joi.boolean().required(),
       uri: Joi.string()
         .uri()
-        .required(),
+        .when('enabled', { is: true, then: Joi.required() }),
       timeoutMilliseconds: Joi.number()
         .integer()
         .min(1)
-        .required(),
+        .when('enabled', { is: true, then: Joi.required() }),
       intervalSeconds: Joi.number()
         .integer()
         .min(1)
-        .required(),
+        .when('enabled', { is: true, then: Joi.required() }),
     },
   },
   ssl: {
@@ -217,7 +217,7 @@ class Server {
       config.private,
       privateConfigSchema
     )
-    if (publicConfig.metrics.influx.enabled) {
+    if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
       this.validatePriveteConfig(
         config.private,
         privateMetricsInfluxConfigSchema

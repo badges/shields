@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const portfinder = require('portfinder')
-const config = require('config').util.toObject()
+const config = require('config')
 const got = require('../got-test-client')
 const Server = require('./server')
 const { createTestServer } = require('./in-process-server-test-helpers')
@@ -119,7 +119,9 @@ describe('The server', function() {
   it('should return the 404 badge for unknown badges', async function() {
     const { statusCode, body } = await got(
       `${baseUrl}this/is/not/a/badge.svg`,
-      { throwHttpErrors: false }
+      {
+        throwHttpErrors: false,
+      }
     )
     expect(statusCode).to.equal(404)
     expect(body)
@@ -164,13 +166,82 @@ describe('The server', function() {
       .and.to.include('jpg no longer available')
   })
 
-  it('should return passed instance id', function() {
-    const server = new Server(config, { id: 'test-instance-id' })
-    expect(server.instanceMetadata.id).to.equal('test-instance-id')
-  })
+  describe('instance metadata', function() {
+    it('should return passed instance id', function() {
+      const server = new Server(config.util.toObject(), {
+        id: 'test-instance-id',
+      })
+      expect(server.instanceMetadata.id).to.equal('test-instance-id')
+    })
 
-  it('should generate new instance id if none was passed', function() {
-    const server = new Server(config, {})
-    expect(server.instanceMetadata.id).to.not.be.empty
+    it('should generate new instance id if none was passed', function() {
+      const server = new Server(config.util.toObject(), {})
+      expect(server.instanceMetadata.id).to.not.be.empty
+    })
+  })
+  describe('configuration validation', function() {
+    let customConfig
+    beforeEach(function() {
+      customConfig = config.util.toObject()
+      customConfig.public.metrics.influx = {
+        enabled: true,
+        uri: 'http://localhost:8081/telegraf',
+        timeoutMilliseconds: 1000,
+        intervalSeconds: 2,
+      }
+      customConfig.private.metrics = {
+        influx: {
+          username: 'telegraf',
+          password: 'telegrafpass',
+        },
+      }
+    })
+
+    it('should not require influx configuration', function() {
+      delete customConfig.public.metrics.influx
+      expect(() => new Server(config.util.toObject(), {})).to.not.throw()
+    })
+
+    it('should require uri when influx configuration is enabled', function() {
+      delete customConfig.public.metrics.influx.uri
+      expect(() => new Server(customConfig, {})).to.throw(
+        '"metrics.influx.uri" is required'
+      )
+    })
+
+    it('should require timeoutMilliseconds when influx configuration is enabled', function() {
+      delete customConfig.public.metrics.influx.timeoutMilliseconds
+      expect(() => new Server(customConfig, {})).to.throw(
+        '"metrics.influx.timeoutMilliseconds" is required'
+      )
+    })
+
+    it('should require intervalSeconds when influx configuration is enabled', function() {
+      delete customConfig.public.metrics.influx.intervalSeconds
+      expect(() => new Server(customConfig, {})).to.throw(
+        '"metrics.influx.intervalSeconds" is required'
+      )
+    })
+
+    it('should require private influx config when influx configuration is enabled', function() {
+      delete customConfig.private.metrics.influx
+      expect(() => new Server(customConfig, {})).to.throw(
+        'Private configuration is invalid. Check these paths: metrics,influx'
+      )
+    })
+
+    it('should require username when influx configuration is enabled', function() {
+      delete customConfig.private.metrics.influx.username
+      expect(() => new Server(customConfig, {})).to.throw(
+        'Private configuration is invalid. Check these paths: metrics,influx,username'
+      )
+    })
+
+    it('should require password when influx configuration is enabled', function() {
+      delete customConfig.private.metrics.influx.password
+      expect(() => new Server(customConfig, {})).to.throw(
+        'Private configuration is invalid. Check these paths: metrics,influx,password'
+      )
+    })
   })
 })
