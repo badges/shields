@@ -217,12 +217,12 @@ class Server {
    */
   constructor(config, instanceMetadata) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
-    const privateConfig = this.validatePriveteConfig(
+    const privateConfig = this.validatePrivateConfig(
       config.private,
       privateConfigSchema
     )
     if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
-      this.validatePriveteConfig(
+      this.validatePrivateConfig(
         config.private,
         privateMetricsInfluxConfigSchema
       )
@@ -262,7 +262,7 @@ class Server {
     }
   }
 
-  validatePriveteConfig(privateConfig, privateConfigSchema) {
+  validatePrivateConfig(privateConfig, privateConfigSchema) {
     try {
       return Joi.attempt(privateConfig, privateConfigSchema)
     } catch (e) {
