@@ -11,6 +11,7 @@ public:
       uri: 'METRICS_INFLUX_URI'
       timeoutMilliseconds: 'METRICS_INFLUX_TIMEOUT_MILLISECONDS'
       intervalSeconds: 'METRICS_INFLUX_INTERVAL_SECONDS'
+      hostnameAsAInstanceId: 'METRICS_INFLUX_HOSTNAME_AS_A_INSTANCE_ID'
 
   ssl:
     isSecure: 'HTTPS'
