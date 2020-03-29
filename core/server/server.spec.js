@@ -240,9 +240,23 @@ describe('The server', function() {
 
       it('should require intervalSeconds when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.intervalSeconds
-        expect(() => new Server(customConfig, {})).to.throw(
-          '"metrics.influx.intervalSeconds" is required'
-        )
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.throw('"metrics.influx.intervalSeconds" is required')
+      })
+
+      it('should allow hostnameAsAInstanceId', function() {
+        customConfig.public.metrics.influx.hostnameAsAInstanceId = true
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should not require hostnameAsAInstanceId when influx configuration is enabled', function() {
+        delete customConfig.public.metrics.influx.hostnameAsAInstanceId
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
       })
 
       it('should require private influx config when influx configuration is enabled', function() {
