@@ -7,6 +7,8 @@ public:
       enabled: false
     influx:
       enabled: false
+      timeoutMilliseconds: 1000
+      intervalSeconds: 15
   ssl:
     isSecure: false
 
