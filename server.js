@@ -49,7 +49,7 @@ if (fs.existsSync(legacySecretsPath)) {
 const Server = require('./core/server/server')
 const server = (module.exports = new Server(config, {
   id: process.env.INSTANCE_ID,
-  env: process.env.INSTANCE_ENV || process.env.NODE_CONFIG_ENV,
+  env: process.env.INSTANCE_ENV || process.env.NODE_CONFIG_ENV || 'unknown',
   hostname: os.hostname(),
 }))
 
