@@ -6,8 +6,11 @@ const { BaseJsonService } = require('..')
 const resourceSchema = Joi.object({
   downloads: Joi.number().required(),
   file: Joi.object({
+    type: Joi.string().required(),
     size: Joi.number().required(),
-    sizeUnit: Joi.string().required(),
+    sizeUnit: Joi.string()
+      .allow('')
+      .required(),
   }).required(),
   testedVersions: Joi.array(),
   rating: Joi.object({
