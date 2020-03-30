@@ -23,13 +23,8 @@ t.create('request for existing profile (mock)')
     color: 'green',
   })
 
-t.create('invalid profile (mock)')
+t.create('invalid profile')
   .get('/non-existent-username.json')
-  .intercept(nock =>
-    nock('https://public.offset.earth')
-      .get('/users/non-existent-username/carbon-offset')
-      .reply(404, {})
-  )
   .expectBadge({
     label: 'carbon offset',
     message: 'profile not found',

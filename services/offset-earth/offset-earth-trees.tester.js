@@ -23,11 +23,6 @@ t.create('request for existing profile (mock)')
     color: 'green',
   })
 
-t.create('invalid profile (mock)')
+t.create('invalid profile')
   .get('/non-existent-username.json')
-  .intercept(nock =>
-    nock('https://public.offset.earth')
-      .get('/users/non-existent-username/trees')
-      .reply(404, {})
-  )
   .expectBadge({ label: 'trees', message: 'profile not found', color: 'red' })
