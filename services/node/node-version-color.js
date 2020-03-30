@@ -1,12 +1,19 @@
 'use strict'
 
 const { promisify } = require('util')
+const moment = require('moment')
 const semver = require('semver')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 
-function getLatestVersion() {
+const dateFormat = 'YYYY-MM-DD'
+
+function getVersion(version) {
+  let semver = ``
+  if (version) {
+    semver = `-${version}.x`
+  }
   return promisify(regularUpdate)({
-    url: 'https://nodejs.org/dist/latest/SHASUMS256.txt',
+    url: `https://nodejs.org/dist/latest${semver}/SHASUMS256.txt`,
     intervalMillis: 24 * 3600 * 1000,
     json: false,
     scraper: shasums => {
@@ -20,8 +27,52 @@ function getLatestVersion() {
   })
 }
 
-async function versionColorForRange(range) {
-  const latestVersion = await getLatestVersion()
+function ltsVersionsScraper(versions) {
+  const currentDate = moment().format(dateFormat)
+  return Object.keys(versions).filter(function(version) {
+    const data = versions[version]
+    return data.lts && data.lts < currentDate && data.end > currentDate
+  })
+}
+
+async function getCurrentVersion() {
+  return getVersion()
+}
+
+async function getLtsVersions() {
+  const versions = await promisify(regularUpdate)({
+    url:
+      'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
+    intervalMillis: 24 * 3600 * 1000,
+    json: true,
+    scraper: ltsVersionsScraper,
+  })
+  return Promise.all(versions.map(getVersion))
+}
+
+async function versionColorForRangeLts(range) {
+  const ltsVersions = await getLtsVersions()
+  try {
+    const matchesAll = ltsVersions.reduce(function(satisfies, version) {
+      return satisfies && semver.satisfies(version, range)
+    }, true)
+    const greaterThanAll = ltsVersions.reduce(function(satisfies, version) {
+      return satisfies && semver.gtr(version, range)
+    }, true)
+    if (matchesAll) {
+      return 'brightgreen'
+    } else if (greaterThanAll) {
+      return 'yellow'
+    } else {
+      return 'orange'
+    }
+  } catch (e) {
+    return 'lightgray'
+  }
+}
+
+async function versionColorForRangeCurrent(range) {
+  const latestVersion = await getCurrentVersion()
   try {
     if (semver.satisfies(latestVersion, range)) {
       return 'brightgreen'
@@ -36,6 +87,8 @@ async function versionColorForRange(range) {
 }
 
 module.exports = {
-  getLatestVersion,
-  versionColorForRange,
+  getCurrentVersion,
+  getStableVersions: getLtsVersions,
+  versionColorForRangeCurrent,
+  versionColorForRangeLts,
 }

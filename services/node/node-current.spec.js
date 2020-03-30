@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const NodeVersion = require('./node.service')
+const NodeVersion = require('./node-current.service')
 
 describe('renderStaticPreview', function() {
   it('should have parity with render()', async function() {
