@@ -23,8 +23,8 @@ t.create('gets the node version of @stdlib/stdlib')
   })
 
 t.create("gets the tagged release's node version version of ionic")
-  .get('/ionic/next.json')
-  .expectBadge({ label: 'node lts@next' })
+  .get('/ionic/testing.json')
+  .expectBadge({ label: 'node lts@testing' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
