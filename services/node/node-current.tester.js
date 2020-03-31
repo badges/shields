@@ -3,7 +3,11 @@
 const { expect } = require('chai')
 const { Range } = require('semver')
 const t = (module.exports = require('../tester').createServiceTester())
-const { mockPackageData, mockCurrentSha, mockNonExistingPackageData } = require('./testUtils/testUtils');
+const {
+  mockPackageData,
+  mockCurrentSha,
+  mockNonExistingPackageData,
+} = require('./testUtils/test-utils')
 
 function expectSemverRange(message) {
   expect(() => new Range(message)).not.to.throw()
@@ -67,7 +71,11 @@ t.create('engines satisfies current node version - scoped and tagged')
   .get('/@cycle/core/canary.json')
   .intercept(mockPackageData(`core`, `>=0.4.0`, `@cycle`, `canary`))
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node@canary', message: `>=0.4.0`, color: `brightgreen` })
+  .expectBadge({
+    label: 'node@canary',
+    message: `>=0.4.0`,
+    color: `brightgreen`,
+  })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
@@ -83,7 +91,15 @@ t.create('engines not satisfies current node version - scoped and tagged')
 
 t.create('engines satisfies current node version with custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')
-  .intercept(mockPackageData(`passport`, `>=0.4.0`, undefined,  undefined, 'https://registry.npmjs.com'))
+  .intercept(
+    mockPackageData(
+      `passport`,
+      `>=0.4.0`,
+      undefined,
+      undefined,
+      'https://registry.npmjs.com'
+    )
+  )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
   .afterJSON(json => {
