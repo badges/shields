@@ -1,9 +1,10 @@
-'use strict';
+'use strict'
 
 const fs = require('fs')
 const path = require('path')
 
-const getTemplate = template => JSON.parse(fs.readFileSync(path.join(__dirname, template), 'utf-8'))
+const getTemplate = template =>
+  JSON.parse(fs.readFileSync(path.join(__dirname, template), 'utf-8'))
 
 const mockPackageData = (
   packageName,
@@ -36,9 +37,10 @@ const mockPackageData = (
     .reply(200, packageJson)
 }
 
-const mockNonExistingPackageData = packageName => nock => nock('https://registry.npmjs.org/')
-  .get(`/${packageName}/latest`)
-  .reply(404)
+const mockNonExistingPackageData = packageName => nock =>
+  nock('https://registry.npmjs.org/')
+    .get(`/${packageName}/latest`)
+    .reply(404)
 
 const mockCurrentSha = latestVersion => nock => {
   const latestSha = `node-v${latestVersion}.12.0-aix-ppc64.tar.gz`
