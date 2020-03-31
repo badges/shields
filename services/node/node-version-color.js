@@ -55,12 +55,12 @@ async function versionColorForRangeLts(range) {
     const matchesAll = ltsVersions.reduce(function(satisfies, version) {
       return satisfies && semver.satisfies(version, range)
     }, true)
-    const greaterThanAll = ltsVersions.reduce(function(satisfies, version) {
-      return satisfies && semver.gtr(version, range)
-    }, true)
+    const matchesSome = ltsVersions.reduce(function(satisfies, version) {
+      return satisfies || semver.satisfies(version, range)
+    }, false)
     if (matchesAll) {
       return 'brightgreen'
-    } else if (greaterThanAll) {
+    } else if (matchesSome) {
       return 'yellow'
     } else {
       return 'orange'
