@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const NodeVersion = require('./node-current.service')
 
-describe('renderStaticPreview', function() {
+describe('node static renderStaticPreview', function() {
   it('should have parity with render()', async function() {
     const nodeVersionRange = '>= 6.0.0'
 
@@ -15,7 +15,7 @@ describe('renderStaticPreview', function() {
       tag: 'latest',
     })
 
-    test(NodeVersion.renderStaticPreview, () => {
+    test(NodeVersion.renderStaticPreview.bind(NodeVersion), () => {
       given({ nodeVersionRange }).expect(expectedNoTag)
       given({ nodeVersionRange, tag: 'latest' }).expect(expectedLatestTag)
     })
