@@ -1,0 +1,79 @@
+{
+  "name": "passport",
+  "version": "0.4.1",
+  "description": "Simple, unobtrusive authentication for Node.js.",
+  "keywords": [
+    "express",
+    "connect",
+    "auth",
+    "authn",
+    "authentication"
+  ],
+  "author": {
+    "name": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "http://www.jaredhanson.net/"
+  },
+  "homepage": "http://passportjs.org/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaredhanson/passport.git"
+  },
+  "bugs": {
+    "url": "http://github.com/jaredhanson/passport/issues"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "./lib",
+  "dependencies": {
+    "passport-strategy": "1.x.x",
+    "pause": "0.0.1"
+  },
+  "devDependencies": {
+    "make-node": "0.3.x",
+    "mocha": "2.x.x",
+    "chai": "2.x.x",
+    "chai-connect-middleware": "0.3.x",
+    "chai-passport-strategy": "0.2.x",
+    "proxyquire": "1.4.x"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec --require test/bootstrap/node test/*.test.js test/**/*.test.js"
+  },
+  "gitHead": "42ff63c60ae55f466d21332306e9112295c0535e",
+  "_id": "passport@0.4.1",
+  "_npmVersion": "5.6.0",
+  "_nodeVersion": "8.11.3",
+  "_npmUser": {
+    "name": "jaredhanson",
+    "email": "jaredhanson@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "jaredhanson",
+      "email": "jaredhanson@gmail.com"
+    }
+  ],
+  "dist": {
+    "integrity": "sha512-IxXgZZs8d7uFSt3eqNjM9NQ3g3uQCW5avD8mRNoXV99Yig50vjuaez6dQK2qC0kVWPRTujxY0dWgGfT09adjYg==",
+    "shasum": "941446a21cb92fc688d97a0861c38ce9f738f270",
+    "tarball": "https://registry.npmjs.org/passport/-/passport-0.4.1.tgz",
+    "fileCount": 12,
+    "unpackedSize": 46157,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJd7mz0CRA9TVsSAnZWagAAw5oQAJuPyqGI+wylbF3HjeGl\nddgyilB20KPqr8kphN6kPiJlS8XhvipWadKNV6ATdBVyhTzXEX/HiW1YWmcQ\nSmAFVA0/UjFdpFcOvweEjspckNmeHlozeeRljQxbt3kU3Zs3REhSsx4ebNW/\npeyqlHyDV6WFbkggXpXDIY4Yy2swXblsHnLTTYi3yxFvzNEqZvpqF3OE9b8x\n20q1yC5/LFjUVrhgDhTV8GTVQV4N36cJNLmI73ZISScruMQnOUzB4ChNbU5C\naHnrsbYAFpW+8t2ZzK+L7hXjxvMGVN6gKvsJTJ1gWpEwC/w4UGaLElthI0dL\nM7wHDzuci9ihiTcXNw/e4K9URddILDFOZDYYg3eOXKnrajQ63wxvoYeoIG24\n2Cs4SplMqjZ7wM7GhXGVL8PhRPjgMoQvBsWAp7QTMmKWMawg/aaUlb86fVOw\nOHi1murS0xlfgYzk6reduQi0IUDL8N3YpnRVWjgZzRY5kLx6yQVEYZnFh+M7\nGRzk4Qd50w5/1LCVsmFrBskR0N7SuMoVxOj/iKmDmleJtZyQ+VI9jCxY0EgM\nelZaneIoh/YDU+OjuiJJigkGu7BMBp60umtmOtAiZm52Pgcy6heS0xK3gYNN\n8zLAX4Z4EG8D+eYcAA5b/G8U/3fMWVRfzgUv3Q8gU9K+GY8IYtRmnXKeMsxu\n8+84\r\n=lh9x\r\n-----END PGP SIGNATURE-----\r\n"
+  },
+  "directories": {},
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/passport_0.4.1_1575906548000_0.5977240542921702"
+  },
+  "_hasShrinkwrap": false
+}
