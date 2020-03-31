@@ -10,7 +10,7 @@ t.create('request for existing profile')
     message: isMetric,
   })
 
-t.create('request for existing profile (mock)')
+t.create('request for existing profile')
   .get('/offsetearth.json')
   .intercept(nock =>
     nock('https://public.offset.earth')
