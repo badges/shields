@@ -104,9 +104,8 @@ module.exports = class NpmBase extends BaseJsonService {
       // these badges, and the response is smaller.
       url = `${registryUrl}/${packageName}/latest`
     } else if (scope === undefined && tag !== undefined) {
-      // e.g. https://registry.npmjs.org/express/latest
-      // Use this endpoint as an optimization. It covers the vast majority of
-      // these badges, and the response is smaller.
+      // e.g. https://registry.npmjs.org/express
+      // because https://registry.npmjs.org/express/canary does not work
       url = `${registryUrl}/${packageName}`
     } else {
       // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
