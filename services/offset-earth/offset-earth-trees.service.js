@@ -3,12 +3,11 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
+const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const apiSchema = Joi.object({
-  total: Joi.number()
-    .positive()
-    .required(),
+  total: nonNegativeInteger,
 }).required()
 
 module.exports = class OffsetEarthTrees extends BaseJsonService {
