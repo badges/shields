@@ -74,7 +74,7 @@ module.exports = class NodeVersionBase extends NPMBase {
     // be synchronous, this method exists. It should return the same value as the
     // real `render()`. There's a unit test to check that.
     return {
-      label: tag ? `node@${tag}` : undefined,
+      label: tag ? `${this.defaultBadgeData.label}@${tag}` : undefined,
       message: nodeVersionRange,
       color: 'brightgreen',
     }
@@ -83,7 +83,7 @@ module.exports = class NodeVersionBase extends NPMBase {
   static async render({ tag, nodeVersionRange }) {
     // Atypically, the `render()` function of this badge is `async` because it needs to pull
     // data from the server.
-    const label = tag ? `node@${tag}` : undefined
+    const label = tag ? `${this.defaultBadgeData.label}@${tag}` : undefined
 
     if (nodeVersionRange === undefined) {
       return {

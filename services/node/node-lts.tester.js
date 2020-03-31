@@ -24,7 +24,7 @@ t.create('gets the node version of @stdlib/stdlib')
 
 t.create("gets the tagged release's node version version of ionic")
   .get('/ionic/next.json')
-  .expectBadge({ label: 'node@next' })
+  .expectBadge({ label: 'node lts@next' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
@@ -38,7 +38,7 @@ t.create('gets the node version of passport from a custom registry')
 
 t.create("gets the tagged release's node version of @cycle/core")
   .get('/@cycle/core/canary.json')
-  .expectBadge({ label: 'node@canary' })
+  .expectBadge({ label: 'node lts@canary' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })

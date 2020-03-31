@@ -21,8 +21,7 @@ function getVersion(version) {
       const taris = shasums.indexOf('node-v')
       const tarie = shasums.indexOf('\n', taris)
       const tarball = shasums.slice(taris, tarie)
-      const version = tarball.split('-')[1]
-      return version
+      return tarball.split('-')[1]
     },
   })
 }
@@ -87,8 +86,6 @@ async function versionColorForRangeCurrent(range) {
 }
 
 module.exports = {
-  getCurrentVersion,
-  getStableVersions: getLtsVersions,
   versionColorForRangeCurrent,
   versionColorForRangeLts,
 }
