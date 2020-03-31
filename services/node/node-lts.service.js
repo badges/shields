@@ -8,6 +8,10 @@ module.exports = class NodeLtsVersion extends NodeVersionBase {
     return 'v-lts'
   }
 
+  static get defaultBadgeData() {
+    return { label: 'node lts' }
+  }
+
   static get type() {
     return 'lts'
   }

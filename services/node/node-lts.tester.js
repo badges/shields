@@ -10,14 +10,14 @@ function expectSemverRange(message) {
 
 t.create('gets the node version of passport')
   .get('/passport.json')
-  .expectBadge({ label: 'node' })
+  .expectBadge({ label: 'node lts' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
 
 t.create('gets the node version of @stdlib/stdlib')
   .get('/@stdlib/stdlib.json')
-  .expectBadge({ label: 'node' })
+  .expectBadge({ label: 'node lts' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
@@ -31,7 +31,7 @@ t.create("gets the tagged release's node version version of ionic")
 
 t.create('gets the node version of passport from a custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')
-  .expectBadge({ label: 'node' })
+  .expectBadge({ label: 'node lts' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
@@ -45,4 +45,4 @@ t.create("gets the tagged release's node version of @cycle/core")
 
 t.create('invalid package name')
   .get('/frodo-is-not-a-package.json')
-  .expectBadge({ label: 'node', message: 'package not found' })
+  .expectBadge({ label: 'node lts', message: 'package not found' })

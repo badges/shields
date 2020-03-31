@@ -69,10 +69,6 @@ module.exports = class NodeVersionBase extends NPMBase {
     ]
   }
 
-  static get defaultBadgeData() {
-    return { label: 'node' }
-  }
-
   static renderStaticPreview({ tag, nodeVersionRange }) {
     // Since this badge has an async `render()` function, but `get examples()` has to
     // be synchronous, this method exists. It should return the same value as the

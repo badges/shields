@@ -8,6 +8,10 @@ module.exports = class NodeCurrentVersion extends NodeVersionBase {
     return 'v'
   }
 
+  static get defaultBadgeData() {
+    return { label: 'node' }
+  }
+
   static get type() {
     return 'current'
   }
