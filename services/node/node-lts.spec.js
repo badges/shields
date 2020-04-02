@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const NodeVersion = require('./node-lts.service')
 
-describe('node lts renderStaticPreview', function() {
+describe('node-lts renderStaticPreview', function() {
   it('should have parity with render()', async function() {
     const nodeVersionRange = '>= 6.0.0'
 
