@@ -19,13 +19,13 @@ const templates = {
 
 const getTemplate = template => JSON.parse(templates[template])
 
-const mockPackageData = (
+const mockPackageData = ({
   packageName,
   engines,
   scope,
   tag,
-  registry
-) => nock => {
+  registry,
+}) => nock => {
   let packageJson
   let urlPath
   if (scope || tag) {
