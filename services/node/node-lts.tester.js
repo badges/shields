@@ -14,6 +14,13 @@ function expectSemverRange(message) {
   expect(() => new Range(message)).not.to.throw()
 }
 
+t.create('gets the node version of passport - live')
+  .get('/passport.json')
+  .expectBadge({ label: 'node lts' })
+  .afterJSON(json => {
+    expectSemverRange(json.message)
+  })
+
 t.create('engines satisfies all lts node versions')
   .get('/passport.json')
   .intercept(mockReleaseSchedule())
@@ -49,6 +56,13 @@ t.create('engines satisfies some lts node versions')
   )
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node lts', message: `10`, color: `yellow` })
+
+t.create('gets the node version of @stdlib/stdlib - live')
+  .get('/@stdlib/stdlib.json')
+  .expectBadge({ label: 'node lts' })
+  .afterJSON(json => {
+    expectSemverRange(json.message)
+  })
 
 t.create('engines satisfies all lts node versions - scoped')
   .get('/@stdlib/stdlib.json')
@@ -89,48 +103,62 @@ t.create('engines satisfies some lts node versions - scoped')
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node lts', message: `10`, color: `yellow` })
 
+t.create("gets the tagged release's node version version of ionic - live")
+  .get('/ionic/testing.json')
+  .expectBadge({ label: 'node lts@testing' })
+  .afterJSON(json => {
+    expectSemverRange(json.message)
+  })
+
 t.create('engines satisfies all lts node versions - tagged')
-  .get('/ionic/next.json')
+  .get('/ionic/testing.json')
   .intercept(mockReleaseSchedule())
   .intercept(
     mockPackageData({
       packageName: 'ionic',
       engines: '10 - 12',
-      tag: 'next',
+      tag: 'testing',
     })
   )
   .intercept(mockVersionsSha())
   .expectBadge({
-    label: 'node lts@next',
+    label: 'node lts@testing',
     message: `10 - 12`,
     color: `brightgreen`,
   })
 
 t.create('engines not satisfies all lts node versions - tagged')
-  .get('/ionic/next.json')
+  .get('/ionic/testing.json')
   .intercept(mockReleaseSchedule())
   .intercept(
     mockPackageData({
       packageName: 'ionic',
       engines: '8',
-      tag: 'next',
+      tag: 'testing',
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node lts@next', message: `8`, color: `orange` })
+  .expectBadge({ label: 'node lts@testing', message: `8`, color: `orange` })
 
 t.create('engines satisfies some lts node versions - tagged')
-  .get('/ionic/next.json')
+  .get('/ionic/testing.json')
   .intercept(mockReleaseSchedule())
   .intercept(
     mockPackageData({
       packageName: 'ionic',
       engines: '10',
-      tag: 'next',
+      tag: 'testing',
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node lts@next', message: `10`, color: `yellow` })
+  .expectBadge({ label: 'node lts@testing', message: `10`, color: `yellow` })
+
+t.create("gets the tagged release's node version of @cycle/core - live")
+  .get('/@cycle/core/canary.json')
+  .expectBadge({ label: 'node lts@canary' })
+  .afterJSON(json => {
+    expectSemverRange(json.message)
+  })
 
 t.create('engines satisfies all lts node versions - scoped and tagged')
   .get('/@cycle/core/canary.json')
@@ -178,6 +206,13 @@ t.create('engines satisfies some lts node versions - scoped and tagged')
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node lts@canary', message: `10`, color: `yellow` })
 
+t.create('gets the node version of passport from a custom registry - live')
+  .get('/passport.json?registry_uri=https://registry.npmjs.com')
+  .expectBadge({ label: 'node lts' })
+  .afterJSON(json => {
+    expectSemverRange(json.message)
+  })
+
 t.create('engines satisfies all lts node versions with custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')
   .intercept(mockReleaseSchedule())
@@ -190,6 +225,10 @@ t.create('engines satisfies all lts node versions with custom registry')
   )
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node lts', message: `10 - 12`, color: `brightgreen` })
+
+t.create('invalid package name - live')
+  .get('/frodo-is-not-a-package.json')
+  .expectBadge({ label: 'node lts', message: 'package not found' })
 
 t.create('invalid package name')
   .get('/frodo-is-not-a-package.json')
