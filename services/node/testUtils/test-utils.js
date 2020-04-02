@@ -35,14 +35,11 @@ const mockPackageData = (
       urlPath = `/${packageName}`
     }
     packageJson = getTemplate('packageJsonVersionsTemplate')
-    packageJson.name = packageJson
     packageJson['dist-tags'][tag || 'latest'] = '0.0.91'
-    packageJson.versions['0.0.91'].name = packageName
     packageJson.versions['0.0.91'].engines.node = engines
   } else {
     urlPath = `/${packageName}/latest`
     packageJson = getTemplate('packageJsonTemplate')
-    packageJson.name = packageName
     packageJson.engines.node = engines
   }
   return nock(registry || 'https://registry.npmjs.org/')
