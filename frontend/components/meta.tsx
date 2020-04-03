@@ -2,6 +2,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 // @ts-ignore
 import favicon from '../images/favicon.png'
+import '../fonts/fonts.css'
 
 const description = `We serve fast and scalable informational images as badges
 for GitHub, Travis CI, Jenkins, WordPress and many more services. Use them to
@@ -17,10 +18,6 @@ export default function Meta(): JSX.Element {
       <meta content="width=device-width,initial-scale=1" name="viewport" />
       <meta content={description} name="description" />
       <link href={favicon} rel="icon" type="image/png" />
-      <link
-        href="https://fonts.googleapis.com/css?family=Lato|Lekton"
-        rel="stylesheet"
-      />
     </Helmet>
   )
 }
