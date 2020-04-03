@@ -19,13 +19,7 @@ const templates = {
 
 const getTemplate = template => JSON.parse(templates[template])
 
-const mockPackageData = ({
-  packageName,
-  engines,
-  scope,
-  tag,
-  registry,
-}) => nock => {
+const mockPackageData = ({ packageName, engines, scope, tag }) => nock => {
   let packageJson
   let urlPath
   if (scope || tag) {
@@ -42,15 +36,10 @@ const mockPackageData = ({
     packageJson = getTemplate('packageJsonTemplate')
     packageJson.engines.node = engines
   }
-  return nock(registry || 'https://registry.npmjs.org/')
+  return nock('https://registry.npmjs.org/')
     .get(urlPath)
     .reply(200, packageJson)
 }
-
-const mockNonExistingPackageData = packageName => nock =>
-  nock('https://registry.npmjs.org/')
-    .get(`/${packageName}/latest`)
-    .reply(404)
 
 const mockCurrentSha = latestVersion => nock => {
   const latestSha = `node-v${latestVersion}.12.0-aix-ppc64.tar.gz`
@@ -173,7 +162,6 @@ const mockReleaseSchedule = () => nock => {
 }
 
 module.exports = {
-  mockNonExistingPackageData,
   mockPackageData,
   mockCurrentSha,
   mockVersionsSha,

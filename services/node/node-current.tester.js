@@ -3,17 +3,13 @@
 const { expect } = require('chai')
 const { Range } = require('semver')
 const t = (module.exports = require('../tester').createServiceTester())
-const {
-  mockPackageData,
-  mockCurrentSha,
-  mockNonExistingPackageData,
-} = require('./testUtils/test-utils')
+const { mockPackageData, mockCurrentSha } = require('./testUtils/test-utils')
 
 function expectSemverRange(message) {
   expect(() => new Range(message)).not.to.throw()
 }
 
-t.create('gets the node version of passport - live')
+t.create('gets the node version of passport')
   .get('/passport.json')
   .expectBadge({ label: 'node' })
   .afterJSON(json => {
@@ -42,7 +38,7 @@ t.create('engines not satisfies current node version')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: `12`, color: `yellow` })
 
-t.create('gets the node version of @stdlib/stdlib - live')
+t.create('gets the node version of @stdlib/stdlib')
   .get('/@stdlib/stdlib.json')
   .expectBadge({ label: 'node' })
   .afterJSON(json => {
@@ -77,7 +73,7 @@ t.create('engines not satisfies current node version - scoped')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: `12`, color: `yellow` })
 
-t.create("gets the tagged release's node version version of ionic - live")
+t.create("gets the tagged release's node version version of ionic")
   .get('/ionic/testing.json')
   .expectBadge({ label: 'node@testing' })
   .afterJSON(json => {
@@ -112,7 +108,7 @@ t.create('engines not satisfies current node version - tagged')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node@testing', message: `12`, color: `yellow` })
 
-t.create("gets the tagged release's node version of @cycle/core - live")
+t.create("gets the tagged release's node version of @cycle/core")
   .get('/@cycle/core/canary.json')
   .expectBadge({ label: 'node@canary' })
   .afterJSON(json => {
@@ -149,30 +145,13 @@ t.create('engines not satisfies current node version - scoped and tagged')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node@canary', message: `12`, color: `yellow` })
 
-t.create('gets the node version of passport from a custom registry - live')
+t.create('gets the node version of passport from a custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')
   .expectBadge({ label: 'node' })
   .afterJSON(json => {
     expectSemverRange(json.message)
   })
 
-t.create('engines satisfies current node version with custom registry')
-  .get('/passport.json?registry_uri=https://registry.npmjs.com')
-  .intercept(
-    mockPackageData({
-      packageName: 'passport',
-      engines: '>=0.4.0',
-      registry: 'https://registry.npmjs.com',
-    })
-  )
-  .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
-
-t.create('invalid package name - live')
-  .get('/frodo-is-not-a-package.json')
-  .expectBadge({ label: 'node', message: 'package not found' })
-
 t.create('invalid package name')
   .get('/frodo-is-not-a-package.json')
-  .intercept(mockNonExistingPackageData(`frodo-is-not-a-package`))
   .expectBadge({ label: 'node', message: 'package not found' })
