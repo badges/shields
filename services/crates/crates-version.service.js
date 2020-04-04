@@ -12,7 +12,7 @@ module.exports = class CratesVersion extends BaseCratesService {
   static get route() {
     return {
       base: 'crates/v',
-      pattern: ':crate',
+      pattern: ':crate/:version?',
     }
   }
 
@@ -22,6 +22,12 @@ module.exports = class CratesVersion extends BaseCratesService {
         title: 'Crates.io',
         namedParams: { crate: 'rustc-serialize' },
         staticPreview: renderVersionBadge({ version: '0.3.24' }),
+        keywords,
+      },
+      {
+        title: 'Crates.io with version',
+        namedParams: { crate: 'rustc-serialize', version: '0.3.23'},
+        staticPreview: renderVersionBadge({ version: '0.3.23' }),
         keywords,
       },
     ]
@@ -34,9 +40,9 @@ module.exports = class CratesVersion extends BaseCratesService {
     return { version: json.version ? json.version.num : json.crate.max_version }
   }
 
-  async handle({ crate }) {
-    const json = await this.fetch({ crate })
-    const { version } = this.transform(json)
-    return renderVersionBadge({ version })
+  async handle({ crate, version}) {
+    const json = await this.fetch({ crate, version })
+    const { fetched_version } = this.transform(json)
+    return renderVersionBadge({ fetched_version })
   }
 }
