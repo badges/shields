@@ -17,9 +17,9 @@ module.exports = class NodeVersionBase extends NPMBase {
     const type = this.type
     const documentation = `
   <p>
-    This badge is designed for projects that release packages to <a href="https://www.npmjs.com/">npm</a>.
-    The badge can be added to the project readme to inform users of the node versions that the package is supported by.
-    The information is retrieved from the <code>engines.node</code> section in package.json.
+    This badge is designed for projects that release packages to <a href="https://www.npmjs.com/">npm</a><br/>
+    The badge can be added to the project readme to inform users of the node versions that the package is supported by<br/>
+    The information is retrieved from the <code>engines.node</code> section in package.json<br/>
     ${this.documentation}
   </p>
 `
