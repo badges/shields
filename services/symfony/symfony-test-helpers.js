@@ -1,7 +1,5 @@
 'use strict'
 
-const runnerConfig = require('config').util.toObject()
-
 const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
 
 function createMockResponse({ status = 'finished', grade, violations }) {
@@ -88,17 +86,9 @@ const config = {
   },
 }
 
-function checkShouldSkip() {
-  const noToken =
-    !runnerConfig.private.sl_insight_userUuid ||
-    !runnerConfig.private.sl_insight_apiToken
-  if (noToken) {
-    console.warn(
-      'No Symfony credentials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
-    )
-  }
-  return noToken
-}
+const { noToken } = require('../test-helpers')
+const { SymfonyInsightBase } = require('./symfony-insight-base')
+const noSymfonyToken = noToken(SymfonyInsightBase)
 
 module.exports = {
   sampleProjectUuid,
@@ -117,5 +107,5 @@ module.exports = {
   user,
   token,
   config,
-  checkShouldSkip,
+  noSymfonyToken,
 }
