@@ -15,6 +15,14 @@ module.exports = class NodeVersionBase extends NPMBase {
 
   static get examples() {
     const type = this.type
+    const documentation = `
+  <p>
+    This badge is designed for projects that release packages to <a href="https://www.npmjs.com/">npm</a>.
+    The badge can be added to the project readme to inform users of the node versions that the package is supported by.
+    The information is retrieved from the <code>engines.node</code> section in package.json.
+    ${this.documentation}
+  </p>
+`
     const prefix = `node-${type}`
     return [
       {
@@ -25,6 +33,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped)`,
@@ -34,6 +43,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (tag)`,
@@ -44,6 +54,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped with tag)`,
@@ -54,6 +65,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped with tag, custom registry)`,
@@ -65,6 +77,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
     ]
   }
