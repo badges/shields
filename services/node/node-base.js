@@ -15,6 +15,12 @@ module.exports = class NodeVersionBase extends NPMBase {
 
   static get examples() {
     const type = this.type
+    const documentation = `
+  <p>
+    ${this.documentation}
+    The node version support is retrieved from the <code>engines.node</code> section in package.json.
+  </p>
+`
     const prefix = `node-${type}`
     return [
       {
@@ -25,6 +31,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped)`,
@@ -34,6 +41,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           nodeVersionRange: '>= 6.0.0',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (tag)`,
@@ -44,6 +52,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped with tag)`,
@@ -54,6 +63,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
       {
         title: `${prefix} (scoped with tag, custom registry)`,
@@ -65,6 +75,7 @@ module.exports = class NodeVersionBase extends NPMBase {
           tag: 'latest',
         }),
         keywords,
+        documentation,
       },
     ]
   }
