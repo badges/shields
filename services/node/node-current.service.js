@@ -21,6 +21,6 @@ module.exports = class NodeCurrentVersion extends NodeVersionBase {
   }
 
   static get documentation() {
-    return `This badge acts as an indicator that the package is supported by the <b>latest</b> release of node`
+    return `This badge indicates whether the package supports the <b>latest</b> release of node`
   }
 }
