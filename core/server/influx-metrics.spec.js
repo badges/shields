@@ -40,14 +40,14 @@ describe('Influx metrics', function() {
     })
   })
 
-  it('should add hostname as an instance label when hostnameAsAInstanceId is enabled', async function() {
+  it('should add hostname as an instance label when hostnameAsAnInstanceId is enabled', async function() {
     const instanceMetadata = {
       id: 'instance2',
       env: 'test-env',
       hostname: 'test-hostname',
     }
     const customConfig = {
-      hostnameAsAInstanceId: true,
+      hostnameAsAnInstanceId: true,
     }
     const influxMetrics = new InfluxMetrics(
       metricInstance,

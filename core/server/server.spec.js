@@ -245,15 +245,15 @@ describe('The server', function() {
         ).to.throw('"metrics.influx.intervalSeconds" is required')
       })
 
-      it('should allow hostnameAsAInstanceId', function() {
-        customConfig.public.metrics.influx.hostnameAsAInstanceId = true
+      it('should allow hostnameAsAnInstanceId', function() {
+        customConfig.public.metrics.influx.hostnameAsAnInstanceId = true
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()
       })
 
-      it('should not require hostnameAsAInstanceId when influx configuration is enabled', function() {
-        delete customConfig.public.metrics.influx.hostnameAsAInstanceId
+      it('should not require hostnameAsAnInstanceId when influx configuration is enabled', function() {
+        delete customConfig.public.metrics.influx.hostnameAsAnInstanceId
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()
