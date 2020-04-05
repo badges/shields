@@ -2,8 +2,8 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
-const LiberapayGoal = require('./liberapay-goal.service')
 const { InvalidResponse } = require('..')
+const LiberapayGoal = require('./liberapay-goal.service')
 
 describe('LiberapayGoal', function() {
   test(LiberapayGoal.prototype.transform, () => {

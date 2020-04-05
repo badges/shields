@@ -2,12 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
+const { NotFound } = require('..')
 const {
   allVersionsSchema,
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
-const { NotFound } = require('..')
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,

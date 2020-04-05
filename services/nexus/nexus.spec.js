@@ -3,8 +3,8 @@
 const { expect } = require('chai')
 const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const Nexus = require('./nexus.service')
 const { InvalidResponse, NotFound } = require('..')
+const Nexus = require('./nexus.service')
 
 describe('Nexus', function() {
   context('transform2()', function() {

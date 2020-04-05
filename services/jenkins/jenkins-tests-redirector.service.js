@@ -1,7 +1,7 @@
 'use strict'
 
-const { buildRedirectUrl } = require('./jenkins-common')
 const { redirector } = require('..')
+const { buildRedirectUrl } = require('./jenkins-common')
 
 const commonProps = {
   category: 'build',

@@ -1,8 +1,8 @@
 'use strict'
 
+const { BaseJsonService } = require('..')
 const { dockerBlue, buildDockerUrl } = require('./docker-helpers')
 const { fetchBuild } = require('./docker-cloud-common-fetch')
-const { BaseJsonService } = require('..')
 
 module.exports = class DockerCloudAutomatedBuild extends BaseJsonService {
   static get category() {

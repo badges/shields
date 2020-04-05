@@ -1,8 +1,8 @@
 'use strict'
 
 const { colorScale } = require('../color-formatters')
-const { fetchProject } = require('./librariesio-common')
 const { BaseJsonService } = require('..')
+const { fetchProject } = require('./librariesio-common')
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])
 

@@ -1,12 +1,12 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { BaseJsonService } = require('..')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
-const { BaseJsonService } = require('..')
 
 const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),

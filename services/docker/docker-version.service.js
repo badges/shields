@@ -3,14 +3,14 @@
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { latest, renderVersionBadge } = require('../version')
+const { NotFound, InvalidResponse } = require('..')
+const { BaseJsonService } = require('..')
 const {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
   getDigestSemVerMatches,
 } = require('./docker-helpers')
-const { NotFound, InvalidResponse } = require('..')
-const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),

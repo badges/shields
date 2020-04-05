@@ -4,8 +4,8 @@ const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { metric, formatDate } = require('../text-formatters')
 const { age: ageColor, downloadCount } = require('../color-formatters')
-const BaseSteamAPI = require('./steam-base')
 const { NotFound } = require('..')
+const BaseSteamAPI = require('./steam-base')
 
 const documentation = `
 <p>

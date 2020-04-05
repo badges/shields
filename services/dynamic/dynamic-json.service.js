@@ -1,9 +1,9 @@
 'use strict'
 
 const { MetricNames } = require('../../core/base-service/metric-helper')
+const { BaseJsonService } = require('..')
 const { createRoute } = require('./dynamic-helpers')
 const jsonPath = require('./json-path')
-const { BaseJsonService } = require('..')
 
 module.exports = class DynamicJson extends jsonPath(BaseJsonService) {
   static get enabledMetrics() {

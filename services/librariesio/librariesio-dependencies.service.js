@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { BaseJsonService } = require('..')
 const {
   transform,
   renderDependenciesBadge,
 } = require('./librariesio-dependencies-helpers')
-const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   dependencies: Joi.array()

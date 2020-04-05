@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
-const NpmBase = require('./npm-base')
 const { NotFound } = require('..')
+const NpmBase = require('./npm-base')
 
 const keywords = ['node']
 

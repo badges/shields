@@ -4,9 +4,9 @@ const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
+const { NotFound } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
-const { NotFound } = require('..')
 
 const releaseSchema = Joi.object({
   assets: Joi.array()

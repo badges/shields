@@ -2,12 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
+const { BaseJsonService, BaseXmlService, NotFound, redirector } = require('..')
 const {
   renderVersionBadge,
   renderDownloadBadge,
   odataToObject,
 } = require('./nuget-helpers')
-const { BaseJsonService, BaseXmlService, NotFound, redirector } = require('..')
 
 function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases

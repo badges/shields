@@ -3,10 +3,10 @@
 const { renderVersionBadge } = require('../version')
 const { isLockfile, getDependencyVersion } = require('../pipenv-helpers')
 const { addv } = require('../text-formatters')
+const { NotFound } = require('..')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation: githubDocumentation } = require('./github-helpers')
-const { NotFound } = require('..')
 
 const keywords = ['pipfile']
 

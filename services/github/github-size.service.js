@@ -3,9 +3,9 @@
 const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
+const { NotFound } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
-const { NotFound } = require('..')
 
 const schema = Joi.alternatives(
   Joi.object({

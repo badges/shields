@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
-const { authConfig } = require('./jira-common')
 const { BaseJsonService } = require('..')
+const { authConfig } = require('./jira-common')
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),

@@ -2,12 +2,12 @@
 
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
+const { BaseService } = require('..')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
-const { BaseService } = require('..')
 
 module.exports = class DockerStars extends BaseService {
   static get category() {

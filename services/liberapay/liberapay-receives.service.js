@@ -1,7 +1,7 @@
 'use strict'
 
-const { renderCurrencyBadge, LiberapayBase } = require('./liberapay-base')
 const { InvalidResponse } = require('..')
+const { renderCurrencyBadge, LiberapayBase } = require('./liberapay-base')
 
 module.exports = class LiberapayReceives extends LiberapayBase {
   static get route() {

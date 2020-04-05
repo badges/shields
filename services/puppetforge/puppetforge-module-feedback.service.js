@@ -3,8 +3,8 @@
 const {
   coveragePercentage: coveragePercentageColor,
 } = require('../color-formatters')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 const { NotFound } = require('..')
+const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
 module.exports = class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
   static get category() {

@@ -1,8 +1,8 @@
 'use strict'
 
 const prettyBytes = require('pretty-bytes')
-const BaseMicrobadgerService = require('./microbadger-base')
 const { NotFound } = require('..')
+const BaseMicrobadgerService = require('./microbadger-base')
 
 const documentation = `
 <p>

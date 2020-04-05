@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { isValidGrade, gradeColor } = require('./codefactor-helpers')
 const { BaseSvgScrapingService } = require('..')
+const { isValidGrade, gradeColor } = require('./codefactor-helpers')
 
 const schema = Joi.object({
   message: isValidGrade,

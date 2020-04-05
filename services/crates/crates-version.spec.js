@@ -2,8 +2,8 @@
 
 const { test, given } = require('sazerac')
 const { expect } = require('chai')
-const CratesVersion = require('./crates-version.service')
 const { InvalidResponse } = require('..')
+const CratesVersion = require('./crates-version.service')
 
 describe('CratesVersion', function() {
   test(CratesVersion.prototype.transform, () => {

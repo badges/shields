@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { codacyGrade } = require('./codacy-helpers')
 const { BaseSvgScrapingService } = require('..')
+const { codacyGrade } = require('./codacy-helpers')
 
 const schema = Joi.object({ message: codacyGrade }).required()
 

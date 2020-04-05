@@ -3,8 +3,8 @@
 const Joi = require('@hapi/joi')
 const { colorScale, letterScore } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
 const { BaseJsonService, NotFound } = require('..')
+const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
 
 const schema = Joi.object({
   data: Joi.object({

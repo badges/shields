@@ -2,12 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { anyInteger } = require('../validators')
+const { BaseJsonService } = require('..')
 const {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } = require('./docker-helpers')
-const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   results: Joi.array()

@@ -2,8 +2,8 @@
 
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const { BaseAmoService, keywords } = require('./amo-base')
 const { redirector } = require('..')
+const { BaseAmoService, keywords } = require('./amo-base')
 
 const documentation = `
 <p>

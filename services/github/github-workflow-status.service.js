@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { documentation } = require('./github-helpers')
 const { BaseSvgScrapingService } = require('..')
+const { documentation } = require('./github-helpers')
 
 const schema = Joi.object({
   message: Joi.alternatives()

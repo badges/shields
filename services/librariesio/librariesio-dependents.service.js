@@ -1,8 +1,8 @@
 'use strict'
 
 const { metric } = require('../text-formatters')
-const { fetchProject } = require('./librariesio-common')
 const { BaseJsonService } = require('..')
+const { fetchProject } = require('./librariesio-common')
 
 // https://libraries.io/api#project-dependents
 module.exports = class LibrariesIoDependents extends BaseJsonService {

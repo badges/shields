@@ -7,8 +7,8 @@ const { optionalUrl } = require('../validators')
 const {
   optionalDottedVersionNClausesWithOptionalSuffix,
 } = require('../validators')
-const { isSnapshotVersion } = require('./nexus-version')
 const { BaseJsonService, InvalidResponse, NotFound } = require('..')
+const { isSnapshotVersion } = require('./nexus-version')
 
 const nexus2SearchApiSchema = Joi.object({
   data: Joi.array()

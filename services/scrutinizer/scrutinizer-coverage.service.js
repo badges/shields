@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { colorScale } = require('../color-formatters')
-const ScrutinizerBase = require('./scrutinizer-base')
 const { NotFound } = require('..')
+const ScrutinizerBase = require('./scrutinizer-base')
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
