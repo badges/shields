@@ -21,6 +21,6 @@ module.exports = class NodeLtsVersion extends NodeVersionBase {
   }
 
   static get documentation() {
-    return `This badge acts as an indicator that the package is supported by <b>all</b> LTS node versions`
+    return `This badge indicates whether the package supports <b>all</b> LTS node versions`
   }
 }
