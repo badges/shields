@@ -24,9 +24,9 @@ badge build passed :green > mybadge.svg
 const { makeBadge, ValidationError } = require('badge-maker')
 
 const format = {
-  text: ['build', 'passed'],
+  label: 'build',
+  message: 'passed',
   color: 'green',
-  template: 'flat',
 }
 
 const svg = makeBadge(format)
@@ -35,7 +35,7 @@ console.log(svg) // <svg...
 try {
   makeBadge({})
 } catch (e) {
-  console.log(e) // ValidationError: Field `text` is required
+  console.log(e) // ValidationError: Field `message` is required
 }
 ```
 
@@ -52,14 +52,12 @@ The format is the following:
 
 ```js
 {
-  text: [ 'build', 'passed' ],  // Textual information to be shown on the badge, in order
+  label: 'build',  // (Optional) Badge label
+  message: 'passed',  // (Required) Badge message
+  labelColor: '#555',  // (Optional) Label color
+  color: '#4c1',  // (Optional) Message color
 
-  format: 'svg',  // Either 'svg' or 'json'
-
-  color: '#4c1',
-  labelColor: '#555',
-
-  // One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
+  // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
   template: 'flat',
 }

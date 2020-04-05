@@ -6,8 +6,8 @@ const { namedColors } = require('./color')
 const { makeBadge } = require('./index')
 
 if (process.argv.length < 4) {
-  console.log('Usage: badge subject status [:color] [@style]')
-  console.log('Or:    badge subject status color [labelColor] [@style]')
+  console.log('Usage: badge label message [:color] [@style]')
+  console.log('Or:    badge label message color [labelColor] [@style]')
   console.log()
   console.log('  color, labelColor:')
   console.log(`    one of ${Object.keys(namedColors).join(', ')}.`)
@@ -30,12 +30,12 @@ for (let i = 4; i < process.argv.length; i++) {
   }
 }
 
-const subject = process.argv[2]
-const status = process.argv[3]
+const label = process.argv[2]
+const message = process.argv[3]
 let color = process.argv[4] || ':green'
 const labelColor = process.argv[5]
 
-const badgeData = { text: [subject, status], format: 'svg' }
+const badgeData = { label, message }
 if (style) {
   badgeData.template = style
 }
