@@ -1,23 +1,24 @@
 'use strict'
 
 const NPMBase = require('../npm/npm-base')
-const { versionColorForRange } = require('./node-version-color')
 
 const keywords = ['npm']
 
-module.exports = class NodeVersion extends NPMBase {
+module.exports = class NodeVersionBase extends NPMBase {
   static get category() {
     return 'platform-support'
   }
 
   static get route() {
-    return this.buildRoute('node/v', { withTag: true })
+    return this.buildRoute(`node/${this.path}`, { withTag: true })
   }
 
   static get examples() {
+    const type = this.type
+    const prefix = `node-${type}`
     return [
       {
-        title: 'node',
+        title: `${prefix}`,
         pattern: ':packageName',
         namedParams: { packageName: 'passport' },
         staticPreview: this.renderStaticPreview({
@@ -26,7 +27,7 @@ module.exports = class NodeVersion extends NPMBase {
         keywords,
       },
       {
-        title: 'node (scoped)',
+        title: `${prefix} (scoped)`,
         pattern: '@:scope/:packageName',
         namedParams: { scope: 'stdlib', packageName: 'stdlib' },
         staticPreview: this.renderStaticPreview({
@@ -35,7 +36,7 @@ module.exports = class NodeVersion extends NPMBase {
         keywords,
       },
       {
-        title: 'node (tag)',
+        title: `${prefix} (tag)`,
         pattern: ':packageName/:tag',
         namedParams: { packageName: 'passport', tag: 'latest' },
         staticPreview: this.renderStaticPreview({
@@ -45,7 +46,7 @@ module.exports = class NodeVersion extends NPMBase {
         keywords,
       },
       {
-        title: 'node (scoped with tag)',
+        title: `${prefix} (scoped with tag)`,
         pattern: '@:scope/:packageName/:tag',
         namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
         staticPreview: this.renderStaticPreview({
@@ -55,7 +56,7 @@ module.exports = class NodeVersion extends NPMBase {
         keywords,
       },
       {
-        title: 'node (scoped with tag, custom registry)',
+        title: `${prefix} (scoped with tag, custom registry)`,
         pattern: '@:scope/:packageName/:tag',
         namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
         queryParams: { registry_uri: 'https://registry.npmjs.com' },
@@ -68,16 +69,12 @@ module.exports = class NodeVersion extends NPMBase {
     ]
   }
 
-  static get defaultBadgeData() {
-    return { label: 'node' }
-  }
-
   static renderStaticPreview({ tag, nodeVersionRange }) {
     // Since this badge has an async `render()` function, but `get examples()` has to
     // be synchronous, this method exists. It should return the same value as the
     // real `render()`. There's a unit test to check that.
     return {
-      label: tag ? `node@${tag}` : undefined,
+      label: tag ? `${this.defaultBadgeData.label}@${tag}` : undefined,
       message: nodeVersionRange,
       color: 'brightgreen',
     }
@@ -86,7 +83,7 @@ module.exports = class NodeVersion extends NPMBase {
   static async render({ tag, nodeVersionRange }) {
     // Atypically, the `render()` function of this badge is `async` because it needs to pull
     // data from the server.
-    const label = tag ? `node@${tag}` : undefined
+    const label = tag ? `${this.defaultBadgeData.label}@${tag}` : undefined
 
     if (nodeVersionRange === undefined) {
       return {
@@ -98,7 +95,7 @@ module.exports = class NodeVersion extends NPMBase {
       return {
         label,
         message: nodeVersionRange,
-        color: await versionColorForRange(nodeVersionRange),
+        color: await this.colorResolver(nodeVersionRange),
       }
     }
   }
