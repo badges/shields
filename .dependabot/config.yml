@@ -34,6 +34,9 @@ update_configs:
           dependency_name: babel-preset-gatsby
           version_requirement: '>=0.3.0'
       - match:
+          dependency_name: chalk
+          version_requirement: '>=4.0.0'
+      - match:
           dependency_name: cross-env
           version_requirement: '>=7.0.0'
       - match:
