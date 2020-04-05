@@ -353,7 +353,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
             documentation={
               <span>
                 Set the color of the logo (hex, rgb, rgba, hsl, hsla and css
-                named colors supported)
+                named colors supported). Supported for named logos but not for
+                custom logos.
               </span>
             }
             key="logoColor"
