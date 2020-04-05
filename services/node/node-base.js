@@ -17,7 +17,6 @@ module.exports = class NodeVersionBase extends NPMBase {
     const type = this.type
     const documentation = `
   <p>
-    This badge is designed to covey to users the node version support status of a package.
     ${this.documentation}
     The node version support is retrieved from the <code>engines.node</code> section in package.json.
   </p>
