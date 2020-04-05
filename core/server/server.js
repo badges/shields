@@ -154,11 +154,6 @@ const privateInfluxConfigSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
 })
-const privateMetricsInfluxConfigSchema = Joi.object({
-  metrics: Joi.object({
-    influx: privateInfluxConfigSchema.required(),
-  }).required(),
-})
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
   bintray_user: Joi.string(),
@@ -190,7 +185,11 @@ const privateConfigSchema = Joi.object({
     influx: privateInfluxConfigSchema,
   },
 }).required()
-
+const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
+  metrics: Joi.object({
+    influx: privateInfluxConfigSchema.required(),
+  }).required(),
+})
 const instanceMetadataSchema = Joi.object({
   id: Joi.string(),
   env: Joi.string().required(),
