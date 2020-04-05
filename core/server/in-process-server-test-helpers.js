@@ -5,8 +5,8 @@ const Server = require('./server')
 
 function createTestServer({ port }) {
   const requiredInstanceMetadata = {
-    env: 'shields-io',
-    hostname: 's3.shields.io',
+    env: 'testing',
+    hostname: 'localhost',
   }
 
   const serverConfig = {
