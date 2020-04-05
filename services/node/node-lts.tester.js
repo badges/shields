@@ -32,7 +32,7 @@ t.create('engines satisfies all lts node versions')
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node-lts', message: `10 - 12`, color: `brightgreen` })
 
-t.create('engines not satisfies all lts node versions')
+t.create('engines does not satisfy all lts node versions')
   .get('/passport.json')
   .intercept(mockReleaseSchedule())
   .intercept(
@@ -76,7 +76,7 @@ t.create('engines satisfies all lts node versions - scoped')
   .intercept(mockVersionsSha())
   .expectBadge({ label: 'node-lts', message: `10 - 12`, color: `brightgreen` })
 
-t.create('engines not satisfies all lts node versions - scoped')
+t.create('engines does not satisfy all lts node versions - scoped')
   .get('/@stdlib/stdlib.json')
   .intercept(mockReleaseSchedule())
   .intercept(
@@ -126,7 +126,7 @@ t.create('engines satisfies all lts node versions - tagged')
     color: `brightgreen`,
   })
 
-t.create('engines not satisfies all lts node versions - tagged')
+t.create('engines does not satisfy all lts node versions - tagged')
   .get('/ionic/testing.json')
   .intercept(mockReleaseSchedule())
   .intercept(
@@ -177,7 +177,7 @@ t.create('engines satisfies all lts node versions - scoped and tagged')
     color: `brightgreen`,
   })
 
-t.create('engines not satisfies all lts node versions - scoped and tagged')
+t.create('engines does not satisfy all lts node versions - scoped and tagged')
   .get('/@cycle/core/canary.json')
   .intercept(mockReleaseSchedule())
   .intercept(

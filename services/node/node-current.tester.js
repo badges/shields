@@ -27,7 +27,7 @@ t.create('engines satisfies current node version')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
 
-t.create('engines not satisfies current node version')
+t.create('engines does not satisfy current node version')
   .get('/passport.json')
   .intercept(
     mockPackageData({
@@ -59,7 +59,7 @@ t.create('engines satisfies current node version - scoped')
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
 
-t.create('engines not satisfies current node version - scoped')
+t.create('engines does not satisfy current node version - scoped')
   .get('/@stdlib/stdlib.json')
   .intercept(
     mockPackageData({
@@ -96,7 +96,7 @@ t.create('engines satisfies current node version - tagged')
     color: `brightgreen`,
   })
 
-t.create('engines not satisfies current node version - tagged')
+t.create('engines does not satisfy current node version - tagged')
   .get('/ionic/testing.json')
   .intercept(
     mockPackageData({
@@ -132,7 +132,7 @@ t.create('engines satisfies current node version - scoped and tagged')
     color: `brightgreen`,
   })
 
-t.create('engines not satisfies current node version - scoped and tagged')
+t.create('engines does not satisfy current node version - scoped and tagged')
   .get('/@cycle/core/canary.json')
   .intercept(
     mockPackageData({
