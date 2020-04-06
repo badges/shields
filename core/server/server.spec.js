@@ -285,6 +285,13 @@ describe('The server', function() {
           'Private configuration is invalid. Check these paths: metrics,influx,password'
         )
       })
+
+      it('should allow other private keys', function() {
+        customConfig.private.gh_token = 'my-token'
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
     })
     describe('instance metadata', function() {
       let customInstanceMetadata
