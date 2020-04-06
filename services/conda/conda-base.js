@@ -5,7 +5,6 @@ const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
 const condaSchema = Joi.object({
-  license: Joi.string(),
   latest_version: Joi.string().required(),
   conda_platforms: Joi.array()
     .items(Joi.string())
