@@ -268,6 +268,15 @@ describe('The server', function() {
         )
       })
 
+      it('should require private metrics config when influx configuration is enabled', function() {
+        delete customConfig.private.metrics
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.throw(
+          'Private configuration is invalid. Check these paths: metrics'
+        )
+      })
+
       it('should require username when influx configuration is enabled', function() {
         delete customConfig.private.metrics.influx.username
         expect(
