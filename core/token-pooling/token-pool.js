@@ -5,6 +5,7 @@
 
 const crypto = require('crypto')
 const PriorityQueue = require('priorityqueuejs')
+const { Inaccessible } = require('../base-service/errors')
 
 /**
  * Compute a one-way hash of the input string.
@@ -265,7 +266,10 @@ class TokenPool {
       }
     }
 
-    throw Error('Token pool is exhausted')
+    throw new Inaccessible({
+      underlyingError: Error('Token pool is exhausted'),
+      prettyMessage: 'no tokens available',
+    })
   }
 
   /**

@@ -3,12 +3,13 @@
 const { expect } = require('chai')
 const sinon = require('sinon')
 const times = require('lodash.times')
+const { Inaccessible } = require('../base-service/errors')
 const { Token, TokenPool } = require('./token-pool')
 
 function expectPoolToBeExhausted(pool) {
   expect(() => {
     pool.next()
-  }).to.throw(Error, /^Token pool is exhausted$/)
+  }).to.throw(Inaccessible, /^Inaccessible: Token pool is exhausted$/)
 }
 
 describe('The token pool', function() {
