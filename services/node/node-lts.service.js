@@ -19,4 +19,8 @@ module.exports = class NodeLtsVersion extends NodeVersionBase {
   static get colorResolver() {
     return versionColorForRangeLts
   }
+
+  static get documentation() {
+    return `This badge indicates whether the package supports <b>all</b> LTS node versions`
+  }
 }
