@@ -52,7 +52,6 @@ module.exports = class CondaLicense extends BaseCondaService {
       schema,
       url: `https://api.anaconda.org/package/${channel}/${pkg}`,
     })
-    // const json = await this.fetch({ channel, pkg })
     return this.constructor.render({
       licenses: toArray(json.license),
     })
