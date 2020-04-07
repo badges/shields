@@ -19,4 +19,8 @@ module.exports = class NodeCurrentVersion extends NodeVersionBase {
   static get colorResolver() {
     return versionColorForRangeCurrent
   }
+
+  static get documentation() {
+    return `This badge indicates whether the package supports the <b>latest</b> release of node`
+  }
 }
