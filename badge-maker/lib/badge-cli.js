@@ -37,7 +37,7 @@ const labelColor = process.argv[5]
 
 const badgeData = { label, message }
 if (style) {
-  badgeData.template = style
+  badgeData.style = style
 }
 
 if (color[0] === ':') {

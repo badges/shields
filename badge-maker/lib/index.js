@@ -23,22 +23,22 @@ function _validate(format) {
     }
   })
 
-  const templateValues = [
+  const styleValues = [
     'plastic',
     'flat',
     'flat-square',
     'for-the-badge',
     'social',
   ]
-  if ('template' in format && !templateValues.includes(format.template)) {
+  if ('style' in format && !styleValues.includes(format.style)) {
     throw new ValidationError(
-      `Field \`template\` must be one of (${templateValues.toString()})`
+      `Field \`style\` must be one of (${styleValues.toString()})`
     )
   }
 }
 
 function _clean(format) {
-  const expectedKeys = ['label', 'message', 'labelColor', 'color', 'template']
+  const expectedKeys = ['label', 'message', 'labelColor', 'color', 'style']
 
   const cleaned = {}
   Object.keys(format).forEach(key => {
@@ -51,9 +51,14 @@ function _clean(format) {
     }
   })
 
+  // convert "public" format to "internal" format
   cleaned.text = [cleaned.label || '', cleaned.message]
   delete cleaned.label
   delete cleaned.message
+  if ('style' in cleaned) {
+    cleaned.template = cleaned.style
+    delete cleaned.style
+  }
 
   return cleaned
 }
@@ -66,7 +71,7 @@ function _clean(format) {
  * @param {string} format.message (Required) Badge message (e.g: 'passing')
  * @param {string} format.labelColor (Optional) Label color
  * @param {string} format.color (Optional) Message color
- * @param {string} format.template (Optional) Visual template e.g: 'flat'
+ * @param {string} format.style (Optional) Visual style e.g: 'flat'
  * @returns {string} Badge in SVG or JSON format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */

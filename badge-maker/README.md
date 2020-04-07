@@ -59,7 +59,7 @@ The format is the following:
 
   // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
-  template: 'flat',
+  style: 'flat',
 }
 ```
 

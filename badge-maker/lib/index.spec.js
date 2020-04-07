@@ -22,7 +22,7 @@ describe('makeBadge function', function() {
         label: 'build',
         message: 'passed',
         color: 'green',
-        template: 'flat',
+        style: 'flat',
       })
     ).to.satisfy(isSvg)
   })
@@ -50,23 +50,26 @@ describe('makeBadge function', function() {
       makeBadge({ label: 'build', message: 'passed', format: 'png' })
     ).to.throw(ValidationError, "Unexpected field 'format'")
     expect(() =>
+      makeBadge({ label: 'build', message: 'passed', template: 'flat' })
+    ).to.throw(ValidationError, "Unexpected field 'template'")
+    expect(() =>
       makeBadge({ label: 'build', message: 'passed', foo: 'bar' })
     ).to.throw(ValidationError, "Unexpected field 'foo'")
     expect(() =>
       makeBadge({
         label: 'build',
         message: 'passed',
-        template: 'something else',
+        style: 'something else',
       })
     ).to.throw(
       ValidationError,
-      'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)'
     )
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', template: 'popout' })
+      makeBadge({ label: 'build', message: 'passed', style: 'popout' })
     ).to.throw(
       ValidationError,
-      'Field `template` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)'
     )
   })
 })

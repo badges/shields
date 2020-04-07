@@ -9,16 +9,25 @@
 - Deprecated parameters have been removed. In version 2.2.0 the `colorA`, `colorB` and `colorscheme` params were deprecated. In version 3.0.0 these have been removed.
 - Only SVG output format is now provided. JSON format has been dropped and the `format` key has been removed.
 - The `text` array has been replaced by `label` and `message` keys.
+- The `template` key has been renamed `style`.
   To upgrade from v2.1.1, change your code from:
   ```js
   const { BadgeFactory } = require('gh-badges')
   const bf = new BadgeFactory()
-  const svg = bf.create({ text: ['build', 'passed'], format: 'svg' })
+  const svg = bf.create({
+    text: ['build', 'passed'],
+    format: 'svg',
+    template: 'flat-square',
+  })
   ```
   to:
   ```js
   const { makeBadge } = require('badge-maker')
-  const svg = makeBadge({ label: 'build', message: 'passed' })
+  const svg = makeBadge({
+    label: 'build',
+    message: 'passed',
+    style: 'flat-square',
+  })
   ```
 - `ValidationError` had been added and inputs are now validated. In previous releases, invalid inputs would be discarded and replaced with defaults. For example, in 2.2.1
   ```js
@@ -35,7 +44,7 @@
   const svg = makeBadge({
     label: 'build',
     message: 'passed',
-    template: 'some invalid value',
+    style: 'some invalid value',
   })
   ```
   will throw a `ValidationError`.
