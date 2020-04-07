@@ -2,6 +2,7 @@
 
 const request = require('request')
 const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
+const log = require('./log')
 
 module.exports = class InfluxMetrics {
   constructor(metricInstance, instanceMetadata, config) {
@@ -33,13 +34,17 @@ module.exports = class InfluxMetrics {
         },
         function(error, response, body) {
           if (error) {
-            console.log(
-              `Cannot push metrics. Cause: ${error.name}: ${error.message}`
+            log.error(
+              new Error(
+                `Cannot push metrics. Cause: ${error.name}: ${error.message}`
+              )
             )
           }
           if (response && response.statusCode >= 300) {
-            console.log(
-              `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
+            log.error(
+              new Error(
+                `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
+              )
             )
           }
         }

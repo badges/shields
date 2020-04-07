@@ -7,6 +7,7 @@ const { expect } = require('chai')
 const Camp = require('camp')
 const portfinder = require('portfinder')
 const got = require('../got-test-client')
+const log = require('./log')
 const InfluxMetrics = require('./influx-metrics')
 require('../register-chai-plugins.spec')
 describe('Influx metrics', function() {
@@ -94,10 +95,10 @@ describe('Influx metrics', function() {
   describe('pushing component', function() {
     let influxMetrics
     beforeEach(function() {
-      sinon.spy(console, 'log')
+      sinon.spy(log, 'error')
     })
     afterEach(function() {
-      console.log.restore()
+      log.error.restore()
       influxMetrics.stopPushingMetrics()
       nock.cleanAll()
       nock.enableNetConnect()
@@ -151,8 +152,15 @@ describe('Influx metrics', function() {
 
       await waitForExpect(
         () => {
-          expect(console.log).to.be.calledWith(
-            'Cannot push metrics. Cause: NetConnectNotAllowedError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+          expect(log.error).to.be.calledWith(
+            sinon.match
+              .instanceOf(Error)
+              .and(
+                sinon.match.has(
+                  'message',
+                  'Cannot push metrics. Cause: NetConnectNotAllowedError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+                )
+              )
           )
         },
         1000,
@@ -177,8 +185,15 @@ describe('Influx metrics', function() {
 
       await waitForExpect(
         () => {
-          expect(console.log).to.be.calledWith(
-            'Cannot push metrics. http://shields-metrics.io/metrics responded with status code 400'
+          expect(log.error).to.be.calledWith(
+            sinon.match
+              .instanceOf(Error)
+              .and(
+                sinon.match.has(
+                  'message',
+                  'Cannot push metrics. http://shields-metrics.io/metrics responded with status code 400'
+                )
+              )
           )
         },
         1000,
