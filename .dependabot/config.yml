@@ -31,6 +31,12 @@ update_configs:
           update_type: 'semver:minor'
     ignored_updates:
       - match:
+          dependency_name: babel-preset-gatsby
+          version_requirement: '>=0.3.0'
+      - match:
+          dependency_name: chalk
+          version_requirement: '>=4.0.0'
+      - match:
           dependency_name: cross-env
           version_requirement: '>=7.0.0'
       - match:
@@ -39,6 +45,27 @@ update_configs:
       - match:
           dependency_name: eslint-plugin-jsdoc
           version_requirement: '>=21.0.0'
+      - match:
+          dependency_name: gatsby
+          version_requirement: '>=2.19.50'
+      - match:
+          dependency_name: gatsby-plugin-catch-links
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-page-creator
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-react-helmet
+          version_requirement: '>=3.2.0'
+      - match:
+          dependency_name: gatsby-plugin-remove-trailing-slashes
+          version_requirement: '>=2.2.0'
+      - match:
+          dependency_name: gatsby-plugin-styled-components
+          version_requirement: '>=3.2.0'
+      - match:
+          dependency_name: gatsby-plugin-typescript
+          version_requirement: '>=2.3.0'
       - match:
           dependency_name: got
           version_requirement: '>=10.0.0'
@@ -66,6 +93,9 @@ update_configs:
       - match:
           dependency_name: start-server-and-test
           version_requirement: '>=1.10.8'
+      - match:
+          dependency_name: xmldom
+          version_requirement: '>=0.3.0'
 
   # gh-badges package dependencies
   - package_manager: 'javascript'

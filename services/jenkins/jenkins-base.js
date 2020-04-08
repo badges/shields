@@ -7,6 +7,7 @@ module.exports = class JenkinsBase extends BaseJsonService {
     return {
       userKey: 'jenkins_user',
       passKey: 'jenkins_pass',
+      serviceKey: 'jenkins',
     }
   }
 
@@ -17,15 +18,16 @@ module.exports = class JenkinsBase extends BaseJsonService {
     errorMessages = { 404: 'instance or job not found' },
     disableStrictSSL,
   }) {
-    return this._requestJson({
-      url,
-      options: {
-        qs,
-        strictSSL: disableStrictSSL === undefined,
-        auth: this.authHelper.basicAuth,
-      },
-      schema,
-      errorMessages,
-    })
+    return this._requestJson(
+      this.authHelper.withBasicAuth({
+        url,
+        options: {
+          qs,
+          strictSSL: disableStrictSSL === undefined,
+        },
+        schema,
+        errorMessages,
+      })
+    )
   }
 }

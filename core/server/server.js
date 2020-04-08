@@ -5,9 +5,10 @@
 
 const path = require('path')
 const url = require('url')
+const { URL } = url
 const bytes = require('bytes')
-const Joi = require('@hapi/joi')
 const Camp = require('camp')
+const originalJoi = require('@hapi/joi')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const suggest = require('../../services/suggest')
@@ -23,8 +24,44 @@ const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
 
+const Joi = originalJoi
+  .extend(base => ({
+    type: 'arrayFromString',
+    base: base.array(),
+    coerce: (value, state, options) => ({
+      value: typeof value === 'string' ? value.split(' ') : value,
+    }),
+  }))
+  .extend(base => ({
+    type: 'string',
+    base: base.string(),
+    messages: {
+      'string.origin':
+        'needs to be an origin string, e.g. https://host.domain with optional port and no trailing slash',
+    },
+    rules: {
+      origin: {
+        validate(value, helpers) {
+          let origin
+          try {
+            ;({ origin } = new URL(value))
+          } catch (e) {}
+          if (origin !== undefined && origin === value) {
+            return value
+          } else {
+            return helpers.error('string.origin')
+          }
+        },
+      },
+    },
+  }))
+
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
+const origins = Joi.arrayFromString().items(Joi.string().origin())
+const defaultService = Joi.object({ authorizedOrigins: origins }).default({
+  authorizedOrigins: [],
+})
 
 const publicConfigSchema = Joi.object({
   bind: {
@@ -61,7 +98,9 @@ const publicConfigSchema = Joi.object({
   persistence: {
     dir: Joi.string().required(),
   },
-  services: {
+  services: Joi.object({
+    bitbucketServer: defaultService,
+    drone: defaultService,
     github: {
       baseUri: requiredUrl,
       debug: {
@@ -72,11 +111,18 @@ const publicConfigSchema = Joi.object({
           .required(),
       },
     },
+    jira: defaultService,
+    jenkins: Joi.object({
+      authorizedOrigins: origins,
+      requireStrictSsl: Joi.boolean(),
+      requireStrictSslToAuthenticate: Joi.boolean(),
+    }).default({ authorizedOrigins: [] }),
+    nexus: defaultService,
+    npm: defaultService,
+    sonar: defaultService,
+    teamcity: defaultService,
     trace: Joi.boolean().required(),
-  },
-  profiling: {
-    makeBadge: Joi.boolean().required(),
-  },
+  }).required(),
   cacheHeaders: {
     defaultCacheLengthSeconds: Joi.number()
       .integer()
@@ -292,10 +338,10 @@ class Server {
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
-          profiling: config.public.profiling,
           fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
           private: config.private,
+          public: config.public,
         }
       )
     )

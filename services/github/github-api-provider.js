@@ -3,6 +3,7 @@
 const Joi = require('@hapi/joi')
 const log = require('../../core/server/log')
 const { TokenPool } = require('../../core/token-pooling/token-pool')
+const { userAgent } = require('../../core/base-service/legacy-request-handler')
 const { nonNegativeInteger } = require('../validators')
 
 const headerSchema = Joi.object({
@@ -184,7 +185,7 @@ class GithubApiProvider {
         url,
         baseUrl,
         headers: {
-          'User-Agent': 'Shields.io',
+          'User-Agent': userAgent,
           Accept: 'application/vnd.github.v3+json',
           Authorization: `token ${tokenString}`,
         },

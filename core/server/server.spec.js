@@ -65,7 +65,7 @@ describe('The server', function() {
 
   it('should produce json badges', async function() {
     const { statusCode, body, headers } = await got(
-      `${baseUrl}npm/v/express.json`
+      `${baseUrl}twitter/follow/_Pyves.json`
     )
     expect(statusCode).to.equal(200)
     expect(headers['content-type']).to.equal('application/json')

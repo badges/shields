@@ -23,9 +23,6 @@ public:
         intervalSeconds: 200
     trace: false
 
-  profiling:
-    makeBadge: false
-
   cacheHeaders:
     defaultCacheLengthSeconds: 120
 

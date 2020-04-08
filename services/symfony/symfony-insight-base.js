@@ -54,6 +54,7 @@ class SymfonyInsightBase extends BaseXmlService {
     return {
       userKey: 'sl_insight_userUuid',
       passKey: 'sl_insight_apiToken',
+      authorizedOrigins: ['https://insight.symfony.com'],
       isRequired: true,
     }
   }
@@ -65,24 +66,23 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 
   async fetch({ projectUuid }) {
-    return this._requestXml({
-      schema,
-      url: `https://insight.symfony.com/api/projects/${projectUuid}`,
-      options: {
-        headers: {
-          Accept: 'application/vnd.com.sensiolabs.insight+xml',
+    return this._requestXml(
+      this.authHelper.withBasicAuth({
+        schema,
+        url: `https://insight.symfony.com/api/projects/${projectUuid}`,
+        options: {
+          headers: { Accept: 'application/vnd.com.sensiolabs.insight+xml' },
         },
-        auth: this.authHelper.basicAuth,
-      },
-      errorMessages: {
-        401: 'not authorized to access project',
-        404: 'project not found',
-      },
-      parserOptions: {
-        attributeNamePrefix: '',
-        ignoreAttributes: false,
-      },
-    })
+        errorMessages: {
+          401: 'not authorized to access project',
+          404: 'project not found',
+        },
+        parserOptions: {
+          attributeNamePrefix: '',
+          ignoreAttributes: false,
+        },
+      })
+    )
   }
 
   transform({ data }) {

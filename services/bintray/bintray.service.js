@@ -23,7 +23,11 @@ module.exports = class Bintray extends BaseJsonService {
   }
 
   static get auth() {
-    return { userKey: 'bintray_user', passKey: 'bintray_apikey' }
+    return {
+      userKey: 'bintray_user',
+      passKey: 'bintray_apikey',
+      authorizedOrigins: ['https://bintray.com'],
+    }
   }
 
   static get examples() {
@@ -46,11 +50,12 @@ module.exports = class Bintray extends BaseJsonService {
 
   async fetch({ subject, repo, packageName }) {
     // https://bintray.com/docs/api/#_get_version
-    return this._requestJson({
-      schema,
-      url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
-      options: { auth: this.authHelper.basicAuth },
-    })
+    return this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema,
+        url: `https://bintray.com/api/v1/packages/${subject}/${repo}/${packageName}/versions/_latest`,
+      })
+    )
   }
 
   async handle({ subject, repo, packageName }) {
