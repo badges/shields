@@ -18,7 +18,7 @@ module.exports = class InfluxMetrics {
     })
   }
 
-  async startPushingMetrics() {
+  startPushingMetrics() {
     const sendMetrics = () => {
       const auth = {
         user: this._config.username,

@@ -124,7 +124,7 @@ describe('Influx metrics', function() {
         password: 'metrics-password',
       })
 
-      await influxMetrics.startPushingMetrics()
+      influxMetrics.startPushingMetrics()
 
       await waitForExpect(
         () => {
