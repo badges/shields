@@ -26,7 +26,7 @@ module.exports = class InfluxMetrics {
       }
       request.post(
         {
-          uri: this._config.uri,
+          uri: this._config.url,
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.metrics(),
           timeout: this._config.timeoutMillseconds,

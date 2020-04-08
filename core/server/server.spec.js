@@ -197,7 +197,7 @@ describe('The server', function() {
         customConfig = config.util.toObject()
         customConfig.public.metrics.influx = {
           enabled: true,
-          uri: 'http://localhost:8081/telegraf',
+          url: 'http://localhost:8081/telegraf',
           timeoutMilliseconds: 1000,
           intervalSeconds: 2,
         }
@@ -216,16 +216,16 @@ describe('The server', function() {
         ).to.not.throw()
       })
 
-      it('should require uri when influx configuration is enabled', function() {
-        delete customConfig.public.metrics.influx.uri
+      it('should require url when influx configuration is enabled', function() {
+        delete customConfig.public.metrics.influx.url
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.uri" is required')
+        ).to.throw('"metrics.influx.url" is required')
       })
 
-      it('should not require uri when influx configuration is disabled', function() {
+      it('should not require url when influx configuration is disabled', function() {
         customConfig.public.metrics.influx.enabled = false
-        delete customConfig.public.metrics.influx.uri
+        delete customConfig.public.metrics.influx.url
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()

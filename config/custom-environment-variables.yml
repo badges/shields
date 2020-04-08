@@ -8,7 +8,7 @@ public:
       enabled: 'METRICS_PROMETHEUS_ENABLED'
     influx:
       enabled: 'METRICS_INFLUX_ENABLED'
-      uri: 'METRICS_INFLUX_URI'
+      url: 'METRICS_INFLUX_URL'
       timeoutMilliseconds: 'METRICS_INFLUX_TIMEOUT_MILLISECONDS'
       intervalSeconds: 'METRICS_INFLUX_INTERVAL_SECONDS'
       hostnameAsAnInstanceId: 'METRICS_INFLUX_HOSTNAME_AS_AN_INSTANCE_ID'

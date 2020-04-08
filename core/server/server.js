@@ -86,7 +86,7 @@ const publicConfigSchema = Joi.object({
     },
     influx: {
       enabled: Joi.boolean().required(),
-      uri: Joi.string()
+      url: Joi.string()
         .uri()
         .when('enabled', { is: true, then: Joi.required() }),
       timeoutMilliseconds: Joi.number()

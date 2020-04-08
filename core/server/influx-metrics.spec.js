@@ -117,7 +117,7 @@ describe('Influx metrics', function() {
         .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
         .reply(200)
       influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
-        uri: 'http://shields-metrics.io/metrics',
+        url: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 100,
         intervalSeconds: 0,
         username: 'metrics-username',
@@ -141,7 +141,7 @@ describe('Influx metrics', function() {
     it('should log errors', async function() {
       nock.disableNetConnect()
       influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
-        uri: 'http://shields-metrics.io/metrics',
+        url: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 50,
         intervalSeconds: 0,
         username: 'metrics-username',
@@ -174,7 +174,7 @@ describe('Influx metrics', function() {
         .post('/metrics')
         .reply(400)
       influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
-        uri: 'http://shields-metrics.io/metrics',
+        url: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 50,
         intervalSeconds: 0,
         username: 'metrics-username',
