@@ -52,9 +52,7 @@ module.exports = class InfluxMetrics {
     }
     this._intervalId = setInterval(
       sendMetrics,
-      this._config.intervalSeconds * 1000,
-      this._metricInstance,
-      this._instanceMetadata
+      this._config.intervalSeconds * 1000
     )
   }
 
