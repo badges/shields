@@ -3,17 +3,17 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 
-t.create('request for existing profile')
+t.create('request for existing username')
   .get('/offsetearth.json')
   .expectBadge({
     label: 'carbon offset',
     message: withRegex(/[\d.]+ tonnes/),
   })
 
-t.create('invalid profile')
+t.create('invalid username')
   .get('/non-existent-username.json')
   .expectBadge({
     label: 'carbon offset',
-    message: 'profile not found',
+    message: 'username not found',
     color: 'red',
   })

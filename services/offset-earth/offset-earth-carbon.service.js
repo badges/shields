@@ -19,7 +19,7 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
   static get route() {
     return {
       base: 'offset-earth/carbon',
-      pattern: ':owner',
+      pattern: ':username',
     }
   }
 
@@ -27,7 +27,7 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
     return [
       {
         title: 'Offset Earth (Carbon Offset)',
-        namedParams: { owner: 'offsetearth' },
+        namedParams: { username: 'offsetearth' },
         staticPreview: this.render({ count: 15.05 }),
       },
     ]
@@ -42,19 +42,19 @@ module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {
     return { message: `${tonnes} tonnes`, color: floorCount(count, 0.5, 1, 5) }
   }
 
-  async fetch({ owner }) {
-    const url = `https://public.offset.earth/users/${owner}/carbon-offset`
+  async fetch({ username }) {
+    const url = `https://public.offset.earth/users/${username}/carbon-offset`
     return this._requestJson({
       url,
       schema: apiSchema,
       errorMessages: {
-        404: 'profile not found',
+        404: 'username not found',
       },
     })
   }
 
-  async handle({ owner }) {
-    const { total } = await this.fetch({ owner })
+  async handle({ username }) {
+    const { total } = await this.fetch({ username })
 
     return this.constructor.render({ count: total })
   }

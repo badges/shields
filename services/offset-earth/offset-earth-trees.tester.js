@@ -3,14 +3,14 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isMetric } = require('../test-validators')
 
-t.create('request for existing profile')
+t.create('request for existing username')
   .get('/offsetearth.json')
   .expectBadge({
     label: 'trees',
     message: isMetric,
   })
 
-t.create('request for existing profile')
+t.create('request for existing username')
   .get('/offsetearth.json')
   .intercept(nock =>
     nock('https://public.offset.earth')
@@ -23,6 +23,6 @@ t.create('request for existing profile')
     color: 'green',
   })
 
-t.create('invalid profile')
+t.create('invalid username')
   .get('/non-existent-username.json')
-  .expectBadge({ label: 'trees', message: 'profile not found', color: 'red' })
+  .expectBadge({ label: 'trees', message: 'username not found', color: 'red' })
