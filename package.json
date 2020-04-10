@@ -29,7 +29,7 @@
     "camp": "~17.2.4",
     "chai-as-promised": "^7.1.1",
     "chalk": "^3.0.0",
-    "check-node-version": "^4.0.2",
+    "check-node-version": "^4.0.3",
     "chrome-web-store-item-property": "~1.2.0",
     "config": "^3.3.1",
     "cross-env": "^6.0.3",
