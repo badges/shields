@@ -25,7 +25,7 @@
     "@hapi/joi": "^16.1.8",
     "@sentry/node": "^5.15.4",
     "bytes": "^3.1.0",
-    "camelcase": "^5.3.1",
+    "camelcase": "^6.0.0",
     "camp": "~17.2.4",
     "chai-as-promised": "^7.1.1",
     "chalk": "^3.0.0",
