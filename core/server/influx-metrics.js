@@ -1,6 +1,7 @@
 'use strict'
 
-const request = require('request')
+const { promisify } = require('util')
+const { post } = require('request')
 const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
 const log = require('./log')
 
@@ -18,40 +19,39 @@ module.exports = class InfluxMetrics {
     })
   }
 
-  startPushingMetrics() {
-    const sendMetrics = () => {
-      const auth = {
-        user: this._config.username,
-        pass: this._config.password,
-      }
-      request.post(
-        {
-          uri: this._config.url,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.metrics(),
-          timeout: this._config.timeoutMillseconds,
-          auth,
-        },
-        function(error, response, body) {
-          if (error) {
-            log.error(
-              new Error(
-                `Cannot push metrics. Cause: ${error.name}: ${error.message}`
-              )
-            )
-          }
-          if (response && response.statusCode >= 300) {
-            log.error(
-              new Error(
-                `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
-              )
-            )
-          }
-        }
+  async sendMetrics() {
+    const auth = {
+      user: this._config.username,
+      pass: this._config.password,
+    }
+    const request = {
+      uri: this._config.url,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: this.metrics(),
+      timeout: this._config.timeoutMillseconds,
+      auth,
+    }
+    const postAsync = promisify(post)
+    let response
+    try {
+      response = await postAsync(request)
+    } catch (error) {
+      log.error(
+        new Error(`Cannot push metrics. Cause: ${error.name}: ${error.message}`)
       )
     }
+    if (response && response.statusCode >= 300) {
+      log.error(
+        new Error(
+          `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
+        )
+      )
+    }
+  }
+
+  startPushingMetrics() {
     this._intervalId = setInterval(
-      sendMetrics,
+      () => this.sendMetrics(),
       this._config.intervalSeconds * 1000
     )
   }
