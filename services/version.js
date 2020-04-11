@@ -94,7 +94,9 @@ function latest(versions, { pre = false } = {}) {
     version = latestDottedVersion(versions)
   }
   if (version === undefined || version === null) {
-    origVersions = origVersions.sort()
+    origVersions = origVersions.sort((a, b) =>
+      a.toLowerCase().localeCompare(b.toLowerCase())
+    )
     version = origVersions[origVersions.length - 1]
   }
   return version
