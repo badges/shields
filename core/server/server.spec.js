@@ -2,7 +2,6 @@
 
 const { expect } = require('chai')
 const isSvg = require('is-svg')
-const portfinder = require('portfinder')
 const config = require('config')
 const got = require('../got-test-client')
 const Server = require('./server')
@@ -14,8 +13,7 @@ describe('The server', function() {
     before('Start the server', async function() {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      const port = await portfinder.getPortPromise()
-      server = createTestServer({ port })
+      server = await createTestServer()
       baseUrl = server.baseUrl
       await server.start()
     })
@@ -28,8 +26,12 @@ describe('The server', function() {
 
     it('should allow strings for port', async function() {
       // fixes #4391 - This allows the app to be run using iisnode, which uses a named pipe for the port.
-      const pipeServer = createTestServer({
-        port: '\\\\.\\pipe\\9c137306-7c4d-461e-b7cf-5213a3939ad6',
+      const pipeServer = await createTestServer({
+        public: {
+          bind: {
+            port: '\\\\.\\pipe\\9c137306-7c4d-461e-b7cf-5213a3939ad6',
+          },
+        },
       })
       expect(pipeServer).to.not.be.undefined
     })
@@ -194,22 +196,15 @@ describe('The server', function() {
         server.stop()
       }
     })
-    async function startTestServer(customConfig) {
-      const port = await portfinder.getPortPromise()
-      const requiredInstanceMetadata = {
-        env: 'testing',
-        hostname: 'localhost',
-      }
-      customConfig.public.bind.port = port
-      return new Server(customConfig, requiredInstanceMetadata)
-    }
+
     it('should allow to enable prometheus metrics', async function() {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      const customConfig = config.util.toObject()
-      customConfig.public.metrics.prometheus.enabled = true
-      customConfig.public.metrics.prometheus.endpointEnabled = true
-      server = await startTestServer(customConfig)
+      server = await createTestServer({
+        public: {
+          metrics: { prometheus: { enabled: true, endpointEnabled: true } },
+        },
+      })
       await server.start()
 
       const { statusCode } = await got(`${server.baseUrl}metrics`)
@@ -220,10 +215,11 @@ describe('The server', function() {
     it('should allow to disable prometheus metrics', async function() {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      const customConfig = config.util.toObject()
-      customConfig.public.metrics.prometheus.enabled = true
-      customConfig.public.metrics.prometheus.endpointEnabled = false
-      server = await startTestServer(customConfig)
+      server = await createTestServer({
+        public: {
+          metrics: { prometheus: { enabled: true, endpointEnabled: false } },
+        },
+      })
       await server.start()
 
       const { statusCode } = await got(`${server.baseUrl}metrics`)

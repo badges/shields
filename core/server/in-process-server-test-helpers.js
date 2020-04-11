@@ -1,26 +1,21 @@
 'use strict'
 
+const merge = require('deepmerge')
 const config = require('config').util.toObject()
+const portfinder = require('portfinder')
 const Server = require('./server')
 
-function createTestServer({ port }) {
+async function createTestServer(customConfig = {}) {
+  const mergedConfig = merge(config, customConfig)
+  if (!mergedConfig.public.bind.port) {
+    mergedConfig.public.bind.port = await portfinder.getPortPromise()
+  }
   const requiredInstanceMetadata = {
     env: 'testing',
     hostname: 'localhost',
   }
 
-  const serverConfig = {
-    ...config,
-    public: {
-      ...config.public,
-      bind: {
-        ...config.public.bind,
-        port,
-      },
-    },
-  }
-
-  return new Server(serverConfig, requiredInstanceMetadata)
+  return new Server(mergedConfig, requiredInstanceMetadata)
 }
 
 module.exports = {
