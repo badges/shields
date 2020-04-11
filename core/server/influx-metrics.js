@@ -12,13 +12,6 @@ module.exports = class InfluxMetrics {
     this._config = config
   }
 
-  async registerMetricsEndpoint(server) {
-    server.route(/^\/metrics-influx$/, (data, match, end, ask) => {
-      ask.res.setHeader('Content-Type', 'text/plain')
-      ask.res.end(this.metrics())
-    })
-  }
-
   async sendMetrics() {
     const auth = {
       user: this._config.username,
