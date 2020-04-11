@@ -186,6 +186,52 @@ describe('The server', function() {
       })
     })
   })
+
+  describe('configuration', function() {
+    let server
+    afterEach(async function() {
+      if (server) {
+        server.stop()
+      }
+    })
+    async function startTestServer(customConfig) {
+      const port = await portfinder.getPortPromise()
+      const requiredInstanceMetadata = {
+        env: 'testing',
+        hostname: 'localhost',
+      }
+      customConfig.public.bind.port = port
+      return new Server(customConfig, requiredInstanceMetadata)
+    }
+    it('should allow to enable prometheus metrics', async function() {
+      // Fixes https://github.com/badges/shields/issues/2611
+      this.timeout(10000)
+      const customConfig = config.util.toObject()
+      customConfig.public.metrics.prometheus.enabled = true
+      customConfig.public.metrics.prometheus.endpointEnabled = true
+      server = await startTestServer(customConfig)
+      await server.start()
+
+      const { statusCode } = await got(`${server.baseUrl}metrics`)
+
+      expect(statusCode).to.be.equal(200)
+    })
+
+    it('should allow to disable prometheus metrics', async function() {
+      // Fixes https://github.com/badges/shields/issues/2611
+      this.timeout(10000)
+      const customConfig = config.util.toObject()
+      customConfig.public.metrics.prometheus.enabled = true
+      customConfig.public.metrics.prometheus.endpointEnabled = false
+      server = await startTestServer(customConfig)
+      await server.start()
+
+      const { statusCode } = await got(`${server.baseUrl}metrics`)
+
+      expect(statusCode).to.be.equal(404)
+    })
+  })
+
   describe('configuration validation', function() {
     const requiredInstanceMetadata = {
       env: 'shields-io',

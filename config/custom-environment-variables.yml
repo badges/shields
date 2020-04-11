@@ -6,6 +6,7 @@ public:
   metrics:
     prometheus:
       enabled: 'METRICS_PROMETHEUS_ENABLED'
+      endpointEnabled: 'METRICS_PROMETHEUS_ENDPOINT_ENABLED'
     influx:
       enabled: 'METRICS_INFLUX_ENABLED'
       url: 'METRICS_INFLUX_URL'

@@ -68,11 +68,13 @@ module.exports = class PrometheusMetrics {
         registers: [this.register],
       }),
     }
+    this.interval = prometheus.collectDefaultMetrics({
+      register: this.register,
+    })
   }
 
-  async initialize(server) {
+  async registerMetricsEndpoint(server) {
     const { register } = this
-    this.interval = prometheus.collectDefaultMetrics({ register })
 
     server.route(/^\/metrics$/, (data, match, end, ask) => {
       ask.res.setHeader('Content-Type', register.contentType)

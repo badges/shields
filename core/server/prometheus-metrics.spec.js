@@ -7,14 +7,10 @@ const got = require('../got-test-client')
 const Metrics = require('./prometheus-metrics')
 
 describe('Prometheus metrics route', function() {
-  let port, baseUrl
+  let port, baseUrl, camp
   beforeEach(async function() {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
-  })
-
-  let camp
-  beforeEach(async function() {
     camp = Camp.start({ port, hostname: '::' })
     await new Promise(resolve => camp.on('listening', () => resolve()))
   })
@@ -26,11 +22,19 @@ describe('Prometheus metrics route', function() {
   })
 
   it('returns metrics', async function() {
-    new Metrics({ enabled: true }).initialize(camp)
+    new Metrics().registerMetricsEndpoint(camp)
 
-    const { statusCode, body } = await got(`${baseUrl}/metrics`)
+    const { statusCode } = await got(`${baseUrl}/metrics`)
 
     expect(statusCode).to.be.equal(200)
+  })
+
+  it('returns default metrics', async function() {
+    const metrics = new Metrics()
+    metrics.registerMetricsEndpoint(camp)
+
+    const { body } = await got(`${baseUrl}/metrics`)
+
     expect(body).to.contain('nodejs_version_info')
   })
 })

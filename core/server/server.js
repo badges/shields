@@ -83,6 +83,7 @@ const publicConfigSchema = Joi.object({
   metrics: {
     prometheus: {
       enabled: Joi.boolean().required(),
+      endpointEnabled: Joi.boolean().required(),
     },
     influx: {
       enabled: Joi.boolean().required(),
@@ -451,7 +452,9 @@ class Server {
     const { githubConstellation } = this
     githubConstellation.initialize(camp)
     if (metricInstance) {
-      metricInstance.initialize(camp)
+      if (this.config.public.metrics.prometheus.endpointEnabled) {
+        metricInstance.registerMetricsEndpoint(camp)
+      }
       if (this.influxMetrics) {
         this.influxMetrics.registerMetricsEndpoint(this.camp)
         this.influxMetrics.startPushingMetrics()

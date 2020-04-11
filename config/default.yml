@@ -5,6 +5,7 @@ public:
   metrics:
     prometheus:
       enabled: false
+      endpointEnabled: false
     influx:
       enabled: false
       timeoutMilliseconds: 1000
