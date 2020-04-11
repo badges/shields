@@ -456,7 +456,6 @@ class Server {
         metricInstance.registerMetricsEndpoint(camp)
       }
       if (this.influxMetrics) {
-        this.influxMetrics.registerMetricsEndpoint(this.camp)
         this.influxMetrics.startPushingMetrics()
       }
     }
