@@ -73,7 +73,6 @@ module.exports = class JetbrainsRating extends JetbrainsBase {
         : starRating(rating)
     return {
       message,
-      label: undefined,
       color: pluginRatingColor(rating),
     }
   }

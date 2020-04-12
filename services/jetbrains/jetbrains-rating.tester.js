@@ -3,19 +3,19 @@
 const { withRegex, isStarRating } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-const isRatingWithReviews = withRegex(/^(([0-4](.?([0-9]))?)|5)\/5$/)
+const isRating = withRegex(/^(([0-4](.?([0-9]))?)|5)\/5$/)
 
 t.create('rating number (user friendly plugin id)')
   .get('/rating/11941-automatic-power-saver.json')
-  .expectBadge({ label: 'rating', message: isRatingWithReviews })
+  .expectBadge({ label: 'rating', message: isRating })
 
 t.create('rating number (plugin id from plugin.xml)')
   .get('/rating/com.chriscarini.jetbrains.jetbrains-auto-power-saver.json')
-  .expectBadge({ label: 'rating', message: isRatingWithReviews })
+  .expectBadge({ label: 'rating', message: isRating })
 
 t.create('rating number (number as a plugin id)')
   .get('/rating/11941.json')
-  .expectBadge({ label: 'rating', message: isRatingWithReviews })
+  .expectBadge({ label: 'rating', message: isRating })
 
 t.create('rating number for unknown plugin')
   .get('/rating/unknown-plugin.json')
