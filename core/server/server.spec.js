@@ -243,11 +243,9 @@ describe('The server', function() {
           timeoutMilliseconds: 1000,
           intervalSeconds: 2,
         }
-        customConfig.private.metrics = {
-          influx: {
-            username: 'telegraf',
-            password: 'telegrafpass',
-          },
+        customConfig.private = {
+          influx_username: 'telegraf',
+          influx_password: 'telegrafpass',
         }
       })
 
@@ -301,39 +299,21 @@ describe('The server', function() {
         ).to.not.throw()
       })
 
-      it('should require private influx config when influx configuration is enabled', function() {
-        delete customConfig.private.metrics.influx
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw(
-          'Private configuration is invalid. Check these paths: metrics,influx'
-        )
-      })
-
-      it('should require private metrics config when influx configuration is enabled', function() {
-        delete customConfig.private.metrics
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw(
-          'Private configuration is invalid. Check these paths: metrics'
-        )
-      })
-
       it('should require username when influx configuration is enabled', function() {
-        delete customConfig.private.metrics.influx.username
+        delete customConfig.private.influx_username
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.throw(
-          'Private configuration is invalid. Check these paths: metrics,influx,username'
+          'Private configuration is invalid. Check these paths: influx_username'
         )
       })
 
       it('should require password when influx configuration is enabled', function() {
-        delete customConfig.private.metrics.influx.password
+        delete customConfig.private.influx_password
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.throw(
-          'Private configuration is invalid. Check these paths: metrics,influx,password'
+          'Private configuration is invalid. Check these paths: influx_password'
         )
       })
 

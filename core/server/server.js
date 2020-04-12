@@ -151,10 +151,6 @@ const publicConfigSchema = Joi.object({
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
 }).required()
 
-const privateInfluxConfigSchema = Joi.object({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
-})
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
   bintray_user: Joi.string(),
@@ -182,14 +178,12 @@ const privateConfigSchema = Joi.object({
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
-  metrics: {
-    influx: privateInfluxConfigSchema,
-  },
+  influx_username: Joi.string(),
+  influx_password: Joi.string(),
 }).required()
 const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
-  metrics: Joi.object({
-    influx: privateInfluxConfigSchema.required(),
-  }).required(),
+  influx_username: Joi.string().required(),
+  influx_password: Joi.string().required(),
 })
 const instanceMetadataSchema = Joi.object({
   id: Joi.string(),
@@ -253,11 +247,10 @@ class Server {
         this.influxMetrics = new InfluxMetrics(
           this.metricInstance,
           this.instanceMetadata,
-          Object.assign(
-            {},
-            publicConfig.metrics.influx,
-            privateConfig.metrics.influx
-          )
+          Object.assign({}, publicConfig.metrics.influx, {
+            username: privateConfig.influx_username,
+            password: privateConfig.influx_password,
+          })
         )
       }
     }
