@@ -34,6 +34,9 @@ update_configs:
           dependency_name: babel-preset-gatsby
           version_requirement: '>=0.3.0'
       - match:
+          dependency_name: camelcase
+          version_requirement: '>=6.0.0'
+      - match:
           dependency_name: chalk
           version_requirement: '>=4.0.0'
       - match:
@@ -42,6 +45,9 @@ update_configs:
       - match:
           dependency_name: decamelize
           version_requirement: '>=4.0.0'
+      - match:
+          dependency_name: escape-string-regexp
+          version_requirement: '>=3.0.0'
       - match:
           dependency_name: eslint-plugin-jsdoc
           version_requirement: '>=21.0.0'
