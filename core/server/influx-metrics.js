@@ -51,12 +51,15 @@ module.exports = class InfluxMetrics {
   }
 
   metrics() {
+    const { env, hostname, id } = this._instanceMetadata
+    const { hostnameAliases = {}, hostnameAsAnInstanceId } = this._config
+    const instance = hostnameAsAnInstanceId
+      ? hostnameAliases[hostname] || hostname
+      : id
     return promClientJsonToInfluxV2(this._metricInstance.metrics(), {
-      env: this._instanceMetadata.env,
+      env,
       application: 'shields',
-      instance: this._config.hostnameAsAnInstanceId
-        ? this._instanceMetadata.hostname
-        : this._instanceMetadata.id,
+      instance,
     })
   }
 

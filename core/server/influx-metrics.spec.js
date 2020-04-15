@@ -54,6 +54,27 @@ describe('Influx metrics', function() {
 
       expect(influxMetrics.metrics()).to.be.contain('instance=test-hostname')
     })
+
+    it('should use a hostname alias as an instance label', async function() {
+      const instanceMetadata = {
+        id: 'instance2',
+        env: 'test-env',
+        hostname: 'test-hostname',
+      }
+      const customConfig = {
+        hostnameAsAnInstanceId: true,
+        hostnameAliases: { 'test-hostname': 'test-hostname-aliass' },
+      }
+      const influxMetrics = new InfluxMetrics(
+        metricInstance,
+        instanceMetadata,
+        customConfig
+      )
+
+      expect(influxMetrics.metrics()).to.be.contain(
+        'instance=test-hostname-alias'
+      )
+    })
   })
 
   describe('startPushingMetrics', function() {

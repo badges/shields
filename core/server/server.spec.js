@@ -244,6 +244,7 @@ describe('The server', function() {
           url: 'http://localhost:8081/telegraf',
           timeoutMilliseconds: 1000,
           intervalSeconds: 2,
+          hostnameAliases: { 'metrics-hostname': 'metrics-hostname-alias' },
         }
         customConfig.private = {
           influx_username: 'telegraf',
@@ -296,6 +297,20 @@ describe('The server', function() {
 
       it('should not require hostnameAsAnInstanceId when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.hostnameAsAnInstanceId
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should not require hostnameAliases', function() {
+        delete customConfig.public.metrics.influx.hostnameAliases
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should allow empty hostnameAliases', function() {
+        customConfig.public.metrics.influx.hostnameAliases = {}
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()
