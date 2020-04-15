@@ -2,6 +2,7 @@
 
 const { promisify } = require('util')
 const { post } = require('request')
+const postAsync = promisify(post)
 const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
 const log = require('./log')
 
@@ -24,7 +25,7 @@ module.exports = class InfluxMetrics {
       timeout: this._config.timeoutMillseconds,
       auth,
     }
-    const postAsync = promisify(post)
+
     let response
     try {
       response = await postAsync(request)
