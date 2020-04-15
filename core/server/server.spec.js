@@ -244,6 +244,7 @@ describe('The server', function() {
           url: 'http://localhost:8081/telegraf',
           timeoutMilliseconds: 1000,
           intervalSeconds: 2,
+          instanceIdFrom: 'random',
           hostnameAliases: { 'metrics-hostname': 'metrics-hostname-alias' },
         }
         customConfig.private = {
@@ -290,6 +291,34 @@ describe('The server', function() {
 
       it('should allow hostnameAsAnInstanceId', function() {
         customConfig.public.metrics.influx.hostnameAsAnInstanceId = true
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should require instanceIdFrom when influx configuration is enabled', function() {
+        delete customConfig.public.metrics.influx.instanceIdFrom
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.throw('"metrics.influx.instanceIdFrom" is required')
+      })
+
+      it('should allow instanceIdFrom = hostname', function() {
+        customConfig.public.metrics.influx.instanceIdFrom = 'hostname'
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should allow instanceIdFrom = env-var', function() {
+        customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.not.throw()
+      })
+
+      it('should allow instanceIdFrom = random', function() {
+        customConfig.public.metrics.influx.instanceIdFrom = 'random'
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()
