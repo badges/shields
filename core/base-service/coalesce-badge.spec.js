@@ -278,8 +278,17 @@ describe('coalesceBadge', function() {
   })
 
   describe('Style', function() {
-    it('overrides the template', function() {
-      expect(coalesceBadge({ style: 'pill' }, {}, {}).template).to.equal('pill')
+    it('falls back to flat with invalid style', function() {
+      expect(coalesceBadge({ style: 'pill' }, {}, {}).template).to.equal('flat')
+    })
+
+    it('replaces legacy popout styles', function() {
+      expect(coalesceBadge({ style: 'popout' }, {}, {}).template).to.equal(
+        'flat'
+      )
+      expect(
+        coalesceBadge({ style: 'popout-square' }, {}, {}).template
+      ).to.equal('flat-square')
     })
   })
 

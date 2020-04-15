@@ -108,6 +108,16 @@ module.exports = function coalesceBadge(
   if (typeof style === 'string' && style.startsWith('popout')) {
     style = style.replace('popout', 'flat')
   }
+  const styleValues = [
+    'plastic',
+    'flat',
+    'flat-square',
+    'for-the-badge',
+    'social',
+  ]
+  if (typeof style === 'string' && !styleValues.includes(style)) {
+    style = 'flat'
+  }
 
   let namedLogo, namedLogoColor, logoWidth, logoPosition, logoSvgBase64
   if (overrideLogo) {
