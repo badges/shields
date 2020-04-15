@@ -222,7 +222,9 @@ describe('The server', function() {
       })
       await server.start()
 
-      const { statusCode } = await got(`${server.baseUrl}metrics`)
+      const { statusCode } = await got(`${server.baseUrl}metrics`, {
+        throwHttpErrors: false,
+      })
 
       expect(statusCode).to.be.equal(404)
     })
