@@ -2,6 +2,7 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
+const { InvalidResponse } = require('..')
 const DockerVersion = require('./docker-version.service')
 const {
   versionDataNoTagDateSort,
@@ -9,7 +10,6 @@ const {
   versionDataNoTagSemVerSort,
   versionDataWithTag,
 } = require('./docker-fixtures')
-const { InvalidResponse } = require('..')
 
 describe('DockerVersion', function() {
   test(DockerVersion.prototype.transform, () => {
