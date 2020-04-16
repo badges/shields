@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { BaseXmlService } = require('..')
+const { BaseXmlService, NotFound } = require('..')
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
@@ -87,6 +87,11 @@ class SymfonyInsightBase extends BaseXmlService {
 
   transform({ data }) {
     const lastAnalysis = data.project['last-analysis']
+
+    if (!lastAnalysis) {
+      throw new NotFound({ prettyMessage: 'no analyses found' })
+    }
+
     let numViolations = 0
     let numCriticalViolations = 0
     let numMajorViolations = 0

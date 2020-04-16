@@ -1,0 +1,29 @@
+{
+  "dist-tags": {
+    "latest": "0.0.91"
+  },
+  "versions": {
+    "0.0.90": {
+      "engines": {
+        "node": ">= 0.4.0"
+      },
+      "maintainers": [
+        {
+          "name": "jaredhanson",
+          "email": "jaredhanson@gmail.com"
+        }
+      ]
+    },
+    "0.0.91": {
+      "engines": {
+        "node": ">= 0.4.0"
+      },
+      "maintainers": [
+        {
+          "name": "jaredhanson",
+          "email": "jaredhanson@gmail.com"
+        }
+      ]
+    }
+  }
+}
