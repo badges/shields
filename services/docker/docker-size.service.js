@@ -4,8 +4,7 @@ const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
 const { latest } = require('../version')
-const { NotFound } = require('..')
-const { BaseJsonService } = require('..')
+const { BaseJsonService, NotFound } = require('..')
 const {
   buildDockerUrl,
   getDockerHubUser,
