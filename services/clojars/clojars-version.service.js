@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { version: versionColor } = require('../color-formatters')
-const { BaseClojarsService } = require('./clojars-base')
 const { redirector } = require('..')
+const { BaseClojarsService } = require('./clojars-base')
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),

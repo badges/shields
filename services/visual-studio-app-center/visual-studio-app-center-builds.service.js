@@ -2,12 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
+const { NotFound } = require('..')
 const {
   BaseVisualStudioAppCenterService,
   keywords,
   documentation,
 } = require('./visual-studio-app-center-base')
-const { NotFound } = require('..')
 
 const schema = Joi.array().items({
   result: isBuildStatus.required(),

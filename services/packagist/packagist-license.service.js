@@ -3,12 +3,12 @@
 const Joi = require('@hapi/joi')
 const { renderLicenseBadge } = require('../licenses')
 const { optionalUrl } = require('../validators')
+const { NotFound } = require('..')
 const {
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
-const { NotFound } = require('..')
 
 const packageSchema = Joi.object()
   .pattern(

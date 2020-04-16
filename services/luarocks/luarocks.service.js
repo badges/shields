@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { addv } = require('../text-formatters')
-const { latestVersion } = require('./luarocks-version-helpers')
 const { BaseJsonService, NotFound } = require('..')
+const { latestVersion } = require('./luarocks-version-helpers')
 
 const schema = Joi.object({
   repository: Joi.object()

@@ -7,13 +7,13 @@ const {
   renderTestResultBadge,
 } = require('../test-results')
 const { optionalNonNegativeInteger } = require('../validators')
+const { InvalidResponse } = require('..')
 const JenkinsBase = require('./jenkins-base')
 const {
   buildTreeParamQueryString,
   buildUrl,
   queryParamSchema,
 } = require('./jenkins-common')
-const { InvalidResponse } = require('..')
 
 // In the API response, the `actions` array can be empty, and when it is not empty it will contain a
 // mix of objects. Some will be empty objects, and several will not have the test count properties.

@@ -2,13 +2,13 @@
 
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
+const { redirector } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   fetchLatestRelease,
   queryParamSchema,
 } = require('./github-common-release')
 const { documentation } = require('./github-helpers')
-const { redirector } = require('..')
 
 class GithubRelease extends GithubAuthV3Service {
   static get category() {

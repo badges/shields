@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { latest } = require('../version')
-const { errorMessagesFor } = require('./github-helpers')
 const { NotFound } = require('..')
+const { errorMessagesFor } = require('./github-helpers')
 
 const releaseInfoSchema = Joi.object({
   tag_name: Joi.string().required(),
