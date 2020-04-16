@@ -4,6 +4,7 @@ const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { formatDate, metric } = require('../text-formatters')
 const { age } = require('../color-formatters')
+const { InvalidResponse } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const {
   documentation,
@@ -11,7 +12,6 @@ const {
   stateColor,
   commentsColor,
 } = require('./github-helpers')
-const { InvalidResponse } = require('..')
 
 const commonSchemaFields = {
   number: nonNegativeInteger,

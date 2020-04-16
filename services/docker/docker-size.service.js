@@ -4,13 +4,12 @@ const Joi = require('@hapi/joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
 const { latest } = require('../version')
+const { BaseJsonService, NotFound } = require('..')
 const {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
 } = require('./docker-helpers')
-const { NotFound } = require('..')
-const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
