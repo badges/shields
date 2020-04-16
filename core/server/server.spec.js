@@ -247,6 +247,7 @@ describe('The server', function() {
           instanceIdFrom: 'random',
           instanceIdEnvVarName: 'INSTANCE_ID',
           hostnameAliases: { 'metrics-hostname': 'metrics-hostname-alias' },
+          envLabel: 'test-env',
         }
         customConfig.private = {
           influx_username: 'telegraf',
@@ -331,6 +332,13 @@ describe('The server', function() {
         expect(
           () => new Server(customConfig, requiredInstanceMetadata)
         ).to.not.throw()
+      })
+
+      it('should require envLabel when influx configuration is enabled', function() {
+        delete customConfig.public.metrics.influx.envLabel
+        expect(
+          () => new Server(customConfig, requiredInstanceMetadata)
+        ).to.throw('"metrics.influx.envLabel" is required')
       })
 
       it('should not require hostnameAsAnInstanceId when influx configuration is enabled', function() {

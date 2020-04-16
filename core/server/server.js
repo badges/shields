@@ -106,6 +106,10 @@ const publicConfigSchema = Joi.object({
         is: 'env-var',
         then: Joi.required(),
       }),
+      envLabel: Joi.string().when('enabled', {
+        is: true,
+        then: Joi.required(),
+      }),
       hostnameAliases: Joi.object(),
     },
   },

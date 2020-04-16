@@ -13,6 +13,9 @@ public:
       timeoutMilliseconds: 'METRICS_INFLUX_TIMEOUT_MILLISECONDS'
       intervalSeconds: 'METRICS_INFLUX_INTERVAL_SECONDS'
       hostnameAsAnInstanceId: 'METRICS_INFLUX_HOSTNAME_AS_AN_INSTANCE_ID'
+      instanceIdFrom: 'METRICS_INFLUX_INSTANCE_ID_FROM'
+      instanceIdEnvVarName: 'METRICS_INFLUX_INSTANCE_ID_ENV_VAR_NAME'
+      envLabel: 'METRICS_INFLUX_ENV_LABEL'
 
   ssl:
     isSecure: 'HTTPS'
