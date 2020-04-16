@@ -2,8 +2,7 @@
 
 const gql = require('graphql-tag')
 const { mergeQueries } = require('../../core/base-service/graphql')
-const { BaseJsonService } = require('..')
-const { BaseGraphqlService } = require('..')
+const { BaseGraphqlService, BaseJsonService } = require('..')
 const { staticAuthConfigured } = require('./github-helpers')
 
 function createRequestFetcher(context, config) {
