@@ -3,8 +3,7 @@
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { latest, renderVersionBadge } = require('../version')
-const { NotFound, InvalidResponse } = require('..')
-const { BaseJsonService } = require('..')
+const { BaseJsonService, NotFound, InvalidResponse } = require('..')
 const {
   buildDockerUrl,
   getDockerHubUser,
