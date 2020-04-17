@@ -2,7 +2,6 @@
 const os = require('os')
 const nock = require('nock')
 const sinon = require('sinon')
-const waitForExpect = require('wait-for-expect')
 const { expect } = require('chai')
 const log = require('./log')
 const InfluxMetrics = require('./influx-metrics')
@@ -74,13 +73,18 @@ describe('Influx metrics', function() {
   })
 
   describe('startPushingMetrics', function() {
-    let influxMetrics
+    let influxMetrics, clock
+    beforeEach(function() {
+      clock = sinon.useFakeTimers()
+    })
     afterEach(function() {
       influxMetrics.stopPushingMetrics()
       nock.cleanAll()
       nock.enableNetConnect()
       delete process.env.INSTANCE_ID
+      clock.restore()
     })
+
     it('should send metrics', async function() {
       const scope = nock('http://shields-metrics.io/', {
         reqheaders: {
@@ -98,7 +102,7 @@ describe('Influx metrics', function() {
       influxMetrics = new InfluxMetrics(metricInstance, {
         url: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 100,
-        intervalSeconds: 0,
+        intervalSeconds: 0.001,
         username: 'metrics-username',
         password: 'metrics-password',
         instanceIdFrom: 'env-var',
@@ -108,15 +112,10 @@ describe('Influx metrics', function() {
 
       influxMetrics.startPushingMetrics()
 
-      await waitForExpect(
-        () => {
-          expect(scope.isDone()).to.be.equal(
-            true,
-            `pending mocks: ${scope.pendingMocks()}`
-          )
-        },
-        1000,
-        1
+      await clock.tickAsync(10)
+      expect(scope.isDone()).to.be.equal(
+        true,
+        `pending mocks: ${scope.pendingMocks()}`
       )
     })
   })
