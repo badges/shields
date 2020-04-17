@@ -264,11 +264,6 @@ describe('The server', function() {
         )
       })
 
-      it('should allow hostnameAsAnInstanceId', function() {
-        customConfig.public.metrics.influx.hostnameAsAnInstanceId = true
-        expect(() => new Server(customConfig)).to.not.throw()
-      })
-
       it('should require instanceIdFrom when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.instanceIdFrom
         expect(() => new Server(customConfig)).to.throw(
@@ -304,11 +299,6 @@ describe('The server', function() {
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.envLabel" is required'
         )
-      })
-
-      it('should not require hostnameAsAnInstanceId when influx configuration is enabled', function() {
-        delete customConfig.public.metrics.influx.hostnameAsAnInstanceId
-        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should not require hostnameAliases', function() {
