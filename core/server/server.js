@@ -217,6 +217,10 @@ class Server {
       config.private,
       privateConfigSchema
     )
+    // We want to require an username and a password for the influx metrics
+    // only if the influx metrics are enabled. The private config schema
+    // and the public config schema are two separate schemas so we have to run
+    // validation manually.
     if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
       this.validatePrivateConfig(
         config.private,
