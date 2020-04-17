@@ -20,7 +20,6 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
-const generateInstanceId = require('./instance-id-generator')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -197,11 +196,6 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
   influx_password: Joi.string().required(),
 })
-const instanceMetadataSchema = Joi.object({
-  id: Joi.string(),
-  env: Joi.string().required(),
-  hostname: Joi.string().required(),
-})
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -215,14 +209,10 @@ class Server {
    * @param {object} config Configuration object read from config yaml files
    * by https://www.npmjs.com/package/config and validated against
    * publicConfigSchema and privateConfigSchema
-   * @param {object} instanceMetadata Metadata of a running server instance
-   * @param {string} instanceMetadata.id Identifier of a running server instance
-   * @param {string} instanceMetadata.env Environment of a running server instance
-   * @param {string} instanceMetadata.hostname Hostname of a running server instance
    * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
    * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
    */
-  constructor(config, instanceMetadata) {
+  constructor(config) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
     const privateConfig = this.validatePrivateConfig(
       config.private,
@@ -244,14 +234,6 @@ class Server {
       service: publicConfig.services.github,
       private: privateConfig,
     })
-    this.instanceMetadata = {
-      ...instanceMetadata,
-      id: instanceMetadata.id || generateInstanceId(),
-    }
-    this.instanceMetadata = Joi.attempt(
-      this.instanceMetadata,
-      instanceMetadataSchema
-    )
 
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
@@ -436,7 +418,6 @@ class Server {
     } = this.config.public
 
     log(`Server is starting up: ${this.baseUrl}`)
-    log(`Instance metadata: ${JSON.stringify(this.instanceMetadata)}`)
 
     const camp = (this.camp = Camp.start({
       documentRoot: path.resolve(__dirname, '..', '..', 'public'),

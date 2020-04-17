@@ -168,25 +168,6 @@ describe('The server', function() {
         .and.to.include('410')
         .and.to.include('jpg no longer available')
     })
-
-    describe('instance metadata', function() {
-      it('should return passed instance id', function() {
-        const server = new Server(config.util.toObject(), {
-          id: 'test-instance-id',
-          env: 'shields-io',
-          hostname: 's3.shields.io',
-        })
-        expect(server.instanceMetadata.id).to.equal('test-instance-id')
-      })
-
-      it('should generate new instance id if none was passed', function() {
-        const server = new Server(config.util.toObject(), {
-          env: 'shields-io',
-          hostname: 's3.shields.io',
-        })
-        expect(server.instanceMetadata.id).to.not.be.empty
-      })
-    })
   })
 
   describe('configuration', function() {
@@ -231,10 +212,6 @@ describe('The server', function() {
   })
 
   describe('configuration validation', function() {
-    const requiredInstanceMetadata = {
-      env: 'shields-io',
-      hostname: 's3.shields.io',
-    }
     describe('influx', function() {
       let customConfig
       beforeEach(function() {
@@ -257,166 +234,110 @@ describe('The server', function() {
 
       it('should not require influx configuration', function() {
         delete customConfig.public.metrics.influx
-        expect(
-          () => new Server(config.util.toObject(), requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(config.util.toObject())).to.not.throw()
       })
 
       it('should require url when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.url
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.url" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.url" is required'
+        )
       })
 
       it('should not require url when influx configuration is disabled', function() {
         customConfig.public.metrics.influx.enabled = false
         delete customConfig.public.metrics.influx.url
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should require timeoutMilliseconds when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.timeoutMilliseconds
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.timeoutMilliseconds" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.timeoutMilliseconds" is required'
+        )
       })
 
       it('should require intervalSeconds when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.intervalSeconds
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.intervalSeconds" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.intervalSeconds" is required'
+        )
       })
 
       it('should allow hostnameAsAnInstanceId', function() {
         customConfig.public.metrics.influx.hostnameAsAnInstanceId = true
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should require instanceIdFrom when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.instanceIdFrom
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.instanceIdFrom" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.instanceIdFrom" is required'
+        )
       })
 
       it('should require instanceIdEnvVarName when instanceIdFrom is env-var', function() {
         customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
         delete customConfig.public.metrics.influx.instanceIdEnvVarName
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.instanceIdEnvVarName" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.instanceIdEnvVarName" is required'
+        )
       })
 
       it('should allow instanceIdFrom = hostname', function() {
         customConfig.public.metrics.influx.instanceIdFrom = 'hostname'
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should allow instanceIdFrom = env-var', function() {
         customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should allow instanceIdFrom = random', function() {
         customConfig.public.metrics.influx.instanceIdFrom = 'random'
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should require envLabel when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.envLabel
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw('"metrics.influx.envLabel" is required')
+        expect(() => new Server(customConfig)).to.throw(
+          '"metrics.influx.envLabel" is required'
+        )
       })
 
       it('should not require hostnameAsAnInstanceId when influx configuration is enabled', function() {
         delete customConfig.public.metrics.influx.hostnameAsAnInstanceId
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should not require hostnameAliases', function() {
         delete customConfig.public.metrics.influx.hostnameAliases
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should allow empty hostnameAliases', function() {
         customConfig.public.metrics.influx.hostnameAliases = {}
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
+        expect(() => new Server(customConfig)).to.not.throw()
       })
 
       it('should require username when influx configuration is enabled', function() {
         delete customConfig.private.influx_username
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw(
+        expect(() => new Server(customConfig)).to.throw(
           'Private configuration is invalid. Check these paths: influx_username'
         )
       })
 
       it('should require password when influx configuration is enabled', function() {
         delete customConfig.private.influx_password
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.throw(
+        expect(() => new Server(customConfig)).to.throw(
           'Private configuration is invalid. Check these paths: influx_password'
         )
       })
 
       it('should allow other private keys', function() {
         customConfig.private.gh_token = 'my-token'
-        expect(
-          () => new Server(customConfig, requiredInstanceMetadata)
-        ).to.not.throw()
-      })
-    })
-    describe('instance metadata', function() {
-      let customInstanceMetadata
-
-      beforeEach(function() {
-        customInstanceMetadata = {
-          id: 'instance 3',
-          env: 'shields-io',
-          hostname: 's3.shields.io',
-        }
-      })
-
-      it('should not require id', function() {
-        delete customInstanceMetadata.id
-        expect(
-          () => new Server(config.util.toObject(), customInstanceMetadata)
-        ).to.not.throw()
-      })
-
-      it('should require hostname', function() {
-        delete customInstanceMetadata.hostname
-        expect(
-          () => new Server(config.util.toObject(), customInstanceMetadata)
-        ).to.throw('"hostname" is required')
-      })
-
-      it('should require env', function() {
-        delete customInstanceMetadata.env
-        expect(
-          () => new Server(config.util.toObject(), customInstanceMetadata)
-        ).to.throw('"env" is required')
+        expect(() => new Server(customConfig)).to.not.throw()
       })
     })
   })

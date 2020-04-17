@@ -10,12 +10,7 @@ async function createTestServer(customConfig = {}) {
   if (!mergedConfig.public.bind.port) {
     mergedConfig.public.bind.port = await portfinder.getPortPromise()
   }
-  const requiredInstanceMetadata = {
-    env: 'testing',
-    hostname: 'localhost',
-  }
-
-  return new Server(mergedConfig, requiredInstanceMetadata)
+  return new Server(mergedConfig)
 }
 
 module.exports = {
