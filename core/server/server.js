@@ -258,7 +258,6 @@ class Server {
       if (publicConfig.metrics.influx.enabled) {
         this.influxMetrics = new InfluxMetrics(
           this.metricInstance,
-          this.instanceMetadata,
           Object.assign({}, publicConfig.metrics.influx, {
             username: privateConfig.influx_username,
             password: privateConfig.influx_password,

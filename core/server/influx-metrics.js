@@ -1,16 +1,17 @@
 'use strict'
-
+const os = require('os')
 const { promisify } = require('util')
 const { post } = require('request')
 const postAsync = promisify(post)
+const generateInstanceId = require('./instance-id-generator')
 const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
 const log = require('./log')
 
 module.exports = class InfluxMetrics {
-  constructor(metricInstance, instanceMetadata, config) {
+  constructor(metricInstance, config) {
     this._metricInstance = metricInstance
-    this._instanceMetadata = instanceMetadata
     this._config = config
+    this._instanceId = this.getInstanceId()
   }
 
   async sendMetrics() {
@@ -51,16 +52,29 @@ module.exports = class InfluxMetrics {
   }
 
   metrics() {
-    const { env, hostname, id } = this._instanceMetadata
-    const { hostnameAliases = {}, hostnameAsAnInstanceId } = this._config
-    const instance = hostnameAsAnInstanceId
-      ? hostnameAliases[hostname] || hostname
-      : id
     return promClientJsonToInfluxV2(this._metricInstance.metrics(), {
-      env,
+      env: this._config.envLabel,
       application: 'shields',
-      instance,
+      instance: this._instanceId,
     })
+  }
+
+  getInstanceId() {
+    const {
+      hostnameAliases = {},
+      instanceIdFrom,
+      instanceIdEnvVarName,
+    } = this._config
+    let instance
+    if (instanceIdFrom === 'env-var') {
+      instance = process.env[instanceIdEnvVarName]
+    } else if (instanceIdFrom === 'hostname') {
+      const hostname = os.hostname()
+      instance = hostnameAliases[hostname] || hostname
+    } else if (instanceIdFrom === 'random') {
+      instance = generateInstanceId()
+    }
+    return instance
   }
 
   stopPushingMetrics() {

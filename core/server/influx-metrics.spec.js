@@ -1,5 +1,5 @@
 'use strict'
-
+const os = require('os')
 const nock = require('nock')
 const sinon = require('sinon')
 const waitForExpect = require('wait-for-expect')
@@ -21,55 +21,51 @@ describe('Influx metrics', function() {
       ]
     },
   }
-  const instanceMetadata = {
-    id: 'instance2',
-    env: 'test-env',
-  }
-  const config = {}
   describe('"metrics" function', function() {
-    it('should add instance id as an instance label', async function() {
-      const influxMetrics = new InfluxMetrics(
-        metricInstance,
-        instanceMetadata,
-        config
-      )
+    let osHostnameStub
+    afterEach(function() {
+      nock.enableNetConnect()
+      delete process.env.INSTANCE_ID
+      if (osHostnameStub) {
+        osHostnameStub.restore()
+      }
+    })
+    it('should use an environment variable value as an instance label', async function() {
+      process.env.INSTANCE_ID = 'instance3'
+      const influxMetrics = new InfluxMetrics(metricInstance, {
+        instanceIdFrom: 'env-var',
+        instanceIdEnvVarName: 'INSTANCE_ID',
+      })
 
-      expect(influxMetrics.metrics()).to.contain('instance=instance2')
+      expect(influxMetrics.metrics()).to.contain('instance=instance3')
     })
 
-    it('should add hostname as an instance label when hostnameAsAnInstanceId is enabled', async function() {
-      const instanceMetadata = {
-        id: 'instance2',
-        env: 'test-env',
-        hostname: 'test-hostname',
-      }
+    it('should use a hostname as an instance label', async function() {
+      osHostnameStub = sinon.stub(os, 'hostname').returns('test-hostname')
       const customConfig = {
-        hostnameAsAnInstanceId: true,
+        instanceIdFrom: 'hostname',
       }
-      const influxMetrics = new InfluxMetrics(
-        metricInstance,
-        instanceMetadata,
-        customConfig
-      )
+      const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
       expect(influxMetrics.metrics()).to.be.contain('instance=test-hostname')
     })
 
-    it('should use a hostname alias as an instance label', async function() {
-      const instanceMetadata = {
-        id: 'instance2',
-        env: 'test-env',
-        hostname: 'test-hostname',
-      }
+    it('should use a random string as an instance label', async function() {
       const customConfig = {
-        hostnameAsAnInstanceId: true,
-        hostnameAliases: { 'test-hostname': 'test-hostname-aliass' },
+        instanceIdFrom: 'random',
       }
-      const influxMetrics = new InfluxMetrics(
-        metricInstance,
-        instanceMetadata,
-        customConfig
-      )
+      const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
+
+      expect(influxMetrics.metrics()).to.be.match(/instance=\w+ /)
+    })
+
+    it('should use a hostname alias as an instance label', async function() {
+      osHostnameStub = sinon.stub(os, 'hostname').returns('test-hostname')
+      const customConfig = {
+        instanceIdFrom: 'hostname',
+        hostnameAliases: { 'test-hostname': 'test-hostname-alias' },
+      }
+      const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
       expect(influxMetrics.metrics()).to.be.contain(
         'instance=test-hostname-alias'
@@ -83,6 +79,7 @@ describe('Influx metrics', function() {
       influxMetrics.stopPushingMetrics()
       nock.cleanAll()
       nock.enableNetConnect()
+      delete process.env.INSTANCE_ID
     })
     it('should send metrics', async function() {
       const scope = nock('http://shields-metrics.io/', {
@@ -97,12 +94,16 @@ describe('Influx metrics', function() {
         )
         .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
         .reply(200)
-      influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
+      process.env.INSTANCE_ID = 'instance2'
+      influxMetrics = new InfluxMetrics(metricInstance, {
         url: 'http://shields-metrics.io/metrics',
         timeoutMillseconds: 100,
         intervalSeconds: 0,
         username: 'metrics-username',
         password: 'metrics-password',
+        instanceIdFrom: 'env-var',
+        instanceIdEnvVarName: 'INSTANCE_ID',
+        envLabel: 'test-env',
       })
 
       influxMetrics.startPushingMetrics()
@@ -130,7 +131,7 @@ describe('Influx metrics', function() {
       nock.enableNetConnect()
     })
 
-    const influxMetrics = new InfluxMetrics(metricInstance, instanceMetadata, {
+    const influxMetrics = new InfluxMetrics(metricInstance, {
       url: 'http://shields-metrics.io/metrics',
       timeoutMillseconds: 50,
       intervalSeconds: 0,
