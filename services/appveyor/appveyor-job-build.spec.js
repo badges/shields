@@ -2,8 +2,8 @@
 
 const { expect } = require('chai')
 const { test, given } = require('sazerac')
-const AppveyorJobBuild = require('./appveyor-job-build.service')
 const { NotFound } = require('..')
+const AppveyorJobBuild = require('./appveyor-job-build.service')
 
 describe('AppveyorJobBuild', function() {
   test(AppveyorJobBuild.prototype.transform, () => {

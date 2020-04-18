@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { coveragePercentage, letterScore } = require('../color-formatters')
-const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
 const { BaseJsonService, NotFound } = require('..')
+const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
 
 const schema = Joi.object({
   data: Joi.object({

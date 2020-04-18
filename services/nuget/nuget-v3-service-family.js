@@ -5,8 +5,8 @@ const Joi = require('@hapi/joi')
 const semver = require('semver')
 const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
-const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 const { BaseJsonService, NotFound } = require('..')
+const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
 
 /*
  * Build the Shields service URL object for the given service configuration. Return

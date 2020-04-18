@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { renderBuildStatusBadge } = require('../build-status')
-const { keywords, fetch } = require('./azure-devops-helpers')
 const { BaseSvgScrapingService, NotFound } = require('..')
+const { keywords, fetch } = require('./azure-devops-helpers')
 
 const queryParamSchema = Joi.object({
   stage: Joi.string(),

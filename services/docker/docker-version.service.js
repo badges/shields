@@ -3,14 +3,13 @@
 const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { latest, renderVersionBadge } = require('../version')
+const { BaseJsonService, NotFound, InvalidResponse } = require('..')
 const {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
   getDigestSemVerMatches,
 } = require('./docker-helpers')
-const { NotFound, InvalidResponse } = require('..')
-const { BaseJsonService } = require('..')
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -97,14 +96,15 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (version !== 'latest') {
         return { version }
       }
-      if (Object.keys(data.results[0].images).length === 0) {
+      const imageTag = data.results[0].images.find(
+        i => i.architecture === 'amd64'
+      ) // Digest is the unique field that we utilise to match images
+      if (!imageTag) {
         throw new InvalidResponse({
           prettyMessage: 'digest not found for latest tag',
         })
       }
-      const { digest } = data.results[0].images.find(
-        i => i.architecture === 'amd64'
-      ) // Digest is the unique field that we utilise to match images
+      const { digest } = imageTag
       return { version: getDigestSemVerMatches({ data: pagedData, digest }) }
     } else if (!tag && sort === 'semver') {
       const matches = data.map(d => d.name)
