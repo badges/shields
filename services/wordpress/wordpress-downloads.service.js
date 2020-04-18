@@ -3,8 +3,8 @@
 const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
-const BaseWordpress = require('./wordpress-base')
 const { NotFound } = require('..')
+const BaseWordpress = require('./wordpress-base')
 
 const dateSchema = Joi.object()
   .pattern(Joi.date().iso(), Joi.number().integer())

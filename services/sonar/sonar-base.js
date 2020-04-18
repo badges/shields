@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { isLegacyVersion } = require('./sonar-helpers')
 const { BaseJsonService, NotFound } = require('..')
+const { isLegacyVersion } = require('./sonar-helpers')
 
 // It is possible to see HTTP 404 response codes and HTTP 200 responses
 // with empty arrays of metric values, with both the legacy (pre v5.3) and modern APIs.

@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { errorMessagesFor } = require('./github-helpers')
 const { InvalidResponse } = require('..')
+const { errorMessagesFor } = require('./github-helpers')
 
 const issueSchema = Joi.object({
   head: Joi.object({

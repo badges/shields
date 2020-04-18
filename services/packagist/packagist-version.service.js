@@ -4,13 +4,13 @@ const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
 const { compare, isStable, latest } = require('../php-version')
 const { optionalUrl } = require('../validators')
+const { NotFound, redirector } = require('..')
 const {
   allVersionsSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
-const { NotFound, redirector } = require('..')
 
 const packageSchema = Joi.object()
   .pattern(
