@@ -2,10 +2,10 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
+const { InvalidResponse } = require('..')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchRepoContent } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
-const { InvalidResponse } = require('..')
 
 const queryParamSchema = Joi.object({
   filename: Joi.string(),

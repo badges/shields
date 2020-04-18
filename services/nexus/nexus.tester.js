@@ -264,7 +264,7 @@ t.create('Nexus 3 - search snapshot version for artifact without snapshots')
 
 t.create('Nexus 3 - repository version')
   .get(
-    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org&nexusVersion=3'
+    '/proxy-public-3rd-party-release/com.h2database/h2.json?server=https://nexus.pentaho.org&nexusVersion=3'
   )
   .expectBadge({
     label: 'nexus',
@@ -276,7 +276,7 @@ t.create(
 )
   .timeout(15000)
   .get(
-    '/proxy-public-3rd-party-release/com.fasterxml.jackson.core/jackson-databind.json?server=https://nexus.pentaho.org'
+    '/proxy-public-3rd-party-release/com.h2database/h2.json?server=https://nexus.pentaho.org'
   )
   .expectBadge({
     label: 'nexus',
