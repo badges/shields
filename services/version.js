@@ -68,13 +68,7 @@ function latestDottedVersion(versions) {
 
 function latestMaybeSemVer(versions, pre) {
   let version = ''
-  const origVersions = versions
-  // return all results that are likely semver compatible versions
-  versions = origVersions.filter(version => /\d+\.\d+/.test(version))
-  // If no semver versions then look for single numbered versions
-  if (!versions.length) {
-    versions = origVersions.filter(version => /\d+/.test(version))
-  }
+
   if (!pre) {
     // remove pre-releases from array
     versions = versions.filter(version => !/\d+-\w+/.test(version))
@@ -98,6 +92,14 @@ function latestMaybeSemVer(versions, pre) {
 // Return undefined if no version could be found.
 function latest(versions, { pre = false } = {}) {
   let version = ''
+  let origVersions = versions
+
+  // return all results that are likely semver compatible versions
+  versions = origVersions.filter(version => /\d+\.\d+/.test(version))
+  // If no semver versions then look for single numbered versions
+  if (!versions.length) {
+    versions = origVersions.filter(version => /\d+/.test(version))
+  }
 
   version = latestMaybeSemVer(versions, pre)
 
@@ -108,10 +110,10 @@ function latest(versions, { pre = false } = {}) {
   // if we've still got nothing,
   // fall back to a case-insensitive string comparison
   if (version == null) {
-    versions = versions.sort((a, b) =>
+    origVersions = origVersions.sort((a, b) =>
       a.toLowerCase().localeCompare(b.toLowerCase())
     )
-    version = versions[versions.length - 1]
+    version = origVersions[origVersions.length - 1]
   }
 
   return version
