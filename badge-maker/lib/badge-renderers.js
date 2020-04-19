@@ -161,7 +161,7 @@ class Badge {
     logoWidth,
     logoPadding,
     color = '#4c1',
-    labelColor = '#555',
+    labelColor,
   }) {
     const horizPadding = 5
     const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
@@ -171,7 +171,10 @@ class Badge {
       logoWidth,
       logoPadding,
     })
-    const hasLabel = label.length
+    const hasLabel = label.length || labelColor
+    if (labelColor == null) {
+      labelColor = '#555'
+    }
 
     labelColor = hasLabel || hasLogo ? labelColor : color
     labelColor = escapeXml(labelColor)
@@ -520,7 +523,7 @@ function forTheBadge({
   logoWidth,
   logoPadding,
   color = '#4c1',
-  labelColor = '#555',
+  labelColor,
   minify,
 }) {
   // For the Badge is styled in all caps. Convert to caps here so widths can
@@ -530,7 +533,10 @@ function forTheBadge({
 
   let { labelWidth, messageWidth } = computeWidths({ label, message })
   const height = 28
-  const hasLabel = label.length
+  const hasLabel = label.length || labelColor
+  if (labelColor == null) {
+    labelColor = '#555'
+  }
   const horizPadding = 9
   const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
     logo,

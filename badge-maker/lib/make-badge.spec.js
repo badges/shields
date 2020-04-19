@@ -165,12 +165,23 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'flat',
           color: '#b3e',
-          labelColor: '#0f0',
         })
       )
     })
 
     it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#b3e',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo and labelColor', function() {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -230,12 +241,23 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'flat-square',
           color: '#b3e',
-          labelColor: '#0f0',
         })
       )
     })
 
     it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'flat-square',
+          color: '#b3e',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo and labelColor', function() {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -295,12 +317,23 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'plastic',
           color: '#b3e',
-          labelColor: '#0f0',
         })
       )
     })
 
     it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'plastic',
+          color: '#b3e',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo and labelColor', function() {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -383,12 +416,23 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'for-the-badge',
           color: '#b3e',
-          labelColor: '#0f0',
         })
       )
     })
 
     it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#b3e',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo and labelColor', function() {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -471,12 +515,23 @@ describe('The badge generator', function() {
           format: 'svg',
           template: 'social',
           color: '#b3e',
-          labelColor: '#0f0',
         })
       )
     })
 
     it('should match snapshots: message only, with logo', function() {
+      snapshot(
+        makeBadge({
+          text: ['', 'grown'],
+          format: 'svg',
+          template: 'social',
+          color: '#b3e',
+          logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        })
+      )
+    })
+
+    it('should match snapshots: message only, with logo and labelColor', function() {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
