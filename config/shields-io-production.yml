@@ -2,6 +2,7 @@ public:
   metrics:
     prometheus:
       enabled: true
+      endpointEnabled: true
 
   ssl:
     isSecure: true
