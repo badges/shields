@@ -4,15 +4,18 @@ const Joi = require('@hapi/joi')
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
+// Examples for this service can be found through the explore page:
+// https://codeclimate.com/explore
+
 t.create('test coverage percentage')
-  .get('/coverage/jekyll/jekyll.json')
+  .get('/coverage/codeclimate/minidoc.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
 t.create('test coverage letter')
-  .get('/coverage-letter/jekyll/jekyll.json')
+  .get('/coverage-letter/codeclimate/minidoc.json')
   .expectBadge({
     label: 'coverage',
     message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
