@@ -105,7 +105,10 @@ module.exports = function coalesceBadge(
   } = defaultBadgeData
 
   let style = coalesce(overrideStyle, serviceStyle)
-  if (typeof style === 'string' && style.startsWith('popout')) {
+  if (typeof style !== 'string') {
+    style = 'flat'
+  }
+  if (style.startsWith('popout')) {
     style = style.replace('popout', 'flat')
   }
   const styleValues = [
@@ -115,7 +118,7 @@ module.exports = function coalesceBadge(
     'for-the-badge',
     'social',
   ]
-  if (typeof style === 'string' && !styleValues.includes(style)) {
+  if (!styleValues.includes(style)) {
     style = 'flat'
   }
 

@@ -280,6 +280,10 @@ describe('coalesceBadge', function() {
   describe('Style', function() {
     it('falls back to flat with invalid style', function() {
       expect(coalesceBadge({ style: 'pill' }, {}, {}).template).to.equal('flat')
+      expect(coalesceBadge({ style: 7 }, {}, {}).template).to.equal('flat')
+      expect(coalesceBadge({ style: undefined }, {}, {}).template).to.equal(
+        'flat'
+      )
     })
 
     it('replaces legacy popout styles', function() {
