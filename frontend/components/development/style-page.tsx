@@ -22,6 +22,7 @@ const StyledTable = styled.table`
 interface BadgeData {
   label: string
   message: string
+  labelColor?: string
   color: string
   namedLogo?: string
 }
@@ -37,7 +38,7 @@ function Badges({
 }): JSX.Element {
   return (
     <>
-      {badges.map(({ label, message, color, namedLogo }) => (
+      {badges.map(({ label, message, labelColor, color, namedLogo }) => (
         <Fragment key={`${label}-${message}-${color}-${namedLogo}`}>
           <Badge
             alt="build"
@@ -45,6 +46,7 @@ function Badges({
               baseUrl,
               label,
               message,
+              labelColor,
               color,
               namedLogo,
               style,
@@ -90,6 +92,13 @@ const examples = [
         label: '',
         message: 'passing',
         color: 'brightgreen',
+        namedLogo: 'appveyor',
+      },
+      {
+        label: '',
+        message: 'passing',
+        color: 'brightgreen',
+        labelColor: 'grey',
         namedLogo: 'appveyor',
       },
     ],
