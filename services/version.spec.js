@@ -70,6 +70,17 @@ describe('Version helpers', function() {
       ],
       { pre: includePre }
     ).expect('v1.0.1')
+    given(
+      [
+        'v1.0.1-alpha.2',
+        'v1.0.1-alpha.1',
+        'v1.0.1-beta.3',
+        'v1.0.1-beta.1',
+        'v1.0.1-RC.1',
+      ],
+      { pre: includePre }
+    ).expect('v1.0.1-RC.1')
+
     // Exclude pre-releases
     given([
       'v1.0.1-alpha.2',
@@ -89,6 +100,13 @@ describe('Version helpers', function() {
       'v1.0.1-RC.2',
       'v1.0.1',
     ]).expect('v1.0.1')
+    given([
+      'v1.0.1-alpha.2',
+      'v1.0.1-alpha.1',
+      'v1.0.1-beta.3',
+      'v1.0.1-beta.1',
+      'v1.0.1-RC.1',
+    ]).expect('v1.0.1-RC.1')
 
     // Versions with 'release-' prefix
     given([

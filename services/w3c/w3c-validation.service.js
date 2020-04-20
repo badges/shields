@@ -1,6 +1,7 @@
 'use strict'
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
+const { BaseJsonService, NotFound } = require('..')
 const {
   documentation,
   presetRegex,
@@ -8,7 +9,6 @@ const {
   getMessage,
   getSchema,
 } = require('./w3c-validation-helper')
-const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.object({
   url: Joi.string().optional(),

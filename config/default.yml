@@ -5,7 +5,11 @@ public:
   metrics:
     prometheus:
       enabled: false
-
+      endpointEnabled: false
+    influx:
+      enabled: false
+      timeoutMilliseconds: 1000
+      intervalSeconds: 15
   ssl:
     isSecure: false
 
@@ -22,9 +26,6 @@ public:
         enabled: false
         intervalSeconds: 200
     trace: false
-
-  profiling:
-    makeBadge: false
 
   cacheHeaders:
     defaultCacheLengthSeconds: 120

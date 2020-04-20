@@ -14,9 +14,9 @@ describe('coalesce', function() {
     given(null, [], {}).expect([])
     given(null, undefined, 0, {}).expect(0)
 
-    const a = null,
-      c = 0,
-      d = 1
+    const a = null
+    const c = 0
+    const d = 1
     let b
     given(a, b, c, d).expect(0)
   })

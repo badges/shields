@@ -11,7 +11,7 @@ t.create('PDK version')
   })
 
 t.create("PDK version (library doesn't use the PDK)")
-  .get('/camptocamp/openssl.json')
+  .get('/puppet/yum.json')
   .expectBadge({
     label: 'pdk version',
     message: 'none',

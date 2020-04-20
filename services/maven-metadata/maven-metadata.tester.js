@@ -5,7 +5,7 @@ const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 t.create('valid maven-metadata.xml uri')
   .get(
-    '/v.json?metadataUrl=http://central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml'
   )
   .expectBadge({
     label: 'maven',
@@ -14,10 +14,10 @@ t.create('valid maven-metadata.xml uri')
 
 t.create('version ending with zero')
   .get(
-    '/v.json?metadataUrl=http://central.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml'
   )
   .intercept(nock =>
-    nock('http://central.maven.org/maven2')
+    nock('https://repo1.maven.org/maven2')
       .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
       .reply(
         200,
@@ -41,6 +41,6 @@ t.create('version ending with zero')
 
 t.create('invalid maven-metadata.xml uri')
   .get(
-    '/v.json?metadataUrl=http://central.maven.org/maven2/com/google/code/gson/gson/foobar.xml'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/code/gson/gson/foobar.xml'
   )
   .expectBadge({ label: 'maven', message: 'not found' })

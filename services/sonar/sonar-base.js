@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { isLegacyVersion } = require('./sonar-helpers')
 const { BaseJsonService, NotFound } = require('..')
+const { isLegacyVersion } = require('./sonar-helpers')
 
 // It is possible to see HTTP 404 response codes and HTTP 200 responses
 // with empty arrays of metric values, with both the legacy (pre v5.3) and modern APIs.
@@ -53,7 +53,7 @@ const legacySchema = Joi.array()
 
 module.exports = class SonarBase extends BaseJsonService {
   static get auth() {
-    return { userKey: 'sonarqube_token' }
+    return { userKey: 'sonarqube_token', serviceKey: 'sonar' }
   }
 
   async fetch({ sonarVersion, server, component, metricName }) {
@@ -78,17 +78,16 @@ module.exports = class SonarBase extends BaseJsonService {
       }
     }
 
-    return this._requestJson({
-      schema,
-      url,
-      options: {
-        qs,
-        auth: this.authHelper.basicAuth,
-      },
-      errorMessages: {
-        404: 'component or metric not found, or legacy API not supported',
-      },
-    })
+    return this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema,
+        url,
+        options: { qs },
+        errorMessages: {
+          404: 'component or metric not found, or legacy API not supported',
+        },
+      })
+    )
   }
 
   transform({ json, sonarVersion }) {

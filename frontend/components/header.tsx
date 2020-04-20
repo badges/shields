@@ -8,7 +8,7 @@ const Highlights = styled.p`
   font-style: italic;
 `
 
-export default function Header() {
+export default function Header(): JSX.Element {
   return (
     <section>
       <Link to="/">

@@ -10,7 +10,10 @@ const trace = require('../core/base-service/trace')
 function normalizeBadgeUrl(url) {
   // Provide a base URL in order to accept fragments.
   const { pathname, searchParams } = new URL(url, 'http://example.com')
-  const newPath = pathname.replace('.svg', '.json')
+  let newPath = pathname.replace('.svg', '')
+  if (!newPath.endsWith('.json')) {
+    newPath = `${newPath}.json`
+  }
   return `${newPath}?${searchParams.toString()}`
 }
 

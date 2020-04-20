@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { NotFound, InvalidParameter } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
-const { NotFound, InvalidParameter } = require('..')
 
 const schema = Joi.object({
   // https://stackoverflow.com/a/23969867/893113

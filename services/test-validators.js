@@ -68,6 +68,10 @@ const isMetricOpenIssues = withRegex(
   /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) open$/
 )
 
+const isMetricOverMetric = withRegex(
+  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/
+)
+
 const isMetricOverTimePeriod = withRegex(
   /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|week|day)$/
 )
@@ -144,6 +148,7 @@ module.exports = {
   isStarRating,
   isMetric,
   isMetricOpenIssues,
+  isMetricOverMetric,
   isMetricOverTimePeriod,
   isPercentage,
   isIntegerPercentage,

@@ -36,7 +36,7 @@ t.create('Release (repo not found)')
   .get('/v/release/badges/helmets.json')
   .expectBadge({ label: 'release', message: 'no releases or repo not found' })
 
-//redirects
+// redirects
 t.create('Release (legacy route: release)')
   .get('/release/photonstorm/phaser.svg')
   .expectRedirect('/github/v/release/photonstorm/phaser.svg')

@@ -5,7 +5,7 @@ const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
-const DroneBuildSchema = Joi.object({
+const schema = Joi.object({
   status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('none'), Joi.equal('killed'))
     .required(),
@@ -29,7 +29,7 @@ module.exports = class DroneBuild extends BaseJsonService {
   }
 
   static get auth() {
-    return { passKey: 'drone_token' }
+    return { passKey: 'drone_token', serviceKey: 'drone' }
   }
 
   static get examples() {
@@ -83,24 +83,19 @@ module.exports = class DroneBuild extends BaseJsonService {
     }
   }
 
-  async handle({ user, repo, branch }, { server }) {
-    const options = {
-      qs: {
-        ref: branch ? `refs/heads/${branch}` : undefined,
-      },
-      headers: this.authHelper.bearerAuthHeader,
-    }
-    if (!server) {
-      server = 'https://cloud.drone.io'
-    }
-    const json = await this._requestJson({
-      options,
-      schema: DroneBuildSchema,
-      url: `${server}/api/repos/${user}/${repo}/builds/latest`,
-      errorMessages: {
-        401: 'repo not found or not authorized',
-      },
-    })
+  async handle({ user, repo, branch }, { server = 'https://cloud.drone.io' }) {
+    const json = await this._requestJson(
+      this.authHelper.withBearerAuthHeader({
+        schema,
+        url: `${server}/api/repos/${user}/${repo}/builds/latest`,
+        options: {
+          qs: { ref: branch ? `refs/heads/${branch}` : undefined },
+        },
+        errorMessages: {
+          401: 'repo not found or not authorized',
+        },
+      })
+    )
     return renderBuildStatusBadge({ status: json.status })
   }
 }

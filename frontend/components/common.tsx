@@ -74,7 +74,7 @@ export function Badge({
   height = '20px',
   clickable = false,
   ...rest
-}: BadgeProps) {
+}: BadgeProps): JSX.Element {
   return (
     <BadgeWrapper clickable={clickable} display={display} height={height}>
       {src ? <img alt={alt} src={src} {...rest} /> : nonBreakingSpace}

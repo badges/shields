@@ -42,8 +42,8 @@ function Example({
   onClick: (example: RenderableExample, isSuggestion: boolean) => void
   exampleData: RenderableExample
   isBadgeSuggestion: boolean
-}) {
-  function handleClick() {
+}): JSX.Element {
+  function handleClick(): void {
     onClick(exampleData, isBadgeSuggestion)
   }
 
@@ -106,7 +106,7 @@ export function BadgeExamples({
   areBadgeSuggestions: boolean
   baseUrl?: string
   onClick: (exampleData: RenderableExample, isSuggestion: boolean) => void
-}) {
+}): JSX.Element {
   return (
     <ExampleTable>
       <tbody>

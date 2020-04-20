@@ -3,14 +3,17 @@ import styled from 'styled-components'
 import Select, { components } from 'react-select'
 import { MarkupFormat } from '../../lib/generate-image-markup'
 
-const ClickableControl = (props: any) => (
-  <components.Control
-    {...props}
-    innerProps={{
-      onMouseDown: props.selectProps.onControlMouseDown,
-    }}
-  />
-)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ClickableControl(props: any): JSX.Element {
+  return (
+    <components.Control
+      {...props}
+      innerProps={{
+        onMouseDown: props.selectProps.onControlMouseDown,
+      }}
+    />
+  )
+}
 
 interface Option {
   value: MarkupFormat
@@ -76,14 +79,14 @@ export default function GetMarkupButton({
 }: {
   onMarkupRequested: (markupFormat: MarkupFormat) => Promise<void>
   isDisabled: boolean
-}) {
+}): JSX.Element {
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
   const selectRef = useRef<Select<Option>>() as React.MutableRefObject<
     Select<Option>
   >
 
-  async function onControlMouseDown(event: MouseEvent) {
+  async function onControlMouseDown(event: MouseEvent): Promise<void> {
     if (onMarkupRequested) {
       await onMarkupRequested('link')
     }

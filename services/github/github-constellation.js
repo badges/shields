@@ -13,14 +13,15 @@ const { setRoutes: setAcceptorRoutes } = require('./auth/acceptor')
 // Convenience class with all the stuff related to the Github API and its
 // authorization tokens, to simplify server initialization.
 class GithubConstellation {
-  static _createOauthHelper(privateConfig) {
+  static _createOauthHelper(config) {
     return new AuthHelper(
       {
         userKey: 'gh_client_id',
         passKey: 'gh_client_secret',
+        authorizedOrigins: ['https://api.github.com'],
         isRequired: true,
       },
-      privateConfig
+      config
     )
   }
 
@@ -54,7 +55,7 @@ class GithubConstellation {
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
     })
 
-    this.oauthHelper = this.constructor._createOauthHelper(config.private)
+    this.oauthHelper = this.constructor._createOauthHelper(config)
   }
 
   scheduleDebugLogging() {

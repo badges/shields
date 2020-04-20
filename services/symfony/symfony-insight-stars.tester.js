@@ -2,10 +2,10 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
-const { sampleProjectUuid, checkShouldSkip } = require('./symfony-test-helpers')
+const { sampleProjectUuid, noSymfonyToken } = require('./symfony-test-helpers')
 
 t.create('valid project stars')
-  .skipWhen(checkShouldSkip)
+  .skipWhen(noSymfonyToken)
   .get(`/${sampleProjectUuid}.json`)
   .timeout(15000)
   .expectBadge({
@@ -16,7 +16,7 @@ t.create('valid project stars')
   })
 
 t.create('stars: nonexistent project')
-  .skipWhen(checkShouldSkip)
+  .skipWhen(noSymfonyToken)
   .get('/abc.json')
   .expectBadge({
     label: 'symfony insight',

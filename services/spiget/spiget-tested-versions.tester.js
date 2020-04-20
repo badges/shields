@@ -27,6 +27,7 @@ t.create('Nock - single version supported')
       .reply(200, {
         downloads: 1,
         file: {
+          type: '.jar',
           size: 1,
           sizeUnit: '1',
         },
@@ -50,6 +51,7 @@ t.create('Nock - multiple versions supported')
       .reply(200, {
         downloads: 1,
         file: {
+          type: '.jar',
           size: 1,
           sizeUnit: '1',
         },

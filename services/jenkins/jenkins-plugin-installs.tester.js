@@ -26,9 +26,9 @@ t.create('version installs | valid: numeric version')
   })
 
 t.create('version installs | valid: alphanumeric version')
-  .get('/view-job-filters/1.27-DRE1.00.json')
+  .get('/build-failure-analyzer/1.17.2-DRE3.14.json')
   .expectBadge({
-    label: 'installs@1.27-DRE1.00',
+    label: 'installs@1.17.2-DRE3.14',
     message: isMetric,
   })
 

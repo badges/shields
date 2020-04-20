@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const { errorMessagesFor } = require('./github-helpers')
 const { InvalidResponse } = require('..')
+const { errorMessagesFor } = require('./github-helpers')
 
 const issueSchema = Joi.object({
   head: Joi.object({
@@ -77,28 +77,8 @@ async function fetchJsonFromRepo(
   }
 }
 
-const releaseInfoSchema = Joi.object({
-  tag_name: Joi.string().required(),
-  prerelease: Joi.boolean().required(),
-}).required()
-
-// Fetch the 'latest' release (as defined by the GitHub API)
-async function fetchLatestRelease(serviceInstance, { user, repo }) {
-  const commonAttrs = {
-    errorMessages: errorMessagesFor('no releases or repo not found'),
-  }
-  const releaseInfo = await serviceInstance._requestJson({
-    schema: releaseInfoSchema,
-    url: `/repos/${user}/${repo}/releases/latest`,
-    ...commonAttrs,
-  })
-  return releaseInfo
-}
-
 module.exports = {
   fetchIssue,
   fetchRepoContent,
   fetchJsonFromRepo,
-  fetchLatestRelease,
-  releaseInfoSchema,
 }

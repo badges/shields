@@ -191,7 +191,6 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       skipped_label: skippedLabel,
     }
   ) {
-    const auth = this.authHelper.basicAuth
     const errorMessages = {
       404: 'build pipeline or test result summary not found',
     }
@@ -200,7 +199,6 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      auth,
       errorMessages
     )
 
@@ -210,7 +208,6 @@ module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
       url: `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`,
       options: {
         qs: { buildId },
-        auth,
       },
       schema: buildTestResultSummarySchema,
       errorMessages,

@@ -2,12 +2,12 @@
 
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
+const { NotFound } = require('..')
 const {
   allVersionsSchema,
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
-const { NotFound } = require('..')
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
@@ -84,9 +84,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
       server,
     })
 
-    if (
-      !allData.packages[this.getPackageName(user, repo)].hasOwnProperty(version)
-    ) {
+    if (!(version in allData.packages[this.getPackageName(user, repo)])) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 

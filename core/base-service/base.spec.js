@@ -74,7 +74,13 @@ class DummyServiceWithServiceResponseSizeMetricEnabled extends DummyService {
 }
 
 describe('BaseService', function() {
-  const defaultConfig = { handleInternalErrors: false, private: {} }
+  const defaultConfig = {
+    public: {
+      handleInternalErrors: false,
+      services: {},
+    },
+    private: {},
+  }
 
   it('Invokes the handler as expected', async function() {
     expect(
@@ -564,13 +570,14 @@ describe('BaseService', function() {
       static get auth() {
         return {
           passKey: 'myci_pass',
+          serviceKey: 'myci',
           isRequired: true,
         }
       }
 
       async handle() {
         return {
-          message: `The CI password is ${this.authHelper.pass}`,
+          message: `The CI password is ${this.authHelper._pass}`,
         }
       }
     }
@@ -579,7 +586,13 @@ describe('BaseService', function() {
       expect(
         await AuthService.invoke(
           {},
-          { defaultConfig, private: { myci_pass: 'abc123' } },
+          {
+            public: {
+              ...defaultConfig.public,
+              services: { myci: { authorizedOrigins: ['https://myci.test'] } },
+            },
+            private: { myci_pass: 'abc123' },
+          },
           { namedParamA: 'bar.bar.bar' }
         )
       ).to.deep.equal({ message: 'The CI password is abc123' })
@@ -587,9 +600,19 @@ describe('BaseService', function() {
 
     it('when auth is not configured properly, invoke() returns inacessible', async function() {
       expect(
-        await AuthService.invoke({}, defaultConfig, {
-          namedParamA: 'bar.bar.bar',
-        })
+        await AuthService.invoke(
+          {},
+          {
+            public: {
+              ...defaultConfig.public,
+              services: { myci: { authorizedOrigins: ['https://myci.test'] } },
+            },
+            private: {},
+          },
+          {
+            namedParamA: 'bar.bar.bar',
+          }
+        )
       ).to.deep.equal({
         color: 'lightgray',
         isError: true,

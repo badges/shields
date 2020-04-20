@@ -1,29 +1,18 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const runnerConfig = require('config').util.toObject()
 const { ServiceTester } = require('../tester')
+const { noToken } = require('../test-helpers')
+const noTwitchToken = noToken(require('./twitch.service'))
 
 const t = (module.exports = new ServiceTester({
   id: 'twitch',
   title: 'Twitch',
 }))
 
-function checkShouldSkip() {
-  const noToken =
-    !runnerConfig.private.twitch_client_id ||
-    !runnerConfig.private.twitch_client_secret
-  if (noToken) {
-    console.warn(
-      'No Twitch client credentials configured. Service tests will be skipped. Add credentials in local.yml to run these tests.'
-    )
-  }
-  return noToken
-}
-
 // the first request would take longer since we need to wait for a token
 t.create('Status of andyonthewings')
-  .skipWhen(checkShouldSkip)
+  .skipWhen(noTwitchToken)
   .get('/status/andyonthewings.json')
   .expectBadge({
     label: 'twitch',
@@ -33,7 +22,7 @@ t.create('Status of andyonthewings')
 
 // the second request should take shorter time since we can reuse the previous token
 t.create('Status of noopkat')
-  .skipWhen(checkShouldSkip)
+  .skipWhen(noTwitchToken)
   .get('/status/noopkat.json')
   .expectBadge({
     label: 'twitch',

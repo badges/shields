@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { renderVersionBadge } = require('../version')
-const BaseBowerService = require('./bower-base')
 const { InvalidResponse, redirector } = require('..')
+const BaseBowerService = require('./bower-base')
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),

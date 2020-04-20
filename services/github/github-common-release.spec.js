@@ -1,10 +1,10 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { GithubRelease } = require('./github-release.service')
+const { _getLatestRelease } = require('./github-common-release')
 
 describe('GithubRelease', function() {
-  test(GithubRelease.getLatestRelease, () => {
+  test(_getLatestRelease, () => {
     const releaseFixture = [
       { tag_name: 'cheese', prerelease: false }, // any old string
       { tag_name: 'v1.2', prerelease: false }, // semver release

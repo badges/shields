@@ -1,8 +1,8 @@
 'use strict'
 
 const { renderVersionBadge } = require('../version')
-const { BaseCratesService, keywords } = require('./crates-base')
 const { InvalidResponse } = require('..')
+const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesVersion extends BaseCratesService {
   static get category() {

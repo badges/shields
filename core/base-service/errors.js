@@ -56,6 +56,7 @@ class NotFound extends ShieldsRuntimeError {
   get name() {
     return 'NotFound'
   }
+
   get defaultPrettyMessage() {
     return defaultNotFoundError
   }
@@ -82,6 +83,7 @@ class InvalidResponse extends ShieldsRuntimeError {
   get name() {
     return 'InvalidResponse'
   }
+
   get defaultPrettyMessage() {
     return 'invalid'
   }
@@ -107,6 +109,7 @@ class Inaccessible extends ShieldsRuntimeError {
   get name() {
     return 'Inaccessible'
   }
+
   get defaultPrettyMessage() {
     return 'inaccessible'
   }
@@ -131,6 +134,7 @@ class ImproperlyConfigured extends ShieldsRuntimeError {
   get name() {
     return 'ImproperlyConfigured'
   }
+
   get defaultPrettyMessage() {
     return 'improperly configured'
   }
@@ -156,6 +160,7 @@ class InvalidParameter extends ShieldsRuntimeError {
   get name() {
     return 'InvalidParameter'
   }
+
   get defaultPrettyMessage() {
     return 'invalid parameter'
   }
@@ -180,6 +185,7 @@ class Deprecated extends ShieldsRuntimeError {
   get name() {
     return 'Deprecated'
   }
+
   get defaultPrettyMessage() {
     return 'no longer available'
   }

@@ -1,8 +1,8 @@
-export function bareLink(badgeUrl: string, link?: string, title = '') {
+export function bareLink(badgeUrl: string, link?: string, title = ''): string {
   return badgeUrl
 }
 
-export function html(badgeUrl: string, link?: string, title?: string) {
+export function html(badgeUrl: string, link?: string, title?: string): string {
   // To be more robust, this should escape the title.
   const alt = title ? ` alt="${title}"` : ''
   const img = `<img${alt} src="${badgeUrl}">`
@@ -13,7 +13,11 @@ export function html(badgeUrl: string, link?: string, title?: string) {
   }
 }
 
-export function markdown(badgeUrl: string, link?: string, title?: string) {
+export function markdown(
+  badgeUrl: string,
+  link?: string,
+  title?: string
+): string {
   const withoutLink = `![${title || ''}](${badgeUrl})`
   if (link) {
     return `[${withoutLink}](${link})`
@@ -26,7 +30,7 @@ export function reStructuredText(
   badgeUrl: string,
   link?: string,
   title?: string
-) {
+): string {
   let result = `.. image:: ${badgeUrl}`
   if (title) {
     result += `   :alt: ${title}`
@@ -37,7 +41,7 @@ export function reStructuredText(
   return result
 }
 
-function quoteAsciiDocAttribute(attr: string | null) {
+function quoteAsciiDocAttribute(attr: string | null): string {
   if (attr == null) {
     return 'None'
   } else {
@@ -61,7 +65,7 @@ function mapValues(
 export function renderAsciiDocAttributes(
   positional: string[],
   named: { [k: string]: string | null }
-) {
+): string {
   // http://asciidoc.org/userguide.html#X21
   const needsQuoting =
     positional.some(attr => attr && attr.includes(',')) ||
@@ -83,7 +87,11 @@ export function renderAsciiDocAttributes(
   }
 }
 
-export function asciiDoc(badgeUrl: string, link?: string, title?: string) {
+export function asciiDoc(
+  badgeUrl: string,
+  link?: string,
+  title?: string
+): string {
   const positional = title ? [title] : []
   const named = link ? { link } : ({} as { [k: string]: string })
   const attrs = renderAsciiDocAttributes(positional, named)
@@ -102,7 +110,7 @@ export function generateMarkup({
   link?: string
   title?: string
   markupFormat: MarkupFormat
-}) {
+}): string {
   const generatorFn = {
     markdown,
     rst: reStructuredText,

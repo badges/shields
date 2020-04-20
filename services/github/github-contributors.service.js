@@ -53,7 +53,7 @@ module.exports = class GithubContributors extends GithubAuthV3Service {
       errorMessages: errorMessagesFor('repo not found'),
     })
 
-    const parsed = parseLinkHeader(res.headers['link'])
+    const parsed = parseLinkHeader(res.headers.link)
     let contributorCount
     if (parsed === null) {
       const json = this._parseJson(buffer)

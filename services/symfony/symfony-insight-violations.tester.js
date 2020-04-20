@@ -2,10 +2,10 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
-const { sampleProjectUuid, checkShouldSkip } = require('./symfony-test-helpers')
+const { sampleProjectUuid, noSymfonyToken } = require('./symfony-test-helpers')
 
 t.create('valid project violations')
-  .skipWhen(checkShouldSkip)
+  .skipWhen(noSymfonyToken)
   .get(`/${sampleProjectUuid}.json`)
   .timeout(15000)
   .expectBadge({

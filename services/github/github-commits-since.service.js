@@ -4,7 +4,10 @@ const Joi = require('@hapi/joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV3Service } = require('./github-auth-service')
-const { fetchLatestRelease } = require('./github-common-fetch')
+const {
+  fetchLatestRelease,
+  queryParamSchema,
+} = require('./github-common-release')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
@@ -18,6 +21,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
     return {
       base: 'github/commits-since',
       pattern: ':user/:repo/:version/:branch*',
+      queryParamSchema,
     }
   }
 
@@ -51,7 +55,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         documentation,
       },
       {
-        title: 'GitHub commits since latest release',
+        title: 'GitHub commits since latest release (by date)',
         namedParams: {
           user: 'SubtitleEdit',
           repo: 'subtitleedit',
@@ -64,7 +68,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         documentation,
       },
       {
-        title: 'GitHub commits since latest release (branch)',
+        title: 'GitHub commits since latest release (by date) for a branch',
         namedParams: {
           user: 'SubtitleEdit',
           repo: 'subtitleedit',
@@ -74,6 +78,54 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         staticPreview: this.render({
           version: '3.5.7',
           commitCount: 157,
+        }),
+        documentation,
+      },
+      {
+        title:
+          'GitHub commits since latest release (by date including pre-releases)',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: 'latest',
+        },
+        queryParams: { include_prereleases: null },
+        staticPreview: this.render({
+          version: 'v3.5.8-alpha.1',
+          isPrerelease: true,
+          commitCount: 158,
+        }),
+        documentation,
+      },
+      {
+        title: 'GitHub commits since latest release (by SemVer)',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: 'latest',
+        },
+        queryParams: { sort: 'semver' },
+        staticPreview: this.render({
+          version: 'v4.0.1',
+          sort: 'semver',
+          commitCount: 200,
+        }),
+        documentation,
+      },
+      {
+        title:
+          'GitHub commits since latest release (by SemVer including pre-releases)',
+        namedParams: {
+          user: 'SubtitleEdit',
+          repo: 'subtitleedit',
+          version: 'latest',
+        },
+        queryParams: { sort: 'semver', include_prereleases: null },
+        staticPreview: this.render({
+          version: 'v4.0.2-alpha.1',
+          sort: 'semver',
+          isPrerelease: true,
+          commitCount: 201,
         }),
         documentation,
       },
@@ -95,12 +147,16 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
     }
   }
 
-  async handle({ user, repo, version, branch }) {
+  async handle({ user, repo, version, branch }, queryParams) {
     if (version === 'latest') {
-      ;({ tag_name: version } = await fetchLatestRelease(this, {
-        user,
-        repo,
-      }))
+      ;({ tag_name: version } = await fetchLatestRelease(
+        this,
+        {
+          user,
+          repo,
+        },
+        queryParams
+      ))
     }
 
     const notFoundMessage = branch

@@ -12,8 +12,8 @@ const { addv } = require('./text-formatters')
 const { version: versionColor } = require('./color-formatters')
 
 function listCompare(a, b) {
-  const alen = a.length,
-    blen = b.length
+  const alen = a.length
+  const blen = b.length
   for (let i = 0; i < alen; i++) {
     if (a[i] < b[i]) {
       return -1
@@ -66,17 +66,9 @@ function latestDottedVersion(versions) {
   return version
 }
 
-// Given a list of versions (as strings), return the latest version.
-// Return undefined if no version could be found.
-function latest(versions, { pre = false } = {}) {
+function latestMaybeSemVer(versions, pre) {
   let version = ''
-  let origVersions = versions
-  // return all results that are likely semver compatible versions
-  versions = origVersions.filter(version => /\d+\.\d+/.test(version))
-  // If no semver versions then look for single numbered versions
-  if (!versions.length) {
-    versions = origVersions.filter(version => /\d+/.test(version))
-  }
+
   if (!pre) {
     // remove pre-releases from array
     versions = versions.filter(version => !/\d+-\w+/.test(version))
@@ -93,10 +85,37 @@ function latest(versions, { pre = false } = {}) {
   } catch (e) {
     version = latestDottedVersion(versions)
   }
-  if (version === undefined || version === null) {
-    origVersions = origVersions.sort()
+  return version
+}
+
+// Given a list of versions (as strings), return the latest version.
+// Return undefined if no version could be found.
+function latest(versions, { pre = false } = {}) {
+  let version = ''
+  let origVersions = versions
+
+  // return all results that are likely semver compatible versions
+  versions = origVersions.filter(version => /\d+\.\d+/.test(version))
+  // If no semver versions then look for single numbered versions
+  if (!versions.length) {
+    versions = origVersions.filter(version => /\d+/.test(version))
+  }
+
+  version = latestMaybeSemVer(versions, pre)
+
+  if (version == null && !pre) {
+    version = latestMaybeSemVer(versions, true)
+  }
+
+  // if we've still got nothing,
+  // fall back to a case-insensitive string comparison
+  if (version == null) {
+    origVersions = origVersions.sort((a, b) =>
+      a.toLowerCase().localeCompare(b.toLowerCase())
+    )
     version = origVersions[origVersions.length - 1]
   }
+
   return version
 }
 

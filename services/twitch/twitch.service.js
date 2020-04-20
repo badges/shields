@@ -7,7 +7,7 @@ const helixSchema = Joi.object({
   data: Joi.array().required(),
 })
 
-class TwitchStatus extends TwitchBase {
+module.exports = class TwitchStatus extends TwitchBase {
   static get category() {
     return 'activity'
   }
@@ -73,5 +73,3 @@ class TwitchStatus extends TwitchBase {
     return this.constructor.render({ user, isLive: data.data.length > 0 })
   }
 }
-
-module.exports = [TwitchStatus]

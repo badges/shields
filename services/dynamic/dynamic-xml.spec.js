@@ -4,8 +4,8 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const xpath = require('xpath')
 const { test, given } = require('sazerac')
-const DynamicXml = require('./dynamic-xml.service')
 const { InvalidResponse } = require('..')
+const DynamicXml = require('./dynamic-xml.service')
 
 const exampleXml = `<?xml version="1.0"?>
 <catalog>

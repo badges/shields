@@ -53,13 +53,15 @@ export interface ServiceDefinition {
 export const services = definitions.services as ServiceDefinition[]
 export const categories = definitions.categories as Category[]
 
-export function findCategory(category: string) {
+export function findCategory(category: string): Category | undefined {
   return categories.find(({ id }) => id === category)
 }
 
 const byCategory = groupBy(services, 'category')
-export function getDefinitionsForCategory(category: string) {
-  return byCategory[category]
+export function getDefinitionsForCategory(
+  category: string
+): ServiceDefinition[] {
+  return byCategory[category] || []
 }
 
 export interface Suggestion {

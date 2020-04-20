@@ -55,7 +55,7 @@ module.exports = class JetbrainsVersion extends JetbrainsBase {
   async handle({ pluginId }) {
     const pluginData = await this.fetchPackageData({ pluginId, schema })
     const version =
-      pluginData['plugin-repository'].category['idea-plugin'][0]['version']
+      pluginData['plugin-repository'].category['idea-plugin'][0].version
     return this.constructor.render({ version })
   }
 }

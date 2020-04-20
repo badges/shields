@@ -18,7 +18,7 @@ const StyledTable = styled.table`
   }
 `
 
-function NamedLogoTable({ logoNames }: { logoNames: string[] }) {
+function NamedLogoTable({ logoNames }: { logoNames: string[] }): JSX.Element {
   return (
     <StyledTable>
       <thead>
@@ -62,7 +62,7 @@ function NamedLogoTable({ logoNames }: { logoNames: string[] }) {
   )
 }
 
-export default function LogoPage() {
+export default function LogoPage(): JSX.Element {
   return (
     <div>
       <Meta />

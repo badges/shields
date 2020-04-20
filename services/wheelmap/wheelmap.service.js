@@ -22,7 +22,11 @@ module.exports = class Wheelmap extends BaseJsonService {
   }
 
   static get auth() {
-    return { passKey: 'wheelmap_token', isRequired: true }
+    return {
+      passKey: 'wheelmap_token',
+      authorizedOrigins: ['https://wheelmap.org'],
+      isRequired: true,
+    }
   }
 
   static get examples() {
@@ -52,15 +56,19 @@ module.exports = class Wheelmap extends BaseJsonService {
   }
 
   async fetch({ nodeId }) {
-    return this._requestJson({
-      schema,
-      url: `https://wheelmap.org/api/nodes/${nodeId}`,
-      options: { qs: { api_key: this.authHelper.pass } },
-      errorMessages: {
-        401: 'invalid token',
-        404: 'node not found',
-      },
-    })
+    return this._requestJson(
+      this.authHelper.withQueryStringAuth(
+        { passKey: 'api_key' },
+        {
+          schema,
+          url: `https://wheelmap.org/api/nodes/${nodeId}`,
+          errorMessages: {
+            401: 'invalid token',
+            404: 'node not found',
+          },
+        }
+      )
+    )
   }
 
   async handle({ nodeId }) {

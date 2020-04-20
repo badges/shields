@@ -42,7 +42,7 @@ module.exports = class MavenMetadata extends BaseXmlService {
         namedParams: {},
         queryParams: {
           metadataUrl:
-            'http://central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
+            'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
         },
         staticPreview: renderVersionBadge({ version: '2.8.5' }),
       },

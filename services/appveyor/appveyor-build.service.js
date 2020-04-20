@@ -3,9 +3,9 @@
 const { renderBuildStatusBadge } = require('../build-status')
 const AppVeyorBase = require('./appveyor-base')
 
-module.exports = class AppVeyorCi extends AppVeyorBase {
+module.exports = class AppVeyorBuild extends AppVeyorBase {
   static get route() {
-    return this.buildRoute('appveyor/ci')
+    return this.buildRoute('appveyor/build')
   }
 
   static get examples() {
@@ -31,7 +31,7 @@ module.exports = class AppVeyorCi extends AppVeyorBase {
 
   async handle({ user, repo, branch }) {
     const data = await this.fetch({ user, repo, branch })
-    if (!data.hasOwnProperty('build')) {
+    if (!('build' in data)) {
       // this project exists but no builds have been run on it yet
       return this.constructor.render({ status: 'no builds found' })
     }

@@ -2,8 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { optionalUrl } = require('../validators')
-const { authConfig } = require('./jira-common')
 const { BaseJsonService } = require('..')
+const { authConfig } = require('./jira-common')
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -83,12 +83,13 @@ module.exports = class JiraIssue extends BaseJsonService {
 
   async handle({ issueKey }, { baseUrl }) {
     // Atlassian Documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-api-2-issue-issueIdOrKey-get
-    const json = await this._requestJson({
-      schema,
-      url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
-      options: { auth: this.authHelper.basicAuth },
-      errorMessages: { 404: 'issue not found' },
-    })
+    const json = await this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema,
+        url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
+        errorMessages: { 404: 'issue not found' },
+      })
+    )
 
     const issueStatus = json.fields.status
     const statusName = issueStatus.name

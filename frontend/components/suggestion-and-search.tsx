@@ -32,7 +32,7 @@ export default function SuggestionAndSearch({
   queryChanged: (query: string) => void
   onBadgeClick: (example: RenderableExample, isSuggestion: boolean) => void
   baseUrl: string
-}) {
+}): JSX.Element {
   const queryChangedDebounced = useRef(
     debounce(queryChanged, 50, { leading: true })
   )
@@ -43,7 +43,7 @@ export default function SuggestionAndSearch({
 
   function onQueryChanged({
     target: { value: query },
-  }: ChangeEvent<HTMLInputElement>) {
+  }: ChangeEvent<HTMLInputElement>): void {
     const isUrl = query.startsWith('https://') || query.startsWith('http://')
     setIsUrl(isUrl)
     setProjectUrl(isUrl ? query : undefined)
@@ -51,7 +51,7 @@ export default function SuggestionAndSearch({
     queryChangedDebounced.current(query)
   }
 
-  async function getSuggestions() {
+  async function getSuggestions(): Promise<void> {
     if (!projectUrl) {
       setSuggestions([])
       return
@@ -77,7 +77,7 @@ export default function SuggestionAndSearch({
     setSuggestions(suggestions)
   }
 
-  function renderSuggestions() {
+  function renderSuggestions(): JSX.Element | null {
     if (suggestions.length === 0) {
       return null
     }

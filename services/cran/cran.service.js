@@ -52,7 +52,7 @@ class CranLicense extends BaseCranService {
 
   async handle({ packageName }) {
     const data = await this.fetch({ packageName })
-    return this.constructor.render({ license: data['License'] })
+    return this.constructor.render({ license: data.License })
   }
 }
 
@@ -84,7 +84,7 @@ class CranVersion extends BaseCranService {
 
   async handle({ packageName }) {
     const data = await this.fetch({ packageName })
-    return this.constructor.render({ version: data['Version'] })
+    return this.constructor.render({ version: data.Version })
   }
 }
 

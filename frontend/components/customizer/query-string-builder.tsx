@@ -72,7 +72,7 @@ function getQueryString({
     // booleans.
     if (typeof value === 'string') {
       if (value) {
-        outQuery[name] = value
+        outQuery[name] = value.trim()
       } else {
         // Skip empty params.
         isComplete = false
@@ -113,7 +113,7 @@ function ServiceQueryParam({
   isStringParam: boolean
   stringParamCount?: number
   handleServiceQueryParamChange: ChangeEventHandler<HTMLInputElement>
-}) {
+}): JSX.Element {
   return (
     <tr>
       <td>
@@ -160,7 +160,7 @@ function BadgeOptionInput({
   handleBadgeOptionChange: ChangeEventHandler<
     HTMLSelectElement | HTMLInputElement
   >
-}) {
+}): JSX.Element {
   if (name === 'style') {
     return (
       <select name="style" onChange={handleBadgeOptionChange} value={value}>
@@ -192,7 +192,7 @@ function BadgeOption({
   name: BadgeOptionName
   value: string
   handleBadgeOptionChange: ChangeEventHandler<HTMLInputElement>
-}) {
+}): JSX.Element {
   const {
     label = humanizeString(name),
     shieldsDefaultValue: hasShieldsDefaultValue,
@@ -237,7 +237,7 @@ export default function QueryStringBuilder({
     queryString: string
     isComplete: boolean
   }) => void
-}) {
+}): JSX.Element {
   const [queryParams, setQueryParams] = useState(() =>
     // For each of the custom query params defined in `exampleParams`,
     // create empty values in `queryParams`.
@@ -266,14 +266,14 @@ export default function QueryStringBuilder({
 
   function handleServiceQueryParamChange({
     target: { name, type: targetType, checked, value },
-  }: ChangeEvent<HTMLInputElement>) {
+  }: ChangeEvent<HTMLInputElement>): void {
     const outValue = targetType === 'checkbox' ? checked : value
     setQueryParams({ ...queryParams, [name]: outValue })
   }
 
   function handleBadgeOptionChange({
     target: { name, value },
-  }: ChangeEvent<HTMLInputElement>) {
+  }: ChangeEvent<HTMLInputElement>): void {
     setBadgeOptions({ ...badgeOptions, [name]: value })
   }
 

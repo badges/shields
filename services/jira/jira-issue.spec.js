@@ -4,13 +4,13 @@ const { expect } = require('chai')
 const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const JiraIssue = require('./jira-issue.service')
-const { user, pass, config } = require('./jira-test-helpers')
+const { user, pass, host, config } = require('./jira-test-helpers')
 
 describe('JiraIssue', function() {
   cleanUpNockAfterEach()
 
   it('sends the auth information as configured', async function() {
-    const scope = nock('https://myprivatejira.test')
+    const scope = nock(`https://${host}`)
       .get(`/rest/api/2/issue/${encodeURIComponent('secure-234')}`)
       // This ensures that the expected credentials are actually being sent with the HTTP request.
       // Without this the request wouldn't match and the test would fail.
@@ -24,7 +24,7 @@ describe('JiraIssue', function() {
         {
           issueKey: 'secure-234',
         },
-        { baseUrl: 'https://myprivatejira.test' }
+        { baseUrl: `https://${host}` }
       )
     ).to.deep.equal({
       label: 'secure-234',

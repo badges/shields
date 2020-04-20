@@ -51,6 +51,6 @@ module.exports = class SpackVersion extends BaseJsonService {
 
   async handle({ packageName }) {
     const pkg = await this.fetch({ packageName })
-    return this.constructor.render({ version: pkg['latest_version'] })
+    return this.constructor.render({ version: pkg.latest_version })
   }
 }

@@ -5,8 +5,9 @@
 
 const path = require('path')
 const url = require('url')
-const Joi = require('@hapi/joi')
+const { URL } = url
 const Camp = require('camp')
+const originalJoi = require('@hapi/joi')
 const makeBadge = require('../../gh-badges/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const suggest = require('../../services/suggest')
@@ -22,6 +23,39 @@ const { merge, checkCustomIntegrationConfiguration } = require('./config')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
+const InfluxMetrics = require('./influx-metrics')
+
+const Joi = originalJoi
+  .extend(base => ({
+    type: 'arrayFromString',
+    base: base.array(),
+    coerce: (value, state, options) => ({
+      value: typeof value === 'string' ? value.split(' ') : value,
+    }),
+  }))
+  .extend(base => ({
+    type: 'string',
+    base: base.string(),
+    messages: {
+      'string.origin':
+        'needs to be an origin string, e.g. https://host.domain with optional port and no trailing slash',
+    },
+    rules: {
+      origin: {
+        validate(value, helpers) {
+          let origin
+          try {
+            ;({ origin } = new URL(value))
+          } catch (e) {}
+          if (origin !== undefined && origin === value) {
+            return value
+          } else {
+            return helpers.error('string.origin')
+          }
+        },
+      },
+    },
+  }))
 
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
@@ -29,6 +63,11 @@ const bytes = Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
 const customIntegration = Joi.object({
   fetchLimit: bytes,
 })
+const origins = Joi.arrayFromString().items(Joi.string().origin())
+const defaultService = Joi.object({ authorizedOrigins: origins }).default({
+  authorizedOrigins: [],
+})
+
 const publicConfigSchema = Joi.object({
   bind: {
     port: Joi.alternatives().try(
@@ -47,6 +86,33 @@ const publicConfigSchema = Joi.object({
   metrics: {
     prometheus: {
       enabled: Joi.boolean().required(),
+      endpointEnabled: Joi.boolean().required(),
+    },
+    influx: {
+      enabled: Joi.boolean().required(),
+      url: Joi.string()
+        .uri()
+        .when('enabled', { is: true, then: Joi.required() }),
+      timeoutMilliseconds: Joi.number()
+        .integer()
+        .min(1)
+        .when('enabled', { is: true, then: Joi.required() }),
+      intervalSeconds: Joi.number()
+        .integer()
+        .min(1)
+        .when('enabled', { is: true, then: Joi.required() }),
+      instanceIdFrom: Joi.string()
+        .equal('hostname', 'env-var', 'random')
+        .when('enabled', { is: true, then: Joi.required() }),
+      instanceIdEnvVarName: Joi.string().when('instanceIdFrom', {
+        is: 'env-var',
+        then: Joi.required(),
+      }),
+      envLabel: Joi.string().when('enabled', {
+        is: true,
+        then: Joi.required(),
+      }),
+      hostnameAliases: Joi.object(),
     },
   },
   ssl: {
@@ -64,7 +130,9 @@ const publicConfigSchema = Joi.object({
   persistence: {
     dir: Joi.string().required(),
   },
-  services: {
+  services: Joi.object({
+    bitbucketServer: defaultService,
+    drone: defaultService,
     github: {
       baseUri: requiredUrl,
       debug: {
@@ -75,11 +143,18 @@ const publicConfigSchema = Joi.object({
           .required(),
       },
     },
+    jira: defaultService,
+    jenkins: Joi.object({
+      authorizedOrigins: origins,
+      requireStrictSsl: Joi.boolean(),
+      requireStrictSslToAuthenticate: Joi.boolean(),
+    }).default({ authorizedOrigins: [] }),
+    nexus: defaultService,
+    npm: defaultService,
+    sonar: defaultService,
+    teamcity: defaultService,
     trace: Joi.boolean().required(),
-  },
-  profiling: {
-    makeBadge: Joi.boolean().required(),
-  },
+  }).required(),
   cacheHeaders: {
     defaultCacheLengthSeconds: Joi.number()
       .integer()
@@ -98,6 +173,7 @@ const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
   bintray_user: Joi.string(),
   bintray_apikey: Joi.string(),
+  drone_token: Joi.string(),
   gh_client_id: Joi.string(),
   gh_client_secret: Joi.string(),
   gh_token: Joi.string(),
@@ -115,11 +191,18 @@ const privateConfigSchema = Joi.object({
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),
+  teamcity_user: Joi.string(),
+  teamcity_pass: Joi.string(),
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
+  influx_username: Joi.string(),
+  influx_password: Joi.string(),
 }).required()
-
+const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
+  influx_username: Joi.string().required(),
+  influx_password: Joi.string().required(),
+})
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -131,22 +214,25 @@ class Server {
    * Badge Server Constructor
    *
    * @param {object} config Configuration object read from config yaml files
-   *    by https://www.npmjs.com/package/config and validated against
-   *    publicConfigSchema and privateConfigSchema
+   * by https://www.npmjs.com/package/config and validated against
+   * publicConfigSchema and privateConfigSchema
    * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
    * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
    */
   constructor(config) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
-    let privateConfig
-    try {
-      privateConfig = Joi.attempt(config.private, privateConfigSchema)
-    } catch (e) {
-      const badPaths = e.details.map(({ path }) => path)
-      throw Error(
-        `Private configuration is invalid. Check these paths: ${badPaths.join(
-          ','
-        )}`
+    const privateConfig = this.validatePrivateConfig(
+      config.private,
+      privateConfigSchema
+    )
+    // We want to require an username and a password for the influx metrics
+    // only if the influx metrics are enabled. The private config schema
+    // and the public config schema are two separate schemas so we have to run
+    // validation manually.
+    if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
+      this.validatePrivateConfig(
+        config.private,
+        privateMetricsInfluxConfigSchema
       )
     }
     this.config = {
@@ -159,8 +245,31 @@ class Server {
       service: publicConfig.services.github,
       private: privateConfig,
     })
+
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
+      if (publicConfig.metrics.influx.enabled) {
+        this.influxMetrics = new InfluxMetrics(
+          this.metricInstance,
+          Object.assign({}, publicConfig.metrics.influx, {
+            username: privateConfig.influx_username,
+            password: privateConfig.influx_password,
+          })
+        )
+      }
+    }
+  }
+
+  validatePrivateConfig(privateConfig, privateConfigSchema) {
+    try {
+      return Joi.attempt(privateConfig, privateConfigSchema)
+    } catch (e) {
+      const badPaths = e.details.map(({ path }) => path)
+      throw Error(
+        `Private configuration is invalid. Check these paths: ${badPaths.join(
+          ','
+        )}`
+      )
     }
   }
 
@@ -305,6 +414,7 @@ class Server {
           profiling: config.public.profiling,
           rasterUrl: config.public.rasterUrl,
           private: config.private,
+          public: config.public,
           ...serviceConfig,
         }
       )
@@ -345,7 +455,12 @@ class Server {
     const { githubConstellation } = this
     githubConstellation.initialize(camp)
     if (metricInstance) {
-      metricInstance.initialize(camp)
+      if (this.config.public.metrics.prometheus.endpointEnabled) {
+        metricInstance.registerMetricsEndpoint(camp)
+      }
+      if (this.influxMetrics) {
+        this.influxMetrics.startPushingMetrics()
+      }
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -389,6 +504,9 @@ class Server {
     }
 
     if (this.metricInstance) {
+      if (this.influxMetrics) {
+        this.influxMetrics.stopPushingMetrics()
+      }
       this.metricInstance.stop()
     }
   }

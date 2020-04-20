@@ -3,14 +3,14 @@
 const { expect } = require('chai')
 const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const Nexus = require('./nexus.service')
 const { InvalidResponse, NotFound } = require('..')
+const Nexus = require('./nexus.service')
 
 describe('Nexus', function() {
-  context('transform()', function() {
+  context('transform2()', function() {
     it('throws NotFound error when no versions exist', function() {
       try {
-        Nexus.prototype.transform({ json: { data: [] } })
+        Nexus.prototype.transform2({ json: { data: [] } })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(NotFound)
@@ -20,7 +20,7 @@ describe('Nexus', function() {
 
     it('throws InvalidResponse error when no there is no latestRelease version', function() {
       try {
-        Nexus.prototype.transform({ repo: 'r', json: { data: [{}] } })
+        Nexus.prototype.transform2({ repo: 'r', json: { data: [{}] } })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
@@ -30,7 +30,7 @@ describe('Nexus', function() {
 
     it('returns latestSnapshot value', function() {
       const latestSnapshot = '7.0.1-SNAPSHOT'
-      const { version } = Nexus.prototype.transform({
+      const { version } = Nexus.prototype.transform2({
         repo: 's',
         json: {
           data: [{ latestSnapshot }, { version: '1.2.3' }],
@@ -41,7 +41,7 @@ describe('Nexus', function() {
 
     it('returns version value when it is a snapshot', function() {
       const latestSnapshot = '1.2.7-SNAPSHOT'
-      const { version } = Nexus.prototype.transform({
+      const { version } = Nexus.prototype.transform2({
         repo: 's',
         json: {
           data: [{ latestSnapshot: '1.2.3' }, { version: latestSnapshot }],
@@ -52,7 +52,7 @@ describe('Nexus', function() {
 
     it('throws InvalidResponse error when no snapshot versions exist', function() {
       try {
-        Nexus.prototype.transform({ repo: 's', json: { data: [{}] } })
+        Nexus.prototype.transform2({ repo: 's', json: { data: [{}] } })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
@@ -62,12 +62,55 @@ describe('Nexus', function() {
 
     it('throws InvalidResponse error when repository has no version data', function() {
       try {
-        Nexus.prototype.transform({ repo: 'developer', json: { data: {} } })
+        Nexus.prototype.transform2({
+          repo: 'developer',
+          json: { data: {} },
+        })
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
         expect(e.prettyMessage).to.equal('invalid artifact version')
       }
+    })
+
+    context('transform3()', function() {
+      it('throws NotFound error when no items exist', function() {
+        try {
+          Nexus.prototype.transform3({ json: { items: [] } })
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e).to.be.an.instanceof(NotFound)
+          expect(e.prettyMessage).to.equal('artifact or version not found')
+        }
+      })
+
+      it('throws NotFound error when no snapshot items exist', function() {
+        try {
+          Nexus.prototype.transform3({
+            repo: 's',
+            json: { items: [] },
+          })
+          expect.fail('Expected to throw')
+        } catch (e) {
+          expect(e).to.be.an.instanceof(NotFound)
+          expect(e.prettyMessage).to.equal(
+            'artifact or snapshot version not found'
+          )
+        }
+      })
+
+      it('returns first item version', function() {
+        const { version } = Nexus.prototype.transform3({
+          json: {
+            items: [
+              { version: '1.2.3' },
+              { version: '1.2.2' },
+              { version: '1.0.1' },
+            ],
+          },
+        })
+        expect(version).to.equal('1.2.3')
+      })
     })
   })
 
@@ -76,11 +119,23 @@ describe('Nexus', function() {
 
     const user = 'admin'
     const pass = 'password'
-    const config = { private: { nexus_user: user, nexus_pass: pass } }
+    const config = {
+      public: {
+        services: {
+          nexus: {
+            authorizedOrigins: ['https://repository.jboss.org'],
+          },
+        },
+      },
+      private: {
+        nexus_user: user,
+        nexus_pass: pass,
+      },
+    }
 
     it('sends the auth information as configured', async function() {
-      const scope = nock('https://repository.jboss.org/nexus')
-        .get('/service/local/lucene/search')
+      const scope = nock('https://repository.jboss.org')
+        .get('/nexus/service/local/lucene/search')
         .query({ g: 'jboss', a: 'jboss-client' })
         // This ensures that the expected credentials are actually being sent with the HTTP request.
         // Without this the request wouldn't match and the test would fail.

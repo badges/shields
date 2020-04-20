@@ -21,6 +21,13 @@ describe('BitbucketPullRequest', function() {
       await BitbucketPullRequest.invoke(
         defaultContext,
         {
+          public: {
+            services: {
+              bitbucketServer: {
+                authorizedOrigins: [],
+              },
+            },
+          },
           private: { bitbucket_username: user, bitbucket_password: pass },
         },
         { user: 'atlassian', repo: 'python-bitbucket' }
@@ -43,6 +50,13 @@ describe('BitbucketPullRequest', function() {
       await BitbucketPullRequest.invoke(
         defaultContext,
         {
+          public: {
+            services: {
+              bitbucketServer: {
+                authorizedOrigins: ['https://bitbucket.example.test'],
+              },
+            },
+          },
           private: {
             bitbucket_server_username: user,
             bitbucket_server_password: pass,

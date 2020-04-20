@@ -43,7 +43,7 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
         .split(/[/-]/)
         .slice(0, 3)
         .join('')
-      const referer = req.headers['referer']
+      const referer = req.headers.referer
 
       if (ipRateLimit.isBanned(ip, req, res)) {
         metricInstance.noteRateLimitExceeded('ip')

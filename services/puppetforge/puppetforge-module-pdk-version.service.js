@@ -1,8 +1,8 @@
 'use strict'
 
 const { renderVersionBadge } = require('../version')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 const { NotFound } = require('..')
+const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
 module.exports = class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesService {
   static get category() {

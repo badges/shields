@@ -14,6 +14,24 @@ const werckerSchema = Joi.array()
   .max(1)
   .required()
 
+const werckerCIDocumentation = `
+<p>
+  Note that Wercker badge Key (used in Wercker's native badge urls) is not the same as
+  the Application Id and the badge key will not work.
+</p>
+<p>
+  You can use the Wercker API to locate your Application Id:
+  <br />
+  <br />
+  https://app.wercker.com/api/v3/applications/:username/:applicationName
+  <br />
+  For example: https://app.wercker.com/api/v3/applications/wercker/go-wercker-api
+  <br />
+  <br />
+  Your Application Id will be in the 'id' field in the API response.
+</p>
+`
+
 module.exports = class Wercker extends BaseJsonService {
   static get category() {
     return 'build'
@@ -35,6 +53,7 @@ module.exports = class Wercker extends BaseJsonService {
         pattern: 'ci/:applicationId',
         namedParams: { applicationId: '559e33c8e982fc615500b357' },
         staticPreview: this.render({ result: 'passed' }),
+        documentation: werckerCIDocumentation,
       },
       {
         title: `Wercker CI Run`,
@@ -44,6 +63,7 @@ module.exports = class Wercker extends BaseJsonService {
           branch: 'master',
         },
         staticPreview: this.render({ result: 'passed' }),
+        documentation: werckerCIDocumentation,
       },
       {
         title: `Wercker Build`,

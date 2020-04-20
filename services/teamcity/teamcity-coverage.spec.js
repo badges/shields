@@ -4,13 +4,13 @@ const { expect } = require('chai')
 const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const TeamCityCoverage = require('./teamcity-coverage.service')
-const { user, pass, config } = require('./teamcity-test-helpers')
+const { user, pass, host, config } = require('./teamcity-test-helpers')
 
 describe('TeamCityCoverage', function() {
   cleanUpNockAfterEach()
 
   it('sends the auth information as configured', async function() {
-    const scope = nock('https://mycompany.teamcity.com')
+    const scope = nock(`https://${host}`)
       .get(
         `/app/rest/builds/${encodeURIComponent(
           'buildType:(id:bt678)'
