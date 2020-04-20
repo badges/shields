@@ -153,7 +153,7 @@ t.create('XPath parse error')
 
 t.create('XML from url | invalid url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
+    '.json?url=https://raw.githubusercontent.com/badges/shields/master/notafile.xml&query=//version'
   )
   .expectBadge({
     label: 'custom badge',
