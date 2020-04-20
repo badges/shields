@@ -547,7 +547,7 @@ function forTheBadge({
   })
 
   labelWidth += 10 + totalLogoWidth
-  if (hasLabel) {
+  if (label.length) {
     labelWidth += 10 + label.length * 1.5
   } else if (hasLogo) {
     if (hasLabel) {
