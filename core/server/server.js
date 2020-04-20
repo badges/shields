@@ -411,7 +411,6 @@ class Server {
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
-          profiling: config.public.profiling,
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,
