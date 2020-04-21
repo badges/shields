@@ -9,10 +9,11 @@ class RedundantCustomConfiguration extends Error {
 }
 
 function merge(_default, custom) {
+  // Overwrites the existing array values completely rather than concatenating them
+  // recipe from https://github.com/TehShrike/deepmerge#arraymerge
+  const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray
   return deepmerge(_default, custom, {
-    arrayMerge: function(destinationArray, sourceArray, options) {
-      return sourceArray
-    },
+    arrayMerge: overwriteMerge,
   })
 }
 
