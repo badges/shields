@@ -60,8 +60,11 @@ const Joi = originalJoi
 const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 const requiredUrl = optionalUrl.required()
 const bytes = Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
-const customIntegration = Joi.object({
-  fetchLimit: bytes,
+const requireFields = {
+  required: schema => schema.required(),
+}
+const integrationSchema = Joi.object({
+  fetchLimit: bytes.alter(requireFields),
 })
 const origins = Joi.arrayFromString().items(Joi.string().origin())
 const defaultService = Joi.object({ authorizedOrigins: origins }).default({
@@ -163,10 +166,8 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   integrations: Joi.object({
-    default: {
-      fetchLimit: bytes,
-    },
-  }).pattern(Joi.string(), customIntegration),
+    default: integrationSchema.tailor('required').required(),
+  }).pattern(Joi.string(), integrationSchema),
 }).required()
 
 const privateConfigSchema = Joi.object({
