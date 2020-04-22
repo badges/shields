@@ -122,7 +122,7 @@ describe('Influx metrics', function() {
 
   describe('sendMetrics', function() {
     beforeEach(function() {
-      sinon.spy(log, 'error')
+      sinon.stub(log, 'error')
     })
     afterEach(function() {
       log.error.restore()
