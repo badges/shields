@@ -23,6 +23,7 @@ const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
+const InfluxMetrics = require('./influx-metrics')
 
 const Joi = originalJoi
   .extend(base => ({
@@ -81,6 +82,33 @@ const publicConfigSchema = Joi.object({
   metrics: {
     prometheus: {
       enabled: Joi.boolean().required(),
+      endpointEnabled: Joi.boolean().required(),
+    },
+    influx: {
+      enabled: Joi.boolean().required(),
+      url: Joi.string()
+        .uri()
+        .when('enabled', { is: true, then: Joi.required() }),
+      timeoutMilliseconds: Joi.number()
+        .integer()
+        .min(1)
+        .when('enabled', { is: true, then: Joi.required() }),
+      intervalSeconds: Joi.number()
+        .integer()
+        .min(1)
+        .when('enabled', { is: true, then: Joi.required() }),
+      instanceIdFrom: Joi.string()
+        .equal('hostname', 'env-var', 'random')
+        .when('enabled', { is: true, then: Joi.required() }),
+      instanceIdEnvVarName: Joi.string().when('instanceIdFrom', {
+        is: 'env-var',
+        then: Joi.required(),
+      }),
+      envLabel: Joi.string().when('enabled', {
+        is: true,
+        then: Joi.required(),
+      }),
+      hostnameAliases: Joi.object(),
     },
   },
   ssl: {
@@ -160,8 +188,13 @@ const privateConfigSchema = Joi.object({
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
   wheelmap_token: Joi.string(),
+  influx_username: Joi.string(),
+  influx_password: Joi.string(),
 }).required()
-
+const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
+  influx_username: Joi.string().required(),
+  influx_password: Joi.string().required(),
+})
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -173,22 +206,25 @@ class Server {
    * Badge Server Constructor
    *
    * @param {object} config Configuration object read from config yaml files
-   *    by https://www.npmjs.com/package/config and validated against
-   *    publicConfigSchema and privateConfigSchema
+   * by https://www.npmjs.com/package/config and validated against
+   * publicConfigSchema and privateConfigSchema
    * @see https://github.com/badges/shields/blob/master/doc/production-hosting.md#configuration
    * @see https://github.com/badges/shields/blob/master/doc/server-secrets.md
    */
   constructor(config) {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
-    let privateConfig
-    try {
-      privateConfig = Joi.attempt(config.private, privateConfigSchema)
-    } catch (e) {
-      const badPaths = e.details.map(({ path }) => path)
-      throw Error(
-        `Private configuration is invalid. Check these paths: ${badPaths.join(
-          ','
-        )}`
+    const privateConfig = this.validatePrivateConfig(
+      config.private,
+      privateConfigSchema
+    )
+    // We want to require an username and a password for the influx metrics
+    // only if the influx metrics are enabled. The private config schema
+    // and the public config schema are two separate schemas so we have to run
+    // validation manually.
+    if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
+      this.validatePrivateConfig(
+        config.private,
+        privateMetricsInfluxConfigSchema
       )
     }
     this.config = {
@@ -201,8 +237,31 @@ class Server {
       service: publicConfig.services.github,
       private: privateConfig,
     })
+
     if (publicConfig.metrics.prometheus.enabled) {
       this.metricInstance = new PrometheusMetrics()
+      if (publicConfig.metrics.influx.enabled) {
+        this.influxMetrics = new InfluxMetrics(
+          this.metricInstance,
+          Object.assign({}, publicConfig.metrics.influx, {
+            username: privateConfig.influx_username,
+            password: privateConfig.influx_password,
+          })
+        )
+      }
+    }
+  }
+
+  validatePrivateConfig(privateConfig, privateConfigSchema) {
+    try {
+      return Joi.attempt(privateConfig, privateConfigSchema)
+    } catch (e) {
+      const badPaths = e.details.map(({ path }) => path)
+      throw Error(
+        `Private configuration is invalid. Check these paths: ${badPaths.join(
+          ','
+        )}`
+      )
     }
   }
 
@@ -381,7 +440,12 @@ class Server {
     const { githubConstellation } = this
     githubConstellation.initialize(camp)
     if (metricInstance) {
-      metricInstance.initialize(camp)
+      if (this.config.public.metrics.prometheus.endpointEnabled) {
+        metricInstance.registerMetricsEndpoint(camp)
+      }
+      if (this.influxMetrics) {
+        this.influxMetrics.startPushingMetrics()
+      }
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
@@ -425,6 +489,9 @@ class Server {
     }
 
     if (this.metricInstance) {
+      if (this.influxMetrics) {
+        this.influxMetrics.stopPushingMetrics()
+      }
       this.metricInstance.stop()
     }
   }
