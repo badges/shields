@@ -22,6 +22,12 @@ const { categories } = yaml.safeLoad(
 async function createPages({ actions: { createPage } }) {
   if (includeDevPages) {
     createPage({
+      path: '/dev/styles',
+      component: require.resolve(
+        './frontend/components/development/style-page.tsx'
+      ),
+    })
+    createPage({
       path: '/dev/logos',
       component: require.resolve(
         './frontend/components/development/logo-page.tsx'

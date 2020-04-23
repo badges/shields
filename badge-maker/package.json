@@ -1,6 +1,6 @@
 {
-  "name": "gh-badges",
-  "version": "2.2.1",
+  "name": "badge-maker",
+  "version": "3.0.0-rc1",
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",
-    "directory": "gh-badges"
+    "directory": "badge-maker"
   },
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
   "license": "CC0-1.0",
@@ -35,10 +35,7 @@
   },
   "dependencies": {
     "anafanafo": "^1.0.0",
-    "dot": "^1.1.2",
-    "gm": "^1.23.0",
-    "is-css-color": "^1.0.0",
-    "svgo": "^1.1.1"
+    "is-css-color": "^1.0.0"
   },
   "scripts": {
     "test": "echo 'Run tests from parent dir'; false"

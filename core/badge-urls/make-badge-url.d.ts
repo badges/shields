@@ -38,6 +38,7 @@ export function staticBadgeUrl({
   baseUrl,
   label,
   message,
+  labelColor,
   color,
   style,
   namedLogo,
@@ -46,6 +47,7 @@ export function staticBadgeUrl({
   baseUrl?: string
   label: string
   message: string
+  labelColor?: string
   color?: string
   style?: string
   namedLogo?: string

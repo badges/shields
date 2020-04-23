@@ -1,6 +1,67 @@
 # Changelog
 
-## 2.2.1
+## 3.0.0
+
+### Breaking Changes
+
+- Package name has changed to `badge-maker` and moved to https://www.npmjs.com/package/badge-maker
+- `BadgeFactory` class is removed and replaced by `makeBadge()` function.
+- Deprecated parameters have been removed. In version 2.2.0 the `colorA`, `colorB` and `colorscheme` params were deprecated. In version 3.0.0 these have been removed.
+- Only SVG output format is now provided. JSON format has been dropped and the `format` key has been removed.
+- The `text` array has been replaced by `label` and `message` keys.
+- The `template` key has been renamed `style`.
+  To upgrade from v2.1.1, change your code from:
+  ```js
+  const { BadgeFactory } = require('gh-badges')
+  const bf = new BadgeFactory()
+  const svg = bf.create({
+    text: ['build', 'passed'],
+    format: 'svg',
+    template: 'flat-square',
+  })
+  ```
+  to:
+  ```js
+  const { makeBadge } = require('badge-maker')
+  const svg = makeBadge({
+    label: 'build',
+    message: 'passed',
+    style: 'flat-square',
+  })
+  ```
+- `ValidationError` had been added and inputs are now validated. In previous releases, invalid inputs would be discarded and replaced with defaults. For example, in 2.2.1
+  ```js
+  const { BadgeFactory } = require('gh-badges')
+  const bf = new BadgeFactory()
+  const svg = bf.create({
+    text: ['build', 'passed'],
+    template: 'some invalid value',
+  })
+  ```
+  would generate an SVG badge. In version >=3
+  ```js
+  const { makeBadge } = require('badge-maker')
+  const svg = makeBadge({
+    label: 'build',
+    message: 'passed',
+    style: 'some invalid value',
+  })
+  ```
+  will throw a `ValidationError`.
+- Raster support has been removed from the CLI. It will now only output SVG. On the console, the output of `badge` can be piped to a utility like [imagemagick](https://imagemagick.org/script/command-line-processing.php). If you were previously using
+  ```sh
+  badge build passed :green .gif
+  ```
+  this could be replaced by
+  ```sh
+  badge build passed :green | magick svg:- gif:-
+  ```
+
+### Security
+
+- Removed dependency on doT library which has known vulnerabilities.
+
+## 2.2.1 - 2019-05-30
 
 ### Fixes
 
