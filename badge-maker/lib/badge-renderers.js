@@ -53,7 +53,8 @@ function renderLogo({
       renderedLogo: '',
     }
   }
-  const y = (badgeHeight - logoWidth) / 2
+  const logoHeight = 14
+  const y = (badgeHeight - logoHeight) / 2
   const x = horizPadding
   return {
     hasLogo: true,
