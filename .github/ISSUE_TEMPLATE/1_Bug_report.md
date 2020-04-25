@@ -8,7 +8,7 @@ Are you experiencing an issue with...
 
 - [ ] [shields.io](https://shields.io/#/)
 - [ ] My own instance
-- [ ] [gh-badges NPM package](https://www.npmjs.com/package/gh-badges)
+- [ ] [badge-maker NPM package](https://www.npmjs.com/package/badge-maker)
 
 :beetle: **Description**
 
