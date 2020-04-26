@@ -59,3 +59,13 @@ t.create('license (no license)')
 t.create('license (package not found)')
   .get('/license/not-a-package.json')
   .expectBadge({ label: 'license', message: 'package not found' })
+
+// maintainer tests
+
+t.create('maintainer (valid)')
+  .get('/maintainer/google-chrome.json')
+  .expectBadge({ label: 'maintainer', message: 'luzifer' })
+
+t.create('maintainer (not found)')
+  .get('/maintainer/not-a-package.json')
+  .expectBadge({ label: 'maintainer', message: 'package not found' })

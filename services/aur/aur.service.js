@@ -19,6 +19,7 @@ const aurSchema = Joi.object({
       NumVotes: nonNegativeInteger,
       Version: Joi.string().required(),
       OutOfDate: nonNegativeInteger.allow(null),
+      Maintainer: Joi.string().required(),
     }).required()
   ),
 }).required()
@@ -168,8 +169,45 @@ class AurVersion extends BaseAurService {
   }
 }
 
+class AurMaintainer extends BaseAurService {
+  static get category() {
+    return 'social'
+  }
+
+  static get route() {
+    return {
+      base: 'aur/maintainer',
+      pattern: ':packageName',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'AUR maintainer',
+        namedParams: { packageName: 'google-chrome' },
+        staticPreview: this.render({ maintainer: 'luzifer' }),
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'maintainer' }
+  }
+
+  static render({ maintainer }) {
+    return { message: maintainer, color: 'blue' }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({ maintainer: json.results.Maintainer })
+  }
+}
+
 module.exports = {
   AurLicense,
   AurVersion,
   AurVotes,
+  AurMaintainer,
 }
