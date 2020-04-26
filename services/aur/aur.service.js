@@ -5,6 +5,8 @@ const { floorCount: floorCountColor } = require('../color-formatters')
 const { addv, metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
+const { formatDate } = require('../text-formatters')
+const { age: ageColor } = require('../color-formatters')
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -20,6 +22,7 @@ const aurSchema = Joi.object({
       Version: Joi.string().required(),
       OutOfDate: nonNegativeInteger.allow(null),
       Maintainer: Joi.string().required(),
+      LastModified: nonNegativeInteger,
     }).required()
   ),
 }).required()
@@ -205,9 +208,49 @@ class AurMaintainer extends BaseAurService {
   }
 }
 
+class AurLastModified extends BaseAurService {
+  static get category() {
+    return 'activity'
+  }
+
+  static get route() {
+    return {
+      base: 'aur/last-modified',
+      pattern: ':packageName',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'AUR last modified',
+        namedParams: { packageName: 'google-chrome' },
+        staticPreview: this.render({ date: new Date().getTime() }),
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'last modified' }
+  }
+
+  static render({ date }) {
+    const color = ageColor(date)
+    const message = formatDate(date)
+    return { color, message }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    const date = 1000 * parseInt(json.results.LastModified)
+    return this.constructor.render({ date })
+  }
+}
+
 module.exports = {
   AurLicense,
   AurVersion,
   AurVotes,
   AurMaintainer,
+  AurLastModified,
 }

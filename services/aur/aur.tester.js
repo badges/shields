@@ -5,6 +5,7 @@ const {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
   isMetric,
 } = require('../test-validators')
+const { isFormattedDate } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'aur',
@@ -69,3 +70,13 @@ t.create('maintainer (valid)')
 t.create('maintainer (not found)')
   .get('/maintainer/not-a-package.json')
   .expectBadge({ label: 'maintainer', message: 'package not found' })
+
+// last-modified tests
+
+t.create('last-modified (valid)')
+  .get('/last-modified/google-chrome.json')
+  .expectBadge({ label: 'last modified', message: isFormattedDate })
+
+t.create('last-modified (not found)')
+  .get('/last-modified/not-a-package.json')
+  .expectBadge({ label: 'last modified', message: 'package not found' })
