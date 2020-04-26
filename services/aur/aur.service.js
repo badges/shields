@@ -21,7 +21,9 @@ const aurSchema = Joi.object({
       NumVotes: nonNegativeInteger,
       Version: Joi.string().required(),
       OutOfDate: nonNegativeInteger.allow(null),
-      Maintainer: Joi.string().required(),
+      Maintainer: Joi.string()
+        .required()
+        .allow(null),
       LastModified: nonNegativeInteger,
     }).required()
   ),
