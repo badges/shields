@@ -69,7 +69,7 @@ module.exports = class Discord extends BaseJsonService {
 
   constructor(context, config) {
     super(context, config)
-    this._runningOnHeroku = config.shieldsProductionHerokuHacks
+    this._shieldsProductionHerokuHacks = config.shieldsProductionHerokuHacks
   }
 
   async fetch({ serverId }) {
@@ -92,7 +92,7 @@ module.exports = class Discord extends BaseJsonService {
   }
 
   async handle({ serverId }) {
-    if (this._runningOnHeroku) {
+    if (this._shieldsProductionHerokuHacks) {
       const { message, color } = await this.fetchOvhProxy({ serverId })
       return { message, color }
     }
