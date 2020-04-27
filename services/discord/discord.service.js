@@ -8,6 +8,11 @@ const discordSchema = Joi.object({
   presence_count: nonNegativeInteger,
 }).required()
 
+const proxySchema = Joi.object({
+  message: Joi.string().required(),
+  color: Joi.string().required(),
+}).required()
+
 const documentation = `
 <p>
   The Discord badge requires the <code>SERVER ID</code> in order access the Discord JSON API.
@@ -62,6 +67,11 @@ module.exports = class Discord extends BaseJsonService {
     }
   }
 
+  constructor(context, config) {
+    super(context, config)
+    this._shieldsProductionHerokuHacks = config.shieldsProductionHerokuHacks
+  }
+
   async fetch({ serverId }) {
     const url = `https://discordapp.com/api/guilds/${serverId}/widget.json`
     return this._requestJson({
@@ -74,7 +84,19 @@ module.exports = class Discord extends BaseJsonService {
     })
   }
 
+  async fetchOvhProxy({ serverId }) {
+    return this._requestJson({
+      url: `https://legacy-img.shields.io/discord/${serverId}.json`,
+      schema: proxySchema,
+    })
+  }
+
   async handle({ serverId }) {
+    if (this._shieldsProductionHerokuHacks) {
+      const { message, color } = await this.fetchOvhProxy({ serverId })
+      return { message, color }
+    }
+
     const data = await this.fetch({ serverId })
     return this.constructor.render({ members: data.presence_count })
   }
