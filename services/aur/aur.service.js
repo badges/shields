@@ -7,6 +7,7 @@ const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 const { formatDate } = require('../text-formatters')
 const { age: ageColor } = require('../color-formatters')
+const { InvalidResponse } = require('..')
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -45,6 +46,8 @@ class BaseAurService extends BaseJsonService {
   }
 
   async fetch({ packageName }) {
+    // Please refer to the Arch wiki page for the full spec and documentation:
+    // https://wiki.archlinux.org/index.php/Aurweb_RPC_interface
     return this._requestJson({
       schema: aurSchema,
       url: 'https://aur.archlinux.org/rpc.php',
@@ -176,7 +179,7 @@ class AurVersion extends BaseAurService {
 
 class AurMaintainer extends BaseAurService {
   static get category() {
-    return 'social'
+    return 'other'
   }
 
   static get route() {
@@ -205,7 +208,9 @@ class AurMaintainer extends BaseAurService {
   }
 
   async handle({ packageName }) {
-    const { results: { Maintainer: maintainer } } = await this.fetch({ packageName })
+    const {
+      results: { Maintainer: maintainer },
+    } = await this.fetch({ packageName })
     if (!maintainer) {
       throw new InvalidResponse({ prettyMessage: 'No maintainer' })
     }
