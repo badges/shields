@@ -159,6 +159,7 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  shieldsProductionHerokuHacks: Joi.boolean(),
 }).required()
 
 const privateConfigSchema = Joi.object({
@@ -401,6 +402,8 @@ class Server {
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,
+          shieldsProductionHerokuHacks:
+            config.public.shieldsProductionHerokuHacks,
         }
       )
     )
