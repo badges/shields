@@ -197,16 +197,19 @@ class AurMaintainer extends BaseAurService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'maintainer' }
+    return { label: 'maintainer', color: 'blue' }
   }
 
   static render({ maintainer }) {
-    return { message: maintainer, color: 'blue' }
+    return { message: maintainer }
   }
 
   async handle({ packageName }) {
-    const json = await this.fetch({ packageName })
-    return this.constructor.render({ maintainer: json.results.Maintainer })
+    const { results: { Maintainer: maintainer } } = await this.fetch({ packageName })
+    if (!maintainer) {
+      throw new InvalidResponse({ prettyMessage: 'No maintainer' })
+    }
+    return this.constructor.render({ maintainer })
   }
 }
 
