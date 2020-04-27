@@ -2,7 +2,6 @@ public:
   metrics:
     prometheus:
       enabled: true
-      endpointEnabled: true
     influx:
       enabled: true
       url: https://metrics.shields.io/telegraf
