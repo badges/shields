@@ -345,7 +345,15 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
             snippet="?logo=appveyor"
           />
           <QueryParam
-            documentation={<span>Insert custom logo image (≥ 14px high)</span>}
+            documentation={
+              <span>
+                Insert custom logo image (≥ 14px high). There is a limit on the
+                total size of request headers we can accept (8192 bytes). From a
+                practical perspective, this means the base64-encoded image text
+                is limited to somewhere slightly under 8192 bytes depending on
+                the rest of the request header.
+              </span>
+            }
             key="logoSvg"
             snippet="?logo=data:image/png;base64,…"
           />
