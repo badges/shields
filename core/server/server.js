@@ -7,7 +7,7 @@ const path = require('path')
 const url = require('url')
 const { URL } = url
 const bytes = require('bytes')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const originalJoi = require('@hapi/joi')
 const makeBadge = require('../../badge-maker/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
@@ -425,7 +425,7 @@ class Server {
 
     log(`Server is starting up: ${this.baseUrl}`)
 
-    const camp = (this.camp = Camp.start({
+    const camp = (this.camp = Camp.create({
       documentRoot: path.resolve(__dirname, '..', '..', 'public'),
       port,
       hostname,
@@ -457,6 +457,8 @@ class Server {
     this.registerErrorHandlers()
     this.registerRedirects()
     this.registerServices()
+
+    camp.listenAsConfigured()
 
     await new Promise(resolve => camp.on('listening', () => resolve()))
   }

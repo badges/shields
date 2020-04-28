@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const portfinder = require('portfinder')
 const config = require('config').util.toObject()
 const got = require('../core/got-test-client')

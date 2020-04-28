@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const nock = require('nock')
 const portfinder = require('portfinder')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const got = require('../got-test-client')
 const coalesceBadge = require('./coalesce-badge')
 const {
