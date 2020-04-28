@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const sinon = require('sinon')
 const portfinder = require('portfinder')
 const queryString = require('query-string')

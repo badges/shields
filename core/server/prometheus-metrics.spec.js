@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const portfinder = require('portfinder')
 const got = require('../got-test-client')
 const Metrics = require('./prometheus-metrics')

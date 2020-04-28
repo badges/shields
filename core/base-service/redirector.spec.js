@@ -1,6 +1,6 @@
 'use strict'
 
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const portfinder = require('portfinder')
 const { expect } = require('chai')
 const got = require('../got-test-client')

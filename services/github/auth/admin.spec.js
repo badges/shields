@@ -2,7 +2,7 @@
 
 const { expect } = require('chai')
 const sinon = require('sinon')
-const Camp = require('camp')
+const Camp = require('@shields_io/camp')
 const portfinder = require('portfinder')
 const serverSecrets = require('../../../lib/server-secrets')
 const got = require('../../../core/got-test-client')
