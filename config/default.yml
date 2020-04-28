@@ -36,4 +36,6 @@ public:
 
   fetchLimit: '10MB'
 
+  shieldsProductionHerokuHacks: false
+
 private: {}
