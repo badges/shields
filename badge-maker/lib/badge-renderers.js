@@ -2,7 +2,7 @@
 
 const anafanafo = require('anafanafo')
 
-const fontFamily = 'font-family="DejaVu Sans,Verdana,Geneva,sans-serif"'
+const fontFamily = 'font-family="Verdana,Geneva,sans-serif"'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 
