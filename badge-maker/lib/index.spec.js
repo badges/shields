@@ -34,6 +34,22 @@ describe('makeBadge function', function() {
     ).to.satisfy(isSvg)
   })
 
+  // This test needs to move up a level.
+  it('should replace undefined svg template with "flat"', function() {
+    const jsonBadgeWithUnknownStyle = makeBadge({
+      label: 'name',
+      message: 'Bob',
+    })
+    const jsonBadgeWithDefaultStyle = makeBadge({
+      label: 'name',
+      message: 'Bob',
+      style: 'flat',
+    })
+    expect(jsonBadgeWithUnknownStyle)
+      .to.equal(jsonBadgeWithDefaultStyle)
+      .and.to.satisfy(isSvg)
+  })
+
   it('should throw a ValidationError with invalid inputs', function() {
     ;[null, undefined, 7, 'foo', 4.25].forEach(x => {
       console.log(x)

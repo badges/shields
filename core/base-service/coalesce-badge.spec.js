@@ -30,6 +30,13 @@ describe('coalesceBadge', function() {
         coalesceBadge({ label: 'purr count' }, { label: 'purrs' }, {})
       ).to.include({ label: 'purr count' })
     })
+
+    // https://github.com/badges/shields/issues/1280
+    it('converts a number to a string', function() {
+      expect(coalesceBadge({}, { label: 1998 }, {})).to.include({
+        label: '1998',
+      })
+    })
   })
 
   describe('Message', function() {
@@ -39,11 +46,12 @@ describe('coalesceBadge', function() {
       })
     })
 
-    it('applies a numeric service message', function() {
+    // https://github.com/badges/shields/issues/1280
+    it('converts a number to a string', function() {
       // While a number of badges use this, in the long run we may want
       // `render()` to always return a string.
       expect(coalesceBadge({}, { message: 10 }, {})).to.include({
-        message: 10,
+        message: '10',
       })
     })
   })

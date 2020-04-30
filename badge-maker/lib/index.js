@@ -63,8 +63,8 @@ function _clean(format) {
     }
   })
 
-  // String coercion and whitespace removal.
-  cleaned.label = `${cleaned.label}`.trim() || ''
+  // Whitespace removal.
+  cleaned.label = `${cleaned.label}`.trim()
   cleaned.message = `${cleaned.message}`.trim()
 
   cleaned.color = normalizeColor(cleaned.color)

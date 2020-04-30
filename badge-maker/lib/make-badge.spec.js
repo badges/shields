@@ -8,12 +8,13 @@ const makeBadge = require('./make-badge')
 describe('The badge generator', function() {
   describe('SVG', function() {
     it('should produce SVG', function() {
-      const svg = makeBadge({
-        label: 'cactus',
-        message: 'grown',
-        style: 'flat',
-      })
-      expect(svg)
+      expect(
+        makeBadge({
+          label: 'cactus',
+          message: 'grown',
+          style: 'flat',
+        })
+      )
         .to.satisfy(isSvg)
         .and.to.include('cactus')
         .and.to.include('grown')
@@ -25,22 +26,6 @@ describe('The badge generator', function() {
   })
 
   describe('Styles', function() {
-    // This test needs to move up a level.
-    it.skip('should replace undefined svg template with "flat"', function() {
-      const jsonBadgeWithUnknownStyle = makeBadge({
-        label: 'name',
-        message: 'Bob',
-      })
-      const jsonBadgeWithDefaultStyle = makeBadge({
-        label: 'name',
-        message: 'Bob',
-        style: 'flat',
-      })
-      expect(jsonBadgeWithUnknownStyle)
-        .to.equal(jsonBadgeWithDefaultStyle)
-        .and.to.satisfy(isSvg)
-    })
-
     it('should fail with unknown svg template', function() {
       expect(() =>
         makeBadge({
@@ -280,19 +265,6 @@ describe('The badge generator', function() {
   })
 
   describe('"for-the-badge" template badge generation', function() {
-    // https://github.com/badges/shields/issues/1280
-    // This needs to be moved up a level.
-    it.skip('numbers should produce a string', function() {
-      const svg = makeBadge({
-        label: 1998,
-        message: 1999,
-        style: 'for-the-badge',
-      })
-      expect(svg)
-        .to.include('1998')
-        .and.to.include('1999')
-    })
-
     it('lowercase/mixedcase string should produce uppercase string', function() {
       const svg = makeBadge({
         label: 'Label',

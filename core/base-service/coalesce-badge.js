@@ -162,8 +162,8 @@ module.exports = function coalesceBadge(
   return {
     // Use `coalesce()` to support empty labels and messages, as in the
     // static badge.
-    label: coalesce(overrideLabel, serviceLabel, defaultLabel, category),
-    message: coalesce(serviceMessage, 'n/a'),
+    label: `${coalesce(overrideLabel, serviceLabel, defaultLabel, category)}`,
+    message: `${coalesce(serviceMessage, 'n/a')}`,
     color: coalesce(
       // In case of an error, disregard user's color override.
       isError ? undefined : overrideColor,
