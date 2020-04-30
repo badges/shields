@@ -28,7 +28,7 @@ function makeBadgeOrJson(badgeData, format = 'svg') {
       value: message,
     })
   } else {
-    return makeBadge({ style: 'flat', ...badgeData })
+    return makeBadge(badgeData)
   }
 }
 

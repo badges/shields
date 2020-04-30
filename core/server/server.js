@@ -308,7 +308,7 @@ class Server {
           label: '410',
           message: `${format} no longer available`,
           color: 'lightgray',
-          format: 'svg',
+          style: 'flat',
         })
       )
     })
@@ -324,7 +324,7 @@ class Server {
             label: '404',
             message: 'raster badges not available',
             color: 'lightgray',
-            format: 'svg',
+            style: 'flat',
           })
         )
       })
@@ -344,6 +344,7 @@ class Server {
             label: '404',
             message: 'badge not found',
             color: 'red',
+            style: 'flat',
           },
           format
         )
