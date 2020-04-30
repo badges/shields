@@ -149,7 +149,10 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       // A request was made not long ago.
       const tooSoon = +reqTime - cached.time < cached.interval
       if (tooSoon || cached.dataChange / cached.reqs <= freqRatioMax) {
-        const badgeOrJson = makeBadgeOrJson(cached.data.badgeData)
+        const badgeOrJson = makeBadgeOrJson(
+          cached.data.badgeData,
+          cached.data.format
+        )
         setCacheHeadersOnResponse(
           ask.res,
           cached.data.badgeData.cacheLengthSeconds
@@ -172,7 +175,10 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       }
       if (requestCache.has(cacheIndex)) {
         const cached = requestCache.get(cacheIndex)
-        const badgeOrJson = makeBadgeOrJson(cached.data.badgeData)
+        const badgeOrJson = makeBadgeOrJson(
+          cached.data.badgeData,
+          cached.data.format
+        )
         setCacheHeadersOnResponse(
           ask.res,
           cached.data.badgeData.cacheLengthSeconds
