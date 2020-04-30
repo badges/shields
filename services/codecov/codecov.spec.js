@@ -5,7 +5,7 @@ const Codecov = require('./codecov.service')
 
 describe('Codecov', function() {
   test(Codecov.prototype.transform, () => {
-    forCases([given({ json: {} }), given({ json: { commit: {} } })]).expect({
+    forCases([given({ data: { message: 'unknown' } })]).expect({
       coverage: 'unknown',
     })
   })
