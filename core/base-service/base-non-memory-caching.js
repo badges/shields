@@ -1,10 +1,10 @@
 'use strict'
 
-const makeBadge = require('../../badge-maker/lib/make-badge')
 const BaseService = require('./base')
 const { MetricHelper } = require('./metric-helper')
 const { setCacheHeaders } = require('./cache-headers')
 const { makeSend } = require('./legacy-result-sender')
+const { makeBadgeOrJson } = require('./make-badge-or-json')
 const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
@@ -57,7 +57,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
       const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
       badgeData.format = format
 
-      const svg = makeBadge(badgeData)
+      const badgeOrJson = makeBadgeOrJson(badgeData, format)
 
       setCacheHeaders({
         cacheHeaderConfig,
@@ -66,7 +66,7 @@ module.exports = class NonMemoryCachingBaseService extends BaseService {
         res: ask.res,
       })
 
-      makeSend(format, ask.res, end)(svg)
+      makeSend(format, ask.res, end)(badgeOrJson)
 
       metricHandle.noteResponseSent()
     })
