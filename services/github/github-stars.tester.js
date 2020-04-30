@@ -20,3 +20,18 @@ t.create('Stars (repo not found)')
     label: 'stars',
     message: 'repo not found',
   })
+
+// https://github.com/badges/shields/issues/4982
+// It doesn't seem important that this work with trailing spaces, though if it
+// did we'd probably want a more global fix.
+t.create('Stars (repo name with trailing spaces)')
+  .only()
+  .get('/badges/shields     .json')
+  .expectBadge({
+    label: 'stars',
+    message: isMetric,
+    link: [
+      'https://github.com/badges/shields%20%20%20%20%20',
+      'https://github.com/badges/shields%20%20%20%20%20/stargazers',
+    ],
+  })
