@@ -1,75 +1,11 @@
 'use strict'
 
-const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
 const isSvg = require('is-svg')
 const makeBadge = require('./make-badge')
-const { normalizeColor } = require('./color')
-
-function testColor(color = '', colorAttr = 'color') {
-  return normalizeColor(color)
-}
 
 describe('The badge generator', function() {
-  describe('color test', function() {
-    test(testColor, () => {
-      // valid hex
-      forCases([
-        given('#4c1'),
-        given('#4C1'),
-        given('4C1'),
-        given('4c1'),
-      ]).expect('#4c1')
-      forCases([
-        given('#abc123'),
-        given('#ABC123'),
-        given('abc123'),
-        given('ABC123'),
-      ]).expect('#abc123')
-      // valid rgb(a)
-      given('rgb(0,128,255)').expect('rgb(0,128,255)')
-      given('rgba(0,128,255,0)').expect('rgba(0,128,255,0)')
-      // valid hsl(a)
-      given('hsl(100, 56%, 10%)').expect('hsl(100, 56%, 10%)')
-      given('hsla(25,20%,0%,0.1)').expect('hsla(25,20%,0%,0.1)')
-      // CSS named color.
-      given('papayawhip').expect('papayawhip')
-      // Shields named color.
-      given('red').expect('red')
-      given('green').expect('green')
-      given('blue').expect('blue')
-      given('yellow').expect('yellow')
-      // Semantic color alias
-      given('success').expect('brightgreen')
-      given('informational').expect('blue')
-
-      forCases(
-        // invalid hex
-        given('#123red'), // contains letter above F
-        given('#red'), // contains letter above F
-        // invalid rgb(a)
-        given('rgb(220,128,255,0.5)'), // has alpha
-        given('rgba(0,0,255)'), // no alpha
-        // invalid hsl(a)
-        given('hsl(360,50%,50%,0.5)'), // has alpha
-        given('hsla(0,50%,101%)'), // no alpha
-        // neither a css named color nor colorscheme
-        given('notacolor'),
-        given('bluish'),
-        given('almostred'),
-        given('brightmaroon'),
-        given('cactus')
-      ).expect(undefined)
-    })
-  })
-
-  describe('color aliases', function() {
-    test(testColor, () => {
-      forCases([given('#4c1', 'color')]).expect('#4c1')
-    })
-  })
-
   describe('SVG', function() {
     it('should produce SVG', function() {
       const svg = makeBadge({
