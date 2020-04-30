@@ -441,7 +441,7 @@ class Server {
     )
 
     const { githubConstellation } = this
-    githubConstellation.initialize(camp)
+    await githubConstellation.initialize(camp)
     if (metricInstance) {
       if (this.config.public.metrics.prometheus.endpointEnabled) {
         metricInstance.registerMetricsEndpoint(camp)
