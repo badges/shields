@@ -25,7 +25,6 @@ t.create('Stars (repo not found)')
 // It doesn't seem important that this work with trailing spaces, though if it
 // did we'd probably want a more global fix.
 t.create('Stars (repo name with trailing spaces)')
-  .only()
   .get('/badges/shields     .json')
   .expectBadge({
     label: 'stars',
