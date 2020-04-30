@@ -7,7 +7,11 @@ const makeBadge = require('../../badge-maker/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 
 function makeExampleSvg({ label, message }) {
-  return makeBadge({ text: ['this is the label', 'this is the result!'] })
+  return makeBadge({
+    label: 'this is the label',
+    message: 'this is the result!',
+    style: 'flat',
+  })
 }
 
 const schema = Joi.object({

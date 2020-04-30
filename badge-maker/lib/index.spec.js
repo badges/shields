@@ -25,6 +25,13 @@ describe('makeBadge function', function() {
         style: 'flat',
       })
     ).to.satisfy(isSvg)
+    expect(
+      makeBadge({
+        label: 'build',
+        message: 'passed',
+        labelColor: undefined,
+      })
+    ).to.satisfy(isSvg)
   })
 
   it('should throw a ValidationError with invalid inputs', function() {

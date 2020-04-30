@@ -7,47 +7,44 @@ const coalesceBadge = require('./coalesce-badge')
 describe('coalesceBadge', function() {
   describe('Label', function() {
     it('uses the default label', function() {
-      expect(coalesceBadge({}, {}, { label: 'heyo' }).text).to.deep.equal([
-        'heyo',
-        'n/a',
-      ])
+      expect(coalesceBadge({}, {}, { label: 'heyo' })).to.include({
+        label: 'heyo',
+      })
     })
 
     // This behavior isn't great and we might want to remove it.
     it('uses the category as a default label', function() {
-      expect(
-        coalesceBadge({}, {}, {}, { category: 'cat' }).text
-      ).to.deep.equal(['cat', 'n/a'])
+      expect(coalesceBadge({}, {}, {}, { category: 'cat' })).to.include({
+        label: 'cat',
+      })
     })
 
     it('preserves an empty label', function() {
-      expect(
-        coalesceBadge({}, { label: '', message: '10k' }, {}).text
-      ).to.deep.equal(['', '10k'])
+      expect(coalesceBadge({}, { label: '', message: '10k' }, {})).to.include({
+        label: '',
+      })
     })
 
     it('overrides the label', function() {
       expect(
-        coalesceBadge({ label: 'purr count' }, { label: 'purrs' }, {}).text
-      ).to.deep.equal(['purr count', 'n/a'])
+        coalesceBadge({ label: 'purr count' }, { label: 'purrs' }, {})
+      ).to.include({ label: 'purr count' })
     })
   })
 
   describe('Message', function() {
     it('applies the service message', function() {
-      expect(coalesceBadge({}, { message: '10k' }, {}).text).to.deep.equal([
-        undefined,
-        '10k',
-      ])
+      expect(coalesceBadge({}, { message: '10k' }, {})).to.include({
+        message: '10k',
+      })
     })
 
     it('applies a numeric service message', function() {
       // While a number of badges use this, in the long run we may want
       // `render()` to always return a string.
-      expect(coalesceBadge({}, { message: 10 }, {}).text).to.deep.equal([
-        undefined,
-        10,
-      ])
+      expect(coalesceBadge({}, { message: 10 }, {})).to.include({
+        message: 10,
+      })
     })
   })
 
@@ -279,20 +276,16 @@ describe('coalesceBadge', function() {
 
   describe('Style', function() {
     it('falls back to flat with invalid style', function() {
-      expect(coalesceBadge({ style: 'pill' }, {}, {}).template).to.equal('flat')
-      expect(coalesceBadge({ style: 7 }, {}, {}).template).to.equal('flat')
-      expect(coalesceBadge({ style: undefined }, {}, {}).template).to.equal(
-        'flat'
-      )
+      expect(coalesceBadge({ style: 'pill' }, {}, {}).style).to.equal('flat')
+      expect(coalesceBadge({ style: 7 }, {}, {}).style).to.equal('flat')
+      expect(coalesceBadge({ style: undefined }, {}, {}).style).to.equal('flat')
     })
 
     it('replaces legacy popout styles', function() {
-      expect(coalesceBadge({ style: 'popout' }, {}, {}).template).to.equal(
-        'flat'
+      expect(coalesceBadge({ style: 'popout' }, {}, {}).style).to.equal('flat')
+      expect(coalesceBadge({ style: 'popout-square' }, {}, {}).style).to.equal(
+        'flat-square'
       )
-      expect(
-        coalesceBadge({ style: 'popout-square' }, {}, {}).template
-      ).to.equal('flat-square')
     })
   })
 

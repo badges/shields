@@ -9,10 +9,10 @@ const { URL } = url
 const bytes = require('bytes')
 const Camp = require('@shields_io/camp')
 const originalJoi = require('@hapi/joi')
-const makeBadge = require('../../badge-maker/lib/make-badge')
 const GithubConstellation = require('../../services/github/github-constellation')
 const suggest = require('../../services/suggest')
 const { loadServiceClasses } = require('../base-service/loader')
+const { makeBadgeOrJson } = require('../base-service/make-badge-or-json')
 const { makeSend } = require('../base-service/legacy-result-sender')
 const {
   handleRequest,
@@ -304,8 +304,9 @@ class Server {
         request.res,
         end
       )(
-        makeBadge({
-          text: ['410', `${format} no longer available`],
+        makeBadgeOrJson({
+          label: '410',
+          message: `${format} no longer available`,
           color: 'lightgray',
           format: 'svg',
         })
@@ -319,8 +320,9 @@ class Server {
           request.res,
           end
         )(
-          makeBadge({
-            text: ['404', 'raster badges not available'],
+          makeBadgeOrJson({
+            label: '404',
+            message: 'raster badges not available',
             color: 'lightgray',
             format: 'svg',
           })
@@ -337,11 +339,14 @@ class Server {
         request.res,
         end
       )(
-        makeBadge({
-          text: ['404', 'badge not found'],
-          color: 'red',
-          format,
-        })
+        makeBadgeOrJson(
+          {
+            label: '404',
+            message: 'badge not found',
+            color: 'red',
+          },
+          format
+        )
       )
     })
   }

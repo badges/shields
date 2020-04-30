@@ -4,6 +4,7 @@
  */
 
 const _makeBadge = require('./make-badge')
+const { normalizeColor } = require('./color')
 
 class ValidationError extends Error {}
 
@@ -16,9 +17,18 @@ function _validate(format) {
     throw new ValidationError('Field `message` is required')
   }
 
-  const stringFields = ['labelColor', 'color', 'message', 'label']
-  stringFields.forEach(function(field) {
+  const requiredStringFields = ['message', 'label']
+  requiredStringFields.forEach(field => {
     if (field in format && typeof format[field] !== 'string') {
+      throw new ValidationError(
+        `Field \`${field}\` is required and must be of type string`
+      )
+    }
+  })
+
+  const optionalStringFields = ['labelColor', 'color']
+  optionalStringFields.forEach(field => {
+    if (format[field] != null && typeof format[field] !== 'string') {
       throw new ValidationError(`Field \`${field}\` must be of type string`)
     }
   })
@@ -42,23 +52,26 @@ function _clean(format) {
 
   const cleaned = {}
   Object.keys(format).forEach(key => {
-    if (format[key] != null && expectedKeys.includes(key)) {
-      cleaned[key] = format[key]
-    } else {
-      throw new ValidationError(
-        `Unexpected field '${key}'. Allowed values are (${expectedKeys.toString()})`
-      )
+    if (format[key] != null) {
+      if (expectedKeys.includes(key)) {
+        cleaned[key] = format[key]
+      } else {
+        throw new ValidationError(
+          `Unexpected field '${key}'. Allowed values are (${expectedKeys.toString()})`
+        )
+      }
     }
   })
 
-  // convert "public" format to "internal" format
-  cleaned.text = [cleaned.label || '', cleaned.message]
-  delete cleaned.label
-  delete cleaned.message
-  if ('style' in cleaned) {
-    cleaned.template = cleaned.style
-    delete cleaned.style
-  }
+  // String coercion and whitespace removal.
+  cleaned.label = `${cleaned.label}`.trim() || ''
+  cleaned.message = `${cleaned.message}`.trim()
+
+  cleaned.color = normalizeColor(cleaned.color)
+  cleaned.labelColor = normalizeColor(cleaned.labelColor)
+
+  cleaned.style = cleaned.style || 'flat'
+  cleaned.links = ['', '']
 
   return cleaned
 }
@@ -84,4 +97,5 @@ function makeBadge(format) {
 module.exports = {
   makeBadge,
   ValidationError,
+  _clean,
 }

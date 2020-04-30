@@ -2,7 +2,7 @@
 
 const request = require('request')
 const queryString = require('query-string')
-const makeBadge = require('../../badge-maker/lib/make-badge')
+const { makeBadgeOrJson } = require('../base-service/make-badge-or-json')
 const { setCacheHeaders } = require('./cache-headers')
 const {
   Inaccessible,
@@ -149,12 +149,12 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       // A request was made not long ago.
       const tooSoon = +reqTime - cached.time < cached.interval
       if (tooSoon || cached.dataChange / cached.reqs <= freqRatioMax) {
-        const svg = makeBadge(cached.data.badgeData)
+        const badgeOrJson = makeBadgeOrJson(cached.data.badgeData)
         setCacheHeadersOnResponse(
           ask.res,
           cached.data.badgeData.cacheLengthSeconds
         )
-        makeSend(cached.data.format, ask.res, end)(svg)
+        makeSend(cached.data.format, ask.res, end)(badgeOrJson)
         cachedVersionSent = true
         // We do not wish to call the vendor servers.
         if (tooSoon) {
@@ -172,12 +172,12 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       }
       if (requestCache.has(cacheIndex)) {
         const cached = requestCache.get(cacheIndex)
-        const svg = makeBadge(cached.data.badgeData)
+        const badgeOrJson = makeBadgeOrJson(cached.data.badgeData)
         setCacheHeadersOnResponse(
           ask.res,
           cached.data.badgeData.cacheLengthSeconds
         )
-        makeSend(cached.data.format, ask.res, end)(svg)
+        makeSend(cached.data.format, ask.res, end)(badgeOrJson)
         return
       }
       ask.res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
@@ -186,10 +186,10 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         { label: 'vendor', message: 'unresponsive' },
         {}
       )
-      const svg = makeBadge(badgeData)
-      const extension = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
+      const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
+      const badgeOrJson = makeBadgeOrJson(badgeData, format)
       setCacheHeadersOnResponse(ask.res)
-      makeSend(extension, ask.res, end)(svg)
+      makeSend(format, ask.res, end)(badgeOrJson)
     }, 25000)
 
     // Only call vendor servers when last request is older than…
@@ -270,9 +270,9 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         }
         requestCache.set(cacheIndex, updatedCache)
         if (!cachedVersionSent) {
-          const svg = makeBadge(badgeData)
+          const badgeOrJson = makeBadgeOrJson(badgeData, format)
           setCacheHeadersOnResponse(ask.res, badgeData.cacheLengthSeconds)
-          makeSend(format, ask.res, end)(svg)
+          makeSend(format, ask.res, end)(badgeOrJson)
         }
       },
       cachingRequest
