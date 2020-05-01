@@ -16,12 +16,14 @@ function createFilter({ packageName, includePrereleases }) {
   return `Id eq '${packageName}' and ${releaseTypeFilter}`
 }
 
+const versionSchema = Joi.alternatives(Joi.string(), Joi.number())
+
 const jsonSchema = Joi.object({
   d: Joi.object({
     results: Joi.array()
       .items(
         Joi.object({
-          Version: Joi.string(),
+          Version: versionSchema,
           NormalizedVersion: Joi.string(),
           DownloadCount: nonNegativeInteger,
         })
@@ -35,7 +37,7 @@ const xmlSchema = Joi.object({
   feed: Joi.object({
     entry: Joi.object({
       'm:properties': Joi.object({
-        'd:Version': Joi.alternatives(Joi.string(), Joi.number()),
+        'd:Version': versionSchema,
         'd:NormalizedVersion': Joi.string(),
         'd:DownloadCount': nonNegativeInteger,
         'd:Tags': Joi.string(),
@@ -172,7 +174,7 @@ function createServiceFamily({
         packageName,
         includePrereleases: queryParams.include_prereleases !== undefined,
       })
-      const version = packageData.NormalizedVersion || packageData.Version
+      const version = packageData.NormalizedVersion || `${packageData.Version}`
       return this.constructor.render({ version })
     }
   }
