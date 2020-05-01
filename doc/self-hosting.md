@@ -2,7 +2,7 @@
 
 ## Installation
 
-You will need Node 8 or later, which you can install using a
+You will need Node 10 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
