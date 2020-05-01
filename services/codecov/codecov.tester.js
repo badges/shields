@@ -70,6 +70,40 @@ t.create('handles unauthorized private repository')
     message: 'unknown',
   })
 
+t.create('handles unauthorized error (with api token)')
+  .get('/github/codecov/private-example-python.json?token=a1b2c3d4e5f6g7h8')
+  .intercept(nock =>
+    nock('https://codecov.io/api', {
+      reqheaders: {
+        authorization: 'token a1b2c3d4e5f6g7h8',
+      },
+    })
+      .get('/github/codecov/private-example-python')
+      .reply(401)
+  )
+  .expectBadge({
+    label: 'coverage',
+    message: 'not authorized to access repository',
+  })
+
+t.create('handles unknown repository (with api token)')
+  .get(
+    '/github/codecov2/fake-not-even-a-little-bit-real-python.json?token=a1b2c3d4e5f6g7h8'
+  )
+  .intercept(nock =>
+    nock('https://codecov.io/api', {
+      reqheaders: {
+        authorization: 'token a1b2c3d4e5f6g7h8',
+      },
+    })
+      .get('/github/codecov2/fake-not-even-a-little-bit-real-python')
+      .reply(404)
+  )
+  .expectBadge({
+    label: 'coverage',
+    message: 'repository not found',
+  })
+
 t.create('gets coverage for private repository')
   .get('/gh/codecov/private-example-python.json?token=a1b2c3d4e5')
   .intercept(nock =>
@@ -84,4 +118,26 @@ t.create('gets coverage for private repository')
   .expectBadge({
     label: 'coverage',
     message: '100%',
+  })
+
+t.create('gets coverage for private repository (with api token)')
+  .get('/github/codecov/private-example-python.json?token=a1b2c3d4e5f6g7h8')
+  .intercept(nock =>
+    nock('https://codecov.io/api', {
+      reqheaders: {
+        authorization: 'token a1b2c3d4e5f6g7h8',
+      },
+    })
+      .get('/github/codecov/private-example-python')
+      .reply(200, {
+        commit: {
+          totals: {
+            c: 94.75,
+          },
+        },
+      })
+  )
+  .expectBadge({
+    label: 'coverage',
+    message: '95%',
   })

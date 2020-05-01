@@ -3,9 +3,24 @@
 const Joi = require('@hapi/joi')
 const { coveragePercentage } = require('../color-formatters')
 const { BaseSvgScrapingService } = require('..')
+const { parseJson } = require('../../core/base-service/json')
+
+// https://docs.codecov.io/reference#totals
+// A new repository that's been added but never had any coverage reports
+// uploaded will not have a `commit` object in the response and sometimes
+// the `totals` object can also be missing for the latest commit.
+// Accordingly the schema is a bit relaxed to support those scenarios
+// and then they are handled in the transform and render functions.
+const legacySchema = Joi.object({
+  commit: Joi.object({
+    totals: Joi.object({
+      c: Joi.number().required(),
+    }),
+  }),
+}).required()
 
 const queryParamSchema = Joi.object({
-  token: Joi.string().regex(/^\w{10}$/),
+  token: Joi.string(),
   // https://docs.codecov.io/docs/flags
   // Flags must be lowercase, alphanumeric, and not exceed 45 characters
   flag: Joi.string().regex(/^[a-z0-9_]{1,45}$/),
@@ -19,13 +34,17 @@ const schema = Joi.object({
 
 const svgValueMatcher = />(\d{1,3}%|unknown)<\/text><\/g>/
 
+const badgeTokenPattern = /^\w{10}$/
+
 const documentation = `
   <p>
     You may specify a Codecov token to get coverage for a private repository.
   </p>
   <p>
-    You can find the token for your badge in this url:
-    <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>
+    You can find the token for your badge in this url: <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>.
+  </p>
+  <p>
+    You can also use Codecov's API token (doesn't support <code>flag</code>). See the <a href="https://docs.codecov.io/reference#authorization">docs</a> for guidance to create API token.
   </p>
 `
 
@@ -99,6 +118,45 @@ module.exports = class Codecov extends BaseSvgScrapingService {
     }
   }
 
+  // Here for backward-compatibility purpose.
+  async legacyFetch({ vcsName, user, repo, branch, token }) {
+    // Codecov Docs: https://docs.codecov.io/reference#section-get-a-single-repository
+    const url = `https://codecov.io/api/${vcsName}/${user}/${repo}${
+      branch ? `/branches/${branch}` : ''
+    }`
+    const { buffer } = await this._request({
+      url,
+      options: {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `token ${token}`,
+        },
+      },
+      errorMessages: {
+        401: 'not authorized to access repository',
+        404: 'repository not found',
+      },
+    })
+    const json = parseJson(buffer)
+    return this.constructor._validate(json, legacySchema)
+  }
+
+  // Here for backward-compatibility purpose.
+  legacyTransform({ json }) {
+    if (!json.commit || !json.commit.totals) {
+      return { coverage: 'unknown' }
+    }
+
+    return { coverage: +json.commit.totals.c }
+  }
+
+  // Doesn't support `flag` feature. Here for backward-compatibility purpose.
+  async legacyHandle({ vcsName, user, repo, branch }, { token }) {
+    const json = await this.legacyFetch({ vcsName, user, repo, branch, token })
+    const { coverage } = this.legacyTransform({ json })
+    return this.constructor.render({ coverage })
+  }
+
   async fetch({ vcsName, user, repo, branch, token, flag }) {
     const url = `https://codecov.io/${vcsName}/${user}/${repo}${
       branch ? `/branches/${branch}` : ''
@@ -110,6 +168,7 @@ module.exports = class Codecov extends BaseSvgScrapingService {
       options: {
         qs: { token, flag },
       },
+      errorMessages: token ? { 400: 'invalid token pattern' } : {},
     })
   }
 
@@ -124,6 +183,10 @@ module.exports = class Codecov extends BaseSvgScrapingService {
   }
 
   async handle({ vcsName, user, repo, branch }, { token, flag }) {
+    if (!flag && token && !badgeTokenPattern.test(token)) {
+      return this.legacyHandle({ vcsName, user, repo, branch }, { token })
+    }
+
     const data = await this.fetch({ vcsName, user, repo, branch, token, flag })
     const { coverage } = this.transform({ data })
     return this.constructor.render({ coverage })
