@@ -109,6 +109,7 @@ package_steps: &package_steps
           export NVM_DIR="/opt/circleci/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm install v12
+          nvm install v14
           nvm use v12
           npm install -g npm
           npm ci
@@ -117,14 +118,6 @@ package_steps: &package_steps
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
-
-    - run:
-        <<: *run_package_tests
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v8/results.xml
-          NODE_VERSION: v8
-        name: Run package tests on Node 8
 
     - run:
         <<: *run_package_tests
@@ -142,13 +135,21 @@ package_steps: &package_steps
           NODE_VERSION: v12
         name: Run package tests on Node 12
 
+    - run:
+        <<: *run_package_tests
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/badge-maker/v14/results.xml
+          NODE_VERSION: v14
+        name: Run package tests on Node 14
+
     - store_test_results:
         path: junit
 
 jobs:
   npm-install:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
 
@@ -160,33 +161,33 @@ jobs:
 
   main:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
 
     <<: *main_steps
 
-  main@node-latest:
+  main@node-12:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12
 
     <<: *main_steps
 
   integration:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
       - image: redis
 
     <<: *integration_steps
 
-  integration@node-latest:
+  integration@node-12:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12
       - image: redis
 
     <<: *integration_steps
 
   danger:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
 
@@ -206,7 +207,7 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
 
@@ -247,13 +248,13 @@ jobs:
 
   services:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
 
     <<: *services_steps
 
-  services@node-latest:
+  services@node-12:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12
 
     <<: *services_steps
 
@@ -308,11 +309,11 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - main@node-latest:
+      - main@node-12:
           filters:
             branches:
               ignore: gh-pages
-      - integration@node-latest:
+      - integration@node-12:
           filters:
             branches:
               ignore: gh-pages
@@ -330,7 +331,7 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - services@node-latest:
+      - services@node-12:
           filters:
             branches:
               ignore:
