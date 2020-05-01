@@ -103,13 +103,13 @@ module.exports = class Codecov extends BaseSvgScrapingService {
     const url = `https://codecov.io/${vcsName}/${user}/${repo}${
       branch ? `/branches/${branch}` : ''
     }/graph/badge.svg`
-    const queryParams = [flag && `flag=${flag}`, token && `token=${token}`]
-      .filter(Boolean)
-      .join('&')
     return this._requestSvg({
       schema,
       valueMatcher: svgValueMatcher,
-      url: `${url}?${queryParams}`,
+      url,
+      options: {
+        qs: { token, flag },
+      },
     })
   }
 
