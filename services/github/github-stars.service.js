@@ -51,12 +51,13 @@ module.exports = class GithubStars extends GithubAuthV3Service {
   }
 
   static render({ stars, user, repo }) {
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
     return {
       message: metric(stars),
       color: 'blue',
       link: [
-        `https://github.com/${user}/${repo}`,
-        `https://github.com/${user}/${repo}/stargazers`,
+        `https://github.com/${slug}`,
+        `https://github.com/${slug}/stargazers`,
       ],
     }
   }
