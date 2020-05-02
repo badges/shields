@@ -38,13 +38,10 @@ const badgeTokenPattern = /^\w{10}$/
 
 const documentation = `
   <p>
-    You may specify a Codecov token to get coverage for a private repository.
+    You may specify a Codecov badge token to get coverage for a private repository.
   </p>
   <p>
-    You can find the token for your badge in this url: <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>.
-  </p>
-  <p>
-    You can also use Codecov's API token (doesn't support <code>flag</code>). See the <a href="https://docs.codecov.io/reference#authorization">docs</a> for guidance to create API token.
+  You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>.
   </p>
 `
 
@@ -72,7 +69,7 @@ module.exports = class Codecov extends BaseSvgScrapingService {
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
-          repo: 'example-python',
+          repo: 'example-node',
         },
         queryParams: {
           token: 'a1b2c3d4e5',
@@ -88,7 +85,7 @@ module.exports = class Codecov extends BaseSvgScrapingService {
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
-          repo: 'example-python',
+          repo: 'example-node',
           branch: 'master',
         },
         queryParams: {
