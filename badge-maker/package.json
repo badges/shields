@@ -25,7 +25,7 @@
     "badge": "lib/badge-cli.js"
   },
   "engines": {
-    "node": ">= 8",
+    "node": ">= 10",
     "npm": ">= 5"
   },
   "collective": {
