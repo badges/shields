@@ -72,7 +72,7 @@ function _clean(format) {
  * @param {string} format.labelColor (Optional) Label color
  * @param {string} format.color (Optional) Message color
  * @param {string} format.style (Optional) Visual style e.g: 'flat'
- * @returns {string} Badge in SVG or JSON format
+ * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */
 function makeBadge(format) {
