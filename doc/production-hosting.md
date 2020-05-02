@@ -36,38 +36,7 @@
 
 There are [too many bottlenecks][issue 2577]!
 
-## Badge servers
-
-There are three public badge servers on OVH VPS’s.
-
-| Cname                       | Hostname             | Type | IP             | Location           |
-| --------------------------- | -------------------- | ---- | -------------- | ------------------ |
-| [s0.servers.shields.io][s0] | vps71670.vps.ovh.ca  | VPS  | 192.99.59.72   | Quebec, Canada     |
-| [s1.servers.shields.io][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
-| [s2.servers.shields.io][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
-
-- These are single-core virtual hosts with 2 GB RAM [VPS SSD 1][].
-- The Node version (v9.4.0 at time of writing) and dependency versions on the
-  servers can be inspected in Sentry, but only when an error occurs.
-- The servers use self-signed SSL certificates. ([#1460][issue 1460])
-- After accepting the certificate, you can debug an individual server using
-  the links above.
-- The scripts that start the server live in the [ServerScript][] repo. However
-  updates must be pulled manually. They are not updated as part of the deploy process.
-- The server runs SSH.
-- Deploys are made using a git post-receive hook.
-- The server uses systemd to automatically restart the server when it crashes.
-- Provisioning additional servers is a manual process which is yet to been
-  documented.
-- The public servers _do not_ use docker. The `Dockerfile` is included for
-  self-hosting (including on a Docker-capable PaaS).
-
-[s0]: https://s0.servers.shields.io/index.html
-[s1]: https://s1.servers.shields.io/index.html
-[s2]: https://s2.servers.shields.io/index.html
-[vps ssd 1]: https://www.ovh.com/world/vps/vps-ssd.xml
-[issue 1460]: https://github.com/badges/shields/issues/1460
-[serverscript]: https://github.com/badges/ServerScript
+[issue 2577]: https://github.com/badges/shields/issues/2577
 
 ## Attached state
 
@@ -147,64 +116,25 @@ hosted on [Zeit Now][]. It's managed in the
 
 ## Deployment
 
-To set things up for deployment:
+The deployment is done in two stages: the badge server (heroku) and the front-end (gh-pages).
 
-1.  Get your SSH key added to the server.
-2.  Clone a fresh copy of the repository, dedicated for deployment.
-    (Not required, but recommended; and lets you use `npm ci` below.)
-3.  Add remotes:
+### Heroku
+
+After merging a commit to master, heroku should create a staging deploy. Check this has deployed correctly in the `shields-staging` pipeline and review http://shields-staging.herokuapp.com/
+
+If we're happy with it, "promote to production". This will deploy what's on staging to the `shields-production-eu` and `shields-production-us` pieplines.
+
+### Frontend
+
+To deploy the front-end to GH pages, use a clean clone of the shields repo.
 
 ```sh
-git remote add s0 root@s0.servers.shields.io:/home/m/shields.git
-git remote add s1 root@s1.servers.shields.io:/home/m/shields.git
-git remote add s2 root@s2.servers.shields.io:/home/m/shields.git
+$ git pull  # update the working copy
+$ npm install  # install dependencies (devDependencies are needed to build the frontend)
+$ make deploy-gh-pages  # build the frontend and push it to the gh-pages branch
 ```
 
-`origin` should point to GitHub as usual.
-
-4.  Since the deploy uses `git worktree`, make sure you have git 2.5 or later.
-
-To deploy:
-
-1.  Use `git fetch` to obtain a current copy of
-    `local-shields-io-production.yml` from the server (or obtain the current
-    version of that file some other way). Save it in `config/`.
-2.  Check out the commit you want to deploy.
-3.  Run `npm ci`. **This is super important for the frontend build!**
-4.  Run `make deploy-s0` to make a canary deploy.
-5.  Check the canary deploy:
-    - [Visit the server][s0]. Don't forget that most of the preview badges
-      are static!
-    - Look for errors in [Sentry][].
-    - Keep an eye on the [status page][status].
-6.  After a little while (usually 10–60 minutes), finish the deploy:
-    `make push-s1 push-s2 deploy-gh-pages`.
-
-To roll back, check out the commit you want to roll back to and repeat those
-steps.
-
-To see which commit is deployed to a server run `git ls-remote` and then
-`git log` on the `HEAD` ref. There will be two deploy commits preceded by the
-commit which was deployed.
-
-Be careful not to push the deploy commits to GitHub.
-
-`make deploy-s0` does the following:
-
-1.  Creates a working tree in `/tmp`.
-2.  In that tree, runs `features` and `examples` to generate data files
-    needed for the frontend.
-3.  Builds and checks in the built frontend.
-4.  Checks in `local-shields-io-production.yml`.
-5.  Pushes to s0, which updates dependencies and then restarts itself.
-
-`make push-s1 push-s2 deploy-gh-pages` does the following:
-
-1.  Pushes the same working tree to s1 and s2.
-2.  Creates a new working tree for the frontend.
-3.  Adds a commit cleaning out the index.
-4.  Adds another commit with the build frontend.
-5.  Pushes to `gh-pages`.
+No secrets are required to build or deploy the frontend.
 
 ## DNS
 
@@ -214,7 +144,7 @@ DNS is registered with [DNSimple][].
 
 ## Logs
 
-Logs are available on the individual servers via SSH.
+Logs can be retrieved [from heroku](https://devcenter.heroku.com/articles/logging#log-retrieval).
 
 ## Error reporting
 
@@ -247,12 +177,3 @@ Request performance is monitored in two places:
 [monitor]: https://shields.redsparr0w.com/1568/
 [notifications]: http://shields.redsparr0w.com/discord_notification
 [monitor discord]: https://discordapp.com/channels/308323056592486420/470700909182320646
-
-## Known limitations
-
-1.  The only way to inspect the commit on the server is with `git ls-remote`.
-2.  The production deploy installs `devDependencies`. It does not honor
-    `package-lock.json`. ([#1988][issue 1988])
-
-[issue 2577]: https://github.com/badges/shields/issues/2577
-[issue 1988]: https://github.com/badges/shields/issues/1988
