@@ -29,7 +29,7 @@ async function getTitle(owner, repo, pullRequest) {
         'User-Agent': 'badges/shields',
         Authorization: `token ${process.env.GITHUB_TOKEN}`,
       },
-      json: true,
+      responseType: 'json',
     }
   )
   return title
