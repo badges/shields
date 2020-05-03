@@ -45,13 +45,13 @@ module.exports = class PackagistLicense extends BasePackagistService {
   static get examples() {
     return [
       {
-        title: 'Packagist',
+        title: 'Packagist License',
         namedParams: { user: 'doctrine', repo: 'orm' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
         keywords,
       },
       {
-        title: 'Packagist (custom server)',
+        title: 'Packagist License (custom server)',
         namedParams: { user: 'doctrine', repo: 'orm' },
         queryParams: { server: 'https://packagist.org' },
         staticPreview: renderLicenseBadge({ license: 'MIT' }),
