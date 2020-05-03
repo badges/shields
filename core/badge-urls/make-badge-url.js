@@ -64,12 +64,14 @@ function staticBadgeUrl({
   style,
   namedLogo,
   format = '',
+  links = [],
 }) {
   const path = [label, message, color].map(encodeField).join('-')
   const outQueryString = queryString.stringify({
     labelColor,
     style,
     logo: namedLogo,
+    link: links,
   })
   const outExt = format.length ? `.${format}` : ''
   const suffix = outQueryString ? `?${outQueryString}` : ''
