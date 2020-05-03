@@ -56,7 +56,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
   static get examples() {
     return [
       {
-        title: 'Packagist',
+        title: 'Packagist Downloads',
         namedParams: {
           interval: 'dm',
           user: 'doctrine',
@@ -70,7 +70,7 @@ module.exports = class PackagistDownloads extends BasePackagistService {
         documentation: cacheDocumentationFragment,
       },
       {
-        title: 'Packagist (custom server)',
+        title: 'Packagist Downloads (custom server)',
         namedParams: {
           interval: 'dm',
           user: 'doctrine',
