@@ -119,8 +119,7 @@
   "lint-staged": {
     "**/*.js": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "**/*.@(md|json|yml)": [
       "prettier --write",
