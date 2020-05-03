@@ -43,6 +43,7 @@ export function staticBadgeUrl({
   style,
   namedLogo,
   format,
+  links,
 }: {
   baseUrl?: string
   label: string
@@ -52,6 +53,7 @@ export function staticBadgeUrl({
   style?: string
   namedLogo?: string
   format?: string
+  links?: string[]
 }): string
 
 export function queryStringStaticBadgeUrl({
