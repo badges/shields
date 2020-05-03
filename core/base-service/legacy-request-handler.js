@@ -2,7 +2,7 @@
 
 const request = require('request')
 const queryString = require('query-string')
-const makeBadge = require('../../gh-badges/lib/make-badge')
+const makeBadge = require('../../badge-maker/lib/make-badge')
 const { setCacheHeaders } = require('./cache-headers')
 const {
   Inaccessible,

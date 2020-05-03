@@ -392,7 +392,7 @@ describe('BaseService', function() {
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
         text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
         color: 'lightgrey',
-        template: undefined,
+        template: 'flat',
         namedLogo: undefined,
         logo: undefined,
         logoWidth: undefined,

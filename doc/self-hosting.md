@@ -2,7 +2,7 @@
 
 ## Installation
 
-You will need Node 8 or later, which you can install using a
+You will need Node 10 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
@@ -78,7 +78,7 @@ $ docker run --rm -p 8080:80 --name shields shields
 # or if you have shields.env file, run the following instead
 $ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
 
-> gh-badges@1.1.2 start /usr/src/app
+> badge-maker@3.0.0 start /usr/src/app
 > node server.js
 
 http://[::1]/

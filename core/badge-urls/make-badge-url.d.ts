@@ -38,18 +38,22 @@ export function staticBadgeUrl({
   baseUrl,
   label,
   message,
+  labelColor,
   color,
   style,
   namedLogo,
   format,
+  links,
 }: {
   baseUrl?: string
   label: string
   message: string
+  labelColor?: string
   color?: string
   style?: string
   namedLogo?: string
   format?: string
+  links?: string[]
 }): string
 
 export function queryStringStaticBadgeUrl({

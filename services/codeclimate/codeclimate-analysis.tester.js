@@ -4,6 +4,9 @@ const Joi = require('@hapi/joi')
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
+// Examples for this service can be found through the explore page:
+// https://codeclimate.com/explore
+
 t.create('issues count')
   .get('/issues/angular/angular.json')
   .expectBadge({

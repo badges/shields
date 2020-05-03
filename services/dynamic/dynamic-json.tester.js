@@ -160,6 +160,21 @@ t.create('query with parse error')
     color: 'red',
   })
 
+// Example from https://stackoverflow.com/q/11670384/893113
+const badQuery =
+  "$[?(en|**|(@.object.property.one=='other') && (@.object.property.two=='something(abc/def)'))]"
+t.create('query with invalid token')
+  .get(
+    `.json?url=https://github.com/badges/shields/raw/master/package.json&query=${encodeURIComponent(
+      badQuery
+    )}`
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'unparseable jsonpath query',
+    color: 'red',
+  })
+
 t.create('JSON contains an array')
   .get('.json?url=https://example.test/json&query=$[0]')
   .intercept(nock =>
