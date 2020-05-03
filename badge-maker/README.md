@@ -1,12 +1,12 @@
-# gh-badges
+# badge-maker
 
-[![npm version](https://img.shields.io/npm/v/gh-badges.svg)](https://npmjs.org/package/gh-badges)
-[![npm license](https://img.shields.io/npm/l/gh-badges.svg)](https://npmjs.org/package/gh-badges)
+[![npm version](https://img.shields.io/npm/v/badge-maker.svg)](https://npmjs.org/package/badge-maker)
+[![npm license](https://img.shields.io/npm/l/badge-maker.svg)](https://npmjs.org/package/badge-maker)
 
 ## Installation
 
 ```sh
-npm install gh-badges
+npm install badge-maker
 ```
 
 ## Usage
@@ -14,29 +14,34 @@ npm install gh-badges
 ### On the console
 
 ```sh
-npm install -g gh-badges
-badge build passed :green .png > mybadge.png
+npm install -g badge-maker
+badge build passed :green > mybadge.svg
 ```
 
 ### As a library
 
 ```js
-const { BadgeFactory } = require('gh-badges')
-
-const bf = new BadgeFactory()
+const { makeBadge, ValidationError } = require('badge-maker')
 
 const format = {
-  text: ['build', 'passed'],
+  label: 'build',
+  message: 'passed',
   color: 'green',
-  template: 'flat',
 }
 
-const svg = bf.create(format)
+const svg = makeBadge(format)
+console.log(svg) // <svg...
+
+try {
+  makeBadge({})
+} catch (e) {
+  console.log(e) // ValidationError: Field `message` is required
+}
 ```
 
 ### Node version support
 
-The latest version of gh-badges supports all currently maintained Node
+The latest version of badge-maker supports all currently maintained Node
 versions. See the [Node Release Schedule][].
 
 [node release schedule]: https://github.com/nodejs/Release#release-schedule
@@ -47,27 +52,16 @@ The format is the following:
 
 ```js
 {
-  text: [ 'build', 'passed' ],  // Textual information shown, in order
+  label: 'build',  // (Optional) Badge label
+  message: 'passed',  // (Required) Badge message
+  labelColor: '#555',  // (Optional) Label color
+  color: '#4c1',  // (Optional) Message color
 
-  format: 'svg',  // Also supports json
-
-  color: '#4c1',
-  labelColor: '#555',
-
-  // See templates/ for a list of available templates.
+  // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
-  template: 'flat',
-
-  // Deprecated attributes:
-  colorscheme: 'green', // Now an alias for `color`.
-  colorB: '#4c1', // Now an alias for `color`.
-  colorA: '#555', // Now an alias for `labelColor`.
+  style: 'flat',
 }
 ```
-
-### See also
-
-- [templates/](./templates) for the `template` option
 
 ## Colors
 
@@ -126,3 +120,12 @@ There are three ways to specify `color` and `labelColor`:
 [lightslategray]: https://img.shields.io/badge/lightslategray-lightslategray.svg
 [css color]: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
 [css/svg color]: http://www.w3.org/TR/SVG/types.html#DataTypeColor
+
+## Raster Formats
+
+Conversion to raster formats is no longer directly supported. In javascript
+code, SVG badges can be converted to raster formats using a library like
+[gm](https://www.npmjs.com/package/gm). On the console, the output of `badge`
+can be piped to a utility like
+[imagemagick](https://imagemagick.org/script/command-line-processing.php)
+e.g: `badge build passed :green | magick svg:- gif:-`.

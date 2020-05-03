@@ -1,6 +1,6 @@
 'use strict'
 
-const makeBadge = require('../../gh-badges/lib/make-badge')
+const makeBadge = require('../../badge-maker/lib/make-badge')
 const BaseService = require('./base')
 const {
   serverHasBeenUpSinceResourceCached,

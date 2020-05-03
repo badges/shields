@@ -67,7 +67,8 @@ module.exports = superclass =>
         const { message } = e
         if (
           message.startsWith('Lexical error') ||
-          message.startsWith('Parse error')
+          message.startsWith('Parse error') ||
+          message.includes('Unexpected token')
         ) {
           throw new InvalidParameter({
             prettyMessage: 'unparseable jsonpath query',

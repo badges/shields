@@ -2,6 +2,12 @@ public:
   metrics:
     prometheus:
       enabled: true
+    influx:
+      enabled: true
+      url: https://metrics.shields.io/telegraf
+      instanceIdFrom: env-var
+      instanceIdEnvVarName: HEROKU_DYNO_ID
+      envLabel: shields-production
 
   ssl:
     isSecure: true

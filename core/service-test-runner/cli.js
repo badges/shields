@@ -43,11 +43,11 @@
 // 1. Generating the list of services to test is necessarily asynchronous, and
 //    in Mocha, exclusive tests (`it.only` and `describe.only`) can only be
 //    applied synchronously. In other words, if you try to add exclusive tests
-//    in an asynchronous callback, all the tests will run. This is true even
-//    when using `_mocha --delay`, as we are. Undoubtedly this could be fixed,
-//    though it's not worth it. The problem is obscure and therefore low
-//    for Mocha, which is quite backlogged. There is an easy workaround, which
-//    is to generate the list of services to test in a separate process.
+//    in an asynchronous callback, all the tests will run. Undoubtedly this
+//    could be fixed, though it's not worth it. The problem is obscure and
+//    therefore low for Mocha, which is quite backlogged. There is an easy
+//    workaround, which is to generate the list of services to test in a
+//    separate process.
 // 2. Executing these two steps of the test runner separately makes the process
 //    easier to reason about and much easier to debug on a dev machine.
 // 3. Getting "pipefail" to work cross platform with an npm script seems tricky.
@@ -73,8 +73,14 @@ if (process.env.TESTED_SERVER_URL) {
 } else {
   const port = 1111
   baseUrl = 'http://localhost:1111'
-  before('Start running the server', function() {
-    server = createTestServer({ port })
+  before('Start running the server', async function() {
+    server = await createTestServer({
+      public: {
+        bind: {
+          port,
+        },
+      },
+    })
     server.start()
   })
   after('Shut down the server', async function() {
@@ -125,5 +131,3 @@ if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
 }
 
 runner.toss()
-// Invoke run() asynchronously, because Mocha will not start otherwise.
-process.nextTick(run)
