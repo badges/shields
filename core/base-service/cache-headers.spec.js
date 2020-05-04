@@ -146,7 +146,9 @@ describe('Cache header functions', function() {
       })
 
       it('should set the expected Cache-Control header', function() {
-        expect(res._headers['cache-control']).to.equal('max-age=123')
+        expect(res._headers['cache-control']).to.equal(
+          'max-age=123 s-maxage=123'
+        )
       })
 
       it('should set the expected Expires header', function() {
@@ -184,7 +186,9 @@ describe('Cache header functions', function() {
     })
 
     it('should set the expected Cache-Control header', function() {
-      expect(res._headers['cache-control']).to.equal(`max-age=${24 * 3600}`)
+      expect(res._headers['cache-control']).to.equal(
+        `max-age=${24 * 3600} s-maxage=${24 * 3600}`
+      )
     })
 
     it('should set the expected Last-Modified header', function() {
