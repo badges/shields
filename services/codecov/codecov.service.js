@@ -2,7 +2,8 @@
 
 const Joi = require('@hapi/joi')
 const { coveragePercentage } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+const { BaseSvgScrapingService } = require('..')
+const { parseJson } = require('../../core/base-service/json')
 
 // https://docs.codecov.io/reference#totals
 // A new repository that's been added but never had any coverage reports
@@ -10,7 +11,7 @@ const { BaseJsonService } = require('..')
 // the `totals` object can also be missing for the latest commit.
 // Accordingly the schema is a bit relaxed to support those scenarios
 // and then they are handled in the transform and render functions.
-const schema = Joi.object({
+const legacySchema = Joi.object({
   commit: Joi.object({
     totals: Joi.object({
       c: Joi.number().required(),
@@ -20,19 +21,31 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   token: Joi.string(),
+  // https://docs.codecov.io/docs/flags
+  // Flags must be lowercase, alphanumeric, and not exceed 45 characters
+  flag: Joi.string().regex(/^[a-z0-9_]{1,45}$/),
 }).required()
+
+const schema = Joi.object({
+  message: Joi.string()
+    .regex(/^\d{1,3}%|unknown$/)
+    .required(),
+})
+
+const svgValueMatcher = />(\d{1,3}%|unknown)<\/text><\/g>/
+
+const badgeTokenPattern = /^\w{10}$/
 
 const documentation = `
   <p>
-    You may specify a Codecov token to get coverage for a private repository.
+    You may specify a Codecov badge token to get coverage for a private repository.
   </p>
   <p>
-    See the <a href="https://docs.codecov.io/reference#authorization">Codecov Docs</a>
-    for more information about creating a token.
+  You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>.
   </p>
 `
 
-module.exports = class Codecov extends BaseJsonService {
+module.exports = class Codecov extends BaseSvgScrapingService {
   static get category() {
     return 'coverage'
   }
@@ -56,10 +69,11 @@ module.exports = class Codecov extends BaseJsonService {
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
-          repo: 'example-python',
+          repo: 'example-node',
         },
         queryParams: {
-          token: 'abc123def456',
+          token: 'a1b2c3d4e5',
+          flag: 'flag_name',
         },
         staticPreview: this.render({ coverage: 90 }),
         documentation,
@@ -71,11 +85,12 @@ module.exports = class Codecov extends BaseJsonService {
         namedParams: {
           vcsName: 'github',
           user: 'codecov',
-          repo: 'example-python',
+          repo: 'example-node',
           branch: 'master',
         },
         queryParams: {
-          token: 'abc123def456',
+          token: 'a1b2c3d4e5',
+          flag: 'flag_name',
         },
         staticPreview: this.render({ coverage: 90 }),
         documentation,
@@ -100,30 +115,31 @@ module.exports = class Codecov extends BaseJsonService {
     }
   }
 
-  async fetch({ vcsName, user, repo, branch, token }) {
+  // Here for backward-compatibility purpose.
+  async legacyFetch({ vcsName, user, repo, branch, token }) {
     // Codecov Docs: https://docs.codecov.io/reference#section-get-a-single-repository
-    let url = `https://codecov.io/api/${vcsName}/${user}/${repo}`
-    if (branch) {
-      url += `/branches/${branch}`
-    }
-    const options = {}
-    if (token) {
-      options.headers = {
-        Authorization: `token ${token}`,
-      }
-    }
-    return this._requestJson({
-      schema,
-      options,
+    const url = `https://codecov.io/api/${vcsName}/${user}/${repo}${
+      branch ? `/branches/${branch}` : ''
+    }`
+    const { buffer } = await this._request({
       url,
+      options: {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `token ${token}`,
+        },
+      },
       errorMessages: {
         401: 'not authorized to access repository',
         404: 'repository not found',
       },
     })
+    const json = parseJson(buffer)
+    return this.constructor._validate(json, legacySchema)
   }
 
-  transform({ json }) {
+  // Here for backward-compatibility purpose.
+  legacyTransform({ json }) {
     if (!json.commit || !json.commit.totals) {
       return { coverage: 'unknown' }
     }
@@ -131,9 +147,45 @@ module.exports = class Codecov extends BaseJsonService {
     return { coverage: +json.commit.totals.c }
   }
 
-  async handle({ vcsName, user, repo, branch }, { token }) {
-    const json = await this.fetch({ vcsName, user, repo, branch, token })
-    const { coverage } = this.transform({ json })
+  // Doesn't support `flag` feature. Here for backward-compatibility purpose.
+  async legacyHandle({ vcsName, user, repo, branch }, { token }) {
+    const json = await this.legacyFetch({ vcsName, user, repo, branch, token })
+    const { coverage } = this.legacyTransform({ json })
+    return this.constructor.render({ coverage })
+  }
+
+  async fetch({ vcsName, user, repo, branch, token, flag }) {
+    const url = `https://codecov.io/${vcsName}/${user}/${repo}${
+      branch ? `/branches/${branch}` : ''
+    }/graph/badge.svg`
+    return this._requestSvg({
+      schema,
+      valueMatcher: svgValueMatcher,
+      url,
+      options: {
+        qs: { token, flag },
+      },
+      errorMessages: token ? { 400: 'invalid token pattern' } : {},
+    })
+  }
+
+  transform({ data }) {
+    // data extracted from svg. e.g.: 42% / unknown
+    let coverage = data.message || 'unknown'
+    if (coverage.slice(-1) === '%') {
+      // remove the trailing %
+      coverage = Number(coverage.slice(0, -1))
+    }
+    return { coverage }
+  }
+
+  async handle({ vcsName, user, repo, branch }, { token, flag }) {
+    if (!flag && token && !badgeTokenPattern.test(token)) {
+      return this.legacyHandle({ vcsName, user, repo, branch }, { token })
+    }
+
+    const data = await this.fetch({ vcsName, user, repo, branch, token, flag })
+    const { coverage } = this.transform({ data })
     return this.constructor.render({ coverage })
   }
 }
