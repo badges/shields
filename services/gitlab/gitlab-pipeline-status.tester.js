@@ -4,21 +4,21 @@ const { isBuildStatus } = require('../build-status')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Pipeline status')
-  .get('/gitlab-org/gitlab-ce.json')
+  .get('/gitlab-org/gitlab.json')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
   })
 
 t.create('Pipeline status (branch)')
-  .get('/gitlab-org/gitlab-ce/v10.7.6.json')
+  .get('/gitlab-org/gitlab/v10.7.6.json')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
   })
 
 t.create('Pipeline status (nonexistent branch)')
-  .get('/gitlab-org/gitlab-ce/nope-not-a-branch.json')
+  .get('/gitlab-org/gitlab/nope-not-a-branch.json')
   .expectBadge({
     label: 'build',
     message: 'branch not found',
