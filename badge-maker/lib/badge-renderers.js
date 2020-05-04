@@ -99,15 +99,15 @@ function renderText({
 
 function renderLinks({
   links: [leftLink, rightLink] = [],
-  labelWidth,
-  messageWidth,
+  leftWidth,
+  rightWidth,
   height,
 }) {
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
   const hasLeftLink = leftLink && leftLink.length
   const hasRightLink = rightLink && rightLink.length
-  const leftLinkWidth = hasRightLink ? labelWidth : labelWidth + messageWidth
+  const leftLinkWidth = hasRightLink ? leftWidth : leftWidth + rightWidth
 
   function render({ link, width }) {
     return `<a target="_blank" xlink:href="${link}"><rect width="${width}" height="${height}" fill="rgba(0,0,0,0)"/></a>`
@@ -115,7 +115,7 @@ function renderLinks({
 
   return (
     (hasRightLink
-      ? render({ link: rightLink, width: labelWidth + messageWidth })
+      ? render({ link: rightLink, width: leftWidth + rightWidth })
       : '') +
     (hasLeftLink ? render({ link: leftLink, width: leftLinkWidth }) : '')
   )

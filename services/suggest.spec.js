@@ -113,7 +113,7 @@ describe('Badge suggestions', function() {
             'https://github.com/atom/atom'
           )}`,
           {
-            json: true,
+            responseType: 'json',
           }
         )
         expect(statusCode).to.equal(200)

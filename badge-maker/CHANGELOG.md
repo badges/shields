@@ -4,6 +4,7 @@
 
 ### Breaking Changes
 
+- Dropped support for node < 10
 - Package name has changed to `badge-maker` and moved to https://www.npmjs.com/package/badge-maker
 - `BadgeFactory` class is removed and replaced by `makeBadge()` function.
 - Deprecated parameters have been removed. In version 2.2.0 the `colorA`, `colorB` and `colorscheme` params were deprecated. In version 3.0.0 these have been removed.
