@@ -52,7 +52,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       {
         title: 'Gitlab pipeline status',
         pattern: ':user/:repo',
-        namedParams: { user: 'gitlab-org', repo: 'gitlab-ce' },
+        namedParams: { user: 'gitlab-org', repo: 'gitlab' },
         staticPreview: this.render({ status: 'passed' }),
         documentation,
       },
@@ -61,7 +61,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
         pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'gitlab-org',
-          repo: 'gitlab-ce',
+          repo: 'gitlab',
           branch: 'master',
         },
         staticPreview: this.render({ status: 'passed' }),
