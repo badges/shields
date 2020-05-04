@@ -8,9 +8,7 @@ const resourceSchema = Joi.object({
   file: Joi.object({
     type: Joi.string().required(),
     size: Joi.number().required(),
-    sizeUnit: Joi.string()
-      .allow('')
-      .required(),
+    sizeUnit: Joi.string().allow('').required(),
   }).required(),
   testedVersions: Joi.array(),
   rating: Joi.object({

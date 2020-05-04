@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const { GithubTag } = require('./github-tag.service')
 
-describe('GithubTag', function() {
+describe('GithubTag', function () {
   test(GithubTag.getLatestTag, () => {
     const tagFixture = [
       'cheese', // any old string

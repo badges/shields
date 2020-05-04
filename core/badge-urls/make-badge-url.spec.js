@@ -10,7 +10,7 @@ const {
   dynamicBadgeUrl,
 } = require('./make-badge-url')
 
-describe('Badge URL generation functions', function() {
+describe('Badge URL generation functions', function () {
   test(badgeUrlFromPath, () => {
     given({
       baseUrl: 'http://example.com',

@@ -19,9 +19,7 @@ t.create('Prerelease')
   .expectBadge({
     label: 'release',
     message: isSemver,
-    color: Joi.string()
-      .allow('blue', 'orange')
-      .required(),
+    color: Joi.string().allow('blue', 'orange').required(),
   })
 
 t.create('Release (No releases)')

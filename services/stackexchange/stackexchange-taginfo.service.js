@@ -9,9 +9,7 @@ const tagSchema = Joi.object({
     .length(1)
     .items(
       Joi.object({
-        count: Joi.number()
-          .min(0)
-          .required(),
+        count: Joi.number().min(0).required(),
       })
     )
     .required(),

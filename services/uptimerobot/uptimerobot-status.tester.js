@@ -51,9 +51,7 @@ t.create('Uptime Robot: Status (service unavailable)')
 t.create('Uptime Robot: Status (unexpected response, valid json)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock =>
-    nock('https://api.uptimerobot.com')
-      .post('/v2/getMonitors')
-      .reply(200, '[]')
+    nock('https://api.uptimerobot.com').post('/v2/getMonitors').reply(200, '[]')
   )
   .expectBadge({ label: 'status', message: 'invalid response data' })
 

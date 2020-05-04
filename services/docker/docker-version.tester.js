@@ -3,12 +3,10 @@
 const { isSemVer } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('docker version (valid, library)')
-  .get('/_/alpine.json')
-  .expectBadge({
-    label: 'version',
-    message: isSemVer,
-  })
+t.create('docker version (valid, library)').get('/_/alpine.json').expectBadge({
+  label: 'version',
+  message: isSemVer,
+})
 
 t.create('docker version (valid, library with tag)')
   .get('/_/alpine/latest.json')

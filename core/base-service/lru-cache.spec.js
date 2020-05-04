@@ -25,14 +25,14 @@ function expectCacheSlots(cache, keys) {
   }
 }
 
-describe('The LRU cache', function() {
-  it('should support a zero capacity', function() {
+describe('The LRU cache', function () {
+  it('should support a zero capacity', function () {
     const cache = new LRU(0)
     cache.set('key', 'value')
     expect(cache.cache.size).to.equal(0)
   })
 
-  it('should support a one capacity', function() {
+  it('should support a one capacity', function () {
     const cache = new LRU(1)
     cache.set('key1', 'value1')
     expectCacheSlots(cache, ['key1'])
@@ -42,7 +42,7 @@ describe('The LRU cache', function() {
     expect(cache.get('key2')).to.equal('value2')
   })
 
-  it('should remove the oldest element when reaching capacity', function() {
+  it('should remove the oldest element when reaching capacity', function () {
     const cache = new LRU(2)
 
     cache.set('key1', 'value1')
@@ -57,7 +57,7 @@ describe('The LRU cache', function() {
     expect(cache.get('key3')).to.equal('value3')
   })
 
-  it('should make sure that resetting a key in cache makes it newest', function() {
+  it('should make sure that resetting a key in cache makes it newest', function () {
     const cache = new LRU(2)
 
     cache.set('key', 'value')
@@ -70,9 +70,9 @@ describe('The LRU cache', function() {
     expectCacheSlots(cache, ['key2', 'key'])
   })
 
-  describe('getting a key in the cache', function() {
-    context('when the requested key is oldest', function() {
-      it('should leave the keys in the expected order', function() {
+  describe('getting a key in the cache', function () {
+    context('when the requested key is oldest', function () {
+      it('should leave the keys in the expected order', function () {
         const cache = new LRU(2)
         cache.set('key1', 'value1')
         cache.set('key2', 'value2')
@@ -85,8 +85,8 @@ describe('The LRU cache', function() {
       })
     })
 
-    context('when the requested key is newest', function() {
-      it('should leave the keys in the expected order', function() {
+    context('when the requested key is newest', function () {
+      it('should leave the keys in the expected order', function () {
         const cache = new LRU(2)
         cache.set('key1', 'value1')
         cache.set('key2', 'value2')
@@ -97,8 +97,8 @@ describe('The LRU cache', function() {
       })
     })
 
-    context('when the requested key is in the middle', function() {
-      it('should leave the keys in the expected order', function() {
+    context('when the requested key is in the middle', function () {
+      it('should leave the keys in the expected order', function () {
         const cache = new LRU(3)
         cache.set('key1', 'value1')
         cache.set('key2', 'value2')
@@ -113,7 +113,7 @@ describe('The LRU cache', function() {
     })
   })
 
-  it('should clear', function() {
+  it('should clear', function () {
     // Set up.
     const cache = new LRU(2)
     cache.set('key1', 'value1')

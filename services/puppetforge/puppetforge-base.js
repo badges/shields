@@ -11,23 +11,16 @@ const usersSchema = Joi.object({
 
 const modulesSchema = Joi.object({
   endorsement: Joi.string().allow(null),
-  feedback_score: Joi.number()
-    .integer()
-    .min(0)
-    .allow(null),
+  feedback_score: Joi.number().integer().min(0).allow(null),
   downloads: nonNegativeInteger,
   current_release: Joi.alternatives(
     Joi.object({
-      pdk: Joi.boolean()
-        .valid(true)
-        .required(),
+      pdk: Joi.boolean().valid(true).required(),
       version: semver,
       metadata: Joi.object({ 'pdk-version': semver }).required(),
     }).required(),
     Joi.object({
-      pdk: Joi.boolean()
-        .valid(false)
-        .required(),
+      pdk: Joi.boolean().valid(false).required(),
       version: semver,
     }).required()
   ),

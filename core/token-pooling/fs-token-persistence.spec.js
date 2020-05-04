@@ -6,20 +6,20 @@ const readFile = require('fs-readfile-promise')
 const { expect } = require('chai')
 const FsTokenPersistence = require('./fs-token-persistence')
 
-describe('File system token persistence', function() {
+describe('File system token persistence', function () {
   let path, persistence
-  beforeEach(function() {
+  beforeEach(function () {
     path = tmp.tmpNameSync()
     persistence = new FsTokenPersistence({ path })
   })
 
-  context('when the file does not exist', function() {
-    it('does nothing', async function() {
+  context('when the file does not exist', function () {
+    it('does nothing', async function () {
       const tokens = await persistence.initialize()
       expect(tokens).to.deep.equal([])
     })
 
-    it('saving creates an empty file', async function() {
+    it('saving creates an empty file', async function () {
       await persistence.initialize()
 
       await persistence.save()
@@ -29,20 +29,20 @@ describe('File system token persistence', function() {
     })
   })
 
-  context('when the file exists', function() {
+  context('when the file exists', function () {
     const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       fs.writeFileSync(path, JSON.stringify(initialTokens))
     })
 
-    it('loads the contents', async function() {
+    it('loads the contents', async function () {
       const tokens = await persistence.initialize()
       expect(tokens).to.deep.equal(initialTokens)
     })
 
-    context('when tokens are added', function() {
-      it('saves the change', async function() {
+    context('when tokens are added', function () {
+      it('saves the change', async function () {
         const newToken = 'e'.repeat(40)
         const expected = Array.from(initialTokens)
         expected.push(newToken)
@@ -55,8 +55,8 @@ describe('File system token persistence', function() {
       })
     })
 
-    context('when tokens are removed', function() {
-      it('saves the change', async function() {
+    context('when tokens are removed', function () {
+      it('saves the change', async function () {
         const expected = Array.from(initialTokens)
         const toRemove = expected.pop()
 

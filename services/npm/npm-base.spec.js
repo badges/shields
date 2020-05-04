@@ -6,9 +6,9 @@ const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 // use NPM Version as an example implementation of NpmBase for this test
 const NpmVersion = require('./npm-version.service')
 
-describe('npm', function() {
-  describe('auth', function() {
-    it('sends the auth information as configured', async function() {
+describe('npm', function () {
+  describe('auth', function () {
+    it('sends the auth information as configured', async function () {
       cleanUpNockAfterEach()
 
       const token = 'abc123'

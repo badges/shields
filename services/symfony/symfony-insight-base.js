@@ -26,10 +26,7 @@ const schema = Joi.object({
         // the xml nodes to always be parsed as an array. Currently, if the response
         // only contains a single violation then it will be parsed as an object,
         // otherwise it will be parsed as an array.
-        violation: Joi.array()
-          .items(violationSchema)
-          .single()
-          .required(),
+        violation: Joi.array().items(violationSchema).single().required(),
       }),
     }),
   }).required(),

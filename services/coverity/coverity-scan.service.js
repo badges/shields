@@ -5,9 +5,7 @@ const { BaseJsonService } = require('..')
 
 const messageRegex = /passed|passed .* new defects|pending|failed/
 const schema = Joi.object({
-  message: Joi.string()
-    .regex(messageRegex)
-    .required(),
+  message: Joi.string().regex(messageRegex).required(),
 }).required()
 
 module.exports = class CoverityScan extends BaseJsonService {

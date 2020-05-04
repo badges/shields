@@ -14,9 +14,7 @@ t.create('Forks')
     ],
   })
 
-t.create('Forks (repo not found)')
-  .get('/badges/helmets.json')
-  .expectBadge({
-    label: 'forks',
-    message: 'repo not found',
-  })
+t.create('Forks (repo not found)').get('/badges/helmets.json').expectBadge({
+  label: 'forks',
+  message: 'repo not found',
+})

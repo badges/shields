@@ -4,12 +4,12 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const GithubApiProvider = require('./github-api-provider')
 
-describe('Github API provider', function() {
+describe('Github API provider', function () {
   const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
   let mockStandardToken, mockSearchToken, mockGraphqlToken, provider
-  beforeEach(function() {
+  beforeEach(function () {
     provider = new GithubApiProvider({ baseUrl, reserveFraction })
 
     mockStandardToken = { update: sinon.spy(), invalidate: sinon.spy() }
@@ -22,11 +22,11 @@ describe('Github API provider', function() {
     sinon.stub(provider.graphqlTokens, 'next').returns(mockGraphqlToken)
   })
 
-  context('a search API request', function() {
+  context('a search API request', function () {
     const mockRequest = (options, callback) => {
       callback()
     }
-    it('should obtain an appropriate token', function(done) {
+    it('should obtain an appropriate token', function (done) {
       provider.request(mockRequest, '/search', {}, (err, res, buffer) => {
         expect(err).to.be.undefined
         expect(provider.searchTokens.next).to.have.been.calledOnce
@@ -37,11 +37,11 @@ describe('Github API provider', function() {
     })
   })
 
-  context('a graphql API request', function() {
+  context('a graphql API request', function () {
     const mockRequest = (options, callback) => {
       callback()
     }
-    it('should obtain an appropriate token', function(done) {
+    it('should obtain an appropriate token', function (done) {
       provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
         expect(err).to.be.undefined
         expect(provider.searchTokens.next).not.to.have.been.called
@@ -52,11 +52,11 @@ describe('Github API provider', function() {
     })
   })
 
-  context('a core API request', function() {
+  context('a core API request', function () {
     const mockRequest = (options, callback) => {
       callback()
     }
-    it('should obtain an appropriate token', function(done) {
+    it('should obtain an appropriate token', function (done) {
       provider.request(mockRequest, '/repo', {}, (err, res, buffer) => {
         expect(err).to.be.undefined
         expect(provider.searchTokens.next).not.to.have.been.called
@@ -67,7 +67,7 @@ describe('Github API provider', function() {
     })
   })
 
-  context('a valid V3 API response', function() {
+  context('a valid V3 API response', function () {
     const rateLimit = 12500
     const remaining = 7955
     const nextReset = 123456789
@@ -85,7 +85,7 @@ describe('Github API provider', function() {
       callback(null, mockResponse, mockBuffer)
     }
 
-    it('should invoke the callback', function(done) {
+    it('should invoke the callback', function (done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
         expect(Object.is(res, mockResponse)).to.be.true
@@ -94,7 +94,7 @@ describe('Github API provider', function() {
       })
     })
 
-    it('should update the token with the expected values', function(done) {
+    it('should update the token with the expected values', function (done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
         const expectedUsesRemaining =
@@ -109,7 +109,7 @@ describe('Github API provider', function() {
     })
   })
 
-  context('a valid V4 API response', function() {
+  context('a valid V4 API response', function () {
     const rateLimit = 12500
     const remaining = 7955
     const nextReset = 123456789
@@ -133,7 +133,7 @@ describe('Github API provider', function() {
       callback(null, mockResponse, mockBuffer)
     }
 
-    it('should invoke the callback', function(done) {
+    it('should invoke the callback', function (done) {
       provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
         expect(Object.is(res, mockResponse)).to.be.true
@@ -142,7 +142,7 @@ describe('Github API provider', function() {
       })
     })
 
-    it('should update the token with the expected values', function(done) {
+    it('should update the token with the expected values', function (done) {
       provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
         const expectedUsesRemaining =
@@ -157,7 +157,7 @@ describe('Github API provider', function() {
     })
   })
 
-  context('an unauthorized response', function() {
+  context('an unauthorized response', function () {
     const mockResponse = { statusCode: 401 }
     const mockBuffer = Buffer.alloc(0)
     const mockRequest = (...args) => {
@@ -165,7 +165,7 @@ describe('Github API provider', function() {
       callback(null, mockResponse, mockBuffer)
     }
 
-    it('should invoke the callback and update the token with the expected values', function(done) {
+    it('should invoke the callback and update the token with the expected values', function (done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.equal(null)
         expect(mockStandardToken.invalidate).to.have.been.calledOnce
@@ -175,13 +175,13 @@ describe('Github API provider', function() {
     })
   })
 
-  context('a connection error', function() {
+  context('a connection error', function () {
     const mockRequest = (...args) => {
       const callback = args.pop()
       callback(Error('connection timeout'))
     }
 
-    it('should pass the error to the callback', function(done) {
+    it('should pass the error to the callback', function (done) {
       provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
         expect(err).to.be.an.instanceof(Error)
         expect(err.message).to.equal('connection timeout')

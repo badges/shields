@@ -5,20 +5,20 @@ const { test, given, forCases } = require('sazerac')
 const { AuthHelper } = require('./auth-helper')
 const { InvalidParameter } = require('./errors')
 
-describe('AuthHelper', function() {
-  describe('constructor checks', function() {
-    it('throws without userKey or passKey', function() {
+describe('AuthHelper', function () {
+  describe('constructor checks', function () {
+    it('throws without userKey or passKey', function () {
       expect(() => new AuthHelper({}, {})).to.throw(
         Error,
         'Expected userKey or passKey to be set'
       )
     })
-    it('throws without serviceKey or authorizedOrigins', function() {
+    it('throws without serviceKey or authorizedOrigins', function () {
       expect(
         () => new AuthHelper({ userKey: 'myci_user', passKey: 'myci_pass' }, {})
       ).to.throw(Error, 'Expected authorizedOrigins or serviceKey to be set')
     })
-    it('throws when authorizedOrigins is not an array', function() {
+    it('throws when authorizedOrigins is not an array', function () {
       expect(
         () =>
           new AuthHelper(
@@ -33,7 +33,7 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('isValid', function() {
+  describe('isValid', function () {
     function validate(config, privateConfig) {
       return new AuthHelper(
         { authorizedOrigins: ['https://example.test'], ...config },
@@ -89,7 +89,7 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('_basicAuth', function() {
+  describe('_basicAuth', function () {
     function validate(config, privateConfig) {
       return new AuthHelper(
         { authorizedOrigins: ['https://example.test'], ...config },
@@ -128,7 +128,7 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('_isInsecureSslRequest', function() {
+  describe('_isInsecureSslRequest', function () {
     test(AuthHelper._isInsecureSslRequest, () => {
       forCases([
         given({ url: 'http://example.test' }),
@@ -146,31 +146,31 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('enforceStrictSsl', function() {
+  describe('enforceStrictSsl', function () {
     const authConfig = {
       userKey: 'myci_user',
       passKey: 'myci_pass',
       serviceKey: 'myci',
     }
 
-    context('by default', function() {
+    context('by default', function () {
       const authHelper = new AuthHelper(authConfig, {
         public: {
           services: { myci: { authorizedOrigins: ['http://myci.test'] } },
         },
         private: { myci_user: 'admin', myci_pass: 'abc123' },
       })
-      it('does not throw for secure requests', function() {
+      it('does not throw for secure requests', function () {
         expect(() => authHelper.enforceStrictSsl({})).not.to.throw()
       })
-      it('throws for insecure requests', function() {
+      it('throws for insecure requests', function () {
         expect(() =>
           authHelper.enforceStrictSsl({ options: { strictSSL: false } })
         ).to.throw(InvalidParameter)
       })
     })
 
-    context("when strict SSL isn't required", function() {
+    context("when strict SSL isn't required", function () {
       const authHelper = new AuthHelper(authConfig, {
         public: {
           services: {
@@ -182,10 +182,10 @@ describe('AuthHelper', function() {
         },
         private: { myci_user: 'admin', myci_pass: 'abc123' },
       })
-      it('does not throw for secure requests', function() {
+      it('does not throw for secure requests', function () {
         expect(() => authHelper.enforceStrictSsl({})).not.to.throw()
       })
-      it('does not throw for insecure requests', function() {
+      it('does not throw for insecure requests', function () {
         expect(() =>
           authHelper.enforceStrictSsl({ options: { strictSSL: false } })
         ).not.to.throw()
@@ -193,14 +193,14 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('shouldAuthenticateRequest', function() {
+  describe('shouldAuthenticateRequest', function () {
     const authConfig = {
       userKey: 'myci_user',
       passKey: 'myci_pass',
       serviceKey: 'myci',
     }
 
-    context('by default', function() {
+    context('by default', function () {
       const authHelper = new AuthHelper(authConfig, {
         public: {
           services: {
@@ -213,12 +213,12 @@ describe('AuthHelper', function() {
       })
       const shouldAuthenticateRequest = requestOptions =>
         authHelper.shouldAuthenticateRequest(requestOptions)
-      describe('a secure request to an authorized origin', function() {
+      describe('a secure request to an authorized origin', function () {
         test(shouldAuthenticateRequest, () => {
           given({ url: 'https://myci.test/api' }).expect(true)
         })
       })
-      describe('an insecure request', function() {
+      describe('an insecure request', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test/api',
@@ -226,7 +226,7 @@ describe('AuthHelper', function() {
           }).expect(false)
         })
       })
-      describe('a request to an unauthorized origin', function() {
+      describe('a request to an unauthorized origin', function () {
         test(shouldAuthenticateRequest, () => {
           forCases([
             given({ url: 'http://myci.test/api' }),
@@ -237,7 +237,7 @@ describe('AuthHelper', function() {
       })
     })
 
-    context('when auth over insecure SSL is allowed', function() {
+    context('when auth over insecure SSL is allowed', function () {
       const authHelper = new AuthHelper(authConfig, {
         public: {
           services: {
@@ -251,12 +251,12 @@ describe('AuthHelper', function() {
       })
       const shouldAuthenticateRequest = requestOptions =>
         authHelper.shouldAuthenticateRequest(requestOptions)
-      describe('a secure request to an authorized origin', function() {
+      describe('a secure request to an authorized origin', function () {
         test(shouldAuthenticateRequest, () => {
           given({ url: 'https://myci.test' }).expect(true)
         })
       })
-      describe('an insecure request', function() {
+      describe('an insecure request', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test',
@@ -264,7 +264,7 @@ describe('AuthHelper', function() {
           }).expect(true)
         })
       })
-      describe('a request to an unauthorized origin', function() {
+      describe('a request to an unauthorized origin', function () {
         test(shouldAuthenticateRequest, () => {
           forCases([
             given({ url: 'http://myci.test' }),
@@ -275,7 +275,7 @@ describe('AuthHelper', function() {
       })
     })
 
-    context('when the service is partly configured', function() {
+    context('when the service is partly configured', function () {
       const authHelper = new AuthHelper(authConfig, {
         public: {
           services: {
@@ -289,7 +289,7 @@ describe('AuthHelper', function() {
       })
       const shouldAuthenticateRequest = requestOptions =>
         authHelper.shouldAuthenticateRequest(requestOptions)
-      describe('a secure request to an authorized origin', function() {
+      describe('a secure request to an authorized origin', function () {
         test(shouldAuthenticateRequest, () => {
           given({ url: 'https://myci.test' }).expect(false)
         })
@@ -297,7 +297,7 @@ describe('AuthHelper', function() {
     })
   })
 
-  describe('withBasicAuth', function() {
+  describe('withBasicAuth', function () {
     const authHelper = new AuthHelper(
       {
         userKey: 'myci_user',
@@ -318,7 +318,7 @@ describe('AuthHelper', function() {
     const withBasicAuth = requestOptions =>
       authHelper.withBasicAuth(requestOptions)
 
-    describe('authenticates a secure request to an authorized origin', function() {
+    describe('authenticates a secure request to an authorized origin', function () {
       test(withBasicAuth, () => {
         given({
           url: 'https://myci.test/api',
@@ -343,7 +343,7 @@ describe('AuthHelper', function() {
       })
     })
 
-    describe('does not authenticate a request to an unauthorized origin', function() {
+    describe('does not authenticate a request to an unauthorized origin', function () {
       test(withBasicAuth, () => {
         given({
           url: 'https://other.test/api',
@@ -364,7 +364,7 @@ describe('AuthHelper', function() {
       })
     })
 
-    describe('throws on an insecure SSL request', function() {
+    describe('throws on an insecure SSL request', function () {
       expect(() =>
         withBasicAuth({
           url: 'https://myci.test/api',

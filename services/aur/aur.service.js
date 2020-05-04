@@ -12,19 +12,13 @@ const { InvalidResponse } = require('..')
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
   results: Joi.alternatives(
-    Joi.array()
-      .length(0)
-      .required(),
+    Joi.array().length(0).required(),
     Joi.object({
-      License: Joi.string()
-        .required()
-        .allow(null),
+      License: Joi.string().required().allow(null),
       NumVotes: nonNegativeInteger,
       Version: Joi.string().required(),
       OutOfDate: nonNegativeInteger.allow(null),
-      Maintainer: Joi.string()
-        .required()
-        .allow(null),
+      Maintainer: Joi.string().required().allow(null),
       LastModified: nonNegativeInteger,
     }).required()
   ),

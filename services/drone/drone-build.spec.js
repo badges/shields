@@ -5,10 +5,10 @@ const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const DroneBuild = require('./drone-build.service')
 
-describe('DroneBuild', function() {
+describe('DroneBuild', function () {
   cleanUpNockAfterEach()
 
-  it('Sends auth headers to cloud instance', async function() {
+  it('Sends auth headers to cloud instance', async function () {
     const token = 'abc123'
 
     const scope = nock('https://cloud.drone.io', {

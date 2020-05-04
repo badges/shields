@@ -29,10 +29,10 @@ class DummyXmlService extends BaseXmlService {
   }
 }
 
-describe('BaseXmlService', function() {
-  describe('Making requests', function() {
+describe('BaseXmlService', function () {
+  describe('Making requests', function () {
     let sendAndCacheRequest
-    beforeEach(function() {
+    beforeEach(function () {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
           buffer: '<requiredString>some-string</requiredString>',
@@ -41,7 +41,7 @@ describe('BaseXmlService', function() {
       )
     })
 
-    it('invokes _sendAndCacheRequest', async function() {
+    it('invokes _sendAndCacheRequest', async function () {
       await DummyXmlService.invoke(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
@@ -55,7 +55,7 @@ describe('BaseXmlService', function() {
       )
     })
 
-    it('forwards options to _sendAndCacheRequest', async function() {
+    it('forwards options to _sendAndCacheRequest', async function () {
       class WithCustomOptions extends BaseXmlService {
         static get route() {
           return {}
@@ -87,8 +87,8 @@ describe('BaseXmlService', function() {
     })
   })
 
-  describe('Making badges', function() {
-    it('handles valid xml responses', async function() {
+  describe('Making badges', function () {
+    it('handles valid xml responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '<requiredString>some-string</requiredString>',
         res: { statusCode: 200 },
@@ -103,7 +103,7 @@ describe('BaseXmlService', function() {
       })
     })
 
-    it('parses XML response with custom parser options', async function() {
+    it('parses XML response with custom parser options', async function () {
       const customParserOption = { trimValues: false }
       class DummyXmlServiceWithParserOption extends DummyXmlService {
         async handle() {
@@ -130,7 +130,7 @@ describe('BaseXmlService', function() {
       })
     })
 
-    it('handles xml responses which do not match the schema', async function() {
+    it('handles xml responses which do not match the schema', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '<unexpectedAttribute>some-string</unexpectedAttribute>',
         res: { statusCode: 200 },
@@ -147,7 +147,7 @@ describe('BaseXmlService', function() {
       })
     })
 
-    it('handles unparseable xml responses', async function() {
+    it('handles unparseable xml responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: 'not xml',
         res: { statusCode: 200 },

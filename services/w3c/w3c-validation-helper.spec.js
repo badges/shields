@@ -8,8 +8,8 @@ const {
   getSchema,
 } = require('./w3c-validation-helper')
 
-describe('w3c-validation-helper', function() {
-  describe('presetRegex', function() {
+describe('w3c-validation-helper', function () {
+  describe('presetRegex', function () {
     function testing(preset) {
       return presetRegex.test(preset)
     }
@@ -61,8 +61,8 @@ describe('w3c-validation-helper', function() {
     })
   })
 
-  describe('getColor', function() {
-    it('returns "brightgreen" if no messages are provided', function() {
+  describe('getColor', function () {
+    it('returns "brightgreen" if no messages are provided', function () {
       const messageTypes = {}
 
       const actualResult = getColor(messageTypes)
@@ -70,7 +70,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('brightgreen')
     })
 
-    it('returns "yellow" if only warning messages are provided', function() {
+    it('returns "yellow" if only warning messages are provided', function () {
       const messageTypes = { warning: 1 }
 
       const actualResult = getColor(messageTypes)
@@ -78,7 +78,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('yellow')
     })
 
-    it('returns "red" if only error messages are provided', function() {
+    it('returns "red" if only error messages are provided', function () {
       const messageTypes = { error: 1 }
 
       const actualResult = getColor(messageTypes)
@@ -86,7 +86,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('red')
     })
 
-    it('returns "red" if both warning and error messages are provided', function() {
+    it('returns "red" if both warning and error messages are provided', function () {
       const messageTypes = { warning: 3, error: 4 }
 
       const actualResult = getColor(messageTypes)
@@ -95,8 +95,8 @@ describe('w3c-validation-helper', function() {
     })
   })
 
-  describe('getMessage', function() {
-    it('returns "validate" if no messages are provided', function() {
+  describe('getMessage', function () {
+    it('returns "validate" if no messages are provided', function () {
       const messageTypes = {}
 
       const actualResult = getMessage(messageTypes)
@@ -104,7 +104,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('validated')
     })
 
-    it('returns "1 error" if 1 error message is provided', function() {
+    it('returns "1 error" if 1 error message is provided', function () {
       const messageTypes = { error: 1 }
 
       const actualResult = getMessage(messageTypes)
@@ -112,7 +112,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('1 error')
     })
 
-    it('returns "2 errors" if 2 error messages are provided', function() {
+    it('returns "2 errors" if 2 error messages are provided', function () {
       const messageTypes = { error: 2 }
 
       const actualResult = getMessage(messageTypes)
@@ -120,7 +120,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('2 errors')
     })
 
-    it('returns "1 warning" if 1 warning message is provided', function() {
+    it('returns "1 warning" if 1 warning message is provided', function () {
       const messageTypes = { warning: 1 }
 
       const actualResult = getMessage(messageTypes)
@@ -128,7 +128,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('1 warning')
     })
 
-    it('returns "2 warnings" if 2 warning messages are provided', function() {
+    it('returns "2 warnings" if 2 warning messages are provided', function () {
       const messageTypes = { warning: 2 }
 
       const actualResult = getMessage(messageTypes)
@@ -136,7 +136,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('2 warnings')
     })
 
-    it('returns "1 error, 1 warning" if 1 error and 1 warning message is provided', function() {
+    it('returns "1 error, 1 warning" if 1 error and 1 warning message is provided', function () {
       const messageTypes = { warning: 1, error: 1 }
 
       const actualResult = getMessage(messageTypes)
@@ -144,7 +144,7 @@ describe('w3c-validation-helper', function() {
       expect(actualResult).to.equal('1 error, 1 warning')
     })
 
-    it('returns "2 errors, 2 warnings" if 2 error and 2 warning message is provided', function() {
+    it('returns "2 errors, 2 warnings" if 2 error and 2 warning message is provided', function () {
       const messageTypes = { error: 2, warning: 2 }
 
       const actualResult = getMessage(messageTypes)
@@ -153,7 +153,7 @@ describe('w3c-validation-helper', function() {
     })
   })
 
-  describe('getSchema', function() {
+  describe('getSchema', function () {
     function execution(preset) {
       return getSchema(preset)
     }
@@ -162,7 +162,7 @@ describe('w3c-validation-helper', function() {
       forCases([given(undefined), given(null), given('')]).expect(undefined)
     })
 
-    it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0" preset', function() {
+    it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0" preset', function () {
       const preset = 'HTML,SVG 1.1,MathML 3.0'
 
       const actualResult = getSchema(preset)
@@ -172,7 +172,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0,ITS 2.0" preset', function() {
+    it('returns 3 schemas associated to the "HTML,SVG 1.1,MathML 3.0,ITS 2.0" preset', function () {
       const preset = 'HTML,SVG 1.1,MathML 3.0,ITS 2.0'
 
       const actualResult = getSchema(preset)
@@ -182,7 +182,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1" preset', function() {
+    it('returns 3 schemas associated to the "HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1" preset', function () {
       const preset = 'HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1'
 
       const actualResult = getSchema(preset)
@@ -192,7 +192,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "HTML 4.01 Strict, URL/ XHTML 1.0 Strict, URL" preset', function() {
+    it('returns 3 schemas associated to the "HTML 4.01 Strict, URL/ XHTML 1.0 Strict, URL" preset', function () {
       const preset = 'HTML 4.01 Strict, URL/ XHTML 1.0 Strict, URL'
 
       const actualResult = getSchema(preset)
@@ -202,7 +202,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "HTML 4.01 Transitional, URL/ XHTML 1.0 Transitional, URL" preset', function() {
+    it('returns 3 schemas associated to the "HTML 4.01 Transitional, URL/ XHTML 1.0 Transitional, URL" preset', function () {
       const preset = 'HTML 4.01 Transitional, URL/ XHTML 1.0 Transitional, URL'
 
       const actualResult = getSchema(preset)
@@ -212,7 +212,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "HTML 4.01 Frameset, URL/ XHTML 1.0 Frameset, URL" preset', function() {
+    it('returns 3 schemas associated to the "HTML 4.01 Frameset, URL/ XHTML 1.0 Frameset, URL" preset', function () {
       const preset = 'HTML 4.01 Frameset, URL/ XHTML 1.0 Frameset, URL'
 
       const actualResult = getSchema(preset)
@@ -222,7 +222,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "XHTML, SVG 1.1, MathML 3.0" preset', function() {
+    it('returns 3 schemas associated to the "XHTML, SVG 1.1, MathML 3.0" preset', function () {
       const preset = 'XHTML, SVG 1.1, MathML 3.0'
 
       const actualResult = getSchema(preset)
@@ -232,7 +232,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1" preset', function() {
+    it('returns 3 schemas associated to the "XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1" preset', function () {
       const preset = 'XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1'
 
       const actualResult = getSchema(preset)
@@ -242,7 +242,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0" preset', function() {
+    it('returns 3 schemas associated to the "XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0" preset', function () {
       const preset = 'XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0'
 
       const actualResult = getSchema(preset)
@@ -252,7 +252,7 @@ describe('w3c-validation-helper', function() {
       )
     })
 
-    it('returns 3 schemas associated to the "SVG 1.1, URL, XHTML, MathML 3.0" preset', function() {
+    it('returns 3 schemas associated to the "SVG 1.1, URL, XHTML, MathML 3.0" preset', function () {
       const preset = 'SVG 1.1, URL, XHTML, MathML 3.0'
 
       const actualResult = getSchema(preset)

@@ -5,9 +5,7 @@ const { floorCount } = require('../color-formatters')
 const { BaseJsonService, InvalidResponse } = require('..')
 
 const ansibleContentSchema = Joi.object({
-  quality_score: Joi.number()
-    .allow(null)
-    .required(),
+  quality_score: Joi.number().allow(null).required(),
 }).required()
 
 class AnsibleGalaxyContent extends BaseJsonService {

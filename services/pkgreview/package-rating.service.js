@@ -9,12 +9,7 @@ const { BaseJsonService } = require('..')
 const pkgReviewColor = colorScale([2, 3, 4])
 
 const schema = Joi.object({
-  rating: Joi.number()
-    .min(0)
-    .max(1)
-    .precision(1)
-    .required()
-    .allow(null),
+  rating: Joi.number().min(0).max(1).precision(1).required().allow(null),
   reviewsCount: nonNegativeInteger,
 }).required()
 

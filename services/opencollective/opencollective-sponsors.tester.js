@@ -68,12 +68,10 @@ t.create('renders correctly')
     message: '10',
     color: 'brightgreen',
   })
-t.create('gets amount of sponsors')
-  .get('/shields.json')
-  .expectBadge({
-    label: 'sponsors',
-    message: nonNegativeInteger,
-  })
+t.create('gets amount of sponsors').get('/shields.json').expectBadge({
+  label: 'sponsors',
+  message: nonNegativeInteger,
+})
 
 t.create('handles not found correctly')
   .get('/nonexistent-collective.json')

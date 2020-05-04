@@ -5,10 +5,7 @@ const { coveragePercentage } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  covered_percent: Joi.number()
-    .min(0)
-    .max(100)
-    .required(),
+  covered_percent: Joi.number().min(0).max(100).required(),
 }).required()
 
 module.exports = class Coveralls extends BaseJsonService {
@@ -75,8 +72,9 @@ module.exports = class Coveralls extends BaseJsonService {
 
   async fetch({ vcsType, user, repo, branch }) {
     // https://docs.coveralls.io/api-introduction#getting-data-from-coveralls
-    const url = `https://coveralls.io/${vcsType ||
-      'github'}/${user}/${repo}.json`
+    const url = `https://coveralls.io/${
+      vcsType || 'github'
+    }/${user}/${repo}.json`
     const options = {
       qs: {
         // The API returns the latest result (across any branch) if no branch is explicitly specified,

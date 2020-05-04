@@ -12,13 +12,11 @@ const isDownloadsColor = Joi.equal(
   'brightgreen'
 )
 
-t.create('total downloads (valid)')
-  .get('/dt/vibe-d.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetric,
-    color: isDownloadsColor,
-  })
+t.create('total downloads (valid)').get('/dt/vibe-d.json').expectBadge({
+  label: 'downloads',
+  message: isMetric,
+  color: isDownloadsColor,
+})
 
 t.create('total downloads, specific version (valid)')
   .get('/dt/dub/1.16.0.json')
@@ -37,29 +35,23 @@ t.create('total downloads, latest version (valid)')
     color: isDownloadsColor,
   })
 
-t.create('daily downloads (valid)')
-  .get('/dd/vibe-d.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-    color: isDownloadsColor,
-  })
+t.create('daily downloads (valid)').get('/dd/vibe-d.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+  color: isDownloadsColor,
+})
 
-t.create('weekly downloads (valid)')
-  .get('/dw/vibe-d.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-    color: isDownloadsColor,
-  })
+t.create('weekly downloads (valid)').get('/dw/vibe-d.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+  color: isDownloadsColor,
+})
 
-t.create('monthly downloads (valid)')
-  .get('/dm/vibe-d.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-    color: isDownloadsColor,
-  })
+t.create('monthly downloads (valid)').get('/dm/vibe-d.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+  color: isDownloadsColor,
+})
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')

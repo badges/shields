@@ -5,13 +5,13 @@ const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const [BitbucketPullRequest] = require('./bitbucket-pull-request.service')
 
-describe('BitbucketPullRequest', function() {
+describe('BitbucketPullRequest', function () {
   cleanUpNockAfterEach()
 
   const user = 'admin'
   const pass = 'password'
 
-  it('Sends auth headers to Bitbucket as configured', async function() {
+  it('Sends auth headers to Bitbucket as configured', async function () {
     const scope = nock('https://bitbucket.org/api/2.0/repositories/')
       .get(/.*/)
       .basicAuth({ user, pass })
@@ -40,7 +40,7 @@ describe('BitbucketPullRequest', function() {
     scope.done()
   })
 
-  it('Sends auth headers to Bitbucket Server as configured', async function() {
+  it('Sends auth headers to Bitbucket Server as configured', async function () {
     const scope = nock('https://bitbucket.example.test/rest/api/1.0/projects')
       .get(/.*/)
       .basicAuth({ user, pass })

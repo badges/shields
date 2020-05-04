@@ -58,10 +58,7 @@ const serviceDataSchema = Joi.object({
   // `render()` to always return a string.
   message: Joi.alternatives(Joi.string().allow(''), Joi.number()).required(),
   color: Joi.string(),
-  link: Joi.array()
-    .items(Joi.string().uri())
-    .single()
-    .max(2),
+  link: Joi.array().items(Joi.string().uri()).single().max(2),
   // Generally services should not use these options, which are provided to
   // support the Endpoint badge.
   labelColor: Joi.string(),
@@ -70,9 +67,7 @@ const serviceDataSchema = Joi.object({
   logoColor: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
   logoPosition: optionalNumberWhenAnyLogoPresent,
-  cacheSeconds: Joi.number()
-    .integer()
-    .min(0),
+  cacheSeconds: Joi.number().integer().min(0),
   style: Joi.string(),
 })
   .oxor('namedLogo', 'logoSvg')

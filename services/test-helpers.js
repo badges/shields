@@ -6,7 +6,7 @@ const runnerConfig = require('config').util.toObject()
 const { promisify } = require('../core/base-service/legacy-request-handler')
 
 function cleanUpNockAfterEach() {
-  afterEach(function() {
+  afterEach(function () {
     nock.restore()
     nock.cleanAll()
     nock.enableNetConnect()

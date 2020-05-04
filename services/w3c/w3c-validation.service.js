@@ -27,9 +27,7 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   targetUrl: optionalUrl.required(),
-  preset: Joi.string()
-    .regex(presetRegex)
-    .allow(''),
+  preset: Joi.string().regex(presetRegex).allow(''),
 }).required()
 
 module.exports = class W3cValidation extends BaseJsonService {

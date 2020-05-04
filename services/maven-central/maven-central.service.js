@@ -8,10 +8,7 @@ const schema = Joi.object({
   metadata: Joi.object({
     versioning: Joi.object({
       versions: Joi.object({
-        version: Joi.array()
-          .items(Joi.string().required())
-          .single()
-          .required(),
+        version: Joi.array().items(Joi.string().required()).single().required(),
       }).required(),
     }).required(),
   }).required(),

@@ -18,20 +18,16 @@ t.create('unknown project id')
 t.create('404 response')
   .get('/1.json')
   .intercept(nock =>
-    nock('https://scan.coverity.com/projects/1')
-      .get('/badge.json')
-      .reply(404)
+    nock('https://scan.coverity.com/projects/1').get('/badge.json').reply(404)
   )
   .expectBadge({ label: 'coverity', message: 'project not found' })
 
 t.create('passed')
   .get('/2.json')
   .intercept(nock =>
-    nock('https://scan.coverity.com/projects/2')
-      .get('/badge.json')
-      .reply(200, {
-        message: 'passed',
-      })
+    nock('https://scan.coverity.com/projects/2').get('/badge.json').reply(200, {
+      message: 'passed',
+    })
   )
   .expectBadge({
     label: 'coverity',
@@ -42,11 +38,9 @@ t.create('passed')
 t.create('passed with defects')
   .get('/2.json')
   .intercept(nock =>
-    nock('https://scan.coverity.com/projects/2')
-      .get('/badge.json')
-      .reply(200, {
-        message: 'passed 51 new defects',
-      })
+    nock('https://scan.coverity.com/projects/2').get('/badge.json').reply(200, {
+      message: 'passed 51 new defects',
+    })
   )
   .expectBadge({
     label: 'coverity',
@@ -57,11 +51,9 @@ t.create('passed with defects')
 t.create('pending')
   .get('/2.json')
   .intercept(nock =>
-    nock('https://scan.coverity.com/projects/2')
-      .get('/badge.json')
-      .reply(200, {
-        message: 'pending',
-      })
+    nock('https://scan.coverity.com/projects/2').get('/badge.json').reply(200, {
+      message: 'pending',
+    })
   )
   .expectBadge({
     label: 'coverity',
@@ -72,11 +64,9 @@ t.create('pending')
 t.create('failed')
   .get('/2.json')
   .intercept(nock =>
-    nock('https://scan.coverity.com/projects/2')
-      .get('/badge.json')
-      .reply(200, {
-        message: 'failed',
-      })
+    nock('https://scan.coverity.com/projects/2').get('/badge.json').reply(200, {
+      message: 'failed',
+    })
   )
   .expectBadge({
     label: 'coverity',

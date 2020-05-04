@@ -6,9 +6,9 @@ const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const { InvalidResponse, NotFound } = require('..')
 const Nexus = require('./nexus.service')
 
-describe('Nexus', function() {
-  context('transform2()', function() {
-    it('throws NotFound error when no versions exist', function() {
+describe('Nexus', function () {
+  context('transform2()', function () {
+    it('throws NotFound error when no versions exist', function () {
       try {
         Nexus.prototype.transform2({ json: { data: [] } })
         expect.fail('Expected to throw')
@@ -18,7 +18,7 @@ describe('Nexus', function() {
       }
     })
 
-    it('throws InvalidResponse error when no there is no latestRelease version', function() {
+    it('throws InvalidResponse error when no there is no latestRelease version', function () {
       try {
         Nexus.prototype.transform2({ repo: 'r', json: { data: [{}] } })
         expect.fail('Expected to throw')
@@ -28,7 +28,7 @@ describe('Nexus', function() {
       }
     })
 
-    it('returns latestSnapshot value', function() {
+    it('returns latestSnapshot value', function () {
       const latestSnapshot = '7.0.1-SNAPSHOT'
       const { version } = Nexus.prototype.transform2({
         repo: 's',
@@ -39,7 +39,7 @@ describe('Nexus', function() {
       expect(version).to.equal(latestSnapshot)
     })
 
-    it('returns version value when it is a snapshot', function() {
+    it('returns version value when it is a snapshot', function () {
       const latestSnapshot = '1.2.7-SNAPSHOT'
       const { version } = Nexus.prototype.transform2({
         repo: 's',
@@ -50,7 +50,7 @@ describe('Nexus', function() {
       expect(version).to.equal(latestSnapshot)
     })
 
-    it('throws InvalidResponse error when no snapshot versions exist', function() {
+    it('throws InvalidResponse error when no snapshot versions exist', function () {
       try {
         Nexus.prototype.transform2({ repo: 's', json: { data: [{}] } })
         expect.fail('Expected to throw')
@@ -60,7 +60,7 @@ describe('Nexus', function() {
       }
     })
 
-    it('throws InvalidResponse error when repository has no version data', function() {
+    it('throws InvalidResponse error when repository has no version data', function () {
       try {
         Nexus.prototype.transform2({
           repo: 'developer',
@@ -73,8 +73,8 @@ describe('Nexus', function() {
       }
     })
 
-    context('transform3()', function() {
-      it('throws NotFound error when no items exist', function() {
+    context('transform3()', function () {
+      it('throws NotFound error when no items exist', function () {
         try {
           Nexus.prototype.transform3({ json: { items: [] } })
           expect.fail('Expected to throw')
@@ -84,7 +84,7 @@ describe('Nexus', function() {
         }
       })
 
-      it('throws NotFound error when no snapshot items exist', function() {
+      it('throws NotFound error when no snapshot items exist', function () {
         try {
           Nexus.prototype.transform3({
             repo: 's',
@@ -99,7 +99,7 @@ describe('Nexus', function() {
         }
       })
 
-      it('returns first item version', function() {
+      it('returns first item version', function () {
         const { version } = Nexus.prototype.transform3({
           json: {
             items: [
@@ -114,7 +114,7 @@ describe('Nexus', function() {
     })
   })
 
-  describe('auth', function() {
+  describe('auth', function () {
     cleanUpNockAfterEach()
 
     const user = 'admin'
@@ -133,7 +133,7 @@ describe('Nexus', function() {
       },
     }
 
-    it('sends the auth information as configured', async function() {
+    it('sends the auth information as configured', async function () {
       const scope = nock('https://repository.jboss.org')
         .get('/nexus/service/local/lucene/search')
         .query({ g: 'jboss', a: 'jboss-client' })

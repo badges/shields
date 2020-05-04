@@ -16,9 +16,7 @@ const {
 const { isIntegerPercentage, isMetric } = require('../test-validators')
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
-  Joi.number()
-    .valid(0)
-    .required()
+  Joi.number().valid(0).required()
 )
 
 // The service tests targeting the legacy SonarQube API are mocked

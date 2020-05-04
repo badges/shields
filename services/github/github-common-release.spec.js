@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const { _getLatestRelease } = require('./github-common-release')
 
-describe('GithubRelease', function() {
+describe('GithubRelease', function () {
   test(_getLatestRelease, () => {
     const releaseFixture = [
       { tag_name: 'cheese', prerelease: false }, // any old string

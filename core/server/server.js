@@ -71,12 +71,8 @@ const publicConfigSchema = Joi.object({
       Joi.string().pattern(/^\\\\\.\\pipe\\.+$/)
     ),
     address: Joi.alternatives().try(
-      Joi.string()
-        .ip()
-        .required(),
-      Joi.string()
-        .hostname()
-        .required()
+      Joi.string().ip().required(),
+      Joi.string().hostname().required()
     ),
   },
   metrics: {
@@ -119,9 +115,7 @@ const publicConfigSchema = Joi.object({
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
   cors: {
-    allowedOrigin: Joi.array()
-      .items(optionalUrl)
-      .required(),
+    allowedOrigin: Joi.array().items(optionalUrl).required(),
   },
   persistence: {
     dir: Joi.string().required(),
@@ -133,10 +127,7 @@ const publicConfigSchema = Joi.object({
       baseUri: requiredUrl,
       debug: {
         enabled: Joi.boolean().required(),
-        intervalSeconds: Joi.number()
-          .integer()
-          .min(1)
-          .required(),
+        intervalSeconds: Joi.number().integer().min(1).required(),
       },
     },
     jira: defaultService,
@@ -152,9 +143,7 @@ const publicConfigSchema = Joi.object({
     trace: Joi.boolean().required(),
   }).required(),
   cacheHeaders: {
-    defaultCacheLengthSeconds: Joi.number()
-      .integer()
-      .required(),
+    defaultCacheLengthSeconds: Joi.number().integer().required(),
   },
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),

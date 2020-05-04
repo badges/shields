@@ -5,9 +5,7 @@ const { BaseJsonService } = require('..')
 
 const projectsCountRegex = /^\s[0-9]*(\.[0-9]k)?\sprojects$/
 const schema = Joi.object({
-  value: Joi.string()
-    .regex(projectsCountRegex)
-    .required(),
+  value: Joi.string().regex(projectsCountRegex).required(),
 }).required()
 
 module.exports = class Sourcegraph extends BaseJsonService {

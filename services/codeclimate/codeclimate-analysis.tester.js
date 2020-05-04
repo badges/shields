@@ -7,14 +7,10 @@ const t = (module.exports = require('../tester').createServiceTester())
 // Examples for this service can be found through the explore page:
 // https://codeclimate.com/explore
 
-t.create('issues count')
-  .get('/issues/angular/angular.json')
-  .expectBadge({
-    label: 'issues',
-    message: Joi.number()
-      .integer()
-      .positive(),
-  })
+t.create('issues count').get('/issues/angular/angular.json').expectBadge({
+  label: 'issues',
+  message: Joi.number().integer().positive(),
+})
 
 t.create('technical debt percentage')
   .get('/tech-debt/angular/angular.json')

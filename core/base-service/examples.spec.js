@@ -4,8 +4,8 @@ const { expect } = require('chai')
 const { test, given } = require('sazerac')
 const { validateExample, transformExample } = require('./examples')
 
-describe('validateExample function', function() {
-  it('passes valid examples', function() {
+describe('validateExample function', function () {
+  it('passes valid examples', function () {
     const validExamples = [
       {
         title: 'Package manager versioning badge',
@@ -23,7 +23,7 @@ describe('validateExample function', function() {
     })
   })
 
-  it('rejects invalid examples', function() {
+  it('rejects invalid examples', function () {
     const invalidExamples = [
       {},
       { staticPreview: { message: '123' } },
@@ -74,7 +74,7 @@ describe('validateExample function', function() {
   })
 })
 
-test(transformExample, function() {
+test(transformExample, function () {
   const ExampleService = {
     name: 'ExampleService',
     route: {

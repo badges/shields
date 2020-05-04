@@ -8,12 +8,10 @@ const t = (module.exports = new ServiceTester({
   title: 'Comprehensive TEX Archive Network',
 }))
 
-t.create('license')
-  .get('/l/novel.json')
-  .expectBadge({
-    label: 'license',
-    message: 'lppl1.3c, ofl',
-  })
+t.create('license').get('/l/novel.json').expectBadge({
+  label: 'license',
+  message: 'lppl1.3c, ofl',
+})
 
 t.create('license missing')
   .get('/l/novel.json')
@@ -48,12 +46,10 @@ t.create('single license')
     message: 'knuth',
   })
 
-t.create('version')
-  .get('/v/novel.json')
-  .expectBadge({
-    label: 'ctan',
-    message: isVPlusDottedVersionAtLeastOne,
-  })
+t.create('version').get('/v/novel.json').expectBadge({
+  label: 'ctan',
+  message: isVPlusDottedVersionAtLeastOne,
+})
 
 t.create('version')
   .get('/v/novel.json')

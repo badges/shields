@@ -6,9 +6,7 @@ const { BaseJsonService } = require('..')
 const schema = Joi.object({
   currency_sign: Joi.string().required(),
   amount: Joi.number().required(),
-  multiplier: Joi.string()
-    .allow('')
-    .required(),
+  multiplier: Joi.string().allow('').required(),
   currency_abbreviation: Joi.string().required(),
 }).required()
 

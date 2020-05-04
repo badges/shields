@@ -14,9 +14,7 @@ t.create('Reputation for StackOverflow user 22656')
     message: isMetric,
   })
 
-t.create('Reputation for Tex user 22656')
-  .get('/tex/r/226.json')
-  .expectBadge({
-    label: 'tex reputation',
-    message: isMetric,
-  })
+t.create('Reputation for Tex user 22656').get('/tex/r/226.json').expectBadge({
+  label: 'tex reputation',
+  message: isMetric,
+})

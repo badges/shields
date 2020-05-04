@@ -17,10 +17,10 @@ const config = {
   },
 }
 
-describe('SonarFortifyRating', function() {
+describe('SonarFortifyRating', function () {
   cleanUpNockAfterEach()
 
-  it('sends the auth information as configured', async function() {
+  it('sends the auth information as configured', async function () {
     const scope = nock('http://sonar.petalslink.com')
       .get('/api/measures/component')
       .query({

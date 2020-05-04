@@ -13,10 +13,7 @@ const PriorityQueue = require('priorityqueuejs')
  * @returns {string} hash
  */
 function sanitizeToken(id) {
-  return crypto
-    .createHash('sha256')
-    .update(id, 'utf-8')
-    .digest('hex')
+  return crypto.createHash('sha256').update(id, 'utf-8').digest('hex')
 }
 
 function getUtcEpochSeconds() {

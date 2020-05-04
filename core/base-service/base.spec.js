@@ -73,7 +73,7 @@ class DummyServiceWithServiceResponseSizeMetricEnabled extends DummyService {
   }
 }
 
-describe('BaseService', function() {
+describe('BaseService', function () {
   const defaultConfig = {
     public: {
       handleInternalErrors: false,
@@ -82,7 +82,7 @@ describe('BaseService', function() {
     private: {},
   }
 
-  it('Invokes the handler as expected', async function() {
+  it('Invokes the handler as expected', async function () {
     expect(
       await DummyService.invoke(
         {},
@@ -95,7 +95,7 @@ describe('BaseService', function() {
     })
   })
 
-  it('Validates query params', async function() {
+  it('Validates query params', async function () {
     expect(
       await DummyService.invoke(
         {},
@@ -110,14 +110,14 @@ describe('BaseService', function() {
     })
   })
 
-  describe('Required overrides', function() {
-    it('Should throw if render() is not overridden', function() {
+  describe('Required overrides', function () {
+    it('Should throw if render() is not overridden', function () {
       expect(() => BaseService.render()).to.throw(
         /^render\(\) function not implemented for BaseService$/
       )
     })
 
-    it('Should throw if route is not overridden', function() {
+    it('Should throw if route is not overridden', function () {
       return expect(BaseService.invoke({}, {}, {})).to.be.rejectedWith(
         /^Route not defined for BaseService$/
       )
@@ -128,31 +128,31 @@ describe('BaseService', function() {
         return {}
       }
     }
-    it('Should throw if handle() is not overridden', function() {
+    it('Should throw if handle() is not overridden', function () {
       return expect(WithRoute.invoke({}, {}, {})).to.be.rejectedWith(
         /^Handler not implemented for WithRoute$/
       )
     })
 
-    it('Should throw if category is not overridden', function() {
+    it('Should throw if category is not overridden', function () {
       expect(() => BaseService.category).to.throw(
         /^Category not set for BaseService$/
       )
     })
   })
 
-  describe('Logging', function() {
+  describe('Logging', function () {
     let sandbox
-    beforeEach(function() {
+    beforeEach(function () {
       sandbox = sinon.createSandbox()
     })
-    afterEach(function() {
+    afterEach(function () {
       sandbox.restore()
     })
-    beforeEach(function() {
+    beforeEach(function () {
       sandbox.stub(trace, 'logTrace')
     })
-    it('Invokes the logger as expected', async function() {
+    it('Invokes the logger as expected', async function () {
       await DummyService.invoke(
         {},
         defaultConfig,
@@ -180,8 +180,8 @@ describe('BaseService', function() {
     })
   })
 
-  describe('Service data validation', function() {
-    it('Allows a link array', async function() {
+  describe('Service data validation', function () {
+    it('Allows a link array', async function () {
       const message = 'hello'
       const link = ['https://example.com/', 'https://other.example.com/']
       class LinkService extends DummyService {
@@ -202,7 +202,7 @@ describe('BaseService', function() {
       })
     })
 
-    context('On invalid data', function() {
+    context('On invalid data', function () {
       class ThrowingService extends DummyService {
         async handle() {
           return {
@@ -211,7 +211,7 @@ describe('BaseService', function() {
         }
       }
 
-      it('Throws a validation error on invalid data', async function() {
+      it('Throws a validation error on invalid data', async function () {
         try {
           await ThrowingService.invoke(
             {},
@@ -229,7 +229,7 @@ describe('BaseService', function() {
 
       // Ensure debuggabillity.
       // https://github.com/badges/shields/issues/3784
-      it('Includes the service class in the stack trace', async function() {
+      it('Includes the service class in the stack trace', async function () {
         try {
           await ThrowingService.invoke(
             {},
@@ -244,8 +244,8 @@ describe('BaseService', function() {
     })
   })
 
-  describe('Error handling', function() {
-    it('Handles internal errors', async function() {
+  describe('Error handling', function () {
+    it('Handles internal errors', async function () {
       class ThrowingService extends DummyService {
         async handle() {
           throw Error("I've made a huge mistake")
@@ -265,8 +265,8 @@ describe('BaseService', function() {
       })
     })
 
-    describe('Handles known subtypes of ShieldsInternalError', function() {
-      it('handles NotFound errors', async function() {
+    describe('Handles known subtypes of ShieldsInternalError', function () {
+      it('handles NotFound errors', async function () {
         class ThrowingService extends DummyService {
           async handle() {
             throw new NotFound()
@@ -281,7 +281,7 @@ describe('BaseService', function() {
         })
       })
 
-      it('handles Inaccessible errors', async function() {
+      it('handles Inaccessible errors', async function () {
         class ThrowingService extends DummyService {
           async handle() {
             throw new Inaccessible()
@@ -296,7 +296,7 @@ describe('BaseService', function() {
         })
       })
 
-      it('handles InvalidResponse errors', async function() {
+      it('handles InvalidResponse errors', async function () {
         class ThrowingService extends DummyService {
           async handle() {
             throw new InvalidResponse()
@@ -311,7 +311,7 @@ describe('BaseService', function() {
         })
       })
 
-      it('handles Deprecated', async function() {
+      it('handles Deprecated', async function () {
         class ThrowingService extends DummyService {
           async handle() {
             throw new Deprecated()
@@ -326,7 +326,7 @@ describe('BaseService', function() {
         })
       })
 
-      it('handles InvalidParameter errors', async function() {
+      it('handles InvalidParameter errors', async function () {
         class ThrowingService extends DummyService {
           async handle() {
             throw new InvalidParameter()
@@ -343,7 +343,7 @@ describe('BaseService', function() {
     })
   })
 
-  describe('ScoutCamp integration', function() {
+  describe('ScoutCamp integration', function () {
     // TODO Strangly, without the useless escape the regexes do not match in Node 12.
     // eslint-disable-next-line no-useless-escape
     const expectedRouteRegex = /^\/foo\/([^\/]+?)(|\.svg|\.json)$/
@@ -351,7 +351,7 @@ describe('BaseService', function() {
     let mockCamp
     let mockHandleRequest
 
-    beforeEach(function() {
+    beforeEach(function () {
       mockCamp = {
         route: sinon.spy(),
       }
@@ -362,12 +362,12 @@ describe('BaseService', function() {
       )
     })
 
-    it('registers the service', function() {
+    it('registers the service', function () {
       expect(mockCamp.route).to.have.been.calledOnce
       expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex)
     })
 
-    it('handles the request', async function() {
+    it('handles the request', async function () {
       expect(mockHandleRequest).to.have.been.calledOnce
 
       const {
@@ -404,8 +404,8 @@ describe('BaseService', function() {
     })
   })
 
-  describe('getDefinition', function() {
-    it('returns the expected result', function() {
+  describe('getDefinition', function () {
+    it('returns the expected result', function () {
       const {
         category,
         name,
@@ -432,12 +432,12 @@ describe('BaseService', function() {
     })
   })
 
-  describe('validate', function() {
+  describe('validate', function () {
     const dummySchema = Joi.object({
       requiredString: Joi.string().required(),
     }).required()
 
-    it('throws error for invalid responses', function() {
+    it('throws error for invalid responses', function () {
       expect(() =>
         DummyService._validate(
           { requiredString: ['this', "shouldn't", 'work'] },
@@ -449,19 +449,19 @@ describe('BaseService', function() {
     })
   })
 
-  describe('request', function() {
+  describe('request', function () {
     let sandbox
-    beforeEach(function() {
+    beforeEach(function () {
       sandbox = sinon.createSandbox()
     })
-    afterEach(function() {
+    afterEach(function () {
       sandbox.restore()
     })
-    beforeEach(function() {
+    beforeEach(function () {
       sandbox.stub(trace, 'logTrace')
     })
 
-    it('logs appropriate information', async function() {
+    it('logs appropriate information', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '',
         res: { statusCode: 200 },
@@ -491,7 +491,7 @@ describe('BaseService', function() {
       )
     })
 
-    it('handles errors', async function() {
+    it('handles errors', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '',
         res: { statusCode: 404 },
@@ -512,14 +512,14 @@ describe('BaseService', function() {
     })
   })
 
-  describe('Metrics', function() {
+  describe('Metrics', function () {
     let register
-    beforeEach(function() {
+    beforeEach(function () {
       register = new prometheus.Registry()
     })
     const url = 'some-url'
 
-    it('service response size metric is optional', async function() {
+    it('service response size metric is optional', async function () {
       const metricHelper = MetricHelper.create({
         metricInstance: new PrometheusMetrics({ register }),
         ServiceClass: DummyServiceWithServiceResponseSizeMetricEnabled,
@@ -544,7 +544,7 @@ describe('BaseService', function() {
         )
     })
 
-    it('service response size metric is disabled by default', async function() {
+    it('service response size metric is disabled by default', async function () {
       const metricHelper = MetricHelper.create({
         metricInstance: new PrometheusMetrics({ register }),
         ServiceClass: DummyService,
@@ -565,7 +565,7 @@ describe('BaseService', function() {
       ).to.not.contain('service_response_bytes_bucket')
     })
   })
-  describe('auth', function() {
+  describe('auth', function () {
     class AuthService extends DummyService {
       static get auth() {
         return {
@@ -582,7 +582,7 @@ describe('BaseService', function() {
       }
     }
 
-    it('when auth is configured properly, invoke() sets authHelper', async function() {
+    it('when auth is configured properly, invoke() sets authHelper', async function () {
       expect(
         await AuthService.invoke(
           {},
@@ -598,7 +598,7 @@ describe('BaseService', function() {
       ).to.deep.equal({ message: 'The CI password is abc123' })
     })
 
-    it('when auth is not configured properly, invoke() returns inacessible', async function() {
+    it('when auth is not configured properly, invoke() returns inacessible', async function () {
       expect(
         await AuthService.invoke(
           {},

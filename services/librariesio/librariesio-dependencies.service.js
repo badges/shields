@@ -11,12 +11,8 @@ const schema = Joi.object({
   dependencies: Joi.array()
     .items(
       Joi.object({
-        deprecated: Joi.boolean()
-          .allow(null)
-          .required(),
-        outdated: Joi.boolean()
-          .allow(null)
-          .required(),
+        deprecated: Joi.boolean().allow(null).required(),
+        outdated: Joi.boolean().allow(null).required(),
       })
     )
     .default([]),

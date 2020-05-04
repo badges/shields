@@ -6,7 +6,7 @@ const Codeship = require('./codeship.service')
 const pending = { message: 'pending', label: undefined, color: undefined }
 const notBuilt = { message: 'not built', label: undefined, color: undefined }
 
-describe('Codeship', function() {
+describe('Codeship', function () {
   test(Codeship.render, () => {
     given({ status: 'testing' }).expect(pending)
     given({ status: 'waiting' }).expect(pending)

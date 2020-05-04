@@ -17,10 +17,7 @@ const schema = Joi.object({
   score: Joi.alternatives()
     .conditional('state', {
       is: 'FINISHED',
-      then: Joi.number()
-        .integer()
-        .min(0)
-        .max(200),
+      then: Joi.number().integer().min(0).max(200),
       otherwise: Joi.valid(null),
     })
     .required(),

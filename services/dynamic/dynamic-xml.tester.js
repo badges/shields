@@ -6,9 +6,7 @@ const { exampleXml } = require('./dynamic-response-fixtures')
 
 const exampleUrl = 'https://example.test/example.xml'
 const withExampleXml = nock =>
-  nock('https://example.test')
-    .get('/example.xml')
-    .reply(200, exampleXml)
+  nock('https://example.test').get('/example.xml').reply(200, exampleXml)
 
 t.create('No URL specified')
   .get('.json?query=//name&label=Package Name')

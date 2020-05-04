@@ -10,9 +10,7 @@ t.create('publish status of the component')
     message: Joi.equal('published', 'unpublished'),
   })
 
-t.create('not found')
-  .get('/does-not-exist.json')
-  .expectBadge({
-    label: 'vaadin directory',
-    message: 'not found',
-  })
+t.create('not found').get('/does-not-exist.json').expectBadge({
+  label: 'vaadin directory',
+  message: 'not found',
+})

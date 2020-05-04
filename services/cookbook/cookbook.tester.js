@@ -3,12 +3,10 @@
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('version')
-  .get('/chef-sugar.json')
-  .expectBadge({
-    label: 'cookbook',
-    message: isVPlusDottedVersionAtLeastOne,
-  })
+t.create('version').get('/chef-sugar.json').expectBadge({
+  label: 'cookbook',
+  message: isVPlusDottedVersionAtLeastOne,
+})
 
 t.create('version')
   .get('/chef-sugar.json')

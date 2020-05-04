@@ -9,39 +9,21 @@ const { fetchJsonFromRepo } = require('../github/github-common-fetch')
 const { InvalidParameter, InvalidResponse, NotFound } = require('..')
 
 const nycrcSchema = Joi.object({
-  branches: Joi.number()
-    .min(0)
-    .max(100),
-  lines: Joi.number()
-    .min(0)
-    .max(100),
-  functions: Joi.number()
-    .min(0)
-    .max(100),
+  branches: Joi.number().min(0).max(100),
+  lines: Joi.number().min(0).max(100),
+  functions: Joi.number().min(0).max(100),
 }).required()
 
 const pkgJSONSchema = Joi.object({
   c8: Joi.object({
-    branches: Joi.number()
-      .min(0)
-      .max(100),
-    lines: Joi.number()
-      .min(0)
-      .max(100),
-    functions: Joi.number()
-      .min(0)
-      .max(100),
+    branches: Joi.number().min(0).max(100),
+    lines: Joi.number().min(0).max(100),
+    functions: Joi.number().min(0).max(100),
   }).optional(),
   nyc: Joi.object({
-    branches: Joi.number()
-      .min(0)
-      .max(100),
-    lines: Joi.number()
-      .min(0)
-      .max(100),
-    functions: Joi.number()
-      .min(0)
-      .max(100),
+    branches: Joi.number().min(0).max(100),
+    lines: Joi.number().min(0).max(100),
+    functions: Joi.number().min(0).max(100),
   }).optional(),
 }).required()
 

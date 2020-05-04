@@ -25,9 +25,7 @@ t.create('rating of the component (eg: 4.2/5)')
     message: Joi.string().regex(/^\d\.\d\/5$/),
   })
 
-t.create('not found')
-  .get('/rating/does-not-exist.json')
-  .expectBadge({
-    label: 'rating',
-    message: 'not found',
-  })
+t.create('not found').get('/rating/does-not-exist.json').expectBadge({
+  label: 'rating',
+  message: 'not found',
+})

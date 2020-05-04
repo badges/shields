@@ -3,13 +3,10 @@
 const { anyInteger } = require('../validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('sourcerank')
-  .timeout(10000)
-  .get('/npm/got.json')
-  .expectBadge({
-    label: 'sourcerank',
-    message: anyInteger,
-  })
+t.create('sourcerank').timeout(10000).get('/npm/got.json').expectBadge({
+  label: 'sourcerank',
+  message: anyInteger,
+})
 
 t.create('sourcerank (scoped npm package)')
   .timeout(10000)

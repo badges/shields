@@ -6,7 +6,7 @@ const { expect } = require('chai')
 const got = require('../got-test-client')
 const redirector = require('./redirector')
 
-describe('Redirector', function() {
+describe('Redirector', function () {
   const route = {
     base: 'very/old/service',
     pattern: ':namedParamA',
@@ -16,15 +16,15 @@ describe('Redirector', function() {
   const dateAdded = new Date()
   const attrs = { category, route, transformPath, dateAdded }
 
-  it('returns true on isDeprecated', function() {
+  it('returns true on isDeprecated', function () {
     expect(redirector(attrs).isDeprecated).to.be.true
   })
 
-  it('has the expected name', function() {
+  it('has the expected name', function () {
     expect(redirector(attrs).name).to.equal('VeryOldServiceRedirect')
   })
 
-  it('overrides the name', function() {
+  it('overrides the name', function () {
     expect(
       redirector({
         ...attrs,
@@ -33,33 +33,33 @@ describe('Redirector', function() {
     ).to.equal('ShinyRedirect')
   })
 
-  it('sets specified route', function() {
+  it('sets specified route', function () {
     expect(redirector(attrs).route).to.deep.equal(route)
   })
 
-  it('sets specified category', function() {
+  it('sets specified category', function () {
     expect(redirector(attrs).category).to.equal(category)
   })
 
-  it('throws the expected error when dateAdded is missing', function() {
+  it('throws the expected error when dateAdded is missing', function () {
     expect(() =>
       redirector({ route, category, transformPath }).validateDefinition()
     ).to.throw('"dateAdded" is required')
   })
 
-  describe('ScoutCamp integration', function() {
+  describe('ScoutCamp integration', function () {
     let port, baseUrl
-    beforeEach(async function() {
+    beforeEach(async function () {
       port = await portfinder.getPortPromise()
       baseUrl = `http://127.0.0.1:${port}`
     })
 
     let camp
-    beforeEach(async function() {
+    beforeEach(async function () {
       camp = Camp.start({ port, hostname: '::' })
       await new Promise(resolve => camp.on('listening', () => resolve()))
     })
-    afterEach(async function() {
+    afterEach(async function () {
       if (camp) {
         await new Promise(resolve => camp.close(resolve))
         camp = undefined
@@ -68,7 +68,7 @@ describe('Redirector', function() {
 
     const transformPath = ({ namedParamA }) => `/new/service/${namedParamA}`
 
-    beforeEach(function() {
+    beforeEach(function () {
       const ServiceClass = redirector({
         category,
         route,
@@ -81,7 +81,7 @@ describe('Redirector', function() {
       )
     })
 
-    it('should redirect as configured', async function() {
+    it('should redirect as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}/very/old/service/hello-world.svg`,
         {
@@ -93,7 +93,7 @@ describe('Redirector', function() {
       expect(headers.location).to.equal('/new/service/hello-world.svg')
     })
 
-    it('should redirect raster extensions to the canonical path as configured', async function() {
+    it('should redirect raster extensions to the canonical path as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}/very/old/service/hello-world.png`,
         {
@@ -107,7 +107,7 @@ describe('Redirector', function() {
       )
     })
 
-    it('should forward the query params', async function() {
+    it('should forward the query params', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}/very/old/service/hello-world.svg?color=123&style=flat-square`,
         {
@@ -121,14 +121,14 @@ describe('Redirector', function() {
       )
     })
 
-    describe('transformQueryParams', function() {
+    describe('transformQueryParams', function () {
       const route = {
         base: 'another/old/service',
         pattern: 'token/:token/:namedParamA',
       }
       const transformQueryParams = ({ token }) => ({ token })
 
-      beforeEach(function() {
+      beforeEach(function () {
         const ServiceClass = redirector({
           category,
           route,
@@ -139,7 +139,7 @@ describe('Redirector', function() {
         ServiceClass.register({ camp }, {})
       })
 
-      it('should forward the transformed query params', async function() {
+      it('should forward the transformed query params', async function () {
         const { statusCode, headers } = await got(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg`,
           {
@@ -153,7 +153,7 @@ describe('Redirector', function() {
         )
       })
 
-      it('should forward the specified and transformed query params', async function() {
+      it('should forward the specified and transformed query params', async function () {
         const { statusCode, headers } = await got(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square`,
           {
@@ -167,7 +167,7 @@ describe('Redirector', function() {
         )
       })
 
-      it('should use transformed query params on param conflicts by default', async function() {
+      it('should use transformed query params on param conflicts by default', async function () {
         const { statusCode, headers } = await got(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
           {
@@ -181,7 +181,7 @@ describe('Redirector', function() {
         )
       })
 
-      it('should use specified query params on param conflicts when configured', async function() {
+      it('should use specified query params on param conflicts when configured', async function () {
         const route = {
           base: 'override/service',
           pattern: 'token/:token/:namedParamA',

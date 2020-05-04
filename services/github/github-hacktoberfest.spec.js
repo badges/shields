@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const GitHubHacktoberfest = require('./github-hacktoberfest.service')
 
-describe('GitHubHacktoberfest', function() {
+describe('GitHubHacktoberfest', function () {
   test(GitHubHacktoberfest.render, () => {
     given({
       daysLeft: -1,

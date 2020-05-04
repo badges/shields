@@ -85,7 +85,7 @@ class ServiceTester {
         this.beforeEach()
       })
       // eslint-disable-next-line mocha/prefer-arrow-callback
-      .finally(function() {
+      .finally(function () {
         // `this` is the IcedFrisby instance.
         let responseBody
         try {
@@ -125,7 +125,7 @@ class ServiceTester {
 
     const fn = this._only ? describe.only : describe
     // eslint-disable-next-line mocha/prefer-arrow-callback
-    fn(this.title, function() {
+    fn(this.title, function () {
       specs.forEach(spec => {
         spec._message = `[${spec.hasIntercept ? 'mocked' : 'live'}] ${
           spec._message

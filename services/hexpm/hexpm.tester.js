@@ -45,13 +45,11 @@ t.create('version (not found)')
   .get('/v/this-package-does-not-exist.json')
   .expectBadge({ label: 'hex', message: 'not found' })
 
-t.create('license')
-  .get('/l/cowboy.json')
-  .expectBadge({
-    label: 'license',
-    message: Joi.string().required(),
-    color: 'blue',
-  })
+t.create('license').get('/l/cowboy.json').expectBadge({
+  label: 'license',
+  message: Joi.string().required(),
+  color: 'blue',
+})
 
 t.create('license (multiple licenses)')
   .get('/l/cowboy.json')

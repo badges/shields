@@ -67,8 +67,9 @@ module.exports = class OpencollectiveBase extends BaseJsonService {
       schema,
       // https://developer.opencollective.com/#/api/collectives?id=get-members
       // https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier
-      url: `https://opencollective.com/${collective}/members/${userType ||
-        'all'}.json${tierId ? `?TierId=${tierId}` : ''}`,
+      url: `https://opencollective.com/${collective}/members/${
+        userType || 'all'
+      }.json${tierId ? `?TierId=${tierId}` : ''}`,
       errorMessages: {
         404: 'collective not found',
       },

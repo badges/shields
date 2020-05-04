@@ -4,8 +4,8 @@ const { expect } = require('chai')
 const { NotFound } = require('..')
 const PackagistLicense = require('./packagist-license.service')
 
-describe('PackagistLicense', function() {
-  it('should throw NotFound when default branch is missing', function() {
+describe('PackagistLicense', function () {
+  it('should throw NotFound when default branch is missing', function () {
     const json = {
       packages: {
         'doctrine/orm': {},

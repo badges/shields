@@ -22,17 +22,17 @@ const exampleXml = `<?xml version="1.0"?>
 </catalog>
 `
 
-describe('DynamicXml', function() {
-  describe('transform()', function() {
-    beforeEach(function() {
+describe('DynamicXml', function () {
+  describe('transform()', function () {
+    beforeEach(function () {
       sinon.stub(xpath, 'select').returns(undefined)
     })
 
-    afterEach(function() {
+    afterEach(function () {
       sinon.restore()
     })
 
-    it('throws InvalidResponse on unsupported query', function() {
+    it('throws InvalidResponse on unsupported query', function () {
       expect(() =>
         DynamicXml.prototype.transform({
           pathExpression: '//book/title',

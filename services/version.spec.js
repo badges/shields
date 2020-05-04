@@ -4,7 +4,7 @@ const { test, given } = require('sazerac')
 const { latest, slice, rangeStart, renderVersionBadge } = require('./version')
 const includePre = true
 
-describe('Version helpers', function() {
+describe('Version helpers', function () {
   test(latest, () => {
     // semver-compatible versions.
     given(['1.0.0', '1.0.2', '1.0.1']).expect('1.0.2')
