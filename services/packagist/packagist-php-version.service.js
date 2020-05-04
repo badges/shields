@@ -29,7 +29,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
   static get examples() {
     return [
       {
-        title: 'PHP from Packagist',
+        title: 'Packagist PHP Version Support',
         pattern: ':user/:repo',
         namedParams: {
           user: 'symfony',
@@ -38,7 +38,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
         staticPreview: this.render({ php: '^7.1.3' }),
       },
       {
-        title: 'PHP from Packagist (specify version)',
+        title: 'Packagist PHP Version Support (specify version)',
         pattern: ':user/:repo/:version',
         namedParams: {
           user: 'symfony',
@@ -48,7 +48,7 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
         staticPreview: this.render({ php: '>=5.3.9' }),
       },
       {
-        title: 'PHP from Packagist (custom server)',
+        title: 'Packagist PHP Version Support (custom server)',
         pattern: ':user/:repo',
         namedParams: {
           user: 'symfony',
