@@ -25,6 +25,7 @@ interface BadgeData {
   labelColor?: string
   color: string
   namedLogo?: string
+  links?: string[]
 }
 
 function Badges({
@@ -38,10 +39,11 @@ function Badges({
 }): JSX.Element {
   return (
     <>
-      {badges.map(({ label, message, labelColor, color, namedLogo }) => (
+      {badges.map(({ label, message, labelColor, color, namedLogo, links }) => (
         <Fragment key={`${label}-${message}-${color}-${namedLogo}`}>
           <Badge
             alt="build"
+            object={Boolean(links)}
             src={staticBadgeUrl({
               baseUrl,
               label,
@@ -50,6 +52,7 @@ function Badges({
               color,
               namedLogo,
               style,
+              links,
             })}
           />
           <br />
@@ -100,6 +103,20 @@ const examples = [
         color: 'brightgreen',
         labelColor: 'grey',
         namedLogo: 'appveyor',
+      },
+    ],
+  },
+  {
+    title: 'Links',
+    badges: [
+      {
+        label: 'badges',
+        message: 'shields',
+        color: 'blue',
+        links: [
+          'https://github.com/badges/',
+          'https://github.com/badges/shields/',
+        ],
       },
     ],
   },

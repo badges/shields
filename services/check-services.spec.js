@@ -9,6 +9,7 @@ const {
 // `expect().not.to.throw()` makes the error output unreadable.
 
 it('Services have unique names', function() {
+  this.timeout(30000)
   checkNames()
 })
 
