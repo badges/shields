@@ -145,7 +145,7 @@ describe('Cache header functions', function () {
         setHeadersForCacheLength(res, 123)
       })
 
-      it('should set the expected Cache-Control header', function() {
+      it('should set the expected Cache-Control header', function () {
         expect(res._headers['cache-control']).to.equal(
           'max-age=123 s-maxage=123'
         )
@@ -185,7 +185,7 @@ describe('Cache header functions', function () {
       setCacheHeadersForStaticResource(res)
     })
 
-    it('should set the expected Cache-Control header', function() {
+    it('should set the expected Cache-Control header', function () {
       expect(res._headers['cache-control']).to.equal(
         `max-age=${24 * 3600} s-maxage=${24 * 3600}`
       )
