@@ -8,7 +8,7 @@ const { InvalidResponse } = require('..')
 const GithubIssueDetail = require('./github-issue-detail.service')
 const { stateColor, commentsColor } = require('./github-helpers')
 
-describe('GithubIssueDetail', function() {
+describe('GithubIssueDetail', function () {
   test(GithubIssueDetail.render, () => {
     given({
       property: 'state',
@@ -182,8 +182,8 @@ describe('GithubIssueDetail', function() {
     })
   })
 
-  context('transform()', function() {
-    it('throws InvalidResponse error when issue has no labels', function() {
+  context('transform()', function () {
+    it('throws InvalidResponse error when issue has no labels', function () {
       try {
         GithubIssueDetail.prototype.transform({
           property: 'label',

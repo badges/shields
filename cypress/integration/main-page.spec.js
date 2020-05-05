@@ -1,19 +1,17 @@
 'use strict'
 
-describe('Main page', function() {
+describe('Main page', function () {
   const backendUrl = Cypress.env('backend_url')
   const SEARCH_INPUT = 'input[placeholder="search / project URL"]'
 
   function expectBadgeExample(title, previewUrl, pattern) {
-    cy.contains('tr', `${title}:`)
-      .find('code')
-      .should('have.text', pattern)
+    cy.contains('tr', `${title}:`).find('code').should('have.text', pattern)
     cy.contains('tr', `${title}:`)
       .find('img')
       .should('have.attr', 'src', previewUrl)
   }
 
-  it('Search for badges', function() {
+  it('Search for badges', function () {
     cy.visit('/')
 
     cy.get(SEARCH_INPUT).type('pypi')
@@ -21,7 +19,7 @@ describe('Main page', function() {
     cy.contains('PyPI - License')
   })
 
-  it('Shows badge from category', function() {
+  it('Shows badge from category', function () {
     cy.visit('/category/chat')
 
     expectBadgeExample(
@@ -31,7 +29,7 @@ describe('Main page', function() {
     )
   })
 
-  it('Suggest badges', function() {
+  it('Suggest badges', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
 
@@ -41,7 +39,7 @@ describe('Main page', function() {
     expectBadgeExample('GitHub issues', badgeUrl, badgeUrl)
   })
 
-  it('Customization form is filled with suggested badge details', function() {
+  it('Customization form is filled with suggested badge details', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
@@ -53,7 +51,7 @@ describe('Main page', function() {
     cy.get('input[name="repo"]').should('have.value', 'shields')
   })
 
-  it('Customizate suggested badge', function() {
+  it('Customizate suggested badge', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
     cy.visit('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')

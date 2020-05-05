@@ -7,8 +7,8 @@ const { mergeQueries } = require('./graphql')
 
 require('../register-chai-plugins.spec')
 
-describe('mergeQueries function', function() {
-  it('merges valid gql queries', function() {
+describe('mergeQueries function', function () {
+  it('merges valid gql queries', function () {
     expect(
       print(
         mergeQueries(
@@ -86,7 +86,7 @@ describe('mergeQueries function', function() {
     ).to.equalIgnoreSpaces('{ foo bar }')
   })
 
-  it('throws an error when passed invalid params', function() {
+  it('throws an error when passed invalid params', function () {
     expect(() => mergeQueries('', '')).to.throw(Error)
     expect(() => mergeQueries(undefined, 17, true)).to.throw(Error)
     expect(() => mergeQueries(gql``, gql`foo`)).to.throw(Error)

@@ -5,8 +5,8 @@ const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const Bintray = require('./bintray.service')
 
-describe('Bintray', function() {
-  describe('auth', function() {
+describe('Bintray', function () {
+  describe('auth', function () {
     cleanUpNockAfterEach()
 
     const user = 'admin'
@@ -18,7 +18,7 @@ describe('Bintray', function() {
       },
     }
 
-    it('sends the auth information as configured', async function() {
+    it('sends the auth information as configured', async function () {
       const scope = nock('https://bintray.com')
         .get('/api/v1/packages/asciidoctor/maven/asciidoctorj/versions/_latest')
         // This ensures that the expected credentials are actually being sent with the HTTP request.

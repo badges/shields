@@ -7,7 +7,7 @@ const defaultErrorMessages = {
 }
 
 module.exports = function checkErrorResponse(errorMessages = {}) {
-  return async function({ buffer, res }) {
+  return async function ({ buffer, res }) {
     let error
     errorMessages = { ...defaultErrorMessages, ...errorMessages }
     if (res.statusCode === 404) {

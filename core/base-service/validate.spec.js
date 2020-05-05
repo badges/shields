@@ -7,19 +7,19 @@ const trace = require('./trace')
 const { InvalidParameter } = require('./errors')
 const validate = require('./validate')
 
-describe('validate', function() {
+describe('validate', function () {
   const schema = Joi.object({
     requiredString: Joi.string().required(),
   }).required()
 
   let sandbox
-  beforeEach(function() {
+  beforeEach(function () {
     sandbox = sinon.createSandbox()
   })
-  afterEach(function() {
+  afterEach(function () {
     sandbox.restore()
   })
-  beforeEach(function() {
+  beforeEach(function () {
     sandbox.stub(trace, 'logTrace')
   })
 
@@ -35,8 +35,8 @@ describe('validate', function() {
     traceSuccessMessage,
   }
 
-  context('schema is not provided', function() {
-    it('throws the expected programmer error', function() {
+  context('schema is not provided', function () {
+    it('throws the expected programmer error', function () {
       try {
         validate(options, { requiredString: 'bar' }, undefined)
         expect.fail('Expected to throw')
@@ -47,8 +47,8 @@ describe('validate', function() {
     })
   })
 
-  context('data matches schema', function() {
-    it('logs the data', function() {
+  context('data matches schema', function () {
+    it('logs the data', function () {
       validate(options, { requiredString: 'bar' }, schema)
       expect(trace.logTrace).to.be.calledWithMatch(
         'validate',
@@ -60,8 +60,8 @@ describe('validate', function() {
     })
   })
 
-  context('data does not match schema', function() {
-    it('logs the data and throws the expected error', function() {
+  context('data does not match schema', function () {
+    it('logs the data and throws the expected error', function () {
       try {
         validate(
           options,
@@ -84,8 +84,8 @@ describe('validate', function() {
       )
     })
 
-    context('with includeKeys: true', function() {
-      it('includes keys in the error text', function() {
+    context('with includeKeys: true', function () {
+      it('includes keys in the error text', function () {
         try {
           validate(
             { ...options, includeKeys: true },
@@ -108,7 +108,7 @@ describe('validate', function() {
     })
   })
 
-  it('allowAndStripUnknownKeys', function() {
+  it('allowAndStripUnknownKeys', function () {
     try {
       validate(
         { ...options, allowAndStripUnknownKeys: false, includeKeys: true },

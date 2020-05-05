@@ -7,9 +7,7 @@ const { BaseJsonService, NotFound } = require('..')
 const schema = Joi.object({
   LayerCount: nonNegativeInteger,
   // DownloadSize may be missing in some cases
-  DownloadSize: Joi.number()
-    .integer()
-    .min(0),
+  DownloadSize: Joi.number().integer().min(0),
   Versions: Joi.array()
     .items(
       Joi.object({
@@ -21,9 +19,7 @@ const schema = Joi.object({
           )
           .required(),
         LayerCount: nonNegativeInteger,
-        DownloadSize: Joi.number()
-          .integer()
-          .min(0),
+        DownloadSize: Joi.number().integer().min(0),
       })
     )
     .required(),

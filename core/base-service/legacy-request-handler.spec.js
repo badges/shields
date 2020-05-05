@@ -70,19 +70,19 @@ function fakeHandlerWithNetworkIo(queryParams, match, sendBadge, request) {
   })
 }
 
-describe('The request handler', function() {
+describe('The request handler', function () {
   let port, baseUrl
-  beforeEach(async function() {
+  beforeEach(async function () {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
   })
 
   let camp
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     camp = Camp.start({ port, hostname: '::' })
     camp.on('listening', () => done())
   })
-  afterEach(function(done) {
+  afterEach(function (done) {
     clearRequestCache()
     if (camp) {
       camp.close(() => done())
@@ -92,15 +92,15 @@ describe('The request handler', function() {
 
   const standardCacheHeaders = { defaultCacheLengthSeconds: 120 }
 
-  describe('the options object calling style', function() {
-    beforeEach(function() {
+  describe('the options object calling style', function () {
+    beforeEach(function () {
       camp.route(
         /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
         handleRequest(standardCacheHeaders, { handler: fakeHandler })
       )
     })
 
-    it('should return the expected response', async function() {
+    it('should return the expected response', async function () {
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
         responseType: 'json',
       })
@@ -116,15 +116,15 @@ describe('The request handler', function() {
     })
   })
 
-  describe('the function shorthand calling style', function() {
-    beforeEach(function() {
+  describe('the function shorthand calling style', function () {
+    beforeEach(function () {
       camp.route(
         /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
         handleRequest(standardCacheHeaders, fakeHandler)
       )
     })
 
-    it('should return the expected response', async function() {
+    it('should return the expected response', async function () {
       const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
         responseType: 'json',
       })
@@ -140,8 +140,8 @@ describe('The request handler', function() {
     })
   })
 
-  describe('the response size limit', function() {
-    beforeEach(function() {
+  describe('the response size limit', function () {
+    beforeEach(function () {
       camp.route(
         /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
         handleRequest(standardCacheHeaders, {
@@ -151,7 +151,7 @@ describe('The request handler', function() {
       )
     })
 
-    it('should not throw an error if the response <= fetchLimitBytes', async function() {
+    it('should not throw an error if the response <= fetchLimitBytes', async function () {
       nock('https://www.google.com')
         .get('/foo/bar')
         .once()
@@ -170,7 +170,7 @@ describe('The request handler', function() {
       })
     })
 
-    it('should throw an error if the response is > fetchLimitBytes', async function() {
+    it('should throw an error if the response is > fetchLimitBytes', async function () {
       nock('https://www.google.com')
         .get('/foo/bar')
         .once()
@@ -189,15 +189,15 @@ describe('The request handler', function() {
       })
     })
 
-    afterEach(function() {
+    afterEach(function () {
       nock.cleanAll()
     })
   })
 
-  describe('caching', function() {
-    describe('standard query parameters', function() {
+  describe('caching', function () {
+    describe('standard query parameters', function () {
       let handlerCallCount
-      beforeEach(function() {
+      beforeEach(function () {
         handlerCallCount = 0
       })
 
@@ -214,12 +214,12 @@ describe('The request handler', function() {
         )
       }
 
-      context('With standard cache settings', function() {
-        beforeEach(function() {
+      context('With standard cache settings', function () {
+        beforeEach(function () {
           register({ cacheHeaderConfig: standardCacheHeaders })
         })
 
-        it('should cache identical requests', async function() {
+        it('should cache identical requests', async function () {
           await performTwoRequests(
             baseUrl,
             '/testing/123.svg',
@@ -228,7 +228,7 @@ describe('The request handler', function() {
           expect(handlerCallCount).to.equal(1)
         })
 
-        it('should differentiate known query parameters', async function() {
+        it('should differentiate known query parameters', async function () {
           await performTwoRequests(
             baseUrl,
             '/testing/123.svg?label=foo',
@@ -237,7 +237,7 @@ describe('The request handler', function() {
           expect(handlerCallCount).to.equal(2)
         })
 
-        it('should ignore unknown query parameters', async function() {
+        it('should ignore unknown query parameters', async function () {
           await performTwoRequests(
             baseUrl,
             '/testing/123.svg?foo=1',
@@ -247,7 +247,7 @@ describe('The request handler', function() {
         })
       })
 
-      it('should set the expires header to current time + defaultCacheLengthSeconds', async function() {
+      it('should set the expires header to current time + defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
@@ -257,7 +257,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=900 s-maxage=900')
       })
 
-      it('should set the expected cache headers on cached responses', async function() {
+      it('should set the expected cache headers on cached responses', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
 
         // Make first request.
@@ -271,7 +271,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=900 s-maxage=900')
       })
 
-      it('should let live service data override the default cache headers with longer value', async function() {
+      it('should let live service data override the default cache headers with longer value', async function () {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
@@ -292,7 +292,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=400 s-maxage=400')
       })
 
-      it('should not let live service data override the default cache headers with shorter value', async function() {
+      it('should not let live service data override the default cache headers with shorter value', async function () {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
@@ -313,7 +313,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=300 s-maxage=300')
       })
 
-      it('should set the expires header to current time + cacheSeconds', async function() {
+      it('should set the expires header to current time + cacheSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
         const { headers } = await got(
           `${baseUrl}/testing/123.json?cacheSeconds=3600`
@@ -325,7 +325,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=3600 s-maxage=3600')
       })
 
-      it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function() {
+      it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 600 } })
         const { headers } = await got(
           `${baseUrl}/testing/123.json?cacheSeconds=300`
@@ -337,7 +337,7 @@ describe('The request handler', function() {
         expect(headers['cache-control']).to.equal('max-age=600 s-maxage=600')
       })
 
-      it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function() {
+      it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         expect(headers.expires).to.equal(headers.date)
@@ -346,25 +346,25 @@ describe('The request handler', function() {
         )
       })
 
-      describe('the cache key', function() {
-        beforeEach(function() {
+      describe('the cache key', function () {
+        beforeEach(function () {
           register({ cacheHeaderConfig: standardCacheHeaders })
         })
         const expectedCacheKey = '/testing/123.json?color=123&label=foo'
-        it('should match expected and use canonical order - 1', async function() {
+        it('should match expected and use canonical order - 1', async function () {
           await got(`${baseUrl}/testing/123.json?color=123&label=foo`)
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)
         })
-        it('should match expected and use canonical order - 2', async function() {
+        it('should match expected and use canonical order - 2', async function () {
           await got(`${baseUrl}/testing/123.json?label=foo&color=123`)
           expect(_requestCache.cache).to.have.keys(expectedCacheKey)
         })
       })
     })
 
-    describe('custom query parameters', function() {
+    describe('custom query parameters', function () {
       let handlerCallCount
-      beforeEach(function() {
+      beforeEach(function () {
         handlerCallCount = 0
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
@@ -378,7 +378,7 @@ describe('The request handler', function() {
         )
       })
 
-      it('should differentiate them', async function() {
+      it('should differentiate them', async function () {
         await performTwoRequests(
           baseUrl,
           '/testing/123.svg?foo=1',

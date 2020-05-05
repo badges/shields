@@ -10,23 +10,17 @@ t.create('existing zcash address')
     message: withRegex(/^(?!not found$)/),
   })
 
-t.create('unknown username')
-  .get('/skyplabsssssss.json')
-  .expectBadge({
-    label: 'zec',
-    message: 'profile not found',
-  })
+t.create('unknown username').get('/skyplabsssssss.json').expectBadge({
+  label: 'zec',
+  message: 'profile not found',
+})
 
-t.create('invalid username')
-  .get('/s.json')
-  .expectBadge({
-    label: 'zec',
-    message: 'invalid username',
-  })
+t.create('invalid username').get('/s.json').expectBadge({
+  label: 'zec',
+  message: 'invalid username',
+})
 
-t.create('missing zcash address')
-  .get('/test.json')
-  .expectBadge({
-    label: 'zec',
-    message: 'no zcash addresses found',
-  })
+t.create('missing zcash address').get('/test.json').expectBadge({
+  label: 'zec',
+  message: 'no zcash addresses found',
+})

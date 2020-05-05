@@ -5,7 +5,7 @@ const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const Wheelmap = require('./wheelmap.service')
 
-describe('Wheelmap', function() {
+describe('Wheelmap', function () {
   cleanUpNockAfterEach()
 
   const token = 'abc123'
@@ -23,7 +23,7 @@ describe('Wheelmap', function() {
     }
   }
 
-  it('node with accessibility', async function() {
+  it('node with accessibility', async function () {
     const nodeId = '26699541'
     const scope = createMock({ nodeId, wheelchair: 'yes' })
     expect(
@@ -32,7 +32,7 @@ describe('Wheelmap', function() {
     scope.done()
   })
 
-  it('node with limited accessibility', async function() {
+  it('node with limited accessibility', async function () {
     const nodeId = '2034868974'
     const scope = createMock({ nodeId, wheelchair: 'limited' })
     expect(
@@ -41,7 +41,7 @@ describe('Wheelmap', function() {
     scope.done()
   })
 
-  it('node without accessibility', async function() {
+  it('node without accessibility', async function () {
     const nodeId = '-147495158'
     const scope = createMock({ nodeId, wheelchair: 'no' })
     expect(
@@ -50,7 +50,7 @@ describe('Wheelmap', function() {
     scope.done()
   })
 
-  it('node not found', async function() {
+  it('node not found', async function () {
     const nodeId = '0'
     const scope = createMock({ nodeId })
     expect(

@@ -19,9 +19,7 @@ t.create('feature requests')
   })
   .timeout(10000)
 
-t.create('invalid project')
-  .get('/invalid/bugs.json')
-  .expectBadge({
-    label: 'open tickets',
-    message: 'project not found',
-  })
+t.create('invalid project').get('/invalid/bugs.json').expectBadge({
+  label: 'open tickets',
+  message: 'project not found',
+})

@@ -7,9 +7,7 @@ const coalesce = require('./coalesce')
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
 
-const isOptionalNonNegativeInteger = Joi.number()
-  .integer()
-  .min(0)
+const isOptionalNonNegativeInteger = Joi.number().integer().min(0)
 
 const queryParamSchema = Joi.object({
   cacheSeconds: isOptionalNonNegativeInteger,

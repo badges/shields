@@ -5,11 +5,11 @@ const Redis = require('ioredis')
 const { expect } = require('chai')
 const RedisTokenPersistence = require('./redis-token-persistence')
 
-describe('Redis token persistence', function() {
+describe('Redis token persistence', function () {
   let server
   // In CI, expect redis already to be running.
   if (!process.env.CI) {
-    beforeEach(async function() {
+    beforeEach(async function () {
       server = new RedisServer({ config: { host: 'localhost' } })
       await server.open()
     })
@@ -18,11 +18,11 @@ describe('Redis token persistence', function() {
   const key = 'tokenPersistenceIntegrationTest'
 
   let redis
-  beforeEach(async function() {
+  beforeEach(async function () {
     redis = new Redis()
     await redis.del(key)
   })
-  afterEach(async function() {
+  afterEach(async function () {
     if (redis) {
       await redis.quit()
       redis = undefined
@@ -30,44 +30,44 @@ describe('Redis token persistence', function() {
   })
 
   if (!process.env.CI) {
-    afterEach(async function() {
+    afterEach(async function () {
       await server.close()
       server = undefined
     })
   }
 
   let persistence
-  beforeEach(function() {
+  beforeEach(function () {
     persistence = new RedisTokenPersistence({ key })
   })
-  afterEach(async function() {
+  afterEach(async function () {
     if (persistence) {
       await persistence.stop()
       persistence = undefined
     }
   })
 
-  context('when the key does not exist', function() {
-    it('does nothing', async function() {
+  context('when the key does not exist', function () {
+    it('does nothing', async function () {
       const tokens = await persistence.initialize()
       expect(tokens).to.deep.equal([])
     })
   })
 
-  context('when the key exists', function() {
+  context('when the key exists', function () {
     const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       await redis.sadd(key, initialTokens)
     })
 
-    it('loads the contents', async function() {
+    it('loads the contents', async function () {
       const tokens = await persistence.initialize()
       expect(tokens.sort()).to.deep.equal(initialTokens)
     })
 
-    context('when tokens are added', function() {
-      it('saves the change', async function() {
+    context('when tokens are added', function () {
+      it('saves the change', async function () {
         const newToken = 'e'.repeat(40)
         const expected = initialTokens.slice()
         expected.push(newToken)
@@ -80,8 +80,8 @@ describe('Redis token persistence', function() {
       })
     })
 
-    context('when tokens are removed', function() {
-      it('saves the change', async function() {
+    context('when tokens are removed', function () {
+      it('saves the change', async function () {
         const expected = Array.from(initialTokens)
         const toRemove = expected.pop()
 

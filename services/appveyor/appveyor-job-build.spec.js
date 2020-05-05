@@ -5,7 +5,7 @@ const { test, given } = require('sazerac')
 const { NotFound } = require('..')
 const AppveyorJobBuild = require('./appveyor-job-build.service')
 
-describe('AppveyorJobBuild', function() {
+describe('AppveyorJobBuild', function () {
   test(AppveyorJobBuild.prototype.transform, () => {
     given({ data: {} }).expect({
       status: 'no builds found',
@@ -31,13 +31,13 @@ describe('AppveyorJobBuild', function() {
     })
   })
 
-  it('throws NotFound when response is missing jobs', function() {
+  it('throws NotFound when response is missing jobs', function () {
     expect(() => AppveyorJobBuild.prototype.transform({ data: { build: {} } }))
       .to.throw(NotFound)
       .with.property('prettyMessage', 'no jobs found')
   })
 
-  it('throws NotFound when specified job missing jobs', function() {
+  it('throws NotFound when specified job missing jobs', function () {
     expect(() =>
       AppveyorJobBuild.prototype.transform({
         jobName: 'mac',

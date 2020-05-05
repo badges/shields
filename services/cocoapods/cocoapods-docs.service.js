@@ -8,9 +8,7 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   cocoadocs: Joi.object({
-    doc_percent: Joi.number()
-      .allow(null)
-      .required(),
+    doc_percent: Joi.number().allow(null).required(),
   }).required(),
 }).required()
 

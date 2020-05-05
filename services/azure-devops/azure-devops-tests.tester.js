@@ -121,9 +121,7 @@ t.create('unknown build definition')
 t.create('404 latest build error response')
   .get(mockBadgeUri)
   .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(404)
+    nock(azureDevOpsApiBaseUri).get(mockLatestBuildApiUriPath).reply(404)
   )
   .expectBadge({
     label: 'tests',
@@ -133,12 +131,10 @@ t.create('404 latest build error response')
 t.create('no build response')
   .get(`${uriPrefix}/${nonExistentDefinitionId}.json`)
   .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockNonExistentBuildApiUriPath)
-      .reply(200, {
-        count: 0,
-        value: [],
-      })
+    nock(azureDevOpsApiBaseUri).get(mockNonExistentBuildApiUriPath).reply(200, {
+      count: 0,
+      value: [],
+    })
   )
   .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 

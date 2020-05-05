@@ -5,10 +5,7 @@ const Joi = require('@hapi/joi')
 // This should be kept in sync with the schema in
 // `frontend/lib/service-definitions/index.ts`.
 
-const arrayOfStrings = Joi.array()
-  .items(Joi.string())
-  .min(0)
-  .required()
+const arrayOfStrings = Joi.array().items(Joi.string()).min(0).required()
 
 const objectOfKeyValues = Joi.object()
   .pattern(/./, Joi.string().allow(null))
@@ -39,9 +36,7 @@ const serviceDefinition = Joi.object({
         }).required(),
         preview: Joi.object({
           label: Joi.string(),
-          message: Joi.string()
-            .allow('')
-            .required(),
+          message: Joi.string().allow('').required(),
           color: Joi.string().required(),
           style: Joi.string(),
           namedLogo: Joi.string(),
@@ -70,9 +65,7 @@ const serviceDefinitionExport = Joi.object({
       })
     )
     .required(),
-  services: Joi.array()
-    .items(serviceDefinition)
-    .required(),
+  services: Joi.array().items(serviceDefinition).required(),
 }).required()
 
 function assertValidServiceDefinitionExport(examples, message = undefined) {

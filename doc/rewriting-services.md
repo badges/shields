@@ -24,7 +24,7 @@ module.exports = class ExampleService extends LegacyService {
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
       /^\/example\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
-      cache(function(data, match, sendBadge, request) {
+      cache(function (data, match, sendBadge, request) {
         var first = match[1]
         var second = match[2]
         var format = match[3]

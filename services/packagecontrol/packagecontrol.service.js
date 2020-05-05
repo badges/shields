@@ -15,9 +15,7 @@ const schema = Joi.object({
       data: Joi.array()
         .items(
           Joi.object({
-            totals: Joi.array()
-              .items(nonNegativeInteger)
-              .required(),
+            totals: Joi.array().items(nonNegativeInteger).required(),
           }).required()
         )
         .required(),

@@ -3,12 +3,10 @@
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('hackage version (valid)')
-  .get('/lens.json')
-  .expectBadge({
-    label: 'hackage',
-    message: isVPlusDottedVersionAtLeastOne,
-  })
+t.create('hackage version (valid)').get('/lens.json').expectBadge({
+  label: 'hackage',
+  message: isVPlusDottedVersionAtLeastOne,
+})
 
 t.create('hackage version (not found)')
   .get('/not-a-package.json')

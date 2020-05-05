@@ -6,9 +6,7 @@ const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')
 
 const apiSchema = Joi.object({
-  total: Joi.number()
-    .positive()
-    .required(),
+  total: Joi.number().positive().required(),
 }).required()
 
 module.exports = class OffsetEarthCarbonOffset extends BaseJsonService {

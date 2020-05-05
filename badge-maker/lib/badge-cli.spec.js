@@ -13,13 +13,13 @@ function runCli(args) {
   })
 }
 
-describe('The CLI', function() {
-  it('should provide a help message', async function() {
+describe('The CLI', function () {
+  it('should provide a help message', async function () {
     const { stdout } = await runCli([])
     expect(stdout).to.startWith('Usage')
   })
 
-  it('should produce default badges', async function() {
+  it('should produce default badges', async function () {
     const { stdout } = await runCli(['cactus', 'grown'])
     expect(stdout)
       .to.satisfy(isSvg)
@@ -27,15 +27,13 @@ describe('The CLI', function() {
       .and.to.include('grown')
   })
 
-  it('should produce colorschemed badges', async function() {
+  it('should produce colorschemed badges', async function () {
     const { stdout } = await runCli(['cactus', 'grown', ':green'])
     expect(stdout).to.satisfy(isSvg)
   })
 
-  it('should produce right-color badges', async function() {
+  it('should produce right-color badges', async function () {
     const { stdout } = await runCli(['cactus', 'grown', '#abcdef'])
-    expect(stdout)
-      .to.satisfy(isSvg)
-      .and.to.include('#abcdef')
+    expect(stdout).to.satisfy(isSvg).and.to.include('#abcdef')
   })
 })

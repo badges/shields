@@ -8,12 +8,10 @@ const t = (module.exports = new ServiceTester({
   title: 'CRAN/METACRAN',
 }))
 
-t.create('version (valid)')
-  .get('/v/devtools.json')
-  .expectBadge({
-    label: 'cran',
-    message: isVPlusTripleDottedVersion,
-  })
+t.create('version (valid)').get('/v/devtools.json').expectBadge({
+  label: 'cran',
+  message: isVPlusTripleDottedVersion,
+})
 
 t.create('version (not found)')
   .get('/v/some-bogus-package.json')

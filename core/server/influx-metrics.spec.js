@@ -6,7 +6,7 @@ const { expect } = require('chai')
 const log = require('./log')
 const InfluxMetrics = require('./influx-metrics')
 require('../register-chai-plugins.spec')
-describe('Influx metrics', function() {
+describe('Influx metrics', function () {
   const metricInstance = {
     metrics() {
       return [
@@ -20,16 +20,16 @@ describe('Influx metrics', function() {
       ]
     },
   }
-  describe('"metrics" function', function() {
+  describe('"metrics" function', function () {
     let osHostnameStub
-    afterEach(function() {
+    afterEach(function () {
       nock.enableNetConnect()
       delete process.env.INSTANCE_ID
       if (osHostnameStub) {
         osHostnameStub.restore()
       }
     })
-    it('should use an environment variable value as an instance label', async function() {
+    it('should use an environment variable value as an instance label', async function () {
       process.env.INSTANCE_ID = 'instance3'
       const influxMetrics = new InfluxMetrics(metricInstance, {
         instanceIdFrom: 'env-var',
@@ -39,7 +39,7 @@ describe('Influx metrics', function() {
       expect(influxMetrics.metrics()).to.contain('instance=instance3')
     })
 
-    it('should use a hostname as an instance label', async function() {
+    it('should use a hostname as an instance label', async function () {
       osHostnameStub = sinon.stub(os, 'hostname').returns('test-hostname')
       const customConfig = {
         instanceIdFrom: 'hostname',
@@ -49,7 +49,7 @@ describe('Influx metrics', function() {
       expect(influxMetrics.metrics()).to.be.contain('instance=test-hostname')
     })
 
-    it('should use a random string as an instance label', async function() {
+    it('should use a random string as an instance label', async function () {
       const customConfig = {
         instanceIdFrom: 'random',
       }
@@ -58,7 +58,7 @@ describe('Influx metrics', function() {
       expect(influxMetrics.metrics()).to.be.match(/instance=\w+ /)
     })
 
-    it('should use a hostname alias as an instance label', async function() {
+    it('should use a hostname alias as an instance label', async function () {
       osHostnameStub = sinon.stub(os, 'hostname').returns('test-hostname')
       const customConfig = {
         instanceIdFrom: 'hostname',
@@ -72,12 +72,12 @@ describe('Influx metrics', function() {
     })
   })
 
-  describe('startPushingMetrics', function() {
+  describe('startPushingMetrics', function () {
     let influxMetrics, clock
-    beforeEach(function() {
+    beforeEach(function () {
       clock = sinon.useFakeTimers()
     })
-    afterEach(function() {
+    afterEach(function () {
       influxMetrics.stopPushingMetrics()
       nock.cleanAll()
       nock.enableNetConnect()
@@ -85,7 +85,7 @@ describe('Influx metrics', function() {
       clock.restore()
     })
 
-    it('should send metrics', async function() {
+    it('should send metrics', async function () {
       const scope = nock('http://shields-metrics.io/', {
         reqheaders: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -120,11 +120,11 @@ describe('Influx metrics', function() {
     })
   })
 
-  describe('sendMetrics', function() {
-    beforeEach(function() {
+  describe('sendMetrics', function () {
+    beforeEach(function () {
       sinon.stub(log, 'error')
     })
-    afterEach(function() {
+    afterEach(function () {
       log.error.restore()
       nock.cleanAll()
       nock.enableNetConnect()
@@ -137,7 +137,7 @@ describe('Influx metrics', function() {
       username: 'metrics-username',
       password: 'metrics-password',
     })
-    it('should log errors', async function() {
+    it('should log errors', async function () {
       nock.disableNetConnect()
 
       await influxMetrics.sendMetrics()
@@ -154,11 +154,8 @@ describe('Influx metrics', function() {
       )
     })
 
-    it('should log error responses', async function() {
-      nock('http://shields-metrics.io/')
-        .persist()
-        .post('/metrics')
-        .reply(400)
+    it('should log error responses', async function () {
+      nock('http://shields-metrics.io/').persist().post('/metrics').reply(400)
 
       await influxMetrics.sendMetrics()
 

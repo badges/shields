@@ -11,7 +11,7 @@ const {
   versionDataWithTag,
 } = require('./docker-fixtures')
 
-describe('DockerVersion', function() {
+describe('DockerVersion', function () {
   test(DockerVersion.prototype.transform, () => {
     given({
       tag: '',
@@ -50,7 +50,7 @@ describe('DockerVersion', function() {
     })
   })
 
-  it('throws InvalidResponse error with latest tag and no amd64 architecture digests', function() {
+  it('throws InvalidResponse error with latest tag and no amd64 architecture digests', function () {
     expect(() => {
       DockerVersion.prototype.transform({
         sort: 'date',

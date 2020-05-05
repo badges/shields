@@ -6,19 +6,15 @@ const t = (module.exports = require('../tester').createServiceTester())
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.
 
-t.create('default branch')
-  .get('/totodem/shields.io/2.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
-  })
+t.create('default branch').get('/totodem/shields.io/2.json').expectBadge({
+  label: 'build',
+  message: isBuildStatus,
+})
 
-t.create('named branch')
-  .get('/totodem/shields.io/2/master.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
-  })
+t.create('named branch').get('/totodem/shields.io/2/master.json').expectBadge({
+  label: 'build',
+  message: isBuildStatus,
+})
 
 t.create('stage badge')
   .get('/totodem/Shields.io/5.json?stage=Successful%20Stage')

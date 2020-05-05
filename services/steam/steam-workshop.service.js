@@ -42,11 +42,7 @@ const steamCollectionNotFoundSchema = Joi.object({
       collectiondetails: Joi.array()
         .items(
           Joi.object({
-            result: Joi.number()
-              .integer()
-              .min(9)
-              .max(9)
-              .required(),
+            result: Joi.number().integer().min(9).max(9).required(),
           }).required()
         )
         .required(),
@@ -65,27 +61,13 @@ const steamFileSchema = Joi.object({
       publishedfiledetails: Joi.array()
         .items(
           Joi.object({
-            file_size: Joi.number()
-              .integer()
-              .required(),
-            time_created: Joi.number()
-              .integer()
-              .required(),
-            subscriptions: Joi.number()
-              .integer()
-              .required(),
-            favorited: Joi.number()
-              .integer()
-              .required(),
-            lifetime_subscriptions: Joi.number()
-              .integer()
-              .required(),
-            lifetime_favorited: Joi.number()
-              .integer()
-              .required(),
-            views: Joi.number()
-              .integer()
-              .required(),
+            file_size: Joi.number().integer().required(),
+            time_created: Joi.number().integer().required(),
+            subscriptions: Joi.number().integer().required(),
+            favorited: Joi.number().integer().required(),
+            lifetime_subscriptions: Joi.number().integer().required(),
+            lifetime_favorited: Joi.number().integer().required(),
+            views: Joi.number().integer().required(),
           })
         )
         .min(1)
@@ -101,11 +83,7 @@ const steamFileNotFoundSchema = Joi.object({
       publishedfiledetails: Joi.array()
         .items(
           Joi.object({
-            result: Joi.number()
-              .integer()
-              .min(9)
-              .max(9)
-              .required(),
+            result: Joi.number().integer().min(9).max(9).required(),
           }).required()
         )
         .min(1)

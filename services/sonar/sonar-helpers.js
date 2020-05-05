@@ -45,9 +45,7 @@ const queryParamSchema = Joi.object({
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
   server: optionalUrl.required(),
-  format: Joi.string()
-    .allow('short', 'long')
-    .optional(),
+  format: Joi.string().allow('short', 'long').optional(),
 }).required()
 
 const keywords = ['sonarcloud', 'sonarqube']

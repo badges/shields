@@ -17,7 +17,7 @@ function _validate(format) {
   }
 
   const stringFields = ['labelColor', 'color', 'message', 'label']
-  stringFields.forEach(function(field) {
+  stringFields.forEach(function (field) {
     if (field in format && typeof format[field] !== 'string') {
       throw new ValidationError(`Field \`${field}\` must be of type string`)
     }

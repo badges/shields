@@ -6,7 +6,7 @@ const {
   renderTestResultBadge,
 } = require('./test-results')
 
-describe('Test result helpers', function() {
+describe('Test result helpers', function () {
   function renderBothStyles(props) {
     const { message: standardMessage, color } = renderTestResultBadge(props)
     const compactMessage = renderTestResultMessage({

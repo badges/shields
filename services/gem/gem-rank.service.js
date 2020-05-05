@@ -10,10 +10,7 @@ const keywords = ['ruby']
 const totalSchema = Joi.array()
   .items(
     Joi.object({
-      total_ranking: Joi.number()
-        .integer()
-        .min(0)
-        .allow(null),
+      total_ranking: Joi.number().integer().min(0).allow(null),
     })
   )
   .min(1)
@@ -21,10 +18,7 @@ const totalSchema = Joi.array()
 const dailySchema = Joi.array()
   .items(
     Joi.object({
-      daily_ranking: Joi.number()
-        .integer()
-        .min(0)
-        .allow(null),
+      daily_ranking: Joi.number().integer().min(0).allow(null),
     })
   )
   .min(1)

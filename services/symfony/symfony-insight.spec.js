@@ -32,7 +32,7 @@ const {
 //
 // In most other cases, do not follow this pattern. Instead, write a .spec file
 // with sazerac tests of the transform and render functions.
-describe('SymfonyInsight[Grade|Stars|Violation]', function() {
+describe('SymfonyInsight[Grade|Stars|Violation]', function () {
   cleanUpNockAfterEach()
 
   function createMock() {
@@ -41,7 +41,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function() {
       .basicAuth({ user, pass: token })
   }
 
-  it('401 not authorized grade', async function() {
+  it('401 not authorized grade', async function () {
     const scope = createMock().reply(401)
     expect(
       await SymfonyInsightGrade.invoke(defaultContext, config, { projectUuid })
@@ -65,9 +65,9 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function() {
       throw Error(`Oops, what are those doing there: ${rest.join(', ')}`)
     }
 
-    describe(description, function() {
+    describe(description, function () {
       if (expectedGradeBadge) {
-        it('grade', async function() {
+        it('grade', async function () {
           const scope = createMock().reply(200, response)
           expect(
             await SymfonyInsightGrade.invoke(defaultContext, config, {
@@ -79,7 +79,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function() {
       }
 
       if (expectedStarsBadge) {
-        it('stars', async function() {
+        it('stars', async function () {
           const scope = createMock().reply(200, response)
           expect(
             await SymfonyInsightStars.invoke(defaultContext, config, {
@@ -91,7 +91,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function() {
       }
 
       if (expectedViolationsBadge) {
-        it('violations', async function() {
+        it('violations', async function () {
           const scope = createMock().reply(200, response)
           expect(
             await SymfonyInsightViolations.invoke(defaultContext, config, {

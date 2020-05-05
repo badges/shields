@@ -4,9 +4,7 @@ const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  total_amount: Joi.number()
-    .min(0)
-    .required(),
+  total_amount: Joi.number().min(0).required(),
 }).required()
 
 module.exports = class Beerpay extends BaseJsonService {

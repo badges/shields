@@ -3,12 +3,10 @@
 const { isVPlusTripleDottedVersion } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('homebrew (valid)')
-  .get('/cake.json')
-  .expectBadge({
-    label: 'homebrew',
-    message: isVPlusTripleDottedVersion,
-  })
+t.create('homebrew (valid)').get('/cake.json').expectBadge({
+  label: 'homebrew',
+  message: isVPlusTripleDottedVersion,
+})
 
 t.create('homebrew (valid)')
   .get('/cake.json')

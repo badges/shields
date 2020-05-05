@@ -4,12 +4,12 @@ const { expect } = require('chai')
 const config = require('config').util.toObject()
 const GithubApiProvider = require('./github-api-provider')
 
-describe('Github API provider', function() {
+describe('Github API provider', function () {
   const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
   const reserveFraction = 0.333
 
   let token
-  before(function() {
+  before(function () {
     token = config.private.gh_token
     if (!token) {
       throw Error('The integration tests require a gh_token to be set')
@@ -18,8 +18,8 @@ describe('Github API provider', function() {
 
   let githubApiProvider
 
-  context('without token pool', function() {
-    before(function() {
+  context('without token pool', function () {
+    before(function () {
       githubApiProvider = new GithubApiProvider({
         baseUrl,
         withPooling: false,
@@ -28,7 +28,7 @@ describe('Github API provider', function() {
       })
     })
 
-    it('should be able to run 10 requests', async function() {
+    it('should be able to run 10 requests', async function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
         await githubApiProvider.requestAsPromise(
@@ -40,9 +40,9 @@ describe('Github API provider', function() {
     })
   })
 
-  context('with token pool', function() {
+  context('with token pool', function () {
     let githubApiProvider
-    before(function() {
+    before(function () {
       githubApiProvider = new GithubApiProvider({
         baseUrl,
         withPooling: true,
@@ -62,14 +62,14 @@ describe('Github API provider', function() {
       headers.push(res.headers)
     }
 
-    before('should be able to run 10 requests', async function() {
+    before('should be able to run 10 requests', async function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
         await performOneRequest()
       }
     })
 
-    it('should decrement the limit remaining with each request', function() {
+    it('should decrement the limit remaining with each request', function () {
       for (let i = 1; i < headers.length; ++i) {
         const current = headers[i]
         const previous = headers[i - 1]
@@ -79,7 +79,7 @@ describe('Github API provider', function() {
       }
     })
 
-    it.skip('should update the token with the final limit remaining and reset time', function() {
+    it.skip('should update the token with the final limit remaining and reset time', function () {
       const lastHeaders = headers.slice(-1)[0]
       const reserve = reserveFraction * +lastHeaders['x-ratelimit-limit']
       const usesRemaining = +lastHeaders['x-ratelimit-remaining'] - reserve

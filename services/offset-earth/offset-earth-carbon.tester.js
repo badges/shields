@@ -10,10 +10,8 @@ t.create('request for existing username')
     message: withRegex(/[\d.]+ tonnes/),
   })
 
-t.create('invalid username')
-  .get('/non-existent-username.json')
-  .expectBadge({
-    label: 'carbon offset',
-    message: 'username not found',
-    color: 'red',
-  })
+t.create('invalid username').get('/non-existent-username.json').expectBadge({
+  label: 'carbon offset',
+  message: 'username not found',
+  color: 'red',
+})

@@ -50,9 +50,7 @@ t.create('Uptime Robot: Percentage (service unavailable)')
 t.create('Uptime Robot: Percentage (unexpected response, valid json)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock =>
-    nock('https://api.uptimerobot.com')
-      .post('/v2/getMonitors')
-      .reply(200, '[]')
+    nock('https://api.uptimerobot.com').post('/v2/getMonitors').reply(200, '[]')
   )
   .expectBadge({ label: 'uptime', message: 'invalid response data' })
 

@@ -13,9 +13,7 @@ const keyFingerprintSchema = Joi.object({
       Joi.object({
         public_keys: {
           primary: {
-            key_fingerprint: Joi.string()
-              .hex()
-              .required(),
+            key_fingerprint: Joi.string().hex().required(),
           },
         },
       })

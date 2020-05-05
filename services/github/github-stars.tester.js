@@ -14,12 +14,10 @@ t.create('Stars')
     ],
   })
 
-t.create('Stars (repo not found)')
-  .get('/badges/helmets.json')
-  .expectBadge({
-    label: 'stars',
-    message: 'repo not found',
-  })
+t.create('Stars (repo not found)').get('/badges/helmets.json').expectBadge({
+  label: 'stars',
+  message: 'repo not found',
+})
 
 // https://github.com/badges/shields/issues/4982
 // It doesn't seem important that this work with trailing spaces, though if it

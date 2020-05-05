@@ -5,12 +5,10 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('version')
-  .get('/asciidoctor/maven/asciidoctorj.json')
-  .expectBadge({
-    label: 'bintray',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-  })
+t.create('version').get('/asciidoctor/maven/asciidoctorj.json').expectBadge({
+  label: 'bintray',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+})
 
 t.create('version (not found)')
   .get('/asciidoctor/maven/not-a-real-package.json')
