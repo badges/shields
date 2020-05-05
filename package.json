@@ -32,7 +32,7 @@
     "check-node-version": "^4.0.3",
     "chrome-web-store-item-property": "~1.2.0",
     "config": "^3.3.1",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.2",
     "decamelize": "^3.2.0",
     "dotenv": "^8.2.0",
     "emojic": "^1.1.15",
