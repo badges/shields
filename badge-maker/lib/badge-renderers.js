@@ -2,7 +2,7 @@
 
 const anafanafo = require('anafanafo')
 
-const fontFamily = 'font-family="DejaVu Sans,Verdana,Geneva,sans-serif"'
+const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 
@@ -278,7 +278,7 @@ class Plastic extends Badge {
         <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
       </g>
 
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
         ${this.renderedLogo}
         ${this.renderedLabel}
         ${this.renderedMessage}
@@ -328,7 +328,7 @@ class Flat extends Badge {
         <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
       </g>
 
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
         ${this.renderedLogo}
         ${this.renderedLabel}
         ${this.renderedMessage}
@@ -368,7 +368,7 @@ class FlatSquare extends Badge {
         <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
       </g>
 
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} font-size="110">
+      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
         ${this.renderedLogo}
         ${this.renderedLabel}
         ${this.renderedMessage}
@@ -501,7 +501,7 @@ function social({
       ${hasMessage ? renderMessageBubble() : ''}
     </g>
     ${renderedLogo}
-    <g fill="#333" text-anchor="middle" ${socialFontFamily} font-weight="700" font-size="110px" line-height="14px">
+    <g fill="#333" text-anchor="middle" ${socialFontFamily} text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
       <text x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
       <text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
       ${hasMessage ? renderMessageText() : ''}
@@ -592,7 +592,7 @@ function forTheBadge({
       <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
       <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${color}"/>
     </g>
-    <g fill="#fff" text-anchor="middle" ${fontFamily} font-size="100">
+    <g fill="#fff" text-anchor="middle" ${fontFamily} text-rendering="geometricPrecision" font-size="100">
       ${renderedLogo}
       ${hasLabel ? renderLabelText() : ''}
       <text x="${(labelWidth + messageWidth / 2) *
