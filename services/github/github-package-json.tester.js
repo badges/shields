@@ -11,12 +11,10 @@ const t = (module.exports = new ServiceTester({
   pathPrefix: '/github/package-json',
 }))
 
-t.create('Package version')
-  .get('/v/badges/shields.json')
-  .expectBadge({
-    label: 'version',
-    message: isSemver,
-  })
+t.create('Package version').get('/v/badges/shields.json').expectBadge({
+  label: 'version',
+  message: isSemver,
+})
 
 t.create('Package version (repo not found)')
   .get('/v/badges/helmets.json')

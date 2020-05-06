@@ -20,20 +20,16 @@ const t = (module.exports = new ServiceTester({
 */
 const isPackagistVersion = Joi.string().regex(/^v?[0-9]+.[0-9]+.[0-9]+[\S]*$/)
 
-t.create('version (valid)')
-  .get('/v/symfony/symfony.json')
-  .expectBadge({
-    label: 'packagist',
-    message: isPackagistVersion,
-  })
+t.create('version (valid)').get('/v/symfony/symfony.json').expectBadge({
+  label: 'packagist',
+  message: isPackagistVersion,
+})
 
-t.create('version (no releases)')
-  .get('/v/wsg/hello.json')
-  .expectBadge({
-    label: 'packagist',
-    message: 'no released version found',
-    color: 'red',
-  })
+t.create('version (no releases)').get('/v/wsg/hello.json').expectBadge({
+  label: 'packagist',
+  message: 'no released version found',
+  color: 'red',
+})
 
 t.create('version (invalid package name)')
   .get('/v/frodo/is-not-a-package.json')

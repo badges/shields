@@ -8,11 +8,11 @@ const got = require('../core/got-test-client')
 const { setRoutes } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe('Badge suggestions for', function() {
+describe('Badge suggestions for', function () {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
   let token, apiProvider
-  before(function() {
+  before(function () {
     token = config.private.gh_token
     if (!token) {
       throw Error('The integration tests require a gh_token to be set')
@@ -25,17 +25,17 @@ describe('Badge suggestions for', function() {
   })
 
   let port, baseUrl
-  before(async function() {
+  before(async function () {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
   })
 
   let camp
-  before(async function() {
+  before(async function () {
     camp = Camp.start({ port, hostname: '::' })
     await new Promise(resolve => camp.on('listening', () => resolve()))
   })
-  after(async function() {
+  after(async function () {
     if (camp) {
       await new Promise(resolve => camp.close(resolve))
       camp = undefined
@@ -43,12 +43,12 @@ describe('Badge suggestions for', function() {
   })
 
   const origin = 'https://example.test'
-  before(function() {
+  before(function () {
     setRoutes([origin], apiProvider, camp)
   })
-  describe('GitHub', function() {
-    context('with an existing project', function() {
-      it('returns the expected suggestions', async function() {
+  describe('GitHub', function () {
+    context('with an existing project', function () {
+      it('returns the expected suggestions', async function () {
         const { statusCode, body } = await got(
           `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/atom/atom'
@@ -116,8 +116,8 @@ describe('Badge suggestions for', function() {
       })
     })
 
-    context('with a non-existent project', function() {
-      it('returns the expected suggestions', async function() {
+    context('with a non-existent project', function () {
+      it('returns the expected suggestions', async function () {
         this.timeout(5000)
 
         const { statusCode, body } = await got(
@@ -188,9 +188,9 @@ describe('Badge suggestions for', function() {
     })
   })
 
-  describe('GitLab', function() {
-    context('with an existing project', function() {
-      it('returns the expected suggestions', async function() {
+  describe('GitLab', function () {
+    context('with an existing project', function () {
+      it('returns the expected suggestions', async function () {
         const { statusCode, body } = await got(
           `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
             'https://gitlab.com/gitlab-org/gitlab'
@@ -231,8 +231,8 @@ describe('Badge suggestions for', function() {
       })
     })
 
-    context('with an nonexisting project', function() {
-      it('returns the expected suggestions', async function() {
+    context('with an nonexisting project', function () {
+      it('returns the expected suggestions', async function () {
         const { statusCode, body } = await got(
           `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
             'https://gitlab.com/gitlab-org/not-gitlab'

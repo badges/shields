@@ -23,9 +23,7 @@ const matrixStateSchema = Joi.array()
       }).required(),
       type: Joi.string().required(),
       sender: Joi.string().required(),
-      state_key: Joi.string()
-        .allow('')
-        .required(),
+      state_key: Joi.string().allow('').required(),
     })
   )
   .required()

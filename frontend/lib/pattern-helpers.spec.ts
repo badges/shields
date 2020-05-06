@@ -1,7 +1,7 @@
 import { test, given } from 'sazerac'
 import { patternToOptions, removeRegexpFromPattern } from './pattern-helpers'
 
-describe('Badge URL functions', function() {
+describe('Badge URL functions', function () {
   test(patternToOptions, () => {
     given('[^\\/]+?').expect(undefined)
     given('abc|[^\\/]+').expect(undefined)

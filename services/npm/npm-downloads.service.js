@@ -33,9 +33,7 @@ const intervalMap = {
     query: 'range/1000-01-01:3000-01-01',
     // https://github.com/npm/registry/blob/master/docs/download-counts.md#output-1
     schema: Joi.object({
-      downloads: Joi.array()
-        .items(pointResponseSchema)
-        .required(),
+      downloads: Joi.array().items(pointResponseSchema).required(),
     }).required(),
     transform: json =>
       json.downloads

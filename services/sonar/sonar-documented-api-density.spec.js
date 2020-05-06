@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const SonarDocumentedApiDensity = require('./sonar-documented-api-density.service')
 
-describe('SonarDocumentedApiDensity', function() {
+describe('SonarDocumentedApiDensity', function () {
   test(SonarDocumentedApiDensity.render, () => {
     given({ density: 0 }).expect({
       message: '0%',

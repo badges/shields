@@ -27,9 +27,7 @@ const pagedSchema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  sort: Joi.string()
-    .valid('date', 'semver')
-    .default('date'),
+  sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
 module.exports = class DockerSize extends BaseJsonService {

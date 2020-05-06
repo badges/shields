@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const SonarTechDebt = require('./sonar-tech-debt.service')
 
-describe('SonarTechDebt', function() {
+describe('SonarTechDebt', function () {
   test(SonarTechDebt.render, () => {
     given({ debt: 0 }).expect({
       label: undefined,

@@ -6,10 +6,10 @@ const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const TeamCityBuild = require('./teamcity-build.service')
 const { user, pass, host, config } = require('./teamcity-test-helpers')
 
-describe('TeamCityBuild', function() {
+describe('TeamCityBuild', function () {
   cleanUpNockAfterEach()
 
-  it('sends the auth information as configured', async function() {
+  it('sends the auth information as configured', async function () {
     const scope = nock(`https://${host}`)
       .get(`/app/rest/builds/${encodeURIComponent('buildType:(id:bt678)')}`)
       // This ensures that the expected credentials are actually being sent with the HTTP request.

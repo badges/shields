@@ -4,8 +4,8 @@ const { expect } = require('chai')
 const isSvg = require('is-svg')
 const { makeBadge, ValidationError } = require('.')
 
-describe('makeBadge function', function() {
-  it('should produce badge with valid input', function() {
+describe('makeBadge function', function () {
+  it('should produce badge with valid input', function () {
     expect(
       makeBadge({
         label: 'build',
@@ -27,7 +27,7 @@ describe('makeBadge function', function() {
     ).to.satisfy(isSvg)
   })
 
-  it('should throw a ValidationError with invalid inputs', function() {
+  it('should throw a ValidationError with invalid inputs', function () {
     ;[null, undefined, 7, 'foo', 4.25].forEach(x => {
       console.log(x)
       expect(() => makeBadge(x)).to.throw(

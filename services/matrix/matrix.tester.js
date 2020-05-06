@@ -292,13 +292,11 @@ t.create('unknown alias')
     color: 'red',
   })
 
-t.create('invalid alias')
-  .get('/ALIASDUMMY.dumb.json')
-  .expectBadge({
-    label: 'chat',
-    message: 'invalid alias',
-    color: 'red',
-  })
+t.create('invalid alias').get('/ALIASDUMMY.dumb.json').expectBadge({
+  label: 'chat',
+  message: 'invalid alias',
+  color: 'red',
+})
 
 t.create('server uses a custom port')
   .get('/ALIAS:DUMMY.dumb:5555.json')

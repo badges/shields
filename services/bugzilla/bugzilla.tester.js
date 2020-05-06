@@ -15,12 +15,10 @@ const bzBugStatus = Joi.equal(
   'incomplete'
 )
 
-t.create('Bugzilla valid bug status')
-  .get('/996038.json')
-  .expectBadge({
-    label: 'bug 996038',
-    message: bzBugStatus,
-  })
+t.create('Bugzilla valid bug status').get('/996038.json').expectBadge({
+  label: 'bug 996038',
+  message: bzBugStatus,
+})
 
 t.create('Bugzilla valid bug status with custom baseUrl')
   .get('/545424.json?baseUrl=https://bugs.eclipse.org/bugs')

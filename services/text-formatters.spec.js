@@ -14,7 +14,7 @@ const {
   formatRelativeDate,
 } = require('./text-formatters')
 
-describe('Text formatters', function() {
+describe('Text formatters', function () {
   test(starRating, () => {
     given(4.9).expect('★★★★★')
     given(3.7).expect('★★★¾☆')
@@ -94,12 +94,12 @@ describe('Text formatters', function() {
       .expect('june 2016')
   })
 
-  context('in october', function() {
+  context('in october', function () {
     let clock
-    beforeEach(function() {
+    beforeEach(function () {
       clock = sinon.useFakeTimers(new Date(2017, 9, 15).getTime())
     })
-    afterEach(function() {
+    afterEach(function () {
       clock.restore()
     })
 
@@ -110,12 +110,12 @@ describe('Text formatters', function() {
     })
   })
 
-  context('in october', function() {
+  context('in october', function () {
     let clock
-    beforeEach(function() {
+    beforeEach(function () {
       clock = sinon.useFakeTimers(new Date(2018, 9, 29).getTime())
     })
-    afterEach(function() {
+    afterEach(function () {
       clock.restore()
     })
 

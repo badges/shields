@@ -13,13 +13,10 @@ const isBowerPrereleaseVersion = Joi.string().regex(
   /^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/
 )
 
-t.create('version')
-  .timeout(10000)
-  .get('/v/bootstrap.json')
-  .expectBadge({
-    label: 'bower',
-    message: isVPlusDottedVersionAtLeastOne,
-  })
+t.create('version').timeout(10000).get('/v/bootstrap.json').expectBadge({
+  label: 'bower',
+  message: isVPlusDottedVersionAtLeastOne,
+})
 
 t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
   .timeout(10000)

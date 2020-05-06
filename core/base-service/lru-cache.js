@@ -126,7 +126,7 @@ Cache.prototype = {
     }
   },
 
-  clear: function() {
+  clear: function () {
     this.cache.clear()
     this.newest = null
     this.oldest = null

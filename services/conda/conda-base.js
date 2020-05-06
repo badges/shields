@@ -6,9 +6,7 @@ const { BaseJsonService } = require('..')
 
 const condaSchema = Joi.object({
   latest_version: Joi.string().required(),
-  conda_platforms: Joi.array()
-    .items(Joi.string())
-    .required(),
+  conda_platforms: Joi.array().items(Joi.string()).required(),
   files: Joi.array()
     .items(
       Joi.object({

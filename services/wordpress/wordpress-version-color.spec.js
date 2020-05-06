@@ -6,8 +6,8 @@ const {
   versionColorForWordpressVersion,
 } = require('./wordpress-version-color')
 
-describe('toSemver() function', function() {
-  it('coerces versions', function() {
+describe('toSemver() function', function () {
+  it('coerces versions', function () {
     expect(toSemver('1.1.1')).to.equal('1.1.1')
     expect(toSemver('4.2')).to.equal('4.2.0')
     expect(toSemver('1.0.0-beta')).to.equal('1.0.0-beta')
@@ -16,8 +16,8 @@ describe('toSemver() function', function() {
   })
 })
 
-describe('versionColorForWordpressVersion()', function() {
-  it('generates correct colours for given versions', async function() {
+describe('versionColorForWordpressVersion()', function () {
+  it('generates correct colours for given versions', async function () {
     this.timeout(5e3)
 
     expect(await versionColorForWordpressVersion('11.2.0')).to.equal(

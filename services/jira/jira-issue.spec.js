@@ -6,10 +6,10 @@ const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const JiraIssue = require('./jira-issue.service')
 const { user, pass, host, config } = require('./jira-test-helpers')
 
-describe('JiraIssue', function() {
+describe('JiraIssue', function () {
   cleanUpNockAfterEach()
 
-  it('sends the auth information as configured', async function() {
+  it('sends the auth information as configured', async function () {
     const scope = nock(`https://${host}`)
       .get(`/rest/api/2/issue/${encodeURIComponent('secure-234')}`)
       // This ensures that the expected credentials are actually being sent with the HTTP request.

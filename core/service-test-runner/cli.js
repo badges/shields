@@ -73,7 +73,7 @@ if (process.env.TESTED_SERVER_URL) {
 } else {
   const port = 1111
   baseUrl = 'http://localhost:1111'
-  before('Start running the server', async function() {
+  before('Start running the server', async function () {
     server = await createTestServer({
       public: {
         bind: {
@@ -83,7 +83,7 @@ if (process.env.TESTED_SERVER_URL) {
     })
     server.start()
   })
-  after('Shut down the server', async function() {
+  after('Shut down the server', async function () {
     if (server) {
       await server.stop()
     }

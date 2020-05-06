@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const SonarQualityGate = require('./sonar-quality-gate.service')
 
-describe('SonarQualityGate', function() {
+describe('SonarQualityGate', function () {
   test(SonarQualityGate.render, () => {
     given({ qualityState: 'OK' }).expect({
       message: 'passed',

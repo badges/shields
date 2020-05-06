@@ -51,8 +51,9 @@ module.exports = class CodeFactorGrade extends BaseSvgScrapingService {
   async handle({ vcsType, user, repo, branch }) {
     const { message } = await this._requestSvg({
       schema,
-      url: `https://codefactor.io/repository/${vcsType}/${user}/${repo}/badge/${branch ||
-        ''}`,
+      url: `https://codefactor.io/repository/${vcsType}/${user}/${repo}/badge/${
+        branch || ''
+      }`,
       errorMessages: { 404: 'repo or branch not found' },
     })
     return this.constructor.render({ grade: message })

@@ -4,7 +4,7 @@ const { test, given } = require('sazerac')
 const { metric } = require('../text-formatters')
 const SonarViolations = require('./sonar-violations.service')
 
-describe('SonarViolations', function() {
+describe('SonarViolations', function () {
   test(SonarViolations.render, () => {
     given({ metricName: 'violations', violations: 1003 }).expect({
       message: metric(1003),

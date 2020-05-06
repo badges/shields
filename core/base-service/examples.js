@@ -21,19 +21,12 @@ const schema = Joi.object({
   staticPreview: Joi.object({
     label: Joi.string(),
     message: Joi.alternatives()
-      .try(
-        Joi.string()
-          .allow('')
-          .required(),
-        Joi.number()
-      )
+      .try(Joi.string().allow('').required(), Joi.number())
       .required(),
     color: Joi.string(),
     style: Joi.string(),
   }).required(),
-  keywords: Joi.array()
-    .items(Joi.string())
-    .default([]),
+  keywords: Joi.array().items(Joi.string()).default([]),
   documentation: Joi.string(), // Valid HTML.
 }).required()
 

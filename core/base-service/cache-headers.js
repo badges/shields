@@ -7,9 +7,7 @@ const coalesce = require('./coalesce')
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
 
-const isOptionalNonNegativeInteger = Joi.number()
-  .integer()
-  .min(0)
+const isOptionalNonNegativeInteger = Joi.number().integer().min(0)
 
 const queryParamSchema = Joi.object({
   cacheSeconds: isOptionalNonNegativeInteger,
@@ -69,7 +67,7 @@ function setHeadersForCacheLength(res, cacheLengthSeconds) {
     cacheControl = 'no-cache, no-store, must-revalidate'
     expires = nowGMTString
   } else {
-    cacheControl = `max-age=${cacheLengthSeconds}`
+    cacheControl = `max-age=${cacheLengthSeconds} s-maxage=${cacheLengthSeconds}`
     expires = new Date(now.getTime() + cacheLengthSeconds * 1000).toGMTString()
   }
 
@@ -94,7 +92,7 @@ function setCacheHeaders({
   setHeadersForCacheLength(res, cacheLengthSeconds)
 }
 
-const staticCacheControlHeader = `max-age=${24 * 3600}` // 1 day.
+const staticCacheControlHeader = `max-age=${24 * 3600} s-maxage=${24 * 3600}` // 1 day.
 function setCacheHeadersForStaticResource(res) {
   res.setHeader('Cache-Control', staticCacheControlHeader)
   res.setHeader('Last-Modified', serverStartTimeGMTString)

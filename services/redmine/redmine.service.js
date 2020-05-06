@@ -7,9 +7,7 @@ const { BaseXmlService } = require('..')
 
 const schema = Joi.object({
   'redmine-plugin': Joi.object({
-    'ratings-average': Joi.number()
-      .min(0)
-      .required(),
+    'ratings-average': Joi.number().min(0).required(),
   }).required(),
 })
 

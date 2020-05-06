@@ -105,9 +105,7 @@ t.create('YAML from url | error color overrides user specified')
 t.create('YAML contains a string')
   .get('.json?url=https://example.test/yaml&query=$.foo,')
   .intercept(nock =>
-    nock('https://example.test')
-      .get('/yaml')
-      .reply(200, '"foo"')
+    nock('https://example.test').get('/yaml').reply(200, '"foo"')
   )
   .expectBadge({
     label: 'custom badge',

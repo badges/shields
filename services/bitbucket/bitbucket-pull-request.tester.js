@@ -24,12 +24,10 @@ t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
   .expectBadge({ label: 'pull requests', message: 'private repo' })
 
-t.create('pr (valid)')
-  .get('/pr/atlassian/python-bitbucket.json')
-  .expectBadge({
-    label: 'pull requests',
-    message: isMetricOpenIssues,
-  })
+t.create('pr (valid)').get('/pr/atlassian/python-bitbucket.json').expectBadge({
+  label: 'pull requests',
+  message: isMetricOpenIssues,
+})
 
 t.create('pr (not found)')
   .get('/pr/atlassian/not-a-repo.json')

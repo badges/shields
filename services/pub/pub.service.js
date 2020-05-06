@@ -5,9 +5,7 @@ const { latest, renderVersionBadge } = require('../version')
 const { BaseJsonService, redirector } = require('..')
 
 const schema = Joi.object({
-  versions: Joi.array()
-    .items(Joi.string())
-    .required(),
+  versions: Joi.array().items(Joi.string()).required(),
 }).required()
 
 const queryParamSchema = Joi.object({

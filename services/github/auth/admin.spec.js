@@ -9,14 +9,14 @@ const got = require('../../../core/got-test-client')
 const GithubApiProvider = require('../github-api-provider')
 const { setRoutes } = require('./admin')
 
-describe('GitHub admin route', function() {
+describe('GitHub admin route', function () {
   const validCredentials = {
     username: '',
     password: '7'.repeat(40),
   }
 
   let sandbox
-  beforeEach(function() {
+  beforeEach(function () {
     sandbox = sinon.createSandbox()
     // Make this work when there is no `shields_secret` defined.
     serverSecrets.shields_secret = undefined
@@ -24,35 +24,35 @@ describe('GitHub admin route', function() {
       .stub(serverSecrets, 'shields_secret')
       .value(validCredentials.password)
   })
-  afterEach(function() {
+  afterEach(function () {
     sandbox.restore()
   })
 
   let port, baseUrl
-  before(async function() {
+  before(async function () {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
   })
 
   let camp
-  before(async function() {
+  before(async function () {
     camp = Camp.start({ port, hostname: '::' })
     await new Promise(resolve => camp.on('listening', () => resolve()))
   })
-  after(async function() {
+  after(async function () {
     if (camp) {
       await new Promise(resolve => camp.close(resolve))
       camp = undefined
     }
   })
 
-  before(function() {
+  before(function () {
     const apiProvider = new GithubApiProvider({ withPooling: true })
     setRoutes(apiProvider, camp)
   })
 
-  context('the password is correct', function() {
-    it('returns a valid JSON response', async function() {
+  context('the password is correct', function () {
+    it('returns a valid JSON response', async function () {
       const { username, password } = validCredentials
       const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`, {
         username,

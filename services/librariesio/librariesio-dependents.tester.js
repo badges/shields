@@ -3,13 +3,10 @@
 const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('dependent count')
-  .timeout(10000)
-  .get('/npm/got.json')
-  .expectBadge({
-    label: 'dependents',
-    message: isMetric,
-  })
+t.create('dependent count').timeout(10000).get('/npm/got.json').expectBadge({
+  label: 'dependents',
+  message: isMetric,
+})
 
 t.create('dependent count (scoped npm package)')
   .timeout(10000)

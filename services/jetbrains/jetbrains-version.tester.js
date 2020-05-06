@@ -17,12 +17,10 @@ t.create('version (plugin id from plugin.xml)')
     message: isVPlusDottedVersionNClauses,
   })
 
-t.create('version (number as a plugin id)')
-  .get('/7495.json')
-  .expectBadge({
-    label: 'jetbrains plugin',
-    message: isVPlusDottedVersionNClauses,
-  })
+t.create('version (number as a plugin id)').get('/7495.json').expectBadge({
+  label: 'jetbrains plugin',
+  message: isVPlusDottedVersionNClauses,
+})
 
 t.create('version')
   .get('/9435.json')

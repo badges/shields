@@ -6,9 +6,7 @@ const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
-  license: Joi.array()
-    .items(Joi.string())
-    .single(),
+  license: Joi.array().items(Joi.string()).single(),
   version: Joi.object({
     number: Joi.string().required(),
   }).required(),

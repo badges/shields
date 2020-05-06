@@ -3,7 +3,7 @@
 const { test, forCases, given } = require('sazerac')
 const Codecov = require('./codecov.service')
 
-describe('Codecov', function() {
+describe('Codecov', function () {
   test(Codecov.prototype.legacyTransform, () => {
     forCases([given({ json: {} }), given({ json: { commit: {} } })]).expect({
       coverage: 'unknown',

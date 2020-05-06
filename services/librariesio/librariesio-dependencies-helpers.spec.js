@@ -5,7 +5,7 @@ const {
   renderDependenciesBadge,
 } = require('./librariesio-dependencies-helpers')
 
-describe('Libraries.io dependency helpers', function() {
+describe('Libraries.io dependency helpers', function () {
   test(renderDependenciesBadge, () => {
     forCases([
       given({ deprecatedCount: 10, outdatedCount: 0 }),

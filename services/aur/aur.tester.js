@@ -36,12 +36,10 @@ t.create('version (not found)')
 
 // votes tests
 
-t.create('votes (valid)')
-  .get('/votes/google-chrome.json')
-  .expectBadge({
-    label: 'votes',
-    message: isMetric,
-  })
+t.create('votes (valid)').get('/votes/google-chrome.json').expectBadge({
+  label: 'votes',
+  message: isMetric,
+})
 
 t.create('votes (not found)')
   .get('/votes/not-a-package.json')

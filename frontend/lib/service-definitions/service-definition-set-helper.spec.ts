@@ -2,7 +2,7 @@ import { test, given, forCases } from 'sazerac'
 import { predicateFromQuery } from './service-definition-set-helper'
 import { Example } from '.'
 
-describe('Badge example functions', function() {
+describe('Badge example functions', function () {
   function exampleMatchesQuery(
     { examples }: { examples: Example[] },
     query: string

@@ -6,9 +6,7 @@ const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
 const licenseResponseSchema = Joi.object({
   marketplace: Joi.object({
     node: Joi.object({
-      license: Joi.string()
-        .allow('')
-        .required(),
+      license: Joi.string().allow('').required(),
     }),
   }),
 }).required()

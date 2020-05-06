@@ -15,9 +15,7 @@ const individualValueSchema = Joi.alternatives()
 
 const compoundValueSchema = Joi.alternatives().try(
   individualValueSchema,
-  Joi.array()
-    .items(individualValueSchema)
-    .required(),
+  Joi.array().items(individualValueSchema).required(),
   Joi.array().length(0)
 )
 

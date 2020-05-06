@@ -7,12 +7,10 @@ const isPlatform = Joi.string().regex(
   /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/
 )
 
-t.create('platform (valid)')
-  .get('/AFNetworking.json')
-  .expectBadge({
-    label: 'platform',
-    message: isPlatform,
-  })
+t.create('platform (valid)').get('/AFNetworking.json').expectBadge({
+  label: 'platform',
+  message: isPlatform,
+})
 
 t.create('platform (not found)')
   .get('/not-a-package.json')

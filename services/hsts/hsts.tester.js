@@ -3,13 +3,11 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const label = 'hsts preloaded'
 
-t.create('gets the hsts status of github')
-  .get('/github.com.json')
-  .expectBadge({
-    label,
-    message: 'yes',
-    color: 'brightgreen',
-  })
+t.create('gets the hsts status of github').get('/github.com.json').expectBadge({
+  label,
+  message: 'yes',
+  color: 'brightgreen',
+})
 
 t.create('gets the hsts status of httpforever')
   .get('/httpforever.com.json')

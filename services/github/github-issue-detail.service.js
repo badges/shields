@@ -21,9 +21,7 @@ const commonSchemaFields = {
 const stateMap = {
   schema: Joi.object({
     ...commonSchemaFields,
-    state: Joi.string()
-      .allow('open', 'closed')
-      .required(),
+    state: Joi.string().allow('open', 'closed').required(),
     merged_at: Joi.string().allow(null),
   }).required(),
   transform: ({ json }) => ({

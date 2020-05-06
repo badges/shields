@@ -7,8 +7,8 @@ const coalesce = require('./coalesce')
 // `undefined` instead of `null`, though h/t to
 // https://github.com/royriojas/coalescy for these tests!
 
-describe('coalesce', function() {
-  test(coalesce, function() {
+describe('coalesce', function () {
+  test(coalesce, function () {
     given().expect(undefined)
     given(null, []).expect([])
     given(null, [], {}).expect([])

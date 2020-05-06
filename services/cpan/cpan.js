@@ -5,10 +5,7 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   version: Joi.string().required(),
-  license: Joi.array()
-    .items(Joi.string())
-    .min(1)
-    .required(),
+  license: Joi.array().items(Joi.string()).min(1).required(),
 }).required()
 
 module.exports = class BaseCpanService extends BaseJsonService {

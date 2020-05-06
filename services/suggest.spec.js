@@ -8,7 +8,7 @@ const got = require('../core/got-test-client')
 const { setRoutes, githubLicense } = require('./suggest')
 const GithubApiProvider = require('./github/github-api-provider')
 
-describe('Badge suggestions', function() {
+describe('Badge suggestions', function () {
   const githubApiBaseUrl = 'https://api.github.test'
   const apiProvider = new GithubApiProvider({
     baseUrl: githubApiBaseUrl,
@@ -16,9 +16,9 @@ describe('Badge suggestions', function() {
     withPooling: false,
   })
 
-  describe('GitHub license', function() {
-    context('When html_url included in response', function() {
-      it('Should link to it', async function() {
+  describe('GitHub license', function () {
+    context('When html_url included in response', function () {
+      it('Should link to it', async function () {
         const scope = nock(githubApiBaseUrl)
           .get('/repos/atom/atom/license')
           .reply(200, {
@@ -46,8 +46,8 @@ describe('Badge suggestions', function() {
       })
     })
 
-    context('When html_url not included in response', function() {
-      it('Should link to the repo', async function() {
+    context('When html_url not included in response', function () {
+      it('Should link to the repo', async function () {
         const scope = nock(githubApiBaseUrl)
           .get('/repos/atom/atom/license')
           .reply(200, {
@@ -69,19 +69,19 @@ describe('Badge suggestions', function() {
     })
   })
 
-  describe('Scoutcamp integration', function() {
+  describe('Scoutcamp integration', function () {
     let port, baseUrl
-    before(async function() {
+    before(async function () {
       port = await portfinder.getPortPromise()
       baseUrl = `http://127.0.0.1:${port}`
     })
 
     let camp
-    before(async function() {
+    before(async function () {
       camp = Camp.start({ port, hostname: '::' })
       await new Promise(resolve => camp.on('listening', () => resolve()))
     })
-    after(async function() {
+    after(async function () {
       if (camp) {
         await new Promise(resolve => camp.close(resolve))
         camp = undefined
@@ -89,12 +89,12 @@ describe('Badge suggestions', function() {
     })
 
     const origin = 'https://example.test'
-    before(function() {
+    before(function () {
       setRoutes([origin], apiProvider, camp)
     })
 
-    context('without an origin header', function() {
-      it('returns the expected suggestions', async function() {
+    context('without an origin header', function () {
+      it('returns the expected suggestions', async function () {
         const scope = nock(githubApiBaseUrl)
           .get('/repos/atom/atom/license')
           .reply(200, {

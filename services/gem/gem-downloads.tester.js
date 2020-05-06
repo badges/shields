@@ -3,12 +3,10 @@
 const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('total downloads (valid)')
-  .get('/dt/rails.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetric,
-  })
+t.create('total downloads (valid)').get('/dt/rails.json').expectBadge({
+  label: 'downloads',
+  message: isMetric,
+})
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-package.json')

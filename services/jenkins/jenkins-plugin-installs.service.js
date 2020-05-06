@@ -117,9 +117,7 @@ module.exports = class JenkinsPluginInstalls extends BaseJsonService {
         })
       }
     } else {
-      const latestDate = Object.keys(json.installations)
-        .sort()
-        .slice(-1)[0]
+      const latestDate = Object.keys(json.installations).sort().slice(-1)[0]
       installs = json.installations[latestDate]
     }
 

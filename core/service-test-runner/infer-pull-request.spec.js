@@ -6,7 +6,7 @@ const {
   inferPullRequest,
 } = require('./infer-pull-request')
 
-describe('Pull request inference', function() {
+describe('Pull request inference', function () {
   test(parseGithubPullRequestUrl, () => {
     forCases([
       given('https://github.com/badges/shields/pull/1234'),

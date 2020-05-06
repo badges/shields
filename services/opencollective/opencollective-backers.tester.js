@@ -77,12 +77,10 @@ t.create('renders correctly')
     color: 'brightgreen',
   })
 
-t.create('gets amount of backers')
-  .get('/shields.json')
-  .expectBadge({
-    label: 'backers',
-    message: nonNegativeInteger,
-  })
+t.create('gets amount of backers').get('/shields.json').expectBadge({
+  label: 'backers',
+  message: nonNegativeInteger,
+})
 
 t.create('handles not found correctly')
   .get('/nonexistent-collective.json')

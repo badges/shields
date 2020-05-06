@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const GithubDeployments = require('./github-deployments.service')
 
-describe('GithubDeployments', function() {
+describe('GithubDeployments', function () {
   test(GithubDeployments.render, () => {
     given({
       state: 'SUCCESS',

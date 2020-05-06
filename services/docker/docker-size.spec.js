@@ -4,7 +4,7 @@ const { test, given } = require('sazerac')
 const DockerSize = require('./docker-size.service')
 const { sizeDataNoTagSemVerSort } = require('./docker-fixtures')
 
-describe('DockerSize', function() {
+describe('DockerSize', function () {
   test(DockerSize.prototype.transform, () => {
     given({
       tag: '',

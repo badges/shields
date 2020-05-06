@@ -59,12 +59,10 @@ t.create('build private project')
     message: 'not authorized to access project',
   })
 
-t.create('build nonexistent project')
-  .get('/gp/foo.json')
-  .expectBadge({
-    label: 'build',
-    message: 'project not found',
-  })
+t.create('build nonexistent project').get('/gp/foo.json').expectBadge({
+  label: 'build',
+  message: 'project not found',
+})
 
 t.create('build nonexistent branch')
   .get('/g/phpmyadmin/phpmyadmin/super-fake/not-real-branch.json')
