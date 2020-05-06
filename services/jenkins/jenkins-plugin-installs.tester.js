@@ -5,12 +5,10 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 // total installs
 
-t.create('total installs | valid')
-  .get('/view-job-filters.json')
-  .expectBadge({
-    label: 'installs',
-    message: isMetric,
-  })
+t.create('total installs | valid').get('/view-job-filters.json').expectBadge({
+  label: 'installs',
+  message: isMetric,
+})
 
 t.create('total installs | not found')
   .get('/not-a-plugin.json')

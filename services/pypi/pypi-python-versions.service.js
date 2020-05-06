@@ -38,9 +38,7 @@ module.exports = class PypiPythonVersions extends PypiBase {
     })
     if (versionSet.size) {
       return {
-        message: Array.from(versionSet)
-          .sort()
-          .join(' | '),
+        message: Array.from(versionSet).sort().join(' | '),
         color: 'blue',
       }
     } else {

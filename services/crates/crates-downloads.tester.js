@@ -20,12 +20,10 @@ t.create('total downloads (with version)')
     message: isMetric,
   })
 
-t.create('downloads for version')
-  .get('/dv/libc.json')
-  .expectBadge({
-    label: 'downloads@latest',
-    message: isMetric,
-  })
+t.create('downloads for version').get('/dv/libc.json').expectBadge({
+  label: 'downloads@latest',
+  message: isMetric,
+})
 
 t.create('downloads for version (with version)')
   .get('/dv/libc/0.2.31.json')
@@ -34,12 +32,10 @@ t.create('downloads for version (with version)')
     message: isMetric,
   })
 
-t.create('recent downloads')
-  .get('/dr/libc.json')
-  .expectBadge({
-    label: 'recent downloads',
-    message: isMetric,
-  })
+t.create('recent downloads').get('/dr/libc.json').expectBadge({
+  label: 'recent downloads',
+  message: isMetric,
+})
 
 t.create('recent downloads (with version)')
   .get('/dr/libc/0.2.31.json')

@@ -2,12 +2,10 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('license')
-  .get('/notepad4e.json')
-  .expectBadge({
-    label: 'license',
-    message: 'EPL 2.0',
-  })
+t.create('license').get('/notepad4e.json').expectBadge({
+  label: 'license',
+  message: 'EPL 2.0',
+})
 
 t.create('unspecified license')
   .get('/notepad4e.json')

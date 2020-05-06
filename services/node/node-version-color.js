@@ -28,7 +28,7 @@ function getVersion(version) {
 
 function ltsVersionsScraper(versions) {
   const currentDate = moment().format(dateFormat)
-  return Object.keys(versions).filter(function(version) {
+  return Object.keys(versions).filter(function (version) {
     const data = versions[version]
     return data.lts && data.lts < currentDate && data.end > currentDate
   })
@@ -52,10 +52,10 @@ async function getLtsVersions() {
 async function versionColorForRangeLts(range) {
   const ltsVersions = await getLtsVersions()
   try {
-    const matchesAll = ltsVersions.reduce(function(satisfies, version) {
+    const matchesAll = ltsVersions.reduce(function (satisfies, version) {
       return satisfies && semver.satisfies(version, range)
     }, true)
-    const matchesSome = ltsVersions.reduce(function(satisfies, version) {
+    const matchesSome = ltsVersions.reduce(function (satisfies, version) {
       return satisfies || semver.satisfies(version, range)
     }, false)
     if (matchesAll) {

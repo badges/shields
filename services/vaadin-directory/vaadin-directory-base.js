@@ -6,9 +6,7 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   ratingCount: nonNegativeInteger,
-  averageRating: Joi.number()
-    .min(0)
-    .required(),
+  averageRating: Joi.number().min(0).required(),
   latestAvailableRelease: Joi.object({
     publicationDate: Joi.date().required(),
     name: Joi.string().required(),

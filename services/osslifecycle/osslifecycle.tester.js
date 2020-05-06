@@ -7,13 +7,11 @@ const t = (module.exports = new ServiceTester({
   title: 'OSS Lifecycle',
 }))
 
-t.create('osslifecycle active status')
-  .get('/netflix/sureal.json')
-  .expectBadge({
-    label: 'oss lifecycle',
-    message: 'active',
-    color: 'brightgreen',
-  })
+t.create('osslifecycle active status').get('/netflix/sureal.json').expectBadge({
+  label: 'oss lifecycle',
+  message: 'active',
+  color: 'brightgreen',
+})
 
 t.create('osslifecycle maintenance status')
   .get('/Teevity/ice.json')
@@ -31,13 +29,11 @@ t.create('osslifecycle archived status')
     color: 'red',
   })
 
-t.create('osslifecycle other status')
-  .get('/Netflix/metacat.json')
-  .expectBadge({
-    label: 'oss lifecycle',
-    message: 'private',
-    color: 'lightgrey',
-  })
+t.create('osslifecycle other status').get('/Netflix/metacat.json').expectBadge({
+  label: 'oss lifecycle',
+  message: 'private',
+  color: 'lightgrey',
+})
 
 t.create('osslifecycle status (branch)')
   .get('/Netflix/osstracker/documentation.json')
@@ -62,9 +58,7 @@ t.create('oss metadata in unexpected format')
     message: 'metadata in unexpected format',
   })
 
-t.create('oss metadata not found')
-  .get('/PyvesB/empty-repo.json')
-  .expectBadge({
-    label: 'oss lifecycle',
-    message: 'not found',
-  })
+t.create('oss metadata not found').get('/PyvesB/empty-repo.json').expectBadge({
+  label: 'oss lifecycle',
+  message: 'not found',
+})

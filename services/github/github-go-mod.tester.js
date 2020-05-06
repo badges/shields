@@ -3,12 +3,10 @@
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Go version')
-  .get('/gohugoio/hugo.json')
-  .expectBadge({
-    label: 'Go',
-    message: isVPlusDottedVersionAtLeastOne,
-  })
+t.create('Go version').get('/gohugoio/hugo.json').expectBadge({
+  label: 'Go',
+  message: isVPlusDottedVersionAtLeastOne,
+})
 
 t.create('Go version (from branch)')
   .get('/gohugoio/hugo/master.json')

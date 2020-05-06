@@ -8,12 +8,10 @@ const t = (module.exports = new ServiceTester({
   pathPrefix: '/scrutinizer/coverage',
 }))
 
-t.create('code coverage (GitHub)')
-  .get('/g/filp/whoops.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
+t.create('code coverage (GitHub)').get('/g/filp/whoops.json').expectBadge({
+  label: 'coverage',
+  message: isIntegerPercentage,
+})
 
 t.create('code coverage branch (GitHub)')
   .get('/g/PHPMailer/PHPMailer/master.json')
@@ -36,9 +34,7 @@ t.create('code coverage private project')
     message: 'not authorized to access project',
   })
 
-t.create('code coverage nonexistent project')
-  .get('/gp/foo.json')
-  .expectBadge({
-    label: 'coverage',
-    message: 'project not found',
-  })
+t.create('code coverage nonexistent project').get('/gp/foo.json').expectBadge({
+  label: 'coverage',
+  message: 'project not found',
+})

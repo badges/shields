@@ -7,15 +7,10 @@ const { BaseJsonService } = require('..')
 const colorFormatter = colorScale([99, 99.5, 100])
 
 const rowSchema = Joi.object().keys({
-  uptime: Joi.number()
-    .precision(3)
-    .min(0)
-    .max(100),
+  uptime: Joi.number().precision(3).min(0).max(100),
 })
 
-const schema = Joi.array()
-  .items(rowSchema)
-  .min(1)
+const schema = Joi.array().items(rowSchema).min(1)
 
 /*
  * this is the checkUuid for the NodePing.com (as used on the [example page](https://nodeping.com/reporting.html#results))

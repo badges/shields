@@ -3,8 +3,8 @@
 const { expect } = require('chai')
 const { loadServiceClasses, InvalidService } = require('./loader')
 
-describe('loadServiceClasses function', function() {
-  it('throws if module exports empty', function() {
+describe('loadServiceClasses function', function () {
+  it('throws if module exports empty', function () {
     expect(() =>
       loadServiceClasses(['./loader-test-fixtures/empty-undefined.fixture.js'])
     ).to.throw(InvalidService)
@@ -26,7 +26,7 @@ describe('loadServiceClasses function', function() {
     ).to.throw(InvalidService)
   })
 
-  it('throws if module exports invalid', function() {
+  it('throws if module exports invalid', function () {
     expect(() =>
       loadServiceClasses(['./loader-test-fixtures/invalid-no-base.fixture.js'])
     ).to.throw(InvalidService)
@@ -47,7 +47,7 @@ describe('loadServiceClasses function', function() {
     ).to.throw(InvalidService)
   })
 
-  it('registers services if module exports valid service classes', function() {
+  it('registers services if module exports valid service classes', function () {
     expect(
       loadServiceClasses([
         './loader-test-fixtures/valid-array.fixture.js',

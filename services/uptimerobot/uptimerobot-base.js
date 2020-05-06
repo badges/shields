@@ -26,10 +26,7 @@ const singleMonitorResponse = Joi.alternatives(
   errorResponse,
   Joi.object({
     stat: Joi.equal('ok').required(),
-    monitors: Joi.array()
-      .length(1)
-      .items(monitor)
-      .required(),
+    monitors: Joi.array().length(1).items(monitor).required(),
   }).required()
 )
 
@@ -37,10 +34,7 @@ const singleMonitorResponseWithUptime = Joi.alternatives(
   errorResponse,
   Joi.object({
     stat: Joi.equal('ok').required(),
-    monitors: Joi.array()
-      .length(1)
-      .items(monitorWithUptime)
-      .required(),
+    monitors: Joi.array().length(1).items(monitorWithUptime).required(),
   }).required()
 )
 

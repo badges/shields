@@ -8,11 +8,11 @@ const {
 // When these tests fail, they will throw AssertionErrors. Wrapping them in an
 // `expect().not.to.throw()` makes the error output unreadable.
 
-it('Services have unique names', function() {
+it('Services have unique names', function () {
   this.timeout(30000)
   checkNames()
 })
 
-it('Can collect the service definitions', function() {
+it('Can collect the service definitions', function () {
   collectDefinitions()
 })

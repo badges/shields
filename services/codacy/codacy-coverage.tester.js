@@ -3,12 +3,10 @@
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Coverage')
-  .get('/59d607d0e311408885e418004068ea58.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
+t.create('Coverage').get('/59d607d0e311408885e418004068ea58.json').expectBadge({
+  label: 'coverage',
+  message: isIntegerPercentage,
+})
 
 t.create('Coverage on branch')
   .get('/59d607d0e311408885e418004068ea58/master.json')

@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const { renderVersionBadge, odataToObject } = require('./nuget-helpers')
 
-describe('NuGet helpers', function() {
+describe('NuGet helpers', function () {
   test(renderVersionBadge, () => {
     given({ version: '1.2-beta' }).expect({
       label: undefined,

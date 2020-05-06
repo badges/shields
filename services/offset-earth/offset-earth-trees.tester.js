@@ -3,12 +3,10 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isMetric } = require('../test-validators')
 
-t.create('request for existing username')
-  .get('/offsetearth.json')
-  .expectBadge({
-    label: 'trees',
-    message: isMetric,
-  })
+t.create('request for existing username').get('/offsetearth.json').expectBadge({
+  label: 'trees',
+  message: isMetric,
+})
 
 t.create('request for existing username')
   .get('/offsetearth.json')

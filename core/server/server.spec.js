@@ -7,24 +7,24 @@ const got = require('../got-test-client')
 const Server = require('./server')
 const { createTestServer } = require('./in-process-server-test-helpers')
 
-describe('The server', function() {
-  describe('running', function() {
+describe('The server', function () {
+  describe('running', function () {
     let server, baseUrl
-    before('Start the server', async function() {
+    before('Start the server', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
       server = await createTestServer()
       baseUrl = server.baseUrl
       await server.start()
     })
-    after('Shut down the server', async function() {
+    after('Shut down the server', async function () {
       if (server) {
         await server.stop()
       }
       server = undefined
     })
 
-    it('should allow strings for port', async function() {
+    it('should allow strings for port', async function () {
       // fixes #4391 - This allows the app to be run using iisnode, which uses a named pipe for the port.
       const pipeServer = await createTestServer({
         public: {
@@ -36,7 +36,7 @@ describe('The server', function() {
       expect(pipeServer).to.not.be.undefined
     })
 
-    it('should produce colorscheme badges', async function() {
+    it('should produce colorscheme badges', async function () {
       const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.svg`)
       expect(statusCode).to.equal(200)
       expect(body)
@@ -45,7 +45,7 @@ describe('The server', function() {
         .and.to.include('apple')
     })
 
-    it('should redirect colorscheme PNG badges as configured', async function() {
+    it('should redirect colorscheme PNG badges as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.png`,
         {
@@ -58,7 +58,7 @@ describe('The server', function() {
       )
     })
 
-    it('should redirect modern PNG badges as configured', async function() {
+    it('should redirect modern PNG badges as configured', async function () {
       const { statusCode, headers } = await got(`${baseUrl}npm/v/express.png`, {
         followRedirect: false,
       })
@@ -68,7 +68,7 @@ describe('The server', function() {
       )
     })
 
-    it('should produce json badges', async function() {
+    it('should produce json badges', async function () {
       const { statusCode, body, headers } = await got(
         `${baseUrl}twitter/follow/_Pyves.json`
       )
@@ -77,16 +77,14 @@ describe('The server', function() {
       expect(() => JSON.parse(body)).not.to.throw()
     })
 
-    it('should preserve label case', async function() {
+    it('should preserve label case', async function () {
       const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
       expect(statusCode).to.equal(200)
-      expect(body)
-        .to.satisfy(isSvg)
-        .and.to.include('fRuiT')
+      expect(body).to.satisfy(isSvg).and.to.include('fRuiT')
     })
 
     // https://github.com/badges/shields/pull/1319
-    it('should not crash with a numeric logo', async function() {
+    it('should not crash with a numeric logo', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}:fruit-apple-green.svg?logo=1`
       )
@@ -97,7 +95,7 @@ describe('The server', function() {
         .and.to.include('apple')
     })
 
-    it('should not crash with a numeric link', async function() {
+    it('should not crash with a numeric link', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}:fruit-apple-green.svg?link=1`
       )
@@ -108,7 +106,7 @@ describe('The server', function() {
         .and.to.include('apple')
     })
 
-    it('should not crash with a boolean link', async function() {
+    it('should not crash with a boolean link', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}:fruit-apple-green.svg?link=true`
       )
@@ -119,7 +117,7 @@ describe('The server', function() {
         .and.to.include('apple')
     })
 
-    it('should return the 404 badge for unknown badges', async function() {
+    it('should return the 404 badge for unknown badges', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}this/is/not/a/badge.svg`,
         {
@@ -133,7 +131,7 @@ describe('The server', function() {
         .and.to.include('badge not found')
     })
 
-    it('should return the 404 badge page for rando links', async function() {
+    it('should return the 404 badge page for rando links', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}this/is/most/definitely/not/a/badge.js`,
         {
@@ -147,7 +145,7 @@ describe('The server', function() {
         .and.to.include('badge not found')
     })
 
-    it('should redirect the root as configured', async function() {
+    it('should redirect the root as configured', async function () {
       const { statusCode, headers } = await got(baseUrl, {
         followRedirect: false,
       })
@@ -157,7 +155,7 @@ describe('The server', function() {
       expect(headers.location).to.equal('http://frontend.example.test')
     })
 
-    it('should return the 410 badge for obsolete formats', async function() {
+    it('should return the 410 badge for obsolete formats', async function () {
       const { statusCode, body } = await got(`${baseUrl}npm/v/express.jpg`, {
         throwHttpErrors: false,
       })
@@ -170,15 +168,15 @@ describe('The server', function() {
     })
   })
 
-  describe('configuration', function() {
+  describe('configuration', function () {
     let server
-    afterEach(async function() {
+    afterEach(async function () {
       if (server) {
         server.stop()
       }
     })
 
-    it('should allow to enable prometheus metrics', async function() {
+    it('should allow to enable prometheus metrics', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
       server = await createTestServer({
@@ -193,7 +191,7 @@ describe('The server', function() {
       expect(statusCode).to.be.equal(200)
     })
 
-    it('should allow to disable prometheus metrics', async function() {
+    it('should allow to disable prometheus metrics', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
       server = await createTestServer({
@@ -211,10 +209,10 @@ describe('The server', function() {
     })
   })
 
-  describe('configuration validation', function() {
-    describe('influx', function() {
+  describe('configuration validation', function () {
+    describe('influx', function () {
       let customConfig
-      beforeEach(function() {
+      beforeEach(function () {
         customConfig = config.util.toObject()
         customConfig.public.metrics.influx = {
           enabled: true,
@@ -232,46 +230,46 @@ describe('The server', function() {
         }
       })
 
-      it('should not require influx configuration', function() {
+      it('should not require influx configuration', function () {
         delete customConfig.public.metrics.influx
         expect(() => new Server(config.util.toObject())).to.not.throw()
       })
 
-      it('should require url when influx configuration is enabled', function() {
+      it('should require url when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.url
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.url" is required'
         )
       })
 
-      it('should not require url when influx configuration is disabled', function() {
+      it('should not require url when influx configuration is disabled', function () {
         customConfig.public.metrics.influx.enabled = false
         delete customConfig.public.metrics.influx.url
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should require timeoutMilliseconds when influx configuration is enabled', function() {
+      it('should require timeoutMilliseconds when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.timeoutMilliseconds
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.timeoutMilliseconds" is required'
         )
       })
 
-      it('should require intervalSeconds when influx configuration is enabled', function() {
+      it('should require intervalSeconds when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.intervalSeconds
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.intervalSeconds" is required'
         )
       })
 
-      it('should require instanceIdFrom when influx configuration is enabled', function() {
+      it('should require instanceIdFrom when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.instanceIdFrom
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.instanceIdFrom" is required'
         )
       })
 
-      it('should require instanceIdEnvVarName when instanceIdFrom is env-var', function() {
+      it('should require instanceIdEnvVarName when instanceIdFrom is env-var', function () {
         customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
         delete customConfig.public.metrics.influx.instanceIdEnvVarName
         expect(() => new Server(customConfig)).to.throw(
@@ -279,53 +277,53 @@ describe('The server', function() {
         )
       })
 
-      it('should allow instanceIdFrom = hostname', function() {
+      it('should allow instanceIdFrom = hostname', function () {
         customConfig.public.metrics.influx.instanceIdFrom = 'hostname'
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should allow instanceIdFrom = env-var', function() {
+      it('should allow instanceIdFrom = env-var', function () {
         customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should allow instanceIdFrom = random', function() {
+      it('should allow instanceIdFrom = random', function () {
         customConfig.public.metrics.influx.instanceIdFrom = 'random'
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should require envLabel when influx configuration is enabled', function() {
+      it('should require envLabel when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.envLabel
         expect(() => new Server(customConfig)).to.throw(
           '"metrics.influx.envLabel" is required'
         )
       })
 
-      it('should not require hostnameAliases', function() {
+      it('should not require hostnameAliases', function () {
         delete customConfig.public.metrics.influx.hostnameAliases
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should allow empty hostnameAliases', function() {
+      it('should allow empty hostnameAliases', function () {
         customConfig.public.metrics.influx.hostnameAliases = {}
         expect(() => new Server(customConfig)).to.not.throw()
       })
 
-      it('should require username when influx configuration is enabled', function() {
+      it('should require username when influx configuration is enabled', function () {
         delete customConfig.private.influx_username
         expect(() => new Server(customConfig)).to.throw(
           'Private configuration is invalid. Check these paths: influx_username'
         )
       })
 
-      it('should require password when influx configuration is enabled', function() {
+      it('should require password when influx configuration is enabled', function () {
         delete customConfig.private.influx_password
         expect(() => new Server(customConfig)).to.throw(
           'Private configuration is invalid. Check these paths: influx_password'
         )
       })
 
-      it('should allow other private keys', function() {
+      it('should allow other private keys', function () {
         customConfig.private.gh_token = 'my-token'
         expect(() => new Server(customConfig)).to.not.throw()
       })

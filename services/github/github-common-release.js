@@ -66,9 +66,7 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
-  sort: Joi.string()
-    .valid('date', 'semver')
-    .default('date'),
+  sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
 // Fetch the latest release as defined by query params

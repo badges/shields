@@ -38,9 +38,7 @@ t.create('unknown project')
   .get('/totodem/515/515/515.json')
   .expectBadge({ label: 'deployment', message: 'project not found' })
 
-t.create('unknown user')
-  .get('/this-repo/does-not-exist/1/2.json')
-  .expectBadge({
-    label: 'deployment',
-    message: 'user or environment not found',
-  })
+t.create('unknown user').get('/this-repo/does-not-exist/1/2.json').expectBadge({
+  label: 'deployment',
+  message: 'user or environment not found',
+})

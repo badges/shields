@@ -26,10 +26,7 @@ const schema = Joi.object({
       .items({
         name: Joi.string().required(),
         code: Joi.string().required(),
-        percentage: Joi.number()
-          .min(0)
-          .max(100)
-          .required(),
+        percentage: Joi.number().min(0).max(100).required(),
       })
       .required(),
   }),

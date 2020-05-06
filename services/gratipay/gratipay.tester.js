@@ -7,9 +7,7 @@ const t = (module.exports = new ServiceTester({
   title: 'Gratipay',
 }))
 
-t.create('Receiving')
-  .get('/Gratipay.json')
-  .expectBadge({
-    label: 'gratipay',
-    message: 'no longer available',
-  })
+t.create('Receiving').get('/Gratipay.json').expectBadge({
+  label: 'gratipay',
+  message: 'no longer available',
+})

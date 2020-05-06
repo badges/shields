@@ -74,9 +74,7 @@ t.create('unknown build definition')
 t.create('404 latest build error response')
   .get(mockBadgeUriPath)
   .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(404)
+    nock(azureDevOpsApiBaseUri).get(mockLatestBuildApiUriPath).reply(404)
   )
   .expectBadge({
     label: 'coverage',

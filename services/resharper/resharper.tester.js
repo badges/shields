@@ -14,12 +14,10 @@ const t = (module.exports = new ServiceTester({
 
 // downloads
 
-t.create('total downloads (valid)')
-  .get('/dt/ReSharper.Nuke.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetric,
-  })
+t.create('total downloads (valid)').get('/dt/ReSharper.Nuke.json').expectBadge({
+  label: 'downloads',
+  message: isMetric,
+})
 
 t.create('total downloads (not found)')
   .get('/dt/not-a-real-package.json')
@@ -27,12 +25,10 @@ t.create('total downloads (not found)')
 
 // version
 
-t.create('version (valid)')
-  .get('/v/ReSharper.Nuke.json')
-  .expectBadge({
-    label: 'resharper',
-    message: isVPlusDottedVersionNClauses,
-  })
+t.create('version (valid)').get('/v/ReSharper.Nuke.json').expectBadge({
+  label: 'resharper',
+  message: isVPlusDottedVersionNClauses,
+})
 
 t.create('version (not found)')
   .get('/v/not-a-real-package.json')

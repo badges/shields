@@ -7,7 +7,7 @@ const {
   latestVersion,
 } = require('./luarocks-version-helpers')
 
-describe('LuaRocks-specific helpers', function() {
+describe('LuaRocks-specific helpers', function () {
   test(compareVersionLists, () => {
     forCases([
       given([1, 2], [1, 2]),

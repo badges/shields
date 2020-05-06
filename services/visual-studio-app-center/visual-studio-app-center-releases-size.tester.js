@@ -40,9 +40,7 @@ t.create('Invalid user, invalid project, valid API token')
     message: 'project not found',
   })
 
-t.create('Invalid API Token')
-  .get('/invalid/invalid/invalid.json')
-  .expectBadge({
-    label: 'size',
-    message: 'invalid token',
-  })
+t.create('Invalid API Token').get('/invalid/invalid/invalid.json').expectBadge({
+  label: 'size',
+  message: 'invalid token',
+})

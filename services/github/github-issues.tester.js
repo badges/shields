@@ -50,12 +50,10 @@ t.create('GitHub closed issues raw')
     message: isMetric,
   })
 
-t.create('GitHub open issues')
-  .get('/issues/badges/shields.json')
-  .expectBadge({
-    label: 'issues',
-    message: isMetricOpenIssues,
-  })
+t.create('GitHub open issues').get('/issues/badges/shields.json').expectBadge({
+  label: 'issues',
+  message: isMetricOpenIssues,
+})
 
 t.create('GitHub open issues raw')
   .get('/issues-raw/badges/shields.json')

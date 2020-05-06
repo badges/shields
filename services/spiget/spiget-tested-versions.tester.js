@@ -12,12 +12,10 @@ t.create('EssentialsX - multiple versions supported - (id 9089)')
     message: multipleVersions,
   })
 
-t.create('Invalid Resource (id 1)')
-  .get('/1.json')
-  .expectBadge({
-    label: 'tested versions',
-    message: 'not found',
-  })
+t.create('Invalid Resource (id 1)').get('/1.json').expectBadge({
+  label: 'tested versions',
+  message: 'not found',
+})
 
 t.create('Nock - single version supported')
   .get('/1.json')

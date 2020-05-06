@@ -16,8 +16,8 @@ function testColor(color = '', colorAttr = 'color') {
   ).color
 }
 
-describe('The badge generator', function() {
-  describe('color test', function() {
+describe('The badge generator', function () {
+  describe('color test', function () {
     test(testColor, () => {
       // valid hex
       forCases([
@@ -69,14 +69,14 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('color aliases', function() {
+  describe('color aliases', function () {
     test(testColor, () => {
       forCases([given('#4c1', 'color')]).expect('#4c1')
     })
   })
 
-  describe('SVG', function() {
-    it('should produce SVG', function() {
+  describe('SVG', function () {
+    it('should produce SVG', function () {
       const svg = makeBadge({ text: ['cactus', 'grown'], format: 'svg' })
       expect(svg)
         .to.satisfy(isSvg)
@@ -84,14 +84,14 @@ describe('The badge generator', function() {
         .and.to.include('grown')
     })
 
-    it('should match snapshot', function() {
+    it('should match snapshot', function () {
       const svg = makeBadge({ text: ['cactus', 'grown'], format: 'svg' })
       snapshot(svg)
     })
   })
 
-  describe('JSON', function() {
-    it('should produce the expected JSON', function() {
+  describe('JSON', function () {
+    it('should produce the expected JSON', function () {
       const json = makeBadge({
         text: ['cactus', 'grown'],
         format: 'json',
@@ -106,7 +106,7 @@ describe('The badge generator', function() {
       })
     })
 
-    it('should replace undefined svg template with "flat"', function() {
+    it('should replace undefined svg template with "flat"', function () {
       const jsonBadgeWithUnknownStyle = makeBadge({
         text: ['name', 'Bob'],
         format: 'svg',
@@ -121,7 +121,7 @@ describe('The badge generator', function() {
         .and.to.satisfy(isSvg)
     })
 
-    it('should fail with unknown svg template', function() {
+    it('should fail with unknown svg template', function () {
       expect(() =>
         makeBadge({
           text: ['name', 'Bob'],
@@ -132,8 +132,8 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('"flat" template badge generation', function() {
-    it('should match snapshots: message/label, no logo', function() {
+  describe('"flat" template badge generation', function () {
+    it('should match snapshots: message/label, no logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -145,7 +145,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with logo', function() {
+    it('should match snapshots: message/label, with logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -158,7 +158,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, no logo', function() {
+    it('should match snapshots: message only, no logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -169,7 +169,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo', function() {
+    it('should match snapshots: message only, with logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -181,7 +181,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo and labelColor', function() {
+    it('should match snapshots: message only, with logo and labelColor', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -194,7 +194,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with links', function() {
+    it('should match snapshots: message/label, with links', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -208,8 +208,8 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('"flat-square" template badge generation', function() {
-    it('should match snapshots: message/label, no logo', function() {
+  describe('"flat-square" template badge generation', function () {
+    it('should match snapshots: message/label, no logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -221,7 +221,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with logo', function() {
+    it('should match snapshots: message/label, with logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -234,7 +234,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, no logo', function() {
+    it('should match snapshots: message only, no logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -245,7 +245,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo', function() {
+    it('should match snapshots: message only, with logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -257,7 +257,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo and labelColor', function() {
+    it('should match snapshots: message only, with logo and labelColor', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -270,7 +270,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with links', function() {
+    it('should match snapshots: message/label, with links', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -284,8 +284,8 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('"plastic" template badge generation', function() {
-    it('should match snapshots: message/label, no logo', function() {
+  describe('"plastic" template badge generation', function () {
+    it('should match snapshots: message/label, no logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -297,7 +297,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with logo', function() {
+    it('should match snapshots: message/label, with logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -310,7 +310,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, no logo', function() {
+    it('should match snapshots: message only, no logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -321,7 +321,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo', function() {
+    it('should match snapshots: message only, with logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -333,7 +333,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo and labelColor', function() {
+    it('should match snapshots: message only, with logo and labelColor', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -346,7 +346,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with links', function() {
+    it('should match snapshots: message/label, with links', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -360,31 +360,27 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('"for-the-badge" template badge generation', function() {
+  describe('"for-the-badge" template badge generation', function () {
     // https://github.com/badges/shields/issues/1280
-    it('numbers should produce a string', function() {
+    it('numbers should produce a string', function () {
       const svg = makeBadge({
         text: [1998, 1999],
         format: 'svg',
         template: 'for-the-badge',
       })
-      expect(svg)
-        .to.include('1998')
-        .and.to.include('1999')
+      expect(svg).to.include('1998').and.to.include('1999')
     })
 
-    it('lowercase/mixedcase string should produce uppercase string', function() {
+    it('lowercase/mixedcase string should produce uppercase string', function () {
       const svg = makeBadge({
         text: ['Label', '1 string'],
         format: 'svg',
         template: 'for-the-badge',
       })
-      expect(svg)
-        .to.include('LABEL')
-        .and.to.include('1 STRING')
+      expect(svg).to.include('LABEL').and.to.include('1 STRING')
     })
 
-    it('should match snapshots: message/label, no logo', function() {
+    it('should match snapshots: message/label, no logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -396,7 +392,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with logo', function() {
+    it('should match snapshots: message/label, with logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -409,7 +405,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, no logo', function() {
+    it('should match snapshots: message only, no logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -420,7 +416,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo', function() {
+    it('should match snapshots: message only, with logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -432,7 +428,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo and labelColor', function() {
+    it('should match snapshots: message only, with logo and labelColor', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -445,7 +441,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with links', function() {
+    it('should match snapshots: message/label, with links', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -459,31 +455,27 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('"social" template badge generation', function() {
-    it('should produce capitalized string for badge key', function() {
+  describe('"social" template badge generation', function () {
+    it('should produce capitalized string for badge key', function () {
       const svg = makeBadge({
         text: ['some-key', 'some-value'],
         format: 'svg',
         template: 'social',
       })
-      expect(svg)
-        .to.include('Some-key')
-        .and.to.include('some-value')
+      expect(svg).to.include('Some-key').and.to.include('some-value')
     })
 
     // https://github.com/badges/shields/issues/1606
-    it('should handle empty strings used as badge keys', function() {
+    it('should handle empty strings used as badge keys', function () {
       const svg = makeBadge({
         text: ['', 'some-value'],
         format: 'json',
         template: 'social',
       })
-      expect(svg)
-        .to.include('""')
-        .and.to.include('some-value')
+      expect(svg).to.include('""').and.to.include('some-value')
     })
 
-    it('should match snapshots: message/label, no logo', function() {
+    it('should match snapshots: message/label, no logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -495,7 +487,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with logo', function() {
+    it('should match snapshots: message/label, with logo', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -508,7 +500,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, no logo', function() {
+    it('should match snapshots: message only, no logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -519,7 +511,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo', function() {
+    it('should match snapshots: message only, with logo', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -531,7 +523,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message only, with logo and labelColor', function() {
+    it('should match snapshots: message only, with logo and labelColor', function () {
       snapshot(
         makeBadge({
           text: ['', 'grown'],
@@ -544,7 +536,7 @@ describe('The badge generator', function() {
       )
     })
 
-    it('should match snapshots: message/label, with links', function() {
+    it('should match snapshots: message/label, with links', function () {
       snapshot(
         makeBadge({
           text: ['cactus', 'grown'],
@@ -558,8 +550,8 @@ describe('The badge generator', function() {
     })
   })
 
-  describe('badges with logos should always produce the same badge', function() {
-    it('badge with logo', function() {
+  describe('badges with logos should always produce the same badge', function () {
+    it('badge with logo', function () {
       const svg = makeBadge({
         text: ['label', 'message'],
         format: 'svg',

@@ -8,12 +8,10 @@ const t = (module.exports = new ServiceTester({
   pathPrefix: '/pub',
 }))
 
-t.create('package version')
-  .get('/v/box2d.json')
-  .expectBadge({
-    label: 'pub',
-    message: isVPlusTripleDottedVersion,
-  })
+t.create('package version').get('/v/box2d.json').expectBadge({
+  label: 'pub',
+  message: isVPlusTripleDottedVersion,
+})
 
 t.create('package pre-release version')
   .get('/v/box2d.json?include_prereleases')
@@ -22,12 +20,10 @@ t.create('package pre-release version')
     message: isVPlusTripleDottedVersion,
   })
 
-t.create('package not found')
-  .get('/v/does-not-exist.json')
-  .expectBadge({
-    label: 'pub',
-    message: 'not found',
-  })
+t.create('package not found').get('/v/does-not-exist.json').expectBadge({
+  label: 'pub',
+  message: 'not found',
+})
 
 t.create('package version (legacy redirect: vpre)')
   .get('/vpre/box2d.svg')

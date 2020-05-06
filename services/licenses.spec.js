@@ -3,7 +3,7 @@
 const { test, given, forCases } = require('sazerac')
 const { licenseToColor, renderLicenseBadge } = require('./licenses')
 
-describe('license helpers', function() {
+describe('license helpers', function () {
   test(licenseToColor, () => {
     forCases([given('MIT'), given('BSD')]).expect('green')
     forCases([given('MPL-2.0'), given('MPL')]).expect('orange')

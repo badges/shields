@@ -130,7 +130,7 @@ t.create('request should set Accept header')
   .intercept(nock =>
     nock('https://json-test')
       .get('/api.json')
-      .reply(200, function(uri, requestBody) {
+      .reply(200, function (uri, requestBody) {
         headers = this.req.headers
         return '{"name":"test"}'
       })
@@ -178,9 +178,7 @@ t.create('query with invalid token')
 t.create('JSON contains an array')
   .get('.json?url=https://example.test/json&query=$[0]')
   .intercept(nock =>
-    nock('https://example.test')
-      .get('/json')
-      .reply(200, '["foo"]')
+    nock('https://example.test').get('/json').reply(200, '["foo"]')
   )
   .expectBadge({
     label: 'custom badge',
@@ -190,9 +188,7 @@ t.create('JSON contains an array')
 t.create('JSON contains a string')
   .get('.json?url=https://example.test/json&query=$.foo,')
   .intercept(nock =>
-    nock('https://example.test')
-      .get('/json')
-      .reply(200, '"foo"')
+    nock('https://example.test').get('/json').reply(200, '"foo"')
   )
   .expectBadge({
     label: 'custom badge',

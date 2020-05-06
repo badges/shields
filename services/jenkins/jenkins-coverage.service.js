@@ -13,10 +13,7 @@ const formatMap = {
   jacoco: {
     schema: Joi.object({
       instructionCoverage: Joi.object({
-        percentage: Joi.number()
-          .min(0)
-          .max(100)
-          .required(),
+        percentage: Joi.number().min(0).max(100).required(),
       }).required(),
     }).required(),
     treeQueryParam: 'instructionCoverage[percentage]',
@@ -30,10 +27,7 @@ const formatMap = {
           .items(
             Joi.object({
               name: Joi.string().required(),
-              ratio: Joi.number()
-                .min(0)
-                .max(100)
-                .required(),
+              ratio: Joi.number().min(0).max(100).required(),
             })
           )
           .has(Joi.object({ name: 'Lines' }))
@@ -57,10 +51,7 @@ const formatMap = {
           .items(
             Joi.object({
               name: Joi.string().required(),
-              ratio: Joi.number()
-                .min(0)
-                .max(100)
-                .required(),
+              ratio: Joi.number().min(0).max(100).required(),
             })
           )
           .has(Joi.object({ name: 'Line' }))

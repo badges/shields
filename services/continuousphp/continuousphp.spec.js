@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const ContinuousPhp = require('./continuousphp.service')
 
-describe('ContinuousPhp', function() {
+describe('ContinuousPhp', function () {
   test(ContinuousPhp.render, () => {
     given({ status: 'unstable' }).expect({
       label: 'build',

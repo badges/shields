@@ -9,9 +9,7 @@ function makeFullUrl(base, partialUrl) {
 }
 
 const isValidRoute = Joi.object({
-  base: Joi.string()
-    .allow('')
-    .required(),
+  base: Joi.string().allow('').required(),
   pattern: Joi.string().allow(''),
   format: Joi.string(),
   capture: Joi.alternatives().conditional('format', {

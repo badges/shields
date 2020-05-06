@@ -6,15 +6,15 @@ const portfinder = require('portfinder')
 const got = require('../got-test-client')
 const Metrics = require('./prometheus-metrics')
 
-describe('Prometheus metrics route', function() {
+describe('Prometheus metrics route', function () {
   let port, baseUrl, camp, metrics
-  beforeEach(async function() {
+  beforeEach(async function () {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
     camp = Camp.start({ port, hostname: '::' })
     await new Promise(resolve => camp.on('listening', () => resolve()))
   })
-  afterEach(async function() {
+  afterEach(async function () {
     if (metrics) {
       metrics.stop()
     }
@@ -24,7 +24,7 @@ describe('Prometheus metrics route', function() {
     }
   })
 
-  it('returns default metrics', async function() {
+  it('returns default metrics', async function () {
     metrics = new Metrics()
     metrics.registerMetricsEndpoint(camp)
 

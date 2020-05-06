@@ -5,8 +5,8 @@ const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const TwitchStatus = require('./twitch.service')
 
-describe('TwitchStatus', function() {
-  describe('auth', function() {
+describe('TwitchStatus', function () {
+  describe('auth', function () {
     cleanUpNockAfterEach()
 
     const user = 'admin'
@@ -19,7 +19,7 @@ describe('TwitchStatus', function() {
       },
     }
 
-    it('sends the auth information as configured', async function() {
+    it('sends the auth information as configured', async function () {
       const tokenNock = nock('https://id.twitch.tv')
         .post('/oauth2/token')
         // This ensures that the expected credentials are actually being sent with the HTTP request.

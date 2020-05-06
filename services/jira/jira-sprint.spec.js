@@ -13,10 +13,10 @@ const {
   sprintQueryString,
 } = require('./jira-test-helpers')
 
-describe('JiraSprint', function() {
+describe('JiraSprint', function () {
   cleanUpNockAfterEach()
 
-  it('sends the auth information as configured', async function() {
+  it('sends the auth information as configured', async function () {
     const scope = nock(`https://${host}`)
       .get('/jira/rest/api/2/search')
       .query(sprintQueryString)

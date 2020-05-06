@@ -3,7 +3,7 @@
 const { test, given } = require('sazerac')
 const NpmDownloads = require('./npm-downloads.service')
 
-describe('NpmDownloads', function() {
+describe('NpmDownloads', function () {
   test(NpmDownloads._intervalMap.dt.transform, () => {
     given({
       downloads: [

@@ -29,10 +29,10 @@ class DummyJsonService extends BaseJsonService {
   }
 }
 
-describe('BaseJsonService', function() {
-  describe('Making requests', function() {
+describe('BaseJsonService', function () {
+  describe('Making requests', function () {
     let sendAndCacheRequest
-    beforeEach(function() {
+    beforeEach(function () {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
           buffer: '{"some": "json"}',
@@ -41,7 +41,7 @@ describe('BaseJsonService', function() {
       )
     })
 
-    it('invokes _sendAndCacheRequest', async function() {
+    it('invokes _sendAndCacheRequest', async function () {
       await DummyJsonService.invoke(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
@@ -55,7 +55,7 @@ describe('BaseJsonService', function() {
       )
     })
 
-    it('forwards options to _sendAndCacheRequest', async function() {
+    it('forwards options to _sendAndCacheRequest', async function () {
       class WithOptions extends DummyJsonService {
         async handle() {
           const { value } = await this._requestJson({
@@ -83,8 +83,8 @@ describe('BaseJsonService', function() {
     })
   })
 
-  describe('Making badges', function() {
-    it('handles valid json responses', async function() {
+  describe('Making badges', function () {
+    it('handles valid json responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '{"requiredString": "some-string"}',
         res: { statusCode: 200 },
@@ -99,7 +99,7 @@ describe('BaseJsonService', function() {
       })
     })
 
-    it('handles json responses which do not match the schema', async function() {
+    it('handles json responses which do not match the schema', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: '{"unexpectedKey": "some-string"}',
         res: { statusCode: 200 },
@@ -116,7 +116,7 @@ describe('BaseJsonService', function() {
       })
     })
 
-    it('handles unparseable json responses', async function() {
+    it('handles unparseable json responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: 'not json',
         res: { statusCode: 200 },

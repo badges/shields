@@ -7,12 +7,10 @@ const isLuaVersion = Joi.string()
   .regex(/^v\d+\.\d+\.\d+-\d+$/)
   .required()
 
-t.create('version')
-  .get('/mpeterv/luacheck.json')
-  .expectBadge({
-    label: 'luarocks',
-    message: isLuaVersion,
-  })
+t.create('version').get('/mpeterv/luacheck.json').expectBadge({
+  label: 'luarocks',
+  message: isLuaVersion,
+})
 
 t.create('specified version')
   .get('/mpeterv/luacheck/0.9.0-1.json')

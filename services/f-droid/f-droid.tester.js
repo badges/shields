@@ -108,98 +108,56 @@ const path = '/fdroid/fdroiddata/raw/master/metadata/axp.tool.apkextractor'
 
 t.create('Package is found with default metadata format')
   .get('/v/axp.tool.apkextractor.json')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.txt`)
-      .reply(200, testString)
-  )
+  .intercept(nock => nock(base).get(`${path}.txt`).reply(200, testString))
   .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Package is found with fallback yml matadata format')
   .get('/v/axp.tool.apkextractor.json')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.txt`)
-      .reply(404)
-  )
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, testYmlString)
-  )
+  .intercept(nock => nock(base).get(`${path}.txt`).reply(404))
+  .intercept(nock => nock(base).get(`${path}.yml`).reply(200, testYmlString))
   .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Trailing 0 in yml format')
   .get('/v/axp.tool.apkextractor.json')
+  .intercept(nock => nock(base).get(`${path}.txt`).reply(404))
   .intercept(nock =>
-    nock(base)
-      .get(`${path}.txt`)
-      .reply(404)
-  )
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, "CurrentVersion: '1.4000'")
+    nock(base).get(`${path}.yml`).reply(200, "CurrentVersion: '1.4000'")
   )
   .expectBadge({ label: 'f-droid', message: 'v1.4000' })
 
 t.create('Package is found with yml matadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, testYmlString)
-  )
+  .intercept(nock => nock(base).get(`${path}.yml`).reply(200, testYmlString))
   .expectBadge({ label: 'f-droid', message: 'v1.4' })
 
 t.create('Package is not found with "metadata_format" query parameter')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(404)
-  )
+  .intercept(nock => nock(base).get(`${path}.yml`).reply(404))
   .expectBadge({ label: 'f-droid', message: 'app not found' })
 
 t.create('Package is found yml matadata format with missing "CurrentVersion"')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
   .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, 'Categories: System')
+    nock(base).get(`${path}.yml`).reply(200, 'Categories: System')
   )
   .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is found with bad yml matadata format')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
   .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, '.CurrentVersion: 1.4')
+    nock(base).get(`${path}.yml`).reply(200, '.CurrentVersion: 1.4')
   )
   .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is not found')
   .get('/v/axp.tool.apkextractor.json')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.txt`)
-      .reply(404)
-  )
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(404)
-  )
+  .intercept(nock => nock(base).get(`${path}.txt`).reply(404))
+  .intercept(nock => nock(base).get(`${path}.yml`).reply(404))
   .expectBadge({ label: 'f-droid', message: 'app not found' })
 
 t.create('The api changed')
   .get('/v/axp.tool.apkextractor.json?metadata_format=yml')
-  .intercept(nock =>
-    nock(base)
-      .get(`${path}.yml`)
-      .reply(200, '')
-  )
+  .intercept(nock => nock(base).get(`${path}.yml`).reply(200, ''))
   .expectBadge({ label: 'f-droid', message: 'invalid response data' })
 
 t.create('Package is not found due invalid metadata format')

@@ -7,28 +7,24 @@ const t = (module.exports = require('../tester').createServiceTester())
 t.create('Valid schema')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+    })
   )
   .expectBadge({ label: '', message: 'yo' })
 
 t.create('color and labelColor')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        color: '#f0dcc3',
-        labelColor: '#e6e6fa',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      color: '#f0dcc3',
+      labelColor: '#e6e6fa',
+    })
   )
   .expectBadge({
     label: 'hey',
@@ -40,14 +36,12 @@ t.create('color and labelColor')
 t.create('style')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        color: '#99c',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      color: '#99c',
+    })
   )
   .expectBadge({
     label: 'hey',
@@ -60,14 +54,12 @@ t.create('style')
 t.create('named logo')
   .get('.svg?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        namedLogo: 'npm',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      namedLogo: 'npm',
+    })
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
@@ -77,15 +69,13 @@ t.create('named logo')
 t.create('named logo with color')
   .get('.svg?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        namedLogo: 'npm',
-        logoColor: 'blue',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      namedLogo: 'npm',
+      logoColor: 'blue',
+    })
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
@@ -100,14 +90,12 @@ const logoSvg = Buffer.from(
 t.create('custom svg logo')
   .get('.svg?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        logoSvg,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      logoSvg,
+    })
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
@@ -117,15 +105,13 @@ t.create('custom svg logo')
 t.create('logoWidth')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        logoSvg,
-        logoWidth: 30,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      logoSvg,
+      logoWidth: 30,
+    })
   )
   .expectBadge({
     label: 'hey',
@@ -136,11 +122,9 @@ t.create('logoWidth')
 t.create('Invalid schema)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: -1,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: -1,
+    })
   )
   .expectBadge({
     label: 'custom badge',
@@ -150,15 +134,13 @@ t.create('Invalid schema)')
 t.create('Invalid schema)')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: 'hey',
-        message: 'yo',
-        extra: 'keys',
-        bogus: true,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      extra: 'keys',
+      bogus: true,
+    })
   )
   .expectBadge({
     label: 'custom badge',
@@ -168,114 +150,98 @@ t.create('Invalid schema)')
 t.create('User color overrides success color')
   .get('.json?url=https://example.com/badge&color=101010')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        color: 'blue',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      color: 'blue',
+    })
   )
   .expectBadge({ label: '', message: 'yo', color: '#101010' })
 
 t.create('User legacy color overrides success color')
   .get('.json?url=https://example.com/badge&colorB=101010')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        color: 'blue',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      color: 'blue',
+    })
   )
   .expectBadge({ label: '', message: 'yo', color: '#101010' })
 
 t.create('User color does not override error color')
   .get('.json?url=https://example.com/badge&color=101010')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        isError: true,
-        label: 'something is',
-        message: 'not right',
-        color: 'red',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      isError: true,
+      label: 'something is',
+      message: 'not right',
+      color: 'red',
+    })
   )
   .expectBadge({ label: 'something is', message: 'not right', color: 'red' })
 
 t.create('User legacy color does not override error color')
   .get('.json?url=https://example.com/badge&colorB=101010')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        isError: true,
-        label: 'something is',
-        message: 'not right',
-        color: 'red',
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      isError: true,
+      label: 'something is',
+      message: 'not right',
+      color: 'red',
+    })
   )
   .expectBadge({ label: 'something is', message: 'not right', color: 'red' })
 
 t.create('cacheSeconds')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        cacheSeconds: 500,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      cacheSeconds: 500,
+    })
   )
   .expectHeader('cache-control', 'max-age=500')
 
 t.create('user can override service cacheSeconds')
   .get('.json?url=https://example.com/badge&cacheSeconds=1000')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        cacheSeconds: 500,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      cacheSeconds: 500,
+    })
   )
   .expectHeader('cache-control', 'max-age=1000')
 
 t.create('user does not override longer service cacheSeconds')
   .get('.json?url=https://example.com/badge&cacheSeconds=450')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        cacheSeconds: 500,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      cacheSeconds: 500,
+    })
   )
   .expectHeader('cache-control', 'max-age=500')
 
 t.create('cacheSeconds does not override longer Shields default')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
-    nock('https://example.com/')
-      .get('/badge')
-      .reply(200, {
-        schemaVersion: 1,
-        label: '',
-        message: 'yo',
-        cacheSeconds: 10,
-      })
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: '',
+      message: 'yo',
+      cacheSeconds: 10,
+    })
   )
   .expectHeader('cache-control', 'max-age=300')
 
@@ -288,9 +254,7 @@ t.create('Blocked domain')
   .expectBadge({ label: 'custom badge', message: 'domain is blocked' })
 
 // https://github.com/badges/shields/issues/3780
-t.create('Invalid url')
-  .get('.json?url=https:/')
-  .expectBadge({
-    label: 'custom badge',
-    message: 'invalid query parameter: url',
-  })
+t.create('Invalid url').get('.json?url=https:/').expectBadge({
+  label: 'custom badge',
+  message: 'invalid query parameter: url',
+})

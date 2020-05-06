@@ -10,9 +10,7 @@ const schema = Joi.object({
     status: isBuildStatus,
     jobs: Joi.array()
       .items({
-        name: Joi.string()
-          .allow('')
-          .required(),
+        name: Joi.string().allow('').required(),
         status: isBuildStatus,
         testsCount: nonNegativeInteger,
         passedTestsCount: nonNegativeInteger,

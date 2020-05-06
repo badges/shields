@@ -16,9 +16,7 @@ const packageSchema = Joi.object()
   .required()
 
 const allVersionsSchema = Joi.object({
-  packages: Joi.object()
-    .pattern(/^/, packageSchema)
-    .required(),
+  packages: Joi.object().pattern(/^/, packageSchema).required(),
 }).required()
 const keywords = ['PHP']
 

@@ -3,12 +3,10 @@
 const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Stars (valid package)')
-  .get('/guzzlehttp/guzzle.json')
-  .expectBadge({
-    label: 'stars',
-    message: isMetric,
-  })
+t.create('Stars (valid package)').get('/guzzlehttp/guzzle.json').expectBadge({
+  label: 'stars',
+  message: isMetric,
+})
 
 t.create('Stars (invalid package)')
   .get('/frodo/is-not-a-package.json')

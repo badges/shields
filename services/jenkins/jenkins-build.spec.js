@@ -7,7 +7,7 @@ const { renderBuildStatusBadge } = require('../build-status')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
 const JenkinsBuild = require('./jenkins-build.service')
 
-describe('JenkinsBuild', function() {
+describe('JenkinsBuild', function () {
   test(JenkinsBuild.prototype.transform, () => {
     forCases([
       given({ json: { color: 'red_anime' } }),
@@ -58,7 +58,7 @@ describe('JenkinsBuild', function() {
     )
   })
 
-  describe('auth', function() {
+  describe('auth', function () {
     cleanUpNockAfterEach()
 
     const user = 'admin'
@@ -77,7 +77,7 @@ describe('JenkinsBuild', function() {
       },
     }
 
-    it('sends the auth information as configured', async function() {
+    it('sends the auth information as configured', async function () {
       const scope = nock('https://jenkins.ubuntu.com')
         .get('/server/job/curtin-vmtest-daily-x/api/json?tree=color')
         // This ensures that the expected credentials are actually being sent with the HTTP request.

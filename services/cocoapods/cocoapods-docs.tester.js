@@ -3,12 +3,10 @@
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('doc percent (valid)')
-  .get('/AFNetworking.json')
-  .expectBadge({
-    label: 'docs',
-    message: isIntegerPercentage,
-  })
+t.create('doc percent (valid)').get('/AFNetworking.json').expectBadge({
+  label: 'docs',
+  message: isIntegerPercentage,
+})
 
 t.create('doc percent (null)')
   .get('/AFNetworking.json')

@@ -39,10 +39,7 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
       const ip =
         (req.headers['x-forwarded-for'] || '').split(', ')[0] ||
         req.socket.remoteAddress
-      const badgeType = req.url
-        .split(/[/-]/)
-        .slice(0, 3)
-        .join('')
+      const badgeType = req.url.split(/[/-]/).slice(0, 3).join('')
       const referer = req.headers.referer
 
       if (ipRateLimit.isBanned(ip, req, res)) {
@@ -91,7 +88,7 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
     })
   })
 
-  return function() {
+  return function () {
     ipRateLimit.stop()
     badgeTypeRateLimit.stop()
     refererRateLimit.stop()

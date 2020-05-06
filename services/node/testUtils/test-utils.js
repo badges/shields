@@ -108,15 +108,9 @@ const mockReleaseSchedule = () => nock => {
     },
     v10: {
       start: '2018-04-24',
-      lts: currentDate
-        .clone()
-        .subtract(6, 'month')
-        .format(dateFormat),
+      lts: currentDate.clone().subtract(6, 'month').format(dateFormat),
       maintenance: '2020-04-30',
-      end: currentDate
-        .clone()
-        .add(1, 'month')
-        .format(dateFormat),
+      end: currentDate.clone().add(1, 'month').format(dateFormat),
       codename: 'Dubnium',
     },
     v11: {
@@ -126,15 +120,9 @@ const mockReleaseSchedule = () => nock => {
     },
     v12: {
       start: '2019-04-23',
-      lts: currentDate
-        .clone()
-        .subtract(1, 'month')
-        .format(dateFormat),
+      lts: currentDate.clone().subtract(1, 'month').format(dateFormat),
       maintenance: '2020-10-20',
-      end: currentDate
-        .clone()
-        .add(6, 'month')
-        .format(dateFormat),
+      end: currentDate.clone().add(6, 'month').format(dateFormat),
       codename: 'Erbium',
     },
     v13: {
@@ -144,15 +132,9 @@ const mockReleaseSchedule = () => nock => {
     },
     v14: {
       start: '2020-04-21',
-      lts: currentDate
-        .clone()
-        .add(4, 'month')
-        .format(dateFormat),
+      lts: currentDate.clone().add(4, 'month').format(dateFormat),
       maintenance: '2021-10-19',
-      end: currentDate
-        .clone()
-        .add(12, 'month')
-        .format(dateFormat),
+      end: currentDate.clone().add(12, 'month').format(dateFormat),
       codename: '',
     },
   }

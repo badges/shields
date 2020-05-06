@@ -20,9 +20,7 @@ const packageSchema = Joi.object()
   .required()
 
 const schema = Joi.object({
-  packages: Joi.object()
-    .pattern(/^/, packageSchema)
-    .required(),
+  packages: Joi.object().pattern(/^/, packageSchema).required(),
 }).required()
 
 const queryParamSchema = Joi.object({

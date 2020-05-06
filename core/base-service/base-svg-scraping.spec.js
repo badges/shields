@@ -33,7 +33,7 @@ class DummySvgScrapingService extends BaseSvgScrapingService {
   }
 }
 
-describe('BaseSvgScrapingService', function() {
+describe('BaseSvgScrapingService', function () {
   const exampleLabel = 'this is the label'
   const exampleMessage = 'this is the result!'
   const exampleSvg = makeExampleSvg({
@@ -41,17 +41,17 @@ describe('BaseSvgScrapingService', function() {
     message: exampleMessage,
   })
 
-  describe('valueFromSvgBadge', function() {
-    it('should find the correct value', function() {
+  describe('valueFromSvgBadge', function () {
+    it('should find the correct value', function () {
       expect(BaseSvgScrapingService.valueFromSvgBadge(exampleSvg)).to.equal(
         exampleMessage
       )
     })
   })
 
-  describe('Making requests', function() {
+  describe('Making requests', function () {
     let sendAndCacheRequest
-    beforeEach(function() {
+    beforeEach(function () {
       sendAndCacheRequest = sinon.stub().returns(
         Promise.resolve({
           buffer: exampleSvg,
@@ -60,7 +60,7 @@ describe('BaseSvgScrapingService', function() {
       )
     })
 
-    it('invokes _sendAndCacheRequest with the expected header', async function() {
+    it('invokes _sendAndCacheRequest with the expected header', async function () {
       await DummySvgScrapingService.invoke(
         { sendAndCacheRequest },
         { handleInternalErrors: false }
@@ -74,7 +74,7 @@ describe('BaseSvgScrapingService', function() {
       )
     })
 
-    it('forwards options to _sendAndCacheRequest', async function() {
+    it('forwards options to _sendAndCacheRequest', async function () {
       class WithCustomOptions extends DummySvgScrapingService {
         async handle() {
           const { message } = await this._requestSvg({
@@ -105,8 +105,8 @@ describe('BaseSvgScrapingService', function() {
     })
   })
 
-  describe('Making badges', function() {
-    it('handles valid svg responses', async function() {
+  describe('Making badges', function () {
+    it('handles valid svg responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: exampleSvg,
         res: { statusCode: 200 },
@@ -121,7 +121,7 @@ describe('BaseSvgScrapingService', function() {
       })
     })
 
-    it('allows overriding the valueMatcher', async function() {
+    it('allows overriding the valueMatcher', async function () {
       class WithValueMatcher extends BaseSvgScrapingService {
         static get route() {
           return {}
@@ -149,7 +149,7 @@ describe('BaseSvgScrapingService', function() {
       })
     })
 
-    it('handles unparseable svg responses', async function() {
+    it('handles unparseable svg responses', async function () {
       const sendAndCacheRequest = async () => ({
         buffer: 'not svg yo',
         res: { statusCode: 200 },

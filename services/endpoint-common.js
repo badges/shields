@@ -18,9 +18,7 @@ const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
 
 const endpointSchema = Joi.object({
   schemaVersion: 1,
-  label: Joi.string()
-    .allow('')
-    .required(),
+  label: Joi.string().allow('').required(),
   message: Joi.string().required(),
   color: Joi.string(),
   labelColor: Joi.string(),
@@ -31,9 +29,7 @@ const endpointSchema = Joi.object({
   logoWidth: optionalNumberWhenAnyLogoPresent,
   logoPosition: optionalNumberWhenAnyLogoPresent,
   style: Joi.string(),
-  cacheSeconds: Joi.number()
-    .integer()
-    .min(0),
+  cacheSeconds: Joi.number().integer().min(0),
 })
   // `namedLogo` or `logoSvg`; not both.
   .oxor('namedLogo', 'logoSvg')

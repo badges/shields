@@ -23,19 +23,15 @@ t.create('Plugin Downloads - Active')
     message: isMetric,
   })
 
-t.create('Plugin Downloads - Day')
-  .get('/plugin/dd/akismet.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-  })
+t.create('Plugin Downloads - Day').get('/plugin/dd/akismet.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+})
 
-t.create('Plugin Downloads - Week')
-  .get('/plugin/dw/akismet.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-  })
+t.create('Plugin Downloads - Week').get('/plugin/dw/akismet.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+})
 
 t.create('Plugin Downloads - Month')
   .get('/plugin/dm/akismet.json')
@@ -44,12 +40,10 @@ t.create('Plugin Downloads - Month')
     message: isMetricOverTimePeriod,
   })
 
-t.create('Plugin Downloads - Year')
-  .get('/plugin/dy/akismet.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetricOverTimePeriod,
-  })
+t.create('Plugin Downloads - Year').get('/plugin/dy/akismet.json').expectBadge({
+  label: 'downloads',
+  message: isMetricOverTimePeriod,
+})
 
 t.create('Theme Downloads - Total')
   .get('/theme/dt/twentyseventeen.json')

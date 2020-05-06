@@ -7,12 +7,10 @@ t.create('invalid buildId')
   .get('/btABC999.json')
   .expectBadge({ label: 'coverage', message: 'build not found' })
 
-t.create('valid buildId')
-  .get('/ReactJSNet_PullRequests.json')
-  .expectBadge({
-    label: 'coverage',
-    message: isIntegerPercentage,
-  })
+t.create('valid buildId').get('/ReactJSNet_PullRequests.json').expectBadge({
+  label: 'coverage',
+  message: isIntegerPercentage,
+})
 
 t.create('specified instance valid buildId')
   .get('/ReactJSNet_PullRequests.json?server=https://teamcity.jetbrains.com')

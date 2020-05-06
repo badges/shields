@@ -6,9 +6,7 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   version: Joi.string().required(),
-  status: Joi.string()
-    .valid('ok')
-    .required(),
+  status: Joi.string().valid('ok').required(),
 }).required()
 
 module.exports = class JitPackVersion extends BaseJsonService {

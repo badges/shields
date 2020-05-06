@@ -74,8 +74,9 @@ module.exports = class GithubMilestoneDetail extends GithubAuthV3Service {
         label = 'issues'
         break
       case 'progress':
-        milestoneMetric = `${milestone.closed_issues}/${milestone.open_issues +
-          milestone.closed_issues}`
+        milestoneMetric = `${milestone.closed_issues}/${
+          milestone.open_issues + milestone.closed_issues
+        }`
         color = 'blue'
         break
       case 'progress-percent':
