@@ -95,7 +95,7 @@
     "pretest": "run-s --silent defs features",
     "test": "run-s --silent --continue-on-error lint test:frontend test:package test:core test:entrypoint check-types:frontend prettier:check",
     "check-types:frontend": "tsc --noEmit --project .",
-    "depcheck": "check-node-version --node \">= 8.0\"",
+    "depcheck": "check-node-version --node \">= 10.0\"",
     "postinstall": "run-s --silent depcheck",
     "prebuild": "run-s --silent depcheck",
     "features": "node scripts/export-supported-features-cli.js > supported-features.json",
