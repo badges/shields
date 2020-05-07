@@ -260,7 +260,7 @@ jobs:
 
   e2e:
     docker:
-      - image: cypress/base:8
+      - image: cypress/base:12
     steps:
       - checkout
 
