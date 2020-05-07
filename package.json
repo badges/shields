@@ -122,8 +122,7 @@
       "prettier --write"
     ],
     "**/*.@(md|json|yml)": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "nodemonConfig": {
