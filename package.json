@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@hapi/joi": "^16.1.8",
+    "@hapi/joi": "^17.1.1",
     "@sentry/node": "^5.15.5",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
