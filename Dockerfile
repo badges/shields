@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:10-alpine
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
