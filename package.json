@@ -150,7 +150,7 @@
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.4",
+    "@types/node": "^13.13.5",
     "@types/react-helmet": "^5.0.15",
     "@types/react-modal": "^3.10.5",
     "@types/react-select": "^3.0.12",
