@@ -8,6 +8,11 @@ const discordSchema = Joi.object({
   presence_count: nonNegativeInteger,
 }).required()
 
+const discordInviteSchema = Joi.object({
+  approximate_member_count: nonNegativeInteger,
+  approximate_presence_count: nonNegativeInteger,
+}).required()
+
 const proxySchema = Joi.object({
   message: Joi.string().required(),
   color: Joi.string().required(),
@@ -27,6 +32,9 @@ const documentation = `
   To use the Discord badge a Discord server admin must enable the widget setting on the server.
 </p>
 <iframe src="https://player.vimeo.com/video/364220040" width="640" height="210" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+<p>
+  To get the total member count you need to create a invite that never ends, and then add the Invite ID after the Server ID in the URL
+</p>
 `
 
 module.exports = class Discord extends BaseJsonService {
@@ -37,16 +45,22 @@ module.exports = class Discord extends BaseJsonService {
   static get route() {
     return {
       base: 'discord',
-      pattern: ':serverId',
+      pattern: ':serverId/:inviteId?',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'Discord',
+        title: 'Discord Server',
         namedParams: { serverId: '102860784329052160' },
-        staticPreview: this.render({ members: 23 }),
+        staticPreview: this.render({ presence: 10 }),
+        documentation,
+      },
+      {
+        title: 'Discord Invite',
+        namedParams: { serverId: '102860784329052160', inviteId: 'NdsqWcj' },
+        staticPreview: this.render({ members: 23, presence: 10 }),
         documentation,
       },
     ]
@@ -60,9 +74,15 @@ module.exports = class Discord extends BaseJsonService {
     return { label: 'chat' }
   }
 
-  static render({ members }) {
+  static render({ members = null, presence }) {
+    if (members === null) {
+      return {
+        message: `${presence} online`,
+        color: 'brightgreen',
+      }
+    }
     return {
-      message: `${members} online`,
+      message: `${presence}/${members} online`,
       color: 'brightgreen',
     }
   }
@@ -72,32 +92,45 @@ module.exports = class Discord extends BaseJsonService {
     this._shieldsProductionHerokuHacks = config.shieldsProductionHerokuHacks
   }
 
-  async fetch({ serverId }) {
-    const url = `https://discordapp.com/api/guilds/${serverId}/widget.json`
-    return this._requestJson({
+  async fetch({ serverId, inviteId }) {
+    const url = inviteId
+      ? `https://discordapp.com/api/invites/${inviteId}?with_counts=true`
+      : `https://discordapp.com/api/guilds/${serverId}/widget.json`
+    const schema = inviteId ? discordInviteSchema : discordSchema
+    const data = await this._requestJson({
       url,
-      schema: discordSchema,
+      schema,
       errorMessages: {
         404: 'invalid server',
         403: 'widget disabled',
       },
     })
+    return data
   }
 
-  async fetchOvhProxy({ serverId }) {
+  async fetchOvhProxy({ serverId, inviteId }) {
     return this._requestJson({
-      url: `https://legacy-img.shields.io/discord/${serverId}.json`,
+      url: inviteId
+        ? `https://legacy-img.shields.io/discord/${serverId}/${inviteId}.json`
+        : `https://legacy-img.shields.io/discord/${serverId}.json`,
       schema: proxySchema,
     })
   }
 
-  async handle({ serverId }) {
+  async handle({ serverId, inviteId }) {
     if (this._shieldsProductionHerokuHacks) {
       const { message, color } = await this.fetchOvhProxy({ serverId })
       return { message, color }
     }
 
-    const data = await this.fetch({ serverId })
-    return this.constructor.render({ members: data.presence_count })
+    const data = await this.fetch({ serverId, inviteId })
+    if (inviteId) {
+      return this.constructor.render({
+        members: data.approximate_member_count,
+        presence: data.approximate_presence_count,
+      })
+    } else {
+      return this.constructor.render({ presence: data.presence_count })
+    }
   }
 }

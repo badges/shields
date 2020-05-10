@@ -11,6 +11,14 @@ t.create('gets status for Reactiflux')
     color: 'brightgreen',
   })
 
+t.create('gets online presence for Reactiflux')
+  .get('/102860784329052160/NdsqWcj.json')
+  .expectBadge({
+    label: 'chat',
+    message: Joi.string().regex(/^[0-9]+\/[0-9]+ online$/),
+    color: 'brightgreen',
+  })
+
 t.create('invalid server ID')
   .get('/12345.json')
   .expectBadge({ label: 'chat', message: 'invalid server' })
