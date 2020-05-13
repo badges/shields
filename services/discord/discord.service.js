@@ -33,7 +33,8 @@ const documentation = `
 </p>
 <iframe src="https://player.vimeo.com/video/364220040" width="640" height="210" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 <p>
-  To get the total member count you need to create a invite that never ends, and then add the Invite ID after the Server ID in the URL
+  To get the total member count you need to create a invite that never ends, and then add the <code>INVITE ID</code> after the <code>SERVER ID</code> in the URL<br>
+  It will only show the online member when <code>INVITE ID</code> is not provided.
 </p>
 `
 
@@ -52,13 +53,13 @@ module.exports = class Discord extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Discord Server',
+        title: 'Discord Online Members',
         namedParams: { serverId: '102860784329052160' },
         staticPreview: this.render({ presence: 10 }),
         documentation,
       },
       {
-        title: 'Discord Invite',
+        title: 'Discord Online & Total Members',
         namedParams: { serverId: '102860784329052160', inviteId: 'NdsqWcj' },
         staticPreview: this.render({ members: 23, presence: 10 }),
         documentation,
