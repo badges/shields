@@ -153,7 +153,7 @@
     "@types/node": "^13.13.5",
     "@types/react-helmet": "^5.0.15",
     "@types/react-modal": "^3.10.5",
-    "@types/react-select": "^3.0.12",
+    "@types/react-select": "^3.0.13",
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.33.0",
