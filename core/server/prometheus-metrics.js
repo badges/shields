@@ -95,6 +95,10 @@ module.exports = class PrometheusMetrics {
   }
 
   /**
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.category e.g: 'build'
+   * @param {string} attrs.serviceFamily e.g: 'npm'
+   * @param {string} attrs.name e.g: 'NpmVersion'
    * @returns {object} `{ inc() {} }`.
    */
   createNumRequestCounter({ category, serviceFamily, name }) {
