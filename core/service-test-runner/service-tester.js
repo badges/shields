@@ -25,7 +25,7 @@ class ServiceTester {
    *    Specifies which tests to run from the CLI or pull requests
    * @param {string} attrs.title
    *    Prints in the Mocha output
-   * @param {string} attrs.path
+   * @param {string} attrs.pathPrefix
    *    Prefix which is automatically prepended to each tested URI.
    *    The default is `/${attrs.id}`.
    */
@@ -119,7 +119,7 @@ class ServiceTester {
    * @param {number} attrs.retry.count number of times to retry test
    * @param {number} attrs.retry.backoff number of milliseconds to add to the wait between each retry
    */
-  toss({ baseUrl, skipIntercepted, retry }) {
+  toss({ baseUrl, skipIntercepted, retry: { count, backoff } }) {
     const { specs, pathPrefix } = this
     const testerBaseUrl = `${baseUrl}${pathPrefix}`
 
@@ -132,7 +132,7 @@ class ServiceTester {
         }`
         if (!skipIntercepted || !spec.intercepted) {
           spec.baseUri(testerBaseUrl)
-          spec.retry(retry.count, retry.backoff)
+          spec.retry(count, backoff)
           spec.toss()
         }
       })
