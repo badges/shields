@@ -7,7 +7,7 @@ const got = require('./core/got-test-client')
 let server
 before(function () {
   this.timeout('5s')
-  // remove args comming from mocha
+  // remove args coming from mocha
   // https://github.com/badges/shields/issues/3365
   process.argv = []
   server = require('./server')
