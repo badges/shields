@@ -22,6 +22,7 @@ const hexSchema = Joi.object({
 
 class BaseHexPmService extends BaseJsonService {
   static get defaultBadgeData() {
+    // arbitrary comment
     return { label: 'hex' }
   }
 

@@ -14,6 +14,7 @@ const queryParamSchema = Joi.object({
 
 class PubVersion extends BaseJsonService {
   static get category() {
+    // arbitrary comment
     return 'version'
   }
 
