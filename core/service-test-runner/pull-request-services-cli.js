@@ -1,5 +1,5 @@
-// Infer the current PR from the Travis environment, and look for bracketed,
-// space-separated service names in the pull request title.
+// Derive a list of service test to run based on files modified in a PR
+// plus any space-separated service names in the PR title.
 //
 // Output the list of services.
 //
@@ -8,41 +8,40 @@
 // Output:
 // travis
 // sonar
-//
-// Example:
-//
-// TRAVIS=1 TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:services:pr:prepare
 
 'use strict'
 
-const got = require('got')
-const { inferPullRequest } = require('./infer-pull-request')
+const fs = require('fs')
+const { join } = require('path')
+const util = require('util')
+const github = require('@actions/github')
 const servicesForTitle = require('./services-for-title')
 
-async function getTitle(owner, repo, pullRequest) {
-  const {
-    body: { title },
-  } = await got(
-    `https://api.github.com/repos/${owner}/${repo}/pulls/${pullRequest}`,
-    {
-      headers: {
-        'User-Agent': 'badges/shields',
-        Authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-      responseType: 'json',
-    }
-  )
-  return title
+const readFile = util.promisify(fs.readFile)
+
+async function getServicesFromDiff() {
+  const buffer = await readFile(join(process.env.HOME, 'files.json'))
+  const text = buffer.toString()
+  const files = JSON.parse(text)
+  return files
+    .map(file => {
+      const match = file.match(/^services\/(.+)\/.+\.(service|tester).js$/)
+      return match ? match[1].replace('-', '').toLowerCase() : undefined
+    })
+    .filter(Boolean)
+}
+
+function getServicesFromTitle() {
+  const title = github.context.payload.pull_request.title
+  console.error(`Title: ${title}\n`)
+  return servicesForTitle(title)
 }
 
 async function main() {
-  const { owner, repo, pullRequest, slug } = inferPullRequest()
-  console.error(`PR: ${slug}`)
+  const titleServices = getServicesFromTitle()
+  const diffServices = await getServicesFromDiff()
+  const services = [...new Set([...titleServices, ...diffServices])]
 
-  const title = await getTitle(owner, repo, pullRequest)
-
-  console.error(`Title: ${title}\n`)
-  const services = servicesForTitle(title)
   if (services.length === 0) {
     console.error('No services found. Nothing to do.')
   } else {

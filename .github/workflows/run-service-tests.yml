@@ -1,0 +1,18 @@
+name: Run service tests
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - id: Checkout
+        uses: actions/checkout@v1
+
+      - id: file_changes
+        uses: trilom/file-changes-action@v1.2.3
+
+      - name: Run Service Tests
+        run: |
+          npm ci
+          npm run test:services:pr:prepare
+          npm run test:services:pr:run
