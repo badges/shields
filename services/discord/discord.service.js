@@ -73,7 +73,7 @@ module.exports = class Discord extends BaseJsonService {
   }
 
   async fetch({ serverId }) {
-    const url = `https://discordapp.com/api/guilds/${serverId}/widget.json`
+    const url = `https://discord.com/api/guilds/${serverId}/widget.json`
     return this._requestJson({
       url,
       schema: discordSchema,
