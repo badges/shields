@@ -2,7 +2,7 @@
 
 ## Supported Projects
 
-We will provide fixes for security issues affecting:
+Please follow this guidance when reporting security issues affecting:
 
 - [Shields.io](https://shields.io)
 - [Raster.shields.io](https://easter.shields.io)
@@ -20,6 +20,6 @@ Report security bugs in third-party modules to the person or team maintaining th
 
 ## Coordinated Disclosure
 
-We aim to patch vulnerabilities within 90 days or less, disclosing the details of those vulnerabilities when a patch is published. We ask that you refrain from sharing your report with others while we work on our patch.
+We aim to patch confirmed vulnerabilities within 90 days or less, disclosing the details of those vulnerabilities when a patch is published. We ask that you refrain from sharing your report with others while we work on our patch.
 
 We may want to coordinate an advisory with you to be published simultaneously with the patch, but you are also welcome to self-disclose after 90 days if you prefer. We will never publish information about you or our communications with you without your permission.
