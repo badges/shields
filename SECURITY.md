@@ -5,7 +5,7 @@
 Please follow this guidance when reporting security issues affecting:
 
 - [Shields.io](https://shields.io)
-- [Raster.shields.io](https://easter.shields.io)
+- [Raster.shields.io](https://raster.shields.io)
 - Self-hosted Shields instances
 - The [svg-to-image-proxy](https://www.npmjs.com/package/svg-to-image-proxy) NPM package
 - The [badge-maker](https://www.npmjs.com/package/badge-maker) NPM package
