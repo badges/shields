@@ -44,7 +44,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "ioredis": "4.16.3",
-    "joi-extension-semver": "4.0.0",
+    "joi-extension-semver": "4.1.1",
     "js-yaml": "^3.13.1",
     "jsonpath": "~1.0.2",
     "lodash.countby": "^4.6.0",
