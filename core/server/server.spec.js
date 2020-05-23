@@ -207,6 +207,12 @@ describe('The server', function () {
         .and.to.include('410')
         .and.to.include('jpg no longer available')
     })
+
+    it('should return cors header for the request', async function () {
+      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      expect(statusCode).to.equal(200)
+      expect(headers['access-control-allow-origin']).to.equal('*')
+    })
   })
 
   context('`requireCloudflare` is enabled', function () {
