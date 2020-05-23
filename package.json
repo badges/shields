@@ -200,7 +200,7 @@
     "gatsby-plugin-react-helmet": "^3.3.2",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.3",
     "gatsby-plugin-styled-components": "^3.3.1",
-    "gatsby-plugin-typescript": "^2.4.2",
+    "gatsby-plugin-typescript": "^2.4.3",
     "got": "11.1.4",
     "humanize-string": "^2.1.0",
     "husky": "^4.2.5",
