@@ -100,7 +100,7 @@ const schema = Joi.object({
 /*
  * Strip Build MetaData
  * Nuget versions may include an optional "build metadata" clause,
- * seperated from the version by a + character.
+ * separated from the version by a + character.
  */
 function stripBuildMetadata(version) {
   return version.split('+')[0]

@@ -189,7 +189,7 @@ t.create('query with node function')
     color: 'blue',
   })
 
-t.create('query with type convertion to string')
+t.create('query with type conversion to string')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
@@ -203,7 +203,7 @@ t.create('query with type convertion to string')
     color: 'blue',
   })
 
-t.create('query with type convertion to number')
+t.create('query with type conversion to number')
   .get(
     `.json?${queryString.stringify({
       url: exampleUrl,
