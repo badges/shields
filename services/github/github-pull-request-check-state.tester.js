@@ -7,7 +7,7 @@ t.create('github pull request check state')
   .expectBadge({ label: 'checks', message: 'failure' })
 
 t.create('github pull request check state (pull request not found)')
-  .get('/s/pulls/badges/shields/5110.json')
+  .get('/s/pulls/badges/shields/5101.json')
   .expectBadge({ label: 'checks', message: 'pull request or repo not found' })
 
 t.create(
