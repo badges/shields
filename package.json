@@ -60,7 +60,7 @@
     "query-string": "^6.12.1",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "2.12.0",
+    "simple-icons": "2.13.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
@@ -195,7 +195,7 @@
     "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.21.33",
-    "gatsby-plugin-catch-links": "^2.3.1",
+    "gatsby-plugin-catch-links": "^2.3.2",
     "gatsby-plugin-page-creator": "^2.3.2",
     "gatsby-plugin-react-helmet": "^3.3.1",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.2",
