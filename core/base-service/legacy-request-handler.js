@@ -107,6 +107,20 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   } = handlerOptions
 
   return (queryParams, match, end, ask) => {
+    /*
+    This is here for legacy reasons. The badge server and frontend used to live
+    on two different servers. When we merged them there was a conflict so we
+    did this to avoid moving the endpoint docs to another URL.
+
+    Never ever do this again.
+    */
+    if (match[0] === '/endpoint' && Object.keys(queryParams).length === 0) {
+      ask.res.statusCode = 301
+      ask.res.setHeader('Location', '/endpoint/')
+      ask.res.end()
+      return
+    }
+
     const reqTime = new Date()
 
     // `defaultCacheLengthSeconds` can be overridden by
