@@ -254,7 +254,7 @@ describe('The request handler', function () {
           +new Date(headers.date) + 900000
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
-        expect(headers['cache-control']).to.equal('max-age=900 s-maxage=900')
+        expect(headers['cache-control']).to.equal('max-age=900, s-maxage=900')
       })
 
       it('should set the expected cache headers on cached responses', async function () {
@@ -268,7 +268,7 @@ describe('The request handler', function () {
           +new Date(headers.date) + 900000
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
-        expect(headers['cache-control']).to.equal('max-age=900 s-maxage=900')
+        expect(headers['cache-control']).to.equal('max-age=900, s-maxage=900')
       })
 
       it('should let live service data override the default cache headers with longer value', async function () {
@@ -322,7 +322,7 @@ describe('The request handler', function () {
           +new Date(headers.date) + 3600000
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
-        expect(headers['cache-control']).to.equal('max-age=3600 s-maxage=3600')
+        expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
       })
 
       it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function () {
@@ -334,7 +334,7 @@ describe('The request handler', function () {
           +new Date(headers.date) + 600000
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
-        expect(headers['cache-control']).to.equal('max-age=600 s-maxage=600')
+        expect(headers['cache-control']).to.equal('max-age=600, s-maxage=600')
       })
 
       it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function () {
