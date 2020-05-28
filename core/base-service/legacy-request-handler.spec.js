@@ -289,7 +289,7 @@ describe('The request handler', function () {
         )
 
         const { headers } = await got(`${baseUrl}/testing/123.json`)
-        expect(headers['cache-control']).to.equal('max-age=400 s-maxage=400')
+        expect(headers['cache-control']).to.equal('max-age=400, s-maxage=400')
       })
 
       it('should not let live service data override the default cache headers with shorter value', async function () {
@@ -310,7 +310,7 @@ describe('The request handler', function () {
         )
 
         const { headers } = await got(`${baseUrl}/testing/123.json`)
-        expect(headers['cache-control']).to.equal('max-age=300 s-maxage=300')
+        expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
       })
 
       it('should set the expires header to current time + cacheSeconds', async function () {
