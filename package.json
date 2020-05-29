@@ -180,7 +180,7 @@
     "eslint-config-standard": "^14.1.1",
     "eslint-config-standard-react": "^9.2.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
-    "eslint-plugin-cypress": "^2.10.3",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsdoc": "^25.4.2",
     "eslint-plugin-mocha": "^6.3.0",
