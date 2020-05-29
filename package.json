@@ -60,7 +60,7 @@
     "query-string": "^6.12.1",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "2.13.0",
+    "simple-icons": "2.14.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
@@ -182,7 +182,7 @@
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jsdoc": "^25.4.2",
+    "eslint-plugin-jsdoc": "^26.0.0",
     "eslint-plugin-mocha": "^6.3.0",
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^11.1.0",
