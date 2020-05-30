@@ -20,16 +20,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class YouTube extends BaseJsonService {
+module.exports = class YouTubeBase extends BaseJsonService {
   static get category() {
     return 'other'
-  }
-
-  static get route() {
-    return {
-      base: 'youtube',
-      pattern: ':statistic(view|like|dislike|comment)/:videoId',
-    }
   }
 
   static get auth() {
@@ -40,32 +33,14 @@ module.exports = class YouTube extends BaseJsonService {
     }
   }
 
-  static get examples() {
-    const preview = this.render({
-      statistic: 'view',
-      videoId: 'abBdk8bSPKU',
-      count: 251,
-    })
-    // link[] is not allowed in examples
-    delete preview.link
-    return [
-      {
-        title: 'YouTube Video',
-        namedParams: { statistic: 'view', videoId: 'abBdk8bSPKU' },
-        staticPreview: preview,
-      },
-    ]
-  }
-
   static get defaultBadgeData() {
-    return { label: 'youtube' }
+    return { label: 'youtube', color: 'red' }
   }
 
-  static render({ statistic, videoId, count }) {
+  static renderSingleStat({ statistics, statisticName, videoId }) {
     return {
-      label: `${statistic}s`,
-      message: metric(count),
-      color: 'red',
+      label: `${statisticName}s`,
+      message: metric(statistics[`${statisticName}Count`]),
       link: `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`,
     }
   }
@@ -85,12 +60,12 @@ module.exports = class YouTube extends BaseJsonService {
     )
   }
 
-  async handle({ statistic, videoId }) {
+  async handle({ videoId }, queryParams) {
     const json = await this.fetch({ videoId })
     if (json.items.length === 0) {
       throw new NotFound({ prettyMessage: 'video not found' })
     }
-    const count = json.items[0].statistics[`${statistic}Count`]
-    return this.constructor.render({ statistic, videoId, count })
+    const statistics = json.items[0].statistics
+    return this.constructor.render({ statistics, videoId }, queryParams)
   }
 }
