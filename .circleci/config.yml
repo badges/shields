@@ -116,6 +116,10 @@ package_steps: &package_steps
         environment:
           CYPRESS_INSTALL_BINARY: 0
 
+    - run:
+          name: Check types
+          command: npm run check-types:package
+
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
 
