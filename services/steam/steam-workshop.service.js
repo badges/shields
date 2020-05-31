@@ -465,6 +465,7 @@ module.exports = {
   SteamCollectionSize,
   SteamFileSize,
   SteamFileReleaseDate,
+  SteamFileUpdateDate,
   SteamFileSubscriptions,
   SteamFileFavorites,
   SteamFileDownloads,
