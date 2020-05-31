@@ -63,6 +63,7 @@ const steamFileSchema = Joi.object({
           Joi.object({
             file_size: Joi.number().integer().required(),
             time_created: Joi.number().integer().required(),
+            time_updated: Joi.number().integer().required(),
             subscriptions: Joi.number().integer().required(),
             favorited: Joi.number().integer().required(),
             lifetime_subscriptions: Joi.number().integer().required(),
