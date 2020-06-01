@@ -140,9 +140,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
+    "@babel/core": "^7.10.1",
     "@babel/polyfill": "^7.10.1",
-    "@babel/register": "7.9.0",
+    "@babel/register": "7.10.1",
     "@mapbox/react-click-to-select": "^2.2.0",
     "@types/chai": "^4.2.11",
     "@types/chai-enzyme": "^0.6.7",
@@ -194,7 +194,7 @@
     "fetch-ponyfill": "^6.1.0",
     "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
-    "gatsby": "2.21.33",
+    "gatsby": "2.22.12",
     "gatsby-plugin-catch-links": "^2.3.3",
     "gatsby-plugin-page-creator": "^2.3.7",
     "gatsby-plugin-react-helmet": "^3.3.2",
