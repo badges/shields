@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+- Add TypeScript definitions
+
 ## 3.0.1
 
 - Fix missing dependency
