@@ -9,6 +9,7 @@
     "image",
     "shields.io"
   ],
+  "types": "index.d.ts",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
