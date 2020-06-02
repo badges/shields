@@ -63,6 +63,7 @@ const steamFileSchema = Joi.object({
           Joi.object({
             file_size: Joi.number().integer().required(),
             time_created: Joi.number().integer().required(),
+            time_updated: Joi.number().integer().required(),
             subscriptions: Joi.number().integer().required(),
             favorited: Joi.number().integer().required(),
             lifetime_subscriptions: Joi.number().integer().required(),
@@ -276,6 +277,45 @@ class SteamFileReleaseDate extends SteamFileService {
   }
 }
 
+class SteamFileUpdateDate extends SteamFileService {
+  static get category() {
+    return 'activity'
+  }
+
+  static get route() {
+    return {
+      base: 'steam/update-date',
+      pattern: ':fileId',
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Steam Update Date',
+        namedParams: { fileId: '100' },
+        staticPreview: this.render({
+          updateDate: new Date(0).setUTCSeconds(1538288239),
+        }),
+        documentation,
+      },
+    ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'update date' }
+  }
+
+  static render({ updateDate }) {
+    return { message: formatDate(updateDate), color: ageColor(updateDate) }
+  }
+
+  async onRequest({ response }) {
+    const updateDate = new Date(0).setUTCSeconds(response.time_updated)
+    return this.constructor.render({ updateDate })
+  }
+}
+
 class SteamFileSubscriptions extends SteamFileService {
   static get category() {
     return 'rating'
@@ -426,6 +466,7 @@ module.exports = {
   SteamCollectionSize,
   SteamFileSize,
   SteamFileReleaseDate,
+  SteamFileUpdateDate,
   SteamFileSubscriptions,
   SteamFileFavorites,
   SteamFileDownloads,
