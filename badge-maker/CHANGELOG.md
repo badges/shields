@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- Fix missing dependency
+
 ## 3.0.0
 
 ### Breaking Changes
