@@ -25,7 +25,15 @@ With CommonJS in JavaScript,
 
 ```js
 const { makeBadge, ValidationError } = require('badge-maker')
+```
 
+With ESM or TypeScript,
+
+```ts
+import { makeBadge, ValidationError } from 'badge-maker'
+```
+
+```js
 const format = {
   label: 'build',
   message: 'passed',
@@ -40,12 +48,6 @@ try {
 } catch (e) {
   console.log(e) // ValidationError: Field `message` is required
 }
-```
-
-With ESM or TypeScript,
-
-```ts
-import { makeBadge, ValidationError } from 'badge-maker'
 ```
 
 ### Node version support
