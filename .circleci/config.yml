@@ -118,13 +118,12 @@ package_steps: &package_steps
     - checkout
 
     - run:
-        name: Install node versions
+        name: Install node and npm
         command: |
           set +e
           export NVM_DIR="/opt/circleci/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm install v12
-          nvm install v14
           nvm use v12
           npm install -g npm
         environment:
