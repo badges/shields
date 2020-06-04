@@ -58,6 +58,7 @@ module.exports = class YouTubeLikes extends YouTubeBase {
         message: `${metric(statistics.likeCount)} 👍 ${metric(
           statistics.dislikeCount
         )} 👎`,
+        style: 'social',
         link: `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`,
       }
     }

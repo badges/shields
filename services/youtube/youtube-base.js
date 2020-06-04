@@ -22,7 +22,7 @@ const schema = Joi.object({
 
 module.exports = class YouTubeBase extends BaseJsonService {
   static get category() {
-    return 'other'
+    return 'social'
   }
 
   static get auth() {
@@ -34,13 +34,14 @@ module.exports = class YouTubeBase extends BaseJsonService {
   }
 
   static get defaultBadgeData() {
-    return { label: 'youtube', color: 'red' }
+    return { label: 'youtube', color: 'red', namedLogo: 'youtube' }
   }
 
   static renderSingleStat({ statistics, statisticName, videoId }) {
     return {
       label: `${statisticName}s`,
       message: metric(statistics[`${statisticName}Count`]),
+      style: 'social',
       link: `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`,
     }
   }
