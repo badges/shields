@@ -126,8 +126,6 @@ package_steps: &package_steps
           nvm install v12
           nvm use v12
           npm install -g npm
-        environment:
-          CYPRESS_INSTALL_BINARY: 0
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
@@ -138,6 +136,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v10/results.xml
           NODE_VERSION: v10
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 10
 
     - run:
@@ -146,6 +145,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v12/results.xml
           NODE_VERSION: v12
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 12
 
     - run:
@@ -154,6 +154,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v14/results.xml
           NODE_VERSION: v14
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 14
 
     - store_test_results:
