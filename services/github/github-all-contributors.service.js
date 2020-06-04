@@ -7,7 +7,7 @@ const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
 
 const schema = Joi.object({
-  contributors: Joi.array(),
+  contributors: Joi.array().required(),
 }).required()
 
 module.exports = class GithubAllContributorsService extends ConditionalGithubAuthV3Service {
