@@ -23,3 +23,10 @@ t.create('subreddit-subscribers (not existing subreddit)')
     label: 'reddit',
     message: 'subreddit not found',
   })
+
+t.create('subreddit-subscribers (private sub)')
+  .get('/centuryclub.json')
+  .expectBadge({
+    label: 'reddit',
+    message: 'subreddit is private',
+  })
