@@ -18,7 +18,7 @@ module.exports = class GithubAllContributorsService extends ConditionalGithubAut
   static get route() {
     return {
       base: 'github/all-contributors',
-      pattern: ':user/:repo',
+      pattern: ':user/:repo/:branch*',
     }
   }
 
@@ -29,6 +29,7 @@ module.exports = class GithubAllContributorsService extends ConditionalGithubAut
         namedParams: {
           repo: 'all-contributors',
           user: 'all-contributors',
+          branch: 'master',
         },
         staticPreview: this.render({ contributorCount: 66 }),
         documentation,
