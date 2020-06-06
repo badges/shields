@@ -6,21 +6,21 @@ const t = (module.exports = require('../tester').createServiceTester())
 t.create('user-karma (valid - link)')
   .get('/link/user_simulator.json')
   .expectBadge({
-    label: "user_simulator's karma (link)",
+    label: 'u/user_simulator karma (link)',
     message: isMetric,
   })
 
 t.create('user-karma (valid - comment')
   .get('/comment/user_simulator.json')
   .expectBadge({
-    label: "user_simulator's karma (comment)",
+    label: 'u/user_simulator karma (comment)',
     message: isMetric,
   })
 
 t.create('user-karma (valid - combined)')
   .get('/combined/user_simulator.json')
   .expectBadge({
-    label: "user_simulator's karma",
+    label: 'u/user_simulator karma',
     message: isMetric,
   })
 
@@ -39,7 +39,7 @@ t.create('user-karma (link - math check)')
       .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
   )
   .expectBadge({
-    label: "user_simulator's karma (link)",
+    label: 'u/user_simulator karma (link)',
     message: '20',
   })
 
@@ -51,7 +51,7 @@ t.create('user-karma (comment - math check)')
       .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
   )
   .expectBadge({
-    label: "user_simulator's karma (comment)",
+    label: 'u/user_simulator karma (comment)',
     message: '80',
   })
 
@@ -63,7 +63,7 @@ t.create('user-karma (combined - math check)')
       .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
   )
   .expectBadge({
-    label: "user_simulator's karma",
+    label: 'u/user_simulator karma',
     message: '100',
   })
 

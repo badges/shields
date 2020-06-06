@@ -46,7 +46,11 @@ module.exports = class RedditUserKarma extends BaseJsonService {
     }
   }
 
-  static render({ label, karma, user }) {
+  static render({ variant, karma, user }) {
+    const label =
+      variant === 'combined'
+        ? `u/${user} karma`
+        : `u/${user} karma (${variant})`
     return {
       label: `${label}`,
       message: metric(karma),
@@ -65,27 +69,28 @@ module.exports = class RedditUserKarma extends BaseJsonService {
     })
   }
 
-  async handle({ variant, user }) {
-    const json = await this.fetch({ user })
-
+  transform({ json, variant }) {
     let karma
-    let label
     if (variant === 'link') {
       karma = json.data.link_karma
-      label = `${user}'s karma (link)`
     } else if (variant === 'comment') {
       karma = json.data.comment_karma
-      label = `${user}'s karma (comment)`
     } else {
       const total = json.data.link_karma + json.data.comment_karma
       karma = total
-      label = `${user}'s karma`
     }
 
+    return { karma }
+  }
+
+  async handle({ variant, user }) {
+    const json = await this.fetch({ user })
+    const { karma } = this.transform({ json, variant })
+
     return this.constructor.render({
-      label: `${label}`,
+      variant,
       karma: `${karma}`,
-      user: 'izzyanut',
+      user,
     })
   }
 }
