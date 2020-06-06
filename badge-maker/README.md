@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/badge-maker.svg)](https://npmjs.org/package/badge-maker)
 [![npm license](https://img.shields.io/npm/l/badge-maker.svg)](https://npmjs.org/package/badge-maker)
+[![npm type definitions](https://img.shields.io/npm/types/badge-maker)](https://npmjs.org/package/badge-maker)
 
 ## Installation
 
@@ -20,9 +21,19 @@ badge build passed :green > mybadge.svg
 
 ### As a library
 
+With CommonJS in JavaScript,
+
 ```js
 const { makeBadge, ValidationError } = require('badge-maker')
+```
 
+With ESM or TypeScript,
+
+```ts
+import { makeBadge, ValidationError } from 'badge-maker'
+```
+
+```js
 const format = {
   label: 'build',
   message: 'passed',

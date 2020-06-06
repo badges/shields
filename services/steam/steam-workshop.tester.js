@@ -18,6 +18,10 @@ t.create('Release Date')
   .get('/release-date/1523924535.json')
   .expectBadge({ label: 'release date', message: isFormattedDate })
 
+t.create('Update Date')
+  .get('/update-date/1523924535.json')
+  .expectBadge({ label: 'update date', message: isFormattedDate })
+
 t.create('Subscriptions')
   .get('/subscriptions/1523924535.json')
   .expectBadge({ label: 'subscriptions', message: isMetric })
@@ -45,6 +49,10 @@ t.create('File Size | File Not Found')
 t.create('Release Date | File Not Found')
   .get('/release-date/1.json')
   .expectBadge({ label: 'release date', message: 'file not found' })
+
+t.create('Update Date | File Not Found')
+  .get('/update-date/1.json')
+  .expectBadge({ label: 'update date', message: 'file not found' })
 
 t.create('Subscriptions | File Not Found')
   .get('/subscriptions/1.json')
