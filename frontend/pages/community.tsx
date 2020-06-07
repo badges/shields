@@ -93,11 +93,11 @@ export default function SponsorsPage(): JSX.Element {
       </SponsorContainer>
 
       <SponsorContainer>
-        ✨ Shields is helped by these companies which provide their products or
-        services to open source projects for free:
+        ✨ Shields is helped by these companies which provide a free plan for
+        their product or service:
         <ul>
           <li>
-            <a href="https://github.com/">GitHub</a>
+            <a href="https://coveralls.io/">Coveralls</a>
           </li>
           <li>
             <a href="https://circleci.com/">CircleCI</a>
@@ -109,7 +109,16 @@ export default function SponsorsPage(): JSX.Element {
             <a href="https://discord.com/">Discord</a>
           </li>
           <li>
-            <a href="https://coveralls.io/">Coveralls</a>
+            <a href="https://github.com/">GitHub</a>
+          </li>
+          <li>
+            <a href="https://lgtm.com/">LGTM</a>
+          </li>
+          <li>
+            <a href="https://www.netlify.com/">Netlify</a>
+          </li>
+          <li>
+            <a href="https://uptimerobot.com/">Uptime Robot</a>
           </li>
         </ul>
       </SponsorContainer>
