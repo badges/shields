@@ -52,7 +52,7 @@ module.exports = class RedditUserKarma extends BaseJsonService {
         ? `u/${user} karma`
         : `u/${user} karma (${variant})`
     return {
-      label: `${label}`,
+      label,
       message: metric(karma),
       color: 'red',
       link: [`https://www.reddit.com/u/${user}`],
@@ -89,7 +89,7 @@ module.exports = class RedditUserKarma extends BaseJsonService {
 
     return this.constructor.render({
       variant,
-      karma: `${karma}`,
+      karma,
       user,
     })
   }
