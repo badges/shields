@@ -34,10 +34,6 @@ async function createPages({ actions: { createPage } }) {
       ),
     })
   }
-  createPage({
-    path: '/community',
-    component: require.resolve('./frontend/pages/community.tsx'),
-  })
 
   categories.forEach(category => {
     const { id } = category
