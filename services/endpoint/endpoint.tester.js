@@ -207,7 +207,7 @@ t.create('cacheSeconds')
       cacheSeconds: 500,
     })
   )
-  .expectHeader('cache-control', 'max-age=500')
+  .expectHeader('cache-control', 'max-age=500, s-maxage=500')
 
 t.create('user can override service cacheSeconds')
   .get('.json?url=https://example.com/badge&cacheSeconds=1000')
@@ -219,7 +219,7 @@ t.create('user can override service cacheSeconds')
       cacheSeconds: 500,
     })
   )
-  .expectHeader('cache-control', 'max-age=1000')
+  .expectHeader('cache-control', 'max-age=1000, s-maxage=1000')
 
 t.create('user does not override longer service cacheSeconds')
   .get('.json?url=https://example.com/badge&cacheSeconds=450')
@@ -231,7 +231,7 @@ t.create('user does not override longer service cacheSeconds')
       cacheSeconds: 500,
     })
   )
-  .expectHeader('cache-control', 'max-age=500')
+  .expectHeader('cache-control', 'max-age=500, s-maxage=500')
 
 t.create('cacheSeconds does not override longer Shields default')
   .get('.json?url=https://example.com/badge')
@@ -243,7 +243,7 @@ t.create('cacheSeconds does not override longer Shields default')
       cacheSeconds: 10,
     })
   )
-  .expectHeader('cache-control', 'max-age=300')
+  .expectHeader('cache-control', 'max-age=300, s-maxage=300')
 
 t.create('Bad scheme')
   .get('.json?url=http://example.com/badge')

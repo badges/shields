@@ -18,7 +18,7 @@ t.create('invalid server ID')
 t.create('widget disabled')
   .get('/12345.json')
   .intercept(nock =>
-    nock('https://discordapp.com/')
+    nock('https://discord.com/')
       .get('/api/guilds/12345/widget.json')
       .reply(403, {
         code: 50004,
@@ -30,7 +30,7 @@ t.create('widget disabled')
 t.create('server error')
   .get('/12345.json')
   .intercept(nock =>
-    nock('https://discordapp.com/')
+    nock('https://discord.com/')
       .get('/api/guilds/12345/widget.json')
       .reply(500, 'Something broke')
   )

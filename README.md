@@ -191,8 +191,11 @@ Maintainers:
 
 Operations:
 
-- [espadrine](https://github.com/espadrine) (sysadmin)
-- [paulmelnikow](https://github.com/paulmelnikow) (limited access)
+- [calebcartwright](https://github.com/calebcartwright)
+- [chris48s](https://github.com/chris48s)
+- [espadrine](https://github.com/espadrine)
+- [paulmelnikow](https://github.com/paulmelnikow)
+- [PyvesB](https://github.com/PyvesB)
 
 Alumni:
 

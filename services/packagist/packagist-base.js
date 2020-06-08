@@ -29,6 +29,11 @@ class BasePackagistService extends BaseJsonService {
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
    *
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.user package user
+   * @param {string} attrs.repo package repository
+   * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
+   * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
@@ -48,6 +53,11 @@ class BasePackagistService extends BaseJsonService {
    * so data fetch from this method might be outdated.
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
    *
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.user package user
+   * @param {string} attrs.repo package repository
+   * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
+   * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
   async fetchByJsonAPI({

@@ -1,6 +1,6 @@
 {
   "name": "badge-maker",
-  "version": "3.0.0-rc1",
+  "version": "3.1.0",
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",
@@ -9,6 +9,7 @@
     "image",
     "shields.io"
   ],
+  "types": "index.d.ts",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "anafanafo": "^1.0.0",
+    "camelcase": "^6.0.0",
     "is-css-color": "^1.0.0"
   },
   "scripts": {
