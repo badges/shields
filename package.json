@@ -37,7 +37,7 @@
     "dotenv": "^8.2.0",
     "emojic": "^1.1.15",
     "escape-string-regexp": "^4.0.0",
-    "fast-xml-parser": "^3.17.3",
+    "fast-xml-parser": "^3.17.4",
     "fsos": "^1.1.6",
     "badge-maker": "file:badge-maker",
     "glob": "^7.1.6",
