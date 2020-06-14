@@ -57,7 +57,7 @@
     "pretty-bytes": "^5.3.0",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^11.5.3",
-    "query-string": "^6.12.1",
+    "query-string": "^6.13.1",
     "request": "~2.88.2",
     "semver": "~7.3.2",
     "simple-icons": "2.16.0",
