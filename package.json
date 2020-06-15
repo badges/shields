@@ -195,7 +195,7 @@
     "fetch-ponyfill": "^6.1.1",
     "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
-    "gatsby": "2.22.12",
+    "gatsby": "2.23.3",
     "gatsby-plugin-catch-links": "^2.3.5",
     "gatsby-plugin-page-creator": "^2.3.9",
     "gatsby-plugin-react-helmet": "^3.3.4",
