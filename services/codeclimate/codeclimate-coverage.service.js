@@ -32,7 +32,11 @@ module.exports = class CodeclimateCoverage extends BaseJsonService {
     return [
       {
         title: 'Code Climate coverage',
-        namedParams: { format: 'coverage', user: 'jekyll', repo: 'jekyll' },
+        namedParams: {
+          format: 'coverage',
+          user: 'codeclimate',
+          repo: 'codeclimate',
+        },
         staticPreview: this.render({
           format: 'coverage',
           percentage: 95.123,

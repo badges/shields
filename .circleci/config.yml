@@ -96,25 +96,36 @@ run_package_tests: &run_package_tests
     nvm install $NODE_VERSION
     nvm use $NODE_VERSION
     node --version
+
+    # install the shields.io dependencies
+    npm ci
+
+    # run the package tests
     npm run test:package
+    npm run check-types:package
+
+    # delete the sheilds.io dependencies
+    rm -rf node_modules/
+
+    # run a smoke test (render a badge with the CLI)
+    # with only the package dependencies installed
+    cd badge-maker
+    npm link
+    badge cactus grown :green @flat
 
 package_steps: &package_steps
   steps:
     - checkout
 
     - run:
-        name: Install dependencies
+        name: Install node and npm
         command: |
           set +e
           export NVM_DIR="/opt/circleci/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm install v12
-          nvm install v14
           nvm use v12
           npm install -g npm
-          npm ci
-        environment:
-          CYPRESS_INSTALL_BINARY: 0
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
@@ -125,6 +136,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v10/results.xml
           NODE_VERSION: v10
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 10
 
     - run:
@@ -133,6 +145,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v12/results.xml
           NODE_VERSION: v12
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 12
 
     - run:
@@ -141,6 +154,7 @@ package_steps: &package_steps
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v14/results.xml
           NODE_VERSION: v14
+          CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 14
 
     - store_test_results:

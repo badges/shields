@@ -1,2 +1,3 @@
 lib/make-badge-test-helpers.js
 lib/**/*.spec.js
+index.test-d.ts

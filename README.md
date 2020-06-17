@@ -183,7 +183,6 @@ Maintainers:
 - [calebcartwright](https://github.com/calebcartwright) (core team)
 - [chris48s](https://github.com/chris48s) (core team)
 - [Daniel15](https://github.com/Daniel15) (core team)
-- [espadrine](https://github.com/espadrine) (core team)
 - [paulmelnikow](https://github.com/paulmelnikow) (core team)
 - [platan](https://github.com/platan) (core team)
 - [PyvesB](https://github.com/PyvesB) (core team)
@@ -191,11 +190,14 @@ Maintainers:
 
 Operations:
 
-- [espadrine](https://github.com/espadrine) (sysadmin)
-- [paulmelnikow](https://github.com/paulmelnikow) (limited access)
+- [calebcartwright](https://github.com/calebcartwright)
+- [chris48s](https://github.com/chris48s)
+- [paulmelnikow](https://github.com/paulmelnikow)
+- [PyvesB](https://github.com/PyvesB)
 
 Alumni:
 
+- [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
 
 ## Related projects

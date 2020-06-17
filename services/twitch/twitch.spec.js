@@ -34,7 +34,9 @@ describe('TwitchStatus', function () {
           expires_in: 2000000,
         })
 
-      const statusNock = nock('https://api.twitch.tv')
+      const statusNock = nock('https://api.twitch.tv', {
+        reqheaders: { Authorization: `Bearer ${token}`, 'Client-ID': user },
+      })
         .get('/helix/streams')
         .reply(200, {
           data: [],

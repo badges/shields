@@ -8,3 +8,4 @@ private:
   twitch_client_id: '...'
   twitch_client_secret: '...'
   wheelmap_token: '...'
+  youtube_api_key: '...'

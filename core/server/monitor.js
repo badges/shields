@@ -20,12 +20,12 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
   const ipRateLimit = new RateLimit({
     // Exclude IPs for GitHub Camo, determined experimentally by running e.g.
     // `curl --insecure -u ":shields-secret" https://s0.shields-server.com/sys/rate-limit`
-    whitelist: /^(?:192\.30\.252\.\d+)|(?:140\.82\.115\.\d+)$/,
+    safelist: /^(?:192\.30\.252\.\d+)|(?:140\.82\.115\.\d+)$/,
   })
   const badgeTypeRateLimit = new RateLimit({ maxHitsPerPeriod: 3000 })
   const refererRateLimit = new RateLimit({
     maxHitsPerPeriod: 300,
-    whitelist: /^https?:\/\/shields\.io\/$/,
+    safelist: /^https?:\/\/shields\.io\/$/,
   })
 
   server.handle((req, res, next) => {
