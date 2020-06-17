@@ -52,7 +52,26 @@ t.create('license (valid)')
   .expectBadge({ label: 'license', message: 'MIT' })
 
 t.create('license (no license)')
-  .get('/license/dns-zone-blacklist-git.json')
+  .get('/license/vscodium-bin.json')
+  .intercept(nock =>
+    nock('https://aur.archlinux.org')
+      .get('/rpc.php')
+      .query({
+        type: 'info',
+        arg: 'vscodium-bin',
+      })
+      .reply(200, {
+        resultcount: 1,
+        results: {
+          License: null,
+          NumVotes: 1,
+          Version: '1',
+          OutOfDate: null,
+          Maintainer: null,
+          LastModified: 1,
+        },
+      })
+  )
   .expectBadge({ label: 'license', message: 'not specified' })
 
 t.create('license (package not found)')
