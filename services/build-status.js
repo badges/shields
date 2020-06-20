@@ -25,6 +25,7 @@ const otherStatuses = [
   'building',
   'canceled',
   'cancelled',
+  'created',
   'expired',
   'initiated',
   'no builds',
