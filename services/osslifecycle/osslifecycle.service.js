@@ -93,7 +93,7 @@ module.exports = class OssTracker extends BaseService {
     const { buffer } = await this.fetch({
       user,
       repo,
-      branch: branch || 'master',
+      branch: branch || 'HEAD',
     })
     try {
       const status = buffer.match(/osslifecycle=([a-z]+)/im)[1]

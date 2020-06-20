@@ -26,7 +26,7 @@ t.create('.nycrc in monorepo')
   .get('/yargs/yargs.json?config=packages/foo/.nycrc.json')
   .intercept(nock =>
     nock('https://api.github.com')
-      .get('/repos/yargs/yargs/contents/packages/foo/.nycrc.json?ref=master')
+      .get('/repos/yargs/yargs/contents/packages/foo/.nycrc.json?ref=HEAD')
       .reply(200, {
         content: Buffer.from(
           JSON.stringify({
@@ -42,7 +42,7 @@ t.create('.nycrc with no thresholds')
   .get('/yargs/yargs.json?config=.nycrc')
   .intercept(nock =>
     nock('https://api.github.com')
-      .get('/repos/yargs/yargs/contents/.nycrc?ref=master')
+      .get('/repos/yargs/yargs/contents/.nycrc?ref=HEAD')
       .reply(200, {
         content: Buffer.from(
           JSON.stringify({
@@ -61,7 +61,7 @@ t.create('package.json with nyc stanza')
   .get('/yargs/yargs.json?config=package.json')
   .intercept(nock =>
     nock('https://api.github.com')
-      .get('/repos/yargs/yargs/contents/package.json?ref=master')
+      .get('/repos/yargs/yargs/contents/package.json?ref=HEAD')
       .reply(200, {
         content: Buffer.from(
           JSON.stringify({
@@ -79,7 +79,7 @@ t.create('package.json with nyc stanza, but no thresholds')
   .get('/yargs/yargs.json?config=package.json')
   .intercept(nock =>
     nock('https://api.github.com')
-      .get('/repos/yargs/yargs/contents/package.json?ref=master')
+      .get('/repos/yargs/yargs/contents/package.json?ref=HEAD')
       .reply(200, {
         content: Buffer.from(
           JSON.stringify({

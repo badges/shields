@@ -164,7 +164,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
       : 'repo or version not found'
     const { ahead_by: commitCount } = await this._requestJson({
       schema,
-      url: `/repos/${user}/${repo}/compare/${version}...${branch || 'master'}`,
+      url: `/repos/${user}/${repo}/compare/${version}...${branch || 'HEAD'}`,
       errorMessages: errorMessagesFor(notFoundMessage),
     })
 
