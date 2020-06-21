@@ -18,19 +18,29 @@ t.create('Manifest version')
   })
 
 t.create('Manifest version (path)')
-  .get('/v/RedSparr0w/IndieGala-Helper.json?file=extension/manifest.json')
+  .get('/v/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json')
   .expectBadge({
     label: 'version',
     message: isVPlusDottedVersionAtLeastOne,
   })
 
+t.create('Manifest version (path not found)')
+  .get(
+    '/v/RedSparr0w/IndieGala-Helper.json?filename=invalid-directory/manifest.json'
+  )
+  .expectBadge({
+    label: 'version',
+    message:
+      'repo not found, branch not found, or invalid-directory/manifest.json missing',
+  })
+
 t.create('Manifest name (path)')
-  .get('/n/RedSparr0w/IndieGala-Helper.json?file=extension/manifest.json')
+  .get('/n/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json')
   .expectBadge({ label: 'name', message: 'IndieGala Helper' })
 
 t.create('Manifest array (path)')
   .get(
-    '/permissions/RedSparr0w/IndieGala-Helper.json?file=extension/manifest.json'
+    '/permissions/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json'
   )
   .expectBadge({
     label: 'permissions',
@@ -39,7 +49,7 @@ t.create('Manifest array (path)')
 
 t.create('Manifest object (path)')
   .get(
-    '/background/RedSparr0w/IndieGala-Helper.json?file=extension/manifest.json'
+    '/background/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json'
   )
   .expectBadge({ label: 'manifest', message: 'invalid key value' })
 

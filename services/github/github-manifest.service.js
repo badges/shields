@@ -16,7 +16,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  file: Joi.string().regex(/.*manifest\.json$/),
+  filename: Joi.string().regex(/.*manifest\.json$/),
 })
 
 const flexibleSchema = Joi.object().required()
@@ -65,7 +65,7 @@ class GithubManifestVersion extends ConditionalGithubAuthV3Service {
           repo: 'IndieGala-Helper',
         },
         queryParams: {
-          file: 'extension/manifest.json',
+          filename: 'extension/manifest.json',
         },
         staticPreview: this.render({ version: 2 }),
         documentation,
@@ -79,7 +79,7 @@ class GithubManifestVersion extends ConditionalGithubAuthV3Service {
           branch: 'master',
         },
         queryParams: {
-          file: 'extension/manifest.json',
+          filename: 'extension/manifest.json',
         },
         staticPreview: this.render({ version: 2, branch: 'master' }),
         documentation,
@@ -95,13 +95,13 @@ class GithubManifestVersion extends ConditionalGithubAuthV3Service {
     })
   }
 
-  async handle({ user, repo, branch }, { file }) {
+  async handle({ user, repo, branch }, { filename = 'manifest.json' }) {
     const { version } = await fetchJsonFromRepo(this, {
       schema,
       user,
       repo,
       branch,
-      filename: file || 'manifest.json',
+      filename,
     })
     return this.constructor.render({ version, branch })
   }
@@ -161,7 +161,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
           repo: 'IndieGala-Helper',
         },
         queryParams: {
-          file: 'extension/manifest.json',
+          filename: 'extension/manifest.json',
         },
         staticPreview: this.render({
           key: 'permissions',
@@ -179,7 +179,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
           branch: 'master',
         },
         queryParams: {
-          file: 'extension/manifest.json',
+          filename: 'extension/manifest.json',
         },
         staticPreview: this.render({
           key: 'permissions',
@@ -205,7 +205,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
     })
   }
 
-  async handle({ key, user, repo, branch }, { file }) {
+  async handle({ key, user, repo, branch }, { filename = 'manifest.json' }) {
     // Not sure `manifest-json/n` was ever advertised, but it was supported.
     if (key === 'n') {
       key = 'name'
@@ -215,7 +215,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
       user,
       repo,
       branch,
-      filename: file || 'manifest.json',
+      filename,
     })
     const value = transformAndValidate({ data, key })
     return this.constructor.render({ key, value, branch })
