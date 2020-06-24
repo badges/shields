@@ -19,6 +19,10 @@ t.create('gets the package version of pagination-bundle')
   .get('/gpslab/pagination-bundle.json')
   .expectBadge({ label: 'php', message: isPhpVersionReduction })
 
+t.create('gets the package version (default branch is not called master)')
+  .get('/slimphp/slim.json')
+  .expectBadge({ label: 'php', message: isPhpVersionReduction })
+
 t.create('invalid package name')
   .get('/frodo/is-not-a-package.json')
   .expectBadge({ label: 'php', message: 'repo not found' })
