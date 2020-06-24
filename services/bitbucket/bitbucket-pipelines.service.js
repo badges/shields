@@ -25,6 +25,12 @@ const bitbucketPipelinesSchema = Joi.object({
     .required(),
 }).required()
 
+const bitbucketRepoSchema = Joi.object({
+  mainbranch: Joi.object({
+    name: Joi.string().required(),
+  }).required(),
+}).required()
+
 module.exports = class BitbucketPipelines extends BaseJsonService {
   static get category() {
     return 'build'
@@ -70,9 +76,22 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   }
 
   async fetch({ user, repo, branch }) {
-    const url = `https://api.bitbucket.org/2.0/repositories/${user}/${repo}/pipelines/`
+    let branchName
+    if (branch == null) {
+      const repoUrl = `https://api.bitbucket.org/2.0/repositories/${user}/${repo}/`
+      const repoResp = await this._requestJson({
+        url: repoUrl,
+        schema: bitbucketRepoSchema,
+        errorMessages: { 403: 'private repo' },
+      })
+      branchName = repoResp.mainbranch.name
+    } else {
+      branchName = branch
+    }
+
+    const pipelineUrl = `https://api.bitbucket.org/2.0/repositories/${user}/${repo}/pipelines/`
     return this._requestJson({
-      url,
+      url: pipelineUrl,
       schema: bitbucketPipelinesSchema,
       options: {
         qs: {
@@ -81,7 +100,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
           pagelen: 2,
           sort: '-created_on',
           'target.ref_type': 'BRANCH',
-          'target.ref_name': branch,
+          'target.ref_name': branchName,
         },
       },
       errorMessages: { 403: 'private repo' },
@@ -99,7 +118,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   }
 
   async handle({ user, repo, branch }) {
-    const data = await this.fetch({ user, repo, branch: branch || 'master' })
+    const data = await this.fetch({ user, repo, branch })
     return this.constructor.render({ status: this.constructor.transform(data) })
   }
 }
