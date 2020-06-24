@@ -114,7 +114,7 @@ class BaseService {
    * credentials to the request. For example:
    * - `{ options: { auth: this.authHelper.basicAuth } }`
    * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
-   * - `{ options: { qs: { token: this.authHelper.pass } } }`
+   * - `{ options: { qs: { token: this.authHelper._pass } } }`
    *
    * @abstract
    * @type {module:core/base-service/base~Auth}
