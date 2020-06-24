@@ -35,3 +35,10 @@ t.create('Pipeline status (custom gitlab URL)')
     label: 'build',
     message: isBuildStatus,
   })
+
+t.create('Pipeline status (default branch is not called master)')
+  .get('/chris48s/no-master-branch.json')
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })

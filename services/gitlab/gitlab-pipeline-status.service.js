@@ -2,6 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
+const { getDefaultBranch } = require('../git')
 const { optionalUrl } = require('../validators')
 const { BaseSvgScrapingService, NotFound } = require('..')
 
@@ -83,12 +84,14 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   }
 
   async handle(
-    { user, repo, branch = 'master' },
+    { user, repo, branch },
     { gitlab_url: baseUrl = 'https://gitlab.com' }
   ) {
+    const branchName =
+      branch == null ? await getDefaultBranch({ baseUrl, user, repo }) : branch
     const { message: status } = await this._requestSvg({
       schema: badgeSchema,
-      url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
+      url: `${baseUrl}/${user}/${repo}/badges/${branchName}/pipeline.svg`,
       errorMessages: {
         401: 'repo not found',
         404: 'repo not found',
