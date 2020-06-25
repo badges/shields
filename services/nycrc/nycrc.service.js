@@ -114,7 +114,7 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
         schema: pkgJSONSchema,
         user,
         repo,
-        branch: 'master',
+        branch: 'HEAD',
         filename: config,
       })
       const nycConfig = pkgJson.c8 || pkgJson.nyc
@@ -131,7 +131,7 @@ module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
           schema: nycrcSchema,
           user,
           repo,
-          branch: 'master',
+          branch: 'HEAD',
           filename: config,
         }),
         preferredThreshold
