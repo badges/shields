@@ -16,6 +16,8 @@ parserOptions:
 settings:
   react:
     version: '16.8'
+  jsdoc:
+    mode: jsdoc
 
 plugins:
   - chai-friendly
