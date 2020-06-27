@@ -247,7 +247,7 @@
     "tmp": "0.2.1",
     "tsd": "^0.11.0",
     "ts-mocha": "^7.0.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "engines": {
     "node": "^10.16.3",
