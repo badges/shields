@@ -37,6 +37,22 @@ t.create('recent downloads').get('/dr/libc.json').expectBadge({
   message: isMetric,
 })
 
+t.create('recent downloads (null)')
+  .get('/dr/libc.json')
+  .intercept(nock =>
+    nock('https://crates.io')
+      .get('/api/v1/crates/libc')
+      .reply(200, {
+        crate: {
+          downloads: 42,
+          recent_downloads: null,
+          max_version: '0.2.71',
+        },
+        versions: [{ downloads: 42, license: 'MIT OR Apache-2.0' }],
+      })
+  )
+  .expectBadge({ label: 'recent downloads', message: '0' })
+
 t.create('recent downloads (with version)')
   .get('/dr/libc/0.2.31.json')
   .expectBadge({
