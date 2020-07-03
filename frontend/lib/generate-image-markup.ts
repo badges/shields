@@ -18,7 +18,8 @@ export function markdown(
   link?: string,
   title?: string
 ): string {
-  const withoutLink = `![${title || ''}](${badgeUrl})`
+  const withoutSpaces = badgeUrl.replace(/\s/g, '%20')
+  const withoutLink = `![${title || ''}](${withoutSpaces})`
   if (link) {
     return `[${withoutLink}](${link})`
   } else {
