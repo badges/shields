@@ -196,7 +196,7 @@
     "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.23.20",
-    "gatsby-plugin-catch-links": "^2.3.7",
+    "gatsby-plugin-catch-links": "^2.3.10",
     "gatsby-plugin-page-creator": "^2.3.12",
     "gatsby-plugin-react-helmet": "^3.3.9",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.10",
