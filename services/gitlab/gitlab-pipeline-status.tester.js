@@ -26,7 +26,7 @@ t.create('Pipeline status (nonexistent repo)')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'build',
-    message: 'repo not found',
+    message: 'repo not found or private',
   })
 
 t.create('Pipeline status (custom gitlab URL)')

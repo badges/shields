@@ -15,7 +15,9 @@ function mockSimpleGitValid(text) {
 function mockSimpleGitInvalid() {
   return {
     listRemote: async function () {
-      throw new Error()
+      throw new Error(
+        "fatal: could not read Username for 'https://github.com': terminal prompts disabled"
+      )
     },
   }
 }
