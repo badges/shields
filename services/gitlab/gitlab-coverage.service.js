@@ -57,8 +57,8 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
       {
         title: 'Gitlab code coverage',
         pattern: ':user/:repo',
-        namedParams: { user: 'gitlab-org', repo: 'gitlab' },
-        staticPreview: this.render({ status: 'passed' }),
+        namedParams: { user: 'gitlab-org', repo: 'gitlab-runner' },
+        staticPreview: this.render({ percentage: 20 }),
         documentation,
       },
       {
@@ -66,7 +66,7 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
         pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'gitlab-org',
-          repo: 'gitlab',
+          repo: 'gitlab-runner',
           branch: 'master',
         },
         staticPreview: this.render({ percentage: 100 }),
@@ -75,9 +75,9 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
       {
         title: 'Gitlab code coverage (self-hosted)',
         pattern: ':user/:repo',
-        namedParams: { user: 'GNOME', repo: 'pango' },
+        namedParams: { user: 'GNOME', repo: 'libhandy' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
-        staticPreview: this.render({ status: 'passed' }),
+        staticPreview: this.render({ percentage: 50 }),
         documentation,
       },
     ]
