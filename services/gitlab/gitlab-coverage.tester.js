@@ -16,7 +16,7 @@ t.create('Coverage (branch)')
   })
 
 t.create('Coverage (existent branch but coverage not set up)')
-  .get('/gitlab-org/gitlab-runner/master.json')
+  .get('/gitlab-org/gitlab/master.json')
   .expectBadge({
     label: 'coverage',
     message: 'not set up',
@@ -37,7 +37,7 @@ t.create('Coverage (nonexistent repo)')
   })
 
 t.create('Coverage (custom gitlab URL)')
-  .get('/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
+  .get('/GNOME/libhandy.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
