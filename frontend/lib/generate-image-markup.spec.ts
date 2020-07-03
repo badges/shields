@@ -44,9 +44,6 @@ test(markdown, () => {
   given('https://img.shields.io/badge', undefined, undefined).expect(
     '![](https://img.shields.io/badge)'
   )
-  given('https://img.shields.io/badge with spaces', undefined, undefined).expect(
-    '![](https://img.shields.io/badge%20with%20spaces)'
-  )
 })
 
 test(reStructuredText, () => {
