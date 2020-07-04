@@ -86,7 +86,7 @@ export function constructPath({
   namedParams: { [k: string]: string }
 }): { path: string; isComplete: boolean } {
   let isComplete = true
-  const path = tokens
+  let path = tokens
     .map(token => {
       if (typeof token === 'string') {
         return token.trim()
@@ -104,6 +104,7 @@ export function constructPath({
       }
     })
     .join('')
+  path = encodeURI(path)
   return { path, isComplete }
 }
 
