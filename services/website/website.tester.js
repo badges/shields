@@ -4,14 +4,17 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('status of http://shields.io')
   .get('/website.json?url=http://shields.io')
+  .timeout(7500)
   .expectBadge({ label: 'website', message: 'up', color: 'brightgreen' })
 
 t.create('status of https://shields.io')
   .get('/website.json?url=https://shields.io')
+  .timeout(7500)
   .expectBadge({ label: 'website', message: 'up', color: 'brightgreen' })
 
 t.create('status of nonexistent domain')
   .get('/website.json?url=http://shields.io.io')
+  .timeout(15000)
   .expectBadge({ label: 'website', message: 'down', color: 'red' })
 
 t.create('status when network is off')
