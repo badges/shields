@@ -43,7 +43,7 @@ const JsonExampleBlock = styled.code<JsonExampleBlockProps>`
   white-space: pre;
 `
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, react/prop-types
 function JsonExample({ data }: { [k: string]: any }): JSX.Element {
   return (
     <JsonExampleBlock>{JSON.stringify(data, undefined, 2)}</JsonExampleBlock>
