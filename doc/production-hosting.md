@@ -33,7 +33,6 @@ Production hosting is managed by the Shields ops team:
 | Cloudflare (CDN)              | Account owner                   | @espadrine                                                                                 |
 | Cloudflare (CDN)              | Access management               | @espadrine                                                                                 |
 | Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                            |
-| GitHub                        | OAuth app                       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
 | Twitch                        | OAuth app                       | @PyvesB                                                                                    |
 | YouTube                       | Account owner                   | @PyvesB                                                                                    |
 | OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                                              |
@@ -64,7 +63,6 @@ Shields has mercifully little persistent state:
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
 [request cache]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js#L29-L30
 [regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
-[oauth transfer]: https://developer.github.com/apps/managing-oauth-apps/transferring-ownership-of-an-oauth-app/
 
 ## Configuration
 
