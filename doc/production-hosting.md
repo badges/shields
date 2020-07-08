@@ -32,7 +32,7 @@ Production hosting is managed by the Shields ops team:
 | Legacy badge servers          | Admin endpoints                 | @espadrine, @paulmelnikow                                                                  |
 | Cloudflare (CDN)              | Account owner                   | @espadrine                                                                                 |
 | Cloudflare (CDN)              | Access management               | @espadrine                                                                                 |
-| Cloudflare (CDN)              | Admin access                    | @espadrine, @paulmelnikow                                                                  |
+| Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                            |
 | GitHub                        | OAuth app                       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
 | Twitch                        | OAuth app                       | @PyvesB                                                                                    |
 | YouTube                       | Account owner                   | @PyvesB                                                                                    |
