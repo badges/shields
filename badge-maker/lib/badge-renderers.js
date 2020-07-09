@@ -657,7 +657,7 @@ function forTheBadge({
     const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
     const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
-    const text = `<text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    const text = `<text fill="#fff" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
     if (hasLeftLink && hasRightLink) {
       return `
         <a target="_blank" xlink:href="${leftLink}">
@@ -670,7 +670,7 @@ function forTheBadge({
   }
 
   function renderMessageText() {
-    const text = `<text x="${
+    const text = `<text fill="#fff" x="${
       (labelWidth + messageWidth / 2) * 10
     }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
       (messageWidth - 24) * 10
