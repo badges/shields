@@ -95,7 +95,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 `
 
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="147" height="28" ><g shape-rendering="crispEdges"><rect width="74" height="28" fill="#0f0"/><rect x="74" width="73" height="28" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="100"><text x="370" y="175" transform="scale(.1)" textLength="500">CACTUS</text><text x="1105" y="175" font-weight="bold" transform="scale(.1)" textLength="490">GROWN</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="147" height="28" ><g shape-rendering="crispEdges"><rect width="74" height="28" fill="#0f0"/><rect x="74" width="73" height="28" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="100"><a target="_blank" xlink:href="https://shields.io/"><rect width="74" height="28" fill="rgba(0,0,0,0)"/><text x="370" y="175" transform="scale(.1)" textLength="500">CACTUS</text></a><a target="_blank" xlink:href="https://www.google.co.uk/"><rect width="73" height="28" x="74" fill="rgba(0,0,0,0)"/><text x="1105" y="175" font-weight="bold" transform="scale(.1)" textLength="490">GROWN</text></a></g></svg>
 `
 
 exports['The badge generator "social" template badge generation should match snapshots: message/label, no logo 1'] = `

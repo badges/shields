@@ -496,6 +496,7 @@ function social({
   const hasLeftLink = leftLink && leftLink.length
   const hasRightLink = rightLink && rightLink.length
   const hasLink = hasLeftLink || hasRightLink
+  const hasOnlyLeftLink = hasLeftLink && !hasRightLink
 
   function renderMessageBubble() {
     const messageBubbleMainX = labelWidth + 6.5
@@ -504,6 +505,26 @@ function social({
       <rect x="${messageBubbleMainX}" y="0.5" width="${messageWidth}" height="${internalHeight}" rx="2" fill="#fafafa"/>
       <rect x="${messageBubbleNotchX}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
       <path d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
+    `
+  }
+
+  function renderLabelText() {
+    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
+    const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    if (hasLeftLink && hasRightLink) {
+      return `
+        <a target="_blank" xlink:href="${leftLink}">
+          ${rect}
+          ${shadow}
+          ${text}
+        </a>
+      `
+    }
+    return `
+      ${rect}
+      ${shadow}
+      ${text}
     `
   }
 
@@ -531,29 +552,9 @@ function social({
     `
   }
 
-  function renderLabelText() {
-    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
-    const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
-    const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
-    if (hasLeftLink && hasRightLink) {
-      return `
-        <a target="_blank" xlink:href="${leftLink}">
-          ${rect}
-          ${shadow}
-          ${text}
-        </a>
-      `
-    }
-    return `
-      ${rect}
-      ${shadow}
-      ${text}
-    `
-  }
-
   const badge = renderBadge(
     {
-      links: hasLeftLink && !hasRightLink ? links : [],
+      links: hasOnlyLeftLink ? links : [],
       leftWidth: labelWidth + 1,
       rightWidth: hasMessage ? messageWidth + 6 : 0,
       label,
@@ -644,18 +645,52 @@ function forTheBadge({
   color = escapeXml(color)
   labelColor = escapeXml(labelColor)
 
+  let [leftLink, rightLink] = links
+  leftLink = escapeXml(leftLink)
+  rightLink = escapeXml(rightLink)
+  const hasLeftLink = leftLink && leftLink.length
+  const hasRightLink = rightLink && rightLink.length
+  const hasLink = hasLeftLink || hasRightLink
+  const hasOnlyLeftLink = hasLeftLink && !hasRightLink
+
   function renderLabelText() {
     const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
     const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
-    return `
-      <text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
-    `
+    const text = `<text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    if (hasLeftLink && hasRightLink) {
+      return `
+        <a target="_blank" xlink:href="${leftLink}">
+          <rect width="${leftWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
+          ${text}
+        </a>
+      `
+    }
+    return text
+  }
+
+  function renderMessageText() {
+    const text = `<text x="${
+      (labelWidth + messageWidth / 2) * 10
+    }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
+      (messageWidth - 24) * 10
+    }">
+      ${escapeXml(message)}</text>`
+    if (hasRightLink) {
+      return `
+        <a target="_blank" xlink:href="${rightLink}">
+          <rect width="${rightWidth}" height="${height}" x="${labelWidth}" fill="rgba(0,0,0,0)"/>
+          ${text}
+        </a>
+      `
+    }
+    return text
   }
 
   const badge = renderBadge(
     {
-      links,
+      links: hasOnlyLeftLink ? links : [],
+      hasLink,
       leftWidth,
       rightWidth,
       label,
@@ -670,12 +705,7 @@ function forTheBadge({
     <g fill="#fff" text-anchor="middle" ${fontFamily} text-rendering="geometricPrecision" font-size="100">
       ${renderedLogo}
       ${hasLabel ? renderLabelText() : ''}
-      <text x="${
-        (labelWidth + messageWidth / 2) * 10
-      }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
-      (messageWidth - 24) * 10
-    }">
-        ${escapeXml(message)}</text>
+      ${renderMessageText()}
     </g>`
   )
 
