@@ -23,9 +23,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 `
 
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="20" ><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="45" height="20" fill="#0f0"/><rect x="45" width="45" height="20" fill="#b3e"/><rect width="90" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">[object Object]
-        [object Object]
-      </g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="20" ><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="45" height="20" fill="#0f0"/><rect x="45" width="45" height="20" fill="#b3e"/><rect width="90" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><a target="_blank" xlink:href="https://shields.io/"><rect width="45" x="0" height="20" fill="rgba(0,0,0,0)" /><text aria-hidden="true" x="235" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="350">cactus</text><text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">cactus</text></a><a target="_blank" xlink:href="https://www.google.co.uk/"><rect width="45" x="45" height="20" fill="rgba(0,0,0,0)" /><text aria-hidden="true" x="665" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="350">grown</text><text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">grown</text></a></g></svg>
 `
 
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, no logo 1'] = `
@@ -49,9 +47,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 `
 
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="20" ><g shape-rendering="crispEdges"><rect width="45" height="20" fill="#0f0"/><rect x="45" width="45" height="20" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">[object Object]
-        [object Object]
-      </g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="20" ><g shape-rendering="crispEdges"><rect width="45" height="20" fill="#0f0"/><rect x="45" width="45" height="20" fill="#b3e"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><a target="_blank" xlink:href="https://shields.io/"><rect width="45" x="0" height="20" fill="rgba(0,0,0,0)" /><text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">cactus</text></a><a target="_blank" xlink:href="https://www.google.co.uk/"><rect width="45" x="45" height="20" fill="rgba(0,0,0,0)" /><text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">grown</text></a></g></svg>
 `
 
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, no logo 1'] = `
@@ -75,9 +71,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 `
 
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="18" ><linearGradient id="s" x2="0" y2="100%"><stop offset="0"  stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1"  stop-color="#000" stop-opacity=".5"/></linearGradient><clipPath id="r"><rect width="90" height="18" rx="4" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="45" height="18" fill="#0f0"/><rect x="45" width="45" height="18" fill="#b3e"/><rect width="90" height="18" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">[object Object]
-        [object Object]
-      </g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90" height="18" ><linearGradient id="s" x2="0" y2="100%"><stop offset="0"  stop-color="#fff" stop-opacity=".7"/><stop offset=".1" stop-color="#aaa" stop-opacity=".1"/><stop offset=".9" stop-color="#000" stop-opacity=".3"/><stop offset="1"  stop-color="#000" stop-opacity=".5"/></linearGradient><clipPath id="r"><rect width="90" height="18" rx="4" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="45" height="18" fill="#0f0"/><rect x="45" width="45" height="18" fill="#b3e"/><rect width="90" height="18" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><a target="_blank" xlink:href="https://shields.io/"><rect width="45" x="0" height="18" fill="rgba(0,0,0,0)" /><text aria-hidden="true" x="235" y="140" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="350">cactus</text><text x="235" y="130" transform="scale(.1)" fill="#fff" textLength="350">cactus</text></a><a target="_blank" xlink:href="https://www.google.co.uk/"><rect width="45" x="45" height="18" fill="rgba(0,0,0,0)" /><text aria-hidden="true" x="665" y="140" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="350">grown</text><text x="665" y="130" transform="scale(.1)" fill="#fff" textLength="350">grown</text></a></g></svg>
 `
 
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, no logo 1'] = `

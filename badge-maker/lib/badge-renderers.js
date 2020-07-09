@@ -81,13 +81,10 @@ function renderLink({
   const rectHeight = height
   const rectWidth = textLength + horizPadding * 2
   const rectX = leftMargin > 1 ? leftMargin + 1 : 0
-  return {
-    renderedText: `<a target="_blank" xlink:href="${escapeXml(link)}">
+  return `<a target="_blank" xlink:href="${escapeXml(link)}">
     <rect width="${rectWidth}" x="${rectX}" height="${rectHeight}" fill="rgba(0,0,0,0)" />
     ${renderedText}
-    </a>`,
-    width: textLength,
-  }
+  </a>`
 }
 
 function renderText({
