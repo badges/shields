@@ -515,9 +515,9 @@ function social({
     if (hasLeftLink && hasRightLink) {
       return `
         <a target="_blank" xlink:href="${leftLink}">
-          ${rect}
           ${shadow}
           ${text}
+          ${rect}
         </a>
       `
     }
@@ -563,7 +563,7 @@ function social({
       height: externalHeight,
     },
     `
-    <style>a #llink:hover{fill:url(#b);stroke:#ccc}a #rlink:hover{fill:#4183c4}</style>
+    <style>a:hover #llink{fill:url(#b);stroke:#ccc}a:hover #rlink{fill:#4183c4}</style>
     <linearGradient id="a" x2="0" y2="100%">
       <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
       <stop offset="1" stop-opacity=".1"/>
