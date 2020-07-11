@@ -41,7 +41,7 @@
     "fsos": "^1.1.6",
     "badge-maker": "file:badge-maker",
     "glob": "^7.1.6",
-    "graphql": "^14.6.0",
+    "graphql": "^14.7.0",
     "graphql-tag": "^2.10.4",
     "ioredis": "4.17.3",
     "joi-extension-semver": "4.1.1",
