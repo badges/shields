@@ -44,6 +44,29 @@ function createAccessibleText({ label, message }) {
   return labelPrefix + message
 }
 
+function hasLinks({ links }) {
+  const [leftLink, rightLink] = links || []
+  const hasLeftLink = leftLink && leftLink.length
+  const hasRightLink = rightLink && rightLink.length
+  const hasLink = hasLeftLink && hasRightLink
+  return { hasLink, hasLeftLink, hasRightLink }
+}
+
+function shouldWrapBodyWithLink({ links }) {
+  const { hasLeftLink, hasRightLink } = hasLinks({ links })
+  return hasLeftLink && !hasRightLink
+}
+
+function renderAriaAttributes({ accessibleText, links }) {
+  const { hasLink } = hasLinks({ links })
+  return hasLink ? '' : `role="img" aria-label="${escapeXml(accessibleText)}"`
+}
+
+function renderTitle({ accessibleText, links }) {
+  const { hasLink } = hasLinks({ links })
+  return hasLink ? '' : `<title>${escapeXml(accessibleText)}</title>`
+}
+
 function renderLogo({
   logo,
   badgeHeight,
@@ -131,39 +154,20 @@ function renderText({
 }
 
 function renderBadge(
-  {
-    links,
-    leftWidth,
-    rightWidth,
-    height,
-    label,
-    message,
-    // Override for aria if links are handled elsewhere (i.e social style)
-    hasLink,
-  },
+  { links, leftWidth, rightWidth, height, accessibleText },
   main
 ) {
   const width = leftWidth + rightWidth
-
   const leftLink = escapeXml(links[0])
-  const rightLink = escapeXml(links[1])
-  const hasLeftLink = leftLink && leftLink.length
-  const hasRightLink = rightLink && rightLink.length
-
-  const accessibleText = createAccessibleText({ label, message })
-  const escapedAccessibleText = escapeXml(accessibleText)
-
-  if (hasLink === undefined) {
-    hasLink = hasLeftLink || hasRightLink
-  }
 
   return `
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" ${
-    hasLink ? '' : `role="img" aria-label="${escapedAccessibleText}"`
-  }>
-    ${hasLink ? '' : `<title>${escapedAccessibleText}</title>`}
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" ${renderAriaAttributes(
+    { links, accessibleText }
+  )}>
+
+    ${renderTitle({ accessibleText, links })}
     ${
-      hasLeftLink && !hasRightLink
+      shouldWrapBodyWithLink({ links })
         ? `<a target="_blank" xlink:href="${leftLink}">${main}</a>`
         : main
     }
@@ -215,8 +219,6 @@ class Badge {
     }
 
     const [leftLink, rightLink] = links
-    const hasLeftLink = leftLink && leftLink.length
-    const hasRightLink = rightLink && rightLink.length
 
     labelColor = hasLabel || hasLogo ? labelColor : color
     labelColor = escapeXml(labelColor)
@@ -228,7 +230,7 @@ class Badge {
       leftMargin: labelMargin,
       horizPadding,
       content: label,
-      link: hasLeftLink && hasRightLink && leftLink,
+      link: !shouldWrapBodyWithLink({ links }) && leftLink,
       height: this.constructor.height,
       verticalMargin: this.constructor.verticalMargin,
       shadow: this.constructor.shadow,
@@ -264,6 +266,8 @@ class Badge {
 
     const width = leftWidth + rightWidth
 
+    const accessibleText = createAccessibleText({ label, message })
+
     this.links = links
     this.leftWidth = leftWidth
     this.rightWidth = rightWidth
@@ -272,6 +276,7 @@ class Badge {
     this.color = color
     this.label = label
     this.message = message
+    this.accessibleText = accessibleText
     this.renderedLogo = renderedLogo
     this.renderedLabel = renderedLabel
     this.renderedMessage = renderedMessage
@@ -305,8 +310,7 @@ class Plastic extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
-        label: this.label,
-        message: this.message,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -359,8 +363,7 @@ class Flat extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
-        label: this.label,
-        message: this.message,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -411,8 +414,7 @@ class FlatSquare extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
-        label: this.label,
-        message: this.message,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -493,10 +495,9 @@ function social({
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
-  const hasLeftLink = leftLink && leftLink.length
-  const hasRightLink = rightLink && rightLink.length
-  const hasLink = hasLeftLink || hasRightLink
-  const hasOnlyLeftLink = hasLeftLink && !hasRightLink
+  const { hasLeftLink, hasRightLink, hasLink } = hasLinks({ links })
+
+  const accessibleText = createAccessibleText({ label, message })
 
   function renderMessageBubble() {
     const messageBubbleMainX = labelWidth + 6.5
@@ -512,7 +513,7 @@ function social({
     const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
     const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
     const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
-    if (hasLeftLink && hasRightLink) {
+    if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
       return `
         <a target="_blank" xlink:href="${leftLink}">
           ${shadow}
@@ -554,12 +555,10 @@ function social({
 
   const badge = renderBadge(
     {
-      links: hasOnlyLeftLink ? links : [],
+      links,
       leftWidth: labelWidth + 1,
       rightWidth: hasMessage ? messageWidth + 6 : 0,
-      label,
-      message,
-      hasLink,
+      accessibleText,
       height: externalHeight,
     },
     `
@@ -648,17 +647,16 @@ function forTheBadge({
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
-  const hasLeftLink = leftLink && leftLink.length
-  const hasRightLink = rightLink && rightLink.length
-  const hasLink = hasLeftLink || hasRightLink
-  const hasOnlyLeftLink = hasLeftLink && !hasRightLink
+  const { hasLeftLink, hasRightLink } = hasLinks({ links })
+
+  const accessibleText = createAccessibleText({ label, message })
 
   function renderLabelText() {
     const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
     const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
     const text = `<text fill="#fff" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
-    if (hasLeftLink && hasRightLink) {
+    if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
       return `
         <a target="_blank" xlink:href="${leftLink}">
           <rect width="${leftWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
@@ -689,12 +687,10 @@ function forTheBadge({
 
   const badge = renderBadge(
     {
-      links: hasOnlyLeftLink ? links : [],
-      hasLink,
+      links,
       leftWidth,
       rightWidth,
-      label,
-      message,
+      accessibleText,
       height,
     },
     `
