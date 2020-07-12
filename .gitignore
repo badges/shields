@@ -116,3 +116,6 @@ service-definitions.yml
 
 # Flamebearer
 flamegraph.html
+
+
+.vscode/.history
