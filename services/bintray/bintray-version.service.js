@@ -10,7 +10,7 @@ const schema = Joi.object()
   })
   .required()
 
-module.exports = class Bintray extends BaseJsonService {
+module.exports = class BintrayVersion extends BaseJsonService {
   static get category() {
     return 'version'
   }
