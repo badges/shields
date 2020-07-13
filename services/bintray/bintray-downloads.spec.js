@@ -35,7 +35,8 @@ describe('BintrayDownloads', function () {
           packageName: 'asciidoctorj',
         })
       ).to.deep.equal({
-        label: undefined,
+        color: 'yellowgreen',
+        label: 'downloads',
         message: '69',
       })
 
