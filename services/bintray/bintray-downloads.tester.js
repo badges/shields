@@ -1,8 +1,6 @@
 'use strict'
 
-const {
-  isMetric,
-} = require('../test-validators')
+const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('downloads').get('/asciidoctor/maven/asciidoctorj.json').expectBadge({
@@ -21,7 +19,7 @@ t.create('downloads (mocked)')
   .get('/asciidoctor/maven/asciidoctorj.json')
   .intercept(nock =>
     nock('https://bintray.com')
-      .get('https://bintray.com/api/ui/package/asciidoctor/maven/asciidoctorj/total_downloads')
+      .get('/api/ui/package/asciidoctor/maven/asciidoctorj/total_downloads')
       .reply(200, {
         totalDownloads: 420,
       })
