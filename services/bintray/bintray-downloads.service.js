@@ -80,17 +80,6 @@ module.exports = class BintrayDownloads extends BaseJsonService {
   }
 
   async fetch({ subject, repo, packageName, version }) {
-    return this._requestJson(
-      this.authHelper.withBasicAuth({
-        schema,
-        url: version
-          ? `https://bintray.com/api/ui/version/${subject}/${repo}/${packageName}/${version}/total_downloads`
-          : `https://bintray.com/api/ui/package/${subject}/${repo}/${packageName}/total_downloads`,
-      })
-    )
-  }
-
-  async handle({ version, subject, repo, packageName }) {
     let actualVersion = version
     if (version === 'latest') {
       actualVersion = (
@@ -102,11 +91,22 @@ module.exports = class BintrayDownloads extends BaseJsonService {
         )
       ).name
     }
+    return this._requestJson(
+      this.authHelper.withBasicAuth({
+        schema,
+        url: actualVersion
+          ? `https://bintray.com/api/ui/version/${subject}/${repo}/${packageName}/${actualVersion}/total_downloads`
+          : `https://bintray.com/api/ui/package/${subject}/${repo}/${packageName}/total_downloads`,
+      })
+    )
+  }
+
+  async handle({ version, subject, repo, packageName }) {
     const { totalDownloads } = await this.fetch({
       subject,
       repo,
       packageName,
-      version: actualVersion,
+      version,
     })
     return this.constructor.render({ version, downloads: totalDownloads })
   }
