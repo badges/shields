@@ -1,11 +1,13 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-// Github JSON APIs
-const { GithubAuthV3Service } = require('../github/github-auth-service')
 const url = require('url')
 // For unzipping the artifact
 var yauzl = require("yauzl")
+// Github JSON APIs
+const { GithubAuthV3Service } = require('../github/github-auth-service')
+// Handle badge errors
+const { NotFound } = require('..')
 
 const colorRanges = [
   {
@@ -92,7 +94,7 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
   static get route() {
     return {
       base: 'docstr-coverage',
-      pattern: ':user/:repo/:workflow/:branch*',
+      pattern: ':user/:repo/:workflow/:branch?',
     }
   }
 
@@ -130,7 +132,8 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
       url: `repos/${user}/${repo}/actions/workflows/${workflow}/runs`,
       options: { qs: { branch, status: 'success' } },
     })
-    if (!workflowRuns || workflowRuns.length === 0) return 'workflow not found'
+    if (!workflowRuns || workflowRuns.length === 0) 
+      throw new NotFound({ prettyMessage: 'workflow not found' })
     const artifactsUrl = workflowRuns[0].artifacts_url
 
     // Get single artifact download URL
@@ -138,7 +141,8 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
       schema: singleArtifactSchema,
       url: url.parse(artifactsUrl).path
     })
-    if (!artifacts || artifacts.length === 0) return 'artifact not found'
+    if (!artifacts || artifacts.length === 0) 
+      throw new NotFound({ prettyMessage: 'artifact not found' })
     const artifactUrl = url.parse(artifacts[0].archive_download_url).path
 
     // Download the artifact
@@ -149,7 +153,7 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
     // TODO: discuss with Hunter wether to have the report contain only the percentage or also everything else
     const lastLine = report.substr(report.lastIndexOf('\n', report.lastIndexOf('\n') - 1))
     const percentage = lastLine.match(/\d+(?:\.\d+)?/g)
-    if (!percentage.length) return 'percentage not found'
+    if (!percentage.length) throw new NotFound({ prettyMessage: 'percentage not found' }) 
 
     return parseInt(percentage[0])
   }
@@ -171,5 +175,21 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
       message: percentage,
       color: badgeColor,
     }
+  }
+
+  static get examples() {
+    return [
+      { 
+        title: "Docstring coverage (docstr-coverage)",
+        namedParams: {
+          user: 'fabiosangregorio',
+          repo: 'telereddit',
+          workflow: 'docs.yml',
+          branch: 'master'
+        },
+        staticPreview: this.render({ percentage: 100 }),
+        keywords: ['docstrings']
+      }
+    ]
   }
 }
