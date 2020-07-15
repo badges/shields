@@ -3,7 +3,7 @@
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound } = require('..')
+const { BaseSvgScrapingService, NotFound, redirector } = require('..')
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -34,7 +34,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
+class GitlabPipelineStatus extends BaseSvgScrapingService {
   static get category() {
     return 'build'
   }
@@ -42,7 +42,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'gitlab/pipeline',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo/:branch+',
       queryParamSchema,
     }
   }
@@ -51,14 +51,6 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     return [
       {
         title: 'Gitlab pipeline status',
-        pattern: ':user/:repo',
-        namedParams: { user: 'gitlab-org', repo: 'gitlab' },
-        staticPreview: this.render({ status: 'passed' }),
-        documentation,
-      },
-      {
-        title: 'Gitlab pipeline status (branch)',
-        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'gitlab-org',
           repo: 'gitlab',
@@ -69,8 +61,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
       },
       {
         title: 'Gitlab pipeline status (self-hosted)',
-        pattern: ':user/:repo',
-        namedParams: { user: 'GNOME', repo: 'pango' },
+        namedParams: { user: 'GNOME', repo: 'pango', branch: 'master' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
         staticPreview: this.render({ status: 'passed' }),
         documentation,
@@ -83,7 +74,7 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
   }
 
   async handle(
-    { user, repo, branch = 'master' },
+    { user, repo, branch },
     { gitlab_url: baseUrl = 'https://gitlab.com' }
   ) {
     const { message: status } = await this._requestSvg({
@@ -99,4 +90,19 @@ module.exports = class GitlabPipelineStatus extends BaseSvgScrapingService {
     }
     return this.constructor.render({ status })
   }
+}
+
+const GitlabPipelineStatusRedirector = redirector({
+  category: 'build',
+  route: {
+    base: 'gitlab/pipeline',
+    pattern: ':user/:repo',
+  },
+  transformPath: ({ user, repo }) => `/gitlab/pipeline/${user}/${repo}/master`,
+  dateAdded: new Date('2020-07-12'),
+})
+
+module.exports = {
+  GitlabPipelineStatus,
+  GitlabPipelineStatusRedirector,
 }

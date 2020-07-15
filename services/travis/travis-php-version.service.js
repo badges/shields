@@ -31,15 +31,15 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
   static get route() {
     return {
       base: 'travis/php-v',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo/:branch+',
     }
   }
 
   static get examples() {
     return [
       {
-        title: 'PHP from Travis config',
-        namedParams: { user: 'symfony', repo: 'symfony' },
+        title: 'PHP version from Travis config',
+        namedParams: { user: 'symfony', repo: 'symfony', branch: 'master' },
         staticPreview: this.render({ reduction: ['^7.1.3'] }),
       },
     ]
@@ -96,7 +96,7 @@ module.exports = class TravisPhpVersion extends BaseJsonService {
     }
   }
 
-  async handle({ user, repo, branch = 'master' }) {
+  async handle({ user, repo, branch }) {
     const travisConfig = await this._requestJson({
       schema,
       url: `https://api.travis-ci.org/repos/${user}/${repo}/branches/${branch}`,
