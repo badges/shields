@@ -1,19 +1,17 @@
 'use strict'
 
 const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
+const t = (module.exports = new ServiceTester({
+  id: 'GitlabPipeline',
+  title: 'Gitlab Pipeline',
+  pathPrefix: '/gitlab/pipeline',
+}))
 
-t.create('Pipeline status').get('/gitlab-org/gitlab.json').expectBadge({
+t.create('Pipeline status').get('/gitlab-org/gitlab/v10.7.6.json').expectBadge({
   label: 'build',
   message: isBuildStatus,
 })
-
-t.create('Pipeline status (branch)')
-  .get('/gitlab-org/gitlab/v10.7.6.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
-  })
 
 t.create('Pipeline status (nonexistent branch)')
   .get('/gitlab-org/gitlab/nope-not-a-branch.json')
@@ -23,15 +21,19 @@ t.create('Pipeline status (nonexistent branch)')
   })
 
 t.create('Pipeline status (nonexistent repo)')
-  .get('/this-repo/does-not-exist.json')
+  .get('/this-repo/does-not-exist/master.json')
   .expectBadge({
     label: 'build',
     message: 'repo not found',
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get('/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
+  .get('/GNOME/pango/master.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
   })
+
+t.create('Pipeline no branch redirect')
+  .get('/gitlab-org/gitlab.svg')
+  .expectRedirect('/gitlab/pipeline/gitlab-org/gitlab/master.svg')
