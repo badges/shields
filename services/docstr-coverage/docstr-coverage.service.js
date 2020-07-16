@@ -127,13 +127,20 @@ module.exports = class DocstrCoverage extends GithubAuthV3Service {
    */
   async fetch({ user, repo, workflow, branch }) {
     // Get artifacts list from latest successful Github Workflow run
-    const { workflow_runs: workflowRuns } = await this._requestJson({
-      schema: artifactsListSchema,
-      url: `repos/${user}/${repo}/actions/workflows/${workflow}/runs`,
-      options: { qs: { branch, status: 'success' } },
-    })
-    if (!workflowRuns || workflowRuns.length === 0) 
+    let workflowRuns
+    try {
+      const { workflow_runs: runs } = await this._requestJson({
+        schema: artifactsListSchema,
+        url: `repos/${user}/${repo}/actions/workflows/${workflow}/runs`,
+        options: { qs: { branch, status: 'success' } },
+      })
+      workflowRuns = runs
+    } catch(e) {
       throw new NotFound({ prettyMessage: 'workflow not found' })
+    }
+    
+    if (!workflowRuns || workflowRuns.length === 0) 
+      throw new NotFound({ prettyMessage: 'branch not found' })
     const artifactsUrl = workflowRuns[0].artifacts_url
 
     // Get single artifact download URL
