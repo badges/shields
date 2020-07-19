@@ -141,7 +141,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/polyfill": "^7.10.4",
     "@babel/register": "7.10.4",
     "@mapbox/react-click-to-select": "^2.2.0",
