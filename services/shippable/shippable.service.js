@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService, NotFound } = require('..')
+const { BaseJsonService, NotFound, redirector } = require('..')
 
 // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
 const statusCodes = {
@@ -29,7 +29,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class Shippable extends BaseJsonService {
+class Shippable extends BaseJsonService {
   static get category() {
     return 'build'
   }
@@ -37,7 +37,7 @@ module.exports = class Shippable extends BaseJsonService {
   static get route() {
     return {
       base: 'shippable',
-      pattern: ':projectId/:branch*',
+      pattern: ':projectId/:branch+',
     }
   }
 
@@ -45,13 +45,6 @@ module.exports = class Shippable extends BaseJsonService {
     return [
       {
         title: 'Shippable',
-        pattern: ':projectId',
-        namedParams: { projectId: '5444c5ecb904a4b21567b0ff' },
-        staticPreview: this.render({ code: 30 }),
-      },
-      {
-        title: 'Shippable branch',
-        pattern: ':projectId/:branch',
         namedParams: {
           projectId: '5444c5ecb904a4b21567b0ff',
           branch: 'master',
@@ -74,7 +67,7 @@ module.exports = class Shippable extends BaseJsonService {
     return this._requestJson({ schema, url })
   }
 
-  async handle({ projectId, branch = 'master' }) {
+  async handle({ projectId, branch }) {
     const data = await this.fetch({ projectId })
     const builds = data.filter(result => result.branchName === branch)
     if (builds.length === 0) {
@@ -83,3 +76,15 @@ module.exports = class Shippable extends BaseJsonService {
     return this.constructor.render({ code: builds[0].statusCode })
   }
 }
+
+const ShippableRedirect = redirector({
+  category: 'build',
+  route: {
+    base: 'shippable',
+    pattern: ':projectId',
+  },
+  transformPath: ({ projectId }) => `/shippable/${projectId}/master`,
+  dateAdded: new Date('2020-07-18'),
+})
+
+module.exports = { Shippable, ShippableRedirect }
