@@ -16,7 +16,7 @@ module.exports = class Flathub extends BaseJsonService {
   static get route() {
     return {
       base: 'flathub/v',
-      pattern: ':package',
+      pattern: ':packageName',
     }
   }
 
@@ -25,7 +25,7 @@ module.exports = class Flathub extends BaseJsonService {
       {
         title: 'Flathub',
         namedParams: {
-          package: 'org.mozilla.firefox',
+          packageName: 'org.mozilla.firefox',
         },
         staticPreview: renderVersionBadge({ version: '78.0.2' }),
       },
@@ -36,11 +36,11 @@ module.exports = class Flathub extends BaseJsonService {
     return { label: 'flathub' }
   }
 
-  async handle({ package }) {
+  async handle({ packageName }) {
     const data = await this._requestJson({
       schema,
       url: `https://flathub.org/api/v1/apps/${encodeURIComponent(
-        package
+        packageName
       )}`,
     })
     return renderVersionBadge({ version: data.currentReleaseVersion })
