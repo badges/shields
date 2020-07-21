@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const { InvalidResponse, NotFound } = require('..')
 const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
@@ -37,10 +38,21 @@ module.exports = class Flathub extends BaseJsonService {
   }
 
   async handle({ packageName }) {
-    const data = await this._requestJson({
-      schema,
-      url: `https://flathub.org/api/v1/apps/${encodeURIComponent(packageName)}`,
-    })
-    return renderVersionBadge({ version: data.currentReleaseVersion })
+    try {
+      const data = await this._requestJson({
+        schema,
+        url: `https://flathub.org/api/v1/apps/${encodeURIComponent(
+          packageName
+        )}`,
+      })
+      return renderVersionBadge({ version: data.currentReleaseVersion })
+    } catch (error) {
+      if (error instanceof InvalidResponse) {
+        throw new NotFound({
+          prettyMessage: `${packageName} not found`,
+        })
+      }
+      throw error
+    }
   }
 }
