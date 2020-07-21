@@ -28,6 +28,8 @@ const inputs = [
 
 export default function DynamicBadgeMaker({
   baseUrl = document.location.href,
+}: {
+  baseUrl: string
 }): JSX.Element {
   const [values, setValues] = useState<State>({
     datatype: '',
