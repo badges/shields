@@ -6,16 +6,16 @@ const {
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('Flathub (valid)')
-  .get('/org.mozilla.firefox')
+  .get('/org.mozilla.firefox.json')
   .expectBadge({
     label: 'flathub',
     message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   })
 
 t.create('Flathub (valid)')
-  .get('/org.mozilla.firefox')
+  .get('/org.mozilla.firefox.json')
   .intercept(nock =>
-    nock('`https://flathub.org/')
+    nock('https://flathub.org/')
       .get('/api/v1/apps/org.mozilla.firefox')
       .reply(200, {
         flatpakAppId: 'org.mozilla.firefox',
@@ -25,5 +25,5 @@ t.create('Flathub (valid)')
   .expectBadge({ label: 'flathub', message: 'v78.0.1' })
 
 t.create('Flathub (not found)')
-  .get('/not.a.package')
+  .get('/not.a.package.json')
   .expectBadge({ label: 'flathub', message: 'not found' })
