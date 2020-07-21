@@ -2,7 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService } = require('..')
+const { BaseJsonService, redirector } = require('..')
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()
@@ -25,7 +25,7 @@ const bitbucketPipelinesSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BitbucketPipelines extends BaseJsonService {
+class BitbucketPipelines extends BaseJsonService {
   static get category() {
     return 'build'
   }
@@ -33,7 +33,7 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   static get route() {
     return {
       base: 'bitbucket/pipelines',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo/:branch+',
     }
   }
 
@@ -41,16 +41,6 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
     return [
       {
         title: 'Bitbucket Pipelines',
-        pattern: ':user/:repo',
-        namedParams: {
-          user: 'atlassian',
-          repo: 'adf-builder-javascript',
-        },
-        staticPreview: this.render({ status: 'SUCCESSFUL' }),
-      },
-      {
-        title: 'Bitbucket Pipelines branch',
-        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'atlassian',
           repo: 'adf-builder-javascript',
@@ -99,7 +89,23 @@ module.exports = class BitbucketPipelines extends BaseJsonService {
   }
 
   async handle({ user, repo, branch }) {
-    const data = await this.fetch({ user, repo, branch: branch || 'master' })
+    const data = await this.fetch({ user, repo, branch })
     return this.constructor.render({ status: this.constructor.transform(data) })
   }
+}
+
+const BitbucketPipelinesRedirector = redirector({
+  category: 'build',
+  route: {
+    base: 'bitbucket/pipelines',
+    pattern: ':user/:repo',
+  },
+  transformPath: ({ user, repo }) =>
+    `/bitbucket/pipelines/${user}/${repo}/master`,
+  dateAdded: new Date('2020-07-12'),
+})
+
+module.exports = {
+  BitbucketPipelines,
+  BitbucketPipelinesRedirector,
 }
