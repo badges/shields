@@ -146,11 +146,14 @@ class AuthHelper {
     )
   }
 
-  _bearerAuthHeader(bearerKey) {
+  get _bearerAuthHeader() {
     const { _pass: pass } = this
-    return this.isConfigured
-      ? { Authorization: `${bearerKey} ${pass}` }
-      : undefined
+    return this.isConfigured ? { Authorization: `Bearer ${pass}` } : undefined
+  }
+
+  get _botAuthHeader() {
+    const { _pass: pass } = this
+    return this.isConfigured ? { Authorization: `Bot ${pass}` } : undefined
   }
 
   static _mergeHeaders(requestParams, headers) {
@@ -170,12 +173,15 @@ class AuthHelper {
     }
   }
 
-  withBearerAuthHeader(requestParams, bearerKey = 'Bearer') {
+  withBearerAuthHeader(requestParams) {
     return this._withAnyAuth(requestParams, requestParams =>
-      this.constructor._mergeHeaders(
-        requestParams,
-        this._bearerAuthHeader(bearerKey)
-      )
+      this.constructor._mergeHeaders(requestParams, this._bearerAuthHeader)
+    )
+  }
+
+  withBotAuthHeader(requestParams) {
+    return this._withAnyAuth(requestParams, requestParams =>
+      this.constructor._mergeHeaders(requestParams, this._botAuthHeader)
     )
   }
 
