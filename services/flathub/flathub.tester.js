@@ -13,7 +13,7 @@ t.create('Flathub (valid)').get('/org.mozilla.firefox.json').expectBadge({
 t.create('Flathub (valid)')
   .get('/org.mozilla.firefox.json')
   .intercept(nock =>
-    nock('https://flathub.org/')
+    nock('https://flathub.org')
       .get('/api/v1/apps/org.mozilla.firefox')
       .reply(200, {
         flatpakAppId: 'org.mozilla.firefox',
