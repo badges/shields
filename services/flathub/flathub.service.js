@@ -39,9 +39,7 @@ module.exports = class Flathub extends BaseJsonService {
   async handle({ packageName }) {
     const data = await this._requestJson({
       schema,
-      url: `https://flathub.org/api/v1/apps/${encodeURIComponent(
-        packageName
-      )}`,
+      url: `https://flathub.org/api/v1/apps/${encodeURIComponent(packageName)}`,
     })
     return renderVersionBadge({ version: data.currentReleaseVersion })
   }

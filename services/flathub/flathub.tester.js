@@ -5,12 +5,10 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Flathub (valid)')
-  .get('/org.mozilla.firefox.json')
-  .expectBadge({
-    label: 'flathub',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
-  })
+t.create('Flathub (valid)').get('/org.mozilla.firefox.json').expectBadge({
+  label: 'flathub',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
+})
 
 t.create('Flathub (valid)')
   .get('/org.mozilla.firefox.json')
