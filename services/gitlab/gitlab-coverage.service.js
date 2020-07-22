@@ -5,7 +5,7 @@ const {
   coveragePercentage: coveragePercentageColor,
 } = require('../color-formatters')
 const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound } = require('..')
+const { BaseSvgScrapingService, NotFound, redirector } = require('..')
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -39,7 +39,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class GitlabCoverage extends BaseSvgScrapingService {
+class GitlabCoverage extends BaseSvgScrapingService {
   static get category() {
     return 'coverage'
   }
@@ -109,4 +109,19 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     const percentage = Number(/[0-9.]+/.exec(percentageText)[0]).toFixed(0)
     return this.constructor.render({ percentage })
   }
+}
+
+const GitlabCoverageRedirector = redirector({
+  category: 'coverage',
+  route: {
+    base: 'gitlab/coverage',
+    pattern: ':user/:repo',
+  },
+  transformPath: ({ user, repo }) => `/gitlab/coverage/${user}/${repo}/master`,
+  dateAdded: new Date('2020-07-12'),
+})
+
+module.exports = {
+  GitlabCoverage,
+  GitlabCoverageRedirector,
 }
