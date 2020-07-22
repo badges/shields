@@ -35,6 +35,9 @@ const documentation = `
 </p>
 <img src="https://user-images.githubusercontent.com/12065866/67156911-e225a180-f324-11e9-93ad-10aafbb3e69e.png" alt="Setting Public pipelines set"/>
 <p>
+Also make sure you have set up code covrage parsing as described <a href="https://docs.gitlab.com/ee/ci/pipelines/settings.html#test-coverage-parsing">here</a>
+</p>
+<p>
   Your badge should be working fine now.
 </p>
 `
@@ -47,7 +50,7 @@ class GitlabCoverage extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'gitlab/coverage',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo/:branch+',
       queryParamSchema,
     }
   }
@@ -56,14 +59,6 @@ class GitlabCoverage extends BaseSvgScrapingService {
     return [
       {
         title: 'Gitlab code coverage',
-        pattern: ':user/:repo',
-        namedParams: { user: 'gitlab-org', repo: 'gitlab-runner' },
-        staticPreview: this.render({ percentage: 20 }),
-        documentation,
-      },
-      {
-        title: 'Gitlab code coverage (branch)',
-        pattern: ':user/:repo/:branch',
         namedParams: {
           user: 'gitlab-org',
           repo: 'gitlab-runner',
@@ -74,8 +69,7 @@ class GitlabCoverage extends BaseSvgScrapingService {
       },
       {
         title: 'Gitlab code coverage (self-hosted)',
-        pattern: ':user/:repo',
-        namedParams: { user: 'GNOME', repo: 'libhandy' },
+        namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
         staticPreview: this.render({ percentage: 50 }),
         documentation,
