@@ -73,14 +73,17 @@ module.exports = class Discord extends BaseJsonService {
   async fetch({ serverId }) {
     const url = `https://discord.com/api/v6/guilds/${serverId}/widget.json`
     return this._requestJson(
-      this.authHelper.withBotAuthHeader({
-        url,
-        schema,
-        errorMessages: {
-          404: 'invalid server',
-          403: 'widget disabled',
+      this.authHelper.withBearerAuthHeader(
+        {
+          url,
+          schema,
+          errorMessages: {
+            404: 'invalid server',
+            403: 'widget disabled',
+          },
         },
-      })
+        'Bot'
+      )
     )
   }
 
