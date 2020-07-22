@@ -22,6 +22,7 @@ const redStatuses = [
 ]
 
 const otherStatuses = [
+  'aborted',
   'building',
   'canceled',
   'cancelled',
