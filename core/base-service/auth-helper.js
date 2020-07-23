@@ -170,7 +170,10 @@ class AuthHelper {
     }
   }
 
-  withBearerAuthHeader(requestParams, bearerKey = 'Bearer') {
+  withBearerAuthHeader(
+    requestParams,
+    bearerKey = 'Bearer' // lgtm [js/hardcoded-credentials]
+  ) {
     return this._withAnyAuth(requestParams, requestParams =>
       this.constructor._mergeHeaders(
         requestParams,
