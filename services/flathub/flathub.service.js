@@ -48,6 +48,9 @@ module.exports = class Flathub extends BaseJsonService {
       return renderVersionBadge({ version: data.currentReleaseVersion })
     } catch (error) {
       if (error instanceof InvalidResponse) {
+        // Note the 'not found' response from Flathub is:
+        // status code = 200,
+        // body = empty
         throw new NotFound({
           prettyMessage: `${packageName} not found`,
         })
