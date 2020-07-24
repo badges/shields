@@ -105,6 +105,15 @@ self-hosted Shields installation access to private repositories hosted on bitbuc
 Bitbucket badges use basic auth. Provide a username and password to give your
 self-hosted Shields installation access to a private Bitbucket Server instance.
 
+### Discord
+
+Using a token for Dicsord is optional but will allow higher API rates.
+
+- `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
+
+Register an application in the [Discord developer console](https://discord.com/developers).
+To obtain a token, simply create a bot for your application.
+
 ### Drone
 
 - `DRONE_ORIGINS` (yml: `public.services.drone.authorizedOrigins`)
