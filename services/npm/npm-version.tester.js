@@ -36,6 +36,15 @@ t.create('gets the package version of left-pad from a custom registry')
   .get('/left-pad.json?registry_uri=https://registry.npmjs.com')
   .expectBadge({ label: 'npm', message: isSemver })
 
+t.create('gets the tagged package version with a "/" in the tag name')
+  .intercept(nock =>
+    nock('https://registry.npmjs.org')
+      .get('/-/package/npm/dist-tags')
+      .reply(200, { 'release/1.0': '1.0.3', latest: '2.0.1' })
+  )
+  .get('/npm/release/1.0.json')
+  .expectBadge({ label: 'npm@release/1.0', message: 'v1.0.3' })
+
 t.create('gets the tagged package version of @cycle/core')
   .get('/@cycle/core/canary.json')
   .expectBadge({ label: 'npm@canary', message: isSemver })
