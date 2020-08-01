@@ -80,7 +80,7 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
   }
 
   async handle(
-    { user, repo, branch = 'master' },
+    { user, repo, branch },
     { gitlab_url: baseUrl = 'https://gitlab.com' }
   ) {
     const { message: percentage } = await this._requestSvg({
