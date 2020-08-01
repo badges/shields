@@ -4,14 +4,14 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { isFormattedDate } = require('../test-validators')
 
 t.create('date')
-  .get('/visual-studio-marketplace/release-date/yasht.terminal-all-in-one.json')
+  .get('/visual-studio-marketplace/last-updated/yasht.terminal-all-in-one.json')
   .expectBadge({
-    label: 'release date',
+    label: 'last updated',
     message: isFormattedDate,
   })
 
 t.create('date')
-  .get('/visual-studio-marketplace/release-date/yasht.terminal-all-in-one.json')
+  .get('/visual-studio-marketplace/last-updated/yasht.terminal-all-in-one.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
@@ -36,7 +36,7 @@ t.create('date')
                   },
                 ],
                 releaseDate: '2013-04-13T07:50:27.000Z',
-                lastUpdated: '2019-04-13T07:50:27.000Z',
+                lastUpdated: '2013-04-13T07:50:27.000Z',
               },
             ],
           },
@@ -44,36 +44,36 @@ t.create('date')
       })
   )
   .expectBadge({
-    label: 'release date',
+    label: 'last updated',
     message: 'april 2013',
     color: 'red',
   })
 
 t.create('invalid extension id')
-  .get('/visual-studio-marketplace/release-date/yasht-terminal-all-in-one.json')
+  .get('/visual-studio-marketplace/last-updated/yasht-terminal-all-in-one.json')
   .expectBadge({
-    label: 'release date',
+    label: 'last updated',
     message: 'invalid extension id',
   })
 
 t.create('non existent extension')
   .get(
-    '/visual-studio-marketplace/release-date/yasht.terminal-all-in-one-fake.json'
+    '/visual-studio-marketplace/last-updated/yasht.terminal-all-in-one-fake.json'
   )
   .expectBadge({
-    label: 'release date',
+    label: 'last updated',
     message: 'extension not found',
   })
 
 t.create('invalid')
-  .get('/visual-studio-marketplace/release-date/yasht.terminal-all-in-one.json')
+  .get('/visual-studio-marketplace/last-updated/yasht.terminal-all-in-one.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post(`/extensionquery/`)
       .reply(401)
   )
   .expectBadge({
-    label: 'release date',
+    label: 'last updated',
     message: 'invalid',
     color: 'lightgrey',
   })
