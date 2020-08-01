@@ -1,18 +1,13 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
+const { coveragePercentage } = require('../color-formatters')
 const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound, redirector } = require('..')
+const { BaseSvgScrapingService, NotFound } = require('..')
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
-    .try(
-      Joi.string().regex(/^([0-9]+\.[0-9]+%)|unknown$/),
-      Joi.equal('unknown')
-    )
+    .try(Joi.string().regex(/^([0-9]+\.[0-9]+%)|unknown$/))
     .required(),
 }).required()
 
@@ -23,7 +18,7 @@ const queryParamSchema = Joi.object({
 const documentation = `
 <p>
   Important: If your project is publicly visible, but the badge is like this:
-  <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
+  <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="build not found"/>
 </p>
 <p>
   Check if your pipelines are publicly visible as well.<br />
@@ -42,7 +37,7 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 </p>
 `
 
-class GitlabCoverage extends BaseSvgScrapingService {
+module.exports = class GitlabCoverage extends BaseSvgScrapingService {
   static get category() {
     return 'coverage'
   }
@@ -64,23 +59,23 @@ class GitlabCoverage extends BaseSvgScrapingService {
           repo: 'gitlab-runner',
           branch: 'master',
         },
-        staticPreview: this.render({ percentage: 100 }),
+        staticPreview: this.render({ coverage: 67 }),
         documentation,
       },
       {
         title: 'Gitlab code coverage (self-hosted)',
         namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
-        staticPreview: this.render({ percentage: 50 }),
+        staticPreview: this.render({ coverage: 93 }),
         documentation,
       },
     ]
   }
 
-  static render({ percentage }) {
+  static render({ coverage }) {
     return {
-      message: `${percentage}%`,
-      color: coveragePercentageColor(percentage),
+      message: `${coverage.toFixed(0)}%`,
+      color: coveragePercentage(coverage),
     }
   }
 
@@ -88,34 +83,19 @@ class GitlabCoverage extends BaseSvgScrapingService {
     { user, repo, branch = 'master' },
     { gitlab_url: baseUrl = 'https://gitlab.com' }
   ) {
-    const { message: percentageText } = await this._requestSvg({
+    const { message: percentage } = await this._requestSvg({
       schema: badgeSchema,
-      url: `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg?style=flat-square`,
+      url: `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg`,
       errorMessages: {
         401: 'repo not found',
         404: 'repo not found',
       },
     })
-    if (!/[0-9.]+/.test(percentageText)) {
+    if (percentage === 'unknown') {
       throw new NotFound({ prettyMessage: 'not set up' })
     }
-    // Parse percentage to a number
-    const percentage = Number(/[0-9.]+/.exec(percentageText)[0]).toFixed(0)
-    return this.constructor.render({ percentage })
+    return this.constructor.render({
+      coverage: Number(percentage.slice(0, -1)),
+    })
   }
-}
-
-const GitlabCoverageRedirector = redirector({
-  category: 'coverage',
-  route: {
-    base: 'gitlab/coverage',
-    pattern: ':user/:repo',
-  },
-  transformPath: ({ user, repo }) => `/gitlab/coverage/${user}/${repo}/master`,
-  dateAdded: new Date('2020-07-12'),
-})
-
-module.exports = {
-  GitlabCoverage,
-  GitlabCoverageRedirector,
 }

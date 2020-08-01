@@ -3,11 +3,6 @@
 const { isIntegerPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Coverage').get('/gitlab-org/gitlab-runner.json').expectBadge({
-  label: 'coverage',
-  message: isIntegerPercentage,
-})
-
 t.create('Coverage (branch)')
   .get('/gitlab-org/gitlab-runner/12-0-stable.json')
   .expectBadge({
