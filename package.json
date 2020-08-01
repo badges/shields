@@ -155,7 +155,7 @@
     "@types/react-helmet": "^6.0.0",
     "@types/react-modal": "^3.10.6",
     "@types/react-select": "^3.0.14",
-    "@types/styled-components": "4.1.8",
+    "@types/styled-components": "5.1.2",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "babel-plugin-inline-react-svg": "^1.1.1",
