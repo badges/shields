@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('@hapi/joi')
+const emojic = require('emojic')
 const { optionalUrl } = require('../validators')
 const {
   queryParamSchema,
@@ -8,6 +9,7 @@ const {
   renderWebsiteStatus,
 } = require('../website-status')
 const { BaseService } = require('..')
+const trace = require('../../core/base-service/trace')
 
 const documentation = `
 <p>
@@ -65,6 +67,15 @@ module.exports = class Website extends BaseService {
     return {
       label: 'website',
     }
+  }
+
+  async _request({ url, options = {} }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    const { res, buffer } = await this._requestFetcher(url, options)
+    await this._meterResponse(res, buffer)
+    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    return { res, buffer }
   }
 
   async handle(
