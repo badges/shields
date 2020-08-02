@@ -6,8 +6,8 @@ const { optionalUrl } = require('../validators')
 const { BaseSvgScrapingService, NotFound } = require('..')
 
 const badgeSchema = Joi.object({
-  message: Joi.alternatives()
-    .try(Joi.string().regex(/^([0-9]+\.[0-9]+%)|unknown$/))
+  message: Joi.string()
+    .regex(/^([0-9]+\.[0-9]+%)|unknown$/)
     .required(),
 }).required()
 
@@ -45,7 +45,7 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
   static get route() {
     return {
       base: 'gitlab/coverage',
-      pattern: ':user/:repo/:branch+',
+      pattern: ':user/:repo/:branch',
       queryParamSchema,
     }
   }
@@ -70,6 +70,10 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
         documentation,
       },
     ]
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'coverage' }
   }
 
   static render({ coverage }) {
