@@ -42,7 +42,7 @@
     "badge-maker": "file:badge-maker",
     "glob": "^7.1.6",
     "graphql": "^14.7.0",
-    "graphql-tag": "^2.10.4",
+    "graphql-tag": "^2.11.0",
     "ioredis": "4.17.3",
     "joi-extension-semver": "4.1.1",
     "js-yaml": "^3.14.0",
@@ -60,7 +60,7 @@
     "query-string": "^6.13.1",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "3.2.0",
+    "simple-icons": "3.3.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.27"
   },
