@@ -5,7 +5,7 @@ const { coveragePercentage } = require('../color-formatters')
 const { optionalUrl } = require('../validators')
 const { BaseSvgScrapingService, NotFound } = require('..')
 
-const badgeSchema = Joi.object({
+const schema = Joi.object({
   message: Joi.string()
     .regex(/^([0-9]+\.[0-9]+%)|unknown$/)
     .required(),
@@ -13,12 +13,13 @@ const badgeSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
+  job_name: Joi.string(),
 }).required()
 
 const documentation = `
 <p>
   Important: If your project is publicly visible, but the badge is like this:
-  <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="build not found"/>
+  <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="coverage not set up"/>
 </p>
 <p>
   Check if your pipelines are publicly visible as well.<br />
@@ -83,23 +84,38 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     }
   }
 
-  async handle(
+  async fetch(
     { user, repo, branch },
-    { gitlab_url: baseUrl = 'https://gitlab.com' }
+    { gitlab_url: baseUrl = 'https://gitlab.com', job_name }
   ) {
-    const { message: percentage } = await this._requestSvg({
-      schema: badgeSchema,
-      url: `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg`,
-      errorMessages: {
-        401: 'repo not found',
-        404: 'repo not found',
-      },
+    // Since the URLdoesn't return a usable value when an invalid job name is specified, it is recommended to not use the query param at all if not required
+    job_name = job_name ? `?job=${job_name}` : ''
+    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${job_name}`
+    const errorMessages = {
+      401: 'repo not found',
+      404: 'repo not found',
+    }
+    return this._requestSvg({
+      schema,
+      url,
+      errorMessages,
     })
-    if (percentage === 'unknown') {
+  }
+
+  static transform({ coverage }) {
+    if (coverage === 'unknown') {
       throw new NotFound({ prettyMessage: 'not set up' })
     }
-    return this.constructor.render({
-      coverage: Number(percentage.slice(0, -1)),
+    return this.render({
+      coverage: Number(coverage.slice(0, -1)),
     })
+  }
+
+  async handle({ user, repo, branch }, { gitlab_url, job_name }) {
+    const svg = await this.fetch(
+      { user, repo, branch },
+      { gitlab_url, job_name }
+    )
+    return this.constructor.transform({ coverage: svg.message })
   }
 }
