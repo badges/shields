@@ -2,7 +2,7 @@
 
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
-module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplacePublisher extends VisualStudioMarketplaceBase {
   static get category() {
     return 'other'
   }
