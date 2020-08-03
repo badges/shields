@@ -23,6 +23,10 @@ const mockResponse = {
               version: '1.0.0',
             },
           ],
+          publisher: {
+            displayName: 'Yash T',
+            publisherName: 'yasht',
+          },
         },
       ],
     },
@@ -112,6 +116,10 @@ t.create('zero installs')
                     version: '1.0.0',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },

@@ -27,6 +27,10 @@ const extensionQuerySchema = Joi.object({
                 )
                 .min(1)
                 .required(),
+              publisher: Joi.object({
+                displayName: Joi.string().required(),
+                publisherName: Joi.string().required(),
+              }).required(),
             })
           )
           .required(),

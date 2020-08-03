@@ -44,6 +44,10 @@ t.create('rating')
                     version: '1.0.0',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },
@@ -72,6 +76,10 @@ t.create('zero rating')
                     version: '1.0.0',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },
@@ -109,6 +117,10 @@ t.create('stars')
                     version: '1.0.0',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },

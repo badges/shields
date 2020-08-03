@@ -28,6 +28,10 @@ t.create('version')
                     version: '1.0.0',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },
@@ -56,6 +60,10 @@ t.create('pre-release version')
                     version: '0.3.8',
                   },
                 ],
+                publisher: {
+                  displayName: 'Yash T',
+                  publisherName: 'yasht',
+                },
               },
             ],
           },
