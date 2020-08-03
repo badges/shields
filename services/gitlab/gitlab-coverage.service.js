@@ -64,9 +64,30 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
         documentation,
       },
       {
+        title: 'Gitlab code coverage (specific job)',
+        namedParams: {
+          user: 'gitlab-org',
+          repo: 'gitlab',
+          branch: 'master',
+        },
+        queryParams: { job_name: 'rspec:coverage' },
+        staticPreview: this.render({ coverage: 96 }),
+        documentation,
+      },
+      {
         title: 'Gitlab code coverage (self-hosted)',
         namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
         queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+        staticPreview: this.render({ coverage: 93 }),
+        documentation,
+      },
+      {
+        title: 'Gitlab code coverage (self-hosted, specific job)',
+        namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+        queryParams: {
+          gitlab_url: 'https://gitlab.gnome.org',
+          job_name: 'unit-test',
+        },
         staticPreview: this.render({ coverage: 93 }),
         documentation,
       },
@@ -88,7 +109,8 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     { user, repo, branch },
     { gitlab_url: baseUrl = 'https://gitlab.com', job_name }
   ) {
-    // Since the URLdoesn't return a usable value when an invalid job name is specified, it is recommended to not use the query param at all if not required
+    // Since the URLdoesn't return a usable value when an invalid job name is specified,
+    // it is recommended to not use the query param at all if not required
     job_name = job_name ? `?job=${job_name}` : ''
     const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${job_name}`
     const errorMessages = {
