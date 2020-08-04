@@ -41,7 +41,6 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   static render({ alerts }) {
     return {
-      label: 'alerts',
       message: metric(alerts),
       color: this.getColor({ alerts }),
     }
