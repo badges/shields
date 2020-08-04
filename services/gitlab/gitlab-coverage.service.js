@@ -105,11 +105,14 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     }
   }
 
-  async fetch(
-    { user, repo, branch },
-    { gitlab_url: baseUrl = 'https://gitlab.com', job_name }
-  ) {
-    // Since the URLdoesn't return a usable value when an invalid job name is specified,
+  async fetch({
+    user,
+    repo,
+    branch,
+    gitlab_url: baseUrl = 'https://gitlab.com',
+    job_name,
+  }) {
+    // Since the URL doesn't return a usable value when an invalid job name is specified,
     // it is recommended to not use the query param at all if not required
     job_name = job_name ? `?job=${job_name}` : ''
     const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${job_name}`
@@ -128,16 +131,19 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     if (coverage === 'unknown') {
       throw new NotFound({ prettyMessage: 'not set up' })
     }
-    return this.render({
-      coverage: Number(coverage.slice(0, -1)),
-    })
+    return Number(coverage.slice(0, -1))
   }
 
   async handle({ user, repo, branch }, { gitlab_url, job_name }) {
-    const svg = await this.fetch(
-      { user, repo, branch },
-      { gitlab_url, job_name }
-    )
-    return this.constructor.transform({ coverage: svg.message })
+    const { message: coverage } = await this.fetch({
+      user,
+      repo,
+      branch,
+      gitlab_url,
+      job_name,
+    })
+    return this.constructor.render({
+      coverage: this.constructor.transform({ coverage }),
+    })
   }
 }
