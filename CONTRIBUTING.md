@@ -103,6 +103,10 @@ There are three places to get help:
   succinctly describing the meaning of the right-hand side.
 - Except for badges using the `social` style, logos should be _turned off by
   default_.
+- Badges should not obtain data from undocumented or reverse-engineered API endpoints
+- Badges should not obtain data by scraping web pages - these are likely to break frequently.
+  Whereas API publishers are incentivised to maintain a stable platform for their users,
+  authors of web pages have no such incentive.
 
 ## Badge URLs
 
