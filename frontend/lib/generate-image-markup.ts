@@ -45,7 +45,7 @@ function quoteAsciiDocAttribute(attr: string | null): string {
   if (attr == null) {
     return 'None'
   } else {
-    const withQuotesEscaped = attr.replace(/"/g, '\\"')
+    const withQuotesEscaped = attr.replace(/"/g, '\\"') // lgtm [js/incomplete-sanitization]
     return `"${withQuotesEscaped}"`
   }
 }
