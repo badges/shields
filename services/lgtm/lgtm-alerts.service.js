@@ -27,7 +27,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   static get defaultBadgeData() {
     return {
-      label: 'alerts',
+      label: 'lgtm alerts',
     }
   }
 
