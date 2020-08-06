@@ -67,10 +67,10 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
         title: 'Gitlab code coverage (specific job)',
         namedParams: {
           user: 'gitlab-org',
-          repo: 'gitlab',
+          repo: 'gitlab-runner',
           branch: 'master',
         },
-        queryParams: { job_name: 'rspec:coverage' },
+        queryParams: { job_name: 'test coverage report' },
         staticPreview: this.render({ coverage: 96 }),
         documentation,
       },
