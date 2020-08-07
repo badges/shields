@@ -45,6 +45,10 @@ function quoteAsciiDocAttribute(attr: string | null): string {
   if (attr == null) {
     return 'None'
   } else {
+    // String values are prepared and returned to users who want to include their badge
+    // in an AsciiDoc document. We're not using the value in any actual processing, so
+    // no need to perform proper sanitization. We simply escape quotes, as mandated by
+    // http://asciidoc.org/userguide.html#X21
     const withQuotesEscaped = attr.replace(/"/g, '\\"') // lgtm [js/incomplete-sanitization]
     return `"${withQuotesEscaped}"`
   }
