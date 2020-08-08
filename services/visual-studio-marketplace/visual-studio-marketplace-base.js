@@ -43,6 +43,9 @@ const statisticSchema = Joi.object().keys({
   onpremDownloads: Joi.number().default(0),
   averagerating: Joi.number().default(0),
   ratingcount: Joi.number().default(0),
+  trendingdaily: Joi.number().default(0),
+  trendingweekly: Joi.number().default(0),
+  trendingmonthly: Joi.number().default(0),
 })
 
 module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
