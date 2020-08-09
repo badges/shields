@@ -12,8 +12,7 @@ function scrollToElementId(id) {
 
 export function onRouteUpdate({ location: { hash } }) {
   if (hash) {
-    if (!redirectLegacyRoutes()) {
-      window.setTimeout(() => scrollToElementId(hash), 10)
-    }
+    redirectLegacyRoutes()
+    window.setTimeout(() => scrollToElementId(hash), 10)
   }
 }
