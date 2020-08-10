@@ -73,7 +73,8 @@ This repo hosts:
 [custom badges]: http://shields.io/#your-badge
 
 ### Quickstart
-Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use! 
+
+Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
 
 Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.
 
