@@ -30,6 +30,7 @@ describe('BintrayDownloads', function () {
 
       expect(
         await BintrayDownloads.invoke(defaultContext, config, {
+          interval: 'dt',
           subject: 'asciidoctor',
           repo: 'maven',
           packageName: 'asciidoctorj',
