@@ -3,10 +3,12 @@
 const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('downloads').get('/dt/asciidoctor/maven/asciidoctorj.json').expectBadge({
-  label: 'downloads',
-  message: isMetric,
-})
+t.create('downloads')
+  .get('/dt/asciidoctor/maven/asciidoctorj.json')
+  .expectBadge({
+    label: 'downloads',
+    message: isMetric,
+  })
 
 t.create('downloads (not found)')
   .get('/dt/asciidoctor/maven/not-a-real-package.json')
