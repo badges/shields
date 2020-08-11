@@ -70,9 +70,13 @@ This repo hosts:
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
-Browse a [complete list of badges][shields.io].
-
 [custom badges]: http://shields.io/#your-badge
+
+### Quickstart
+
+Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
+
+Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.
 
 ## Contributing
 
@@ -94,8 +98,8 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 ## Development
 
-1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 8 and 10.
+1. Install Node 10 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 10 and 12.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.

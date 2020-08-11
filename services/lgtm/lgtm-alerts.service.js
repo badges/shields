@@ -25,6 +25,12 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
     ]
   }
 
+  static get defaultBadgeData() {
+    return {
+      label: 'lgtm alerts',
+    }
+  }
+
   static getColor({ alerts }) {
     let color = 'yellow'
     if (alerts === 0) {
@@ -35,7 +41,7 @@ module.exports = class LgtmAlerts extends LgtmBaseService {
 
   static render({ alerts }) {
     return {
-      message: metric(alerts) + (alerts === 1 ? ' alert' : ' alerts'),
+      message: metric(alerts),
       color: this.getColor({ alerts }),
     }
   }
