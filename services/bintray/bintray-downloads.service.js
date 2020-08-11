@@ -13,6 +13,12 @@ const versionSchema = Joi.object({
   name: Joi.string().required(),
 }).required()
 
+const documentation = `
+<p>
+  These badges utilize unofficial Bintray APIs to retrieve download data. <br />
+  As such, they may be unstable or intermittently unavailable.
+</p>`
+
 module.exports = class BintrayDownloads extends BaseJsonService {
   static get category() {
     return 'downloads'
@@ -20,8 +26,8 @@ module.exports = class BintrayDownloads extends BaseJsonService {
 
   static get route() {
     return {
-      base: 'bintray/d',
-      pattern: ':subject/:repo/:packageName/:version*',
+      base: 'bintray',
+      pattern: ':interval(dt)/:subject/:repo/:packageName/:version*',
     }
   }
 
@@ -39,30 +45,36 @@ module.exports = class BintrayDownloads extends BaseJsonService {
         title: 'Bintray',
         staticPreview: this.render({ downloads: 69000 }),
         namedParams: {
+          interval: 'dt',
           subject: 'asciidoctor',
           repo: 'maven',
           packageName: 'asciidoctorj',
         },
+        documentation,
       },
       {
         title: 'Bintray (latest)',
         staticPreview: this.render({ version: 'latest', downloads: 69000 }),
         namedParams: {
+          interval: 'dt',
           subject: 'asciidoctor',
           repo: 'maven',
           packageName: 'asciidoctorj',
           version: 'latest',
         },
+        documentation,
       },
       {
         title: 'Bintray (version)',
         staticPreview: this.render({ version: '1.6.0', downloads: 69000 }),
         namedParams: {
+          interval: 'dt',
           subject: 'asciidoctor',
           repo: 'maven',
           packageName: 'asciidoctorj',
           version: '1.6.0',
         },
+        documentation,
       },
     ]
   }
