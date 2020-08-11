@@ -3,9 +3,9 @@
 const { expect } = require('chai')
 const nock = require('nock')
 const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const Bintray = require('./bintray.service')
+const BintrayVersion = require('./bintray-version.service')
 
-describe('Bintray', function () {
+describe('BintrayVersion', function () {
   describe('auth', function () {
     cleanUpNockAfterEach()
 
@@ -29,7 +29,7 @@ describe('Bintray', function () {
         })
 
       expect(
-        await Bintray.invoke(defaultContext, config, {
+        await BintrayVersion.invoke(defaultContext, config, {
           subject: 'asciidoctor',
           repo: 'maven',
           packageName: 'asciidoctorj',
