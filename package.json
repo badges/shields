@@ -190,7 +190,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "eslint-plugin-sort-class-members": "^1.7.0",
+    "eslint-plugin-sort-class-members": "^1.8.0",
     "eslint-plugin-standard": "^4.0.1",
     "fetch-ponyfill": "^6.1.1",
     "form-data": "^3.0.0",
