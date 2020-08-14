@@ -65,7 +65,7 @@ module.exports = class FDroid extends BaseJsonService {
   }
 
   async fetch({ appId }) {
-    const url = `https://gitlab.com/kitsunyan/fdroidapi/raw/master/applications/${appId}`
+    const url = `https://f-droid.org/api/v1/packages/${appId}`
     return this._requestJson({
       schema,
       url,
@@ -76,9 +76,8 @@ module.exports = class FDroid extends BaseJsonService {
     })
   }
 
-  async handle({ appId }, { include_prereleases: prereleases }) {
-    const json = await this.fetch({ appId })
-    const svc = prereleases === undefined && json.suggestedVersionCode
+  transform({ json, suggested }) {
+    const svc = suggested && json.suggestedVersionCode
     const packages = (json.packages || []).filter(
       ({ versionCode }) => !svc || versionCode <= svc
     )
@@ -88,6 +87,13 @@ module.exports = class FDroid extends BaseJsonService {
     const version = packages.reduce((a, b) =>
       a.versionCode > b.versionCode ? a : b
     ).versionName
+    return { version }
+  }
+
+  async handle({ appId }, { include_prereleases }) {
+    const json = await this.fetch({ appId })
+    const suggested = include_prereleases === undefined
+    const { version } = this.transform({ json, suggested })
     return this.constructor.render({ version })
   }
 }
