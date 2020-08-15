@@ -30,8 +30,8 @@ const testJson = `
 }
 `
 
-const base = 'https://gitlab.com/kitsunyan/fdroidapi'
-const path = `/raw/master/applications/${testPkg}`
+const base = 'https://f-droid.org/api/v1'
+const path = `/packages/${testPkg}`
 
 t.create('Package is found')
   .get(`/v/${testPkg}.json`)
