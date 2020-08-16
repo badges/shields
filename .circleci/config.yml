@@ -129,6 +129,7 @@ package_steps: &package_steps
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
+    # https://nodejs.org/en/about/releases/
 
     - run:
         <<: *run_package_tests
