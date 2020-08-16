@@ -9,5 +9,5 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('Offset Earth trees alias')
-  .get('/offset-earth/trees/ecologi.svg')
+  .get('/trees/ecologi.svg')
   .expectRedirect('/ecologi/trees/ecologi.svg')
