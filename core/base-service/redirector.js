@@ -42,7 +42,7 @@ module.exports = function redirector(attrs) {
 
   return class Redirector extends BaseService {
     static name =
-      name ??
+      name ||
       `${camelcase(route.base.replace(/\//g, '_'), {
         pascalCase: true,
       })}Redirect`
