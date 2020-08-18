@@ -162,18 +162,6 @@ package_steps: &package_steps
         path: junit
 
 jobs:
-  npm-install:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-          environment:
-            CYPRESS_INSTALL_BINARY: 0
-
   main:
     docker:
       - image: circleci/node:12
