@@ -41,27 +41,15 @@ module.exports = function redirector(attrs) {
   } = Joi.attempt(attrs, attrSchema, `Redirector for ${attrs.route.base}`)
 
   return class Redirector extends BaseService {
-    static get name() {
-      if (name) {
-        return name
-      } else {
-        return `${camelcase(route.base.replace(/\//g, '_'), {
-          pascalCase: true,
-        })}Redirect`
-      }
-    }
+    static name =
+      name ??
+      `${camelcase(route.base.replace(/\//g, '_'), {
+        pascalCase: true,
+      })}Redirect`
 
-    static get category() {
-      return category
-    }
-
-    static get isDeprecated() {
-      return true
-    }
-
-    static get route() {
-      return route
-    }
+    static category = category
+    static isDeprecated = true
+    static route = route
 
     static register({ camp, metricInstance }, { rasterUrl }) {
       const { regex, captureNames } = prepareRoute({

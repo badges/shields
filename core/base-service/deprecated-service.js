@@ -26,33 +26,17 @@ function deprecatedService(attrs) {
   )
 
   return class DeprecatedService extends BaseService {
-    static get name() {
-      return name
-        ? `Deprecated${name}`
-        : `Deprecated${camelcase(route.base.replace(/\//g, '_'), {
-            pascalCase: true,
-          })}`
-    }
+    static name = name
+      ? `Deprecated${name}`
+      : `Deprecated${camelcase(route.base.replace(/\//g, '_'), {
+          pascalCase: true,
+        })}`
 
-    static get category() {
-      return category
-    }
-
-    static get isDeprecated() {
-      return true
-    }
-
-    static get route() {
-      return route
-    }
-
-    static get examples() {
-      return examples
-    }
-
-    static get defaultBadgeData() {
-      return { label }
-    }
+    static category = category
+    static isDeprecated = true
+    static route = route
+    static examples = examples
+    static defaultBadgeData = { label }
 
     async handle() {
       throw new Deprecated({ prettyMessage: message })
