@@ -116,17 +116,10 @@ const { BaseService } = require('..')
 // (3)
 module.exports = class Example extends BaseService {
   // (4)
-  static get category() {
-    return 'build'
-  }
+  static category = 'build'
 
   // (5)
-  static get route() {
-    return {
-      base: 'example',
-      pattern: ':text',
-    }
-  }
+  static route = { base: 'example', pattern: ':text' }
 
   // (6)
   async handle({ text }) {
@@ -194,22 +187,13 @@ const schema = Joi.object({
 // (5)
 module.exports = class GemVersion extends BaseJsonService {
   // (6)
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
 
   // (7)
-  static get route() {
-    return {
-      base: 'gem/v',
-      pattern: ':gem',
-    }
-  }
+  static route = { base: 'gem/v', pattern: ':gem' }
 
   // (8)
-  static get defaultBadgeData() {
-    return { label: 'gem' }
-  }
+  static defaultBadgeData = { label: 'gem' }
 
   // (11)
   static render({ version }) {
@@ -298,23 +282,19 @@ Once we have implemented our badge, we can add it to the index so that users can
 module.exports = class GemVersion extends BaseJsonService {
   // ...
 
-  static get category() {
-    // (1)
-    return 'version'
-  }
+  // (1)
+  static category = 'version'
 
-  static get examples() {
-    // (2)
-    return [
-      {
-        // (3)
-        title: 'Gem',
-        namedParams: { gem: 'formatador' },
-        staticPreview: this.render({ version: '2.1.0' }),
-        keywords: ['ruby'],
-      },
-    ]
-  }
+  // (2)
+  static examples = [
+    {
+      // (3)
+      title: 'Gem',
+      namedParams: { gem: 'formatador' },
+      staticPreview: this.render({ version: '2.1.0' }),
+      keywords: ['ruby'],
+    },
+  ]
 }
 ```
 
