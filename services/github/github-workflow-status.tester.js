@@ -23,14 +23,21 @@ t.create('nonexistent workflow')
   })
 
 t.create('valid workflow')
-  .get('/actions/toolkit/Main%20workflow.json')
+  .get('/actions/toolkit/toolkit-unit-tests.json')
   .expectBadge({
     label: 'build',
     message: isWorkflowStatus,
   })
 
 t.create('valid workflow (branch)')
-  .get('/actions/toolkit/Main%20workflow/master.json')
+  .get('/actions/toolkit/toolkit-unit-tests/master.json')
+  .expectBadge({
+    label: 'build',
+    message: isWorkflowStatus,
+  })
+
+t.create('valid workflow (event)')
+  .get('/actions/toolkit/toolkit-unit-tests.json?event=push')
   .expectBadge({
     label: 'build',
     message: isWorkflowStatus,
