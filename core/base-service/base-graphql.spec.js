@@ -12,15 +12,8 @@ const dummySchema = Joi.object({
 }).required()
 
 class DummyGraphqlService extends BaseGraphqlService {
-  static get category() {
-    return 'cat'
-  }
-
-  static get route() {
-    return {
-      base: 'foo',
-    }
-  }
+  static category = 'cat'
+  static route = { base: 'foo' }
 
   async handle() {
     const { requiredString } = await this._requestGraphql({

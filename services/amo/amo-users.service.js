@@ -4,33 +4,19 @@ const { metric } = require('../text-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
 module.exports = class AmoUsers extends BaseAmoService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'amo/users', pattern: ':addonId' }
 
-  static get route() {
-    return {
-      base: 'amo/users',
-      pattern: ':addonId',
-    }
-  }
+  static examples = [
+    {
+      title: 'Mozilla Add-on',
+      namedParams: { addonId: 'dustman' },
+      staticPreview: this.render({ users: 750 }),
+      keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Mozilla Add-on',
-        namedParams: { addonId: 'dustman' },
-        staticPreview: this.render({ users: 750 }),
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'users',
-    }
-  }
+  static defaultBadgeData = { label: 'users' }
 
   static render({ users }) {
     return {
