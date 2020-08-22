@@ -220,7 +220,7 @@
     "mocha-junit-reporter": "^2.0.0",
     "mocha-yaml-loader": "^1.0.3",
     "nock": "13.0.4",
-    "node-mocks-http": "^1.8.1",
+    "node-mocks-http": "^1.9.0",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
