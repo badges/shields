@@ -62,7 +62,7 @@
     "semver": "~7.3.2",
     "simple-icons": "3.5.0",
     "xmldom": "~0.2.1",
-    "xpath": "~0.0.27"
+    "xpath": "~0.0.29"
   },
   "scripts": {
     "coverage:test:core": "nyc npm run test:core",
