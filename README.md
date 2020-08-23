@@ -206,10 +206,10 @@ Alumni:
 
 ## Related projects
 
-- [badgerbadgerbadger gem][gem]
+- [poser PHP library][poser]
 - [pybadges python library][pybadges]
 
-[gem]: https://github.com/badges/badgerbadgerbadger
+[poser]: https://github.com/badges/poser
 [pybadges]: https://github.com/google/pybadges
 
 ## License
