@@ -16,13 +16,17 @@ const foundSchema = Joi.object()
   })
   .required()
 
-const notFoundSchema = Joi.string().allow(null, false)
+const notFoundSchema = Joi.object()
+  .keys({
+    error: Joi.string(),
+  })
+  .required()
 
 const schemas = Joi.alternatives(foundSchema, notFoundSchema)
 
 module.exports = class BaseWordpress extends BaseJsonService {
   async fetch({ extensionType, slug }) {
-    const url = `https://api.wordpress.org/${extensionType}s/info/1.1/`
+    const url = `https://api.wordpress.org/${extensionType}s/info/1.2/`
     const json = await this._requestJson({
       url,
       schema: schemas,
@@ -37,6 +41,7 @@ module.exports = class BaseWordpress extends BaseJsonService {
               homepage: 0,
               tags: 0,
               screenshot_url: 0,
+              downloaded: 1,
             },
           },
         },
@@ -45,7 +50,7 @@ module.exports = class BaseWordpress extends BaseJsonService {
         },
       },
     })
-    if (!json) {
+    if ('error' in json) {
       throw new NotFound()
     }
     return json
