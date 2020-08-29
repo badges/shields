@@ -30,4 +30,4 @@ The design of our badges has been carefully considered to provide sufficient pad
 
 ![](https://raw.github.com/badges/shields/master/spec/proportions.png)
 
-When it comes to color choices, the focus is on clear contrast between the text and the background color on both sides of the badge (key and value). The two sides are also contrasted with each other with the key side always retaining a dark grey color for consistency, and the value side taking on whichever background color better conveys the meaning of the data provided (e.g. green for a successful build, red for a failed build).
+When it comes to color choices, the focus is on clear contrast between the text and the background color on both sides of the badge (key and value). The two sides are also contrasted with each other with the key side generally retaining a dark grey color for consistency, and the value side taking on whichever background color better conveys the meaning of the data provided (e.g. green for a successful build, red for a failed build). The preferred text color is white, but black may also be chosen to ensure legibility when a light background is used for a given badge side.

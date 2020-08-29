@@ -1,6 +1,7 @@
 'use strict'
 
 const anafanafo = require('anafanafo')
+const { brightness } = require('./color')
 
 const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
 const socialFontFamily =
@@ -8,6 +9,19 @@ const socialFontFamily =
 
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
+}
+
+function colorsForBackground(color) {
+  if (brightness(color) <= 0.8) {
+    return {
+      textColor: '#fff',
+      shadowColor: '#010101',
+    }
+  }
+  return {
+    textColor: '#000',
+    shadowColor: '#ccc',
+  }
 }
 
 function escapeXml(s) {
@@ -118,6 +132,7 @@ function renderText({
   height,
   verticalMargin = 0,
   shadow = false,
+  color,
 }) {
   if (!content.length) {
     return { renderedText: '', width: 0 }
@@ -133,10 +148,11 @@ function renderText({
   const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
 
   let renderedText = ''
+  const { textColor, shadowColor } = colorsForBackground(color)
   if (shadow) {
-    renderedText = `<text aria-hidden="true" x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
+    renderedText = `<text aria-hidden="true" x="${x}" y="${shadowMargin}" fill="${shadowColor}" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
   }
-  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" fill="#fff" textLength="${outTextLength}">${escapedContent}</text>`
+  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" fill="${textColor}" textLength="${outTextLength}">${escapedContent}</text>`
 
   return {
     renderedText: link
@@ -234,6 +250,7 @@ class Badge {
       height: this.constructor.height,
       verticalMargin: this.constructor.verticalMargin,
       shadow: this.constructor.shadow,
+      color: labelColor,
     })
 
     const leftWidth = hasLabel
@@ -257,6 +274,7 @@ class Badge {
       height: this.constructor.height,
       verticalMargin: this.constructor.verticalMargin,
       shadow: this.constructor.shadow,
+      color,
     })
 
     let rightWidth = messageWidth + 2 * horizPadding
@@ -652,10 +670,11 @@ function forTheBadge({
   const accessibleText = createAccessibleText({ label, message })
 
   function renderLabelText() {
+    const { textColor } = colorsForBackground(labelColor)
     const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
     const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
-    const text = `<text fill="#fff" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    const text = `<text fill="${textColor}" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
       return `
         <a target="_blank" xlink:href="${leftLink}">
@@ -668,7 +687,8 @@ function forTheBadge({
   }
 
   function renderMessageText() {
-    const text = `<text fill="#fff" x="${
+    const { textColor } = colorsForBackground(color)
+    const text = `<text fill="${textColor}" x="${
       (labelWidth + messageWidth / 2) * 10
     }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
       (messageWidth - 24) * 10
