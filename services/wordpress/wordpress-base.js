@@ -4,17 +4,34 @@ const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 
-const foundSchema = Joi.object()
+const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
+
+const themeSchema = Joi.object()
   .keys({
     version: Joi.string(),
     rating: nonNegativeInteger,
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
-    requires: Joi.string(), // Plugin Only
-    tested: Joi.string(), // Plugin Only
-    support_threads: nonNegativeInteger, // Plugin Only
-    support_threads_resolved: nonNegativeInteger, // Plugin Only
+    requires: Joi.string(),
+    last_updated: Joi.string(),
+    requires_php: stringOrFalse,
+  })
+  .required()
+
+const pluginSchema = Joi.object()
+  .keys({
+    version: Joi.string(),
+    rating: nonNegativeInteger,
+    num_ratings: nonNegativeInteger,
+    downloaded: nonNegativeInteger,
+    active_installs: nonNegativeInteger,
+    requires: Joi.string(),
+    tested: Joi.string(),
+    support_threads: nonNegativeInteger,
+    support_threads_resolved: nonNegativeInteger,
+    requires_php: stringOrFalse,
+    last_updated: Joi.string(),
   })
   .required()
 
@@ -24,11 +41,20 @@ const notFoundSchema = Joi.object()
   })
   .required()
 
-const schemas = Joi.alternatives(foundSchema, notFoundSchema)
+const pluginSchemas = Joi.alternatives(pluginSchema, notFoundSchema)
+const themeSchemas = Joi.alternatives(themeSchema, notFoundSchema)
 
 module.exports = class BaseWordpress extends BaseJsonService {
   async fetch({ extensionType, slug }) {
     const url = `https://api.wordpress.org/${extensionType}s/info/1.2/`
+    let schemas
+    if (extensionType === 'plugin') {
+      schemas = pluginSchemas
+    } else if (extensionType === 'theme') {
+      schemas = themeSchemas
+    } else {
+      throw new NotFound()
+    }
     const json = await this._requestJson({
       url,
       schema: schemas,
@@ -46,6 +72,8 @@ module.exports = class BaseWordpress extends BaseJsonService {
               downloaded: 1,
               support_threads: 1,
               support_threads_resolved: 1,
+              requires_php: 1,
+              last_updated: 1,
             },
           },
         },
