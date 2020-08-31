@@ -128,8 +128,8 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
-`SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
-snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
+`SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved
+snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
