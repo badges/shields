@@ -19,7 +19,7 @@ function colorsForBackground(color) {
     }
   }
   return {
-    textColor: '#000',
+    textColor: '#333',
     shadowColor: '#ccc',
   }
 }
