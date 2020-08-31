@@ -154,7 +154,7 @@ describe('PyPI helpers', function () {
     given({
       info: { version: '0.8.2' },
       releases: {
-        '0.8': [{ packagetype: 'sdist' }],
+        0.8: [{ packagetype: 'sdist' }],
         '0.8.1': [
           { packagetype: 'bdist_egg' },
           { packagetype: 'bdist_egg' },
