@@ -8,7 +8,7 @@ const {
   queryParamSchema,
 } = require('./localizely-base')
 
-module.exports = class Localizely extends BaseLocalizelyService {
+module.exports = class LocalizelyProgress extends BaseLocalizelyService {
   static get category() {
     return 'other'
   }
