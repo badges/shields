@@ -5,19 +5,19 @@ const { isIntegerPercentage } = require('../test-validators')
 
 t.create('Language progress')
   .get(
-    '/lang-progress/5cc34208-0418-40b1-8353-acc70c95f802/en-US.json?token=0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a'
+    '/5cc34208-0418-40b1-8353-acc70c95f802/en-US.json?token=0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a'
   )
   .expectBadge({ label: 'English (US)', message: isIntegerPercentage })
 
 t.create('Language progress on specific branch')
   .get(
-    '/lang-progress/5cc34208-0418-40b1-8353-acc70c95f802/en-US/Version_1.0.json?token=0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a'
+    '/5cc34208-0418-40b1-8353-acc70c95f802/en-US/Version_1.0.json?token=0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a'
   )
   .expectBadge({ label: 'English (US)', message: isIntegerPercentage })
 
 t.create('Language progress with invalid token')
   .get(
-    '/lang-progress/1349592f-8d05-4317-9f46-bddc5def11fe/en-US/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
+    '/1349592f-8d05-4317-9f46-bddc5def11fe/en-US/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
   )
   .intercept(nock =>
     nock('https://api.localizely.com', {
@@ -38,7 +38,7 @@ t.create('Language progress with invalid token')
 
 t.create('Language progress for unsupported language code')
   .get(
-    '/lang-progress/1349592f-8d05-4317-9f46-bddc5def11fe/fr/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
+    '/1349592f-8d05-4317-9f46-bddc5def11fe/fr/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
   )
   .intercept(nock =>
     nock('https://api.localizely.com', {
@@ -68,7 +68,7 @@ t.create('Language progress for unsupported language code')
 
 t.create('Language progress for supported language code')
   .get(
-    '/lang-progress/1349592f-8d05-4317-9f46-bddc5def11fe/en-US/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
+    '/1349592f-8d05-4317-9f46-bddc5def11fe/en-US/main.json?token=312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715'
   )
   .intercept(nock =>
     nock('https://api.localizely.com', {

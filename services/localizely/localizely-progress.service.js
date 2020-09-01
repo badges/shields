@@ -15,8 +15,8 @@ module.exports = class Localizely extends BaseLocalizelyService {
 
   static get route() {
     return {
-      base: 'localizely',
-      pattern: 'progress/:projectId/:branch*',
+      base: 'localizely/progress',
+      pattern: ':projectId/:branch*',
       queryParamSchema,
     }
   }
