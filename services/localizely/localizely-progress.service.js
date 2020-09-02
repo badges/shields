@@ -103,7 +103,7 @@ module.exports = class Localizely extends BaseJsonService {
         headers: { Accept: 'application/json', 'X-Api-Token': apiToken },
       },
       errorMessages: {
-        403: 'invalid API token',
+        403: 'not authorized for project',
       },
     })
   }
