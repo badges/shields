@@ -38,17 +38,16 @@ module.exports = class Criterion extends BaseJsonService {
     return { label: 'criterion' }
   }
 
-  static render({ isImproved, status }) {
-    if (isImproved) {
-      return {
-        message: `${status}`,
-        color: 'brightgreen',
-      }
-    } else {
-      return {
-        message: `${status}`,
-        color: 'yellow',
-      }
+  static render({ status }) {
+    let statusColor = 'brightgreen'
+
+    if (status !== IMPROVED_STATUS) {
+      statusColor = 'yellow'
+    }
+
+    return {
+      message: `${status}`,
+      color: statusColor,
     }
   }
 
@@ -59,7 +58,6 @@ module.exports = class Criterion extends BaseJsonService {
       schema,
     })
 
-    const isImproved = status === IMPROVED_STATUS
-    return this.constructor.render({ isImproved, status })
+    return this.constructor.render({ status })
   }
 }
