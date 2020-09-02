@@ -26,37 +26,29 @@ module.exports = class ScoopVersion extends ConditionalGithubAuthV3Service {
   // Cache it for the lifetime of the current Node.js process.
   buckets = null
 
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'scoop/v',
+    pattern: ':app',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'scoop/v',
-      pattern: ':app',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Scoop Version',
+      namedParams: { app: 'ngrok' },
+      staticPreview: this.render({ version: '2.3.35' }),
+    },
+    {
+      title: 'Scoop Version (extras bucket)',
+      namedParams: { app: 'dnspy' },
+      queryParams: { bucket: 'extras' },
+      staticPreview: this.render({ version: '6.1.4' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Scoop Version',
-        namedParams: { app: 'ngrok' },
-        staticPreview: this.render({ version: '2.3.35' }),
-      },
-      {
-        title: 'Scoop Version (extras bucket)',
-        namedParams: { app: 'dnspy' },
-        queryParams: { bucket: 'extras' },
-        staticPreview: this.render({ version: '6.1.4' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'scoop' }
-  }
+  static defaultBadgeData = { label: 'scoop' }
 
   static render({ version }) {
     return renderVersionBadge({ version })
