@@ -7,36 +7,21 @@ const { IMPROVED_STATUS, NOT_FOUND_STATUS } = require('./constants')
 const schema = Joi.string().required()
 
 module.exports = class Criterion extends BaseJsonService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'criterion', pattern: ':user/:repo' }
 
-  static get route() {
-    return {
-      base: 'criterion',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Criterion',
-        namedParams: {
-          user: 'chmoder',
-          repo: 'data_vault',
-        },
-        staticPreview: this.render({
-          isImproved: true,
-          status: IMPROVED_STATUS,
-        }),
+  static examples = [
+    {
+      title: 'Criterion',
+      namedParams: {
+        user: 'chmoder',
+        repo: 'data_vault',
       },
-    ]
-  }
+      staticPreview: this.render({ status: IMPROVED_STATUS }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'criterion' }
-  }
+  static defaultBadgeData = { label: 'criterion' }
 
   static render({ status }) {
     let statusColor = 'brightgreen'
