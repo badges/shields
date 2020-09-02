@@ -26,7 +26,7 @@ const contentSchema = Joi.object({
 
 async function fetchRepoContent(
   serviceInstance,
-  { user, repo, branch = 'master', filename }
+  { user, repo, branch = 'HEAD', filename }
 ) {
   const errorMessages = errorMessagesFor(
     `repo not found, branch not found, or ${filename} missing`

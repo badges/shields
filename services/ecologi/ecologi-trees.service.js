@@ -10,14 +10,14 @@ const apiSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-module.exports = class OffsetEarthTrees extends BaseJsonService {
+module.exports = class EcologiTrees extends BaseJsonService {
   static get category() {
     return 'other'
   }
 
   static get route() {
     return {
-      base: 'offset-earth/trees',
+      base: 'ecologi/trees',
       pattern: ':username',
     }
   }
@@ -25,8 +25,8 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
   static get examples() {
     return [
       {
-        title: 'Offset Earth (Trees)',
-        namedParams: { username: 'offsetearth' },
+        title: 'Ecologi (Trees)',
+        namedParams: { username: 'ecologi' },
         staticPreview: this.render({ count: 250 }),
       },
     ]
@@ -41,7 +41,7 @@ module.exports = class OffsetEarthTrees extends BaseJsonService {
   }
 
   async fetch({ username }) {
-    const url = `https://public.offset.earth/users/${username}/trees`
+    const url = `https://public.ecologi.com/users/${username}/trees`
     return this._requestJson({
       url,
       schema: apiSchema,

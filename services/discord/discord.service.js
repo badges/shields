@@ -4,13 +4,8 @@ const Joi = require('@hapi/joi')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 
-const discordSchema = Joi.object({
+const schema = Joi.object({
   presence_count: nonNegativeInteger,
-}).required()
-
-const proxySchema = Joi.object({
-  message: Joi.string().required(),
-  color: Joi.string().required(),
 }).required()
 
 const documentation = `
@@ -41,6 +36,14 @@ module.exports = class Discord extends BaseJsonService {
     }
   }
 
+  static get auth() {
+    return {
+      passKey: 'discord_bot_token',
+      authorizedOrigins: ['https://discord.com'],
+      isRequired: false,
+    }
+  }
+
   static get examples() {
     return [
       {
@@ -67,36 +70,24 @@ module.exports = class Discord extends BaseJsonService {
     }
   }
 
-  constructor(context, config) {
-    super(context, config)
-    this._shieldsProductionHerokuHacks = config.shieldsProductionHerokuHacks
-  }
-
   async fetch({ serverId }) {
-    const url = `https://discordapp.com/api/guilds/${serverId}/widget.json`
-    return this._requestJson({
-      url,
-      schema: discordSchema,
-      errorMessages: {
-        404: 'invalid server',
-        403: 'widget disabled',
-      },
-    })
-  }
-
-  async fetchOvhProxy({ serverId }) {
-    return this._requestJson({
-      url: `https://legacy-img.shields.io/discord/${serverId}.json`,
-      schema: proxySchema,
-    })
+    const url = `https://discord.com/api/v6/guilds/${serverId}/widget.json`
+    return this._requestJson(
+      this.authHelper.withBearerAuthHeader(
+        {
+          url,
+          schema,
+          errorMessages: {
+            404: 'invalid server',
+            403: 'widget disabled',
+          },
+        },
+        'Bot'
+      )
+    )
   }
 
   async handle({ serverId }) {
-    if (this._shieldsProductionHerokuHacks) {
-      const { message, color } = await this.fetchOvhProxy({ serverId })
-      return { message, color }
-    }
-
     const data = await this.fetch({ serverId })
     return this.constructor.render({ members: data.presence_count })
   }

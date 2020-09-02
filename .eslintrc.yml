@@ -16,6 +16,8 @@ parserOptions:
 settings:
   react:
     version: '16.8'
+  jsdoc:
+    mode: jsdoc
 
 plugins:
   - chai-friendly
@@ -149,7 +151,7 @@ rules:
   # allow Joi as an undefined type
   jsdoc/no-undefined-types: ['error', { definedTypes: ['Joi'] }]
 
-  # all the other reccomended rules as errors (not warnings)
+  # all the other recommended rules as errors (not warnings)
   jsdoc/check-alignment: 'error'
   jsdoc/check-param-names: 'error'
   jsdoc/check-tag-names: 'error'

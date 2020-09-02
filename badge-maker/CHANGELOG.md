@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.2.0
+
+- Accessibility improvements: Help users of assistive technologies to read the badges when used inline
+
+## 3.1.0
+
+- Add TypeScript definitions
+
+## 3.0.1
+
+- Fix missing dependency
+
 ## 3.0.0
 
 ### Breaking Changes

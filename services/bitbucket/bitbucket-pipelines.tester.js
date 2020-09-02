@@ -1,7 +1,12 @@
 'use strict'
 
 const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
+const t = (module.exports = new ServiceTester({
+  id: 'BitbucketPipelines',
+  title: 'Bitbucket Pipelines',
+  pathPrefix: '/bitbucket/pipelines',
+}))
 
 function bitbucketApiResponse(status) {
   return JSON.stringify({
@@ -20,15 +25,8 @@ function bitbucketApiResponse(status) {
   })
 }
 
-t.create('master build result (valid)')
-  .get('/atlassian/adf-builder-javascript.json')
-  .expectBadge({
-    label: 'build',
-    message: isBuildStatus,
-  })
-
 t.create('master build result (not found)')
-  .get('/atlassian/not-a-repo.json')
+  .get('/atlassian/not-a-repo/master.json')
   .expectBadge({ label: 'build', message: 'not found' })
 
 t.create('branch build result (valid)')
@@ -47,7 +45,7 @@ t.create('branch build result (never built)')
   .expectBadge({ label: 'build', message: 'never built' })
 
 t.create('build result (passing)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
@@ -56,7 +54,7 @@ t.create('build result (passing)')
   .expectBadge({ label: 'build', message: 'passing' })
 
 t.create('build result (failing)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
@@ -65,7 +63,7 @@ t.create('build result (failing)')
   .expectBadge({ label: 'build', message: 'failing' })
 
 t.create('build result (error)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
@@ -74,7 +72,7 @@ t.create('build result (error)')
   .expectBadge({ label: 'build', message: 'error' })
 
 t.create('build result (stopped)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
@@ -83,7 +81,7 @@ t.create('build result (stopped)')
   .expectBadge({ label: 'build', message: 'stopped' })
 
 t.create('build result (expired)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
@@ -92,10 +90,16 @@ t.create('build result (expired)')
   .expectBadge({ label: 'build', message: 'expired' })
 
 t.create('build result (unexpected status)')
-  .get('/atlassian/adf-builder-javascript.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
       .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED'))
   )
   .expectBadge({ label: 'build', message: 'invalid response data' })
+
+t.create('build result no branch redirect')
+  .get('/atlassian/adf-builder-javascript.svg')
+  .expectRedirect(
+    '/bitbucket/pipelines/atlassian/adf-builder-javascript/master.svg'
+  )

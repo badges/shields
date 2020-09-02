@@ -105,6 +105,15 @@ self-hosted Shields installation access to private repositories hosted on bitbuc
 Bitbucket badges use basic auth. Provide a username and password to give your
 self-hosted Shields installation access to a private Bitbucket Server instance.
 
+### Discord
+
+Using a token for Dicsord is optional but will allow higher API rates.
+
+- `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
+
+Register an application in the [Discord developer console](https://discord.com/developers).
+To obtain a token, simply create a bot for your application.
+
 ### Drone
 
 - `DRONE_ORIGINS` (yml: `public.services.drone.authorizedOrigins`)
@@ -227,6 +236,16 @@ Create an account, [sign in][wheelmap token] and use the _Authentication Token_
 displayed on your profile page.
 
 [wheelmap token]: http://classic.wheelmap.org/en/users/sign_in
+
+### YouTube
+
+- `YOUTUBE_API_KEY` (yml: `private.youtube_api_key`)
+
+The YouTube API requires authentication. To obtain an API key,
+log in to a Google account, go to the [credentials page][youtube credentials],
+and create an API key for the YouTube Data API v3.
+
+[youtube credentials]: https://console.developers.google.com/apis/credentials
 
 ## Error reporting
 

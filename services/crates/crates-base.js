@@ -9,7 +9,7 @@ const keywords = ['Rust']
 const crateSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
-    recent_downloads: nonNegativeInteger,
+    recent_downloads: nonNegativeInteger.allow(null),
     max_version: Joi.string().required(),
   }).required(),
   versions: Joi.array()

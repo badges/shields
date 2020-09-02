@@ -15,15 +15,8 @@ const schema = Joi.object({
 }).required()
 
 class DummySvgScrapingService extends BaseSvgScrapingService {
-  static get category() {
-    return 'cat'
-  }
-
-  static get route() {
-    return {
-      base: 'foo',
-    }
-  }
+  static category = 'cat'
+  static route = { base: 'foo' }
 
   async handle() {
     return this._requestSvg({
@@ -123,9 +116,7 @@ describe('BaseSvgScrapingService', function () {
 
     it('allows overriding the valueMatcher', async function () {
       class WithValueMatcher extends BaseSvgScrapingService {
-        static get route() {
-          return {}
-        }
+        static route = {}
 
         async handle() {
           return this._requestSvg({

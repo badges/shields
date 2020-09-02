@@ -10,7 +10,7 @@ module.exports = class RateLimit {
     this.maxHitsPerPeriod = options.maxHitsPerPeriod || 500
     this.banned = new Set()
     this.bannedUrls = new Set()
-    this.whitelist = options.whitelist || /(?!)/ // Matches nothing by default.
+    this.safelist = options.safelist || /(?!)/ // Matches nothing by default.
     this.interval = setInterval(this.resetHits.bind(this), this.period * 1000)
   }
 
@@ -29,7 +29,7 @@ module.exports = class RateLimit {
     const hitsInCurrentPeriod = this.hits.get(reqParam) || 0
     if (
       reqParam != null &&
-      !this.whitelist.test(reqParam) &&
+      !this.safelist.test(reqParam) &&
       hitsInCurrentPeriod > this.maxHitsPerPeriod
     ) {
       this.banned.add(reqParam)

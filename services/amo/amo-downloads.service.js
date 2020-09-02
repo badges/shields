@@ -14,32 +14,20 @@ const documentation = `
 `
 
 class AmoWeeklyDownloads extends BaseAmoService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'amo/dw', pattern: ':addonId' }
 
-  static get route() {
-    return {
-      base: 'amo/dw',
-      pattern: ':addonId',
-    }
-  }
+  static examples = [
+    {
+      title: 'Mozilla Add-on',
+      namedParams: { addonId: 'dustman' },
+      staticPreview: this.render({ downloads: 120 }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Mozilla Add-on',
-        namedParams: { addonId: 'dustman' },
-        staticPreview: this.render({ downloads: 120 }),
-        keywords,
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
     return {
