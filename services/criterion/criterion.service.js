@@ -2,15 +2,7 @@
 
 const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
-
-const IMPROVED = 'improved'
-
-function errorMessagesFor(notFoundMessage = 'status not found') {
-  return {
-    404: notFoundMessage,
-    422: notFoundMessage,
-  }
-}
+const { IMPROVED_STATUS, NOT_FOUND_STATUS } = require('./constants')
 
 const schema = Joi.string().required()
 
@@ -34,7 +26,10 @@ module.exports = class Criterion extends BaseJsonService {
           user: 'chmoder',
           repo: 'data_vault',
         },
-        staticPreview: this.render({ isImproved: true, status: IMPROVED }),
+        staticPreview: this.render({
+          isImproved: true,
+          status: IMPROVED_STATUS,
+        }),
       },
     ]
   }
@@ -60,11 +55,11 @@ module.exports = class Criterion extends BaseJsonService {
   async handle({ user, repo }) {
     const status = await this._requestJson({
       url: `https://api.criterion.dev/v1/${user}/${repo}/status`,
-      errorMessages: errorMessagesFor('no status found'),
+      errorMessages: { 404: NOT_FOUND_STATUS },
       schema,
     })
 
-    const isImproved = status === IMPROVED
+    const isImproved = status === IMPROVED_STATUS
     return this.constructor.render({ isImproved, status })
   }
 }
