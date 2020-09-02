@@ -22,6 +22,10 @@ const queryParamSchema = Joi.object({
 })
 
 module.exports = class ScoopVersion extends ConditionalGithubAuthV3Service {
+  // The buckets file (https://github.com/lukesampson/scoop/blob/master/buckets.json) changes very rarely.
+  // Cache it for the lifetime of the current Node.js process.
+  buckets = null
+
   static get category() {
     return 'version'
   }
@@ -59,15 +63,17 @@ module.exports = class ScoopVersion extends ConditionalGithubAuthV3Service {
   }
 
   async handle({ app }, queryParams) {
-    const buckets = await fetchJsonFromRepo(this, {
-      schema: bucketsSchema,
-      user: 'lukesampson',
-      repo: 'scoop',
-      branch: 'master',
-      filename: 'buckets.json',
-    })
+    if (!this.buckets) {
+      this.buckets = await fetchJsonFromRepo(this, {
+        schema: bucketsSchema,
+        user: 'lukesampson',
+        repo: 'scoop',
+        branch: 'master',
+        filename: 'buckets.json',
+      })
+    }
     const bucket = queryParams.bucket || 'main'
-    const bucketUrl = buckets[bucket]
+    const bucketUrl = this.buckets[bucket]
     if (!bucketUrl) {
       throw new NotFound({ prettyMessage: `bucket "${bucket}" not found` })
     }
