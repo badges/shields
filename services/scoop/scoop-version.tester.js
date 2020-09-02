@@ -10,7 +10,7 @@ const t = (module.exports = new ServiceTester({
 
 // version
 
-t.create('version (valid)').get('/v/curl.json').expectBadge({
+t.create('version (valid)').get('/v/apache.json').expectBadge({
   label: 'scoop',
   message: isVPlusDottedVersionNClauses,
 })
