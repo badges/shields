@@ -13,7 +13,7 @@ const themeSchema = Joi.object()
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
-    requires: Joi.string(),
+    requires: stringOrFalse,
     last_updated: Joi.string(),
     requires_php: stringOrFalse,
   })
@@ -26,7 +26,7 @@ const pluginSchema = Joi.object()
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
-    requires: Joi.string(),
+    requires: stringOrFalse,
     tested: Joi.string(),
     support_threads: nonNegativeInteger,
     support_threads_resolved: nonNegativeInteger,
@@ -52,8 +52,6 @@ module.exports = class BaseWordpress extends BaseJsonService {
       schemas = pluginSchemas
     } else if (extensionType === 'theme') {
       schemas = themeSchemas
-    } else {
-      throw new NotFound()
     }
     const json = await this._requestJson({
       url,
