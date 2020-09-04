@@ -6,6 +6,15 @@ const { IMPROVED_STATUS, NOT_FOUND_STATUS } = require('./constants')
 
 const schema = Joi.string().required()
 
+/**
+ * Criterion Badge Service
+ *
+ * Support and Contact:
+ * - https://github.com/chmoder/api.criterion.dev
+ *
+ * API Documentation:
+ * - https://app.swaggerhub.com/apis-docs/chmoder/Criterion.dev
+ */
 module.exports = class Criterion extends BaseJsonService {
   static category = 'analysis'
   static route = { base: 'criterion', pattern: ':user/:repo' }
