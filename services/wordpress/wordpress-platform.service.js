@@ -78,7 +78,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
   static get examples() {
     return [
       {
-        title: 'WordPress Plugin: Tested WP Version',
+        title: 'WordPress Plugin Tested WP Version',
         namedParams: { slug: 'bbpress' },
         staticPreview: this.renderStaticPreview({
           testedVersion: '4.9.8',
