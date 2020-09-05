@@ -16,6 +16,22 @@ const themeSchema = Joi.object()
     requires: stringOrFalse,
     last_updated: Joi.string(),
     requires_php: stringOrFalse,
+    author: Joi.object()
+      .keys({
+        user_nicename: Joi.string(),
+        profile: Joi.string(),
+        avatar: Joi.string(),
+        display_name: Joi.string(),
+      })
+      .required(),
+  })
+  .required()
+
+const pluginContributor = Joi.object()
+  .keys({
+    profile: Joi.string(),
+    avatar: Joi.string(),
+    display_name: Joi.string(),
   })
   .required()
 
@@ -32,6 +48,9 @@ const pluginSchema = Joi.object()
     support_threads_resolved: nonNegativeInteger,
     requires_php: stringOrFalse,
     last_updated: Joi.string(),
+    author: Joi.string(),
+    author_profile: Joi.string(),
+    contributors: Joi.object().pattern(/^/, pluginContributor),
   })
   .required()
 
