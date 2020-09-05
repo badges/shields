@@ -60,7 +60,7 @@
     "query-string": "^6.13.1",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "3.6.0",
+    "simple-icons": "3.6.1",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.29"
   },
