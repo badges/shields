@@ -22,7 +22,6 @@ t.create('Overall progress with invalid token')
   .intercept(nock =>
     nock('https://api.localizely.com', {
       reqheaders: {
-        accept: 'application/json',
         'x-api-token':
           '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
       },
@@ -55,7 +54,6 @@ t.create('Language progress with invalid token')
   .intercept(nock =>
     nock('https://api.localizely.com', {
       reqheaders: {
-        accept: 'application/json',
         'x-api-token':
           '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
       },
@@ -76,7 +74,6 @@ t.create('Language progress for unsupported language code')
   .intercept(nock =>
     nock('https://api.localizely.com', {
       reqheaders: {
-        accept: 'application/json',
         'x-api-token':
           '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
       },
@@ -106,7 +103,6 @@ t.create('Language progress for supported language code')
   .intercept(nock =>
     nock('https://api.localizely.com', {
       reqheaders: {
-        accept: 'application/json',
         'x-api-token':
           '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
       },

@@ -100,7 +100,7 @@ module.exports = class Localizely extends BaseJsonService {
       url: `https://api.localizely.com/v1/projects/${projectId}/status`,
       options: {
         qs: { branch },
-        headers: { Accept: 'application/json', 'X-Api-Token': apiToken },
+        headers: { 'X-Api-Token': apiToken },
       },
       errorMessages: {
         403: 'not authorized for project',
