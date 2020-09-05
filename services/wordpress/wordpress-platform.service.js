@@ -1,9 +1,21 @@
 'use strict'
 
+const { NotFound } = require('..')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const BaseWordpress = require('./wordpress-base')
 const { versionColorForWordpressVersion } = require('./wordpress-version-color')
+
+const extensionData = {
+  plugin: {
+    capt: 'Plugin',
+    exampleSlug: 'bbpress',
+  },
+  theme: {
+    capt: 'Theme',
+    exampleSlug: 'twentytwenty',
+  },
+}
 
 class WordpressPluginRequiresVersion extends BaseWordpress {
   static get category() {
@@ -103,7 +115,65 @@ class WordpressPluginTestedVersion extends BaseWordpress {
   }
 }
 
-module.exports = {
+function RequiresPHPVersionForType(extensionType) {
+  const { capt, exampleSlug } = extensionData[extensionType]
+
+  return class WordpressRequiresPHPVersion extends BaseWordpress {
+    static get category() {
+      return 'platform-support'
+    }
+
+    static get route() {
+      return {
+        base: `wordpress/${extensionType}/required-php`,
+        pattern: ':slug',
+      }
+    }
+
+    static get examples() {
+      return [
+        {
+          title: `WordPress ${capt} Required PHP Version`,
+          namedParams: { slug: exampleSlug },
+          staticPreview: this.render({ version: '5.5' }),
+        },
+      ]
+    }
+
+    static get defaultBadgeData() {
+      return { label: 'required php' }
+    }
+
+    static render({ version }) {
+      return {
+        label: 'required php',
+        message: addv(version),
+        color: versionColor(version),
+      }
+    }
+
+    async handle({ slug }) {
+      const { requires_php } = await this.fetch({
+        extensionType,
+        slug,
+      })
+
+      if (requires_php === false) {
+        throw new NotFound({
+          prettyMessage: `not set for this ${extensionType}`,
+        })
+      }
+
+      return this.constructor.render({
+        version: requires_php,
+      })
+    }
+  }
+}
+
+const required_php = ['plugin', 'theme'].map(RequiresPHPVersionForType)
+module.exports = [
   WordpressPluginRequiresVersion,
   WordpressPluginTestedVersion,
-}
+  ...required_php,
+]

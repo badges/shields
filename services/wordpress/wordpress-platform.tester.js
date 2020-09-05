@@ -148,3 +148,31 @@ t.create('Plugin Tested WP Version | Not Found')
 t.create('Plugin Tested WP Version (Alias)')
   .get('/v/100.svg')
   .expectRedirect('/wordpress/plugin/tested/100.svg')
+
+t.create('Plugin Required PHP Version')
+  .get('/plugin/required-php/jetpack.json')
+  .expectBadge({
+    label: 'required php',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
+t.create('Plugin Required PHP Version (Not Set)')
+  .get('/plugin/required-php/akismet.json')
+  .expectBadge({
+    label: 'required php',
+    message: 'not set for this plugin',
+  })
+
+t.create('Theme Required PHP Version')
+  .get('/theme/required-php/twentytwenty.json')
+  .expectBadge({
+    label: 'required php',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
+t.create('Theme Required PHP Version (Not Set)')
+  .get('/theme/required-php/generatepress.json')
+  .expectBadge({
+    label: 'required php',
+    message: 'not set for this theme',
+  })
