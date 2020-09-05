@@ -18,6 +18,10 @@ function AuthorForType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressAuthor extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}Author`
+    }
+
     static get category() {
       return 'social'
     }

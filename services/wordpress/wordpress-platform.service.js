@@ -21,6 +21,10 @@ function RequiresForType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRequiresVersion extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}RequiresVersion`
+    }
+
     static get category() {
       return 'platform-support'
     }
@@ -123,6 +127,10 @@ function RequiresPHPVersionForType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRequiresPHPVersion extends BaseWordpress {
+    static get name() {
+      return `Wordpress${capt}RequiresPHPVersion`
+    }
+
     static get category() {
       return 'platform-support'
     }
