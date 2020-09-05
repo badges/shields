@@ -2,11 +2,13 @@
 
 const Joi = require('@hapi/joi')
 const { BaseJsonService } = require('..')
-const { IMPROVED_STATUS, NOT_FOUND_STATUS, REGRESSED_STATUS } = require('./constants')
+const {
+  IMPROVED_STATUS,
+  NOT_FOUND_STATUS,
+  REGRESSED_STATUS,
+} = require('./constants')
 
-const schema = Joi.string()
-  .allow(IMPROVED_STATUS, REGRESSED_STATUS)
-  .required()
+const schema = Joi.string().allow(IMPROVED_STATUS, REGRESSED_STATUS).required()
 
 /**
  * Criterion Badge Service
