@@ -76,26 +76,36 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  async handle({ user, repo, version = 'dev-master' }, { server }) {
+  transform({ json, user, repo, version = '' }) {
+    const packageVersion =
+      version === ''
+        ? this.getDefaultBranch(json, user, repo)
+        : json.packages[this.getPackageName(user, repo)][version]
+
+    if (!packageVersion) {
+      throw new NotFound({ prettyMessage: 'invalid version' })
+    }
+
+    if (!packageVersion.require || !packageVersion.require.php) {
+      throw new NotFound({ prettyMessage: 'version requirement not found' })
+    }
+
+    return { phpVersion: packageVersion.require.php }
+  }
+
+  async handle({ user, repo, version = '' }, { server }) {
     const allData = await this.fetch({
       user,
       repo,
       schema: allVersionsSchema,
       server,
     })
-
-    if (!(version in allData.packages[this.getPackageName(user, repo)])) {
-      throw new NotFound({ prettyMessage: 'invalid version' })
-    }
-
-    const packageVersion =
-      allData.packages[this.getPackageName(user, repo)][version]
-    if (!packageVersion.require || !packageVersion.require.php) {
-      throw new NotFound({ prettyMessage: 'version requirement not found' })
-    }
-
-    return this.constructor.render({
-      php: packageVersion.require.php,
+    const { phpVersion } = this.transform({
+      json: allData,
+      user,
+      repo,
+      version,
     })
+    return this.constructor.render({ php: phpVersion })
   }
 }
