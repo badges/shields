@@ -6,7 +6,7 @@ const { brightness } = require('./color')
 const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
-const brightnessThreshold = 0.8
+const brightnessThreshold = 0.69
 
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
