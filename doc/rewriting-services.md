@@ -17,9 +17,7 @@ Legacy services look like:
 
 ```js
 module.exports = class ExampleService extends LegacyService {
-  static get category() {
-    return 'build'
-  }
+  static category = 'build'
 
   static registerLegacyRouteHandler({ camp, cache }) {
     camp.route(
@@ -101,12 +99,7 @@ tests are passing, though.
 const BaseJsonService = require('../base-json')
 
 class ExampleDownloads extends BaseJsonService {
-  static get route() {
-    return {
-      base: 'example/d',
-      pattern: ':param1/:param2',
-    }
-  }
+  static route = { base: 'example/d', pattern: ':param1/:param2' }
 
   static defaultBadgeData() {
     return { label: 'downloads' } // or whatever

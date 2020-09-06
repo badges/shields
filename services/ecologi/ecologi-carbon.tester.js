@@ -4,7 +4,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 const { withRegex } = require('../test-validators')
 
 t.create('request for existing username')
-  .get('/offsetearth.json')
+  .get('/ecologi.json')
   .expectBadge({
     label: 'carbon offset',
     message: withRegex(/[\d.]+ tonnes/),

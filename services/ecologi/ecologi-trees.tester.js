@@ -3,16 +3,16 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { isMetric } = require('../test-validators')
 
-t.create('request for existing username').get('/offsetearth.json').expectBadge({
+t.create('request for existing username').get('/ecologi.json').expectBadge({
   label: 'trees',
   message: isMetric,
 })
 
 t.create('request for existing username')
-  .get('/offsetearth.json')
+  .get('/ecologi.json')
   .intercept(nock =>
-    nock('https://public.offset.earth')
-      .get('/users/offsetearth/trees')
+    nock('https://public.ecologi.com')
+      .get('/users/ecologi/trees')
       .reply(200, { total: 50 })
   )
   .expectBadge({

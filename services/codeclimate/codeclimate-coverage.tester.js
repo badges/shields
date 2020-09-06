@@ -8,14 +8,14 @@ const t = (module.exports = require('../tester').createServiceTester())
 // https://codeclimate.com/explore
 
 t.create('test coverage percentage')
-  .get('/coverage/codeclimate/minidoc.json')
+  .get('/coverage/codeclimate/codeclimate.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
 t.create('test coverage letter')
-  .get('/coverage-letter/codeclimate/minidoc.json')
+  .get('/coverage-letter/codeclimate/codeclimate.json')
   .expectBadge({
     label: 'coverage',
     message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),

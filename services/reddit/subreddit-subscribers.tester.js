@@ -23,3 +23,22 @@ t.create('subreddit-subscribers (not existing subreddit)')
     label: 'reddit',
     message: 'subreddit not found',
   })
+
+t.create('subreddit-subscribers (private sub)')
+  .get('/centuryclub.json')
+  .expectBadge({
+    label: 'reddit',
+    message: 'subreddit is private',
+  })
+
+t.create('subreddit-subscribers (private sub)')
+  .get('/centuryclub.json')
+  .intercept(nock =>
+    nock('https://www.reddit.com/r')
+      .get('/centuryclub/about.json')
+      .reply(200, { kind: 't5', data: {} })
+  )
+  .expectBadge({
+    label: 'reddit',
+    message: 'subreddit not found',
+  })

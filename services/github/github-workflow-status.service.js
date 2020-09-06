@@ -11,6 +11,10 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  event: Joi.string(),
+}).required()
+
 const keywords = ['action', 'actions']
 
 module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
@@ -22,6 +26,7 @@ module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
     return {
       base: 'github/workflow/status',
       pattern: ':user/:repo/:workflow/:branch*',
+      queryParamSchema,
     }
   }
 
@@ -33,7 +38,7 @@ module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
         namedParams: {
           user: 'actions',
           repo: 'toolkit',
-          workflow: 'Main workflow',
+          workflow: 'toolkit-unit-tests',
         },
         staticPreview: renderBuildStatusBadge({
           status: 'passing',
@@ -47,8 +52,25 @@ module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
         namedParams: {
           user: 'actions',
           repo: 'toolkit',
-          workflow: 'Main workflow',
+          workflow: 'toolkit-unit-tests',
           branch: 'master',
+        },
+        staticPreview: renderBuildStatusBadge({
+          status: 'passing',
+        }),
+        documentation,
+        keywords,
+      },
+      {
+        title: 'GitHub Workflow Status (event)',
+        pattern: ':user/:repo/:workflow',
+        namedParams: {
+          user: 'actions',
+          repo: 'toolkit',
+          workflow: 'toolkit-unit-tests',
+        },
+        queryParams: {
+          event: 'push',
         },
         staticPreview: renderBuildStatusBadge({
           status: 'passing',
@@ -65,13 +87,13 @@ module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
     }
   }
 
-  async fetch({ user, repo, workflow, branch }) {
+  async fetch({ user, repo, workflow, branch, event }) {
     const { message: status } = await this._requestSvg({
       schema,
       url: `https://github.com/${user}/${repo}/workflows/${encodeURIComponent(
         workflow
       )}/badge.svg`,
-      options: { qs: { branch } },
+      options: { qs: { branch, event } },
       valueMatcher: />([^<>]+)<\/tspan><\/text><\/g><path/,
       errorMessages: {
         404: 'repo, branch, or workflow not found',
@@ -81,8 +103,8 @@ module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
     return { status }
   }
 
-  async handle({ user, repo, workflow, branch }) {
-    const { status } = await this.fetch({ user, repo, workflow, branch })
+  async handle({ user, repo, workflow, branch }, { event }) {
+    const { status } = await this.fetch({ user, repo, workflow, branch, event })
     return renderBuildStatusBadge({ status })
   }
 }

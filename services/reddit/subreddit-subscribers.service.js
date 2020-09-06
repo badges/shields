@@ -11,7 +11,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class SubredditSubscribers extends BaseJsonService {
+module.exports = class RedditSubredditSubscribers extends BaseJsonService {
   static get category() {
     return 'social'
   }
@@ -60,6 +60,7 @@ module.exports = class SubredditSubscribers extends BaseJsonService {
       url: `https://www.reddit.com/r/${subreddit}/about.json`,
       errorMessages: {
         404: 'subreddit not found',
+        403: 'subreddit is private',
       },
     })
   }

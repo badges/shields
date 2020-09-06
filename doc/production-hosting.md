@@ -1,5 +1,12 @@
 # Production hosting
 
+Production hosting is managed by the Shields ops team:
+
+- [calebcartwright](https://github.com/calebcartwright)
+- [chris48s](https://github.com/chris48s)
+- [paulmelnikow](https://github.com/paulmelnikow)
+- [PyvesB](https://github.com/PyvesB)
+
 [![operations issues](https://img.shields.io/github/issues/badges/shields/operations.svg?label=open%20operations%20issues)][operations issues]
 
 [#ops chat room][ops discord]
@@ -9,21 +16,26 @@
 
 | Component                     | Subcomponent                    | People with access                                                                         |
 | ----------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
-| Badge servers                 | Account owner                   | @espadrine                                                                                 |
-| Badge servers                 | ssh, logs                       | @espadrine                                                                                 |
-| Badge servers                 | Deployment                      | @espadrine, @paulmelnikow                                                                  |
-| Badge servers                 | Admin endpoints                 | @espadrine, @paulmelnikow                                                                  |
+| shields-production-us         | Account owner                   | @paulmelnikow                                                                              |
+| shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
+| shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                                              |
 | Compose.io Redis              | Account access                  | @paulmelnikow                                                                              |
-| Compose.io Redis              | Database connection credentials | @espadrine, @paulmelnikow                                                                  |
+| Compose.io Redis              | Database connection credentials | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
 | Zeit Now                      | Team owner                      | @paulmelnikow                                                                              |
 | Zeit Now                      | Team members                    | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
 | Raster server                 | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
 | shields-server.com redirector | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
-| Cloudflare                    | Account owner                   | @espadrine                                                                                 |
-| Cloudflare                    | Admin access                    | @espadrine, @paulmelnikow                                                                  |
-| GitHub                        | OAuth app                       | @espadrine ([could be transferred to the badges org][oauth transfer])                      |
+| Legacy badge servers          | Account owner                   | @espadrine                                                                                 |
+| Legacy badge servers          | ssh, logs                       | @espadrine                                                                                 |
+| Legacy badge servers          | Deployment                      | @espadrine, @paulmelnikow                                                                  |
+| Legacy badge servers          | Admin endpoints                 | @espadrine, @paulmelnikow                                                                  |
+| Cloudflare (CDN)              | Account owner                   | @espadrine                                                                                 |
+| Cloudflare (CDN)              | Access management               | @espadrine                                                                                 |
+| Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                            |
 | Twitch                        | OAuth app                       | @PyvesB                                                                                    |
+| Discord                       | OAuth app                       | @PyvesB                                                                                    |
+| YouTube                       | Account owner                   | @PyvesB                                                                                    |
 | OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                                              |
 | DNS                           | Account owner                   | @olivierlacan                                                                              |
 | DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                                                       |
@@ -52,7 +64,6 @@ Shields has mercifully little persistent state:
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
 [request cache]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js#L29-L30
 [regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
-[oauth transfer]: https://developer.github.com/apps/managing-oauth-apps/transferring-ownership-of-an-oauth-app/
 
 ## Configuration
 

@@ -87,7 +87,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
       case 'dv':
         return json.crate ? json.versions[0].downloads : json.version.downloads
       case 'dr':
-        return json.crate.recent_downloads
+        return json.crate.recent_downloads || 0
       default:
         return json.crate ? json.crate.downloads : json.version.downloads
     }

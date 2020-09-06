@@ -18,9 +18,7 @@ const schema = Joi.object({
 }).required()
 
 class BaseAmoService extends BaseJsonService {
-  static get defaultBadgeData() {
-    return { label: 'mozilla add-on' }
-  }
+  static defaultBadgeData = { label: 'mozilla add-on' }
 
   async fetch({ addonId }) {
     return this._requestJson({

@@ -64,8 +64,6 @@ public:
 
   fetchLimit: 'FETCH_LIMIT'
 
-  shieldsProductionHerokuHacks: 'SHIELDS_PRODUCTION_HEROKU_HACKS'
-
 private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bintray_user: 'BINTRAY_USER'
@@ -74,6 +72,7 @@ private:
   bitbucket_password: 'BITBUCKET_PASS'
   bitbucket_server_username: 'BITBUCKET_SERVER_USER'
   bitbucket_server_password: 'BITBUCKET_SERVER_PASS'
+  discord_bot_token: 'DISCORD_BOT_TOKEN'
   drone_token: 'DRONE_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
@@ -98,3 +97,4 @@ private:
   wheelmap_token: 'WHEELMAP_TOKEN'
   influx_username: 'INFLUX_USERNAME'
   influx_password: 'INFLUX_PASSWORD'
+  youtube_api_key: 'YOUTUBE_API_KEY'

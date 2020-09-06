@@ -146,9 +146,11 @@ class AuthHelper {
     )
   }
 
-  get _bearerAuthHeader() {
+  _bearerAuthHeader(bearerKey) {
     const { _pass: pass } = this
-    return this.isConfigured ? { Authorization: `Bearer ${pass}` } : undefined
+    return this.isConfigured
+      ? { Authorization: `${bearerKey} ${pass}` }
+      : undefined
   }
 
   static _mergeHeaders(requestParams, headers) {
@@ -168,9 +170,15 @@ class AuthHelper {
     }
   }
 
-  withBearerAuthHeader(requestParams) {
+  withBearerAuthHeader(
+    requestParams,
+    bearerKey = 'Bearer' // lgtm [js/hardcoded-credentials]
+  ) {
     return this._withAnyAuth(requestParams, requestParams =>
-      this.constructor._mergeHeaders(requestParams, this._bearerAuthHeader)
+      this.constructor._mergeHeaders(
+        requestParams,
+        this._bearerAuthHeader(bearerKey)
+      )
     )
   }
 

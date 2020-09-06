@@ -90,9 +90,7 @@ class BaseService {
     throw new Error(`Category not set for ${this.name}`)
   }
 
-  static get isDeprecated() {
-    return false
-  }
+  static isDeprecated = false
 
   /**
    * Route to mount this service on
@@ -114,14 +112,12 @@ class BaseService {
    * credentials to the request. For example:
    * - `{ options: { auth: this.authHelper.basicAuth } }`
    * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
-   * - `{ options: { qs: { token: this.authHelper.pass } } }`
+   * - `{ options: { qs: { token: this.authHelper._pass } } }`
    *
    * @abstract
    * @type {module:core/base-service/base~Auth}
    */
-  static get auth() {
-    return undefined
-  }
+  static auth = undefined
 
   /**
    * Array of Example objects describing example URLs for this service.
@@ -139,9 +135,7 @@ class BaseService {
    * @abstract
    * @type {module:core/base-service/base~Example[]}
    */
-  static get examples() {
-    return []
-  }
+  static examples = []
 
   static get _cacheLength() {
     const cacheLengths = {
@@ -160,9 +154,7 @@ class BaseService {
    *
    * @type {module:core/base-service/base~DefaultBadgeData}
    */
-  static get defaultBadgeData() {
-    return {}
-  }
+  static defaultBadgeData = {}
 
   static render(props) {
     throw new Error(`render() function not implemented for ${this.name}`)
@@ -228,9 +220,7 @@ class BaseService {
     return checkErrorResponse(errorMessages)({ buffer, res })
   }
 
-  static get enabledMetrics() {
-    return []
-  }
+  static enabledMetrics = []
 
   static isMetricEnabled(metricName) {
     return this.enabledMetrics.includes(metricName)
