@@ -57,12 +57,12 @@ module.exports = class Localizely extends BaseJsonService {
       keywords,
       documentation,
       namedParams: {
-        projectId: '1349592f-8d05-4317-9f46-bddc5def11fe',
+        projectId: '5cc34208-0418-40b1-8353-acc70c95f802',
         branch: 'main',
       },
       queryParams: {
         token:
-          '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
+          '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
       },
       staticPreview: this.render({ reviewedProgress: 93 }),
     },
@@ -71,12 +71,12 @@ module.exports = class Localizely extends BaseJsonService {
       keywords,
       documentation,
       namedParams: {
-        projectId: '1349592f-8d05-4317-9f46-bddc5def11fe',
+        projectId: '5cc34208-0418-40b1-8353-acc70c95f802',
         branch: 'main',
       },
       queryParams: {
         token:
-          '312045388bfb4d2591cfe1d60868ea52b63ac6daa6dc406b9bab682f4d9ab715',
+          '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
         languageCode: 'en-US',
       },
       staticPreview: this.render({
@@ -85,6 +85,8 @@ module.exports = class Localizely extends BaseJsonService {
       }),
     },
   ]
+
+  static defaultBadgeData = { label: 'localized' }
 
   static render({ langName, reviewedProgress }) {
     return {

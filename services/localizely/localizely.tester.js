@@ -33,7 +33,7 @@ t.create('Overall progress with invalid token')
         errorMessage: 'Tried to access unauthorized project',
       })
   )
-  .expectBadge({ label: 'other', message: 'not authorized for project' })
+  .expectBadge({ label: 'localized', message: 'not authorized for project' })
 
 t.create('Language progress')
   .get(
@@ -65,7 +65,7 @@ t.create('Language progress with invalid token')
         errorMessage: 'Tried to access unauthorized project',
       })
   )
-  .expectBadge({ label: 'other', message: 'not authorized for project' })
+  .expectBadge({ label: 'localized', message: 'not authorized for project' })
 
 t.create('Language progress for unsupported language code')
   .get(
@@ -94,7 +94,7 @@ t.create('Language progress for unsupported language code')
         ],
       })
   )
-  .expectBadge({ label: 'other', message: 'Unsupported language' })
+  .expectBadge({ label: 'localized', message: 'Unsupported language' })
 
 t.create('Language progress for supported language code')
   .get(
