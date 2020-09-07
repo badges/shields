@@ -1,6 +1,7 @@
 'use strict'
 
 const isCSSColor = require('is-css-color')
+const cssColorConverter = require('css-color-converter')
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
 const namedColors = {
@@ -64,9 +65,20 @@ function toSvgColor(color) {
   }
 }
 
+function brightness(color) {
+  if (color) {
+    const rgb = cssColorConverter(color).toRgbaArray()
+    if (rgb) {
+      return +((rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 255000).toFixed(2)
+    }
+  }
+  return 0
+}
+
 module.exports = {
   namedColors,
   isHexColor,
   normalizeColor,
   toSvgColor,
+  brightness,
 }

@@ -560,4 +560,30 @@ describe('The badge generator', function () {
       snapshot(svg)
     })
   })
+
+  describe('text colors', function () {
+    it('should use black text when the label color is light', function () {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'flat',
+          color: '#000',
+          labelColor: '#f3f3f3',
+        })
+      )
+    })
+
+    it('should use black text when the message color is light', function () {
+      snapshot(
+        makeBadge({
+          text: ['cactus', 'grown'],
+          format: 'svg',
+          template: 'for-the-badge',
+          color: '#e2ffe1',
+          labelColor: '#000',
+        })
+      )
+    })
+  })
 })
