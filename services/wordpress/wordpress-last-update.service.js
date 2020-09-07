@@ -19,34 +19,24 @@ function LastUpdateForType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressLastUpdate extends BaseWordpress {
-    static get name() {
-      return `Wordpress${capt}LastUpdated`
+    static name = `Wordpress${capt}LastUpdated`
+
+    static category = 'activity'
+
+    static route = {
+      base: `wordpress/${extensionType}/last-updated`,
+      pattern: ':slug',
     }
 
-    static get category() {
-      return 'activity'
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Last Updated`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({ last_updated: '2020-08-11' }),
+      },
+    ]
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/last-updated`,
-        pattern: ':slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Last Updated`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ last_updated: '2020-08-11' }),
-        },
-      ]
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'last updated' }
-    }
+    static defaultBadgeData = { label: 'last updated' }
 
     static render({ last_updated }) {
       return {

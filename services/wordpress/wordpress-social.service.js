@@ -18,40 +18,30 @@ function AuthorForType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressAuthor extends BaseWordpress {
-    static get name() {
-      return `Wordpress${capt}Author`
+    static name = `Wordpress${capt}Author`
+
+    static category = 'social'
+
+    static route = {
+      base: `wordpress/${extensionType}/author`,
+      pattern: ':slug',
     }
 
-    static get category() {
-      return 'social'
-    }
-
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/author`,
-        pattern: ':slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Author`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: {
-            label: 'author',
-            message: 'wordpress',
-            style: 'social',
-          },
+    static examples = [
+      {
+        title: `WordPress ${capt} Author`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: {
+          label: 'author',
+          message: 'wordpress',
+          style: 'social',
         },
-      ]
-    }
+      },
+    ]
 
-    static get defaultBadgeData() {
-      return {
-        label: 'author',
-        namedLogo: 'wordpress',
-      }
+    static defaultBadgeData = {
+      label: 'author',
+      namedLogo: 'wordpress',
     }
 
     static render({ author, link }) {
@@ -94,36 +84,28 @@ function AuthorForType(extensionType) {
 }
 
 class WordpressPluginContributor extends BaseWordpress {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: `wordpress/plugin/contributor`,
+    pattern: ':slug/:contributor',
   }
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/contributor`,
-      pattern: ':slug/:contributor',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: `WordPress Plugin Contributor`,
-        namedParams: { slug: 'akismet', contributor: 'automattic' },
-        staticPreview: {
-          label: 'contributor',
-          message: 'wordpress',
-          style: 'social',
-        },
+  static examples = [
+    {
+      title: `WordPress Plugin Contributor`,
+      namedParams: { slug: 'akismet', contributor: 'automattic' },
+      staticPreview: {
+        label: 'contributor',
+        message: 'wordpress',
+        style: 'social',
       },
-    ]
-  }
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'contributor',
-      namedLogo: 'wordpress',
-    }
+  static defaultBadgeData = {
+    label: 'contributor',
+    namedLogo: 'wordpress',
   }
 
   static render({ contributor, link }) {

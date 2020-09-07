@@ -3,54 +3,48 @@
 const BaseWordpress = require('./wordpress-base')
 
 class WordpressPluginIssues extends BaseWordpress {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+
+  static route = {
+    base: `wordpress/plugin/issues`,
+    pattern: ':variant(raw|percentage|outof)/:status(open|closed)/:slug',
   }
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/issues`,
-      pattern: ':variant(raw|percentage|outof)/:status(open|closed)/:slug',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'WordPress Plugin Issues',
-        pattern: 'raw/:status(open|closed)/:slug',
-        namedParams: { status: 'open', slug: 'akismet' },
-        staticPreview: this.render({
-          status: 'open',
-          variant: 'raw',
-          issues: '365',
-          closed_issues: '200',
-        }),
-      },
-      {
-        title: 'WordPress Plugin Issues (Percentage)',
-        pattern: 'percentage/:status(open|closed)/:slug',
-        namedParams: { status: 'open', slug: 'akismet' },
-        staticPreview: this.render({
-          status: 'open',
-          variant: 'percentage',
-          issues: '365',
-          closed_issues: '200',
-        }),
-      },
-      {
-        title: 'WordPress Plugin Issues (OutOf)',
-        pattern: 'outof/:status(open|closed)/:slug',
-        namedParams: { status: 'open', slug: 'akismet' },
-        staticPreview: this.render({
-          status: 'open',
-          variant: 'outof',
-          issues: 365,
-          closed_issues: 200,
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'WordPress Plugin Issues',
+      pattern: 'raw/:status(open|closed)/:slug',
+      namedParams: { status: 'open', slug: 'akismet' },
+      staticPreview: this.render({
+        status: 'open',
+        variant: 'raw',
+        issues: '365',
+        closed_issues: '200',
+      }),
+    },
+    {
+      title: 'WordPress Plugin Issues (Percentage)',
+      pattern: 'percentage/:status(open|closed)/:slug',
+      namedParams: { status: 'open', slug: 'akismet' },
+      staticPreview: this.render({
+        status: 'open',
+        variant: 'percentage',
+        issues: '365',
+        closed_issues: '200',
+      }),
+    },
+    {
+      title: 'WordPress Plugin Issues (OutOf)',
+      pattern: 'outof/:status(open|closed)/:slug',
+      namedParams: { status: 'open', slug: 'akismet' },
+      staticPreview: this.render({
+        status: 'open',
+        variant: 'outof',
+        issues: 365,
+        closed_issues: 200,
+      }),
+    },
+  ]
 
   static calcOpen(issues, closed_issues) {
     return issues - closed_issues
@@ -157,29 +151,23 @@ class WordpressPluginIssues extends BaseWordpress {
 }
 
 class WordpressPluginIssuesOpenClose extends BaseWordpress {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+
+  static route = {
+    base: `wordpress/plugin/issues/opcl`,
+    pattern: ':slug',
   }
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/issues/opcl`,
-      pattern: ':slug',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'WordPress Plugin issues (open/closed)',
-        namedParams: { slug: 'akismet' },
-        staticPreview: this.render({
-          issues: 300,
-          closed_issues: 259,
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'WordPress Plugin issues (open/closed)',
+      namedParams: { slug: 'akismet' },
+      staticPreview: this.render({
+        issues: 300,
+        closed_issues: 259,
+      }),
+    },
+  ]
 
   static calcOpen(issues, closed_issues) {
     return issues - closed_issues
