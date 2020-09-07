@@ -8,32 +8,18 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Beerpay extends BaseJsonService {
-  static get category() {
-    return 'funding'
-  }
+  static category = 'funding'
+  static route = { base: 'beerpay', pattern: ':user/:project' }
 
-  static get route() {
-    return {
-      base: 'beerpay',
-      pattern: ':user/:project',
-    }
-  }
+  static examples = [
+    {
+      title: 'Beerpay',
+      namedParams: { user: 'hashdog', project: 'scrapfy-chrome-extension' },
+      staticPreview: this.render({ totalAmount: 10 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Beerpay',
-        namedParams: { user: 'hashdog', project: 'scrapfy-chrome-extension' },
-        staticPreview: this.render({ totalAmount: 10 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'beerpay',
-    }
-  }
+  static defaultBadgeData = { label: 'beerpay' }
 
   static render({ totalAmount }) {
     return {
