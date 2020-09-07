@@ -14,6 +14,7 @@ const packageSchema = Joi.object()
   .pattern(
     /^/,
     Joi.object({
+      'default-branch': Joi.bool(),
       license: Joi.array().required(),
     }).required()
   )
@@ -66,8 +67,7 @@ module.exports = class PackagistLicense extends BasePackagistService {
   }
 
   transform({ json, user, repo }) {
-    const packageName = this.getPackageName(user, repo)
-    const branch = json.packages[packageName]['dev-master']
+    const branch = this.getDefaultBranch(json, user, repo)
     if (!branch) {
       throw new NotFound({ prettyMessage: 'default branch not found' })
     }
