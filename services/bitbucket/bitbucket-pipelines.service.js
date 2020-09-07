@@ -26,34 +26,25 @@ const bitbucketPipelinesSchema = Joi.object({
 }).required()
 
 class BitbucketPipelines extends BaseJsonService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+  static route = {
+    base: 'bitbucket/pipelines',
+    pattern: ':user/:repo/:branch+',
   }
 
-  static get route() {
-    return {
-      base: 'bitbucket/pipelines',
-      pattern: ':user/:repo/:branch+',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Bitbucket Pipelines',
-        namedParams: {
-          user: 'atlassian',
-          repo: 'adf-builder-javascript',
-          branch: 'task/SECO-2168',
-        },
-        staticPreview: this.render({ status: 'SUCCESSFUL' }),
+  static examples = [
+    {
+      title: 'Bitbucket Pipelines',
+      namedParams: {
+        user: 'atlassian',
+        repo: 'adf-builder-javascript',
+        branch: 'task/SECO-2168',
       },
-    ]
-  }
+      staticPreview: this.render({ status: 'SUCCESSFUL' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
+  static defaultBadgeData = { label: 'build' }
 
   static render({ status }) {
     return renderBuildStatusBadge({ status: status.toLowerCase() })

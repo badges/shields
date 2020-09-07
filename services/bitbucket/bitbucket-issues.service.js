@@ -14,37 +14,22 @@ function issueClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketIssues extends BaseJsonService {
-    static get name() {
-      return `BitbucketIssues${raw ? 'Raw' : ''}`
-    }
+    static name = `BitbucketIssues${raw ? 'Raw' : ''}`
+    static category = 'issue-tracking'
+    static route = { base: `bitbucket/${routePrefix}`, pattern: ':user/:repo' }
 
-    static get category() {
-      return 'issue-tracking'
-    }
-
-    static get route() {
-      return {
-        base: `bitbucket/${routePrefix}`,
-        pattern: ':user/:repo',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: 'Bitbucket open issues',
-          namedParams: {
-            user: 'atlassian',
-            repo: 'python-bitbucket',
-          },
-          staticPreview: this.render({ issues: 33 }),
+    static examples = [
+      {
+        title: 'Bitbucket open issues',
+        namedParams: {
+          user: 'atlassian',
+          repo: 'python-bitbucket',
         },
-      ]
-    }
+        staticPreview: this.render({ issues: 33 }),
+      },
+    ]
 
-    static get defaultBadgeData() {
-      return { label: 'issues' }
-    }
+    static defaultBadgeData = { label: 'issues' }
 
     static render({ issues }) {
       return {
