@@ -11,42 +11,28 @@ const schema = Joi.object()
   .required()
 
 module.exports = class BintrayVersion extends BaseJsonService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+  static route = { base: 'bintray/v', pattern: ':subject/:repo/:packageName' }
+
+  static auth = {
+    userKey: 'bintray_user',
+    passKey: 'bintray_apikey',
+    authorizedOrigins: ['https://bintray.com'],
   }
 
-  static get route() {
-    return {
-      base: 'bintray/v',
-      pattern: ':subject/:repo/:packageName',
-    }
-  }
-
-  static get auth() {
-    return {
-      userKey: 'bintray_user',
-      passKey: 'bintray_apikey',
-      authorizedOrigins: ['https://bintray.com'],
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Bintray',
-        staticPreview: renderVersionBadge({ version: '1.6.0' }),
-        namedParams: {
-          subject: 'asciidoctor',
-          repo: 'maven',
-          packageName: 'asciidoctorj',
-        },
+  static examples = [
+    {
+      title: 'Bintray',
+      staticPreview: renderVersionBadge({ version: '1.6.0' }),
+      namedParams: {
+        subject: 'asciidoctor',
+        repo: 'maven',
+        packageName: 'asciidoctorj',
       },
-    ]
-  }
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'bintray' }
-  }
+  static defaultBadgeData = { label: 'bintray' }
 
   async fetch({ subject, repo, packageName }) {
     // https://bintray.com/docs/api/#_get_version
