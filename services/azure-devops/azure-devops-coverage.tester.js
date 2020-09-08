@@ -5,7 +5,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 const org = 'swellaby'
 const project = 'opensource'
-const linuxDefinitionId = 21
+const linuxDefinitionId = 25
 const macDefinitionId = 26
 const windowsDefinitionId = 24
 const nonExistentDefinitionId = 234421
