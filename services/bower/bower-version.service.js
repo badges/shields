@@ -10,37 +10,24 @@ const queryParamSchema = Joi.object({
 }).required()
 
 class BowerVersion extends BaseBowerService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'bower/v', pattern: ':packageName', queryParamSchema }
 
-  static get route() {
-    return {
-      base: 'bower/v',
-      pattern: ':packageName',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Bower Version',
+      namedParams: { packageName: 'bootstrap' },
+      staticPreview: renderVersionBadge({ version: '4.2.1' }),
+    },
+    {
+      title: 'Bower Version (including pre-releases)',
+      namedParams: { packageName: 'bootstrap' },
+      queryParams: { include_prereleases: null },
+      staticPreview: renderVersionBadge({ version: '4.2.1' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Bower Version',
-        namedParams: { packageName: 'bootstrap' },
-        staticPreview: renderVersionBadge({ version: '4.2.1' }),
-      },
-      {
-        title: 'Bower Version (including pre-releases)',
-        namedParams: { packageName: 'bootstrap' },
-        queryParams: { include_prereleases: null },
-        staticPreview: renderVersionBadge({ version: '4.2.1' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'bower' }
-  }
+  static defaultBadgeData = { label: 'bower' }
 
   async handle({ packageName }, queryParams) {
     const data = await this.fetch({ packageName })

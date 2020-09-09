@@ -34,76 +34,70 @@ const documentation = `
 `
 
 module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'azure-devops/build',
+    pattern: ':organization/:projectId/:definitionId/:branch*',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'azure-devops/build',
-      pattern: ':organization/:projectId/:definitionId/:branch*',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Azure DevOps builds',
-        pattern: ':organization/:projectId/:definitionId',
-        namedParams: {
-          organization: 'totodem',
-          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-          definitionId: '2',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Azure DevOps builds',
+      pattern: ':organization/:projectId/:definitionId',
+      namedParams: {
+        organization: 'totodem',
+        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+        definitionId: '2',
       },
-      {
-        title: 'Azure DevOps builds (branch)',
-        pattern: ':organization/:projectId/:definitionId/:branch',
-        namedParams: {
-          organization: 'totodem',
-          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-          definitionId: '2',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+    {
+      title: 'Azure DevOps builds (branch)',
+      pattern: ':organization/:projectId/:definitionId/:branch',
+      namedParams: {
+        organization: 'totodem',
+        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+        definitionId: '2',
+        branch: 'master',
       },
-      {
-        title: 'Azure DevOps builds (stage)',
-        namedParams: {
-          organization: 'totodem',
-          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-          definitionId: '5',
-        },
-        queryParams: {
-          stage: 'Successful Stage',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+    {
+      title: 'Azure DevOps builds (stage)',
+      namedParams: {
+        organization: 'totodem',
+        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+        definitionId: '5',
       },
-      {
-        title: 'Azure DevOps builds (job)',
-        namedParams: {
-          organization: 'totodem',
-          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-          definitionId: '5',
-        },
-        queryParams: {
-          stage: 'Successful Stage',
-          job: 'Successful Job',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+      queryParams: {
+        stage: 'Successful Stage',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+    {
+      title: 'Azure DevOps builds (job)',
+      namedParams: {
+        organization: 'totodem',
+        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+        definitionId: '5',
+      },
+      queryParams: {
+        stage: 'Successful Stage',
+        job: 'Successful Job',
+      },
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+  ]
 
   async handle(
     { organization, projectId, definitionId, branch },

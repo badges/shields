@@ -47,50 +47,42 @@ const buildCodeCoverageSchema = Joi.object({
 }).required()
 
 module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+
+  static route = {
+    base: 'azure-devops/coverage',
+    pattern: ':organization/:project/:definitionId/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'azure-devops/coverage',
-      pattern: ':organization/:project/:definitionId/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Azure DevOps coverage',
-        pattern: ':organization/:project/:definitionId',
-        namedParams: {
-          organization: 'swellaby',
-          project: 'opensource',
-          definitionId: '25',
-        },
-        staticPreview: this.render({ coverage: 100 }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Azure DevOps coverage',
+      pattern: ':organization/:project/:definitionId',
+      namedParams: {
+        organization: 'swellaby',
+        project: 'opensource',
+        definitionId: '25',
       },
-      {
-        title: 'Azure DevOps coverage (branch)',
-        pattern: ':organization/:project/:definitionId/:branch',
-        namedParams: {
-          organization: 'swellaby',
-          project: 'opensource',
-          definitionId: '25',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 100 }),
-        keywords,
-        documentation,
+      staticPreview: this.render({ coverage: 100 }),
+      keywords,
+      documentation,
+    },
+    {
+      title: 'Azure DevOps coverage (branch)',
+      pattern: ':organization/:project/:definitionId/:branch',
+      namedParams: {
+        organization: 'swellaby',
+        project: 'opensource',
+        definitionId: '25',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ coverage: 100 }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     return {

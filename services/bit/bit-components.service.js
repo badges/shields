@@ -13,31 +13,22 @@ const collectionSchema = Joi.object({
 }).required()
 
 module.exports = class BitComponents extends BaseJsonService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+  static route = {
+    base: 'bit/collection/total-components',
+    pattern: ':owner/:collection',
   }
 
-  static get route() {
-    return {
-      base: 'bit/collection/total-components',
-      pattern: ':owner/:collection',
-    }
-  }
+  static examples = [
+    {
+      title: 'bit',
+      namedParams: { owner: 'ramda', collection: 'ramda' },
+      staticPreview: this.render({ count: 330 }),
+      keywords: ['components'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'bit',
-        namedParams: { owner: 'ramda', collection: 'ramda' },
-        staticPreview: this.render({ count: 330 }),
-        keywords: ['components'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'components' }
-  }
+  static defaultBadgeData = { label: 'components' }
 
   static render({ count }) {
     return { message: metric(count), color: downloadCount(count) }
