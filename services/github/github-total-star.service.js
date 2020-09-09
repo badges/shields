@@ -225,7 +225,7 @@ module.exports = class TotalStarService extends GithubAuthV4Service {
     let grandTotalStars = 0
     let fetchedReposCount = 0
     let nextCursor = null
-    let hasNext = true
+    let hasNext
     const dataType = org === undefined ? 'user' : 'organization'
 
     do {
