@@ -12,6 +12,13 @@ const Documentation = styled.div`
   max-width: 800px;
   margin: 35px auto 20px;
   text-align: left;
+
+  mark {
+    padding: 0.2em 0.4em;
+    font-size: 85%;
+    background-color: rgba(27, 31, 35, 0.05);
+    border-radius: 6px;
+  }
 `
 
 export function MarkupModalContent({

@@ -32,6 +32,24 @@ function transformErrors(errors) {
   }
 }
 
+/**
+ * This method can be used to transform graphql error when any query path is not found.
+ * When user or organization is not found, it creates error with
+ * pretty message.
+ *
+ * @param {*} errors graphql raw error
+ * @returns {*} specific error
+ */
+function transformGraphqlErrors(errors) {
+  if (errors[0].type === 'NOT_FOUND') {
+    return new NotFound({
+      prettyMessage: `${errors[0].path.join('/')} not found`,
+    })
+  } else {
+    return new InvalidResponse({ prettyMessage: errors[0].message })
+  }
+}
+
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
 function staticAuthConfigured() {
@@ -44,5 +62,6 @@ module.exports = {
   commentsColor,
   errorMessagesFor,
   transformErrors,
+  transformGraphqlErrors,
   staticAuthConfigured,
 }
