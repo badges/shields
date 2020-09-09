@@ -19,32 +19,20 @@ class AnsibleGalaxyContent extends BaseJsonService {
 }
 
 module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'ansible/quality', pattern: ':projectId' }
 
-  static get route() {
-    return {
-      base: 'ansible/quality',
-      pattern: ':projectId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Ansible Quality Score',
-        namedParams: {
-          projectId: '432',
-        },
-        staticPreview: this.render({ qualityScore: 4.125 }),
+  static examples = [
+    {
+      title: 'Ansible Quality Score',
+      namedParams: {
+        projectId: '432',
       },
-    ]
-  }
+      staticPreview: this.render({ qualityScore: 4.125 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'quality' }
-  }
+  static defaultBadgeData = { label: 'quality' }
 
   static render({ qualityScore }) {
     return {

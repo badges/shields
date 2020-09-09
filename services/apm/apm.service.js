@@ -20,9 +20,7 @@ const schema = Joi.object({
 })
 
 class BaseAPMService extends BaseJsonService {
-  static get defaultBadgeData() {
-    return { label: 'apm' }
-  }
+  static defaultBadgeData = { label: 'apm' }
 
   async fetch({ packageName }) {
     return this._requestJson({
@@ -34,31 +32,19 @@ class BaseAPMService extends BaseJsonService {
 }
 
 class APMDownloads extends BaseAPMService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'apm/dm', pattern: ':packageName' }
 
-  static get route() {
-    return {
-      base: 'apm/dm',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'APM',
+      namedParams: { packageName: 'vim-mode' },
+      staticPreview: this.render({ downloads: '60043' }),
+      keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'APM',
-        namedParams: { packageName: 'vim-mode' },
-        staticPreview: this.render({ downloads: '60043' }),
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
     return { message: metric(downloads), color: 'green' }
@@ -71,27 +57,17 @@ class APMDownloads extends BaseAPMService {
 }
 
 class APMVersion extends BaseAPMService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'apm/v', pattern: ':packageName' }
 
-  static get route() {
-    return {
-      base: 'apm/v',
-      pattern: ':packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'APM',
-        namedParams: { packageName: 'vim-mode' },
-        staticPreview: this.render({ version: '0.6.0' }),
-        keywords,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'APM',
+      namedParams: { packageName: 'vim-mode' },
+      staticPreview: this.render({ version: '0.6.0' }),
+      keywords,
+    },
+  ]
 
   static render({ version }) {
     return renderVersionBadge({ version })
@@ -110,31 +86,19 @@ class APMVersion extends BaseAPMService {
 }
 
 class APMLicense extends BaseAPMService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'apm/l', pattern: ':packageName' }
 
-  static get route() {
-    return {
-      base: 'apm/l',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'APM',
+      namedParams: { packageName: 'vim-mode' },
+      staticPreview: this.render({ license: 'MIT' }),
+      keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'APM',
-        namedParams: { packageName: 'vim-mode' },
-        staticPreview: this.render({ license: 'MIT' }),
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   static render({ license }) {
     return renderLicenseBadge({ license })
