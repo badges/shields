@@ -25,47 +25,35 @@ function pullRequestClassGenerator(raw) {
   const badgeSuffix = raw ? '' : ' open'
 
   return class BitbucketPullRequest extends BaseJsonService {
-    static get name() {
-      return `BitbucketPullRequest${raw ? 'Raw' : ''}`
+    static name = `BitbucketPullRequest${raw ? 'Raw' : ''}`
+    static category = 'issue-tracking'
+    static route = {
+      base: `bitbucket/${routePrefix}`,
+      pattern: `:user/:repo`,
+      queryParamSchema,
     }
 
-    static get category() {
-      return 'issue-tracking'
-    }
-
-    static get route() {
-      return {
-        base: `bitbucket/${routePrefix}`,
-        pattern: `:user/:repo`,
-        queryParamSchema,
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: 'Bitbucket open pull requests',
-          namedParams: {
-            user: 'atlassian',
-            repo: 'python-bitbucket',
-          },
-          staticPreview: this.render({ prs: 22 }),
+    static examples = [
+      {
+        title: 'Bitbucket open pull requests',
+        namedParams: {
+          user: 'atlassian',
+          repo: 'python-bitbucket',
         },
-        {
-          title: 'Bitbucket Server open pull requests',
-          namedParams: {
-            user: 'foo',
-            repo: 'bar',
-          },
-          queryParams: { server: 'https://bitbucket.mydomain.net' },
-          staticPreview: this.render({ prs: 42 }),
+        staticPreview: this.render({ prs: 22 }),
+      },
+      {
+        title: 'Bitbucket Server open pull requests',
+        namedParams: {
+          user: 'foo',
+          repo: 'bar',
         },
-      ]
-    }
+        queryParams: { server: 'https://bitbucket.mydomain.net' },
+        staticPreview: this.render({ prs: 42 }),
+      },
+    ]
 
-    static get defaultBadgeData() {
-      return { label: 'pull requests' }
-    }
+    static defaultBadgeData = { label: 'pull requests' }
 
     static render({ prs }) {
       return {

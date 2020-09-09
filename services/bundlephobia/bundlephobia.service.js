@@ -13,72 +13,61 @@ const schema = Joi.object({
 const keywords = ['node', 'bundlephobia']
 
 module.exports = class Bundlephobia extends BaseJsonService {
-  static get category() {
-    return 'size'
+  static category = 'size'
+
+  static route = {
+    base: 'bundlephobia',
+    pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
   }
 
-  static get route() {
-    return {
-      base: 'bundlephobia',
-      pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
-    }
-  }
+  static examples = [
+    {
+      title: 'npm bundle size',
+      pattern: ':format(min|minzip)/:packageName',
+      namedParams: {
+        format: 'min',
+        packageName: 'react',
+      },
+      staticPreview: this.render({ format: 'min', size: 6652 }),
+      keywords,
+    },
+    {
+      title: 'npm bundle size (scoped)',
+      pattern: ':format(min|minzip)/:scope/:packageName',
+      namedParams: {
+        format: 'min',
+        scope: '@cycle',
+        packageName: 'core',
+      },
+      staticPreview: this.render({ format: 'min', size: 3562 }),
+      keywords,
+    },
+    {
+      title: 'npm bundle size (version)',
+      pattern: ':format(min|minzip)/:packageName/:version',
+      namedParams: {
+        format: 'min',
+        packageName: 'react',
+        version: '15.0.0',
+      },
+      staticPreview: this.render({ format: 'min', size: 20535 }),
+      keywords,
+    },
+    {
+      title: 'npm bundle size (scoped version)',
+      pattern: ':format(min|minzip)/:scope/:packageName/:version',
+      namedParams: {
+        format: 'min',
+        scope: '@cycle',
+        packageName: 'core',
+        version: '7.0.0',
+      },
+      staticPreview: this.render({ format: 'min', size: 3562 }),
+      keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'npm bundle size',
-        pattern: ':format(min|minzip)/:packageName',
-        namedParams: {
-          format: 'min',
-          packageName: 'react',
-        },
-        staticPreview: this.render({ format: 'min', size: 6652 }),
-        keywords,
-      },
-      {
-        title: 'npm bundle size (scoped)',
-        pattern: ':format(min|minzip)/:scope/:packageName',
-        namedParams: {
-          format: 'min',
-          scope: '@cycle',
-          packageName: 'core',
-        },
-        staticPreview: this.render({ format: 'min', size: 3562 }),
-        keywords,
-      },
-      {
-        title: 'npm bundle size (version)',
-        pattern: ':format(min|minzip)/:packageName/:version',
-        namedParams: {
-          format: 'min',
-          packageName: 'react',
-          version: '15.0.0',
-        },
-        staticPreview: this.render({ format: 'min', size: 20535 }),
-        keywords,
-      },
-      {
-        title: 'npm bundle size (scoped version)',
-        pattern: ':format(min|minzip)/:scope/:packageName/:version',
-        namedParams: {
-          format: 'min',
-          scope: '@cycle',
-          packageName: 'core',
-          version: '7.0.0',
-        },
-        staticPreview: this.render({ format: 'min', size: 3562 }),
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'bundlephobia',
-      color: 'informational',
-    }
-  }
+  static defaultBadgeData = { label: 'bundlephobia', color: 'informational' }
 
   static render({ format, size }) {
     const label = format === 'min' ? 'minified size' : 'minzipped size'

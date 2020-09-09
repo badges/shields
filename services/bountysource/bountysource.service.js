@@ -8,30 +8,18 @@ const { BaseJsonService } = require('..')
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 
 module.exports = class Bountysource extends BaseJsonService {
-  static get category() {
-    return 'funding'
-  }
+  static category = 'funding'
+  static route = { base: 'bountysource/team', pattern: ':team/activity' }
 
-  static get route() {
-    return {
-      base: 'bountysource/team',
-      pattern: ':team/activity',
-    }
-  }
+  static examples = [
+    {
+      title: 'Bountysource',
+      namedParams: { team: 'mozilla-core' },
+      staticPreview: this.render({ total: 53000 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Bountysource',
-        namedParams: { team: 'mozilla-core' },
-        staticPreview: this.render({ total: 53000 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'bounties' }
-  }
+  static defaultBadgeData = { label: 'bounties' }
 
   static render({ total }) {
     return {
