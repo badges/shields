@@ -1,6 +1,5 @@
 'use strict'
 
-const isCSSColor = require('is-css-color')
 const cssColorConverter = require('css-color-converter')
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
@@ -36,6 +35,13 @@ Object.entries(aliases).forEach(([alias, original]) => {
 const hexColorRegex = /^([\da-f]{3}){1,2}$/i
 function isHexColor(s = '') {
   return hexColorRegex.test(s)
+}
+
+function isCSSColor(color) {
+  return (
+    !Array.isArray(color) &&
+    typeof cssColorConverter(color).toRgbaArray() !== 'undefined'
+  )
 }
 
 function normalizeColor(color) {
