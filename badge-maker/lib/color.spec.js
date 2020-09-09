@@ -1,7 +1,12 @@
 'use strict'
 
 const { test, given, forCases } = require('sazerac')
-const { isHexColor, normalizeColor, toSvgColor } = require('./color')
+const {
+  isHexColor,
+  normalizeColor,
+  toSvgColor,
+  brightness,
+} = require('./color')
 
 test(isHexColor, () => {
   forCases([given('f00bae'), given('4c1'), given('ABC123')]).expect(true)
@@ -54,4 +59,13 @@ test(toSvgColor, () => {
   )
   given('lightgray').expect('#9f9f9f')
   given('informational').expect('#007ec6')
+})
+
+test(brightness, () => {
+  given('white').expect(1)
+  given('black').expect(0)
+  given('#abc123').expect(0.66)
+  given('rgb(10, 5, 128)').expect(0.08)
+  given(undefined).expect(0)
+  given('not-a-color').expect(0)
 })
