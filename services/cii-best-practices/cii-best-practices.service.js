@@ -32,7 +32,10 @@ const summaryColorScale = colorScale(
 
 module.exports = class CIIBestPracticesService extends BaseJsonService {
   static category = 'analysis'
-  static route = { base: 'cii', pattern: ':metric(level|percentage|summary)/:projectId' }
+  static route = {
+    base: 'cii',
+    pattern: ':metric(level|percentage|summary)/:projectId',
+  }
 
   static exampless = [
     {
