@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-![](https://raster.shields.io/badge/conduct-AT%20shields.io-blue.png) or directly to [@chris48s](https://github.com/chris48s) ![](https://raster.shields.io/badge/chris-AT%20shields.io-blue.png) or [@paulmelnikow](https://github.com/paulmelnikow) ![](https://raster.shields.io/badge/paul-AT%20shields.io-blue.png)
+![](https://img.shields.io/badge/conduct-AT%20shields.io-blue) or directly to [@calebcartwright](https://github.com/calebcartwright) ![](https://img.shields.io/badge/caleb-AT%20shields.io-blue) or [@paulmelnikow](https://github.com/paulmelnikow) ![](https://img.shields.io/badge/paul-AT%20shields.io-blue)
 
 All complaints will be reviewed and investigated promptly and fairly.
 
