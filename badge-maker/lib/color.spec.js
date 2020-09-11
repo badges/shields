@@ -56,7 +56,6 @@ test(normalizeColor, () => {
     given(null),
     given(true),
     given(1),
-    given(void 0),
     given(Math),
     given([]),
     given({}),
