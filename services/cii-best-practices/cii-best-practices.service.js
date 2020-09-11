@@ -31,56 +31,42 @@ const summaryColorScale = colorScale(
 )
 
 module.exports = class CIIBestPracticesService extends BaseJsonService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'cii', pattern: ':metric(level|percentage|summary)/:projectId' }
 
-  static get route() {
-    return {
-      base: 'cii',
-      pattern: ':metric(level|percentage|summary)/:projectId',
-    }
-  }
+  static exampless = [
+    {
+      title: 'CII Best Practices Level',
+      pattern: 'level/:projectId',
+      namedParams: {
+        projectId: '1',
+      },
+      staticPreview: this.renderLevelBadge({ level: 'gold' }),
+      keywords,
+    },
+    {
+      title: 'CII Best Practices Tiered Percentage',
+      pattern: 'percentage/:projectId',
+      namedParams: {
+        projectId: '29',
+      },
+      staticPreview: this.renderTieredPercentageBadge({ percentage: 107 }),
+      keywords,
+    },
+    {
+      title: 'CII Best Practices Summary',
+      pattern: 'summary/:projectId',
+      namedParams: {
+        projectId: '33',
+      },
+      staticPreview: this.renderSummaryBadge({ percentage: 94 }),
+      keywords,
+      documentation:
+        'This badge uses the same message and color scale as the native CII one, but with all the configuration and goodness that Shields provides!',
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'CII Best Practices Level',
-        pattern: 'level/:projectId',
-        namedParams: {
-          projectId: '1',
-        },
-        staticPreview: this.renderLevelBadge({ level: 'gold' }),
-        keywords,
-      },
-      {
-        title: 'CII Best Practices Tiered Percentage',
-        pattern: 'percentage/:projectId',
-        namedParams: {
-          projectId: '29',
-        },
-        staticPreview: this.renderTieredPercentageBadge({ percentage: 107 }),
-        keywords,
-      },
-      {
-        title: 'CII Best Practices Summary',
-        pattern: 'summary/:projectId',
-        namedParams: {
-          projectId: '33',
-        },
-        staticPreview: this.renderSummaryBadge({ percentage: 94 }),
-        keywords,
-        documentation:
-          'This badge uses the same message and color scale as the native CII one, but with all the configuration and goodness that Shields provides!',
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'cii',
-    }
-  }
+  static defaultBadgeData = { label: 'cii' }
 
   static renderLevelBadge({ level }) {
     let message = level
