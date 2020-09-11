@@ -28,15 +28,36 @@ test(normalizeColor, () => {
   given('4c1').expect('#4c1')
   given('f00f00').expect('#f00f00')
   given('ABC123').expect('#abc123')
+  given('#ccc').expect('#ccc')
+  given('#fffe').expect('#fffe')
+  given('#fffeffff').expect('#fffeffff')
   given('#ABC123').expect('#abc123')
   given('papayawhip').expect('papayawhip')
   given('purple').expect('purple')
+  given('  blue ').expect('  blue ')
+  given('rgb(100%, 200%, 222%)').expect('rgb(100%, 200%, 222%)')
+  given('rgb(122, 200, 222)').expect('rgb(122, 200, 222)')
+  given('rgb(100%, 200, 222)').expect('rgb(100%, 200, 222)')
+  given('rgba(100, 20, 111, 1)').expect('rgba(100, 20, 111, 1)')
+  given('hsl(122, 200%, 222%)').expect('hsl(122, 200%, 222%)')
+  given('hsla(122, 200%, 222%, 1)').expect('hsla(122, 200%, 222%, 1)')
   forCases([
+    given(),
     given(''),
     given('not-a-color'),
+    given('#ABCFGH'),
+    given('rgb(122, 200, 222, 1)'),
+    given('rgb(-100, 20, 111)'),
+    given('rgba(-100, 20, 111, 1.1)'),
+    given('hsl(122, 200, 222, 1)'),
+    given('hsl(122, 200, 222)'),
+    given('hsl(122, 200, 222%)'),
     given(undefined),
     given(null),
     given(true),
+    given(1),
+    given(void 0),
+    given(Math),
     given([]),
     given({}),
     given(() => {}),

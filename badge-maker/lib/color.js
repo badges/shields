@@ -39,8 +39,8 @@ function isHexColor(s = '') {
 
 function isCSSColor(color) {
   return (
-    !Array.isArray(color) &&
-    typeof cssColorConverter(color).toRgbaArray() !== 'undefined'
+    typeof color === 'string' &&
+    typeof cssColorConverter(color.trim()).toRgbaArray() !== 'undefined'
   )
 }
 
