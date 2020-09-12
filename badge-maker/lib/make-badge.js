@@ -24,17 +24,14 @@ module.exports = function makeBadge({
 
   const [label, message] = text
 
-  color = normalizeColor(color)
-  labelColor = normalizeColor(labelColor)
-
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
     return JSON.stringify({
       label,
       message,
       logoWidth,
-      color,
-      labelColor,
+      color: normalizeColor(color),
+      labelColor: normalizeColor(labelColor),
       link: links,
       name: label,
       value: message,
