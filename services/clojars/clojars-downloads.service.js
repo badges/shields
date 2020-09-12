@@ -5,29 +5,17 @@ const { downloadCount: downloadsColor } = require('../color-formatters')
 const { BaseClojarsService } = require('./clojars-base')
 
 module.exports = class ClojarsDownloads extends BaseClojarsService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'clojars/dt', pattern: ':clojar+' }
 
-  static get route() {
-    return {
-      base: 'clojars/dt',
-      pattern: ':clojar+',
-    }
-  }
+  static examples = [
+    {
+      namedParams: { clojar: 'prismic' },
+      staticPreview: this.render({ downloads: 117 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        namedParams: { clojar: 'prismic' },
-        staticPreview: this.render({ downloads: 117 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
     return {
