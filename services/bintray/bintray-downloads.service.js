@@ -20,68 +20,58 @@ const documentation = `
 </p>`
 
 module.exports = class BintrayDownloads extends BaseJsonService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'bintray',
+    pattern: ':interval(dt)/:subject/:repo/:packageName/:version*',
   }
 
-  static get route() {
-    return {
-      base: 'bintray',
-      pattern: ':interval(dt)/:subject/:repo/:packageName/:version*',
-    }
+  static auth = {
+    userKey: 'bintray_user',
+    passKey: 'bintray_apikey',
+    authorizedOrigins: ['https://bintray.com'],
   }
 
-  static get auth() {
-    return {
-      userKey: 'bintray_user',
-      passKey: 'bintray_apikey',
-      authorizedOrigins: ['https://bintray.com'],
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Bintray',
-        staticPreview: this.render({ downloads: 69000 }),
-        namedParams: {
-          interval: 'dt',
-          subject: 'asciidoctor',
-          repo: 'maven',
-          packageName: 'asciidoctorj',
-        },
-        documentation,
+  static examples = [
+    {
+      title: 'Bintray',
+      staticPreview: this.render({ downloads: 69000 }),
+      namedParams: {
+        interval: 'dt',
+        subject: 'asciidoctor',
+        repo: 'maven',
+        packageName: 'asciidoctorj',
       },
-      {
-        title: 'Bintray (latest)',
-        staticPreview: this.render({ version: 'latest', downloads: 69000 }),
-        namedParams: {
-          interval: 'dt',
-          subject: 'asciidoctor',
-          repo: 'maven',
-          packageName: 'asciidoctorj',
-          version: 'latest',
-        },
-        documentation,
+      documentation,
+    },
+    {
+      title: 'Bintray (latest)',
+      staticPreview: this.render({ version: 'latest', downloads: 69000 }),
+      namedParams: {
+        interval: 'dt',
+        subject: 'asciidoctor',
+        repo: 'maven',
+        packageName: 'asciidoctorj',
+        version: 'latest',
       },
-      {
-        title: 'Bintray (version)',
-        staticPreview: this.render({ version: '1.6.0', downloads: 69000 }),
-        namedParams: {
-          interval: 'dt',
-          subject: 'asciidoctor',
-          repo: 'maven',
-          packageName: 'asciidoctorj',
-          version: '1.6.0',
-        },
-        documentation,
+      documentation,
+    },
+    {
+      title: 'Bintray (version)',
+      staticPreview: this.render({ version: '1.6.0', downloads: 69000 }),
+      namedParams: {
+        interval: 'dt',
+        subject: 'asciidoctor',
+        repo: 'maven',
+        packageName: 'asciidoctorj',
+        version: '1.6.0',
       },
-    ]
-  }
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ version, downloads }) {
     return {

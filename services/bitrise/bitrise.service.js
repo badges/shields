@@ -13,34 +13,23 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class Bitrise extends BaseJsonService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+  static route = {
+    base: 'bitrise',
+    pattern: ':appId/:branch?',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'bitrise',
-      pattern: ':appId/:branch?',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Bitrise',
+      namedParams: { appId: 'cde737473028420d', branch: 'master' },
+      queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
+      staticPreview: this.render({ status: 'success' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Bitrise',
-        namedParams: { appId: 'cde737473028420d', branch: 'master' },
-        queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
-        staticPreview: this.render({ status: 'success' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'bitrise',
-    }
-  }
+  static defaultBadgeData = { label: 'bitrise' }
 
   static render({ status }) {
     const color = {

@@ -10,42 +10,30 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Buildkite extends BaseJsonService {
-  static get category() {
-    return 'build'
-  }
+  static category = 'build'
+  static route = { base: 'buildkite', pattern: ':identifier/:branch*' }
 
-  static get route() {
-    return {
-      base: 'buildkite',
-      pattern: ':identifier/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Buildkite',
-        pattern: ':identifier',
-        namedParams: {
-          identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  static examples = [
+    {
+      title: 'Buildkite',
+      pattern: ':identifier',
+      namedParams: {
+        identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
       },
-      {
-        title: 'Buildkite (branch)',
-        pattern: ':identifier/:branch',
-        namedParams: {
-          identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+    {
+      title: 'Buildkite (branch)',
+      pattern: ':identifier/:branch',
+      namedParams: {
+        identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
+  static defaultBadgeData = { label: 'build' }
 
   async fetch({ identifier, branch }) {
     const url = `https://badge.buildkite.com/${identifier}.json`

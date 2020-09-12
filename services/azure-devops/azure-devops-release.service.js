@@ -23,39 +23,29 @@ const documentation = `
 `
 
 module.exports = class AzureDevOpsRelease extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'azure-devops/release',
+    pattern: ':organization/:projectId/:definitionId/:environmentId',
   }
 
-  static get route() {
-    return {
-      base: 'azure-devops/release',
-      pattern: ':organization/:projectId/:definitionId/:environmentId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Azure DevOps releases',
-        namedParams: {
-          organization: 'totodem',
-          projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-          definitionId: '1',
-          environmentId: '1',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Azure DevOps releases',
+      namedParams: {
+        organization: 'totodem',
+        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+        definitionId: '1',
+        environmentId: '1',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'deployment',
-    }
-  }
+  static defaultBadgeData = { label: 'deployment' }
 
   async handle({ organization, projectId, definitionId, environmentId }) {
     // Microsoft documentation: ?

@@ -4,30 +4,18 @@ const { renderLicenseBadge } = require('../licenses')
 const BaseBowerService = require('./bower-base')
 
 module.exports = class BowerLicense extends BaseBowerService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'bower/l', pattern: ':packageName' }
 
-  static get route() {
-    return {
-      base: 'bower/l',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'Bower',
+      namedParams: { packageName: 'bootstrap' },
+      staticPreview: renderLicenseBadge({ licenses: ['MIT'] }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Bower',
-        namedParams: { packageName: 'bootstrap' },
-        staticPreview: renderLicenseBadge({ licenses: ['MIT'] }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   async handle({ packageName }) {
     const data = await this.fetch({ packageName })
