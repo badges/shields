@@ -10,37 +10,24 @@ const queryParamSchema = Joi.object({
 }).required()
 
 class ClojarsVersionService extends BaseClojarsService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'clojars/v', pattern: ':clojar+', queryParamSchema }
 
-  static get route() {
-    return {
-      base: 'clojars/v',
-      pattern: ':clojar+',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Clojars Version',
+      namedParams: { clojar: 'prismic' },
+      staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
+    },
+    {
+      title: 'Clojars Version (including pre-releases)',
+      namedParams: { clojar: 'prismic' },
+      queryParams: { include_prereleases: null },
+      staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Clojars Version',
-        namedParams: { clojar: 'prismic' },
-        staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
-      },
-      {
-        title: 'Clojars Version (including pre-releases)',
-        namedParams: { clojar: 'prismic' },
-        queryParams: { include_prereleases: null },
-        staticPreview: this.render({ clojar: 'clojar', version: '1.2' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'clojars' }
-  }
+  static defaultBadgeData = { label: 'clojars' }
 
   static render({ clojar, version }) {
     return {
