@@ -170,7 +170,7 @@ jobs:
 
   main@node-14:
     docker:
-      - image: cimg/node:14
+      - image: cimg/node:14.11
 
     <<: *main_steps
 
@@ -183,7 +183,7 @@ jobs:
 
   integration@node-14:
     docker:
-      - image: cimg/node:14
+      - image: cimg/node:14.11
       - image: redis
 
     <<: *integration_steps
