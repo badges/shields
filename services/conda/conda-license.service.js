@@ -10,38 +10,26 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CondaLicense extends BaseCondaService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'conda', pattern: 'l/:channel/:pkg' }
 
-  static get route() {
-    return {
-      base: 'conda',
-      pattern: 'l/:channel/:pkg',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Conda - License',
-        pattern: 'l/:channel/:package',
-        namedParams: {
-          channel: 'conda-forge',
-          package: 'setuptools',
-        },
-        staticPreview: this.render({
-          variant: 'l',
-          channel: 'conda-forge',
-          licenses: ['MIT'],
-        }),
+  static examples = [
+    {
+      title: 'Conda - License',
+      pattern: 'l/:channel/:package',
+      namedParams: {
+        channel: 'conda-forge',
+        package: 'setuptools',
       },
-    ]
-  }
+      staticPreview: this.render({
+        variant: 'l',
+        channel: 'conda-forge',
+        licenses: ['MIT'],
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })
