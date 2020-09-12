@@ -14,42 +14,28 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CodacyCoverage extends BaseSvgScrapingService {
-  static get category() {
-    return 'coverage'
-  }
+  static category = 'coverage'
+  static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
 
-  static get route() {
-    return {
-      base: 'codacy/coverage',
-      pattern: ':projectId/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Codacy coverage',
-        pattern: ':projectId',
-        namedParams: { projectId: '59d607d0e311408885e418004068ea58' },
-        staticPreview: this.render({ percentage: 90 }),
+  static examples = [
+    {
+      title: 'Codacy coverage',
+      pattern: ':projectId',
+      namedParams: { projectId: '59d607d0e311408885e418004068ea58' },
+      staticPreview: this.render({ percentage: 90 }),
+    },
+    {
+      title: 'Codacy branch coverage',
+      pattern: ':projectId/:branch',
+      namedParams: {
+        projectId: '59d607d0e311408885e418004068ea58',
+        branch: 'master',
       },
-      {
-        title: 'Codacy branch coverage',
-        pattern: ':projectId/:branch',
-        namedParams: {
-          projectId: '59d607d0e311408885e418004068ea58',
-          branch: 'master',
-        },
-        staticPreview: this.render({ percentage: 90 }),
-      },
-    ]
-  }
+      staticPreview: this.render({ percentage: 90 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'coverage',
-    }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ percentage }) {
     return {
