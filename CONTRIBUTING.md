@@ -108,7 +108,7 @@ There are three places to get help:
   Whereas API publishers are incentivised to maintain a stable platform for their users,
   authors of web pages have no such incentive.
 - Badges may require users to specify a token in the badge URL as long it is scoped only to
-  fetching status and doesn't expose any sensitive information. Generating a token with the
+  fetching information and doesn't expose any sensitive information. Generating a token with the
   correct scope must be clearly documented.
 
 ## Badge URLs
