@@ -3,32 +3,20 @@
 const BaseCocoaPodsService = require('./cocoapods-base')
 
 module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
+  static route = { base: 'cocoapods/p', pattern: ':spec' }
 
-  static get route() {
-    return {
-      base: 'cocoapods/p',
-      pattern: ':spec',
-    }
-  }
+  static examples = [
+    {
+      title: 'Cocoapods platforms',
+      namedParams: { spec: 'AFNetworking' },
+      staticPreview: this.render({
+        platforms: ['ios', 'osx', 'watchos', 'tvos'],
+      }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Cocoapods platforms',
-        namedParams: { spec: 'AFNetworking' },
-        staticPreview: this.render({
-          platforms: ['ios', 'osx', 'watchos', 'tvos'],
-        }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'platform' }
-  }
+  static defaultBadgeData = { label: 'platform' }
 
   static render({ platforms }) {
     return {
