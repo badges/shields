@@ -3,30 +3,20 @@
 const BaseCondaService = require('./conda-base')
 
 module.exports = class CondaPlatform extends BaseCondaService {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
+  static route = { base: 'conda', pattern: ':variant(p|pn)/:channel/:pkg' }
 
-  static get route() {
-    return {
-      base: 'conda',
-      pattern: ':variant(p|pn)/:channel/:pkg',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Conda',
-        namedParams: { channel: 'conda-forge', package: 'python' },
-        pattern: 'pn/:channel/:package',
-        staticPreview: this.render({
-          variant: 'pn',
-          platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Conda',
+      namedParams: { channel: 'conda-forge', package: 'python' },
+      pattern: 'pn/:channel/:package',
+      staticPreview: this.render({
+        variant: 'pn',
+        platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
+      }),
+    },
+  ]
 
   static render({ variant, platforms }) {
     return {

@@ -7,42 +7,28 @@ const { codacyGrade } = require('./codacy-helpers')
 const schema = Joi.object({ message: codacyGrade }).required()
 
 module.exports = class CodacyGrade extends BaseSvgScrapingService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'codacy/grade', pattern: ':projectId/:branch*' }
 
-  static get route() {
-    return {
-      base: 'codacy/grade',
-      pattern: ':projectId/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Codacy grade',
-        pattern: ':projectId',
-        namedParams: { projectId: 'e27821fb6289410b8f58338c7e0bc686' },
-        staticPreview: this.render({ grade: 'A' }),
+  static examples = [
+    {
+      title: 'Codacy grade',
+      pattern: ':projectId',
+      namedParams: { projectId: 'e27821fb6289410b8f58338c7e0bc686' },
+      staticPreview: this.render({ grade: 'A' }),
+    },
+    {
+      title: 'Codacy branch grade',
+      pattern: ':projectId/:branch',
+      namedParams: {
+        projectId: 'e27821fb6289410b8f58338c7e0bc686',
+        branch: 'master',
       },
-      {
-        title: 'Codacy branch grade',
-        pattern: ':projectId/:branch',
-        namedParams: {
-          projectId: 'e27821fb6289410b8f58338c7e0bc686',
-          branch: 'master',
-        },
-        staticPreview: this.render({ grade: 'A' }),
-      },
-    ]
-  }
+      staticPreview: this.render({ grade: 'A' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'code quality',
-    }
-  }
+  static defaultBadgeData = { label: 'code quality' }
 
   static render({ grade }) {
     const color = {

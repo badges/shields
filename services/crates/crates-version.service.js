@@ -5,27 +5,17 @@ const { InvalidResponse } = require('..')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesVersion extends BaseCratesService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'crates/v', pattern: ':crate' }
 
-  static get route() {
-    return {
-      base: 'crates/v',
-      pattern: ':crate',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Crates.io',
-        namedParams: { crate: 'rustc-serialize' },
-        staticPreview: renderVersionBadge({ version: '0.3.24' }),
-        keywords,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Crates.io',
+      namedParams: { crate: 'rustc-serialize' },
+      staticPreview: renderVersionBadge({ version: '0.3.24' }),
+      keywords,
+    },
+  ]
 
   transform(json) {
     if (json.errors) {

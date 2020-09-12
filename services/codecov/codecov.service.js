@@ -46,61 +46,50 @@ const documentation = `
 `
 
 module.exports = class Codecov extends BaseSvgScrapingService {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+  static route = {
+    base: 'codecov/c',
+    // https://docs.codecov.io/docs#section-common-questions
+    // Github, BitBucket, and GitLab are the only supported options (long or short form)
+    pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'codecov/c',
-      // https://docs.codecov.io/docs#section-common-questions
-      // Github, BitBucket, and GitLab are the only supported options (long or short form)
-      pattern:
-        ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Codecov',
-        pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo',
-        namedParams: {
-          vcsName: 'github',
-          user: 'codecov',
-          repo: 'example-node',
-        },
-        queryParams: {
-          token: 'a1b2c3d4e5',
-          flag: 'flag_name',
-        },
-        staticPreview: this.render({ coverage: 90 }),
-        documentation,
+  static examples = [
+    {
+      title: 'Codecov',
+      pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo',
+      namedParams: {
+        vcsName: 'github',
+        user: 'codecov',
+        repo: 'example-node',
       },
-      {
-        title: 'Codecov branch',
-        pattern:
-          ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch',
-        namedParams: {
-          vcsName: 'github',
-          user: 'codecov',
-          repo: 'example-node',
-          branch: 'master',
-        },
-        queryParams: {
-          token: 'a1b2c3d4e5',
-          flag: 'flag_name',
-        },
-        staticPreview: this.render({ coverage: 90 }),
-        documentation,
+      queryParams: {
+        token: 'a1b2c3d4e5',
+        flag: 'flag_name',
       },
-    ]
-  }
+      staticPreview: this.render({ coverage: 90 }),
+      documentation,
+    },
+    {
+      title: 'Codecov branch',
+      pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch',
+      namedParams: {
+        vcsName: 'github',
+        user: 'codecov',
+        repo: 'example-node',
+        branch: 'master',
+      },
+      queryParams: {
+        token: 'a1b2c3d4e5',
+        flag: 'flag_name',
+      },
+      staticPreview: this.render({ coverage: 90 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     if (coverage === 'unknown') {
