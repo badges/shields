@@ -12,8 +12,7 @@ t.create('known project id')
 
 t.create('unknown project id')
   .get('/abc.json')
-  // Coverity actually returns an HTTP 200 status with an HTML page when the project is not found.
-  .expectBadge({ label: 'coverity', message: 'unparseable json response' })
+  .expectBadge({ label: 'coverity', message: 'project not found' })
 
 t.create('404 response')
   .get('/1.json')
