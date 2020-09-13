@@ -1,6 +1,5 @@
 'use strict'
 
-const camelcase = require('camelcase')
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 
@@ -41,11 +40,10 @@ module.exports = function makeBadge({
     })
   }
 
-  const methodName = camelcase(template)
-  if (!(methodName in badgeRenderers)) {
+  const render = badgeRenderers[template]
+  if (!render) {
     throw new Error(`Unknown template: '${template}'`)
   }
-  const render = badgeRenderers[methodName]
 
   logoWidth = +logoWidth || (logo ? 14 : 0)
 
