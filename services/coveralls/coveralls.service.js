@@ -9,59 +9,50 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Coveralls extends BaseJsonService {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+  static route = {
+    base: 'coveralls',
+    pattern: ':vcsType(github|bitbucket)?/:user/:repo/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'coveralls',
-      pattern: ':vcsType(github|bitbucket)?/:user/:repo/:branch*',
-    }
-  }
+  static examples = [
+    {
+      title: 'Coveralls github',
+      pattern: ':vcsType/:user/:repo',
+      namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
+      staticPreview: this.render({ coverage: 86 }),
+    },
+    {
+      title: 'Coveralls github branch',
+      pattern: ':vcsType/:user/:repo/:branch',
+      namedParams: {
+        vcsType: 'github',
+        user: 'lemurheavy',
+        repo: 'coveralls-ruby',
+        branch: 'master',
+      },
+      staticPreview: this.render({ coverage: 91.81 }),
+    },
+    {
+      title: 'Coveralls bitbucket',
+      pattern: ':vcsType/:user/:repo',
+      namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
+      staticPreview: this.render({ coverage: 86 }),
+    },
+    {
+      title: 'Coveralls bitbucket branch',
+      pattern: ':vcsType/:user/:repo/:branch',
+      namedParams: {
+        vcsType: 'bitbucket',
+        user: 'pyKLIP',
+        repo: 'pyklip',
+        branch: 'master',
+      },
+      staticPreview: this.render({ coverage: 96 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Coveralls github',
-        pattern: ':vcsType/:user/:repo',
-        namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
-        staticPreview: this.render({ coverage: 86 }),
-      },
-      {
-        title: 'Coveralls github branch',
-        pattern: ':vcsType/:user/:repo/:branch',
-        namedParams: {
-          vcsType: 'github',
-          user: 'lemurheavy',
-          repo: 'coveralls-ruby',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 91.81 }),
-      },
-      {
-        title: 'Coveralls bitbucket',
-        pattern: ':vcsType/:user/:repo',
-        namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
-        staticPreview: this.render({ coverage: 86 }),
-      },
-      {
-        title: 'Coveralls bitbucket branch',
-        pattern: ':vcsType/:user/:repo/:branch',
-        namedParams: {
-          vcsType: 'bitbucket',
-          user: 'pyKLIP',
-          repo: 'pyklip',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 96 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     return {

@@ -13,9 +13,7 @@ const schema = Joi.object({
 }).required()
 
 class BaseCtanService extends BaseJsonService {
-  static get defaultBadgeData() {
-    return { label: 'ctan' }
-  }
+  static defaultBadgeData = { label: 'ctan' }
 
   async fetch({ library }) {
     const url = `http://www.ctan.org/json/pkg/${library}`
@@ -27,31 +25,19 @@ class BaseCtanService extends BaseJsonService {
 }
 
 class CtanLicense extends BaseCtanService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'ctan/l', pattern: ':library' }
 
-  static get route() {
-    return {
-      base: 'ctan/l',
-      pattern: ':library',
-    }
-  }
+  static examples = [
+    {
+      title: 'CTAN',
+      namedParams: { library: 'novel' },
+      staticPreview: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
+      keywords: ['tex'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'CTAN',
-        namedParams: { library: 'novel' },
-        staticPreview: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
-        keywords: ['tex'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })
@@ -65,27 +51,17 @@ class CtanLicense extends BaseCtanService {
 }
 
 class CtanVersion extends BaseCtanService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'ctan/v', pattern: ':library' }
 
-  static get route() {
-    return {
-      base: 'ctan/v',
-      pattern: ':library',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'CTAN',
-        namedParams: { library: 'tex' },
-        staticPreview: this.render({ version: '3.14159265' }),
-        keywords: ['tex'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'CTAN',
+      namedParams: { library: 'tex' },
+      staticPreview: this.render({ version: '3.14159265' }),
+      keywords: ['tex'],
+    },
+  ]
 
   static render({ version }) {
     return renderVersionBadge({ version })
