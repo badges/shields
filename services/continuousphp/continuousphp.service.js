@@ -14,46 +14,37 @@ const statusMap = {
 }
 
 module.exports = class ContinuousPhp extends BaseJsonService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+  static route = {
+    base: 'continuousphp',
+    pattern: ':provider/:user/:repo/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'continuousphp',
-      pattern: ':provider/:user/:repo/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'continuousphp',
-        pattern: ':provider/:user/:repo',
-        namedParams: {
-          provider: 'git-hub',
-          user: 'doctrine',
-          repo: 'dbal',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  static examples = [
+    {
+      title: 'continuousphp',
+      pattern: ':provider/:user/:repo',
+      namedParams: {
+        provider: 'git-hub',
+        user: 'doctrine',
+        repo: 'dbal',
       },
-      {
-        title: 'continuousphp',
-        pattern: ':provider/:user/:repo/:branch',
-        namedParams: {
-          provider: 'git-hub',
-          user: 'doctrine',
-          repo: 'dbal',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+    {
+      title: 'continuousphp',
+      pattern: ':provider/:user/:repo/:branch',
+      namedParams: {
+        provider: 'git-hub',
+        user: 'doctrine',
+        repo: 'dbal',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'continuousphp' }
-  }
+  static defaultBadgeData = { label: 'continuousphp' }
 
   static render({ status }) {
     const badge = renderBuildStatusBadge({ label: 'build', status })

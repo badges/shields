@@ -3,35 +3,25 @@
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesLicense extends BaseCratesService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'crates/l', pattern: ':crate/:version?' }
 
-  static get route() {
-    return {
-      base: 'crates/l',
-      pattern: ':crate/:version?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Crates.io',
-        pattern: ':crate',
-        namedParams: { crate: 'rustc-serialize' },
-        staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
-        keywords,
-      },
-      {
-        title: 'Crates.io',
-        pattern: ':crate/:version',
-        namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-        staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
-        keywords,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Crates.io',
+      pattern: ':crate',
+      namedParams: { crate: 'rustc-serialize' },
+      staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
+      keywords,
+    },
+    {
+      title: 'Crates.io',
+      pattern: ':crate/:version',
+      namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
+      staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
+      keywords,
+    },
+  ]
 
   static render({ license }) {
     return {

@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('@hapi/joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const {
   IMPROVED_STATUS,
@@ -7,13 +8,13 @@ const {
   NOT_FOUND_STATUS,
 } = require('./constants')
 
-t.create('Criterion (improved)')
-  .get('/chmoder/credit_card.json')
-  .expectBadge({ label: 'criterion', message: IMPROVED_STATUS })
+const isStatus = Joi.string()
+  .allow(IMPROVED_STATUS, NOT_FOUND_STATUS, REGRESSED_STATUS)
+  .required()
 
-t.create('Criterion (regressed)')
-  .get('/chmoder/data_vault.json')
-  .expectBadge({ label: 'criterion', message: REGRESSED_STATUS })
+t.create('Criterion (valid repo)')
+  .get('/chmoder/credit_card.json')
+  .expectBadge({ label: 'criterion', message: isStatus })
 
 t.create('Criterion (not found)')
   .get('/chmoder/not-a-repo.json')
