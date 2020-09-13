@@ -30,6 +30,8 @@ module.exports = function makeBadge({
       label,
       message,
       logoWidth,
+      // Only call normalizeColor for the JSON case: this is handled
+      // internally by toSvgColor in the SVG case.
       color: normalizeColor(color),
       labelColor: normalizeColor(labelColor),
       link: links,
