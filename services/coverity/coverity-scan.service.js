@@ -9,36 +9,22 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CoverityScan extends BaseJsonService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'coverity/scan', pattern: ':projectId' }
 
-  static get route() {
-    return {
-      base: 'coverity/scan',
-      pattern: ':projectId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Coverity Scan',
-        namedParams: {
-          projectId: '3997',
-        },
-        staticPreview: this.render({
-          message: 'passed',
-        }),
+  static examples = [
+    {
+      title: 'Coverity Scan',
+      namedParams: {
+        projectId: '3997',
       },
-    ]
-  }
+      staticPreview: this.render({
+        message: 'passed',
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'coverity',
-    }
-  }
+  static defaultBadgeData = { label: 'coverity' }
 
   static render({ message }) {
     let color
