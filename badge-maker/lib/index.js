@@ -38,7 +38,14 @@ function _validate(format) {
 }
 
 function _clean(format) {
-  const expectedKeys = ['label', 'message', 'labelColor', 'color', 'style']
+  const expectedKeys = [
+    'label',
+    'message',
+    'labelColor',
+    'color',
+    'style',
+    'links',
+  ]
 
   const cleaned = {}
   Object.keys(format).forEach(key => {
@@ -71,6 +78,7 @@ function _clean(format) {
  * @param {string} format.message (Required) Badge message (e.g: 'passing')
  * @param {string} format.labelColor (Optional) Label color
  * @param {string} format.color (Optional) Message color
+ * @param {string} format.links (Optional) Badge link(s) (e.g: ['label link', 'message link'])
  * @param {string} format.style (Optional) Visual style e.g: 'flat'
  * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md

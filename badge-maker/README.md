@@ -67,6 +67,7 @@ The format is the following:
   message: 'passed',  // (Required) Badge message
   labelColor: '#555',  // (Optional) Label color
   color: '#4c1',  // (Optional) Message color
+  links: ['https://github.com/badges/shields'],  // (Optional) Badge links (can provide up to 2 links)
 
   // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
