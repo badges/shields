@@ -24,27 +24,9 @@ function errorMessagesFor(notFoundMessage = 'repo not found') {
   }
 }
 
-function transformErrors(errors) {
+function transformErrors(errors, entity = 'repo') {
   if (errors[0].type === 'NOT_FOUND') {
-    return new NotFound({ prettyMessage: 'repo not found' })
-  } else {
-    return new InvalidResponse({ prettyMessage: errors[0].message })
-  }
-}
-
-/**
- * This method can be used to transform graphql error when any query path is not found.
- * When user or organization is not found, it creates error with
- * pretty message.
- *
- * @param {*} errors graphql raw error
- * @returns {*} specific error
- */
-function transformGraphqlErrors(errors) {
-  if (errors[0].type === 'NOT_FOUND') {
-    return new NotFound({
-      prettyMessage: `${errors[0].path.join('/')} not found`,
-    })
+    return new NotFound({ prettyMessage: `${entity} not found` })
   } else {
     return new InvalidResponse({ prettyMessage: errors[0].message })
   }
@@ -62,6 +44,5 @@ module.exports = {
   commentsColor,
   errorMessagesFor,
   transformErrors,
-  transformGraphqlErrors,
   staticAuthConfigured,
 }

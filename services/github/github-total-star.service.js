@@ -7,20 +7,20 @@ const { metric } = require('../text-formatters')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const {
   documentation: commonDocumentation,
-  transformGraphqlErrors: transformErrors,
+  transformErrors,
 } = require('./github-helpers')
 
 const MAX_REPO_LIMIT = 200
 
-const customDocumentation = `This badge takes upto <mark>${MAX_REPO_LIMIT}</mark> most starred repositories into account.`
+const customDocumentation = `This badge takes upto <code>${MAX_REPO_LIMIT}</code> most starred repositories of given user / org into account.`
 
 const userDocumentation = `${commonDocumentation}
 <p>
   <b>Note:</b><br>
   1. ${customDocumentation}<br>
-  2. <mark>affiliations</mark> query param accepts three value <mark>OWNER</mark>, <mark>COLLABORATOR</mark>, <mark>ORGANIZATION_MEMBER</mark>.
-  One can pass comma separated combination of these values (no spaces) e.g. <mark>OWNER,COLLABORATOR</mark> or <mark>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</mark>.
-  Default value is <mark>OWNER</mark>. See these values explanation <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.
+  2. <code>affiliations</code> query param accepts three value <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
+  One can pass comma separated combination of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.
+  Default value is <code>OWNER</code>. See these values explanation <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.
 </p>
 `
 const orgDocumentation = `${commonDocumentation}
@@ -37,7 +37,7 @@ const nodesSchema = Joi.array()
   .items(
     Joi.object({
       stargazers: Joi.object({
-        totalCount: nonNegativeInteger.required(),
+        totalCount: nonNegativeInteger,
       }).required(),
     })
   )
@@ -73,7 +73,7 @@ const userQuery = gql`
       repositories(
         first: 100
         after: $nextCursor
-        affiliations: $affiliations
+        ownerAffiliations: $affiliations
         orderBy: { field: STARGAZERS, direction: DESC }
       ) {
         pageInfo {
@@ -134,13 +134,12 @@ const validateAffiliations = (value, helpers) => {
 
 const queryParamSchema = Joi.object({
   org: Joi.valid('').optional(),
-  // TODO add regex
   affiliations: Joi.string().default('OWNER').custom(validateAffiliations),
 }).required()
 
-module.exports = class TotalStarService extends GithubAuthV4Service {
+module.exports = class GithubTotalStarService extends GithubAuthV4Service {
   static get defaultLabel() {
-    return 'Total Stars'
+    return 'Stars'
   }
 
   static get category() {
@@ -149,8 +148,8 @@ module.exports = class TotalStarService extends GithubAuthV4Service {
 
   static get route() {
     return {
-      base: 'github/users',
-      pattern: ':user/total-stars',
+      base: 'github/stars',
+      pattern: ':user',
       queryParamSchema,
     }
   }
@@ -158,7 +157,7 @@ module.exports = class TotalStarService extends GithubAuthV4Service {
   static get examples() {
     return [
       {
-        title: "Github User's total stars",
+        title: "Github User's stars",
         namedParams: {
           user: 'chris48s',
         },
@@ -171,7 +170,7 @@ module.exports = class TotalStarService extends GithubAuthV4Service {
         documentation: userDocumentation,
       },
       {
-        title: "Github Org's total stars",
+        title: "Github Org's stars",
         namedParams: {
           user: 'badges',
         },
@@ -208,7 +207,8 @@ module.exports = class TotalStarService extends GithubAuthV4Service {
       query,
       variables,
       schema,
-      transformErrors,
+      transformErrors: e =>
+        transformErrors(e, org === undefined ? 'user' : 'org'),
     })
   }
 
