@@ -16,30 +16,20 @@ const buildSchema = Joi.object({
 }).required()
 
 module.exports = class DockerBuild extends BaseJsonService {
-  static get category() {
-    return 'build'
-  }
-
-  static get route() {
-    return buildDockerUrl('build')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Docker Build Status',
-        namedParams: {
-          user: 'jrottenberg',
-          repo: 'ffmpeg',
-        },
-        staticPreview: this.render({ status: 10 }),
+  static category = 'build'
+  static route = buildDockerUrl('build')
+  static examples = [
+    {
+      title: 'Docker Build Status',
+      namedParams: {
+        user: 'jrottenberg',
+        repo: 'ffmpeg',
       },
-    ]
-  }
+      staticPreview: this.render({ status: 10 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'docker build' }
-  }
+  static defaultBadgeData = { label: 'docker build' }
 
   static render({ status }) {
     if (status === 10) {
