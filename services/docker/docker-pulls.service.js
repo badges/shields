@@ -15,30 +15,20 @@ const pullsSchema = Joi.object({
 }).required()
 
 module.exports = class DockerPulls extends BaseJsonService {
-  static get category() {
-    return 'downloads'
-  }
-
-  static get route() {
-    return buildDockerUrl('pulls')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Docker Pulls',
-        namedParams: {
-          user: '_',
-          repo: 'ubuntu',
-        },
-        staticPreview: this.render({ count: 765400000 }),
+  static category = 'downloads'
+  static route = buildDockerUrl('pulls')
+  static examples = [
+    {
+      title: 'Docker Pulls',
+      namedParams: {
+        user: '_',
+        repo: 'ubuntu',
       },
-    ]
-  }
+      staticPreview: this.render({ count: 765400000 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'docker pulls' }
-  }
+  static defaultBadgeData = { label: 'docker pulls' }
 
   static render({ count }) {
     return {

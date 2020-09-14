@@ -7,6 +7,8 @@ type State = Record<StateKey, string>
 
 export default function StaticBadgeMaker({
   baseUrl = document.location.href,
+}: {
+  baseUrl: string
 }): JSX.Element {
   const [values, setValues] = useState<State>({
     label: '',

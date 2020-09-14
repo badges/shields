@@ -81,7 +81,7 @@ module.exports = class TwitchBase extends BaseJsonService {
       options: {
         ...request.options,
         headers: {
-          'Client-ID': this.authHelper.user,
+          'Client-ID': this.authHelper._user,
           Authorization: `Bearer ${await this._twitchToken()}`,
           ...(request.options && request.options.headers),
         },

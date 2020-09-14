@@ -1,13 +1,28 @@
 'use strict'
 
 const anafanafo = require('anafanafo')
+const { brightness } = require('./color')
 
 const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
+const brightnessThreshold = 0.69
 
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
+}
+
+function colorsForBackground(color) {
+  if (brightness(color) <= brightnessThreshold) {
+    return {
+      textColor: '#fff',
+      shadowColor: '#010101',
+    }
+  }
+  return {
+    textColor: '#333',
+    shadowColor: '#ccc',
+  }
 }
 
 function escapeXml(s) {
@@ -39,6 +54,34 @@ function computeWidths({ label, message }) {
   }
 }
 
+function createAccessibleText({ label, message }) {
+  const labelPrefix = label ? `${label}: ` : ''
+  return labelPrefix + message
+}
+
+function hasLinks({ links }) {
+  const [leftLink, rightLink] = links || []
+  const hasLeftLink = leftLink && leftLink.length
+  const hasRightLink = rightLink && rightLink.length
+  const hasLink = hasLeftLink && hasRightLink
+  return { hasLink, hasLeftLink, hasRightLink }
+}
+
+function shouldWrapBodyWithLink({ links }) {
+  const { hasLeftLink, hasRightLink } = hasLinks({ links })
+  return hasLeftLink && !hasRightLink
+}
+
+function renderAriaAttributes({ accessibleText, links }) {
+  const { hasLink } = hasLinks({ links })
+  return hasLink ? '' : `role="img" aria-label="${escapeXml(accessibleText)}"`
+}
+
+function renderTitle({ accessibleText, links }) {
+  const { hasLink } = hasLinks({ links })
+  return hasLink ? '' : `<title>${escapeXml(accessibleText)}</title>`
+}
+
 function renderLogo({
   logo,
   badgeHeight,
@@ -65,12 +108,32 @@ function renderLogo({
   }
 }
 
+function renderLink({
+  link,
+  height,
+  textLength,
+  horizPadding,
+  leftMargin,
+  renderedText,
+}) {
+  const rectHeight = height
+  const rectWidth = textLength + horizPadding * 2
+  const rectX = leftMargin > 1 ? leftMargin + 1 : 0
+  return `<a target="_blank" xlink:href="${escapeXml(link)}">
+    <rect width="${rectWidth}" x="${rectX}" height="${rectHeight}" fill="rgba(0,0,0,0)" />
+    ${renderedText}
+  </a>`
+}
+
 function renderText({
   leftMargin,
   horizPadding = 0,
   content,
+  link,
+  height,
   verticalMargin = 0,
   shadow = false,
+  color,
 }) {
   if (!content.length) {
     return { renderedText: '', width: 0 }
@@ -86,47 +149,45 @@ function renderText({
   const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
 
   let renderedText = ''
+  const { textColor, shadowColor } = colorsForBackground(color)
   if (shadow) {
-    renderedText = `<text x="${x}" y="${shadowMargin}" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
+    renderedText = `<text aria-hidden="true" x="${x}" y="${shadowMargin}" fill="${shadowColor}" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
   }
-  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
+  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" fill="${textColor}" textLength="${outTextLength}">${escapedContent}</text>`
 
   return {
-    renderedText,
+    renderedText: link
+      ? renderLink({
+          link,
+          height,
+          textLength,
+          horizPadding,
+          leftMargin,
+          renderedText,
+        })
+      : renderedText,
     width: textLength,
   }
 }
 
-function renderLinks({
-  links: [leftLink, rightLink] = [],
-  leftWidth,
-  rightWidth,
-  height,
-}) {
-  leftLink = escapeXml(leftLink)
-  rightLink = escapeXml(rightLink)
-  const hasLeftLink = leftLink && leftLink.length
-  const hasRightLink = rightLink && rightLink.length
-  const leftLinkWidth = hasRightLink ? leftWidth : leftWidth + rightWidth
-
-  function render({ link, width }) {
-    return `<a target="_blank" xlink:href="${link}"><rect width="${width}" height="${height}" fill="rgba(0,0,0,0)"/></a>`
-  }
-
-  return (
-    (hasRightLink
-      ? render({ link: rightLink, width: leftWidth + rightWidth })
-      : '') +
-    (hasLeftLink ? render({ link: leftLink, width: leftLinkWidth }) : '')
-  )
-}
-
-function renderBadge({ links, leftWidth, rightWidth, height }, main) {
+function renderBadge(
+  { links, leftWidth, rightWidth, height, accessibleText },
+  main
+) {
   const width = leftWidth + rightWidth
+  const leftLink = escapeXml(links[0])
+
   return `
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">
-    ${main}
-    ${renderLinks({ links, leftWidth, rightWidth, height })}
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" ${renderAriaAttributes(
+    { links, accessibleText }
+  )}>
+
+    ${renderTitle({ accessibleText, links })}
+    ${
+      shouldWrapBodyWithLink({ links })
+        ? `<a target="_blank" xlink:href="${leftLink}">${main}</a>`
+        : main
+    }
     </svg>`
 }
 
@@ -174,6 +235,8 @@ class Badge {
       labelColor = '#555'
     }
 
+    const [leftLink, rightLink] = links
+
     labelColor = hasLabel || hasLogo ? labelColor : color
     labelColor = escapeXml(labelColor)
     color = escapeXml(color)
@@ -184,8 +247,11 @@ class Badge {
       leftMargin: labelMargin,
       horizPadding,
       content: label,
+      link: !shouldWrapBodyWithLink({ links }) && leftLink,
+      height: this.constructor.height,
       verticalMargin: this.constructor.verticalMargin,
       shadow: this.constructor.shadow,
+      color: labelColor,
     })
 
     const leftWidth = hasLabel
@@ -205,8 +271,11 @@ class Badge {
       leftMargin: messageMargin,
       horizPadding,
       content: message,
+      link: rightLink,
+      height: this.constructor.height,
       verticalMargin: this.constructor.verticalMargin,
       shadow: this.constructor.shadow,
+      color,
     })
 
     let rightWidth = messageWidth + 2 * horizPadding
@@ -216,12 +285,17 @@ class Badge {
 
     const width = leftWidth + rightWidth
 
+    const accessibleText = createAccessibleText({ label, message })
+
     this.links = links
     this.leftWidth = leftWidth
     this.rightWidth = rightWidth
     this.width = width
     this.labelColor = labelColor
     this.color = color
+    this.label = label
+    this.message = message
+    this.accessibleText = accessibleText
     this.renderedLogo = renderedLogo
     this.renderedLabel = renderedLabel
     this.renderedMessage = renderedMessage
@@ -255,6 +329,7 @@ class Plastic extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -307,6 +382,7 @@ class Flat extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -357,6 +433,7 @@ class FlatSquare extends Badge {
         links: this.links,
         leftWidth: this.leftWidth,
         rightWidth: this.rightWidth,
+        accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
       `
@@ -437,8 +514,9 @@ function social({
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
   rightLink = escapeXml(rightLink)
-  const hasLeftLink = leftLink && leftLink.length
-  const hasRightLink = rightLink && rightLink.length
+  const { hasLeftLink, hasRightLink, hasLink } = hasLinks({ links })
+
+  const accessibleText = createAccessibleText({ label, message })
 
   function renderMessageBubble() {
     const messageBubbleMainX = labelWidth + 6.5
@@ -450,16 +528,42 @@ function social({
     `
   }
 
+  function renderLabelText() {
+    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
+    const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
+      return `
+        <a target="_blank" xlink:href="${leftLink}">
+          ${shadow}
+          ${text}
+          ${rect}
+        </a>
+      `
+    }
+    return `
+      ${rect}
+      ${shadow}
+      ${text}
+    `
+  }
+
   function renderMessageText() {
     const messageTextX = (labelWidth + messageWidth / 2 + 6) * 10
     const messageTextLength = (messageWidth - 8) * 10
     const escapedMessage = escapeXml(message)
-    const shadow = `<text x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
+    const rect = `<rect width="${messageWidth + 1}" x="${
+      labelWidth + 6
+    }" height="${internalHeight + 1}" fill="rgba(0,0,0,0)" />`
+    const shadow = `<text aria-hidden="true" x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
     const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
     if (hasRightLink) {
       return `
-      ${shadow}
-      <a target="_blank" xlink:href="${rightLink}">${text}</a>
+        <a target="_blank" xlink:href="${rightLink}">
+          ${rect}
+          ${shadow}
+          ${text}
+        </a>
       `
     }
     return `
@@ -468,23 +572,16 @@ function social({
     `
   }
 
-  function renderLeftLink() {
-    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
-    if (hasLeftLink) {
-      return `<a target="_blank" xlink:href="${leftLink}">${rect}</a>`
-    }
-    return rect
-  }
-
   const badge = renderBadge(
     {
-      links: [],
+      links,
       leftWidth: labelWidth + 1,
       rightWidth: hasMessage ? messageWidth + 6 : 0,
+      accessibleText,
       height: externalHeight,
     },
     `
-    <style>a #llink:hover{fill:url(#b);stroke:#ccc}a #rlink:hover{fill:#4183c4}</style>
+    <style>a:hover #llink{fill:url(#b);stroke:#ccc}a:hover #rlink{fill:#4183c4}</style>
     <linearGradient id="a" x2="0" y2="100%">
       <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
       <stop offset="1" stop-opacity=".1"/>
@@ -498,12 +595,10 @@ function social({
       ${hasMessage ? renderMessageBubble() : ''}
     </g>
     ${renderedLogo}
-    <g fill="#333" text-anchor="middle" ${socialFontFamily} text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
-      <text x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
-      <text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
+    <g aria-hidden="${!hasLink}" fill="#333" text-anchor="middle" ${socialFontFamily} text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
+      ${renderLabelText()}
       ${hasMessage ? renderMessageText() : ''}
     </g>
-    ${renderLeftLink()}
     `
   )
 
@@ -568,13 +663,47 @@ function forTheBadge({
   color = escapeXml(color)
   labelColor = escapeXml(labelColor)
 
+  let [leftLink, rightLink] = links
+  leftLink = escapeXml(leftLink)
+  rightLink = escapeXml(rightLink)
+  const { hasLeftLink, hasRightLink } = hasLinks({ links })
+
+  const accessibleText = createAccessibleText({ label, message })
+
   function renderLabelText() {
+    const { textColor } = colorsForBackground(labelColor)
     const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
     const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
     const escapedLabel = escapeXml(label)
-    return `
-      <text x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>
-    `
+    const text = `<text fill="${textColor}" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
+      return `
+        <a target="_blank" xlink:href="${leftLink}">
+          <rect width="${leftWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
+          ${text}
+        </a>
+      `
+    }
+    return text
+  }
+
+  function renderMessageText() {
+    const { textColor } = colorsForBackground(color)
+    const text = `<text fill="${textColor}" x="${
+      (labelWidth + messageWidth / 2) * 10
+    }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
+      (messageWidth - 24) * 10
+    }">
+      ${escapeXml(message)}</text>`
+    if (hasRightLink) {
+      return `
+        <a target="_blank" xlink:href="${rightLink}">
+          <rect width="${rightWidth}" height="${height}" x="${labelWidth}" fill="rgba(0,0,0,0)"/>
+          ${text}
+        </a>
+      `
+    }
+    return text
   }
 
   const badge = renderBadge(
@@ -582,6 +711,7 @@ function forTheBadge({
       links,
       leftWidth,
       rightWidth,
+      accessibleText,
       height,
     },
     `
@@ -592,12 +722,7 @@ function forTheBadge({
     <g fill="#fff" text-anchor="middle" ${fontFamily} text-rendering="geometricPrecision" font-size="100">
       ${renderedLogo}
       ${hasLabel ? renderLabelText() : ''}
-      <text x="${
-        (labelWidth + messageWidth / 2) * 10
-      }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
-      (messageWidth - 24) * 10
-    }">
-        ${escapeXml(message)}</text>
+      ${renderMessageText()}
     </g>`
   )
 
@@ -607,4 +732,10 @@ function forTheBadge({
   return badge
 }
 
-module.exports = { plastic, flat, flatSquare, social, forTheBadge }
+module.exports = {
+  plastic,
+  flat,
+  social,
+  'flat-square': flatSquare,
+  'for-the-badge': forTheBadge,
+}

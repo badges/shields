@@ -22,9 +22,11 @@ const redStatuses = [
 ]
 
 const otherStatuses = [
+  'aborted',
   'building',
   'canceled',
   'cancelled',
+  'created',
   'expired',
   'initiated',
   'no builds',

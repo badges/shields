@@ -3,27 +3,17 @@
 const BaseCpanService = require('./cpan')
 
 module.exports = class CpanLicense extends BaseCpanService {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = { base: 'cpan/l', pattern: ':packageName' }
 
-  static get route() {
-    return {
-      base: 'cpan/l',
-      pattern: ':packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'CPAN',
-        namedParams: { packageName: 'Config-Augeas' },
-        staticPreview: this.render({ license: 'lgpl_2_1' }),
-        keywords: ['perl'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'CPAN',
+      namedParams: { packageName: 'Config-Augeas' },
+      staticPreview: this.render({ license: 'lgpl_2_1' }),
+      keywords: ['perl'],
+    },
+  ]
 
   static render({ license }) {
     return {

@@ -27,30 +27,18 @@ class AnsibleGalaxyRole extends BaseJsonService {
 }
 
 class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'ansible/role/d', pattern: ':roleId' }
 
-  static get route() {
-    return {
-      base: 'ansible/role/d',
-      pattern: ':roleId',
-    }
-  }
+  static examples = [
+    {
+      title: 'Ansible Role',
+      namedParams: { roleId: '3078' },
+      staticPreview: this.render({ downloads: 76 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Ansible Role',
-        namedParams: { roleId: '3078' },
-        staticPreview: this.render({ downloads: 76 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'role downloads' }
-  }
+  static defaultBadgeData = { label: 'role downloads' }
 
   static render({ downloads }) {
     return {
@@ -66,32 +54,20 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
 }
 
 class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
+  static route = { base: 'ansible/role', pattern: ':roleId' }
 
-  static get route() {
-    return {
-      base: 'ansible/role',
-      pattern: ':roleId',
-    }
-  }
+  static examples = [
+    {
+      title: 'Ansible Role',
+      namedParams: { roleId: '3078' },
+      staticPreview: this.render({
+        name: 'ansible-roles.sublimetext3_packagecontrol',
+      }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Ansible Role',
-        namedParams: { roleId: '3078' },
-        staticPreview: this.render({
-          name: 'ansible-roles.sublimetext3_packagecontrol',
-        }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'role' }
-  }
+  static defaultBadgeData = { label: 'role' }
 
   static render({ name }) {
     return { message: name, color: 'blue' }

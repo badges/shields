@@ -17,31 +17,28 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CodeclimateCoverage extends BaseJsonService {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+  static route = {
+    base: 'codeclimate',
+    pattern: ':format(coverage|coverage-letter)/:user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'codeclimate',
-      pattern: ':format(coverage|coverage-letter)/:user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Code Climate coverage',
-        namedParams: { format: 'coverage', user: 'jekyll', repo: 'jekyll' },
-        staticPreview: this.render({
-          format: 'coverage',
-          percentage: 95.123,
-          letter: 'A',
-        }),
-        keywords,
+  static examples = [
+    {
+      title: 'Code Climate coverage',
+      namedParams: {
+        format: 'coverage',
+        user: 'codeclimate',
+        repo: 'codeclimate',
       },
-    ]
-  }
+      staticPreview: this.render({
+        format: 'coverage',
+        percentage: 95.123,
+        letter: 'A',
+      }),
+      keywords,
+    },
+  ]
 
   static render({ wantLetter, percentage, letter }) {
     if (wantLetter) {

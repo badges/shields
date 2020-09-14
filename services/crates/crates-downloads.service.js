@@ -6,62 +6,55 @@ const { InvalidParameter, NotFound } = require('..')
 const { BaseCratesService, keywords } = require('./crates-base')
 
 module.exports = class CratesDownloads extends BaseCratesService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+  static route = {
+    base: 'crates',
+    pattern: ':variant(d|dv|dr)/:crate/:version?',
   }
 
-  static get route() {
-    return {
-      base: 'crates',
-      pattern: ':variant(d|dv|dr)/:crate/:version?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Crates.io',
-        pattern: 'd/:crate',
-        namedParams: {
-          crate: 'rustc-serialize',
-        },
-        staticPreview: this.render({ variant: 'd', downloads: 5000000 }),
-        keywords,
+  static examples = [
+    {
+      title: 'Crates.io',
+      pattern: 'd/:crate',
+      namedParams: {
+        crate: 'rustc-serialize',
       },
-      {
-        title: 'Crates.io (latest)',
-        pattern: 'dv/:crate',
-        namedParams: {
-          crate: 'rustc-serialize',
-        },
-        staticPreview: this.render({ variant: 'dv', downloads: 2000000 }),
-        keywords,
+      staticPreview: this.render({ variant: 'd', downloads: 5000000 }),
+      keywords,
+    },
+    {
+      title: 'Crates.io (latest)',
+      pattern: 'dv/:crate',
+      namedParams: {
+        crate: 'rustc-serialize',
       },
-      {
-        title: 'Crates.io (version)',
-        pattern: 'dv/:crate/:version',
-        namedParams: {
-          crate: 'rustc-serialize',
-          version: '0.3.24',
-        },
-        staticPreview: this.render({
-          variant: 'dv',
-          downloads: 2000000,
-          version: '0.3.24',
-        }),
-        keywords,
+      staticPreview: this.render({ variant: 'dv', downloads: 2000000 }),
+      keywords,
+    },
+    {
+      title: 'Crates.io (version)',
+      pattern: 'dv/:crate/:version',
+      namedParams: {
+        crate: 'rustc-serialize',
+        version: '0.3.24',
       },
-      {
-        title: 'Crates.io (recent)',
-        pattern: 'dr/:crate',
-        namedParams: {
-          crate: 'rustc-serialize',
-        },
-        staticPreview: this.render({ variant: 'dr', downloads: 2000000 }),
-        keywords,
+      staticPreview: this.render({
+        variant: 'dv',
+        downloads: 2000000,
+        version: '0.3.24',
+      }),
+      keywords,
+    },
+    {
+      title: 'Crates.io (recent)',
+      pattern: 'dr/:crate',
+      namedParams: {
+        crate: 'rustc-serialize',
       },
-    ]
-  }
+      staticPreview: this.render({ variant: 'dr', downloads: 2000000 }),
+      keywords,
+    },
+  ]
 
   static _getLabel(version, variant) {
     switch (variant) {
@@ -87,7 +80,7 @@ module.exports = class CratesDownloads extends BaseCratesService {
       case 'dv':
         return json.crate ? json.versions[0].downloads : json.version.downloads
       case 'dr':
-        return json.crate.recent_downloads
+        return json.crate.recent_downloads || 0
       default:
         return json.crate ? json.crate.downloads : json.version.downloads
     }

@@ -49,8 +49,9 @@ simple changes, like badge additions. These are usually tagged with
 
 Please review [these impeccable guidelines][code review guidelines].
 
-You can monitor [issues][] and the [chat room][], and help other people who
-have questions about contributing to Shields, or using it for their projects.
+You can monitor [issues][], [discussions][] and the [chat room][], and help
+other people who have questions about contributing to Shields, or using it
+for their projects.
 
 Feel free to reach out to one of the [maintainers][]
 if you need help getting started.
@@ -58,6 +59,7 @@ if you need help getting started.
 [service badge pr tag]: https://github.com/badges/shields/pulls?q=is%3Apr+is%3Aopen+label%3Aservice-badge
 [code review guidelines]: https://kickstarter.engineering/a-guide-to-mindful-communication-in-code-reviews-48aab5282e5e
 [issues]: https://github.com/badges/shields/issues
+[discussions]: https://github.com/badges/shields/discussions
 [chat room]: https://discordapp.com/invite/HjJCwm5
 [maintainers]: https://github.com/badges/shields#project-leaders
 
@@ -86,9 +88,9 @@ We're also asking for [one-time \$10 donations](https://opencollective.com/shiel
 There are three places to get help:
 
 1. If you're new to the project, a good place to start is the [tutorial][].
-2. If you need help getting started or implementing a change, [open an issue][]
+2. If you need help getting started or implementing a change, [start a discussion][discussions]
    with your question. We promise it's okay to do that. If there is already an
-   issue open for the feature you're working on, you can post there.
+   issue open for the feature you're working on, you can post there directly.
 3. You can also join the [chat room][] and ask your question there.
 
 [tutorial]: doc/TUTORIAL.md
@@ -96,11 +98,18 @@ There are three places to get help:
 ## Badge guidelines
 
 - Shields.io hosts integrations for services which are primarily
-  used by developers or which are widely used by developers
+  used by developers or which are widely used by developers.
 - The left-hand side of a badge should not advertise. It should be a lowercase _noun_
   succinctly describing the meaning of the right-hand side.
 - Except for badges using the `social` style, logos should be _turned off by
   default_.
+- Badges should not obtain data from undocumented or reverse-engineered API endpoints.
+- Badges should not obtain data by scraping web pages - these are likely to break frequently.
+  Whereas API publishers are incentivised to maintain a stable platform for their users,
+  authors of web pages have no such incentive.
+- Badges may require users to specify a token in the badge URL as long it is scoped only to
+  fetching information and doesn't expose any sensitive information. Generating a token with the
+  correct scope must be clearly documented.
 
 ## Badge URLs
 
