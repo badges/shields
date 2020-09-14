@@ -10,33 +10,21 @@ const documentation = `
 `
 
 module.exports = class Date extends BaseService {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
+  static route = { base: 'date', pattern: ':timestamp([0-9]+)' }
 
-  static get route() {
-    return {
-      base: 'date',
-      pattern: ':timestamp([0-9]+)',
-    }
-  }
+  static examples = [
+    {
+      title: 'Relative date',
+      pattern: ':timestamp',
+      namedParams: { timestamp: '1540814400' },
+      staticPreview: this.render({ relativeDateString: '2 days ago' }),
+      keywords: ['time', 'countdown', 'countup', 'moment'],
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Relative date',
-        pattern: ':timestamp',
-        namedParams: { timestamp: '1540814400' },
-        staticPreview: this.render({ relativeDateString: '2 days ago' }),
-        keywords: ['time', 'countdown', 'countup', 'moment'],
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'date' }
-  }
+  static defaultBadgeData = { label: 'date' }
 
   static render({ relativeDateString }) {
     return {
