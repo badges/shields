@@ -732,4 +732,10 @@ function forTheBadge({
   return badge
 }
 
-module.exports = { plastic, flat, flatSquare, social, forTheBadge }
+module.exports = {
+  plastic,
+  flat,
+  social,
+  'flat-square': flatSquare,
+  'for-the-badge': forTheBadge,
+}

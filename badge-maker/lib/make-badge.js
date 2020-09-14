@@ -1,6 +1,5 @@
 'use strict'
 
-const camelcase = require('camelcase')
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 
@@ -24,28 +23,26 @@ module.exports = function makeBadge({
 
   const [label, message] = text
 
-  color = normalizeColor(color)
-  labelColor = normalizeColor(labelColor)
-
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
     return JSON.stringify({
       label,
       message,
       logoWidth,
-      color,
-      labelColor,
+      // Only call normalizeColor for the JSON case: this is handled
+      // internally by toSvgColor in the SVG case.
+      color: normalizeColor(color),
+      labelColor: normalizeColor(labelColor),
       link: links,
       name: label,
       value: message,
     })
   }
 
-  const methodName = camelcase(template)
-  if (!(methodName in badgeRenderers)) {
+  const render = badgeRenderers[template]
+  if (!render) {
     throw new Error(`Unknown template: '${template}'`)
   }
-  const render = badgeRenderers[methodName]
 
   logoWidth = +logoWidth || (logo ? 14 : 0)
 
