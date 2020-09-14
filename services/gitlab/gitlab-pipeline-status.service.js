@@ -3,10 +3,15 @@
 const Joi = require('@hapi/joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound, redirector } = require('..')
+const {
+  BaseSvgScrapingService,
+  NotFound,
+  Inaccessible,
+  redirector,
+} = require('..')
 
 const badgeSchema = Joi.object({
-  message: Joi.alternatives()
+  status: Joi.alternatives()
     .try(isBuildStatus, Joi.equal('unknown'))
     .required(),
 }).required()
@@ -73,18 +78,65 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
+  async fetch({ user, repo, branch, baseUrl }) {
+    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`
+    const options = { headers: { Accept: 'image/svg+xml' } }
+    const errorMessages = {
+      401: 'repo not found',
+      404: 'repo not found',
+    }
+    try {
+      const { buffer } = await this._request({
+        url,
+        options,
+        errorMessages,
+      })
+      const data = {
+        status: super.constructor.valueFromSvgBadge(buffer),
+      }
+
+      return super.constructor._validate(data, badgeSchema)
+    } catch (e) {
+      if (e instanceof Inaccessible) {
+        try {
+          await this._request({
+            url,
+            options: {
+              ...options,
+              ...{ method: 'HEAD', followRedirect: false },
+            },
+            errorMessages,
+          })
+        } catch (err) {
+          const {
+            response: {
+              statusCode,
+              headers: { location },
+            },
+          } = err
+          if (
+            (statusCode === 301 || statusCode === 302) &&
+            location === `${baseUrl}/users/sign_in`
+          ) {
+            throw new NotFound({ prettyMessage: 'repo not found or private' })
+          }
+        }
+      }
+      throw e
+    }
+  }
+
   async handle(
     { user, repo, branch },
     { gitlab_url: baseUrl = 'https://gitlab.com' }
   ) {
-    const { message: status } = await this._requestSvg({
-      schema: badgeSchema,
-      url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
-      errorMessages: {
-        401: 'repo not found',
-        404: 'repo not found',
-      },
+    const { status } = await this.fetch({
+      user,
+      repo,
+      branch,
+      baseUrl,
     })
+
     if (status === 'unknown') {
       throw new NotFound({ prettyMessage: 'branch not found' })
     }
