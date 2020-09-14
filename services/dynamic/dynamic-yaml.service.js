@@ -6,13 +6,8 @@ const { createRoute } = require('./dynamic-helpers')
 const jsonPath = require('./json-path')
 
 module.exports = class DynamicYaml extends jsonPath(BaseYamlService) {
-  static get enabledMetrics() {
-    return [MetricNames.SERVICE_RESPONSE_SIZE]
-  }
-
-  static get route() {
-    return createRoute('yaml')
-  }
+  static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
+  static route = createRoute('yaml')
 
   async fetch({ schema, url, errorMessages }) {
     return this._requestYaml({
