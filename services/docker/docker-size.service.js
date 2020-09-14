@@ -31,45 +31,32 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class DockerSize extends BaseJsonService {
-  static get category() {
-    return 'size'
-  }
+  static category = 'size'
+  static route = { ...buildDockerUrl('image-size', true), queryParamSchema }
+  static examples = [
+    {
+      title: 'Docker Image Size (latest by date)',
+      pattern: ':user/:repo',
+      namedParams: { user: 'fedora', repo: 'apache' },
+      queryParams: { sort: 'date' },
+      staticPreview: this.render({ size: 126000000 }),
+    },
+    {
+      title: 'Docker Image Size (latest semver)',
+      pattern: ':user/:repo',
+      namedParams: { user: 'fedora', repo: 'apache' },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({ size: 136000000 }),
+    },
+    {
+      title: 'Docker Image Size (tag)',
+      pattern: ':user/:repo/:tag',
+      namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
+      staticPreview: this.render({ size: 103000000 }),
+    },
+  ]
 
-  static get route() {
-    return { ...buildDockerUrl('image-size', true), queryParamSchema }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Docker Image Size (latest by date)',
-        pattern: ':user/:repo',
-        namedParams: { user: 'fedora', repo: 'apache' },
-        queryParams: { sort: 'date' },
-        staticPreview: this.render({ size: 126000000 }),
-      },
-      {
-        title: 'Docker Image Size (latest semver)',
-        pattern: ':user/:repo',
-        namedParams: { user: 'fedora', repo: 'apache' },
-        queryParams: { sort: 'semver' },
-        staticPreview: this.render({ size: 136000000 }),
-      },
-      {
-        title: 'Docker Image Size (tag)',
-        pattern: ':user/:repo/:tag',
-        namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
-        staticPreview: this.render({ size: 103000000 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'image size',
-      color: 'blue',
-    }
-  }
+  static defaultBadgeData = { label: 'image size', color: 'blue' }
 
   static render({ size }) {
     return { message: prettyBytes(size) }
