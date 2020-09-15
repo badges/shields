@@ -11,30 +11,17 @@ const apiSchema = Joi.object({
 }).required()
 
 module.exports = class EcologiTrees extends BaseJsonService {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
+  static route = { base: 'ecologi/trees', pattern: ':username' }
+  static examples = [
+    {
+      title: 'Ecologi (Trees)',
+      namedParams: { username: 'ecologi' },
+      staticPreview: this.render({ count: 250 }),
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'ecologi/trees',
-      pattern: ':username',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Ecologi (Trees)',
-        namedParams: { username: 'ecologi' },
-        staticPreview: this.render({ count: 250 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'trees' }
-  }
+  static defaultBadgeData = { label: 'trees' }
 
   static render({ count }) {
     return { message: metric(count), color: floorCount(count, 10, 50, 100) }

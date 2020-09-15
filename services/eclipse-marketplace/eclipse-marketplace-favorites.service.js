@@ -13,27 +13,17 @@ const favoritesResponseSchema = Joi.object({
 }).required()
 
 module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBase {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
+  static route = this.buildRoute('eclipse-marketplace/favorites')
+  static examples = [
+    {
+      title: 'Eclipse Marketplace',
+      namedParams: { name: 'notepad4e' },
+      staticPreview: this.render({ favorited: 55 }),
+    },
+  ]
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/favorites')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Eclipse Marketplace',
-        namedParams: { name: 'notepad4e' },
-        staticPreview: this.render({ favorited: 55 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'favorites' }
-  }
+  static defaultBadgeData = { label: 'favorites' }
 
   static render({ favorited }) {
     return {
