@@ -14,23 +14,10 @@ const { createRoute } = require('./dynamic-helpers')
 // JSON parser and write the queries in jsonpath instead. Then eventually
 // deprecate the old version.
 module.exports = class DynamicXml extends BaseService {
-  static get category() {
-    return 'dynamic'
-  }
-
-  static get enabledMetrics() {
-    return [MetricNames.SERVICE_RESPONSE_SIZE]
-  }
-
-  static get route() {
-    return createRoute('xml')
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'custom badge',
-    }
-  }
+  static category = 'dynamic'
+  static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
+  static route = createRoute('xml')
+  static defaultBadgeData = { label: 'custom badge' }
 
   transform({ pathExpression, buffer }) {
     // e.g. //book[2]/@id
