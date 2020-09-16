@@ -13,27 +13,17 @@ const versionResponseSchema = Joi.object({
 }).required()
 
 module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = this.buildRoute('eclipse-marketplace/v')
+  static examples = [
+    {
+      title: 'Eclipse Marketplace',
+      namedParams: { name: 'notepad4e' },
+      staticPreview: this.render({ version: '1.0.1' }),
+    },
+  ]
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/v')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Eclipse Marketplace',
-        namedParams: { name: 'notepad4e' },
-        staticPreview: this.render({ version: '1.0.1' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'eclipse marketplace' }
-  }
+  static defaultBadgeData = { label: 'eclipse marketplace' }
 
   static render({ version }) {
     return renderVersionBadge({ version })

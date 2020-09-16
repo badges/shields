@@ -12,27 +12,17 @@ const licenseResponseSchema = Joi.object({
 }).required()
 
 module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
+  static route = this.buildRoute('eclipse-marketplace/l')
+  static examples = [
+    {
+      title: 'Eclipse Marketplace',
+      namedParams: { name: 'notepad4e' },
+      staticPreview: this.render({ license: 'GPL' }),
+    },
+  ]
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/l')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Eclipse Marketplace',
-        namedParams: { name: 'notepad4e' },
-        staticPreview: this.render({ license: 'GPL' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'license' }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   static render({ license }) {
     if (license === '') {

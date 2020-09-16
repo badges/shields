@@ -35,56 +35,47 @@ const intervalMap = {
 }
 
 module.exports = class DubDownloads extends BaseJsonService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+  static route = {
+    base: 'dub',
+    pattern: ':interval(dd|dw|dm|dt)/:packageName/:version*',
   }
 
-  static get route() {
-    return {
-      base: 'dub',
-      pattern: ':interval(dd|dw|dm|dt)/:packageName/:version*',
-    }
-  }
+  static examples = [
+    {
+      title: 'DUB',
+      namedParams: { interval: 'dm', packageName: 'vibe-d' },
+      staticPreview: this.render({ interval: 'dm', downloadCount: 5000 }),
+    },
+    {
+      title: 'DUB (version)',
+      namedParams: {
+        interval: 'dm',
+        packageName: 'vibe-d',
+        version: '0.8.4',
+      },
+      staticPreview: this.render({
+        interval: 'dm',
+        version: '0.8.4',
+        downloadCount: 100,
+      }),
+    },
+    {
+      title: 'DUB (latest)',
+      namedParams: {
+        interval: 'dm',
+        packageName: 'vibe-d',
+        version: 'latest',
+      },
+      staticPreview: this.render({
+        interval: 'dm',
+        version: 'latest',
+        downloadCount: 100,
+      }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'DUB',
-        namedParams: { interval: 'dm', packageName: 'vibe-d' },
-        staticPreview: this.render({ interval: 'dm', downloadCount: 5000 }),
-      },
-      {
-        title: 'DUB (version)',
-        namedParams: {
-          interval: 'dm',
-          packageName: 'vibe-d',
-          version: '0.8.4',
-        },
-        staticPreview: this.render({
-          interval: 'dm',
-          version: '0.8.4',
-          downloadCount: 100,
-        }),
-      },
-      {
-        title: 'DUB (latest)',
-        namedParams: {
-          interval: 'dm',
-          packageName: 'vibe-d',
-          version: 'latest',
-        },
-        staticPreview: this.render({
-          interval: 'dm',
-          version: 'latest',
-          downloadCount: 100,
-        }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ interval, version, downloadCount }) {
     const { messageSuffix } = intervalMap[interval]

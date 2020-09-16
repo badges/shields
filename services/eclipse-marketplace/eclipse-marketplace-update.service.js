@@ -15,27 +15,17 @@ const updateResponseSchema = Joi.object({
 }).required()
 
 module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
-  static get category() {
-    return 'activity'
-  }
+  static category = 'activity'
+  static route = this.buildRoute('eclipse-marketplace/last-update')
+  static examples = [
+    {
+      title: 'Eclipse Marketplace',
+      namedParams: { name: 'notepad4e' },
+      staticPreview: this.render({ date: new Date().getTime() }),
+    },
+  ]
 
-  static get route() {
-    return this.buildRoute('eclipse-marketplace/last-update')
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Eclipse Marketplace',
-        namedParams: { name: 'notepad4e' },
-        staticPreview: this.render({ date: new Date().getTime() }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'updated' }
-  }
+  static defaultBadgeData = { label: 'updated' }
 
   static render({ date }) {
     return {
