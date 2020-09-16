@@ -17,10 +17,10 @@ const documentation = `
 </p>
 `
 
-module.exports = class LinesOfCode extends BaseJsonService {
+module.exports = class Tokei extends BaseJsonService {
   static category = 'size'
 
-  static route = { base: 'tokei/l', pattern: ':provider/:user/:repo' }
+  static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }
 
   static get examples() {
     return [
@@ -38,14 +38,13 @@ module.exports = class LinesOfCode extends BaseJsonService {
     ]
   }
 
-  static defaultBadgeData = { label: 'total lines' }
+  static defaultBadgeData = {
+    label: 'total lines',
+    color: 'blue'
+  }
 
   static render({ lines }) {
-    return {
-      label: 'total lines',
-      message: metric(lines),
-      color: 'brightgreen',
-    }
+    return { message: metric(lines) }
   }
 
   async fetch({ provider, user, repo }) {
