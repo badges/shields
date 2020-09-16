@@ -40,7 +40,7 @@ module.exports = class Tokei extends BaseJsonService {
 
   static defaultBadgeData = {
     label: 'total lines',
-    color: 'blue'
+    color: 'blue',
   }
 
   static render({ lines }) {
