@@ -31,45 +31,32 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class DockerVersion extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { ...buildDockerUrl('v', true), queryParamSchema }
+  static examples = [
+    {
+      title: 'Docker Image Version (latest by date)',
+      pattern: ':user/:repo',
+      namedParams: { user: '_', repo: 'alpine' },
+      queryParams: { sort: 'date' },
+      staticPreview: this.render({ version: '3.9.5' }),
+    },
+    {
+      title: 'Docker Image Version (latest semver)',
+      pattern: ':user/:repo',
+      namedParams: { user: '_', repo: 'alpine' },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({ version: '3.11.3' }),
+    },
+    {
+      title: 'Docker Image Version (tag latest semver)',
+      pattern: ':user/:repo/:tag',
+      namedParams: { user: '_', repo: 'alpine', tag: '3.6' },
+      staticPreview: this.render({ version: '3.6.5' }),
+    },
+  ]
 
-  static get route() {
-    return { ...buildDockerUrl('v', true), queryParamSchema }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Docker Image Version (latest by date)',
-        pattern: ':user/:repo',
-        namedParams: { user: '_', repo: 'alpine' },
-        queryParams: { sort: 'date' },
-        staticPreview: this.render({ version: '3.9.5' }),
-      },
-      {
-        title: 'Docker Image Version (latest semver)',
-        pattern: ':user/:repo',
-        namedParams: { user: '_', repo: 'alpine' },
-        queryParams: { sort: 'semver' },
-        staticPreview: this.render({ version: '3.11.3' }),
-      },
-      {
-        title: 'Docker Image Version (tag latest semver)',
-        pattern: ':user/:repo/:tag',
-        namedParams: { user: '_', repo: 'alpine', tag: '3.6' },
-        staticPreview: this.render({ version: '3.6.5' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'version',
-      color: 'blue',
-    }
-  }
+  static defaultBadgeData = { label: 'version', color: 'blue' }
 
   static render({ version }) {
     return renderVersionBadge({ version })

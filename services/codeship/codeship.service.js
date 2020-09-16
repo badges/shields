@@ -27,42 +27,30 @@ const statusMap = {
 }
 
 module.exports = class Codeship extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
-  }
+  static category = 'build'
+  static route = { base: 'codeship', pattern: ':projectId/:branch*' }
 
-  static get route() {
-    return {
-      base: 'codeship',
-      pattern: ':projectId/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Codeship',
-        pattern: ':projectId',
-        namedParams: {
-          projectId: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  static examples = [
+    {
+      title: 'Codeship',
+      pattern: ':projectId',
+      namedParams: {
+        projectId: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
       },
-      {
-        title: 'Codeship (branch)',
-        pattern: ':projectId/:branch',
-        namedParams: {
-          projectId: '0bdb0440-3af5-0133-00ea-0ebda3a33bf6',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+    {
+      title: 'Codeship (branch)',
+      pattern: ':projectId/:branch',
+      namedParams: {
+        projectId: '0bdb0440-3af5-0133-00ea-0ebda3a33bf6',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'build' }
-  }
+  static defaultBadgeData = { label: 'build' }
 
   static render({ status }) {
     status = statusMap[status] || status

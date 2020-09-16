@@ -38,27 +38,16 @@ function DownloadsForInterval(interval) {
   }[interval]
 
   return class EclipseMarketplaceDownloads extends EclipseMarketplaceBase {
-    static get name() {
-      return name
-    }
-
-    static get category() {
-      return 'downloads'
-    }
-
-    static get route() {
-      return this.buildRoute(base)
-    }
-
-    static get examples() {
-      return [
-        {
-          title: 'Eclipse Marketplace',
-          namedParams: { name: 'notepad4e' },
-          staticPreview: this.render({ downloads: 30000 }),
-        },
-      ]
-    }
+    static name = name
+    static category = 'downloads'
+    static route = this.buildRoute(base)
+    static examples = [
+      {
+        title: 'Eclipse Marketplace',
+        namedParams: { name: 'notepad4e' },
+        staticPreview: this.render({ downloads: 30000 }),
+      },
+    ]
 
     static render({ downloads }) {
       return {

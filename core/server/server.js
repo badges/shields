@@ -148,13 +148,13 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
-  shieldsProductionHerokuHacks: Joi.boolean(),
 }).required()
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
   bintray_user: Joi.string(),
   bintray_apikey: Joi.string(),
+  discord_bot_token: Joi.string(),
   drone_token: Joi.string(),
   gh_client_id: Joi.string(),
   gh_client_secret: Joi.string(),
@@ -392,8 +392,6 @@ class Server {
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,
-          shieldsProductionHerokuHacks:
-            config.public.shieldsProductionHerokuHacks,
         }
       )
     )

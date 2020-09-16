@@ -27,51 +27,38 @@ const documentation = `
 `
 
 module.exports = class Bugzilla extends BaseJsonService {
-  static get category() {
-    return 'issue-tracking'
-  }
+  static category = 'issue-tracking'
+  static route = { base: 'bugzilla', pattern: ':bugNumber', queryParamSchema }
 
-  static get route() {
-    return {
-      base: 'bugzilla',
-      pattern: ':bugNumber',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Bugzilla bug status (Mozilla)',
-        namedParams: {
-          bugNumber: '996038',
-        },
-        staticPreview: this.render({
-          bugNumber: 996038,
-          status: 'FIXED',
-          resolution: '',
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'Bugzilla bug status (Mozilla)',
+      namedParams: {
+        bugNumber: '996038',
       },
-      {
-        title: 'Bugzilla bug status (non-Mozilla)',
-        namedParams: {
-          bugNumber: '545424',
-        },
-        queryParams: { baseUrl: 'https://bugs.eclipse.org/bugs' },
-        staticPreview: this.render({
-          bugNumber: 545424,
-          status: 'RESOLVED',
-          resolution: 'FIXED',
-        }),
-        documentation,
+      staticPreview: this.render({
+        bugNumber: 996038,
+        status: 'FIXED',
+        resolution: '',
+      }),
+      documentation,
+    },
+    {
+      title: 'Bugzilla bug status (non-Mozilla)',
+      namedParams: {
+        bugNumber: '545424',
       },
-    ]
-  }
+      queryParams: { baseUrl: 'https://bugs.eclipse.org/bugs' },
+      staticPreview: this.render({
+        bugNumber: 545424,
+        status: 'RESOLVED',
+        resolution: 'FIXED',
+      }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'bugzilla' }
-  }
+  static defaultBadgeData = { label: 'bugzilla' }
 
   static getDisplayStatus({ status, resolution }) {
     let displayStatus =

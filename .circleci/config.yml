@@ -129,6 +129,7 @@ package_steps: &package_steps
 
     # Run the package tests on each currently supported node version. See:
     # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
+    # https://nodejs.org/en/about/releases/
 
     - run:
         <<: *run_package_tests
@@ -161,47 +162,35 @@ package_steps: &package_steps
         path: junit
 
 jobs:
-  npm-install:
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-          environment:
-            CYPRESS_INSTALL_BINARY: 0
-
   main:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
 
     <<: *main_steps
 
-  main@node-12:
+  main@node-14:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
 
     <<: *main_steps
 
   integration:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
       - image: redis
 
     <<: *integration_steps
 
-  integration@node-12:
+  integration@node-14:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
       - image: redis
 
     <<: *integration_steps
 
   danger:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
 
@@ -221,7 +210,7 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
 
@@ -262,13 +251,13 @@ jobs:
 
   services:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
 
     <<: *services_steps
 
-  services@node-12:
+  services@node-14:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
 
     <<: *services_steps
 
@@ -323,11 +312,11 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - main@node-12:
+      - main@node-14:
           filters:
             branches:
               ignore: gh-pages
-      - integration@node-12:
+      - integration@node-14:
           filters:
             branches:
               ignore: gh-pages
@@ -345,7 +334,7 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - services@node-12:
+      - services@node-14:
           filters:
             branches:
               ignore:

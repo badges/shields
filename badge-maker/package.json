@@ -1,6 +1,6 @@
 {
   "name": "badge-maker",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",
@@ -36,8 +36,7 @@
   },
   "dependencies": {
     "anafanafo": "^1.0.0",
-    "camelcase": "^6.0.0",
-    "is-css-color": "^1.0.0"
+    "css-color-converter": "^1.1.1"
   },
   "scripts": {
     "test": "echo 'Run tests from parent dir'; false"

@@ -13,30 +13,18 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class CocoapodsDocs extends BaseJsonService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
+  static route = { base: 'cocoapods/metrics/doc-percent', pattern: ':spec' }
 
-  static get route() {
-    return {
-      base: 'cocoapods/metrics/doc-percent',
-      pattern: ':spec',
-    }
-  }
+  static examples = [
+    {
+      title: 'Cocoapods doc percentage',
+      namedParams: { spec: 'AFNetworking' },
+      staticPreview: this.render({ percentage: 94 }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Cocoapods doc percentage',
-        namedParams: { spec: 'AFNetworking' },
-        staticPreview: this.render({ percentage: 94 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'docs' }
-  }
+  static defaultBadgeData = { label: 'docs' }
 
   static render({ percentage }) {
     return {

@@ -47,7 +47,7 @@ module.exports = class NpmBase extends BaseJsonService {
     if (withTag) {
       return {
         base,
-        pattern: ':scope(@[^/]+)?/:packageName/:tag?',
+        pattern: ':scope(@[^/]+)?/:packageName/:tag*',
         queryParamSchema,
       }
     } else {

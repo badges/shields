@@ -70,9 +70,13 @@ This repo hosts:
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
-Browse a [complete list of badges][shields.io].
-
 [custom badges]: http://shields.io/#your-badge
+
+### Quickstart
+
+Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
+
+Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.
 
 ## Contributing
 
@@ -94,8 +98,8 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 ## Development
 
-1. Install Node 8 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 8 and 10.
+1. Install Node 12 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 12 and 14.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -124,8 +128,8 @@ Please report any Gitpod bugs, questions, or suggestions in issue
 
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
-`SNAPSHOT_DRY=1 npm run test:js:server` to preview changes to the saved
-snapshots, and `SNAPSHOT_UPDATE=1 npm run test:js:server` to update them.
+`SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved
+snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
@@ -202,10 +206,10 @@ Alumni:
 
 ## Related projects
 
-- [badgerbadgerbadger gem][gem]
+- [poser PHP library][poser]
 - [pybadges python library][pybadges]
 
-[gem]: https://github.com/badges/badgerbadgerbadger
+[poser]: https://github.com/badges/poser
 [pybadges]: https://github.com/google/pybadges
 
 ## License
