@@ -17,15 +17,8 @@ const { InvalidParameter, InvalidResponse } = require('..')
  */
 module.exports = superclass =>
   class extends superclass {
-    static get category() {
-      return 'dynamic'
-    }
-
-    static get defaultBadgeData() {
-      return {
-        label: 'custom badge',
-      }
-    }
+    static category = 'dynamic'
+    static defaultBadgeData = { label: 'custom badge' }
 
     /**
      * Request data from an upstream API, transform it to JSON and validate against a schema

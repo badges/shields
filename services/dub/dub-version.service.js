@@ -7,30 +7,17 @@ const { BaseJsonService } = require('..')
 const schema = Joi.string().required()
 
 module.exports = class DubVersion extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'dub/v', pattern: ':packageName' }
+  static examples = [
+    {
+      title: 'DUB',
+      namedParams: { packageName: 'vibe-d' },
+      staticPreview: renderVersionBadge({ version: 'v0.8.4' }),
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'dub/v',
-      pattern: ':packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'DUB',
-        namedParams: { packageName: 'vibe-d' },
-        staticPreview: renderVersionBadge({ version: 'v0.8.4' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'dub' }
-  }
+  static defaultBadgeData = { label: 'dub' }
 
   async fetch({ packageName }) {
     return this._requestJson({

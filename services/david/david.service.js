@@ -41,37 +41,28 @@ const statusMap = {
 }
 
 module.exports = class David extends BaseJsonService {
-  static get category() {
-    return 'dependencies'
+  static category = 'dependencies'
+  static route = {
+    base: 'david',
+    pattern: ':kind(dev|optional|peer)?/:user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'david',
-      pattern: ':kind(dev|optional|peer)?/:user/:repo',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'David',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      staticPreview: this.render({ status: 'uptodate' }),
+    },
+    {
+      title: 'David (path)',
+      namedParams: { user: 'babel', repo: 'babel' },
+      queryParams: { path: 'packages/babel-core' },
+      staticPreview: this.render({ status: 'uptodate' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'David',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        staticPreview: this.render({ status: 'uptodate' }),
-      },
-      {
-        title: 'David (path)',
-        namedParams: { user: 'babel', repo: 'babel' },
-        queryParams: { path: 'packages/babel-core' },
-        staticPreview: this.render({ status: 'uptodate' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'dependencies' }
-  }
+  static defaultBadgeData = { label: 'dependencies' }
 
   static render({ status, kind }) {
     return {

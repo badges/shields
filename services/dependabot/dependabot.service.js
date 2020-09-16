@@ -10,33 +10,24 @@ const schema = Joi.object({
 })
 
 module.exports = class DependabotSemverCompatibility extends BaseJsonService {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+  static route = {
+    base: 'dependabot/semver',
+    pattern: ':packageManager/:dependencyName',
   }
 
-  static get route() {
-    return {
-      base: 'dependabot/semver',
-      pattern: ':packageManager/:dependencyName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Dependabot SemVer Compatibility',
-        namedParams: { packageManager: 'bundler', dependencyName: 'puma' },
-        staticPreview: {
-          color: 'green',
-          message: '98%',
-        },
+  static examples = [
+    {
+      title: 'Dependabot SemVer Compatibility',
+      namedParams: { packageManager: 'bundler', dependencyName: 'puma' },
+      staticPreview: {
+        color: 'green',
+        message: '98%',
       },
-    ]
-  }
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'semver stability' }
-  }
+  static defaultBadgeData = { label: 'semver stability' }
 
   _getQuery({ packageManager, dependencyName }) {
     return {

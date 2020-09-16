@@ -10,30 +10,17 @@ const apiSchema = Joi.object({
 }).required()
 
 module.exports = class EcologiCarbonOffset extends BaseJsonService {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
+  static route = { base: 'ecologi/carbon', pattern: ':username' }
+  static examples = [
+    {
+      title: 'Ecologi (Carbon Offset)',
+      namedParams: { username: 'ecologi' },
+      staticPreview: this.render({ count: 15.05 }),
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'ecologi/carbon',
-      pattern: ':username',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Ecologi (Carbon Offset)',
-        namedParams: { username: 'ecologi' },
-        staticPreview: this.render({ count: 15.05 }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'carbon offset' }
-  }
+  static defaultBadgeData = { label: 'carbon offset' }
 
   static render({ count }) {
     const tonnes = metric(count)
