@@ -48,6 +48,15 @@ module.exports = class Tokei extends BaseJsonService {
   }
 
   async fetch({ provider, user, repo }) {
+    // This request uses the tokei-rs (https://github.com/XAMPPRocky/tokei_rs) API.
+    //
+    // By default, the API returns an svg, but when the Accept HTTP header is set to
+    // `application/json`, it sends json data. The `_requestJson` method
+    // automatically sets the Accept Header to what we need, so we don't need to
+    // specify it here
+    //
+    // This behaviour of the API is "documented" here:
+    // https://github.com/XAMPPRocky/tokei_rs/issues/8#issuecomment-475071147
     return this._requestJson({
       schema,
       url: `https://tokei.rs/b1/${provider}/${user}/${repo}`,
