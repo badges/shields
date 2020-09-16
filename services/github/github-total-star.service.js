@@ -12,15 +12,15 @@ const {
 
 const MAX_REPO_LIMIT = 200
 
-const customDocumentation = `This badge takes upto <code>${MAX_REPO_LIMIT}</code> most starred repositories of given user / org into account.`
+const customDocumentation = `This badge takes into account up to <code>${MAX_REPO_LIMIT}</code> of the most starred repositories of given user / org.`
 
 const userDocumentation = `${commonDocumentation}
 <p>
   <b>Note:</b><br>
   1. ${customDocumentation}<br>
-  2. <code>affiliations</code> query param accepts three value <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
-  One can pass comma separated combination of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.
-  Default value is <code>OWNER</code>. See these values explanation <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.
+  2. <code>affiliations</code> query param accepts three values (must be UPPER case) <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
+  One can pass comma separated combinations of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.
+  Default value is <code>OWNER</code>. See the explanation of these values <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.
 </p>
 `
 const orgDocumentation = `${commonDocumentation}
@@ -138,58 +138,47 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class GithubTotalStarService extends GithubAuthV4Service {
-  static get defaultLabel() {
-    return 'Stars'
+  static defaultLabel = 'Stars'
+  static category = 'social'
+
+  static route = {
+    base: 'github/stars',
+    pattern: ':user',
+    queryParamSchema,
   }
 
-  static get category() {
-    return 'social'
-  }
-
-  static get route() {
-    return {
-      base: 'github/stars',
-      pattern: ':user',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: "Github User's stars",
-        namedParams: {
-          user: 'chris48s',
-        },
-        queryParams: { affiliations: 'OWNER,COLLABORATOR' },
-        staticPreview: {
-          label: this.defaultLabel,
-          message: 54,
-          style: 'social',
-        },
-        documentation: userDocumentation,
+  static examples = [
+    {
+      title: "Github User's stars",
+      namedParams: {
+        user: 'chris48s',
       },
-      {
-        title: "Github Org's stars",
-        namedParams: {
-          user: 'badges',
-        },
-        queryParams: { org: null },
-        staticPreview: {
-          label: this.defaultLabel,
-          message: metric(7000),
-          style: 'social',
-        },
-        documentation: orgDocumentation,
+      queryParams: { affiliations: 'OWNER,COLLABORATOR' },
+      staticPreview: {
+        label: this.defaultLabel,
+        message: 54,
+        style: 'social',
       },
-    ]
-  }
+      documentation: userDocumentation,
+    },
+    {
+      title: "Github Org's stars",
+      namedParams: {
+        user: 'badges',
+      },
+      queryParams: { org: null },
+      staticPreview: {
+        label: this.defaultLabel,
+        message: metric(7000),
+        style: 'social',
+      },
+      documentation: orgDocumentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: this.defaultLabel,
-      namedLogo: 'github',
-    }
+  static defaultBadgeData = {
+    label: this.defaultLabel,
+    namedLogo: 'github',
   }
 
   static render({ totalStars, user }) {
