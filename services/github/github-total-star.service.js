@@ -63,7 +63,7 @@ const schema = Joi.object({
   ).required(),
 }).required()
 
-const userQuery = gql`
+const query = gql`
   query fetchStars(
     $user: String!
     $nextCursor: String
@@ -87,11 +87,7 @@ const userQuery = gql`
         }
       }
     }
-  }
-`
 
-const orgQuery = gql`
-  query fetchStars($user: String!, $nextCursor: String) {
     organization(login: $user) {
       repositories(
         first: 100
@@ -111,6 +107,7 @@ const orgQuery = gql`
     }
   }
 `
+
 const affiliationsAllowedValues = [
   'OWNER',
   `COLLABORATOR`,
@@ -133,12 +130,11 @@ const validateAffiliations = (value, helpers) => {
 }
 
 const queryParamSchema = Joi.object({
-  org: Joi.valid('').optional(),
   affiliations: Joi.string().default('OWNER').custom(validateAffiliations),
 }).required()
 
 module.exports = class GithubTotalStarService extends GithubAuthV4Service {
-  static defaultLabel = 'Stars'
+  static defaultLabel = 'stars'
   static category = 'social'
 
   static route = {
@@ -149,7 +145,7 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
 
   static examples = [
     {
-      title: "Github User's stars",
+      title: "GitHub User's stars",
       namedParams: {
         user: 'chris48s',
       },
@@ -162,11 +158,10 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
       documentation: userDocumentation,
     },
     {
-      title: "Github Org's stars",
+      title: "GitHub Org's stars",
       namedParams: {
         user: 'badges',
       },
-      queryParams: { org: null },
       staticPreview: {
         label: this.defaultLabel,
         message: metric(7000),
@@ -189,15 +184,15 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, org, affiliations, nextCursor }) {
-    const query = org === undefined ? userQuery : orgQuery
+  async fetch({ user, affiliations, nextCursor }) {
     const variables = { user, affiliations, nextCursor }
     return await this._requestGraphql({
       query,
       variables,
       schema,
-      transformErrors: e =>
-        transformErrors(e, org === undefined ? 'user' : 'org'),
+      transformJson: json =>
+        json.data.organization || json.data.user ? { data: json.data } : json,
+      transformErrors: e => transformErrors(e, 'user/org'),
     })
   }
 
@@ -205,22 +200,23 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
     const totalStars = repos
       .map(element => element.stargazers.totalCount)
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    const lastRepo = repos.slice(-1).pop() // undefined when repos is empty
+    const hasStars = lastRepo ? lastRepo.stargazers.totalCount !== 0 : false
     return {
       totalStars,
+      hasStars,
     }
   }
 
-  async getTotalStars({ user }, { org, affiliations }) {
+  async getTotalStars({ user }, { affiliations }) {
     let grandTotalStars = 0
     let fetchedReposCount = 0
     let nextCursor = null
     let hasNext
-    const dataType = org === undefined ? 'user' : 'organization'
 
     do {
       const { data } = await this.fetch({
         user,
-        org,
         affiliations: affiliations.split(','),
         nextCursor,
       })
@@ -229,11 +225,12 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
           pageInfo: { hasNextPage, endCursor },
           nodes: repos,
         },
-      } = data[dataType]
-      hasNext = hasNextPage
+      } = data.user || data.organization
+      const { totalStars, hasStars } = this.transform(repos)
+      // repos are sorted based on the stars. If last repo has zero star,
+      // no need to fire additional fetch call, as repos on next page will have zero stars only.
+      hasNext = hasNextPage && hasStars
       nextCursor = endCursor
-
-      const { totalStars } = this.transform(repos)
       grandTotalStars += totalStars
       fetchedReposCount += repos.length
     } while (hasNext && fetchedReposCount < MAX_REPO_LIMIT)
