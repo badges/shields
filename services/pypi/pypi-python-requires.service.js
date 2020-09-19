@@ -47,7 +47,7 @@ module.exports = class PypiPythonRequires extends PypiBase {
     const version = parsePyRequires(
       packageData,
       /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(\, )?)+$/
-    )[0] // For some reason, indexing it like this worked. Indexing within parsePyRequires didn't....
+    )
 
     return this.constructor.render({ version })
   }
