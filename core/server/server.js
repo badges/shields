@@ -20,6 +20,7 @@ const {
 } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
+const { setHeadersForCacheLength } = require('../base-service/cache-headers')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -186,6 +187,20 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
   influx_password: Joi.string().required(),
 })
+
+function getHandlerIndex(camp, functionName) {
+  const stackFunctions = camp.stack.map(fn => fn.name)
+  const index = stackFunctions.findIndex(name => name === functionName)
+  if (index === -1) {
+    throw new Error(`Could not find stack function ${functionName}`)
+  }
+  return index
+}
+
+function addHandlerAtIndex(camp, index, fn) {
+  camp.stack.splice(index, 0, fn)
+}
+
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -421,6 +436,17 @@ class Server {
       cert,
       key,
     }))
+
+    const index = getHandlerIndex(this.camp, 'staticLayer')
+    addHandlerAtIndex(this.camp, index, function addCacheHeaders(
+      req,
+      res,
+      next
+    ) {
+      const frontendMaxAge = 300
+      setHeadersForCacheLength(res, frontendMaxAge)
+      next()
+    })
 
     const { metricInstance } = this
     this.cleanupMonitor = sysMonitor.setRoutes(

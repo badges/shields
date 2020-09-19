@@ -45,6 +45,16 @@ describe('The server', function () {
         .and.to.include('apple')
     })
 
+    it('should serve front-end with default maxAge', async function () {
+      const { headers } = await got(`${baseUrl}/`)
+      expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
+    })
+
+    it('should serve badges with custom maxAge', async function () {
+      const { headers } = await got(`${baseUrl}npm/l/express`)
+      expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
+    })
+
     it('should redirect colorscheme PNG badges as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.png`,
