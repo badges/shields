@@ -32,6 +32,9 @@ const documentation = `
 <p>
   Your badge should be working fine now.
 </p>
+<p>
+  NB - The badge will display 'inaccessible' if the specified repo was not found on the target Gitlab instance.
+</p>
 `
 
 class GitlabPipelineStatus extends BaseSvgScrapingService {
