@@ -57,10 +57,10 @@
     "pretty-bytes": "^5.4.1",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^11.5.3",
-    "query-string": "^6.13.1",
+    "query-string": "^6.13.2",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "3.7.0",
+    "simple-icons": "3.8.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.29"
   },
