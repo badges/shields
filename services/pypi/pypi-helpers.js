@@ -50,6 +50,15 @@ function parseClassifiers(parsedData, pattern) {
   return results
 }
 
+function parsePyRequires(parsedData, pattern) {
+	var results = ""
+	const matched = pattern.exec(parsedData.info.pyrequires)
+	if (matched && matched[1]) {
+		results = matched[0]
+	}
+	return results
+}
+
 function getLicenses(packageData) {
   const {
     info: { license },
