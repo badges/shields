@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@sentry/node": "^5.23.0",
+    "@sentry/node": "^5.24.2",
     "bytes": "^3.1.0",
     "camelcase": "^5.3.1",
     "@shields_io/camp": "^18.0.0",
@@ -57,10 +57,10 @@
     "pretty-bytes": "^5.4.1",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^11.5.3",
-    "query-string": "^6.13.1",
+    "query-string": "^6.13.2",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "3.7.0",
+    "simple-icons": "3.8.0",
     "xmldom": "~0.2.1",
     "xpath": "~0.0.29"
   },
