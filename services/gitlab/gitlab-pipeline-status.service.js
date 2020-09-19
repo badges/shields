@@ -35,39 +35,33 @@ const documentation = `
 `
 
 class GitlabPipelineStatus extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'gitlab/pipeline',
+    pattern: ':user/:repo/:branch+',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'gitlab/pipeline',
-      pattern: ':user/:repo/:branch+',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Gitlab pipeline status',
-        namedParams: {
-          user: 'gitlab-org',
-          repo: 'gitlab',
-          branch: 'master',
-        },
-        staticPreview: this.render({ status: 'passed' }),
-        documentation,
+  static examples = [
+    {
+      title: 'Gitlab pipeline status',
+      namedParams: {
+        user: 'gitlab-org',
+        repo: 'gitlab',
+        branch: 'master',
       },
-      {
-        title: 'Gitlab pipeline status (self-hosted)',
-        namedParams: { user: 'GNOME', repo: 'pango', branch: 'master' },
-        queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
-        staticPreview: this.render({ status: 'passed' }),
-        documentation,
-      },
-    ]
-  }
+      staticPreview: this.render({ status: 'passed' }),
+      documentation,
+    },
+    {
+      title: 'Gitlab pipeline status (self-hosted)',
+      namedParams: { user: 'GNOME', repo: 'pango', branch: 'master' },
+      queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+      staticPreview: this.render({ status: 'passed' }),
+      documentation,
+    },
+  ]
 
   static render({ status }) {
     return renderBuildStatusBadge({ status })
