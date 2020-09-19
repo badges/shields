@@ -8,29 +8,29 @@ const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
 
 const themeSchema = Joi.object()
   .keys({
-    version: Joi.string(),
-    rating: nonNegativeInteger,
-    num_ratings: nonNegativeInteger,
-    downloaded: nonNegativeInteger,
-    active_installs: nonNegativeInteger,
+    version: Joi.string().required(),
+    rating: nonNegativeInteger.required(),
+    num_ratings: nonNegativeInteger.required(),
+    downloaded: nonNegativeInteger.required(),
+    active_installs: nonNegativeInteger.required(),
   })
   .required()
 
 const pluginSchema = Joi.object()
   .keys({
-    version: Joi.string(),
-    rating: nonNegativeInteger,
-    num_ratings: nonNegativeInteger,
-    downloaded: nonNegativeInteger,
-    active_installs: nonNegativeInteger,
-    requires: stringOrFalse,
-    tested: Joi.string(),
+    version: Joi.string().required(),
+    rating: nonNegativeInteger.required(),
+    num_ratings: nonNegativeInteger.required(),
+    downloaded: nonNegativeInteger.required(),
+    active_installs: nonNegativeInteger.required(),
+    requires: stringOrFalse.required(),
+    tested: Joi.string().required(),
   })
   .required()
 
 const notFoundSchema = Joi.object()
   .keys({
-    error: Joi.string(),
+    error: Joi.string().required(),
   })
   .required()
 
