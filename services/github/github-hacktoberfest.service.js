@@ -59,62 +59,49 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Service {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+  static route = {
+    base: 'github/hacktoberfest',
+    pattern: ':year(2019|2020)/:user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'github/hacktoberfest',
-      pattern: ':year(2019|2020)/:user/:repo',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub Hacktoberfest combined status',
-        namedParams: {
-          year: '2020',
-          user: 'snyk',
-          repo: 'snyk',
-        },
-        staticPreview: this.render({
-          suggestedIssueCount: 12,
-          contributionCount: 8,
-          daysLeft: 15,
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub Hacktoberfest combined status',
+      namedParams: {
+        year: '2020',
+        user: 'snyk',
+        repo: 'snyk',
       },
-      {
-        title:
-          'GitHub Hacktoberfest combined status (suggestion label override)',
-        namedParams: {
-          year: '2020',
-          user: 'tmrowco',
-          repo: 'tmrowapp-contrib',
-        },
-        queryParams: {
-          suggestion_label: 'help wanted',
-        },
-        staticPreview: this.render({
-          year: '2020',
-          suggestedIssueCount: 12,
-          contributionCount: 8,
-          daysLeft: 15,
-        }),
-        documentation,
+      staticPreview: this.render({
+        suggestedIssueCount: 12,
+        contributionCount: 8,
+        daysLeft: 15,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Hacktoberfest combined status (suggestion label override)',
+      namedParams: {
+        year: '2020',
+        user: 'tmrowco',
+        repo: 'tmrowapp-contrib',
       },
-    ]
-  }
+      queryParams: {
+        suggestion_label: 'help wanted',
+      },
+      staticPreview: this.render({
+        year: '2020',
+        suggestedIssueCount: 12,
+        contributionCount: 8,
+        daysLeft: 15,
+      }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'hacktoberfest',
-      color: 'orange',
-    }
-  }
+  static defaultBadgeData = { label: 'hacktoberfest', color: 'orange' }
 
   static render({
     suggestedIssueCount,
