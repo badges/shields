@@ -159,8 +159,9 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
     },
     {
       title: "GitHub Org's stars",
+      pattern: ':org',
       namedParams: {
-        user: 'badges',
+        org: 'badges',
       },
       staticPreview: {
         label: this.defaultLabel,
