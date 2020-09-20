@@ -22,28 +22,23 @@ const documentation = `
 `
 
 module.exports = class HSTS extends BaseJsonService {
-  static get category() {
-    return 'monitoring'
+  static category = 'monitoring';
+
+  static route = {
+    base: 'hsts/preload',
+    pattern: ':domain'
   }
 
-  static get route() {
-    return {
-      base: 'hsts/preload',
-      pattern: ':domain',
+  static examples = [
+    {
+      title: 'Chromium HSTS preload',
+      namedParams: { domain: 'github.com' },
+      staticPreview: this.render({ status: 'preloaded' }),
+      keywords: ['security'],
+      documentation,
     }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Chromium HSTS preload',
-        namedParams: { domain: 'github.com' },
-        staticPreview: this.render({ status: 'preloaded' }),
-        keywords: ['security'],
-        documentation,
-      },
-    ]
-  }
+  ]
+  
 
   static render({ status }) {
     let color = 'red'
