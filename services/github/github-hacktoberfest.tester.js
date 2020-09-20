@@ -20,7 +20,7 @@ const isHacktoberfestStatus = Joi.alternatives().try(
 )
 
 t.create('GitHub Hacktoberfest combined status')
-  .get('/badges/shields.json')
+  .get('/2019/badges/shields.json')
   .expectBadge({
     label: 'hacktoberfest',
     message: isHacktoberfestStatus,
@@ -28,7 +28,7 @@ t.create('GitHub Hacktoberfest combined status')
 
 t.create('GitHub Hacktoberfest combined status (suggestion label override)')
   .get(
-    `/badges/shields.json?suggestion_label=${encodeURIComponent(
+    `/2019/badges/shields.json?suggestion_label=${encodeURIComponent(
       'good first issue'
     )}`
   )
