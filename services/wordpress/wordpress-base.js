@@ -9,10 +9,10 @@ const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
 const themeSchema = Joi.object()
   .keys({
     version: Joi.string().required(),
-    rating: nonNegativeInteger.required(),
-    num_ratings: nonNegativeInteger.required(),
-    downloaded: nonNegativeInteger.required(),
-    active_installs: nonNegativeInteger.required(),
+    rating: nonNegativeInteger,
+    num_ratings: nonNegativeInteger,
+    downloaded: nonNegativeInteger,
+    active_installs: nonNegativeInteger,
   })
   .required()
 
