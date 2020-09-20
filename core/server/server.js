@@ -149,6 +149,9 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  documentRoot: Joi.string().default(
+    path.resolve(__dirname, '..', '..', 'public')
+  ),
 }).required()
 
 const privateConfigSchema = Joi.object({
@@ -429,7 +432,7 @@ class Server {
     log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.create({
-      documentRoot: path.resolve(__dirname, '..', '..', 'public'),
+      documentRoot: this.config.public.documentRoot,
       port,
       hostname,
       secure,

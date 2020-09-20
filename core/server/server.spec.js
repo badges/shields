@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path')
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const config = require('config')
@@ -13,7 +14,11 @@ describe('The server', function () {
     before('Start the server', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      server = await createTestServer()
+      server = await createTestServer({
+        public: {
+          documentRoot: path.resolve(__dirname, 'test-public'),
+        },
+      })
       baseUrl = server.baseUrl
       await server.start()
     })
