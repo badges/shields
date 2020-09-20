@@ -25,7 +25,7 @@ module.exports = class GithubStars extends GithubAuthV3Service {
   static get examples() {
     return [
       {
-        title: 'GitHub stars',
+        title: 'GitHub Repo stars',
         namedParams: {
           user: 'badges',
           repo: 'shields',

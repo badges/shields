@@ -24,9 +24,9 @@ function errorMessagesFor(notFoundMessage = 'repo not found') {
   }
 }
 
-function transformErrors(errors) {
+function transformErrors(errors, entity = 'repo') {
   if (errors[0].type === 'NOT_FOUND') {
-    return new NotFound({ prettyMessage: 'repo not found' })
+    return new NotFound({ prettyMessage: `${entity} not found` })
   } else {
     return new InvalidResponse({ prettyMessage: errors[0].message })
   }
