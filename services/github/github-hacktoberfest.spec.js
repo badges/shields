@@ -23,7 +23,7 @@ describe('GitHubHacktoberfest', function () {
       hasStarted: false,
       year: 2020,
     }).expect({
-      message: '5 days til kickoff!',
+      message: '5 days till kickoff!',
     })
   })
 })

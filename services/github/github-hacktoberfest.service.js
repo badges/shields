@@ -116,7 +116,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
         message: `${daysToStart} ${maybePluralize(
           'day',
           daysToStart
-        )} til kickoff!`,
+        )} till kickoff!`,
       }
     }
     if (daysLeft === undefined) {
