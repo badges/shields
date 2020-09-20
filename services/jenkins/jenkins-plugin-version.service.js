@@ -6,36 +6,28 @@ const { renderVersionBadge } = require('../version')
 const { BaseService, NotFound } = require('..')
 
 module.exports = class JenkinsPluginVersion extends BaseService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'jenkins/plugin/v',
+    pattern: ':plugin',
   }
 
-  static get route() {
-    return {
-      base: 'jenkins/plugin/v',
-      pattern: ':plugin',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Jenkins Plugins',
-        namedParams: {
-          plugin: 'blueocean',
-        },
-        staticPreview: {
-          label: 'plugin',
-          message: 'v1.10.1',
-          color: 'blue',
-        },
+  static examples = [
+    {
+      title: 'Jenkins Plugins',
+      namedParams: {
+        plugin: 'blueocean',
       },
-    ]
-  }
+      staticPreview: {
+        label: 'plugin',
+        message: 'v1.10.1',
+        color: 'blue',
+      },
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'plugin' }
-  }
+  static defaultBadgeData = { label: 'plugin' }
 
   static render({ version }) {
     return renderVersionBadge({ version })
