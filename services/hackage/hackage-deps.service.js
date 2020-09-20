@@ -3,30 +3,22 @@
 const { BaseService } = require('..')
 
 module.exports = class HackageDeps extends BaseService {
-  static get category() {
-    return 'dependencies'
+  static category = 'dependencies'
+
+  static route = {
+    base: 'hackage-deps/v',
+    pattern: ':packageName',
   }
 
-  static get route() {
-    return {
-      base: 'hackage-deps/v',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'Hackage-Deps',
+      namedParams: { packageName: 'lens' },
+      staticPreview: this.render({ isOutdated: false }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Hackage-Deps',
-        namedParams: { packageName: 'lens' },
-        staticPreview: this.render({ isOutdated: false }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'dependencies' }
-  }
+  static defaultBadgeData = { label: 'dependencies' }
 
   static render({ isOutdated }) {
     if (isOutdated) {
