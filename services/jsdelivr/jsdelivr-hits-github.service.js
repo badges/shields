@@ -3,26 +3,22 @@
 const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
 
 module.exports = class JsDelivrHitsGitHub extends BaseJsDelivrService {
-  static get route() {
-    return {
-      base: 'jsdelivr/gh',
-      pattern: ':period(hd|hw|hm|hy)/:user/:repo',
-    }
+  static route = {
+    base: 'jsdelivr/gh',
+    pattern: ':period(hd|hw|hm|hy)/:user/:repo',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'jsDelivr hits (GitHub)',
-        namedParams: {
-          period: 'hm',
-          user: 'jquery',
-          repo: 'jquery',
-        },
-        staticPreview: this.render({ period: 'hm', hits: 9809876 }),
+  static examples = [
+    {
+      title: 'jsDelivr hits (GitHub)',
+      namedParams: {
+        period: 'hm',
+        user: 'jquery',
+        repo: 'jquery',
       },
-    ]
-  }
+      staticPreview: this.render({ period: 'hm', hits: 9809876 }),
+    },
+  ]
 
   async fetch({ period, user, repo }) {
     return this._requestJson({
