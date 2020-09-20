@@ -18,5 +18,12 @@ describe('GitHubHacktoberfest', function () {
     }).expect({
       message: '54 open issues, 27 PRs, 10 days left',
     })
+    given({
+      daysToStart: 5,
+      hasStarted: false,
+      year: 2020,
+    }).expect({
+      message: '5 days till kickoff!',
+    })
   })
 })
