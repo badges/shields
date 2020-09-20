@@ -36,7 +36,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JenkinsTests extends JenkinsBase {
-  static category = 'build';
+  static category = 'build'
 
   static route = {
     base: 'jenkins',
@@ -66,7 +66,7 @@ module.exports = class JenkinsTests extends JenkinsBase {
     },
   ]
 
-  static defaultBadgeData = {  label: 'tests' };
+  static defaultBadgeData = { label: 'tests' }
 
   static render({
     passed,

@@ -41,12 +41,12 @@ module.exports = class JenkinsPluginInstalls extends BaseJsonService {
     }
   }
 
-  static category = 'downloads';
+  static category = 'downloads'
 
   static route = {
     base: 'jenkins/plugin/i',
     pattern: ':plugin/:version?',
-  };
+  }
 
   static examples = [
     {
@@ -74,7 +74,7 @@ module.exports = class JenkinsPluginInstalls extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'installs' };
+  static defaultBadgeData = { label: 'installs' }
 
   static render({ label, installs }) {
     return {

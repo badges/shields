@@ -21,7 +21,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JetbrainsVersion extends JetbrainsBase {
-  static category = 'version';
+  static category = 'version'
 
   static route = {
     base: 'jetbrains/plugin/v',
@@ -38,8 +38,8 @@ module.exports = class JetbrainsVersion extends JetbrainsBase {
     },
   ]
 
-  static defaultBadgeData = { label: 'jetbrains plugin' };
-  
+  static defaultBadgeData = { label: 'jetbrains plugin' }
+
   static render({ version }) {
     return renderVersionBadge({ version })
   }

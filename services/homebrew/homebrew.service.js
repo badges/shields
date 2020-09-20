@@ -11,19 +11,19 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Homebrew extends BaseJsonService {
-  static category = 'version';
+  static category = 'version'
 
-  static route = { base: 'homebrew/v',pattern: ':formula'}
+  static route = { base: 'homebrew/v', pattern: ':formula' }
 
   static examples = [
     {
       title: 'homebrew',
       namedParams: { formula: 'cake' },
       staticPreview: renderVersionBadge({ version: 'v0.32.0' }),
-    }
+    },
   ]
 
-  static defaultBadgeData = {label: 'homebrew'};
+  static defaultBadgeData = { label: 'homebrew' }
 
   async fetch({ formula }) {
     return this._requestJson({

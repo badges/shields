@@ -24,12 +24,12 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JetbrainsRating extends JetbrainsBase {
-  static category = 'rating';
+  static category = 'rating'
 
   static route = {
     base: 'jetbrains/plugin/r',
     pattern: ':format(rating|stars)/:pluginId',
-  };
+  }
 
   static examples = [
     {
@@ -56,7 +56,7 @@ module.exports = class JetbrainsRating extends JetbrainsBase {
     },
   ]
 
-  static defaultBadgeData = { label: 'rating' };
+  static defaultBadgeData = { label: 'rating' }
 
   static render({ rating, format }) {
     const message =

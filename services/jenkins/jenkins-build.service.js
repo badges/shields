@@ -34,7 +34,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JenkinsBuild extends JenkinsBase {
-  static category = 'build';
+  static category = 'build'
 
   static route = {
     base: 'jenkins',
@@ -50,10 +50,10 @@ module.exports = class JenkinsBuild extends JenkinsBase {
         jobUrl: 'https://wso2.org/jenkins/view/All%20Builds/job/archetypes',
       },
       staticPreview: renderBuildStatusBadge({ status: 'passing' }),
-    }
+    },
   ]
 
-  static defaultBadgeData = { label: 'build' };
+  static defaultBadgeData = { label: 'build' }
 
   static render({ status }) {
     if (status === 'unstable') {

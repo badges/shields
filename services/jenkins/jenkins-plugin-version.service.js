@@ -6,8 +6,7 @@ const { renderVersionBadge } = require('../version')
 const { BaseService, NotFound } = require('..')
 
 module.exports = class JenkinsPluginVersion extends BaseService {
-
-  static category = 'version';
+  static category = 'version'
 
   static route = {
     base: 'jenkins/plugin/v',
@@ -28,7 +27,7 @@ module.exports = class JenkinsPluginVersion extends BaseService {
     },
   ]
 
-  static defaultBadgeData = { label: 'plugin' };
+  static defaultBadgeData = { label: 'plugin' }
 
   static render({ version }) {
     return renderVersionBadge({ version })

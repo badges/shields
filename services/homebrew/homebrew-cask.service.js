@@ -9,18 +9,18 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class HomebrewCask extends BaseJsonService {
-  static category = 'version';
-  static route = { base: 'homebrew/cask/v',pattern: ':cask'};
+  static category = 'version'
+  static route = { base: 'homebrew/cask/v', pattern: ':cask' }
 
   static examples = [
     {
       title: 'homebrew cask',
       namedParams: { cask: 'iterm2' },
       staticPreview: renderVersionBadge({ version: 'v3.2.5' }),
-    }
+    },
   ]
 
-  static defaultBadgeData = { label: 'homebrew cask'}
+  static defaultBadgeData = { label: 'homebrew cask' }
 
   async fetch({ cask }) {
     return this._requestJson({

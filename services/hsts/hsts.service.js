@@ -22,11 +22,11 @@ const documentation = `
 `
 
 module.exports = class HSTS extends BaseJsonService {
-  static category = 'monitoring';
+  static category = 'monitoring'
 
   static route = {
     base: 'hsts/preload',
-    pattern: ':domain'
+    pattern: ':domain',
   }
 
   static examples = [
@@ -36,9 +36,8 @@ module.exports = class HSTS extends BaseJsonService {
       staticPreview: this.render({ status: 'preloaded' }),
       keywords: ['security'],
       documentation,
-    }
+    },
   ]
-  
 
   static render({ status }) {
     let color = 'red'

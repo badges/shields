@@ -13,7 +13,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Itunes extends BaseJsonService {
-  static category = 'version';
+  static category = 'version'
 
   static route = {
     base: 'itunes/v',
@@ -25,11 +25,11 @@ module.exports = class Itunes extends BaseJsonService {
       title: 'iTunes App Store',
       namedParams: { bundleId: '803453959' },
       staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
-    }
+    },
   ]
 
-  static defaultBadgeData = { label: 'itunes app store' };
-  
+  static defaultBadgeData = { label: 'itunes app store' }
+
   async fetch({ bundleId }) {
     return this._requestJson({
       schema,
