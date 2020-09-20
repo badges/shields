@@ -19,10 +19,10 @@ const themeSchema = Joi.object()
 const pluginSchema = Joi.object()
   .keys({
     version: Joi.string().required(),
-    rating: nonNegativeInteger.required(),
-    num_ratings: nonNegativeInteger.required(),
-    downloaded: nonNegativeInteger.required(),
-    active_installs: nonNegativeInteger.required(),
+    rating: nonNegativeInteger,
+    num_ratings: nonNegativeInteger,
+    downloaded: nonNegativeInteger,
+    active_installs: nonNegativeInteger,
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
   })
