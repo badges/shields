@@ -23,118 +23,106 @@ const releaseArraySchema = Joi.alternatives().try(
 )
 
 module.exports = class GithubDownloads extends GithubAuthV3Service {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+  static route = {
+    base: 'github',
+    pattern: ':kind(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
   }
 
-  static get route() {
-    return {
-      base: 'github',
-      pattern: ':kind(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
-    }
-  }
+  static examples = [
+    {
+      title: 'GitHub All Releases',
+      pattern: 'downloads/:user/:repo/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+      },
+      staticPreview: this.render({
+        assetName: 'total',
+        downloadCount: 857000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Releases',
+      pattern: 'downloads/:user/:repo/:tag/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+      },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'total',
+        downloadCount: 27000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Pre-Releases',
+      pattern: 'downloads-pre/:user/:repo/:tag/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+      },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'total',
+        downloadCount: 2000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Releases (by Release)',
+      pattern: 'downloads/:user/:repo/:tag/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'v0.190.0',
+      },
+      staticPreview: this.render({
+        tag: 'v0.190.0',
+        assetName: 'total',
+        downloadCount: 490000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Releases (by Asset)',
+      pattern: 'downloads/:user/:repo/:tag/:path',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+        path: 'atom-amd64.deb',
+      },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+        downloadCount: 3000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub Pre-Releases (by Asset)',
+      pattern: 'downloads-pre/:user/:repo/:tag/:path',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+        path: 'atom-amd64.deb',
+      },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+        downloadCount: 237,
+      }),
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'GitHub All Releases',
-        pattern: 'downloads/:user/:repo/total',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-        },
-        staticPreview: this.render({
-          assetName: 'total',
-          downloadCount: 857000,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Releases',
-        pattern: 'downloads/:user/:repo/:tag/total',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          tag: 'latest',
-        },
-        staticPreview: this.render({
-          tag: 'latest',
-          assetName: 'total',
-          downloadCount: 27000,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Pre-Releases',
-        pattern: 'downloads-pre/:user/:repo/:tag/total',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          tag: 'latest',
-        },
-        staticPreview: this.render({
-          tag: 'latest',
-          assetName: 'total',
-          downloadCount: 2000,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Releases (by Release)',
-        pattern: 'downloads/:user/:repo/:tag/total',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          tag: 'v0.190.0',
-        },
-        staticPreview: this.render({
-          tag: 'v0.190.0',
-          assetName: 'total',
-          downloadCount: 490000,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Releases (by Asset)',
-        pattern: 'downloads/:user/:repo/:tag/:path',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          tag: 'latest',
-          path: 'atom-amd64.deb',
-        },
-        staticPreview: this.render({
-          tag: 'latest',
-          assetName: 'atom-amd64.deb',
-          downloadCount: 3000,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub Pre-Releases (by Asset)',
-        pattern: 'downloads-pre/:user/:repo/:tag/:path',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          tag: 'latest',
-          path: 'atom-amd64.deb',
-        },
-        staticPreview: this.render({
-          tag: 'latest',
-          assetName: 'atom-amd64.deb',
-          downloadCount: 237,
-        }),
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'downloads',
-      namedLogo: 'github',
-    }
-  }
+  static defaultBadgeData = { label: 'downloads', namedLogo: 'github' }
 
   static render({ tag, assetName, downloadCount }) {
     return {

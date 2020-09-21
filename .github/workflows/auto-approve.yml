@@ -5,6 +5,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: chris48s/approve-bot@2.0.0
+      - uses: chris48s/approve-bot@2.0.1
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
