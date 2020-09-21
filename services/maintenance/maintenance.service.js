@@ -3,36 +3,28 @@
 const { NonMemoryCachingBaseService } = require('..')
 
 module.exports = class Maintenance extends NonMemoryCachingBaseService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'maintenance',
+    pattern: ':maintained/:year(\\d{4})',
   }
 
-  static get route() {
-    return {
-      base: 'maintenance',
-      pattern: ':maintained/:year(\\d{4})',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Maintenance',
-        pattern: ':maintained(yes|no)/:year',
-        namedParams: {
-          maintained: 'yes',
-          year: '2019',
-        },
-        staticPreview: this.render({ isMaintained: false, targetYear: '2018' }),
-        keywords: ['maintained'],
+  static examples = [
+    {
+      title: 'Maintenance',
+      pattern: ':maintained(yes|no)/:year',
+      namedParams: {
+        maintained: 'yes',
+        year: '2019',
       },
-    ]
-  }
+      staticPreview: this.render({ isMaintained: false, targetYear: '2018' }),
+      keywords: ['maintained'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'maintained',
-    }
+  static defaultBadgeData = {
+    label: 'maintained',
   }
 
   static render({ isMaintained, isStale, targetYear, message }) {
