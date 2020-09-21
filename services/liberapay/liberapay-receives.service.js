@@ -4,23 +4,19 @@ const { InvalidResponse } = require('..')
 const { renderCurrencyBadge, LiberapayBase } = require('./liberapay-base')
 
 module.exports = class LiberapayReceives extends LiberapayBase {
-  static get route() {
-    return this.buildRoute('receives')
-  }
+  static route = this.buildRoute('receives')
 
-  static get examples() {
-    return [
-      {
-        title: 'Liberapay receiving',
-        namedParams: { entity: 'Changaco' },
-        staticPreview: renderCurrencyBadge({
-          label: 'receives',
-          amount: '98.32',
-          currency: 'EUR',
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Liberapay receiving',
+      namedParams: { entity: 'Changaco' },
+      staticPreview: renderCurrencyBadge({
+        label: 'receives',
+        amount: '98.32',
+        currency: 'EUR',
+      }),
+    },
+  ]
 
   async handle({ entity }) {
     const data = await this.fetch({ entity })
