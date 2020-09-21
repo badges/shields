@@ -35,7 +35,9 @@ module.exports = class LibrariesIoDependentRepos extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = 'dependent repos'
+  static defaultBadgeData = {
+    label: 'dependent repos',
+  }
 
   static render({ dependentReposCount }) {
     return {
