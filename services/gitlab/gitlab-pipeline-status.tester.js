@@ -20,11 +20,18 @@ t.create('Pipeline status (nonexistent branch)')
     message: 'branch not found',
   })
 
+// Gitlab will redirect users to a sign-in page
+// (which we ultimately see as a 503 error) in the event
+// a nonexistent, or private, repository is specified.
+// Given the additional complexity that would've been required to
+// present users with a more traditional and friendly 'Not Found'
+// error message, we will simply display inaccessible
+// https://github.com/badges/shields/pull/5538
 t.create('Pipeline status (nonexistent repo)')
   .get('/this-repo/does-not-exist/master.json')
   .expectBadge({
     label: 'build',
-    message: 'repo not found',
+    message: 'inaccessible',
   })
 
 t.create('Pipeline status (custom gitlab URL)')
