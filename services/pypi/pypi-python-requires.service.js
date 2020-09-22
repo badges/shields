@@ -18,7 +18,7 @@ module.exports = class PypiPythonRequires extends PypiBase {
         title: 'PyPI - Python Requires',
         pattern: ':packageName',
         namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ versions: ">=3.5, <=3.7" }),
+        staticPreview: this.render({ versions: '>=3.5, <=3.7' }),
       },
     ]
   }
@@ -46,7 +46,7 @@ module.exports = class PypiPythonRequires extends PypiBase {
 
     const version = parsePyRequires(
       packageData,
-      /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(\, )?)+$/
+      /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(, )?)+$/
     )
 
     return this.constructor.render({ version })

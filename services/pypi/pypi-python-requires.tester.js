@@ -1,11 +1,10 @@
 'use strict'
 
-
 const Joi = require('@hapi/joi')
-const t = (module.exports = require('../tester.js').createServiceTester())
+const t = (module.exports = require('../tester').createServiceTester())
 
 const isCommaSeparated = Joi.string().regex(
-  /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(\, )?)+$/
+  /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(, )?)+$/
 )
 
 t.create('python requires (valid, package version specified)')
@@ -14,7 +13,7 @@ t.create('python requires (valid, package version specified)')
     label: 'python',
     message: isCommaSeparated,
   })
-  
+
 t.create('python requires (valid, package version not specified)')
   .get('/requests.json')
   .expectBadge({
@@ -35,10 +34,8 @@ t.create('python requires (Only only)')
     label: 'python',
     message: '>=3.6',
   })
-  
-t.create('python requires (invalid)')
-  .get('/not-a-package.json')
-  .expectBadge({
-    label: 'python',
-    message: 'missing',
-  })
+
+t.create('python requires (invalid)').get('/not-a-package.json').expectBadge({
+  label: 'python',
+  message: 'missing',
+})

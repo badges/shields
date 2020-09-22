@@ -51,12 +51,12 @@ function parseClassifiers(parsedData, pattern) {
 }
 
 function parsePyRequires(parsedData, pattern) {
-	var results = ""
-	const matched = pattern.exec(parsedData.info.pyrequires)
-	if (matched && matched[1]) {
-		results = matched[0]
-	}
-	return results
+  let results = ''
+  const matched = pattern.exec(parsedData.info.pyrequires)
+  if (matched && matched[1]) {
+    results = matched[0]
+  }
+  return results
 }
 
 function getLicenses(packageData) {
@@ -103,6 +103,7 @@ function getPackageFormats(packageData) {
 }
 
 module.exports = {
+  parsePyRequires,
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
