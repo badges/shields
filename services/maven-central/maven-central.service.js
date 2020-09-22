@@ -52,9 +52,7 @@ module.exports = class MavenCentral extends BaseXmlService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'maven-central',
-  }
+  static defaultBadgeData = { label: 'maven-central' }
 
   async fetch({ groupId, artifactId }) {
     const group = encodeURIComponent(groupId).replace(/\./g, '/')
