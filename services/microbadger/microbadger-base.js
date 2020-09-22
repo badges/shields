@@ -26,9 +26,7 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class BaseMicrobadgerService extends BaseJsonService {
-  static get category() {
-    return 'size'
-  }
+  static category = 'size'
 
   async fetch({ user, repo }) {
     if (user === '_') {
