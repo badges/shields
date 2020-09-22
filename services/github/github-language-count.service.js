@@ -4,36 +4,21 @@ const { BaseGithubLanguage } = require('./github-languages-base')
 const { documentation } = require('./github-helpers')
 
 module.exports = class GithubLanguageCount extends BaseGithubLanguage {
-  static get category() {
-    return 'analysis'
-  }
-
-  static get route() {
-    return {
-      base: 'github/languages/count',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub language count',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        staticPreview: this.render({ count: 5 }),
-        documentation,
+  static category = 'analysis'
+  static route = { base: 'github/languages/count', pattern: ':user/:repo' }
+  static examples = [
+    {
+      title: 'GitHub language count',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      staticPreview: this.render({ count: 5 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'languages',
-    }
-  }
+  static defaultBadgeData = { label: 'languages' }
 
   static render({ count }) {
     return {

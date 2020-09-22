@@ -16,49 +16,33 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubForks extends GithubAuthV4Service {
-  static get category() {
-    return 'social'
-  }
-
-  static get route() {
-    return {
-      base: 'github/forks',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub forks',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        // TODO: This is currently a literal, as `staticPreview` doesn't
-        // support `link`.
-        staticPreview: {
-          label: 'Fork',
-          message: '150',
-          style: 'social',
-        },
-        // staticPreview: {
-        //   ...this.render({ user: 'badges', repo: 'shields', forkCount: 150 }),
-        //   label: 'fork',
-        //   style: 'social',
-        // },
-        queryParams: { label: 'Fork' },
-        documentation,
+  static category = 'social'
+  static route = { base: 'github/forks', pattern: ':user/:repo' }
+  static examples = [
+    {
+      title: 'GitHub forks',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      // TODO: This is currently a literal, as `staticPreview` doesn't
+      // support `link`.
+      staticPreview: {
+        label: 'Fork',
+        message: '150',
+        style: 'social',
+      },
+      // staticPreview: {
+      //   ...this.render({ user: 'badges', repo: 'shields', forkCount: 150 }),
+      //   label: 'fork',
+      //   style: 'social',
+      // },
+      queryParams: { label: 'Fork' },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'forks',
-      namedLogo: 'github',
-    }
-  }
+  static defaultBadgeData = { label: 'forks', namedLogo: 'github' }
 
   static render({ user, repo, forkCount }) {
     return {
