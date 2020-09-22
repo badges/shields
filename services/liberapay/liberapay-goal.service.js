@@ -5,19 +5,15 @@ const { InvalidResponse } = require('..')
 const { LiberapayBase } = require('./liberapay-base')
 
 module.exports = class LiberapayGoal extends LiberapayBase {
-  static get route() {
-    return this.buildRoute('goal')
-  }
+  static route = this.buildRoute('goal')
 
-  static get examples() {
-    return [
-      {
-        title: 'Liberapay goal progress',
-        namedParams: { entity: 'Changaco' },
-        staticPreview: this.render({ percentAchieved: 33 }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Liberapay goal progress',
+      namedParams: { entity: 'Changaco' },
+      staticPreview: this.render({ percentAchieved: 33 }),
+    },
+  ]
 
   static render({ percentAchieved }) {
     return {
