@@ -171,9 +171,7 @@ describe('PyPI helpers', function () {
   })
 
   test(getPythonVersionsFromPythonRequires, () => {
-    given({
-      info: {},
-    }).expect(undefined)
+    given({ info: { requires_python: null } }).expect(undefined)
     given({
       info: {
         requires_python: '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
