@@ -21,11 +21,29 @@ t.create('python versions (valid, no package version specified)')
     message: isPipeSeparatedPythonVersions,
   })
 
-t.create('python versions ("Only" and others)')
+t.create(
+  'python versions (valid, package version in request, experimental flag)'
+)
+  .get('/requests/2.18.4.json?experimental')
+  .expectBadge({
+    label: 'python',
+    message: isPipeSeparatedPythonVersions,
+  })
+
+t.create(
+  'python versions (valid, no package version specified, experimental flag)'
+)
+  .get('/requests.json?experimental')
+  .expectBadge({
+    label: 'python',
+    message: isPipeSeparatedPythonVersions,
+  })
+
+t.create('python versions ("Only" classifier and others)')
   .get('/uvloop/0.12.1.json')
   .expectBadge({ label: 'python', message: '3.5 | 3.6 | 3.7' })
 
-t.create('python versions ("Only" only)')
+t.create('python versions ("Only" classifier only)')
   .get('/hashpipe/0.9.1.json')
   .expectBadge({ label: 'python', message: '3' })
 

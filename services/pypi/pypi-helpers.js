@@ -1,5 +1,13 @@
 'use strict'
 
+const { satisfies } = require('@renovate/pep440')
+
+// This list tracks "Active Python Releases" at
+// https://www.python.org/downloads/ which means it needs to be manually updated
+// every two years or so. It would be good to find a machine-readable version of
+// this listing (like we do with PHP) so it does not need to be updated manually.
+const ACTIVE_PYTHON_VERSIONS = ['2.7', '3.5', '3.6', '3.7', '3.8']
+
 /*
   Django versions will be specified in the form major.minor
   trying to sort with `semver.compare` will throw e.g:
@@ -93,10 +101,52 @@ function getPackageFormats(packageData) {
   }
 }
 
+function getPythonVersionsFromClassifiers(packageData) {
+  let versions = parseClassifiers(
+    packageData,
+    /^Programming Language :: Python :: ([\d.]+)$/
+  )
+
+  // If no versions are found yet, check "X :: Only" as a fallback.
+  if (versions.length === 0) {
+    versions.push(
+      ...parseClassifiers(
+        packageData,
+        /^Programming Language :: Python :: (\d+) :: Only$/
+      )
+    )
+  }
+
+  // We only show v2 if eg. v2.4 does not appear.
+  // See https://github.com/badges/shields/pull/489 for more.
+  ;['2', '3'].forEach(majorVersion => {
+    if (versions.some(v => v.startsWith(`${majorVersion}.`))) {
+      versions = versions.filter(v => v !== majorVersion)
+    }
+  })
+
+  return versions.sort()
+}
+
+function getPythonVersionsFromPythonRequires(packageData) {
+  const {
+    info: { requires_python: pythonRequires },
+  } = packageData
+  if (pythonRequires) {
+    return ACTIVE_PYTHON_VERSIONS.filter(activeVersion =>
+      satisfies(activeVersion, pythonRequires)
+    )
+  } else {
+    return undefined
+  }
+}
+
 module.exports = {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
+  getPythonVersionsFromClassifiers,
+  getPythonVersionsFromPythonRequires,
 }
