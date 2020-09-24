@@ -55,7 +55,7 @@ async function fetchRepoContent(
 
 async function fetchJsonFromRepo(
   serviceInstance,
-  { schema, user, repo, branch = 'master', filename }
+  { schema, user, repo, branch = 'HEAD', filename }
 ) {
   if (serviceInstance.staticAuthConfigured) {
     const buffer = await fetchRepoContent(serviceInstance, {
