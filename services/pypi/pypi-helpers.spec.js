@@ -2,6 +2,7 @@
 
 const { test, given, forCases } = require('sazerac')
 const {
+  parsePyRequires,
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
@@ -37,6 +38,25 @@ const classifiersFixture = {
 }
 
 describe('PyPI helpers', function () {
+  test(parsePyRequires, function () {
+    given(
+      {
+        info: {
+          requires_python: '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+        },
+      },
+      /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(, )?)+$/
+    ).expect('>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*')
+    given(
+      { info: { requires_python: '=3' } },
+      /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(, )?)+$/
+    ).expect('')
+    given(
+      { info: { requires_python: '~=3.2.*' } },
+      /^(([><~]=?\d(?:\.\d)?(?:\.[*\d])?)(, )?)+$/
+    ).expect('~=3.2.*')
+  })
+
   test(parseClassifiers, function () {
     given(
       classifiersFixture,

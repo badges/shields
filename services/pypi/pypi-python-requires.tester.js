@@ -8,10 +8,10 @@ const isCommaSeparated = Joi.string().regex(
 )
 
 t.create('python requires (valid, package version specified)')
-  .get('/requests/2.24.0.json')
+  .get('/requests/2.24.0')
   .expectBadge({
     label: 'python',
-    message: isCommaSeparated,
+    message: '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
   })
 
 t.create('python requires (valid, package version not specified)')
@@ -21,18 +21,11 @@ t.create('python requires (valid, package version not specified)')
     message: isCommaSeparated,
   })
 
-t.create('python requires (Only and others)')
-  .get('/requests/2.24.0.json')
-  .expectBadge({
-    label: 'python',
-    message: '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
-  })
-
 t.create('python requires (Only only)')
   .get('/discord.py/1.4.1.json')
   .expectBadge({
     label: 'python',
-    message: '>=3.6',
+    message: '>=3.5.3',
   })
 
 t.create('python requires (invalid)').get('/not-a-package.json').expectBadge({
