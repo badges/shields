@@ -14,41 +14,32 @@ const schema = Joi.array()
   .required()
 
 module.exports = class GithubMilestone extends GithubAuthV3Service {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+  static route = {
+    base: 'github/milestones',
+    pattern: ':variant(open|closed|all)/:user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'github/milestones',
-      pattern: ':variant(open|closed|all)/:user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub milestones',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          variant: 'open',
-        },
-        staticPreview: {
-          label: 'milestones',
-          message: '2',
-          color: 'red',
-        },
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub milestones',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        variant: 'open',
       },
-    ]
-  }
+      staticPreview: {
+        label: 'milestones',
+        message: '2',
+        color: 'red',
+      },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'milestones',
-      color: 'informational',
-    }
+  static defaultBadgeData = {
+    label: 'milestones',
+    color: 'informational',
   }
 
   static render({ user, repo, variant, milestones }) {
