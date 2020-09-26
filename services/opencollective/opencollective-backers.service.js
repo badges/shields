@@ -3,25 +3,19 @@
 const OpencollectiveBase = require('./opencollective-base')
 
 module.exports = class OpencollectiveBackers extends OpencollectiveBase {
-  static get route() {
-    return this.buildRoute('backers')
-  }
+  static route = this.buildRoute('backers')
 
-  static get examples() {
-    return [
-      {
-        title: 'Open Collective backers',
-        namedParams: { collective: 'shields' },
-        staticPreview: this.render(25),
-        keywords: ['opencollective'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Open Collective backers',
+      namedParams: { collective: 'shields' },
+      staticPreview: this.render(25),
+      keywords: ['opencollective'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'backers',
-    }
+  static defaultBadgeData = {
+    label: 'backers',
   }
 
   async handle({ collective }) {
