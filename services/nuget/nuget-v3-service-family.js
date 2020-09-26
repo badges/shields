@@ -159,25 +159,17 @@ function createServiceFamily({
   withFeed = true,
 }) {
   class NugetVersionService extends BaseJsonService {
-    static get category() {
-      return 'version'
-    }
+    static category = 'version'
 
-    static get route() {
-      return buildRoute({ serviceBaseUrl, withTenant, withFeed })
-        .push('(v|vpre)', 'which')
-        .push('(.+?)', 'packageName')
-        .toObject()
-    }
+    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
+      .push('(v|vpre)', 'which')
+      .push('(.+?)', 'packageName')
+      .toObject()
 
-    static get examples() {
-      return []
-    }
+    static examples = []
 
-    static get defaultBadgeData() {
-      return {
-        label: defaultLabel,
-      }
+    static defaultBadgeData = {
+      label: defaultLabel,
     }
 
     static render(props) {
@@ -216,20 +208,14 @@ function createServiceFamily({
   }
 
   class NugetDownloadService extends BaseJsonService {
-    static get category() {
-      return 'downloads'
-    }
+    static category = 'downloads'
 
-    static get route() {
-      return buildRoute({ serviceBaseUrl, withTenant, withFeed })
-        .push('dt')
-        .push('(.+?)', 'packageName')
-        .toObject()
-    }
+    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
+      .push('dt')
+      .push('(.+?)', 'packageName')
+      .toObject()
 
-    static get examples() {
-      return []
-    }
+    static examples = []
 
     static render(props) {
       return renderDownloadBadge(props)

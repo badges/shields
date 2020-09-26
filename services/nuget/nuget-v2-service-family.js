@@ -123,20 +123,14 @@ function createServiceFamily({
   }
 
   class NugetVersionService extends Base {
-    static get name() {
-      return `${name}Version`
-    }
+    static name = `${name}Version`
 
-    static get category() {
-      return 'version'
-    }
+    static category = 'version'
 
-    static get route() {
-      return {
-        base: `${serviceBaseUrl}/v`,
-        pattern: ':packageName',
-        queryParamSchema,
-      }
+    static route = {
+      base: `${serviceBaseUrl}/v`,
+      pattern: ':packageName',
+      queryParamSchema,
     }
 
     static get examples() {
@@ -157,10 +151,8 @@ function createServiceFamily({
       ]
     }
 
-    static get defaultBadgeData() {
-      return {
-        label: defaultLabel,
-      }
+    static defaultBadgeData = {
+      label: defaultLabel,
     }
 
     static render(props) {
@@ -193,19 +185,13 @@ function createServiceFamily({
   })
 
   class NugetDownloadService extends Base {
-    static get name() {
-      return `${name}Downloads`
-    }
+    static name = `${name}Downloads`
 
-    static get category() {
-      return 'downloads'
-    }
+    static category = 'downloads'
 
-    static get route() {
-      return {
-        base: serviceBaseUrl,
-        pattern: 'dt/:packageName',
-      }
+    static route = {
+      base: serviceBaseUrl,
+      pattern: 'dt/:packageName',
     }
 
     static get examples() {
