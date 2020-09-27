@@ -9,7 +9,7 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('Weekly Downloads')
-  .get('/dw/dustman.json')
+  .get('/dw/duckduckgo-for-firefox.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('Weekly Downloads (not found)')
