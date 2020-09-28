@@ -6,9 +6,12 @@ const {
   IMPROVED_STATUS,
   NOT_FOUND_STATUS,
   REGRESSED_STATUS,
+  NO_CHANGE_STATUS,
 } = require('./constants')
 
-const schema = Joi.string().allow(IMPROVED_STATUS, REGRESSED_STATUS).required()
+const schema = Joi.string()
+  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
+  .required()
 
 /**
  * Criterion Badge Service
