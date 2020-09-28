@@ -10,7 +10,7 @@ const {
 } = require('./constants')
 
 const isStatus = Joi.string()
-  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
+  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NOT_FOUND_STATUS, NO_CHANGE_STATUS)
   .required()
 
 t.create('Criterion (valid repo)')
