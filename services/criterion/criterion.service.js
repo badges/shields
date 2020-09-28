@@ -40,7 +40,7 @@ module.exports = class Criterion extends BaseJsonService {
   static defaultBadgeData = { label: 'criterion' }
 
   static render({ status }) {
-    let statusColor = 'brightgreen'
+    let statusColor = 'lightgrey'
 
     if (status !== IMPROVED_STATUS) {
       statusColor = 'yellow'
