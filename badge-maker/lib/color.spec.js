@@ -37,7 +37,7 @@ test(normalizeColor, () => {
   given('  blue ').expect('  blue ')
   given('rgb(100%, 200%, 222%)').expect('rgb(100%, 200%, 222%)')
   given('rgb(122, 200, 222)').expect('rgb(122, 200, 222)')
-  given('rgb(100%, 200, 222)').expect('rgb(100%, 200, 222)')
+  given('rgb(122, 200, 222, 1)').expect('rgb(122, 200, 222, 1)')
   given('rgba(100, 20, 111, 1)').expect('rgba(100, 20, 111, 1)')
   given('hsl(122, 200%, 222%)').expect('hsl(122, 200%, 222%)')
   given('hsla(122, 200%, 222%, 1)').expect('hsla(122, 200%, 222%, 1)')
@@ -46,8 +46,8 @@ test(normalizeColor, () => {
     given(''),
     given('not-a-color'),
     given('#ABCFGH'),
-    given('rgb(122, 200, 222, 1)'),
     given('rgb(-100, 20, 111)'),
+    given('rgb(100%, 200, 222)'),
     given('rgba(-100, 20, 111, 1.1)'),
     given('hsl(122, 200, 222, 1)'),
     given('hsl(122, 200, 222)'),
