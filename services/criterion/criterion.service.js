@@ -6,9 +6,12 @@ const {
   IMPROVED_STATUS,
   NOT_FOUND_STATUS,
   REGRESSED_STATUS,
+  NO_CHANGE_STATUS,
 } = require('./constants')
 
-const schema = Joi.string().allow(IMPROVED_STATUS, REGRESSED_STATUS).required()
+const schema = Joi.string()
+  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
+  .required()
 
 /**
  * Criterion Badge Service
@@ -37,10 +40,14 @@ module.exports = class Criterion extends BaseJsonService {
   static defaultBadgeData = { label: 'criterion' }
 
   static render({ status }) {
-    let statusColor = 'brightgreen'
+    let statusColor = 'lightgrey'
 
-    if (status !== IMPROVED_STATUS) {
-      statusColor = 'yellow'
+    if (status === IMPROVED_STATUS) {
+      statusColor = 'brightgreen'
+    } else if (status === NO_CHANGE_STATUS) {
+      statusColor = 'green'
+    } else if (statusColor === REGRESSED_STATUS) {
+      statusColor = 'red'
     }
 
     return {
