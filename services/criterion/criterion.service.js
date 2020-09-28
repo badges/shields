@@ -42,8 +42,12 @@ module.exports = class Criterion extends BaseJsonService {
   static render({ status }) {
     let statusColor = 'lightgrey'
 
-    if (status !== IMPROVED_STATUS) {
-      statusColor = 'yellow'
+    if (status === IMPROVED_STATUS) {
+      statusColor = 'brightgreen'
+    } else if (status === NO_CHANGE_STATUS) {
+      statusColor = 'green'
+    } else if (statusColor === REGRESSED_STATUS) {
+      statusColor = 'red'
     }
 
     return {
