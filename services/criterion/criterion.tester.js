@@ -5,11 +5,12 @@ const t = (module.exports = require('../tester').createServiceTester())
 const {
   IMPROVED_STATUS,
   REGRESSED_STATUS,
+  NO_CHANGE_STATUS,
   NOT_FOUND_STATUS,
 } = require('./constants')
 
 const isStatus = Joi.string()
-  .allow(IMPROVED_STATUS, NOT_FOUND_STATUS, REGRESSED_STATUS)
+  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
   .required()
 
 t.create('Criterion (valid repo)')
