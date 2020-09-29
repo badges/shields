@@ -11,73 +11,61 @@ const {
 const { documentation } = require('./github-helpers')
 
 class GithubRelease extends GithubAuthV3Service {
-  static get category() {
-    return 'version'
+  static category = 'version'
+  static route = {
+    base: 'github/v/release',
+    pattern: ':user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'github/v/release',
-      pattern: ':user/:repo',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'GitHub release (latest by date)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: {},
+      staticPreview: this.render({
+        version: 'v4.16.4',
+        sort: 'date',
+        isPrerelease: false,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (latest by date including pre-releases)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { include_prereleases: null },
+      staticPreview: this.render({
+        version: 'v5.0.0-alpha.7',
+        sort: 'date',
+        isPrerelease: true,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (latest SemVer)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({
+        version: 'v4.16.4',
+        sort: 'semver',
+        isPrerelease: false,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (latest SemVer including pre-releases)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { sort: 'semver', include_prereleases: null },
+      staticPreview: this.render({
+        version: 'v5.0.0-alpha.7',
+        sort: 'semver',
+        isPrerelease: true,
+      }),
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'GitHub release (latest by date)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: {},
-        staticPreview: this.render({
-          version: 'v4.16.4',
-          sort: 'date',
-          isPrerelease: false,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub release (latest by date including pre-releases)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: { include_prereleases: null },
-        staticPreview: this.render({
-          version: 'v5.0.0-alpha.7',
-          sort: 'date',
-          isPrerelease: true,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub release (latest SemVer)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: { sort: 'semver' },
-        staticPreview: this.render({
-          version: 'v4.16.4',
-          sort: 'semver',
-          isPrerelease: false,
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub release (latest SemVer including pre-releases)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: { sort: 'semver', include_prereleases: null },
-        staticPreview: this.render({
-          version: 'v5.0.0-alpha.7',
-          sort: 'semver',
-          isPrerelease: true,
-        }),
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'release',
-      namedLogo: 'github',
-    }
-  }
+  static defaultBadgeData = { label: 'release', namedLogo: 'github' }
 
   static render({ version, sort, isPrerelease }) {
     let color = 'blue'
