@@ -1,7 +1,7 @@
 'use strict'
 
 const label = 'hsts preloaded'
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const schema = Joi.object({
   status: Joi.string().required(),

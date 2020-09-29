@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { isBuildStatus } = require('../build-status')
 
 const keywords = ['vso', 'vsts', 'azure-devops']
