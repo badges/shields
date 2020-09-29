@@ -43,50 +43,39 @@ ${githubDocumentation}
 `
 
 class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
-  static get category() {
-    return 'platform-support'
+  static category = 'platform-support'
+  static route = {
+    base: 'github/pipenv/locked/python-version',
+    pattern: ':user/:repo/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'github/pipenv/locked/python-version',
-      pattern: ':user/:repo/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub Pipenv locked Python version',
-        pattern: ':user/:repo',
-        namedParams: {
-          user: 'metabolize',
-          repo: 'rq-dashboard-on-heroku',
-        },
-        staticPreview: this.render({ version: '3.7' }),
-        documentation,
-        keywords,
+  static examples = [
+    {
+      title: 'GitHub Pipenv locked Python version',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'metabolize',
+        repo: 'rq-dashboard-on-heroku',
       },
-      {
-        title: 'GitHub Pipenv locked Python version (branch)',
-        pattern: ':user/:repo/:branch',
-        namedParams: {
-          user: 'metabolize',
-          repo: 'rq-dashboard-on-heroku',
-          branch: 'master',
-        },
-        staticPreview: this.render({ version: '3.7', branch: 'master' }),
-        documentation,
-        keywords,
+      staticPreview: this.render({ version: '3.7' }),
+      documentation,
+      keywords,
+    },
+    {
+      title: 'GitHub Pipenv locked Python version (branch)',
+      pattern: ':user/:repo/:branch',
+      namedParams: {
+        user: 'metabolize',
+        repo: 'rq-dashboard-on-heroku',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ version: '3.7', branch: 'master' }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'python',
-    }
-  }
+  static defaultBadgeData = { label: 'python' }
 
   static render({ version, branch }) {
     return renderVersionBadge({
@@ -116,56 +105,45 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
 }
 
 class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service {
-  static get category() {
-    return 'dependencies'
+  static category = 'dependencies'
+  static route = {
+    base: 'github/pipenv/locked/dependency-version',
+    pattern: ':user/:repo/:kind(dev)?/:packageName/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'github/pipenv/locked/dependency-version',
-      pattern: ':user/:repo/:kind(dev)?/:packageName/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub Pipenv locked dependency version',
-        pattern: ':user/:repo/:kind(dev)?/:packageName',
-        namedParams: {
-          user: 'metabolize',
-          repo: 'rq-dashboard-on-heroku',
-          packageName: 'flask',
-        },
-        staticPreview: this.render({
-          dependency: 'flask',
-          version: '1.1.1',
-        }),
-        documentation,
-        keywords: ['python', ...keywords],
+  static examples = [
+    {
+      title: 'GitHub Pipenv locked dependency version',
+      pattern: ':user/:repo/:kind(dev)?/:packageName',
+      namedParams: {
+        user: 'metabolize',
+        repo: 'rq-dashboard-on-heroku',
+        packageName: 'flask',
       },
-      {
-        title: 'GitHub Pipenv locked dependency version (branch)',
-        pattern: ':user/:repo/:kind(dev)?/:packageName/:branch',
-        namedParams: {
-          user: 'metabolize',
-          repo: 'rq-dashboard-on-heroku',
-          kind: 'dev',
-          packageName: 'black',
-          branch: 'master',
-        },
-        staticPreview: this.render({ dependency: 'black', version: '19.3b0' }),
-        documentation,
-        keywords: ['python', ...keywords],
+      staticPreview: this.render({
+        dependency: 'flask',
+        version: '1.1.1',
+      }),
+      documentation,
+      keywords: ['python', ...keywords],
+    },
+    {
+      title: 'GitHub Pipenv locked dependency version (branch)',
+      pattern: ':user/:repo/:kind(dev)?/:packageName/:branch',
+      namedParams: {
+        user: 'metabolize',
+        repo: 'rq-dashboard-on-heroku',
+        kind: 'dev',
+        packageName: 'black',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ dependency: 'black', version: '19.3b0' }),
+      documentation,
+      keywords: ['python', ...keywords],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'dependency',
-    }
-  }
+  static defaultBadgeData = { label: 'dependency' }
 
   static render({ dependency, version, ref }) {
     return {
