@@ -59,10 +59,6 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
     next()
   })
 
-  server.get('/sys/network', (req, res) => {
-    res.json({ ips: config.public.shields_ips })
-  })
-
   server.ws('/sys/logs', socket => {
     const listener = (...msg) => socket.send(msg.join(' '))
     socket.on('close', () => log.removeListener(listener))
