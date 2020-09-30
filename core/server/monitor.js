@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config').util.toObject()
 const secretIsValid = require('./secret-is-valid')
 const RateLimit = require('./rate-limit')
 const log = require('./log')
