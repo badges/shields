@@ -3,7 +3,6 @@
 const config = require('config').util.toObject()
 const secretIsValid = require('./secret-is-valid')
 const RateLimit = require('./rate-limit')
-const log = require('./log')
 
 function secretInvalid(req, res) {
   if (!secretIsValid(req.password)) {
@@ -63,23 +62,6 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
     res.json({ ips: config.public.shields_ips })
   })
 
-  server.ws('/sys/logs', socket => {
-    const listener = (...msg) => socket.send(msg.join(' '))
-    socket.on('close', () => log.removeListener(listener))
-    socket.on('message', msg => {
-      let req
-      try {
-        req = JSON.parse(msg)
-      } catch (e) {
-        return
-      }
-      if (!secretIsValid(req.secret)) {
-        return socket.close()
-      }
-      log.addListener(listener)
-    })
-  })
-
   server.get('/sys/rate-limit', (req, res) => {
     res.json({
       ip: ipRateLimit.toJSON(),
@@ -95,6 +77,4 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
   }
 }
 
-module.exports = {
-  setRoutes,
-}
+module.exports = { setRoutes }
