@@ -1,7 +1,5 @@
 'use strict'
 
-const secretIsValid = require('./secret-is-valid')
-const config = require('config').util.toObject()
 const RateLimit = require('./rate-limit')
 
 function setRoutes({ rateLimit }, { server, metricInstance }) {
