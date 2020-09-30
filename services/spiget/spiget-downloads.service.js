@@ -5,35 +5,27 @@ const { downloadCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloads extends BaseSpigetService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'spiget/downloads',
+    pattern: ':resourceId',
   }
 
-  static get route() {
-    return {
-      base: 'spiget/downloads',
-      pattern: ':resourceId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Spiget Downloads',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({ downloads: 560891 }),
-        documentation,
-        keywords,
+  static examples = [
+    {
+      title: 'Spiget Downloads',
+      namedParams: {
+        resourceId: '9089',
       },
-    ]
-  }
+      staticPreview: this.render({ downloads: 560891 }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'downloads',
-    }
+  static defaultBadgeData = {
+    label: 'downloads',
   }
 
   static render({ downloads }) {

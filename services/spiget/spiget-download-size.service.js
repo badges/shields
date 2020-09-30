@@ -3,9 +3,7 @@
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetDownloadSize extends BaseSpigetService {
-  static get category() {
-    return 'size'
-  }
+  static category = 'size'
 
   static get route() {
     return {
@@ -14,25 +12,21 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
     }
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Spiget Download Size',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({ size: 2.5, unit: 'MB' }),
-        documentation,
-        keywords,
+  static examples = [
+    {
+      title: 'Spiget Download Size',
+      namedParams: {
+        resourceId: '9089',
       },
-    ]
-  }
+      staticPreview: this.render({ size: 2.5, unit: 'MB' }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'size',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'size',
+    color: 'blue',
   }
 
   static render({ size, unit, type }) {
