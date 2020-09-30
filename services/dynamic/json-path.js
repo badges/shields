@@ -4,7 +4,7 @@
 
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const jp = require('jsonpath')
 const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
 const { InvalidParameter, InvalidResponse } = require('..')

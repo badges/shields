@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 

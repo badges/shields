@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 const renderQuestionsBadge = require('./stackexchange-helpers')

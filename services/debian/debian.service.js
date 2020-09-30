@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { latest, renderVersionBadge } = require('../version')
 const { BaseJsonService, NotFound, InvalidResponse } = require('..')
 

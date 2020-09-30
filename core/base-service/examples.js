@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { pathToRegexp, compile } = require('path-to-regexp')
 const categories = require('../../services/categories')
 const coalesceBadge = require('./coalesce-badge')
