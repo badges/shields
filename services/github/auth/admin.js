@@ -2,7 +2,7 @@
 
 const secretIsValid = require('../../../core/server/secret-is-valid')
 
-function setRoutes(apiProvider, server) {
+function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   // Allow the admin to obtain the tokens for operational and debugging
   // purposes. This could be used to:
   //
@@ -16,7 +16,9 @@ function setRoutes(apiProvider, server) {
   // e.g.
   // curl --insecure -u ':very-very-secret' 'https://s0.servers.shields.io/$github-auth/tokens'
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
-    if (!secretIsValid(ask.password)) {
+    console.log(ask.password)
+    console.log(shieldsSecret)
+    if (!secretIsValid(ask.password, shieldsSecret)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(() => {
         end('Invalid secret.')
@@ -26,6 +28,4 @@ function setRoutes(apiProvider, server) {
   })
 }
 
-module.exports = {
-  setRoutes,
-}
+module.exports = { setRoutes }
