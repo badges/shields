@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config').util.toObject()
 const RateLimit = require('./rate-limit')
 
 function setRoutes({ rateLimit }, { server, metricInstance }) {
@@ -38,10 +37,6 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
     }
 
     next()
-  })
-
-  server.get('/sys/network', (req, res) => {
-    res.json({ ips: config.public.shields_ips })
   })
 
   server.get('/sys/rate-limit', (req, res) => {
