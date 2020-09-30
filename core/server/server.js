@@ -168,7 +168,6 @@ const privateConfigSchema = Joi.object({
   npm_token: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
-  shields_ips: Joi.array().items(Joi.string().ip()),
   shields_secret: Joi.string(),
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
