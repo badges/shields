@@ -4,29 +4,21 @@ const PypiBase = require('./pypi-base')
 const { getPackageFormats } = require('./pypi-helpers')
 
 module.exports = class PypiFormat extends PypiBase {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
 
-  static get route() {
-    return this.buildRoute('pypi/format')
-  }
+  static route = this.buildRoute('pypi/format')
 
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - Format',
-        pattern: ':packageName',
-        namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ hasWheel: true }),
-        keywords: ['python'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'PyPI - Format',
+      pattern: ':packageName',
+      namedParams: { packageName: 'Django' },
+      staticPreview: this.render({ hasWheel: true }),
+      keywords: ['python'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'format' }
-  }
+  static defaultBadgeData = { label: 'format' }
 
   static render({ hasWheel, hasEgg }) {
     if (hasWheel) {

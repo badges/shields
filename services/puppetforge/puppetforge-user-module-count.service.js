@@ -5,32 +5,24 @@ const { floorCount: floorCountColor } = require('../color-formatters')
 const { BasePuppetForgeUsersService } = require('./puppetforge-base')
 
 module.exports = class PuppetForgeModuleCountService extends BasePuppetForgeUsersService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'puppetforge/mc',
+    pattern: ':user',
   }
 
-  static get route() {
-    return {
-      base: 'puppetforge/mc',
-      pattern: ':user',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Puppet Forge modules by user',
-        namedParams: {
-          user: 'camptocamp',
-        },
-        staticPreview: this.render({ modules: 60 }),
+  static examples = [
+    {
+      title: 'Puppet Forge modules by user',
+      namedParams: {
+        user: 'camptocamp',
       },
-    ]
-  }
+      staticPreview: this.render({ modules: 60 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'modules' }
-  }
+  static defaultBadgeData = { label: 'modules' }
 
   static render({ modules }) {
     return {
