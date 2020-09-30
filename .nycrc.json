@@ -10,6 +10,7 @@
     "**/*-test-helpers.js",
     "**/*-fixtures.js",
     "**/mocha-*.js",
+    "**/*.test-d.ts",
     "dangerfile.js",
     "gatsby-*.js",
     "core/service-test-runner",
