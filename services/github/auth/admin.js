@@ -16,8 +16,6 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   // e.g.
   // curl --insecure -u ':very-very-secret' 'https://s0.servers.shields.io/$github-auth/tokens'
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
-    console.log(ask.password)
-    console.log(shieldsSecret)
     if (!secretIsValid(ask.password, shieldsSecret)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(() => {
