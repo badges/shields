@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService, InvalidParameter } = require('..')
 
 const queryParamSchema = Joi.object({

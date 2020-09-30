@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { compare, isStable, latest } = require('../php-version')
 const { optionalUrl } = require('../validators')

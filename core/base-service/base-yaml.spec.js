@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const BaseYamlService = require('./base-yaml')

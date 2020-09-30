@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 // This should be kept in sync with the schema in
 // `frontend/lib/service-definitions/index.ts`.
