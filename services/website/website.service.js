@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const emojic = require('emojic')
 const { optionalUrl } = require('../validators')
 const {

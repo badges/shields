@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { starRating } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseXmlService } = require('..')

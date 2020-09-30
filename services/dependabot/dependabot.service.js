@@ -1,7 +1,7 @@
 'use strict'
 
 const url = require('url')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({

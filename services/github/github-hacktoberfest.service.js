@@ -1,7 +1,7 @@
 'use strict'
 
 const gql = require('graphql-tag')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const moment = require('moment')
 const { metric, maybePluralize } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')

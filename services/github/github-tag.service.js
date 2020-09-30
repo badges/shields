@@ -1,7 +1,7 @@
 'use strict'
 
 const gql = require('graphql-tag')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { addv } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const { latest } = require('../version')
