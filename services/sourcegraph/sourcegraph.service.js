@@ -9,33 +9,25 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Sourcegraph extends BaseJsonService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'sourcegraph/rrc',
+    pattern: ':repo(.*?)',
   }
 
-  static get route() {
-    return {
-      base: 'sourcegraph/rrc',
-      pattern: ':repo(.*?)',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sourcegraph for Repo Reference Count',
-        pattern: ':repo',
-        namedParams: {
-          repo: 'github.com/gorilla/mux',
-        },
-        staticPreview: this.render({ projectsCount: '9.9k projects' }),
+  static examples = [
+    {
+      title: 'Sourcegraph for Repo Reference Count',
+      pattern: ':repo',
+      namedParams: {
+        repo: 'github.com/gorilla/mux',
       },
-    ]
-  }
+      staticPreview: this.render({ projectsCount: '9.9k projects' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { color: 'brightgreen', label: 'used by' }
-  }
+  static defaultBadgeData = { color: 'brightgreen', label: 'used by' }
 
   static render({ projectsCount }) {
     return {

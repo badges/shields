@@ -10,43 +10,35 @@ const {
 } = require('./sonar-helpers')
 
 module.exports = class SonarTechDebt extends SonarBase {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'sonar',
+    pattern: ':metric(tech_debt|sqale_debt_ratio)/:component',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'sonar',
-      pattern: ':metric(tech_debt|sqale_debt_ratio)/:component',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Tech Debt',
-        namedParams: {
-          component: 'org.ow2.petals:petals-se-ase',
-          metric: 'tech_debt',
-        },
-        queryParams: {
-          server: 'http://sonar.petalslink.com',
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({
-          debt: 1,
-          metric: 'tech_debt',
-        }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Sonar Tech Debt',
+      namedParams: {
+        component: 'org.ow2.petals:petals-se-ase',
+        metric: 'tech_debt',
       },
-    ]
-  }
+      queryParams: {
+        server: 'http://sonar.petalslink.com',
+        sonarVersion: '4.2',
+      },
+      staticPreview: this.render({
+        debt: 1,
+        metric: 'tech_debt',
+      }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'tech debt' }
-  }
+  static defaultBadgeData = { label: 'tech debt' }
 
   static render({ debt, metric }) {
     return {
