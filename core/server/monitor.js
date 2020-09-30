@@ -1,19 +1,7 @@
 'use strict'
 
 const config = require('config').util.toObject()
-const secretIsValid = require('./secret-is-valid')
 const RateLimit = require('./rate-limit')
-
-function secretInvalid(req, res) {
-  if (!secretIsValid(req.password)) {
-    // An unknown entity tries to connect. Let the connection linger for a minute.
-    setTimeout(() => {
-      res.json({ errors: [{ code: 'invalid_secrets' }] })
-    }, 10000)
-    return true
-  }
-  return false
-}
 
 function setRoutes({ rateLimit }, { server, metricInstance }) {
   const ipRateLimit = new RateLimit({
@@ -28,12 +16,6 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
   })
 
   server.handle((req, res, next) => {
-    if (req.url.startsWith('/sys/')) {
-      if (secretInvalid(req, res)) {
-        return
-      }
-    }
-
     if (rateLimit) {
       const ip =
         (req.headers['x-forwarded-for'] || '').split(', ')[0] ||
