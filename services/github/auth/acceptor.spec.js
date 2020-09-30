@@ -8,27 +8,14 @@ const portfinder = require('portfinder')
 const queryString = require('query-string')
 const nock = require('nock')
 const got = require('../../../core/got-test-client')
-const serverSecrets = require('../../../lib/server-secrets')
 const GithubConstellation = require('../github-constellation')
 const acceptor = require('./acceptor')
 
 const fakeClientId = 'githubdabomb'
-const fakeShieldsSecret = 'letmeinplz'
 
 describe('Github token acceptor', function () {
   const oauthHelper = GithubConstellation._createOauthHelper({
     private: { gh_client_id: fakeClientId },
-  })
-  before(function () {
-    // Make sure properties exist.
-    // https://github.com/sinonjs/sinon/pull/1557
-    serverSecrets.shields_ips = undefined
-    serverSecrets.shields_secret = undefined
-    sinon.stub(serverSecrets, 'shields_ips').value([])
-    sinon.stub(serverSecrets, 'shields_secret').value(fakeShieldsSecret)
-  })
-  after(function () {
-    sinon.restore()
   })
 
   let port, baseUrl
@@ -128,21 +115,9 @@ describe('Github token acceptor', function () {
         expect(res.body).to.startWith(
           '<p>Shields.io has received your app-specific GitHub user token.'
         )
+
+        expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)
       })
     })
-  })
-
-  it('should add a received token', async function () {
-    const fakeAccessToken = 'its-my-token'
-    const form = new FormData()
-    form.append('shieldsSecret', fakeShieldsSecret)
-    form.append('token', fakeAccessToken)
-
-    const { body } = await got.post(`${baseUrl}/github-auth/add-token`, {
-      body: form,
-    })
-
-    expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)
-    expect(body).to.equal('Thanks!')
   })
 })
