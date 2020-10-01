@@ -7,7 +7,7 @@ module.exports = class SpigetDownloadSize extends BaseSpigetService {
 
   static route = {
     base: 'spiget/download-size',
-    pattern: ':resourceId'
+    pattern: ':resourceId',
   }
 
   static examples = [
