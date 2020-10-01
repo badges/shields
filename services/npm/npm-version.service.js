@@ -14,57 +14,51 @@ const schema = Joi.object()
   .required()
 
 module.exports = class NpmVersion extends NpmBase {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
 
-  static get route() {
-    return this.buildRoute('npm/v', { withTag: true })
-  }
+  static route = this.buildRoute('npm/v', { withTag: true })
 
-  static get examples() {
-    return [
-      {
-        title: 'npm',
-        pattern: ':packageName',
-        namedParams: { packageName: 'npm' },
-        staticPreview: this.render({ version: '6.3.0' }),
-        keywords,
-      },
-      {
-        title: 'npm (scoped)',
-        pattern: ':scope/:packageName',
-        namedParams: { scope: '@cycle', packageName: 'core' },
-        staticPreview: this.render({ version: '7.0.0' }),
-        keywords,
-      },
-      {
-        title: 'npm (tag)',
-        pattern: ':packageName/:tag',
-        namedParams: { packageName: 'npm', tag: 'next' },
-        staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
-        keywords,
-      },
-      {
-        title: 'npm (custom registry)',
-        pattern: ':packageName/:tag',
-        namedParams: { packageName: 'npm', tag: 'next' },
-        queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        staticPreview: this.render({ tag: 'latest', version: '7.0.0' }),
-        keywords,
-      },
-      {
-        title: 'npm (scoped with tag)',
-        pattern: ':scope/:packageName/:tag',
-        namedParams: { scope: '@cycle', packageName: 'core', tag: 'canary' },
-        staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
-        keywords,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'npm',
+      pattern: ':packageName',
+      namedParams: { packageName: 'npm' },
+      staticPreview: this.render({ version: '6.3.0' }),
+      keywords,
+    },
+    {
+      title: 'npm (scoped)',
+      pattern: ':scope/:packageName',
+      namedParams: { scope: '@cycle', packageName: 'core' },
+      staticPreview: this.render({ version: '7.0.0' }),
+      keywords,
+    },
+    {
+      title: 'npm (tag)',
+      pattern: ':packageName/:tag',
+      namedParams: { packageName: 'npm', tag: 'next' },
+      staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
+      keywords,
+    },
+    {
+      title: 'npm (custom registry)',
+      pattern: ':packageName/:tag',
+      namedParams: { packageName: 'npm', tag: 'next' },
+      queryParams: { registry_uri: 'https://registry.npmjs.com' },
+      staticPreview: this.render({ tag: 'latest', version: '7.0.0' }),
+      keywords,
+    },
+    {
+      title: 'npm (scoped with tag)',
+      pattern: ':scope/:packageName/:tag',
+      namedParams: { scope: '@cycle', packageName: 'core', tag: 'canary' },
+      staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'npm' }
+  static defaultBadgeData = {
+    label: 'npm',
   }
 
   static render({ tag, version }) {

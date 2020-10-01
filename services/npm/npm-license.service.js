@@ -5,33 +5,27 @@ const toArray = require('../../core/base-service/to-array')
 const NpmBase = require('./npm-base')
 
 module.exports = class NpmLicense extends NpmBase {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
 
-  static get route() {
-    return this.buildRoute('npm/l', { withTag: false })
-  }
+  static route = this.buildRoute('npm/l', { withTag: false })
 
-  static get examples() {
-    return [
-      {
-        title: 'NPM',
-        pattern: ':packageName',
-        namedParams: { packageName: 'express' },
-        staticPreview: this.render({ licenses: ['MIT'] }),
-        keywords: ['node'],
-      },
-      {
-        title: 'NPM',
-        pattern: ':packageName',
-        namedParams: { packageName: 'express' },
-        queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        staticPreview: this.render({ licenses: ['MIT'] }),
-        keywords: ['node'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'NPM',
+      pattern: ':packageName',
+      namedParams: { packageName: 'express' },
+      staticPreview: this.render({ licenses: ['MIT'] }),
+      keywords: ['node'],
+    },
+    {
+      title: 'NPM',
+      pattern: ':packageName',
+      namedParams: { packageName: 'express' },
+      queryParams: { registry_uri: 'https://registry.npmjs.com' },
+      staticPreview: this.render({ licenses: ['MIT'] }),
+      keywords: ['node'],
+    },
+  ]
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })
