@@ -4,34 +4,26 @@ const { renderVersionBadge } = require('../version')
 const { BaseService, NotFound, InvalidResponse } = require('..')
 
 module.exports = class OpmVersion extends BaseService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'opm/v',
+    pattern: ':user/:moduleName',
   }
 
-  static get route() {
-    return {
-      base: 'opm/v',
-      pattern: ':user/:moduleName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'OPM',
-        namedParams: {
-          user: 'openresty',
-          moduleName: 'lua-resty-lrucache',
-        },
-        staticPreview: renderVersionBadge({ version: 'v0.08' }),
+  static examples = [
+    {
+      title: 'OPM',
+      namedParams: {
+        user: 'openresty',
+        moduleName: 'lua-resty-lrucache',
       },
-    ]
-  }
+      staticPreview: renderVersionBadge({ version: 'v0.08' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'opm',
-    }
+  static defaultBadgeData = {
+    label: 'opm',
   }
 
   async fetch({ user, moduleName }) {

@@ -5,19 +5,15 @@ const { colorScale } = require('../color-formatters')
 const { LiberapayBase } = require('./liberapay-base')
 
 module.exports = class LiberapayPatrons extends LiberapayBase {
-  static get route() {
-    return this.buildRoute('patrons')
-  }
+  static route = this.buildRoute('patrons')
 
-  static get examples() {
-    return [
-      {
-        title: 'Liberapay patrons',
-        namedParams: { entity: 'Changaco' },
-        staticPreview: this.render({ patrons: 10 }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Liberapay patrons',
+      namedParams: { entity: 'Changaco' },
+      staticPreview: this.render({ patrons: 10 }),
+    },
+  ]
 
   static render({ patrons }) {
     return {

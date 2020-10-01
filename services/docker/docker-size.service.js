@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
 const { latest } = require('../version')

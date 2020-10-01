@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const KeybaseProfile = require('./keybase-profile')
 
@@ -29,31 +29,25 @@ const zcachAddressSchema = Joi.object({
 }).required()
 
 module.exports = class KeybaseZEC extends KeybaseProfile {
-  static get route() {
-    return {
-      base: 'keybase/zec',
-      pattern: ':username',
-    }
+  static route = {
+    base: 'keybase/zec',
+    pattern: ':username',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Keybase ZEC',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({
-          address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
-        }),
-        keywords: ['zcash'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Keybase ZEC',
+      namedParams: { username: 'skyplabs' },
+      staticPreview: this.render({
+        address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
+      }),
+      keywords: ['zcash'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'zec',
-      color: 'informational',
-    }
+  static defaultBadgeData = {
+    label: 'zec',
+    color: 'informational',
   }
 
   static render({ address }) {
@@ -62,9 +56,7 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
     }
   }
 
-  static get apiVersion() {
-    return '1.0'
-  }
+  static apiVersion = '1.0'
 
   async handle({ username }) {
     const options = {

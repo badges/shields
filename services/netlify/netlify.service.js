@@ -17,35 +17,27 @@ const statusMap = {
 }
 
 module.exports = class Netlify extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'netlify',
+    pattern: ':projectId',
   }
 
-  static get route() {
-    return {
-      base: 'netlify',
-      pattern: ':projectId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Netlify',
-        namedParams: {
-          projectId: 'e6d5a4e0-dee1-4261-833e-2f47f509c68f',
-        },
-        documentation:
-          'To locate your project id, visit your project settings, scroll to "Status badges" under "General", and copy the ID between "/api/v1/badges/" and "/deploy-status" in the code sample',
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  static examples = [
+    {
+      title: 'Netlify',
+      namedParams: {
+        projectId: 'e6d5a4e0-dee1-4261-833e-2f47f509c68f',
       },
-    ]
-  }
+      documentation:
+        'To locate your project id, visit your project settings, scroll to "Status badges" under "General", and copy the ID between "/api/v1/badges/" and "/deploy-status" in the code sample',
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'netlify',
-    }
+  static defaultBadgeData = {
+    label: 'netlify',
   }
 
   static render({ status }) {

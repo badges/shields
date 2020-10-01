@@ -1,7 +1,7 @@
 'use strict'
 
 const gql = require('graphql-tag')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { NotFound } = require('..')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const { documentation, transformErrors } = require('./github-helpers')
@@ -40,37 +40,28 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubDeployments extends GithubAuthV4Service {
-  static get category() {
-    return 'other'
+  static category = 'other'
+  static route = {
+    base: 'github/deployments',
+    pattern: ':user/:repo/:environment',
   }
 
-  static get route() {
-    return {
-      base: 'github/deployments',
-      pattern: ':user/:repo/:environment',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub deployments',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          environment: 'shields-staging',
-        },
-        staticPreview: this.render({
-          state: 'success',
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub deployments',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        environment: 'shields-staging',
       },
-    ]
-  }
+      staticPreview: this.render({
+        state: 'success',
+      }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'state' }
-  }
+  static defaultBadgeData = { label: 'state' }
 
   static render({ state }) {
     let color

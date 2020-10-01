@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { coveragePercentage } = require('../color-formatters')
 const { optionalUrl } = require('../validators')
 const { BaseSvgScrapingService, NotFound } = require('..')
@@ -39,64 +39,56 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 `
 
 module.exports = class GitlabCoverage extends BaseSvgScrapingService {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+
+  static route = {
+    base: 'gitlab/coverage',
+    pattern: ':user/:repo/:branch',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'gitlab/coverage',
-      pattern: ':user/:repo/:branch',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Gitlab code coverage',
+      namedParams: {
+        user: 'gitlab-org',
+        repo: 'gitlab-runner',
+        branch: 'master',
+      },
+      staticPreview: this.render({ coverage: 67 }),
+      documentation,
+    },
+    {
+      title: 'Gitlab code coverage (specific job)',
+      namedParams: {
+        user: 'gitlab-org',
+        repo: 'gitlab-runner',
+        branch: 'master',
+      },
+      queryParams: { job_name: 'test coverage report' },
+      staticPreview: this.render({ coverage: 96 }),
+      documentation,
+    },
+    {
+      title: 'Gitlab code coverage (self-hosted)',
+      namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+      queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+      staticPreview: this.render({ coverage: 93 }),
+      documentation,
+    },
+    {
+      title: 'Gitlab code coverage (self-hosted, specific job)',
+      namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+      queryParams: {
+        gitlab_url: 'https://gitlab.gnome.org',
+        job_name: 'unit-test',
+      },
+      staticPreview: this.render({ coverage: 93 }),
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Gitlab code coverage',
-        namedParams: {
-          user: 'gitlab-org',
-          repo: 'gitlab-runner',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 67 }),
-        documentation,
-      },
-      {
-        title: 'Gitlab code coverage (specific job)',
-        namedParams: {
-          user: 'gitlab-org',
-          repo: 'gitlab-runner',
-          branch: 'master',
-        },
-        queryParams: { job_name: 'test coverage report' },
-        staticPreview: this.render({ coverage: 96 }),
-        documentation,
-      },
-      {
-        title: 'Gitlab code coverage (self-hosted)',
-        namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
-        queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
-        staticPreview: this.render({ coverage: 93 }),
-        documentation,
-      },
-      {
-        title: 'Gitlab code coverage (self-hosted, specific job)',
-        namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
-        queryParams: {
-          gitlab_url: 'https://gitlab.gnome.org',
-          job_name: 'unit-test',
-        },
-        staticPreview: this.render({ coverage: 93 }),
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     return {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { optionalUrl, nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
@@ -21,40 +21,32 @@ const documentation = `
 `
 
 module.exports = class MastodonFollow extends BaseJsonService {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'mastodon/follow',
+    pattern: ':id',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'mastodon/follow',
-      pattern: ':id',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Mastodon Follow',
-        namedParams: {
-          id: '26471',
-        },
-        queryParams: { domain: 'https://mastodon.social' },
-        staticPreview: {
-          label: 'Follow',
-          message: '862',
-          style: 'social',
-        },
-        documentation,
+  static examples = [
+    {
+      title: 'Mastodon Follow',
+      namedParams: {
+        id: '26471',
       },
-    ]
-  }
+      queryParams: { domain: 'https://mastodon.social' },
+      staticPreview: {
+        label: 'Follow',
+        message: '862',
+        style: 'social',
+      },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      namedLogo: 'mastodon',
-    }
+  static defaultBadgeData = {
+    namedLogo: 'mastodon',
   }
 
   static render({ username, followers, domain }) {

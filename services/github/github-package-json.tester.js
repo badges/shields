@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isSemver } = require('../test-validators')
 const { semverRange } = require('../validators')

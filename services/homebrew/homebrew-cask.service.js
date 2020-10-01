@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
@@ -9,30 +9,18 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class HomebrewCask extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'homebrew/cask/v', pattern: ':cask' }
 
-  static get route() {
-    return {
-      base: 'homebrew/cask/v',
-      pattern: ':cask',
-    }
-  }
+  static examples = [
+    {
+      title: 'homebrew cask',
+      namedParams: { cask: 'iterm2' },
+      staticPreview: renderVersionBadge({ version: 'v3.2.5' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'homebrew cask',
-        namedParams: { cask: 'iterm2' },
-        staticPreview: renderVersionBadge({ version: 'v3.2.5' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'homebrew cask' }
-  }
+  static defaultBadgeData = { label: 'homebrew cask' }
 
   async fetch({ cask }) {
     return this._requestJson({

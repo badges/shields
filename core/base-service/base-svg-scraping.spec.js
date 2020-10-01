@@ -2,7 +2,7 @@
 
 const { expect } = require('chai')
 const sinon = require('sinon')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const makeBadge = require('../../badge-maker/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 

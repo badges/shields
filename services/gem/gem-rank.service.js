@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { floorCount } = require('../color-formatters')
 const { ordinalNumber } = require('../text-formatters')
 const { BaseJsonService, InvalidResponse } = require('..')
@@ -25,43 +25,30 @@ const dailySchema = Joi.array()
   .required()
 
 module.exports = class GemRank extends BaseJsonService {
-  static get category() {
-    return 'downloads'
-  }
-
-  static get route() {
-    return {
-      base: 'gem',
-      pattern: ':period(rt|rd)/:gem',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Gem download rank',
-        pattern: 'rt/:gem',
-        namedParams: {
-          gem: 'puppet',
-        },
-        staticPreview: this.render({ period: 'rt', rank: 332 }),
-        keywords,
+  static category = 'downloads'
+  static route = { base: 'gem', pattern: ':period(rt|rd)/:gem' }
+  static examples = [
+    {
+      title: 'Gem download rank',
+      pattern: 'rt/:gem',
+      namedParams: {
+        gem: 'puppet',
       },
-      {
-        title: 'Gem download rank (daily)',
-        pattern: 'rd/:gem',
-        namedParams: {
-          gem: 'facter',
-        },
-        staticPreview: this.render({ period: 'rd', rank: 656 }),
-        keywords,
+      staticPreview: this.render({ period: 'rt', rank: 332 }),
+      keywords,
+    },
+    {
+      title: 'Gem download rank (daily)',
+      pattern: 'rd/:gem',
+      namedParams: {
+        gem: 'facter',
       },
-    ]
-  }
+      staticPreview: this.render({ period: 'rd', rank: 656 }),
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'rank' }
-  }
+  static defaultBadgeData = { label: 'rank' }
 
   static render({ period, rank }) {
     const count = Math.floor(100000 / rank)

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
@@ -34,6 +34,7 @@ const mockedQuerySelector = {
       homepage: '0',
       tags: '0',
       screenshot_url: '0',
+      downloaded: 1,
     },
   },
 }
@@ -46,7 +47,7 @@ t.create('Plugin Tested WP Version - current')
   .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
-      .get('/plugins/info/1.1/')
+      .get('/plugins/info/1.2/')
       .query(mockedQuerySelector)
       .reply(200, {
         version: '1.3',
@@ -70,7 +71,7 @@ t.create('Plugin Tested WP Version - old')
   .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
-      .get('/plugins/info/1.1/')
+      .get('/plugins/info/1.2/')
       .query(mockedQuerySelector)
       .reply(200, {
         version: '1.2',
@@ -94,7 +95,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
   .get('/plugin/tested/akismet.json')
   .intercept(nock =>
     nock('https://api.wordpress.org')
-      .get('/plugins/info/1.1/')
+      .get('/plugins/info/1.2/')
       .query(mockedQuerySelector)
       .reply(200, {
         version: '1.2',

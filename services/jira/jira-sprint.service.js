@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 const { authConfig } = require('./jira-common')
@@ -33,44 +33,34 @@ const documentation = `
 `
 
 module.exports = class JiraSprint extends BaseJsonService {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+
+  static route = {
+    base: 'jira/sprint',
+    pattern: ':sprintId',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'jira/sprint',
-      pattern: ':sprintId',
-      queryParamSchema,
-    }
-  }
+  static auth = authConfig
 
-  static get auth() {
-    return authConfig
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'JIRA sprint completion',
-        namedParams: {
-          sprintId: '94',
-        },
-        queryParams: {
-          baseUrl: 'https://jira.spring.io',
-        },
-        staticPreview: this.render({
-          numCompletedIssues: 27,
-          numTotalIssues: 28,
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'JIRA sprint completion',
+      namedParams: {
+        sprintId: '94',
       },
-    ]
-  }
+      queryParams: {
+        baseUrl: 'https://jira.spring.io',
+      },
+      staticPreview: this.render({
+        numCompletedIssues: 27,
+        numTotalIssues: 28,
+      }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'jira' }
-  }
+  static defaultBadgeData = { label: 'jira' }
 
   static render({ numCompletedIssues, numTotalIssues }) {
     const percentComplete = numTotalIssues

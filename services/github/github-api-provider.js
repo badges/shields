@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const log = require('../../core/server/log')
 const { TokenPool } = require('../../core/token-pooling/token-pool')
 const { userAgent } = require('../../core/base-service/legacy-request-handler')

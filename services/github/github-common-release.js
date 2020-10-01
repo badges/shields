@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { latest } = require('../version')
 const { NotFound } = require('..')
 const { errorMessagesFor } = require('./github-helpers')

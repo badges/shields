@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
@@ -12,32 +12,19 @@ const schema = Joi.object({
 const defaultBranch = 'rawhide'
 
 module.exports = class Fedora extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'fedora/v', pattern: ':packageName/:branch?' }
+  static examples = [
+    {
+      title: 'Fedora package',
+      namedParams: { packageName: 'rpm', branch: 'rawhide' },
+      staticPreview: renderVersionBadge({ version: '4.14.2.1' }),
+      documentation:
+        'See <a href="https://apps.fedoraproject.org/mdapi/">mdapi docs</a> for information on valid branches.',
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'fedora/v',
-      pattern: ':packageName/:branch?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Fedora package',
-        namedParams: { packageName: 'rpm', branch: 'rawhide' },
-        staticPreview: renderVersionBadge({ version: '4.14.2.1' }),
-        documentation:
-          'See <a href="https://apps.fedoraproject.org/mdapi/">mdapi docs</a> for information on valid branches.',
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'fedora' }
-  }
+  static defaultBadgeData = { label: 'fedora' }
 
   async handle({ packageName, branch = defaultBranch }) {
     const data = await this._requestJson({

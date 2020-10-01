@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
@@ -46,42 +46,34 @@ const documentation = `
 `
 
 module.exports = class MozillaObservatory extends BaseJsonService {
-  static get category() {
-    // TODO: Once created, change to a more appropriate category,
-    // see https://github.com/badges/shields/pull/2926#issuecomment-460777017
-    return 'monitoring'
+  // TODO: Once created, change to a more appropriate category,
+  // see https://github.com/badges/shields/pull/2926#issuecomment-460777017
+  static category = 'monitoring'
+
+  static route = {
+    base: 'mozilla-observatory',
+    pattern: ':format(grade|grade-score)/:host',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'mozilla-observatory',
-      pattern: ':format(grade|grade-score)/:host',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Mozilla HTTP Observatory Grade',
+      namedParams: { format: 'grade', host: 'github.com' },
+      staticPreview: this.render({
+        format: 'grade',
+        state: 'FINISHED',
+        grade: 'A+',
+        score: 115,
+      }),
+      queryParams: { publish: null },
+      keywords: ['scanner', 'security'],
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Mozilla HTTP Observatory Grade',
-        namedParams: { format: 'grade', host: 'github.com' },
-        staticPreview: this.render({
-          format: 'grade',
-          state: 'FINISHED',
-          grade: 'A+',
-          score: 115,
-        }),
-        queryParams: { publish: null },
-        keywords: ['scanner', 'security'],
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'observatory',
-    }
+  static defaultBadgeData = {
+    label: 'observatory',
   }
 
   static render({ format, state, grade, score }) {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const {
   optionalNonNegativeInteger,
   nonNegativeInteger,
@@ -23,39 +23,25 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class FDroid extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
+  static category = 'version'
+  static route = { base: 'f-droid/v', pattern: ':appId', queryParamSchema }
+  static examples = [
+    {
+      title: 'F-Droid',
+      namedParams: { appId: 'org.thosp.yourlocalweather' },
+      staticPreview: this.render({ version: '1.0' }),
+      keywords: ['fdroid', 'android', 'app'],
+    },
+    {
+      title: 'F-Droid (including pre-releases)',
+      namedParams: { appId: 'org.dystopia.email' },
+      queryParams: { include_prereleases: null },
+      staticPreview: this.render({ version: '1.2.1' }),
+      keywords: ['fdroid', 'android', 'app'],
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'f-droid/v',
-      pattern: ':appId',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'F-Droid',
-        namedParams: { appId: 'org.thosp.yourlocalweather' },
-        staticPreview: this.render({ version: '1.0' }),
-        keywords: ['fdroid', 'android', 'app'],
-      },
-      {
-        title: 'F-Droid (including pre-releases)',
-        namedParams: { appId: 'org.dystopia.email' },
-        queryParams: { include_prereleases: null },
-        staticPreview: this.render({ version: '1.2.1' }),
-        keywords: ['fdroid', 'android', 'app'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'f-droid' }
-  }
+  static defaultBadgeData = { label: 'f-droid' }
 
   static render({ version }) {
     return {

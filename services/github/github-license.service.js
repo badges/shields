@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderLicenseBadge } = require('../licenses')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
@@ -11,37 +11,22 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubLicense extends GithubAuthV3Service {
-  static get category() {
-    return 'license'
-  }
-
-  static get route() {
-    return {
-      base: 'github/license',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub',
-        namedParams: { user: 'mashape', repo: 'apistatus' },
-        staticPreview: {
-          label: 'license',
-          message: 'MIT',
-          color: 'green',
-        },
-        documentation,
+  static category = 'license'
+  static route = { base: 'github/license', pattern: ':user/:repo' }
+  static examples = [
+    {
+      title: 'GitHub',
+      namedParams: { user: 'mashape', repo: 'apistatus' },
+      staticPreview: {
+        label: 'license',
+        message: 'MIT',
+        color: 'green',
       },
-    ]
-  }
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'license',
-    }
-  }
+  static defaultBadgeData = { label: 'license' }
 
   static render({ license }) {
     if (license === 'NOASSERTION') {

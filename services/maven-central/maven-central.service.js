@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseXmlService, NotFound } = require('..')
 
@@ -15,51 +15,45 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class MavenCentral extends BaseXmlService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'maven-central/v',
+    pattern: ':groupId/:artifactId/:versionPrefix?',
   }
 
-  static get route() {
-    return {
-      base: 'maven-central/v',
-      pattern: ':groupId/:artifactId/:versionPrefix?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Maven Central',
-        pattern: ':groupId/:artifactId',
-        namedParams: {
-          groupId: 'org.apache.maven',
-          artifactId: 'apache-maven',
-        },
-        staticPreview: {
-          label: 'maven-central',
-          message: 'v3.6.0',
-          color: 'blue',
-        },
+  static examples = [
+    {
+      title: 'Maven Central',
+      pattern: ':groupId/:artifactId',
+      namedParams: {
+        groupId: 'org.apache.maven',
+        artifactId: 'apache-maven',
       },
-      {
-        title: 'Maven Central with version prefix filter',
-        pattern: ':groupId/:artifactId/:versionPrefix',
-        namedParams: {
-          groupId: 'org.apache.maven',
-          artifactId: 'apache-maven',
-          versionPrefix: '2',
-        },
-        staticPreview: {
-          label: 'maven-central',
-          message: 'v2.2.1',
-          color: 'blue',
-        },
+      staticPreview: {
+        label: 'maven-central',
+        message: 'v3.6.0',
+        color: 'blue',
       },
-    ]
-  }
+    },
+    {
+      title: 'Maven Central with version prefix filter',
+      pattern: ':groupId/:artifactId/:versionPrefix',
+      namedParams: {
+        groupId: 'org.apache.maven',
+        artifactId: 'apache-maven',
+        versionPrefix: '2',
+      },
+      staticPreview: {
+        label: 'maven-central',
+        message: 'v2.2.1',
+        color: 'blue',
+      },
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'maven-central' }
+  static defaultBadgeData = {
+    label: 'maven-central',
   }
 
   async fetch({ groupId, artifactId }) {
