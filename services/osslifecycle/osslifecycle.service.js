@@ -14,45 +14,37 @@ const documentation = `
 `
 
 module.exports = class OssTracker extends BaseService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'osslifecycle',
+    pattern: ':user/:repo/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'osslifecycle',
-      pattern: ':user/:repo/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'OSS Lifecycle',
-        pattern: ':user/:repo',
-        namedParams: { user: 'Teevity', repo: 'ice' },
-        staticPreview: this.render({ status: 'active' }),
-        keywords: ['Netflix'],
-        documentation,
+  static examples = [
+    {
+      title: 'OSS Lifecycle',
+      pattern: ':user/:repo',
+      namedParams: { user: 'Teevity', repo: 'ice' },
+      staticPreview: this.render({ status: 'active' }),
+      keywords: ['Netflix'],
+      documentation,
+    },
+    {
+      title: 'OSS Lifecycle (branch)',
+      pattern: ':user/:repo/:branch',
+      namedParams: {
+        user: 'Netflix',
+        repo: 'osstracker',
+        branch: 'documentation',
       },
-      {
-        title: 'OSS Lifecycle (branch)',
-        pattern: ':user/:repo/:branch',
-        namedParams: {
-          user: 'Netflix',
-          repo: 'osstracker',
-          branch: 'documentation',
-        },
-        staticPreview: this.render({ status: 'active' }),
-        keywords: ['Netflix'],
-        documentation,
-      },
-    ]
-  }
+      staticPreview: this.render({ status: 'active' }),
+      keywords: ['Netflix'],
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'oss lifecycle' }
-  }
+  static defaultBadgeData = { label: 'oss lifecycle' }
 
   /**
    * Return color for active, maintenance and archived statuses, which were the three
