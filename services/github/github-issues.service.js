@@ -167,7 +167,7 @@ module.exports = class GithubIssues extends GithubAuthV4Service {
       pattern: 'issues-pr-closed/:user/:repo',
       namedParams: {
         user: 'cdnjs',
-        repo: 'shields',
+        repo: 'cdnjs',
       },
       staticPreview: {
         label: 'pull requests',
