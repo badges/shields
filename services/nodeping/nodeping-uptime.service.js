@@ -24,33 +24,25 @@ const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 // TODO: support for custom # of decimal places
 
 module.exports = class NodePingUptime extends BaseJsonService {
-  static get category() {
-    return 'monitoring'
+  static category = 'monitoring'
+
+  static route = {
+    base: 'nodeping/uptime',
+    pattern: ':checkUuid',
   }
 
-  static get route() {
-    return {
-      base: 'nodeping/uptime',
-      pattern: ':checkUuid',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'NodePing uptime',
-        namedParams: {
-          checkUuid: sampleCheckUuid,
-        },
-        staticPreview: this.render({ uptime: 99.999 }),
+  static examples = [
+    {
+      title: 'NodePing uptime',
+      namedParams: {
+        checkUuid: sampleCheckUuid,
       },
-    ]
-  }
+      staticPreview: this.render({ uptime: 99.999 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'Uptime',
-    }
+  static defaultBadgeData = {
+    label: 'Uptime',
   }
 
   static formatPercentage(uptime) {
