@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
 
@@ -10,35 +10,27 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JitPackVersion extends BaseJsonService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'jitpack/v',
+    pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'jitpack/v',
-      pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'JitPack',
-        namedParams: {
-          vcs: 'github',
-          user: 'jitpack',
-          repo: 'maven-simple',
-        },
-        staticPreview: renderVersionBadge({ version: 'v1.1' }),
-        keywords: ['java', 'maven'],
+  static examples = [
+    {
+      title: 'JitPack',
+      namedParams: {
+        vcs: 'github',
+        user: 'jitpack',
+        repo: 'maven-simple',
       },
-    ]
-  }
+      staticPreview: renderVersionBadge({ version: 'v1.1' }),
+      keywords: ['java', 'maven'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'jitpack' }
-  }
+  static defaultBadgeData = { label: 'jitpack' }
 
   async fetch({ vcs, user, repo }) {
     const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latest`

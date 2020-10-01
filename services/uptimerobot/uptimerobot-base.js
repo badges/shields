@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 
 // https://uptimerobot.com/api

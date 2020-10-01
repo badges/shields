@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
@@ -13,30 +13,22 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Itunes extends BaseJsonService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'itunes/v',
+    pattern: ':bundleId',
   }
 
-  static get route() {
-    return {
-      base: 'itunes/v',
-      pattern: ':bundleId',
-    }
-  }
+  static examples = [
+    {
+      title: 'iTunes App Store',
+      namedParams: { bundleId: '803453959' },
+      staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'iTunes App Store',
-        namedParams: { bundleId: '803453959' },
-        staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'itunes app store' }
-  }
+  static defaultBadgeData = { label: 'itunes app store' }
 
   async fetch({ bundleId }) {
     return this._requestJson({

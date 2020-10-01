@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')
 
@@ -13,37 +13,23 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Gerrit extends BaseJsonService {
-  static get category() {
-    return 'issue-tracking'
-  }
-
-  static get route() {
-    return {
-      base: 'gerrit',
-      pattern: ':changeId',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Gerrit change status',
-        namedParams: {
-          changeId: '1011478',
-        },
-        queryParams: { baseUrl: 'https://android-review.googlesource.com' },
-        staticPreview: this.render({
-          changeId: 1011478,
-          status: 'MERGED',
-        }),
+  static category = 'issue-tracking'
+  static route = { base: 'gerrit', pattern: ':changeId', queryParamSchema }
+  static examples = [
+    {
+      title: 'Gerrit change status',
+      namedParams: {
+        changeId: '1011478',
       },
-    ]
-  }
+      queryParams: { baseUrl: 'https://android-review.googlesource.com' },
+      staticPreview: this.render({
+        changeId: 1011478,
+        status: 'MERGED',
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'gerrit' }
-  }
+  static defaultBadgeData = { label: 'gerrit' }
 
   static getColor({ displayStatus }) {
     if (displayStatus === 'new') {

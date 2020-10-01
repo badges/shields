@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { renderVersionBadge } = require('../version')
 const { BaseXmlService } = require('..')
@@ -20,34 +20,28 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class MavenMetadata extends BaseXmlService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'maven-metadata',
+    pattern: 'v',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'maven-metadata',
-      pattern: 'v',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Maven metadata URL',
-        namedParams: {},
-        queryParams: {
-          metadataUrl:
-            'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
-        },
-        staticPreview: renderVersionBadge({ version: '2.8.5' }),
+  static examples = [
+    {
+      title: 'Maven metadata URL',
+      namedParams: {},
+      queryParams: {
+        metadataUrl:
+          'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
       },
-    ]
-  }
+      staticPreview: renderVersionBadge({ version: '2.8.5' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'maven' }
+  static defaultBadgeData = {
+    label: 'maven',
   }
 
   async fetch({ metadataUrl }) {

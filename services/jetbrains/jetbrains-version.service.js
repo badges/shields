@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const JetbrainsBase = require('./jetbrains-base')
 
@@ -21,32 +21,24 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JetbrainsVersion extends JetbrainsBase {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'jetbrains/plugin/v',
+    pattern: ':pluginId',
   }
 
-  static get route() {
-    return {
-      base: 'jetbrains/plugin/v',
-      pattern: ':pluginId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'JetBrains IntelliJ Plugins',
-        namedParams: {
-          pluginId: '9630-a8translate',
-        },
-        staticPreview: this.render({ version: 'v1.7' }),
+  static examples = [
+    {
+      title: 'JetBrains IntelliJ Plugins',
+      namedParams: {
+        pluginId: '9630-a8translate',
       },
-    ]
-  }
+      staticPreview: this.render({ version: 'v1.7' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'jetbrains plugin' }
-  }
+  static defaultBadgeData = { label: 'jetbrains plugin' }
 
   static render({ version }) {
     return renderVersionBadge({ version })

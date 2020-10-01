@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
@@ -41,48 +41,40 @@ module.exports = class JenkinsPluginInstalls extends BaseJsonService {
     }
   }
 
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'jenkins/plugin/i',
+    pattern: ':plugin/:version?',
   }
 
-  static get route() {
-    return {
-      base: 'jenkins/plugin/i',
-      pattern: ':plugin/:version?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Jenkins Plugin installs',
-        pattern: ':plugin',
-        namedParams: {
-          plugin: 'view-job-filters',
-        },
-        staticPreview: this.render({
-          label: this._getLabel(),
-          installs: 10247,
-        }),
+  static examples = [
+    {
+      title: 'Jenkins Plugin installs',
+      pattern: ':plugin',
+      namedParams: {
+        plugin: 'view-job-filters',
       },
-      {
-        title: 'Jenkins Plugin installs (version)',
-        pattern: ':plugin/:version',
-        namedParams: {
-          plugin: 'view-job-filters',
-          version: '1.26',
-        },
-        staticPreview: this.render({
-          label: this._getLabel('1.26'),
-          installs: 955,
-        }),
+      staticPreview: this.render({
+        label: this._getLabel(),
+        installs: 10247,
+      }),
+    },
+    {
+      title: 'Jenkins Plugin installs (version)',
+      pattern: ':plugin/:version',
+      namedParams: {
+        plugin: 'view-job-filters',
+        version: '1.26',
       },
-    ]
-  }
+      staticPreview: this.render({
+        label: this._getLabel('1.26'),
+        installs: 955,
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'installs' }
-  }
+  static defaultBadgeData = { label: 'installs' }
 
   static render({ label, installs }) {
     return {

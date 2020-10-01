@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const parseLinkHeader = require('parse-link-header')
 const { renderContributorBadge } = require('../contributor-count')
 const { GithubAuthV3Service } = require('./github-auth-service')
@@ -10,35 +10,26 @@ const { documentation, errorMessagesFor } = require('./github-helpers')
 const schema = Joi.array().items(Joi.object())
 
 module.exports = class GithubContributors extends GithubAuthV3Service {
-  static get category() {
-    return 'activity'
+  static category = 'activity'
+  static route = {
+    base: 'github',
+    pattern: ':variant(contributors|contributors-anon)/:user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'github',
-      pattern: ':variant(contributors|contributors-anon)/:user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub contributors',
-        namedParams: {
-          variant: 'contributors',
-          user: 'cdnjs',
-          repo: 'cdnjs',
-        },
-        staticPreview: this.render({ contributorCount: 397 }),
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub contributors',
+      namedParams: {
+        variant: 'contributors',
+        user: 'cdnjs',
+        repo: 'cdnjs',
       },
-    ]
-  }
+      staticPreview: this.render({ contributorCount: 397 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'contributors' }
-  }
+  static defaultBadgeData = { label: 'contributors' }
 
   static render({ contributorCount }) {
     return renderContributorBadge({ contributorCount })

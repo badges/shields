@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { formatDate } = require('../text-formatters')
 const { age: ageColor } = require('../color-formatters')
 const { GithubAuthV3Service } = require('./github-auth-service')
@@ -23,48 +23,33 @@ const schema = Joi.array()
   .required()
 
 module.exports = class GithubLastCommit extends GithubAuthV3Service {
-  static get category() {
-    return 'activity'
-  }
-
-  static get route() {
-    return {
-      base: 'github/last-commit',
-      pattern: ':user/:repo/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub last commit',
-        pattern: ':user/:repo',
-        namedParams: {
-          user: 'google',
-          repo: 'skia',
-        },
-        staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
-        ...commonExampleAttrs,
+  static category = 'activity'
+  static route = { base: 'github/last-commit', pattern: ':user/:repo/:branch*' }
+  static examples = [
+    {
+      title: 'GitHub last commit',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'google',
+        repo: 'skia',
       },
-      {
-        title: 'GitHub last commit (branch)',
-        pattern: ':user/:repo/:branch',
-        namedParams: {
-          user: 'google',
-          repo: 'skia',
-          branch: 'infra/config',
-        },
-        staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
-        ...commonExampleAttrs,
+      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
+      ...commonExampleAttrs,
+    },
+    {
+      title: 'GitHub last commit (branch)',
+      pattern: ':user/:repo/:branch',
+      namedParams: {
+        user: 'google',
+        repo: 'skia',
+        branch: 'infra/config',
       },
-    ]
-  }
+      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
+      ...commonExampleAttrs,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'last commit',
-    }
-  }
+  static defaultBadgeData = { label: 'last commit' }
 
   static render({ commitDate }) {
     return {

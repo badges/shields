@@ -1,7 +1,16 @@
 'use strict'
 
-const { isMetricOverTimePeriod } = require('../test-validators')
+const Joi = require('joi')
+const {
+  isMetricOverTimePeriod,
+  isZeroOverTimePeriod,
+} = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
+
+const isCommitActivity = Joi.alternatives().try(
+  isMetricOverTimePeriod,
+  isZeroOverTimePeriod
+)
 
 t.create('commit activity (1 year)').get('/y/eslint/eslint.json').expectBadge({
   label: 'commit activity',
@@ -22,7 +31,7 @@ t.create('commit activity (4 weeks)')
 
 t.create('commit activity (1 week)').get('/w/eslint/eslint.json').expectBadge({
   label: 'commit activity',
-  message: isMetricOverTimePeriod,
+  message: isCommitActivity,
 })
 
 t.create('commit activity (repo not found)')

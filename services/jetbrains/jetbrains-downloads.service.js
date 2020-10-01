@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
@@ -23,28 +23,22 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JetbrainsDownloads extends JetbrainsBase {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'jetbrains/plugin/d',
+    pattern: ':pluginId',
   }
 
-  static get route() {
-    return {
-      base: 'jetbrains/plugin/d',
-      pattern: ':pluginId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'JetBrains IntelliJ plugins',
-        namedParams: {
-          pluginId: '1347-scala',
-        },
-        staticPreview: this.render({ downloads: 10200000 }),
+  static examples = [
+    {
+      title: 'JetBrains IntelliJ plugins',
+      namedParams: {
+        pluginId: '1347-scala',
       },
-    ]
-  }
+      staticPreview: this.render({ downloads: 10200000 }),
+    },
+  ]
 
   static render({ downloads }) {
     return {

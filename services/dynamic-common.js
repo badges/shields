@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const toArray = require('../core/base-service/to-array')
 const validate = require('../core/base-service/validate')
 const { InvalidResponse } = require('.')

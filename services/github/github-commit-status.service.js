@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { NotFound, InvalidParameter } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
@@ -11,42 +11,31 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubCommitStatus extends GithubAuthV3Service {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+  static route = {
+    base: 'github/commit-status',
+    pattern: ':user/:repo/:branch/:commit',
   }
 
-  static get route() {
-    return {
-      base: 'github/commit-status',
-      pattern: ':user/:repo/:branch/:commit',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub commit merge status',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-          branch: 'master',
-          commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
-        },
-        staticPreview: this.render({
-          isInBranch: true,
-          branch: 'master',
-        }),
-        keywords: ['branch'],
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub commit merge status',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        branch: 'master',
+        commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
       },
-    ]
-  }
+      staticPreview: this.render({
+        isInBranch: true,
+        branch: 'master',
+      }),
+      keywords: ['branch'],
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'commit status',
-    }
-  }
+  static defaultBadgeData = { label: 'commit status' }
 
   static render({ isInBranch, branch }) {
     if (isInBranch) {

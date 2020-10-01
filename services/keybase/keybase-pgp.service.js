@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const KeybaseProfile = require('./keybase-profile')
 
@@ -25,28 +25,22 @@ const keyFingerprintSchema = Joi.object({
 }).required()
 
 module.exports = class KeybasePGP extends KeybaseProfile {
-  static get route() {
-    return {
-      base: 'keybase/pgp',
-      pattern: ':username',
-    }
+  static route = {
+    base: 'keybase/pgp',
+    pattern: ':username',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Keybase PGP',
-        namedParams: { username: 'skyplabs' },
-        staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Keybase PGP',
+      namedParams: { username: 'skyplabs' },
+      staticPreview: this.render({ fingerprint: '1863145FD39EE07E' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'pgp',
-      color: 'informational',
-    }
+  static defaultBadgeData = {
+    label: 'pgp',
+    color: 'informational',
   }
 
   static render({ fingerprint }) {
@@ -55,9 +49,7 @@ module.exports = class KeybasePGP extends KeybaseProfile {
     }
   }
 
-  static get apiVersion() {
-    return '1.0'
-  }
+  static apiVersion = '1.0'
 
   async handle({ username }) {
     const options = {

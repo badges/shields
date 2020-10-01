@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { version: versionColor } = require('../color-formatters')
 const { addv } = require('../text-formatters')
 const { optionalUrl } = require('../validators')

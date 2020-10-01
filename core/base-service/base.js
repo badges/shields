@@ -5,7 +5,7 @@
 
 // See available emoji at http://emoji.muan.co/
 const emojic = require('emojic')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const log = require('../server/log')
 const { AuthHelper } = require('./auth-helper')
 const { MetricHelper, MetricNames } = require('./metric-helper')

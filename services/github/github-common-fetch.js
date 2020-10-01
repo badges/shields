@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { InvalidResponse } = require('..')
 const { errorMessagesFor } = require('./github-helpers')
 
@@ -55,7 +55,7 @@ async function fetchRepoContent(
 
 async function fetchJsonFromRepo(
   serviceInstance,
-  { schema, user, repo, branch = 'master', filename }
+  { schema, user, repo, branch = 'HEAD', filename }
 ) {
   if (serviceInstance.staticAuthConfigured) {
     const buffer = await fetchRepoContent(serviceInstance, {

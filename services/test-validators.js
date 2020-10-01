@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { semver: isSemver } = require('./validators')
 
 /*
@@ -76,6 +76,8 @@ const isMetricOverTimePeriod = withRegex(
   /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|week|day)$/
 )
 
+const isZeroOverTimePeriod = withRegex(/^0\/(year|month|four weeks|week|day)$/)
+
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
@@ -150,6 +152,7 @@ module.exports = {
   isMetricOpenIssues,
   isMetricOverMetric,
   isMetricOverTimePeriod,
+  isZeroOverTimePeriod,
   isPercentage,
   isIntegerPercentage,
   isDecimalPercentage,

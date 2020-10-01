@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const prettyBytes = require('pretty-bytes')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV3Service } = require('./github-auth-service')
@@ -11,36 +11,21 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubRepoSize extends GithubAuthV3Service {
-  static get category() {
-    return 'size'
-  }
-
-  static get route() {
-    return {
-      base: 'github/repo-size',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub repo size',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-        },
-        staticPreview: this.render({ size: 319488 }),
-        documentation,
+  static category = 'size'
+  static route = { base: 'github/repo-size', pattern: ':user/:repo' }
+  static examples = [
+    {
+      title: 'GitHub repo size',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
       },
-    ]
-  }
+      staticPreview: this.render({ size: 319488 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'repo size',
-    }
-  }
+  static defaultBadgeData = { label: 'repo size' }
 
   static render({ size }) {
     return {

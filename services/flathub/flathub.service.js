@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { InvalidResponse, NotFound } = require('..')
 const { renderVersionBadge } = require('../version')
 const { BaseJsonService } = require('..')
@@ -10,32 +10,19 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Flathub extends BaseJsonService {
-  static get category() {
-    return 'version'
-  }
-
-  static get route() {
-    return {
-      base: 'flathub/v',
-      pattern: ':packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Flathub',
-        namedParams: {
-          packageName: 'org.mozilla.firefox',
-        },
-        staticPreview: renderVersionBadge({ version: '78.0.2' }),
+  static category = 'version'
+  static route = { base: 'flathub/v', pattern: ':packageName' }
+  static examples = [
+    {
+      title: 'Flathub',
+      namedParams: {
+        packageName: 'org.mozilla.firefox',
       },
-    ]
-  }
+      staticPreview: renderVersionBadge({ version: '78.0.2' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'flathub' }
-  }
+  static defaultBadgeData = { label: 'flathub' }
 
   async handle({ packageName }) {
     try {

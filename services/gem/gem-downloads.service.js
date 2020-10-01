@@ -1,7 +1,7 @@
 'use strict'
 
 const semver = require('semver')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { latest: latestVersion } = require('../version')
@@ -27,73 +27,60 @@ const versionSchema = Joi.array()
   .required()
 
 module.exports = class GemDownloads extends BaseJsonService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
+  static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
+  static examples = [
+    {
+      title: 'Gem',
+      pattern: 'dv/:gem/:version',
+      namedParams: {
+        gem: 'rails',
+        version: 'stable',
+      },
+      staticPreview: this.render({
+        variant: 'dv',
+        version: 'stable',
+        downloads: 70000,
+      }),
+      keywords,
+    },
+    {
+      title: 'Gem',
+      pattern: 'dv/:gem/:version',
+      namedParams: {
+        gem: 'rails',
+        version: '4.1.0',
+      },
+      staticPreview: this.render({
+        variant: 'dv',
+        version: '4.1.0',
+        downloads: 50000,
+      }),
+      keywords,
+    },
+    {
+      title: 'Gem',
+      pattern: 'dtv/:gem',
+      namedParams: { gem: 'rails' },
+      staticPreview: this.render({
+        variant: 'dtv',
+        downloads: 70000,
+      }),
+      keywords,
+    },
+    {
+      title: 'Gem',
+      pattern: 'dt/:gem',
+      namedParams: { gem: 'rails' },
+      staticPreview: this.render({
+        variant: 'dt',
+        downloads: 900000,
+      }),
+      keywords,
+    },
+  ]
 
-  static get route() {
-    return {
-      base: 'gem',
-      pattern: ':variant(dt|dtv|dv)/:gem/:version?',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Gem',
-        pattern: 'dv/:gem/:version',
-        namedParams: {
-          gem: 'rails',
-          version: 'stable',
-        },
-        staticPreview: this.render({
-          variant: 'dv',
-          version: 'stable',
-          downloads: 70000,
-        }),
-        keywords,
-      },
-      {
-        title: 'Gem',
-        pattern: 'dv/:gem/:version',
-        namedParams: {
-          gem: 'rails',
-          version: '4.1.0',
-        },
-        staticPreview: this.render({
-          variant: 'dv',
-          version: '4.1.0',
-          downloads: 50000,
-        }),
-        keywords,
-      },
-      {
-        title: 'Gem',
-        pattern: 'dtv/:gem',
-        namedParams: { gem: 'rails' },
-        staticPreview: this.render({
-          variant: 'dtv',
-          downloads: 70000,
-        }),
-        keywords,
-      },
-      {
-        title: 'Gem',
-        pattern: 'dt/:gem',
-        namedParams: { gem: 'rails' },
-        staticPreview: this.render({
-          variant: 'dt',
-          downloads: 900000,
-        }),
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ variant, version, downloads }) {
     let label

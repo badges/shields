@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { starRating } = require('../text-formatters')
 const { colorScale } = require('../color-formatters')
 const JetbrainsBase = require('./jetbrains-base')
@@ -24,47 +24,39 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class JetbrainsRating extends JetbrainsBase {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'jetbrains/plugin/r',
+    pattern: ':format(rating|stars)/:pluginId',
   }
 
-  static get route() {
-    return {
-      base: 'jetbrains/plugin/r',
-      pattern: ':format(rating|stars)/:pluginId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'JetBrains IntelliJ Plugins',
-        pattern: 'rating/:pluginId',
-        namedParams: {
-          pluginId: '11941-automatic-power-saver',
-        },
-        staticPreview: this.render({
-          rating: '4.5',
-          format: 'rating',
-        }),
+  static examples = [
+    {
+      title: 'JetBrains IntelliJ Plugins',
+      pattern: 'rating/:pluginId',
+      namedParams: {
+        pluginId: '11941-automatic-power-saver',
       },
-      {
-        title: 'JetBrains IntelliJ Plugins',
-        pattern: 'stars/:pluginId',
-        namedParams: {
-          pluginId: '11941-automatic-power-saver',
-        },
-        staticPreview: this.render({
-          rating: '4.5',
-          format: 'stars',
-        }),
+      staticPreview: this.render({
+        rating: '4.5',
+        format: 'rating',
+      }),
+    },
+    {
+      title: 'JetBrains IntelliJ Plugins',
+      pattern: 'stars/:pluginId',
+      namedParams: {
+        pluginId: '11941-automatic-power-saver',
       },
-    ]
-  }
+      staticPreview: this.render({
+        rating: '4.5',
+        format: 'stars',
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'rating' }
-  }
+  static defaultBadgeData = { label: 'rating' }
 
   static render({ rating, format }) {
     const message =

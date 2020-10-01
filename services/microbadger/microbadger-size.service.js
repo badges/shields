@@ -6,13 +6,13 @@ const BaseMicrobadgerService = require('./microbadger-base')
 
 const documentation = `
 <p>
-  The MicroBadger API can sometimes be a bit temperamental when it comes to retrieving the size of your image. 
-  If the website indicates "Layer information not yet retrieved" for your image, Shields.io will display the size as unknown in its badge. 
+  The MicroBadger API can sometimes be a bit temperamental when it comes to retrieving the size of your image.
+  If the website indicates "Layer information not yet retrieved" for your image, Shields.io will display the size as unknown in its badge.
   In some cases, the size is also reported as 0.
 </p>
 <p>
-  To speed things up on the MicroBadger side of things, you may want to hit their webhook manually. 
-  Simply go to your image's page on the MicroBadger website, click "Get the webhook" and follow the instructions listed there. 
+  To speed things up on the MicroBadger side of things, you may want to hit their webhook manually.
+  Simply go to your image's page on the MicroBadger website, click "Get the webhook" and follow the instructions listed there.
   Please be patient, it may still take several minutes for the information to be made available to Shields.io!
 </p>
 <p>
@@ -28,36 +28,32 @@ const documentation = `
 `
 
 module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
-  static get route() {
-    return {
-      base: 'microbadger/image-size',
-      pattern: ':user/:repo/:tag*',
-    }
+  static route = {
+    base: 'microbadger/image-size',
+    pattern: ':user/:repo/:tag*',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'MicroBadger Size',
-        pattern: ':user/:repo',
-        namedParams: { user: 'fedora', repo: 'apache' },
-        staticPreview: this.render({ size: 126000000 }),
-        keywords: ['docker'],
-        documentation,
-      },
-      {
-        title: 'MicroBadger Size (tag)',
-        pattern: ':user/:repo/:tag',
-        namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
-        staticPreview: this.render({ size: 103000000 }),
-        keywords: ['docker'],
-        documentation,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'MicroBadger Size',
+      pattern: ':user/:repo',
+      namedParams: { user: 'fedora', repo: 'apache' },
+      staticPreview: this.render({ size: 126000000 }),
+      keywords: ['docker'],
+      documentation,
+    },
+    {
+      title: 'MicroBadger Size (tag)',
+      pattern: ':user/:repo/:tag',
+      namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
+      staticPreview: this.render({ size: 103000000 }),
+      keywords: ['docker'],
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'image size' }
+  static defaultBadgeData = {
+    label: 'image size',
   }
 
   static render({ size }) {
