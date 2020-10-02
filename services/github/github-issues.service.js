@@ -235,7 +235,7 @@ module.exports = class GithubIssues extends GithubAuthV4Service {
         message: '8 open',
         color: 'yellow',
       },
-      keywords: ['pullrequests', 'pr'],
+      keywords: ['pullrequest', 'pr'],
       documentation,
     },
     {
@@ -251,7 +251,39 @@ module.exports = class GithubIssues extends GithubAuthV4Service {
         message: '8',
         color: 'yellow',
       },
-      keywords: ['pullrequests', 'pr'],
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests by-label',
+      pattern: 'issues-pr-closed/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge pull requests',
+        message: '835 closed',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests by-label',
+      pattern: 'issues-pr-closed-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'closed service-badge pull requests',
+        message: '835',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
       documentation,
     },
   ]
