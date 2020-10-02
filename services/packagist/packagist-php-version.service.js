@@ -14,60 +14,52 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class PackagistPhpVersion extends BasePackagistService {
-  static get category() {
-    return 'platform-support'
+  static category = 'platform-support'
+
+  static route = {
+    base: 'packagist/php-v',
+    pattern: ':user/:repo/:version?',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'packagist/php-v',
-      pattern: ':user/:repo/:version?',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Packagist PHP Version Support',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+      },
+      staticPreview: this.render({ php: '^7.1.3' }),
+    },
+    {
+      title: 'Packagist PHP Version Support (specify version)',
+      pattern: ':user/:repo/:version',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+        version: 'v2.8.0',
+      },
+      staticPreview: this.render({ php: '>=5.3.9' }),
+    },
+    {
+      title: 'Packagist PHP Version Support (custom server)',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+      },
+      queryParams: {
+        server: 'https://packagist.org',
+      },
+      staticPreview: this.render({ php: '^7.1.3' }),
+      documentation: customServerDocumentationFragment,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Packagist PHP Version Support',
-        pattern: ':user/:repo',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        staticPreview: this.render({ php: '^7.1.3' }),
-      },
-      {
-        title: 'Packagist PHP Version Support (specify version)',
-        pattern: ':user/:repo/:version',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-          version: 'v2.8.0',
-        },
-        staticPreview: this.render({ php: '>=5.3.9' }),
-      },
-      {
-        title: 'Packagist PHP Version Support (custom server)',
-        pattern: ':user/:repo',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        queryParams: {
-          server: 'https://packagist.org',
-        },
-        staticPreview: this.render({ php: '^7.1.3' }),
-        documentation: customServerDocumentationFragment,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'php',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'php',
+    color: 'blue',
   }
 
   static render({ php }) {
