@@ -32,6 +32,7 @@ class FsTokenPersistence extends TokenPersistence {
   }
 
   async onTokenAdded(token) {
+    /* istanbul ignore if */
     if (!this._tokens) {
       throw Error('initialize() has not been called')
     }
@@ -40,6 +41,7 @@ class FsTokenPersistence extends TokenPersistence {
   }
 
   async onTokenRemoved(token) {
+    /* istanbul ignore if */
     if (!this._tokens) {
       throw Error('initialize() has not been called')
     }

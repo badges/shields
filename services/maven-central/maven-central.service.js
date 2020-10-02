@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseXmlService, NotFound } = require('..')
 
@@ -52,7 +52,9 @@ module.exports = class MavenCentral extends BaseXmlService {
     },
   ]
 
-  static defaultBadgeData = { label: 'maven-central' }
+  static defaultBadgeData = {
+    label: 'maven-central',
+  }
 
   async fetch({ groupId, artifactId }) {
     const group = encodeURIComponent(groupId).replace(/\./g, '/')

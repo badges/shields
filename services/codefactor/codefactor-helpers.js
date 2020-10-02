@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 // https://support.codefactor.io/i14-glossary
 // https://github.com/badges/shields/issues/4269

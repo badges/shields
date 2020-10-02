@@ -1,14 +1,23 @@
 'use strict'
 
-const { isMetricOverTimePeriod } = require('../test-validators')
+const Joi = require('joi')
+const {
+  isMetricOverTimePeriod,
+  isZeroOverTimePeriod,
+} = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
+
+const isDownloadsOverTimePeriod = Joi.alternatives().try(
+  isMetricOverTimePeriod,
+  isZeroOverTimePeriod
+)
 
 t.create('jquery/jquery hits/day')
   .timeout(10000)
   .get('/hd/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
-    message: isMetricOverTimePeriod,
+    message: isDownloadsOverTimePeriod,
   })
 
 t.create('jquery/jquery hits/week')
@@ -16,7 +25,7 @@ t.create('jquery/jquery hits/week')
   .get('/hw/jquery/jquery.json')
   .expectBadge({
     label: 'jsdelivr',
-    message: isMetricOverTimePeriod,
+    message: isDownloadsOverTimePeriod,
   })
 
 t.create('jquery/jquery hits/month')

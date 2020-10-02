@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { coveragePercentage } = require('../color-formatters')
 const JenkinsBase = require('./jenkins-base')
 const {

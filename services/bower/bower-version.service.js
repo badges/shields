@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { InvalidResponse, redirector } = require('..')
 const BaseBowerService = require('./bower-base')

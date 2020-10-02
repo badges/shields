@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
@@ -10,36 +10,28 @@ const versionSchema = Joi.object({
 }).required()
 
 module.exports = class SpigetLatestVersion extends BaseSpigetService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'spiget/version',
+    pattern: ':resourceId',
   }
 
-  static get route() {
-    return {
-      base: 'spiget/version',
-      pattern: ':resourceId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Spiget Version',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: renderVersionBadge({ version: 2.1 }),
-        documentation,
-        keywords,
+  static examples = [
+    {
+      title: 'Spiget Version',
+      namedParams: {
+        resourceId: '9089',
       },
-    ]
-  }
+      staticPreview: renderVersionBadge({ version: 2.1 }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'spiget',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'spiget',
+    color: 'blue',
   }
 
   async handle({ resourceId }) {

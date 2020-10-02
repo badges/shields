@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { errorMessagesFor } = require('./github-helpers')

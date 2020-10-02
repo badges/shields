@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { isDependencyMap } = require('../package-json-helpers')
 const { BaseJsonService, InvalidResponse, NotFound } = require('..')

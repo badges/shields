@@ -1,8 +1,10 @@
 'use strict'
 
-const secretIsValid = require('../../../core/server/secret-is-valid')
+const { makeSecretIsValid } = require('../../../core/server/secret-is-valid')
 
-function setRoutes(apiProvider, server) {
+function setRoutes({ shieldsSecret }, { apiProvider, server }) {
+  const secretIsValid = makeSecretIsValid(shieldsSecret)
+
   // Allow the admin to obtain the tokens for operational and debugging
   // purposes. This could be used to:
   //
@@ -26,6 +28,4 @@ function setRoutes(apiProvider, server) {
   })
 }
 
-module.exports = {
-  setRoutes,
-}
+module.exports = { setRoutes }

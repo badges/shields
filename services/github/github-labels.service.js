@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
@@ -9,37 +9,22 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubLabels extends GithubAuthV3Service {
-  static get category() {
-    return 'issue-tracking'
-  }
-
-  static get route() {
-    return {
-      base: 'github/labels',
-      pattern: ':user/:repo/:name',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub labels',
-        namedParams: {
-          user: 'atom',
-          repo: 'atom',
-          name: 'help-wanted',
-        },
-        staticPreview: this.render({ name: 'help-wanted', color: '#159818' }),
-        documentation,
+  static category = 'issue-tracking'
+  static route = { base: 'github/labels', pattern: ':user/:repo/:name' }
+  static examples = [
+    {
+      title: 'GitHub labels',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        name: 'help-wanted',
       },
-    ]
-  }
+      staticPreview: this.render({ name: 'help-wanted', color: '#159818' }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: ' ',
-    }
-  }
+  static defaultBadgeData = { label: ' ' }
 
   static render({ name, color }) {
     return {

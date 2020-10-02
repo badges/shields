@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderBuildStatusBadge } = require('../build-status')
 const JenkinsBase = require('./jenkins-base')
 const {

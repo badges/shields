@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV3Service } = require('./github-auth-service')
@@ -13,44 +13,32 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubMilestoneDetail extends GithubAuthV3Service {
-  static get category() {
-    return 'issue-tracking'
+  static category = 'issue-tracking'
+  static route = {
+    base: 'github/milestones',
+    pattern:
+      ':variant(issues-closed|issues-open|issues-total|progress|progress-percent)/:user/:repo/:number([0-9]+)',
   }
 
-  static get route() {
-    return {
-      base: 'github/milestones',
-      pattern:
-        ':variant(issues-closed|issues-open|issues-total|progress|progress-percent)/:user/:repo/:number([0-9]+)',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub milestone',
-        namedParams: {
-          variant: 'issues-open',
-          user: 'badges',
-          repo: 'shields',
-          number: '1',
-        },
-        staticPreview: {
-          label: 'milestone issues',
-          message: '17/22',
-          color: 'blue',
-        },
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub milestone',
+      namedParams: {
+        variant: 'issues-open',
+        user: 'badges',
+        repo: 'shields',
+        number: '1',
       },
-    ]
-  }
+      staticPreview: {
+        label: 'milestone issues',
+        message: '17/22',
+        color: 'blue',
+      },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'milestones',
-      color: 'informational',
-    }
-  }
+  static defaultBadgeData = { label: 'milestones', color: 'informational' }
 
   static render({ user, repo, variant, number, milestone }) {
     let milestoneMetric

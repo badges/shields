@@ -1,5 +1,5 @@
 'use strict'
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const isErrorOnly = Joi.string().regex(/^[0-9]+ errors?$/)

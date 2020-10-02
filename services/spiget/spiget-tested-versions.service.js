@@ -3,36 +3,28 @@
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetTestedVersions extends BaseSpigetService {
-  static get category() {
-    return 'platform-support'
+  static category = 'platform-support'
+
+  static route = {
+    base: 'spiget/tested-versions',
+    pattern: ':resourceId',
   }
 
-  static get route() {
-    return {
-      base: 'spiget/tested-versions',
-      pattern: ':resourceId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Spiget tested server versions',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({ versions: '1.7-1.13' }),
-        documentation,
-        keywords,
+  static examples = [
+    {
+      title: 'Spiget tested server versions',
+      namedParams: {
+        resourceId: '9089',
       },
-    ]
-  }
+      staticPreview: this.render({ versions: '1.7-1.13' }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'tested versions',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'tested versions',
+    color: 'blue',
   }
 
   static render({ versions }) {

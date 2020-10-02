@@ -1,7 +1,7 @@
 'use strict'
 
 const { semver, semverRange } = require('joi-extension-semver')
-const Joi = require('@hapi/joi').extend(semver).extend(semverRange)
+const Joi = require('joi').extend(semver).extend(semverRange)
 
 const optionalNonNegativeInteger = Joi.number().integer().min(0)
 

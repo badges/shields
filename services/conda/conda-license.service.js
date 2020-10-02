@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderLicenseBadge } = require('../licenses')
 const toArray = require('../../core/base-service/to-array')
 const BaseCondaService = require('./conda-base')
