@@ -5,25 +5,19 @@ const PypiBase = require('./pypi-base')
 const { getLicenses } = require('./pypi-helpers')
 
 module.exports = class PypiLicense extends PypiBase {
-  static get category() {
-    return 'license'
-  }
+  static category = 'license'
 
-  static get route() {
-    return this.buildRoute('pypi/l')
-  }
+  static route = this.buildRoute('pypi/l')
 
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - License',
-        pattern: ':packageName',
-        namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ licenses: ['BSD'] }),
-        keywords: ['python'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'PyPI - License',
+      pattern: ':packageName',
+      namedParams: { packageName: 'Django' },
+      staticPreview: this.render({ licenses: ['BSD'] }),
+      keywords: ['python'],
+    },
+  ]
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })
