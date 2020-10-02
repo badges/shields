@@ -46,14 +46,18 @@ describe('GitHub admin route', function () {
   })
 
   // Disabled because this code isn't modified often and the test is very
-  // slow. I wasn't able to make this work with fake timers:
+  // slow. To run it, run `SLOW=true npm run test:core`
+  //
+  // I wasn't able to make this work with fake timers:
   // https://github.com/sinonjs/sinon/issues/1739
-  // context('the password is missing', function () {
-  //   it('returns the expected message', async function () {
-  //     this.timeout(11000)
-  //     const res = await require('node-fetch')(`${baseUrl}/$github-auth/tokens`)
-  //     expect(res.ok).to.be.true
-  //     expect(await res.text()).to.equal('"Invalid secret."')
-  //   })
-  // })
+  if (process.env.SLOW) {
+    context('the password is missing', function () {
+      it('returns the expected message', async function () {
+        this.timeout(11000)
+        const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`)
+        expect(statusCode).to.equal(200)
+        expect(body).to.equal('"Invalid secret."')
+      })
+    })
+  }
 })

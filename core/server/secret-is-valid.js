@@ -11,6 +11,10 @@ function constEq(a, b) {
   return zero === 0
 }
 
-module.exports = function secretIsValid(secret = '', expected) {
-  return expected && constEq(secret, expected)
+function makeSecretIsValid(shieldsSecret) {
+  return function secretIsValid(secret = '') {
+    return shieldsSecret && constEq(secret, shieldsSecret)
+  }
 }
+
+module.exports = { makeSecretIsValid }

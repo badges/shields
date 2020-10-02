@@ -1,8 +1,10 @@
 'use strict'
 
-const secretIsValid = require('../../../core/server/secret-is-valid')
+const { makeSecretIsValid } = require('../../../core/server/secret-is-valid')
 
 function setRoutes({ shieldsSecret }, { apiProvider, server }) {
+  const secretIsValid = makeSecretIsValid(shieldsSecret)
+
   // Allow the admin to obtain the tokens for operational and debugging
   // purposes. This could be used to:
   //
@@ -16,7 +18,7 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   // e.g.
   // curl --insecure -u ':very-very-secret' 'https://s0.servers.shields.io/$github-auth/tokens'
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
-    if (!secretIsValid(ask.password, shieldsSecret)) {
+    if (!secretIsValid(ask.password)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(() => {
         end('Invalid secret.')
