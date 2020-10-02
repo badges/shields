@@ -30,33 +30,25 @@ const {
 })
 
 class PowershellGalleryPlatformSupport extends BaseXmlService {
-  static get category() {
-    return 'platform-support'
+  static category = 'platform-support'
+
+  static route = {
+    base: 'powershellgallery/p',
+    pattern: ':packageName',
   }
 
-  static get route() {
-    return {
-      base: 'powershellgallery/p',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'PowerShell Gallery',
+      namedParams: { packageName: 'DNS.1.1.1.1' },
+      staticPreview: this.render({
+        platforms: ['windows', 'macos', 'linux'],
+      }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'PowerShell Gallery',
-        namedParams: { packageName: 'DNS.1.1.1.1' },
-        staticPreview: this.render({
-          platforms: ['windows', 'macos', 'linux'],
-        }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'platform',
-    }
+  static defaultBadgeData = {
+    label: 'platform',
   }
 
   static render({ platforms }) {
