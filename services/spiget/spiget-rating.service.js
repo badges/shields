@@ -5,47 +5,41 @@ const { floorCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
 module.exports = class SpigetRatings extends BaseSpigetService {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'spiget',
+    pattern: ':format(rating|stars)/:resourceId',
   }
 
-  static get route() {
-    return {
-      base: 'spiget',
-      pattern: ':format(rating|stars)/:resourceId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Spiget Stars',
-        pattern: 'stars/:resourceId',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({
-          format: 'stars',
-          total: 325,
-          average: 4.5,
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'Spiget Stars',
+      pattern: 'stars/:resourceId',
+      namedParams: {
+        resourceId: '9089',
       },
-      {
-        title: 'Spiget Rating',
-        pattern: 'rating/:resourceId',
-        namedParams: {
-          resourceId: '9089',
-        },
-        staticPreview: this.render({ total: 325, average: 4.5 }),
-        documentation,
-        keywords,
+      staticPreview: this.render({
+        format: 'stars',
+        total: 325,
+        average: 4.5,
+      }),
+      documentation,
+    },
+    {
+      title: 'Spiget Rating',
+      pattern: 'rating/:resourceId',
+      namedParams: {
+        resourceId: '9089',
       },
-    ]
-  }
+      staticPreview: this.render({ total: 325, average: 4.5 }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'rating' }
+  static defaultBadgeData = {
+    label: 'rating',
   }
 
   static render({ format, total, average }) {
