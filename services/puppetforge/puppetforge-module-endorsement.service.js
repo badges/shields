@@ -4,33 +4,25 @@ const { NotFound } = require('..')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
 module.exports = class PuppetforgeModuleEndorsement extends BasePuppetForgeModulesService {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'puppetforge/e',
+    pattern: ':user/:moduleName',
   }
 
-  static get route() {
-    return {
-      base: 'puppetforge/e',
-      pattern: ':user/:moduleName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Puppet Forge endorsement',
-        namedParams: {
-          user: 'camptocamp',
-          moduleName: 'openssl',
-        },
-        staticPreview: this.render({ endorsement: 'approved' }),
+  static examples = [
+    {
+      title: 'Puppet Forge endorsement',
+      namedParams: {
+        user: 'camptocamp',
+        moduleName: 'openssl',
       },
-    ]
-  }
+      staticPreview: this.render({ endorsement: 'approved' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'endorsement' }
-  }
+  static defaultBadgeData = { label: 'endorsement' }
 
   static render({ endorsement }) {
     let color

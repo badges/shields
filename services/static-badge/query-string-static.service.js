@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseStaticService } = require('..')
 
 const queryParamSchema = Joi.object({
@@ -8,18 +8,14 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class QueryStringStaticBadge extends BaseStaticService {
-  static get category() {
-    return 'static'
-  }
+  static category = 'static'
 
-  static get route() {
-    return {
-      base: '',
-      pattern: 'static/:schemaVersion(v1)',
-      // All but one of the parameters are parsed via coalesceBadge. This
-      // reuses what is the override behaviour for other badges.
-      queryParamSchema,
-    }
+  static route = {
+    base: '',
+    pattern: 'static/:schemaVersion(v1)',
+    // All but one of the parameters are parsed via coalesceBadge. This
+    // reuses what is the override behaviour for other badges.
+    queryParamSchema,
   }
 
   handle(namedParams, queryParams) {

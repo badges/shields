@@ -6,46 +6,6 @@ const {
   userAgent,
 } = require('../../../core/base-service/legacy-request-handler')
 const log = require('../../../core/server/log')
-const secretIsValid = require('../../../core/server/secret-is-valid')
-const serverSecrets = require('../../../lib/server-secrets')
-
-function sendTokenToAllServers(token) {
-  const {
-    shields_ips: shieldsIps,
-    shields_secret: shieldsSecret,
-  } = serverSecrets
-  return Promise.all(
-    shieldsIps.map(
-      ip =>
-        new Promise((resolve, reject) => {
-          const options = {
-            url: `https://${ip}/github-auth/add-token`,
-            method: 'POST',
-            form: {
-              shieldsSecret,
-              token,
-            },
-            // We target servers by IP, and we use HTTPS. Assuming that
-            // 1. Internet routers aren't hacked, and
-            // 2. We don't unknowingly lose our IP to someone else,
-            // we're not leaking people's and our information.
-            // (If we did, it would have no impact, as we only ask for a token,
-            // no GitHub scope. The malicious entity would only be able to use
-            // our rate limit pool.)
-            // FIXME: use letsencrypt.
-            strictSSL: false,
-          }
-          request(options, (err, res, body) => {
-            if (err != null) {
-              reject(err)
-            } else {
-              resolve()
-            }
-          })
-        })
-    )
-  )
-}
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
@@ -120,26 +80,9 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
           '<p><a href="/">Back to the website</a></p>'
       )
 
-      sendTokenToAllServers(token).catch(e => {
-        console.error('GitHub user token transmission failed:', e)
-      })
+      onTokenAccepted(token)
     })
   })
-
-  server.route(/^\/github-auth\/add-token$/, (data, match, end, ask) => {
-    if (!secretIsValid(data.shieldsSecret)) {
-      // An unknown entity tries to connect. Let the connection linger for 10s.
-      setTimeout(() => {
-        end('Invalid secret.')
-      }, 10000)
-      return
-    }
-
-    onTokenAccepted(data.token)
-    end('Thanks!')
-  })
 }
 
-module.exports = {
-  setRoutes,
-}
+module.exports = { setRoutes }

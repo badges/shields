@@ -2,7 +2,7 @@
 
 const camelcase = require('camelcase')
 const emojic = require('emojic')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const queryString = require('query-string')
 const BaseService = require('./base')
 const {

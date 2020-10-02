@@ -4,28 +4,20 @@ const PypiBase = require('./pypi-base')
 const { parseClassifiers } = require('./pypi-helpers')
 
 module.exports = class PypiPythonVersions extends PypiBase {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
 
-  static get route() {
-    return this.buildRoute('pypi/pyversions')
-  }
+  static route = this.buildRoute('pypi/pyversions')
 
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - Python Version',
-        pattern: ':packageName',
-        namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'PyPI - Python Version',
+      pattern: ':packageName',
+      namedParams: { packageName: 'Django' },
+      staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'python' }
-  }
+  static defaultBadgeData = { label: 'python' }
 
   static render({ versions }) {
     const versionSet = new Set(versions)

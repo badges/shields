@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 const testResultQueryParamSchema = Joi.object({
   compact_message: Joi.equal(''),

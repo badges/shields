@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { latest, renderVersionBadge } = require('../version')
 const { BaseJsonService, redirector } = require('..')
 
@@ -13,39 +13,31 @@ const queryParamSchema = Joi.object({
 }).required()
 
 class PubVersion extends BaseJsonService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'pub/v',
+    pattern: ':packageName',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'pub/v',
-      pattern: ':packageName',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Pub Version',
+      namedParams: { packageName: 'box2d' },
+      staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
+      keywords: ['dart', 'dartlang'],
+    },
+    {
+      title: 'Pub Version (including pre-releases)',
+      namedParams: { packageName: 'box2d' },
+      queryParams: { include_prereleases: null },
+      staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
+      keywords: ['dart', 'dartlang'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Pub Version',
-        namedParams: { packageName: 'box2d' },
-        staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
-        keywords: ['dart', 'dartlang'],
-      },
-      {
-        title: 'Pub Version (including pre-releases)',
-        namedParams: { packageName: 'box2d' },
-        queryParams: { include_prereleases: null },
-        staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
-        keywords: ['dart', 'dartlang'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'pub' }
-  }
+  static defaultBadgeData = { label: 'pub' }
 
   async fetch({ packageName }) {
     return this._requestJson({

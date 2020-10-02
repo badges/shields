@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const categories = require('../../services/categories')
 
 const isRealCategory = Joi.equal(...categories.map(({ id }) => id)).required()

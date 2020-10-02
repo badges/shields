@@ -1,7 +1,7 @@
 'use strict'
 
 const camelcase = require('camelcase')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
 const { BaseJsonService } = require('..')

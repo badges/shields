@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const TwitchBase = require('./twitch-base')
 
 const helixSchema = Joi.object({

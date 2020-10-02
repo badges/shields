@@ -15,9 +15,6 @@ update_configs:
           dependency_name: 'eslint*'
           update_type: 'semver:minor'
       - match:
-          dependency_name: 'enzyme*'
-          update_type: 'semver:minor'
-      - match:
           dependency_name: 'mocha*'
           update_type: 'semver:minor'
       - match:

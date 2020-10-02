@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { coveragePercentage } = require('../color-formatters')
 const { BaseJsonService, InvalidResponse } = require('..')
@@ -37,34 +37,28 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class POEditor extends BaseJsonService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'poeditor',
+    pattern: 'progress/:projectId/:languageCode',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'poeditor',
-      pattern: 'progress/:projectId/:languageCode',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'POEditor',
-        namedParams: { projectId: '323337', languageCode: 'fr' },
-        queryParams: { token: 'abc123def456' },
-        staticPreview: this.render({
-          code: 200,
-          message: 'OK',
-          language: { percentage: 93, code: 'fr', name: 'French' },
-        }),
-        keywords: ['l10n'],
-        documentation,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'POEditor',
+      namedParams: { projectId: '323337', languageCode: 'fr' },
+      queryParams: { token: 'abc123def456' },
+      staticPreview: this.render({
+        code: 200,
+        message: 'OK',
+        language: { percentage: 93, code: 'fr', name: 'French' },
+      }),
+      keywords: ['l10n'],
+      documentation,
+    },
+  ]
 
   static render({ code, message, language }) {
     if (code !== 200) {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { compare, isStable, latest } = require('../php-version')
 const { optionalUrl } = require('../validators')
@@ -34,59 +34,51 @@ const queryParamSchema = Joi.object({
 }).required()
 
 class PackagistVersion extends BasePackagistService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'packagist/v',
+    pattern: ':user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'packagist/v',
-      pattern: ':user/:repo',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Packagist Version',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+      },
+      staticPreview: renderVersionBadge({ version: '4.2.2' }),
+      keywords,
+    },
+    {
+      title: 'Packagist Version (including pre-releases)',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+      },
+      queryParams: { include_prereleases: null },
+      staticPreview: renderVersionBadge({ version: '4.3-dev' }),
+      keywords,
+    },
+    {
+      title: 'Packagist Version (custom server)',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+      },
+      queryParams: {
+        server: 'https://packagist.org',
+      },
+      staticPreview: renderVersionBadge({ version: '4.2.2' }),
+      keywords,
+      documentation: customServerDocumentationFragment,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Packagist Version',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        staticPreview: renderVersionBadge({ version: '4.2.2' }),
-        keywords,
-      },
-      {
-        title: 'Packagist Version (including pre-releases)',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        queryParams: { include_prereleases: null },
-        staticPreview: renderVersionBadge({ version: '4.3-dev' }),
-        keywords,
-      },
-      {
-        title: 'Packagist Version (custom server)',
-        namedParams: {
-          user: 'symfony',
-          repo: 'symfony',
-        },
-        queryParams: {
-          server: 'https://packagist.org',
-        },
-        staticPreview: renderVersionBadge({ version: '4.2.2' }),
-        keywords,
-        documentation: customServerDocumentationFragment,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'packagist',
-    }
+  static defaultBadgeData = {
+    label: 'packagist',
   }
 
   static render({ version }) {

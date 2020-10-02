@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { isBuildStatus } = require('../build-status')
 const { BaseJsonService } = require('..')

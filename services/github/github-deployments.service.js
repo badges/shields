@@ -1,7 +1,7 @@
 'use strict'
 
 const gql = require('graphql-tag')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { NotFound } = require('..')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const { documentation, transformErrors } = require('./github-helpers')

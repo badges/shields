@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
@@ -34,34 +34,26 @@ const periodMap = {
 // this badge uses PyPI Stats instead of the PyPI API
 // so it doesn't extend PypiBase
 module.exports = class PypiDownloads extends BaseJsonService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'pypi',
+    pattern: ':period(dd|dw|dm)/:packageName',
   }
 
-  static get route() {
-    return {
-      base: 'pypi',
-      pattern: ':period(dd|dw|dm)/:packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - Downloads',
-        namedParams: {
-          period: 'dd',
-          packageName: 'Django',
-        },
-        staticPreview: this.render({ period: 'dd', downloads: 14000 }),
-        keywords,
+  static examples = [
+    {
+      title: 'PyPI - Downloads',
+      namedParams: {
+        period: 'dd',
+        packageName: 'Django',
       },
-    ]
-  }
+      staticPreview: this.render({ period: 'dd', downloads: 14000 }),
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'downloads' }
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ period, downloads }) {
     return {
