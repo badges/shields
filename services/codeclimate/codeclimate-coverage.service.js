@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { coveragePercentage, letterScore } = require('../color-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')

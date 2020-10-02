@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseJsonService } = require('..')
@@ -17,33 +17,27 @@ const reputationSchema = Joi.object({
 }).required()
 
 module.exports = class StackExchangeReputation extends BaseJsonService {
-  static get category() {
-    return 'chat'
+  static category = 'chat'
+
+  static route = {
+    base: 'stackexchange',
+    pattern: ':stackexchangesite/r/:query',
   }
 
-  static get route() {
-    return {
-      base: 'stackexchange',
-      pattern: ':stackexchangesite/r/:query',
-    }
-  }
+  static examples = [
+    {
+      title: 'Stack Exchange reputation',
+      namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
+      staticPreview: this.render({
+        stackexchangesite: 'stackoverflow',
+        numValue: 10,
+      }),
+      keywords: ['stackexchange', 'stackoverflow'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Stack Exchange reputation',
-        namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
-        staticPreview: this.render({
-          stackexchangesite: 'stackoverflow',
-          numValue: 10,
-        }),
-        keywords: ['stackexchange', 'stackoverflow'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'stackoverflow' }
+  static defaultBadgeData = {
+    label: 'stackoverflow',
   }
 
   static render({ stackexchangesite, numValue }) {

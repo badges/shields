@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderVersionBadge } = require('../version')
 const { InvalidResponse } = require('..')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')

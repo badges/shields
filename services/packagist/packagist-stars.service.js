@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 const { optionalUrl } = require('../validators')
@@ -22,53 +22,45 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class PackagistStars extends BasePackagistService {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'packagist/stars',
+    pattern: ':user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'packagist/stars',
-      pattern: ':user/:repo',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Packagist Stars',
-        namedParams: {
-          user: 'guzzlehttp',
-          repo: 'guzzle',
-        },
-        staticPreview: this.render({
-          stars: 1000,
-        }),
-        keywords,
-        documentation: cacheDocumentationFragment,
+  static examples = [
+    {
+      title: 'Packagist Stars',
+      namedParams: {
+        user: 'guzzlehttp',
+        repo: 'guzzle',
       },
-      {
-        title: 'Packagist Stars (custom server)',
-        namedParams: {
-          user: 'guzzlehttp',
-          repo: 'guzzle',
-        },
-        staticPreview: this.render({
-          stars: 1000,
-        }),
-        queryParams: { server: 'https://packagist.org' },
-        keywords,
-        documentation:
-          customServerDocumentationFragment + cacheDocumentationFragment,
+      staticPreview: this.render({
+        stars: 1000,
+      }),
+      keywords,
+      documentation: cacheDocumentationFragment,
+    },
+    {
+      title: 'Packagist Stars (custom server)',
+      namedParams: {
+        user: 'guzzlehttp',
+        repo: 'guzzle',
       },
-    ]
-  }
+      staticPreview: this.render({
+        stars: 1000,
+      }),
+      queryParams: { server: 'https://packagist.org' },
+      keywords,
+      documentation:
+        customServerDocumentationFragment + cacheDocumentationFragment,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'stars',
-    }
+  static defaultBadgeData = {
+    label: 'stars',
   }
 
   static render({ stars }) {

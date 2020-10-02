@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@hapi/joi": "^17.1.1",
+    "joi": "17.2.1",
     "@sentry/node": "^5.24.2",
     "@shields_io/camp": "^18.0.0",
     "badge-maker": "file:badge-maker",
@@ -44,7 +44,7 @@
     "graphql": "^14.7.0",
     "graphql-tag": "^2.11.0",
     "ioredis": "4.17.3",
-    "joi-extension-semver": "4.1.1",
+    "joi-extension-semver": "5.0.0",
     "js-yaml": "^3.14.0",
     "jsonpath": "~1.0.2",
     "lodash.countby": "^4.6.0",
