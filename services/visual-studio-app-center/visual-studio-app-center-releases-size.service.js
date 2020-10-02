@@ -14,38 +14,30 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
-  static get category() {
-    return 'size'
+  static category = 'size'
+
+  static route = {
+    base: 'visual-studio-app-center/releases/size',
+    pattern: ':owner/:app/:token',
   }
 
-  static get route() {
-    return {
-      base: 'visual-studio-app-center/releases/size',
-      pattern: ':owner/:app/:token',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Visual Studio App Center Size',
-        namedParams: {
-          owner: 'jct',
-          app: 'my-amazing-app',
-          token: 'ac70cv...',
-        },
-        staticPreview: this.render({ size: 8368844 }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Visual Studio App Center Size',
+      namedParams: {
+        owner: 'jct',
+        app: 'my-amazing-app',
+        token: 'ac70cv...',
       },
-    ]
-  }
+      staticPreview: this.render({ size: 8368844 }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'size',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'size',
+    color: 'blue',
   }
 
   static render({ size }) {
