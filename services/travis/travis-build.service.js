@@ -24,19 +24,28 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
       title: 'Travis (.org)',
       pattern: ':user/:repo',
       namedParams: { user: 'rust-lang', repo: 'rust' },
-      staticPreview: this.staticPreview,
+      staticPreview: {
+        message: 'passing',
+        color: 'brightgreen',
+      },
     },
     {
       title: 'Travis (.org) branch',
       pattern: ':user/:repo/:branch',
       namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
-      staticPreview: this.staticPreview,
+      staticPreview: {
+        message: 'passing',
+        color: 'brightgreen',
+      },
     },
     {
       title: 'Travis (.com)',
       pattern: 'com/:user/:repo',
       namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-      staticPreview: this.staticPreview,
+      staticPreview: {
+        message: 'passing',
+        color: 'brightgreen',
+      },
     },
     {
       title: 'Travis (.com) branch',
@@ -46,7 +55,10 @@ module.exports = class TravisBuild extends BaseSvgScrapingService {
         repo: 'rackian-gateway',
         branch: 'master',
       },
-      staticPreview: this.staticPreview,
+      staticPreview: {
+        message: 'passing',
+        color: 'brightgreen',
+      },
     },
   ]
 
