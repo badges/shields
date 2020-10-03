@@ -78,8 +78,9 @@ module.exports = class Sourceforge extends BaseJsonService {
   }
 
   async fetch({ interval, project, folder }) {
-    const url = `https://sourceforge.net/projects/${project}/files/${folder ? `${folder}/` : ''
-      }stats/json`
+    const url = `https://sourceforge.net/projects/${project}/files/${
+      folder ? `${folder}/` : ''
+    }stats/json`
     // get yesterday since today is incomplete
     const endDate = moment().subtract(24, 'hours')
     const startDate = intervalMap[interval].startDate(endDate)
