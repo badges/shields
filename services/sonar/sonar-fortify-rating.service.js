@@ -13,45 +13,37 @@ const colorMap = {
 }
 
 module.exports = class SonarFortifyRating extends SonarBase {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'sonar/fortify-security-rating',
+    pattern: ':component',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'sonar/fortify-security-rating',
-      pattern: ':component',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Fortify Security Rating',
-        namedParams: {
-          component: 'org.ow2.petals:petals-se-ase',
-        },
-        queryParams: {
-          server: 'http://sonar.petalslink.com',
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({ rating: 4 }),
-        keywords,
-        documentation: `
-        <p>
-          Note that the Fortify Security Rating badge will only work on Sonar instances that have the <a href='https://marketplace.microfocus.com/fortify/content/fortify-sonarqube-plugin'>Fortify SonarQube Plugin</a> installed.
-          The badge is not available for projects analyzed on SonarCloud.io
-        </p>
-        ${documentation}
-      `,
+  static examples = [
+    {
+      title: 'Sonar Fortify Security Rating',
+      namedParams: {
+        component: 'org.ow2.petals:petals-se-ase',
       },
-    ]
-  }
+      queryParams: {
+        server: 'http://sonar.petalslink.com',
+        sonarVersion: '4.2',
+      },
+      staticPreview: this.render({ rating: 4 }),
+      keywords,
+      documentation: `
+      <p>
+        Note that the Fortify Security Rating badge will only work on Sonar instances that have the <a href='https://marketplace.microfocus.com/fortify/content/fortify-sonarqube-plugin'>Fortify SonarQube Plugin</a> installed.
+        The badge is not available for projects analyzed on SonarCloud.io
+      </p>
+      ${documentation}
+    `,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'fortify-security-rating' }
-  }
+  static defaultBadgeData = { label: 'fortify-security-rating' }
 
   static render({ rating }) {
     return {
