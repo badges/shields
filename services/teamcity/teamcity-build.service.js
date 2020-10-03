@@ -14,56 +14,48 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class TeamCityBuild extends TeamCityBase {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'teamcity/build',
+    pattern: ':verbosity(s|e)/:buildId',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'teamcity/build',
-      pattern: ':verbosity(s|e)/:buildId',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'TeamCity Simple Build Status',
-        namedParams: {
-          verbosity: 's',
-          buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
-        },
-        queryParams: {
-          server: 'https://teamcity.jetbrains.com',
-        },
-        staticPreview: this.render({
-          status: 'SUCCESS',
-        }),
+  static examples = [
+    {
+      title: 'TeamCity Simple Build Status',
+      namedParams: {
+        verbosity: 's',
+        buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
       },
-      {
-        title: 'TeamCity Full Build Status',
-        namedParams: {
-          verbosity: 'e',
-          buildId: 'bt345',
-        },
-        queryParams: {
-          server: 'https://teamcity.jetbrains.com',
-        },
-        staticPreview: this.render({
-          status: 'FAILURE',
-          statusText: 'Tests failed: 4, passed: 1103, ignored: 2',
-          useVerbose: true,
-        }),
-        keywords: ['test', 'test results'],
+      queryParams: {
+        server: 'https://teamcity.jetbrains.com',
       },
-    ]
-  }
+      staticPreview: this.render({
+        status: 'SUCCESS',
+      }),
+    },
+    {
+      title: 'TeamCity Full Build Status',
+      namedParams: {
+        verbosity: 'e',
+        buildId: 'bt345',
+      },
+      queryParams: {
+        server: 'https://teamcity.jetbrains.com',
+      },
+      staticPreview: this.render({
+        status: 'FAILURE',
+        statusText: 'Tests failed: 4, passed: 1103, ignored: 2',
+        useVerbose: true,
+      }),
+      keywords: ['test', 'test results'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
+  static defaultBadgeData = {
+    label: 'build',
   }
 
   static render({ status, statusText, useVerbose }) {
