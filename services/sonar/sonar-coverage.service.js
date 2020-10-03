@@ -5,39 +5,31 @@ const SonarBase = require('./sonar-base')
 const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
 module.exports = class SonarCoverage extends SonarBase {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+
+  static route = {
+    base: 'sonar/coverage',
+    pattern: ':component',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'sonar/coverage',
-      pattern: ':component',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Coverage',
-        namedParams: {
-          component: 'org.ow2.petals:petals-se-ase',
-        },
-        queryParams: {
-          server: 'http://sonar.petalslink.com',
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({ coverage: 63 }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Sonar Coverage',
+      namedParams: {
+        component: 'org.ow2.petals:petals-se-ase',
       },
-    ]
-  }
+      queryParams: {
+        server: 'http://sonar.petalslink.com',
+        sonarVersion: '4.2',
+      },
+      staticPreview: this.render({ coverage: 63 }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     return {
