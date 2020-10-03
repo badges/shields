@@ -4,40 +4,32 @@ const SonarBase = require('./sonar-base')
 const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
 module.exports = class SonarQualityGate extends SonarBase {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'sonar',
+    pattern: ':metric(quality_gate|alert_status)/:component',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'sonar',
-      pattern: ':metric(quality_gate|alert_status)/:component',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Sonar Quality Gate',
-        namedParams: {
-          component: 'swellaby:azdo-shellcheck',
-          metric: 'quality_gate',
-        },
-        queryParams: {
-          server: 'https://sonarcloud.io',
-          sonarVersion: '4.2',
-        },
-        staticPreview: this.render({ qualityState: 'OK' }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Sonar Quality Gate',
+      namedParams: {
+        component: 'swellaby:azdo-shellcheck',
+        metric: 'quality_gate',
       },
-    ]
-  }
+      queryParams: {
+        server: 'https://sonarcloud.io',
+        sonarVersion: '4.2',
+      },
+      staticPreview: this.render({ qualityState: 'OK' }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'quality gate' }
-  }
+  static defaultBadgeData = { label: 'quality gate' }
 
   static render({ qualityState }) {
     if (qualityState === 'OK') {
