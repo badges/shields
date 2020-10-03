@@ -5,31 +5,25 @@ const { age: ageColor } = require('../color-formatters')
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
 module.exports = class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryService {
-  static get category() {
-    return 'activity'
+  static category = 'activity'
+
+  static route = {
+    base: 'vaadin-directory',
+    pattern: ':alias(rd|release-date)/:packageName',
   }
 
-  static get route() {
-    return {
-      base: 'vaadin-directory',
-      pattern: ':alias(rd|release-date)/:packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'Vaadin Directory',
+      pattern: 'release-date/:packageName',
+      namedParams: { packageName: 'vaadinvaadin-grid' },
+      staticPreview: this.render({ date: '2018-12-12' }),
+      keywords: ['vaadin-directory', 'date', 'latest release date'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Vaadin Directory',
-        pattern: 'release-date/:packageName',
-        namedParams: { packageName: 'vaadinvaadin-grid' },
-        staticPreview: this.render({ date: '2018-12-12' }),
-        keywords: ['vaadin-directory', 'date', 'latest release date'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'latest release date' }
+  static defaultBadgeData = {
+    label: 'latest release date',
   }
 
   static render({ date }) {

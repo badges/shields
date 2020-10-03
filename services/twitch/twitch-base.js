@@ -17,13 +17,11 @@ function sleep(ms) {
 
 // Abstract class for Twitch badges
 module.exports = class TwitchBase extends BaseJsonService {
-  static get auth() {
-    return {
-      userKey: 'twitch_client_id',
-      passKey: 'twitch_client_secret',
-      authorizedOrigins: ['https://id.twitch.tv'],
-      isRequired: true,
-    }
+  static auth = {
+    userKey: 'twitch_client_id',
+    passKey: 'twitch_client_secret',
+    authorizedOrigins: ['https://id.twitch.tv'],
+    isRequired: true,
   }
 
   constructor(...args) {
