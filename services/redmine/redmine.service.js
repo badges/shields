@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { starRating } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseXmlService } = require('..')
@@ -12,9 +12,7 @@ const schema = Joi.object({
 })
 
 class BaseRedminePluginRating extends BaseXmlService {
-  static get category() {
-    return 'rating'
-  }
+  static category = 'rating'
 
   static render({ rating }) {
     throw new Error(`render() function not implemented for ${this.name}`)
@@ -33,26 +31,20 @@ class BaseRedminePluginRating extends BaseXmlService {
 }
 
 class RedminePluginRating extends BaseRedminePluginRating {
-  static get route() {
-    return {
-      base: 'redmine/plugin/rating',
-      pattern: ':plugin',
-    }
+  static route = {
+    base: 'redmine/plugin/rating',
+    pattern: ':plugin',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Plugin on redmine.org',
-        namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
-        staticPreview: this.render({ rating: 5 }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Plugin on redmine.org',
+      namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
+      staticPreview: this.render({ rating: 5 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'redmine' }
-  }
+  static defaultBadgeData = { label: 'redmine' }
 
   static render({ rating }) {
     return {
@@ -64,22 +56,18 @@ class RedminePluginRating extends BaseRedminePluginRating {
 }
 
 class RedminePluginStars extends BaseRedminePluginRating {
-  static get route() {
-    return {
-      base: 'redmine/plugin/stars',
-      pattern: ':plugin',
-    }
+  static route = {
+    base: 'redmine/plugin/stars',
+    pattern: ':plugin',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Plugin on redmine.org',
-        namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
-        staticPreview: this.render({ rating: 5 }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'Plugin on redmine.org',
+      namedParams: { plugin: 'redmine_xlsx_format_issue_exporter' },
+      staticPreview: this.render({ rating: 5 }),
+    },
+  ]
 
   static render({ rating }) {
     return {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { addv } = require('../text-formatters')
 const { BaseJsonService, NotFound } = require('..')
 const { latestVersion } = require('./luarocks-version-helpers')

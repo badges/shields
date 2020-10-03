@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const ScrutinizerBase = require('./scrutinizer-base')
 
@@ -19,14 +19,10 @@ const schema = Joi.object({
 }).required()
 
 class ScrutinizerBuildBase extends ScrutinizerBase {
-  static get category() {
-    return 'build'
-  }
+  static category = 'build'
 
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
+  static defaultBadgeData = {
+    label: 'build',
   }
 
   async makeBadge({ vcs, slug, branch }) {
@@ -39,28 +35,24 @@ class ScrutinizerBuildBase extends ScrutinizerBase {
 }
 
 class ScrutinizerBuild extends ScrutinizerBuildBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/build',
-      pattern: ':vcs(g|b)/:user/:repo/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/build',
+    pattern: ':vcs(g|b)/:user/:repo/:branch*',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Scrutinizer build (GitHub/Bitbucket)',
-        pattern: ':vcs(g|b)/:user/:repo/:branch?',
-        namedParams: {
-          vcs: 'g',
-          user: 'filp',
-          repo: 'whoops',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  static examples = [
+    {
+      title: 'Scrutinizer build (GitHub/Bitbucket)',
+      pattern: ':vcs(g|b)/:user/:repo/:branch?',
+      namedParams: {
+        vcs: 'g',
+        user: 'filp',
+        repo: 'whoops',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
   async handle({ vcs, user, repo, branch }) {
     return this.makeBadge({
@@ -72,32 +64,28 @@ class ScrutinizerBuild extends ScrutinizerBuildBase {
 }
 
 class ScrutinizerGitLabBuild extends ScrutinizerBuildBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/build/gl',
-      pattern: ':instance/:user/:repo/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/build/gl',
+    pattern: ':instance/:user/:repo/:branch*',
   }
 
-  static get examples() {
-    // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
-    // The example used is valid, but the project will not be accessible if Shields users try to use it.
-    // https://gitlab.propertywindow.nl/propertywindow/client
-    // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
-    return [
-      {
-        title: 'Scrutinizer build (GitLab)',
-        pattern: ':instance/:user/:repo/:branch?',
-        namedParams: {
-          instance: 'propertywindow',
-          user: 'propertywindow',
-          repo: 'client',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+  // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
+  // The example used is valid, but the project will not be accessible if Shields users try to use it.
+  // https://gitlab.propertywindow.nl/propertywindow/client
+  // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
+  static examples = [
+    {
+      title: 'Scrutinizer build (GitLab)',
+      pattern: ':instance/:user/:repo/:branch?',
+      namedParams: {
+        instance: 'propertywindow',
+        user: 'propertywindow',
+        repo: 'client',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
+    },
+  ]
 
   async handle({ instance, user, repo, branch }) {
     return this.makeBadge({
@@ -109,11 +97,9 @@ class ScrutinizerGitLabBuild extends ScrutinizerBuildBase {
 }
 
 class ScrutinizerPlainGitBuild extends ScrutinizerBuildBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/build/gp',
-      pattern: ':slug/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/build/gp',
+    pattern: ':slug/:branch*',
   }
 
   async handle({ slug, branch }) {

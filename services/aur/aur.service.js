@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { addv, metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')

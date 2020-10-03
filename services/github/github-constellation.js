@@ -4,7 +4,6 @@ const path = require('path')
 const { AuthHelper } = require('../../core/base-service/auth-helper')
 const RedisTokenPersistence = require('../../core/token-pooling/redis-token-persistence')
 const FsTokenPersistence = require('../../core/token-pooling/fs-token-persistence')
-const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../core/server/log')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
@@ -28,8 +27,9 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
+    this.shieldsSecret = config.private.shields_secret
 
-    const { redis_url: redisUrl } = config.private
+    const { redis_url: redisUrl, gh_token: globalToken } = config.private
     const { dir: persistenceDir } = config.persistence
     if (redisUrl) {
       log('RedisTokenPersistence configured with redisUrl')
@@ -46,10 +46,8 @@ class GithubConstellation {
       this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
-    const globalToken = serverSecrets.gh_token
-    const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     this.apiProvider = new GithubApiProvider({
-      baseUrl,
+      baseUrl: process.env.GITHUB_URL || 'https://api.github.com',
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
@@ -84,7 +82,8 @@ class GithubConstellation {
       this.apiProvider.addToken(tokenString)
     })
 
-    setAdminRoutes(this.apiProvider, server)
+    const { shieldsSecret, apiProvider } = this
+    setAdminRoutes({ shieldsSecret }, { apiProvider, server })
 
     if (this.oauthHelper.isConfigured) {
       setAcceptorRoutes({

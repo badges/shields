@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService } = require('..')
 const renderQuestionsBadge = require('./stackexchange-helpers')
@@ -11,34 +11,28 @@ const tagSchema = Joi.object({
 }).required()
 
 module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
-  static get category() {
-    return 'chat'
+  static category = 'chat'
+
+  static route = {
+    base: 'stackexchange',
+    pattern: ':stackexchangesite/qm/:query',
   }
 
-  static get route() {
-    return {
-      base: 'stackexchange',
-      pattern: ':stackexchangesite/qm/:query',
-    }
-  }
+  static examples = [
+    {
+      title: 'Stack Exchange monthly questions',
+      namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
+      staticPreview: this.render({
+        stackexchangesite: 'stackoverflow',
+        query: 'momentjs',
+        numValue: 2000,
+      }),
+      keywords: ['stackexchange', 'stackoverflow'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Stack Exchange monthly questions',
-        namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
-        staticPreview: this.render({
-          stackexchangesite: 'stackoverflow',
-          query: 'momentjs',
-          numValue: 2000,
-        }),
-        keywords: ['stackexchange', 'stackoverflow'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'stackoverflow' }
+  static defaultBadgeData = {
+    label: 'stackoverflow',
   }
 
   static render(props) {

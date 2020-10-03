@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { renderBuildStatusBadge } = require('../build-status')
 const { BaseJsonService, NotFound, redirector } = require('..')
 
@@ -30,33 +30,25 @@ const schema = Joi.array()
   .required()
 
 class Shippable extends BaseJsonService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'shippable',
+    pattern: ':projectId/:branch+',
   }
 
-  static get route() {
-    return {
-      base: 'shippable',
-      pattern: ':projectId/:branch+',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Shippable',
-        namedParams: {
-          projectId: '5444c5ecb904a4b21567b0ff',
-          branch: 'master',
-        },
-        staticPreview: this.render({ code: 30 }),
+  static examples = [
+    {
+      title: 'Shippable',
+      namedParams: {
+        projectId: '5444c5ecb904a4b21567b0ff',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ code: 30 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'shippable' }
-  }
+  static defaultBadgeData = { label: 'shippable' }
 
   static render({ code }) {
     return renderBuildStatusBadge({ label: 'build', status: statusCodes[code] })

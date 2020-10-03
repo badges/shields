@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { colorScale } = require('../color-formatters')
 const { NotFound } = require('..')
 const ScrutinizerBase = require('./scrutinizer-base')
@@ -32,14 +32,10 @@ const schema = Joi.object({
 const scale = colorScale([40, 61], ['red', 'yellow', 'brightgreen'])
 
 class ScrutinizerCoverageBase extends ScrutinizerBase {
-  static get category() {
-    return 'coverage'
-  }
+  static category = 'coverage'
 
-  static get defaultBadgeData() {
-    return {
-      label: 'coverage',
-    }
+  static defaultBadgeData = {
+    label: 'coverage',
   }
 
   static render({ coverage }) {
@@ -71,28 +67,24 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
 }
 
 class ScrutinizerCoverage extends ScrutinizerCoverageBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/coverage',
-      pattern: ':vcs(g|b)/:user/:repo/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/coverage',
+    pattern: ':vcs(g|b)/:user/:repo/:branch*',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Scrutinizer coverage (GitHub/BitBucket)',
-        pattern: ':vcs(g|b)/:user/:repo/:branch?',
-        namedParams: {
-          vcs: 'g',
-          user: 'filp',
-          repo: 'whoops',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 86 }),
+  static examples = [
+    {
+      title: 'Scrutinizer coverage (GitHub/BitBucket)',
+      pattern: ':vcs(g|b)/:user/:repo/:branch?',
+      namedParams: {
+        vcs: 'g',
+        user: 'filp',
+        repo: 'whoops',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ coverage: 86 }),
+    },
+  ]
 
   async handle({ vcs, user, repo, branch }) {
     return this.makeBadge({
@@ -104,32 +96,28 @@ class ScrutinizerCoverage extends ScrutinizerCoverageBase {
 }
 
 class ScrutinizerCoverageGitLab extends ScrutinizerCoverageBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/coverage/gl',
-      pattern: ':instance/:user/:repo/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/coverage/gl',
+    pattern: ':instance/:user/:repo/:branch*',
   }
 
-  static get examples() {
-    // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
-    // The example used is valid, but the project will not be accessible if Shields users try to use it.
-    // https://gitlab.propertywindow.nl/propertywindow/client
-    // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
-    return [
-      {
-        title: 'Scrutinizer coverage (GitLab)',
-        pattern: ':instance/:user/:repo/:branch?',
-        namedParams: {
-          instance: 'propertywindow',
-          user: 'propertywindow',
-          repo: 'client',
-          branch: 'master',
-        },
-        staticPreview: this.render({ coverage: 94 }),
+  // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
+  // The example used is valid, but the project will not be accessible if Shields users try to use it.
+  // https://gitlab.propertywindow.nl/propertywindow/client
+  // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
+  static examples = [
+    {
+      title: 'Scrutinizer coverage (GitLab)',
+      pattern: ':instance/:user/:repo/:branch?',
+      namedParams: {
+        instance: 'propertywindow',
+        user: 'propertywindow',
+        repo: 'client',
+        branch: 'master',
       },
-    ]
-  }
+      staticPreview: this.render({ coverage: 94 }),
+    },
+  ]
 
   async handle({ instance, user, repo, branch }) {
     return this.makeBadge({
@@ -141,11 +129,9 @@ class ScrutinizerCoverageGitLab extends ScrutinizerCoverageBase {
 }
 
 class ScrutinizerCoveragePlainGit extends ScrutinizerCoverageBase {
-  static get route() {
-    return {
-      base: 'scrutinizer/coverage/gp',
-      pattern: ':slug/:branch*',
-    }
+  static route = {
+    base: 'scrutinizer/coverage/gp',
+    pattern: ':slug/:branch*',
   }
 
   async handle({ slug, branch }) {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { starRating, metric } = require('../text-formatters')
 const { colorScale } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
@@ -14,41 +14,35 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class PkgreviewRating extends BaseJsonService {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'pkgreview',
+    pattern: ':format(rating|stars)/:pkgManager(npm)/:pkgSlug+',
   }
 
-  static get route() {
-    return {
-      base: 'pkgreview',
-      pattern: ':format(rating|stars)/:pkgManager(npm)/:pkgSlug+',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'pkgreview.dev Package Ratings',
-        pattern: 'rating/:pkgManager/:pkgSlug+',
-        namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
-        staticPreview: this.render({
-          format: 'rating',
-          rating: 3.5,
-          reviewsCount: 237,
-        }),
-      },
-      {
-        title: 'pkgreview.dev Star Ratings',
-        pattern: 'stars/:pkgManager/:pkgSlug+',
-        namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
-        staticPreview: this.render({
-          format: 'stars',
-          rating: 1.5,
-          reviewsCount: 200,
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'pkgreview.dev Package Ratings',
+      pattern: 'rating/:pkgManager/:pkgSlug+',
+      namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
+      staticPreview: this.render({
+        format: 'rating',
+        rating: 3.5,
+        reviewsCount: 237,
+      }),
+    },
+    {
+      title: 'pkgreview.dev Star Ratings',
+      pattern: 'stars/:pkgManager/:pkgSlug+',
+      namedParams: { pkgManager: 'npm', pkgSlug: 'react' },
+      staticPreview: this.render({
+        format: 'stars',
+        rating: 1.5,
+        reviewsCount: 200,
+      }),
+    },
+  ]
 
   static render({ rating, reviewsCount, format }) {
     const message =

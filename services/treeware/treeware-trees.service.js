@@ -1,7 +1,7 @@
 'use strict'
 
 const crypto = require('crypto')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
 const { BaseJsonService } = require('..')

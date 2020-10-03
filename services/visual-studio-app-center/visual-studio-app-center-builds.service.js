@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { NotFound } = require('..')
 const {
@@ -14,38 +14,30 @@ const schema = Joi.array().items({
 })
 
 module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCenterService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'visual-studio-app-center/builds',
+    pattern: ':owner/:app/:branch/:token',
   }
 
-  static get route() {
-    return {
-      base: 'visual-studio-app-center/builds',
-      pattern: ':owner/:app/:branch/:token',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Visual Studio App Center Builds',
-        namedParams: {
-          owner: 'jct',
-          app: 'my-amazing-app',
-          branch: 'master',
-          token: 'ac70cv...',
-        },
-        staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Visual Studio App Center Builds',
+      namedParams: {
+        owner: 'jct',
+        app: 'my-amazing-app',
+        branch: 'master',
+        token: 'ac70cv...',
       },
-    ]
-  }
+      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
+  static defaultBadgeData = {
+    label: 'build',
   }
 
   async handle({ owner, app, branch, token }) {

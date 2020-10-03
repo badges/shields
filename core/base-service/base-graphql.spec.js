@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { expect } = require('chai')
 const gql = require('graphql-tag')
 const sinon = require('sinon')

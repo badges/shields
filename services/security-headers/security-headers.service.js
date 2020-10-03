@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { BaseService, NotFound } = require('..')
 
@@ -20,36 +20,28 @@ const documentation = `
 `
 
 module.exports = class SecurityHeaders extends BaseService {
-  static get category() {
-    return 'monitoring'
+  static category = 'monitoring'
+
+  static route = {
+    base: '',
+    pattern: 'security-headers',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: '',
-      pattern: 'security-headers',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'Security Headers',
+      namedParams: {},
+      queryParams: { url: 'https://shields.io' },
+      staticPreview: this.render({
+        grade: 'A+',
+      }),
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Security Headers',
-        namedParams: {},
-        queryParams: { url: 'https://shields.io' },
-        staticPreview: this.render({
-          grade: 'A+',
-        }),
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'security headers',
-    }
+  static defaultBadgeData = {
+    label: 'security headers',
   }
 
   static render({ grade }) {

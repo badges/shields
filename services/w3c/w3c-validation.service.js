@@ -1,5 +1,5 @@
 'use strict'
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 const {
@@ -31,37 +31,29 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class W3cValidation extends BaseJsonService {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'w3c-validation',
+    pattern: ':parser(default|html|xml|xmldtd)',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'w3c-validation',
-      pattern: ':parser(default|html|xml|xmldtd)',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'W3C Validation',
-        namedParams: { parser: 'html' },
-        queryParams: {
-          targetUrl: 'https://validator.nu/',
-          preset: 'HTML, SVG 1.1, MathML 3.0',
-        },
-        staticPreview: this.render({ messageTypes: {} }),
-        documentation,
+  static examples = [
+    {
+      title: 'W3C Validation',
+      namedParams: { parser: 'html' },
+      queryParams: {
+        targetUrl: 'https://validator.nu/',
+        preset: 'HTML, SVG 1.1, MathML 3.0',
       },
-    ]
-  }
+      staticPreview: this.render({ messageTypes: {} }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'w3c',
-    }
+  static defaultBadgeData = {
+    label: 'w3c',
   }
 
   static render({ messageTypes }) {

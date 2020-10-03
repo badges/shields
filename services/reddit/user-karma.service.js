@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { nonNegativeInteger } = require('../validators')
 const { metric } = require('../text-formatters')
 const { BaseJsonService } = require('..')
@@ -13,37 +13,29 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class RedditUserKarma extends BaseJsonService {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'reddit/user-karma',
+    pattern: ':variant(link|comment|combined)/:user',
   }
 
-  static get route() {
-    return {
-      base: 'reddit/user-karma',
-      pattern: ':variant(link|comment|combined)/:user',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Reddit User Karma',
-        namedParams: { variant: 'combined', user: 'example' },
-        staticPreview: {
-          label: 'combined karma',
-          message: 56,
-          color: 'red',
-          style: 'social',
-        },
+  static examples = [
+    {
+      title: 'Reddit User Karma',
+      namedParams: { variant: 'combined', user: 'example' },
+      staticPreview: {
+        label: 'combined karma',
+        message: 56,
+        color: 'red',
+        style: 'social',
       },
-    ]
-  }
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'reddit karma',
-      namedLogo: 'reddit',
-    }
+  static defaultBadgeData = {
+    label: 'reddit karma',
+    namedLogo: 'reddit',
   }
 
   static render({ variant, karma, user }) {

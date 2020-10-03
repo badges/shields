@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const {
   BaseVisualStudioAppCenterService,
   keywords,
@@ -13,38 +13,30 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class VisualStudioAppCenterReleasesOSVersion extends BaseVisualStudioAppCenterService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'visual-studio-app-center/releases/osver',
+    pattern: ':owner/:app/:token',
   }
 
-  static get route() {
-    return {
-      base: 'visual-studio-app-center/releases/osver',
-      pattern: ':owner/:app/:token',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Visual Studio App Center (Minimum) OS Version',
-        namedParams: {
-          owner: 'jct',
-          app: 'my-amazing-app',
-          token: 'ac70cv...',
-        },
-        staticPreview: this.render({ min_os: '4.1', app_os: 'Android' }),
-        keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Visual Studio App Center (Minimum) OS Version',
+      namedParams: {
+        owner: 'jct',
+        app: 'my-amazing-app',
+        token: 'ac70cv...',
       },
-    ]
-  }
+      staticPreview: this.render({ min_os: '4.1', app_os: 'Android' }),
+      keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'min version',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'min version',
+    color: 'blue',
   }
 
   static render({ app_os, min_os }) {

@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
 const statusSchema = Joi.object({
@@ -8,42 +8,34 @@ const statusSchema = Joi.object({
 }).required()
 
 module.exports = class RequiresIo extends BaseJsonService {
-  static get category() {
-    return 'dependencies'
+  static category = 'dependencies'
+
+  static route = {
+    base: 'requires',
+    pattern: ':service/:user/:repo/:branch*',
   }
 
-  static get route() {
-    return {
-      base: 'requires',
-      pattern: ':service/:user/:repo/:branch*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Requires.io',
-        pattern: ':service/:user/:repo',
-        namedParams: { service: 'github', user: 'celery', repo: 'celery' },
-        staticPreview: this.render({ status: 'up-to-date' }),
+  static examples = [
+    {
+      title: 'Requires.io',
+      pattern: ':service/:user/:repo',
+      namedParams: { service: 'github', user: 'celery', repo: 'celery' },
+      staticPreview: this.render({ status: 'up-to-date' }),
+    },
+    {
+      title: 'Requires.io (branch)',
+      pattern: ':service/:user/:repo/:branch',
+      namedParams: {
+        service: 'github',
+        user: 'celery',
+        repo: 'celery',
+        branch: 'master',
       },
-      {
-        title: 'Requires.io (branch)',
-        pattern: ':service/:user/:repo/:branch',
-        namedParams: {
-          service: 'github',
-          user: 'celery',
-          repo: 'celery',
-          branch: 'master',
-        },
-        staticPreview: this.render({ status: 'up-to-date' }),
-      },
-    ]
-  }
+      staticPreview: this.render({ status: 'up-to-date' }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'requirements' }
-  }
+  static defaultBadgeData = { label: 'requirements' }
 
   static render({ status }) {
     let message = status

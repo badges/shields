@@ -1,6 +1,6 @@
 'use strict'
 
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('favorites count').get('/notepad4e.json').expectBadge({
