@@ -16,28 +16,24 @@ const gradeStars = {
 }
 
 module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
-  static get route() {
-    return {
-      base: 'symfony/i/stars',
-      pattern: ':projectUuid',
-    }
+  static route = {
+    base: 'symfony/i/stars',
+    pattern: ':projectUuid',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'SymfonyInsight Stars',
-        namedParams: {
-          projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
-        },
-        staticPreview: this.render({
-          grade: 'silver',
-          status: 'finished',
-        }),
-        keywords,
+  static examples = [
+    {
+      title: 'SymfonyInsight Stars',
+      namedParams: {
+        projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
       },
-    ]
-  }
+      staticPreview: this.render({
+        grade: 'silver',
+        status: 'finished',
+      }),
+      keywords,
+    },
+  ]
 
   static render({ status, grade }) {
     const label = 'stars'

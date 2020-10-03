@@ -7,28 +7,24 @@ const {
 } = require('./symfony-insight-base')
 
 module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
-  static get route() {
-    return {
-      base: 'symfony/i/grade',
-      pattern: ':projectUuid',
-    }
+  static route = {
+    base: 'symfony/i/grade',
+    pattern: ':projectUuid',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'SymfonyInsight Grade',
-        namedParams: {
-          projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
-        },
-        staticPreview: this.render({
-          grade: 'bronze',
-          status: 'finished',
-        }),
-        keywords,
+  static examples = [
+    {
+      title: 'SymfonyInsight Grade',
+      namedParams: {
+        projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
       },
-    ]
-  }
+      staticPreview: this.render({
+        grade: 'bronze',
+        status: 'finished',
+      }),
+      keywords,
+    },
+  ]
 
   static render({ status, grade = 'none' }) {
     const label = 'grade'

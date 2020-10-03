@@ -22,39 +22,31 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class TeamCityCoverage extends TeamCityBase {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+
+  static route = {
+    base: 'teamcity/coverage',
+    pattern: ':buildId',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'teamcity/coverage',
-      pattern: ':buildId',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'TeamCity Coverage',
-        namedParams: {
-          buildId: 'ReactJSNet_PullRequests',
-        },
-        queryParams: {
-          server: 'https://teamcity.jetbrains.com',
-        },
-        staticPreview: this.render({
-          coverage: 82,
-        }),
+  static examples = [
+    {
+      title: 'TeamCity Coverage',
+      namedParams: {
+        buildId: 'ReactJSNet_PullRequests',
       },
-    ]
-  }
+      queryParams: {
+        server: 'https://teamcity.jetbrains.com',
+      },
+      staticPreview: this.render({
+        coverage: 82,
+      }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'coverage',
-    }
+  static defaultBadgeData = {
+    label: 'coverage',
   }
 
   static render({ coverage }) {
