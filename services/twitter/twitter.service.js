@@ -10,41 +10,33 @@ const queryParamSchema = Joi.object({
 }).required()
 
 class TwitterUrl extends BaseService {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'twitter',
+    pattern: 'url',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'twitter',
-      pattern: 'url',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Twitter URL',
-        namedParams: {},
-        queryParams: {
-          url: 'https://shields.io',
-        },
-        // hard code the static preview
-        // because link[] is not allowed in examples
-        staticPreview: {
-          label: 'Tweet',
-          message: '',
-          style: 'social',
-        },
+  static examples = [
+    {
+      title: 'Twitter URL',
+      namedParams: {},
+      queryParams: {
+        url: 'https://shields.io',
       },
-    ]
-  }
+      // hard code the static preview
+      // because link[] is not allowed in examples
+      staticPreview: {
+        label: 'Tweet',
+        message: '',
+        style: 'social',
+      },
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      namedLogo: 'twitter',
-    }
+  static defaultBadgeData = {
+    namedLogo: 'twitter',
   }
 
   async handle(_routeParams, { url }) {

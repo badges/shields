@@ -5,31 +5,25 @@ const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
 module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService {
-  static get category() {
-    return 'rating'
+  static category = 'rating'
+
+  static route = {
+    base: 'vaadin-directory',
+    pattern: ':format(star|stars|rating)/:packageName',
   }
 
-  static get route() {
-    return {
-      base: 'vaadin-directory',
-      pattern: ':format(star|stars|rating)/:packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'Vaadin Directory',
+      pattern: ':format(stars|rating)/:packageName',
+      namedParams: { format: 'rating', packageName: 'vaadinvaadin-grid' },
+      staticPreview: this.render({ format: 'rating', score: 4.75 }),
+      keywords: ['vaadin-directory'],
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Vaadin Directory',
-        pattern: ':format(stars|rating)/:packageName',
-        namedParams: { format: 'rating', packageName: 'vaadinvaadin-grid' },
-        staticPreview: this.render({ format: 'rating', score: 4.75 }),
-        keywords: ['vaadin-directory'],
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'rating' }
+  static defaultBadgeData = {
+    label: 'rating',
   }
 
   static render({ format, score }) {

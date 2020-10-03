@@ -8,39 +8,28 @@ const helixSchema = Joi.object({
 })
 
 module.exports = class TwitchStatus extends TwitchBase {
-  static get category() {
-    return 'activity'
+  static category = 'activity'
+
+  static route = {
+    base: 'twitch/status',
+    pattern: ':user',
   }
 
-  static get route() {
-    return {
-      base: 'twitch/status',
-      pattern: ':user',
-    }
-  }
-
-  static get examples() {
-    const preview = this.render({
-      user: 'andyonthewings',
-      isLive: true,
-    })
-    // link[] is not allowed in examples
-    delete preview.link
-    return [
-      {
-        title: 'Twitch Status',
-        namedParams: {
-          user: 'andyonthewings',
-        },
-        staticPreview: preview,
+  static examples = [
+    {
+      title: 'Twitch Status',
+      namedParams: {
+        user: 'andyonthewings',
       },
-    ]
-  }
+      staticPreview: {
+        message: 'live',
+        color: 'red',
+      },
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'twitch',
-    }
+  static defaultBadgeData = {
+    label: 'twitch',
   }
 
   static render({ user, isLive }) {
