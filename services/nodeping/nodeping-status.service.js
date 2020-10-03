@@ -18,35 +18,27 @@ const schema = Joi.array()
 const exampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 
 module.exports = class NodePingStatus extends BaseJsonService {
-  static get category() {
-    return 'monitoring'
+  static category = 'monitoring'
+
+  static route = {
+    base: 'nodeping/status',
+    pattern: ':checkUuid',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'nodeping/status',
-      pattern: ':checkUuid',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'NodePing status',
-        namedParams: {
-          checkUuid: exampleCheckUuid,
-        },
-        queryParams: exampleQueryParams,
-        staticPreview: renderWebsiteStatus({ isUp: true }),
+  static examples = [
+    {
+      title: 'NodePing status',
+      namedParams: {
+        checkUuid: exampleCheckUuid,
       },
-    ]
-  }
+      queryParams: exampleQueryParams,
+      staticPreview: renderWebsiteStatus({ isUp: true }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'Status',
-    }
+  static defaultBadgeData = {
+    label: 'Status',
   }
 
   async fetch({ checkUuid }) {
