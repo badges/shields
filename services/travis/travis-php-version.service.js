@@ -24,31 +24,23 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class TravisPhpVersion extends BaseJsonService {
-  static get category() {
-    return 'platform-support'
+  static category = 'platform-support'
+
+  static route = {
+    base: 'travis/php-v',
+    pattern: ':user/:repo/:branch+',
   }
 
-  static get route() {
-    return {
-      base: 'travis/php-v',
-      pattern: ':user/:repo/:branch+',
-    }
-  }
+  static examples = [
+    {
+      title: 'PHP version from Travis config',
+      namedParams: { user: 'symfony', repo: 'symfony', branch: 'master' },
+      staticPreview: this.render({ reduction: ['^7.1.3'] }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'PHP version from Travis config',
-        namedParams: { user: 'symfony', repo: 'symfony', branch: 'master' },
-        staticPreview: this.render({ reduction: ['^7.1.3'] }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'php',
-    }
+  static defaultBadgeData = {
+    label: 'php',
   }
 
   static render({ reduction, hasHhvm }) {
