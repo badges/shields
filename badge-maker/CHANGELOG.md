@@ -3,8 +3,8 @@
 ## 3.3.0
 
 - Readability improvements: a dark font color is automatically used when the badge's background is too light. For example: ![](https://img.shields.io/badge/hello-world-white)
-- Better CSS color compliance: thanks to a switch from *is-css-color* to *[css-color-converter](https://www.npmjs.com/package/css-color-converter)*, you can use a wider range of color formats from the latest CSS specification, for example `rgb(0 255 0)`
-- Less dependencies: *badge-maker* no longer depends on *camelcase*
+- Better CSS color compliance: thanks to a switch from _is-css-color_ to _[css-color-converter](https://www.npmjs.com/package/css-color-converter)_, you can use a wider range of color formats from the latest CSS specification, for example `rgb(0 255 0)`
+- Less dependencies: _badge-maker_ no longer depends on _camelcase_
 
 ## 3.2.0
 
