@@ -6,38 +6,30 @@ const NpmBase = require('./npm-base')
 const keywords = ['node']
 
 module.exports = class NpmCollaborators extends NpmBase {
-  static get category() {
-    return 'activity'
-  }
+  static category = 'activity'
 
-  static get route() {
-    return this.buildRoute('npm/collaborators', { withTag: false })
-  }
+  static route = this.buildRoute('npm/collaborators', { withTag: false })
 
-  static get examples() {
-    return [
-      {
-        title: 'npm collaborators',
-        pattern: ':packageName',
-        namedParams: { packageName: 'prettier' },
-        staticPreview: this.render({ collaborators: 6 }),
-        keywords,
-      },
-      {
-        title: 'npm collaborators',
-        pattern: ':packageName',
-        namedParams: { packageName: 'prettier' },
-        queryParams: { registry_uri: 'https://registry.npmjs.com' },
-        staticPreview: this.render({ collaborators: 6 }),
-        keywords,
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'npm collaborators',
+      pattern: ':packageName',
+      namedParams: { packageName: 'prettier' },
+      staticPreview: this.render({ collaborators: 6 }),
+      keywords,
+    },
+    {
+      title: 'npm collaborators',
+      pattern: ':packageName',
+      namedParams: { packageName: 'prettier' },
+      queryParams: { registry_uri: 'https://registry.npmjs.com' },
+      staticPreview: this.render({ collaborators: 6 }),
+      keywords,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'npm collaborators',
-    }
+  static defaultBadgeData = {
+    label: 'npm collaborators',
   }
 
   static render({ collaborators }) {

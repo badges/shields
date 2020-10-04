@@ -6,30 +6,24 @@ const NpmBase = require('./npm-base')
 // dependencies must be declared, or the `types` key must be set in
 // package.json.
 module.exports = class NpmTypeDefinitions extends NpmBase {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
 
-  static get route() {
-    return this.buildRoute('npm/types', { withTag: false })
-  }
+  static route = this.buildRoute('npm/types', { withTag: false })
 
-  static get examples() {
-    return [
-      {
-        title: 'npm type definitions',
-        pattern: ':packageName',
-        namedParams: { packageName: 'chalk' },
-        staticPreview: this.render({
-          supportedLanguages: ['TypeScript', 'Flow'],
-        }),
-        keywords: ['node', 'typescript', 'flow'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'npm type definitions',
+      pattern: ':packageName',
+      namedParams: { packageName: 'chalk' },
+      staticPreview: this.render({
+        supportedLanguages: ['TypeScript', 'Flow'],
+      }),
+      keywords: ['node', 'typescript', 'flow'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'types' }
+  static defaultBadgeData = {
+    label: 'types',
   }
 
   static render({ supportedLanguages }) {
