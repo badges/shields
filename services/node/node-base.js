@@ -7,8 +7,6 @@ const keywords = ['npm']
 module.exports = class NodeVersionBase extends NPMBase {
   static category = 'platform-support'
 
-  // static route = this.buildRoute(`node`, { withTag: true })
-
   static get examples() {
     const type = this.type
     const documentation = `

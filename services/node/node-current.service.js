@@ -5,7 +5,6 @@ const { versionColorForRangeCurrent } = require('./node-version-color')
 
 module.exports = class NodeCurrentVersion extends NodeVersionBase {
   static route = this.buildRoute('node/v', { withTag: true })
-  // static path = 'v'
 
   static defaultBadgeData = {
     label: 'node',
