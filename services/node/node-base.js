@@ -5,13 +5,7 @@ const NPMBase = require('../npm/npm-base')
 const keywords = ['npm']
 
 module.exports = class NodeVersionBase extends NPMBase {
-  static get category() {
-    return 'platform-support'
-  }
-
-  static get route() {
-    return this.buildRoute(`node/${this.path}`, { withTag: true })
-  }
+  static category = 'platform-support'
 
   static get examples() {
     const type = this.type

@@ -46,32 +46,24 @@ const intervalMap = {
 // This hits an entirely different API from the rest of the NPM services, so
 // it does not use NpmBase.
 module.exports = class NpmDownloads extends BaseJsonService {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'npm',
+    pattern: ':interval(dw|dm|dy|dt)/:scope(@.+)?/:packageName',
   }
 
-  static get route() {
-    return {
-      base: 'npm',
-      pattern: ':interval(dw|dm|dy|dt)/:scope(@.+)?/:packageName',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'npm',
-        namedParams: { interval: 'dw', packageName: 'localeval' },
-        staticPreview: this.render({ interval: 'dw', downloadCount: 30000 }),
-        keywords: ['node'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'npm',
+      namedParams: { interval: 'dw', packageName: 'localeval' },
+      staticPreview: this.render({ interval: 'dw', downloadCount: 30000 }),
+      keywords: ['node'],
+    },
+  ]
 
   // For testing.
-  static get _intervalMap() {
-    return intervalMap
-  }
+  static _intervalMap = intervalMap
 
   static render({ interval, downloadCount }) {
     const { messageSuffix } = intervalMap[interval]
