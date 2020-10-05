@@ -15,29 +15,23 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Ubuntu extends BaseJsonService {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'ubuntu/v',
+    pattern: ':packageName/:series?',
   }
 
-  static get route() {
-    return {
-      base: 'ubuntu/v',
-      pattern: ':packageName/:series?',
-    }
-  }
+  static examples = [
+    {
+      title: 'Ubuntu package',
+      namedParams: { series: 'bionic', packageName: 'ubuntu-wallpapers' },
+      staticPreview: renderVersionBadge({ version: '18.04.1-0ubuntu1' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Ubuntu package',
-        namedParams: { series: 'bionic', packageName: 'ubuntu-wallpapers' },
-        staticPreview: renderVersionBadge({ version: '18.04.1-0ubuntu1' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'ubuntu' }
+  static defaultBadgeData = {
+    label: 'ubuntu',
   }
 
   async fetch({ packageName, series }) {
