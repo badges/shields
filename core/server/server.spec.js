@@ -168,6 +168,28 @@ describe('The server', function () {
     })
   })
 
+  context('`requireCloudflare` is enabled', function () {
+    let server
+    afterEach(async function () {
+      if (server) {
+        server.stop()
+      }
+    })
+
+    it('should reject requests from localhost with an empty 200 response', async function () {
+      this.timeout(10000)
+      server = await createTestServer({ public: { requireCloudflare: true } })
+      await server.start()
+
+      const { statusCode, body } = await got(
+        `${server.baseUrl}badge/foo-bar-blue.svg`
+      )
+
+      expect(statusCode).to.be.equal(200)
+      expect(body).to.equal('')
+    })
+  })
+
   describe('configuration', function () {
     let server
     afterEach(async function () {

@@ -22,7 +22,6 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "joi": "17.2.1",
     "@sentry/node": "^5.24.2",
     "@shields_io/camp": "^18.0.0",
     "badge-maker": "file:badge-maker",
@@ -32,6 +31,7 @@
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.3",
     "chrome-web-store-item-property": "~1.2.0",
+    "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.2",
     "cross-env": "^7.0.2",
     "decamelize": "^3.2.0",
@@ -44,6 +44,7 @@
     "graphql": "^14.7.0",
     "graphql-tag": "^2.11.0",
     "ioredis": "4.17.3",
+    "joi": "17.2.1",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^3.14.0",
     "jsonpath": "~1.0.2",

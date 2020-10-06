@@ -6,6 +6,7 @@
 const path = require('path')
 const url = require('url')
 const { URL } = url
+const cloudflareMiddleware = require('cloudflare-middleware')
 const bytes = require('bytes')
 const Camp = require('@shields_io/camp')
 const originalJoi = require('joi')
@@ -186,6 +187,11 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
   influx_password: Joi.string().required(),
 })
+
+function addHandlerAtIndex(camp, index, handlerFn) {
+  camp.stack.splice(index, 0, handlerFn)
+}
+
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -276,6 +282,16 @@ class Server {
       port,
       pathname: '/',
     })
+  }
+
+  requireCloudflare() {
+    // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
+    // by Express but not Scoutcamp.
+    addHandlerAtIndex(this.camp, 0, function (req, res, next) {
+      req.ip = req.socket.remoteAddress
+      next()
+    })
+    addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
   }
 
   /**
@@ -409,6 +425,7 @@ class Server {
       ssl: { isSecure: secure, cert, key },
       cors: { allowedOrigin },
       rateLimit,
+      requireCloudflare,
     } = this.config.public
 
     log(`Server is starting up: ${this.baseUrl}`)
@@ -421,6 +438,10 @@ class Server {
       cert,
       key,
     }))
+
+    if (requireCloudflare) {
+      this.requireCloudflare()
+    }
 
     const { metricInstance } = this
     this.cleanupMonitor = sysMonitor.setRoutes(
