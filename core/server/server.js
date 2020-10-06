@@ -148,6 +148,7 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  requireCloudflare: Joi.boolean().required(),
 }).required()
 
 const privateConfigSchema = Joi.object({
