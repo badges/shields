@@ -285,6 +285,7 @@ class Server {
   }
 
   requireCloudflare() {
+    // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
     // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
     // by Express but not Scoutcamp.
     addHandlerAtIndex(this.camp, 0, function (req, res, next) {
