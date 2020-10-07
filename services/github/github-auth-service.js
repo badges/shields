@@ -3,7 +3,6 @@
 const gql = require('graphql-tag')
 const { mergeQueries } = require('../../core/base-service/graphql')
 const { BaseGraphqlService, BaseJsonService } = require('..')
-const { staticAuthConfigured } = require('./github-helpers')
 
 function createRequestFetcher(context, config) {
   const { sendAndCacheRequestWithCallbacks, githubApiProvider } = context
@@ -32,7 +31,7 @@ class GithubAuthV3Service extends BaseJsonService {
 class ConditionalGithubAuthV3Service extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
-    if (staticAuthConfigured()) {
+    if (context.githubApiProvider.globalToken) {
       this._requestFetcher = createRequestFetcher(context, config)
       this.staticAuthConfigured = true
     } else {
