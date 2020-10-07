@@ -184,7 +184,7 @@ Start the server using the Sentry DSN. You can set it:
 sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
 ```
 
-Or via [checked in config](server-secrets.md):
+Or via config as you would do with [server secrets](server-secrets.md):
 
 ```yml
 private:
