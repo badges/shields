@@ -131,11 +131,11 @@ if (allFiles.length > 100) {
         )
       }
 
-      if (diff.includes("require('joi')")) {
+      if (diff.includes("require('@hapi/joi')")) {
         fail(
           [
-            `Found import of 'joi' in \`${file}\`. <br>`,
-            "Joi must be imported as '@hapi/joi'.",
+            `Found import of '@hapi/joi' in \`${file}\`. <br>`,
+            "Joi must be imported as 'joi'.",
           ].join('')
         )
       }
