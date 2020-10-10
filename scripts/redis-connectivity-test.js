@@ -5,7 +5,6 @@ console.log(config)
 const GithubConstellation = require('../services/github/github-constellation')
 
 const { persistence } = new GithubConstellation({
-  persistence: config.public.persistence,
   service: config.public.services.github,
   private: config.private,
 })
