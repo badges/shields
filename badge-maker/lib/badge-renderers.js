@@ -43,15 +43,8 @@ function roundUpToOdd(val) {
   return val % 2 === 0 ? val + 1 : val
 }
 
-function preferredWidthOf(str) {
-  return roundUpToOdd((anafanafo(str) / 10) | 0)
-}
-
-function computeWidths({ label, message }) {
-  return {
-    labelWidth: preferredWidthOf(label),
-    messageWidth: preferredWidthOf(message),
-  }
+function preferredWidthOf(str, options) {
+  return roundUpToOdd(anafanafo(str, options) | 0)
 }
 
 function createAccessibleText({ label, message }) {
@@ -139,7 +132,10 @@ function renderText({
     return { renderedText: '', width: 0 }
   }
 
-  const textLength = preferredWidthOf(content)
+  const textLength = preferredWidthOf(content, {
+    size: '11px',
+    weight: 'normal',
+  })
   const escapedContent = escapeXml(content)
 
   const shadowMargin = 150 + verticalMargin
@@ -502,14 +498,16 @@ function social({
   })
   const hasMessage = message.length
 
-  let { labelWidth, messageWidth } = computeWidths({ label, message })
-  labelWidth += 10 + totalLogoWidth
-  messageWidth += 10
-  messageWidth -= 4
-
-  const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
-  const labelTextLength = (labelWidth - (10 + totalLogoWidth)) * 10
-  const escapedLabel = escapeXml(label)
+  const fontAttrs = { size: '11px', weight: 'bold' }
+  const labelTextWidth = preferredWidthOf(label, fontAttrs)
+  const messageTextWidth = preferredWidthOf(message, fontAttrs)
+  console.log({
+    label,
+    labelTextWidth,
+    messageTextWidth,
+  })
+  const labelRectWidth = labelTextWidth + totalLogoWidth
+  const messageRectWidth = messageTextWidth
 
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
@@ -519,17 +517,21 @@ function social({
   const accessibleText = createAccessibleText({ label, message })
 
   function renderMessageBubble() {
-    const messageBubbleMainX = labelWidth + 6.5
-    const messageBubbleNotchX = labelWidth + 6
+    const messageBubbleMainX = labelRectWidth + 6.5
+    const messageBubbleNotchX = labelRectWidth + 6
     return `
-      <rect x="${messageBubbleMainX}" y="0.5" width="${messageWidth}" height="${internalHeight}" rx="2" fill="#fafafa"/>
+      <rect x="${messageBubbleMainX}" y="0.5" width="${messageRectWidth}" height="${internalHeight}" rx="2" fill="#fafafa"/>
       <rect x="${messageBubbleNotchX}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
       <path d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
     `
   }
 
   function renderLabelText() {
-    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelWidth}" height="${internalHeight}" rx="2" />`
+    const labelTextX = ((labelTextWidth + totalLogoWidth) / 2) * 10
+    const labelTextLength = 10 * labelTextWidth
+    const escapedLabel = escapeXml(label)
+
+    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelRectWidth}" height="${internalHeight}" rx="2" />`
     const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
     const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
@@ -549,11 +551,11 @@ function social({
   }
 
   function renderMessageText() {
-    const messageTextX = (labelWidth + messageWidth / 2 + 6) * 10
-    const messageTextLength = (messageWidth - 8) * 10
+    const messageTextX = 10 * (labelRectWidth + 6 + messageRectWidth / 2)
+    const messageTextLength = 10 * messageTextWidth
     const escapedMessage = escapeXml(message)
-    const rect = `<rect width="${messageWidth + 1}" x="${
-      labelWidth + 6
+    const rect = `<rect width="${messageRectWidth + 1}" x="${
+      labelRectWidth + 6
     }" height="${internalHeight + 1}" fill="rgba(0,0,0,0)" />`
     const shadow = `<text aria-hidden="true" x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
     const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
@@ -575,8 +577,8 @@ function social({
   const badge = renderBadge(
     {
       links,
-      leftWidth: labelWidth + 1,
-      rightWidth: hasMessage ? messageWidth + 6 : 0,
+      leftWidth: labelRectWidth + 1,
+      rightWidth: hasMessage ? messageRectWidth + 6 : 0,
       accessibleText,
       height: externalHeight,
     },
@@ -591,7 +593,7 @@ function social({
       <stop offset="1" stop-opacity=".1"/>
     </linearGradient>
     <g stroke="#d5d5d5">
-      <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="${labelWidth}" height="${internalHeight}" rx="2"/>
+      <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="${labelRectWidth}" height="${internalHeight}" rx="2"/>
       ${hasMessage ? renderMessageBubble() : ''}
     </g>
     ${renderedLogo}
@@ -624,7 +626,13 @@ function forTheBadge({
   label = label.toUpperCase()
   message = message.toUpperCase()
 
-  let { labelWidth, messageWidth } = computeWidths({ label, message })
+  let labelWidth =
+    preferredWidthOf(label, { size: '10px', weight: 'normal' }) || 0
+  let messageWidth =
+    preferredWidthOf(message, {
+      size: '10px',
+      weight: 'bold',
+    }) || 0
   const height = 28
   const hasLabel = label.length || labelColor
   if (labelColor == null) {
@@ -641,7 +649,9 @@ function forTheBadge({
 
   labelWidth += 10 + totalLogoWidth
   if (label.length) {
-    labelWidth += 10 + label.length * 1.5
+    // Add 10 px of padding, plus approximately 1 px of letter spacing per
+    // character.
+    labelWidth += 10 + 2 * label.length
   } else if (hasLogo) {
     if (hasLabel) {
       labelWidth += 7
@@ -652,8 +662,9 @@ function forTheBadge({
     labelWidth -= 11
   }
 
-  messageWidth += 10
-  messageWidth += 10 + message.length * 2
+  // Add 20 px of padding, plus approximately 1.5 px of letter spacing per
+  // character.
+  messageWidth += 20 + 1.5 * message.length
   const leftWidth = hasLogo && !hasLabel ? 0 : labelWidth
   const rightWidth =
     hasLogo && !hasLabel ? messageWidth + labelWidth : messageWidth
