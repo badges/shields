@@ -3,29 +3,23 @@
 const UptimeRobotBase = require('./uptimerobot-base')
 
 module.exports = class UptimeRobotStatus extends UptimeRobotBase {
-  static get route() {
-    return {
-      base: 'uptimerobot/status',
-      pattern: ':monitorSpecificKey',
-    }
+  static route = {
+    base: 'uptimerobot/status',
+    pattern: ':monitorSpecificKey',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'Uptime Robot status',
-        namedParams: {
-          monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
-        },
-        staticPreview: this.render({ status: 2 }),
+  static examples = [
+    {
+      title: 'Uptime Robot status',
+      namedParams: {
+        monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
       },
-    ]
-  }
+      staticPreview: this.render({ status: 2 }),
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'status',
-    }
+  static defaultBadgeData = {
+    label: 'status',
   }
 
   static render({ status }) {

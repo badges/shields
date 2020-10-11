@@ -15,36 +15,28 @@ const documentation = `
 // due differences in how the Marketplace tracks metrics for Azure DevOps extensions vs. other extension types.
 // See https://github.com/badges/shields/pull/2748 for more information on the discussion and decision.
 module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends VisualStudioMarketplaceBase {
-  static get category() {
-    return 'downloads'
+  static category = 'downloads'
+
+  static route = {
+    base: 'visual-studio-marketplace/azure-devops/installs',
+    pattern: ':measure(total|onprem|services)/:extensionId',
   }
 
-  static get route() {
-    return {
-      base: 'visual-studio-marketplace/azure-devops/installs',
-      pattern: ':measure(total|onprem|services)/:extensionId',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Visual Studio Marketplace Installs - Azure DevOps Extension',
-        namedParams: {
-          measure: 'total',
-          extensionId: 'swellaby.mirror-git-repository',
-        },
-        staticPreview: this.render({ count: 651 }),
-        keywords: this.keywords,
-        documentation,
+  static examples = [
+    {
+      title: 'Visual Studio Marketplace Installs - Azure DevOps Extension',
+      namedParams: {
+        measure: 'total',
+        extensionId: 'swellaby.mirror-git-repository',
       },
-    ]
-  }
+      staticPreview: this.render({ count: 651 }),
+      keywords: this.keywords,
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'installs',
-    }
+  static defaultBadgeData = {
+    label: 'installs',
   }
 
   static render({ count }) {

@@ -3,28 +3,24 @@
 const { SymfonyInsightBase, keywords } = require('./symfony-insight-base')
 
 module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
-  static get route() {
-    return {
-      base: 'symfony/i/violations',
-      pattern: ':projectUuid',
-    }
+  static route = {
+    base: 'symfony/i/violations',
+    pattern: ':projectUuid',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'SymfonyInsight Violations',
-        namedParams: {
-          projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
-        },
-        staticPreview: this.render({
-          numViolations: 0,
-          status: 'finished',
-        }),
-        keywords,
+  static examples = [
+    {
+      title: 'SymfonyInsight Violations',
+      namedParams: {
+        projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
       },
-    ]
-  }
+      staticPreview: this.render({
+        numViolations: 0,
+        status: 'finished',
+      }),
+      keywords,
+    },
+  ]
 
   static render({
     status,

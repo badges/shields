@@ -4,29 +4,21 @@ const PypiBase = require('./pypi-base')
 const { getPackageFormats } = require('./pypi-helpers')
 
 module.exports = class PypiWheel extends PypiBase {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
 
-  static get route() {
-    return this.buildRoute('pypi/wheel')
-  }
+  static route = this.buildRoute('pypi/wheel')
 
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - Wheel',
-        pattern: ':packageName',
-        namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ hasWheel: true }),
-        keywords: ['python'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'PyPI - Wheel',
+      pattern: ':packageName',
+      namedParams: { packageName: 'Django' },
+      staticPreview: this.render({ hasWheel: true }),
+      keywords: ['python'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'wheel' }
-  }
+  static defaultBadgeData = { label: 'wheel' }
 
   static render({ hasWheel }) {
     if (hasWheel) {

@@ -1,10 +1,7 @@
 'use strict'
 
-const path = require('path')
 const { AuthHelper } = require('../../core/base-service/auth-helper')
 const RedisTokenPersistence = require('../../core/token-pooling/redis-token-persistence')
-const FsTokenPersistence = require('../../core/token-pooling/fs-token-persistence')
-const serverSecrets = require('../../lib/server-secrets')
 const log = require('../../core/server/log')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
@@ -28,28 +25,19 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
+    this.shieldsSecret = config.private.shields_secret
 
-    const { redis_url: redisUrl } = config.private
-    const { dir: persistenceDir } = config.persistence
+    const { redis_url: redisUrl, gh_token: globalToken } = config.private
     if (redisUrl) {
-      log('RedisTokenPersistence configured with redisUrl')
+      log('Token persistence configured with redisUrl')
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
         key: 'githubUserTokens',
       })
-    } else {
-      const userTokensPath = path.resolve(
-        persistenceDir,
-        'github-user-tokens.json'
-      )
-      log(`FsTokenPersistence configured with ${userTokensPath}`)
-      this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
-    const globalToken = serverSecrets.gh_token
-    const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
     this.apiProvider = new GithubApiProvider({
-      baseUrl,
+      baseUrl: process.env.GITHUB_URL || 'https://api.github.com',
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
@@ -73,6 +61,10 @@ class GithubConstellation {
 
     this.scheduleDebugLogging()
 
+    if (!this.persistence) {
+      return
+    }
+
     let tokens = []
     try {
       tokens = await this.persistence.initialize()
@@ -84,7 +76,8 @@ class GithubConstellation {
       this.apiProvider.addToken(tokenString)
     })
 
-    setAdminRoutes(this.apiProvider, server)
+    const { shieldsSecret, apiProvider } = this
+    setAdminRoutes({ shieldsSecret }, { apiProvider, server })
 
     if (this.oauthHelper.isConfigured) {
       setAcceptorRoutes({
@@ -96,6 +89,9 @@ class GithubConstellation {
   }
 
   onTokenAdded(tokenString) {
+    if (!this.persistence) {
+      throw Error('Token persistence is not configured')
+    }
     this.apiProvider.addToken(tokenString)
     process.nextTick(async () => {
       try {
@@ -107,13 +103,15 @@ class GithubConstellation {
   }
 
   onTokenInvalidated(tokenString) {
-    process.nextTick(async () => {
-      try {
-        await this.persistence.noteTokenRemoved(tokenString)
-      } catch (e) {
-        log.error(e)
-      }
-    })
+    if (this.persistence) {
+      process.nextTick(async () => {
+        try {
+          await this.persistence.noteTokenRemoved(tokenString)
+        } catch (e) {
+          log.error(e)
+        }
+      })
+    }
   }
 
   async stop() {
@@ -122,10 +120,12 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    try {
-      await this.persistence.stop()
-    } catch (e) {
-      log.error(e)
+    if (this.persistence) {
+      try {
+        await this.persistence.stop()
+      } catch (e) {
+        log.error(e)
+      }
     }
   }
 }

@@ -4,29 +4,21 @@ const PypiBase = require('./pypi-base')
 const { parseClassifiers } = require('./pypi-helpers')
 
 module.exports = class PypiStatus extends PypiBase {
-  static get category() {
-    return 'other'
-  }
+  static category = 'other'
 
-  static get route() {
-    return this.buildRoute('pypi/status')
-  }
+  static route = this.buildRoute('pypi/status')
 
-  static get examples() {
-    return [
-      {
-        title: 'PyPI - Status',
-        pattern: ':packageName',
-        namedParams: { packageName: 'Django' },
-        staticPreview: this.render({ status: 'stable' }),
-        keywords: ['python'],
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'PyPI - Status',
+      pattern: ':packageName',
+      namedParams: { packageName: 'Django' },
+      staticPreview: this.render({ status: 'stable' }),
+      keywords: ['python'],
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'status' }
-  }
+  static defaultBadgeData = { label: 'status' }
 
   static render({ status = '' }) {
     status = status.toLowerCase()

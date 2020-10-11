@@ -4,33 +4,25 @@ const { renderVersionBadge } = require('../version')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
 module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: '',
+    pattern: '(visual-studio-marketplace|vscode-marketplace)/v/:extensionId',
   }
 
-  static get route() {
-    return {
-      base: '',
-      pattern: '(visual-studio-marketplace|vscode-marketplace)/v/:extensionId',
-    }
-  }
+  static examples = [
+    {
+      title: 'Visual Studio Marketplace Version',
+      pattern: 'visual-studio-marketplace/v/:extensionId',
+      namedParams: { extensionId: 'swellaby.rust-pack' },
+      staticPreview: this.render({ version: '0.2.7' }),
+      keywords: this.keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Visual Studio Marketplace Version',
-        pattern: 'visual-studio-marketplace/v/:extensionId',
-        namedParams: { extensionId: 'swellaby.rust-pack' },
-        staticPreview: this.render({ version: '0.2.7' }),
-        keywords: this.keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'version',
-    }
+  static defaultBadgeData = {
+    label: 'version',
   }
 
   static render({ version }) {

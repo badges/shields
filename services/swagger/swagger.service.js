@@ -20,34 +20,28 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class SwaggerValidatorService extends BaseJsonService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'swagger/valid',
+    pattern: '3.0',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'swagger/valid',
-      pattern: '3.0',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Swagger Validator',
-        staticPreview: this.render({ status: 'valid' }),
-        namedParams: {},
-        queryParams: {
-          specUrl:
-            'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
-        },
+  static examples = [
+    {
+      title: 'Swagger Validator',
+      staticPreview: this.render({ status: 'valid' }),
+      namedParams: {},
+      queryParams: {
+        specUrl:
+          'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
       },
-    ]
-  }
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'swagger' }
+  static defaultBadgeData = {
+    label: 'swagger',
   }
 
   static render({ status }) {
