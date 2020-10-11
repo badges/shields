@@ -132,10 +132,7 @@ function renderText({
     return { renderedText: '', width: 0 }
   }
 
-  const textLength = preferredWidthOf(content, {
-    size: '11px',
-    weight: 'normal',
-  })
+  const textLength = preferredWidthOf(content, { font: '11px Verdana' })
   const escapedContent = escapeXml(content)
 
   const shadowMargin = 150 + verticalMargin
@@ -498,9 +495,9 @@ function social({
   })
   const hasMessage = message.length
 
-  const fontAttrs = { size: '11px', weight: 'bold' }
-  const labelTextWidth = preferredWidthOf(label, fontAttrs)
-  const messageTextWidth = preferredWidthOf(message, fontAttrs)
+  const font = 'bold 11px Helvetica'
+  const labelTextWidth = preferredWidthOf(label, { font })
+  const messageTextWidth = preferredWidthOf(message, { font })
   console.log({
     label,
     labelTextWidth,
@@ -626,13 +623,9 @@ function forTheBadge({
   label = label.toUpperCase()
   message = message.toUpperCase()
 
-  let labelWidth =
-    preferredWidthOf(label, { size: '10px', weight: 'normal' }) || 0
+  let labelWidth = preferredWidthOf(label, { font: '10px Verdana' }) || 0
   let messageWidth =
-    preferredWidthOf(message, {
-      size: '10px',
-      weight: 'bold',
-    }) || 0
+    preferredWidthOf(message, { font: 'bold 10px Verdana' }) || 0
   const height = 28
   const hasLabel = label.length || labelColor
   if (labelColor == null) {
