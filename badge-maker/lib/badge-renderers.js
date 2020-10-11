@@ -486,6 +486,7 @@ function social({
   const externalHeight = 20
   const internalHeight = 19
   const horizPadding = 5
+  const horizGutter = 6
   const { totalLogoWidth, renderedLogo } = renderLogo({
     logo,
     badgeHeight: externalHeight,
@@ -498,13 +499,8 @@ function social({
   const font = 'bold 11px Helvetica'
   const labelTextWidth = preferredWidthOf(label, { font })
   const messageTextWidth = preferredWidthOf(message, { font })
-  console.log({
-    label,
-    labelTextWidth,
-    messageTextWidth,
-  })
-  const labelRectWidth = labelTextWidth + totalLogoWidth
-  const messageRectWidth = messageTextWidth
+  const labelRectWidth = labelTextWidth + totalLogoWidth + 2 * horizPadding
+  const messageRectWidth = messageTextWidth + 2 * horizPadding
 
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
@@ -514,8 +510,8 @@ function social({
   const accessibleText = createAccessibleText({ label, message })
 
   function renderMessageBubble() {
-    const messageBubbleMainX = labelRectWidth + 6.5
-    const messageBubbleNotchX = labelRectWidth + 6
+    const messageBubbleMainX = labelRectWidth + horizGutter + 0.5
+    const messageBubbleNotchX = labelRectWidth + horizGutter
     return `
       <rect x="${messageBubbleMainX}" y="0.5" width="${messageRectWidth}" height="${internalHeight}" rx="2" fill="#fafafa"/>
       <rect x="${messageBubbleNotchX}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
@@ -524,7 +520,7 @@ function social({
   }
 
   function renderLabelText() {
-    const labelTextX = ((labelTextWidth + totalLogoWidth) / 2) * 10
+    const labelTextX = 10 * (totalLogoWidth + labelTextWidth / 2 + horizPadding)
     const labelTextLength = 10 * labelTextWidth
     const escapedLabel = escapeXml(label)
 
@@ -548,11 +544,12 @@ function social({
   }
 
   function renderMessageText() {
-    const messageTextX = 10 * (labelRectWidth + 6 + messageRectWidth / 2)
+    const messageTextX =
+      10 * (labelRectWidth + horizGutter + messageRectWidth / 2)
     const messageTextLength = 10 * messageTextWidth
     const escapedMessage = escapeXml(message)
     const rect = `<rect width="${messageRectWidth + 1}" x="${
-      labelRectWidth + 6
+      labelRectWidth + horizGutter
     }" height="${internalHeight + 1}" fill="rgba(0,0,0,0)" />`
     const shadow = `<text aria-hidden="true" x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
     const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
