@@ -118,9 +118,6 @@ const publicConfigSchema = Joi.object({
   cors: {
     allowedOrigin: Joi.array().items(optionalUrl).required(),
   },
-  persistence: {
-    dir: Joi.string().required(),
-  },
   services: Joi.object({
     bitbucketServer: defaultService,
     drone: defaultService,
@@ -230,7 +227,6 @@ class Server {
     }
 
     this.githubConstellation = new GithubConstellation({
-      persistence: publicConfig.persistence,
       service: publicConfig.services.github,
       private: privateConfig,
     })

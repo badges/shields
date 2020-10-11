@@ -30,9 +30,6 @@ public:
       __name: 'ALLOWED_ORIGIN'
       __format: 'json'
 
-  persistence:
-    dir: 'PERSISTENCE_DIR'
-
   services:
     bitbucketServer:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'

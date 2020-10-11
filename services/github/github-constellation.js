@@ -1,9 +1,7 @@
 'use strict'
 
-const path = require('path')
 const { AuthHelper } = require('../../core/base-service/auth-helper')
 const RedisTokenPersistence = require('../../core/token-pooling/redis-token-persistence')
-const FsTokenPersistence = require('../../core/token-pooling/fs-token-persistence')
 const log = require('../../core/server/log')
 const GithubApiProvider = require('./github-api-provider')
 const { setRoutes: setAdminRoutes } = require('./auth/admin')
@@ -30,20 +28,12 @@ class GithubConstellation {
     this.shieldsSecret = config.private.shields_secret
 
     const { redis_url: redisUrl, gh_token: globalToken } = config.private
-    const { dir: persistenceDir } = config.persistence
     if (redisUrl) {
-      log('RedisTokenPersistence configured with redisUrl')
+      log('Token persistence configured with redisUrl')
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
         key: 'githubUserTokens',
       })
-    } else {
-      const userTokensPath = path.resolve(
-        persistenceDir,
-        'github-user-tokens.json'
-      )
-      log(`FsTokenPersistence configured with ${userTokensPath}`)
-      this.persistence = new FsTokenPersistence({ path: userTokensPath })
     }
 
     this.apiProvider = new GithubApiProvider({
@@ -71,6 +61,10 @@ class GithubConstellation {
 
     this.scheduleDebugLogging()
 
+    if (!this.persistence) {
+      return
+    }
+
     let tokens = []
     try {
       tokens = await this.persistence.initialize()
@@ -95,6 +89,9 @@ class GithubConstellation {
   }
 
   onTokenAdded(tokenString) {
+    if (!this.persistence) {
+      throw Error('Token persistence is not configured')
+    }
     this.apiProvider.addToken(tokenString)
     process.nextTick(async () => {
       try {
@@ -106,13 +103,15 @@ class GithubConstellation {
   }
 
   onTokenInvalidated(tokenString) {
-    process.nextTick(async () => {
-      try {
-        await this.persistence.noteTokenRemoved(tokenString)
-      } catch (e) {
-        log.error(e)
-      }
-    })
+    if (this.persistence) {
+      process.nextTick(async () => {
+        try {
+          await this.persistence.noteTokenRemoved(tokenString)
+        } catch (e) {
+          log.error(e)
+        }
+      })
+    }
   }
 
   async stop() {
@@ -121,10 +120,12 @@ class GithubConstellation {
       this.debugInterval = undefined
     }
 
-    try {
-      await this.persistence.stop()
-    } catch (e) {
-      log.error(e)
+    if (this.persistence) {
+      try {
+        await this.persistence.stop()
+      } catch (e) {
+        log.error(e)
+      }
     }
   }
 }

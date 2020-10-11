@@ -16,9 +16,6 @@ public:
   cors:
     allowedOrigin: []
 
-  persistence:
-    dir: './private'
-
   services:
     github:
       baseUri: 'https://api.github.com/'
