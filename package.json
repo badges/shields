@@ -193,7 +193,7 @@
     "gatsby": "2.24.65",
     "gatsby-plugin-catch-links": "^2.3.10",
     "gatsby-plugin-page-creator": "^2.3.30",
-    "gatsby-plugin-react-helmet": "^3.3.9",
+    "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.10",
     "gatsby-plugin-styled-components": "^3.3.9",
     "gatsby-plugin-typescript": "^2.4.16",
