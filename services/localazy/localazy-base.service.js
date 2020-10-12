@@ -7,7 +7,7 @@ const schema = Joi.object({
   label: Joi.string(),
   message: Joi.string(),
   color: Joi.string(),
-}).required()
+})
 
 module.exports = class LocalazyBase extends BaseJsonService {
   static category = 'other'
@@ -38,7 +38,7 @@ module.exports = class LocalazyBase extends BaseJsonService {
   }
 
   async fetch({ projectId, title, content }) {
-    return await this._requestJson({
+    return this._requestJson({
       schema,
       url: `https://connect.localazy.com/status/${projectId}/data`,
       options: {

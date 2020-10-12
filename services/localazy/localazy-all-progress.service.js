@@ -3,7 +3,7 @@
 const LocalazyBase = require('./localazy-base.service')
 
 module.exports = class LocalazyAllProgress extends LocalazyBase {
-  static route = this.buildRoute('')
+  static route = this.buildRoute()
 
   static examples = [
     {
@@ -27,7 +27,6 @@ module.exports = class LocalazyAllProgress extends LocalazyBase {
       title: 'translated',
       content: 'progress',
     })
-    console.log(label, message, color)
     return this.constructor.render({ message, label, color })
   }
 }
