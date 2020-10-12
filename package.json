@@ -30,6 +30,7 @@
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.3",
     "chrome-web-store-item-property": "~1.2.0",
+    "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.2",
     "cross-env": "^7.0.2",
     "decamelize": "^3.2.0",
