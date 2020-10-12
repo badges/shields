@@ -1,33 +1,131 @@
 'use strict'
 
-const { deprecatedService } = require('..')
+const { floorCount: floorCountColor } = require('../color-formatters')
+const { metric, starRating } = require('../text-formatters')
+const { NotFound } = require('..')
+const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
-const commonAttrs = {
-  category: 'rating',
-  label: 'rating',
-  dateAdded: new Date('2020-09-06'),
+class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
+  static get category() {
+    return 'rating'
+  }
+
+  static get defaultBadgeData() {
+    return { label: 'rating' }
+  }
 }
 
-module.exports = [
-  deprecatedService({
-    route: {
+class ChromeWebStoreRating extends BaseChromeWebStoreRating {
+  static get route() {
+    return {
       base: 'chrome-web-store/rating',
       pattern: ':storeId',
-    },
-    ...commonAttrs,
-  }),
-  deprecatedService({
-    route: {
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
+        staticPreview: this.render({ rating: '3.67' }),
+      },
+    ]
+  }
+
+  static render({ rating }) {
+    rating = Math.round(rating * 100) / 100
+    return {
+      message: `${rating}/5`,
+      color: floorCountColor(rating, 2, 3, 4),
+    }
+  }
+
+  async handle({ storeId }) {
+    const chromeWebStore = await this.fetch({ storeId })
+    const rating = chromeWebStore.ratingValue()
+    if (rating == null) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+    return this.constructor.render({ rating })
+  }
+}
+
+class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
+  static get route() {
+    return {
       base: 'chrome-web-store/rating-count',
       pattern: ':storeId',
-    },
-    ...commonAttrs,
-  }),
-  deprecatedService({
-    route: {
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
+        staticPreview: this.render({ ratingCount: 12 }),
+      },
+    ]
+  }
+
+  static render({ ratingCount }) {
+    return {
+      message: `${metric(ratingCount)} total`,
+      color: floorCountColor(ratingCount, 5, 50, 500),
+    }
+  }
+
+  async handle({ storeId }) {
+    const chromeWebStore = await this.fetch({
+      storeId,
+      property: 'ratingCount',
+    })
+    const ratingCount = chromeWebStore.ratingCount()
+    if (ratingCount == null) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+    return this.constructor.render({ ratingCount })
+  }
+}
+
+class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
+  static get route() {
+    return {
       base: 'chrome-web-store/stars',
       pattern: ':storeId',
-    },
-    ...commonAttrs,
-  }),
-]
+    }
+  }
+
+  static get examples() {
+    return [
+      {
+        title: 'Chrome Web Store',
+        namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
+        staticPreview: this.render({ rating: '3.75' }),
+      },
+    ]
+  }
+
+  static render({ rating }) {
+    return {
+      message: starRating(rating),
+      color: floorCountColor(rating, 2, 3, 4),
+    }
+  }
+
+  async handle({ storeId }) {
+    const chromeWebStore = await this.fetch({ storeId })
+    const rating = chromeWebStore.ratingValue()
+    if (rating == null) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+    return this.constructor.render({ rating })
+  }
+}
+
+module.exports = {
+  ChromeWebStoreRating,
+  ChromeWebStoreRatingCount,
+  ChromeWebStoreRatingStars,
+}
