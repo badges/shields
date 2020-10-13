@@ -2,7 +2,7 @@
 
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Localazy overall progress')
+t.create('Localazy translation progress with langs')
   .get('/floating-apps.json')
   .intercept(nock =>
     nock('https://connect.localazy.com')
