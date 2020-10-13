@@ -23,7 +23,7 @@ t.create('version (valid)')
   })
 
 t.create('version (valid, out of date)')
-  .get('/version/gog-gemini-rue.json')
+  .get('/version/dasht.json')
   .expectBadge({
     label: 'aur',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
