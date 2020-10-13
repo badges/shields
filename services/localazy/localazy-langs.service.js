@@ -27,7 +27,6 @@ module.exports = class LocalazyLangs extends LocalazyBase {
       title: 'translated',
       content: 'langs',
     })
-    console.log(label, message, color)
     return this.constructor.render({ message, label, color })
   }
 }
