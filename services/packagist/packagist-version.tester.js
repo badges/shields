@@ -36,7 +36,7 @@ t.create('version (invalid package name)')
   .expectBadge({ label: 'packagist', message: 'not found' })
 
 t.create('pre-release version (valid)')
-  .get('/v/symfony/symfony.json?include_prereleases')
+  .get('/v/guzzlehttp/guzzle.json?include_prereleases')
   .expectBadge({
     label: 'packagist',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
