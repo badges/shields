@@ -102,7 +102,13 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (Object.keys(version.images).length === 0) {
         return { version: version.name }
       }
-      const { digest } = version.images.find(i => i.architecture === 'amd64')
+      const image = version.images.find(i => i.architecture === 'amd64')
+      if (!image) {
+        throw new InvalidResponse({
+          prettyMessage: 'digest not found for given tag',
+        })
+      }
+      const { digest } = image
       return { version: getDigestSemVerMatches({ data, digest }) }
     }
   }
