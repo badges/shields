@@ -280,12 +280,18 @@ class Server {
     })
   }
 
+  // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
   requireCloudflare() {
-    // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
     // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
     // by Express but not Scoutcamp.
     addHandlerAtIndex(this.camp, 0, function (req, res, next) {
-      req.ip = req.socket.remoteAddress
+      // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
+      // the router ensures that the last item in the `X-Forwarded-For` header
+      // is the real origin.
+      // https://stackoverflow.com/a/18517550/893113
+      req.ip = process.env.DYNO
+        ? req.headers['x-forwarded-for'].split(', ').pop()
+        : req.socket.remoteAddress
       next()
     })
     addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
