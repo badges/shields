@@ -79,6 +79,7 @@ describe('DockerVersion', function () {
       .with.property('prettyMessage', 'digest not found for latest tag')
   })
 
+  // https://github.com/badges/shields/issues/5535
   it('throws InvalidResponse error with custom tag and no amd64 architecture digests', function () {
     expect(() => {
       DockerVersion.prototype.transform({
