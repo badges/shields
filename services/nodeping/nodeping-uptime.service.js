@@ -41,9 +41,7 @@ module.exports = class NodePingUptime extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'Uptime',
-  }
+  static defaultBadgeData = { label: 'uptime' }
 
   static formatPercentage(uptime) {
     if (uptime === 100.0) {

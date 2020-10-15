@@ -37,9 +37,7 @@ module.exports = class NodePingStatus extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'Status',
-  }
+  static defaultBadgeData = { label: 'status' }
 
   async fetch({ checkUuid }) {
     const rows = await this._requestJson({
