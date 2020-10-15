@@ -285,6 +285,8 @@ class Server {
     // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
     // by Express but not Scoutcamp.
     addHandlerAtIndex(this.camp, 0, function (req, res, next) {
+      console.log('req.socket.remoteAddress', req.socket.remoteAddress)
+      console.log('req.headers', req.headers)
       req.ip = req.socket.remoteAddress
       next()
     })
