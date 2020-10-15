@@ -78,4 +78,32 @@ describe('DockerVersion', function () {
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'digest not found for latest tag')
   })
+
+  // https://github.com/badges/shields/issues/5535
+  it('throws InvalidResponse error with custom tag and no amd64 architecture digests', function () {
+    expect(() => {
+      DockerVersion.prototype.transform({
+        tag: '3.10',
+        data: [
+          {
+            name: '3.10',
+            images: [
+              {
+                architecture: 'arm64',
+                digest:
+                  'sha256:597bd5c319cc09d6bb295b4ef23cac50ec7c373fff5fe923cfd246ec09967b31',
+              },
+              {
+                architecture: 'arm',
+                digest:
+                  'sha256:c5ea49127cd44d0f50eafda229a056bb83b6e691883c56fd863d42675fae3909',
+              },
+            ],
+          },
+        ],
+      })
+    })
+      .to.throw(InvalidResponse)
+      .with.property('prettyMessage', 'digest not found for given tag')
+  })
 })
