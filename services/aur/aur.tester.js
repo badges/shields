@@ -22,14 +22,6 @@ t.create('version (valid)')
     color: 'blue',
   })
 
-t.create('version (valid, out of date)')
-  .get('/version/gog-gemini-rue.json')
-  .expectBadge({
-    label: 'aur',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    color: 'orange',
-  })
-
 t.create('version (not found)')
   .get('/version/not-a-package.json')
   .expectBadge({ label: 'aur', message: 'package not found' })

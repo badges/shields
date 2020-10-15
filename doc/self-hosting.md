@@ -205,3 +205,9 @@ METRICS_PROMETHEUS_ENABLED=true npm start
 ```
 
 Metrics are available at `/metrics` resource.
+
+### Cloudflare
+
+Shields uses Cloudflare as a downstream CDN. If your installation does the same,
+you can configure your server to only accept requests coming from Cloudflare's IPs.
+Set `public.requireCloudflare: true`.
