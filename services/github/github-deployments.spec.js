@@ -23,6 +23,12 @@ describe('GithubDeployments', function () {
       message: 'in progress',
       color: undefined,
     })
+    given({
+      state: 'NO_STATUS',
+    }).expect({
+      message: 'no status yet',
+      color: undefined,
+    })
   })
 
   test(GithubDeployments.prototype.transform, () => {
@@ -47,7 +53,9 @@ describe('GithubDeployments', function () {
           },
         },
       },
-    }).expectError('Not Found: deployment has no status (yet)')
+    }).expect({
+      state: 'NO_STATUS',
+    })
     given({
       data: {
         repository: {
