@@ -485,12 +485,13 @@ function social({
 
   const externalHeight = 20
   const internalHeight = 19
-  const horizPadding = 5
+  const labelHorizPadding = 5
+  const messageHorizPadding = 4
   const horizGutter = 6
   const { totalLogoWidth, renderedLogo } = renderLogo({
     logo,
     badgeHeight: externalHeight,
-    horizPadding,
+    horizPadding: labelHorizPadding,
     logoWidth,
     logoPadding,
   })
@@ -499,8 +500,8 @@ function social({
   const font = 'bold 11px Helvetica'
   const labelTextWidth = preferredWidthOf(label, { font })
   const messageTextWidth = preferredWidthOf(message, { font })
-  const labelRectWidth = labelTextWidth + totalLogoWidth + 2 * horizPadding
-  const messageRectWidth = messageTextWidth + 2 * horizPadding
+  const labelRectWidth = labelTextWidth + totalLogoWidth + 2 * labelHorizPadding
+  const messageRectWidth = messageTextWidth + 2 * messageHorizPadding
 
   let [leftLink, rightLink] = links
   leftLink = escapeXml(leftLink)
@@ -520,7 +521,8 @@ function social({
   }
 
   function renderLabelText() {
-    const labelTextX = 10 * (totalLogoWidth + labelTextWidth / 2 + horizPadding)
+    const labelTextX =
+      10 * (totalLogoWidth + labelTextWidth / 2 + labelHorizPadding)
     const labelTextLength = 10 * labelTextWidth
     const escapedLabel = escapeXml(label)
 
@@ -572,7 +574,7 @@ function social({
     {
       links,
       leftWidth: labelRectWidth + 1,
-      rightWidth: hasMessage ? messageRectWidth + 6 : 0,
+      rightWidth: hasMessage ? horizGutter + messageRectWidth : 0,
       accessibleText,
       height: externalHeight,
     },
