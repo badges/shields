@@ -82,7 +82,7 @@ harness will call it for you.
 [icedfrisby api]: https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md
 [joi]: https://github.com/hapijs/joi
 [joi api]: https://github.com/hapijs/joi/blob/master/API.md
-[RegExp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+[regexp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 
 ### (3) Running the Tests
 
