@@ -314,7 +314,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['410', `${format} no longer available`],
+          label: '410',
+          message: `${format} no longer available`,
           color: 'lightgray',
           format: 'svg',
         })
@@ -329,7 +330,8 @@ class Server {
           end
         )(
           makeBadge({
-            text: ['404', 'raster badges not available'],
+            label: '404',
+            message: 'raster badges not available',
             color: 'lightgray',
             format: 'svg',
           })
@@ -347,7 +349,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['404', 'badge not found'],
+          label: '404',
+          message: 'badge not found',
           color: 'red',
           format,
         })
