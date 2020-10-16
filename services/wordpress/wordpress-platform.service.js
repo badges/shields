@@ -17,45 +17,47 @@ const extensionData = {
   },
 }
 
-class WordpressPluginRequiresVersion extends BaseWordpress {
-  static get category() {
-    return 'platform-support'
-  }
+function WordpressRequiresVersion(extensionType) {
+  const { capt, exampleSlug } = extensionData[extensionType]
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/wp-version`,
-      pattern: ':slug',
+  return class WordpressRequiresVersion extends BaseWordpress {
+    static name = `Wordpress${capt}RequiresVersion`
+
+    static category = 'platform-support'
+
+    static get route() {
+      return {
+        base: `wordpress/${extensionType}/wp-version`,
+        pattern: ':slug',
+      }
     }
-  }
 
-  static get examples() {
-    return [
-      {
-        title: 'WordPress Plugin: Required WP Version',
-        namedParams: { slug: 'bbpress' },
-        staticPreview: this.render({ wordpressVersion: '4.8' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'wordpress' }
-  }
-
-  static render({ wordpressVersion }) {
-    return {
-      message: addv(wordpressVersion),
-      color: versionColor(wordpressVersion),
+    static get examples() {
+      return [
+        {
+          title: `WordPress ${capt}: Required WP Version`,
+          namedParams: { slug: exampleSlug },
+          staticPreview: this.render({ wordpressVersion: '4.8' }),
+        },
+      ]
     }
-  }
 
-  async handle({ slug }) {
-    const { requires: wordpressVersion } = await this.fetch({
-      extensionType: 'plugin',
-      slug,
-    })
-    return this.constructor.render({ wordpressVersion })
+    static defaultBadgeData = { label: 'wordpress' }
+
+    static render({ wordpressVersion }) {
+      return {
+        message: addv(wordpressVersion),
+        color: versionColor(wordpressVersion),
+      }
+    }
+
+    async handle({ slug }) {
+      const { requires: wordpressVersion } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ wordpressVersion })
+    }
   }
 }
 
@@ -166,8 +168,9 @@ function RequiresPHPVersionForType(extensionType) {
 }
 
 const required_php = ['plugin', 'theme'].map(RequiresPHPVersionForType)
+const requiresVersion = ['plugin', 'theme'].map(WordpressRequiresVersion)
 module.exports = {
-  WordpressPluginRequiresVersion,
+  ...requiresVersion,
   WordpressPluginTestedVersion,
   ...required_php,
 }

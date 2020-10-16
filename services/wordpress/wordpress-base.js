@@ -14,6 +14,7 @@ const themeSchema = Joi.object()
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
     requires_php: stringOrFalse.required(),
+    requires: stringOrFalse.required(),
   })
   .required()
 
