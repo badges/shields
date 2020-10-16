@@ -35,6 +35,7 @@ const mockedQuerySelector = {
       tags: '0',
       screenshot_url: '0',
       downloaded: 1,
+      last_updated: 1,
     },
   },
 }
@@ -57,6 +58,7 @@ t.create('Plugin Tested WP Version - current')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.8',
+        last_updated: '2020-01-01',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -81,6 +83,7 @@ t.create('Plugin Tested WP Version - old')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.6',
+        last_updated: '2020-01-01',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -105,6 +108,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
         active_installs: 100,
         requires: '4.0',
         tested: '4.0.0',
+        last_updated: '2020-01-01',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
