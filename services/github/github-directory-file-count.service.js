@@ -4,7 +4,20 @@ const path = require('path')
 const Joi = require('joi')
 const { InvalidParameter } = require('..')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+const {
+  documentation: commonDocumentation,
+  errorMessagesFor,
+} = require('./github-helpers')
+
+const documentation = `${commonDocumentation}
+<p>
+  <b>Note:</b><br>
+  1. Parameter <code>type</code> accepts either <code>file</code> or <code>dir</code> value. Passing other value will result in an error.<br>
+  2. Parameter <code>extension</code> accepts file extension without a leading dot.
+     For instance for <code>.js</code> extension pass <code>js</code>.
+     Only single extension value can be specified.<br>
+</p>
+`
 
 const schema = Joi.alternatives(
   /*
