@@ -7,6 +7,10 @@ const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.alternatives(
+  /*
+   alternative empty object schema to provide a custom error message
+   in the event a file path is provided by the user instead of a directory
+  */
   Joi.object({}).required(),
   Joi.array()
     .items(
