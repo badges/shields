@@ -84,7 +84,7 @@ function renderLogo({
     return {
       hasLogo: true,
       totalLogoWidth: logoWidth + logoPadding,
-      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="14" xlink:href="${escapeXml(
+      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="${logoHeight}" xlink:href="${escapeXml(
         logo
       )}"/>`,
     }
