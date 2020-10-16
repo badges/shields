@@ -98,7 +98,7 @@ run_package_tests: &run_package_tests
     node --version
 
     # install the shields.io dependencies
-    if [[ "$NODE_VERSION" == "10" ]]; then
+    if [[ "$NODE_VERSION" == "v10" ]]; then
       # Avoid a depcheck error.
       npm ci --ignore-scripts
     else
