@@ -38,6 +38,13 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
 
   static examples = [
     {
+      title: 'GitHub repo file count',
+      pattern: ':user/:repo',
+      namedParams: { user: 'badges', repo: 'shields' },
+      staticPreview: this.render({ count: 20 }),
+      documentation,
+    },
+    {
       title: 'GitHub repo file count (custom path)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
@@ -46,6 +53,14 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
     },
     {
       title: 'GitHub repo directory count',
+      pattern: ':user/:repo',
+      namedParams: { user: 'badges', repo: 'shields' },
+      queryParams: { type: 'dir' },
+      staticPreview: this.render({ count: 8 }),
+      documentation,
+    },
+    {
+      title: 'GitHub repo directory count (custom path)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
       queryParams: { type: 'dir' },
@@ -54,6 +69,14 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
     },
     {
       title: 'GitHub repo file count (file type)',
+      pattern: ':user/:repo',
+      namedParams: { user: 'badges', repo: 'shields' },
+      queryParams: { type: 'file' },
+      staticPreview: this.render({ count: 2 }),
+      documentation,
+    },
+    {
+      title: 'GitHub repo file count (custom path & file type)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
       queryParams: { type: 'file' },
@@ -61,7 +84,7 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
       documentation,
     },
     {
-      title: 'GitHub repo directory file count (file extension)',
+      title: 'GitHub repo file count (file extension)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
       queryParams: { extension: 'js' },
