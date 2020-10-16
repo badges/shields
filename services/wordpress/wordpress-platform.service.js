@@ -62,9 +62,7 @@ function WordpressRequiresVersion(extensionType) {
 }
 
 class WordpressPluginTestedVersion extends BaseWordpress {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
 
   static get route() {
     return {
@@ -85,9 +83,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
     ]
   }
 
-  static get defaultBadgeData() {
-    return { label: 'wordpress' }
-  }
+  static defaultBadgeData = { label: 'wordpress' }
 
   static renderStaticPreview({ testedVersion }) {
     // Since this badge has an async `render()` function, but `get examples()` has to
