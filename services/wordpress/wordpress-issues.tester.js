@@ -1,11 +1,14 @@
 'use strict'
 
+const Joi = require('joi')
 const { ServiceTester } = require('../tester')
 const {
   isMetric,
   isIntegerPercentage,
   isMetricOverMetric,
 } = require('../test-validators')
+
+const isOpenClosedIssue = Joi.string().regex(/^[0-9]+ open, [0-9]+ closed$/)
 
 const t = new ServiceTester({
   id: 'wordpress',
@@ -55,9 +58,16 @@ t.create('Plugin Issues - Closed Out Of')
     message: isMetricOverMetric,
   })
 
-t.create('Plugin Issues - Open/Closed')
-  .get('/plugin/issues/opcl/jetpack.json')
+t.create('Plugin Issues - Open/Closed (Short)')
+  .get('/plugin/issues/opcl-min/jetpack.json')
   .expectBadge({
     label: 'open/closed',
     message: isMetricOverMetric,
+  })
+
+t.create('Plugin Issues - Open/Close (Long)')
+  .get('/plugin/issues/opcl-long/jetpack.json')
+  .expectBadge({
+    label: 'issues',
+    message: isOpenClosedIssue,
   })
