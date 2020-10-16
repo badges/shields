@@ -53,7 +53,7 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
       documentation,
     },
     {
-      title: 'GitHub repo directory file count (file type)',
+      title: 'GitHub repo file count (file type)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
       queryParams: { type: 'file' },
