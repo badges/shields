@@ -24,19 +24,21 @@ t.create('Plugin Tested WP Version')
     message: Joi.string().regex(/^v\d+(\.\d+)?(\.\d+)? tested$/),
   })
 
+const mockedQueryFields = {
+  active_installs: '1',
+  sections: '0',
+  homepage: '0',
+  tags: '0',
+  screenshot_url: '0',
+  downloaded: 1,
+  requires_php: 1,
+}
+
 const mockedQuerySelector = {
   action: 'plugin_information',
   request: {
     slug: 'akismet',
-    fields: {
-      active_installs: '1',
-      sections: '0',
-      homepage: '0',
-      tags: '0',
-      screenshot_url: '0',
-      downloaded: 1,
-      requires_php: 1,
-    },
+    fields: mockedQueryFields,
   },
 }
 
@@ -160,6 +162,27 @@ t.create('Theme Required PHP Version')
 
 t.create('Theme Required PHP Version (Not Set)')
   .get('/theme/required-php/generatepress.json')
+  .intercept(nock =>
+    nock('https://api.wordpress.org')
+      .get('/themes/info/1.2/')
+      .query({
+        action: 'theme_information',
+        request: {
+          slug: 'generatepress',
+          fields: mockedQueryFields,
+        },
+      })
+      .reply(200, {
+        version: '1.2',
+        rating: 80,
+        num_ratings: 100,
+        downloaded: 100,
+        active_installs: 100,
+        requires: '4.0',
+        tested: '4.0.0',
+        requires_php: false,
+      })
+  )
   .expectBadge({
     label: 'required php',
     message: 'not set for this theme',
