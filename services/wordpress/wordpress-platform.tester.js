@@ -43,6 +43,22 @@ const mockedCoreResponseData = {
   offers: [{ version: '4.9.8' }, { version: '4.9.6' }],
 }
 
+// const mockedThemeAuthor = {
+//   user_nicename:"wordpressdotorg",
+//   profile:"https://profiles.wordpress.org/wordpressdotorg",
+//   avatar:"https://secure.gravatar.com/avatar/61ee2579b8905e62b4b4045bdc92c11a?s=96&d=monsterid&r=g",
+//   display_name:"WordPress.org"
+// }
+
+const mockedPluginContributors = {
+  matt: {
+    profile: 'https://profiles.wordpress.org/matt',
+    avatar:
+      'http://1.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=96&d=monsterid&r=g',
+    display_name: 'Matt Mullenweg',
+  },
+}
+
 t.create('Plugin Tested WP Version - current')
   .get('/plugin/tested/akismet.json')
   .intercept(nock =>
@@ -57,6 +73,10 @@ t.create('Plugin Tested WP Version - current')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.8',
+        author:
+          '<a href="https://automattic.com/wordpress-plugins">Automattic</a>',
+        author_profile: 'https://profiles.wordpress.org/automattic',
+        contributors: mockedPluginContributors,
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -81,6 +101,10 @@ t.create('Plugin Tested WP Version - old')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.6',
+        author:
+          '<a href="https://automattic.com/wordpress-plugins/">Automattic</a>',
+        author_profile: 'https://profiles.wordpress.org/automattic',
+        contributors: mockedPluginContributors,
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -105,6 +129,10 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
         active_installs: 100,
         requires: '4.0',
         tested: '4.0.0',
+        author:
+          '<a href="https://automattic.com/wordpress-plugins/">Automattic</a>',
+        author_profile: 'https://profiles.wordpress.org/automattic',
+        contributors: mockedPluginContributors,
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
