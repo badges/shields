@@ -90,7 +90,7 @@ run_package_tests: &run_package_tests
   when: always
   command: |
     # https://discuss.circleci.com/t/switch-nodejs-version-on-machine-executor-solved/26675/3
-    set +e
+    set -e
     export NVM_DIR="/opt/circleci/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     nvm install $NODE_VERSION
