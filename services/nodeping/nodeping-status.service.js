@@ -29,9 +29,7 @@ module.exports = class NodePingStatus extends BaseJsonService {
   static examples = [
     {
       title: 'NodePing status',
-      namedParams: {
-        checkUuid: exampleCheckUuid,
-      },
+      namedParams: { checkUuid: exampleCheckUuid },
       queryParams: exampleQueryParams,
       staticPreview: renderWebsiteStatus({ isUp: true }),
     },

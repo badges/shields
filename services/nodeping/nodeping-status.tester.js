@@ -5,10 +5,7 @@ const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('NodePing status')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')
-  .expectBadge({
-    label: 'Status',
-    message: Joi.equal('up', 'down').required(),
-  })
+  .expectBadge({ label: 'status', message: Joi.equal('up', 'down').required() })
 
 t.create('NodePing status - up')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')

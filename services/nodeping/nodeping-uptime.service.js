@@ -26,17 +26,12 @@ const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 module.exports = class NodePingUptime extends BaseJsonService {
   static category = 'monitoring'
 
-  static route = {
-    base: 'nodeping/uptime',
-    pattern: ':checkUuid',
-  }
+  static route = { base: 'nodeping/uptime', pattern: ':checkUuid' }
 
   static examples = [
     {
       title: 'NodePing uptime',
-      namedParams: {
-        checkUuid: sampleCheckUuid,
-      },
+      namedParams: { checkUuid: sampleCheckUuid },
       staticPreview: this.render({ uptime: 99.999 }),
     },
   ]
