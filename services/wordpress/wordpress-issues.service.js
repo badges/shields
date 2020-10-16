@@ -154,15 +154,27 @@ class WordpressPluginIssuesOpenClose extends BaseWordpress {
   static category = 'issue-tracking'
 
   static route = {
-    base: `wordpress/plugin/issues/opcl`,
-    pattern: ':slug',
+    base: `wordpress/plugin/issues`,
+    pattern: ':opcl(opcl-min|opcl-long)/:slug',
   }
 
   static examples = [
     {
-      title: 'WordPress Plugin issues (open/closed)',
+      title: 'WordPress Plugin issues (open/closed, short format)',
+      pattern: 'opcl-min/:slug',
       namedParams: { slug: 'akismet' },
       staticPreview: this.render({
+        long: false,
+        issues: 300,
+        closed_issues: 259,
+      }),
+    },
+    {
+      title: 'WordPress Plugin issues (open/closed, long format)',
+      pattern: 'opcl-long/:slug',
+      namedParams: { slug: 'akismet' },
+      staticPreview: this.render({
+        long: true,
         issues: 300,
         closed_issues: 259,
       }),
@@ -192,7 +204,7 @@ class WordpressPluginIssuesOpenClose extends BaseWordpress {
     }
   }
 
-  static valueColor(issues, closed_issues) {
+  static valueColor(long, issues, closed_issues) {
     const closed_percentage = this.percentageCalc(
       issues,
       closed_issues,
@@ -201,7 +213,12 @@ class WordpressPluginIssuesOpenClose extends BaseWordpress {
 
     const color = this.colorCalc(closed_percentage)
     const open_issues = this.calcOpen(issues, closed_issues)
-    const value = `${open_issues}/${closed_issues}`
+    let value
+    if (long) {
+      value = `${open_issues} open, ${closed_issues} closed`
+    } else {
+      value = `${open_issues}/${closed_issues}`
+    }
 
     return {
       value,
@@ -209,16 +226,22 @@ class WordpressPluginIssuesOpenClose extends BaseWordpress {
     }
   }
 
-  static render({ issues, closed_issues }) {
-    const { value, color } = this.valueColor(issues, closed_issues)
+  static render({ long, issues, closed_issues }) {
+    let label
+    const { value, color } = this.valueColor(long, issues, closed_issues)
+    if (long) {
+      label = 'issues'
+    } else {
+      label = 'open/closed'
+    }
     return {
-      label: 'open/closed',
+      label,
       message: value,
       color,
     }
   }
 
-  async handle({ slug }) {
+  async handle({ opcl, slug }) {
     const { support_threads, support_threads_resolved } = await this.fetch({
       extensionType: 'plugin',
       slug,
@@ -226,7 +249,13 @@ class WordpressPluginIssuesOpenClose extends BaseWordpress {
     const issues = support_threads
     const closed_issues = support_threads_resolved
 
+    let long = false
+    if (opcl === 'opcl-long') {
+      long = true
+    }
+
     return this.constructor.render({
+      long,
       issues,
       closed_issues,
     })
