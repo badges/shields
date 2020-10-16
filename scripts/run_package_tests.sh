@@ -5,7 +5,7 @@ set -euo pipefail
 
 export NVM_DIR="/opt/circleci/.nvm"
 echo "0"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" || true
 echo "1"
 nvm install $NODE_VERSION
 echo "2"
