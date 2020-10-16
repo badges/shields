@@ -9,7 +9,7 @@ it is likely this will impact on the package's public interface in index.js
 */
 module.exports = function makeBadge({
   format,
-  template = 'flat',
+  style = 'flat',
   label,
   message,
   color,
@@ -39,9 +39,9 @@ module.exports = function makeBadge({
     })
   }
 
-  const render = badgeRenderers[template]
+  const render = badgeRenderers[style]
   if (!render) {
-    throw new Error(`Unknown template: '${template}'`)
+    throw new Error(`Unknown badge style: '${style}'`)
   }
 
   logoWidth = +logoWidth || (logo ? 14 : 0)
