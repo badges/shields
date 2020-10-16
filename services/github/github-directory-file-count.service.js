@@ -110,6 +110,10 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
   }
 
   static transform(files, { type, extension }) {
+    if (!Array.isArray(files)) {
+      throw new InvalidParameter({ prettyMessage: 'not a directory' })
+    }
+
     if (type) {
       files = files.filter(file => file.type === type)
     }
@@ -123,9 +127,6 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
 
   async handle({ user, repo, path }, { type, extension }) {
     const content = await this.fetch({ user, repo, path })
-    if (!Array.isArray(content)) {
-      throw new InvalidParameter({ prettyMessage: 'not a directory' })
-    }
     const { count } = this.constructor.transform(content, { type, extension })
     return this.constructor.render({ count })
   }
