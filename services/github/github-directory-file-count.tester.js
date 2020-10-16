@@ -1,5 +1,6 @@
 'use strict'
 
+const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const mockContents = nock => {
@@ -19,7 +20,7 @@ t.create('directory file count')
   .get('/badges/shields/services.json')
   .expectBadge({
     label: 'files',
-    message: /^[0-9]+$/,
+    message: isMetric,
   })
 
 t.create('directory file count (root)')
