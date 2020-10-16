@@ -86,33 +86,6 @@ services_steps: &services_steps
     - store_test_results:
         path: junit
 
-run_package_tests: &run_package_tests
-  when: always
-  command: |
-    # https://discuss.circleci.com/t/switch-nodejs-version-on-machine-executor-solved/26675/3
-    set +e
-    export NVM_DIR="/opt/circleci/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install $NODE_VERSION
-    nvm use $NODE_VERSION
-    node --version
-
-    # install the shields.io dependencies
-    npm ci
-
-    # run the package tests
-    npm run test:package
-    npm run check-types:package
-
-    # delete the sheilds.io dependencies
-    rm -rf node_modules/
-
-    # run a smoke test (render a badge with the CLI)
-    # with only the package dependencies installed
-    cd badge-maker
-    npm link
-    badge cactus grown :green @flat
-
 package_steps: &package_steps
   steps:
     - checkout
@@ -132,31 +105,31 @@ package_steps: &package_steps
     # https://nodejs.org/en/about/releases/
 
     - run:
-        <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v10/results.xml
           NODE_VERSION: v10
           CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 10
+        command: scripts/run_package_tests.sh
 
     - run:
-        <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v12/results.xml
           NODE_VERSION: v12
           CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 12
+        command: scripts/run_package_tests.sh
 
     - run:
-        <<: *run_package_tests
         environment:
           mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v14/results.xml
           NODE_VERSION: v14
           CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 14
+        command: scripts/run_package_tests.sh
 
     - store_test_results:
         path: junit
