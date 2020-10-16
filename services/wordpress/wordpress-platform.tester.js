@@ -35,6 +35,7 @@ const mockedQuerySelector = {
       tags: '0',
       screenshot_url: '0',
       downloaded: 1,
+      requires_php: 1,
     },
   },
 }
@@ -57,6 +58,7 @@ t.create('Plugin Tested WP Version - current')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.8',
+        requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -81,6 +83,7 @@ t.create('Plugin Tested WP Version - old')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.6',
+        requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -105,6 +108,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
         active_installs: 100,
         requires: '4.0',
         tested: '4.0.0',
+        requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
       .reply(200, mockedCoreResponseData)
@@ -132,3 +136,31 @@ t.create('Plugin Tested WP Version | Not Found')
 t.create('Plugin Tested WP Version (Alias)')
   .get('/v/100.svg')
   .expectRedirect('/wordpress/plugin/tested/100.svg')
+
+t.create('Plugin Required PHP Version')
+  .get('/plugin/required-php/jetpack.json')
+  .expectBadge({
+    label: 'required php',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
+t.create('Plugin Required PHP Version (Not Set)')
+  .get('/plugin/required-php/akismet.json')
+  .expectBadge({
+    label: 'required php',
+    message: 'not set for this plugin',
+  })
+
+t.create('Theme Required PHP Version')
+  .get('/theme/required-php/twentytwenty.json')
+  .expectBadge({
+    label: 'required php',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
+t.create('Theme Required PHP Version (Not Set)')
+  .get('/theme/required-php/generatepress.json')
+  .expectBadge({
+    label: 'required php',
+    message: 'not set for this theme',
+  })
