@@ -33,11 +33,7 @@ module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Serv
     {
       title: 'GitHub R package version (branch)',
       pattern: ':user/:repo/:branch',
-      namedParams: {
-        user: 'mixOmicsTeam',
-        repo: 'mixOmics',
-        branch: 'master',
-      },
+      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
       staticPreview: this.render({ version: '6.10.9', branch: 'master' }),
       documentation,
     },
@@ -47,6 +43,14 @@ module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Serv
       namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics' },
       queryParams: { filename: 'subdirectory/DESCRIPTION' },
       staticPreview: this.render({ version: '6.10.9' }),
+      documentation,
+    },
+    {
+      title: 'GitHub R package version (branch & subdirectory of monorepo)',
+      pattern: ':user/:repo:/:branch',
+      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
+      queryParams: { filename: 'subdirectory/DESCRIPTION' },
+      staticPreview: this.render({ version: '6.10.9', branch: 'master' }),
       documentation,
     },
   ]
