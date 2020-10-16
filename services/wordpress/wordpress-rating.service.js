@@ -16,42 +16,32 @@ const extensionData = {
 }
 
 class WordpressRatingBase extends BaseWordpress {
-  static get category() {
-    return 'rating'
-  }
+  static category = 'rating'
 
-  static get defaultBadgeData() {
-    return { label: 'rating' }
-  }
+  static defaultBadgeData = { label: 'rating' }
 }
 
 function RatingForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressRating extends WordpressRatingBase {
-    static get name() {
-      return `Wordpress${capt}Rating`
+    static name = `Wordpress${capt}Rating`
+
+    static route = {
+      base: `wordpress/${extensionType}/rating`,
+      pattern: ':slug',
     }
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/rating`,
-        pattern: ':slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Rating`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({
-            rating: 80,
-            numRatings: 100,
-          }),
-        },
-      ]
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Rating`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({
+          rating: 80,
+          numRatings: 100,
+        }),
+      },
+    ]
 
     static render({ rating, numRatings }) {
       const scaledAndRounded = ((rating / 100) * 5).toFixed(1)
@@ -75,30 +65,24 @@ function StarsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressStars extends WordpressRatingBase {
-    static get name() {
-      return `Wordpress${capt}Stars`
+    static name = `Wordpress${capt}Stars`
+
+    static route = {
+      base: `wordpress/${extensionType}`,
+      pattern: '(stars|r)/:slug',
     }
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}`,
-        pattern: '(stars|r)/:slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Rating`,
-          pattern: 'stars/:slug',
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({
-            rating: 80,
-          }),
-          documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
-        },
-      ]
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Rating`,
+        pattern: 'stars/:slug',
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({
+          rating: 80,
+        }),
+        documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
+      },
+    ]
 
     static render({ rating }) {
       const scaled = (rating / 100) * 5
