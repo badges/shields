@@ -25,6 +25,8 @@ const pluginSchema = Joi.object()
     active_installs: nonNegativeInteger,
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
+    support_threads: nonNegativeInteger,
+    support_threads_resolved: nonNegativeInteger,
   })
   .required()
 
@@ -61,6 +63,8 @@ module.exports = class BaseWordpress extends BaseJsonService {
               tags: 0,
               screenshot_url: 0,
               downloaded: 1,
+              support_threads: 1,
+              support_threads_resolved: 1,
             },
           },
         },
