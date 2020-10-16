@@ -2,16 +2,15 @@
 
 # https://discuss.circleci.com/t/switch-nodejs-version-on-machine-executor-solved/26675/3
 
-# Start off less strict to work around an nvm error.
-# "/opt/circleci/.nvm/nvm.sh: line 1988: NVM_USE_OUTPUT: unbound variable"
+# Start off less strict to work around various nvm errors.
 set -e
 export NVM_DIR="/opt/circleci/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-
-set -euo pipefail
-
 nvm install $NODE_VERSION
 nvm use $NODE_VERSION
+
+# Stricter.
+set -euo pipefail
 node --version
 
 # Install the shields.io dependencies.
