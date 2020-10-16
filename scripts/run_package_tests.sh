@@ -4,13 +4,14 @@
 set -euo pipefail
 
 export NVM_DIR="/opt/circleci/.nvm"
-echo "0"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" || true
-echo "1"
+# Be less strict to work around nvm error.
+# "/opt/circleci/.nvm/nvm.sh: line 1988: NVM_USE_OUTPUT: unbound variable"
+set -e
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+set -euo pipefail
+
 nvm install $NODE_VERSION
-echo "2"
 nvm use $NODE_VERSION
-echo "3"
 node --version
 
 # install the shields.io dependencies
