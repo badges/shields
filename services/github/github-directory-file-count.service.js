@@ -38,7 +38,7 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
 
   static examples = [
     {
-      title: 'GitHub repo directory file count',
+      title: 'GitHub repo file count (custom path)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
       staticPreview: this.render({ count: 10 }),
