@@ -13,6 +13,22 @@ const themeSchema = Joi.object()
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
+    author: Joi.object()
+      .keys({
+        user_nicename: Joi.string(),
+        profile: Joi.string().required(),
+        avatar: Joi.string(),
+        display_name: Joi.string().required(),
+      })
+      .required(),
+  })
+  .required()
+
+const pluginContributor = Joi.object()
+  .keys({
+    profile: Joi.string().required(),
+    avatar: Joi.string(),
+    display_name: Joi.string().required(),
   })
   .required()
 
@@ -25,6 +41,9 @@ const pluginSchema = Joi.object()
     active_installs: nonNegativeInteger,
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
+    author: Joi.string().required(),
+    author_profile: Joi.string().required(),
+    contributors: Joi.object().pattern(/^/, pluginContributor).required(),
   })
   .required()
 
