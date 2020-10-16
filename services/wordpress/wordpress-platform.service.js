@@ -136,12 +136,12 @@ function RequiresPHPVersionForType(extensionType) {
       },
     ]
 
-    static defaultBadgeData = { label: 'required php' }
+    static defaultBadgeData = { label: 'php' }
 
     static render({ version }) {
       return {
-        label: 'required php',
-        message: addv(version),
+        label: 'php',
+        message: `>=${version}`,
         color: versionColor(version),
       }
     }

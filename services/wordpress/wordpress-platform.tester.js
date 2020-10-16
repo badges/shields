@@ -2,7 +2,10 @@
 
 const Joi = require('joi')
 const { ServiceTester } = require('../tester')
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
+const {
+  isVPlusDottedVersionAtLeastOne,
+  isComposerVersion,
+} = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'WordpressPlatform',
@@ -142,22 +145,22 @@ t.create('Plugin Tested WP Version (Alias)')
 t.create('Plugin Required PHP Version')
   .get('/plugin/required-php/jetpack.json')
   .expectBadge({
-    label: 'required php',
-    message: isVPlusDottedVersionAtLeastOne,
+    label: 'php',
+    message: isComposerVersion,
   })
 
 t.create('Plugin Required PHP Version (Not Set)')
   .get('/plugin/required-php/akismet.json')
   .expectBadge({
-    label: 'required php',
+    label: 'php',
     message: 'not set for this plugin',
   })
 
 t.create('Theme Required PHP Version')
   .get('/theme/required-php/twentytwenty.json')
   .expectBadge({
-    label: 'required php',
-    message: isVPlusDottedVersionAtLeastOne,
+    label: 'php',
+    message: isComposerVersion,
   })
 
 t.create('Theme Required PHP Version (Not Set)')
@@ -184,6 +187,6 @@ t.create('Theme Required PHP Version (Not Set)')
       })
   )
   .expectBadge({
-    label: 'required php',
+    label: 'php',
     message: 'not set for this theme',
   })
