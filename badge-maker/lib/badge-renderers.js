@@ -33,12 +33,12 @@ function escapeXml(s) {
   }
 }
 
-// Increase chances of pixel grid alignment.
 function roundUpToOdd(val) {
   return val % 2 === 0 ? val + 1 : val
 }
 
 function preferredWidthOf(str, options) {
+  // Increase chances of pixel grid alignment.
   return roundUpToOdd(anafanafo(str, options) | 0)
 }
 
