@@ -18,6 +18,8 @@ const documentation = `${commonDocumentation}
      Only single <code>extension</code> value can be specified.
      <code>extension</code> is applicable for <code>type</code> <code>file</code> only.
      Passing it either without <code>type</code> or along with <code>type</code> <code>dir</code> will result in an error.<br>
+  3. GitHub API has an upper limit of 1,000 files for a directory.
+     In case a directory contains files above the limit, a badge might present inaccurate information.<br>
 </p>
 `
 
