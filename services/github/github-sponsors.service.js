@@ -4,7 +4,7 @@ const gql = require('graphql-tag')
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
-const { redirector, NotFound } = require('..')
+const { NotFound } = require('..')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const { documentation, transformErrors } = require('./github-helpers')
 
@@ -18,7 +18,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-class GithubSponsors extends GithubAuthV4Service {
+module.exports = class GithubSponsors extends GithubAuthV4Service {
   static get category() {
     return 'social'
   }
@@ -98,21 +98,4 @@ class GithubSponsors extends GithubAuthV4Service {
       count,
     })
   }
-}
-
-const redirects = {
-  GithubSponsorsRedirect: redirector({
-    category: 'social',
-    route: {
-      base: 'github/sponsors',
-      pattern: ':user',
-    },
-    transformPath: ({ user }) => `/github/sponsors/${user}`,
-    dateAdded: new Date('2020-10-09'),
-  }),
-}
-
-module.exports = {
-  GithubSponsors,
-  ...redirects,
 }
