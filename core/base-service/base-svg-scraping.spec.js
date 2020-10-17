@@ -6,10 +6,6 @@ const Joi = require('joi')
 const makeBadge = require('../../badge-maker/lib/make-badge')
 const BaseSvgScrapingService = require('./base-svg-scraping')
 
-function makeExampleSvg({ label, message }) {
-  return makeBadge({ text: ['this is the label', 'this is the result!'] })
-}
-
 const schema = Joi.object({
   message: Joi.string().required(),
 }).required()
@@ -29,10 +25,7 @@ class DummySvgScrapingService extends BaseSvgScrapingService {
 describe('BaseSvgScrapingService', function () {
   const exampleLabel = 'this is the label'
   const exampleMessage = 'this is the result!'
-  const exampleSvg = makeExampleSvg({
-    label: exampleLabel,
-    message: exampleMessage,
-  })
+  const exampleSvg = makeBadge({ label: exampleLabel, message: exampleMessage })
 
   describe('valueFromSvgBadge', function () {
     it('should find the correct value', function () {

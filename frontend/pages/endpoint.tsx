@@ -209,7 +209,7 @@ export default function EndpointPage(): JSX.Element {
         <dt>logoColor</dt>
         <dd>
           Default: none. Same meaning as the query string. Can be overridden by
-          the query string.
+          the query string. Only works for named logos.
         </dd>
         <dt>logoWidth</dt>
         <dd>

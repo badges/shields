@@ -51,10 +51,10 @@ function _clean(format) {
     }
   })
 
+  // Legacy.
+  cleaned.label = cleaned.label || ''
+
   // convert "public" format to "internal" format
-  cleaned.text = [cleaned.label || '', cleaned.message]
-  delete cleaned.label
-  delete cleaned.message
   if ('style' in cleaned) {
     cleaned.template = cleaned.style
     delete cleaned.style
