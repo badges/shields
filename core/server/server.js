@@ -280,12 +280,18 @@ class Server {
     })
   }
 
+  // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
   requireCloudflare() {
-    // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
     // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
     // by Express but not Scoutcamp.
     addHandlerAtIndex(this.camp, 0, function (req, res, next) {
-      req.ip = req.socket.remoteAddress
+      // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
+      // the router ensures that the last item in the `X-Forwarded-For` header
+      // is the real origin.
+      // https://stackoverflow.com/a/18517550/893113
+      req.ip = process.env.DYNO
+        ? req.headers['x-forwarded-for'].split(', ').pop()
+        : req.socket.remoteAddress
       next()
     })
     addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
@@ -308,7 +314,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['410', `${format} no longer available`],
+          label: '410',
+          message: `${format} no longer available`,
           color: 'lightgray',
           format: 'svg',
         })
@@ -323,7 +330,8 @@ class Server {
           end
         )(
           makeBadge({
-            text: ['404', 'raster badges not available'],
+            label: '404',
+            message: 'raster badges not available',
             color: 'lightgray',
             format: 'svg',
           })
@@ -341,7 +349,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['404', 'badge not found'],
+          label: '404',
+          message: 'badge not found',
           color: 'red',
           format,
         })

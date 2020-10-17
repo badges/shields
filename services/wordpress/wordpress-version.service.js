@@ -17,34 +17,24 @@ function VersionForExtensionType(extensionType) {
   }[extensionType]
 
   return class WordpressVersion extends BaseWordpress {
-    static get name() {
-      return `Wordpress${capt}Version`
+    static name = `Wordpress${capt}Version`
+
+    static category = 'version'
+
+    static route = {
+      base: `wordpress/${extensionType}/v`,
+      pattern: ':slug',
     }
 
-    static get category() {
-      return 'version'
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Version`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({ version: 2.5 }),
+      },
+    ]
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/v`,
-        pattern: ':slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Version`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ version: 2.5 }),
-        },
-      ]
-    }
-
-    static get defaultBadgeData() {
-      return { label: extensionType }
-    }
+    static defaultBadgeData = { label: extensionType }
 
     static render({ version }) {
       return {

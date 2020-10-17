@@ -1,22 +1,19 @@
 'use strict'
 
-const chromeWebStore = require('chrome-web-store-item-property')
+const ChromeWebStore = require('webextension-store-meta/lib/chrome-web-store')
 const checkErrorResponse = require('../../core/base-service/check-error-response')
 const { BaseService, Inaccessible } = require('..')
 
 module.exports = class BaseChromeWebStoreService extends BaseService {
   async fetch({ storeId }) {
     try {
-      return await chromeWebStore(storeId)
+      return await ChromeWebStore.load({ id: storeId })
     } catch (e) {
-      if (e.statusCode === undefined) {
+      const statusCode = parseInt(e.message)
+      if (isNaN(statusCode)) {
         throw new Inaccessible({ underlyingError: e })
       }
-      /*
-      chrome-web-store-item-property's `HTTPError` object has a
-      `statusCode` property so we can pass `e` to `checkErrorResponse`
-      to throw the correct `ShieldsRuntimeError` for us.
-      */
+      e.statusCode = statusCode
       return checkErrorResponse({})({ buffer: '', res: e })
     }
   }

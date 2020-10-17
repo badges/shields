@@ -268,7 +268,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         let dataHasChanged = false
         if (
           cached !== undefined &&
-          cached.data.badgeData.text[1] !== badgeData.text[1]
+          cached.data.badgeData.message !== badgeData.message
         ) {
           dataHasChanged = true
         }
