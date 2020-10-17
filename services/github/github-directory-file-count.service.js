@@ -12,10 +12,12 @@ const {
 const documentation = `${commonDocumentation}
 <p>
   <b>Note:</b><br>
-  1. Parameter <code>type</code> accepts either <code>file</code> or <code>dir</code> value. Passing other value will result in an error.<br>
+  1. Parameter <code>type</code> accepts either <code>file</code> or <code>dir</code> value. Passing any other value will result in an error.<br>
   2. Parameter <code>extension</code> accepts file extension without a leading dot.
      For instance for <code>.js</code> extension pass <code>js</code>.
-     Only single extension value can be specified.<br>
+     Only single <code>extension</code> value can be specified.
+     <code>extension</code> is applicable for <code>type</code> <code>file</code> only.
+     Passing it either without <code>type</code> or along with <code>type</code> <code>dir</code> will result in an error.<br>
 </p>
 `
 
@@ -127,12 +129,20 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
       throw new InvalidParameter({ prettyMessage: 'not a directory' })
     }
 
+    if (type !== 'file' && extension) {
+      throw new InvalidParameter({
+        prettyMessage: 'extension is applicable for type file only',
+      })
+    }
+
     if (type) {
       files = files.filter(file => file.type === type)
     }
+
     if (extension) {
       files = files.filter(file => path.extname(file.path) === `.${extension}`)
     }
+
     return {
       count: files.length,
     }
