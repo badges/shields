@@ -4,7 +4,7 @@ const { ServiceTester } = require('../tester')
 
 const t = new ServiceTester({
   id: 'wordpress',
-  title: 'WordPress Social',
+  title: 'WordPress Author',
 })
 module.exports = t
 
@@ -21,21 +21,6 @@ t.create('Plugin Author (Not Found)')
   .expectBadge({
     label: 'author',
     message: 'not found',
-  })
-
-t.create('Plugin Contributor')
-  .get('/plugin/contributor/akismet/matt.json')
-  .expectBadge({
-    label: 'contributor',
-    message: 'Matt Mullenweg',
-    link: ['https://profiles.wordpress.org/matt'],
-  })
-
-t.create('Plugin Contributor (Not Found)')
-  .get('/plugin/contributor/akismet/notacontributor.json')
-  .expectBadge({
-    label: 'contributor',
-    message: 'Contributor not found in plugin',
   })
 
 t.create('Theme Author')
