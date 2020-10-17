@@ -46,7 +46,7 @@ class GithubSponsors extends GithubAuthV4Service {
   static get defaultBadgeData() {
     return {
       label: 'sponsors',
-      namedLogo: 'github-sponsors',
+      namedLogo: 'github',
     }
   }
 

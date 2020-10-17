@@ -9,12 +9,10 @@ const t = (module.exports = new ServiceTester({
   pathPrefix: '/github',
 }))
 
-t.create('Sponsors')
-  .get('/sponsors/Homebrew.json')
-  .expectBadge({
-    label: 'sponsors',
-    message: isMetric,
-  })
+t.create('Sponsors').get('/sponsors/Homebrew.json').expectBadge({
+  label: 'sponsors',
+  message: isMetric,
+})
 
 t.create('Sponsors (user not found)')
   .get('/sponsors/badges-non-exist.json')
