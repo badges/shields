@@ -14,7 +14,8 @@ it is likely this will impact on the package's public interface in index.js
 module.exports = function makeBadge({
   format,
   template = 'flat',
-  text,
+  label,
+  message,
   color,
   labelColor,
   logo,
@@ -23,9 +24,8 @@ module.exports = function makeBadge({
   links = ['', ''],
 }) {
   // String coercion and whitespace removal.
-  text = text.map(value => `${value}`.trim())
-
-  const [label, message] = text
+  label = `${label}`.trim()
+  message = `${message}`.trim()
 
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
