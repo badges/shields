@@ -2,6 +2,7 @@
 
 const path = require('path')
 const Joi = require('joi')
+const { metric } = require('../text-formatters')
 const { InvalidParameter } = require('..')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const {
@@ -114,7 +115,7 @@ module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3S
 
   static render({ count }) {
     return {
-      message: count,
+      message: metric(count),
     }
   }
 
