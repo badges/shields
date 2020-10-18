@@ -6,6 +6,7 @@
 const path = require('path')
 const url = require('url')
 const { URL } = url
+const cloudflareMiddleware = require('cloudflare-middleware')
 const bytes = require('bytes')
 const Camp = require('@shields_io/camp')
 const originalJoi = require('joi')
@@ -145,6 +146,7 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  requireCloudflare: Joi.boolean().required(),
 }).required()
 
 const privateConfigSchema = Joi.object({
@@ -182,6 +184,11 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
   influx_password: Joi.string().required(),
 })
+
+function addHandlerAtIndex(camp, index, handlerFn) {
+  camp.stack.splice(index, 0, handlerFn)
+}
+
 /**
  * The Server is based on the web framework Scoutcamp. It creates
  * an http server, sets up helpers for token persistence and monitoring.
@@ -273,6 +280,23 @@ class Server {
     })
   }
 
+  // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
+  requireCloudflare() {
+    // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
+    // by Express but not Scoutcamp.
+    addHandlerAtIndex(this.camp, 0, function (req, res, next) {
+      // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
+      // the router ensures that the last item in the `X-Forwarded-For` header
+      // is the real origin.
+      // https://stackoverflow.com/a/18517550/893113
+      req.ip = process.env.DYNO
+        ? req.headers['x-forwarded-for'].split(', ').pop()
+        : req.socket.remoteAddress
+      next()
+    })
+    addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
+  }
+
   /**
    * Set up Scoutcamp routes for 404/not found responses
    */
@@ -290,7 +314,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['410', `${format} no longer available`],
+          label: '410',
+          message: `${format} no longer available`,
           color: 'lightgray',
           format: 'svg',
         })
@@ -305,7 +330,8 @@ class Server {
           end
         )(
           makeBadge({
-            text: ['404', 'raster badges not available'],
+            label: '404',
+            message: 'raster badges not available',
             color: 'lightgray',
             format: 'svg',
           })
@@ -323,7 +349,8 @@ class Server {
         end
       )(
         makeBadge({
-          text: ['404', 'badge not found'],
+          label: '404',
+          message: 'badge not found',
           color: 'red',
           format,
         })
@@ -404,6 +431,7 @@ class Server {
       ssl: { isSecure: secure, cert, key },
       cors: { allowedOrigin },
       rateLimit,
+      requireCloudflare,
     } = this.config.public
 
     log(`Server is starting up: ${this.baseUrl}`)
@@ -416,6 +444,10 @@ class Server {
       cert,
       key,
     }))
+
+    if (requireCloudflare) {
+      this.requireCloudflare()
+    }
 
     const { metricInstance } = this
     this.cleanupMonitor = sysMonitor.setRoutes(

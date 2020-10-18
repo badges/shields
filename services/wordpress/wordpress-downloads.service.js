@@ -48,34 +48,24 @@ function DownloadsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressDownloads extends BaseWordpress {
-    static get name() {
-      return `Wordpress${capt}Downloads`
+    static name = `Wordpress${capt}Downloads`
+
+    static category = 'downloads'
+
+    static route = {
+      base: `wordpress/${extensionType}`,
+      pattern: ':interval(dd|dw|dm|dy|dt)/:slug',
     }
 
-    static get category() {
-      return 'downloads'
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Downloads`,
+        namedParams: { interval: 'dm', slug: exampleSlug },
+        staticPreview: this.render({ interval: 'dm', downloads: 200000 }),
+      },
+    ]
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}`,
-        pattern: ':interval(dd|dw|dm|dy|dt)/:slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Downloads`,
-          namedParams: { interval: 'dm', slug: exampleSlug },
-          staticPreview: this.render({ interval: 'dm', downloads: 200000 }),
-        },
-      ]
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'downloads' }
-    }
+    static defaultBadgeData = { label: 'downloads' }
 
     static render({ interval, downloads }) {
       const { messageSuffix } = intervalMap[interval]
@@ -129,34 +119,24 @@ function InstallsForExtensionType(extensionType) {
   const { capt, exampleSlug } = extensionData[extensionType]
 
   return class WordpressInstalls extends BaseWordpress {
-    static get name() {
-      return `Wordpress${capt}Installs`
+    static name = `Wordpress${capt}Installs`
+
+    static category = 'downloads'
+
+    static route = {
+      base: `wordpress/${extensionType}/installs`,
+      pattern: ':slug',
     }
 
-    static get category() {
-      return 'downloads'
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt} Active Installs`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({ installCount: 300000 }),
+      },
+    ]
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/installs`,
-        pattern: ':slug',
-      }
-    }
-
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt} Active Installs`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ installCount: 300000 }),
-        },
-      ]
-    }
-
-    static get defaultBadgeData() {
-      return { label: 'active installs' }
-    }
+    static defaultBadgeData = { label: 'active installs' }
 
     static render({ installCount }) {
       return {

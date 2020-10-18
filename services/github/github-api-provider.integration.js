@@ -79,7 +79,8 @@ describe('Github API provider', function () {
       }
     })
 
-    it.skip('should update the token with the final limit remaining and reset time', function () {
+    // Is this test failing? See https://github.com/badges/shields/pull/4590#issuecomment-708551801
+    it('should update the token with the final limit remaining and reset time', function () {
       const lastHeaders = headers.slice(-1)[0]
       const reserve = reserveFraction * +lastHeaders['x-ratelimit-limit']
       const usesRemaining = +lastHeaders['x-ratelimit-remaining'] - reserve

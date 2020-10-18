@@ -35,17 +35,13 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
     {
       title: 'GitHub go.mod Go version (branch)',
       pattern: ':user/:repo/:branch',
-      namedParams: {
-        user: 'gohugoio',
-        repo: 'hugo',
-        branch: 'master',
-      },
+      namedParams: { user: 'gohugoio', repo: 'hugo', branch: 'master' },
       staticPreview: this.render({ version: '1.12', branch: 'master' }),
       documentation,
       keywords,
     },
     {
-      title: 'GitHub go.mod Go version (subfolder of monorepo)',
+      title: 'GitHub go.mod Go version (subdirectory of monorepo)',
       pattern: ':user/:repo',
       namedParams: { user: 'golang', repo: 'go' },
       queryParams: { filename: 'src/go.mod' },
@@ -54,7 +50,7 @@ module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Servi
       keywords,
     },
     {
-      title: 'GitHub go.mod Go version (branch & subfolder of monorepo)',
+      title: 'GitHub go.mod Go version (branch & subdirectory of monorepo)',
       pattern: ':user/:repo/:branch',
       namedParams: { user: 'golang', repo: 'go', branch: 'master' },
       queryParams: { filename: 'src/go.mod' },
