@@ -32,9 +32,9 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
     },
   ]
 
-  static defaultBadgeData =  {
-      label: 'sponsors',
-      namedLogo: 'github',
+  static defaultBadgeData = {
+    label: 'sponsors',
+    namedLogo: 'github',
   }
 
   static render({ count }) {
