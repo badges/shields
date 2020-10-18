@@ -27,13 +27,12 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   }
 
   async handle({ storeId }) {
-    const data = await this.fetch({ storeId })
-    if (!data.interactionCount || !data.interactionCount.UserDownloads) {
-      throw new NotFound({ prettyMessage: 'count not found' })
+    const chromeWebStore = await this.fetch({ storeId })
+    const downloads = chromeWebStore.users()
+    if (downloads == null) {
+      throw new NotFound({ prettyMessage: 'not found' })
     }
-    return this.constructor.render({
-      downloads: data.interactionCount.UserDownloads,
-    })
+    return this.constructor.render({ downloads })
   }
 }
 

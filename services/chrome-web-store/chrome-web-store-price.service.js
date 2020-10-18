@@ -1,6 +1,7 @@
 'use strict'
 
 const { currencyFromCode } = require('../text-formatters')
+const { NotFound } = require('..')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
 module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
@@ -25,7 +26,12 @@ module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
   }
 
   async handle({ storeId }) {
-    const { priceCurrency, price } = await this.fetch({ storeId })
+    const chromeWebStore = await this.fetch({ storeId })
+    const priceCurrency = chromeWebStore.priceCurrency()
+    const price = chromeWebStore.price()
+    if (priceCurrency == null || price == null) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
     return this.constructor.render({ priceCurrency, price })
   }
 }

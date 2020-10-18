@@ -373,7 +373,8 @@ describe('BaseService', function () {
       const expectedFormat = 'svg'
       expect(mockSendBadge).to.have.been.calledOnce
       expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
-        text: ['cat', 'Hello namedParamA: bar with queryParamA: ?'],
+        label: 'cat',
+        message: 'Hello namedParamA: bar with queryParamA: ?',
         color: 'lightgrey',
         template: 'flat',
         namedLogo: undefined,
