@@ -17,6 +17,7 @@ const themeSchema = Joi.object()
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
     last_updated: Joi.string().required().regex(RegExp(themeDatePattern)),
+    requires_php: stringOrFalse.required(),
   })
   .required()
 
@@ -30,6 +31,7 @@ const pluginSchema = Joi.object()
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
     last_updated: Joi.string().required().regex(RegExp(pluginDatePattern)),
+    requires_php: stringOrFalse.required(),
   })
   .required()
 
@@ -67,6 +69,7 @@ module.exports = class BaseWordpress extends BaseJsonService {
               screenshot_url: 0,
               downloaded: 1,
               last_updated: 1,
+              requires_php: 1,
             },
           },
         },
