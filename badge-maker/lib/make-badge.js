@@ -23,6 +23,10 @@ module.exports = function makeBadge({
   logoWidth,
   links = ['', ''],
 }) {
+  if (!logo && (logoPosition !== undefined || logoWidth !== undefined)) {
+    throw Error('`logoPosition` and `logoWidth` require `logo`')
+  }
+
   // String coercion and whitespace removal.
   label = `${label}`.trim()
   message = `${message}`.trim()
