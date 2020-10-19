@@ -25,22 +25,18 @@ function WordpressRequiresVersion(extensionType) {
 
     static category = 'platform-support'
 
-    static get route() {
-      return {
-        base: `wordpress/${extensionType}/wp-version`,
-        pattern: ':slug',
-      }
+    static route = {
+      base: `wordpress/${extensionType}/wp-version`,
+      pattern: ':slug',
     }
 
-    static get examples() {
-      return [
-        {
-          title: `WordPress ${capt}: Required WP Version`,
-          namedParams: { slug: exampleSlug },
-          staticPreview: this.render({ wordpressVersion: '4.8' }),
-        },
-      ]
-    }
+    static examples = [
+      {
+        title: `WordPress ${capt}: Required WP Version`,
+        namedParams: { slug: exampleSlug },
+        staticPreview: this.render({ wordpressVersion: '4.8' }),
+      },
+    ]
 
     static defaultBadgeData = { label: 'wordpress' }
 
@@ -165,8 +161,8 @@ function RequiresPHPVersionForType(extensionType) {
 
 const required_php = ['plugin', 'theme'].map(RequiresPHPVersionForType)
 const requiresVersion = ['plugin', 'theme'].map(WordpressRequiresVersion)
-module.exports = {
+module.exports = [
+  ...required_php,
   ...requiresVersion,
   WordpressPluginTestedVersion,
-  ...required_php,
-}
+]
