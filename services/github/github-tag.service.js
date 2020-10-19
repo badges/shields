@@ -27,51 +27,45 @@ const schema = Joi.object({
 }).required()
 
 class GithubTag extends GithubAuthV4Service {
-  static get category() {
-    return 'version'
+  static category = 'version'
+
+  static route = {
+    base: 'github/v/tag',
+    pattern: ':user/:repo',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'github/v/tag',
-      pattern: ':user/:repo',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'GitHub tag (latest by date)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      staticPreview: this.render({
+        version: 'v5.0.0-alpha.7',
+        sort: 'date',
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub tag (latest SemVer)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({ version: 'v4.16.4', sort: 'semver' }),
+      documentation,
+    },
+    {
+      title: 'GitHub tag (latest SemVer pre-release)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { sort: 'semver', include_prereleases: null },
+      staticPreview: this.render({
+        version: 'v5.0.0-alpha.7',
+        sort: 'semver',
+      }),
+      documentation,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'GitHub tag (latest by date)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        staticPreview: this.render({
-          version: 'v5.0.0-alpha.7',
-          sort: 'date',
-        }),
-        documentation,
-      },
-      {
-        title: 'GitHub tag (latest SemVer)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: { sort: 'semver' },
-        staticPreview: this.render({ version: 'v4.16.4', sort: 'semver' }),
-        documentation,
-      },
-      {
-        title: 'GitHub tag (latest SemVer pre-release)',
-        namedParams: { user: 'expressjs', repo: 'express' },
-        queryParams: { sort: 'semver', include_prereleases: null },
-        staticPreview: this.render({
-          version: 'v5.0.0-alpha.7',
-          sort: 'semver',
-        }),
-        documentation,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'tag' }
+  static defaultBadgeData = {
+    label: 'tag',
   }
 
   static render({ version, sort }) {

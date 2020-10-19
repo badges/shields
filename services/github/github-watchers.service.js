@@ -11,43 +11,35 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubWatchers extends GithubAuthV3Service {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'github/watchers',
+    pattern: ':user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'github/watchers',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub watchers',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        // TODO: This is currently a literal, as `staticPreview` doesn't
-        // support `link`.
-        staticPreview: {
-          label: 'Watch',
-          message: '96',
-          style: 'social',
-        },
-        queryParams: { label: 'Watch' },
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub watchers',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      // TODO: This is currently a literal, as `staticPreview` doesn't
+      // support `link`.
+      staticPreview: {
+        label: 'Watch',
+        message: '96',
+        style: 'social',
+      },
+      queryParams: { label: 'Watch' },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'watchers',
-      namedLogo: 'github',
-    }
+  static defaultBadgeData = {
+    label: 'watchers',
+    namedLogo: 'github',
   }
 
   static render({ watchers, user, repo }) {
