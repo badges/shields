@@ -18,73 +18,65 @@ const queryParamSchema = Joi.object({
 const keywords = ['action', 'actions']
 
 module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'github/workflow/status',
+    pattern: ':user/:repo/:workflow/:branch*',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'github/workflow/status',
-      pattern: ':user/:repo/:workflow/:branch*',
-      queryParamSchema,
-    }
-  }
+  static examples = [
+    {
+      title: 'GitHub Workflow Status',
+      pattern: ':user/:repo/:workflow',
+      namedParams: {
+        user: 'actions',
+        repo: 'toolkit',
+        workflow: 'toolkit-unit-tests',
+      },
+      staticPreview: renderBuildStatusBadge({
+        status: 'passing',
+      }),
+      documentation,
+      keywords,
+    },
+    {
+      title: 'GitHub Workflow Status (branch)',
+      pattern: ':user/:repo/:workflow/:branch',
+      namedParams: {
+        user: 'actions',
+        repo: 'toolkit',
+        workflow: 'toolkit-unit-tests',
+        branch: 'master',
+      },
+      staticPreview: renderBuildStatusBadge({
+        status: 'passing',
+      }),
+      documentation,
+      keywords,
+    },
+    {
+      title: 'GitHub Workflow Status (event)',
+      pattern: ':user/:repo/:workflow',
+      namedParams: {
+        user: 'actions',
+        repo: 'toolkit',
+        workflow: 'toolkit-unit-tests',
+      },
+      queryParams: {
+        event: 'push',
+      },
+      staticPreview: renderBuildStatusBadge({
+        status: 'passing',
+      }),
+      documentation,
+      keywords,
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'GitHub Workflow Status',
-        pattern: ':user/:repo/:workflow',
-        namedParams: {
-          user: 'actions',
-          repo: 'toolkit',
-          workflow: 'toolkit-unit-tests',
-        },
-        staticPreview: renderBuildStatusBadge({
-          status: 'passing',
-        }),
-        documentation,
-        keywords,
-      },
-      {
-        title: 'GitHub Workflow Status (branch)',
-        pattern: ':user/:repo/:workflow/:branch',
-        namedParams: {
-          user: 'actions',
-          repo: 'toolkit',
-          workflow: 'toolkit-unit-tests',
-          branch: 'master',
-        },
-        staticPreview: renderBuildStatusBadge({
-          status: 'passing',
-        }),
-        documentation,
-        keywords,
-      },
-      {
-        title: 'GitHub Workflow Status (event)',
-        pattern: ':user/:repo/:workflow',
-        namedParams: {
-          user: 'actions',
-          repo: 'toolkit',
-          workflow: 'toolkit-unit-tests',
-        },
-        queryParams: {
-          event: 'push',
-        },
-        staticPreview: renderBuildStatusBadge({
-          status: 'passing',
-        }),
-        documentation,
-        keywords,
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return {
-      label: 'build',
-    }
+  static defaultBadgeData = {
+    label: 'build',
   }
 
   async fetch({ user, repo, workflow, branch, event }) {
