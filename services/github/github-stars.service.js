@@ -11,43 +11,35 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubStars extends GithubAuthV3Service {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'github/stars',
+    pattern: ':user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'github/stars',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub Repo stars',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        queryParams: { style: 'social' },
-        // TODO: This is currently a literal, as `staticPreview` doesn't
-        // support `link`.
-        staticPreview: {
-          label: 'Stars',
-          message: '7k',
-          style: 'social',
-        },
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub Repo stars',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      queryParams: { style: 'social' },
+      // TODO: This is currently a literal, as `staticPreview` doesn't
+      // support `link`.
+      staticPreview: {
+        label: 'Stars',
+        message: '7k',
+        style: 'social',
+      },
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'stars',
-      namedLogo: 'github',
-    }
+  static defaultBadgeData = {
+    label: 'stars',
+    namedLogo: 'github',
   }
 
   static render({ stars, user, repo }) {
