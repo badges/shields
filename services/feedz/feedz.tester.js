@@ -16,7 +16,7 @@ const t = (module.exports = new ServiceTester({
 
 // version
 t.create('version (valid)')
-  .get('/feedz/shieldstests/public/v/Shields.TestPackage.json')
+  .get('/feedz/v/shieldstests/public/Shields.TestPackage.json')
   .expectBadge({
     label: 'feedz',
     message: 'v1.0.0',
@@ -24,7 +24,7 @@ t.create('version (valid)')
   })
 
 t.create('version (yellow badge)')
-  .get('/feedz/shieldstests/public/v/Shields.TestPreOnly.json')
+  .get('/feedz/v/shieldstests/public/Shields.TestPreOnly.json')
   .expectBadge({
     label: 'feedz',
     message: 'v0.1.0-pre',
@@ -32,7 +32,7 @@ t.create('version (yellow badge)')
   })
 
 t.create('version (orange badge)')
-  .get('/feedz/shieldstests/public/v/Shields.NoV1.json')
+  .get('/feedz/v/shieldstests/public/Shields.NoV1.json')
   .expectBadge({
     label: 'feedz',
     message: 'v0.1.0',
@@ -40,16 +40,16 @@ t.create('version (orange badge)')
   })
 
 t.create('repository (not found)')
-  .get('/feedz/foo/bar/v/not-a-real-package.json')
+  .get('/feedz/v/foo/bar/not-a-real-package.json')
   .expectBadge({ label: 'feedz', message: 'not found' })
 
 t.create('version (not found)')
-  .get('/feedz/shieldstests/public/v/not-a-real-package.json')
+  .get('/feedz/v/shieldstests/public/not-a-real-package.json')
   .expectBadge({ label: 'feedz', message: 'not found' })
 
 // version (pre)
 t.create('version (pre) (valid)')
-  .get('/feedz/shieldstests/public/vpre/Shields.TestPackage.json')
+  .get('/feedz/vpre/shieldstests/public/Shields.TestPackage.json')
   .expectBadge({
     label: 'feedz',
     message: 'v1.0.0',
@@ -57,7 +57,7 @@ t.create('version (pre) (valid)')
   })
 
 t.create('version (pre) (yellow badge)')
-  .get('/feedz/shieldstests/public/vpre/Shields.TestPreOnly.json')
+  .get('/feedz/vpre/shieldstests/public/Shields.TestPreOnly.json')
   .expectBadge({
     label: 'feedz',
     message: 'v0.1.0-pre',
@@ -65,7 +65,7 @@ t.create('version (pre) (yellow badge)')
   })
 
 t.create('version (pre) (orange badge)')
-  .get('/feedz/shieldstests/public/vpre/Shields.NoV1.json')
+  .get('/feedz/vpre/shieldstests/public/Shields.NoV1.json')
   .expectBadge({
     label: 'feedz',
     message: 'v0.1.0',
@@ -73,9 +73,9 @@ t.create('version (pre) (orange badge)')
   })
 
 t.create('repository (pre) (not found)')
-  .get('/feedz/foo/bar/vpre/not-a-real-package.json')
+  .get('/feedz/vpre/foo/bar/not-a-real-package.json')
   .expectBadge({ label: 'feedz', message: 'not found' })
 
 t.create('version (pre) (not found)')
-  .get('/feedz/shieldstests/public/vpre/not-a-real-package.json')
+  .get('/feedz/vpre/shieldstests/public/not-a-real-package.json')
   .expectBadge({ label: 'feedz', message: 'not found' })

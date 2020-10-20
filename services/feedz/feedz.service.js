@@ -53,22 +53,6 @@ function stripBuildMetadata(version) {
   return version.split('+')[0]
 }
 
-async function fetch(serviceInstance, { baseUrl, packageName }) {
-  const registrationsBaseUrl = await searchQueryServiceUrl(baseUrl)
-  const json = await serviceInstance._requestJson({
-    schema,
-    url: `${registrationsBaseUrl}${packageName}/index.json`,
-  })
-
-  if (json.items.length === 1) {
-    return json.items[0].items.map(i =>
-      stripBuildMetadata(i.catalogEntry.version)
-    )
-  } else {
-    throw new NotFound({ prettyMessage: 'not found' })
-  }
-}
-
 function selectVersion(versions, includePrereleases) {
   if (includePrereleases) {
     return versions.slice(-1).pop()
@@ -92,9 +76,9 @@ class FeedzVersionService extends BaseJsonService {
   static category = 'version'
 
   static route = new RouteBuilder({ base: 'feedz' })
+    .push('(v|vpre)', 'which')
     .push('([^/]+)', 'tenant')
     .push('([^/]+)', 'feed')
-    .push('(v|vpre)', 'which')
     .push('(.+?)', 'packageName')
     .toObject()
 
@@ -129,11 +113,27 @@ class FeedzVersionService extends BaseJsonService {
     return renderVersionBadge(props)
   }
 
-  async handle({ tenant, feed, which, packageName }) {
+  async fetch({ baseUrl, packageName }) {
+    const registrationsBaseUrl = await searchQueryServiceUrl(baseUrl)
+    const json = await this._requestJson({
+      schema,
+      url: `${registrationsBaseUrl}${packageName}/index.json`,
+    })
+
+    if (json.items.length === 1) {
+      return json.items[0].items.map(i =>
+        stripBuildMetadata(i.catalogEntry.version)
+      )
+    } else {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+  }
+
+  async handle({ which, tenant, feed, packageName }) {
     const includePrereleases = which === 'vpre'
     const baseUrl = apiUrl({ tenant, feed })
 
-    const allVersions = await fetch(this, { baseUrl, packageName })
+    const allVersions = await this.fetch({ baseUrl, packageName })
     const version = selectVersion(allVersions, includePrereleases)
     return this.constructor.render({
       version,
