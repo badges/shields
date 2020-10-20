@@ -20,6 +20,13 @@ t.create('Plugin Required WP Version')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
+t.create('Theme Required WP Version')
+  .get('/theme/wp-version/twentytwenty.json')
+  .expectBadge({
+    label: 'wordpress',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
 t.create('Plugin Tested WP Version')
   .get('/plugin/tested/akismet.json')
   .expectBadge({
@@ -130,6 +137,13 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
 
 t.create('Plugin Required WP Version | Not Found')
   .get('/plugin/wp-version/100.json')
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not found',
+  })
+
+t.create('Theme Required WP Version | Not Found')
+  .get('/theme/wp-version/100.json')
   .expectBadge({
     label: 'wordpress',
     message: 'not found',

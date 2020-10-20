@@ -15,6 +15,7 @@ const themeSchema = Joi.object()
     active_installs: nonNegativeInteger,
     last_updated: Joi.string().required(),
     requires_php: stringOrFalse.required(),
+    requires: stringOrFalse.required(),
   })
   .required()
 
