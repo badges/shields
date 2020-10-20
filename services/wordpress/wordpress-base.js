@@ -5,9 +5,6 @@ const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 
 const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
-const pluginDatePattern =
-  '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{1,2}:[0-5][0-9](am|pm) [A-Z]{3}'
-const themeDatePattern = '[0-9]{4}-[0-9]{2}-[0-9]{2}'
 
 const themeSchema = Joi.object()
   .keys({
@@ -16,7 +13,7 @@ const themeSchema = Joi.object()
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
-    last_updated: Joi.string().required().regex(RegExp(themeDatePattern)),
+    last_updated: Joi.string().required(),
     requires_php: stringOrFalse.required(),
   })
   .required()
@@ -30,7 +27,7 @@ const pluginSchema = Joi.object()
     active_installs: nonNegativeInteger,
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
-    last_updated: Joi.string().required().regex(RegExp(pluginDatePattern)),
+    last_updated: Joi.string().required(),
     requires_php: stringOrFalse.required(),
   })
   .required()

@@ -1,5 +1,7 @@
 'use strict'
 
+const moment = require('moment')
+const { InvalidResponse } = require('..')
 const { formatDate } = require('../text-formatters')
 const { age: ageColor } = require('../color-formatters')
 const BaseWordpress = require('./wordpress-base')
@@ -8,15 +10,17 @@ const extensionData = {
   plugin: {
     capt: 'Plugin',
     exampleSlug: 'bbpress',
+    lastUpdateFormat: 'YYYY-MM-DD hh:mma GMT',
   },
   theme: {
     capt: 'Theme',
     exampleSlug: 'twentyseventeen',
+    lastUpdateFormat: 'YYYY-MM-DD',
   },
 }
 
 function LastUpdateForType(extensionType) {
-  const { capt, exampleSlug } = extensionData[extensionType]
+  const { capt, exampleSlug, lastUpdateFormat } = extensionData[extensionType]
 
   return class WordpressLastUpdate extends BaseWordpress {
     static name = `Wordpress${capt}LastUpdated`
@@ -46,19 +50,14 @@ function LastUpdateForType(extensionType) {
       }
     }
 
-    transform(date, extensionType) {
-      let d
-      if (extensionType === 'plugin') {
-        d = date.split(' ')
-        d = d[0]
+    transform(lastUpdate) {
+      const date = moment(lastUpdate, lastUpdateFormat)
+
+      if (date.isValid()) {
+        return date.format('YYYY-MM-DD')
       } else {
-        d = date
+        throw new InvalidResponse({ prettyMessage: 'invalid date' })
       }
-
-      const ymd = d.split('-')
-
-      const out = ymd[0] + ymd[1] + ymd[2]
-      return out
     }
 
     async handle({ slug }) {
@@ -67,7 +66,7 @@ function LastUpdateForType(extensionType) {
         slug,
       })
 
-      const newDate = await this.transform(last_updated, extensionType)
+      const newDate = await this.transform(last_updated)
 
       return this.constructor.render({
         last_updated: newDate,
