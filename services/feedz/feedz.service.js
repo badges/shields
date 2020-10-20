@@ -32,8 +32,8 @@ function apiUrl({ tenant, feed }) {
 /*
  * Hit the service index endpoint and return a first RegistrationsBaseUrl URL.
  */
-function searchQueryServiceUrl(baseUrl) {
-  return promisify(regularUpdate)({
+async function searchQueryServiceUrl(baseUrl) {
+  return await promisify(regularUpdate)({
     url: `${baseUrl}/index.json`,
     intervalMillis: 42 * 60 * 1000,
     json: true,
@@ -65,7 +65,7 @@ async function fetch(serviceInstance, { baseUrl, packageName }) {
       stripBuildMetadata(i.catalogEntry.version)
     )
   } else {
-    throw new NotFound({ prettyMessage: 'package not found' })
+    throw new NotFound({ prettyMessage: 'not found' })
   }
 }
 
@@ -135,7 +135,10 @@ class FeedzVersionService extends BaseJsonService {
 
     const allVersions = await fetch(this, { baseUrl, packageName })
     const version = selectVersion(allVersions, includePrereleases)
-    return this.constructor.render({ version, feed })
+    return this.constructor.render({
+      version,
+      feed: FeedzVersionService.defaultBadgeData.label,
+    })
   }
 }
 
