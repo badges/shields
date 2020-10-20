@@ -177,7 +177,7 @@ module.exports = function coalesceBadge(
       serviceLabelColor,
       defaultLabelColor
     ),
-    template: style,
+    style,
     namedLogo,
     logo: logoSvgBase64,
     logoWidth,

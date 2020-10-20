@@ -376,7 +376,7 @@ describe('BaseService', function () {
         label: 'cat',
         message: 'Hello namedParamA: bar with queryParamA: ?',
         color: 'lightgrey',
-        template: 'flat',
+        style: 'flat',
         namedLogo: undefined,
         logo: undefined,
         logoWidth: undefined,
