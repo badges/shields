@@ -25,8 +25,8 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
-function apiUrl({ tenant, feed }) {
-  return `https://f.feedz.io/${tenant}/${feed}/nuget`
+function apiUrl({ organization, repository }) {
+  return `https://f.feedz.io/${organization}/${repository}/nuget`
 }
 
 /*
@@ -77,8 +77,8 @@ class FeedzVersionService extends BaseJsonService {
 
   static route = new RouteBuilder({ base: 'feedz' })
     .push('(v|vpre)', 'which')
-    .push('([^/]+)', 'tenant')
-    .push('([^/]+)', 'feed')
+    .push('([^/]+)', 'organization')
+    .push('([^/]+)', 'repository')
     .push('(.+?)', 'packageName')
     .toObject()
 
@@ -129,9 +129,9 @@ class FeedzVersionService extends BaseJsonService {
     }
   }
 
-  async handle({ which, tenant, feed, packageName }) {
+  async handle({ which, organization, repository, packageName }) {
     const includePrereleases = which === 'vpre'
-    const baseUrl = apiUrl({ tenant, feed })
+    const baseUrl = apiUrl({ organization, repository })
 
     const allVersions = await this.fetch({ baseUrl, packageName })
     const version = selectVersion(allVersions, includePrereleases)
