@@ -13,6 +13,7 @@ const themeSchema = Joi.object()
     num_ratings: nonNegativeInteger,
     downloaded: nonNegativeInteger,
     active_installs: nonNegativeInteger,
+    last_updated: Joi.string().required(),
     requires_php: stringOrFalse.required(),
     requires: stringOrFalse.required(),
   })
@@ -27,6 +28,7 @@ const pluginSchema = Joi.object()
     active_installs: nonNegativeInteger,
     requires: stringOrFalse.required(),
     tested: Joi.string().required(),
+    last_updated: Joi.string().required(),
     requires_php: stringOrFalse.required(),
   })
   .required()
@@ -64,6 +66,7 @@ module.exports = class BaseWordpress extends BaseJsonService {
               tags: 0,
               screenshot_url: 0,
               downloaded: 1,
+              last_updated: 1,
               requires_php: 1,
             },
           },
