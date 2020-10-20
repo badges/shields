@@ -35,6 +35,7 @@ const mockedQueryFields = {
   screenshot_url: '0',
   downloaded: 1,
   requires_php: 1,
+  last_updated: 1,
 }
 
 const mockedQuerySelector = {
@@ -187,6 +188,7 @@ t.create('Theme Required PHP Version (Not Set)')
         requires: '4.0',
         tested: '4.0.0',
         requires_php: false,
+        last_updated: '2020-01-01',
       })
   )
   .expectBadge({
