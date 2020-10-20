@@ -15,32 +15,26 @@ const schema = Joi.alternatives(
 )
 
 module.exports = class GithubSize extends GithubAuthV3Service {
-  static get category() {
-    return 'size'
+  static category = 'size'
+
+  static route = {
+    base: 'github/size',
+    pattern: ':user/:repo/:path*',
   }
 
-  static get route() {
-    return {
-      base: 'github/size',
-      pattern: ':user/:repo/:path*',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub file size in bytes',
-        namedParams: {
-          user: 'webcaetano',
-          repo: 'craft',
-          path: 'build/phaser-craft.min.js',
-        },
-        staticPreview: this.render({ size: 9170 }),
-        keywords: ['repo'],
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub file size in bytes',
+      namedParams: {
+        user: 'webcaetano',
+        repo: 'craft',
+        path: 'build/phaser-craft.min.js',
       },
-    ]
-  }
+      staticPreview: this.render({ size: 9170 }),
+      keywords: ['repo'],
+      documentation,
+    },
+  ]
 
   static render({ size }) {
     return {

@@ -20,6 +20,13 @@ t.create('Plugin Required WP Version')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
+t.create('Theme Required WP Version')
+  .get('/theme/wp-version/twentytwenty.json')
+  .expectBadge({
+    label: 'wordpress',
+    message: isVPlusDottedVersionAtLeastOne,
+  })
+
 t.create('Plugin Tested WP Version')
   .get('/plugin/tested/akismet.json')
   .expectBadge({
@@ -35,6 +42,7 @@ const mockedQueryFields = {
   screenshot_url: '0',
   downloaded: 1,
   requires_php: 1,
+  last_updated: 1,
 }
 
 const mockedQuerySelector = {
@@ -63,6 +71,7 @@ t.create('Plugin Tested WP Version - current')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.8',
+        last_updated: '2020-01-01 7:21am GMT',
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
@@ -88,6 +97,7 @@ t.create('Plugin Tested WP Version - old')
         active_installs: 100,
         requires: '4.9',
         tested: '4.9.6',
+        last_updated: '2020-01-01 7:21am GMT',
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
@@ -113,6 +123,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
         active_installs: 100,
         requires: '4.0',
         tested: '4.0.0',
+        last_updated: '2020-01-01 7:21am GMT',
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
@@ -126,6 +137,13 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
 
 t.create('Plugin Required WP Version | Not Found')
   .get('/plugin/wp-version/100.json')
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not found',
+  })
+
+t.create('Theme Required WP Version | Not Found')
+  .get('/theme/wp-version/100.json')
   .expectBadge({
     label: 'wordpress',
     message: 'not found',
@@ -184,6 +202,7 @@ t.create('Theme Required PHP Version (Not Set)')
         requires: '4.0',
         tested: '4.0.0',
         requires_php: false,
+        last_updated: '2020-01-01',
       })
   )
   .expectBadge({

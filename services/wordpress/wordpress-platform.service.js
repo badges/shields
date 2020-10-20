@@ -17,52 +17,48 @@ const extensionData = {
   },
 }
 
-class WordpressPluginRequiresVersion extends BaseWordpress {
-  static get category() {
-    return 'platform-support'
-  }
+function WordpressRequiresVersion(extensionType) {
+  const { capt, exampleSlug } = extensionData[extensionType]
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/wp-version`,
+  return class WordpressRequiresVersion extends BaseWordpress {
+    static name = `Wordpress${capt}RequiresVersion`
+
+    static category = 'platform-support'
+
+    static route = {
+      base: `wordpress/${extensionType}/wp-version`,
       pattern: ':slug',
     }
-  }
 
-  static get examples() {
-    return [
+    static examples = [
       {
-        title: 'WordPress Plugin: Required WP Version',
-        namedParams: { slug: 'bbpress' },
+        title: `WordPress ${capt}: Required WP Version`,
+        namedParams: { slug: exampleSlug },
         staticPreview: this.render({ wordpressVersion: '4.8' }),
       },
     ]
-  }
 
-  static get defaultBadgeData() {
-    return { label: 'wordpress' }
-  }
+    static defaultBadgeData = { label: 'wordpress' }
 
-  static render({ wordpressVersion }) {
-    return {
-      message: addv(wordpressVersion),
-      color: versionColor(wordpressVersion),
+    static render({ wordpressVersion }) {
+      return {
+        message: addv(wordpressVersion),
+        color: versionColor(wordpressVersion),
+      }
     }
-  }
 
-  async handle({ slug }) {
-    const { requires: wordpressVersion } = await this.fetch({
-      extensionType: 'plugin',
-      slug,
-    })
-    return this.constructor.render({ wordpressVersion })
+    async handle({ slug }) {
+      const { requires: wordpressVersion } = await this.fetch({
+        extensionType,
+        slug,
+      })
+      return this.constructor.render({ wordpressVersion })
+    }
   }
 }
 
 class WordpressPluginTestedVersion extends BaseWordpress {
-  static get category() {
-    return 'platform-support'
-  }
+  static category = 'platform-support'
 
   static get route() {
     return {
@@ -83,9 +79,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
     ]
   }
 
-  static get defaultBadgeData() {
-    return { label: 'wordpress' }
-  }
+  static defaultBadgeData = { label: 'wordpress' }
 
   static renderStaticPreview({ testedVersion }) {
     // Since this badge has an async `render()` function, but `get examples()` has to
@@ -166,8 +160,9 @@ function RequiresPHPVersionForType(extensionType) {
 }
 
 const required_php = ['plugin', 'theme'].map(RequiresPHPVersionForType)
-module.exports = {
-  WordpressPluginRequiresVersion,
-  WordpressPluginTestedVersion,
+const requiresVersion = ['plugin', 'theme'].map(WordpressRequiresVersion)
+module.exports = [
   ...required_php,
-}
+  ...requiresVersion,
+  WordpressPluginTestedVersion,
+]
