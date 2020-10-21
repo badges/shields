@@ -581,8 +581,9 @@ function forTheBadge({
 }) {
   const BADGE_HEIGHT = 28
   const LOGO_HEIGHT = 14
-  const HORIZONTAL_PADDING = 12
-  const LOGO_RIGHT_MARGIN = 3
+  const TEXT_MARGIN = 12
+  const LOGO_MARGIN = 9
+  const LOGO_TEXT_GUTTER = 6
   const LETTER_SPACING = 1.25
 
   // Prepare content.
@@ -610,27 +611,31 @@ function forTheBadge({
   // message rect; when false, only a message rect.
   const hasLabel = Boolean(label.length)
   const needsLabelRect = hasLabel || (logo && labelColor)
-  let logoMinX, effectiveLogoRightMargin, labelTextMinX
+  let logoMinX, labelTextMinX
   if (logo) {
-    logoMinX = HORIZONTAL_PADDING
-    effectiveLogoRightMargin = LOGO_RIGHT_MARGIN
-    labelTextMinX = logoMinX + logoWidth + LOGO_RIGHT_MARGIN
+    logoMinX = LOGO_MARGIN
+    labelTextMinX = logoMinX + logoWidth + LOGO_TEXT_GUTTER
   } else {
-    labelTextMinX = HORIZONTAL_PADDING
+    labelTextMinX = TEXT_MARGIN
   }
   let labelRectWidth, messageTextMinX, messageRectWidth
   if (needsLabelRect) {
-    labelRectWidth = labelTextMinX + labelTextWidth + HORIZONTAL_PADDING
-    messageTextMinX = labelRectWidth + HORIZONTAL_PADDING
-    messageRectWidth = 2 * HORIZONTAL_PADDING + messageTextWidth
+    if (hasLabel) {
+      labelRectWidth = labelTextMinX + labelTextWidth + TEXT_MARGIN
+    } else {
+      labelRectWidth = 2 * LOGO_MARGIN + logoWidth
+    }
+    messageTextMinX = labelRectWidth + TEXT_MARGIN
+    messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
   } else {
-    messageTextMinX =
-      HORIZONTAL_PADDING + (logoWidth || 0) + (effectiveLogoRightMargin || 0)
-    messageRectWidth =
-      2 * HORIZONTAL_PADDING +
-      (logoWidth || 0) +
-      (effectiveLogoRightMargin || 0) +
-      messageTextWidth
+    if (logo) {
+      messageTextMinX = TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER
+      messageRectWidth =
+        2 * TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER + messageTextWidth
+    } else {
+      messageTextMinX = TEXT_MARGIN
+      messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
+    }
   }
 
   // Render.
