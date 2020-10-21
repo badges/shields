@@ -596,12 +596,19 @@ function forTheBadge({
   const outLabelColor = labelColor || '#555'
 
   // Compute text width.
+  // TODO: This really should count the symbols rather than just using `.length`.
+  // https://mathiasbynens.be/notes/javascript-unicode
+  // This is not using `preferredWidthOf()` as it tends to produce larger
+  // inconsistencies in the letter spacing. The badges look fine, however if you
+  // replace `textLength` with `letterSpacing` in the rendered SVG, you can see
+  // the discrepancy. Ideally, swapping out `textLength` for `letterSpacing`
+  // should not affect the appearance.
   const labelTextWidth = label.length
-    ? preferredWidthOf(label, { font: '10px Verdana' }) +
+    ? (anafanafo(label, { font: '10px Verdana' }) || 0) +
       LETTER_SPACING * label.length
     : 0
   const messageTextWidth = message.length
-    ? preferredWidthOf(message, { font: 'bold 10px Verdana' }) +
+    ? (anafanafo(message, { font: 'bold 10px Verdana' }) || 0) +
       LETTER_SPACING * message.length
     : 0
 
