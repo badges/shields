@@ -643,7 +643,7 @@ function forTheBadge({
     return `
       <image
         x="${logoMinX}"
-        y="${(BADGE_HEIGHT - LOGO_HEIGHT) / 2}"
+        y="${0.5 * (BADGE_HEIGHT - LOGO_HEIGHT)}"
         width="${logoWidth}"
         height="${LOGO_HEIGHT}"
         xlink:href="${escapeXml(logo)}"
@@ -653,10 +653,11 @@ function forTheBadge({
 
   function renderLabelText() {
     const { textColor } = colorsForBackground(outLabelColor)
+    const midX = labelTextMinX + 0.5 * labelTextWidth
     const text = `
       <text
         transform="scale(.1)"
-        x="${10 * (labelTextMinX + 0.5 * labelTextWidth)}"
+        x="${10 * midX}"
         y="175"
         textLength="${10 * labelTextWidth}"
         fill="${escapeXml(textColor)}">
@@ -682,10 +683,11 @@ function forTheBadge({
 
   function renderMessageText() {
     const { textColor } = colorsForBackground(color)
+    const midX = messageTextMinX + 0.5 * messageTextWidth
     const text = `
       <text
         transform="scale(.1)"
-        x="${10 * (messageTextMinX + 0.5 * messageTextWidth)}"
+        x="${10 * midX}"
         y="175"
         textLength="${10 * messageTextWidth}"
         fill="${textColor}"
