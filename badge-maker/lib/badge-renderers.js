@@ -604,11 +604,11 @@ function forTheBadge({
   // the discrepancy. Ideally, swapping out `textLength` for `letterSpacing`
   // should not affect the appearance.
   const labelTextWidth = label.length
-    ? (anafanafo(label, { font: '10px Verdana' }) || 0) +
+    ? (anafanafo(label, { font: '10px Verdana' }) | 0) +
       LETTER_SPACING * label.length
     : 0
   const messageTextWidth = message.length
-    ? (anafanafo(message, { font: 'bold 10px Verdana' }) || 0) +
+    ? (anafanafo(message, { font: 'bold 10px Verdana' }) | 0) +
       LETTER_SPACING * message.length
     : 0
 

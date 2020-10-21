@@ -969,7 +969,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="147.75"
+  width="146.75"
   height="28"
   role="img"
   aria-label="CACTUS: GROWN"
@@ -977,7 +977,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
   <title>CACTUS: GROWN</title>
   <g shape-rendering="crispEdges">
     <rect width="72.5" height="28" fill="#0f0" />
-    <rect x="72.5" width="75.25" height="28" fill="#b3e" />
+    <rect x="72.5" width="74.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -991,9 +991,9 @@ exports['The badge generator "for-the-badge" template badge generation should ma
     </text>
     <text
       transform="scale(.1)"
-      x="1101.25"
+      x="1096.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#fff"
       font-weight="bold"
     >
@@ -1008,7 +1008,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="164.75"
+  width="163.75"
   height="28"
   role="img"
   aria-label="CACTUS: GROWN"
@@ -1016,7 +1016,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
   <title>CACTUS: GROWN</title>
   <g shape-rendering="crispEdges">
     <rect width="89.5" height="28" fill="#0f0" />
-    <rect x="89.5" width="75.25" height="28" fill="#b3e" />
+    <rect x="89.5" width="74.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -1037,9 +1037,9 @@ exports['The badge generator "for-the-badge" template badge generation should ma
     </text>
     <text
       transform="scale(.1)"
-      x="1271.25"
+      x="1266.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#fff"
       font-weight="bold"
     >
@@ -1054,14 +1054,14 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="75.25"
+  width="74.25"
   height="28"
   role="img"
   aria-label="GROWN"
 >
   <title>GROWN</title>
   <g shape-rendering="crispEdges">
-    <rect width="75.25" height="28" fill="#b3e" />
+    <rect width="74.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -1072,9 +1072,9 @@ exports['The badge generator "for-the-badge" template badge generation should ma
   >
     <text
       transform="scale(.1)"
-      x="376.25"
+      x="371.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#fff"
       font-weight="bold"
     >
@@ -1089,14 +1089,14 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="95.25"
+  width="94.25"
   height="28"
   role="img"
   aria-label="GROWN"
 >
   <title>GROWN</title>
   <g shape-rendering="crispEdges">
-    <rect width="95.25" height="28" fill="#b3e" />
+    <rect width="94.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -1114,9 +1114,9 @@ exports['The badge generator "for-the-badge" template badge generation should ma
     />
     <text
       transform="scale(.1)"
-      x="576.25"
+      x="571.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#fff"
       font-weight="bold"
     >
@@ -1131,7 +1131,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="107.25"
+  width="106.25"
   height="28"
   role="img"
   aria-label="GROWN"
@@ -1139,7 +1139,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
   <title>GROWN</title>
   <g shape-rendering="crispEdges">
     <rect width="32" height="28" fill="#0f0" />
-    <rect x="32" width="75.25" height="28" fill="#b3e" />
+    <rect x="32" width="74.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -1157,9 +1157,9 @@ exports['The badge generator "for-the-badge" template badge generation should ma
     />
     <text
       transform="scale(.1)"
-      x="696.25"
+      x="691.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#fff"
       font-weight="bold"
     >
@@ -1174,12 +1174,12 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="147.75"
+  width="146.75"
   height="28"
 >
   <g shape-rendering="crispEdges">
     <rect width="72.5" height="28" fill="#0f0" />
-    <rect x="72.5" width="75.25" height="28" fill="#b3e" />
+    <rect x="72.5" width="74.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -1201,12 +1201,12 @@ exports['The badge generator "for-the-badge" template badge generation should ma
       </text>
     </a>
     <a target="_blank" xlink:href="https://www.google.co.uk/">
-      <rect width="75.25" height="28" x="72.5" fill="rgba(0,0,0,0)" />
+      <rect width="74.25" height="28" x="72.5" fill="rgba(0,0,0,0)" />
       <text
         transform="scale(.1)"
-        x="1101.25"
+        x="1096.25"
         y="175"
-        textLength="512.5"
+        textLength="502.5"
         fill="#fff"
         font-weight="bold"
       >
@@ -1908,7 +1908,7 @@ exports['The badge generator text colors should use black text when the message 
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="147.75"
+  width="146.75"
   height="28"
   role="img"
   aria-label="CACTUS: GROWN"
@@ -1916,7 +1916,7 @@ exports['The badge generator text colors should use black text when the message 
   <title>CACTUS: GROWN</title>
   <g shape-rendering="crispEdges">
     <rect width="72.5" height="28" fill="#000" />
-    <rect x="72.5" width="75.25" height="28" fill="#e2ffe1" />
+    <rect x="72.5" width="74.25" height="28" fill="#e2ffe1" />
   </g>
   <g
     fill="#fff"
@@ -1930,9 +1930,9 @@ exports['The badge generator text colors should use black text when the message 
     </text>
     <text
       transform="scale(.1)"
-      x="1101.25"
+      x="1096.25"
       y="175"
-      textLength="512.5"
+      textLength="502.5"
       fill="#333"
       font-weight="bold"
     >
