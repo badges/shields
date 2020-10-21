@@ -124,7 +124,7 @@ function transformExample(inExample, index, ServiceClass) {
     documentation,
   } = validateExample(inExample, index, ServiceClass)
 
-  const { label, message, color, template: style, namedLogo } = coalesceBadge(
+  const { label, message, color, style, namedLogo } = coalesceBadge(
     {},
     staticPreview,
     ServiceClass.defaultBadgeData,

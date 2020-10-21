@@ -280,22 +280,22 @@ describe('coalesceBadge', function () {
   describe('Style', function () {
     it('falls back to flat with invalid style', function () {
       expect(coalesceBadge({ style: 'pill' }, {}, {})).to.include({
-        template: 'flat',
+        style: 'flat',
       })
       expect(coalesceBadge({ style: 7 }, {}, {})).to.include({
-        template: 'flat',
+        style: 'flat',
       })
       expect(coalesceBadge({ style: undefined }, {}, {})).to.include({
-        template: 'flat',
+        style: 'flat',
       })
     })
 
     it('replaces legacy popout styles', function () {
       expect(coalesceBadge({ style: 'popout' }, {}, {})).to.include({
-        template: 'flat',
+        style: 'flat',
       })
       expect(coalesceBadge({ style: 'popout-square' }, {}, {})).to.include({
-        template: 'flat-square',
+        style: 'flat-square',
       })
     })
   })

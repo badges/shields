@@ -123,7 +123,7 @@ describe('The badge generator', function () {
         label: 'name',
         message: 'Bob',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
       })
       expect(jsonBadgeWithUnknownStyle)
         .to.equal(jsonBadgeWithDefaultStyle)
@@ -136,9 +136,9 @@ describe('The badge generator', function () {
           label: 'name',
           message: 'Bob',
           format: 'svg',
-          template: 'unknown_style',
+          style: 'unknown_style',
         })
-      ).to.throw(Error, "Unknown template: 'unknown_style'")
+      ).to.throw(Error, "Unknown badge style: 'unknown_style'")
     })
   })
 
@@ -148,7 +148,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
         labelColor: '#0f0',
       })
@@ -159,7 +159,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -171,7 +171,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
       })
     })
@@ -181,7 +181,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
@@ -192,7 +192,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -204,7 +204,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
@@ -218,7 +218,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
         labelColor: '#0f0',
       })
@@ -229,7 +229,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -241,7 +241,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
       })
     })
@@ -251,7 +251,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
@@ -262,7 +262,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -274,7 +274,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat-square',
+        style: 'flat-square',
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
@@ -288,7 +288,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
         labelColor: '#0f0',
       })
@@ -299,7 +299,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -311,7 +311,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
       })
     })
@@ -321,7 +321,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
@@ -332,7 +332,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -344,7 +344,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'plastic',
+        style: 'plastic',
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
@@ -360,7 +360,7 @@ describe('The badge generator', function () {
           label: 1998,
           message: 1999,
           format: 'svg',
-          template: 'for-the-badge',
+          style: 'for-the-badge',
         })
       )
         .to.include('1998')
@@ -373,7 +373,7 @@ describe('The badge generator', function () {
           label: 'Label',
           message: '1 string',
           format: 'svg',
-          template: 'for-the-badge',
+          style: 'for-the-badge',
         })
       )
         .to.include('LABEL')
@@ -385,7 +385,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
         labelColor: '#0f0',
       })
@@ -396,7 +396,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -408,7 +408,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
       })
     })
@@ -418,7 +418,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
@@ -429,7 +429,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -441,7 +441,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
@@ -456,7 +456,7 @@ describe('The badge generator', function () {
           label: 'some-key',
           message: 'some-value',
           format: 'svg',
-          template: 'social',
+          style: 'social',
         })
       )
         .to.include('Some-key')
@@ -470,7 +470,7 @@ describe('The badge generator', function () {
           label: '',
           message: 'some-value',
           format: 'json',
-          template: 'social',
+          style: 'social',
         })
       )
         .to.include('""')
@@ -482,7 +482,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
         labelColor: '#0f0',
       })
@@ -493,7 +493,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -505,7 +505,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
       })
     })
@@ -515,7 +515,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
       })
@@ -526,7 +526,7 @@ describe('The badge generator', function () {
         label: '',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
@@ -538,7 +538,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'social',
+        style: 'social',
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
@@ -563,7 +563,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'flat',
+        style: 'flat',
         color: '#000',
         labelColor: '#f3f3f3',
       })
@@ -574,7 +574,7 @@ describe('The badge generator', function () {
         label: 'cactus',
         message: 'grown',
         format: 'svg',
-        template: 'for-the-badge',
+        style: 'for-the-badge',
         color: '#e2ffe1',
         labelColor: '#000',
       })
