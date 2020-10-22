@@ -3,6 +3,10 @@
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
 
+// https://github.com/badges/shields/pull/1132
+const FONT_SCALE_FACTOR = 10
+const FONT_SCALE_ATTR = 'transform="scale(.1)"'
+
 const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
@@ -579,6 +583,7 @@ function forTheBadge({
   color = '#4c1',
   labelColor,
 }) {
+  const FONT_SIZE = 10
   const BADGE_HEIGHT = 28
   const LOGO_HEIGHT = 14
   const TEXT_MARGIN = 12
@@ -604,11 +609,11 @@ function forTheBadge({
   // the discrepancy. Ideally, swapping out `textLength` for `letterSpacing`
   // should not affect the appearance.
   const labelTextWidth = label.length
-    ? (anafanafo(label, { font: '10px Verdana' }) | 0) +
+    ? (anafanafo(label, { font: `${FONT_SIZE}px Verdana` }) | 0) +
       LETTER_SPACING * label.length
     : 0
   const messageTextWidth = message.length
-    ? (anafanafo(message, { font: 'bold 10px Verdana' }) | 0) +
+    ? (anafanafo(message, { font: `bold ${FONT_SIZE}px Verdana` }) | 0) +
       LETTER_SPACING * message.length
     : 0
 
@@ -663,10 +668,10 @@ function forTheBadge({
     const midX = labelTextMinX + 0.5 * labelTextWidth
     const text = `
       <text
-        transform="scale(.1)"
-        x="${10 * midX}"
+        ${FONT_SCALE_ATTR}
+        x="${FONT_SCALE_FACTOR * midX}"
         y="175"
-        textLength="${10 * labelTextWidth}"
+        textLength="${FONT_SCALE_FACTOR * labelTextWidth}"
         fill="${escapeXml(textColor)}">
         ${escapeXml(label)}
       </text>
@@ -693,10 +698,10 @@ function forTheBadge({
     const midX = messageTextMinX + 0.5 * messageTextWidth
     const text = `
       <text
-        transform="scale(.1)"
-        x="${10 * midX}"
+        ${FONT_SCALE_ATTR}
+        x="${FONT_SCALE_FACTOR * midX}"
         y="175"
-        textLength="${10 * messageTextWidth}"
+        textLength="${FONT_SCALE_FACTOR * messageTextWidth}"
         fill="${textColor}"
         font-weight="bold"
       >
@@ -760,7 +765,7 @@ function forTheBadge({
       text-anchor="middle"
       ${fontFamily}
       text-rendering="geometricPrecision"
-      font-size="100"
+      font-size="${FONT_SCALE_FACTOR * FONT_SIZE}"
     >
       ${logo ? renderLogo() : ''}
       ${hasLabel ? renderLabelText() : ''}
