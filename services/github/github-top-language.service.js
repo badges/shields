@@ -4,39 +4,31 @@ const { BaseGithubLanguage } = require('./github-languages-base')
 const { documentation } = require('./github-helpers')
 
 module.exports = class GithubTopLanguage extends BaseGithubLanguage {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'github/languages/top',
+    pattern: ':user/:repo',
   }
 
-  static get route() {
-    return {
-      base: 'github/languages/top',
-      pattern: ':user/:repo',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub top language',
-        namedParams: {
-          user: 'badges',
-          repo: 'shields',
-        },
-        staticPreview: this.render({
-          language: 'javascript',
-          languageSize: 99.5,
-          totalSize: 100,
-        }),
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub top language',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      staticPreview: this.render({
+        language: 'javascript',
+        languageSize: 99.5,
+        totalSize: 100,
+      }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'language',
-    }
+  static defaultBadgeData = {
+    label: 'language',
   }
 
   static render({ language, languageSize, totalSize }) {
