@@ -29,17 +29,13 @@ module.exports = class NodePingStatus extends BaseJsonService {
   static examples = [
     {
       title: 'NodePing status',
-      namedParams: {
-        checkUuid: exampleCheckUuid,
-      },
+      namedParams: { checkUuid: exampleCheckUuid },
       queryParams: exampleQueryParams,
       staticPreview: renderWebsiteStatus({ isUp: true }),
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'Status',
-  }
+  static defaultBadgeData = { label: 'status' }
 
   async fetch({ checkUuid }) {
     const rows = await this._requestJson({

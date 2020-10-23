@@ -9,37 +9,29 @@ const { errorMessagesFor, documentation } = require('./github-helpers')
 const schema = Joi.object({ total_count: nonNegativeInteger }).required()
 
 module.exports = class GithubSearch extends GithubAuthV3Service {
-  static get category() {
-    return 'analysis'
+  static category = 'analysis'
+
+  static route = {
+    base: 'github/search',
+    pattern: ':user/:repo/:query+',
   }
 
-  static get route() {
-    return {
-      base: 'github/search',
-      pattern: ':user/:repo/:query+',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'GitHub search hit counter',
-        pattern: ':user/:repo/:query',
-        namedParams: {
-          user: 'torvalds',
-          repo: 'linux',
-          query: 'goto',
-        },
-        staticPreview: this.render({ query: 'goto', totalCount: 14000 }),
-        documentation,
+  static examples = [
+    {
+      title: 'GitHub search hit counter',
+      pattern: ':user/:repo/:query',
+      namedParams: {
+        user: 'torvalds',
+        repo: 'linux',
+        query: 'goto',
       },
-    ]
-  }
+      staticPreview: this.render({ query: 'goto', totalCount: 14000 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'counter',
-    }
+  static defaultBadgeData = {
+    label: 'counter',
   }
 
   static render({ query, totalCount }) {

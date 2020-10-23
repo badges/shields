@@ -160,12 +160,10 @@ module.exports = function coalesceBadge(
   }
 
   return {
-    text: [
-      // Use `coalesce()` to support empty labels and messages, as in the
-      // static badge.
-      coalesce(overrideLabel, serviceLabel, defaultLabel, category),
-      coalesce(serviceMessage, 'n/a'),
-    ],
+    // Use `coalesce()` to support empty labels and messages, as in the static
+    // badge.
+    label: coalesce(overrideLabel, serviceLabel, defaultLabel, category),
+    message: coalesce(serviceMessage, 'n/a'),
     color: coalesce(
       // In case of an error, disregard user's color override.
       isError ? undefined : overrideColor,
@@ -179,7 +177,7 @@ module.exports = function coalesceBadge(
       serviceLabelColor,
       defaultLabelColor
     ),
-    template: style,
+    style,
     namedLogo,
     logo: logoSvgBase64,
     logoWidth,

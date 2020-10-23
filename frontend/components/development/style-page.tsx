@@ -129,7 +129,7 @@ function StyleTable({ style }: { style: string }): JSX.Element {
         <tr>
           <td>Description</td>
           <td>Badges (new)</td>
-          <td>Badges (old)</td>
+          <td>Badges (img.shields.io)</td>
         </tr>
       </thead>
       <tbody>

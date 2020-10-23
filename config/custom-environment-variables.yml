@@ -30,9 +30,6 @@ public:
       __name: 'ALLOWED_ORIGIN'
       __format: 'json'
 
-  persistence:
-    dir: 'PERSISTENCE_DIR'
-
   services:
     bitbucketServer:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
@@ -63,6 +60,8 @@ public:
   rateLimit: 'RATE_LIMIT'
 
   fetchLimit: 'FETCH_LIMIT'
+
+  requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'

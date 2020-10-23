@@ -9,7 +9,12 @@ const { documentation, transformErrors } = require('./github-helpers')
 const greenStates = ['SUCCESS']
 const redStates = ['ERROR', 'FAILURE']
 const blueStates = ['INACTIVE']
-const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING']
+const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING', 'NO_STATUS']
+
+const stateToMessageMappings = {
+  IN_PROGRESS: 'in progress',
+  NO_STATUS: 'no status yet',
+}
 
 const allState = greenStates
   .concat(redStates)
@@ -73,10 +78,8 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
       color = 'blue'
     }
 
-    let message
-    if (state === 'IN_PROGRESS') {
-      message = 'in progress'
-    } else {
+    let message = stateToMessageMappings[state]
+    if (!message) {
       message = state.toLowerCase()
     }
 
@@ -114,7 +117,7 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
     // This happens for the brief moment a deployment is created, but no
     // status is created for the deployment (yet).
     if (data.repository.deployments.nodes[0].latestStatus == null) {
-      throw new NotFound({ prettyMessage: 'deployment has no status (yet)' })
+      return { state: 'NO_STATUS' }
     }
 
     const state = data.repository.deployments.nodes[0].latestStatus.state

@@ -16,9 +16,6 @@ public:
   cors:
     allowedOrigin: []
 
-  persistence:
-    dir: './private'
-
   services:
     github:
       baseUri: 'https://api.github.com/'
@@ -35,5 +32,7 @@ public:
   handleInternalErrors: true
 
   fetchLimit: '10MB'
+
+  requireCloudflare: false
 
 private: {}
