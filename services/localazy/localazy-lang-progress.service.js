@@ -13,6 +13,7 @@ module.exports = class LocalazyLangProgress extends LocalazyBase {
     ':localeCode',
     queryParamSchema
   )
+
   static examples = [
     {
       title: 'Localazy language progress with locale',
