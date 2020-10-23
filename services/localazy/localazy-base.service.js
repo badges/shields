@@ -14,11 +14,12 @@ module.exports = class LocalazyBase extends BaseJsonService {
 
   static route = this.buildRoute()
 
-  static buildRoute(base = '', pattern = '') {
-    return {
+  static buildRoute(base = '', pattern = '', query) {
+    const baseRoute = {
       base: `localazy${base ? `/${base}` : ''}`,
       pattern: `:projectId${pattern ? `/${pattern}` : ''}`,
     }
+    return query ? { ...baseRoute, queryParamSchema: query } : baseRoute
   }
 
   static get documentation() {
