@@ -6,7 +6,12 @@ const { nonNegativeInteger } = require('../validators')
 const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { NotFound } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
+const { fetchLatestRelease } = require('./github-common-release')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+
+const queryParamSchema = Joi.object({
+  sort: Joi.string().valid('date', 'semver').default('date'),
+}).required()
 
 const releaseSchema = Joi.object({
   assets: Joi.array()
@@ -27,11 +32,12 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
   static route = {
     base: 'github',
     pattern: ':kind(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
+    queryParamSchema,
   }
 
   static examples = [
     {
-      title: 'GitHub All Releases',
+      title: 'GitHub all releases',
       pattern: 'downloads/:user/:repo/total',
       namedParams: {
         user: 'atom',
@@ -44,7 +50,7 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
       documentation,
     },
     {
-      title: 'GitHub Releases',
+      title: 'GitHub release (latest by date)',
       pattern: 'downloads/:user/:repo/:tag/total',
       namedParams: {
         user: 'atom',
@@ -59,7 +65,23 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
       documentation,
     },
     {
-      title: 'GitHub Pre-Releases',
+      title: 'GitHub release (latest by SemVer)',
+      pattern: 'downloads/:user/:repo/:tag/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+      },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'total',
+        downloadCount: 27000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (latest by date including pre-releases)',
       pattern: 'downloads-pre/:user/:repo/:tag/total',
       namedParams: {
         user: 'atom',
@@ -74,7 +96,23 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
       documentation,
     },
     {
-      title: 'GitHub Releases (by Release)',
+      title: 'GitHub release (latest by SemVer including pre-releases)',
+      pattern: 'downloads-pre/:user/:repo/:tag/total',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+      },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'total',
+        downloadCount: 2000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (by tag)',
       pattern: 'downloads/:user/:repo/:tag/total',
       namedParams: {
         user: 'atom',
@@ -89,13 +127,13 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
       documentation,
     },
     {
-      title: 'GitHub Releases (by Asset)',
-      pattern: 'downloads/:user/:repo/:tag/:path',
+      title: 'GitHub release (latest by date and asset)',
+      pattern: 'downloads/:user/:repo/:tag/:assetName',
       namedParams: {
         user: 'atom',
         repo: 'atom',
         tag: 'latest',
-        path: 'atom-amd64.deb',
+        assetName: 'atom-amd64.deb',
       },
       staticPreview: this.render({
         tag: 'latest',
@@ -105,14 +143,49 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
       documentation,
     },
     {
-      title: 'GitHub Pre-Releases (by Asset)',
-      pattern: 'downloads-pre/:user/:repo/:tag/:path',
+      title: 'GitHub release (latest by SemVer and asset)',
+      pattern: 'downloads/:user/:repo/:tag/:assetName',
       namedParams: {
         user: 'atom',
         repo: 'atom',
         tag: 'latest',
-        path: 'atom-amd64.deb',
+        assetName: 'atom-amd64.deb',
       },
+      queryParams: { sort: 'semver' },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+        downloadCount: 3000,
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub release (latest by date and asset including pre-releases)',
+      pattern: 'downloads-pre/:user/:repo/:tag/:assetName',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+      },
+      staticPreview: this.render({
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+        downloadCount: 237,
+      }),
+      documentation,
+    },
+    {
+      title:
+        'GitHub release (latest by SemVer and asset including pre-releases)',
+      pattern: 'downloads-pre/:user/:repo/:tag/:assetName',
+      namedParams: {
+        user: 'atom',
+        repo: 'atom',
+        tag: 'latest',
+        assetName: 'atom-amd64.deb',
+      },
+      queryParams: { sort: 'semver' },
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'atom-amd64.deb',
@@ -154,29 +227,16 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
     return { downloadCount }
   }
 
-  async handle({ kind, user, repo, tag, assetName }) {
+  async handle({ kind, user, repo, tag, assetName }, { sort }) {
     let releases
-    if (tag === 'latest' && kind === 'downloads') {
-      const latestRelease = await this._requestJson({
-        schema: releaseSchema,
-        url: `/repos/${user}/${repo}/releases/latest`,
-        errorMessages: errorMessagesFor('repo not found'),
-      })
+    if (tag === 'latest') {
+      const include_prereleases = kind === 'downloads-pre' || undefined
+      const latestRelease = await fetchLatestRelease(
+        this,
+        { user, repo },
+        { sort, include_prereleases }
+      )
       releases = [latestRelease]
-    } else if (tag === 'latest') {
-      // Keep only the latest release.
-      const [latestReleaseIncludingPrereleases] = await this._requestJson({
-        schema: releaseArraySchema,
-        url: `/repos/${user}/${repo}/releases`,
-        options: { qs: { per_page: 1 } },
-        errorMessages: errorMessagesFor('repo not found'),
-      })
-      // Note that the API will return an empty array if there are no releases
-      // https://github.com/badges/shields/issues/3786
-      if (!latestReleaseIncludingPrereleases) {
-        throw new NotFound({ prettyMessage: 'no releases' })
-      }
-      releases = [latestReleaseIncludingPrereleases]
     } else if (tag) {
       const wantedRelease = await this._requestJson({
         schema: releaseSchema,
