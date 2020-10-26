@@ -51,7 +51,7 @@ describe('DockerVersion', function () {
     given({
       tag: '3.9',
       data: versionDataWithTag,
-      arch: 'arm'
+      arch: 'arm',
     }).expect({
       version: '3.9.5',
     })

@@ -28,7 +28,9 @@ const buildSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.string().valid('amd64', 'arm', 'arm64', 'ppc64le', 's390x', '386').default('amd64')
+  arch: Joi.string()
+    .valid('amd64', 'arm', 'arm64', 'ppc64le', 's390x', '386')
+    .default('amd64'),
 }).required()
 
 module.exports = class DockerVersion extends BaseJsonService {
@@ -82,9 +84,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (version !== 'latest') {
         return { version }
       }
-      const imageTag = data.results[0].images.find(
-        i => i.architecture === arch
-      ) // Digest is the unique field that we utilise to match images
+      const imageTag = data.results[0].images.find(i => i.architecture === arch) // Digest is the unique field that we utilise to match images
       if (!imageTag) {
         throw new InvalidResponse({
           prettyMessage: 'digest not found for latest tag',
@@ -137,7 +137,13 @@ module.exports = class DockerVersion extends BaseJsonService {
       })
     }
 
-    const { version } = await this.transform({ tag, sort, data, pagedData, arch })
+    const { version } = await this.transform({
+      tag,
+      sort,
+      data,
+      pagedData,
+      arch,
+    })
     return this.constructor.render({ version })
   }
 }
