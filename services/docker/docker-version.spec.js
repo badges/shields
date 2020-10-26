@@ -48,6 +48,13 @@ describe('DockerVersion', function () {
     }).expect({
       version: '3.10.4',
     })
+    given({
+      tag: '3.9',
+      data: versionDataWithTag,
+      arch: 'arm'
+    }).expect({
+      version: '3.9.5',
+    })
   })
 
   it('throws InvalidResponse error with latest tag and no amd64 architecture digests', function () {
