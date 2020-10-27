@@ -1,12 +1,14 @@
 'use strict'
 
-const { promisify } = require('util')
 const Joi = require('joi')
-const semver = require('semver')
-const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
 const { BaseJsonService, NotFound } = require('..')
-const { renderVersionBadge } = require('../nuget/nuget-helpers')
+const {
+  renderVersionBadge,
+  searchServiceUrl,
+  stripBuildMetadata,
+  selectVersion,
+} = require('../nuget/nuget-helpers')
 
 const schema = Joi.object({
   items: Joi.array()
@@ -27,49 +29,6 @@ const schema = Joi.object({
 
 function apiUrl({ organization, repository }) {
   return `https://f.feedz.io/${organization}/${repository}/nuget`
-}
-
-/*
- * Hit the service index endpoint and return a first RegistrationsBaseUrl URL.
- */
-async function searchQueryServiceUrl(baseUrl) {
-  return await promisify(regularUpdate)({
-    url: `${baseUrl}/index.json`,
-    intervalMillis: 42 * 60 * 1000,
-    json: true,
-    scraper: json =>
-      json.resources.filter(r => r['@type'] === 'RegistrationsBaseUrl')[0][
-        '@id'
-      ],
-  })
-}
-
-/*
- * Strip Build MetaData
- * Nuget versions may include an optional "build metadata" clause,
- * separated from the version by a + character.
- */
-function stripBuildMetadata(version) {
-  return version.split('+')[0]
-}
-
-function selectVersion(versions, includePrereleases) {
-  if (includePrereleases) {
-    return versions.slice(-1).pop()
-  } else {
-    const filtered = versions.filter(i => {
-      if (semver.valid(i)) {
-        return !semver.prerelease(i)
-      } else {
-        return !i.version.includes('-')
-      }
-    })
-    if (filtered.length > 0) {
-      return filtered.slice(-1).pop()
-    } else {
-      return versions.slice(-1).pop()
-    }
-  }
 }
 
 class FeedzVersionService extends BaseJsonService {
@@ -114,7 +73,10 @@ class FeedzVersionService extends BaseJsonService {
   }
 
   async fetch({ baseUrl, packageName }) {
-    const registrationsBaseUrl = await searchQueryServiceUrl(baseUrl)
+    const registrationsBaseUrl = await searchServiceUrl(
+      baseUrl,
+      'RegistrationsBaseUrl'
+    )
     const json = await this._requestJson({
       schema,
       url: `${registrationsBaseUrl}${packageName}/index.json`,

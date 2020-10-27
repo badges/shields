@@ -1,12 +1,15 @@
 'use strict'
 
-const { promisify } = require('util')
 const Joi = require('joi')
-const semver = require('semver')
-const { regularUpdate } = require('../../core/legacy/regular-update')
 const RouteBuilder = require('../route-builder')
 const { BaseJsonService, NotFound } = require('..')
-const { renderVersionBadge, renderDownloadBadge } = require('./nuget-helpers')
+const {
+  renderVersionBadge,
+  renderDownloadBadge,
+  searchServiceUrl,
+  stripBuildMetadata,
+  selectVersion,
+} = require('./nuget-helpers')
 
 /*
  * Build the Shields service URL object for the given service configuration. Return
@@ -47,37 +50,6 @@ function apiUrl({ withTenant, apiBaseUrl, apiDomain, tenant, withFeed, feed }) {
   return result
 }
 
-function randomElementFrom(items) {
-  const index = Math.floor(Math.random() * items.length)
-  return items[index]
-}
-
-/*
- * Hit the service index endpoint and return a SearchQueryService URL, chosen
- * at random. Cache the responses, but return a different random URL each time.
- */
-async function searchQueryServiceUrl(baseUrl) {
-  // Should we really be caching all these NuGet feeds in memory?
-  const searchQueryServices = await promisify(regularUpdate)({
-    url: `${baseUrl}/index.json`,
-    // The endpoint changes once per year (ie, a period of n = 1 year).
-    // We minimize the users' waiting time for information.
-    // With l = latency to fetch the endpoint and x = endpoint update period
-    // both in years, the yearly number of queries for the endpoint are 1/x,
-    // and when the endpoint changes, we wait for up to x years to get the
-    // right endpoint.
-    // So the waiting time within n years is n*l/x + x years, for which a
-    // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
-    intervalMillis: 42 * 60 * 1000,
-    json: true,
-    scraper: json =>
-      json.resources.filter(
-        resource => resource['@type'] === 'SearchQueryService'
-      ),
-  })
-  return randomElementFrom(searchQueryServices)['@id']
-}
-
 const schema = Joi.object({
   data: Joi.array()
     .items(
@@ -98,15 +70,6 @@ const schema = Joi.object({
 }).required()
 
 /*
- * Strip Build MetaData
- * Nuget versions may include an optional "build metadata" clause,
- * separated from the version by a + character.
- */
-function stripBuildMetadata(version) {
-  return version.split('+')[0]
-}
-
-/*
  * Get information about a single package.
  */
 async function fetch(
@@ -115,7 +78,7 @@ async function fetch(
 ) {
   const json = await serviceInstance._requestJson({
     schema,
-    url: await searchQueryServiceUrl(baseUrl),
+    url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
       qs: {
         q: `packageid:${encodeURIComponent(packageName.toLowerCase())}`,
@@ -177,6 +140,7 @@ function createServiceFamily({
     }
 
     async handle({ tenant, feed, which, packageName }) {
+      const includePrereleases = which === 'vpre'
       const baseUrl = apiUrl({
         withTenant,
         apiBaseUrl,
@@ -186,23 +150,8 @@ function createServiceFamily({
         feed,
       })
       let { versions } = await fetch(this, { baseUrl, packageName })
-      versions = versions.map(item => ({
-        version: stripBuildMetadata(item.version),
-      }))
-      let latest = versions.slice(-1).pop()
-      const includePrereleases = which === 'vpre'
-      if (!includePrereleases) {
-        const filtered = versions.filter(item => {
-          if (semver.valid(item.version)) {
-            return !semver.prerelease(item.version)
-          }
-          return !item.version.includes('-')
-        })
-        if (filtered.length) {
-          latest = filtered.slice(-1).pop()
-        }
-      }
-      const { version } = latest
+      versions = versions.map(item => stripBuildMetadata(item.version))
+      const version = selectVersion(versions, includePrereleases)
       return this.constructor.render({ version, feed })
     }
   }
