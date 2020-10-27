@@ -591,7 +591,9 @@ function forTheBadge({
   const LOGO_TEXT_GUTTER = 6
   const LETTER_SPACING = 1.25
 
-  // Prepare content.
+  // Prepare content. For the Badge is styled in all caps. It's important to to
+  // convert to uppercase first so the widths can be measured using the correct
+  // symbols.
   label = label.toUpperCase()
   message = message.toUpperCase()
 
