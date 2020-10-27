@@ -47,20 +47,20 @@ class FeedzVersionService extends BaseJsonService {
       pattern: 'v/:organization/:repository/:packageName',
       namedParams: {
         organization: 'shieldstests',
-        repository: 'public',
-        packageName: 'Shields.TestPackage',
+        repository: 'mongodb',
+        packageName: 'MongoDB.Driver.Core',
       },
-      staticPreview: this.render({ version: '1.0.0' }),
+      staticPreview: this.render({ version: '2.10.4' }),
     },
     {
       title: 'Feedz (with prereleases)',
       pattern: 'vpre/:organization/:repository/:packageName',
       namedParams: {
         organization: 'shieldstests',
-        repository: 'public',
-        packageName: 'Shields.TestPreOnly',
+        repository: 'mongodb',
+        packageName: 'MongoDB.Driver.Core',
       },
-      staticPreview: this.render({ version: '0.1.0-pre' }),
+      staticPreview: this.render({ version: '2.11.0-beta2' }),
     },
   ]
 
