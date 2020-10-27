@@ -44,23 +44,23 @@ class FeedzVersionService extends BaseJsonService {
   static examples = [
     {
       title: 'Feedz',
-      pattern: ':tenant/:feed/v/:packageName',
+      pattern: ':organization/v/:repository/:packageName',
       namedParams: {
-        tenant: 'leancode',
-        feed: 'mongodb',
-        packageName: 'MongoDB.Driver.Core',
+        organization: 'shieldstests',
+        repository: 'public',
+        packageName: 'Shields.TestPackage',
       },
-      staticPreview: this.render({ version: '2.6.1' }),
+      staticPreview: this.render({ version: '1.0.0' }),
     },
     {
       title: 'Feedz (with prereleases)',
-      pattern: ':tenant/:feed/vpre/:packageName',
+      pattern: ':organization/vpre/:repository/:packageName',
       namedParams: {
-        tenant: 'leancode',
-        feed: 'mongodb',
-        packageName: 'MongoDB.Driver.Core',
+        organization: 'shieldstests',
+        repository: 'public',
+        packageName: 'Shields.TestPreOnly',
       },
-      staticPreview: this.render({ version: '2.7.0-beta0001' }),
+      staticPreview: this.render({ version: '0.1.0-pre' }),
     },
   ]
 
