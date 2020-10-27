@@ -44,7 +44,7 @@ class FeedzVersionService extends BaseJsonService {
   static examples = [
     {
       title: 'Feedz',
-      pattern: ':organization/v/:repository/:packageName',
+      pattern: 'v/:organization/:repository/:packageName',
       namedParams: {
         organization: 'shieldstests',
         repository: 'public',
@@ -54,7 +54,7 @@ class FeedzVersionService extends BaseJsonService {
     },
     {
       title: 'Feedz (with prereleases)',
-      pattern: ':organization/vpre/:repository/:packageName',
+      pattern: 'vpre/:organization/:repository/:packageName',
       namedParams: {
         organization: 'shieldstests',
         repository: 'public',
