@@ -1,0 +1,44 @@
+'use strict'
+
+const { test, given } = require('sazerac')
+const { FeedzVersionService } = require('./feedz.service')
+
+function json(versions) {
+  return {
+    items: [
+      {
+        items: versions.map(v => ({
+          catalogEntry: {
+            version: v,
+          },
+        })),
+      },
+    ],
+  }
+}
+
+describe('Feedz service', function () {
+  test(FeedzVersionService.prototype.transform, () => {
+    given({ json: json(['1.0.0']), includePrereleases: false }).expect('1.0.0')
+    given({ json: json(['1.0.0', '1.0.1']), includePrereleases: false }).expect(
+      '1.0.1'
+    )
+    given({
+      json: json(['1.0.0', '1.0.1-beta1']),
+      includePrereleases: false,
+    }).expect('1.0.0')
+    given({
+      json: json(['1.0.0', '1.0.1-beta1']),
+      includePrereleases: true,
+    }).expect('1.0.1-beta1')
+
+    given({
+      json: json(['1.0.0+1', '1.0.1-beta1+1']),
+      includePrereleases: false,
+    }).expect('1.0.0')
+    given({
+      json: json(['1.0.0+1', '1.0.1-beta1+1']),
+      includePrereleases: true,
+    }).expect('1.0.1-beta1')
+  })
+})

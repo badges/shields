@@ -26,10 +26,6 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
-function apiUrl({ organization, repository }) {
-  return `https://f.feedz.io/${organization}/${repository}/nuget`
-}
-
 class FeedzVersionService extends BaseJsonService {
   static category = 'version'
 
@@ -69,20 +65,27 @@ class FeedzVersionService extends BaseJsonService {
     return renderVersionBadge(props)
   }
 
+  apiUrl({ organization, repository }) {
+    return `https://f.feedz.io/${organization}/${repository}/nuget`
+  }
+
   async fetch({ baseUrl, packageName }) {
     const registrationsBaseUrl = await searchServiceUrl(
       baseUrl,
       'RegistrationsBaseUrl'
     )
-    const json = await this._requestJson({
+    return await this._requestJson({
       schema,
       url: `${registrationsBaseUrl}${packageName}/index.json`,
     })
+  }
 
+  transform({ json, includePrereleases }) {
     if (json.items.length === 1) {
-      return json.items[0].items.map(i =>
+      const versions = json.items[0].items.map(i =>
         stripBuildMetadata(i.catalogEntry.version)
       )
+      return selectVersion(versions, includePrereleases)
     } else {
       throw new NotFound({ prettyMessage: 'not found' })
     }
@@ -90,10 +93,9 @@ class FeedzVersionService extends BaseJsonService {
 
   async handle({ which, organization, repository, packageName }) {
     const includePrereleases = which === 'vpre'
-    const baseUrl = apiUrl({ organization, repository })
-
-    const allVersions = await this.fetch({ baseUrl, packageName })
-    const version = selectVersion(allVersions, includePrereleases)
+    const baseUrl = this.apiUrl({ organization, repository })
+    const json = await this.fetch({ baseUrl, packageName })
+    const version = this.transform({ json, includePrereleases })
     return this.constructor.render({
       version,
       feed: FeedzVersionService.defaultBadgeData.label,
