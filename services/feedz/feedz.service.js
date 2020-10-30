@@ -1,7 +1,6 @@
 'use strict'
 
 const Joi = require('joi')
-const RouteBuilder = require('../route-builder')
 const { BaseJsonService, NotFound } = require('..')
 const {
   renderVersionBadge,
@@ -34,12 +33,10 @@ function apiUrl({ organization, repository }) {
 class FeedzVersionService extends BaseJsonService {
   static category = 'version'
 
-  static route = new RouteBuilder({ base: 'feedz' })
-    .push('(v|vpre)', 'which')
-    .push('([^/]+)', 'organization')
-    .push('([^/]+)', 'repository')
-    .push('(.+?)', 'packageName')
-    .toObject()
+  static route = {
+    base: 'feedz',
+    pattern: ':which(v|vpre)/:organization/:repository/:packageName',
+  }
 
   static examples = [
     {
