@@ -2935,10 +2935,111 @@ const versionDataWithTag = [
   { name: '2.6', images: [] },
 ]
 
+const versionDataWithVaryingArchitectures = [
+  {
+    name: '3.9.5',
+    images: [
+      {
+        digest:
+          'sha256:fa5361fbf636d3ac50cb529dab20d810eb466de2079f5710cef4cbada29cf499',
+        architecture: 'ppc64le',
+      },
+      {
+        digest:
+          'sha256:97e9e9a15ef94526018e2fabfdfff14781e58b87f989d2e70543f296dcad26c6',
+        architecture: 's390x',
+      },
+      {
+        digest:
+          'sha256:cae6522b6a351615e547ae9222c9a05d172bc5c3240eec03072d4e1d0429a17a',
+        architecture: 'arm64',
+      },
+    ],
+  },
+  {
+    name: '3.9',
+    images: [
+      {
+        digest:
+          'sha256:c7b3e8392e08c971e98627e2bddd10c7fa9d2eae797a16bc94de9709bb9300d0',
+        architecture: '386',
+      },
+      {
+        digest:
+          'sha256:5292cebaf695db860087c5582d340a406613891b2819092747b0388da47936c8',
+        architecture: 'arm',
+      },
+    ],
+  },
+  {
+    name: '3.8.5',
+    images: [
+      {
+        digest:
+          'sha256:dabea2944dcc2b86482b4f0b0fb62da80e0673e900c46c0e03b45919881a5d84',
+        architecture: 'arm',
+      },
+      {
+        digest:
+          'sha256:514ec80ffbe1a2ab1d9a3d5e6082296296a1d8b6870246edf897228e5df2367d',
+        architecture: 's390x',
+      },
+      {
+        digest:
+          'sha256:ab3fe83c0696e3f565c9b4a734ec309ae9bd0d74c192de4590fd6dc2ef717815',
+        architecture: 'amd64',
+      },
+    ],
+  },
+  {
+    name: '3.8',
+    images: [
+      {
+        digest:
+          'sha256:cf35b4fa14e23492df67af08ced54a15e68ad00cac545b437b1994340f20648c',
+        architecture: '386',
+      },
+      {
+        digest:
+          'sha256:514ec80ffbe1a2ab1d9a3d5e6082296296a1d8b6870246edf897228e5df2367d',
+        architecture: 's390x',
+      },
+      {
+        digest:
+          'sha256:402d21757a03a114d273bbe372fa4b9eca567e8b6c332fa7ebf982b902207242',
+        architecture: 'ppc64le',
+      },
+    ],
+  },
+  {
+    name: '3.10.4',
+    images: [
+      {
+        digest:
+          'sha256:2632d6288d34d7175021683f6e363fa7c0fa8866a565eb285e36e3b856545e82',
+        architecture: 'arm',
+      },
+      {
+        digest:
+          'sha256:9afbfccb806687f6979661622f0c04dc534769e742465b107f84a830cbb8e77a',
+        architecture: 'arm',
+      },
+      {
+        digest:
+          'sha256:33158d51a7a549207e508a42bf46493f23e1e99fbc011eb3f3742e8b349a2be9',
+        architecture: 'ppc64le',
+      },
+    ],
+  },
+  { name: '2.7', images: [] },
+  { name: '2.6', images: [] },
+]
+
 module.exports = {
   sizeDataNoTagSemVerSort,
   versionDataNoTagDateSort,
   versionPagedDataNoTagDateSort,
   versionDataNoTagSemVerSort,
   versionDataWithTag,
+  versionDataWithVaryingArchitectures,
 }
