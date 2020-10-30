@@ -18,6 +18,12 @@ function json(versions) {
 }
 
 describe('Feedz service', function () {
+  test(FeedzVersionService.prototype.apiUrl, () => {
+    given({ organization: 'shieldstests', repository: 'public' }).expect(
+      'https://f.feedz.io/shieldstests/public/nuget'
+    )
+  })
+
   test(FeedzVersionService.prototype.transform, () => {
     given({ json: json(['1.0.0']), includePrereleases: false }).expect('1.0.0')
     given({ json: json(['1.0.0', '1.0.1']), includePrereleases: false }).expect(
