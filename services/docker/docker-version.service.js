@@ -29,7 +29,21 @@ const buildSchema = Joi.object({
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
   arch: Joi.string()
-    .valid('amd64', 'arm', 'arm64', 'ppc64le', 's390x', '386')
+    // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
+    .valid(
+      'amd64',
+      'arm',
+      'arm64',
+      's390x',
+      '386',
+      'ppc64',
+      'ppc64le',
+      'wasm',
+      'mips',
+      'mipsle',
+      'mips64',
+      'mips64le'
+    )
     .default('amd64'),
 }).required()
 
