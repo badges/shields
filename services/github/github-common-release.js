@@ -1,11 +1,18 @@
 'use strict'
 
 const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
 const { latest } = require('../version')
 const { NotFound } = require('..')
 const { errorMessagesFor } = require('./github-helpers')
 
 const releaseInfoSchema = Joi.object({
+  assets: Joi.array()
+    .items({
+      name: Joi.string().required(),
+      download_count: nonNegativeInteger,
+    })
+    .required(),
   tag_name: Joi.string().required(),
   prerelease: Joi.boolean().required(),
 }).required()
@@ -42,16 +49,11 @@ async function fetchReleases(serviceInstance, { user, repo }) {
 
 function getLatestRelease({ releases, sort, includePrereleases }) {
   if (sort === 'semver') {
-    const latestRelease = latest(
+    const latestTagName = latest(
       releases.map(release => release.tag_name),
-      {
-        pre: includePrereleases,
-      }
+      { pre: includePrereleases }
     )
-    const kvpairs = Object.assign(
-      ...releases.map(release => ({ [release.tag_name]: release.prerelease }))
-    )
-    return { tag_name: latestRelease, prerelease: kvpairs[latestRelease] }
+    return releases.find(({ tag_name }) => tag_name === latestTagName)
   }
 
   if (!includePrereleases) {
