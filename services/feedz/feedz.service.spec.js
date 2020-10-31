@@ -17,6 +17,12 @@ function json(versions) {
   }
 }
 
+function noItemsJson() {
+  return {
+    items: [],
+  }
+}
+
 describe('Feedz service', function () {
   test(FeedzVersionService.prototype.apiUrl, () => {
     given({ organization: 'shieldstests', repository: 'public' }).expect(
@@ -46,5 +52,18 @@ describe('Feedz service', function () {
       json: json(['1.0.0+1', '1.0.1-beta1+1']),
       includePrereleases: true,
     }).expect('1.0.1-beta1')
+
+    given({ json: json([]), includePrereleases: false }).expectError(
+      'Not Found: package not found'
+    )
+    given({ json: json([]), includePrereleases: true }).expectError(
+      'Not Found: package not found'
+    )
+    given({ json: noItemsJson(), includePrereleases: false }).expectError(
+      'Not Found: package not found'
+    )
+    given({ json: noItemsJson(), includePrereleases: true }).expectError(
+      'Not Found: package not found'
+    )
   })
 })

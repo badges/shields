@@ -41,11 +41,15 @@ t.create('version (orange badge)')
 
 t.create('repository (not found)')
   .get('/feedz/v/foo/bar/not-a-real-package.json')
-  .expectBadge({ label: 'feedz', message: 'not found' })
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
 
 t.create('version (not found)')
   .get('/feedz/v/shieldstests/public/not-a-real-package.json')
-  .expectBadge({ label: 'feedz', message: 'not found' })
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
+
+t.create('non-existing repository')
+  .get('/feedz/v/shieldstests/does-not-exist/Shields.TestPackage.json')
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
 
 // version (pre)
 t.create('version (pre) (valid)')
@@ -74,8 +78,12 @@ t.create('version (pre) (orange badge)')
 
 t.create('repository (pre) (not found)')
   .get('/feedz/vpre/foo/bar/not-a-real-package.json')
-  .expectBadge({ label: 'feedz', message: 'not found' })
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
 
 t.create('version (pre) (not found)')
   .get('/feedz/vpre/shieldstests/public/not-a-real-package.json')
-  .expectBadge({ label: 'feedz', message: 'not found' })
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
+
+t.create('non-existing repository')
+  .get('/feedz/vpre/shieldstests/does-not-exist/Shields.TestPackage.json')
+  .expectBadge({ label: 'feedz', message: 'repository or package not found' })
