@@ -28,6 +28,23 @@ const buildSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
+  arch: Joi.string()
+    // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
+    .valid(
+      'amd64',
+      'arm',
+      'arm64',
+      's390x',
+      '386',
+      'ppc64',
+      'ppc64le',
+      'wasm',
+      'mips',
+      'mipsle',
+      'mips64',
+      'mips64le'
+    )
+    .default('amd64'),
 }).required()
 
 module.exports = class DockerVersion extends BaseJsonService {
@@ -38,7 +55,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       title: 'Docker Image Version (latest by date)',
       pattern: ':user/:repo',
       namedParams: { user: '_', repo: 'alpine' },
-      queryParams: { sort: 'date' },
+      queryParams: { sort: 'date', arch: 'amd64' },
       staticPreview: this.render({ version: '3.9.5' }),
     },
     {
@@ -73,7 +90,7 @@ module.exports = class DockerVersion extends BaseJsonService {
     })
   }
 
-  transform({ tag, sort, data, pagedData }) {
+  transform({ tag, sort, data, pagedData, arch = 'amd64' }) {
     let version
 
     if (!tag && sort === 'date') {
@@ -81,9 +98,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (version !== 'latest') {
         return { version }
       }
-      const imageTag = data.results[0].images.find(
-        i => i.architecture === 'amd64'
-      ) // Digest is the unique field that we utilise to match images
+      const imageTag = data.results[0].images.find(i => i.architecture === arch) // Digest is the unique field that we utilise to match images
       if (!imageTag) {
         throw new InvalidResponse({
           prettyMessage: 'digest not found for latest tag',
@@ -102,7 +117,7 @@ module.exports = class DockerVersion extends BaseJsonService {
       if (Object.keys(version.images).length === 0) {
         return { version: version.name }
       }
-      const image = version.images.find(i => i.architecture === 'amd64')
+      const image = version.images.find(i => i.architecture === arch)
       if (!image) {
         throw new InvalidResponse({
           prettyMessage: 'digest not found for given tag',
@@ -113,7 +128,7 @@ module.exports = class DockerVersion extends BaseJsonService {
     }
   }
 
-  async handle({ user, repo, tag }, { sort }) {
+  async handle({ user, repo, tag }, { sort, arch }) {
     let data, pagedData
 
     if (!tag && sort === 'date') {
@@ -136,7 +151,13 @@ module.exports = class DockerVersion extends BaseJsonService {
       })
     }
 
-    const { version } = await this.transform({ tag, sort, data, pagedData })
+    const { version } = await this.transform({
+      tag,
+      sort,
+      data,
+      pagedData,
+      arch,
+    })
     return this.constructor.render({ version })
   }
 }
