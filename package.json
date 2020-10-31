@@ -235,7 +235,7 @@
     "require-hacker": "^3.0.1",
     "rimraf": "^3.0.2",
     "sazerac": "^2.0.0",
-    "sinon": "^9.2.0",
+    "sinon": "^9.2.1",
     "sinon-chai": "^3.5.0",
     "snap-shot-it": "^7.9.3",
     "start-server-and-test": "1.11.5",
