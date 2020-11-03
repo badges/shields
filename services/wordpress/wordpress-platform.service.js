@@ -60,24 +60,20 @@ function WordpressRequiresVersion(extensionType) {
 class WordpressPluginTestedVersion extends BaseWordpress {
   static category = 'platform-support'
 
-  static get route() {
-    return {
-      base: `wordpress/plugin/tested`,
-      pattern: ':slug',
-    }
+  static route = {
+    base: `wordpress/plugin/tested`,
+    pattern: ':slug',
   }
 
-  static get examples() {
-    return [
-      {
-        title: 'WordPress Plugin: Tested WP Version',
-        namedParams: { slug: 'bbpress' },
-        staticPreview: this.renderStaticPreview({
-          testedVersion: '4.9.8',
-        }),
-      },
-    ]
-  }
+  static examples = [
+    {
+      title: 'WordPress Plugin: Tested WP Version',
+      namedParams: { slug: 'bbpress' },
+      staticPreview: this.renderStaticPreview({
+        testedVersion: '4.9.8',
+      }),
+    },
+  ]
 
   static defaultBadgeData = { label: 'wordpress' }
 

@@ -9,12 +9,10 @@ const queryParamSchema = Joi.object({
 }).required()
 
 module.exports = class YouTubeLikes extends YouTubeBase {
-  static get route() {
-    return {
-      base: 'youtube/likes',
-      pattern: ':videoId',
-      queryParamSchema,
-    }
+  static route = {
+    base: 'youtube/likes',
+    pattern: ':videoId',
+    queryParamSchema,
   }
 
   static get examples() {
