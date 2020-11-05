@@ -8,9 +8,7 @@ module.exports = class KeybaseProfile extends BaseJsonService {
     throw new Error(`apiVersion() is not implemented for ${this.name}`)
   }
 
-  static get category() {
-    return 'social'
-  }
+  static category = 'social'
 
   async fetch({ schema, options }) {
     const apiVersion = this.constructor.apiVersion

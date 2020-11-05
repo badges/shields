@@ -56,40 +56,32 @@ class TwitterUrl extends BaseService {
 const schema = Joi.any()
 
 class TwitterFollow extends BaseJsonService {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static route = {
+    base: 'twitter/follow',
+    pattern: ':user',
   }
 
-  static get route() {
-    return {
-      base: 'twitter/follow',
-      pattern: ':user',
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Twitter Follow',
-        namedParams: {
-          user: 'espadrine',
-        },
-        queryParams: { label: 'Follow' },
-        // hard code the static preview
-        // because link[] is not allowed in examples
-        staticPreview: {
-          label: 'Follow',
-          message: '393',
-          style: 'social',
-        },
+  static examples = [
+    {
+      title: 'Twitter Follow',
+      namedParams: {
+        user: 'espadrine',
       },
-    ]
-  }
+      queryParams: { label: 'Follow' },
+      // hard code the static preview
+      // because link[] is not allowed in examples
+      staticPreview: {
+        label: 'Follow',
+        message: '393',
+        style: 'social',
+      },
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      namedLogo: 'twitter',
-    }
+  static defaultBadgeData = {
+    namedLogo: 'twitter',
   }
 
   static render({ user, followers }) {
