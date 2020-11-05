@@ -33,59 +33,53 @@ const werckerCIDocumentation = `
 `
 
 module.exports = class Wercker extends BaseJsonService {
-  static get category() {
-    return 'build'
+  static category = 'build'
+
+  static route = {
+    base: 'wercker',
+    format:
+      '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+?))(?:/(.+?))?',
+    capture: ['projectId', 'applicationName', 'branch'],
   }
 
-  static get route() {
-    return {
-      base: 'wercker',
-      format:
-        '(?:(?:ci/)([a-fA-F0-9]{24})|(?:build|ci)/([^/]+/[^/]+?))(?:/(.+?))?',
-      capture: ['projectId', 'applicationName', 'branch'],
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: `Wercker CI Run`,
-        pattern: 'ci/:applicationId',
-        namedParams: { applicationId: '559e33c8e982fc615500b357' },
-        staticPreview: this.render({ result: 'passed' }),
-        documentation: werckerCIDocumentation,
+  static examples = [
+    {
+      title: `Wercker CI Run`,
+      pattern: 'ci/:applicationId',
+      namedParams: { applicationId: '559e33c8e982fc615500b357' },
+      staticPreview: this.render({ result: 'passed' }),
+      documentation: werckerCIDocumentation,
+    },
+    {
+      title: `Wercker CI Run`,
+      pattern: 'ci/:applicationId/:branch',
+      namedParams: {
+        applicationId: '559e33c8e982fc615500b357',
+        branch: 'master',
       },
-      {
-        title: `Wercker CI Run`,
-        pattern: 'ci/:applicationId/:branch',
-        namedParams: {
-          applicationId: '559e33c8e982fc615500b357',
-          branch: 'master',
-        },
-        staticPreview: this.render({ result: 'passed' }),
-        documentation: werckerCIDocumentation,
+      staticPreview: this.render({ result: 'passed' }),
+      documentation: werckerCIDocumentation,
+    },
+    {
+      title: `Wercker Build`,
+      pattern: 'build/:userName/:applicationName',
+      namedParams: {
+        userName: 'wercker',
+        applicationName: 'go-wercker-api',
       },
-      {
-        title: `Wercker Build`,
-        pattern: 'build/:userName/:applicationName',
-        namedParams: {
-          userName: 'wercker',
-          applicationName: 'go-wercker-api',
-        },
-        staticPreview: this.render({ result: 'passed' }),
+      staticPreview: this.render({ result: 'passed' }),
+    },
+    {
+      title: `Wercker Build branch`,
+      pattern: 'build/:userName/:applicationName/:branch',
+      namedParams: {
+        userName: 'wercker',
+        applicationName: 'go-wercker-api',
+        branch: 'master',
       },
-      {
-        title: `Wercker Build branch`,
-        pattern: 'build/:userName/:applicationName/:branch',
-        namedParams: {
-          userName: 'wercker',
-          applicationName: 'go-wercker-api',
-          branch: 'master',
-        },
-        staticPreview: this.render({ result: 'passed' }),
-      },
-    ]
-  }
+      staticPreview: this.render({ result: 'passed' }),
+    },
+  ]
 
   static render({ result }) {
     return renderBuildStatusBadge({ status: result })

@@ -21,20 +21,18 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class YouTubeBase extends BaseJsonService {
-  static get category() {
-    return 'social'
+  static category = 'social'
+
+  static auth = {
+    passKey: 'youtube_api_key',
+    authorizedOrigins: ['https://www.googleapis.com'],
+    isRequired: true,
   }
 
-  static get auth() {
-    return {
-      passKey: 'youtube_api_key',
-      authorizedOrigins: ['https://www.googleapis.com'],
-      isRequired: true,
-    }
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'youtube', color: 'red', namedLogo: 'youtube' }
+  static defaultBadgeData = {
+    label: 'youtube',
+    color: 'red',
+    namedLogo: 'youtube',
   }
 
   static renderSingleStat({ statistics, statisticName, videoId }) {
