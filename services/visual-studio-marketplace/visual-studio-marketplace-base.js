@@ -46,22 +46,18 @@ const statisticSchema = Joi.object().keys({
 })
 
 module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
-  static get keywords() {
-    return [
-      'vscode',
-      'tfs',
-      'vsts',
-      'visual-studio-marketplace',
-      'vs-marketplace',
-      'vscode-marketplace',
-    ]
-  }
+  static keywords = [
+    'vscode',
+    'tfs',
+    'vsts',
+    'visual-studio-marketplace',
+    'vs-marketplace',
+    'vscode-marketplace',
+  ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'vs marketplace',
-      color: 'blue',
-    }
+  static defaultBadgeData = {
+    label: 'vs marketplace',
+    color: 'blue',
   }
 
   async fetch({ extensionId }) {
