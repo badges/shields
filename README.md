@@ -91,10 +91,6 @@ maybe you'd like to open a pull request to address one of them.
 You can read a [tutorial on how to add a badge][tutorial].
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-[![Hacktoberfest 2020](https://img.shields.io/github/hacktoberfest/2020/badges/shields?label=hacktoberfest%202020)](https://github.com/badges/shields/issues?q=is%3Aopen+is%3Aissue+label%3Ahacktoberfest)
-
-Let's see if we can beat last year!
-[![Hacktoberfest 2019](https://img.shields.io/github/hacktoberfest/2019/badges/shields?label=hacktoberfest%202019)](https://github.com/badges/shields/issues?q=is%3Aopen+is%3Aissue+label%3Ahacktoberfest)
 
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: doc/TUTORIAL.md
