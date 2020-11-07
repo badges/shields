@@ -40,7 +40,7 @@
     "glob": "^7.1.6",
     "graphql": "^14.7.0",
     "graphql-tag": "^2.11.0",
-    "ioredis": "4.19.1",
+    "ioredis": "4.19.2",
     "joi": "17.3.0",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^3.14.0",
@@ -55,10 +55,10 @@
     "pretty-bytes": "^5.4.1",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^11.5.3",
-    "query-string": "^6.13.6",
+    "query-string": "^6.13.7",
     "request": "~2.88.2",
     "semver": "~7.3.2",
-    "simple-icons": "3.12.1",
+    "simple-icons": "3.12.2",
     "webextension-store-meta": "^1.0.2",
     "xmldom": "~0.4.0",
     "xpath": "~0.0.32"
@@ -188,7 +188,7 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "eslint-plugin-sort-class-members": "^1.8.0",
     "eslint-plugin-standard": "^4.0.2",
-    "fetch-ponyfill": "^6.1.1",
+    "fetch-ponyfill": "^7.0.0",
     "form-data": "^3.0.0",
     "fs-readfile-promise": "^3.0.1",
     "gatsby": "2.24.91",
@@ -197,7 +197,7 @@
     "gatsby-plugin-react-helmet": "^3.3.9",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.10",
     "gatsby-plugin-styled-components": "^3.3.9",
-    "gatsby-plugin-typescript": "^2.4.24",
+    "gatsby-plugin-typescript": "^2.5.0",
     "got": "11.8.0",
     "humanize-string": "^2.1.0",
     "husky": "^4.3.0",
@@ -243,7 +243,7 @@
     "tmp": "0.2.1",
     "tsd": "^0.13.1",
     "ts-mocha": "^8.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.5"
   },
   "engines": {
     "node": "^12.18.3",
