@@ -100,10 +100,8 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
     },
   ]
 
-  static get defaultBadgeData() {
-    return {
-      label: 'tests',
-    }
+  static defaultBadgeData = {
+    label: 'tests',
   }
 
   static render({

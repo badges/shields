@@ -207,8 +207,10 @@ module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Ser
   }
 
   static getCalendarPosition(year) {
-    const daysToStart =
-      moment(`${year}-10-01 12:00:00 Z`).diff(moment(), 'days') + 1
+    const daysToStart = moment(`${year}-10-01 00:00:00 Z`).diff(
+      moment(),
+      'days'
+    )
     const isBefore = daysToStart > 0
     return { daysToStart, isBefore }
   }

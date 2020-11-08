@@ -3,12 +3,10 @@
 const { BaseJsonService } = require('..')
 
 module.exports = class JenkinsBase extends BaseJsonService {
-  static get auth() {
-    return {
-      userKey: 'jenkins_user',
-      passKey: 'jenkins_pass',
-      serviceKey: 'jenkins',
-    }
+  static auth = {
+    userKey: 'jenkins_user',
+    passKey: 'jenkins_pass',
+    serviceKey: 'jenkins',
   }
 
   async fetch({

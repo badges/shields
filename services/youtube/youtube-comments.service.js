@@ -3,11 +3,9 @@
 const YouTubeBase = require('./youtube-base')
 
 module.exports = class YouTubeComments extends YouTubeBase {
-  static get route() {
-    return {
-      base: 'youtube/comments',
-      pattern: ':videoId',
-    }
+  static route = {
+    base: 'youtube/comments',
+    pattern: ':videoId',
   }
 
   static get examples() {

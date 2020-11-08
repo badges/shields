@@ -168,30 +168,22 @@ class AurMaintainer extends BaseAurService {
 }
 
 class AurLastModified extends BaseAurService {
-  static get category() {
-    return 'activity'
+  static category = 'activity'
+
+  static route = {
+    base: 'aur/last-modified',
+    pattern: ':packageName',
   }
 
-  static get route() {
-    return {
-      base: 'aur/last-modified',
-      pattern: ':packageName',
-    }
-  }
+  static examples = [
+    {
+      title: 'AUR last modified',
+      namedParams: { packageName: 'google-chrome' },
+      staticPreview: this.render({ date: new Date().getTime() }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'AUR last modified',
-        namedParams: { packageName: 'google-chrome' },
-        staticPreview: this.render({ date: new Date().getTime() }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'last modified' }
-  }
+  static defaultBadgeData = { label: 'last modified' }
 
   static render({ date }) {
     const color = ageColor(date)

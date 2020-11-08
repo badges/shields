@@ -10,38 +10,28 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class Wheelmap extends BaseJsonService {
-  static get category() {
-    return 'other'
+  static category = 'other'
+
+  static route = {
+    base: 'wheelmap/a',
+    pattern: ':nodeId(-?[0-9]+)',
   }
 
-  static get route() {
-    return {
-      base: 'wheelmap/a',
-      pattern: ':nodeId(-?[0-9]+)',
-    }
+  static auth = {
+    passKey: 'wheelmap_token',
+    authorizedOrigins: ['https://wheelmap.org'],
+    isRequired: true,
   }
 
-  static get auth() {
-    return {
-      passKey: 'wheelmap_token',
-      authorizedOrigins: ['https://wheelmap.org'],
-      isRequired: true,
-    }
-  }
+  static examples = [
+    {
+      title: 'Wheelmap',
+      namedParams: { nodeId: '26699541' },
+      staticPreview: this.render({ accessibility: 'yes' }),
+    },
+  ]
 
-  static get examples() {
-    return [
-      {
-        title: 'Wheelmap',
-        namedParams: { nodeId: '26699541' },
-        staticPreview: this.render({ accessibility: 'yes' }),
-      },
-    ]
-  }
-
-  static get defaultBadgeData() {
-    return { label: 'accessibility' }
-  }
+  static defaultBadgeData = { label: 'accessibility' }
 
   static render({ accessibility }) {
     let color
