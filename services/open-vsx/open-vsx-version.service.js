@@ -26,7 +26,7 @@ module.exports = class OpenVSXVersion extends OpenVSXBase {
 
   async handle({ namespace, extension }) {
     const json = await this.fetch({ namespace, extension })
-    const { version } = this.validateResponse({ json })
+    const { version } = this.transform({ json })
 
     return this.constructor.render({ version })
   }

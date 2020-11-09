@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const { optionalNonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 
 const extensionQuerySchema = Joi.object({
@@ -57,7 +58,7 @@ module.exports = class OpenVSXBase extends BaseJsonService {
     })
   }
 
-  validateResponse({ json }) {
+  transform({ json }) {
     const { error, version } = json
     if (error || !version) {
       throw new NotFound({

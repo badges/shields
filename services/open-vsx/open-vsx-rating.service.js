@@ -68,7 +68,7 @@ module.exports = class OpenVSXRating extends OpenVSXBase {
 
   async handle({ format, namespace, extension }) {
     const json = await this.fetch({ namespace, extension })
-    const { averageRating, reviewCount } = this.validateResponse({ json })
+    const { averageRating, reviewCount } = this.transform({ json })
 
     return this.constructor.render({
       format,

@@ -48,7 +48,7 @@ module.exports = class OpenVSXDownloads extends OpenVSXBase {
 
   async handle({ namespace, extension, version }) {
     const json = await this.fetch({ namespace, extension, version })
-    const { version: tag, downloadCount } = this.validateResponse({ json })
+    const { version: tag, downloadCount } = this.transform({ json })
 
     return this.constructor.render({
       version: version ? tag : undefined,
