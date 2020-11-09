@@ -14,35 +14,7 @@ t.create('version invalid extension')
     message: isNotFound,
   })
 
-t.create('version live').get('/v/redhat/java.json').expectBadge({
+t.create('version').get('/v/redhat/java.json').expectBadge({
   label: 'open vsx',
   message: isVersion,
 })
-
-t.create('version pre-release')
-  .get('/v/redhat/java.json')
-  .intercept(nock =>
-    nock(baseUrl).get('/redhat/java').reply(200, {
-      version: '0.69.0',
-      timestamp: '2020-10-15T13:40:16.986723Z',
-    })
-  )
-  .expectBadge({
-    label: 'open vsx',
-    message: 'v0.69.0',
-    color: 'orange',
-  })
-
-t.create('version')
-  .get('/v/redhat/java.json')
-  .intercept(nock =>
-    nock(baseUrl).get(`/redhat/java`).reply(200, {
-      version: '1.0.0',
-      timestamp: '2020-10-15T13:40:16.986723Z',
-    })
-  )
-  .expectBadge({
-    label: 'open vsx',
-    message: 'v1.0.0',
-    color: 'blue',
-  })

@@ -13,7 +13,7 @@ t.create('downloads invalid extension')
     message: isNotFound,
   })
 
-t.create('downloads live').get('/dt/redhat/java.json').expectBadge({
+t.create('downloads').get('/dt/redhat/java.json').expectBadge({
   label: 'downloads',
   message: isMetric,
 })

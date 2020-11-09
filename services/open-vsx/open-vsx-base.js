@@ -15,8 +15,8 @@ const extensionQuerySchema = Joi.object({
     then: Joi.forbidden(),
     otherwise: Joi.required(),
   }),
-  downloadCount: Joi.number().optional().min(0),
-  reviewCount: Joi.number().optional().min(0),
+  downloadCount: optionalNonNegativeInteger,
+  reviewCount: optionalNonNegativeInteger,
   averageRating: Joi.number().when('reviewCount', {
     is: Joi.exist(),
     then: Joi.number().max(5),

@@ -48,17 +48,21 @@ module.exports = class OpenVSXRating extends OpenVSXBase {
   }
 
   static render({ format, averageRating, ratingCount }) {
-    const rating =
-      ratingCount > 0
+    if (ratingCount === 0) {
+      return {
+        message: 'unrated',
+        color: 'lightgrey',
+      }
+    }
+
+    const message =
+      format === 'rating'
         ? `${averageRating.toFixed(1)}/5 (${ratingCount})`
-        : 'UNRATED'
-    const message = format === 'rating' ? rating : starRating(averageRating)
-    const color =
-      ratingCount > 0 ? floorCount(averageRating, 2, 3, 4) : 'lightgrey'
+        : starRating(averageRating)
 
     return {
       message,
-      color,
+      color: floorCount(averageRating, 2, 3, 4),
     }
   }
 
