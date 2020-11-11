@@ -138,8 +138,8 @@ function createServiceFamily({
      */
     transform({ json, includePrereleases }) {
       if (json.data.length === 1 && json.data[0].versions.length > 0) {
-        const packageInfo = json.data[0]
-        const versions = packageInfo.versions.map(item =>
+        const { versions: packageVersions } = json.data[0]
+        const versions = packageVersions.map(item =>
           stripBuildMetadata(item.version)
         )
         return selectVersion(versions, includePrereleases)

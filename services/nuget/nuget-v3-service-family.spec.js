@@ -27,17 +27,8 @@ function downloadsJson(payload) {
   }
 }
 
-function noDataJson() {
-  return {
-    data: [],
-  }
-}
-
-function tooMuchDataJson() {
-  return {
-    data: [{}, {}],
-  }
-}
+const noDataJson = { data: [] }
+const tooMuchDataJson = { data: [{}, {}] }
 
 describe('Nuget Version service', function () {
   test(NugetVersionService.prototype.transform, () => {
@@ -72,16 +63,16 @@ describe('Nuget Version service', function () {
     given({ json: versionJson([]), includePrereleases: true }).expectError(
       'Not Found: package not found'
     )
-    given({ json: noDataJson(), includePrereleases: false }).expectError(
+    given({ json: noDataJson, includePrereleases: false }).expectError(
       'Not Found: package not found'
     )
-    given({ json: noDataJson(), includePrereleases: true }).expectError(
+    given({ json: noDataJson, includePrereleases: true }).expectError(
       'Not Found: package not found'
     )
-    given({ json: tooMuchDataJson(), includePrereleases: false }).expectError(
+    given({ json: tooMuchDataJson, includePrereleases: false }).expectError(
       'Not Found: package not found'
     )
-    given({ json: tooMuchDataJson(), includePrereleases: true }).expectError(
+    given({ json: tooMuchDataJson, includePrereleases: true }).expectError(
       'Not Found: package not found'
     )
   })
@@ -94,9 +85,7 @@ describe('Nuget Download service', function () {
     given({ json: downloadsJson({ other: 11 }) }).expect(0)
     given({ json: downloadsJson({}) }).expect(0)
 
-    given({ json: noDataJson() }).expectError('Not Found: package not found')
-    given({ json: tooMuchDataJson() }).expectError(
-      'Not Found: package not found'
-    )
+    given({ json: noDataJson }).expectError('Not Found: package not found')
+    given({ json: tooMuchDataJson }).expectError('Not Found: package not found')
   })
 })
