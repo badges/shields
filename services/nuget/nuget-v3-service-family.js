@@ -76,7 +76,7 @@ async function fetch(
   serviceInstance,
   { baseUrl, packageName, includePrereleases = false }
 ) {
-  return await serviceInstance._requestJson({
+  return serviceInstance._requestJson({
     schema,
     url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
