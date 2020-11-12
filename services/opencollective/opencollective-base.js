@@ -22,9 +22,7 @@ function buildMembersArraySchema({ userType, tierRequired }) {
 }
 
 module.exports = class OpencollectiveBase extends BaseJsonService {
-  static get category() {
-    return 'funding'
-  }
+  static category = 'funding'
 
   static buildRoute(base, withTierId) {
     return {

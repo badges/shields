@@ -17,14 +17,10 @@ const periodMap = {
 }
 
 class BaseJsDelivrService extends BaseJsonService {
-  static get category() {
-    return 'downloads'
-  }
+  static category = 'downloads'
 
-  static get defaultBadgeData() {
-    return {
-      label: 'jsdelivr',
-    }
+  static defaultBadgeData = {
+    label: 'jsdelivr',
   }
 
   static render({ period, hits }) {

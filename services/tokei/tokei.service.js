@@ -31,21 +31,19 @@ module.exports = class Tokei extends BaseJsonService {
 
   static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }
 
-  static get examples() {
-    return [
-      {
-        title: 'Lines of code',
-        namedParams: {
-          provider: 'github',
-          user: 'badges',
-          repo: 'shields',
-        },
-        staticPreview: this.render({ lines: 119500 }),
-        keywords: ['loc', 'tokei'],
-        documentation,
+  static examples = [
+    {
+      title: 'Lines of code',
+      namedParams: {
+        provider: 'github',
+        user: 'badges',
+        repo: 'shields',
       },
-    ]
-  }
+      staticPreview: this.render({ lines: 119500 }),
+      keywords: ['loc', 'tokei'],
+      documentation,
+    },
+  ]
 
   static defaultBadgeData = {
     label: 'total lines',
