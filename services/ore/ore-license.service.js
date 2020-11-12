@@ -1,5 +1,6 @@
 'use strict'
 
+const { renderLicenseBadge } = require('../licenses')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
 module.exports = class OreLicense extends BaseOreService {
@@ -27,17 +28,23 @@ module.exports = class OreLicense extends BaseOreService {
   }
 
   static render({ license }) {
-    return {
-      label: 'license',
-      message: license || 'no license specified',
-      color: license ? 'blue' : 'lightgrey',
-    }
+    return renderLicenseBadge({ license })
+  }
+
+  transform({ data }) {
+    const {
+      settings: {
+        license: { name, url },
+      },
+    } = data
+    /* license: { name: '', url: 'https://donationstore.net/legal/eula' }
+    encountered in the wild */
+    return { license: name || (url ? 'custom' : null) || undefined }
   }
 
   async handle({ pluginId }) {
-    const { settings } = await this.fetch({ pluginId })
-    const { license } = settings
-    const { name } = license
-    return this.constructor.render({ license: name })
+    const data = await this.fetch({ pluginId })
+    const { license } = this.transform({ data })
+    return this.constructor.render({ license })
   }
 }

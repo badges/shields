@@ -24,17 +24,23 @@ module.exports = class OreCategory extends BaseOreService {
 
   static defaultBadgeData = {
     label: 'category',
+    color: 'blue',
   }
 
   static render({ category }) {
     return {
-      message: category.replace(/_/g, ' '),
-      color: 'blue',
+      message: category,
     }
   }
 
+  transform({ data }) {
+    const category = data.category.replace(/_/g, ' ')
+    return { category }
+  }
+
   async handle({ pluginId }) {
-    const { category } = await this.fetch({ pluginId })
+    const data = await this.fetch({ pluginId })
+    const { category } = this.transform({ data })
     return this.constructor.render({ category })
   }
 }

@@ -25,12 +25,12 @@ module.exports = class OreStars extends BaseOreService {
 
   static defaultBadgeData = {
     label: 'stars',
+    color: 'blue',
   }
 
   static render({ stars }) {
     return {
       message: metric(stars),
-      color: 'brightgreen',
     }
   }
 

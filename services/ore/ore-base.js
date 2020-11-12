@@ -28,8 +28,8 @@ const resourceSchema = Joi.object({
   category: Joi.string().required(),
   settings: Joi.object({
     license: Joi.object({
-      name: Joi.string().allow(null),
-      url: Joi.string().allow(null),
+      name: Joi.string().allow(null).allow(''),
+      url: Joi.string().allow(null).allow(''),
     }),
   }).required(),
 }).required()

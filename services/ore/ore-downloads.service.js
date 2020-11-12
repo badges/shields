@@ -36,7 +36,9 @@ module.exports = class OreDownloads extends BaseOreService {
   }
 
   async handle({ pluginId }) {
-    const { stats: { downloads } } = await this.fetch({ pluginId })
+    const {
+      stats: { downloads },
+    } = await this.fetch({ pluginId })
     return this.constructor.render({ downloads })
   }
 }

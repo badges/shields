@@ -1,7 +1,6 @@
 'use strict'
 
 const { renderVersionBadge } = require('../version')
-const { InvalidResponse } = require('..')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
 module.exports = class OreVersion extends BaseOreService {
@@ -28,12 +27,26 @@ module.exports = class OreVersion extends BaseOreService {
     label: 'version',
   }
 
-  async handle({ pluginId }) {
-    const { promoted_versions } = await this.fetch({ pluginId })
-    if (promoted_versions.length === 0) {
-      throw new InvalidResponse({ prettyMessage: 'no promoted versions' })
+  static render({ version }) {
+    if (!version) {
+      return { message: 'none', color: 'inactive' }
     }
-    const { version } = promoted_versions[0]
     return renderVersionBadge({ version })
+  }
+
+  transform({ data }) {
+    const { promoted_versions } = data
+    return {
+      version:
+        promoted_versions.length === 0
+          ? undefined
+          : promoted_versions[0].version,
+    }
+  }
+
+  async handle({ pluginId }) {
+    const data = await this.fetch({ pluginId })
+    const { version } = this.transform({ data })
+    return this.constructor.render({ version })
   }
 }
