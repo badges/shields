@@ -76,7 +76,7 @@ async function fetch(
   serviceInstance,
   { baseUrl, packageName, includePrereleases = false }
 ) {
-  const json = await serviceInstance._requestJson({
+  return serviceInstance._requestJson({
     schema,
     url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
@@ -89,12 +89,6 @@ async function fetch(
       },
     },
   })
-
-  if (json.data.length === 1) {
-    return json.data[0]
-  } else {
-    throw new NotFound({ prettyMessage: 'package not found' })
-  }
 }
 
 /*
@@ -139,6 +133,21 @@ function createServiceFamily({
       return renderVersionBadge(props)
     }
 
+    /*
+     * Extract version information from the raw package info.
+     */
+    transform({ json, includePrereleases }) {
+      if (json.data.length === 1 && json.data[0].versions.length > 0) {
+        const { versions: packageVersions } = json.data[0]
+        const versions = packageVersions.map(item =>
+          stripBuildMetadata(item.version)
+        )
+        return selectVersion(versions, includePrereleases)
+      } else {
+        throw new NotFound({ prettyMessage: 'package not found' })
+      }
+    }
+
     async handle({ tenant, feed, which, packageName }) {
       const includePrereleases = which === 'vpre'
       const baseUrl = apiUrl({
@@ -149,9 +158,8 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      let { versions } = await fetch(this, { baseUrl, packageName })
-      versions = versions.map(item => stripBuildMetadata(item.version))
-      const version = selectVersion(versions, includePrereleases)
+      const json = await fetch(this, { baseUrl, packageName })
+      const version = this.transform({ json, includePrereleases })
       return this.constructor.render({ version, feed })
     }
   }
@@ -170,6 +178,20 @@ function createServiceFamily({
       return renderDownloadBadge(props)
     }
 
+    /*
+     * Extract download count from the raw package.
+     */
+    transform({ json }) {
+      if (json.data.length === 1) {
+        const packageInfo = json.data[0]
+        // Official NuGet server uses "totalDownloads" whereas MyGet uses
+        // "totaldownloads" (lowercase D). Ugh.
+        return packageInfo.totalDownloads || packageInfo.totaldownloads || 0
+      } else {
+        throw new NotFound({ prettyMessage: 'package not found' })
+      }
+    }
+
     async handle({ tenant, feed, which, packageName }) {
       const baseUrl = apiUrl({
         withTenant,
@@ -179,13 +201,8 @@ function createServiceFamily({
         withFeed,
         feed,
       })
-      const packageInfo = await fetch(this, { baseUrl, packageName })
-
-      // Official NuGet server uses "totalDownloads" whereas MyGet uses
-      // "totaldownloads" (lowercase D). Ugh.
-      const downloads =
-        packageInfo.totalDownloads || packageInfo.totaldownloads || 0
-
+      const json = await fetch(this, { baseUrl, packageName })
+      const downloads = this.transform({ json })
       return this.constructor.render({ downloads })
     }
   }
