@@ -39,19 +39,9 @@ module.exports = class OpenVSXBase extends BaseJsonService {
   }
 
   async fetch({ namespace, extension, version }) {
-    const baseUrl = 'https://open-vsx.org/api'
-    const options = {
-      method: 'GET',
-    }
-
-    const url = version
-      ? `${baseUrl}/${namespace}/${extension}/${version}`
-      : `${baseUrl}/${namespace}/${extension}`
-
     return this._requestJson({
       schema: extensionQuerySchema,
-      url,
-      options,
+      url: `https://open-vsx.org/api/${namespace}/${extension}/${version || ''}`,
       errorMessages: {
         400: 'invalid extension id',
       },
