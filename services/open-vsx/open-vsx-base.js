@@ -8,12 +8,12 @@ const extensionQuerySchema = Joi.object({
   error: Joi.string(),
   version: Joi.string().when('error', {
     is: Joi.exist(),
-    then: Joi.forbidden(),
+    then: Joi.optional(),
     otherwise: Joi.required(),
   }),
   timestamp: Joi.string().isoDate().when('error', {
     is: Joi.exist(),
-    then: Joi.forbidden(),
+    then: Joi.optional(),
     otherwise: Joi.required(),
   }),
   downloadCount: optionalNonNegativeInteger,
@@ -21,7 +21,7 @@ const extensionQuerySchema = Joi.object({
   averageRating: Joi.number().when('reviewCount', {
     is: Joi.exist(),
     then: Joi.number().max(5),
-    otherwise: Joi.forbidden(),
+    otherwise: Joi.optional(),
   }),
 }).required()
 
@@ -41,7 +41,9 @@ module.exports = class OpenVSXBase extends BaseJsonService {
   async fetch({ namespace, extension, version }) {
     return this._requestJson({
       schema: extensionQuerySchema,
-      url: `https://open-vsx.org/api/${namespace}/${extension}/${version || ''}`,
+      url: `https://open-vsx.org/api/${namespace}/${extension}/${
+        version || ''
+      }`,
       errorMessages: {
         400: 'invalid extension id',
       },
