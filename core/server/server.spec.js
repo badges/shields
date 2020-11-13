@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path')
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const config = require('config')
@@ -13,7 +14,11 @@ describe('The server', function () {
     before('Start the server', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      server = await createTestServer()
+      server = await createTestServer({
+        public: {
+          documentRoot: path.resolve(__dirname, 'test-public'),
+        },
+      })
       baseUrl = server.baseUrl
       await server.start()
     })
@@ -43,6 +48,16 @@ describe('The server', function () {
         .to.satisfy(isSvg)
         .and.to.include('fruit')
         .and.to.include('apple')
+    })
+
+    it('should serve front-end with default maxAge', async function () {
+      const { headers } = await got(`${baseUrl}/`)
+      expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
+    })
+
+    it('should serve badges with custom maxAge', async function () {
+      const { headers } = await got(`${baseUrl}npm/l/express`)
+      expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
     })
 
     it('should redirect colorscheme PNG badges as configured', async function () {
