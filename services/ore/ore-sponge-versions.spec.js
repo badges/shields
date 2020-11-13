@@ -39,22 +39,20 @@ describe('OreSpongeVersions', function () {
   })
 
   test(OreSpongeVersions.render, () => {
-    forCases([
-      given({
-        versions: [],
-      }),
-    ]).expect({ message: 'none', color: 'inactive' })
+    given({
+      versions: [],
+    }).expect({ message: 'none', color: 'inactive' })
   })
 
   test(OreSpongeVersions.render, () => {
-    forCases([given({ versions: ['1.23', '4.56'] })]).expect({
+    given({ versions: ['1.23', '4.56'] }).expect({
       message: '1.23 | 4.56',
       color: 'blue',
     })
   })
 
   test(OreSpongeVersions.render, () => {
-    forCases([given({ versions: ['1.23'] })]).expect({
+    given({ versions: ['1.23'] }).expect({
       message: '1.23',
       color: 'blue',
     })
