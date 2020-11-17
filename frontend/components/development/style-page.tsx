@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import styled from 'styled-components'
 // @ts-ingnore
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
-import { baseUrl } from '../../constants'
+import { getBaseUrl } from '../../constants'
 import Meta from '../meta'
 // @ts-ignore
 import Header from '../header'
@@ -123,6 +123,7 @@ const examples = [
 ]
 
 function StyleTable({ style }: { style: string }): JSX.Element {
+  const baseUrl = getBaseUrl()
   return (
     <StyledTable>
       <thead>
