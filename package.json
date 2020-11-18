@@ -118,7 +118,7 @@
     "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json ."
   },
   "lint-staged": {
-    "**/*.js": [
+    "**/*.@(js|ts|tsx)": [
       "eslint --fix",
       "prettier --write"
     ],
