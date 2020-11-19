@@ -20,9 +20,14 @@ export function getBaseUrl(): string {
   https://www.shields.io/ to both generate badges with the base
   https://img.shields.io/
   */
-  const { protocol, hostname } = window.location
-  if (['shields.io', 'www.shields.io'].includes(hostname)) {
-    return 'https://img.shields.io'
+  try {
+    const { protocol, hostname } = window.location
+    if (['shields.io', 'www.shields.io'].includes(hostname)) {
+      return 'https://img.shields.io'
+    }
+    return `${protocol}//${hostname}`
+  } catch (e) {
+    // server-side rendering
+    return ''
   }
-  return `${protocol}//${hostname}`
 }
