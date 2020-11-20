@@ -12,7 +12,9 @@ const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),
 }).required()
 
-module.exports = class DockerAutomatedBuild extends BaseJsonService {
+module.exports = class DockerAutomatedBuild extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = buildDockerUrl('automated')
   static examples = [

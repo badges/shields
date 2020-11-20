@@ -45,7 +45,9 @@ const documentation = `
   </p>
 `
 
-module.exports = class Codecov extends BaseSvgScrapingService {
+module.exports = class Codecov extends (
+  BaseSvgScrapingService
+) {
   static category = 'coverage'
   static route = {
     base: 'codecov/c',

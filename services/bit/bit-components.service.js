@@ -12,7 +12,9 @@ const collectionSchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class BitComponents extends BaseJsonService {
+module.exports = class BitComponents extends (
+  BaseJsonService
+) {
   static category = 'other'
   static route = {
     base: 'bit/collection/total-components',

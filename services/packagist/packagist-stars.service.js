@@ -21,7 +21,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistStars extends BasePackagistService {
+module.exports = class PackagistStars extends (
+  BasePackagistService
+) {
   static category = 'rating'
 
   static route = {

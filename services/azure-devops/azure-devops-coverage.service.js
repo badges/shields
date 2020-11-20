@@ -46,7 +46,9 @@ const buildCodeCoverageSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
+module.exports = class AzureDevOpsCoverage extends (
+  AzureDevOpsBase
+) {
   static category = 'coverage'
 
   static route = {

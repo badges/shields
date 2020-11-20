@@ -22,7 +22,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JetbrainsDownloads extends JetbrainsBase {
+module.exports = class JetbrainsDownloads extends (
+  JetbrainsBase
+) {
   static category = 'downloads'
 
   static route = {

@@ -21,7 +21,9 @@ function buildMembersArraySchema({ userType, tierRequired }) {
   return Joi.array().items(Joi.object().keys(keys))
 }
 
-module.exports = class OpencollectiveBase extends BaseJsonService {
+module.exports = class OpencollectiveBase extends (
+  BaseJsonService
+) {
   static category = 'funding'
 
   static buildRoute(base, withTierId) {

@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const OpenVSXBase = require('./open-vsx-base')
 
-module.exports = class OpenVSXVersion extends OpenVSXBase {
+module.exports = class OpenVSXVersion extends (
+  OpenVSXBase
+) {
   static category = 'version'
 
   static route = {

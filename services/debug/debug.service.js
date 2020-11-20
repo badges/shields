@@ -5,7 +5,9 @@ const { NonMemoryCachingBaseService } = require('..')
 const serverStartTime = new Date(new Date().toGMTString())
 let bitFlip = false
 
-module.exports = class Debug extends NonMemoryCachingBaseService {
+module.exports = class Debug extends (
+  NonMemoryCachingBaseService
+) {
   static category = 'debug'
   static route = { base: 'debug', pattern: ':variant(time|starttime|flip)' }
 

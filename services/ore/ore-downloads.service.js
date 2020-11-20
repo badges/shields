@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreDownloads extends BaseOreService {
+module.exports = class OreDownloads extends (
+  BaseOreService
+) {
   static category = 'downloads'
 
   static route = {

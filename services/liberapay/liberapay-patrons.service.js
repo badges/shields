@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { colorScale } = require('../color-formatters')
 const { LiberapayBase } = require('./liberapay-base')
 
-module.exports = class LiberapayPatrons extends LiberapayBase {
+module.exports = class LiberapayPatrons extends (
+  LiberapayBase
+) {
   static route = this.buildRoute('patrons')
 
   static examples = [

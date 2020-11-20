@@ -3,7 +3,9 @@
 const PypiBase = require('./pypi-base')
 const { getPackageFormats } = require('./pypi-helpers')
 
-module.exports = class PypiWheel extends PypiBase {
+module.exports = class PypiWheel extends (
+  PypiBase
+) {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/wheel')

@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const BaseCocoaPodsService = require('./cocoapods-base')
 
-module.exports = class CocoapodsVersion extends BaseCocoaPodsService {
+module.exports = class CocoapodsVersion extends (
+  BaseCocoaPodsService
+) {
   static category = 'version'
   static route = { base: 'cocoapods/v', pattern: ':spec' }
 

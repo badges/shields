@@ -19,7 +19,9 @@ const queryParamSchema = Joi.object({
   specUrl: optionalUrl.required(),
 }).required()
 
-module.exports = class SwaggerValidatorService extends BaseJsonService {
+module.exports = class SwaggerValidatorService extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

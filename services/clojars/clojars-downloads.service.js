@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { downloadCount: downloadsColor } = require('../color-formatters')
 const { BaseClojarsService } = require('./clojars-base')
 
-module.exports = class ClojarsDownloads extends BaseClojarsService {
+module.exports = class ClojarsDownloads extends (
+  BaseClojarsService
+) {
   static category = 'downloads'
   static route = { base: 'clojars/dt', pattern: ':clojar+' }
 

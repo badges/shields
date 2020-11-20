@@ -2,7 +2,9 @@
 
 const YouTubeBase = require('./youtube-base')
 
-module.exports = class YouTubeViews extends YouTubeBase {
+module.exports = class YouTubeViews extends (
+  YouTubeBase
+) {
   static route = {
     base: 'youtube/views',
     pattern: ':videoId',

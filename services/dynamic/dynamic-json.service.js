@@ -5,7 +5,9 @@ const { BaseJsonService } = require('..')
 const { createRoute } = require('./dynamic-helpers')
 const jsonPath = require('./json-path')
 
-module.exports = class DynamicJson extends jsonPath(BaseJsonService) {
+module.exports = class DynamicJson extends (
+  jsonPath(BaseJsonService)
+) {
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('json')
 

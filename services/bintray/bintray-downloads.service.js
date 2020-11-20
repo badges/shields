@@ -19,7 +19,9 @@ const documentation = `
   As such, they may be unstable or intermittently unavailable.
 </p>`
 
-module.exports = class BintrayDownloads extends BaseJsonService {
+module.exports = class BintrayDownloads extends (
+  BaseJsonService
+) {
   static category = 'downloads'
 
   static route = {

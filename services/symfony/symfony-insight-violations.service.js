@@ -2,7 +2,9 @@
 
 const { SymfonyInsightBase, keywords } = require('./symfony-insight-base')
 
-module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
+module.exports = class SymfonyInsightViolations extends (
+  SymfonyInsightBase
+) {
   static route = {
     base: 'symfony/i/violations',
     pattern: ':projectUuid',

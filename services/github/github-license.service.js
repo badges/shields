@@ -10,7 +10,9 @@ const schema = Joi.object({
   license: Joi.object({ spdx_id: Joi.string().required() }).allow(null),
 }).required()
 
-module.exports = class GithubLicense extends GithubAuthV3Service {
+module.exports = class GithubLicense extends (
+  GithubAuthV3Service
+) {
   static category = 'license'
   static route = { base: 'github/license', pattern: ':user/:repo' }
   static examples = [

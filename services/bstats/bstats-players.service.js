@@ -8,7 +8,9 @@ const schema = Joi.array()
   .items(Joi.array().items(Joi.number().required(), Joi.number().required()))
   .required()
 
-module.exports = class BStatsPlayers extends BaseJsonService {
+module.exports = class BStatsPlayers extends (
+  BaseJsonService
+) {
   static category = 'other'
   static route = { base: 'bstats/players', pattern: ':pluginid' }
 

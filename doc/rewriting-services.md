@@ -16,7 +16,9 @@ boilerplate for [creating the tester][creating a tester].
 Legacy services look like:
 
 ```js
-module.exports = class ExampleService extends LegacyService {
+module.exports = class ExampleService extends (
+  LegacyService
+) {
   static category = 'build'
 
   static registerLegacyRouteHandler({ camp, cache }) {

@@ -14,7 +14,9 @@ const updateResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
+module.exports = class EclipseMarketplaceUpdate extends (
+  EclipseMarketplaceBase
+) {
   static category = 'activity'
   static route = this.buildRoute('eclipse-marketplace/last-update')
   static examples = [

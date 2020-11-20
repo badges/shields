@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
-module.exports = class SpigetDownloads extends BaseSpigetService {
+module.exports = class SpigetDownloads extends (
+  BaseSpigetService
+) {
   static category = 'downloads'
 
   static route = {

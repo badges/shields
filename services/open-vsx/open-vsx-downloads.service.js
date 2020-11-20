@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const OpenVSXBase = require('./open-vsx-base')
 
-module.exports = class OpenVSXDownloads extends OpenVSXBase {
+module.exports = class OpenVSXDownloads extends (
+  OpenVSXBase
+) {
   static category = 'downloads'
 
   static route = {

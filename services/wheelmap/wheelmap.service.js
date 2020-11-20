@@ -9,7 +9,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class Wheelmap extends BaseJsonService {
+module.exports = class Wheelmap extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

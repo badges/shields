@@ -12,7 +12,9 @@ const { documentation, errorMessagesFor } = require('./github-helpers')
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
-module.exports = class GithubCommitsSince extends GithubAuthV3Service {
+module.exports = class GithubCommitsSince extends (
+  GithubAuthV3Service
+) {
   static category = 'activity'
   static route = {
     base: 'github/commits-since',

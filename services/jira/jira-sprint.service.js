@@ -32,7 +32,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class JiraSprint extends BaseJsonService {
+module.exports = class JiraSprint extends (
+  BaseJsonService
+) {
   static category = 'issue-tracking'
 
   static route = {

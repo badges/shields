@@ -12,7 +12,9 @@ const queryParamSchema = Joi.object({
   token: Joi.string().required(),
 }).required()
 
-module.exports = class Bitrise extends BaseJsonService {
+module.exports = class Bitrise extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = {
     base: 'bitrise',

@@ -5,7 +5,9 @@ const UptimeRobotBase = require('./uptimerobot-base')
 
 const ratioColor = colorScale([10, 30, 50, 70])
 
-module.exports = class UptimeRobotRatio extends UptimeRobotBase {
+module.exports = class UptimeRobotRatio extends (
+  UptimeRobotBase
+) {
   static route = {
     base: 'uptimerobot/ratio',
     pattern: ':numberOfDays(\\d+)?/:monitorSpecificKey',

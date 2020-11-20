@@ -4,7 +4,9 @@ const { renderLicenseBadge } = require('../licenses')
 const toArray = require('../../core/base-service/to-array')
 const NpmBase = require('./npm-base')
 
-module.exports = class NpmLicense extends NpmBase {
+module.exports = class NpmLicense extends (
+  NpmBase
+) {
   static category = 'license'
 
   static route = this.buildRoute('npm/l', { withTag: false })

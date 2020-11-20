@@ -13,7 +13,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class TeamCityBuild extends TeamCityBase {
+module.exports = class TeamCityBuild extends (
+  TeamCityBase
+) {
   static category = 'build'
 
   static route = {

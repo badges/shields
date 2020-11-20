@@ -9,7 +9,9 @@ const schema = Joi.object({
   currentReleaseVersion: Joi.string().required(),
 }).required()
 
-module.exports = class Flathub extends BaseJsonService {
+module.exports = class Flathub extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'flathub/v', pattern: ':packageName' }
   static examples = [

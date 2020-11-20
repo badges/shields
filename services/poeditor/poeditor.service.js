@@ -36,7 +36,9 @@ const queryParamSchema = Joi.object({
   token: Joi.string().required(),
 }).required()
 
-module.exports = class POEditor extends BaseJsonService {
+module.exports = class POEditor extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

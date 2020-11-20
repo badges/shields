@@ -4,7 +4,9 @@ const { coveragePercentage } = require('../color-formatters')
 const SonarBase = require('./sonar-base')
 const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
-module.exports = class SonarCoverage extends SonarBase {
+module.exports = class SonarCoverage extends (
+  SonarBase
+) {
   static category = 'coverage'
 
   static route = {

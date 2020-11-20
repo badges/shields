@@ -12,7 +12,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class ReadTheDocs extends BaseSvgScrapingService {
+module.exports = class ReadTheDocs extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

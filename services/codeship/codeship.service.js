@@ -26,7 +26,9 @@ const statusMap = {
   infrastructure_failure: 'failed',
 }
 
-module.exports = class Codeship extends BaseSvgScrapingService {
+module.exports = class Codeship extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
   static route = { base: 'codeship', pattern: ':projectId/:branch*' }
 

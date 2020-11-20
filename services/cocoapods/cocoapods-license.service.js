@@ -2,7 +2,9 @@
 
 const BaseCocoaPodsService = require('./cocoapods-base')
 
-module.exports = class CocoapodsLicense extends BaseCocoaPodsService {
+module.exports = class CocoapodsLicense extends (
+  BaseCocoaPodsService
+) {
   static category = 'license'
   static route = { base: 'cocoapods/l', pattern: ':spec' }
 

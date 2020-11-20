@@ -10,7 +10,9 @@ const apiSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-module.exports = class EcologiTrees extends BaseJsonService {
+module.exports = class EcologiTrees extends (
+  BaseJsonService
+) {
   static category = 'other'
   static route = { base: 'ecologi/trees', pattern: ':username' }
   static examples = [

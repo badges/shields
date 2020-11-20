@@ -12,7 +12,9 @@ const schema = Joi.object({
     .min(0),
 }).required()
 
-module.exports = class Itunes extends BaseJsonService {
+module.exports = class Itunes extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {

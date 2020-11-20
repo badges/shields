@@ -14,7 +14,9 @@ const schema = Joi.alternatives(
   Joi.array().required()
 )
 
-module.exports = class GithubSize extends GithubAuthV3Service {
+module.exports = class GithubSize extends (
+  GithubAuthV3Service
+) {
   static category = 'size'
 
   static route = {

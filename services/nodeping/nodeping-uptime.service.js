@@ -23,7 +23,9 @@ const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 // TODO: support for custom '100%' label
 // TODO: support for custom # of decimal places
 
-module.exports = class NodePingUptime extends BaseJsonService {
+module.exports = class NodePingUptime extends (
+  BaseJsonService
+) {
   static category = 'monitoring'
 
   static route = { base: 'nodeping/uptime', pattern: ':checkUuid' }

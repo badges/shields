@@ -4,7 +4,9 @@ const { renderVersionBadge } = require('../version')
 const { NotFound } = require('..')
 const BaseChromeWebStoreService = require('./chrome-web-store-base')
 
-module.exports = class ChromeWebStoreVersion extends BaseChromeWebStoreService {
+module.exports = class ChromeWebStoreVersion extends (
+  BaseChromeWebStoreService
+) {
   static category = 'version'
   static route = { base: 'chrome-web-store/v', pattern: ':storeId' }
 

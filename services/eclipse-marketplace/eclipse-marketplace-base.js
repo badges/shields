@@ -2,7 +2,9 @@
 
 const { BaseXmlService } = require('..')
 
-module.exports = class EclipseMarketplaceBase extends BaseXmlService {
+module.exports = class EclipseMarketplaceBase extends (
+  BaseXmlService
+) {
   static buildRoute(base) {
     return {
       base,

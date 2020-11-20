@@ -12,7 +12,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class CocoapodsDocs extends BaseJsonService {
+module.exports = class CocoapodsDocs extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = { base: 'cocoapods/metrics/doc-percent', pattern: ':spec' }
 

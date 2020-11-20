@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const { BaseAmoService, keywords } = require('./amo-base')
 
-module.exports = class AmoVersion extends BaseAmoService {
+module.exports = class AmoVersion extends (
+  BaseAmoService
+) {
   static category = 'version'
   static route = { base: 'amo/v', pattern: ':addonId' }
 

@@ -11,7 +11,9 @@ const { MetricHelper } = require('./metric-helper')
 const coalesceBadge = require('./coalesce-badge')
 const { prepareRoute, namedParamsForMatch } = require('./route')
 
-module.exports = class BaseStaticService extends BaseService {
+module.exports = class BaseStaticService extends (
+  BaseService
+) {
   static register({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
 

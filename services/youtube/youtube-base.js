@@ -20,7 +20,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class YouTubeBase extends BaseJsonService {
+module.exports = class YouTubeBase extends (
+  BaseJsonService
+) {
   static category = 'social'
 
   static auth = {

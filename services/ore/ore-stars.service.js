@@ -3,7 +3,9 @@
 const { metric } = require('../text-formatters')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreStars extends BaseOreService {
+module.exports = class OreStars extends (
+  BaseOreService
+) {
   static category = 'rating'
 
   static route = {

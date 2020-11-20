@@ -13,7 +13,9 @@ const schema = Joi.object()
   .pattern(/./, Joi.string())
   .required()
 
-module.exports = class NpmVersion extends NpmBase {
+module.exports = class NpmVersion extends (
+  NpmBase
+) {
   static category = 'version'
 
   static route = this.buildRoute('npm/v', { withTag: true })

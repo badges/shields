@@ -3,7 +3,9 @@
 const NodeVersionBase = require('./node-base')
 const { versionColorForRangeLts } = require('./node-version-color')
 
-module.exports = class NodeLtsVersion extends NodeVersionBase {
+module.exports = class NodeLtsVersion extends (
+  NodeVersionBase
+) {
   static route = this.buildRoute('node/v-lts', { withTag: true })
 
   static defaultBadgeData = {

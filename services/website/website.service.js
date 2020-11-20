@@ -35,7 +35,9 @@ const urlQueryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-module.exports = class Website extends BaseService {
+module.exports = class Website extends (
+  BaseService
+) {
   static category = 'monitoring'
 
   static route = {

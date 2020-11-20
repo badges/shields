@@ -3,7 +3,9 @@
 const { metric } = require('../text-formatters')
 const LgtmBaseService = require('./lgtm-base')
 
-module.exports = class LgtmAlerts extends LgtmBaseService {
+module.exports = class LgtmAlerts extends (
+  LgtmBaseService
+) {
   static route = {
     base: 'lgtm/alerts',
     pattern: this.pattern,

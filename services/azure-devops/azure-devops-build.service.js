@@ -33,7 +33,9 @@ const documentation = `
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
+module.exports = class AzureDevOpsBuild extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

@@ -4,7 +4,9 @@ const { starRating } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
 const OpenVSXBase = require('./open-vsx-base')
 
-module.exports = class OpenVSXRating extends OpenVSXBase {
+module.exports = class OpenVSXRating extends (
+  OpenVSXBase
+) {
   static category = 'rating'
 
   static route = {

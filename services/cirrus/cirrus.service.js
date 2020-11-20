@@ -15,7 +15,9 @@ const queryParamSchema = Joi.object({
   script: Joi.string(),
 }).required()
 
-module.exports = class Cirrus extends BaseJsonService {
+module.exports = class Cirrus extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = {
     base: 'cirrus',

@@ -7,7 +7,9 @@ const helixSchema = Joi.object({
   data: Joi.array().required(),
 })
 
-module.exports = class TwitchStatus extends TwitchBase {
+module.exports = class TwitchStatus extends (
+  TwitchBase
+) {
   static category = 'activity'
 
   static route = {

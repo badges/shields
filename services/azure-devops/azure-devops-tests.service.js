@@ -61,7 +61,9 @@ const buildTestResultSummarySchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
+module.exports = class AzureDevOpsTests extends (
+  AzureDevOpsBase
+) {
   static category = 'build'
 
   static route = {

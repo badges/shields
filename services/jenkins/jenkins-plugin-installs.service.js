@@ -24,7 +24,9 @@ const schemaInstallationsPerVersion = Joi.object()
   })
   .required()
 
-module.exports = class JenkinsPluginInstalls extends BaseJsonService {
+module.exports = class JenkinsPluginInstalls extends (
+  BaseJsonService
+) {
   static _getSchema(version) {
     if (version) {
       return schemaInstallationsPerVersion

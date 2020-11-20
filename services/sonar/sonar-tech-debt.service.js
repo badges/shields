@@ -9,7 +9,9 @@ const {
   queryParamSchema,
 } = require('./sonar-helpers')
 
-module.exports = class SonarTechDebt extends SonarBase {
+module.exports = class SonarTechDebt extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

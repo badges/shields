@@ -2,7 +2,9 @@
 
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreSpongeVersions extends BaseOreService {
+module.exports = class OreSpongeVersions extends (
+  BaseOreService
+) {
   static category = 'platform-support'
 
   static route = {

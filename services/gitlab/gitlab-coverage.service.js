@@ -38,7 +38,9 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 </p>
 `
 
-module.exports = class GitlabCoverage extends BaseSvgScrapingService {
+module.exports = class GitlabCoverage extends (
+  BaseSvgScrapingService
+) {
   static category = 'coverage'
 
   static route = {

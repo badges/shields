@@ -12,7 +12,9 @@ const schema = Joi.object({
 
 const keywords = ['node', 'bundlephobia']
 
-module.exports = class Bundlephobia extends BaseJsonService {
+module.exports = class Bundlephobia extends (
+  BaseJsonService
+) {
   static category = 'size'
 
   static route = {

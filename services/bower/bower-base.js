@@ -25,7 +25,9 @@ const schema = Joi.object()
   })
   .required()
 
-module.exports = class BaseBowerService extends BaseJsonService {
+module.exports = class BaseBowerService extends (
+  BaseJsonService
+) {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,

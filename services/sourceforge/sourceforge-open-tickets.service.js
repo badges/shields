@@ -9,7 +9,9 @@ const schema = Joi.object({
   count: nonNegativeInteger.required(),
 }).required()
 
-module.exports = class SourceforgeOpenTickets extends BaseJsonService {
+module.exports = class SourceforgeOpenTickets extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

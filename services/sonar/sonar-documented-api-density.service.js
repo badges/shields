@@ -11,7 +11,9 @@ const {
 
 const metric = 'public_documented_api_density'
 
-module.exports = class SonarDocumentedApiDensity extends SonarBase {
+module.exports = class SonarDocumentedApiDensity extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

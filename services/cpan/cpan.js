@@ -8,7 +8,9 @@ const schema = Joi.object({
   license: Joi.array().items(Joi.string()).min(1).required(),
 }).required()
 
-module.exports = class BaseCpanService extends BaseJsonService {
+module.exports = class BaseCpanService extends (
+  BaseJsonService
+) {
   static defaultBadgeData = { label: 'cpan' }
 
   async fetch({ packageName }) {

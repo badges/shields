@@ -27,7 +27,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
+module.exports = class MicrobadgerSize extends (
+  BaseMicrobadgerService
+) {
   static route = {
     base: 'microbadger/image-size',
     pattern: ':user/:repo/:tag*',

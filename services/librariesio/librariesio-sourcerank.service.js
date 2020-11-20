@@ -6,7 +6,9 @@ const { fetchProject } = require('./librariesio-common')
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])
 
-module.exports = class LibrariesIoSourcerank extends BaseJsonService {
+module.exports = class LibrariesIoSourcerank extends (
+  BaseJsonService
+) {
   static category = 'rating'
 
   static route = {

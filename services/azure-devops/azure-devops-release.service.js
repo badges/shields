@@ -22,7 +22,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class AzureDevOpsRelease extends BaseSvgScrapingService {
+module.exports = class AzureDevOpsRelease extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

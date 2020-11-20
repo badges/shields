@@ -51,7 +51,9 @@ const legacySchema = Joi.array()
   )
   .required()
 
-module.exports = class SonarBase extends BaseJsonService {
+module.exports = class SonarBase extends (
+  BaseJsonService
+) {
   static auth = { userKey: 'sonarqube_token', serviceKey: 'sonar' }
 
   async fetch({ sonarVersion, server, component, metricName }) {

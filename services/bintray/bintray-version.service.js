@@ -10,7 +10,9 @@ const schema = Joi.object()
   })
   .required()
 
-module.exports = class BintrayVersion extends BaseJsonService {
+module.exports = class BintrayVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'bintray/v', pattern: ':subject/:repo/:packageName' }
 

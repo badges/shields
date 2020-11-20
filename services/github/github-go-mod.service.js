@@ -15,7 +15,9 @@ const goVersionRegExp = new RegExp('^go (.+)$', 'm')
 
 const keywords = ['golang']
 
-module.exports = class GithubGoModGoVersion extends ConditionalGithubAuthV3Service {
+module.exports = class GithubGoModGoVersion extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'version'
   static route = {
     base: 'github/go-mod/go-version',

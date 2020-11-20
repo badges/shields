@@ -22,7 +22,9 @@ const hostMappings = {
   gitlab: 'gl',
 }
 
-module.exports = class LgtmBaseService extends BaseJsonService {
+module.exports = class LgtmBaseService extends (
+  BaseJsonService
+) {
   static category = 'analysis'
 
   static defaultBadgeData = { label: 'lgtm' }

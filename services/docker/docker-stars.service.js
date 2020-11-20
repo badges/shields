@@ -9,7 +9,9 @@ const {
   getDockerHubUser,
 } = require('./docker-helpers')
 
-module.exports = class DockerStars extends BaseService {
+module.exports = class DockerStars extends (
+  BaseService
+) {
   static category = 'rating'
   static route = buildDockerUrl('stars')
   static examples = [

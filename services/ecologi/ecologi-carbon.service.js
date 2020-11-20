@@ -9,7 +9,9 @@ const apiSchema = Joi.object({
   total: Joi.number().positive().required(),
 }).required()
 
-module.exports = class EcologiCarbonOffset extends BaseJsonService {
+module.exports = class EcologiCarbonOffset extends (
+  BaseJsonService
+) {
   static category = 'other'
   static route = { base: 'ecologi/carbon', pattern: ':username' }
   static examples = [

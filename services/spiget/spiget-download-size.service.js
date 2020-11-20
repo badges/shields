@@ -2,7 +2,9 @@
 
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
-module.exports = class SpigetDownloadSize extends BaseSpigetService {
+module.exports = class SpigetDownloadSize extends (
+  BaseSpigetService
+) {
   static category = 'size'
 
   static route = {

@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { downloadCount } = require('../color-formatters')
 const BaseCondaService = require('./conda-base')
 
-module.exports = class CondaDownloads extends BaseCondaService {
+module.exports = class CondaDownloads extends (
+  BaseCondaService
+) {
   static category = 'downloads'
   static route = { base: 'conda', pattern: ':variant(d|dn)/:channel/:pkg' }
 

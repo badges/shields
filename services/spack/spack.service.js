@@ -7,7 +7,9 @@ const schema = Joi.object({
   latest_version: Joi.string().required(),
 }).required()
 
-module.exports = class SpackVersion extends BaseJsonService {
+module.exports = class SpackVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {

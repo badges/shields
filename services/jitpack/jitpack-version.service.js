@@ -9,7 +9,9 @@ const schema = Joi.object({
   status: Joi.string().valid('ok').required(),
 }).required()
 
-module.exports = class JitPackVersion extends BaseJsonService {
+module.exports = class JitPackVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {

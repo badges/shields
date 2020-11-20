@@ -15,7 +15,9 @@ const schema = Joi.object({
 
 // Repository for this service is: https://github.com/iqubex-technologies/pkgreview.dev
 // Internally the service leverages the npms.io API (https://api.npms.io/v2)
-module.exports = class PkgreviewRating extends BaseJsonService {
+module.exports = class PkgreviewRating extends (
+  BaseJsonService
+) {
   static category = 'rating'
 
   static route = {

@@ -4,7 +4,9 @@ const { starRating, metric } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
-module.exports = class SpigetRatings extends BaseSpigetService {
+module.exports = class SpigetRatings extends (
+  BaseSpigetService
+) {
   static category = 'rating'
 
   static route = {

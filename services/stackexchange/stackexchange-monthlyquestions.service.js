@@ -10,7 +10,9 @@ const tagSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
+module.exports = class StackExchangeMonthlyQuestions extends (
+  BaseJsonService
+) {
   static category = 'chat'
 
   static route = {

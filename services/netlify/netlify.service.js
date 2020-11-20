@@ -16,7 +16,9 @@ const statusMap = {
   infrastructure_failure: 'failed',
 }
 
-module.exports = class Netlify extends BaseSvgScrapingService {
+module.exports = class Netlify extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

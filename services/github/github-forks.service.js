@@ -15,7 +15,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class GithubForks extends GithubAuthV4Service {
+module.exports = class GithubForks extends (
+  GithubAuthV4Service
+) {
   static category = 'social'
   static route = { base: 'github/forks', pattern: ':user/:repo' }
   static examples = [

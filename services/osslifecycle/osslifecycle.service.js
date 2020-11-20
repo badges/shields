@@ -13,7 +13,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class OssTracker extends BaseService {
+module.exports = class OssTracker extends (
+  BaseService
+) {
   static category = 'other'
 
   static route = {

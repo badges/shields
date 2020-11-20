@@ -44,7 +44,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class GithubDeployments extends GithubAuthV4Service {
+module.exports = class GithubDeployments extends (
+  GithubAuthV4Service
+) {
   static category = 'other'
   static route = {
     base: 'github/deployments',

@@ -25,7 +25,9 @@ const extensionQuerySchema = Joi.object({
   }),
 }).required()
 
-module.exports = class OpenVSXBase extends BaseJsonService {
+module.exports = class OpenVSXBase extends (
+  BaseJsonService
+) {
   static keywords = [
     'ovsx',
     'open-vsx',

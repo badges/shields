@@ -6,7 +6,9 @@ const NpmBase = require('./npm-base')
 const { queryParamSchema } = NpmBase
 const keywords = ['node']
 
-module.exports = class NpmDependencyVersion extends NpmBase {
+module.exports = class NpmDependencyVersion extends (
+  NpmBase
+) {
   static category = 'platform-support'
 
   static route = {

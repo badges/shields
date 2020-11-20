@@ -8,7 +8,9 @@ const { errorMessagesFor, documentation } = require('./github-helpers')
 
 const schema = Joi.object({ total_count: nonNegativeInteger }).required()
 
-module.exports = class GithubSearch extends GithubAuthV3Service {
+module.exports = class GithubSearch extends (
+  GithubAuthV3Service
+) {
   static category = 'analysis'
 
   static route = {

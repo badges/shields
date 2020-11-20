@@ -10,7 +10,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class TravisBuild extends BaseSvgScrapingService {
+module.exports = class TravisBuild extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

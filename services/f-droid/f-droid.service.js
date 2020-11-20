@@ -22,7 +22,9 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
 }).required()
 
-module.exports = class FDroid extends BaseJsonService {
+module.exports = class FDroid extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'f-droid/v', pattern: ':appId', queryParamSchema }
   static examples = [

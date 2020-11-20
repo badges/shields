@@ -87,7 +87,9 @@ const variantMap = {
   },
 }
 
-module.exports = class CodeclimateAnalysis extends BaseJsonService {
+module.exports = class CodeclimateAnalysis extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = {
     base: 'codeclimate',

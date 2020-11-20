@@ -2,7 +2,9 @@
 
 const { BaseStaticService } = require('..')
 
-module.exports = class Gitter extends BaseStaticService {
+module.exports = class Gitter extends (
+  BaseStaticService
+) {
   static category = 'chat'
 
   static route = {

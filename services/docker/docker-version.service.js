@@ -47,7 +47,9 @@ const queryParamSchema = Joi.object({
     .default('amd64'),
 }).required()
 
-module.exports = class DockerVersion extends BaseJsonService {
+module.exports = class DockerVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { ...buildDockerUrl('v', true), queryParamSchema }
   static examples = [

@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreVersion extends BaseOreService {
+module.exports = class OreVersion extends (
+  BaseOreService
+) {
   static category = 'version'
 
   static route = {

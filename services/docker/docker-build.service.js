@@ -15,7 +15,9 @@ const buildSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class DockerBuild extends BaseJsonService {
+module.exports = class DockerBuild extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = buildDockerUrl('build')
   static examples = [

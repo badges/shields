@@ -9,7 +9,9 @@ const { documentation, errorMessagesFor } = require('./github-helpers')
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
 
-module.exports = class GithubContributors extends GithubAuthV3Service {
+module.exports = class GithubContributors extends (
+  GithubAuthV3Service
+) {
   static category = 'activity'
   static route = {
     base: 'github',

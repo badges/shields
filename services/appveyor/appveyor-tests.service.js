@@ -36,7 +36,9 @@ const commonPreviewProps = {
   isCompact: false,
 }
 
-module.exports = class AppVeyorTests extends AppVeyorBase {
+module.exports = class AppVeyorTests extends (
+  AppVeyorBase
+) {
   static route = {
     ...this.buildRoute('appveyor/tests'),
     queryParamSchema: testResultQueryParamSchema,

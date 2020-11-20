@@ -9,7 +9,9 @@ const schema = Joi.object({
   license: Joi.string().required(),
 }).required()
 
-module.exports = class CondaLicense extends BaseCondaService {
+module.exports = class CondaLicense extends (
+  BaseCondaService
+) {
   static category = 'license'
   static route = { base: 'conda', pattern: 'l/:channel/:pkg' }
 

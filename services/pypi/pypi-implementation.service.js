@@ -3,7 +3,9 @@
 const PypiBase = require('./pypi-base')
 const { parseClassifiers } = require('./pypi-helpers')
 
-module.exports = class PypiImplementation extends PypiBase {
+module.exports = class PypiImplementation extends (
+  PypiBase
+) {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/implementation')

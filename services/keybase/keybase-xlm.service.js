@@ -26,7 +26,9 @@ const stellarAddressSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybaseXLM extends KeybaseProfile {
+module.exports = class KeybaseXLM extends (
+  KeybaseProfile
+) {
   static route = {
     base: 'keybase/xlm',
     pattern: ':username',

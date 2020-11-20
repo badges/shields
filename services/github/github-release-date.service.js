@@ -20,7 +20,9 @@ const schema = Joi.alternatives(
     .min(1)
 )
 
-module.exports = class GithubReleaseDate extends GithubAuthV3Service {
+module.exports = class GithubReleaseDate extends (
+  GithubAuthV3Service
+) {
   static category = 'activity'
   static route = {
     base: 'github',

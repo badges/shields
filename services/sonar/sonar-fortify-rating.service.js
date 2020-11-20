@@ -12,7 +12,9 @@ const colorMap = {
   5: 'brightgreen',
 }
 
-module.exports = class SonarFortifyRating extends SonarBase {
+module.exports = class SonarFortifyRating extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

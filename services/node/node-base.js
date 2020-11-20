@@ -4,7 +4,9 @@ const NPMBase = require('../npm/npm-base')
 
 const keywords = ['npm']
 
-module.exports = class NodeVersionBase extends NPMBase {
+module.exports = class NodeVersionBase extends (
+  NPMBase
+) {
   static category = 'platform-support'
 
   static get examples() {

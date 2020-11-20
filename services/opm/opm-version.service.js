@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const { BaseService, NotFound, InvalidResponse } = require('..')
 
-module.exports = class OpmVersion extends BaseService {
+module.exports = class OpmVersion extends (
+  BaseService
+) {
   static category = 'version'
 
   static route = {

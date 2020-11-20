@@ -52,7 +52,9 @@ const documentation = `
   </p>
   `
 
-module.exports = class Matrix extends BaseJsonService {
+module.exports = class Matrix extends (
+  BaseJsonService
+) {
   static category = 'chat'
 
   static route = {

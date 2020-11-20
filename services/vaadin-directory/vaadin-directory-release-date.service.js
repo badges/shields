@@ -4,7 +4,9 @@ const { formatDate } = require('../text-formatters')
 const { age: ageColor } = require('../color-formatters')
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
-module.exports = class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryService {
+module.exports = class VaadinDirectoryReleaseDate extends (
+  BaseVaadinDirectoryService
+) {
   static category = 'activity'
 
   static route = {

@@ -33,7 +33,9 @@ const periodMap = {
 
 // this badge uses PyPI Stats instead of the PyPI API
 // so it doesn't extend PypiBase
-module.exports = class PypiDownloads extends BaseJsonService {
+module.exports = class PypiDownloads extends (
+  BaseJsonService
+) {
   static category = 'downloads'
 
   static route = {

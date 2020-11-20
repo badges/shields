@@ -23,7 +23,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class TravisPhpVersion extends BaseJsonService {
+module.exports = class TravisPhpVersion extends (
+  BaseJsonService
+) {
   static category = 'platform-support'
 
   static route = {

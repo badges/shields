@@ -35,7 +35,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class JenkinsTests extends JenkinsBase {
+module.exports = class JenkinsTests extends (
+  JenkinsBase
+) {
   static category = 'build'
 
   static route = {

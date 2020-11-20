@@ -4,7 +4,9 @@ const { colorScale } = require('../color-formatters')
 const { InvalidResponse } = require('..')
 const { LiberapayBase } = require('./liberapay-base')
 
-module.exports = class LiberapayGoal extends LiberapayBase {
+module.exports = class LiberapayGoal extends (
+  LiberapayBase
+) {
   static route = this.buildRoute('goal')
 
   static examples = [

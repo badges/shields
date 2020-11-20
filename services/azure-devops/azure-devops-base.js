@@ -14,7 +14,9 @@ const latestBuildSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsBase extends BaseJsonService {
+module.exports = class AzureDevOpsBase extends (
+  BaseJsonService
+) {
   static auth = {
     passKey: 'azure_devops_token',
     authorizedOrigins: ['https://dev.azure.com'],

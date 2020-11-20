@@ -14,7 +14,9 @@ const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
 }).required()
 
-module.exports = class DockerPulls extends BaseJsonService {
+module.exports = class DockerPulls extends (
+  BaseJsonService
+) {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
   static examples = [

@@ -23,7 +23,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JetbrainsRating extends JetbrainsBase {
+module.exports = class JetbrainsRating extends (
+  JetbrainsBase
+) {
   static category = 'rating'
 
   static route = {

@@ -13,7 +13,9 @@ const { createRoute } = require('./dynamic-helpers')
 // One way to create a more performant version would be to use the BaseXml
 // JSON parser and write the queries in jsonpath instead. Then eventually
 // deprecate the old version.
-module.exports = class DynamicXml extends BaseService {
+module.exports = class DynamicXml extends (
+  BaseService
+) {
   static category = 'dynamic'
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('xml')

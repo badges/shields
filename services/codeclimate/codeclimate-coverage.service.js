@@ -16,7 +16,9 @@ const schema = Joi.object({
   }).allow(null),
 }).required()
 
-module.exports = class CodeclimateCoverage extends BaseJsonService {
+module.exports = class CodeclimateCoverage extends (
+  BaseJsonService
+) {
   static category = 'coverage'
   static route = {
     base: 'codeclimate',

@@ -21,7 +21,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class HSTS extends BaseJsonService {
+module.exports = class HSTS extends (
+  BaseJsonService
+) {
   static category = 'monitoring'
 
   static route = {

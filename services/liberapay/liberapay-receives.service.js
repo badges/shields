@@ -3,7 +3,9 @@
 const { InvalidResponse } = require('..')
 const { renderCurrencyBadge, LiberapayBase } = require('./liberapay-base')
 
-module.exports = class LiberapayReceives extends LiberapayBase {
+module.exports = class LiberapayReceives extends (
+  LiberapayBase
+) {
   static route = this.buildRoute('receives')
 
   static examples = [

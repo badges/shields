@@ -11,7 +11,9 @@ const licenseResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceLicense extends EclipseMarketplaceBase {
+module.exports = class EclipseMarketplaceLicense extends (
+  EclipseMarketplaceBase
+) {
   static category = 'license'
   static route = this.buildRoute('eclipse-marketplace/l')
   static examples = [

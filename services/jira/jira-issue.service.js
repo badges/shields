@@ -20,7 +20,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JiraIssue extends BaseJsonService {
+module.exports = class JiraIssue extends (
+  BaseJsonService
+) {
   static category = 'issue-tracking'
 
   static route = {

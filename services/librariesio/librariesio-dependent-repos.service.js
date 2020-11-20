@@ -5,7 +5,9 @@ const { BaseJsonService } = require('..')
 const { fetchProject } = require('./librariesio-common')
 
 // https://libraries.io/api#project-dependent-repositories
-module.exports = class LibrariesIoDependentRepos extends BaseJsonService {
+module.exports = class LibrariesIoDependentRepos extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

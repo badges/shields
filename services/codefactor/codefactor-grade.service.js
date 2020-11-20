@@ -8,7 +8,9 @@ const schema = Joi.object({
   message: isValidGrade,
 }).required()
 
-module.exports = class CodeFactorGrade extends BaseSvgScrapingService {
+module.exports = class CodeFactorGrade extends (
+  BaseSvgScrapingService
+) {
   static category = 'analysis'
   static route = {
     base: 'codefactor/grade',

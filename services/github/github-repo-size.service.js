@@ -10,7 +10,9 @@ const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubRepoSize extends GithubAuthV3Service {
+module.exports = class GithubRepoSize extends (
+  GithubAuthV3Service
+) {
   static category = 'size'
   static route = { base: 'github/repo-size', pattern: ':user/:repo' }
   static examples = [

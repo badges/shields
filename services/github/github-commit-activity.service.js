@@ -14,7 +14,9 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubCommitActivity extends GithubAuthV3Service {
+module.exports = class GithubCommitActivity extends (
+  GithubAuthV3Service
+) {
   static category = 'activity'
   static route = {
     base: 'github/commit-activity',

@@ -4,7 +4,9 @@ const { renderVersionBadge } = require('../version')
 const { NotFound } = require('..')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
-module.exports = class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesService {
+module.exports = class PuppetforgeModulePdkVersion extends (
+  BasePuppetForgeModulesService
+) {
   static category = 'platform-support'
 
   static route = {

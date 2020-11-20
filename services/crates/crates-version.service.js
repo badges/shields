@@ -4,7 +4,9 @@ const { renderVersionBadge } = require('../version')
 const { InvalidResponse } = require('..')
 const { BaseCratesService, keywords } = require('./crates-base')
 
-module.exports = class CratesVersion extends BaseCratesService {
+module.exports = class CratesVersion extends (
+  BaseCratesService
+) {
   static category = 'version'
   static route = { base: 'crates/v', pattern: ':crate' }
 

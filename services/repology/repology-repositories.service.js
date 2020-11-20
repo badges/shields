@@ -9,7 +9,9 @@ const schema = Joi.object({
   message: nonNegativeInteger,
 }).required()
 
-module.exports = class RepologyRepositories extends BaseSvgScrapingService {
+module.exports = class RepologyRepositories extends (
+  BaseSvgScrapingService
+) {
   static category = 'platform-support'
 
   static route = {

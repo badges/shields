@@ -5,7 +5,9 @@ const NpmBase = require('./npm-base')
 
 const keywords = ['node']
 
-module.exports = class NpmCollaborators extends NpmBase {
+module.exports = class NpmCollaborators extends (
+  NpmBase
+) {
   static category = 'activity'
 
   static route = this.buildRoute('npm/collaborators', { withTag: false })

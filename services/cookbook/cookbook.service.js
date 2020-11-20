@@ -6,7 +6,9 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({ version: Joi.string().required() }).required()
 
-module.exports = class Cookbook extends BaseJsonService {
+module.exports = class Cookbook extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'cookbook/v', pattern: ':cookbook' }
 

@@ -20,7 +20,9 @@ const documentation = `
 <p>Failing that, you can also visit your profile page, where your user ID will be in the header in a tag like this: <code>&lt;link href='https://your.mastodon.server/api/salmon/{your-user-id}' rel='salmon'></code></p>
 `
 
-module.exports = class MastodonFollow extends BaseJsonService {
+module.exports = class MastodonFollow extends (
+  BaseJsonService
+) {
   static category = 'social'
 
   static route = {

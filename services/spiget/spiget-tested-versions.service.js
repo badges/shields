@@ -2,7 +2,9 @@
 
 const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
 
-module.exports = class SpigetTestedVersions extends BaseSpigetService {
+module.exports = class SpigetTestedVersions extends (
+  BaseSpigetService
+) {
   static category = 'platform-support'
 
   static route = {

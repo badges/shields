@@ -7,7 +7,9 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({ version: semver }).required()
 
-module.exports = class ElmPackage extends BaseJsonService {
+module.exports = class ElmPackage extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'elm-package/v', pattern: ':user/:packageName' }
   static examples = [

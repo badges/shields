@@ -23,7 +23,9 @@ const violationCategoryColorMap = {
   info_violations: 'green',
 }
 
-module.exports = class SonarViolations extends SonarBase {
+module.exports = class SonarViolations extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

@@ -18,7 +18,9 @@ const schema = Joi.array()
 
 const defaultDistribution = 'stable'
 
-module.exports = class Debian extends BaseJsonService {
+module.exports = class Debian extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = {
     base: 'debian/v',

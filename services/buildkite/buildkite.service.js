@@ -9,7 +9,9 @@ const schema = Joi.object({
   status: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
 }).required()
 
-module.exports = class Buildkite extends BaseJsonService {
+module.exports = class Buildkite extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = { base: 'buildkite', pattern: ':identifier/:branch*' }
 

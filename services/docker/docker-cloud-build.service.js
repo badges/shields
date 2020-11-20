@@ -4,7 +4,9 @@ const { BaseJsonService } = require('..')
 const { dockerBlue, buildDockerUrl } = require('./docker-helpers')
 const { fetchBuild } = require('./docker-cloud-common-fetch')
 
-module.exports = class DockerCloudBuild extends BaseJsonService {
+module.exports = class DockerCloudBuild extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = buildDockerUrl('cloud/build')
   static examples = [

@@ -6,7 +6,9 @@ const { codacyGrade } = require('./codacy-helpers')
 
 const schema = Joi.object({ message: codacyGrade }).required()
 
-module.exports = class CodacyGrade extends BaseSvgScrapingService {
+module.exports = class CodacyGrade extends (
+  BaseSvgScrapingService
+) {
   static category = 'analysis'
   static route = { base: 'codacy/grade', pattern: ':projectId/:branch*' }
 

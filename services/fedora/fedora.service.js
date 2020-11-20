@@ -11,7 +11,9 @@ const schema = Joi.object({
 // No way to permalink to current "stable", https://pagure.io/mdapi/issue/69
 const defaultBranch = 'rawhide'
 
-module.exports = class Fedora extends BaseJsonService {
+module.exports = class Fedora extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'fedora/v', pattern: ':packageName/:branch?' }
   static examples = [

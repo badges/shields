@@ -9,7 +9,9 @@ const versionSchema = Joi.object({
   name: Joi.string().required(),
 }).required()
 
-module.exports = class SpigetLatestVersion extends BaseSpigetService {
+module.exports = class SpigetLatestVersion extends (
+  BaseSpigetService
+) {
   static category = 'version'
 
   static route = {

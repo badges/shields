@@ -58,7 +58,9 @@ const queryParamSchema = Joi.object({
   suggestion_label: Joi.string(),
 }).required()
 
-module.exports = class GithubHacktoberfestCombinedStatus extends GithubAuthV4Service {
+module.exports = class GithubHacktoberfestCombinedStatus extends (
+  GithubAuthV4Service
+) {
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',

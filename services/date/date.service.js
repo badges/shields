@@ -9,7 +9,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class Date extends BaseService {
+module.exports = class Date extends (
+  BaseService
+) {
   static category = 'other'
   static route = { base: 'date', pattern: ':timestamp([0-9]+)' }
 

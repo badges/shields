@@ -45,7 +45,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class MozillaObservatory extends BaseJsonService {
+module.exports = class MozillaObservatory extends (
+  BaseJsonService
+) {
   // TODO: Once created, change to a more appropriate category,
   // see https://github.com/badges/shields/pull/2926#issuecomment-460777017
   static category = 'monitoring'

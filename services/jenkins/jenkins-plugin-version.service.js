@@ -5,7 +5,9 @@ const { regularUpdate } = require('../../core/legacy/regular-update')
 const { renderVersionBadge } = require('../version')
 const { BaseService, NotFound } = require('..')
 
-module.exports = class JenkinsPluginVersion extends BaseService {
+module.exports = class JenkinsPluginVersion extends (
+  BaseService
+) {
   static category = 'version'
 
   static route = {

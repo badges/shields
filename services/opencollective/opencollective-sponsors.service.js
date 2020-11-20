@@ -2,7 +2,9 @@
 
 const OpencollectiveBase = require('./opencollective-base')
 
-module.exports = class OpencollectiveSponsors extends OpencollectiveBase {
+module.exports = class OpencollectiveSponsors extends (
+  OpencollectiveBase
+) {
   static route = this.buildRoute('sponsors')
 
   static examples = [

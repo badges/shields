@@ -3,7 +3,9 @@
 const { metric } = require('../text-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
-module.exports = class AmoUsers extends BaseAmoService {
+module.exports = class AmoUsers extends (
+  BaseAmoService
+) {
   static category = 'downloads'
   static route = { base: 'amo/users', pattern: ':addonId' }
 

@@ -30,7 +30,9 @@ const summaryColorScale = colorScale(
   ]
 )
 
-module.exports = class CIIBestPracticesService extends BaseJsonService {
+module.exports = class CIIBestPracticesService extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = {
     base: 'cii',

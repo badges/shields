@@ -12,7 +12,9 @@ const schema = Joi.object({
   title: Joi.string().required(),
 }).required()
 
-module.exports = class GithubMilestoneDetail extends GithubAuthV3Service {
+module.exports = class GithubMilestoneDetail extends (
+  GithubAuthV3Service
+) {
   static category = 'issue-tracking'
   static route = {
     base: 'github/milestones',

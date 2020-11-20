@@ -28,7 +28,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistLicense extends BasePackagistService {
+module.exports = class PackagistLicense extends (
+  BasePackagistService
+) {
   static category = 'license'
 
   static route = {

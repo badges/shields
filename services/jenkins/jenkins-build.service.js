@@ -33,7 +33,9 @@ const schema = Joi.object({
   color: Joi.allow(...Object.keys(colorStatusMap)).required(),
 }).required()
 
-module.exports = class JenkinsBuild extends JenkinsBase {
+module.exports = class JenkinsBuild extends (
+  JenkinsBase
+) {
   static category = 'build'
 
   static route = {

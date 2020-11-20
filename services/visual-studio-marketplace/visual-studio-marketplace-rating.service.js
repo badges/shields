@@ -4,7 +4,9 @@ const { starRating } = require('../text-formatters')
 const { floorCount } = require('../color-formatters')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
-module.exports = class VisualStudioMarketplaceRating extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplaceRating extends (
+  VisualStudioMarketplaceBase
+) {
   static category = 'rating'
 
   static route = {

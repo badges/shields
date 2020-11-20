@@ -11,7 +11,9 @@ const versionSchema = Joi.object({
   version: Joi.alternatives().try(semver, Joi.equal('independent').required()),
 }).required()
 
-module.exports = class GithubLernaJson extends ConditionalGithubAuthV3Service {
+module.exports = class GithubLernaJson extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'version'
   static route = {
     base: 'github/lerna-json/v',

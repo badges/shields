@@ -7,7 +7,9 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 
-module.exports = class Bountysource extends BaseJsonService {
+module.exports = class Bountysource extends (
+  BaseJsonService
+) {
   static category = 'funding'
   static route = { base: 'bountysource/team', pattern: ':team/activity' }
 

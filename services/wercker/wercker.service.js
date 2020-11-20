@@ -32,7 +32,9 @@ const werckerCIDocumentation = `
 </p>
 `
 
-module.exports = class Wercker extends BaseJsonService {
+module.exports = class Wercker extends (
+  BaseJsonService
+) {
   static category = 'build'
 
   static route = {

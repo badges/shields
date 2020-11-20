@@ -8,7 +8,9 @@ const schema = Joi.object({
   pkgver: Joi.string().required(),
 }).required()
 
-module.exports = class ArchLinux extends BaseJsonService {
+module.exports = class ArchLinux extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = {
     base: 'archlinux/v',

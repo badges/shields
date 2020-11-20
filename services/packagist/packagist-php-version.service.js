@@ -13,7 +13,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistPhpVersion extends BasePackagistService {
+module.exports = class PackagistPhpVersion extends (
+  BasePackagistService
+) {
   static category = 'platform-support'
 
   static route = {

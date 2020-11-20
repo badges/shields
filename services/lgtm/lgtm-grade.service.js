@@ -2,7 +2,9 @@
 
 const LgtmBaseService = require('./lgtm-base')
 
-module.exports = class LgtmGrade extends LgtmBaseService {
+module.exports = class LgtmGrade extends (
+  LgtmBaseService
+) {
   static route = {
     base: 'lgtm/grade',
     pattern: `:language/${this.pattern}`,

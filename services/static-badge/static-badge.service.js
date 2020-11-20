@@ -3,7 +3,9 @@
 const { escapeFormat } = require('../../core/badge-urls/path-helpers')
 const { BaseStaticService } = require('..')
 
-module.exports = class StaticBadge extends BaseStaticService {
+module.exports = class StaticBadge extends (
+  BaseStaticService
+) {
   static category = 'static'
 
   static route = {

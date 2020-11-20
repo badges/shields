@@ -4,7 +4,9 @@ const { starRating } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseAmoService, keywords } = require('./amo-base')
 
-module.exports = class AmoRating extends BaseAmoService {
+module.exports = class AmoRating extends (
+  BaseAmoService
+) {
   static category = 'rating'
   static route = { base: 'amo', pattern: ':format(stars|rating)/:addonId' }
 

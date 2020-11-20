@@ -2,7 +2,9 @@
 
 const BaseCpanService = require('./cpan')
 
-module.exports = class CpanLicense extends BaseCpanService {
+module.exports = class CpanLicense extends (
+  BaseCpanService
+) {
   static category = 'license'
   static route = { base: 'cpan/l', pattern: ':packageName' }
 

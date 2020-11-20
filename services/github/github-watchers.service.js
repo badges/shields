@@ -10,7 +10,9 @@ const schema = Joi.object({
   subscribers_count: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubWatchers extends GithubAuthV3Service {
+module.exports = class GithubWatchers extends (
+  GithubAuthV3Service
+) {
   static category = 'social'
 
   static route = {

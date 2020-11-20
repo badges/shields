@@ -4,7 +4,9 @@ const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
-module.exports = class PuppetforgeModuleDownloads extends BasePuppetForgeModulesService {
+module.exports = class PuppetforgeModuleDownloads extends (
+  BasePuppetForgeModulesService
+) {
   static category = 'downloads'
 
   static route = {

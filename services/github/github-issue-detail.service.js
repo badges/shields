@@ -152,7 +152,9 @@ const propertyMap = {
   'last-update': ageUpdateMap,
 }
 
-module.exports = class GithubIssueDetail extends GithubAuthV3Service {
+module.exports = class GithubIssueDetail extends (
+  GithubAuthV3Service
+) {
   static category = 'issue-tracking'
   static route = {
     base: 'github',

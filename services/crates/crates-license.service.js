@@ -2,7 +2,9 @@
 
 const { BaseCratesService, keywords } = require('./crates-base')
 
-module.exports = class CratesLicense extends BaseCratesService {
+module.exports = class CratesLicense extends (
+  BaseCratesService
+) {
   static category = 'license'
   static route = { base: 'crates/l', pattern: ':crate/:version?' }
 

@@ -28,7 +28,9 @@ const bitcoinAddressSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybaseBTC extends KeybaseProfile {
+module.exports = class KeybaseBTC extends (
+  KeybaseProfile
+) {
   static route = {
     base: 'keybase/btc',
     pattern: ':username',

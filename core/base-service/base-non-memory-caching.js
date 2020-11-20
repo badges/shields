@@ -24,7 +24,9 @@ const { prepareRoute, namedParamsForMatch } = require('./route')
 // be cached _downstream_. This is governed by cache headers, which are
 // configured by the service, the user's request, and the server's default
 // cache length.
-module.exports = class NonMemoryCachingBaseService extends BaseService {
+module.exports = class NonMemoryCachingBaseService extends (
+  BaseService
+) {
   static register({ camp, metricInstance }, serviceConfig) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { _cacheLength: serviceDefaultCacheLengthSeconds } = this

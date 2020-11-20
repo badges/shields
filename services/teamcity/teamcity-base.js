@@ -2,7 +2,9 @@
 
 const { BaseJsonService } = require('..')
 
-module.exports = class TeamCityBase extends BaseJsonService {
+module.exports = class TeamCityBase extends (
+  BaseJsonService
+) {
   static auth = {
     userKey: 'teamcity_user',
     passKey: 'teamcity_pass',

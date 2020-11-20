@@ -4,7 +4,9 @@ const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
 const OpenVSXBase = require('./open-vsx-base')
 
-module.exports = class OpenVSXReleaseDate extends OpenVSXBase {
+module.exports = class OpenVSXReleaseDate extends (
+  OpenVSXBase
+) {
   static category = 'activity'
 
   static route = {

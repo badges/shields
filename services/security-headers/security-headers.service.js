@@ -19,7 +19,9 @@ const documentation = `
 <p>
 `
 
-module.exports = class SecurityHeaders extends BaseService {
+module.exports = class SecurityHeaders extends (
+  BaseService
+) {
   static category = 'monitoring'
 
   static route = {

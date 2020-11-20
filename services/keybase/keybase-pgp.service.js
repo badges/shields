@@ -24,7 +24,9 @@ const keyFingerprintSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybasePGP extends KeybaseProfile {
+module.exports = class KeybasePGP extends (
+  KeybaseProfile
+) {
   static route = {
     base: 'keybase/pgp',
     pattern: ':username',

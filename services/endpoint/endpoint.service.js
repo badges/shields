@@ -13,7 +13,9 @@ const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-module.exports = class Endpoint extends BaseJsonService {
+module.exports = class Endpoint extends (
+  BaseJsonService
+) {
   static category = 'dynamic'
   static route = {
     base: 'endpoint',

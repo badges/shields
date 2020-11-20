@@ -8,7 +8,9 @@ const depfuSchema = Joi.object({
   colorscheme: Joi.string().required(),
 }).required()
 
-module.exports = class Depfu extends BaseJsonService {
+module.exports = class Depfu extends (
+  BaseJsonService
+) {
   static category = 'dependencies'
   static route = { base: 'depfu', pattern: ':user/:repo' }
   static examples = [

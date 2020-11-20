@@ -40,7 +40,9 @@ const statusMap = {
   },
 }
 
-module.exports = class David extends BaseJsonService {
+module.exports = class David extends (
+  BaseJsonService
+) {
   static category = 'dependencies'
   static route = {
     base: 'david',

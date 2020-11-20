@@ -15,7 +15,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class DroneBuild extends BaseJsonService {
+module.exports = class DroneBuild extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = {
     base: 'drone/build',

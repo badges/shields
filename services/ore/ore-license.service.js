@@ -3,7 +3,9 @@
 const { renderLicenseBadge } = require('../licenses')
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreLicense extends BaseOreService {
+module.exports = class OreLicense extends (
+  BaseOreService
+) {
   static category = 'license'
 
   static route = {

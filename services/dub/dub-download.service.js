@@ -34,7 +34,9 @@ const intervalMap = {
   },
 }
 
-module.exports = class DubDownloads extends BaseJsonService {
+module.exports = class DubDownloads extends (
+  BaseJsonService
+) {
   static category = 'downloads'
   static route = {
     base: 'dub',

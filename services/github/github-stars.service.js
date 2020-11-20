@@ -10,7 +10,9 @@ const schema = Joi.object({
   stargazers_count: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubStars extends GithubAuthV3Service {
+module.exports = class GithubStars extends (
+  GithubAuthV3Service
+) {
   static category = 'social'
 
   static route = {

@@ -2,7 +2,9 @@
 
 const BaseMicrobadgerService = require('./microbadger-base')
 
-module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
+module.exports = class MicrobadgerLayers extends (
+  BaseMicrobadgerService
+) {
   static route = {
     base: 'microbadger/layers',
     pattern: ':user/:repo/:tag*',

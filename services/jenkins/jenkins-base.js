@@ -2,7 +2,9 @@
 
 const { BaseJsonService } = require('..')
 
-module.exports = class JenkinsBase extends BaseJsonService {
+module.exports = class JenkinsBase extends (
+  BaseJsonService
+) {
   static auth = {
     userKey: 'jenkins_user',
     passKey: 'jenkins_pass',

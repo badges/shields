@@ -45,7 +45,9 @@ const intervalMap = {
 
 // This hits an entirely different API from the rest of the NPM services, so
 // it does not use NpmBase.
-module.exports = class NpmDownloads extends BaseJsonService {
+module.exports = class NpmDownloads extends (
+  BaseJsonService
+) {
   static category = 'downloads'
 
   static route = {

@@ -26,7 +26,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class Tokei extends BaseJsonService {
+module.exports = class Tokei extends (
+  BaseJsonService
+) {
   static category = 'size'
 
   static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }

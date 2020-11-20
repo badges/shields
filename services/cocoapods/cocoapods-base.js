@@ -16,7 +16,9 @@ const schema = Joi.object({
   platforms: Joi.object().default({ ios: '5.0', osx: '10.7' }),
 }).required()
 
-module.exports = class BaseCocoaPodsService extends BaseJsonService {
+module.exports = class BaseCocoaPodsService extends (
+  BaseJsonService
+) {
   async fetch({ spec }) {
     return this._requestJson({
       schema,

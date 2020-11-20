@@ -26,7 +26,9 @@ const versionSchema = Joi.array()
   .min(1)
   .required()
 
-module.exports = class GemDownloads extends BaseJsonService {
+module.exports = class GemDownloads extends (
+  BaseJsonService
+) {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
   static examples = [

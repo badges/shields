@@ -10,7 +10,9 @@ const schema = Joi.object({
   version: Joi.string().required(),
 }).required()
 
-module.exports = class GemVersion extends BaseJsonService {
+module.exports = class GemVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'gem/v', pattern: ':gem' }
   static examples = [

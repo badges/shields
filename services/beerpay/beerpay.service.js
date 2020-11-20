@@ -7,7 +7,9 @@ const schema = Joi.object({
   total_amount: Joi.number().min(0).required(),
 }).required()
 
-module.exports = class Beerpay extends BaseJsonService {
+module.exports = class Beerpay extends (
+  BaseJsonService
+) {
   static category = 'funding'
   static route = { base: 'beerpay', pattern: ':user/:project' }
 

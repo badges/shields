@@ -28,7 +28,9 @@ const zcachAddressSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybaseZEC extends KeybaseProfile {
+module.exports = class KeybaseZEC extends (
+  KeybaseProfile
+) {
   static route = {
     base: 'keybase/zec',
     pattern: ':username',

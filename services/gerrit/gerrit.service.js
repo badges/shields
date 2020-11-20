@@ -12,7 +12,9 @@ const schema = Joi.object({
   status: Joi.equal('NEW', 'MERGED', 'ABANDONED').required(),
 }).required()
 
-module.exports = class Gerrit extends BaseJsonService {
+module.exports = class Gerrit extends (
+  BaseJsonService
+) {
   static category = 'issue-tracking'
   static route = { base: 'gerrit', pattern: ':changeId', queryParamSchema }
   static examples = [

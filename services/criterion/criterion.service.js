@@ -22,7 +22,9 @@ const schema = Joi.string()
  * API Documentation:
  * - https://app.swaggerhub.com/apis-docs/chmoder/Criterion.dev
  */
-module.exports = class Criterion extends BaseJsonService {
+module.exports = class Criterion extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = { base: 'criterion', pattern: ':user/:repo' }
 

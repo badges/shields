@@ -3,7 +3,9 @@
 const { BaseGithubLanguage } = require('./github-languages-base')
 const { documentation } = require('./github-helpers')
 
-module.exports = class GithubLanguageCount extends BaseGithubLanguage {
+module.exports = class GithubLanguageCount extends (
+  BaseGithubLanguage
+) {
   static category = 'analysis'
   static route = { base: 'github/languages/count', pattern: ':user/:repo' }
   static examples = [

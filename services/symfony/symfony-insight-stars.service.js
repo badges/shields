@@ -15,7 +15,9 @@ const gradeStars = {
   platinum: 4,
 }
 
-module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
+module.exports = class SymfonyInsightStars extends (
+  SymfonyInsightBase
+) {
   static route = {
     base: 'symfony/i/stars',
     pattern: ':projectUuid',

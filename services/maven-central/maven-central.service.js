@@ -14,7 +14,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class MavenCentral extends BaseXmlService {
+module.exports = class MavenCentral extends (
+  BaseXmlService
+) {
   static category = 'version'
 
   static route = {

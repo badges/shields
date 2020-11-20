@@ -35,7 +35,9 @@ const documentation = `<p>
 
 const validThresholds = ['branches', 'lines', 'functions']
 
-module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
+module.exports = class Nycrc extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'coverage'
 
   static route = {

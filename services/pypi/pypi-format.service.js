@@ -3,7 +3,9 @@
 const PypiBase = require('./pypi-base')
 const { getPackageFormats } = require('./pypi-helpers')
 
-module.exports = class PypiFormat extends PypiBase {
+module.exports = class PypiFormat extends (
+  PypiBase
+) {
   static category = 'other'
 
   static route = this.buildRoute('pypi/format')

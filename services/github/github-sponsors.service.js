@@ -18,7 +18,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class GithubSponsors extends GithubAuthV4Service {
+module.exports = class GithubSponsors extends (
+  GithubAuthV4Service
+) {
   static category = 'social'
   static route = { base: 'github/sponsors', pattern: ':user' }
   static examples = [

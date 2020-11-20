@@ -81,7 +81,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class JenkinsCoverage extends JenkinsBase {
+module.exports = class JenkinsCoverage extends (
+  JenkinsBase
+) {
   static category = 'coverage'
 
   static route = {

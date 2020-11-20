@@ -2,7 +2,9 @@
 
 const { BaseJsonService, NotFound, InvalidResponse } = require('..')
 
-module.exports = class ScrutinizerBase extends BaseJsonService {
+module.exports = class ScrutinizerBase extends (
+  BaseJsonService
+) {
   // https://scrutinizer-ci.com/docs/api/#repository-details
   async fetch({ schema, vcs, slug }) {
     return this._requestJson({

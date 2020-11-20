@@ -10,7 +10,9 @@ const schema = Joi.object({
   followers: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubFollowers extends GithubAuthV3Service {
+module.exports = class GithubFollowers extends (
+  GithubAuthV3Service
+) {
   static category = 'social'
   static route = { base: 'github/followers', pattern: ':user' }
   static examples = [

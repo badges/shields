@@ -27,7 +27,9 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().length(0)
 )
 
-module.exports = class GithubDownloads extends GithubAuthV3Service {
+module.exports = class GithubDownloads extends (
+  GithubAuthV3Service
+) {
   static category = 'downloads'
   static route = {
     base: 'github',

@@ -2,7 +2,9 @@
 
 const { NonMemoryCachingBaseService } = require('..')
 
-module.exports = class Maintenance extends NonMemoryCachingBaseService {
+module.exports = class Maintenance extends (
+  NonMemoryCachingBaseService
+) {
   static category = 'other'
 
   static route = {

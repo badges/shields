@@ -25,7 +25,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BaseMicrobadgerService extends BaseJsonService {
+module.exports = class BaseMicrobadgerService extends (
+  BaseJsonService
+) {
   static category = 'size'
 
   async fetch({ user, repo }) {

@@ -5,7 +5,9 @@ const { metric } = require('../text-formatters')
 const { InvalidParameter, NotFound } = require('..')
 const { BaseCratesService, keywords } = require('./crates-base')
 
-module.exports = class CratesDownloads extends BaseCratesService {
+module.exports = class CratesDownloads extends (
+  BaseCratesService
+) {
   static category = 'downloads'
   static route = {
     base: 'crates',

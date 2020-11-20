@@ -30,7 +30,9 @@ const queryParamSchema = Joi.object({
   preset: Joi.string().regex(presetRegex).allow(''),
 }).required()
 
-module.exports = class W3cValidation extends BaseJsonService {
+module.exports = class W3cValidation extends (
+  BaseJsonService
+) {
   static category = 'analysis'
 
   static route = {

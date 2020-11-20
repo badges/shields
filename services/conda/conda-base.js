@@ -16,7 +16,9 @@ const condaSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BaseCondaService extends BaseJsonService {
+module.exports = class BaseCondaService extends (
+  BaseJsonService
+) {
   static defaultBadgeData = { label: 'conda' }
 
   async fetch({ channel, pkg }) {

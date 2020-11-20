@@ -3,7 +3,9 @@
 const { BaseJsonService } = require('..')
 const { NotFound } = require('..')
 
-module.exports = class KeybaseProfile extends BaseJsonService {
+module.exports = class KeybaseProfile extends (
+  BaseJsonService
+) {
   static get apiVersion() {
     throw new Error(`apiVersion() is not implemented for ${this.name}`)
   }

@@ -37,7 +37,9 @@ const isClosedVariant = {
   'issues-pr-closed': true,
 }
 
-module.exports = class GithubIssues extends GithubAuthV4Service {
+module.exports = class GithubIssues extends (
+  GithubAuthV4Service
+) {
   static category = 'issue-tracking'
   static route = {
     base: 'github',

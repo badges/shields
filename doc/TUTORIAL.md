@@ -114,7 +114,9 @@ As a first step we will look at the code for an example which generates a badge 
 const { BaseService } = require('..')
 
 // (3)
-module.exports = class Example extends BaseService {
+module.exports = class Example extends (
+  BaseService
+) {
   // (4)
   static category = 'build'
 
@@ -185,7 +187,9 @@ const schema = Joi.object({
 }).required()
 
 // (5)
-module.exports = class GemVersion extends BaseJsonService {
+module.exports = class GemVersion extends (
+  BaseJsonService
+) {
   // (6)
   static category = 'version'
 
@@ -279,7 +283,9 @@ throw new NotFound({ prettyMessage: 'package not found' })
 Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method `examples()` to our class.
 
 ```js
-module.exports = class GemVersion extends BaseJsonService {
+module.exports = class GemVersion extends (
+  BaseJsonService
+) {
   // ...
 
   // (1)

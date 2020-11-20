@@ -14,7 +14,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Luarocks extends BaseJsonService {
+module.exports = class Luarocks extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {

@@ -24,7 +24,9 @@ const documentation = `
 <iframe src="https://player.vimeo.com/video/364220040" width="640" height="210" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 `
 
-module.exports = class Discord extends BaseJsonService {
+module.exports = class Discord extends (
+  BaseJsonService
+) {
   static get category() {
     return 'chat'
   }

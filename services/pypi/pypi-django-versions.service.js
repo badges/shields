@@ -3,7 +3,9 @@
 const PypiBase = require('./pypi-base')
 const { sortDjangoVersions, parseClassifiers } = require('./pypi-helpers')
 
-module.exports = class PypiDjangoVersions extends PypiBase {
+module.exports = class PypiDjangoVersions extends (
+  PypiBase
+) {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/djversions')

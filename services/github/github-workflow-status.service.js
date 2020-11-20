@@ -17,7 +17,9 @@ const queryParamSchema = Joi.object({
 
 const keywords = ['action', 'actions']
 
-module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
+module.exports = class GithubWorkflowStatus extends (
+  BaseSvgScrapingService
+) {
   static category = 'build'
 
   static route = {

@@ -6,7 +6,9 @@ const {
   gradeColors,
 } = require('./symfony-insight-base')
 
-module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
+module.exports = class SymfonyInsightGrade extends (
+  SymfonyInsightBase
+) {
   static route = {
     base: 'symfony/i/grade',
     pattern: ':projectUuid',

@@ -106,7 +106,9 @@ const metricNames = [
 ]
 const metricNameRouteParam = metricNames.join('|')
 
-module.exports = class SonarGeneric extends SonarBase {
+module.exports = class SonarGeneric extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

@@ -8,7 +8,9 @@ const schema = Joi.object({
   value: Joi.string().regex(projectsCountRegex).required(),
 }).required()
 
-module.exports = class Sourcegraph extends BaseJsonService {
+module.exports = class Sourcegraph extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

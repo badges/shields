@@ -6,7 +6,9 @@ const { BaseJsonService } = require('..')
 
 const schema = Joi.string().required()
 
-module.exports = class DubVersion extends BaseJsonService {
+module.exports = class DubVersion extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'dub/v', pattern: ':packageName' }
   static examples = [

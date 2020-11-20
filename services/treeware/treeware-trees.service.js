@@ -10,7 +10,9 @@ const apiSchema = Joi.object({
   total: Joi.number().required(),
 }).required()
 
-module.exports = class TreewareTrees extends BaseJsonService {
+module.exports = class TreewareTrees extends (
+  BaseJsonService
+) {
   static category = 'other'
 
   static route = {

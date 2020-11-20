@@ -4,7 +4,9 @@ const prettyBytes = require('pretty-bytes')
 const { BaseGithubLanguage } = require('./github-languages-base')
 const { documentation } = require('./github-helpers')
 
-module.exports = class GithubCodeSize extends BaseGithubLanguage {
+module.exports = class GithubCodeSize extends (
+  BaseGithubLanguage
+) {
   static category = 'size'
   static route = {
     base: 'github/languages/code-size',

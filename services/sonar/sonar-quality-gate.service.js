@@ -3,7 +3,9 @@
 const SonarBase = require('./sonar-base')
 const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
 
-module.exports = class SonarQualityGate extends SonarBase {
+module.exports = class SonarQualityGate extends (
+  SonarBase
+) {
   static category = 'analysis'
 
   static route = {

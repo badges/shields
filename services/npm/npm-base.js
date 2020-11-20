@@ -38,7 +38,9 @@ const queryParamSchema = Joi.object({
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
-module.exports = class NpmBase extends BaseJsonService {
+module.exports = class NpmBase extends (
+  BaseJsonService
+) {
   static auth = {
     passKey: 'npm_token',
     serviceKey: 'npm',

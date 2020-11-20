@@ -53,7 +53,9 @@ const queryParamSchema = Joi.object({
   nexusVersion: Joi.equal('2', '3'),
 }).required()
 
-module.exports = class Nexus extends BaseJsonService {
+module.exports = class Nexus extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {

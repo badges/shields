@@ -133,7 +133,9 @@ const queryParamSchema = Joi.object({
   affiliations: Joi.string().default('OWNER').custom(validateAffiliations),
 }).required()
 
-module.exports = class GithubTotalStarService extends GithubAuthV4Service {
+module.exports = class GithubTotalStarService extends (
+  GithubAuthV4Service
+) {
   static defaultLabel = 'stars'
   static category = 'social'
 

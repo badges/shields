@@ -19,7 +19,9 @@ const schema = Joi.object({
 
 const keywords = ['pullrequest', 'detail']
 
-module.exports = class GithubPullRequestCheckState extends GithubAuthV3Service {
+module.exports = class GithubPullRequestCheckState extends (
+  GithubAuthV3Service
+) {
   static category = 'build'
   static route = {
     base: 'github/status',

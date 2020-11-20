@@ -9,7 +9,9 @@ const schema = Joi.object({
   colour: Joi.string().required(),
 })
 
-module.exports = class DependabotSemverCompatibility extends BaseJsonService {
+module.exports = class DependabotSemverCompatibility extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = {
     base: 'dependabot/semver',

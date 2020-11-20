@@ -7,7 +7,9 @@ const statusSchema = Joi.object({
   status: Joi.string().required(),
 }).required()
 
-module.exports = class RequiresIo extends BaseJsonService {
+module.exports = class RequiresIo extends (
+  BaseJsonService
+) {
   static category = 'dependencies'
 
   static route = {

@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const { BaseService, InvalidResponse } = require('..')
 
-module.exports = class HackageVersion extends BaseService {
+module.exports = class HackageVersion extends (
+  BaseService
+) {
   static category = 'version'
 
   static route = {

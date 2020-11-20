@@ -24,7 +24,9 @@ const dailySchema = Joi.array()
   .min(1)
   .required()
 
-module.exports = class GemRank extends BaseJsonService {
+module.exports = class GemRank extends (
+  BaseJsonService
+) {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':period(rt|rd)/:gem' }
   static examples = [

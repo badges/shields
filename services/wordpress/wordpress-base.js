@@ -42,7 +42,9 @@ const notFoundSchema = Joi.object()
 const pluginSchemas = Joi.alternatives(pluginSchema, notFoundSchema)
 const themeSchemas = Joi.alternatives(themeSchema, notFoundSchema)
 
-module.exports = class BaseWordpress extends BaseJsonService {
+module.exports = class BaseWordpress extends (
+  BaseJsonService
+) {
   async fetch({ extensionType, slug }) {
     const url = `https://api.wordpress.org/${extensionType}s/info/1.2/`
     let schemas

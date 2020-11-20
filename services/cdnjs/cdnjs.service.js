@@ -9,7 +9,9 @@ const cdnjsSchema = Joi.object({
   version: Joi.string(),
 }).required()
 
-module.exports = class Cdnjs extends BaseJsonService {
+module.exports = class Cdnjs extends (
+  BaseJsonService
+) {
   static category = 'version'
   static route = { base: 'cdnjs/v', pattern: ':library' }
 

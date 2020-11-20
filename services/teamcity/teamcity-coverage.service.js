@@ -21,7 +21,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class TeamCityCoverage extends TeamCityBase {
+module.exports = class TeamCityCoverage extends (
+  TeamCityBase
+) {
   static category = 'coverage'
 
   static route = {

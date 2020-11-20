@@ -30,7 +30,9 @@ const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
-module.exports = class DockerSize extends BaseJsonService {
+module.exports = class DockerSize extends (
+  BaseJsonService
+) {
   static category = 'size'
   static route = { ...buildDockerUrl('image-size', true), queryParamSchema }
   static examples = [

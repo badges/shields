@@ -2,7 +2,9 @@
 
 const { BaseOreService, documentation, keywords } = require('./ore-base')
 
-module.exports = class OreCategory extends BaseOreService {
+module.exports = class OreCategory extends (
+  BaseOreService
+) {
   static category = 'other'
 
   static route = {

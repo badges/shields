@@ -10,7 +10,9 @@ const schema = Joi.object({
   status: Joi.equal('identical', 'ahead', 'behind', 'diverged'),
 }).required()
 
-module.exports = class GithubCommitStatus extends GithubAuthV3Service {
+module.exports = class GithubCommitStatus extends (
+  GithubAuthV3Service
+) {
   static category = 'issue-tracking'
   static route = {
     base: 'github/commit-status',

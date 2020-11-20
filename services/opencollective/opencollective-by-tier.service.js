@@ -5,7 +5,9 @@ const OpencollectiveBase = require('./opencollective-base')
 const documentation = `<h3>How to get the tierId</h3>
 <p>According to <a target="_blank" href="https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier">open collectives documentation</a>, you can find the tierId by looking at the URL after clicking on a Tier Card on the collective page. (e.g. tierId for https://opencollective.com/shields/order/2988 is 2988)</p>`
 
-module.exports = class OpencollectiveByTier extends OpencollectiveBase {
+module.exports = class OpencollectiveByTier extends (
+  OpencollectiveBase
+) {
   static route = this.buildRoute('tier', true)
 
   static examples = [

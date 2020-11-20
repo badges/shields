@@ -13,7 +13,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class CodacyCoverage extends BaseSvgScrapingService {
+module.exports = class CodacyCoverage extends (
+  BaseSvgScrapingService
+) {
   static category = 'coverage'
   static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
 

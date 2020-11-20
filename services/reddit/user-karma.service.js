@@ -12,7 +12,9 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class RedditUserKarma extends BaseJsonService {
+module.exports = class RedditUserKarma extends (
+  BaseJsonService
+) {
   static category = 'social'
 
   static route = {

@@ -6,7 +6,9 @@ const { BaseJsonService } = require('..')
 
 const ownerSchema = Joi.array().required()
 
-module.exports = class GemOwner extends BaseJsonService {
+module.exports = class GemOwner extends (
+  BaseJsonService
+) {
   static category = 'other'
   static route = { base: 'gem/u', pattern: ':user' }
   static examples = [

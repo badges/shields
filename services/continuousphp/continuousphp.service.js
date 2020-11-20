@@ -13,7 +13,9 @@ const statusMap = {
   running: 'blue',
 }
 
-module.exports = class ContinuousPhp extends BaseJsonService {
+module.exports = class ContinuousPhp extends (
+  BaseJsonService
+) {
   static category = 'build'
   static route = {
     base: 'continuousphp',

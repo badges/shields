@@ -45,7 +45,9 @@ const statisticSchema = Joi.object().keys({
   ratingcount: Joi.number().default(0),
 })
 
-module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
+module.exports = class VisualStudioMarketplaceBase extends (
+  BaseJsonService
+) {
   static keywords = [
     'vscode',
     'tfs',

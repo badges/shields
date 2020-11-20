@@ -26,7 +26,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class Bugzilla extends BaseJsonService {
+module.exports = class Bugzilla extends (
+  BaseJsonService
+) {
   static category = 'issue-tracking'
   static route = { base: 'bugzilla', pattern: ':bugNumber', queryParamSchema }
 

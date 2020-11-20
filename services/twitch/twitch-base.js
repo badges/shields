@@ -16,7 +16,9 @@ function sleep(ms) {
 }
 
 // Abstract class for Twitch badges
-module.exports = class TwitchBase extends BaseJsonService {
+module.exports = class TwitchBase extends (
+  BaseJsonService
+) {
   static auth = {
     userKey: 'twitch_client_id',
     passKey: 'twitch_client_secret',

@@ -4,7 +4,9 @@ const { addv: versionText } = require('../text-formatters')
 const { version: versionColor } = require('../color-formatters')
 const BaseCondaService = require('./conda-base')
 
-module.exports = class CondaVersion extends BaseCondaService {
+module.exports = class CondaVersion extends (
+  BaseCondaService
+) {
   static category = 'version'
   static route = { base: 'conda', pattern: ':variant(v|vn)/:channel/:pkg' }
 

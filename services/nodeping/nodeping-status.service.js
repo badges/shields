@@ -17,7 +17,9 @@ const schema = Joi.array()
  */
 const exampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 
-module.exports = class NodePingStatus extends BaseJsonService {
+module.exports = class NodePingStatus extends (
+  BaseJsonService
+) {
   static category = 'monitoring'
 
   static route = {

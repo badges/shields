@@ -20,7 +20,9 @@ const schema = Joi.object({
   }),
 }).required()
 
-module.exports = class AppVeyorBase extends BaseJsonService {
+module.exports = class AppVeyorBase extends (
+  BaseJsonService
+) {
   static category = 'build'
 
   async fetch({ user, repo, branch }) {

@@ -2,7 +2,9 @@
 
 const UptimeRobotBase = require('./uptimerobot-base')
 
-module.exports = class UptimeRobotStatus extends UptimeRobotBase {
+module.exports = class UptimeRobotStatus extends (
+  UptimeRobotBase
+) {
   static route = {
     base: 'uptimerobot/status',
     pattern: ':monitorSpecificKey',

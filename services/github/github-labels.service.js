@@ -8,7 +8,9 @@ const schema = Joi.object({
   color: Joi.string().hex().required(),
 }).required()
 
-module.exports = class GithubLabels extends GithubAuthV3Service {
+module.exports = class GithubLabels extends (
+  GithubAuthV3Service
+) {
   static category = 'issue-tracking'
   static route = { base: 'github/labels', pattern: ':user/:repo/:name' }
   static examples = [

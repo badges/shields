@@ -8,7 +8,9 @@ const schema = Joi.object({
   info: Joi.object({ license: Joi.string().required() }).required(),
 })
 
-module.exports = class DubLicense extends BaseJsonService {
+module.exports = class DubLicense extends (
+  BaseJsonService
+) {
   static category = 'license'
   static route = { base: 'dub/l', pattern: ':packageName' }
   static examples = [

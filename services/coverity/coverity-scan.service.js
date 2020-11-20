@@ -8,7 +8,9 @@ const schema = Joi.object({
   message: Joi.string().regex(messageRegex).required(),
 }).required()
 
-module.exports = class CoverityScan extends BaseJsonService {
+module.exports = class CoverityScan extends (
+  BaseJsonService
+) {
   static category = 'analysis'
   static route = { base: 'coverity/scan', pattern: ':projectId' }
 

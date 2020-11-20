@@ -14,7 +14,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Ubuntu extends BaseJsonService {
+module.exports = class Ubuntu extends (
+  BaseJsonService
+) {
   static category = 'version'
 
   static route = {
