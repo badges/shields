@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { baseUrl } from '../constants'
+import { getBaseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -19,6 +19,7 @@ const SponsorContainer = styled.div`
 `
 
 export default function SponsorsPage(): JSX.Element {
+  const baseUrl = getBaseUrl()
   return (
     <MainContainer>
       <GlobalStyle />

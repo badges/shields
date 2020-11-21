@@ -11,7 +11,7 @@ import {
   RenderableExample,
 } from '../lib/service-definitions'
 import ServiceDefinitionSetHelper from '../lib/service-definitions/service-definition-set-helper'
-import { baseUrl } from '../constants'
+import { getBaseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
 import SuggestionAndSearch from './suggestion-and-search'
@@ -54,6 +54,7 @@ export default function Main({
     setSelectedExampleIsSuggestion,
   ] = useState(false)
   const searchTimeout = useRef(0)
+  const baseUrl = getBaseUrl()
 
   function performSearch(query: string): void {
     setSearchIsInProgress(false)
