@@ -90,8 +90,6 @@ files:
 [shields-io-production.yml]: ../config/shields-io-production.yml
 [default.yml]: ../config/default.yml
 
-The project ships with `dotenv`, however there is no `.env` in production.
-
 ## Badge CDN
 
 Sitting in front of the three servers is a Cloudflare Free account which
