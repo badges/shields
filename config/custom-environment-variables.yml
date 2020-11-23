@@ -21,7 +21,7 @@ public:
     key: 'HTTPS_KEY'
     cert: 'HTTPS_CRT'
 
-  redirectUri: 'REDIRECT_URI'
+  redirectUrl: 'REDIRECT_URI'
 
   rasterUrl: 'RASTER_URL'
 
