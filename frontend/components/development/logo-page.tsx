@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
-import { baseUrl } from '../../constants'
+import { getBaseUrl } from '../../constants'
 import { shieldsLogos, simpleIcons } from '../../lib/supported-features'
 import Meta from '../meta'
 import Header from '../header'
@@ -19,6 +19,7 @@ const StyledTable = styled.table`
 `
 
 function NamedLogoTable({ logoNames }: { logoNames: string[] }): JSX.Element {
+  const baseUrl = getBaseUrl()
   return (
     <StyledTable>
       <thead>

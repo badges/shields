@@ -90,8 +90,6 @@ files:
 [shields-io-production.yml]: ../config/shields-io-production.yml
 [default.yml]: ../config/default.yml
 
-The project ships with `dotenv`, however there is no `.env` in production.
-
 ## Badge CDN
 
 Sitting in front of the three servers is a Cloudflare Free account which
@@ -188,19 +186,3 @@ Request performance is monitored in two places:
 [monitor]: https://shields.redsparr0w.com/1568/
 [notifications]: http://shields.redsparr0w.com/discord_notification
 [monitor discord]: https://discordapp.com/channels/308323056592486420/470700909182320646
-
-## Legacy servers
-
-There are three legacy servers on OVH VPS’s which are currently used for proxying.
-
-| Cname                       | Hostname             | Type | IP             | Location           |
-| --------------------------- | -------------------- | ---- | -------------- | ------------------ |
-| [s0.servers.shields.io][s0] | vps71670.vps.ovh.ca  | VPS  | 192.99.59.72   | Quebec, Canada     |
-| [s1.servers.shields.io][s1] | vps244529.ovh.net    | VPS  | 51.254.114.150 | Gravelines, France |
-| [s2.servers.shields.io][s2] | vps117870.vps.ovh.ca | VPS  | 149.56.96.133  | Quebec, Canada     |
-
-[s0]: https://s0.servers.shields.io/index.html
-[s1]: https://s1.servers.shields.io/index.html
-[s2]: https://s2.servers.shields.io/index.html
-
-The only way to inspect the commit on the server is with `git ls-remote`.
