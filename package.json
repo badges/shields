@@ -30,7 +30,7 @@
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.3",
     "cloudflare-middleware": "^1.0.4",
-    "config": "^3.3.2",
+    "config": "^3.3.3",
     "cross-env": "^7.0.2",
     "decamelize": "^3.2.0",
     "emojic": "^1.1.16",
