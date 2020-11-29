@@ -26,10 +26,6 @@ Production hosting is managed by the Shields ops team:
 | Zeit Now                      | Team members                    | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
 | Raster server                 | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
 | shields-server.com redirector | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
-| Legacy badge servers          | Account owner                   | @espadrine                                                      |
-| Legacy badge servers          | ssh, logs                       | @espadrine                                                      |
-| Legacy badge servers          | Deployment                      | @espadrine, @paulmelnikow                                       |
-| Legacy badge servers          | Admin endpoints                 | @espadrine, @paulmelnikow                                       |
 | Cloudflare (CDN)              | Account owner                   | @espadrine                                                      |
 | Cloudflare (CDN)              | Access management               | @espadrine                                                      |
 | Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
