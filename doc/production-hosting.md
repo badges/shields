@@ -14,37 +14,36 @@ Production hosting is managed by the Shields ops team:
 [operations issues]: https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Aoperations
 [ops discord]: https://discordapp.com/channels/308323056592486420/480747695879749633
 
-| Component                     | Subcomponent                    | People with access                                                                         |
-| ----------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
-| shields-production-us         | Account owner                   | @paulmelnikow                                                                              |
-| shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
-| shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
-| Compose.io Redis              | Account owner                   | @paulmelnikow                                                                              |
-| Compose.io Redis              | Account access                  | @paulmelnikow                                                                              |
-| Compose.io Redis              | Database connection credentials | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb                                        |
-| Zeit Now                      | Team owner                      | @paulmelnikow                                                                              |
-| Zeit Now                      | Team members                    | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
-| Raster server                 | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
-| shields-server.com redirector | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan                                        |
-| Legacy badge servers          | Account owner                   | @espadrine                                                                                 |
-| Legacy badge servers          | ssh, logs                       | @espadrine                                                                                 |
-| Legacy badge servers          | Deployment                      | @espadrine, @paulmelnikow                                                                  |
-| Legacy badge servers          | Admin endpoints                 | @espadrine, @paulmelnikow                                                                  |
-| Cloudflare (CDN)              | Account owner                   | @espadrine                                                                                 |
-| Cloudflare (CDN)              | Access management               | @espadrine                                                                                 |
-| Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                            |
-| Twitch                        | OAuth app                       | @PyvesB                                                                                    |
-| Discord                       | OAuth app                       | @PyvesB                                                                                    |
-| YouTube                       | Account owner                   | @PyvesB                                                                                    |
-| OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                                              |
-| DNS                           | Account owner                   | @olivierlacan                                                                              |
-| DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                                                       |
-| Sentry                        | Error reports                   | @espadrine, @paulmelnikow                                                                  |
-| Frontend                      | Deployment                      | Technically anyone with push access but in practice must be deployed with the badge server |
-| Metrics server                | Owner                           | @platan                                                                                    |
-| UptimeRobot                   | Account owner                   | @paulmelnikow                                                                              |
-| More metrics                  | Owner                           | @RedSparr0w                                                                                |
-| Netlify (documentation site)  | Owner                           | @chris48s                                                                                  |
+| Component                     | Subcomponent                    | People with access                                              |
+| ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
+| shields-production-us         | Account owner                   | @paulmelnikow                                                   |
+| shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
+| shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
+| Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
+| Compose.io Redis              | Account access                  | @paulmelnikow                                                   |
+| Compose.io Redis              | Database connection credentials | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
+| Zeit Now                      | Team owner                      | @paulmelnikow                                                   |
+| Zeit Now                      | Team members                    | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
+| Raster server                 | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
+| shields-server.com redirector | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
+| Legacy badge servers          | Account owner                   | @espadrine                                                      |
+| Legacy badge servers          | ssh, logs                       | @espadrine                                                      |
+| Legacy badge servers          | Deployment                      | @espadrine, @paulmelnikow                                       |
+| Legacy badge servers          | Admin endpoints                 | @espadrine, @paulmelnikow                                       |
+| Cloudflare (CDN)              | Account owner                   | @espadrine                                                      |
+| Cloudflare (CDN)              | Access management               | @espadrine                                                      |
+| Cloudflare (CDN)              | Admin access                    | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
+| Twitch                        | OAuth app                       | @PyvesB                                                         |
+| Discord                       | OAuth app                       | @PyvesB                                                         |
+| YouTube                       | Account owner                   | @PyvesB                                                         |
+| OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                   |
+| DNS                           | Account owner                   | @olivierlacan                                                   |
+| DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                            |
+| Sentry                        | Error reports                   | @espadrine, @paulmelnikow                                       |
+| Metrics server                | Owner                           | @platan                                                         |
+| UptimeRobot                   | Account owner                   | @paulmelnikow                                                   |
+| More metrics                  | Owner                           | @RedSparr0w                                                     |
+| Netlify (documentation site)  | Owner                           | @chris48s                                                       |
 
 There are [too many bottlenecks][issue 2577]!
 
@@ -95,24 +94,10 @@ files:
 Sitting in front of the three servers is a Cloudflare Free account which
 provides several services:
 
-- Global CDN, caching, and SSL gateway for `img.shields.io`
+- Global CDN, caching, and SSL gateway for `img.shields.io` and `shields.io`
 - Analytics through the Cloudflare dashboard
-- DNS hosting for `shields.io`
 
 Cloudflare is configured to respect the servers' cache headers.
-
-## Frontend
-
-The frontend is served by [GitHub Pages][] via the [gh-pages branch][gh-pages]. SSL is enforced.
-
-`shields.io` resolves to the GitHub Pages hosts. It is not proxied through
-Cloudflare.
-
-Technically any maintainer can push to `gh-pages`, but in practice the frontend must be deployed
-with the badge server via the deployment process described below.
-
-[github pages]: https://pages.github.com/
-[gh-pages]: https://github.com/badges/shields/tree/gh-pages
 
 ## Raster server
 
@@ -123,27 +108,13 @@ hosted on [Zeit Now][]. It's managed in the
 [zeit now]: https://zeit.co/now
 [svg-to-image-proxy]: https://github.com/badges/svg-to-image-proxy
 
-## Deployment
+### Heroku Deployment
 
-The deployment is done in two stages: the badge server (heroku) and the front-end (gh-pages).
-
-### Heroku
+Both the badge server and frontend are served from Heroku.
 
 After merging a commit to master, heroku should create a staging deploy. Check this has deployed correctly in the `shields-staging` pipeline and review http://shields-staging.herokuapp.com/
 
 If we're happy with it, "promote to production". This will deploy what's on staging to the `shields-production-eu` and `shields-production-us` pieplines.
-
-### Frontend
-
-To deploy the front-end to GH pages, use a clean clone of the shields repo.
-
-```sh
-$ git pull  # update the working copy
-$ npm ci  # install dependencies (devDependencies are needed to build the frontend)
-$ make deploy-gh-pages  # build the frontend and push it to the gh-pages branch
-```
-
-No secrets are required to build or deploy the frontend.
 
 ## DNS
 
