@@ -15,6 +15,4 @@ public:
   cors:
     allowedOrigin: ['http://shields.io', 'https://shields.io']
 
-  redirectUrl: 'https://shields.io/'
-
   rasterUrl: 'https://raster.shields.io'
