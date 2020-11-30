@@ -92,6 +92,7 @@ provides several services:
 
 - Global CDN, caching, and SSL gateway for `img.shields.io` and `shields.io`
 - Analytics through the Cloudflare dashboard
+- DNS resolution for `shields.io` (and subdomains)
 
 Cloudflare is configured to respect the servers' cache headers.
 
