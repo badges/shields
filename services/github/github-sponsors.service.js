@@ -25,9 +25,11 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
     {
       title: 'GitHub Sponsors',
       namedParams: { user: 'Homebrew' },
-      staticPreview: this.render({
-        count: '217',
-      }),
+      queryParams: { style: 'social' },
+      staticPreview: {
+        message: '217',
+        style: 'social',
+      },
       documentation,
     },
   ]
@@ -41,7 +43,6 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
     return {
       message: metric(count),
       color: '4183C4',
-      style: 'social',
     }
   }
 
