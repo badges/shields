@@ -11,7 +11,7 @@ const queryParamSchema = Joi.object({
   filename: Joi.string(),
 }).required()
 
-const versionRegExp = new RegExp('^Version:[\\s]*(.+)$', 'm')
+const versionRegExp = /^Version:[\s]*(.+)$/m
 
 module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'

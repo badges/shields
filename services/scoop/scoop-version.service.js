@@ -8,9 +8,7 @@ const {
 const { fetchJsonFromRepo } = require('../github/github-common-fetch')
 const { renderVersionBadge } = require('../version')
 
-const gitHubRepoRegExp = new RegExp(
-  'https://github.com/(?<user>.*?)/(?<repo>.*?)(/|$)'
-)
+const gitHubRepoRegExp = /https:\/\/github.com\/(?<user>.*?)\/(?<repo>.*?)(\/|$)/
 const bucketsSchema = Joi.object()
   .pattern(/.+/, Joi.string().pattern(gitHubRepoRegExp).required())
   .required()
