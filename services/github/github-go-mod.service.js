@@ -11,7 +11,7 @@ const queryParamSchema = Joi.object({
   filename: Joi.string(),
 }).required()
 
-const goVersionRegExp = new RegExp('^go (.+)$', 'm')
+const goVersionRegExp = /^go (.+)$/m
 
 const keywords = ['golang']
 

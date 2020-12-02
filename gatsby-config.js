@@ -1,5 +1,7 @@
 'use strict'
 
+const path = require('path')
+
 module.exports = {
   siteMetadata: {
     title: 'Shields.io: Quality metadata badges for open source projects',
@@ -11,7 +13,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-page-creator',
       options: {
-        path: `${__dirname}/frontend/pages`,
+        path: path.join(__dirname, 'frontend', 'pages'),
       },
     },
     'gatsby-plugin-react-helmet',

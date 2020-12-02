@@ -106,6 +106,7 @@ module.exports = class JiraSprint extends BaseJsonService {
       if (issue.fields.resolution != null) {
         return issue.fields.resolution.name !== 'Unresolved'
       }
+      return false
     }).length
 
     return this.constructor.render({ numTotalIssues, numCompletedIssues })
