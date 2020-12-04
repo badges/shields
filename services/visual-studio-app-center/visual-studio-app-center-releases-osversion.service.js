@@ -12,7 +12,9 @@ const schema = Joi.object({
   min_os: Joi.string().required(),
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesOSVersion extends BaseVisualStudioAppCenterService {
+module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
+  BaseVisualStudioAppCenterService
+) {
   static category = 'version'
 
   static route = {
