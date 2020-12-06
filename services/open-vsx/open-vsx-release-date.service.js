@@ -36,9 +36,7 @@ module.exports = class OpenVSXReleaseDate extends OpenVSXBase {
   }
 
   async handle({ namespace, extension }) {
-    const json = await this.fetch({ namespace, extension })
-    const { timestamp } = this.transform({ json })
-
+    const { timestamp } = await this.fetch({ namespace, extension })
     return this.constructor.render({
       releaseDate: timestamp,
     })
