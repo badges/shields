@@ -2,20 +2,12 @@
 
 const Joi = require('joi')
 const { optionalNonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+const { BaseJsonService } = require('..')
 
 const extensionQuerySchema = Joi.object({
   error: Joi.string(),
-  version: Joi.string().when('error', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.required(),
-  }),
-  timestamp: Joi.string().isoDate().when('error', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.required(),
-  }),
+  version: Joi.string().required(),
+  timestamp: Joi.string().isoDate().required(),
   downloadCount: optionalNonNegativeInteger,
   reviewCount: optionalNonNegativeInteger,
   averageRating: Joi.number().when('reviewCount', {
@@ -46,17 +38,8 @@ module.exports = class OpenVSXBase extends BaseJsonService {
       }`,
       errorMessages: {
         400: 'invalid extension id',
+        404: 'extension not found',
       },
     })
-  }
-
-  transform({ json }) {
-    const { error, version } = json
-    if (error || !version) {
-      throw new NotFound({
-        prettyMessage: 'extension not found',
-      })
-    }
-    return json
   }
 }
