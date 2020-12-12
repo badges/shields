@@ -1,5 +1,6 @@
 extends:
   - standard
+  - standard-jsx
   - standard-react
   - plugin:@typescript-eslint/recommended
   - prettier
