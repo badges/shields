@@ -14,7 +14,9 @@ const documentation = `
 // This service exists separately from the other Marketplace downloads badges (in ./visual-studio-marketplace-downloads.js)
 // due differences in how the Marketplace tracks metrics for Azure DevOps extensions vs. other extension types.
 // See https://github.com/badges/shields/pull/2748 for more information on the discussion and decision.
-module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplaceAzureDevOpsInstalls extends (
+  VisualStudioMarketplaceBase
+) {
   static category = 'downloads'
 
   static route = {

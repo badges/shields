@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
-module.exports = class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
+module.exports = class VaadinDirectoryVersion extends (
+  BaseVaadinDirectoryService
+) {
   static category = 'version'
 
   static route = {

@@ -12,7 +12,9 @@ const versionResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
+module.exports = class EclipseMarketplaceVersion extends (
+  EclipseMarketplaceBase
+) {
   static category = 'version'
   static route = this.buildRoute('eclipse-marketplace/v')
   static examples = [

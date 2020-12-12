@@ -4,7 +4,9 @@ const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
-module.exports = class VisualStudioMarketplaceReleaseDate extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplaceReleaseDate extends (
+  VisualStudioMarketplaceBase
+) {
   static category = 'activity'
 
   static route = {

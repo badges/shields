@@ -6,7 +6,9 @@ const {
 const { NotFound } = require('..')
 const { BasePuppetForgeModulesService } = require('./puppetforge-base')
 
-module.exports = class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
+module.exports = class PuppetforgeModuleFeedback extends (
+  BasePuppetForgeModulesService
+) {
   static category = 'rating'
 
   static route = {
