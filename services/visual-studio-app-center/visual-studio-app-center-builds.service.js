@@ -13,7 +13,9 @@ const schema = Joi.array().items({
   result: isBuildStatus.required(),
 })
 
-module.exports = class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCenterService {
+module.exports = class VisualStudioAppCenterBuilds extends (
+  BaseVisualStudioAppCenterService
+) {
   static category = 'build'
 
   static route = {

@@ -13,7 +13,9 @@ const queryParamSchema = Joi.object({
 
 const versionRegExp = /^Version:[\s]*(.+)$/m
 
-module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Service {
+module.exports = class GithubRPackageVersion extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'version'
 
   static route = {

@@ -4,7 +4,9 @@ const { starRating } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
-module.exports = class VaadinDirectoryRating extends BaseVaadinDirectoryService {
+module.exports = class VaadinDirectoryRating extends (
+  BaseVaadinDirectoryService
+) {
   static category = 'rating'
 
   static route = {

@@ -12,7 +12,9 @@ const favoritesResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceFavorites extends EclipseMarketplaceBase {
+module.exports = class EclipseMarketplaceFavorites extends (
+  EclipseMarketplaceBase
+) {
   static category = 'other'
   static route = this.buildRoute('eclipse-marketplace/favorites')
   static examples = [

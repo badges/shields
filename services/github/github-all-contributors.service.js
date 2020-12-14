@@ -10,7 +10,9 @@ const schema = Joi.object({
   contributors: Joi.array().required(),
 }).required()
 
-module.exports = class GithubAllContributorsService extends ConditionalGithubAuthV3Service {
+module.exports = class GithubAllContributorsService extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'activity'
   static route = {
     base: 'github/all-contributors',

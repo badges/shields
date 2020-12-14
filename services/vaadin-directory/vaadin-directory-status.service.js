@@ -2,7 +2,9 @@
 
 const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
 
-module.exports = class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
+module.exports = class VaadinDirectoryStatus extends (
+  BaseVaadinDirectoryService
+) {
   static category = 'other'
 
   static route = {
