@@ -22,7 +22,7 @@ module.exports = class InfluxMetrics {
     const request = {
       uri: this._config.url,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: this.metrics(),
+      body: await this.metrics(),
       timeout: this._config.timeoutMillseconds,
       auth,
     }
@@ -51,8 +51,8 @@ module.exports = class InfluxMetrics {
     )
   }
 
-  metrics() {
-    return promClientJsonToInfluxV2(this._metricInstance.metrics(), {
+  async metrics() {
+    return promClientJsonToInfluxV2(await this._metricInstance.metrics(), {
       env: this._config.envLabel,
       application: 'shields',
       instance: this._instanceId,
