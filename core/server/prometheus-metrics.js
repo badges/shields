@@ -76,9 +76,9 @@ module.exports = class PrometheusMetrics {
   async registerMetricsEndpoint(server) {
     const { register } = this
 
-    server.route(/^\/metrics$/, (data, match, end, ask) => {
+    server.route(/^\/metrics$/, async (data, match, end, ask) => {
       ask.res.setHeader('Content-Type', register.contentType)
-      ask.res.end(register.metrics())
+      ask.res.end(await register.metrics())
     })
   }
 
