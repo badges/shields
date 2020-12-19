@@ -221,14 +221,15 @@ export default function PathBuilder({
     tokenIndex: number,
     namedParamIndex: number
   ): JSX.Element {
-    const { delimiter, optional } = token
+    const { prefix, modifier } = token
+    const optional = modifier === '?' || modifier === '*'
     const name = `${token.name}`
 
     const exampleValue = exampleParams[name] || '(not set)'
 
     return (
       <React.Fragment key={token.name}>
-        {renderLiteral(delimiter, tokenIndex, false)}
+        {renderLiteral(prefix, tokenIndex, false)}
         <PathBuilderColumn pathContainsOnlyLiterals={false} withHorizPadding>
           <NamedParamLabelContainer>
             <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
