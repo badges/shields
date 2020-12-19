@@ -90,8 +90,8 @@ module.exports = class PrometheusMetrics {
     }
   }
 
-  metrics() {
-    return this.register.getMetricsAsJSON()
+  async metrics() {
+    return await this.register.getMetricsAsJSON()
   }
 
   /**
