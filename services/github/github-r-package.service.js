@@ -49,7 +49,7 @@ module.exports = class GithubRPackageVersion extends (
     },
     {
       title: 'GitHub R package version (branch & subdirectory of monorepo)',
-      pattern: ':user/:repo:/:branch',
+      pattern: ':user/:repo/:branch',
       namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
       queryParams: { filename: 'subdirectory/DESCRIPTION' },
       staticPreview: this.render({ version: '6.10.9', branch: 'master' }),

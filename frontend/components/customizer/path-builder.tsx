@@ -91,15 +91,15 @@ export function constructPath({
       if (typeof token === 'string') {
         return token.trim()
       } else {
-        const { delimiter, name, optional } = token
+        const { prefix, name, modifier } = token
         const value = namedParams[name]
         if (value) {
-          return `${delimiter}${value.trim()}`
-        } else if (optional) {
+          return `${prefix}${value.trim()}`
+        } else if (modifier === '?' || modifier === '*') {
           return ''
         } else {
           isComplete = false
-          return `${delimiter}:${name}`
+          return `${prefix}:${name}`
         }
       }
     })
