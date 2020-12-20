@@ -14,6 +14,11 @@ describe('Main page', function () {
   it('Search for badges', function () {
     cy.visit('/')
 
+    cy.get(SEARCH_INPUT).should('be.visible')
+    cy.percySnapshot('', {
+      percyCSS: `#like-this + p { display: none; }`,
+    })
+
     cy.get(SEARCH_INPUT).type('pypi')
 
     cy.contains('PyPI - License')

@@ -1,8 +1,8 @@
 {
   "baseUrl": "http://localhost:3000",
   "fixturesFolder": false,
-  "pluginsFile": false,
-  "supportFile": false,
+  "pluginsFile": "cypress/plugins/index.js",
+  "supportFile": "cypress/support/commands.js",
   "env": {
     "backend_url": "http://localhost:8080"
   }
