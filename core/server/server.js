@@ -90,10 +90,10 @@ const publicConfigSchema = Joi.object({
         .integer()
         .min(1)
         .when('enabled', { is: true, then: Joi.required() }),
-      intervalSeconds: Joi.number()
-        .integer()
-        .min(1)
-        .when('enabled', { is: true, then: Joi.required() }),
+      intervalSeconds: Joi.number().when('enabled', {
+        is: true,
+        then: Joi.required(),
+      }),
       instanceIdFrom: Joi.string()
         .equal('hostname', 'env-var', 'random')
         .when('enabled', { is: true, then: Joi.required() }),
