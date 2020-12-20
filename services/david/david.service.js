@@ -73,14 +73,10 @@ module.exports = class David extends BaseJsonService {
   }
 
   async fetch({ kind, user, repo, path }) {
-    const url = `https://david-dm.org/${user}/${repo}/${
-      kind ? `${kind}-` : ''
-    }info.json`
-
     return this._requestJson({
       schema,
-      url,
-      options: { qs: { path } },
+      url: `https://status.david-dm.org/gh/${user}/${repo}`,
+      options: { qs: { path, type: kind } },
       errorMessages: {
         /* note:
         david returns a 500 response for 'not found'
