@@ -51,7 +51,6 @@ it('should push custom metrics', async function () {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   })
-    // .persist()
     .post(
       '/metrics',
       /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/
