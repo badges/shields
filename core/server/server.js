@@ -90,7 +90,7 @@ const publicConfigSchema = Joi.object({
         .integer()
         .min(1)
         .when('enabled', { is: true, then: Joi.required() }),
-      intervalSeconds: Joi.number().when('enabled', {
+      intervalSeconds: Joi.number().integer().min(1).when('enabled', {
         is: true,
         then: Joi.required(),
       }),

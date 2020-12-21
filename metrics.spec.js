@@ -3,6 +3,7 @@
 const { expect } = require('chai')
 const nock = require('nock')
 const sinon = require('sinon')
+const got = require('./core/got-test-client')
 
 let server
 let scope
@@ -22,7 +23,7 @@ before(function () {
           instanceIdFrom: 'env-var',
           instanceIdEnvVarName: 'INSTANCE_ID',
           envLabel: 'localhost-env',
-          intervalSeconds: 0.001,
+          intervalSeconds: 1,
         },
       },
     },
@@ -32,18 +33,6 @@ before(function () {
     },
   })
   process.env.INSTANCE_ID = 'test-instance'
-  scope = nock('http://localhost:1112', {
-    reqheaders: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  })
-    .persist()
-    .post(
-      '/metrics'
-      // TODO check body
-    )
-    .basicAuth({ user: 'influx-username', pass: 'influx-password' })
-    .reply(200)
   clock = sinon.useFakeTimers()
   server = require('./server')
 })
@@ -56,9 +45,23 @@ after('shut down the server', async function () {
   clock.restore()
 })
 
-it('should push metrics', async function () {
-  // TODO add request and verify custom metrics
-  await clock.tickAsync(2)
+it('should push custom metrics', async function () {
+  scope = nock('http://localhost:1112', {
+    reqheaders: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
+    // .persist()
+    .post(
+      '/metrics',
+      /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/
+    )
+    .basicAuth({ user: 'influx-username', pass: 'influx-password' })
+    .reply(200)
+  await got('http://localhost:1111/badge/fruit-apple-green.svg')
+
+  await clock.tickAsync(1100)
+
   expect(scope.isDone()).to.be.equal(
     true,
     `pending mocks: ${scope.pendingMocks()}`
