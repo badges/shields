@@ -9,7 +9,7 @@ const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success'),
 }).required()
 
-module.exports = class GithubCommitStatus extends GithubAuthV3Service {
+module.exports = class GithubCommitChecks extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/commit-checks',

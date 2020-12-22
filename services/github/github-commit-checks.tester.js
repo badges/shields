@@ -23,6 +23,6 @@ t.create('commit checks - nonexistent ref')
   .get('/badges/shields/this-ref-does-not-exist.json')
   .expectBadge({
     label: 'checks',
-    message: 'ref not found',
+    message: 'invalid ref',
     color: 'red',
   })
