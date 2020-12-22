@@ -17,25 +17,21 @@ t.create('downloads (user friendly plugin id)')
 
 t.create('downloads')
   .get('/9435.json')
-  .intercept(
-    nock =>
-      nock('https://plugins.jetbrains.com')
-        .get('/plugins/list?pluginId=9435')
-        .reply(
-          200,
-          `<?xml version="1.0" encoding="UTF-8"?>
-            <plugin-repository>
-              <category name="Code editing">
-                <idea-plugin downloads="2" size="13159" date="1485601807000" url=""></idea-plugin>
-              </category>
-            </plugin-repository>`
-        ),
-    {
-      'Content-Type': 'text/xml;charset=UTF-8',
-    }
+  .intercept(nock =>
+    nock('https://plugins.jetbrains.com')
+      .get('/api/plugins/9435')
+      .reply(200, { downloads: 2 })
   )
   .expectBadge({ label: 'downloads', message: '2' })
 
-t.create('unknown plugin')
+t.create('unknown plugin (string)')
   .get('/unknown-plugin.json')
+  .expectBadge({ label: 'downloads', message: 'not found' })
+
+t.create('unknown plugin (numeric)')
+  .get('/9999999999999.json')
+  .expectBadge({ label: 'downloads', message: 'not found' })
+
+t.create('unknown plugin (mixed)')
+  .get('/9999999999999-abc.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
