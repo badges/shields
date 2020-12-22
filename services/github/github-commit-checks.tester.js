@@ -1,6 +1,5 @@
 'use strict'
 
-const { invalidJSONString } = require('../response-fixtures')
 const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('commit checks - passing')

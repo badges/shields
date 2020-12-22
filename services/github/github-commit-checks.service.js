@@ -35,12 +35,12 @@ module.exports = class GithubCommitChecks extends GithubAuthV3Service {
   static defaultBadgeData = { label: 'checks' }
 
   static render({ state }) {
-    if (state === "success") {
+    if (state === 'success') {
       return {
         message: `passing`,
         color: 'brightgreen',
       }
-    } else if (state === "pending") {
+    } else if (state === 'pending') {
       return {
         message: `pending`,
         color: 'yellow',
