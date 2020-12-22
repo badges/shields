@@ -371,6 +371,7 @@ describe('The server', function () {
 
   describe('running with metrics enabled', function () {
     let server, baseUrl, scope, clock
+    const metricsPushIntervalSeconds = 1
     before('Start the server', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
@@ -385,7 +386,7 @@ describe('The server', function () {
               instanceIdFrom: 'env-var',
               instanceIdEnvVarName: 'INSTANCE_ID',
               envLabel: 'localhost-env',
-              intervalSeconds: 1,
+              intervalSeconds: metricsPushIntervalSeconds,
             },
           },
         },
@@ -422,7 +423,7 @@ describe('The server', function () {
         .reply(200)
       await got(`${baseUrl}badge/fruit-apple-green.svg`)
 
-      await clock.tickAsync(1100)
+      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 500)
 
       expect(scope.isDone()).to.be.equal(
         true,
