@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
+const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 
 const schema = Joi.object({
   state: isBuildStatus,
@@ -61,7 +61,7 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
   static defaultBadgeData = { label: 'checks' }
 
   async handle({ user, repo, ref }) {
-    let { state } = await this._requestJson({
+    const { state } = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/status`,
       errorMessages: errorMessagesFor('ref or repo not found'),
       schema,
