@@ -9,16 +9,16 @@ const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success'),
 }).required()
 
-module.exports = class GithubCommitChecks extends GithubAuthV3Service {
+module.exports = class GithubChecksStatus extends GithubAuthV3Service {
   static category = 'build'
   static route = {
-    base: 'github/commit-checks',
+    base: 'github/checks-status',
     pattern: ':user/:repo/:ref',
   }
 
   static examples = [
     {
-      title: 'GitHub commit checks state',
+      title: 'GitHub branch checks state',
       namedParams: {
         user: 'badges',
         repo: 'shields',
@@ -28,6 +28,32 @@ module.exports = class GithubCommitChecks extends GithubAuthV3Service {
         state: 'success',
       }),
       keywords: ['branch'],
+      documentation,
+    },
+    {
+      title: 'GitHub commit checks state',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        ref: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
+      },
+      staticPreview: this.render({
+        state: 'success',
+      }),
+      keywords: ['commit'],
+      documentation,
+    },
+    {
+      title: 'GitHub tag checks state',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        ref: '3.3.0',
+      },
+      staticPreview: this.render({
+        state: 'success',
+      }),
+      keywords: ['tag'],
       documentation,
     },
   ]
