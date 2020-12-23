@@ -329,7 +329,7 @@ describe('BaseService', function () {
   describe('ScoutCamp integration', function () {
     // TODO Strangly, without the useless escape the regexes do not match in Node 12.
     // eslint-disable-next-line no-useless-escape
-    const expectedRouteRegex = /^\/foo\/([^\/]+?)(|\.svg|\.json)$/
+    const expectedRouteRegex = /^\/foo(?:\/([^\/#\?]+?))(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest

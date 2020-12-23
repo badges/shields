@@ -7,7 +7,7 @@ const JetbrainsBase = require('./jetbrains-base')
 
 const pluginRatingColor = colorScale([2, 3, 4])
 
-const schema = Joi.object({
+const intelliJschema = Joi.object({
   'plugin-repository': Joi.object({
     category: Joi.object({
       'idea-plugin': Joi.array()
@@ -23,6 +23,10 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const jetbrainsSchema = Joi.object({
+  meanRating: Joi.number().min(0).required(),
+}).required()
+
 module.exports = class JetbrainsRating extends JetbrainsBase {
   static category = 'rating'
 
@@ -33,10 +37,10 @@ module.exports = class JetbrainsRating extends JetbrainsBase {
 
   static examples = [
     {
-      title: 'JetBrains IntelliJ Plugins',
+      title: 'JetBrains Plugins',
       pattern: 'rating/:pluginId',
       namedParams: {
-        pluginId: '11941-automatic-power-saver',
+        pluginId: '11941',
       },
       staticPreview: this.render({
         rating: '4.5',
@@ -44,10 +48,10 @@ module.exports = class JetbrainsRating extends JetbrainsBase {
       }),
     },
     {
-      title: 'JetBrains IntelliJ Plugins',
+      title: 'JetBrains Plugins',
       pattern: 'stars/:pluginId',
       namedParams: {
-        pluginId: '11941-automatic-power-saver',
+        pluginId: '11941',
       },
       staticPreview: this.render({
         rating: '4.5',
@@ -70,9 +74,26 @@ module.exports = class JetbrainsRating extends JetbrainsBase {
   }
 
   async handle({ format, pluginId }) {
-    const pluginData = await this.fetchPackageData({ pluginId, schema })
-    const pluginRating =
-      pluginData['plugin-repository'].category['idea-plugin'][0].rating
-    return this.constructor.render({ rating: pluginRating, format })
+    let rating
+    if (this.constructor._isLegacyPluginId(pluginId)) {
+      const intelliJPluginData = await this.fetchIntelliJPluginData({
+        pluginId,
+        schema: intelliJschema,
+      })
+      rating =
+        intelliJPluginData['plugin-repository'].category['idea-plugin'][0]
+          .rating
+    } else {
+      const jetbrainsPluginData = await this._requestJson({
+        schema: jetbrainsSchema,
+        url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
+          pluginId
+        )}/rating`,
+        errorMessages: { 400: 'not found' },
+      })
+      rating = jetbrainsPluginData.meanRating
+    }
+
+    return this.constructor.render({ rating, format })
   }
 }
