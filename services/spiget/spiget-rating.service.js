@@ -58,7 +58,7 @@ module.exports = class SpigetRatings extends BaseSpigetService {
     return this.constructor.render({
       format,
       total: rating.count,
-      average: rating.average,
+      average: rating.average.toFixed(2),
     })
   }
 }

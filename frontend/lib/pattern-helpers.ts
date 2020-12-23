@@ -21,19 +21,11 @@ export function removeRegexpFromPattern(pattern: string): string {
       if (typeof token === 'string') {
         return token
       } else {
-        const { delimiter, optional, repeat, name, pattern } = token
+        const { prefix, modifier, name, pattern } = token
         if (typeof name === 'number') {
-          return `${delimiter}(${pattern})`
+          return `${prefix}(${pattern})`
         } else {
-          let modifier = ''
-          if (optional && !repeat) {
-            modifier = '?'
-          } else if (!optional && repeat) {
-            modifier = '+'
-          } else if (optional && repeat) {
-            modifier = '*'
-          }
-          return `${delimiter}:${name}${modifier}`
+          return `${prefix}:${name}${modifier}`
         }
       }
     })
