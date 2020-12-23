@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: self-hosting</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: self-hosting</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>self-hosting</h2>
+</header>
+
+<article>
+    <h1>Hosting your own Shields server</h1>
+<h2>Installation</h2>
+<p>You will need Node 12 or later, which you can install using a
+<a href="https://nodejs.org/en/download/package-manager/">package manager</a>.</p>
+<p>On Ubuntu / Debian:</p>
+<pre class="prettyprint source lang-sh"><code>curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -; sudo apt-get install -y nodejs
+</code></pre>
+<pre class="prettyprint source lang-sh"><code>git clone https://github.com/badges/shields.git
+cd shields
+npm ci  # You may need sudo for this.
+</code></pre>
+<h2>Build the frontend</h2>
+<pre class="prettyprint source lang-sh"><code>npm run build
+</code></pre>
+<h2>Start the server</h2>
+<pre class="prettyprint source lang-sh"><code>sudo node server
+</code></pre>
+<p>The server uses port 80 by default, which requires <code>sudo</code> permissions.</p>
+<p>There are two ways to provide an alternate port:</p>
+<pre class="prettyprint source lang-sh"><code>PORT=8080 node server
+node server 8080
+</code></pre>
+<p>The root gets redirected to https://shields.io.</p>
+<p>For testing purposes, you can go to <code>http://localhost/</code>.</p>
+<h2>Heroku</h2>
+<p>Once you have installed the <a href="https://devcenter.heroku.com/articles/heroku-cli">Heroku CLI</a></p>
+<pre class="prettyprint source lang-bash"><code>heroku login
+heroku create your-app-name
+git push heroku master
+heroku open
+</code></pre>
+<h2>Docker</h2>
+<p>You can build and run the server locally using Docker. First build an image:</p>
+<pre class="prettyprint source lang-console"><code>$ docker build -t shields .
+Sending build context to Docker daemon 3.923 MB
+…
+Successfully built 4471b442c220
+</code></pre>
+<p>Optionally, create a file called <code>shields.env</code> that contains the needed
+configuration. See <a href="server-secrets.md">server-secrets.md</a> and <a href="/config/custom-environment-variables.yml">config/custom-environment-variables.yml</a> for examples.</p>
+<p>Then run the container:</p>
+<pre class="prettyprint source lang-console"><code>$ docker run --rm -p 8080:80 --name shields shields
+# or if you have shields.env file, run the following instead
+$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
+
+> badge-maker@3.0.0 start /usr/src/app
+> node server.js
+
+http://[::1]/
+</code></pre>
+<p>Assuming Docker is running locally, you should be able to get to the
+application at http://localhost:8080/.</p>
+<p>If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
+then you will need to replace <code>localhost</code> with the IP address of that virtual
+machine.</p>
+<h2>Raster server</h2>
+<p>If you want to host PNG badges, you can also self-host a <a href="https://github.com/badges/svg-to-image-proxy">raster server</a>
+which points to your badge server. It's designed as a web function which is
+tested on Zeit Now, though you may be able to run it on AWS Lambda. It's
+built on the <a href="https://github.com/zeit/micro">micro</a> framework, and comes with a <code>start</code> script that allows
+it to run as a standalone Node service.</p>
+<ul>
+<li>In your raster instance, set <code>BASE_URL</code> to your Shields instance, e.g.
+<code>https://shields.example.co</code>.</li>
+<li>Optionally, in your Shields, instance, configure <code>RASTER_URL</code> to the base
+URL, e.g. <code>https://raster.example.co</code>. This will send 301 redirects
+for the legacy raster URLs instead of 404's.</li>
+</ul>
+<p>If anyone has set this up, more documentation on how to do this would be
+welcome! It would also be nice to ship a Docker image that includes a
+preconfigured raster server.</p>
+<h2>Zeit Now</h2>
+<p>To deploy using Zeit Now:</p>
+<pre class="prettyprint source lang-console"><code>npm run build  # Not sure why, but this needs to be run before deploying.
+now
+</code></pre>
+<h2>Persistence</h2>
+<p>To enable Redis-backed GitHub token persistence, point <code>REDIS_URL</code> to your
+Redis installation.</p>
+<h2>Server secrets</h2>
+<p>You can add your own server secrets in environment variables or <code>config/local.yml</code>.</p>
+<p>These are documented in <a href="./server-secrets.md">server-secrets.md</a></p>
+<h2>Separate frontend hosting</h2>
+<p>If you want to host the frontend on a separate server, such as cloud storage
+or a CDN, you can do that.</p>
+<p>First, build the frontend, pointing <code>GATSBY_BASE_URL</code> to your server.</p>
+<pre class="prettyprint source lang-sh"><code>GATSBY_BASE_URL=https://your-server.example.com npm run build
+</code></pre>
+<p>Then copy the contents of the <code>build/</code> folder to your static hosting / CDN.</p>
+<p>There are also a couple settings you should configure on the server.</p>
+<p>If you want to use server suggestions, you should also set <code>ALLOWED_ORIGIN</code>:</p>
+<pre class="prettyprint source lang-sh"><code>ALLOWED_ORIGIN=http://my-custom-shields.s3.amazonaws.com,https://my-custom-shields.s3.amazonaws.com
+</code></pre>
+<p>This should be a comma-separated list of allowed origin headers. They should
+not have paths or trailing slashes.</p>
+<p>To help out users, you can make the Shields server redirect the server root.
+Set the <code>REDIRECT_URI</code> environment variable:</p>
+<pre class="prettyprint source lang-sh"><code>REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
+</code></pre>
+<h2>Sentry</h2>
+<p>In order to enable integration with <a href="https://sentry.io">Sentry</a>, you need your own <a href="https://docs.sentry.io/quickstart/#configure-the-dsn">Sentry DSN</a>. It’s an URL in format <code>https://{PUBLIC_KEY}:{SECRET_KEY}@sentry.io/{PROJECT_ID}</code>.</p>
+<h3>How to obtain the Sentry DSN</h3>
+<ol>
+<li><a href="https://sentry.io/pricing/">Sign up</a> for Sentry</li>
+<li>Log in to Sentry</li>
+<li>Create a new project for Node.js</li>
+<li>You should see <a href="https://docs.sentry.io/quickstart/#configure-the-dsn">Sentry DSN</a> for your project. Sentry DSN can be found by navigating to [Project Name] -&gt; Project Settings -&gt; Client Keys (DSN) as well.</li>
+</ol>
+<p>Start the server using the Sentry DSN. You can set it:</p>
+<ul>
+<li>by <code>SENTRY_DSN</code> environment variable</li>
+</ul>
+<pre class="prettyprint source"><code>sudo SENTRY_DSN=https://xxx:yyy@sentry.io/zzz node server
+</code></pre>
+<p>Or via config as you would do with <a href="server-secrets.md">server secrets</a>:</p>
+<pre class="prettyprint source lang-yml"><code>private:
+  sentry_dsn: ...
+</code></pre>
+<pre class="prettyprint source lang-sh"><code>sudo node server
+</code></pre>
+<h3>Prometheus</h3>
+<p>Shields uses <a href="https://github.com/siimon/prom-client">prom-client</a> to provide <a href="https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors">default metrics</a>. These metrics are disabled by default.
+You can enable them by <code>METRICS_PROMETHEUS_ENABLED</code> environment variable.</p>
+<pre class="prettyprint source lang-bash"><code>METRICS_PROMETHEUS_ENABLED=true npm start
+</code></pre>
+<p>Metrics are available at <code>/metrics</code> resource.</p>
+<h3>Cloudflare</h3>
+<p>Shields uses Cloudflare as a downstream CDN. If your installation does the same,
+you can configure your server to only accept requests coming from Cloudflare's IPs.
+Set <code>public.requireCloudflare: true</code>.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

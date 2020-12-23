@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: code-walkthrough</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: code-walkthrough</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>code-walkthrough</h2>
+</header>
+
+<article>
+    <h1>High-level code walkthrough</h1>
+<h2>Code inventory and testing strategy</h2>
+<p>The Shields codebase is divided into several parts:</p>
+<ol>
+<li>The frontend (about 7% of the code)
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/frontend"><code>frontend</code></a></li>
+</ol>
+</li>
+<li>The badge renderer (which is available as an npm package)
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/badge-maker"><code>badge-maker</code></a></li>
+</ol>
+</li>
+<li>The base service classes (about 8% of the code, and probably the most important
+code in the codebase)
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/core/base-service"><code>core/base-service</code></a></li>
+</ol>
+</li>
+<li>The server code and a few related odds and ends
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/core/server"><code>core/server</code></a></li>
+</ol>
+</li>
+<li>Helper code for token pooling and persistence (used to avoid GitHub rate limiting)
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/core/token-pooling"><code>core/token-pooling</code></a></li>
+</ol>
+</li>
+<li>Service common helper functions (about 7% of the code, and fairly important
+since it’s shared across much of the service code)
+<ol>
+<li><code>*.js</code> in the root of <a href="https://github.com/badges/shields/tree/master/services"><code>services</code></a></li>
+</ol>
+</li>
+<li>The services themselves (about 80% of the code)
+<ol>
+<li><code>*.js</code> in the folders of <a href="https://github.com/badges/shields/tree/master/services"><code>services</code></a></li>
+</ol>
+</li>
+<li>The badge suggestion endpoint (Note: it's tested as if it’s a service.)
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/lib/suggest.js"><code>lib/suggest.js</code></a></li>
+</ol>
+</li>
+</ol>
+<p>The tests are also divided into several parts:</p>
+<ol>
+<li>Unit and functional tests of the frontend
+<ol>
+<li><code>frontend/**/*.spec.js</code></li>
+</ol>
+</li>
+<li>Unit and functional tests of the badge renderer
+<ol>
+<li><code>badge-maker/**/*.spec.js</code></li>
+</ol>
+</li>
+<li>Unit and functional tests of the core code
+<ol>
+<li><code>core/**/*.spec.js</code></li>
+</ol>
+</li>
+<li>Unit and functional tests of the service helper functions
+<ol>
+<li><code>services/*.spec.js</code></li>
+</ol>
+</li>
+<li>Unit and functional tests of the service code (we have only a few of these)
+<ol>
+<li><code>services/*/**/*.spec.js</code></li>
+</ol>
+</li>
+<li>The service tester and service test runner
+<ol>
+<li><a href="https://github.com/badges/shields/tree/master/core/service-test-runner"><code>core/service-test-runner</code></a></li>
+</ol>
+</li>
+<li><a href="https://github.com/badges/shields/blob/master/doc/service-tests.md">The service tests themselves</a> live integration tests of the
+services, and some mocked tests
+<ol>
+<li><code>*.tester.js</code> in subfolders of <a href="https://github.com/badges/shields/tree/master/services"><code>services</code></a></li>
+</ol>
+</li>
+<li>Integration tests of Redis-backed persistence code
+<ol>
+<li><a href="https://github.com/badges/shields/blob/master/core/token-pooling/redis-token-persistence.integration.js"><code>core/token-pooling/redis-token-persistence.integration.js</code></a></li>
+</ol>
+</li>
+<li>Integration tests of the GitHub authorization code
+<ol>
+<li><a href="https://github.com/badges/shields/blob/master/services/github/github-api-provider.integration.js"><code>services/github/github-api-provider.integration.js</code></a></li>
+</ol>
+</li>
+</ol>
+<p>Our goal is for the core code is to reach 100% coverage of the code in the
+frontend, core, and service helper functions when the unit and functional
+tests are run.</p>
+<p>Our test strategy for the service code is a bit different. It’s primarily
+based on live integration tests. That’s because service response formats can
+change, and when they do the badges break. We want our tests to fail when this
+happens. That way we can fix the problems proactively instead of waiting for
+users to report them. There’s a good discussion about this decision in
+<a href="https://github.com/badges/shields/issues/927">#927</a>. It’s acceptable to write mocked tests of logic that is
+difficult to reach using live tests, however where possible, it’s preferred to
+test this kind of logic through unit tests (e.g. of <code>render()</code> and
+<code>transform()</code> functions).</p>
+<h2>Server initialization</h2>
+<ol>
+<li>
+<p>The server entrypoint is <a href="https://github.com/badges/shields/blob/master/server.js"><code>server.js</code></a> which sets up error
+reporting, loads config, and creates an instance of the server.</p>
+</li>
+<li>
+<p>The Server, which is defined in
+<a href="https://github.com/badges/shields/blob/master/core/server/server.js"><code>core/server/server.js</code></a>, is based on the web
+framework <a href="https://github.com/espadrine/sc">Scoutcamp</a>. It creates an http server, sets up helpers for
+token persistence and monitoring. Then it loads all the services,
+injecting dependencies as it asks each one to register its route
+with Scoutcamp.</p>
+</li>
+<li>
+<p>The service registration continues in <code>BaseService.register</code>. From its
+<code>route</code> property, it derives a regular expression to match the route
+path, and invokes <code>camp.route</code> with this value.</p>
+</li>
+<li>
+<p>At this point the situation gets gnarly and hard to follow. For the
+purpose of initialization, suffice it to say that <code>camp.route</code> invokes a
+callback with the four parameters <code>( queryParams, match, end, ask )</code> which
+is created in a legacy helper function in
+<a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler.js</code></a>. This callback
+delegates to a callback in <code>BaseService.register</code> with four different
+parameters <code>( queryParams, match, sendBadge, request )</code>, which
+then runs <code>BaseService.invoke</code>. <code>BaseService.invoke</code> instantiates the
+service and runs <code>BaseService#handle</code>.</p>
+</li>
+</ol>
+<h2>Downstream caching</h2>
+<ol>
+<li>In production, the majority of requests are served from caches, including
+the browser cache, GitHub’s camo proxy server, and other downstream caches.</li>
+<li>The Shields servers sit behind the Cloudflare CDN. The CDN itself handles
+about 40% of the HTTPS requests that come in.</li>
+<li>The remaining requests are proxied to one of the servers.</li>
+<li>See the <a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md">production hosting documentation</a> for a
+fuller discussion of the production architecture.</li>
+</ol>
+<h2>How the server makes a badge</h2>
+<ol>
+<li>An HTTPS request arrives. Scoutcamp inspects the URL path and matches it
+against the regexes for all the registered routes until it finds one that
+matches. (See <em>Initialization</em> above for an explanation of how routes are
+registered.)</li>
+<li>Scoutcamp invokes a callback with the four parameters:
+<code>( queryParams, match, end, ask )</code>. This callback is defined in
+<a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler</code></a>. If the badge result
+is found in a relatively small in-memory cache, the response is sent
+immediately. Otherwise a timeout is set to handle unresponsive service
+code and the next callback is invoked: the legacy handler function.</li>
+<li>The legacy handler function receives
+<code>( queryParams, match, sendBadge, request )</code>. Its job is to extract data
+from the regex <code>match</code> and <code>queryParams</code>, invoke <code>request</code> to fetch
+whatever data it needs, and then invoke <code>sendBadge</code> with the result.</li>
+<li>The implementation of this function is in <code>BaseService.register</code>. It
+works by running <code>BaseService.invoke</code>, which instantiates the service,
+injects more dependencies, and invokes <code>BaseService#handle</code> which is
+implemented by the service subclass.</li>
+<li>The job of <code>handle()</code>, which should be implemented by each service
+subclass, is to return an object which partially describes a badge or
+throw one of the handled error classes. &quot;Partially rendered&quot; most
+commonly means a non-empty message and an optional color. In the case
+of the Endpoint badge, it could include many other parameters. At the
+time of writing the handled error classes were NotFound,
+InvalidResponse, Inaccessible, InvalidParameter, and Deprecated.
+Throwing any other error is a programmer error which will be
+<a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md#error-reporting">reported</a> and described to the user as a <strong>shields
+internal error</strong>.</li>
+<li>A typical <code>handle()</code> function delegates to one or more helpers to
+handle stages of the request:
+<ol>
+<li><strong>fetch</strong>: load the needed data from the upstream service and
+validate it</li>
+<li><strong>transform</strong>: pluck, convert, or summarize the response format
+into a few properties which will be displayed on the badge</li>
+<li><strong>render</strong>: given a few properties, return a message, optional
+color, and optional label.</li>
+</ol>
+</li>
+<li>When an error is thrown, BaseService steps in and converts the error
+object to renderable properties: <code>{ isError, message, color }</code>.</li>
+<li>The service invokes <a href="https://github.com/badges/shields/blob/master/core/base-service/coalesce-badge.js"><code>coalesceBadge</code></a> whose job is to
+coalesce query string overrides with values from the service and the
+service’s defaults to produce an object that fully describes the badge to
+be rendered.</li>
+<li><code>sendBadge</code> is invoked with that object. It does some housekeeping on the
+timeout and caches the result. Then it renders the badge to svg or raster
+and pushes out the result over the HTTPS connection.</li>
+</ol>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

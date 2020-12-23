@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: TUTORIAL</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: TUTORIAL</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>TUTORIAL</h2>
+</header>
+
+<article>
+    <h1>Tutorial on how to add a badge for a service</h1>
+<p>This tutorial should help you add a service to shields.io in form of a badge.
+You will need to learn to use JavaScript, Git and GitHub, however, this document
+will guide you through that journey if you are a beginner.
+Please <a href="https://github.com/badges/shields/edit/master/doc/TUTORIAL.md">improve the tutorial</a> while you read it.</p>
+<h2>(1) Reading</h2>
+<ul>
+<li><a href="../CONTRIBUTING.md">Contributing Guidance</a></li>
+<li><a href="https://contributing.shields.io/index.html">Documentation</a> for the Shields Core API</li>
+<li>You can also read previous
+<a href="https://github.com/badges/shields/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+label%3Aservice-badge+is%3Amerged">merged pull-requests with the 'service-badge' label</a>
+to see how other people implemented their badges.</li>
+</ul>
+<h2>(2) Setup</h2>
+<h3>Pre-requisites</h3>
+<h4>Git</h4>
+<p>You should have <a href="https://git-scm.com/">git</a> installed.
+If you do not, <a href="https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/">install git</a>
+and learn about the <a href="http://try.github.io/">Github workflow</a>.</p>
+<h4>Node, NPM</h4>
+<p>Node 12 or later is required. If you don't already have them,
+install node and npm: https://nodejs.org/en/download/</p>
+<h3>Setup a dev install</h3>
+<ol>
+<li><a href="https://github.com/badges/shields/fork">Fork</a> this repository.</li>
+<li>Clone the fork
+<code>git clone git@github.com:YOURGITHUBUSERNAME/shields.git</code></li>
+<li><code>cd shields</code></li>
+<li>Install project dependencies
+<code>npm ci</code></li>
+<li>Run the badge server and the frontend dev server
+<code>npm start</code></li>
+<li>Visit the website to check the front-end is loaded: <a href="http://localhost:3000/">http://localhost:3000/</a>.</li>
+</ol>
+<p>In case you get the <em>&quot;getaddrinfo ENOTFOUND localhost&quot;</em> error, visit <a href="http://127.0.0.1:3000">http://127.0.0.1:3000/</a> instead or take a look at <a href="https://github.com/angular/angular-cli/issues/2227#issuecomment-358036526">this issue</a>.</p>
+<h2>(3) Open an Issue</h2>
+<p>Before you want to implement your service, you may want to <a href="https://github.com/badges/shields/issues/new?template=3_Badge_request.md">open an issue</a> and describe what you have in mind:</p>
+<ul>
+<li>What is the badge for?</li>
+<li>Which API do you want to use?</li>
+</ul>
+<p>You may additionally proceed to say what you want to work on.
+This information allows other humans to help and build on your work.</p>
+<h2>(4) Implementing</h2>
+<h3>(4.1) Structure and Layout</h3>
+<p>Service badge code is stored in the <a href="https://github.com/badges/shields/tree/master/services/">/services</a> directory.
+Each service has a directory for its files:</p>
+<ul>
+<li>
+<p>In files ending with <code>.service.js</code>, you can find the code which handles
+incoming requests and generates the badges.
+Sometimes, code for a service can be re-used.
+This might be the case when you add a badge for an API which is already used
+by other badges.</p>
+<p>Imagine a service that lives at https://img.shields.io/example/some-param-here.</p>
+<ul>
+<li>
+<p>For services with a single badge, the badge code will generally be stored in
+<code>/services/example/example.service.js</code>.
+If you add a badge for a new API, create a new directory.</p>
+<p>Example: <a href="https://github.com/badges/shields/tree/master/services/wercker">wercker</a></p>
+</li>
+<li>
+<p>For service families with multiple badges we usually store the code for each
+badge in its own file like this:</p>
+<ul>
+<li><code>/services/example/example-downloads.service.js</code></li>
+<li><code>/services/example/example-version.service.js</code> etc.</li>
+</ul>
+<p>Example: <a href="https://github.com/badges/shields/tree/master/services/gem">ruby gems</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>In files ending with <code>.tester.js</code>, you can find the code which uses
+the shields server to test if the badges are generated correctly.
+There is a <a href="#45-write-tests">chapter on Tests</a>.</p>
+</li>
+</ul>
+<h3>(4.2) Our First Badge</h3>
+<p>All service badge classes inherit from <a href="https://contributing.shields.io/module-core_base-service_base-baseservice">BaseService</a> or another class which extends it.
+Other classes implement useful behavior on top of <a href="https://contributing.shields.io/module-core_base-service_base-baseservice">BaseService</a>.</p>
+<ul>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-json-basejsonservice">BaseJsonService</a>
+implements methods for performing requests to a JSON API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-xml-basexmlservice">BaseXmlService</a>
+implements methods for performing requests to an XML API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-yaml-baseyamlservice">BaseYamlService</a>
+implements methods for performing requests to a YAML API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-svg-scraping-basesvgscrapingservice">BaseSvgScrapingService</a>
+implements methods for retrieving information from existing third-party badges.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-graphql-basegraphqlservice">BaseGraphqlService</a>
+implements methods for performing requests to a GraphQL API and schema validation.</li>
+<li>If you are contributing to a <em>service family</em>, you may define a common super
+class for the badges or one may already exist.</li>
+</ul>
+<p>As a first step we will look at the code for an example which generates a badge without contacting an API.</p>
+<pre class="prettyprint source lang-js"><code>// (1)
+'use strict'
+// (2)
+const { BaseService } = require('..')
+
+// (3)
+module.exports = class Example extends BaseService {
+  // (4)
+  static category = 'build'
+
+  // (5)
+  static route = { base: 'example', pattern: ':text' }
+
+  // (6)
+  async handle({ text }) {
+    return {
+      label: 'example',
+      message: text,
+      color: 'blue',
+    }
+  }
+}
+</code></pre>
+<p>Description of the code:</p>
+<ol>
+<li>We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.</li>
+<li>Our service badge class will extend <code>BaseService</code> so we need to require it. Variables are declared with <code>const</code> and <code>let</code> in preference to <code>var</code>.</li>
+<li>Our module must export a class which extends <code>BaseService</code>.</li>
+<li>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</li>
+<li><code>route()</code> declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+<ul>
+<li><code>base</code> defines the first part of the URL that doesn't change, e.g. <code>/example/</code>.</li>
+<li><code>pattern</code> defines the variable part of the route, everything that comes after <code>/example/</code>. It can include any
+number of named parameters. These are converted into
+regular expressions by <a href="https://github.com/pillarjs/path-to-regexp#parameters"><code>path-to-regexp</code></a>.
+Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static">That's why they're marked <code>static</code>.</a></li>
+<li>There is additional documentation on conventions for <a href="./badge-urls.md">designing badge URLs</a></li>
+</ul>
+</li>
+<li>All badges must implement the <code>async handle()</code> function that receives parameters to render the badge. Parameters of <code>handle()</code> will match the name defined in <code>route()</code> Because we're capturing a single variable called <code>text</code> our function signature is <code>async handle({ text })</code>. <code>async</code> is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our <code>handle()</code> function should return an object with 3 properties:
+<ul>
+<li><code>label</code>: the text on the left side of the badge</li>
+<li><code>message</code>: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex</li>
+<li><code>color</code>: the background color of the right side of the badge</li>
+</ul>
+</li>
+</ol>
+<p>The process of turning this object into an image is handled automatically by the <code>BaseService</code> class.</p>
+<p>To try out this example badge:</p>
+<ol>
+<li>Copy and paste this code into a new file in <code>/services/example/example.service.js</code></li>
+<li>The server should restart on its own. (If it doesn't for some reason, quit
+the running server with <code>Control+C</code>, then start it again with <code>npm start</code>.)</li>
+<li>Visit the badge at <a href="http:%5C/%5C/localhost:8080/example/foo">http://localhost:8080/example/foo</a>.
+It should look like this: <img src="https://img.shields.io/badge/example-foo-blue" alt=""></li>
+</ol>
+<h3>(4.3) Querying an API</h3>
+<p>The example above was completely static. In order to make a useful service badge we will need to get some data from somewhere. The most common case is that we will query an API which serves up some JSON data, but other formats (e.g: XML) may be used.</p>
+<p>This example is based on the <a href="https://github.com/badges/shields/blob/master/services/gem/gem-version.service.js">Ruby Gems version</a> badge:</p>
+<pre class="prettyprint source lang-js"><code>// (1)
+'use strict'
+
+// (2)
+const { renderVersionBadge } = require('..//version')
+// (3)
+const { BaseJsonService } = require('..')
+
+// (4)
+const Joi = require('joi')
+const schema = Joi.object({
+  version: Joi.string().required(),
+}).required()
+
+// (5)
+module.exports = class GemVersion extends BaseJsonService {
+  // (6)
+  static category = 'version'
+
+  // (7)
+  static route = { base: 'gem/v', pattern: ':gem' }
+
+  // (8)
+  static defaultBadgeData = { label: 'gem' }
+
+  // (11)
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  // (10)
+  async fetch({ gem }) {
+    return this._requestJson({
+      schema,
+      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
+    })
+  }
+
+  // (9)
+  async handle({ gem }) {
+    const { version } = await this.fetch({ gem })
+    return this.constructor.render({ version })
+  }
+}
+</code></pre>
+<p>Description of the code:</p>
+<ol>
+<li>
+<p>As with the first example, we declare strict mode at the start of each file.</p>
+</li>
+<li>
+<p>In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in <code>/services</code>. Some useful generic helpers can be found in:</p>
+<ul>
+<li><a href="https://github.com/badges/shields/blob/master/services/build-status.js">build-status.js</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/services/color-formatters.js">color-formatters.js</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/services/licenses.js">licenses.js</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/services/text-formatters.js">text-formatters.js</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/services/version.js">version.js</a></li>
+</ul>
+</li>
+<li>
+<p>Our badge will query a JSON API so we will extend <code>BaseJsonService</code> instead of <code>BaseService</code>. This contains some helpers to reduce the need for boilerplate when calling a JSON API.</p>
+</li>
+<li>
+<p>We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using <a href="https://github.com/hapijs/joi">Joi</a>. Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string.</p>
+</li>
+<li>
+<p>Our module exports a class which extends <code>BaseJsonService</code></p>
+</li>
+<li>
+<p>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</p>
+</li>
+<li>
+<p>As with our previous badge, we need to declare a route. This time we will capture a variable called <code>gem</code>.</p>
+</li>
+<li>
+<p>We can use <code>defaultBadgeData()</code> to set a default <code>color</code>, <code>logo</code> and/or <code>label</code>. If <code>handle()</code> doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use <code>defaultBadgeData()</code> here to define it declaratively.</p>
+</li>
+<li>
+<p>We now jump to the bottom of the example code to the function all badges must implement: <code>async handle()</code>. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called <code>gem</code>, our function signature is <code>async handle({ gem })</code>. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The <code>fetch()</code> function is responsible for calling an API endpoint to get data. The <code>render()</code> function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.</p>
+</li>
+<li>
+<p>Working our way upward, the <code>async fetch()</code> method is responsible for calling an API endpoint to get data. Extending <code>BaseJsonService</code> gives us the helper function <code>_requestJson()</code>. Note here that we pass the schema we defined in step 4 as an argument. <code>_requestJson()</code> will deal with validating the response against the schema and throwing an error if necessary.</p>
+<ul>
+<li><code>_requestJson()</code> automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.</li>
+<li><code>_requestJson()</code> uses <a href="https://github.com/request/request">request</a> to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by <code>_requestJson()</code>. There is no need to specify json, as the JSON parsing is handled by <code>_requestJson()</code>. See the <code>request</code> docs for <a href="https://github.com/request/request#requestoptions-callback">supported options</a>.</li>
+<li>Error messages corresponding to each status code can be returned by passing a dictionary of status codes -&gt; messages in <code>errorMessages</code>.</li>
+<li>A more complex call to <code>_requestJson()</code> might look like this:<pre class="prettyprint source lang-js"><code>return this._requestJson({
+  schema: mySchema,
+  url,
+  options: { qs: { branch: 'master' } },
+  errorMessages: {
+    401: 'private application not supported',
+    404: 'application not found',
+  },
+})
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>Upward still, the <code>static render()</code> method is responsible for formatting the data for display. <code>render()</code> is a pure function so we can make it a <code>static</code> method. By convention we declare functions which don't reference <code>this</code> as <code>static</code>. We could explicitly return an object here, as we did in the previous example. In this case, we will hand the version string off to <code>renderVersionBadge()</code> which will format it consistently and set an appropriate color. Because <code>renderVersionBadge()</code> doesn't return a <code>label</code> key, the default label we defined in <code>defaultBadgeData()</code> will be used when we generate the badge.</p>
+</li>
+</ol>
+<p>This code allows us to call this URL <a href="https:%5C/%5C/img.shields.io/gem/v/formatador">https://img.shields.io/gem/v/formatador</a> to generate this badge: <img src="https://img.shields.io/gem/v/formatador" alt=""></p>
+<p>It is also worth considering the code we <em>haven't</em> written here. Note that our example doesn't contain any explicit error handling code, but our badge handles errors gracefully. For example, if we call https://img.shields.io/gem/v/does-not-exist we render a 'not found' badge <img src="https://img.shields.io/gem/v/does-not-exist" alt=""> because https://rubygems.org/api/v1/gems/this-package-does-not-exist.json returns a <code>404 Not Found</code> status code. When dealing with well-behaved APIs, some of our error handling will be handled implicitly in <code>BaseJsonService</code>.</p>
+<p>Specifically <code>BaseJsonService</code> will handle the following errors for us:</p>
+<ul>
+<li>API does not respond</li>
+<li>API responds with a non-<code>200 OK</code> status code</li>
+<li>API returns a response which can't be parsed as JSON</li>
+<li>API returns a response which doesn't validate against our schema</li>
+</ul>
+<p>Sometimes it may be necessary to manually throw an exception to deal with a
+non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at
+<a href="https://contributing.shields.io/module-core_base-service_errors.html">errors</a>
+and can be imported via the import shortcut and then thrown:</p>
+<pre class="prettyprint source lang-js"><code>const { NotFound } = require('..')
+
+throw new NotFound({ prettyMessage: 'package not found' })
+</code></pre>
+<h3>(4.4) Adding an Example to the Front Page</h3>
+<p>Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method <code>examples()</code> to our class.</p>
+<pre class="prettyprint source lang-js"><code>module.exports = class GemVersion extends BaseJsonService {
+  // ...
+
+  // (1)
+  static category = 'version'
+
+  // (2)
+  static examples = [
+    {
+      // (3)
+      title: 'Gem',
+      namedParams: { gem: 'formatador' },
+      staticPreview: this.render({ version: '2.1.0' }),
+      keywords: ['ruby'],
+    },
+  ]
+}
+</code></pre>
+<ol>
+<li>We defined category earlier in the tutorial. The <code>category()</code> property defines which heading in the index our example will appear under.</li>
+<li>The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.</li>
+<li>Our example object should contain the following properties:
+<ul>
+<li><code>title</code>: Descriptive text that will be shown next to the badge</li>
+<li><code>namedParams</code>: Provide a valid example of params we can substitute into
+the pattern. In this case we need a valid ruby gem, so we've picked <a href="https://rubygems.org/gems/formatador">formatador</a>.</li>
+<li><code>staticPreview</code>: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. <code>staticPreview</code> should be populated by calling our <code>render()</code> method with some valid data.</li>
+<li><code>keywords</code>: If we want to provide additional keywords other than the title and the category, we can add them here. This helps users to search for relevant badges.</li>
+</ul>
+</li>
+</ol>
+<p>Save, run <code>npm start</code>, and you can see it <a href="http://127.0.0.1:3000/">locally</a>.</p>
+<p>If you update <code>examples</code>, you don't have to restart the server. Run <code>npm run defs</code> in another terminal window and the frontend will update.</p>
+<h3>(4.5) Write Tests<!-- Change the link below when you change the heading --></h3>
+<p>When creating a badge for a new service or changing a badge's behavior, tests
+should be included. They serve several purposes:</p>
+<ol>
+<li>They speed up future contributors when they are debugging or improving a
+badge.</li>
+<li>If the contributors would like to change your badge, chances are, they forget
+edge cases and break your code.
+Tests may give hints in such cases.</li>
+<li>The contributor and reviewer can easily verify the code works as
+intended.</li>
+<li>When a badge stops working on the live server, maintainers can find out
+right away.</li>
+</ol>
+<p>There is a dedicated <a href="service-tests.md">tutorial for tests in the service-tests folder</a>.
+Please follow it to include tests on your pull-request.</p>
+<h3>(4.6) Update the Docs</h3>
+<p>If your submission requires an API token or authentication credentials, please
+update <a href="./server-secrets.md">server-secrets.md</a>. You should explain what the
+token or credentials are for and how to obtain them.</p>
+<h2>(5) Create a Pull Request</h2>
+<p>Once you have implemented a new badge:</p>
+<ul>
+<li>Before submitting your changes, please review the <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md#coding-guidelines">coding guidelines</a>.</li>
+<li><a href="https://help.github.com/articles/creating-a-pull-request/">Create a pull-request</a> to propose your changes.</li>
+<li>CI will check the tests pass and that your code conforms to our coding standards.</li>
+<li>We also use <a href="https://danger.systems/">Danger</a> to check for some common problems. The first comment on your pull request will be posted by a bot. If there are any errors or warnings raised, please review them.</li>
+<li>One of the
+<a href="https://github.com/badges/shields/blob/master/README.md#project-leaders">maintainers</a>
+will review your contribution.</li>
+<li>We'll work with you to progress your contribution suggesting improvements if necessary. Although there are some occasions where a contribution is not appropriate, if your contribution conforms to our <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md#badge-guidelines">guidelines</a> we'll aim to work towards merging it. The majority of pull requests adding a service badge are merged.</li>
+<li>If your contribution is merged, the final comment on the pull request will be an automated post which you can monitor to tell when your contribution has been deployed to production.</li>
+</ul>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: service-tests</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: service-tests</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>service-tests</h2>
+</header>
+
+<article>
+    <h1>Service tests</h1>
+<p>When creating a badge for a new service or changing a badge's behavior,
+automated tests should be included. They serve three purposes:</p>
+<ol>
+<li>
+<p>The contributor and reviewer can easily verify the code works as
+intended.</p>
+</li>
+<li>
+<p>When a badge stops working due to an upstream API, maintainers can find out
+right away.</p>
+</li>
+<li>
+<p>They speed up future contributors when they are debugging or improving a
+badge.</p>
+</li>
+</ol>
+<p>Test should cover:</p>
+<ol>
+<li>Valid behavior</li>
+<li>Optional parameters like tags or branches</li>
+<li>Any customized error handling</li>
+<li>If a non-trivial validator is defined, include tests for malformed responses</li>
+</ol>
+<h2>Tutorial</h2>
+<p>Before getting started, set up a development environment by following the
+<a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#2-setup">setup instructions</a></p>
+<p>We will write some tests for the <a href="https://github.com/badges/shields/blob/master/services/wercker/wercker.service.js">Wercker Build service</a></p>
+<h3>(1) Boilerplate</h3>
+<p>The code for our badge is in <code>services/wercker/wercker.service.js</code>. Tests for this badge should be stored in <code>services/wercker/wercker.tester.js</code>.</p>
+<p>We'll start by adding some boilerplate to our file:</p>
+<pre class="prettyprint source lang-js"><code>'use strict'
+
+const t = (module.exports = require('../tester').createServiceTester())
+</code></pre>
+<p>If our <code>.service.js</code> module exports a single class, we can
+<code>require('../tester').createServiceTester()</code>, which uses convention to create a
+<code>ServiceTester</code> object. Calling this inside
+<code>services/wercker/wercker.tester.js</code> will create a <code>ServiceTester</code> object
+configured for the service exported in <code>services/wercker/wercker.service.js</code>.
+We will add our tests to this <code>ServiceTester</code> object <code>t</code>, which is exported
+from the module.</p>
+<h3>(2) Our First Test Case</h3>
+<p>First we'll add a test for the typical case:</p>
+<pre class="prettyprint source lang-js"><code>const { isBuildStatus } = require('../test-validators')
+
+t.create('Build status')
+  .get('/build/wercker/go-wercker-api.json')
+  .expectBadge({ label: 'build', message: isBuildStatus })
+</code></pre>
+<ol>
+<li>The <code>create()</code> method adds a new test to the tester object.
+The chained-on calls come from the API testing framework <a href="https://github.com/MarkHerhold/IcedFrisby">IcedFrisby</a>.
+Here's a <a href="https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code">longer example</a> and the complete <a href="https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md">API guide</a>.</li>
+<li>We use the <code>get()</code> method to request a badge. There are several points to consider here:
+<ul>
+<li>We need a real project to test against. In this case we have used <a href="https://app.wercker.com/wercker/go-wercker-api/runs">wercker/go-wercker-api</a> but we could have chosen any stable project.</li>
+<li>Note that when we call our badge, we are allowing it to communicate with an external service without mocking the response. We write tests which interact with external services, which is unusual practice in unit testing. We do this because one of the purposes of service tests is to notify us if a badge has broken due to an upstream API change. For this reason it is important for at least one test to call the live API without mocking the interaction.</li>
+<li>All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate <img src="https://img.shields.io/wercker/build/wercker/go-wercker-api.svg" alt=""> we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.</li>
+<li>We don't need to explicitly call <code>/wercker/build/wercker/go-wercker-api.json</code> here, only <code>/build/wercker/go-wercker-api.json</code>. When we create a tester object with <code>createServiceTester()</code> the URL base defined in our service class (in this case <code>/wercker</code>) is used as the base URL for any requests made by the tester object.</li>
+</ul>
+</li>
+<li><code>expectBadge()</code> is a helper function which accepts either a string literal, a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> or a <a href="https://github.com/hapijs/joi">Joi</a> schema for the different fields.
+Joi is a validation library that is build into IcedFrisby which you can use to
+match based on a set of allowed strings, regexes, or specific values. You can
+refer to their <a href="https://github.com/hapijs/joi/blob/master/API.md">API reference</a>.</li>
+<li>We expect <code>label</code> to be a string literal <code>&quot;build&quot;</code>.</li>
+<li>Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a &quot;picture check&quot; to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example project's build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case we will use a pre-defined regular expression to check that the badge value looks like a build status. <a href="https://github.com/badges/shields/blob/master/services/test-validators.js">services/test-validators.js</a> defines a number of useful validators we can use. Many of the common badge types (version, downloads, rank, etc.) already have validators defined here.</li>
+</ol>
+<p>When defining an IcedFrisby test, typically you would invoke the <code>toss()</code>
+method, to register the test. This is not necessary, because the Shields test
+harness will call it for you.</p>
+<h3>(3) Running the Tests</h3>
+<p>Lets run the test we have written:</p>
+<pre class="prettyprint source"><code>npm run test:services -- --only=wercker
+</code></pre>
+<p>The <code>--only=</code> option indicates which service or services you want to test. You
+can provide a comma-separated list here.</p>
+<p>The <code>--</code> tells the NPM CLI to pass the remaining arguments through to the test
+runner.</p>
+<p>Here's the output:</p>
+<pre class="prettyprint source"><code>Server is starting up: http://lib/service-test-runner/cli.js:80/
+  Wercker
+    Build status
+      ✓
+        [ GET /build/wercker/go-wercker-api.json ] (572ms)
+
+  1 passing (1s)
+</code></pre>
+<p>That's looking good!</p>
+<p>Sometimes if we have a failing test, it is useful to be able to see some logging output to help work out why the test is failing. We can do that by calling <code>npm run test:services:trace</code>. Try running</p>
+<pre class="prettyprint source"><code>npm run test:services:trace -- --only=wercker
+</code></pre>
+<p>to run the test with some additional debug output.</p>
+<h3>(4) Writing More Tests</h3>
+<p>We should write tests cases for valid paths through our code. The Wercker badge supports an optional branch parameter so we'll add a second test for a branch build.</p>
+<pre class="prettyprint source lang-js"><code>t.create('Build status (with branch)')
+  .get('/build/wercker/go-wercker-api/master.json')
+  .expectBadge({ label: 'build', message: isBuildStatus })
+</code></pre>
+<pre class="prettyprint source"><code>Server is starting up: http://lib/service-test-runner/cli.js:80/
+  Wercker
+    Build status
+      ✓
+        [ GET /build/wercker/go-wercker-api.json ] (572ms)
+    Build status (with branch)
+      ✓
+        [ GET /build/wercker/go-wercker-api/master.json ] (368ms)
+
+  2 passing (1s)
+</code></pre>
+<p>Once we have multiple tests, sometimes it is useful to run only one test. We can do this using the <code>--fgrep</code> argument. For example:</p>
+<pre class="prettyprint source"><code>npm run test:services -- --only=&quot;wercker&quot; --fgrep=&quot;Build status (with branch)&quot;
+</code></pre>
+<p>Having covered the typical and custom cases, we'll move on to errors. We should include a test for the 'not found' response and also tests for any other custom error handling. The Wercker integration defines a custom error condition for 401 as well as a custom 404 message:</p>
+<pre class="prettyprint source lang-js"><code>errorMessages: {
+  401: 'private application not supported',
+  404: 'application not found',
+}
+</code></pre>
+<p>First we'll add a test for a project which will return a 404 error:</p>
+<pre class="prettyprint source lang-js"><code>t.create('Build status (application not found)')
+  .get('/build/some-project/that-doesnt-exist.json')
+  .expectBadge({ label: 'build', message: 'application not found' })
+</code></pre>
+<p>In this case we are expecting a string literal instead of a pattern for <code>message</code>. This narrows down the expectation and gives us a more helpful error message if the test fails.</p>
+<p>We also want to include a test for the 'private application not supported' case. One way to do this would be to find another example of a private project which is unlikely to change. For example:</p>
+<pre class="prettyprint source lang-js"><code>t.create('Build status (private application)')
+  .get('/build/wercker/blueprint.json')
+  .expectBadge({ label: 'build', message: 'private application not supported' })
+</code></pre>
+<h2>(5) Mocking Responses</h2>
+<p>If we didn't have a stable example of a private project, another approach would be to mock the response. An alternative test for the 'private application' case might look like:</p>
+<pre class="prettyprint source lang-js"><code>t.create('Build status (private application)')
+  .get('/build/wercker/go-wercker-api.json')
+  .intercept(nock =>
+    nock('https://app.wercker.com/api/v3/applications/')
+      .get('/wercker/go-wercker-api/builds?limit=1')
+      .reply(401)
+  )
+  .expectBadge({ label: 'build', message: 'private application not supported' })
+</code></pre>
+<p>This will intercept the request and provide our own mock response.
+We use the <code>intercept()</code> method provided by the
+<a href="https://github.com/paulmelnikow/icedfrisby-nock#usage">icedfrisby-nock plugin</a>. It takes a setup function,
+which returns an interceptor, and exposes the full API of the HTTP mocking
+library <a href="https://github.com/node-nock/nock">Nock</a>.</p>
+<p>Nock is fussy. All parts of a request must match perfectly for the mock to
+take effect, including the HTTP method (in this case GET), scheme (https), host,
+and path.</p>
+<p>Our test suite should also include service tests which receive a known value from the API. For example, in the <code>render()</code> method of our service, there is some logic which sets the badge color based on the build status:</p>
+<pre class="prettyprint source lang-js"><code>static render({ status, result }) {
+  if (status === 'finished') {
+    if (result === 'passed') {
+      return { message: 'passing', color: 'brightgreen' }
+    } else {
+      return { message: result, color: 'red' }
+    }
+  }
+  return { message: status }
+}
+</code></pre>
+<p>We can also use nock to intercept API calls to return a known response body.</p>
+<pre class="prettyprint source lang-js"><code>t.create('Build passed')
+  .get('/build/wercker/go-wercker-api.json')
+  .intercept(nock =>
+    nock('https://app.wercker.com/api/v3/applications/')
+      .get('/wercker/go-wercker-api/builds?limit=1')
+      .reply(200, [{ status: 'finished', result: 'passed' }])
+  )
+  .expectBadge({
+    label: 'build',
+    message: 'passing',
+    color: 'brightgreen',
+  })
+
+t.create('Build failed')
+  .get('/build/wercker/go-wercker-api.json')
+  .intercept(nock =>
+    nock('https://app.wercker.com/api/v3/applications/')
+      .get('/wercker/go-wercker-api/builds?limit=1')
+      .reply(200, [{ status: 'finished', result: 'failed' }])
+  )
+  .expectBadge({ label: 'build', message: 'failed', color: 'red' })
+</code></pre>
+<p>Note that in these tests, we have specified a <code>color</code> parameter in <code>expectBadge</code>. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.</p>
+<h2>Code coverage</h2>
+<p>By checking code coverage, we can make sure we've covered all our bases.</p>
+<p>We can generate a coverage report and open it:</p>
+<pre class="prettyprint source"><code>npm run coverage:test:services -- --only=wercker
+npm run coverage:report:open
+</code></pre>
+<h2>Pull requests</h2>
+<p>The affected service ids should be included in square brackets in the pull request
+title. That way, Circle CI will run those service tests. When a pull request
+affects multiple services, they should be separated with spaces. The test
+runner is case-insensitive, so they should be capitalized for readability.</p>
+<p>For example:</p>
+<ul>
+<li>[Travis] Fix timeout issues</li>
+<li>[Travis Sonar] Support user token authentication</li>
+<li>Add tests for [CRAN] and [CPAN]</li>
+</ul>
+<p>In the rare case when it's necessary to see the output of a full service-test
+run in a PR, include <code>[*****]</code> in the title. Unless all the tests pass, the build
+will fail, so likely it will be necessary to remove it and re-run the tests
+before merging.</p>
+<h2>Getting help</h2>
+<p>If you have questions about how to write your tests, please open an issue. If
+there's already an issue open for the badge you're working on, you can post a
+comment there instead.</p>
+<h2>Further reading</h2>
+<ul>
+<li><a href="https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md">IcedFrisby API</a></li>
+<li><a href="https://github.com/hapijs/joi/blob/master/API.md">Joi API</a></li>
+<li><a href="https://github.com/paulmelnikow/icedfrisby-nock#usage">icedfrisby-nock</a></li>
+<li><a href="https://github.com/node-nock/nock#use">Nock API</a></li>
+</ul>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

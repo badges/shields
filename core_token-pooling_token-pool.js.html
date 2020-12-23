@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/token-pooling/token-pool.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/token-pooling/token-pool.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+/**
+ * @module
+ */
+
+const crypto = require('crypto')
+const PriorityQueue = require('priorityqueuejs')
+
+/**
+ * Compute a one-way hash of the input string.
+ *
+ * @param {string} id token
+ * @returns {string} hash
+ */
+function sanitizeToken(id) {
+  return crypto.createHash('sha256').update(id, 'utf-8').digest('hex')
+}
+
+function getUtcEpochSeconds() {
+  return (Date.now() / 1000) >>> 0
+}
+
+/**
+ * Encapsulate a rate-limited token, with a user-provided ID and user-provided data.
+ *
+ * Each token has a notion of the number of uses remaining until exhausted,
+ * and the next reset time, when it can be used again even if it's exhausted.
+ */
+class Token {
+  /**
+   * Token Constructor
+   *
+   * @param {string} id token string
+   * @param {*} data reserved for future use
+   * @param {number} usesRemaining
+   *    Number of uses remaining until the token is exhausted
+   * @param {number} nextReset
+   *    Time when the token can be used again even if it's exhausted (unix timestamp)
+   */
+  constructor(id, data, usesRemaining, nextReset) {
+    // Use underscores to avoid conflict with property accessors.
+    Object.assign(this, {
+      _id: id,
+      _data: data,
+      _usesRemaining: usesRemaining,
+      _nextReset: nextReset,
+      _isValid: true,
+      _isFrozen: false,
+    })
+  }
+
+  get id() {
+    return this._id
+  }
+
+  get data() {
+    return this._data
+  }
+
+  get usesRemaining() {
+    return this._usesRemaining
+  }
+
+  get nextReset() {
+    return this._nextReset
+  }
+
+  get isValid() {
+    return this._isValid
+  }
+
+  get isFrozen() {
+    return this._isFrozen
+  }
+
+  get hasReset() {
+    return getUtcEpochSeconds() >= this.nextReset
+  }
+
+  get isExhausted() {
+    return this.usesRemaining &lt;= 0 &amp;&amp; !this.hasReset
+  }
+
+  /**
+   * Update the uses remaining and next reset time for a token.
+   *
+   * @param {number} usesRemaining
+   *    Number of uses remaining until the token is exhausted
+   * @param {number} nextReset
+   *    Time when the token can be used again even if it's exhausted (unix timestamp)
+   */
+  update(usesRemaining, nextReset) {
+    if (!Number.isInteger(usesRemaining)) {
+      throw Error('usesRemaining must be an integer')
+    }
+    if (!Number.isInteger(nextReset)) {
+      throw Error('nextReset must be an integer')
+    }
+
+    if (this._isFrozen) {
+      return
+    }
+
+    // Since the token pool will typically return the same token for many uses
+    // before moving on to another, `update()` may be called many times. Since
+    // the sequence of responses may be indeterminate, keep the "worst case"
+    // value for uses remaining.
+    if (
+      this._nextReset === this.constructor.nextResetNever ||
+      nextReset > this._nextReset
+    ) {
+      this._nextReset = nextReset
+      this._usesRemaining = usesRemaining
+    } else if (nextReset === this._nextReset) {
+      this._usesRemaining = Math.min(this._usesRemaining, usesRemaining)
+    } else {
+      // Discard the new update; it's older than the values we have.
+    }
+  }
+
+  /**
+   * Indicate that the token should no longer be used.
+   */
+  invalidate() {
+    this._isValid = false
+  }
+
+  /**
+   * Freeze the uses remaining and next reset values. Helpful for keeping
+   * stable ordering for a valid priority queue.
+   */
+  freeze() {
+    this._isFrozen = true
+  }
+
+  /**
+   * Unfreeze the uses remaining and next reset values.
+   */
+  unfreeze() {
+    this._isFrozen = false
+  }
+
+  getDebugInfo({ sanitize = true } = {}) {
+    const { id, data, usesRemaining, nextReset, isValid, isFrozen } = this
+
+    if (sanitize) {
+      return {
+        id: sanitizeToken(id),
+        data: '[redacted]',
+        usesRemaining,
+        nextReset,
+        isValid,
+        isFrozen,
+      }
+    } else {
+      return { id, data, usesRemaining, nextReset, isValid, isFrozen }
+    }
+  }
+}
+
+// Large sentinel value which means "never reset".
+Token.nextResetNever = Number.MAX_SAFE_INTEGER
+
+/**
+ * Encapsulate a collection of rate-limited tokens and choose the next
+ * available token when one is needed.
+ *
+ * Designed for the Github API, though may be also useful with other rate-
+ * limited APIs.
+ */
+class TokenPool {
+  /**
+   * TokenPool Constructor
+   *
+   * @param {number} batchSize
+   *    The maximum number of times we use each token before moving
+   *    on to the next one.
+   */
+  constructor({ batchSize = 1 } = {}) {
+    this.batchSize = batchSize
+
+    this.currentBatch = { currentToken: null, remaining: 0 }
+
+    // A set of IDs used for deduplication.
+    this.tokenIds = new Set()
+
+    // See discussion on the FIFO and priority queues in `next()`.
+    this.fifoQueue = []
+    this.priorityQueue = new PriorityQueue(this.constructor.compareTokens)
+  }
+
+  /**
+   * compareTokens
+   *
+   * @param {module:core/token-pooling/token-pool~Token} first first token to compare
+   * @param {module:core/token-pooling/token-pool~Token} second second token to compare
+   * @returns {module:core/token-pooling/token-pool~Token} The token whose current rate allotment is expiring soonest.
+   */
+  static compareTokens(first, second) {
+    return second.nextReset - first.nextReset
+  }
+
+  /**
+   * Add a token with user-provided ID and data.
+   *
+   * @param {string} id token string
+   * @param {*} data reserved for future use
+   * @param {number} usesRemaining
+   *    Number of uses remaining until the token is exhausted
+   * @param {number} nextReset
+   *    Time when the token can be used again even if it's exhausted (unix timestamp)
+   *
+   * @returns {boolean} Was the token added to the pool?
+   */
+  add(id, data, usesRemaining, nextReset) {
+    if (this.tokenIds.has(id)) {
+      return false
+    }
+    this.tokenIds.add(id)
+
+    usesRemaining = usesRemaining === undefined ? this.batchSize : usesRemaining
+    nextReset = nextReset === undefined ? Token.nextResetNever : nextReset
+
+    const token = new Token(id, data, usesRemaining, nextReset)
+    this.fifoQueue.push(token)
+
+    return true
+  }
+
+  // Prepare to start a new batch by obtaining and returning the next usable
+  // token.
+  _nextBatch() {
+    let next
+
+    while ((next = this.fifoQueue.shift())) {
+      if (!next.isValid) {
+        // Discard, and
+        continue
+      } else if (next.isExhausted) {
+        next.freeze()
+        this.priorityQueue.enq(next)
+      } else {
+        return next
+      }
+    }
+
+    while (
+      !this.priorityQueue.isEmpty() &amp;&amp;
+      (next = this.priorityQueue.peek())
+    ) {
+      if (!next.isValid) {
+        // Discard, and
+        continue
+      } else if (next.isExhausted) {
+        // No need to check any more tokens, since they all reset after this
+        // one.
+        break
+      } else {
+        this.priorityQueue.deq() // deq next
+        next.unfreeze()
+        return next
+      }
+    }
+
+    throw Error('Token pool is exhausted')
+  }
+
+  /**
+   * Obtain the next available token, returning `null` if no tokens are
+   * available.
+   *
+   * Tokens are initially pulled from a FIFO queue. The first token is used
+   * for a batch of requests, then returned to the queue to give those
+   * requests the opportunity to complete. The next token is used for the next
+   * batch of requests.
+   *
+   * This strategy allows a token to be used for concurrent requests, not just
+   * sequential request, and simplifies token recovery after errored and timed
+   * out requests.
+   *
+   * By the time the original token re-emerges, its requests should have long
+   * since completed. Even if a couple them are still running, they can
+   * reasonably be ignored. The uses remaining won't be 100% correct, but
+   * that's fine, because Shields uses only 75%
+   *
+   * The process continues until an exhausted token is pulled from the FIFO
+   * queue. At that time it's placed in the priority queue based on its
+   * scheduled reset time. To ensure the priority queue works as intended,
+   * the scheduled reset time is frozen then.
+   *
+   * After obtaining a token using `next()`, invoke `update()` on it to set a
+   * new use-remaining count and next-reset time. Invoke `invalidate()` to
+   * indicate it should not be reused.
+   *
+   * @returns {module:core/token-pooling/token-pool~Token} token
+   */
+  next() {
+    let token = this.currentBatch.token
+    const remaining = this.currentBatch.remaining
+
+    if (remaining &lt;= 0 || !token.isValid || token.isExhausted) {
+      token = this._nextBatch()
+      this.currentBatch = {
+        token,
+        remaining: token.hasReset
+          ? this.batchSize
+          : Math.min(this.batchSize, token.usesRemaining),
+      }
+      this.fifoQueue.push(token)
+    }
+
+    this.currentBatch.remaining -= 1
+
+    return token
+  }
+
+  /**
+   * Iterate over all valid tokens.
+   *
+   * @param {Function} callback function to execute on each valid token
+   */
+  forEach(callback) {
+    function visit(item) {
+      if (item.isValid) {
+        callback(item)
+      }
+    }
+
+    this.fifoQueue.forEach(visit)
+    this.priorityQueue.forEach(visit)
+  }
+
+  allValidTokenIds() {
+    const result = []
+    this.forEach(({ id }) => result.push(id))
+    return result
+  }
+
+  serializeDebugInfo({ sanitize = true } = {}) {
+    const maybeSanitize = sanitize ? id => sanitizeToken(id) : id => id
+
+    const priorityQueue = []
+    this.priorityQueue.forEach(t =>
+      priorityQueue.push(t.getDebugInfo({ sanitize }))
+    )
+
+    return {
+      utcEpochSeconds: getUtcEpochSeconds(),
+      allValidTokenIds: this.allValidTokenIds().map(maybeSanitize),
+      fifoQueue: this.fifoQueue.map(t => t.getDebugInfo({ sanitize })),
+      priorityQueue,
+      sanitized: sanitize,
+    }
+  }
+}
+
+module.exports = {
+  sanitizeToken,
+  Token,
+  TokenPool,
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: rewriting-services</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: rewriting-services</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>rewriting-services</h2>
+</header>
+
+<article>
+    <p><strong><em>WARNING: all legacy services have been rewritten, this document may contain outdated information.</em></strong></p>
+<h1>Tips for rewriting legacy services</h1>
+<h2>Background</h2>
+<p>The services are in the process of being rewritten to use our new service
+framework (<a href="https://github.com/badges/shields/issues/1358">#1358</a>).
+Meanwhile, the legacy services extend from an abstract
+adapter called <a href="https://github.com/badges/shields/blob/master/services/legacy-service.js">LegacyService</a> which provides a place to put the
+<code>camp.route()</code> invocation. The wrapper extends from <a href="https://github.com/badges/shields/blob/master/services/base.js">BaseService</a>, so it
+supports badge examples via <code>category</code>, <code>examples</code>, and <code>route</code>. Setting <code>route</code>
+also enables <code>createServiceTester()</code> to infer a service's base path, reducing
+boilerplate for <a href="https://github.com/badges/shields/blob/master/doc/service-tests.md#1-boilerplate">creating the tester</a>.</p>
+<p>Legacy services look like:</p>
+<pre class="prettyprint source lang-js"><code>module.exports = class ExampleService extends LegacyService {
+  static category = 'build'
+
+  static registerLegacyRouteHandler({ camp, cache }) {
+    camp.route(
+      /^\/example\/([^\/]+)\/([^\/]+)\.(svg|png|gif|jpg|json)$/,
+      cache(function (data, match, sendBadge, request) {
+        var first = match[1]
+        var second = match[2]
+        var format = match[3]
+        var badgeData = getBadgeData('X' + first + 'X', data)
+        badgeData.text[1] = second
+        badgeData.colorscheme = 'blue'
+        badgeData.colorB = '#008bb8'
+        sendBadge(format, badgeData)
+      })
+    )
+  }
+}
+</code></pre>
+<p>References:</p>
+<ul>
+<li>Current documentation
+<ul>
+<li><a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#42-our-first-badge">Defining a route</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#44-adding-an-example-to-the-front-page">Defining examples</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/doc/service-tests.md#1-boilerplate">Creating a tester</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/badges/shields/blob/master/services/base.js">BaseService, the new service framework</a></li>
+<li><a href="https://github.com/badges/shields/blob/master/services/legacy-service.js">LegacyService, the adapter</a></li>
+<li><a href="https://github.com/badges/shields/blob/e25e748a03d4cbb50c60b69d2b2404fc08e7cead/doc/TUTORIAL.md">Obsolete tutorial on legacy services</a>, possibly useful as a reference</li>
+</ul>
+<h2>First, write some tests</h2>
+<p>If service tests don’t exist for the legacy service, stop and write them first.
+It’s recommended to PR these separately. If there’s some test coverage, it’s
+probably fine to move right ahead and add more in the process. Make sure the
+tests are passing, though.</p>
+<h2>Organization</h2>
+<ol>
+<li>When there’s a single legacy service that handles lots of different things
+(e.g. version, license, and downloads), it should be split into three separate
+service classes and placed in three separate files, e.g.:</li>
+</ol>
+<ul>
+<li><code>example-version.service.js</code></li>
+<li><code>example-license.service.js</code></li>
+<li><code>example-downloads.service.js</code></li>
+</ul>
+<ol start="2">
+<li>
+<p>When a badge offers different variants of basically the same thing, it’s okay
+to put them in the same service class. For example, daily/weekly/monthly/total
+downloads can go in one badge, and star rating vs point rating vs rating count
+can go in one badge, and same with various kinds of detail about a pull request.
+The hard limit (as of now anyway) is <em>one category per service class</em>.</p>
+</li>
+<li>
+<p>If the tests haven’t been split up, split them up too and make sure they
+still pass.</p>
+</li>
+</ol>
+<h2>Get the route working</h2>
+<ol>
+<li>
+<p>Disable the legacy service by adding a <code>return</code> at the top of
+<code>registerLegacyRouteHandler()</code>.</p>
+</li>
+<li>
+<p>Set up the route for one of the badges. First determine if you can express
+the route using a <code>pattern</code>. A <code>pattern</code> (e.g. <code>pattern: ':param1/:param2'</code>) is
+the simplest way to declare the route, also the most readable, and will be
+useful for displaying a badge builder with fields in the front end and
+generating badge URLs programmatically.</p>
+</li>
+<li>
+<p>When creating the initial route, you can stub out the service. A minimal
+service extends BaseJsonService (or BaseService, or one of the others), and
+defines <code>route()</code> and <code>handle()</code>. <code>defaultBadgeData</code> is optional but suggested:</p>
+</li>
+</ol>
+<pre class="prettyprint source lang-js"><code>const BaseJsonService = require('../base-json')
+
+class ExampleDownloads extends BaseJsonService {
+  static route = { base: 'example/d', pattern: ':param1/:param2' }
+
+  static defaultBadgeData() {
+    return { label: 'downloads' } // or whatever
+  }
+
+  async handle({ param1, param2 }) {
+    return { message: 'hello' }
+  }
+}
+</code></pre>
+<ol start="4">
+<li>We don’t have really good tools for debugging matches, so the best you can do
+is run a subset of your tests. To run a single service test, add <code>.only()</code>
+somewhere in the chain, and run <code>npm run test:services:trace -- --only=example</code>.</li>
+</ol>
+<pre class="prettyprint source lang-js"><code>t.create('build status')
+  .get('/pip.json')
+  .only() // Prevent this ServiceTester from running its other tests.
+  .expectBadge(
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  )
+</code></pre>
+<ol start="5">
+<li>
+<p>Presumably the test will fail, though by examining the copious output, you
+can confirm the route was matched and the named parameters mapped successfully.
+Since you'll have just run the tests on the old code (right?) you'll know you
+haven't inadvertently changed the route (an easy mistake to make).</p>
+</li>
+<li>
+<p>If the legacy service had a base URL and you've changed it, you’ll need to
+update the tests <em>and</em> the examples. Take care to do that.</p>
+</li>
+</ol>
+<h2>Implement <code>render()</code> and <code>handle()</code></h2>
+<p>Once the route is working, fill out <code>render()</code> and <code>handle()</code>.</p>
+<ol>
+<li>If there’s a single service, you can implement fetch as a method or a
+function at the top of the file. If there are more than one service which share
+fetching code, you can put the fetch function in <code>example-common.js</code> like this
+one for github:</li>
+</ol>
+<details>
+<pre class="prettyprint source lang-js"><code>const Joi = require('joi')
+const { errorMessagesFor } = require('./github-helpers')
+
+const issueSchema = Joi.object({
+  head: Joi.object({
+    sha: Joi.string().required(),
+  }).required(),
+}).required()
+
+async function fetchIssue(serviceInstance, { user, repo, number }) {
+  return serviceInstance._requestJson({
+    schema: issueSchema,
+    url: `/repos/${user}/${repo}/pulls/${number}`,
+    errorMessages: errorMessagesFor('pull request or repo not found'),
+  })
+}
+
+module.exports = {
+  fetchIssue,
+}
+</code></pre>
+</details>
+<p>or create an abstract superclass like <strong>PypiBase</strong>:</p>
+<details>
+<pre class="prettyprint source lang-js"><code>const Joi = require('joi')
+const BaseJsonService = require('../base-json')
+
+const schema = Joi.object({
+  info: Joi.object({
+    ...
+  }).required()
+}).required()
+
+module.exports = class PypiBase extends BaseJsonService {
+  static buildRoute(base) {
+    return {
+      base,
+      pattern: ':egg*',
+    }
+  }
+
+  async fetch({ egg }) {
+    return this._requestJson({
+      schema,
+      url: `https://pypi.org/pypi/${egg}/json`,
+      errorMessages: { 404: 'package or version not found' },
+    })
+  }
+}
+</code></pre>
+</details>
+<ol start="2">
+<li>
+<p>Validation should be handled using Joi. Save this for last. While you're
+getting things working, you can use <code>const schema = Joi.any()</code>, which matches
+anything.</p>
+</li>
+<li>
+<p>Substitution of default values should also be handled by Joi, using
+<code>.default()</code>.</p>
+</li>
+<li>
+<p>To keep with the design pattern of <code>render()</code>, formatting concerns, including
+concatenation and color computation, should be dealt with inside <code>render()</code>.
+This helps avoid static examples falling out of sync with the implementation.</p>
+</li>
+</ol>
+<h2>Error handling</h2>
+<p>BaseService includes built-in runtime error handling. Error classes are defined
+in <code>services/errors.js</code>. Request code and validation code will throw a runtime
+error, which will then bubble up to BaseService, which then renders an error
+badge. The cases covered by built-in error handling need not be tested in each
+service, and existing tests should be removed.</p>
+<ol>
+<li>
+<p>If an external server can't be reached or returns a 5xx status code,
+<code>_requestJson()</code> along with code in <code>lib/error-helper.js</code> will bubble up an
+<strong>Inaccessible</strong> error.</p>
+</li>
+<li>
+<p>If a response does not match the schema, <code>validate()</code> will bubble up an
+<strong>InvalidResponse</strong> error which will display <strong>invalid response data</strong>.</p>
+</li>
+</ol>
+<p>Error handling can also be customized by the service. Alternate messages
+corresponding to HTTP status codes can be specified in the <code>errorMessages</code>
+parameter to <code>_requestJson()</code> etc.</p>
+<p>For the not found case, a service test should establish that the API is doing
+what we expect. If the API returns a 404 error, code in <code>lib/error-helper.js</code>
+will automatically throw a <strong>NotFound</strong> error. The error message can, and
+generally should be customized to display something more specific like
+<strong>package not found</strong> or <strong>room not found</strong>.</p>
+<p>Not all services return a 404 response in the not found case. Sometimes a
+different status code is returned.</p>
+<p>Sometimes a 200 response must be examined to distinguish the not found case from a success case. This can be handled in either of two ways:</p>
+<ul>
+<li>Write a schema which accommodates both the success and error cases.</li>
+<li>Write the schema for the success case. Pass <code>schema: Joi.any()</code> to
+<code>_requestJson()</code>. Manually check for the error case, then invoke
+<code>_validate()</code> with the success-case schema.</li>
+</ul>
+<p>In either case, the service should throw e.g
+<code>new NotFound({ prettyMessage: 'package not found' })</code>.</p>
+<h2>Convert the examples</h2>
+<ol>
+<li>
+<p>Convert all the examples to <code>pattern</code>, <code>namedParams</code>, and <code>staticExample</code>. In some cases you can use the <code>pattern</code> inherited from <code>route</code>, though in other cases you may need to specify a pattern in the example. For example, when showing download badges for several periods, you may want to render the example with an explicit <code>dt</code> instead of <code>:which</code>. You will also need to specify a pattern for badges that use a <code>format</code> regex in the route.</p>
+</li>
+<li>
+<p>Open the frontend and check that the static preview badges look good.
+Remember, none of them are live.</p>
+</li>
+<li>
+<p>Open up the prepared example URLs in their own tabs, and make sure they work correctly.</p>
+</li>
+</ol>
+<h2>Validation</h2>
+<p>When it's time to add the schema, refer to the Joi API docs:
+https://github.com/hapijs/joi/blob/master/API.md</p>
+<h2>Housekeeping</h2>
+<p>Switch to <code>createServiceTester</code>:</p>
+<pre class="prettyprint source lang-js"><code>const t = (module.exports = require('../tester').createServiceTester())
+</code></pre>
+<p>This may require updating the URLs, which will be relative to the service's base
+URL. When using <code>createServiceTester</code>, services need to be specified using
+the non-case-sensitive service class name, or a leading substring (e.g.
+<code>AppveyorTests</code> or <code>appveyor</code>).</p>
+<p>Do this last. Since it involves changing test URLs, and you don't want to
+accidentally change them.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 23 2020 18:45:19 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
