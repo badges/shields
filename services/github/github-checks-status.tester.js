@@ -34,13 +34,11 @@ t.create('commit checks - failing')
     color: 'red',
   })
 
-t.create('tag checks - passing')
-  .get('/badges/shields/3.3.0.json')
-  .expectBadge({
-    label: 'checks',
-    message: 'passing',
-    color: 'brightgreen',
-  })
+t.create('tag checks - passing').get('/badges/shields/3.3.0.json').expectBadge({
+  label: 'checks',
+  message: 'passing',
+  color: 'brightgreen',
+})
 
 t.create('checks - nonexistent ref')
   .get('/badges/shields/this-ref-does-not-exist.json')
