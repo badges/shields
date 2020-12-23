@@ -114,7 +114,7 @@
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
-    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json ."
+    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME"
   },
   "lint-staged": {
     "**/*.@(js|ts|tsx)": [
@@ -190,7 +190,7 @@
     "form-data": "^3.0.0",
     "gatsby": "2.29.1",
     "gatsby-plugin-catch-links": "^2.3.10",
-    "gatsby-plugin-page-creator": "^2.6.0",
+    "gatsby-plugin-page-creator": "^2.7.1",
     "gatsby-plugin-react-helmet": "^3.3.9",
     "gatsby-plugin-remove-trailing-slashes": "^2.3.10",
     "gatsby-plugin-styled-components": "^3.3.9",
@@ -238,7 +238,7 @@
     "styled-components": "^5.2.1",
     "ts-mocha": "^8.0.0",
     "tsd": "^0.14.0",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.3"
   },
   "engines": {
     "node": "^12.18.3",
