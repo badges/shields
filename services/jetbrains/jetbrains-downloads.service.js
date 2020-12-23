@@ -6,7 +6,7 @@ const { downloadCount: downloadCountColor } = require('../color-formatters')
 const { nonNegativeInteger } = require('../validators')
 const JetbrainsBase = require('./jetbrains-base')
 
-const schema = Joi.object({
+const intelliJschema = Joi.object({
   'plugin-repository': Joi.object({
     category: Joi.object({
       'idea-plugin': Joi.array()
@@ -22,6 +22,8 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const jetbrainsSchema = Joi.object({ downloads: nonNegativeInteger }).required()
+
 module.exports = class JetbrainsDownloads extends JetbrainsBase {
   static category = 'downloads'
 
@@ -32,9 +34,9 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
 
   static examples = [
     {
-      title: 'JetBrains IntelliJ plugins',
+      title: 'JetBrains plugins',
       namedParams: {
-        pluginId: '1347-scala',
+        pluginId: '1347',
       },
       staticPreview: this.render({ downloads: 10200000 }),
     },
@@ -48,9 +50,27 @@ module.exports = class JetbrainsDownloads extends JetbrainsBase {
   }
 
   async handle({ pluginId }) {
-    const pluginData = await this.fetchPackageData({ pluginId, schema })
-    const downloads =
-      pluginData['plugin-repository'].category['idea-plugin'][0]['@_downloads']
+    let downloads
+    if (this.constructor._isLegacyPluginId(pluginId)) {
+      const intelliJPluginData = await this.fetchIntelliJPluginData({
+        pluginId,
+        schema: intelliJschema,
+      })
+      downloads =
+        intelliJPluginData['plugin-repository'].category['idea-plugin'][0][
+          '@_downloads'
+        ]
+    } else {
+      const jetbrainsPluginData = await this._requestJson({
+        schema: jetbrainsSchema,
+        url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
+          pluginId
+        )}`,
+        errorMessages: { 400: 'not found' },
+      })
+      downloads = jetbrainsPluginData.downloads
+    }
+
     return this.constructor.render({ downloads })
   }
 }

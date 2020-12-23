@@ -15,12 +15,21 @@ t.create('downloads (user friendly plugin id)')
   .get('/1347-scala.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
-t.create('downloads')
+t.create('downloads (numeric id)')
   .get('/9435.json')
+  .intercept(nock =>
+    nock('https://plugins.jetbrains.com')
+      .get('/api/plugins/9435')
+      .reply(200, { downloads: 2 })
+  )
+  .expectBadge({ label: 'downloads', message: '2' })
+
+t.create('downloads (string id)')
+  .get('/io.harply.plugin.json')
   .intercept(
     nock =>
       nock('https://plugins.jetbrains.com')
-        .get('/plugins/list?pluginId=9435')
+        .get('/plugins/list?pluginId=io.harply.plugin')
         .reply(
           200,
           `<?xml version="1.0" encoding="UTF-8"?>
@@ -36,6 +45,14 @@ t.create('downloads')
   )
   .expectBadge({ label: 'downloads', message: '2' })
 
-t.create('unknown plugin')
+t.create('unknown plugin (string id)')
   .get('/unknown-plugin.json')
+  .expectBadge({ label: 'downloads', message: 'not found' })
+
+t.create('unknown plugin (numeric id)')
+  .get('/9999999999999.json')
+  .expectBadge({ label: 'downloads', message: 'not found' })
+
+t.create('unknown plugin (mixed id)')
+  .get('/9999999999999-abc.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
