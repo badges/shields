@@ -22,12 +22,21 @@ t.create('version (number as a plugin id)').get('/7495.json').expectBadge({
   message: isVPlusDottedVersionNClauses,
 })
 
-t.create('version')
+t.create('version (numeric id)')
   .get('/9435.json')
+  .intercept(nock =>
+    nock('https://plugins.jetbrains.com')
+      .get('/api/plugins/9435/updates')
+      .reply(200, [{ version: '1.0' }])
+  )
+  .expectBadge({ label: 'jetbrains plugin', message: 'v1.0' })
+
+t.create('version (strong id)')
+  .get('/io.harply.plugin.json')
   .intercept(
     nock =>
       nock('https://plugins.jetbrains.com')
-        .get('/plugins/list?pluginId=9435')
+        .get('/plugins/list?pluginId=io.harply.plugin')
         .reply(
           200,
           `<?xml version="1.0" encoding="UTF-8"?>
@@ -45,6 +54,14 @@ t.create('version')
   )
   .expectBadge({ label: 'jetbrains plugin', message: 'v1.0' })
 
-t.create('version for unknown plugin')
+t.create('version for unknown plugin (string id)')
   .get('/unknown-plugin.json')
+  .expectBadge({ label: 'jetbrains plugin', message: 'not found' })
+
+t.create('version for unknown plugin (numeric id)')
+  .get('/9999999999999.json')
+  .expectBadge({ label: 'jetbrains plugin', message: 'not found' })
+
+t.create('unknown plugin (mixed id)')
+  .get('/9999999999999-abc.json')
   .expectBadge({ label: 'jetbrains plugin', message: 'not found' })
