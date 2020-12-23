@@ -91,15 +91,15 @@ export function constructPath({
       if (typeof token === 'string') {
         return token.trim()
       } else {
-        const { delimiter, name, optional } = token
+        const { prefix, name, modifier } = token
         const value = namedParams[name]
         if (value) {
-          return `${delimiter}${value.trim()}`
-        } else if (optional) {
+          return `${prefix}${value.trim()}`
+        } else if (modifier === '?' || modifier === '*') {
           return ''
         } else {
           isComplete = false
-          return `${delimiter}:${name}`
+          return `${prefix}:${name}`
         }
       }
     })
@@ -221,14 +221,15 @@ export default function PathBuilder({
     tokenIndex: number,
     namedParamIndex: number
   ): JSX.Element {
-    const { delimiter, optional } = token
+    const { prefix, modifier } = token
+    const optional = modifier === '?' || modifier === '*'
     const name = `${token.name}`
 
     const exampleValue = exampleParams[name] || '(not set)'
 
     return (
       <React.Fragment key={token.name}>
-        {renderLiteral(delimiter, tokenIndex, false)}
+        {renderLiteral(prefix, tokenIndex, false)}
         <PathBuilderColumn pathContainsOnlyLiterals={false} withHorizPadding>
           <NamedParamLabelContainer>
             <BuilderLabel htmlFor={name}>{humanizeString(name)}</BuilderLabel>
