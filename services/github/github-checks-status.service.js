@@ -4,9 +4,10 @@ const Joi = require('joi')
 const { NotFound, InvalidParameter } = require('..')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
+const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
 
 const schema = Joi.object({
-  state: Joi.equal('failure', 'pending', 'success'),
+  state: isBuildStatus,
 }).required()
 
 module.exports = class GithubChecksStatus extends GithubAuthV3Service {
@@ -24,8 +25,8 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
         repo: 'shields',
         ref: 'master',
       },
-      staticPreview: this.render({
-        state: 'success',
+      staticPreview: renderBuildStatusBadge({
+        status: 'success',
       }),
       keywords: ['status'],
       documentation,
@@ -37,8 +38,8 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
         repo: 'shields',
         ref: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
       },
-      staticPreview: this.render({
-        state: 'success',
+      staticPreview: renderBuildStatusBadge({
+        status: 'success',
       }),
       keywords: ['status'],
       documentation,
@@ -50,8 +51,8 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
         repo: 'shields',
         ref: '3.3.0',
       },
-      staticPreview: this.render({
-        state: 'success',
+      staticPreview: renderBuildStatusBadge({
+        status: 'success',
       }),
       keywords: ['status'],
       documentation,
@@ -60,40 +61,13 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'checks' }
 
-  static render({ state }) {
-    if (state === 'success') {
-      return {
-        message: `passing`,
-        color: 'brightgreen',
-      }
-    } else if (state === 'pending') {
-      return {
-        message: `pending`,
-        color: 'yellow',
-      }
-    } else {
-      return {
-        message: `failing`,
-        color: 'red',
-      }
-    }
-  }
-
   async handle({ user, repo, ref }) {
-    let state
-    try {
-      ;({ state } = await this._requestJson({
-        url: `/repos/${user}/${repo}/commits/${ref}/status`,
-        errorMessages: errorMessagesFor('ref not found'),
-        schema,
-      }))
-    } catch (e) {
-      if (e instanceof NotFound) {
-        throw new InvalidParameter({ prettyMessage: 'invalid ref' })
-      }
-      throw e
-    }
+    let { state } = await this._requestJson({
+      url: `/repos/${user}/${repo}/commits/${ref}/status`,
+      errorMessages: errorMessagesFor('ref or repo not found'),
+      schema,
+    })
 
-    return this.constructor.render({ state })
+    return renderBuildStatusBadge({ status: state })
   }
 }
