@@ -27,7 +27,7 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
       staticPreview: this.render({
         state: 'success',
       }),
-      keywords: ['branch'],
+      keywords: ['status'],
       documentation,
     },
     {
@@ -40,7 +40,7 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
       staticPreview: this.render({
         state: 'success',
       }),
-      keywords: ['commit'],
+      keywords: ['status'],
       documentation,
     },
     {
@@ -53,7 +53,7 @@ module.exports = class GithubChecksStatus extends GithubAuthV3Service {
       staticPreview: this.render({
         state: 'success',
       }),
-      keywords: ['tag'],
+      keywords: ['status'],
       documentation,
     },
   ]
