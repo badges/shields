@@ -519,7 +519,7 @@ describe('BaseService', function () {
 
       await serviceInstance._request({ url })
 
-      expect(register.getSingleMetricAsString('service_response_bytes'))
+      expect(await register.getSingleMetricAsString('service_response_bytes'))
         .to.contain(
           'service_response_bytes_bucket{le="65536",category="other",family="undefined",service="dummy_service_with_service_response_size_metric_enabled"} 0\n'
         )
@@ -545,7 +545,7 @@ describe('BaseService', function () {
       await serviceInstance._request({ url })
 
       expect(
-        register.getSingleMetricAsString('service_response_bytes')
+        await register.getSingleMetricAsString('service_response_bytes')
       ).to.not.contain('service_response_bytes_bucket')
     })
   })

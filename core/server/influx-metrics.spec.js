@@ -36,7 +36,7 @@ describe('Influx metrics', function () {
         instanceIdEnvVarName: 'INSTANCE_ID',
       })
 
-      expect(influxMetrics.metrics()).to.contain('instance=instance3')
+      expect(await influxMetrics.metrics()).to.contain('instance=instance3')
     })
 
     it('should use a hostname as an instance label', async function () {
@@ -46,7 +46,9 @@ describe('Influx metrics', function () {
       }
       const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
-      expect(influxMetrics.metrics()).to.be.contain('instance=test-hostname')
+      expect(await influxMetrics.metrics()).to.be.contain(
+        'instance=test-hostname'
+      )
     })
 
     it('should use a random string as an instance label', async function () {
@@ -55,7 +57,7 @@ describe('Influx metrics', function () {
       }
       const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
-      expect(influxMetrics.metrics()).to.be.match(/instance=\w+ /)
+      expect(await influxMetrics.metrics()).to.be.match(/instance=\w+ /)
     })
 
     it('should use a hostname alias as an instance label', async function () {
@@ -66,7 +68,7 @@ describe('Influx metrics', function () {
       }
       const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
-      expect(influxMetrics.metrics()).to.be.contain(
+      expect(await influxMetrics.metrics()).to.be.contain(
         'instance=test-hostname-alias'
       )
     })
