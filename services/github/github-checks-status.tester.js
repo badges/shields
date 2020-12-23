@@ -27,7 +27,7 @@ t.create('commit checks - passing')
   })
 
 t.create('commit checks - failing')
-  .get('/badges/shields/91b108d4b7359b2f8794a4614c11cb1157dc9fff.json')
+  .get('/badges/shields/473619cf124c4eb77a79463c55d65091b454b178.json')
   .expectBadge({
     label: 'checks',
     message: 'failing',
