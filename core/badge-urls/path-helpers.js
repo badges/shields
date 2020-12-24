@@ -6,7 +6,7 @@ function escapeFormat(t) {
   return (
     t
       // Single underscore.
-      .replace(/([^_]|^)_(?!_|$)/g, '$1 ')
+      .replace(/(^|[^_])((?:__)*)_(?!_)/g, '$1$2 ')
       // Double underscore and double dash.
       .replace(/__/g, '_')
       .replace(/--/g, '-')
