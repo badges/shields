@@ -39,7 +39,6 @@ Production hosting is managed by the Shields ops team:
 | Metrics server                | Owner                           | @platan                                                         |
 | UptimeRobot                   | Account owner                   | @paulmelnikow                                                   |
 | More metrics                  | Owner                           | @RedSparr0w                                                     |
-| Netlify (documentation site)  | Owner                           | @chris48s                                                       |
 
 There are [too many bottlenecks][issue 2577]!
 

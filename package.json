@@ -50,10 +50,10 @@
     "moment": "^2.29.1",
     "node-env-flag": "^0.1.0",
     "parse-link-header": "^1.0.1",
-    "path-to-regexp": "^5.0.0",
+    "path-to-regexp": "^6.2.0",
     "pretty-bytes": "^5.4.1",
     "priorityqueuejs": "^2.0.0",
-    "prom-client": "^11.5.3",
+    "prom-client": "^13.0.0",
     "query-string": "^6.13.7",
     "request": "~2.88.2",
     "semver": "~7.3.4",
@@ -114,7 +114,7 @@
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
-    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json ."
+    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME"
   },
   "lint-staged": {
     "**/*.@(js|ts|tsx)": [
