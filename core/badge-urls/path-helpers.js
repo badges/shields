@@ -6,7 +6,7 @@ function escapeFormat(t) {
   return (
     t
       // Inline single underscore.
-      .replace(/([^_])_([^_])/g, '$1 $2')
+      .replace(/([^_])_(?!_|$)/g, '$1 ')
       // Leading or trailing underscore.
       .replace(/([^_])_$/, '$1 ')
       .replace(/^_([^_])/, ' $1')
