@@ -5,11 +5,8 @@
 function escapeFormat(t) {
   return (
     t
-      // Inline single underscore.
-      .replace(/([^_])_([^_])/g, '$1 $2')
-      // Leading or trailing underscore.
-      .replace(/([^_])_$/, '$1 ')
-      .replace(/^_([^_])/, ' $1')
+      // Single underscore.
+      .replace(/(^|[^_])((?:__)*)_(?!_)/g, '$1$2 ')
       // Double underscore and double dash.
       .replace(/__/g, '_')
       .replace(/--/g, '-')
