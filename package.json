@@ -51,7 +51,7 @@
     "node-env-flag": "^0.1.0",
     "parse-link-header": "^1.0.1",
     "path-to-regexp": "^6.2.0",
-    "pretty-bytes": "^5.4.1",
+    "pretty-bytes": "^5.5.0",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^13.0.0",
     "query-string": "^6.13.7",
