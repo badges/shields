@@ -24,6 +24,7 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
         end('Invalid secret.')
       }, 10000)
     }
+    ask.res.setHeader('Cache-Control', 'private')
     end(apiProvider.serializeDebugInfo({ sanitize: false }))
   })
 }
