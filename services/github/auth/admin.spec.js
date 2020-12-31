@@ -35,13 +35,17 @@ describe('GitHub admin route', function () {
 
   context('the password is correct', function () {
     it('returns a valid JSON response', async function () {
-      const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`, {
-        username: '',
-        password: shieldsSecret,
-        responseType: 'json',
-      })
+      const { statusCode, body, headers } = await got(
+        `${baseUrl}/$github-auth/tokens`,
+        {
+          username: '',
+          password: shieldsSecret,
+          responseType: 'json',
+        }
+      )
       expect(statusCode).to.equal(200)
       expect(body).to.be.ok
+      expect(headers['cache-control']).to.equal('private')
     })
   })
 
@@ -54,9 +58,15 @@ describe('GitHub admin route', function () {
     context('the password is missing', function () {
       it('returns the expected message', async function () {
         this.timeout(11000)
-        const { statusCode, body } = await got(`${baseUrl}/$github-auth/tokens`)
-        expect(statusCode).to.equal(200)
+        const { statusCode, body, headers } = await got(
+          `${baseUrl}/$github-auth/tokens`,
+          {
+            throwHttpErrors: false,
+          }
+        )
+        expect(statusCode).to.equal(401)
         expect(body).to.equal('"Invalid secret."')
+        expect(headers['cache-control']).to.equal('private')
       })
     })
   }
