@@ -17,10 +17,10 @@ When we receive input data from an upstream API, we perform input validation to:
 - The schema/validation we choose is informed by the assumptions we're making about the data. e.g:
 
   - If we're going to use a value, make sure it exists.
-  - If we need to multiply it by something, we check its a number.
-  - If we're going to call `.split()` on it, we make sure its a string.
+  - If we need to multiply it by something, we check it's a number.
+  - If we're going to call `.split()` on it, we make sure it's a string.
   - If we're going to address `foo[0]`, `foo` must be an array.
-  - If we're going to sort a version on the assumption it is a semver, check its a semver
+  - If we're going to sort a version on the assumption it is a semver, check it's a semver
 
 - We don't need to validate characteristics we don't rely on. For example, if we're just going to render a version on a badge with the same exact value from the API response and do not need to sort or transform the value, then it doesn't matter what format the version number is in. We can use a very relaxed schema to validate in this case, e.g. `Joi.string().required()`
 
