@@ -45,6 +45,6 @@ When we receive input data from an upstream API, we perform input validation to:
 
 - If we know of a real-world example of a package/repo/etc that causes us to render an error value on a badge (e.g: ![](https://img.shields.io/badge/version-null-blue) ![](https://img.shields.io/badge/coverage-NaN%25-red) ![](https://img.shields.io/badge/build-undefined-red) ) our input validation is broken and we should fix it.
 
-- If we know of a real-world example of a package/repo/etc that causes us to thrown an unhandled runtime exception, our input validation is broken and we should fix it.
+- If we know of a real-world example of a package/repo/etc that causes us to throw an unhandled runtime exception, our input validation is broken and we should fix it.
 
 - We should not fail to render a badge because of a validation failure on a field that isn't necessary to render the badge. In the above example of a shared license/version schema: If we become aware of a real-world example of a package/repo/etc that has a `version` key but not a `license` key then we should split the schema (or make `version` optional and handle the error in code).
