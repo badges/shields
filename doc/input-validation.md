@@ -22,7 +22,7 @@ When we receive input data from an upstream API, we perform input validation to:
   - If we're going to address `foo[0]`, `foo` must be an array.
   - If we're going to sort a version on the assumption it is a semver, check its a semver
 
-- We don't need to validate characteristics we don't rely on. For example, if we're just going to render a version on a badge, it doesn't matter what format the version number is in.
+- We don't need to validate characteristics we don't rely on. For example, if we're just going to render a version on a badge with the same exact value from the API response and do not need to sort or transform the value, then it doesn't matter what format the version number is in. We can use a very relaxed schema to validate in this case, e.g. `Joi.string().required()`
 
 - If theory (docs) and practice (real-world API responses) conflict, real-world outputs take precedence over documented behaviour. e.g: if the docs say version is a semver but we learn that there are real-world packages where the version number is `0.3b` or `1.2.1.27` then we should accept those values in preference to enforcing the documented API behaviour.
 
