@@ -35,7 +35,7 @@
     "decamelize": "^3.2.0",
     "emojic": "^1.1.16",
     "escape-string-regexp": "^4.0.0",
-    "fast-xml-parser": "^3.17.5",
+    "fast-xml-parser": "^3.17.6",
     "glob": "^7.1.6",
     "graphql": "^14.7.0",
     "graphql-tag": "^2.11.0",
