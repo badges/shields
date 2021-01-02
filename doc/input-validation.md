@@ -8,7 +8,7 @@ When we receive input data from an upstream API, we perform input validation to:
 
 ## Writing schemas and validation
 
-- The default validation mechanism should be to use [Joi](https://github.com/sideway/joi) to define a schema for the input data. Validation against Joi schemas is implemented in the base classes every integration inherits from. Sometimes additional manual validation is needed which can't be covered by Joi and plugins in which case we implement it by hand.
+- The default validation mechanism should be to use [Joi](https://github.com/sideway/joi) to define a schema for the input data. Validation against Joi schemas is implemented in the base classes and inherited by every service class that extends them. Sometimes additional manual validation is needed which can't be covered by Joi and plugins in which case we implement it by hand.
 
 - If validation is implemented manually (because we need to enforce a constraint that can't be expressed with Joi), invalid data should throw an [InvalidResponse](https://contributing.shields.io/module-core_base-service_errors-InvalidResponse.html) exception.
 
