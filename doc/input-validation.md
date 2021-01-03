@@ -43,7 +43,7 @@ When we receive input data from an upstream API, we perform input validation to:
 
 ## Identifying problems
 
-- If we know of a real-world example of a package/repo/etc that causes us to render an error value on a badge (e.g: ![](https://img.shields.io/badge/version-null-blue) ![](https://img.shields.io/badge/coverage-NaN%25-red) ![](https://img.shields.io/badge/build-undefined-red) ) our input validation is broken and we should fix it.
+- If we know of a real-world example of a package/repo/etc that causes us to render an invalid value on a badge (e.g: ![](https://img.shields.io/badge/version-null-blue) ![](https://img.shields.io/badge/coverage-NaN%25-red) ![](https://img.shields.io/badge/build-undefined-red) ) our input validation is broken and we should fix it.
 
 - If we know of a real-world example of a package/repo/etc that causes us to throw an unhandled runtime exception, our input validation is broken and we should fix it.
 
