@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Deprecated</title>
+    <title>JSDoc: Tutorial: input-validation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,190 +17,82 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Deprecated</h1>
+    <h1 class="page-title">Tutorial: input-validation</h1>
 
-    
-
-
-
-
-<section>
+    <section>
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-core_base-service_errors.html">core/base-service/errors</a>~</span>Deprecated<span class="signature">(props)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Throw this error to indicate that a service is deprecated or removed</p></div>
-        
-    
+
+    <h2>input-validation</h2>
 </header>
 
 <article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="Deprecated"><span class="type-signature"></span>new Deprecated<span class="signature">(props)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>props</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-core_base-service_errors.html#~RuntimeErrorProps">module:core/base-service/errors~RuntimeErrorProps</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Refer to individual attrs</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line184">line 184</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <h1>Input Data Validation</h1>
+<p>When we receive input data from an upstream API, we perform input validation to:</p>
+<ul>
+<li>Ensure we won't throw a runtime error trying to render a badge</li>
+<li>Ensure we won't render badges with spurious or unexpected output e.g: <img src="https://img.shields.io/badge/version-null-blue" alt=""> <img src="https://img.shields.io/badge/coverage-NaN%25-red" alt=""> <img src="https://img.shields.io/badge/build-undefined-red" alt=""> <img src="https://img.shields.io/badge/coverage---10%25-critical" alt=""> etc</li>
+<li>Express and document our understanding of the input data</li>
+</ul>
+<h2>Writing schemas and validation</h2>
+<ul>
+<li>
+<p>The default validation mechanism should be to use <a href="https://github.com/sideway/joi">Joi</a> to define a schema for the input data. Validation against Joi schemas is implemented in the base classes and inherited by every service class that extends them. Sometimes additional manual validation is needed which can't be covered by Joi and plugins in which case we implement it by hand.</p>
+</li>
+<li>
+<p>If validation is implemented manually (because we need to enforce a constraint that can't be expressed with Joi), invalid data should throw an <a href="https://contributing.shields.io/module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a> exception.</p>
+</li>
+<li>
+<p>Our definition of &quot;valid&quot; should not be stricter than the upstream API's definition of &quot;valid&quot;.</p>
+</li>
+<li>
+<p>The schema/validation we choose is informed by the assumptions we're making about the data. e.g:</p>
+<ul>
+<li>If we're going to use a value, make sure it exists.</li>
+<li>If we need to multiply it by something, we check it's a number.</li>
+<li>If we're going to call <code>.split()</code> on it, we make sure it's a string.</li>
+<li>If we're going to address <code>foo[0]</code>, <code>foo</code> must be an array.</li>
+<li>If we're going to sort a version on the assumption it is a semver, check it's a semver</li>
+</ul>
+</li>
+<li>
+<p>We don't need to validate characteristics we don't rely on. For example, if we're just going to render a version on a badge with the same exact value from the API response and do not need to sort or transform the value, then it doesn't matter what format the version number is in. We can use a very relaxed schema to validate in this case, e.g. <code>Joi.string().required()</code></p>
+</li>
+<li>
+<p>If theory (docs) and practice (real-world API responses) conflict, real-world outputs take precedence over documented behaviour. e.g: if the docs say version is a semver but we learn that there are real-world packages where the version number is <code>0.3b</code> or <code>1.2.1.27</code> then we should accept those values in preference to enforcing the documented API behaviour.</p>
+</li>
+<li>
+<p>Shields is descriptive rather than prescriptive. We reflect the established norms of the communities we serve.</p>
+</li>
+<li>
+<p>It is fine to define a single schema which is applied to multiple badges. For example, we could define a schema that says:</p>
+<pre class="prettyprint source lang-js"><code>const schema = Joi.object({
+  license: Joi.string().required(),
+  version: Joi.string().required(),
+}).required()
+</code></pre>
+<p>and have both the license and version badges validate the response against that schema.</p>
+</li>
+<li>
+<p>For build status badges there is a shared <a href="https://github.com/badges/shields/blob/master/services/build-status.js">isBuildStatus</a> validator. In most cases build status badges should use <code>isBuildStatus</code> or input validation and <code>renderBuildStatusBadge</code> should be used for rendering. Any additional status values can be added to the relevant color arrays.</p>
+</li>
+</ul>
+<h2>Identifying problems</h2>
+<ul>
+<li>
+<p>If we know of a real-world example of a package/repo/etc that causes us to render an invalid value on a badge (e.g: <img src="https://img.shields.io/badge/version-null-blue" alt=""> <img src="https://img.shields.io/badge/coverage-NaN%25-red" alt=""> <img src="https://img.shields.io/badge/build-undefined-red" alt=""> ) our input validation is broken and we should fix it.</p>
+</li>
+<li>
+<p>If we know of a real-world example of a package/repo/etc that causes us to throw an unhandled runtime exception, our input validation is broken and we should fix it.</p>
+</li>
+<li>
+<p>We should not fail to render a badge because of a validation failure on a field that isn't necessary to render the badge. In the above example of a shared license/version schema: If we become aware of a real-world example of a package/repo/etc that has a <code>version</code> key but not a <code>license</code> key then we should split the schema (or make <code>version</code> optional and handle the error in code).</p>
+</li>
+</ul>
 </article>
 
 </section>
-
-
-
 
 </div>
 
