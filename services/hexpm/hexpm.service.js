@@ -15,9 +15,7 @@ const hexSchema = Joi.object({
   meta: Joi.object({
     licenses: Joi.array().required(),
   }).required(),
-  releases: Joi.array()
-    .items(Joi.object({ version: Joi.string().required() }).required())
-    .required(),
+  latest_stable_version: Joi.string().required(),
 }).required()
 
 class BaseHexPmService extends BaseJsonService {
@@ -92,7 +90,7 @@ class HexPmVersion extends BaseHexPmService {
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ version: json.releases[0].version })
+    return this.constructor.render({ version: json.latest_stable_version })
   }
 }
 
