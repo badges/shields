@@ -191,18 +191,12 @@ describe('The request handler', function () {
 
   describe('caching', function () {
     describe('standard query parameters', function () {
-      let handlerCallCount
-      beforeEach(function () {
-        handlerCallCount = 0
-      })
-
       function register({ cacheHeaderConfig }) {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
             cacheHeaderConfig,
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               fakeHandler(queryParams, match, sendBadge, request)
             }
           )
@@ -239,7 +233,6 @@ describe('The request handler', function () {
           handleRequest(
             { defaultCacheLengthSeconds: 300 },
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               createFakeHandlerWithCacheLength(400)(
                 queryParams,
                 match,
@@ -260,7 +253,6 @@ describe('The request handler', function () {
           handleRequest(
             { defaultCacheLengthSeconds: 300 },
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               createFakeHandlerWithCacheLength(200)(
                 queryParams,
                 match,
