@@ -40,10 +40,6 @@ Production hosting is managed by the Shields ops team:
 | UptimeRobot                   | Account owner                   | @paulmelnikow                                                   |
 | More metrics                  | Owner                           | @RedSparr0w                                                     |
 
-There are [too many bottlenecks][issue 2577]!
-
-[issue 2577]: https://github.com/badges/shields/issues/2577
-
 ## Attached state
 
 Shields has mercifully little persistent state:
