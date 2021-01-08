@@ -8,6 +8,10 @@ t.create('all-contributors repo')
   .expectBadge({
     label: 'all contributors',
     message: isMetric,
+    link: [
+      `https://github.com/all-contributors/all-contributors`,
+      `https://github.com/all-contributors/all-contributors/graphs/contributors`,
+    ],
   })
 
 t.create('shields repo (not found)').get('/badges/shields.json').expectBadge({
