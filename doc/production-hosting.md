@@ -130,6 +130,13 @@ the server. It's generously donated by [Sentry][sentry home]. We bundle
 [sentry home]: https://sentry.io/shields/
 [sentry configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry
 
+## URLs
+
+Currently it is possible to request badges on both `img.shields.io` and `shields.io` i.e: https://img.shields.io/badge/build-passing-brightgreen and https://shields.io/badge/build-passing-brightgreen will both work. However:
+
+- We never show or generate the `img.`-less URL format on https://shields.io/
+- We make no guarantees about the `img.`-less URL format. At some future point we may remove the ability to serve badges on `shields.io` (without `img.`)
+
 ## Monitoring
 
 Overall server performance and requests by service are monitored using
