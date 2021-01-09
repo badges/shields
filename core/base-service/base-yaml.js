@@ -57,7 +57,7 @@ class BaseYamlService extends BaseService {
     })
     let parsed
     try {
-      parsed = yaml.safeLoad(buffer.toString(), encoding)
+      parsed = yaml.load(buffer.toString(), encoding)
     } catch (err) {
       logTrace(emojic.dart, 'Response YAML (unparseable)', buffer)
       throw new InvalidResponse({
