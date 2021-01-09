@@ -1,7 +1,10 @@
 'use strict'
 
 const { test, given } = require('sazerac')
-const { renderContributorBadge } = require('./contributor-count')
+const {
+  renderContributorBadge,
+  renderContributorBadgeWithLink,
+} = require('./contributor-count')
 
 describe('Contributor count helpers', function () {
   test(renderContributorBadge, () => {
@@ -19,6 +22,29 @@ describe('Contributor count helpers', function () {
       label: 'collaborators',
       message: '3k',
       color: 'brightgreen',
+    })
+  })
+
+  test(renderContributorBadgeWithLink, () => {
+    given({
+      label: 'maintainers',
+      contributorCount: 1,
+      link: 'https://github.com/badges/shields',
+    }).expect({
+      label: 'maintainers',
+      message: '1',
+      color: 'red',
+      link: 'https://github.com/badges/shields',
+    })
+    given({
+      label: 'collaborators',
+      contributorCount: 3000,
+      link: 'https://github.com/badges/shields',
+    }).expect({
+      label: 'collaborators',
+      message: '3k',
+      color: 'brightgreen',
+      link: 'https://github.com/badges/shields',
     })
   })
 })

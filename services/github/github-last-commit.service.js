@@ -33,7 +33,10 @@ module.exports = class GithubLastCommit extends GithubAuthV3Service {
         user: 'google',
         repo: 'skia',
       },
-      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
+      staticPreview: {
+        message: formatDate('2013-07-31T20:01:41Z'),
+        color: 'red',
+      },
       ...commonExampleAttrs,
     },
     {
@@ -44,17 +47,25 @@ module.exports = class GithubLastCommit extends GithubAuthV3Service {
         repo: 'skia',
         branch: 'infra/config',
       },
-      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
+      staticPreview: {
+        message: formatDate('2013-07-31T20:01:41Z'),
+        color: 'red',
+      },
       ...commonExampleAttrs,
     },
   ]
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
+  static render({ user, repo, branch, commitDate }) {
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
     return {
       message: formatDate(commitDate),
       color: ageColor(Date.parse(commitDate)),
+      link: [
+        `https://github.com/${slug}`,
+        `https://github.com/${slug}/commits/${branch}`,
+      ],
     }
   }
 

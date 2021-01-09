@@ -27,7 +27,9 @@ module.exports = class GithubCommitActivity extends GithubAuthV3Service {
       // Override the pattern to omit the deprecated interval "4w".
       pattern: ':interval(y|m|w)/:user/:repo',
       namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
-      staticPreview: this.render({ interval: 'm', commitCount: 457 }),
+      staticPreview: {
+        message: '457/month',
+      },
       keywords: ['commits'],
       documentation,
     },
@@ -35,16 +37,20 @@ module.exports = class GithubCommitActivity extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'commit activity', color: 'blue' }
 
-  static render({ interval, commitCount }) {
+  static render({ user, repo, interval, commitCount }) {
     const intervalLabel = {
       y: '/year',
       m: '/month',
       '4w': '/four weeks',
       w: '/week',
     }[interval]
-
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
     return {
       message: `${metric(commitCount)}${intervalLabel}`,
+      link: [
+        `https://github.com/${slug}`,
+        `https://github.com/${slug}/graphs/commit-activity`,
+      ],
     }
   }
 
@@ -89,6 +95,6 @@ module.exports = class GithubCommitActivity extends GithubAuthV3Service {
       errorMessages: errorMessagesFor(),
     })
     const commitCount = this.constructor.transform({ interval, weekData })
-    return this.constructor.render({ interval, commitCount })
+    return this.constructor.render({ user, repo, interval, commitCount })
   }
 }
