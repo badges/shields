@@ -1,6 +1,5 @@
 'use strict'
 
-const moment = require('moment')
 const Joi = require('joi')
 const { age } = require('../color-formatters')
 const { formatDate } = require('../text-formatters')
@@ -35,7 +34,10 @@ module.exports = class GithubReleaseDate extends GithubAuthV3Service {
         user: 'SubtitleEdit',
         repo: 'subtitleedit',
       },
-      staticPreview: this.render({ date: '2017-04-13T07:50:27.000Z' }),
+      staticPreview: {
+        message: formatDate('2017-04-13T07:50:27.000Z'),
+        color: 'red',
+      },
       documentation,
     },
     {
@@ -45,18 +47,27 @@ module.exports = class GithubReleaseDate extends GithubAuthV3Service {
         user: 'Cockatrice',
         repo: 'Cockatrice',
       },
-      staticPreview: this.render({ date: '2017-04-13T07:50:27.000Z' }),
+      staticPreview: {
+        message: formatDate('2017-04-13T07:50:27.000Z'),
+        color: 'red',
+      },
       documentation,
     },
   ]
 
   static defaultBadgeData = { label: 'release date' }
 
-  static render({ date }) {
-    const releaseDate = moment(date)
+  static render({ user, repo, variant, date }) {
+    const repoSlug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
+    const releasesSlug =
+      variant === 'release-date' ? 'releases/latest' : 'releases'
     return {
-      message: formatDate(releaseDate),
-      color: age(releaseDate),
+      message: formatDate(date),
+      color: age(date),
+      link: [
+        `https://github.com/${repoSlug}`,
+        `https://github.com/${repoSlug}/${releasesSlug}`,
+      ],
     }
   }
 
@@ -75,8 +86,18 @@ module.exports = class GithubReleaseDate extends GithubAuthV3Service {
   async handle({ variant, user, repo }) {
     const body = await this.fetch({ variant, user, repo })
     if (Array.isArray(body)) {
-      return this.constructor.render({ date: body[0].created_at })
+      return this.constructor.render({
+        user,
+        repo,
+        variant,
+        date: body[0].created_at,
+      })
     }
-    return this.constructor.render({ date: body.created_at })
+    return this.constructor.render({
+      user,
+      repo,
+      variant,
+      date: body.created_at,
+    })
   }
 }

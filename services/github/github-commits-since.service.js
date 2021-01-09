@@ -28,7 +28,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         repo: 'subtitleedit',
         version: '3.4.7',
       },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: '3.4.7',
         commitCount: 4225,
       }),
@@ -42,7 +42,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         version: '3.4.7',
         branch: 'master',
       },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: '3.4.7',
         commitCount: 4225,
       }),
@@ -55,7 +55,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         repo: 'subtitleedit',
         version: 'latest',
       },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: '3.5.7',
         commitCount: 157,
       }),
@@ -69,7 +69,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         version: 'latest',
         branch: 'master',
       },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: '3.5.7',
         commitCount: 157,
       }),
@@ -84,7 +84,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         version: 'latest',
       },
       queryParams: { include_prereleases: null },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: 'v3.5.8-alpha.1',
         isPrerelease: true,
         commitCount: 158,
@@ -99,7 +99,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         version: 'latest',
       },
       queryParams: { sort: 'semver' },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: 'v4.0.1',
         sort: 'semver',
         commitCount: 200,
@@ -115,7 +115,7 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
         version: 'latest',
       },
       queryParams: { sort: 'semver', include_prereleases: null },
-      staticPreview: this.render({
+      staticPreview: this.renderStaticPreview({
         version: 'v4.0.2-alpha.1',
         sort: 'semver',
         isPrerelease: true,
@@ -127,12 +127,25 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'github', namedLogo: 'github' }
 
-  static render({ version, commitCount }) {
+  static render({ user, repo, branch, version, commitCount }) {
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
     return {
       label: `commits since ${version}`,
       message: metric(commitCount),
       color: 'blue',
+      link: [
+        `https://github.com/${slug}`,
+        `https://github.com/${slug}/compare/${version}...${branch || 'HEAD'}`,
+      ],
     }
+  }
+
+  // TODO: can shift this function to BaseService (to handle cases where link is present in render
+  // response and staticPreview doesn't supports it)
+  static renderStaticPreview(props) {
+    const renderedResponse = this.render(props)
+    delete renderedResponse.link
+    return renderedResponse
   }
 
   async handle({ user, repo, version, branch }, queryParams) {
@@ -156,6 +169,6 @@ module.exports = class GithubCommitsSince extends GithubAuthV3Service {
       errorMessages: errorMessagesFor(notFoundMessage),
     })
 
-    return this.constructor.render({ version, commitCount })
+    return this.constructor.render({ user, repo, branch, version, commitCount })
   }
 }

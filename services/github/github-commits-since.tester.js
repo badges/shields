@@ -11,6 +11,10 @@ t.create('Commits since')
     label: isCommitsSince,
     message: isMetric,
     color: 'blue',
+    link: [
+      `https://github.com/badges/shields`,
+      `https://github.com/badges/shields/compare/a0663d8da53fb712472c02665e6ff7547ba945b7...HEAD}`,
+    ],
   })
 
 t.create('Commits since (branch)')
@@ -20,6 +24,10 @@ t.create('Commits since (branch)')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
+    link: [
+      `https://github.com/badges/shields`,
+      `https://github.com/badges/shields/compare/a0663d8da53fb712472c02665e6ff7547ba945b7...historical}`,
+    ],
   })
 
 t.create('Commits since by latest release')
@@ -27,6 +35,10 @@ t.create('Commits since by latest release')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
+    link: [
+      `https://github.com/microsoft/typescript`,
+      `https://github.com/microsoft/typescript/compare/latest...HEAD}`,
+    ],
   })
 
 t.create('Commits since by latest release (branch)')
@@ -34,6 +46,10 @@ t.create('Commits since by latest release (branch)')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
+    link: [
+      `https://github.com/microsoft/typescript`,
+      `https://github.com/microsoft/typescript/compare/latest...master}`,
+    ],
   })
 
 t.create('Commits since by latest SemVer release')
@@ -41,6 +57,10 @@ t.create('Commits since by latest SemVer release')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
+    link: [
+      `https://github.com/microsoft/typescript`,
+      `https://github.com/microsoft/typescript/compare/latest...HEAD}`,
+    ],
   })
 
 t.create('Commits since by latest pre-release')
@@ -48,6 +68,10 @@ t.create('Commits since by latest pre-release')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
+    link: [
+      `https://github.com/microsoft/typescript`,
+      `https://github.com/microsoft/typescript/compare/latest...master}`,
+    ],
   })
 
 t.create('Commits since (version not found)')
