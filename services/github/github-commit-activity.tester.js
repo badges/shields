@@ -12,27 +12,49 @@ const isCommitActivity = Joi.alternatives().try(
   isZeroOverTimePeriod
 )
 
-t.create('commit activity (1 year)').get('/y/eslint/eslint.json').expectBadge({
-  label: 'commit activity',
-  message: isMetricOverTimePeriod,
-})
+t.create('commit activity (1 year)')
+  .get('/y/eslint/eslint.json')
+  .expectBadge({
+    label: 'commit activity',
+    message: isMetricOverTimePeriod,
+    link: [
+      'https://github.com/eslint/eslint',
+      'https://github.com/eslint/eslint/graphs/code-frequency',
+    ],
+  })
 
-t.create('commit activity (1 month)').get('/m/eslint/eslint.json').expectBadge({
-  label: 'commit activity',
-  message: isMetricOverTimePeriod,
-})
+t.create('commit activity (1 month)')
+  .get('/m/eslint/eslint.json')
+  .expectBadge({
+    label: 'commit activity',
+    message: isMetricOverTimePeriod,
+    link: [
+      'https://github.com/eslint/eslint',
+      'https://github.com/eslint/eslint/graphs/code-frequency',
+    ],
+  })
 
 t.create('commit activity (4 weeks)')
   .get('/4w/eslint/eslint.json')
   .expectBadge({
     label: 'commit activity',
     message: isMetricOverTimePeriod,
+    link: [
+      'https://github.com/eslint/eslint',
+      'https://github.com/eslint/eslint/graphs/code-frequency',
+    ],
   })
 
-t.create('commit activity (1 week)').get('/w/eslint/eslint.json').expectBadge({
-  label: 'commit activity',
-  message: isCommitActivity,
-})
+t.create('commit activity (1 week)')
+  .get('/w/eslint/eslint.json')
+  .expectBadge({
+    label: 'commit activity',
+    message: isCommitActivity,
+    link: [
+      'https://github.com/eslint/eslint',
+      'https://github.com/eslint/eslint/graphs/code-frequency',
+    ],
+  })
 
 t.create('commit activity (repo not found)')
   .get('/w/badges/helmets.json')

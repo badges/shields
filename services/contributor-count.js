@@ -20,7 +20,14 @@ function renderContributorBadge({ label, contributorCount }) {
   }
 }
 
+function renderContributorBadgeWithLink({ label, contributorCount, link }) {
+  const contributorBadge = renderContributorBadge({ label, contributorCount })
+  contributorBadge.link = link
+  return contributorBadge
+}
+
 module.exports = {
   contributorColor,
   renderContributorBadge,
+  renderContributorBadgeWithLink,
 }

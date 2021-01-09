@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { renderContributorBadge } = require('../contributor-count')
+const { renderContributorBadgeWithLink } = require('../contributor-count')
 const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
 const { fetchJsonFromRepo } = require('./github-common-fetch')
 const { documentation } = require('./github-helpers')
@@ -27,15 +27,26 @@ module.exports = class GithubAllContributorsService extends (
         user: 'all-contributors',
         branch: 'master',
       },
-      staticPreview: this.render({ contributorCount: 66 }),
+      // TODO: This is currently a literal, as `staticPreview` doesn't
+      // support `link`.
+      staticPreview: {
+        label: 'all contributors',
+        message: '66',
+        color: 'brightgreen',
+      },
       documentation,
     },
   ]
 
   static defaultBadgeData = { label: 'all contributors' }
 
-  static render({ contributorCount }) {
-    return renderContributorBadge({ contributorCount })
+  static render({ user, repo, contributorCount }) {
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
+    const link = [
+      `https://github.com/${slug}`,
+      `https://github.com/${slug}/graphs/contributors`,
+    ]
+    return renderContributorBadgeWithLink({ contributorCount, link })
   }
 
   async handle({ user, repo, branch }) {
@@ -48,6 +59,6 @@ module.exports = class GithubAllContributorsService extends (
     })
 
     const contributorCount = contributors.length
-    return this.constructor.render({ contributorCount })
+    return this.constructor.render({ user, repo, contributorCount })
   }
 }

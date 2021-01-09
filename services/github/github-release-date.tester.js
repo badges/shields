@@ -8,6 +8,10 @@ t.create('Release Date. e.g release date|today')
   .expectBadge({
     label: 'release date',
     message: isFormattedDate,
+    link: [
+      `https://github.com/mochajs/mocha`,
+      `https://github.com/mochajs/mocha/releases/latest`,
+    ],
   })
 
 t.create(
@@ -24,6 +28,10 @@ t.create('(Pre-)Release Date. e.g release date|today')
   .expectBadge({
     label: 'release date',
     message: isFormattedDate,
+    link: [
+      `https://github.com/mochajs/mocha`,
+      `https://github.com/mochajs/mocha/releases`,
+    ],
   })
 
 t.create(

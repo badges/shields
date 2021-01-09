@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const parseLinkHeader = require('parse-link-header')
-const { renderContributorBadge } = require('../contributor-count')
+const { renderContributorBadgeWithLink } = require('../contributor-count')
 const { GithubAuthV3Service } = require('./github-auth-service')
 const { documentation, errorMessagesFor } = require('./github-helpers')
 
@@ -24,15 +24,26 @@ module.exports = class GithubContributors extends GithubAuthV3Service {
         user: 'cdnjs',
         repo: 'cdnjs',
       },
-      staticPreview: this.render({ contributorCount: 397 }),
+      // TODO: This is currently a literal, as `staticPreview` doesn't
+      // support `link`.
+      staticPreview: {
+        label: 'contributors',
+        message: '397',
+        color: 'brightgreen',
+      },
       documentation,
     },
   ]
 
   static defaultBadgeData = { label: 'contributors' }
 
-  static render({ contributorCount }) {
-    return renderContributorBadge({ contributorCount })
+  static render({ user, repo, contributorCount }) {
+    const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
+    const link = [
+      `https://github.com/${slug}`,
+      `https://github.com/${slug}/graphs/contributors`,
+    ]
+    return renderContributorBadgeWithLink({ contributorCount, link })
   }
 
   async handle({ variant, user, repo }) {
@@ -54,6 +65,6 @@ module.exports = class GithubContributors extends GithubAuthV3Service {
       contributorCount = +parsed.last.page
     }
 
-    return this.constructor.render({ contributorCount })
+    return this.constructor.render({ user, repo, contributorCount })
   }
 }
