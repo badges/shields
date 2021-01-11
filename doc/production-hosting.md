@@ -44,15 +44,13 @@ Production hosting is managed by the Shields ops team:
 
 Shields has mercifully little persistent state:
 
-1.  The GitHub tokens we collect are saved on each server in a cloud Redis database.
-    They can also be fetched from the [GitHub auth admin endpoint][] for debugging.
-2.  The server keeps a few caches in memory. These are neither persisted nor
-    inspectable.
-    - The [request cache][]
-    - The [regular-update cache][]
+1. The GitHub tokens we collect are saved on each server in a cloud Redis
+   database. They can also be fetched from the [GitHub auth admin endpoint][]
+   for debugging.
+2. The server keeps the [regular-update cache][] in memory. It is neither
+   persisted nor inspectable.
 
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
-[request cache]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js#L29-L30
 [regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
 
 ## Configuration
