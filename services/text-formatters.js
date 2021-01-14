@@ -119,6 +119,9 @@ function formatDate(d) {
 }
 
 function formatRelativeDate(timestamp) {
+  if (timestamp instanceof Date) {
+    timestamp = timestamp.getTime() / 1000
+  }
   return moment()
     .to(moment.unix(parseInt(timestamp, 10)))
     .toLowerCase()
