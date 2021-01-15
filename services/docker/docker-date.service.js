@@ -106,10 +106,11 @@ module.exports = class DockerDate extends BaseJsonService {
   async handle({ user, repo, tag }, { arch }) {
     let data
 
-    data = (await this.fetch({ user, repo })).results
+    data = await this.fetch({ user, repo })
     if (data.count === 0) {
       throw new NotFound({ prettyMessage: 'repository not found' })
     }
+    data = data.results
     if (tag && !data.find(d => d.name === tag)) {
       data = await getMultiPageData({
         user,
