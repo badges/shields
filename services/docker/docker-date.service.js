@@ -90,36 +90,27 @@ module.exports = class DockerDate extends BaseJsonService {
     })
   }
 
-  transform({ tag, data, pagedData, arch = 'amd64' }) {
+  transform({ tag, data, arch = 'amd64' }) {
     let version
     if (!tag) {
-      version = data.results[0]
-      return { version: version.last_updated }
+      version = data[0]
     } else {
       version = data.find(d => d.name === tag)
-      if (!version) {
-        throw new NotFound({ prettyMessage: 'tag not found' })
-      }
-      return { version: version.last_updated }
     }
+    if (!version) {
+      throw new NotFound({ prettyMessage: 'tag not found' })
+    }
+    return { version: version.last_updated }
   }
 
   async handle({ user, repo, tag }, { arch }) {
-    let data, pagedData
+    let data
 
-    if (!tag) {
-      data = await this.fetch({ user, repo })
-      if (data.count === 0) {
-        throw new NotFound({ prettyMessage: 'repository not found' })
-      }
-      if (data.results[0].name === 'latest') {
-        pagedData = await getMultiPageData({
-          user,
-          repo,
-          fetch: this.fetch.bind(this),
-        })
-      }
-    } else {
+    data = (await this.fetch({ user, repo })).results
+    if (data.count === 0) {
+      throw new NotFound({ prettyMessage: 'repository not found' })
+    }
+    if (tag && !data.find(d => d.name === tag)) {
       data = await getMultiPageData({
         user,
         repo,
@@ -130,7 +121,6 @@ module.exports = class DockerDate extends BaseJsonService {
     const { version } = await this.transform({
       tag,
       data,
-      pagedData,
       arch,
     })
     return this.constructor.render({ version })
