@@ -46,10 +46,10 @@ class BaseGraphqlService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
-   * @param {Function} [attrs.transformJson=data => data] Function which takes the raw json and transforms it before
+   * @param {Function} [attrs.transformJson] Function which takes the raw json and transforms it before
    * further procesing. In case of multiple query in a single graphql call and few of them
    * throw error, partial data might be used ignoring the error.
-   * @param {Function} [attrs.transformErrors=defaultTransformErrors]
+   * @param {Function} [attrs.transformErrors = defaultTransformErrors]
    *    Function which takes an errors object from a GraphQL
    *    response and returns an instance of ShieldsRuntimeError.
    *    The default is to return the first entry of the `errors` array as
