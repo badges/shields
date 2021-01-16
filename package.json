@@ -32,7 +32,7 @@
     "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.3",
     "cross-env": "^7.0.3",
-    "decamelize": "^3.2.0",
+    "decamelize": "^5.0.0",
     "emojic": "^1.1.16",
     "escape-string-regexp": "^4.0.0",
     "fast-xml-parser": "^3.17.6",
