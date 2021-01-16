@@ -201,8 +201,7 @@ Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [de
 You can enable them by `METRICS_PROMETHEUS_ENABLED` and `METRICS_PROMETHEUS_ENDPOINT_ENABLED` environment variables.
 
 ```bash
-METRICS_PROMETHEUS_ENABLED=true
-METRICS_PROMETHEUS_ENDPOINT_ENABLED=true
+METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ENDPOINT_ENABLED=true npm start
 ```
 
 Metrics are available at `/metrics` resource.
