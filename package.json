@@ -57,7 +57,7 @@
     "query-string": "^6.13.8",
     "request": "~2.88.2",
     "semver": "~7.3.4",
-    "simple-icons": "4.5.0",
+    "simple-icons": "4.6.0",
     "webextension-store-meta": "^1.0.3",
     "xmldom": "~0.4.0",
     "xpath": "~0.0.32"
@@ -223,7 +223,7 @@
     "react-helmet": "^6.1.0",
     "react-modal": "^3.12.1",
     "react-pose": "^4.0.10",
-    "react-select": "^3.1.1",
+    "react-select": "^3.2.0",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
     "require-hacker": "^3.0.1",
