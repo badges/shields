@@ -6,11 +6,7 @@ const portfinder = require('portfinder')
 const Camp = require('@shields_io/camp')
 const got = require('../got-test-client')
 const coalesceBadge = require('./coalesce-badge')
-const {
-  handleRequest,
-  clearRequestCache,
-  _requestCache,
-} = require('./legacy-request-handler')
+const { handleRequest } = require('./legacy-request-handler')
 
 async function performTwoRequests(baseUrl, first, second) {
   expect((await got(`${baseUrl}${first}`)).statusCode).to.equal(200)
@@ -83,7 +79,6 @@ describe('The request handler', function () {
     camp.on('listening', () => done())
   })
   afterEach(function (done) {
-    clearRequestCache()
     if (camp) {
       camp.close(() => done())
       camp = null
@@ -196,56 +191,17 @@ describe('The request handler', function () {
 
   describe('caching', function () {
     describe('standard query parameters', function () {
-      let handlerCallCount
-      beforeEach(function () {
-        handlerCallCount = 0
-      })
-
       function register({ cacheHeaderConfig }) {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
             cacheHeaderConfig,
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               fakeHandler(queryParams, match, sendBadge, request)
             }
           )
         )
       }
-
-      context('With standard cache settings', function () {
-        beforeEach(function () {
-          register({ cacheHeaderConfig: standardCacheHeaders })
-        })
-
-        it('should cache identical requests', async function () {
-          await performTwoRequests(
-            baseUrl,
-            '/testing/123.svg',
-            '/testing/123.svg'
-          )
-          expect(handlerCallCount).to.equal(1)
-        })
-
-        it('should differentiate known query parameters', async function () {
-          await performTwoRequests(
-            baseUrl,
-            '/testing/123.svg?label=foo',
-            '/testing/123.svg?label=bar'
-          )
-          expect(handlerCallCount).to.equal(2)
-        })
-
-        it('should ignore unknown query parameters', async function () {
-          await performTwoRequests(
-            baseUrl,
-            '/testing/123.svg?foo=1',
-            '/testing/123.svg?foo=2'
-          )
-          expect(handlerCallCount).to.equal(1)
-        })
-      })
 
       it('should set the expires header to current time + defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
@@ -277,7 +233,6 @@ describe('The request handler', function () {
           handleRequest(
             { defaultCacheLengthSeconds: 300 },
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               createFakeHandlerWithCacheLength(400)(
                 queryParams,
                 match,
@@ -298,7 +253,6 @@ describe('The request handler', function () {
           handleRequest(
             { defaultCacheLengthSeconds: 300 },
             (queryParams, match, sendBadge, request) => {
-              ++handlerCallCount
               createFakeHandlerWithCacheLength(200)(
                 queryParams,
                 match,
@@ -344,21 +298,6 @@ describe('The request handler', function () {
         expect(headers['cache-control']).to.equal(
           'no-cache, no-store, must-revalidate'
         )
-      })
-
-      describe('the cache key', function () {
-        beforeEach(function () {
-          register({ cacheHeaderConfig: standardCacheHeaders })
-        })
-        const expectedCacheKey = '/testing/123.json?color=123&label=foo'
-        it('should match expected and use canonical order - 1', async function () {
-          await got(`${baseUrl}/testing/123.json?color=123&label=foo`)
-          expect(_requestCache.cache).to.have.keys(expectedCacheKey)
-        })
-        it('should match expected and use canonical order - 2', async function () {
-          await got(`${baseUrl}/testing/123.json?label=foo&color=123`)
-          expect(_requestCache.cache).to.have.keys(expectedCacheKey)
-        })
       })
     })
 

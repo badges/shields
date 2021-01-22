@@ -1,8 +1,8 @@
 'use strict'
 
-const { NonMemoryCachingBaseService } = require('..')
+const { BaseService } = require('..')
 
-module.exports = class Maintenance extends NonMemoryCachingBaseService {
+module.exports = class Maintenance extends BaseService {
   static category = 'other'
 
   static route = {

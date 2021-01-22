@@ -52,6 +52,13 @@ function WordpressRequiresVersion(extensionType) {
         extensionType,
         slug,
       })
+
+      if (wordpressVersion === false) {
+        throw new NotFound({
+          prettyMessage: `not set for this ${extensionType}`,
+        })
+      }
+
       return this.constructor.render({ wordpressVersion })
     }
   }

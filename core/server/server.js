@@ -15,10 +15,7 @@ const GithubConstellation = require('../../services/github/github-constellation'
 const suggest = require('../../services/suggest')
 const { loadServiceClasses } = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
-const {
-  handleRequest,
-  clearRequestCache,
-} = require('../base-service/legacy-request-handler')
+const { handleRequest } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
@@ -485,7 +482,6 @@ class Server {
   static resetGlobalState() {
     // This state should be migrated to instance state. When possible, do not add new
     // global state.
-    clearRequestCache()
     clearRegularUpdateCache()
   }
 
