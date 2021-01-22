@@ -463,9 +463,7 @@ describe('BaseService', function () {
         'fetch',
         sinon.match.string,
         'Request',
-        url,
-        '\n',
-        options
+        `${url}\n${JSON.stringify(options, null, 2)}`
       )
       expect(trace.logTrace).to.be.calledWithMatch(
         'fetch',
