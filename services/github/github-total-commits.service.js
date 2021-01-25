@@ -62,7 +62,7 @@ module.exports = class GithubTotalCommits extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, repo, branch }) {
+  async fetch({ user, repo, branch = 'HEAD' }) {
     return this._requestGraphql({
       query: gql`
         query($user: String!, $repo: String!, $branch: String!) {
@@ -84,7 +84,7 @@ module.exports = class GithubTotalCommits extends GithubAuthV4Service {
   }
 
   async handle({ user, repo, branch }) {
-    const json = await this.fetch({ user, repo, branch: branch ?? 'HEAD' })
+    const json = await this.fetch({ user, repo, branch })
     const commits = json.data.repository.object.history.totalCount
     return this.constructor.render({ commits })
   }
