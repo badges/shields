@@ -2,6 +2,7 @@
 
 const gql = require('graphql-tag')
 const Joi = require('joi')
+const { downloadCount } = require('../color-formatters')
 const { metric } = require('../text-formatters')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const { documentation, transformErrors } = require('./github-helpers')
@@ -59,6 +60,7 @@ module.exports = class GithubTotalCommits extends GithubAuthV4Service {
   static render({ commits }) {
     return {
       message: metric(commits),
+      color: downloadCount(commits),
     }
   }
 
