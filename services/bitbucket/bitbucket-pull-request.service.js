@@ -29,7 +29,7 @@ function pullRequestClassGenerator(raw) {
     static category = 'issue-tracking'
     static route = {
       base: `bitbucket/${routePrefix}`,
-      pattern: `:projectOrUser/:repo`,
+      pattern: `:user/:repo`,
       queryParamSchema,
     }
 
@@ -37,7 +37,7 @@ function pullRequestClassGenerator(raw) {
       {
         title: 'Bitbucket open pull requests',
         namedParams: {
-          projectOrUser: 'atlassian',
+          user: 'atlassian',
           repo: 'python-bitbucket',
         },
         staticPreview: this.render({ prs: 22 }),
@@ -45,7 +45,7 @@ function pullRequestClassGenerator(raw) {
       {
         title: 'Bitbucket Server open pull requests',
         namedParams: {
-          projectOrUser: 'foo',
+          user: 'foo',
           repo: 'bar',
         },
         queryParams: { server: 'https://bitbucket.mydomain.net' },
@@ -83,10 +83,10 @@ function pullRequestClassGenerator(raw) {
       )
     }
 
-    async fetchCloud({ projectOrUser, repo }) {
+    async fetchCloud({ user, repo }) {
       return this._requestJson(
         this.bitbucketAuthHelper.withBasicAuth({
-          url: `https://bitbucket.org/api/2.0/repositories/${projectOrUser}/${repo}/pullrequests/`,
+          url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
           schema,
           options: { qs: { state: 'OPEN', limit: 0 } },
           errorMessages,
@@ -95,10 +95,10 @@ function pullRequestClassGenerator(raw) {
     }
 
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
-    async fetchServer({ server, projectOrUser, repo }) {
+    async fetchServer({ server, user, repo }) {
       return this._requestJson(
         this.bitbucketServerAuthHelper.withBasicAuth({
-          url: `${server}/rest/api/1.0/projects/${projectOrUser}/repos/${repo}/pull-requests`,
+          url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
           schema,
           options: {
             qs: {
@@ -113,16 +113,16 @@ function pullRequestClassGenerator(raw) {
       )
     }
 
-    async fetch({ server, projectOrUser, repo }) {
+    async fetch({ server, user, repo }) {
       if (server !== undefined) {
-        return this.fetchServer({ server, projectOrUser, repo })
+        return this.fetchServer({ server, user, repo })
       } else {
-        return this.fetchCloud({ projectOrUser, repo })
+        return this.fetchCloud({ user, repo })
       }
     }
 
-    async handle({ projectOrUser, repo }, { server }) {
-      const data = await this.fetch({ server, projectOrUser, repo })
+    async handle({ user, repo }, { server }) {
+      const data = await this.fetch({ server, user, repo })
       return this.constructor.render({ prs: data.size })
     }
   }
