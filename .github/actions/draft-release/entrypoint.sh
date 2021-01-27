@@ -34,8 +34,7 @@ sed -i "${INSERT_POINT} r temp-changes.txt" CHANGELOG.md
 rm temp-changes.txt
 
 # Run prettier (to ensure the markdown file doesn't fail CI)
-npm ci
-npm run prettier
+npx prettier@$(cat package.json | jq -r .devDependencies.prettier) --write "CHANGELOG.md"
 
 # Generate a unique branch name
 BRANCH_NAME="$RELEASE_NAME"-$(uuidgen | head -c 8)
