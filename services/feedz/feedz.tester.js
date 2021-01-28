@@ -12,6 +12,7 @@ const t = (module.exports = new ServiceTester({
 //  - Shields.NoV1: 0.1.0
 //  - Shields.TestPackage: 0.0.1, 0.1.0-pre, 1.0.0
 //  - Shields.TestPreOnly: 0.1.0-pre
+//  - Shields.MultiPage: 0.1.0-0.1.100 plus 1.0.0 but the response has multiple top-level `items`
 // The source code of these packages is here: https://github.com/jakubfijalkowski/shields-test-packages
 
 // version
@@ -37,6 +38,14 @@ t.create('version (orange badge)')
     label: 'feedz',
     message: 'v0.1.0',
     color: 'orange',
+  })
+
+t.create('multi-page')
+  .get('/feedz/v/shieldstests/public/Shields.MultiPage.json')
+  .expectBadge({
+    label: 'feedz',
+    message: 'v1.0.0',
+    color: 'blue',
   })
 
 t.create('repository (not found)')
@@ -74,6 +83,14 @@ t.create('version (pre) (orange badge)')
     label: 'feedz',
     message: 'v0.1.0',
     color: 'orange',
+  })
+
+t.create('multi-page (pre)')
+  .get('/feedz/vpre/shieldstests/public/Shields.MultiPage.json')
+  .expectBadge({
+    label: 'feedz',
+    message: 'v1.0.0',
+    color: 'blue',
   })
 
 t.create('repository (pre) (not found)')
