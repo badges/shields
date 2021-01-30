@@ -1,6 +1,8 @@
+'use strict'
+
 function findChangelogStart(lines) {
   for (let i = 0; i < lines.length; i++) {
-    line = lines[i]
+    const line = lines[i]
     if (
       line === '<summary>Changelog</summary>' &&
       lines[i + 2] === '<blockquote>'
@@ -13,7 +15,7 @@ function findChangelogStart(lines) {
 
 function findChangelogEnd(lines, start) {
   for (let i = start; i < lines.length; i++) {
-    line = lines[i]
+    const line = lines[i]
     if (line === '</blockquote>') {
       return i
     }
@@ -33,7 +35,9 @@ function allChangelogLinesAreVersionBump(changelogLines) {
 
 function isPointlessGatsbyBump(body) {
   const lines = body.split(/\r?\n/)
-  if (!lines[0].includes('https://github.com/gatsbyjs/gatsby')) {
+  if (
+    !lines[0].includes('https://github.com/gatsbyjs/gatsby') // lgtm [js/incomplete-url-substring-sanitization]
+  ) {
     return false
   }
   const start = findChangelogStart(lines)
