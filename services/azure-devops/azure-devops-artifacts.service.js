@@ -6,6 +6,7 @@ const { addv } = require('../text-formatters')
 const {
   renderVersionBadge: renderNugetVersionBadge,
 } = require('../nuget/nuget-helpers')
+const { NotFound } = require('..')
 const AzureDevOpsBase = require('./azure-devops-base')
 
 const getPackagesSchema = Joi.object({
@@ -34,16 +35,17 @@ module.exports = class Example extends AzureDevOpsBase {
 
   static route = {
     base: 'azure-devops/artifacts',
-    pattern: ':organization/:project/:feedId/:packageName',
+    pattern: ':which(v|vpre)/:organization/:project/:feedId/:packageName',
   }
 
-  async handle({ organization, project, feedId, packageName }) {
+  async handle({ which, organization, project, feedId, packageName }) {
     const url = `https://feeds.dev.azure.com/${organization}/${project}/_apis/packaging/Feeds/${feedId}/packages`
     const options = {
       qs: {
         packageNameQuery: packageName,
         $top: 1,
         includeUrls: false,
+        isRelease: which === 'v',
         'api-version': '6.0-preview.1',
       },
     }
@@ -58,20 +60,12 @@ module.exports = class Example extends AzureDevOpsBase {
     })
 
     if (json.value.length === 0) {
-      return {
-        label: 'Azure Artifacts',
-        message: `unknown package ${packageName}`,
-        color: 'red',
-      }
+      throw new NotFound({ prettyMessage: `${packageName} package not found` })
     }
 
     const packageObj = json.value[0]
     if (packageObj.normalizedName !== packageName.toLowerCase()) {
-      return {
-        label: 'Azure Artifacts',
-        message: `unknown package ${packageName}`,
-        color: 'red',
-      }
+      throw new NotFound({ prettyMessage: `${packageName} package not found` })
     }
 
     const protocolType = packageObj.protocolType
