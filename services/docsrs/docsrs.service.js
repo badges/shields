@@ -3,9 +3,14 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
-const schema = Joi.object({
-  build_status: Joi.boolean().required(),
-}).required()
+const schema = Joi.array()
+  .items(
+    Joi.object({
+      build_status: Joi.boolean().required(),
+    })
+  )
+  .min(1)
+  .required()
 
 module.exports = class DocsRs extends BaseJsonService {
   static category = 'build'
@@ -19,17 +24,19 @@ module.exports = class DocsRs extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'docs' }
+  static defaultBadgeData = {}
 
   static render({ buildStatus, version }) {
     if (buildStatus) {
       return {
-        message: version,
+        label: `docs@${version}`,
+        message: 'passing',
         color: 'success',
       }
     } else {
       return {
-        message: `${version} | failed`,
+        label: `docs@${version}`,
+        message: 'failing',
         color: 'critical',
         isError: true,
       }
@@ -43,11 +50,10 @@ module.exports = class DocsRs extends BaseJsonService {
     })
   }
 
-  async handle({ crate, version }) {
-    if (version === undefined) {
-      version = 'latest'
-    }
-    const { build_status: buildStatus } = await this.fetch({ crate, version })
+  async handle({ crate, version = 'latest' }) {
+    const { build_status: buildStatus } = (
+      await this.fetch({ crate, version })
+    ).pop()
     return this.constructor.render({ version, buildStatus })
   }
 }
