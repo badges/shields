@@ -156,6 +156,11 @@ Because all changes are pulled into the main branch via squash merges from PRs, 
 
 Accordingly, it is the responsibility of contributors to review this type of information and adjust as needed before marking PRs as ready for review and merging.
 
+You can review and modify your local [git configuration][git-config] via `git config`, and also find more information about amending your commit messages [here][amending-commits].
+
+[git-config]: https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+[amending-commits]: https://docs.github.com/en/github/committing-changes-to-your-project/changing-a-commit-message#rewriting-the-most-recent-commit-message
+
 ### Running service tests in pull requests
 
 The affected service names must be included in square brackets in the pull request title so that the CI engine will run those service tests. When a pull request affects multiple services, they should be separated with spaces. The test runner is case-insensitive, so they should be capitalized for readability.
