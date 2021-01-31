@@ -22,7 +22,6 @@ const schema = Joi.object({
         ),
       }).required()
     )
-    .max(1)
     .default([]),
 }).required()
 
@@ -84,10 +83,10 @@ class FeedzVersionService extends BaseJsonService {
   }
 
   transform({ json, includePrereleases }) {
-    if (json.items.length === 1 && json.items[0].items.length > 0) {
-      const versions = json.items[0].items.map(i =>
-        stripBuildMetadata(i.catalogEntry.version)
-      )
+    const versions = json.items.flatMap(tl =>
+      tl.items.map(i => stripBuildMetadata(i.catalogEntry.version))
+    )
+    if (versions.length >= 1) {
       return selectVersion(versions, includePrereleases)
     } else {
       throw new NotFound({ prettyMessage: 'package not found' })

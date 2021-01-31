@@ -4,3 +4,4 @@
 /__snapshots__
 /public
 badge-maker/node_modules/
+!.github/

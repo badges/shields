@@ -5,6 +5,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: chris48s/approve-bot@2.0.2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install action dependencies
+        run: cd .github/actions/approve-bot && npm ci
+
+      - uses: ./.github/actions/approve-bot
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
