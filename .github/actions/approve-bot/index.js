@@ -13,7 +13,7 @@ async function run() {
       throw new Error('Event payload missing `pull_request`')
     }
 
-    const client = new github.GitHub(token)
+    const client = github.getOctokit(token)
 
     if (
       ['dependabot[bot]', 'dependabot-preview[bot]'].includes(pr.user.login)
