@@ -24,21 +24,24 @@ module.exports = class DocsRs extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = {}
+  static defaultBadgeData = { label: 'docs' }
 
   static render({ buildStatus, version }) {
+    let label = `docs@${version}`
+    if (version === 'latest') {
+      label = 'docs'
+    }
     if (buildStatus) {
       return {
-        label: `docs@${version}`,
+        label,
         message: 'passing',
         color: 'success',
       }
     } else {
       return {
-        label: `docs@${version}`,
+        label,
         message: 'failing',
         color: 'critical',
-        isError: true,
       }
     }
   }
