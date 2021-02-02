@@ -41,7 +41,7 @@ function renderArtifactBadge(version, protocolType) {
       }
 }
 
-module.exports = class Example extends AzureDevOpsBase {
+module.exports = class AzureDevOpsArtifacts extends AzureDevOpsBase {
   static category = 'version'
 
   static route = {
