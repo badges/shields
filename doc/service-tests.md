@@ -260,21 +260,9 @@ npm run coverage:report:open
 
 ## Pull requests
 
-The affected service ids should be included in square brackets in the pull request
-title. That way, Circle CI will run those service tests. When a pull request
-affects multiple services, they should be separated with spaces. The test
-runner is case-insensitive, so they should be capitalized for readability.
+Pull requests must follow the [documented conventions][pr-conventions] in order to execute the correct set of service tests.
 
-For example:
-
-- [Travis] Fix timeout issues
-- [Travis Sonar] Support user token authentication
-- Add tests for [CRAN] and [CPAN]
-
-In the rare case when it's necessary to see the output of a full service-test
-run in a PR, include `[*****]` in the title. Unless all the tests pass, the build
-will fail, so likely it will be necessary to remove it and re-run the tests
-before merging.
+[pr-conventions]: https://github.com/badges/shields/blob/master/CONTRIBUTING.md#running-service-tests-in-pull-requests
 
 ## Getting help
 
