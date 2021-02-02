@@ -8,6 +8,7 @@ const {
 } = require('../nuget/nuget-helpers')
 const { NotFound } = require('..')
 const AzureDevOpsBase = require('./azure-devops-base')
+const { keywords } = require('./azure-devops-helpers')
 
 const getPackagesSchema = Joi.object({
   count: Joi.number().required(),
@@ -30,22 +31,47 @@ const getPackagesSchema = Joi.object({
     .required(),
 }).required()
 
+function renderArtifactBadge(version, protocolType) {
+  return protocolType === 'NuGet'
+    ? renderNugetVersionBadge({ version, feed: `Azure Artifacts NuGet` })
+    : {
+        label: `Azure Artifacts ${protocolType}`,
+        message: addv(version),
+        color: versionColor(version),
+      }
+}
+
 module.exports = class Example extends AzureDevOpsBase {
-  static category = 'build'
+  static category = 'version'
 
   static route = {
     base: 'azure-devops/artifacts',
-    pattern: ':which(v|vpre)/:organization/:project/:feedId/:packageName',
+    pattern: ':prerel(v|vpre)/:organization/:project/:feedId/:packageName',
   }
 
-  async handle({ which, organization, project, feedId, packageName }) {
+  static examples = [
+    {
+      title: 'Azure DevOps Artifacts',
+      namedParams: {
+        prerel: 'v',
+        organization: 'dotnet',
+        project: 'NuGetPackageExplorer',
+        feedId: 'BuildPackages',
+        packageName: 'NuGetPackageExplorer.Core',
+      },
+      staticPreview: renderArtifactBadge('1.2.28', 'NuGet'),
+      keywords,
+    },
+  ]
+
+  async handle({ prerel, organization, project, feedId, packageName }) {
     const url = `https://feeds.dev.azure.com/${organization}/${project}/_apis/packaging/Feeds/${feedId}/packages`
     const options = {
       qs: {
         packageNameQuery: packageName,
         $top: 1,
         includeUrls: false,
-        isRelease: which === 'v',
+        isRelease: prerel === 'v',
         'api-version': '6.0-preview.1',
       },
     }
@@ -71,12 +97,6 @@ module.exports = class Example extends AzureDevOpsBase {
     const protocolType = packageObj.protocolType
     const version = packageObj.versions[0].version
 
-    return protocolType === 'NuGet'
-      ? renderNugetVersionBadge({ version, feed: `Azure Artifacts NuGet` })
-      : {
-          label: `Azure Artifacts ${protocolType}`,
-          message: addv(version),
-          color: versionColor(version),
-        }
+    return renderArtifactBadge(version, protocolType)
   }
 }
