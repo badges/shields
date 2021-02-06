@@ -24,7 +24,7 @@ touch temp-changes.txt
     echo "## $RELEASE_NAME"
     echo ""
     git log "$LAST_TAG"..HEAD --no-merges --oneline --pretty="format:- %s" --perl-regexp --author='^((?!dependabot).*)$'
-    echo $'\n'
+    echo $'\n- Dependency updates\n'
 } >> temp-changes.txt
 
 # Write the changelog
