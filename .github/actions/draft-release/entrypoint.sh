@@ -26,6 +26,8 @@ touch temp-changes.txt
     git log "$LAST_TAG"..HEAD --no-merges --oneline --pretty="format:- %s" --perl-regexp --author='^((?!dependabot).*)$'
     echo $'\n- Dependency updates\n'
 } >> temp-changes.txt
+BASE_URL="https:\/\/github.com\/badges\/shields\/issues\/"
+sed -r -i "s/\((\#)([0-9]+)\)$/\[\1\2\]\($BASE_URL\2\)/g" temp-changes.txt
 
 # Write the changelog
 sed -i "${INSERT_POINT} r temp-changes.txt" CHANGELOG.md
