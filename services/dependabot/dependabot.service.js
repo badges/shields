@@ -46,13 +46,6 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
     })
   }
 
-  _getLink({ packageManager, dependencyName }) {
-    const qs = new url.URLSearchParams(
-      this._getQuery({ packageManager, dependencyName })
-    )
-    return `https://dependabot.com/compatibility-score.html?${qs.toString()}`
-  }
-
   async handle({ packageManager, dependencyName }) {
     const json = await this.fetch({ packageManager, dependencyName })
     return {
