@@ -1,6 +1,5 @@
 'use strict'
 
-const url = require('url')
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
