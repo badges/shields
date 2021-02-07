@@ -58,7 +58,6 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
     return {
       color: json.colour,
       message: json.status,
-      link: this._getLink({ packageManager, dependencyName }),
     }
   }
 }

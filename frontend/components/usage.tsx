@@ -378,8 +378,10 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
           <QueryParam
             documentation={
               <span>
-                Specify what clicking on the left/right of a badge should do
-                (esp. for social badge style)
+                Specify what clicking on the left/right of a badge should do.
+                Note that this only works when integrating your badge in an
+                <StyledCode>&lt;object&gt;</StyledCode> HTML tag, but not an
+                <StyledCode>&lt;img&gt;</StyledCode> tag or a markup language.
               </span>
             }
             key="link"
