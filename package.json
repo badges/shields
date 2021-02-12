@@ -161,7 +161,7 @@
     "caller": "^1.0.1",
     "chai": "^4.3.0",
     "chai-as-promised": "^7.1.1",
-    "chai-datetime": "^1.7.0",
+    "chai-datetime": "^1.8.0",
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
