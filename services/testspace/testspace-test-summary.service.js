@@ -23,7 +23,6 @@ module.exports = class TestspaceTests extends TestspaceBase {
         space: 'main',
       },
       queryParams: {
-        compact_message: null,
         passed_label: 'passed',
         failed_label: 'failed',
         skipped_label: 'skipped',
