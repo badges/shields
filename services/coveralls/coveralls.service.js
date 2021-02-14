@@ -17,31 +17,12 @@ module.exports = class Coveralls extends BaseJsonService {
 
   static examples = [
     {
-      title: 'Coveralls github',
-      pattern: ':vcsType/:user/:repo',
+      title: 'Coveralls',
       namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
       staticPreview: this.render({ coverage: 86 }),
     },
     {
-      title: 'Coveralls github branch',
-      pattern: ':vcsType/:user/:repo/:branch',
-      namedParams: {
-        vcsType: 'github',
-        user: 'lemurheavy',
-        repo: 'coveralls-ruby',
-        branch: 'master',
-      },
-      staticPreview: this.render({ coverage: 91.81 }),
-    },
-    {
-      title: 'Coveralls bitbucket',
-      pattern: ':vcsType/:user/:repo',
-      namedParams: { vcsType: 'bitbucket', user: 'pyKLIP', repo: 'pyklip' },
-      staticPreview: this.render({ coverage: 86 }),
-    },
-    {
-      title: 'Coveralls bitbucket branch',
-      pattern: ':vcsType/:user/:repo/:branch',
+      title: 'Coveralls branch',
       namedParams: {
         vcsType: 'bitbucket',
         user: 'pyKLIP',
