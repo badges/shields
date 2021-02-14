@@ -4,7 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const isPipeSeparatedDjangoVersions = Joi.string().regex(
-  /^([0-9]+\.[0-9]+(?: \| )?)+$/
+  /^([1-9]\.[0-9]+(?: \| )?)+$/
 )
 
 t.create('supported django versions (valid, package version in request)')
