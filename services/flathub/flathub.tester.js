@@ -22,4 +22,4 @@ t.create('Flathub (valid)')
 
 t.create('Flathub (not found)')
   .get('/not.a.package.json')
-  .expectBadge({ label: 'flathub', message: 'not.a.package not found' })
+  .expectBadge({ label: 'flathub', message: 'not found' })
