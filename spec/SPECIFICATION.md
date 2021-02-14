@@ -8,7 +8,7 @@ This document specifies the visual design of Shields badges.
 - **semantic**: the purpose of the information provided by a badge should be self-evident
 - **non-promotional**: badges should refrain from advertising a service but instead provide value through the badge's information instead
 - **concise**: one descriptive word on the left (the key), one piece of data on the right (the value)
-- **hyperlinked**: badges can link to a third-party website providing more information, either related to the metadata provided by the badge or about the project the badge was used for (e.g. an open source library)
+- **hyperlinked**: badges with style 'social' can link to a third-party website providing more information, either related to the metadata provided by the badge or about the project the badge was used for (e.g. an open source library)
 
 ### Example
 

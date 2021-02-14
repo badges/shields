@@ -8,7 +8,6 @@ t.create('All Milestones')
   .expectBadge({
     label: 'milestones',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestones`],
   })
 
 t.create('Open Milestones')
@@ -16,7 +15,6 @@ t.create('Open Milestones')
   .expectBadge({
     label: 'active milestones',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestones`],
   })
 
 t.create('Closed Milestones')
@@ -24,7 +22,6 @@ t.create('Closed Milestones')
   .expectBadge({
     label: 'completed milestones',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestones`],
   })
 
 t.create('Milestones (repo not found)')

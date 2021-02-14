@@ -1,6 +1,5 @@
 'use strict'
 
-const url = require('url')
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
@@ -46,19 +45,11 @@ module.exports = class DependabotSemverCompatibility extends BaseJsonService {
     })
   }
 
-  _getLink({ packageManager, dependencyName }) {
-    const qs = new url.URLSearchParams(
-      this._getQuery({ packageManager, dependencyName })
-    )
-    return `https://dependabot.com/compatibility-score.html?${qs.toString()}`
-  }
-
   async handle({ packageManager, dependencyName }) {
     const json = await this.fetch({ packageManager, dependencyName })
     return {
       color: json.colour,
       message: json.status,
-      link: this._getLink({ packageManager, dependencyName }),
     }
   }
 }

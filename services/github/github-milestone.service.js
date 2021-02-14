@@ -65,7 +65,6 @@ module.exports = class GithubMilestone extends GithubAuthV3Service {
       label: `${label} milestones`,
       message: metric(milestoneLength),
       color,
-      link: [`https://github.com/${user}/${repo}/milestones`],
     }
   }
 

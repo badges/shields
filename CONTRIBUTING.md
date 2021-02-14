@@ -101,7 +101,7 @@ There are three places to get help:
   used by developers or which are widely used by developers.
 - The left-hand side of a badge should not advertise. It should be a lowercase _noun_
   succinctly describing the meaning of the right-hand side.
-- Except for badges using the `social` style, logos should be _turned off by
+- Except for badges using the `social` style, logos and links should be _turned off by
   default_.
 - Badges should not obtain data from undocumented or reverse-engineered API endpoints.
 - Badges should not obtain data by scraping web pages - these are likely to break frequently.

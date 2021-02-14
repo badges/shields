@@ -12,7 +12,6 @@ t.create('Milestone Open Issues')
   .expectBadge({
     label: 'openWithOneOpenIssue open issues',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestone/1`],
   })
 
 t.create('Milestone Closed Issues')
@@ -20,7 +19,6 @@ t.create('Milestone Closed Issues')
   .expectBadge({
     label: 'closedWithOneClosedIssue closed issues',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestone/3`],
   })
 
 t.create('Milestone Total Issues')
@@ -28,7 +26,6 @@ t.create('Milestone Total Issues')
   .expectBadge({
     label: 'openWithOneOpenOneClosedIssue issues',
     message: isMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestone/2`],
   })
 
 t.create('Milestone Progress')
@@ -36,7 +33,6 @@ t.create('Milestone Progress')
   .expectBadge({
     label: 'openWithOneOpenOneClosedIssue',
     message: isMetricOverMetric,
-    link: [`https://github.com/MacroPower/milestone-test/milestone/2`],
   })
 
 t.create('Milestone Progress (Percent)')
@@ -44,7 +40,6 @@ t.create('Milestone Progress (Percent)')
   .expectBadge({
     label: 'openWithOneOpenOneClosedIssue',
     message: isIntegerPercentage,
-    link: [`https://github.com/MacroPower/milestone-test/milestone/2`],
   })
 
 t.create('Milestones (repo or milestone not found)')
