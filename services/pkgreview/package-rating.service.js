@@ -62,7 +62,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   async fetch({ pkgManager, pkgSlug }) {
     return this._requestJson({
       schema,
-      url: `https://pkgreview.dev/api/v1/${pkgManager}/${encodeURIComponent(
+      url: `https://pkgreview.now.sh/api/v1/${pkgManager}/${encodeURIComponent(
         pkgSlug
       )}`,
       errorMessages: {
