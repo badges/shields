@@ -140,7 +140,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.12.13",
+    "@babel/core": "^7.12.17",
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.12.13",
     "@mapbox/react-click-to-select": "^2.2.0",
@@ -187,7 +187,7 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "eslint-plugin-sort-class-members": "^1.9.0",
     "fetch-ponyfill": "^7.1.0",
-    "form-data": "^3.0.0",
+    "form-data": "^4.0.0",
     "gatsby": "2.32.3",
     "gatsby-plugin-catch-links": "^2.3.10",
     "gatsby-plugin-page-creator": "^2.10.0",
