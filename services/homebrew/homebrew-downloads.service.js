@@ -14,11 +14,6 @@ function getSchema({ formula }) {
         '90d': Joi.object({ [formula]: nonNegativeInteger }).required(),
         '365d': Joi.object({ [formula]: nonNegativeInteger }).required(),
       }).required(),
-      install_on_request: Joi.object({
-        '30d': Joi.object({ [formula]: nonNegativeInteger }).required(),
-        '90d': Joi.object({ [formula]: nonNegativeInteger }).required(),
-        '365d': Joi.object({ [formula]: nonNegativeInteger }).required(),
-      }).required(),
     }).required(),
   }).required()
 }
