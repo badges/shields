@@ -12,13 +12,14 @@ module.exports = class Coveralls extends BaseJsonService {
   static category = 'coverage'
   static route = {
     base: 'coveralls',
-    pattern: ':vcsType(github|bitbucket)?/:user/:repo/:branch*',
+    pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch*',
   }
 
   static examples = [
     {
       title: 'Coveralls',
       namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
+      pattern: ':vcsType(github|bitbucket)/:user/:repo',
       staticPreview: this.render({ coverage: 86 }),
     },
     {
@@ -29,6 +30,7 @@ module.exports = class Coveralls extends BaseJsonService {
         repo: 'pyklip',
         branch: 'master',
       },
+      pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch',
       staticPreview: this.render({ coverage: 96 }),
     },
   ]
