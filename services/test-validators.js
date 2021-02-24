@@ -73,10 +73,12 @@ const isMetricOverMetric = withRegex(
 )
 
 const isMetricOverTimePeriod = withRegex(
-  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|week|day)$/
+  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|quarter|week|day)$/
 )
 
-const isZeroOverTimePeriod = withRegex(/^0\/(year|month|four weeks|week|day)$/)
+const isZeroOverTimePeriod = withRegex(
+  /^0\/(year|month|four weeks|quarter|week|day)$/
+)
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
