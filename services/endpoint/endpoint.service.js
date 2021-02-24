@@ -55,7 +55,14 @@ module.exports = class Endpoint extends BaseJsonService {
   }
 
   async handle(namedParams, { url }) {
-    const { protocol, hostname } = new URL(url)
+    let protocol, hostname
+    try {
+      const parsedUrl = new URL(url)
+      protocol = parsedUrl.protocol
+      hostname = parsedUrl.hostname
+    } catch (e) {
+      throw new InvalidParameter({ prettyMessage: 'invalid url' })
+    }
     if (protocol !== 'https:') {
       throw new InvalidParameter({ prettyMessage: 'please use https' })
     }
