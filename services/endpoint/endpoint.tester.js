@@ -255,10 +255,17 @@ t.create('Blocked domain')
   .expectBadge({ label: 'custom badge', message: 'domain is blocked' })
 
 // https://github.com/badges/shields/issues/3780
-t.create('Invalid url').get('.json?url=https:/').expectBadge({
+t.create('Invalid url (1)').get('.json?url=https:/').expectBadge({
   label: 'custom badge',
   message: 'invalid query parameter: url',
 })
+
+t.create('Invalid url (2)')
+  .get('.json?url=https%3A//shields.io%foo')
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid url',
+  })
 
 // https://github.com/badges/shields/issues/5868
 t.create('gzipped endpoint')
