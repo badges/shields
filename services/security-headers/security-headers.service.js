@@ -6,7 +6,7 @@ const { BaseService, NotFound } = require('..')
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
-  noFollowRedirects: Joi.equal(''),
+  ignoreRedirects: Joi.equal(''),
 }).required()
 
 const documentation = `
@@ -42,7 +42,7 @@ module.exports = class SecurityHeaders extends BaseService {
     {
       title: "Security Headers (Don't follow redirects)",
       namedParams: {},
-      queryParams: { url: 'https://www.shields.io', noFollowRedirects: null },
+      queryParams: { url: 'https://www.shields.io', ignoreRedirects: null },
       staticPreview: this.render({
         grade: 'R',
       }),
@@ -72,7 +72,7 @@ module.exports = class SecurityHeaders extends BaseService {
     }
   }
 
-  async handle(namedParams, { url, noFollowRedirects }) {
+  async handle(namedParams, { url, ignoreRedirects }) {
     const { res } = await this._request({
       url: `https://securityheaders.com`,
       options: {
@@ -80,7 +80,7 @@ module.exports = class SecurityHeaders extends BaseService {
         qs: {
           q: url,
           hide: 'on',
-          followRedirects: noFollowRedirects !== undefined ? null : 'on',
+          followRedirects: ignoreRedirects !== undefined ? null : 'on',
         },
       },
     })
