@@ -8,4 +8,4 @@ t.create('grade of https://shields.io')
 
 t.create('grade of https://httpstat.us/301 as redirect')
   .get('/security-headers.json?ignoreRedirects&url=https://httpstat.us/301')
-  .expectBadge({ label: 'security headers', message: 'R', color: 'lightgrey' })
+  .expectBadge({ label: 'security headers', message: 'R', color: 'blue' })
