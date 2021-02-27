@@ -21,6 +21,7 @@ const {
   Deprecated,
 } = require('./errors')
 const { validateExample, transformExample } = require('./examples')
+const { fetchFactory } = require('./got')
 const {
   makeFullUrl,
   assertValidRoute,
@@ -430,6 +431,8 @@ class BaseService {
       ServiceClass: this,
     })
 
+    const fetcher = fetchFactory(fetchLimitBytes)
+
     camp.route(
       regex,
       handleRequest(cacheHeaderConfig, {
@@ -440,7 +443,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              sendAndCacheRequest: request.asPromise,
+              sendAndCacheRequest: fetcher,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
               metricHelper,
