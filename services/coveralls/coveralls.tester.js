@@ -15,10 +15,6 @@ t.create('github branch coverage')
   .get('/github/lemurheavy/coveralls-ruby/master.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
-t.create('github coverage for legacy link')
-  .get('/jekyll/jekyll.json')
-  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
-
 t.create('bitbucket coverage')
   .get('/bitbucket/pyKLIP/pyklip.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
