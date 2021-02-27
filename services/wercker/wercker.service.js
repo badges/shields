@@ -85,24 +85,21 @@ module.exports = class Wercker extends BaseJsonService {
     return renderBuildStatusBadge({ status: result })
   }
 
-  static getBaseUrl({ projectId, applicationName }) {
-    if (applicationName) {
-      return `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
-    } else {
-      return `https://app.wercker.com/api/v3/runs?applicationId=${projectId}`
-    }
-  }
+  async fetch({ projectId, applicationName, branch }) {
+    let url
+    const qs = { branch, limit: 1 }
 
-  async fetch({ baseUrl, branch }) {
+    if (applicationName) {
+      url = `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
+    } else {
+      url = 'https://app.wercker.com/api/v3/runs'
+      qs.applicationId = projectId
+    }
+
     return this._requestJson({
       schema: werckerSchema,
-      url: baseUrl,
-      options: {
-        qs: {
-          branch,
-          limit: 1,
-        },
-      },
+      url,
+      options: { qs },
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',
@@ -112,10 +109,8 @@ module.exports = class Wercker extends BaseJsonService {
 
   async handle({ projectId, applicationName, branch }) {
     const json = await this.fetch({
-      baseUrl: this.constructor.getBaseUrl({
-        projectId,
-        applicationName,
-      }),
+      projectId,
+      applicationName,
       branch,
     })
     if (json.length === 0) {
