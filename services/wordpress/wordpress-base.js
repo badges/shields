@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const qs = require('qs')
 const { nonNegativeInteger } = require('../validators')
 const { BaseJsonService, NotFound } = require('..')
 
@@ -51,29 +52,32 @@ module.exports = class BaseWordpress extends BaseJsonService {
     } else if (extensionType === 'theme') {
       schemas = themeSchemas
     }
+
+    const queryString = qs.stringify(
+      {
+        action: `${extensionType}_information`,
+        request: {
+          slug,
+          fields: {
+            active_installs: 1,
+            sections: 0,
+            homepage: 0,
+            tags: 0,
+            screenshot_url: 0,
+            downloaded: 1,
+            last_updated: 1,
+            requires_php: 1,
+          },
+        },
+      },
+      { encode: false }
+    )
+
     const json = await this._requestJson({
       url,
       schema: schemas,
       options: {
-        qs: {
-          action: `${extensionType}_information`,
-          request: {
-            slug,
-            fields: {
-              active_installs: 1,
-              sections: 0,
-              homepage: 0,
-              tags: 0,
-              screenshot_url: 0,
-              downloaded: 1,
-              last_updated: 1,
-              requires_php: 1,
-            },
-          },
-        },
-        qsStringifyOptions: {
-          encode: false,
-        },
+        qs: queryString,
       },
     })
     if ('error' in json) {
