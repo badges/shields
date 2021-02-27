@@ -5,6 +5,7 @@
 
 const path = require('path')
 const url = require('url')
+const { bootstrap } = require('global-agent')
 const { URL } = url
 const cloudflareMiddleware = require('cloudflare-middleware')
 const bytes = require('bytes')
@@ -421,6 +422,25 @@ class Server {
     )
   }
 
+  bootstrapAgent() {
+    /*
+    Bootstrap global agent.
+    This allows self-hosting users to configure a proxy with
+    HTTP_PROXY, HTTPS_PROXY, NO_PROXY variables
+    */
+    if (!('GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE' in process.env)) {
+      process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE = ''
+    }
+
+    const proxyPrefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
+    const HTTP_PROXY = process.env[`${proxyPrefix}HTTP_PROXY`] || null
+    const HTTPS_PROXY = process.env[`${proxyPrefix}HTTPS_PROXY`] || null
+
+    if (HTTP_PROXY || HTTPS_PROXY) {
+      bootstrap()
+    }
+  }
+
   /**
    * Start the HTTP server:
    * Bootstrap Scoutcamp,
@@ -435,6 +455,8 @@ class Server {
       rateLimit,
       requireCloudflare,
     } = this.config.public
+
+    this.bootstrapAgent()
 
     log(`Server is starting up: ${this.baseUrl}`)
 
