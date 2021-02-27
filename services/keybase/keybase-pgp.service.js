@@ -53,7 +53,7 @@ module.exports = class KeybasePGP extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      form: {
+      qs: {
         usernames: username,
         fields: 'public_keys',
       },

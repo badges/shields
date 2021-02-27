@@ -60,7 +60,7 @@ module.exports = class KeybaseZEC extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      form: {
+      qs: {
         usernames: username,
         fields: 'cryptocurrency_addresses',
       },
