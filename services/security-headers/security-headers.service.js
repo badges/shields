@@ -63,7 +63,7 @@ module.exports = class SecurityHeaders extends BaseService {
       D: 'orange',
       E: 'orange',
       F: 'red',
-      R: 'lightgrey',
+      R: 'blue',
     }
 
     return {
