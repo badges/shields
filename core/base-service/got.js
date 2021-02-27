@@ -55,7 +55,7 @@ async function sendRequest(gotWrapper, url, options) {
   } catch (err) {
     if (err instanceof got.CancelError) {
       throw new InvalidResponse({
-        prettyMessage: 'Maximum response size exceeded',
+        underlyingError: new Error('Maximum response size exceeded'),
       })
     }
     throw new Inaccessible({ underlyingError: err })
@@ -92,5 +92,6 @@ function fetchFactory(fetchLimitBytes) {
 }
 
 module.exports = {
+  requestOptions2GotOptions,
   fetchFactory,
 }
