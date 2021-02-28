@@ -121,6 +121,20 @@ describe('Redirector', function () {
       )
     })
 
+    it('should correctly encode the redirect URL', async function () {
+      const { statusCode, headers } = await got(
+        `${baseUrl}/very/old/service/hello%0Dworld.svg?foobar=a%0Db`,
+        {
+          followRedirect: false,
+        }
+      )
+
+      expect(statusCode).to.equal(301)
+      expect(headers.location).to.equal(
+        '/new/service/hello%0Dworld.svg?foobar=a%0Db'
+      )
+    })
+
     describe('transformQueryParams', function () {
       const route = {
         base: 'another/old/service',
