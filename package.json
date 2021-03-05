@@ -153,7 +153,7 @@
     "@types/styled-components": "5.1.7",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
-    "babel-plugin-inline-react-svg": "^1.1.2",
+    "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-preset-gatsby": "^0.5.1",
     "caller": "^1.0.1",
