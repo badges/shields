@@ -157,7 +157,7 @@
     "babel-plugin-istanbul": "^6.0.0",
     "babel-preset-gatsby": "^0.5.1",
     "caller": "^1.0.1",
-    "chai": "^4.3.0",
+    "chai": "^4.3.3",
     "chai-as-promised": "^7.1.1",
     "chai-datetime": "^1.8.0",
     "chai-string": "^1.4.0",
