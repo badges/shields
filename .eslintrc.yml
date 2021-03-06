@@ -4,9 +4,6 @@ extends:
   - standard-react
   - plugin:@typescript-eslint/recommended
   - prettier
-  - prettier/@typescript-eslint
-  - prettier/standard
-  - prettier/react
   - eslint:recommended
 
 parserOptions:
