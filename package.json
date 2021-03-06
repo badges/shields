@@ -51,7 +51,7 @@
     "node-env-flag": "^0.1.0",
     "parse-link-header": "^1.0.1",
     "path-to-regexp": "^6.2.0",
-    "pretty-bytes": "^5.5.0",
+    "pretty-bytes": "^5.6.0",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^13.1.0",
     "query-string": "^6.14.1",
@@ -138,7 +138,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.12.17",
+    "@babel/core": "^7.13.8",
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.13.0",
     "@mapbox/react-click-to-select": "^2.2.0",
@@ -209,7 +209,7 @@
     "mocha-env-reporter": "^4.0.0",
     "mocha-junit-reporter": "^2.0.0",
     "mocha-yaml-loader": "^1.0.3",
-    "nock": "13.0.7",
+    "nock": "13.0.10",
     "node-mocks-http": "^1.10.1",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
