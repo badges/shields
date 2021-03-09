@@ -1,9 +1,9 @@
 'use strict'
 
+const bytes = require('bytes')
 const nock = require('nock')
-const request = require('request')
 const runnerConfig = require('config').util.toObject()
-const { promisify } = require('../core/base-service/legacy-request-handler')
+const { fetchFactory } = require('../core/base-service/got')
 
 function cleanUpNockAfterEach() {
   afterEach(function () {
@@ -32,7 +32,7 @@ function noToken(serviceClass) {
   }
 }
 
-const sendAndCacheRequest = promisify(request)
+const sendAndCacheRequest = fetchFactory(bytes(runnerConfig.public.fetchLimit))
 
 const defaultContext = { sendAndCacheRequest }
 
