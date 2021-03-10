@@ -82,6 +82,21 @@ describe('got wrapper', function () {
     )
   })
 
+  it('should pass a custom user agent header', async function () {
+    nock('https://www.google.com', {
+      reqheaders: {
+        'user-agent': function (agent) {
+          return agent.startsWith('Shields.io')
+        },
+      },
+    })
+      .get('/foo/bar')
+      .once()
+      .reply(200)
+    const sendRequest = fetchFactory(1024)
+    await sendRequest('https://www.google.com/foo/bar')
+  })
+
   afterEach(function () {
     nock.cleanAll()
     nock.enableNetConnect()
