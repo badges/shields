@@ -12,7 +12,7 @@ t.create('Giving (not found)')
   .get('/does-not-exist.json')
   .expectBadge({ label: 'liberapay', message: 'not found' })
 
-t.create('Goal (missing goal key)')
+t.create('Giving (missing goal key)')
   .get('/Liberapay.json')
   .intercept(nock =>
     nock('https://liberapay.com')
