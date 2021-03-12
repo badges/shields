@@ -141,7 +141,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.13.8",
+    "@babel/core": "^7.13.10",
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.13.8",
     "@mapbox/react-click-to-select": "^2.2.0",
@@ -200,7 +200,7 @@
     "husky": "^4.3.8",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.0.0",
-    "is-svg": "^4.2.1",
+    "is-svg": "^4.2.2",
     "js-yaml-loader": "^1.2.2",
     "jsdoc": "^3.6.6",
     "lint-staged": "^10.5.4",
