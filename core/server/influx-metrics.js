@@ -1,8 +1,6 @@
 'use strict'
 const os = require('os')
-const { promisify } = require('util')
-const { post } = require('request')
-const postAsync = promisify(post)
+const got = require('got')
 const generateInstanceId = require('./instance-id-generator')
 const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
 const log = require('./log')
@@ -15,21 +13,19 @@ module.exports = class InfluxMetrics {
   }
 
   async sendMetrics() {
-    const auth = {
-      user: this._config.username,
-      pass: this._config.password,
-    }
     const request = {
-      uri: this._config.url,
+      url: this._config.url,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: await this.metrics(),
       timeout: this._config.timeoutMillseconds,
-      auth,
+      username: this._config.username,
+      password: this._config.password,
+      throwHttpErrors: false,
     }
 
     let response
     try {
-      response = await postAsync(request)
+      response = await got.post(request)
     } catch (error) {
       log.error(
         new Error(`Cannot push metrics. Cause: ${error.name}: ${error.message}`)
@@ -38,7 +34,7 @@ module.exports = class InfluxMetrics {
     if (response && response.statusCode >= 300) {
       log.error(
         new Error(
-          `Cannot push metrics. ${response.request.href} responded with status code ${response.statusCode}`
+          `Cannot push metrics. ${request.url} responded with status code ${response.statusCode}`
         )
       )
     }
