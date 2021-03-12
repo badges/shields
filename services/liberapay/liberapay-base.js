@@ -26,8 +26,7 @@ const schema = Joi.object({
     .keys({
       amount: Joi.string().required(),
     })
-    .allow(null)
-    .required(),
+    .allow(null),
 }).required()
 
 const isCurrencyOverTime = Joi.string().regex(
