@@ -150,7 +150,7 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. Cause: NetConnectNotAllowedError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
             )
           )
       )
