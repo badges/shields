@@ -62,4 +62,13 @@ describe('Main page', function () {
 
     cy.get(`img[src='${backendUrl}/github/issues/badges/shields?color=orange']`)
   })
+
+  it('Do not duplicate example parameters', function () {
+    cy.visit('/category/social')
+
+    cy.contains('GitHub Sponsors').click()
+    cy.get('[name="style"]').should($style => {
+      expect($style).to.have.length(1)
+    })
+  })
 })
