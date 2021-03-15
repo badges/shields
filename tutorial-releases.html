@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: releases</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: releases</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>releases</h2>
+</header>
+
+<article>
+    <h1>Releases</h1>
+<p>Shields is a community project that is stewarded by a handful of core maintainers who contribute on a volunteer basis. We do our best to maintain the availability and reliability of the service, and enhance and improve the project overall. However, if you've spotted something wrong or would like to see a specific feature implemented, please consider helping us resolve it by submitting a pull request. All community contributions, even documentation improvements, are welcome!</p>
+<p>https://github.com/badges/shields is a monorepo and hosts the Shields frontend and server code as well as the <a href="https://www.npmjs.com/package/badge-maker">badge-maker</a> NPM library (and the <a href="https://github.com/badges/shields/tree/master/spec">badge design specification</a>). The packaging and release processes for these items is described in the respective sections below.</p>
+<h2>badge-maker package</h2>
+<p>We follow <a href="https://semver.org/">Semantic Versioning</a> for the badge-maker package, and publish git Tags using the form <code>X.Y.Z</code>, and all such tags of this form are badge-maker releases (e.g. <a href="https://github.com/badges/shields/releases/tag/3.3.0">3.3.0</a>)</p>
+<p>The <a href="https://www.npmjs.com/package/badge-maker">badge-maker</a> is also published to the npm.js registry.</p>
+<p>Releases of badge-maker are done as and when needed, and not on any predetermined interval.</p>
+<h2>Shields.io service</h2>
+<p>The <a href="https://shields.io">Shields.io Service</a> consists of the frontend <a href="https://shields.io">https://shields.io</a> website which allows users to browse and discover available badges, as well as the badge server backend that serves up requested badges (e.g. https://img.shields.io/badge/badges-rock-blue).</p>
+<p>This is the core, free, anonymous service available for anyone to use and which serves up more than 500 million badges every month!</p>
+<p>We do not have a fixed schedule for deploying updates to the Shields.io production environment, but we typically deploy the latest version at least once per week.</p>
+<p>We do not have any guaranteed SLA for the Shields.io service, but we do have monitoring and observability capabilities in place and our <a href="https://github.com/badges/shields#project-leaders">Operations team</a> will review and address any availability, performance, etc. issues on a best-effort basis.</p>
+<p>More information about the production environment can be found <a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md">here</a></p>
+<h2>Shields server</h2>
+<p>Some users may wish to host their own instance of Shields so we also make it possible for users to do so. This is particularly useful if you want to serve badges for resources that require authentication or are not exposed to the internet (e.g: inside a corporate network). A variety of options are available either by installing from source or using a docker image.</p>
+<h3>Important information</h3>
+<p>This Shields server is the exact same codebase that powers the main Shields.io service; we do not have a separate self-hosted version of Shields. This means that the server codebase is geared towards the development, maintenance, and operation of the Shields.io service so there are a few things to note:</p>
+<ul>
+<li>We often have to reject or de-prioritize feature requests that are only applicable for self-hosting and/or which may be problematic for the core Shields.io offering (e.g. requiring authentication on the badge server)</li>
+<li>We do not accept new badges that cannot be utilized with Shields.io (e.g. those that would always require user-specific authorization)</li>
+<li>We do not do any additional testing nor validation of self-hosted instances (e.g. we test Shields.io with Jira Cloud badges, but we don't test a self-hosted Shields server against a self-hosted Jira server instance with auth)</li>
+<li>We're happy to try to offer some tips and guidance to self-hosters when and where we can, but we don't have the ability to troubleshoot/debug/support/etc. self-hosted Shields servers
+<ul>
+<li>Note that Paul, a core team member, offers some paid support options for those interested in self-hosting support. Contact him at <img src="https://img.shields.io/badge/paul-%40m6ize.com-blue" alt=""> for more information.</li>
+</ul>
+</li>
+</ul>
+<p>We are happy to document and collate any self-hosting patterns/approaches that others have found to be helpful to be able to share with the broader community. If you have any self-hosting material you'd like to share, please feel free to get in contact with us (or even open a PR) and we'll work with you to get that incorporated for the benefit of other self-hosters!</p>
+<h3>Server Releases</h3>
+<p>We try to make it as easy as possible for users to self-host a Shields server so we publish a few releases of the server. Please be sure to refer to the <a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md">self hosting guide</a> for a detailed walk through on how to spin up a server.</p>
+<ul>
+<li>The server uses <a href="https://calver.org/">Calendar Versioning</a>. Tags of the form <code>server-YYYY-MM-DD</code> are server releases (these are the tags that are relevant to self-hosting users, e.g. <a href="https://github.com/badges/shields/releases/tag/server-2021-02-01">server-2021-02-01</a>).</li>
+<li>As well as <a href="https://github.com/badges/shields/tags">tags on GitHub</a>, server releases are also pushed to <a href="https://registry.hub.docker.com/r/shieldsio/shields/tags">DockerHub</a>. See the self-hosting section on <a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md#Docker">Docker</a> for more details.</li>
+<li>We publish release notes for server releases in the <a href="https://github.com/badges/shields/blob/master/CHANGELOG.md">CHANGELOG</a>. There may occasionally be non-backwards compatible changes to be aware of.</li>
+<li>We will normally put out one release per month. If there is a security patch or major bugfix affecting self-hosting users, we may put out an out-of-sequence release.</li>
+<li>Releases are just a snapshot in time. We advise always tracking the latest release to ensure you are up-to-date with the latest bug fixes and security updates. There are no 'patch' releases - we don't backport fixes to old releases. Tagged versions just provide a convenient way to apply upgrades in a controlled way or roll back to an older version if necessary and communicate about versions.</li>
+<li>You can stay on the bleeding edge by tracking the <code>master</code> branch for source installs or the <code>next</code> tag on DockerHub.</li>
+</ul>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-rewriting-services.html">rewriting-services</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-users.html">users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Mar 15 2021 07:45:51 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
