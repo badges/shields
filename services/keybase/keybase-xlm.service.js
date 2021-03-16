@@ -58,7 +58,7 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      qs: {
+      form: {
         usernames: username,
         fields: 'stellar',
       },
