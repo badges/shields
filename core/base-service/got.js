@@ -3,8 +3,6 @@
 const got = require('got')
 const { Inaccessible, InvalidResponse } = require('./errors')
 
-const userAgent = 'Shields.io/2003a'
-
 function requestOptions2GotOptions(options) {
   const requestOptions = Object.assign({}, options)
   const gotOptions = {}
@@ -51,8 +49,6 @@ async function sendRequest(gotWrapper, url, options) {
   const gotOptions = requestOptions2GotOptions(options)
   gotOptions.throwHttpErrors = false
   gotOptions.retry = 0
-  gotOptions.headers = gotOptions.headers || {}
-  gotOptions.headers['User-Agent'] = userAgent
   try {
     const resp = await gotWrapper(url, gotOptions)
     return { res: resp, buffer: resp.body }
