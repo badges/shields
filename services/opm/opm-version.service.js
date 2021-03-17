@@ -41,8 +41,8 @@ module.exports = class OpmVersion extends BaseService {
       },
     })
 
-    // TODO: set followRedirect to false and intercept 302 redirects
-    const location = res.request.redirects[0]
+    // XXX: intercept 302 redirects and set followRedirect to false
+    const location = res.request.path
     if (!location) {
       throw new NotFound({ prettyMessage: 'module not found' })
     }
