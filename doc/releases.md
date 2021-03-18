@@ -16,7 +16,7 @@ Releases of badge-maker are done as and when needed, and not on any predetermine
 
 The [Shields.io Service][shields.io] consists of the frontend [https://shields.io][shields.io] website which allows users to browse and discover available badges, as well as the badge server backend that serves up requested badges (e.g. https://img.shields.io/badge/badges-rock-blue).
 
-This is the core, free, anonymous service available for anyone to use and which serves up more than 500 million badges every month!
+This is the core, free, anonymous service available for anyone to use and which serves up hundreds of millions of badges every month!
 
 We do not have a fixed schedule for deploying updates to the Shields.io production environment, but we typically deploy the latest version at least once per week.
 
