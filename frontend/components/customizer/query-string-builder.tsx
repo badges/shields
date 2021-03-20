@@ -241,15 +241,21 @@ export default function QueryStringBuilder({
   const [queryParams, setQueryParams] = useState(() =>
     // For each of the custom query params defined in `exampleParams`,
     // create empty values in `queryParams`.
-    Object.entries(exampleParams).reduce((accum, [name, value]) => {
-      // Custom query params are either string or boolean. Inspect the example
-      // value to infer which one, and set empty values accordingly.
-      // Throughout the component, these two types are supported in the same
-      // manner: by inspecting this value type.
-      const isStringParam = typeof value === 'string'
-      accum[name] = isStringParam ? '' : true
-      return accum
-    }, {} as { [k: string]: string | boolean })
+    Object.entries(exampleParams)
+      .filter(
+        // If the example defines a value for one of the standard supported
+        // options, do not duplicate the corresponding parameter.
+        ([name]) => !supportedBadgeOptions.some(option => name === option.name)
+      )
+      .reduce((accum, [name, value]) => {
+        // Custom query params are either string or boolean. Inspect the example
+        // value to infer which one, and set empty values accordingly.
+        // Throughout the component, these two types are supported in the same
+        // manner: by inspecting this value type.
+        const isStringParam = typeof value === 'string'
+        accum[name] = isStringParam ? '' : true
+        return accum
+      }, {} as { [k: string]: string | boolean })
   )
   // For each of the standard badge options, create empty values in
   // `badgeOptions`. When `initialStyle` has been provided, use it.

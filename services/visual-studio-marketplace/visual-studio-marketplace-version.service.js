@@ -3,7 +3,9 @@
 const { renderVersionBadge } = require('../version')
 const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
 
-module.exports = class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplaceVersion extends (
+  VisualStudioMarketplaceBase
+) {
   static category = 'version'
 
   static route = {

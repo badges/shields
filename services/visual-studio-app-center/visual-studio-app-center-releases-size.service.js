@@ -13,7 +13,9 @@ const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
+module.exports = class VisualStudioAppCenterReleasesSize extends (
+  BaseVisualStudioAppCenterService
+) {
   static category = 'size'
 
   static route = {

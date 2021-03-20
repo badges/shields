@@ -16,14 +16,17 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   // password.
   //
   // e.g.
-  // curl --insecure -u ':very-very-secret' 'https://s0.servers.shields.io/$github-auth/tokens'
+  // curl --insecure -u ':very-very-secret' 'https://img.shields.io/$github-auth/tokens'
   server.ajax.on('github-auth/tokens', (json, end, ask) => {
     if (!secretIsValid(ask.password)) {
       // An unknown entity tries to connect. Let the connection linger for a minute.
       return setTimeout(() => {
+        ask.res.statusCode = 401
+        ask.res.setHeader('Cache-Control', 'private')
         end('Invalid secret.')
       }, 10000)
     }
+    ask.res.setHeader('Cache-Control', 'private')
     end(apiProvider.serializeDebugInfo({ sanitize: false }))
   })
 }

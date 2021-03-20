@@ -15,10 +15,7 @@ const GithubConstellation = require('../../services/github/github-constellation'
 const suggest = require('../../services/suggest')
 const { loadServiceClasses } = require('../base-service/loader')
 const { makeSend } = require('../base-service/legacy-result-sender')
-const {
-  handleRequest,
-  clearRequestCache,
-} = require('../base-service/legacy-request-handler')
+const { handleRequest } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const log = require('./log')
@@ -90,10 +87,10 @@ const publicConfigSchema = Joi.object({
         .integer()
         .min(1)
         .when('enabled', { is: true, then: Joi.required() }),
-      intervalSeconds: Joi.number()
-        .integer()
-        .min(1)
-        .when('enabled', { is: true, then: Joi.required() }),
+      intervalSeconds: Joi.number().integer().min(1).when('enabled', {
+        is: true,
+        then: Joi.required(),
+      }),
       instanceIdFrom: Joi.string()
         .equal('hostname', 'env-var', 'random')
         .when('enabled', { is: true, then: Joi.required() }),
@@ -146,6 +143,9 @@ const publicConfigSchema = Joi.object({
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  documentRoot: Joi.string().default(
+    path.resolve(__dirname, '..', '..', 'public')
+  ),
   requireCloudflare: Joi.boolean().required(),
 }).required()
 
@@ -162,6 +162,8 @@ const privateConfigSchema = Joi.object({
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),
   jira_pass: Joi.string(),
+  bitbucket_server_username: Joi.string(),
+  bitbucket_server_password: Joi.string(),
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
@@ -437,10 +439,11 @@ class Server {
     log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.create({
-      documentRoot: path.resolve(__dirname, '..', '..', 'public'),
+      documentRoot: this.config.public.documentRoot,
       port,
       hostname,
       secure,
+      staticMaxAge: 300,
       cert,
       key,
     }))
@@ -481,7 +484,6 @@ class Server {
   static resetGlobalState() {
     // This state should be migrated to instance state. When possible, do not add new
     // global state.
-    clearRequestCache()
     clearRegularUpdateCache()
   }
 

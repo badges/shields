@@ -10,14 +10,14 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class Homebrew extends BaseJsonService {
+module.exports = class HomebrewVersion extends BaseJsonService {
   static category = 'version'
 
   static route = { base: 'homebrew/v', pattern: ':formula' }
 
   static examples = [
     {
-      title: 'homebrew',
+      title: 'homebrew version',
       namedParams: { formula: 'cake' },
       staticPreview: renderVersionBadge({ version: 'v0.32.0' }),
     },

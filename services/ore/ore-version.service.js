@@ -1,0 +1,52 @@
+'use strict'
+
+const { renderVersionBadge } = require('../version')
+const { BaseOreService, documentation, keywords } = require('./ore-base')
+
+module.exports = class OreVersion extends BaseOreService {
+  static category = 'version'
+
+  static route = {
+    base: 'ore/v',
+    pattern: ':pluginId',
+  }
+
+  static examples = [
+    {
+      title: 'Ore Version',
+      namedParams: {
+        pluginId: 'nucleus',
+      },
+      staticPreview: renderVersionBadge({ version: '2.2.3' }),
+      documentation,
+      keywords,
+    },
+  ]
+
+  static defaultBadgeData = {
+    label: 'version',
+  }
+
+  static render({ version }) {
+    if (!version) {
+      return { message: 'none', color: 'inactive' }
+    }
+    return renderVersionBadge({ version })
+  }
+
+  transform({ data }) {
+    const { promoted_versions } = data
+    return {
+      version:
+        promoted_versions.length === 0
+          ? undefined
+          : promoted_versions[0].version,
+    }
+  }
+
+  async handle({ pluginId }) {
+    const data = await this.fetch({ pluginId })
+    const { version } = this.transform({ data })
+    return this.constructor.render({ version })
+  }
+}

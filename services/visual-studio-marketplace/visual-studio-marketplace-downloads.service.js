@@ -13,7 +13,9 @@ const documentation = `
 </p>
 `
 
-module.exports = class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
+module.exports = class VisualStudioMarketplaceDownloads extends (
+  VisualStudioMarketplaceBase
+) {
   static category = 'downloads'
 
   static route = {

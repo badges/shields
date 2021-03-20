@@ -15,12 +15,10 @@ const latestBuildSchema = Joi.object({
 }).required()
 
 module.exports = class AzureDevOpsBase extends BaseJsonService {
-  static get auth() {
-    return {
-      passKey: 'azure_devops_token',
-      authorizedOrigins: ['https://dev.azure.com'],
-      defaultToEmptyStringForUser: true,
-    }
+  static auth = {
+    passKey: 'azure_devops_token',
+    authorizedOrigins: ['https://dev.azure.com'],
+    defaultToEmptyStringForUser: true,
   }
 
   async fetch({ url, options, schema, errorMessages }) {

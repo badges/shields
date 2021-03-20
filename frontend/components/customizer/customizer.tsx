@@ -11,13 +11,6 @@ import {
   CopiedContentIndicatorHandle,
 } from './copied-content-indicator'
 
-function getBaseUrlFromWindowLocation(): string {
-  // Default to the current hostname for when there is no `BASE_URL` set
-  // at build time (as in most PaaS deploys).
-  const { protocol, hostname } = window.location
-  return `${protocol}//${hostname}`
-}
-
 export default function Customizer({
   baseUrl,
   title,
@@ -39,9 +32,7 @@ export default function Customizer({
 }): JSX.Element {
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
-  const indicatorRef = useRef<
-    CopiedContentIndicatorHandle
-  >() as React.MutableRefObject<CopiedContentIndicatorHandle>
+  const indicatorRef = useRef<CopiedContentIndicatorHandle>() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
   const [queryString, setQueryString] = useState<string>()
   const [pathIsComplete, setPathIsComplete] = useState<boolean>()
@@ -50,7 +41,7 @@ export default function Customizer({
 
   function generateBuiltBadgeUrl(): string {
     const suffix = queryString ? `?${queryString}` : ''
-    return `${baseUrl || getBaseUrlFromWindowLocation()}${path}${suffix}`
+    return `${baseUrl}${path}${suffix}`
   }
 
   function renderLivePreview(): JSX.Element {

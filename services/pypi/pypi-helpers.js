@@ -39,12 +39,16 @@ function sortDjangoVersions(versions) {
 }
 
 // Extract classifiers from a pypi json response based on a regex.
-function parseClassifiers(parsedData, pattern) {
+function parseClassifiers(parsedData, pattern, preserveCase = false) {
   const results = []
   for (let i = 0; i < parsedData.info.classifiers.length; i++) {
     const matched = pattern.exec(parsedData.info.classifiers[i])
     if (matched && matched[1]) {
-      results.push(matched[1].toLowerCase())
+      if (preserveCase) {
+        results.push(matched[1])
+      } else {
+        results.push(matched[1].toLowerCase())
+      }
     }
   }
   return results
@@ -59,9 +63,17 @@ function getLicenses(packageData) {
   } else {
     const parenthesizedAcronymRegex = /\(([^)]+)\)/
     const bareAcronymRegex = /^[a-z0-9]+$/
-    let licenses = parseClassifiers(packageData, /^License :: (.+)$/)
+    const spdxAliases = {
+      'OSI Approved :: Apache Software License': 'Apache-2.0',
+      'CC0 1.0 Universal (CC0 1.0) Public Domain Dedication': 'CC0-1.0',
+      'OSI Approved :: GNU Affero General Public License v3': 'AGPL-3.0',
+    }
+    let licenses = parseClassifiers(packageData, /^License :: (.+)$/, true)
+      .map(classifier =>
+        classifier in spdxAliases ? spdxAliases[classifier] : classifier
+      )
       .map(classifier => classifier.split(' :: ').pop())
-      .map(license => license.replace(' license', ''))
+      .map(license => license.replace(' License', ''))
       .map(license => {
         const match = license.match(parenthesizedAcronymRegex)
         return match ? match[1].toUpperCase() : license
@@ -71,7 +83,7 @@ function getLicenses(packageData) {
         return match ? license.toUpperCase() : license
       })
     if (licenses.length > 1) {
-      licenses = licenses.filter(l => l !== 'dfsg approved')
+      licenses = licenses.filter(l => l !== 'DFSG approved')
     }
     return licenses
   }

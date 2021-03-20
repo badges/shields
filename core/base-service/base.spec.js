@@ -329,7 +329,7 @@ describe('BaseService', function () {
   describe('ScoutCamp integration', function () {
     // TODO Strangly, without the useless escape the regexes do not match in Node 12.
     // eslint-disable-next-line no-useless-escape
-    const expectedRouteRegex = /^\/foo\/([^\/]+?)(|\.svg|\.json)$/
+    const expectedRouteRegex = /^\/foo(?:\/([^\/#\?]+?))(|\.svg|\.json)$/
 
     let mockCamp
     let mockHandleRequest
@@ -463,9 +463,7 @@ describe('BaseService', function () {
         'fetch',
         sinon.match.string,
         'Request',
-        url,
-        '\n',
-        options
+        `${url}\n${JSON.stringify(options, null, 2)}`
       )
       expect(trace.logTrace).to.be.calledWithMatch(
         'fetch',
@@ -519,7 +517,7 @@ describe('BaseService', function () {
 
       await serviceInstance._request({ url })
 
-      expect(register.getSingleMetricAsString('service_response_bytes'))
+      expect(await register.getSingleMetricAsString('service_response_bytes'))
         .to.contain(
           'service_response_bytes_bucket{le="65536",category="other",family="undefined",service="dummy_service_with_service_response_size_metric_enabled"} 0\n'
         )
@@ -545,7 +543,7 @@ describe('BaseService', function () {
       await serviceInstance._request({ url })
 
       expect(
-        register.getSingleMetricAsString('service_response_bytes')
+        await register.getSingleMetricAsString('service_response_bytes')
       ).to.not.contain('service_response_bytes_bucket')
     })
   })

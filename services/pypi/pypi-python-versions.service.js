@@ -1,5 +1,6 @@
 'use strict'
 
+const semver = require('semver')
 const PypiBase = require('./pypi-base')
 const { parseClassifiers } = require('./pypi-helpers')
 
@@ -30,7 +31,11 @@ module.exports = class PypiPythonVersions extends PypiBase {
     })
     if (versionSet.size) {
       return {
-        message: Array.from(versionSet).sort().join(' | '),
+        message: Array.from(versionSet)
+          .sort((v1, v2) =>
+            semver.compare(semver.coerce(v1), semver.coerce(v2))
+          )
+          .join(' | '),
         color: 'blue',
       }
     } else {

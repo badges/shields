@@ -1,8 +1,11 @@
 'use strict'
 
+const path = require('path')
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const config = require('config')
+const nock = require('nock')
+const sinon = require('sinon')
 const got = require('../got-test-client')
 const Server = require('./server')
 const { createTestServer } = require('./in-process-server-test-helpers')
@@ -13,7 +16,11 @@ describe('The server', function () {
     before('Start the server', async function () {
       // Fixes https://github.com/badges/shields/issues/2611
       this.timeout(10000)
-      server = await createTestServer()
+      server = await createTestServer({
+        public: {
+          documentRoot: path.resolve(__dirname, 'test-public'),
+        },
+      })
       baseUrl = server.baseUrl
       await server.start()
     })
@@ -43,6 +50,16 @@ describe('The server', function () {
         .to.satisfy(isSvg)
         .and.to.include('fruit')
         .and.to.include('apple')
+    })
+
+    it('should serve front-end with default maxAge', async function () {
+      const { headers } = await got(`${baseUrl}/`)
+      expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
+    })
+
+    it('should serve badges with custom maxAge', async function () {
+      const { headers } = await got(`${baseUrl}npm/l/express`)
+      expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
     })
 
     it('should redirect colorscheme PNG badges as configured', async function () {
@@ -349,6 +366,69 @@ describe('The server', function () {
         customConfig.private.gh_token = 'my-token'
         expect(() => new Server(customConfig)).to.not.throw()
       })
+    })
+  })
+
+  describe('running with metrics enabled', function () {
+    let server, baseUrl, scope, clock
+    const metricsPushIntervalSeconds = 1
+    before('Start the server', async function () {
+      // Fixes https://github.com/badges/shields/issues/2611
+      this.timeout(10000)
+      process.env.INSTANCE_ID = 'test-instance'
+      server = await createTestServer({
+        public: {
+          metrics: {
+            prometheus: { enabled: true },
+            influx: {
+              enabled: true,
+              url: 'http://localhost:1112/metrics',
+              instanceIdFrom: 'env-var',
+              instanceIdEnvVarName: 'INSTANCE_ID',
+              envLabel: 'localhost-env',
+              intervalSeconds: metricsPushIntervalSeconds,
+            },
+          },
+        },
+        private: {
+          influx_username: 'influx-username',
+          influx_password: 'influx-password',
+        },
+      })
+      clock = sinon.useFakeTimers()
+      baseUrl = server.baseUrl
+      await server.start()
+    })
+    after('Shut down the server', async function () {
+      if (server) {
+        await server.stop()
+      }
+      server = undefined
+      nock.cleanAll()
+      delete process.env.INSTANCE_ID
+      clock.restore()
+    })
+
+    it('should push custom metrics', async function () {
+      scope = nock('http://localhost:1112', {
+        reqheaders: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .post(
+          '/metrics',
+          /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/
+        )
+        .basicAuth({ user: 'influx-username', pass: 'influx-password' })
+        .reply(200)
+      await got(`${baseUrl}badge/fruit-apple-green.svg`)
+
+      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 500)
+
+      expect(scope.isDone()).to.be.equal(
+        true,
+        `pending mocks: ${scope.pendingMocks()}`
+      )
     })
   })
 })

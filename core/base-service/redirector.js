@@ -82,7 +82,7 @@ module.exports = function redirector(attrs) {
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
 
-        const targetPath = transformPath(namedParams)
+        const targetPath = encodeURI(transformPath(namedParams))
         trace.logTrace('validate', emojic.dart, 'Target', targetPath)
 
         let urlSuffix = ask.uri.search || ''

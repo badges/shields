@@ -4,7 +4,9 @@ const { metric } = require('../text-formatters')
 const { floorCount: floorCountColor } = require('../color-formatters')
 const { BasePuppetForgeUsersService } = require('./puppetforge-base')
 
-module.exports = class PuppetForgeReleaseCountService extends BasePuppetForgeUsersService {
+module.exports = class PuppetForgeReleaseCountService extends (
+  BasePuppetForgeUsersService
+) {
   static category = 'other'
 
   static route = {

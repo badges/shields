@@ -23,17 +23,11 @@ const hostMappings = {
 }
 
 module.exports = class LgtmBaseService extends BaseJsonService {
-  static get category() {
-    return 'analysis'
-  }
+  static category = 'analysis'
 
-  static get defaultBadgeData() {
-    return { label: 'lgtm' }
-  }
+  static defaultBadgeData = { label: 'lgtm' }
 
-  static get pattern() {
-    return `:host(${Object.keys(hostMappings).join('|')})/:user/:repo`
-  }
+  static pattern = `:host(${Object.keys(hostMappings).join('|')})/:user/:repo`
 
   async fetch({ host, user, repo }) {
     const mappedHost = hostMappings[host]

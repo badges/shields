@@ -12,7 +12,7 @@ const envFlag = require('node-env-flag')
 
 const includeDevPages = envFlag(process.env.INCLUDE_DEV_PAGES, true)
 
-const { categories } = yaml.safeLoad(
+const { categories } = yaml.load(
   fs.readFileSync('./service-definitions.yml', 'utf8')
 )
 

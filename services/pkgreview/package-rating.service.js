@@ -13,6 +13,8 @@ const schema = Joi.object({
   reviewsCount: nonNegativeInteger,
 }).required()
 
+// Repository for this service is: https://github.com/iqubex-technologies/pkgreview.dev
+// Internally the service leverages the npms.io API (https://api.npms.io/v2)
 module.exports = class PkgreviewRating extends BaseJsonService {
   static category = 'rating'
 
@@ -60,7 +62,7 @@ module.exports = class PkgreviewRating extends BaseJsonService {
   async fetch({ pkgManager, pkgSlug }) {
     return this._requestJson({
       schema,
-      url: `https://pkgreview.dev/api/v1/${pkgManager}/${encodeURIComponent(
+      url: `https://pkgreview.now.sh/api/v1/${pkgManager}/${encodeURIComponent(
         pkgSlug
       )}`,
       errorMessages: {

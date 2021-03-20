@@ -1,5 +1,6 @@
 'use strict'
 
+const zlib = require('zlib')
 const { expect } = require('chai')
 const { getShieldsIcon } = require('../../lib/logos')
 const t = (module.exports = require('../tester').createServiceTester())
@@ -119,7 +120,7 @@ t.create('logoWidth')
     logoWidth: 30,
   })
 
-t.create('Invalid schema)')
+t.create('Invalid schema')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/').get('/badge').reply(200, {
@@ -131,7 +132,7 @@ t.create('Invalid schema)')
     message: 'invalid properties: schemaVersion, label, message',
   })
 
-t.create('Invalid schema)')
+t.create('Invalid schema')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/').get('/badge').reply(200, {
@@ -254,7 +255,30 @@ t.create('Blocked domain')
   .expectBadge({ label: 'custom badge', message: 'domain is blocked' })
 
 // https://github.com/badges/shields/issues/3780
-t.create('Invalid url').get('.json?url=https:/').expectBadge({
+t.create('Invalid url (1)').get('.json?url=https:/').expectBadge({
   label: 'custom badge',
   message: 'invalid query parameter: url',
 })
+
+t.create('Invalid url (2)')
+  .get('.json?url=https%3A//shields.io%foo')
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid url',
+  })
+
+// https://github.com/badges/shields/issues/5868
+t.create('gzipped endpoint')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(
+        200,
+        zlib.gzipSync(
+          JSON.stringify({ schemaVersion: 1, label: '', message: 'yo' })
+        ),
+        { 'Content-Encoding': 'gzip' }
+      )
+  )
+  .expectBadge({ label: '', message: 'yo' })

@@ -82,38 +82,30 @@ const documentation = `
 `
 
 module.exports = class JenkinsCoverage extends JenkinsBase {
-  static get category() {
-    return 'coverage'
+  static category = 'coverage'
+
+  static route = {
+    base: 'jenkins/coverage',
+    pattern: ':format(jacoco|cobertura|api)',
+    queryParamSchema,
   }
 
-  static get route() {
-    return {
-      base: 'jenkins/coverage',
-      pattern: ':format(jacoco|cobertura|api)',
-      queryParamSchema,
-    }
-  }
-
-  static get examples() {
-    return [
-      {
-        title: 'Jenkins Coverage',
-        namedParams: {
-          format: 'cobertura',
-        },
-        queryParams: {
-          jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
-        },
-        keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
-        staticPreview: this.render({ coverage: 95 }),
-        documentation,
+  static examples = [
+    {
+      title: 'Jenkins Coverage',
+      namedParams: {
+        format: 'cobertura',
       },
-    ]
-  }
+      queryParams: {
+        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+      },
+      keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
+      staticPreview: this.render({ coverage: 95 }),
+      documentation,
+    },
+  ]
 
-  static get defaultBadgeData() {
-    return { label: 'coverage' }
-  }
+  static defaultBadgeData = { label: 'coverage' }
 
   static render({ coverage }) {
     return {
