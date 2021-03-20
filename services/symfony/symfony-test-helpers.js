@@ -1,6 +1,6 @@
 'use strict'
 
-const sampleProjectUuid = '45afb680-d4e6-4e66-93ea-bcfa79eb8a87'
+const sampleProjectUuid = '15c5c748-f8d8-4b56-b536-a29a151aac6c'
 
 function createMockResponse({ status = 'finished', grade, violations }) {
   let response = `

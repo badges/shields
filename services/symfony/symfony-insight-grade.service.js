@@ -16,7 +16,7 @@ module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
     {
       title: 'SymfonyInsight Grade',
       namedParams: {
-        projectUuid: '45afb680-d4e6-4e66-93ea-bcfa79eb8a87',
+        projectUuid: '15c5c748-f8d8-4b56-b536-a29a151aac6c',
       },
       staticPreview: this.render({
         grade: 'bronze',
