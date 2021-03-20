@@ -5,6 +5,10 @@ const { BaseJsonService, NotFound } = require('..')
 const { metric } = require('../text-formatters')
 const { nonNegativeInteger } = require('../validators')
 
+const documentation = `
+<p>By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service. These can be found here:
+<code>https://www.youtube.com/t/terms</code></p>`
+
 const schema = Joi.object({
   items: Joi.array()
     .items(
@@ -20,7 +24,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class YouTubeBase extends BaseJsonService {
+class YouTubeBase extends BaseJsonService {
   static category = 'social'
 
   static auth = {
@@ -68,3 +72,5 @@ module.exports = class YouTubeBase extends BaseJsonService {
     return this.constructor.render({ statistics, videoId }, queryParams)
   }
 }
+
+module.exports = { documentation, YouTubeBase }
