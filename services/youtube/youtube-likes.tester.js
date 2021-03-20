@@ -20,7 +20,7 @@ t.create('video vote count')
   .skipWhen(noYouTubeToken)
   .get('/pU9Q6oiQNd0.json?withDislikes')
   .expectBadge({
-    label: 'votes',
+    label: 'likes',
     message: Joi.string().regex(
       /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) 👍 ([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) 👎$/
     ),

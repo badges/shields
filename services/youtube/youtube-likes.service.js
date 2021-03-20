@@ -2,7 +2,15 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
-const YouTubeBase = require('./youtube-base')
+const { documentation, YouTubeBase } = require('./youtube-base')
+
+const documentationWithDislikes = `
+  ${documentation}
+  <p>
+    When enabling the <code>withDislikes</code> option, 👍 corresponds to the number
+    of likes of a given video, 👎 corresponds to the number of dislikes.
+  </p>
+`
 
 const queryParamSchema = Joi.object({
   withDislikes: Joi.equal(''),
@@ -37,33 +45,34 @@ module.exports = class YouTubeLikes extends YouTubeBase {
         title: 'YouTube Video Likes',
         namedParams: { videoId: 'abBdk8bSPKU' },
         staticPreview: previewLikes,
+        documentation,
       },
       {
-        title: 'YouTube Video Votes',
+        title: 'YouTube Video Likes and Dislikes',
         namedParams: { videoId: 'pU9Q6oiQNd0' },
         staticPreview: previewVotes,
         queryParams: {
           withDislikes: null,
         },
+        documentation: documentationWithDislikes,
       },
     ]
   }
 
   static render({ statistics, videoId }, queryParams) {
-    if (queryParams && typeof queryParams.withDislikes !== 'undefined') {
-      return {
-        label: 'votes',
-        message: `${metric(statistics.likeCount)} 👍 ${metric(
-          statistics.dislikeCount
-        )} 👎`,
-        style: 'social',
-        link: `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`,
-      }
-    }
-    return super.renderSingleStat({
+    let renderedBadge = super.renderSingleStat({
       statistics,
       statisticName: 'like',
       videoId,
     })
+    if (queryParams && typeof queryParams.withDislikes !== 'undefined') {
+      renderedBadge = {
+        ...renderedBadge,
+        message: `${metric(statistics.likeCount)} 👍 ${metric(
+          statistics.dislikeCount
+        )} 👎`,
+      }
+    }
+    return renderedBadge
   }
 }
