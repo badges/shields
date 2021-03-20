@@ -2,12 +2,14 @@
 
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
+const { XmlElement, escapeXml } = require('./xml')
 
 // https://github.com/badges/shields/pull/1132
-const FONT_SCALE_FACTOR = 10
-const FONT_SCALE_ATTR = 'transform="scale(.1)"'
+const FONT_SCALE_UP_FACTOR = 10
+const FONT_SCALE_DOWN_VALUE = 'scale(.1)'
 
-const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
+const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
+const fontFamily = `font-family="${FONT_FAMILY}"`
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 const brightnessThreshold = 0.69
@@ -21,19 +23,6 @@ function colorsForBackground(color) {
     return { textColor: '#fff', shadowColor: '#010101' }
   } else {
     return { textColor: '#333', shadowColor: '#ccc' }
-  }
-}
-
-function escapeXml(s) {
-  if (s === undefined || typeof s !== 'string') {
-    return undefined
-  } else {
-    return s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;')
   }
 }
 
@@ -597,7 +586,7 @@ function forTheBadge({
   label = label.toUpperCase()
   message = message.toUpperCase()
 
-  const [leftLink, rightLink] = links.map(escapeXml)
+  const [leftLink, rightLink] = links
   const { hasLeftLink, hasRightLink } = hasLinks({ links })
 
   const outLabelColor = labelColor || '#555'
@@ -652,104 +641,151 @@ function forTheBadge({
     }
   }
 
-  // Render.
-  function renderLogo() {
-    return `
-      <image
-        x="${logoMinX}"
-        y="${0.5 * (BADGE_HEIGHT - LOGO_HEIGHT)}"
-        width="${logoWidth}"
-        height="${LOGO_HEIGHT}"
-        xlink:href="${escapeXml(logo)}"
-      />
-    `
-  }
+  const logoElement = new XmlElement({
+    tag: 'image',
+    attrs: {
+      x: logoMinX,
+      y: 0.5 * (BADGE_HEIGHT - LOGO_HEIGHT),
+      width: logoWidth,
+      height: LOGO_HEIGHT,
+      'xlink:href': logo,
+    },
+  })
 
-  function renderLabelText() {
+  function getLabelElement() {
     const { textColor } = colorsForBackground(outLabelColor)
     const midX = labelTextMinX + 0.5 * labelTextWidth
-    const text = `
-      <text
-        ${FONT_SCALE_ATTR}
-        x="${FONT_SCALE_FACTOR * midX}"
-        y="175"
-        textLength="${FONT_SCALE_FACTOR * labelTextWidth}"
-        fill="${escapeXml(textColor)}">
-        ${escapeXml(label)}
-      </text>
-    `
+    const text = new XmlElement({
+      tag: 'text',
+      content: [label],
+      attrs: {
+        transform: FONT_SCALE_DOWN_VALUE,
+        x: FONT_SCALE_UP_FACTOR * midX,
+        y: 175,
+        textLength: FONT_SCALE_UP_FACTOR * labelTextWidth,
+        fill: textColor,
+      },
+    })
 
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
-      return `
-        <a target="_blank" xlink:href="${leftLink}">
-          <rect
-            width="${labelRectWidth}"
-            height="${BADGE_HEIGHT}"
-            fill="rgba(0,0,0,0)"
-          />
-          ${text}
-        </a>
-      `
+      const rect = new XmlElement({
+        tag: 'rect',
+        attrs: {
+          width: labelRectWidth,
+          height: BADGE_HEIGHT,
+          fill: 'rgba(0,0,0,0)',
+        },
+      })
+      return new XmlElement({
+        tag: 'a',
+        content: [rect, text],
+        attrs: {
+          target: '_blank',
+          'xlink:href': leftLink,
+        },
+      })
     } else {
       return text
     }
   }
 
-  function renderMessageText() {
+  function getMessageElement() {
     const { textColor } = colorsForBackground(color)
     const midX = messageTextMinX + 0.5 * messageTextWidth
-    const text = `
-      <text
-        ${FONT_SCALE_ATTR}
-        x="${FONT_SCALE_FACTOR * midX}"
-        y="175"
-        textLength="${FONT_SCALE_FACTOR * messageTextWidth}"
-        fill="${textColor}"
-        font-weight="bold"
-      >
-        ${escapeXml(message)}
-      </text>
-    `
+    const text = new XmlElement({
+      tag: 'text',
+      content: [message],
+      attrs: {
+        transform: FONT_SCALE_DOWN_VALUE,
+        x: FONT_SCALE_UP_FACTOR * midX,
+        y: 175,
+        textLength: FONT_SCALE_UP_FACTOR * messageTextWidth,
+        fill: textColor,
+        'font-weight': 'bold',
+      },
+    })
 
     if (hasRightLink) {
-      return `
-        <a target="_blank" xlink:href="${rightLink}">
-          <rect
-            width="${messageRectWidth}"
-            height="${BADGE_HEIGHT}"
-            x="${labelRectWidth || 0}"
-            fill="rgba(0,0,0,0)"
-          />
-          ${text}
-        </a>
-      `
+      const rect = new XmlElement({
+        tag: 'rect',
+        attrs: {
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          x: labelRectWidth || 0,
+          fill: 'rgba(0,0,0,0)',
+        },
+      })
+      return new XmlElement({
+        tag: 'a',
+        content: [rect, text],
+        attrs: {
+          target: '_blank',
+          'xlink:href': rightLink,
+        },
+      })
     } else {
       return text
     }
   }
 
-  const renderedBackground = needsLabelRect
-    ? `
-        <rect
-          width="${labelRectWidth}"
-          height="${BADGE_HEIGHT}"
-          fill="${escapeXml(outLabelColor)}"
-        />
-        <rect
-          x="${labelRectWidth}"
-          width="${messageRectWidth}"
-          height="${BADGE_HEIGHT}"
-          fill="${escapeXml(color)}"
-        />
-      `
-    : `
-        <rect
-          width="${messageRectWidth}"
-          height="${BADGE_HEIGHT}"
-          fill="${escapeXml(color)}"
-        />
-      `
+  let backgroundContent
+  if (needsLabelRect) {
+    backgroundContent = [
+      new XmlElement({
+        tag: 'rect',
+        attrs: {
+          width: labelRectWidth,
+          height: BADGE_HEIGHT,
+          fill: outLabelColor,
+        },
+      }),
+      new XmlElement({
+        tag: 'rect',
+        attrs: {
+          x: labelRectWidth,
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          fill: color,
+        },
+      }),
+    ]
+  } else {
+    backgroundContent = [
+      new XmlElement({
+        tag: 'rect',
+        attrs: {
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          fill: color,
+        },
+      }),
+    ]
+  }
 
+  const backgroundGroup = new XmlElement({
+    tag: 'g',
+    content: backgroundContent,
+    attrs: {
+      'shape-rendering': 'crispEdges',
+    },
+  })
+  const foregroundGroup = new XmlElement({
+    tag: 'g',
+    content: [
+      logo ? logoElement : '',
+      hasLabel ? getLabelElement() : '',
+      getMessageElement(),
+    ],
+    attrs: {
+      fill: '#fff',
+      'text-anchor': 'middle',
+      'font-family': FONT_FAMILY,
+      'text-rendering': 'geometricPrecision',
+      'font-size': FONT_SCALE_UP_FACTOR * FONT_SIZE,
+    },
+  })
+
+  // Render.
   return renderBadge(
     {
       links,
@@ -758,22 +794,7 @@ function forTheBadge({
       accessibleText: createAccessibleText({ label, message }),
       height: BADGE_HEIGHT,
     },
-    `
-    <g shape-rendering="crispEdges">
-      ${renderedBackground}
-    </g>
-    <g
-      fill="#fff"
-      text-anchor="middle"
-      ${fontFamily}
-      text-rendering="geometricPrecision"
-      font-size="${FONT_SCALE_FACTOR * FONT_SIZE}"
-    >
-      ${logo ? renderLogo() : ''}
-      ${hasLabel ? renderLabelText() : ''}
-      ${renderMessageText()}
-    </g>
-    `
+    [backgroundGroup.render(), foregroundGroup.render()].join('')
   )
 }
 

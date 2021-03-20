@@ -2,10 +2,7 @@
 
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
-
-function stripXmlWhitespace(xml) {
-  return xml.replace(/>\s+/g, '>').replace(/<\s+/g, '<').trim()
-}
+const { stripXmlWhitespace } = require('./xml')
 
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
