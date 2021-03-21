@@ -8,5 +8,5 @@ const t = (module.exports = new ServiceTester({
 }))
 
 t.create('sensiolabs insight')
-  .get('/i/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg')
-  .expectRedirect('/symfony/i/grade/45afb680-d4e6-4e66-93ea-bcfa79eb8a87.svg')
+  .get('/i/15c5c748-f8d8-4b56-b536-a29a151aac6c.svg')
+  .expectRedirect('/symfony/i/grade/15c5c748-f8d8-4b56-b536-a29a151aac6c.svg')

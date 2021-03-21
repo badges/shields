@@ -1,6 +1,6 @@
 'use strict'
 
-const YouTubeBase = require('./youtube-base')
+const { documentation, YouTubeBase } = require('./youtube-base')
 
 module.exports = class YouTubeViews extends YouTubeBase {
   static route = {
@@ -20,6 +20,7 @@ module.exports = class YouTubeViews extends YouTubeBase {
         title: 'YouTube Video Views',
         namedParams: { videoId: 'abBdk8bSPKU' },
         staticPreview: preview,
+        documentation,
       },
     ]
   }
