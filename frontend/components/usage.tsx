@@ -434,8 +434,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
         for use cases where SVG will not work. These requests should be made to
         our raster server <code>https://raster.shields.io</code>. For example,
         the raster equivalent of{' '}
-        <code>https://img.shields.io/v/npm/express</code> is{' '}
-        <code>https://raster.shields.io/v/npm/express</code>. For backward
+        <code>https://img.shields.io/npm/v/express</code> is{' '}
+        <code>https://raster.shields.io/npm/v/express</code>. For backward
         compatibility, the badge server will redirect <code>.png</code> badges
         to the raster server.
       </p>
