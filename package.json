@@ -197,7 +197,7 @@
     "gatsby-plugin-styled-components": "^3.10.0",
     "gatsby-plugin-typescript": "^2.12.0",
     "humanize-string": "^2.1.0",
-    "husky": "^4.3.8",
+    "husky": "^5.2.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.0.0",
     "is-svg": "^4.3.1",
