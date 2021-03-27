@@ -43,6 +43,7 @@ overrides:
       es6: true
     rules:
       no-console: 'off'
+      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
       - '**/*.@(ts|tsx)'
@@ -58,6 +59,7 @@ overrides:
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
       '@typescript-eslint/no-explicit-any': 'error'
       '@typescript-eslint/ban-ts-ignore': 'off'
+      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
       - core/**/*.ts
