@@ -230,11 +230,11 @@ module.exports = class GithubDownloads extends GithubAuthV3Service {
   async handle({ kind, user, repo, tag, assetName }, { sort }) {
     let releases
     if (tag === 'latest') {
-      const include_prereleases = kind === 'downloads-pre' || undefined
+      const includePre = kind === 'downloads-pre' || undefined
       const latestRelease = await fetchLatestRelease(
         this,
         { user, repo },
-        { sort, include_prereleases }
+        { sort, include_prereleases: includePre }
       )
       releases = [latestRelease]
     } else if (tag) {

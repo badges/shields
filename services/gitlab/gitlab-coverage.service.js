@@ -102,12 +102,12 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
     repo,
     branch,
     gitlab_url: baseUrl = 'https://gitlab.com',
-    job_name,
+    job_name: jobName,
   }) {
     // Since the URL doesn't return a usable value when an invalid job name is specified,
     // it is recommended to not use the query param at all if not required
-    job_name = job_name ? `?job=${job_name}` : ''
-    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${job_name}`
+    jobName = jobName ? `?job=${jobName}` : ''
+    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${jobName}`
     const errorMessages = {
       401: 'repo not found',
       404: 'repo not found',
