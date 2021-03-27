@@ -6,6 +6,9 @@ extends:
   - prettier
   - eslint:recommended
 
+globals:
+  JSX: 'readonly'
+
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
   # though that setting is only for ES6 modules, not CommonJS modules.
@@ -121,6 +124,9 @@ rules:
   no-unused-vars: 'off'
 
   '@typescript-eslint/no-var-requires': 'off'
+
+  '@typescript-eslint/no-use-before-define': 'error'
+  no-use-before-define: 'off'
 
   # These should be disabled by eslint-config-prettier, but are not.
   no-extra-semi: 'off'
