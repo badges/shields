@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
+// FIXME: is this needed?
 // @ts-ingnore
 import { staticBadgeUrl } from '../../../core/badge-urls/make-badge-url'
 import { getBaseUrl } from '../../constants'
 import Meta from '../meta'
-// @ts-ignore
+// ts-expect-error: because reasons?
 import Header from '../header'
 import { H3, Badge } from '../common'
 
@@ -60,11 +61,6 @@ function Badges({
       ))}
     </>
   )
-}
-
-interface StyleExamples {
-  title: string
-  badges: BadgeData[]
 }
 
 const examples = [
