@@ -138,6 +138,16 @@ rules:
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
 
+  # Account for destructuring responses from upstream services,
+  # many of which do not follow camelcase
+  # Based on original rule configuration from eslint-config-standard
+  camelcase: [ 'error', {
+    ignoreDestructuring: true,
+    properties: 'never',
+    ignoreGlobals: true,
+    allow: ['^UNSAFE_'],
+  }]
+
   # Chai friendly.
   no-unused-expressions: 'off'
   chai-friendly/no-unused-expressions: 'error'
