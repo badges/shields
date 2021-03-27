@@ -40,7 +40,7 @@
     "fast-xml-parser": "^3.19.0",
     "glob": "^7.1.6",
     "got": "11.8.2",
-    "graphql": "^14.7.0",
+    "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
     "ioredis": "4.24.4",
     "joi": "17.4.0",
