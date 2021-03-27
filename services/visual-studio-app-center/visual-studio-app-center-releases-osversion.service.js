@@ -49,7 +49,12 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
   }
 
   async handle({ owner, app, token }) {
-    const { app_os: appOS, min_os: minOS } = await this.fetch({ owner, app, token, schema })
+    const { app_os: appOS, min_os: minOS } = await this.fetch({
+      owner,
+      app,
+      token,
+      schema,
+    })
     return this.constructor.render({ appOS, minOS })
   }
 }

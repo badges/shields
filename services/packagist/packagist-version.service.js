@@ -121,7 +121,10 @@ class PackagistVersion extends BasePackagistService {
     }
   }
 
-  async handle({ user, repo }, { include_prereleases: includePrereleases, server }) {
+  async handle(
+    { user, repo },
+    { include_prereleases: includePrereleases, server }
+  ) {
     includePrereleases = includePrereleases !== undefined
     const json = await this.fetch({
       user,

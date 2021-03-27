@@ -141,12 +141,16 @@ rules:
   # Account for destructuring responses from upstream services,
   # many of which do not follow camelcase
   # Based on original rule configuration from eslint-config-standard
-  camelcase: [ 'error', {
-    ignoreDestructuring: true,
-    properties: 'never',
-    ignoreGlobals: true,
-    allow: ['^UNSAFE_'],
-  }]
+  camelcase:
+    [
+      'error',
+      {
+        ignoreDestructuring: true,
+        properties: 'never',
+        ignoreGlobals: true,
+        allow: ['^UNSAFE_'],
+      },
+    ]
 
   # Chai friendly.
   no-unused-expressions: 'off'
