@@ -9,8 +9,8 @@ const responseSchema = Joi.object({
   last_access: Joi.date(),
   lint_code: Joi.number(),
   lint_output: Joi.string(),
-  status: Joi.string().required(),
-  url: Joi.string().required(),
+  status: Joi.string().valid('compliant', 'non-compliant').required(),
+  url: Joi.string(),
 }).required()
 
 module.exports = class Reuse extends BaseJsonService {
@@ -35,7 +35,7 @@ module.exports = class Reuse extends BaseJsonService {
   ]
 
   static defaultBadgeData = {
-    label: 'REUSE',
+    label: 'reuse',
   }
 
   static render({ status }) {

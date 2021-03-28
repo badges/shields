@@ -7,7 +7,7 @@ const COLOR_MAP = {
 
 function renderReuseBadge({ status }) {
   return {
-    label: 'REUSE',
+    label: 'reuse',
     message: status,
     color: COLOR_MAP[status],
   }
