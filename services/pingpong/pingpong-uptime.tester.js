@@ -4,7 +4,7 @@ const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 // Example matches: 87.33%, 100%, 51%
-const isCorrectMessage = Joi.string().pattern(new RegExp(/\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/))
+const isCorrectMessage = Joi.string().pattern(/\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/)
 
 t.create('PingPong: Uptime (valid)')
   .get('/sp_eb705b7c189f42e3b574dc790291c33f.json')

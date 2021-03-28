@@ -1,9 +1,8 @@
 'use strict'
 
-const { renderVersionBadge } = require('..//version')
+const Joi = require('joi')
 const { BaseJsonService, InvalidParameter } = require('..')
 
-const Joi = require('joi')
 const schema = Joi.object({
   message: Joi.string().required(),
   color: Joi.string().required(),
@@ -19,7 +18,6 @@ const pingpongDocumentation = `
 module.exports = class PingPongUptime extends BaseJsonService {
   static category = 'monitoring'
   static route = { base: 'pingpong/uptime', pattern: ':apiKey' }
-  static defaultBadgeData = { label: 'uptime' }
 
   static examples = [
     {
@@ -30,6 +28,8 @@ module.exports = class PingPongUptime extends BaseJsonService {
       keywords: ['statuspage', 'status page'],
     },
   ]
+
+  static defaultBadgeData = { label: 'uptime' }
 
   static validateApiKey({ apiKey }) {
     if (!apiKey.startsWith('sp_')) {
@@ -42,8 +42,8 @@ module.exports = class PingPongUptime extends BaseJsonService {
   static render({ message, color }) {
     return {
       label: 'uptime',
-      message: message,
-      color: color,
+      message,
+      color,
     }
   }
 
