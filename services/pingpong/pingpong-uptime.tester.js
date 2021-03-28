@@ -4,7 +4,9 @@ const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 
 // Example matches: 87.33%, 100%, 51%
-const isCorrectMessage = Joi.string().pattern(/\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/)
+const isCorrectMessage = Joi.string().pattern(
+  /\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/
+)
 
 t.create('PingPong: Uptime (valid)')
   .get('/sp_eb705b7c189f42e3b574dc790291c33f.json')
@@ -31,16 +33,17 @@ t.create('PingPong: Uptime (unexpected response, valid json)')
   .get('/sp_key.json')
   .intercept(nock =>
     nock('https://api.pingpong.one')
-    .get('/widget/badge/uptime/sp_key')
-    .reply(200, '[]')
+      .get('/widget/badge/uptime/sp_key')
+      .reply(200, '[]')
   )
   .expectBadge({ label: 'uptime', message: 'invalid response data' })
 
 t.create('PingPong: Uptime (unexpected response, missing json values)')
   .get('/sp_key.json')
-  .intercept(nock =>
-    nock('https://api.pingpong.one')
-    .get('/widget/badge/uptime/sp_key')
-    .reply(200, '{"message": "up"}') // no color key
+  .intercept(
+    nock =>
+      nock('https://api.pingpong.one')
+        .get('/widget/badge/uptime/sp_key')
+        .reply(200, '{"message": "up"}') // no color key
   )
   .expectBadge({ label: 'uptime', message: 'invalid response data' })

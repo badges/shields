@@ -7,7 +7,7 @@ const isCorrectStatus = Joi.string().valid(
   'up',
   'issues',
   'down',
-  'maintenance',
+  'maintenance'
 )
 
 t.create('PingPong: Status (valid)')
@@ -35,16 +35,17 @@ t.create('PingPong: Status (unexpected response, valid json)')
   .get('/sp_key.json')
   .intercept(nock =>
     nock('https://api.pingpong.one')
-    .get('/widget/badge/status/sp_key')
-    .reply(200, '[]')
+      .get('/widget/badge/status/sp_key')
+      .reply(200, '[]')
   )
   .expectBadge({ label: 'status', message: 'invalid response data' })
 
 t.create('PingPong: Status (unexpected response, missing json values)')
   .get('/sp_key.json')
-  .intercept(nock =>
-    nock('https://api.pingpong.one')
-    .get('/widget/badge/status/sp_key')
-    .reply(200, '{"message": "up"}') // no color key
+  .intercept(
+    nock =>
+      nock('https://api.pingpong.one')
+        .get('/widget/badge/status/sp_key')
+        .reply(200, '{"message": "up"}') // no color key
   )
   .expectBadge({ label: 'status', message: 'invalid response data' })
