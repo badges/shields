@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { advertisedStyles, shieldsLogos } from '../lib/supported-features'
-// @ts-ignore
+// ts-expect-error: because reasons?
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'

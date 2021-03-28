@@ -30,7 +30,7 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
         app: 'my-amazing-app',
         token: 'ac70cv...',
       },
-      staticPreview: this.render({ min_os: '4.1', app_os: 'Android' }),
+      staticPreview: this.render({ minOS: '4.1', appOS: 'Android' }),
       keywords,
       documentation,
     },
@@ -41,15 +41,20 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
     color: 'blue',
   }
 
-  static render({ app_os, min_os }) {
+  static render({ appOS, minOS }) {
     return {
-      label: `${app_os.toLowerCase()}`,
-      message: `${min_os}+`,
+      label: `${appOS.toLowerCase()}`,
+      message: `${minOS}+`,
     }
   }
 
   async handle({ owner, app, token }) {
-    const { app_os, min_os } = await this.fetch({ owner, app, token, schema })
-    return this.constructor.render({ app_os, min_os })
+    const { app_os: appOS, min_os: minOS } = await this.fetch({
+      owner,
+      app,
+      token,
+      schema,
+    })
+    return this.constructor.render({ appOS, minOS })
   }
 }

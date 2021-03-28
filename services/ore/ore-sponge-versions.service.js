@@ -39,7 +39,7 @@ module.exports = class OreSpongeVersions extends BaseOreService {
       versions: promoted_versions
         .reduce((acc, { tags }) => acc.concat(tags), [])
         .filter(({ name }) => name.toLowerCase() === 'sponge')
-        .map(({ display_data }) => display_data)
+        .map(({ display_data: displayData }) => displayData)
         // display_data is not mandatory in the schema, filter null values
         .filter(x => !!x),
     }

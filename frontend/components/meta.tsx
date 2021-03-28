@@ -1,5 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+// eslint-disable-next-line
 // @ts-ignore
 import favicon from '../images/favicon.png'
 import '@fontsource/lato'
