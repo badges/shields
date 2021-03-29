@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
-const { documentation, YouTubeBase } = require('./youtube-base')
+const { documentation, YouTubeVideoBase } = require('./youtube-video-base')
 
 const documentationWithDislikes = `
   ${documentation}
@@ -16,7 +16,7 @@ const queryParamSchema = Joi.object({
   withDislikes: Joi.equal(''),
 }).required()
 
-module.exports = class YouTubeLikes extends YouTubeBase {
+module.exports = class YouTubeLikes extends YouTubeVideoBase {
   static route = {
     base: 'youtube/likes',
     pattern: ':videoId',
