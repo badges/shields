@@ -10,18 +10,20 @@ const documentation = `
 <code>https://www.youtube.com/t/terms</code></p>`
 
 const schema = Joi.object({
-  items: Joi.array()
-    .items(
-      Joi.object({
-        statistics: Joi.object({
-          viewCount: nonNegativeInteger,
-          subscriberCount: nonNegativeInteger,
-          hiddenSubscriberCount: Joi.boolean().required(),
-          videoCount: nonNegativeInteger,
-        }).required(),
-      })
-    )
-    .required(),
+  pageInfo: Joi.object({
+    totalResults: nonNegativeInteger,
+    resultsPerPage: nonNegativeInteger,
+  }).required(),
+  items: Joi.array().items(
+    Joi.object({
+      statistics: Joi.object({
+        viewCount: nonNegativeInteger,
+        subscriberCount: nonNegativeInteger,
+        hiddenSubscriberCount: Joi.boolean().required(),
+        videoCount: nonNegativeInteger,
+      }).required(),
+    })
+  ),
 }).required()
 
 class YouTubeChannelBase extends BaseJsonService {
@@ -66,7 +68,7 @@ class YouTubeChannelBase extends BaseJsonService {
   async handle({ channelId }, queryParams) {
     const json = await this.fetch({ channelId })
     console.log(JSON.stringify(json))
-    if (json.items.length === 0) {
+    if (json.pageInfo.totalResults === 0) {
       throw new NotFound({ prettyMessage: 'channel not found' })
     }
     const statistics = json.items[0].statistics

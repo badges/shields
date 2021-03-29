@@ -2,7 +2,7 @@
 
 const { documentation, YouTubeChannelBase } = require('./youtube-channel-base')
 
-module.exports = class YouTubeSubscribes extends YouTubeChannelBase {
+module.exports = class YouTubeChannelViews extends YouTubeChannelBase {
   static route = {
     base: 'youtube/channel/views',
     pattern: ':channelId',
