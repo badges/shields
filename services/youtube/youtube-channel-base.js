@@ -67,7 +67,6 @@ class YouTubeChannelBase extends BaseJsonService {
 
   async handle({ channelId }, queryParams) {
     const json = await this.fetch({ channelId })
-    console.log(JSON.stringify(json))
     if (json.pageInfo.totalResults === 0) {
       throw new NotFound({ prettyMessage: 'channel not found' })
     }
