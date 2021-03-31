@@ -1,8 +1,10 @@
 'use strict'
 
 const COLOR_MAP = {
-  compliant: 'brightgreen',
+  checking: 'brightgreen',
+  compliant: 'green',
   'non-compliant': 'red',
+  unregistered: 'red',
 }
 
 function renderReuseBadge({ status }) {
