@@ -1,12 +1,10 @@
 'use strict'
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { renderReuseBadge } = require('./reuse-compliance-helper')
+const { isReuseCompliance, COLOR_MAP } = require('./reuse-compliance-helper')
 
 const responseSchema = Joi.object({
-  status: Joi.string()
-    .valid('compliant', 'non-compliant', 'checking', 'unregistered')
-    .required(),
+  status: isReuseCompliance,
 }).required()
 
 module.exports = class Reuse extends BaseJsonService {
@@ -33,7 +31,11 @@ module.exports = class Reuse extends BaseJsonService {
   }
 
   static render({ status }) {
-    return renderReuseBadge({ status })
+    return {
+      label: 'reuse',
+      message: status,
+      color: COLOR_MAP[status],
+    }
   }
 
   async fetch({ remote }) {

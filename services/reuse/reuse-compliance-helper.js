@@ -1,5 +1,7 @@
 'use strict'
 
+const Joi = require('joi')
+
 const COLOR_MAP = {
   checking: 'brightgreen',
   compliant: 'green',
@@ -7,14 +9,11 @@ const COLOR_MAP = {
   unregistered: 'red',
 }
 
-function renderReuseBadge({ status }) {
-  return {
-    label: 'reuse',
-    message: status,
-    color: COLOR_MAP[status],
-  }
-}
+const isReuseCompliance = Joi.string()
+  .valid('compliant', 'non-compliant', 'checking', 'unregistered')
+  .required()
 
 module.exports = {
-  renderReuseBadge,
+  isReuseCompliance,
+  COLOR_MAP,
 }
