@@ -76,9 +76,9 @@ module.exports = class FDroid extends BaseJsonService {
     return { version }
   }
 
-  async handle({ appId }, { include_prereleases }) {
+  async handle({ appId }, { include_prereleases: includePre }) {
     const json = await this.fetch({ appId })
-    const suggested = include_prereleases === undefined
+    const suggested = includePre === undefined
     const { version } = this.transform({ json, suggested })
     return this.constructor.render({ version })
   }

@@ -6,6 +6,9 @@ extends:
   - prettier
   - eslint:recommended
 
+globals:
+  JSX: 'readonly'
+
 parserOptions:
   # Override eslint-config-standard, which incorrectly sets this to "module",
   # though that setting is only for ES6 modules, not CommonJS modules.
@@ -40,6 +43,7 @@ overrides:
       es6: true
     rules:
       no-console: 'off'
+      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
       - '**/*.@(ts|tsx)'
@@ -55,6 +59,7 @@ overrides:
       '@typescript-eslint/no-object-literal-type-assertion': 'off'
       '@typescript-eslint/no-explicit-any': 'error'
       '@typescript-eslint/ban-ts-ignore': 'off'
+      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
       - core/**/*.ts
@@ -122,6 +127,9 @@ rules:
 
   '@typescript-eslint/no-var-requires': 'off'
 
+  '@typescript-eslint/no-use-before-define': 'error'
+  no-use-before-define: 'off'
+
   # These should be disabled by eslint-config-prettier, but are not.
   no-extra-semi: 'off'
 
@@ -137,6 +145,20 @@ rules:
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
+
+  # Account for destructuring responses from upstream services,
+  # many of which do not follow camelcase
+  # Based on original rule configuration from eslint-config-standard
+  camelcase:
+    [
+      'error',
+      {
+        ignoreDestructuring: true,
+        properties: 'never',
+        ignoreGlobals: true,
+        allow: ['^UNSAFE_'],
+      },
+    ]
 
   # Chai friendly.
   no-unused-expressions: 'off'

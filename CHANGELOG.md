@@ -4,6 +4,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-04-01
+
+- Use NPM packages to provide fonts instead of Google Fonts [#6274](https://github.com/badges/shields/issues/6274)
+- Prevent duplication of parameters in badge examples [#6272](https://github.com/badges/shields/issues/6272)
+- Add docs for all types of releases [#6210](https://github.com/badges/shields/issues/6210)
+- refresh self-hosting docs [#6273](https://github.com/badges/shields/issues/6273)
+- allow missing 'goal' key in [liberapay] badges [#6258](https://github.com/badges/shields/issues/6258)
+- use got to push influx metrics [#6257](https://github.com/badges/shields/issues/6257)
+- Dependency updates
+
 ## server-2021-03-01
 
 - ensure redirect target path is correctly encoded [#6229](https://github.com/badges/shields/issues/6229)
