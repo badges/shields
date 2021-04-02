@@ -1,8 +1,8 @@
 'use strict'
 
-const { documentation, YouTubeVideoBase } = require('./youtube-video-base')
+const { documentation, YouTubeBase } = require('./youtube-base')
 
-module.exports = class YouTubeComments extends YouTubeVideoBase {
+module.exports = class YouTubeComments extends YouTubeBase {
   static route = {
     base: 'youtube/comments',
     pattern: ':videoId',

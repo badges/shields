@@ -7,12 +7,12 @@ const noYouTubeToken = noToken(require('./youtube-subscribers.service'))
 
 t.create('subscriber count')
   .skipWhen(noYouTubeToken)
-  .get('/UCTNq28Ah5eyDgsYOA0oHzew.json')
+  .get('/UC8butISFwT-Wl7EV0hUK0BQ.json')
   .expectBadge({
     label: 'subscribers',
     message: isMetric,
     color: 'red',
-    link: ['https://www.youtube.com/channel/UCTNq28Ah5eyDgsYOA0oHzew'],
+    link: ['https://www.youtube.com/channel/UC8butISFwT-Wl7EV0hUK0BQ'],
   })
 
 t.create('channel not found')
