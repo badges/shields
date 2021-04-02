@@ -17,7 +17,7 @@ module.exports = class YouTubeSubscribes extends YouTubeBase {
     delete preview.link
     return [
       {
-        title: 'YouTube Subscriber Counts',
+        title: 'YouTube Channel Subscribers',
         namedParams: { channelId: 'UC8butISFwT-Wl7EV0hUK0BQ' },
         staticPreview: preview,
         documentation,

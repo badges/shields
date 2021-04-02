@@ -19,8 +19,6 @@ const channelSchema = Joi.object({
       statistics: Joi.object({
         viewCount: nonNegativeInteger,
         subscriberCount: nonNegativeInteger,
-        hiddenSubscriberCount: Joi.boolean(),
-        videoCount: nonNegativeInteger,
       }),
     })
   ),
