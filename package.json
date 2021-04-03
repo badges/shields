@@ -24,7 +24,7 @@
   "dependencies": {
     "@fontsource/lato": "^4.2.2",
     "@fontsource/lekton": "^4.2.2",
-    "@sentry/node": "^6.2.3",
+    "@sentry/node": "^6.2.5",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.0",
@@ -60,7 +60,7 @@
     "query-string": "^7.0.0",
     "request": "~2.88.2",
     "semver": "~7.3.5",
-    "simple-icons": "4.16.0",
+    "simple-icons": "4.17.0",
     "webextension-store-meta": "^1.0.3",
     "xmldom": "~0.5.0",
     "xpath": "~0.0.32"
@@ -154,7 +154,7 @@
     "@types/react-modal": "^3.12.0",
     "@types/react-select": "^4.0.13",
     "@types/styled-components": "5.1.9",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-istanbul": "^6.0.0",
