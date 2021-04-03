@@ -1,8 +1,8 @@
 'use strict'
 
-const { documentation, YouTubeBase } = require('./youtube-base')
+const { documentation, YouTubeChannelBase } = require('./youtube-base')
 
-module.exports = class YouTubeChannelViews extends YouTubeBase {
+module.exports = class YouTubeChannelViews extends YouTubeChannelBase {
   static route = {
     base: 'youtube/channel/views',
     pattern: ':channelId',
@@ -11,7 +11,7 @@ module.exports = class YouTubeChannelViews extends YouTubeBase {
   static get examples() {
     const preview = this.render({
       statistics: { viewCount: 30543 },
-      channelId: 'UC8butISFwT-Wl7EV0hUK0BQ',
+      id: 'UC8butISFwT-Wl7EV0hUK0BQ',
     })
     // link[] is not allowed in examples
     delete preview.link
@@ -25,11 +25,7 @@ module.exports = class YouTubeChannelViews extends YouTubeBase {
     ]
   }
 
-  static render({ statistics, channelId }) {
-    return super.renderSingleStat({
-      statistics,
-      statisticName: 'view',
-      channelId,
-    })
+  static render({ statistics, id }) {
+    return super.renderSingleStat({ statistics, statisticName: 'view', id })
   }
 }
