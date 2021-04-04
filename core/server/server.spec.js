@@ -207,6 +207,55 @@ describe('The server', function () {
     })
   })
 
+  describe('`requestTimeoutSeconds` setting', function () {
+    let server
+
+    beforeEach(async function () {
+      this.timeout(10000)
+
+      // configure server to time out requests that take >2 seconds
+      server = await createTestServer({ public: { requestTimeoutSeconds: 2 } })
+      await server.start()
+
+      // /fast returns a 200 OK after a 1 second delay
+      server.camp.route(/^\/fast$/, (data, match, end, ask) => {
+        setTimeout(() => {
+          ask.res.statusCode = 200
+          ask.res.end()
+        }, 1000)
+      })
+
+      // /slow returns a 200 OK after a 3 second delay
+      server.camp.route(/^\/slow$/, (data, match, end, ask) => {
+        setTimeout(() => {
+          ask.res.statusCode = 200
+          ask.res.end()
+        }, 3000)
+      })
+    })
+
+    afterEach(async function () {
+      if (server) {
+        server.stop()
+      }
+      server = undefined
+    })
+
+    it('should time out slow requests', async function () {
+      this.timeout(10000)
+      return expect(got(`${server.baseUrl}slow`)).to.be.rejectedWith(
+        got.RequestError
+      )
+    })
+
+    it('should not time out fast requests', async function () {
+      this.timeout(10000)
+      const { statusCode, body } = await got(`${server.baseUrl}fast`)
+      expect(statusCode).to.be.equal(200)
+      expect(body).to.equal('')
+    })
+  })
+
   describe('configuration', function () {
     let server
     afterEach(async function () {

@@ -33,6 +33,8 @@ public:
 
   fetchLimit: '10MB'
 
+  requestTimeoutSeconds: 120
+
   requireCloudflare: false
 
 private: {}
