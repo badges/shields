@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { metric } = require('../text-formatters')
-const { documentation, YouTubeBase } = require('./youtube-base')
+const { documentation, YouTubeVideoBase } = require('./youtube-base')
 
 const documentationWithDislikes = `
   ${documentation}
@@ -16,7 +16,7 @@ const queryParamSchema = Joi.object({
   withDislikes: Joi.equal(''),
 }).required()
 
-module.exports = class YouTubeLikes extends YouTubeBase {
+module.exports = class YouTubeLikes extends YouTubeVideoBase {
   static route = {
     base: 'youtube/likes',
     pattern: ':videoId',
@@ -26,16 +26,14 @@ module.exports = class YouTubeLikes extends YouTubeBase {
   static get examples() {
     const previewLikes = this.render({
       statistics: { likeCount: 7 },
-      videoId: 'abBdk8bSPKU',
+      id: 'abBdk8bSPKU',
     })
     const previewVotes = this.render(
       {
         statistics: { likeCount: 10236, dislikeCount: 396 },
-        videoId: 'pU9Q6oiQNd0',
+        id: 'pU9Q6oiQNd0',
       },
-      {
-        withDislikes: '',
-      }
+      { withDislikes: '' }
     )
     // link[] is not allowed in examples
     delete previewLikes.link
@@ -59,11 +57,11 @@ module.exports = class YouTubeLikes extends YouTubeBase {
     ]
   }
 
-  static render({ statistics, videoId }, queryParams) {
+  static render({ statistics, id }, queryParams) {
     let renderedBadge = super.renderSingleStat({
       statistics,
       statisticName: 'like',
-      videoId,
+      id,
     })
     if (queryParams && typeof queryParams.withDislikes !== 'undefined') {
       renderedBadge = {
