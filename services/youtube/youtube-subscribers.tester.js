@@ -3,23 +3,23 @@
 const t = (module.exports = require('../tester').createServiceTester())
 const { noToken } = require('../test-helpers')
 const { isMetric } = require('../test-validators')
-const noYouTubeToken = noToken(require('./youtube-views.service'))
+const noYouTubeToken = noToken(require('./youtube-subscribers.service'))
 
-t.create('video view count')
+t.create('subscriber count')
   .skipWhen(noYouTubeToken)
-  .get('/abBdk8bSPKU.json')
+  .get('/UC8butISFwT-Wl7EV0hUK0BQ.json')
   .expectBadge({
-    label: 'views',
+    label: 'subscribers',
     message: isMetric,
     color: 'red',
-    link: ['https://www.youtube.com/video/abBdk8bSPKU'],
+    link: ['https://www.youtube.com/channel/UC8butISFwT-Wl7EV0hUK0BQ'],
   })
 
-t.create('video not found')
+t.create('channel not found')
   .skipWhen(noYouTubeToken)
   .get('/doesnotexist.json')
   .expectBadge({
     label: 'youtube',
-    message: 'video not found',
+    message: 'channel not found',
     color: 'red',
   })
