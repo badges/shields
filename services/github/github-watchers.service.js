@@ -45,7 +45,7 @@ module.exports = class GithubWatchers extends GithubAuthV3Service {
   static render({ watchers, user, repo }) {
     return {
       message: metric(watchers),
-      color: '4183C4',
+      color: 'blue',
       link: [
         `https://github.com/${user}/${repo}`,
         `https://github.com/${user}/${repo}/watchers`,
