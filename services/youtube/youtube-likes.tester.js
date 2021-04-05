@@ -13,7 +13,7 @@ t.create('video like count')
     label: 'likes',
     message: isMetric,
     color: 'red',
-    link: ['https://www.youtube.com/watch?v=pU9Q6oiQNd0'],
+    link: ['https://www.youtube.com/video/pU9Q6oiQNd0'],
   })
 
 t.create('video vote count')
@@ -25,7 +25,7 @@ t.create('video vote count')
       /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) 👍 ([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) 👎$/
     ),
     color: 'red',
-    link: ['https://www.youtube.com/watch?v=pU9Q6oiQNd0'],
+    link: ['https://www.youtube.com/video/pU9Q6oiQNd0'],
   })
 
 t.create('video not found')

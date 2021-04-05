@@ -31,7 +31,7 @@ module.exports = class GithubFollowers extends GithubAuthV3Service {
   static render({ followers }) {
     return {
       message: metric(followers),
-      color: '4183C4',
+      color: 'blue',
     }
   }
 

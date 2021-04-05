@@ -8,6 +8,7 @@ t.create('Watchers')
   .expectBadge({
     label: 'watchers',
     message: Joi.number().integer().positive(),
+    color: 'blue',
     link: [
       'https://github.com/badges/shields',
       'https://github.com/badges/shields/watchers',

@@ -42,7 +42,7 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
   static render({ count }) {
     return {
       message: metric(count),
-      color: '4183C4',
+      color: 'blue',
     }
   }
 
