@@ -8,6 +8,7 @@ t.create('Forks')
   .expectBadge({
     label: 'forks',
     message: isMetric,
+    color: 'blue',
     link: [
       'https://github.com/badges/shields/fork',
       'https://github.com/badges/shields/network',

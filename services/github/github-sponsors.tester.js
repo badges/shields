@@ -12,6 +12,7 @@ const t = (module.exports = new ServiceTester({
 t.create('Sponsors').get('/sponsors/Homebrew.json').expectBadge({
   label: 'sponsors',
   message: isMetric,
+  color: 'blue',
 })
 
 t.create('Sponsors (user not found)')
