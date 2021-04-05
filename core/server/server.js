@@ -18,6 +18,7 @@ const { makeSend } = require('../base-service/legacy-result-sender')
 const { handleRequest } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
+const { nonNegativeInteger } = require('../../services/validators')
 const log = require('./log')
 const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
@@ -137,12 +138,11 @@ const publicConfigSchema = Joi.object({
     teamcity: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
-  cacheHeaders: {
-    defaultCacheLengthSeconds: Joi.number().integer().required(),
-  },
+  cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  requestTimeoutSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
     path.resolve(__dirname, '..', '..', 'public')
   ),
@@ -476,6 +476,7 @@ class Server {
     this.registerRedirects()
     this.registerServices()
 
+    camp.timeout = this.config.public.requestTimeoutSeconds * 1000
     camp.listenAsConfigured()
 
     await new Promise(resolve => camp.on('listening', () => resolve()))

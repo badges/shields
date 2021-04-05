@@ -61,6 +61,8 @@ public:
 
   fetchLimit: 'FETCH_LIMIT'
 
+  requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
+
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
