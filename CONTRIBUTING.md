@@ -107,9 +107,15 @@ There are three places to get help:
 - Badges should not obtain data by scraping web pages - these are likely to break frequently.
   Whereas API publishers are incentivised to maintain a stable platform for their users,
   authors of web pages have no such incentive.
+- Badges should not use a specialised API which is specifically designed to set Shields.io badge
+  attributes. For that purpose, the [endpoint badge][] should be used instead. Where possible, the
+  badge code should be responsible for computing its own attributes, leveraging returned data rather
+  than being imposed all attributes by the API.
 - Badges may require users to specify a token in the badge URL as long it is scoped only to
   fetching information and doesn't expose any sensitive information. Generating a token with the
   correct scope must be clearly documented.
+
+[endpoint badge]: https://shields.io/endpoint
 
 ## Badge URLs
 
