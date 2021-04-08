@@ -243,9 +243,11 @@ describe('The server', function () {
 
     it('should time out slow requests', async function () {
       this.timeout(10000)
-      return expect(got(`${server.baseUrl}slow`)).to.be.rejectedWith(
-        got.RequestError
-      )
+      const { statusCode, body } = await got(`${server.baseUrl}slow`, {
+        throwHttpErrors: false,
+      })
+      expect(statusCode).to.be.equal(408)
+      expect(body).to.equal('Request Timeout')
     })
 
     it('should not time out fast requests', async function () {

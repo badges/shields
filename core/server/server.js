@@ -477,6 +477,17 @@ class Server {
     this.registerServices()
 
     camp.timeout = this.config.public.requestTimeoutSeconds * 1000
+    if (this.config.public.requestTimeoutSeconds > 0) {
+      camp.on('timeout', socket => {
+        socket.write('HTTP/1.1 408 Request Timeout\n')
+        socket.write('Content-Type: text/html; charset=UTF-8\n')
+        socket.write('Content-Encoding: UTF-8\n')
+        socket.write('Cache-Control: max-age=60, s-maxage=60\n')
+        socket.write('Connection: close\n\n')
+        socket.write('Request Timeout')
+        socket.end()
+      })
+    }
     camp.listenAsConfigured()
 
     await new Promise(resolve => camp.on('listening', () => resolve()))
