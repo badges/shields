@@ -89,6 +89,22 @@ t.create('Nexus 2 - snapshot version with + in version')
     message: isVersion,
   })
 
+t.create('Nexus 2 - snapshot version with + and hex hash in version')
+  .get(
+    '/s/com.typesafe.akka/akka-stream-kafka_2.13.json?server=https://repository.jboss.org/nexus'
+  )
+  .intercept(nock =>
+    nock('https://repository.jboss.org/nexus')
+      .get('/service/local/lucene/search')
+      .query({ g: 'com.typesafe.akka', a: 'akka-stream-kafka_2.13' })
+      .reply(200, { data: [{ version: '2.1.0-M1+58-f25047fc-SNAPSHOT' }] })
+  )
+  .expectBadge({
+    label: 'nexus',
+    color: 'orange',
+    message: isVersion,
+  })
+
 t.create('Nexus 2 - search snapshot version not in latestSnapshot')
   .get(
     '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus'
