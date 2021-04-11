@@ -62,6 +62,7 @@ public:
   fetchLimit: 'FETCH_LIMIT'
 
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
+  requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'
 
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 

@@ -143,6 +143,7 @@ const publicConfigSchema = Joi.object({
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
   requestTimeoutSeconds: nonNegativeInteger,
+  requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
     path.resolve(__dirname, '..', '..', 'public')
   ),
@@ -479,10 +480,11 @@ class Server {
     camp.timeout = this.config.public.requestTimeoutSeconds * 1000
     if (this.config.public.requestTimeoutSeconds > 0) {
       camp.on('timeout', socket => {
+        const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
         socket.write('HTTP/1.1 408 Request Timeout\n')
         socket.write('Content-Type: text/html; charset=UTF-8\n')
         socket.write('Content-Encoding: UTF-8\n')
-        socket.write('Cache-Control: max-age=60, s-maxage=60\n')
+        socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\n`)
         socket.write('Connection: close\n\n')
         socket.write('Request Timeout')
         socket.end()
