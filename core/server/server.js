@@ -481,11 +481,11 @@ class Server {
     if (this.config.public.requestTimeoutSeconds > 0) {
       camp.on('timeout', socket => {
         const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
-        socket.write('HTTP/1.1 408 Request Timeout\n')
-        socket.write('Content-Type: text/html; charset=UTF-8\n')
-        socket.write('Content-Encoding: UTF-8\n')
-        socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\n`)
-        socket.write('Connection: close\n\n')
+        socket.write('HTTP/1.1 408 Request Timeout\r\n')
+        socket.write('Content-Type: text/html; charset=UTF-8\r\n')
+        socket.write('Content-Encoding: UTF-8\r\n')
+        socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\r\n`)
+        socket.write('Connection: close\r\n\r\n')
         socket.write('Request Timeout')
         socket.end()
       })
