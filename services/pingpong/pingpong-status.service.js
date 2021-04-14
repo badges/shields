@@ -4,8 +4,7 @@ const Joi = require('joi')
 const { BaseJsonService, InvalidParameter } = require('..')
 
 const schema = Joi.object({
-  message: Joi.string().required(),
-  color: Joi.string().required(),
+  status: Joi.string().required(),
 }).required()
 
 const pingpongDocumentation = `
@@ -22,8 +21,8 @@ module.exports = class PingPongStatus extends BaseJsonService {
   static examples = [
     {
       title: 'PingPong status',
-      namedParams: { apiKey: 'sp_eb705b7c189f42e3b574dc790291c33f' },
-      staticPreview: this.render({ message: 'up', color: 'brightgreen' }),
+      namedParams: { apiKey: 'sp_2e80bc00b6054faeb2b87e2464be337e' },
+      staticPreview: this.render({ status: 'Operational' }),
       documentation: pingpongDocumentation,
       keywords: ['statuspage', 'status page'],
     },
@@ -39,24 +38,31 @@ module.exports = class PingPongStatus extends BaseJsonService {
     }
   }
 
-  static render({ message, color }) {
-    return {
-      label: 'status',
-      message,
-      color,
+  static render({ status }) {
+    switch (status) {
+      case 'Operational':
+        return { message: 'up', color: 'brightgreen' }
+      case 'Major issues':
+        return { message: 'issues', color: 'orange' }
+      case 'Critical state':
+        return { message: 'down', color: 'red' }
+      case 'Maintenance mode':
+        return { message: 'maintenance', color: 'lightgrey' }
+      default:
+        return { message: 'unknown', color: 'lightgrey' }
     }
   }
 
   async fetch({ apiKey }) {
     return this._requestJson({
       schema,
-      url: `https://api.pingpong.one/widget/badge/status/${apiKey}`,
+      url: `https://api.pingpong.one/widget/shields/status/${apiKey}`,
     })
   }
 
   async handle({ apiKey }) {
     this.constructor.validateApiKey({ apiKey })
-    const { message, color } = await this.fetch({ apiKey })
-    return this.constructor.render({ message, color })
+    const { status } = await this.fetch({ apiKey })
+    return this.constructor.render({ status })
   }
 }

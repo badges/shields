@@ -1,11 +1,11 @@
 'use strict'
 
 const Joi = require('joi')
+const { coveragePercentage } = require('../color-formatters')
 const { BaseJsonService, InvalidParameter } = require('..')
 
 const schema = Joi.object({
-  message: Joi.string().required(),
-  color: Joi.string().required(),
+  uptime: Joi.number().min(0).max(100).required(),
 }).required()
 
 const pingpongDocumentation = `
@@ -22,8 +22,8 @@ module.exports = class PingPongUptime extends BaseJsonService {
   static examples = [
     {
       title: 'PingPong uptime (last 30 days)',
-      namedParams: { apiKey: 'sp_eb705b7c189f42e3b574dc790291c33f' },
-      staticPreview: this.render({ message: '100%', color: 'brightgreen' }),
+      namedParams: { apiKey: 'sp_2e80bc00b6054faeb2b87e2464be337e' },
+      staticPreview: this.render({ uptime: 100 }),
       documentation: pingpongDocumentation,
       keywords: ['statuspage', 'status page'],
     },
@@ -39,24 +39,23 @@ module.exports = class PingPongUptime extends BaseJsonService {
     }
   }
 
-  static render({ message, color }) {
+  static render({ uptime }) {
     return {
-      label: 'uptime',
-      message,
-      color,
+      message: `${uptime}%`,
+      color: coveragePercentage(uptime),
     }
   }
 
   async fetch({ apiKey }) {
     return this._requestJson({
       schema,
-      url: `https://api.pingpong.one/widget/badge/uptime/${apiKey}`,
+      url: `https://api.pingpong.one/widget/shields/uptime/${apiKey}`,
     })
   }
 
   async handle({ apiKey }) {
     this.constructor.validateApiKey({ apiKey })
-    const { message, color } = await this.fetch({ apiKey })
-    return this.constructor.render({ message, color })
+    const { uptime } = await this.fetch({ apiKey })
+    return this.constructor.render({ uptime })
   }
 }
