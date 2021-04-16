@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService } = require('..')
+const { BaseJsonService, NotFound } = require('..')
 
 const schema = Joi.array().items(
   Joi.object({
@@ -45,8 +45,10 @@ module.exports = class GitlabTag extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const json = await this.fetch({ user, repo })
-    const { name } = json[0]
+    const tags = await this.fetch({ user, repo })
+    if (tags.length === 0)
+      throw new NotFound({ prettyMessage: 'no tags found' })
+    const { name } = tags[0]
     return this.constructor.render({ name })
   }
 }
