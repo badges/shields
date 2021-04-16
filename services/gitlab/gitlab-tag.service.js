@@ -41,6 +41,9 @@ module.exports = class GitlabTag extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://gitlab.com/api/v4/projects/${user}%2F${repo}/repository/tags`,
+      errorMessages: {
+        404: 'repo not found',
+      },
     })
   }
 
