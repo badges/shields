@@ -143,7 +143,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.15",
     "@babel/polyfill": "^7.12.1",
-    "@babel/register": "7.13.14",
+    "@babel/register": "7.13.16",
     "@mapbox/react-click-to-select": "^2.2.1",
     "@types/chai": "^4.2.16",
     "@types/lodash.debounce": "^4.0.6",
