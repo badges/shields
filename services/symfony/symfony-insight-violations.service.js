@@ -12,7 +12,7 @@ module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
     {
       title: 'SymfonyInsight Violations',
       namedParams: {
-        projectUuid: '15c5c748-f8d8-4b56-b536-a29a151aac6c',
+        projectUuid: '825be328-29f8-44f7-a750-f82818ae9111',
       },
       staticPreview: this.render({
         numViolations: 0,
