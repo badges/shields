@@ -198,7 +198,9 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       },
       cachingRequest
     )
+    // eslint-disable-next-line promise/prefer-await-to-then
     if (result && result.catch) {
+      // eslint-disable-next-line promise/prefer-await-to-then
       result.catch(err => {
         throw err
       })
