@@ -193,6 +193,7 @@ function setRoutes(allowedOrigin, githubApiProvider, server) {
       .then(suggestions => {
         end({ suggestions })
       })
+      // eslint-disable-next-line promise/prefer-await-to-then
       .catch(err => {
         end({ suggestions: [], err })
       })

@@ -24,7 +24,7 @@
   "dependencies": {
     "@fontsource/lato": "^4.2.2",
     "@fontsource/lekton": "^4.2.2",
-    "@sentry/node": "^6.3.0",
+    "@sentry/node": "^6.3.4",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.0",
@@ -60,7 +60,7 @@
     "query-string": "^7.0.0",
     "request": "~2.88.2",
     "semver": "~7.3.5",
-    "simple-icons": "4.20.0",
+    "simple-icons": "4.21.0",
     "webextension-store-meta": "^1.0.3",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
@@ -141,7 +141,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.14.0",
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.13.16",
     "@mapbox/react-click-to-select": "^2.2.1",
@@ -179,11 +179,11 @@
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^32.3.1",
+    "eslint-plugin-jsdoc": "^33.0.0",
     "eslint-plugin-mocha": "^8.1.0",
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sort-class-members": "^1.11.0",
