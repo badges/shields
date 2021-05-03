@@ -26,4 +26,4 @@ t.create('PingPong: Status (unexpected response)')
         .get('/widget/shields/status/sp_key')
         .reply(200, '{"status": "up"}') // unexpected status message
   )
-  .expectBadge({ message: 'unknown', color: 'lightgrey' })
+  .expectBadge({ label: 'status', message: 'Unknown status received' })

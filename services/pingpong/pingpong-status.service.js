@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const { BaseJsonService, InvalidParameter } = require('..')
+const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
 
 const schema = Joi.object({
   status: Joi.string().required(),
@@ -49,7 +49,9 @@ module.exports = class PingPongStatus extends BaseJsonService {
       case 'Maintenance mode':
         return { message: 'maintenance', color: 'lightgrey' }
       default:
-        return { message: 'unknown', color: 'lightgrey' }
+        throw new InvalidResponse({
+            prettyMessage: 'Unknown status received',
+        })
     }
   }
 
