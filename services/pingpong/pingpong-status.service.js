@@ -50,7 +50,7 @@ module.exports = class PingPongStatus extends BaseJsonService {
         return { message: 'maintenance', color: 'lightgrey' }
       default:
         throw new InvalidResponse({
-            prettyMessage: 'Unknown status received',
+          prettyMessage: 'Unknown status received',
         })
     }
   }
