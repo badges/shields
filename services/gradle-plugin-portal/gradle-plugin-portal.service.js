@@ -18,8 +18,8 @@ module.exports = class MavenCentral extends BaseXmlService {
   static category = 'version'
 
   static route = {
-    base: 'maven-central/v',
-    pattern: ':groupId/:artifactId/:versionPrefix?',
+    base: 'gradle-plugin-portal/v',
+    pattern: ':pluginId/:versionPrefix?',
   }
 
   static examples = [
@@ -53,13 +53,14 @@ module.exports = class MavenCentral extends BaseXmlService {
   ]
 
   static defaultBadgeData = {
-    label: 'maven-central',
+    label: 'plugin portal',
   }
 
-  async fetch({ groupId, artifactId }) {
-    const group = encodeURIComponent(groupId).replace(/\./g, '/')
-    const artifact = encodeURIComponent(artifactId)
-    const url = `https://repo1.maven.org/maven2/${group}/${artifact}/maven-metadata.xml`
+  async fetch({ pluginId }) {
+    const plugin = encodeURIComponent(pluginId)
+    const group = plugin.replace(/\./g, '/')
+    const artifact = `${plugin}.gradle.plugin`
+    const url = `https://plugins.gradle.org/m2/${group}/${artifact}/maven-metadata.xml`
     return this._requestXml({
       schema,
       url,
@@ -67,8 +68,8 @@ module.exports = class MavenCentral extends BaseXmlService {
     })
   }
 
-  async handle({ groupId, artifactId, versionPrefix }) {
-    const data = await this.fetch({ groupId, artifactId })
+  async handle({ pluginId, versionPrefix }) {
+    const data = await this.fetch({ pluginId })
     const versions = data.metadata.versioning.versions.version.reverse()
     let version = versions[0]
     if (versionPrefix !== undefined) {
