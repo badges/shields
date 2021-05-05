@@ -14,7 +14,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class MavenCentral extends BaseXmlService {
+module.exports = class GradlePluginPortal extends BaseXmlService {
   static category = 'version'
 
   static route = {
