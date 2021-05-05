@@ -24,29 +24,27 @@ module.exports = class MavenCentral extends BaseXmlService {
 
   static examples = [
     {
-      title: 'Maven Central',
-      pattern: ':groupId/:artifactId',
+      title: 'Gradle Plugin Portal',
+      pattern: ':pluginId',
       namedParams: {
-        groupId: 'org.apache.maven',
-        artifactId: 'apache-maven',
+        pluginId: 'com.gradle.plugin-publish',
       },
       staticPreview: {
-        label: 'maven-central',
-        message: 'v3.6.0',
+        label: 'plugin portal',
+        message: 'v0.14.0',
         color: 'blue',
       },
     },
     {
-      title: 'Maven Central with version prefix filter',
-      pattern: ':groupId/:artifactId/:versionPrefix',
+      title: 'Gradle Plugin Portal with version prefix filter',
+      pattern: ':pluginId/:versionPrefix',
       namedParams: {
-        groupId: 'org.apache.maven',
-        artifactId: 'apache-maven',
-        versionPrefix: '2',
+        pluginId: 'com.gradle.plugin-publish',
+        versionPrefix: '0.10',
       },
       staticPreview: {
-        label: 'maven-central',
-        message: 'v2.2.1',
+        label: 'plugin portal',
+        message: 'v0.10.1',
         color: 'blue',
       },
     },
