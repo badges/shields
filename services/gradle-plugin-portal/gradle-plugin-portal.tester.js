@@ -5,39 +5,41 @@ const {
 } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('latest version')
-  .get('/com.github.fabriziocucci/yacl4j.json') // http://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/
-  .expectBadge({
-    label: 'maven-central',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-  })
+// https://plugins.gradle.org/m2/com/gradle/plugin-publish/com.gradle.plugin-publish.gradle.plugin/
+t.create('latest version').get('/com.gradle.plugin-publish.json').expectBadge({
+  label: 'plugin portal',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+})
 
-t.create('latest 0.8 version')
-  .get('/com.github.fabriziocucci/yacl4j/0.8.json') // http://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/
+// https://plugins.gradle.org/m2/com/gradle/plugin-publish/com.gradle.plugin-publish.gradle.plugin/
+t.create('latest 0.10 version')
+  .get('/com.gradle.plugin-publish/0.10.json')
   .expectBadge({
-    label: 'maven-central',
+    label: 'plugin portal',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
 t.create('inexistent artifact')
-  .get('/inexistent-group-id/inexistent-artifact-id.json')
-  .expectBadge({ label: 'maven-central', message: 'not found' })
+  .get('/inexistent-plugin-id.json')
+  .expectBadge({ label: 'plugin portal', message: 'not found' })
 
 t.create('inexistent version prefix')
-  .get('/com.github.fabriziocucci/yacl4j/99.json')
-  .expectBadge({ label: 'maven-central', message: 'version prefix not found' })
+  .get('/com.gradle.plugin-publish/1000.json')
+  .expectBadge({ label: 'plugin portal', message: 'version prefix not found' })
 
 t.create('version ending with zero')
-  .get('/mocked-group-id/mocked-artifact-id.json')
+  .get('/mocked-plugin-id.json')
   .intercept(nock =>
-    nock('https://repo1.maven.org/maven2')
-      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+    nock('https://plugins.gradle.org/m2')
+      .get(
+        '/mocked-plugin-id/mocked-plugin-id.gradle.plugin/maven-metadata.xml'
+      )
       .reply(
         200,
         `
       <metadata>
-        <groupId>mocked-group-id</groupId>
-        <artifactId>mocked-artifact-id</artifactId>
+        <groupId>mocked-plugin-id</groupId>
+        <artifactId>mocked-plugin-id.gradle.plugin</artifactId>
         <versioning>
             <latest>1.30</latest>
             <release>1.30</release>
@@ -50,4 +52,4 @@ t.create('version ending with zero')
       `
       )
   )
-  .expectBadge({ label: 'maven-central', message: 'v1.30' })
+  .expectBadge({ label: 'plugin portal', message: 'v1.30' })
