@@ -34,6 +34,12 @@ module.exports = class GemVersion extends BaseJsonService {
       staticPreview: this.render({ version: '2.1.0' }),
       keywords: ['ruby'],
     },
+    {
+      title: 'Gem',
+      namedParams: { gem: 'flame', distribution: 'latest' },
+      staticPreview: this.render({ version: '5.0.0.rc6' }),
+      keywords: ['ruby'],
+    },
   ]
 
   static defaultBadgeData = { label: 'gem' }
