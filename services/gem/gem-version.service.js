@@ -3,7 +3,6 @@
 const Joi = require('joi')
 const { renderVersionBadge, latest } = require('../version')
 const { BaseJsonService, NotFound } = require('..')
-const { nonNegativeInteger } = require('../validators')
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't
@@ -14,19 +13,19 @@ const schema = Joi.object({
 const versionSchema = Joi.array()
   .items(
     Joi.object({
-      prerelease: Joi.boolean().required(),
       number: Joi.string().required(),
-      downloads_count: nonNegativeInteger,
     })
   )
   .min(1)
   .required()
 
-const defaultDistribution = 'stable'
+const queryParamSchema = Joi.object({
+  latest: Joi.equal(''),
+}).required()
 
 module.exports = class GemVersion extends BaseJsonService {
   static category = 'version'
-  static route = { base: 'gem/v', pattern: ':gem/:distribution?' }
+  static route = { base: 'gem/v', pattern: ':gem', queryParamSchema }
   static examples = [
     {
       title: 'Gem',
@@ -35,8 +34,11 @@ module.exports = class GemVersion extends BaseJsonService {
       keywords: ['ruby'],
     },
     {
-      title: 'Gem',
-      namedParams: { gem: 'flame', distribution: 'latest' },
+      title: 'Gem (latest)',
+      namedParams: { gem: 'flame' },
+      queryParams: {
+        latest: null,
+      },
       staticPreview: this.render({ version: '5.0.0.rc6' }),
       keywords: ['ruby'],
     },
@@ -62,17 +64,17 @@ module.exports = class GemVersion extends BaseJsonService {
     })
   }
 
-  async handle({ gem, distribution = defaultDistribution }) {
-    if (distribution === defaultDistribution) {
-      const { version } = await this.fetch({ gem })
-      return this.constructor.render({ version })
-    } else {
+  async handle({ gem }, queryParams) {
+    if (queryParams && typeof queryParams.latest !== 'undefined') {
       const data = await this.fetchLatest({ gem })
       if (!Array.isArray(data) || data.length === 0) {
         throw new NotFound()
       }
       const versions = data.map(version => version.number)
       return this.constructor.render({ version: latest(versions) })
+    } else {
+      const { version } = await this.fetch({ gem })
+      return this.constructor.render({ version })
     }
   }
 }
