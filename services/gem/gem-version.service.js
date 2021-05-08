@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { renderVersionBadge, latest } = require('../version')
-const { BaseJsonService, NotFound } = require('..')
+const { BaseJsonService } = require('..')
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't
@@ -67,9 +67,6 @@ module.exports = class GemVersion extends BaseJsonService {
   async handle({ gem }, queryParams) {
     if (queryParams && typeof queryParams.include_prereleases !== 'undefined') {
       const data = await this.fetchLatest({ gem })
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new NotFound()
-      }
       const versions = data.map(version => version.number)
       return this.constructor.render({ version: latest(versions) })
     } else {
