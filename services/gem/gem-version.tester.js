@@ -20,11 +20,13 @@ t.create('version (not found)')
 const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
   /^v\d+(\.\d+)*([-+~.].*)?$/
 )
-t.create('latest version (valid)').get('/flame.json?latest').expectBadge({
-  label: 'gem',
-  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-})
+t.create('version including prereleases (valid)')
+  .get('/flame.json?include_prereleases')
+  .expectBadge({
+    label: 'gem',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
-t.create('latest version (not found)')
-  .get('/not-a-package.json?latest')
+t.create('version including prereleases (not found)')
+  .get('/not-a-package.json?include_prereleases')
   .expectBadge({ label: 'gem', message: 'not found' })

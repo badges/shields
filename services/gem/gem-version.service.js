@@ -20,7 +20,7 @@ const versionSchema = Joi.array()
   .required()
 
 const queryParamSchema = Joi.object({
-  latest: Joi.equal(''),
+  include_prereleases: Joi.equal(''),
 }).required()
 
 module.exports = class GemVersion extends BaseJsonService {
@@ -34,10 +34,10 @@ module.exports = class GemVersion extends BaseJsonService {
       keywords: ['ruby'],
     },
     {
-      title: 'Gem (latest)',
+      title: 'Gem (including prereleases)',
       namedParams: { gem: 'flame' },
       queryParams: {
-        latest: null,
+        include_prereleases: null,
       },
       staticPreview: this.render({ version: '5.0.0.rc6' }),
       keywords: ['ruby'],
@@ -65,7 +65,7 @@ module.exports = class GemVersion extends BaseJsonService {
   }
 
   async handle({ gem }, queryParams) {
-    if (queryParams && typeof queryParams.latest !== 'undefined') {
+    if (queryParams && typeof queryParams.include_prereleases !== 'undefined') {
       const data = await this.fetchLatest({ gem })
       if (!Array.isArray(data) || data.length === 0) {
         throw new NotFound()
