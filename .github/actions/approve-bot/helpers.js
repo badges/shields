@@ -40,7 +40,7 @@ function isPointlessVersionBump(body) {
   ]
 
   const lines = body.split(/\r?\n/)
-  if (!pointlessBumpLinks.some(link => new RegExp(link).test(lines[0]))) {
+  if (!pointlessBumpLinks.some(link => lines[0].includes(link))) {
     return false
   }
   const start = findChangelogStart(lines)
