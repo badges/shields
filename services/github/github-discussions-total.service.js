@@ -2,6 +2,7 @@
 
 const { default: gql } = require('graphql-tag')
 const Joi = require('joi')
+const { nonNegativeInteger } = require('../validators')
 const { GithubAuthV4Service } = require('./github-auth-service')
 const { transformErrors } = require('./github-helpers')
 
@@ -9,7 +10,7 @@ const schema = Joi.object({
   data: Joi.object({
     repository: Joi.object({
       discussions: Joi.object({
-        totalCount: Joi.number().required(),
+        totalCount: nonNegativeInteger,
       }).required(),
     }).required(),
   }).required(),
