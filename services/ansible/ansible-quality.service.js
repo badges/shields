@@ -18,7 +18,9 @@ class AnsibleGalaxyContent extends BaseJsonService {
   }
 }
 
-module.exports = class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
+module.exports = class AnsibleGalaxyContentQualityScore extends (
+  AnsibleGalaxyContent
+) {
   static category = 'analysis'
   static route = { base: 'ansible/quality', pattern: ':projectId' }
 

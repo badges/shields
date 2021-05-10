@@ -31,3 +31,8 @@ update_configs:
   - package_manager: 'javascript'
     directory: '/badge-maker'
     update_schedule: 'weekly'
+
+  # approve-bot package dependencies
+  - package_manager: 'javascript'
+    directory: '.github/actions/approve-bot'
+    update_schedule: 'weekly'

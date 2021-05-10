@@ -13,7 +13,9 @@ const schema = Joi.object({
   short_version: Joi.string().required(),
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesVersion extends BaseVisualStudioAppCenterService {
+module.exports = class VisualStudioAppCenterReleasesVersion extends (
+  BaseVisualStudioAppCenterService
+) {
   static category = 'version'
 
   static route = {
@@ -40,14 +42,14 @@ module.exports = class VisualStudioAppCenterReleasesVersion extends BaseVisualSt
   }
 
   async handle({ owner, app, token }) {
-    const { version, short_version } = await this.fetch({
+    const { version, short_version: shortVersion } = await this.fetch({
       owner,
       app,
       token,
       schema,
     })
     return renderVersionBadge({
-      version: `${short_version} (${version})`,
+      version: `${shortVersion} (${version})`,
     })
   }
 }

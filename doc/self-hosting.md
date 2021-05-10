@@ -1,6 +1,8 @@
 # Hosting your own Shields server
 
-## Installation
+This document describes how to host your own shields server either from source or using a docker image. See the docs on [releases](https://github.com/badges/shields/blob/master/doc/releases.md#shields-server) for info on how we version the server and how to choose a release.
+
+## Installing from Source
 
 You will need Node 12 or later, which you can install using a
 [package manager][].
@@ -14,18 +16,19 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -; sudo apt-get in
 ```sh
 git clone https://github.com/badges/shields.git
 cd shields
+git checkout $(git tag | grep server | tail -n 1)  # checkout the latest tag
 npm ci  # You may need sudo for this.
 ```
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 
-## Build the frontend
+### Build the frontend
 
 ```sh
 npm run build
 ```
 
-## Start the server
+### Start the server
 
 ```sh
 sudo node server
@@ -44,7 +47,7 @@ The root gets redirected to https://shields.io.
 
 For testing purposes, you can go to `http://localhost/`.
 
-## Heroku
+### Deploying to Heroku
 
 Once you have installed the [Heroku CLI][]
 
@@ -57,9 +60,32 @@ heroku open
 
 [heroku cli]: https://devcenter.heroku.com/articles/heroku-cli
 
+### Deploying to Zeit Vercel
+
+To deploy using Zeit Vercel:
+
+```console
+npm run build  # Not sure why, but this needs to be run before deploying.
+vercel
+```
+
 ## Docker
 
-You can build and run the server locally using Docker. First build an image:
+### DockerHub
+
+We publish images to DockerHub at https://registry.hub.docker.com/r/shieldsio/shields
+
+The `next` tag is the latest build from `master`, or tagged releases are available
+https://registry.hub.docker.com/r/shieldsio/shields/tags
+
+```console
+$ docker pull shieldsio/shields:next
+$ docker run shieldsio/shields:next
+```
+
+### Building Docker Image Locally
+
+Alternatively, you can build and run the server locally using Docker. First build an image:
 
 ```console
 $ docker build -t shields .
@@ -113,15 +139,6 @@ preconfigured raster server.
 
 [raster server]: https://github.com/badges/svg-to-image-proxy
 [micro]: https://github.com/zeit/micro
-
-## Zeit Now
-
-To deploy using Zeit Now:
-
-```console
-npm run build  # Not sure why, but this needs to be run before deploying.
-now
-```
 
 ## Persistence
 
@@ -195,19 +212,19 @@ private:
 sudo node server
 ```
 
-### Prometheus
+## Prometheus
 
 Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
-You can enable them by `METRICS_PROMETHEUS_ENABLED` environment variable.
+You can enable them by `METRICS_PROMETHEUS_ENABLED` and `METRICS_PROMETHEUS_ENDPOINT_ENABLED` environment variables.
 
 ```bash
-METRICS_PROMETHEUS_ENABLED=true npm start
+METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ENDPOINT_ENABLED=true npm start
 ```
 
 Metrics are available at `/metrics` resource.
 
-### Cloudflare
+## Cloudflare
 
-Shields uses Cloudflare as a downstream CDN. If your installation does the same,
+Shields.io uses Cloudflare as a downstream CDN. If your installation does the same,
 you can configure your server to only accept requests coming from Cloudflare's IPs.
 Set `public.requireCloudflare: true`.

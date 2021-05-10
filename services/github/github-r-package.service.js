@@ -11,9 +11,11 @@ const queryParamSchema = Joi.object({
   filename: Joi.string(),
 }).required()
 
-const versionRegExp = new RegExp('^Version:[\\s]*(.+)$', 'm')
+const versionRegExp = /^Version:[\s]*(.+)$/m
 
-module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Service {
+module.exports = class GithubRPackageVersion extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'version'
 
   static route = {
@@ -47,7 +49,7 @@ module.exports = class GithubRPackageVersion extends ConditionalGithubAuthV3Serv
     },
     {
       title: 'GitHub R package version (branch & subdirectory of monorepo)',
-      pattern: ':user/:repo:/:branch',
+      pattern: ':user/:repo/:branch',
       namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
       queryParams: { filename: 'subdirectory/DESCRIPTION' },
       staticPreview: this.render({ version: '6.10.9', branch: 'master' }),

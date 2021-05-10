@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
-import { baseUrl } from '../constants'
+import { getBaseUrl } from '../constants'
 import Meta from '../components/meta'
 import Header from '../components/header'
 import Footer from '../components/footer'
@@ -89,6 +89,7 @@ const Schema = styled.dl`
 `
 
 export default function EndpointPage(): JSX.Element {
+  const baseUrl = getBaseUrl()
   return (
     <MainContainer>
       <GlobalStyle />

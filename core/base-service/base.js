@@ -213,7 +213,18 @@ class BaseService {
 
   async _request({ url, options = {}, errorMessages = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    let logUrl = url
+    const logOptions = Object.assign({}, options)
+    if ('qs' in options) {
+      const params = new URLSearchParams(options.qs)
+      logUrl = `${url}?${params.toString()}`
+      delete logOptions.qs
+    }
+    logTrace(
+      emojic.bowAndArrow,
+      'Request',
+      `${logUrl}\n${JSON.stringify(logOptions, null, 2)}`
+    )
     const { res, buffer } = await this._requestFetcher(url, options)
     await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)

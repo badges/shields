@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/badges/shields/master/frontend/images/logo.svg?sanitize=true"
+    <img src="https://raw.githubusercontent.com/badges/shields/master/readme-logo.svg?sanitize=true"
         height="130">
 </p>
 <p align="center">
@@ -22,9 +22,6 @@
     <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
         <img src="https://img.shields.io/lgtm/alerts/g/badges/shields"
             alt="Total alerts"/></a>
-    <a href="https://github.com/badges/shields/compare/gh-pages...master">
-        <img src="https://img.shields.io/github/commits-since/badges/shields/gh-pages?label=commits%20to%20be%20deployed"
-            alt="commits to be deployed"></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
@@ -38,7 +35,13 @@ and legible badges in SVG and raster format, which can easily be included in
 GitHub readmes or any other web page. The service supports dozens of
 continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 470 million images.
+Every month it serves over 770 million images and is used by some of the
+world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
+and [Bootstrap][bootstrap] to name a few.
+
+[vscode]: https://github.com/Microsoft/vscode
+[vue]: https://github.com/vuejs/vue
+[bootstrap]: https://github.com/twbs/bootstrap
 
 This repo hosts:
 

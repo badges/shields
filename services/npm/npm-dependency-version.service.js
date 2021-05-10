@@ -32,7 +32,7 @@ module.exports = class NpmDependencyVersion extends NpmBase {
     },
     {
       title: 'npm peer dependency version (scoped)',
-      pattern: ':scope?/:packageName/dev/:dependencyScope?/:dependency',
+      pattern: ':scope?/:packageName/peer/:dependencyScope?/:dependency',
       namedParams: {
         scope: '@swellaby',
         packageName: 'eslint-config',

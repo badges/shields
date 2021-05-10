@@ -53,7 +53,7 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
       releases.map(release => release.tag_name),
       { pre: includePrereleases }
     )
-    return releases.find(({ tag_name }) => tag_name === latestTagName)
+    return releases.find(({ tag_name: tagName }) => tagName === latestTagName)
   }
 
   if (!includePrereleases) {

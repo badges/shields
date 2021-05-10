@@ -52,6 +52,13 @@ function WordpressRequiresVersion(extensionType) {
         extensionType,
         slug,
       })
+
+      if (wordpressVersion === false) {
+        throw new NotFound({
+          prettyMessage: `not set for this ${extensionType}`,
+        })
+      }
+
       return this.constructor.render({ wordpressVersion })
     }
   }
@@ -137,28 +144,28 @@ function RequiresPHPVersionForType(extensionType) {
     }
 
     async handle({ slug }) {
-      const { requires_php } = await this.fetch({
+      const { requires_php: requiresPhp } = await this.fetch({
         extensionType,
         slug,
       })
 
-      if (requires_php === false) {
+      if (requiresPhp === false) {
         throw new NotFound({
           prettyMessage: `not set for this ${extensionType}`,
         })
       }
 
       return this.constructor.render({
-        version: requires_php,
+        version: requiresPhp,
       })
     }
   }
 }
 
-const required_php = ['plugin', 'theme'].map(RequiresPHPVersionForType)
+const requiredPhp = ['plugin', 'theme'].map(RequiresPHPVersionForType)
 const requiresVersion = ['plugin', 'theme'].map(WordpressRequiresVersion)
 module.exports = [
-  ...required_php,
+  ...requiredPhp,
   ...requiresVersion,
   WordpressPluginTestedVersion,
 ]

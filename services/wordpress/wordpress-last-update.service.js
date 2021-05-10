@@ -36,17 +36,17 @@ function LastUpdateForType(extensionType) {
       {
         title: `WordPress ${capt} Last Updated`,
         namedParams: { slug: exampleSlug },
-        staticPreview: this.render({ last_updated: '2020-08-11' }),
+        staticPreview: this.render({ lastUpdated: '2020-08-11' }),
       },
     ]
 
     static defaultBadgeData = { label: 'last updated' }
 
-    static render({ last_updated }) {
+    static render({ lastUpdated }) {
       return {
         label: 'last updated',
-        message: formatDate(last_updated),
-        color: ageColor(last_updated),
+        message: formatDate(lastUpdated),
+        color: ageColor(lastUpdated),
       }
     }
 
@@ -61,15 +61,15 @@ function LastUpdateForType(extensionType) {
     }
 
     async handle({ slug }) {
-      const { last_updated } = await this.fetch({
+      const { last_updated: lastUpdated } = await this.fetch({
         extensionType,
         slug,
       })
 
-      const newDate = await this.transform(last_updated)
+      const newDate = await this.transform(lastUpdated)
 
       return this.constructor.render({
-        last_updated: newDate,
+        lastUpdated: newDate,
       })
     }
   }

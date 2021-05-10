@@ -45,7 +45,9 @@ const queryParamSchema = Joi.object({
   extension: Joi.string(),
 })
 
-module.exports = class GithubDirectoryFileCount extends ConditionalGithubAuthV3Service {
+module.exports = class GithubDirectoryFileCount extends (
+  ConditionalGithubAuthV3Service
+) {
   static category = 'size'
 
   static route = {

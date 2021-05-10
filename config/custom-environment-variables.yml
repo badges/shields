@@ -61,12 +61,13 @@ public:
 
   fetchLimit: 'FETCH_LIMIT'
 
+  requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
+  requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'
+
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
   azure_devops_token: 'AZURE_DEVOPS_TOKEN'
-  bintray_user: 'BINTRAY_USER'
-  bintray_apikey: 'BINTRAY_API_KEY'
   bitbucket_username: 'BITBUCKET_USER'
   bitbucket_password: 'BITBUCKET_PASS'
   bitbucket_server_username: 'BITBUCKET_SERVER_USER'

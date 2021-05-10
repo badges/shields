@@ -8,7 +8,7 @@ const helixSchema = Joi.object({
 })
 
 module.exports = class TwitchStatus extends TwitchBase {
-  static category = 'activity'
+  static category = 'social'
 
   static route = {
     base: 'twitch/status',
@@ -21,15 +21,18 @@ module.exports = class TwitchStatus extends TwitchBase {
       namedParams: {
         user: 'andyonthewings',
       },
+      queryParams: { style: 'social' },
       staticPreview: {
         message: 'live',
         color: 'red',
+        style: 'social',
       },
     },
   ]
 
   static defaultBadgeData = {
     label: 'twitch',
+    namedLogo: 'twitch',
   }
 
   static render({ user, isLive }) {

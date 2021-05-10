@@ -4,6 +4,8 @@ const path = require('path')
 const { expect } = require('chai')
 const isSvg = require('is-svg')
 const config = require('config')
+const nock = require('nock')
+const sinon = require('sinon')
 const got = require('../got-test-client')
 const Server = require('./server')
 const { createTestServer } = require('./in-process-server-test-helpers')
@@ -205,6 +207,57 @@ describe('The server', function () {
     })
   })
 
+  describe('`requestTimeoutSeconds` setting', function () {
+    let server
+
+    beforeEach(async function () {
+      this.timeout(10000)
+
+      // configure server to time out requests that take >2 seconds
+      server = await createTestServer({ public: { requestTimeoutSeconds: 2 } })
+      await server.start()
+
+      // /fast returns a 200 OK after a 1 second delay
+      server.camp.route(/^\/fast$/, (data, match, end, ask) => {
+        setTimeout(() => {
+          ask.res.statusCode = 200
+          ask.res.end()
+        }, 1000)
+      })
+
+      // /slow returns a 200 OK after a 3 second delay
+      server.camp.route(/^\/slow$/, (data, match, end, ask) => {
+        setTimeout(() => {
+          ask.res.statusCode = 200
+          ask.res.end()
+        }, 3000)
+      })
+    })
+
+    afterEach(async function () {
+      if (server) {
+        server.stop()
+      }
+      server = undefined
+    })
+
+    it('should time out slow requests', async function () {
+      this.timeout(10000)
+      const { statusCode, body } = await got(`${server.baseUrl}slow`, {
+        throwHttpErrors: false,
+      })
+      expect(statusCode).to.be.equal(408)
+      expect(body).to.equal('Request Timeout')
+    })
+
+    it('should not time out fast requests', async function () {
+      this.timeout(10000)
+      const { statusCode, body } = await got(`${server.baseUrl}fast`)
+      expect(statusCode).to.be.equal(200)
+      expect(body).to.equal('')
+    })
+  })
+
   describe('configuration', function () {
     let server
     afterEach(async function () {
@@ -364,6 +417,69 @@ describe('The server', function () {
         customConfig.private.gh_token = 'my-token'
         expect(() => new Server(customConfig)).to.not.throw()
       })
+    })
+  })
+
+  describe('running with metrics enabled', function () {
+    let server, baseUrl, scope, clock
+    const metricsPushIntervalSeconds = 1
+    before('Start the server', async function () {
+      // Fixes https://github.com/badges/shields/issues/2611
+      this.timeout(10000)
+      process.env.INSTANCE_ID = 'test-instance'
+      server = await createTestServer({
+        public: {
+          metrics: {
+            prometheus: { enabled: true },
+            influx: {
+              enabled: true,
+              url: 'http://localhost:1112/metrics',
+              instanceIdFrom: 'env-var',
+              instanceIdEnvVarName: 'INSTANCE_ID',
+              envLabel: 'localhost-env',
+              intervalSeconds: metricsPushIntervalSeconds,
+            },
+          },
+        },
+        private: {
+          influx_username: 'influx-username',
+          influx_password: 'influx-password',
+        },
+      })
+      clock = sinon.useFakeTimers()
+      baseUrl = server.baseUrl
+      await server.start()
+    })
+    after('Shut down the server', async function () {
+      if (server) {
+        await server.stop()
+      }
+      server = undefined
+      nock.cleanAll()
+      delete process.env.INSTANCE_ID
+      clock.restore()
+    })
+
+    it('should push custom metrics', async function () {
+      scope = nock('http://localhost:1112', {
+        reqheaders: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+        .post(
+          '/metrics',
+          /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/
+        )
+        .basicAuth({ user: 'influx-username', pass: 'influx-password' })
+        .reply(200)
+      await got(`${baseUrl}badge/fruit-apple-green.svg`)
+
+      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 500)
+
+      expect(scope.isDone()).to.be.equal(
+        true,
+        `pending mocks: ${scope.pendingMocks()}`
+      )
     })
   })
 })

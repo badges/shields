@@ -14,7 +14,9 @@ t.create('Commits since')
   })
 
 t.create('Commits since (branch)')
-  .get('/badges/shields/60be4859585650e8c2b87669e3a39d98ca084e98/gh-pages.json')
+  .get(
+    '/badges/shields/8b87fac3a1538ec20ff20983faf4b6f7e722ef87/historical.json'
+  )
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,

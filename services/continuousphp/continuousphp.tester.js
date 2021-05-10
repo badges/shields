@@ -1,23 +1,22 @@
 'use strict'
 
-const Joi = require('joi')
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
 
-t.create('build status on default branch')
+const t = (module.exports = new ServiceTester({
+  id: 'continuousphp',
+  title: 'Continuousphp',
+}))
+
+t.create('no longer available (previously build status on default branch)')
   .get('/git-hub/doctrine/dbal.json')
   .expectBadge({
-    label: 'build',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+    label: 'continuousphp',
+    message: 'no longer available',
   })
 
-t.create('build status on named branch')
+t.create('no longer available (previously build status on named branch)')
   .get('/git-hub/doctrine/dbal/develop.json')
   .expectBadge({
-    label: 'build',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+    label: 'continuousphp',
+    message: 'no longer available',
   })
-
-t.create('unknown repo')
-  .get('/git-hub/this-repo/does-not-exist.json')
-  .expectBadge({ label: 'continuousphp', message: 'project not found' })

@@ -80,14 +80,6 @@ An Azure DevOps Token (PAT) is required for accessing [private Azure DevOps proj
 [ado personal access tokens]: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=vsts#create-personal-access-tokens-to-authenticate-access
 [ado token scopes]: https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=vsts#scopes
 
-### Bintray
-
-- `BINTRAY_USER` (yml: `private.bintray_user`)
-- `BINTRAY_API_KEY` (yml: `private.bintray_apikey`)
-
-The bintray API [requires authentication](https://bintray.com/docs/api/#_authentication)
-Create an account and obtain a token from the user profile page.
-
 ### Bitbucket (Cloud)
 
 - `BITBUCKET_USER` (yml: `private.bitbucket_username`)

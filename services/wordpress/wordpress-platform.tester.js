@@ -135,6 +135,29 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
     color: 'yellow',
   })
 
+t.create('Plugin Required WP Version | Missing')
+  .get('/plugin/wp-version/akismet.json')
+  .intercept(nock =>
+    nock('https://api.wordpress.org')
+      .get('/plugins/info/1.2/')
+      .query(mockedQuerySelector)
+      .reply(200, {
+        version: '1.2',
+        rating: 80,
+        num_ratings: 100,
+        downloaded: 100,
+        active_installs: 100,
+        requires: false,
+        tested: '4.0.0',
+        last_updated: '2020-01-01 7:21am GMT',
+        requires_php: '5.5',
+      })
+  )
+  .expectBadge({
+    label: 'wordpress',
+    message: 'not set for this plugin',
+  })
+
 t.create('Plugin Required WP Version | Not Found')
   .get('/plugin/wp-version/100.json')
   .expectBadge({

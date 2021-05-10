@@ -23,7 +23,7 @@ t.create('downloads (zero for period)')
       .get('/api/packages/cowboy')
       .reply(200, {
         downloads: { all: 100 }, // there is no 'day' key here
-        releases: [{ version: '1.0' }],
+        latest_stable_version: '1.0',
         meta: { licenses: ['MIT'] },
       })
   )
@@ -58,7 +58,7 @@ t.create('license (multiple licenses)')
       .get('/api/packages/cowboy')
       .reply(200, {
         downloads: { all: 100 },
-        releases: [{ version: '1.0' }],
+        latest_stable_version: '1.0',
         meta: { licenses: ['GPLv2', 'MIT'] },
       })
   )
@@ -75,7 +75,7 @@ t.create('license (no license)')
       .get('/api/packages/cowboy')
       .reply(200, {
         downloads: { all: 100 },
-        releases: [{ version: '1.0' }],
+        latest_stable_version: '1.0',
         meta: { licenses: [] },
       })
   )

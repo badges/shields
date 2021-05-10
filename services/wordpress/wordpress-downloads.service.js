@@ -86,10 +86,10 @@ function DownloadsForExtensionType(extensionType) {
         })
         downloads = _downloads
       } else {
-        const ext_type = extensionType === 'plugin' ? 'plugin' : 'themes'
+        const extType = extensionType === 'plugin' ? 'plugin' : 'themes'
         const json = await this._requestJson({
           schema: dateSchema,
-          url: `https://api.wordpress.org/stats/${ext_type}/1.0/downloads.php`,
+          url: `https://api.wordpress.org/stats/${extType}/1.0/downloads.php`,
           options: {
             qs: {
               slug,
