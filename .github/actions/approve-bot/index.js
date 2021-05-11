@@ -2,7 +2,7 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const { isPointlessGatsbyBump, shouldAutoMerge } = require('./helpers')
+const { isPointlessVersionBump, shouldAutoMerge } = require('./helpers')
 
 async function run() {
   try {
@@ -18,7 +18,7 @@ async function run() {
     if (
       ['dependabot[bot]', 'dependabot-preview[bot]'].includes(pr.user.login)
     ) {
-      if (isPointlessGatsbyBump(pr.body)) {
+      if (isPointlessVersionBump(pr.body)) {
         core.debug(`Closing pull request #${pr.number}`)
         await client.pulls.update({
           owner: github.context.repo.owner,

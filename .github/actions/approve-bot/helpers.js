@@ -33,11 +33,14 @@ function allChangelogLinesAreVersionBump(changelogLines) {
   )
 }
 
-function isPointlessGatsbyBump(body) {
+function isPointlessVersionBump(body) {
+  const pointlessBumpLinks = [
+    'https://github.com/gatsbyjs/gatsby',
+    'https://github.com/typescript-eslint/typescript-eslint',
+  ]
+
   const lines = body.split(/\r?\n/)
-  if (
-    !lines[0].includes('https://github.com/gatsbyjs/gatsby') // lgtm [js/incomplete-url-substring-sanitization]
-  ) {
+  if (!pointlessBumpLinks.some(link => lines[0].includes(link))) {
     return false
   }
   const start = findChangelogStart(lines)
@@ -62,4 +65,4 @@ function shouldAutoMerge(body) {
   )
 }
 
-module.exports = { isPointlessGatsbyBump, shouldAutoMerge }
+module.exports = { isPointlessVersionBump, shouldAutoMerge }
