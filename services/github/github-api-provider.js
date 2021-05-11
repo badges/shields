@@ -188,6 +188,7 @@ class GithubApiProvider {
           'User-Agent': userAgent,
           Accept: 'application/vnd.github.v3+json',
           Authorization: `token ${tokenString}`,
+          ...options.headers,
         },
       },
     }
