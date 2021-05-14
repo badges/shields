@@ -179,7 +179,7 @@
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-import": "^2.23.0",
-    "eslint-plugin-jsdoc": "^33.1.0",
+    "eslint-plugin-jsdoc": "^34.2.2",
     "eslint-plugin-mocha": "^8.1.0",
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^11.1.0",
