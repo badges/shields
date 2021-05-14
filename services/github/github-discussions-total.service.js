@@ -45,7 +45,7 @@ module.exports = class GithubTotalDiscussions extends GithubAuthV4Service {
   async fetch({ user, repo }) {
     return this._requestGraphql({
       query: gql`
-        query($user: String!, $repo: String!) {
+        query ($user: String!, $repo: String!) {
           repository(name: $repo, owner: $user) {
             discussions {
               totalCount

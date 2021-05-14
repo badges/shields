@@ -183,10 +183,8 @@ class AuthHelper {
   }
 
   static _mergeQueryParams(requestParams, query) {
-    const {
-      options: { qs: existingQuery, ...restOptions } = {},
-      ...rest
-    } = requestParams
+    const { options: { qs: existingQuery, ...restOptions } = {}, ...rest } =
+      requestParams
     return {
       options: {
         qs: {

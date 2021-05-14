@@ -23,7 +23,12 @@ const totalResponseSchema = Joi.object({
 }).required()
 
 function DownloadsForInterval(interval) {
-  const { base, schema, messageSuffix = '', name } = {
+  const {
+    base,
+    schema,
+    messageSuffix = '',
+    name,
+  } = {
     month: {
       base: 'eclipse-marketplace/dm',
       messageSuffix: '/month',
