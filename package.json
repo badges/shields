@@ -24,7 +24,7 @@
   "dependencies": {
     "@fontsource/lato": "^4.2.2",
     "@fontsource/lekton": "^4.3.0",
-    "@sentry/node": "^6.3.5",
+    "@sentry/node": "^6.3.6",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.0",
