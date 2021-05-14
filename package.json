@@ -194,7 +194,7 @@
     "gatsby-plugin-page-creator": "^3.4.0",
     "gatsby-plugin-react-helmet": "^4.1.0",
     "gatsby-plugin-remove-trailing-slashes": "^3.1.0",
-    "gatsby-plugin-styled-components": "^4.4.0",
+    "gatsby-plugin-styled-components": "^4.5.0",
     "gatsby-plugin-typescript": "^3.2.0",
     "humanize-string": "^2.1.0",
     "husky": "^4.3.8",
