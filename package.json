@@ -60,7 +60,7 @@
     "query-string": "^7.0.0",
     "request": "~2.88.2",
     "semver": "~7.3.5",
-    "simple-icons": "4.22.0",
+    "simple-icons": "4.23.0",
     "webextension-store-meta": "^1.0.3",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
