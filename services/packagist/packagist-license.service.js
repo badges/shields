@@ -3,18 +3,15 @@
 const Joi = require('joi')
 const { renderLicenseBadge } = require('../licenses')
 const { optionalUrl } = require('../validators')
-const { NotFound } = require('..')
 const {
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
 } = require('./packagist-base')
 
-const packageSchema = Joi.object()
-  .pattern(
-    /^/,
+const packageSchema = Joi.array()
+  .items(
     Joi.object({
-      'default-branch': Joi.bool(),
       license: Joi.array().required(),
     }).required()
   )
@@ -59,17 +56,18 @@ module.exports = class PackagistLicense extends BasePackagistService {
   }
 
   transform({ json, user, repo }) {
-    const branch = this.getDefaultBranch(json, user, repo)
-    if (!branch) {
-      throw new NotFound({ prettyMessage: 'default branch not found' })
-    }
-    const { license } = branch
+    const packageName = this.getPackageName(user, repo)
+
+    const license = json.packages[packageName][0].license
+
     return { license }
   }
 
   async handle({ user, repo }, { server }) {
     const json = await this.fetch({ user, repo, schema, server })
+
     const { license } = this.transform({ json, user, repo })
+
     return renderLicenseBadge({ license })
   }
 }
