@@ -1,11 +1,9 @@
 import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 
-const packageSchema = Joi.object()
-  .pattern(
-    /^/,
+const packageSchema = Joi.array()
+  .items(
     Joi.object({
-      'default-branch': Joi.bool(),
       version: Joi.string(),
       require: Joi.object({
         php: Joi.string(),
@@ -36,7 +34,7 @@ class BasePackagistService extends BaseJsonService {
    * @returns {object} Parsed response
    */
   async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
-    const url = `${server}/p/${user.toLowerCase()}/${repo.toLowerCase()}.json`
+    const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}.json`
 
     return this._requestJson({
       schema,

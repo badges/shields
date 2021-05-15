@@ -66,11 +66,19 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
+  findVersionIndex(json, user, repo, version) {
+    const packageArr = json.packages[this.getPackageName(user, repo)]
+
+    return packageArr.findIndex(v => v.version === version)
+  }
+
   transform({ json, user, repo, version = '' }) {
     const packageVersion =
       version === ''
-        ? this.getDefaultBranch(json, user, repo)
-        : json.packages[this.getPackageName(user, repo)][version]
+        ? json.packages[this.getPackageName(user, repo)][0]
+        : json.packages[this.getPackageName(user, repo)][
+            this.findVersionIndex(json, user, repo, version)
+          ]
 
     if (!packageVersion) {
       throw new NotFound({ prettyMessage: 'invalid version' })

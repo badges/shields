@@ -10,15 +10,12 @@ import {
   customServerDocumentationFragment,
 } from './packagist-base.js'
 
-const packageSchema = Joi.object()
-  .pattern(
-    /^/,
+const packageSchema = Joi.array()
+  .items(
     Joi.object({
       version: Joi.string(),
-      extra: Joi.object({
-        'branch-alias': Joi.object().pattern(/^/, Joi.string()),
-      }),
-    }).required()
+      extra: Joi.any(),
+    })
   )
   .required()
 
@@ -88,25 +85,27 @@ class PackagistVersion extends BasePackagistService {
 
   transform({ includePrereleases, json, user, repo }) {
     const versionsData = json.packages[this.getPackageName(user, repo)]
-    let versions = Object.keys(versionsData)
+
+    let versions = []
     const aliasesMap = {}
-    versions.forEach(version => {
-      const versionData = versionsData[version]
-      if (
-        versionData.extra &&
-        versionData.extra['branch-alias'] &&
-        versionData.extra['branch-alias'][version]
-      ) {
+
+    versionsData.forEach(version => {
+      if (version.extra && version.extra['branch-alias']) {
         // eg, version is 'dev-master', mapped to '2.0.x-dev'.
-        const validVersion = versionData.extra['branch-alias'][version]
+        const validVersion =
+          version.extra['branch-alias'][
+            Object.keys(version.extra['branch-alias'])
+          ]
         if (
           aliasesMap[validVersion] === undefined ||
           compare(aliasesMap[validVersion], validVersion) < 0
         ) {
           versions.push(validVersion)
-          aliasesMap[validVersion] = version
+          aliasesMap[validVersion] = version.version
         }
       }
+
+      versions.push(version.version)
     })
 
     versions = versions.filter(version => !/^dev-/.test(version))
