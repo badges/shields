@@ -83,10 +83,8 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   }
 
   const allowedKeys = flattenQueryParams(handlerOptions.queryParams)
-  const {
-    cacheLength: serviceDefaultCacheLengthSeconds,
-    fetchLimitBytes,
-  } = handlerOptions
+  const { cacheLength: serviceDefaultCacheLengthSeconds, fetchLimitBytes } =
+    handlerOptions
 
   return (queryParams, match, end, ask) => {
     /*

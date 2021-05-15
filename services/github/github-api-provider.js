@@ -101,11 +101,8 @@ class GithubApiProvider {
     let rateLimit, totalUsesRemaining, nextReset
     if (url.startsWith('/graphql')) {
       try {
-        ;({
-          rateLimit,
-          totalUsesRemaining,
-          nextReset,
-        } = this.getV4RateLimitFromBody(res.body))
+        ;({ rateLimit, totalUsesRemaining, nextReset } =
+          this.getV4RateLimitFromBody(res.body))
       } catch (e) {
         console.error(
           `Could not extract rate limit info from response body ${res.body}`
@@ -115,11 +112,8 @@ class GithubApiProvider {
       }
     } else {
       try {
-        ;({
-          rateLimit,
-          totalUsesRemaining,
-          nextReset,
-        } = this.getV3RateLimitFromHeaders(res.headers))
+        ;({ rateLimit, totalUsesRemaining, nextReset } =
+          this.getV3RateLimitFromHeaders(res.headers))
       } catch (e) {
         const logHeaders = {
           'x-ratelimit-limit': res.headers['x-ratelimit-limit'],

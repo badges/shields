@@ -5,7 +5,8 @@ const { withRegex } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
-const buildStatusTextRegex = /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?/
+const buildStatusTextRegex =
+  /^success|failure|error|tests( failed: \d+( \(\d+ new\))?)?(,)?( passed: \d+)?(,)?( ignored: \d+)?(,)?( muted: \d+)?/
 
 t.create('unknown build')
   .get('/s/btabc.json?server=https://teamcity.jetbrains.com')
