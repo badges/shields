@@ -13,7 +13,7 @@ describe('mergeQueries function', function () {
       print(
         mergeQueries(
           gql`
-            query($param: String!) {
+            query ($param: String!) {
               foo(param: $param) {
                 bar
               }
@@ -29,7 +29,7 @@ describe('mergeQueries function', function () {
       print(
         mergeQueries(
           gql`
-            query($param: String!) {
+            query ($param: String!) {
               foo(param: $param) {
                 bar
               }

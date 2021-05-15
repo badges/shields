@@ -71,12 +71,8 @@ module.exports = class NpmVersion extends NpmBase {
   }
 
   async handle(namedParams, queryParams) {
-    const {
-      scope,
-      packageName,
-      tag,
-      registryUrl,
-    } = this.constructor.unpackParams(namedParams, queryParams)
+    const { scope, packageName, tag, registryUrl } =
+      this.constructor.unpackParams(namedParams, queryParams)
 
     const slug =
       scope === undefined
