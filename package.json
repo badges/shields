@@ -145,7 +145,7 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.13.16",
     "@mapbox/react-click-to-select": "^2.2.1",
-    "@types/chai": "^4.2.17",
+    "@types/chai": "^4.2.18",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/mocha": "^8.2.2",
