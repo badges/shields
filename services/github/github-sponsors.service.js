@@ -25,18 +25,13 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
     {
       title: 'GitHub Sponsors',
       namedParams: { user: 'Homebrew' },
-      queryParams: { style: 'social' },
-      staticPreview: {
-        message: '217',
-        style: 'social',
-      },
+      staticPreview: this.render({ count: 217 }),
       documentation,
     },
   ]
 
   static defaultBadgeData = {
     label: 'sponsors',
-    namedLogo: 'github',
   }
 
   static render({ count }) {
