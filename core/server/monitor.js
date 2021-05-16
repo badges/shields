@@ -8,9 +8,9 @@ function setRoutes({ rateLimit }, { server, metricInstance }) {
     // `curl --insecure -u ":shields-secret" https://s0.shields-server.com/sys/rate-limit`
     safelist: /^(?:192\.30\.252\.\d+)|(?:140\.82\.115\.\d+)$/,
   })
-  const badgeTypeRateLimit = new RateLimit({ maxHitsPerPeriod: 3000 })
+  const badgeTypeRateLimit = new RateLimit({ maxHitsPerPeriod: 6000 })
   const refererRateLimit = new RateLimit({
-    maxHitsPerPeriod: 300,
+    maxHitsPerPeriod: 600,
     safelist: /^https?:\/\/shields\.io\/$/,
   })
 
