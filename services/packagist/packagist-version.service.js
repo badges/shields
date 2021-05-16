@@ -12,14 +12,12 @@ const {
   customServerDocumentationFragment,
 } = require('./packagist-base')
 
-const packageSchema = Joi.array()
-  .items(
-    Joi.object({
-      version: Joi.string(),
-      extra: Joi.any(),
-    })
-  )
-  .required()
+const packageSchema = Joi.array().items(
+  Joi.object({
+    version: Joi.string(),
+    extra: Joi.any(),
+  })
+)
 
 const schema = Joi.object({
   packages: Joi.object().pattern(/^/, packageSchema).required(),

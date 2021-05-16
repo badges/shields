@@ -12,7 +12,7 @@ const {
 const packageSchema = Joi.array()
   .items(
     Joi.object({
-      license: Joi.array().required(),
+      license: Joi.array(),
     }).required()
   )
   .required()

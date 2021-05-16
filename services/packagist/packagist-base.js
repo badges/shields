@@ -3,16 +3,14 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 
-const packageSchema = Joi.array()
-  .items(
-    Joi.object({
-      version: Joi.string(),
-      require: Joi.object({
-        php: Joi.string(),
-      }),
-    }).required()
-  )
-  .required()
+const packageSchema = Joi.array().items(
+  Joi.object({
+    version: Joi.string(),
+    require: Joi.object({
+      php: Joi.string(),
+    }),
+  })
+)
 
 const allVersionsSchema = Joi.object({
   packages: Joi.object().pattern(/^/, packageSchema).required(),
