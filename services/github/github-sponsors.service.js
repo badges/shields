@@ -49,7 +49,7 @@ module.exports = class GithubSponsors extends GithubAuthV4Service {
   async fetch({ user }) {
     return this._requestGraphql({
       query: gql`
-        query($user: String!) {
+        query ($user: String!) {
           repositoryOwner(login: $user) {
             ... on User {
               sponsorshipsAsMaintainer {

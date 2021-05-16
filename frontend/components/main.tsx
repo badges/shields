@@ -45,14 +45,13 @@ export default function Main({
 }): JSX.Element {
   const [searchIsInProgress, setSearchIsInProgress] = useState(false)
   const [queryIsTooShort, setQueryIsTooShort] = useState(false)
-  const [searchResults, setSearchResults] = useState<{
-    [k: string]: ServiceDefinition[]
-  }>()
+  const [searchResults, setSearchResults] =
+    useState<{
+      [k: string]: ServiceDefinition[]
+    }>()
   const [selectedExample, setSelectedExample] = useState<RenderableExample>()
-  const [
-    selectedExampleIsSuggestion,
-    setSelectedExampleIsSuggestion,
-  ] = useState(false)
+  const [selectedExampleIsSuggestion, setSelectedExampleIsSuggestion] =
+    useState(false)
   const searchTimeout = useRef(0)
   const baseUrl = getBaseUrl()
 

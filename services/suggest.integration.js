@@ -98,8 +98,7 @@ describe('Badge suggestions for', function () {
             },
             {
               title: 'Twitter',
-              link:
-                'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
+              link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
               example: {
                 pattern: '/twitter/url',
                 namedParams: {},
@@ -169,8 +168,7 @@ describe('Badge suggestions for', function () {
             },
             {
               title: 'Twitter',
-              link:
-                'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
+              link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fbadges%2Fnot-a-real-project',
               example: {
                 pattern: '/twitter/url',
                 namedParams: {},
@@ -213,8 +211,7 @@ describe('Badge suggestions for', function () {
             },
             {
               title: 'Twitter',
-              link:
-                'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fgitlab',
+              link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fgitlab',
               example: {
                 pattern: '/twitter/url',
                 namedParams: {},
@@ -255,8 +252,7 @@ describe('Badge suggestions for', function () {
             },
             {
               title: 'Twitter',
-              link:
-                'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fnot-gitlab',
+              link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgitlab.com%2Fgitlab-org%2Fnot-gitlab',
               example: {
                 pattern: '/twitter/url',
                 namedParams: {},
