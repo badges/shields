@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const PackagistLicense = require('./packagist-license.service')
 
 describe('PackagistLicense', function () {
-  it('should return the version of the most recent release', function () {
+  it('should return the license of the most recent release', function () {
     const json = {
       packages: {
         'frodo/the-one-package': [
