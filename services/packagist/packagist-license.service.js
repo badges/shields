@@ -59,6 +59,10 @@ export default class PackagistLicense extends BasePackagistService {
 
     const license = json.packages[packageName][0].license
 
+    if (!license) {
+      throw new NotFound({ prettyMessage: 'license not found' })
+    }
+
     return { license }
   }
 
