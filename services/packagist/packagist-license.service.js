@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const { renderLicenseBadge } = require('../licenses')
 const { optionalUrl } = require('../validators')
+const { NotFound } = require('..')
 const {
   keywords,
   BasePackagistService,
@@ -59,6 +60,10 @@ module.exports = class PackagistLicense extends BasePackagistService {
     const packageName = this.getPackageName(user, repo)
 
     const license = json.packages[packageName][0].license
+
+    if (!license) {
+      throw new NotFound({ prettyMessage: 'license not found' })
+    }
 
     return { license }
   }
