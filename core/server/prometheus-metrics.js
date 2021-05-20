@@ -25,12 +25,6 @@ module.exports = class PrometheusMetrics {
         ],
         registers: [this.register],
       }),
-      rateLimitExceeded: new prometheus.Counter({
-        name: 'rate_limit_exceeded_total',
-        help: 'Count of rate limit exceeded by type',
-        labelNames: ['rate_limit_type'],
-        registers: [this.register],
-      }),
       serviceResponseSize: new prometheus.Histogram({
         name: 'service_response_bytes',
         help: 'Service response size in bytes',
@@ -80,10 +74,6 @@ module.exports = class PrometheusMetrics {
 
   noteResponseTime(responseTime) {
     return this.counters.responseTime.observe(responseTime)
-  }
-
-  noteRateLimitExceeded(rateLimitType) {
-    return this.counters.rateLimitExceeded.labels(rateLimitType).inc()
   }
 
   createServiceResponseSizeHistogram({ category, serviceFamily, name }) {
