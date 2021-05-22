@@ -52,18 +52,11 @@ class XmlElement {
    * @returns {string} String representation of the XML element
    */
   render() {
-    let attrsStr = ''
-    attrsStr = Object.entries(this.attrs)
-      .map(([k, v]) => `${k}="${escapeXml(v)}"`)
-      .join(' ')
+    const attrsStr = Object.entries(this.attrs)
+      .map(([k, v]) => ` ${k}="${escapeXml(v)}"`)
+      .join('')
     if (this.content.length > 0) {
-      let xmlStr = `<${this.tag}`
-      if (attrsStr === '') {
-        xmlStr += '>'
-      } else {
-        xmlStr += ` ${attrsStr}>`
-      }
-      xmlStr += this.content
+      const content = this.content
         .map(function (el) {
           if (el instanceof XmlElement) {
             return el.render()
@@ -72,10 +65,11 @@ class XmlElement {
           }
         })
         .join(' ')
-      xmlStr += `</${this.tag}>`
-      return stripXmlWhitespace(xmlStr)
+      return stripXmlWhitespace(
+        `<${this.tag}${attrsStr}>${content}</${this.tag}>`
+      )
     }
-    return stripXmlWhitespace(`<${this.tag} ${attrsStr}/>`)
+    return stripXmlWhitespace(`<${this.tag}${attrsStr}/>`)
   }
 }
 

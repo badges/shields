@@ -9,14 +9,14 @@ function testRender(params) {
 
 describe('XmlElement class', function () {
   test(testRender, () => {
-    given({ tag: 'tag' }).expect('<tag />')
+    given({ tag: 'tag' }).expect('<tag/>')
 
     given({ tag: 'tag', content: ['text'] }).expect('<tag>text</tag>')
 
     given({
       tag: 'tag',
       content: ['not xml>>>', 'text', new XmlElement({ tag: 'xml' })],
-    }).expect('<tag>not xml&gt;&gt;&gt; text <xml /></tag>')
+    }).expect('<tag>not xml&gt;&gt;&gt; text <xml/></tag>')
 
     given({
       tag: 'nested1',
@@ -26,7 +26,7 @@ describe('XmlElement class', function () {
           content: [new XmlElement({ tag: 'nested3' })],
         }),
       ],
-    }).expect('<nested1><nested2><nested3 /></nested2></nested1>')
+    }).expect('<nested1><nested2><nested3/></nested2></nested1>')
 
     given({
       tag: 'tag',
