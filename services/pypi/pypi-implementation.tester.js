@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 t.create('implementation (valid, package version in request)')
   .get('/beehive/1.0.json')

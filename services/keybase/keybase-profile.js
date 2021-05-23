@@ -1,9 +1,6 @@
-'use strict'
+import {BaseJsonService, NotFound} from '..';
 
-const { BaseJsonService } = require('..')
-const { NotFound } = require('..')
-
-module.exports = class KeybaseProfile extends BaseJsonService {
+export default class KeybaseProfile extends BaseJsonService {
   static get apiVersion() {
     throw new Error(`apiVersion() is not implemented for ${this.name}`)
   }
@@ -33,4 +30,4 @@ module.exports = class KeybaseProfile extends BaseJsonService {
 
     return { user: data.them[0] }
   }
-}
+};

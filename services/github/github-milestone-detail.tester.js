@@ -1,11 +1,7 @@
-'use strict'
-
-const {
-  isMetric,
-  isMetricOverMetric,
-  isIntegerPercentage,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isMetric, isMetricOverMetric, isIntegerPercentage} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Milestone Open Issues')
   .get('/issues-open/MacroPower/milestone-test/1.json')

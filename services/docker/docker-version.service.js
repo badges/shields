@@ -1,15 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { latest, renderVersionBadge } = require('../version')
-const { BaseJsonService, NotFound, InvalidResponse } = require('..')
-const {
-  buildDockerUrl,
-  getDockerHubUser,
-  getMultiPageData,
-  getDigestSemVerMatches,
-} = require('./docker-helpers')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {latest, renderVersionBadge} from '../version.js';
+import {BaseJsonService, NotFound, InvalidResponse} from '..';
+import {buildDockerUrl, getDockerHubUser, getMultiPageData, getDigestSemVerMatches} from './docker-helpers.js';
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -47,7 +40,7 @@ const queryParamSchema = Joi.object({
     .default('amd64'),
 }).required()
 
-module.exports = class DockerVersion extends BaseJsonService {
+export default class DockerVersion extends BaseJsonService {
   static category = 'version'
   static route = { ...buildDockerUrl('v', true), queryParamSchema }
   static examples = [
@@ -160,4 +153,4 @@ module.exports = class DockerVersion extends BaseJsonService {
     })
     return this.constructor.render({ version })
   }
-}
+};

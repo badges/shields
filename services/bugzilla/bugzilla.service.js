@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {optionalUrl} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl,
@@ -26,7 +24,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class Bugzilla extends BaseJsonService {
+export default class Bugzilla extends BaseJsonService {
   static category = 'issue-tracking'
   static route = { base: 'bugzilla', pattern: ':bugNumber', queryParamSchema }
 
@@ -115,4 +113,4 @@ module.exports = class Bugzilla extends BaseJsonService {
       resolution: data.bugs[0].resolution,
     })
   }
-}
+};

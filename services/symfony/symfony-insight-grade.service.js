@@ -1,12 +1,6 @@
-'use strict'
+import {SymfonyInsightBase, keywords, gradeColors} from './symfony-insight-base.js';
 
-const {
-  SymfonyInsightBase,
-  keywords,
-  gradeColors,
-} = require('./symfony-insight-base')
-
-module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
+export default class SymfonyInsightGrade extends SymfonyInsightBase {
   static route = {
     base: 'symfony/i/grade',
     pattern: ':projectUuid',
@@ -50,4 +44,4 @@ module.exports = class SymfonyInsightGrade extends SymfonyInsightBase {
 
     return this.constructor.render({ grade, status })
   }
-}
+};

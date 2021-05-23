@@ -1,12 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const {
-  isDefaultTestTotals,
-  isDefaultCompactTestTotals,
-  isCustomTestTotals,
-  isCustomCompactTestTotals,
-} = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals} from '../test-validators.js';
 
 t.create('Tests')
   .get('/swellaby/swellaby:testspace-sample/main.json')

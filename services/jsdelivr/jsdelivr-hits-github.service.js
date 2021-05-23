@@ -1,8 +1,6 @@
-'use strict'
+import {schema, periodMap, BaseJsDelivrService} from './jsdelivr-base.js';
 
-const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
-
-module.exports = class JsDelivrHitsGitHub extends BaseJsDelivrService {
+export default class JsDelivrHitsGitHub extends BaseJsDelivrService {
   static route = {
     base: 'jsdelivr/gh',
     pattern: ':period(hd|hw|hm|hy)/:user/:repo',
@@ -31,4 +29,4 @@ module.exports = class JsDelivrHitsGitHub extends BaseJsDelivrService {
     const { total } = await this.fetch({ period, user, repo })
     return this.constructor.render({ period, hits: total })
   }
-}
+};

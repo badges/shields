@@ -1,6 +1,4 @@
-'use strict'
-
-const { deprecatedService } = require('..')
+import {deprecatedService} from '..';
 
 const commonAttrs = {
   category: 'funding',
@@ -8,7 +6,7 @@ const commonAttrs = {
   dateAdded: new Date('2017-12-29'),
 }
 
-module.exports = [
+export default [
   deprecatedService({
     route: {
       base: 'gittip',
@@ -23,4 +21,4 @@ module.exports = [
     },
     ...commonAttrs,
   }),
-]
+];

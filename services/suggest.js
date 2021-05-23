@@ -4,10 +4,8 @@
 //
 // This endpoint is called from frontend/components/suggestion-and-search.js.
 
-'use strict'
-
-const { URL } = require('url')
-const request = require('request')
+import {URL} from 'url';
+import request from 'request';
 
 function twitterPage(url) {
   if (url.protocol === null) {
@@ -200,8 +198,8 @@ function setRoutes(allowedOrigin, githubApiProvider, server) {
   })
 }
 
-module.exports = {
+export default {
   findSuggestions,
   githubLicense,
   setRoutes,
-}
+};

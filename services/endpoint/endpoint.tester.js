@@ -1,9 +1,9 @@
-'use strict'
-
-const zlib = require('zlib')
-const { expect } = require('chai')
-const { getShieldsIcon } = require('../../lib/logos')
-const t = (module.exports = require('../tester').createServiceTester())
+import zlib from 'zlib';
+import {expect} from 'chai';
+import {getShieldsIcon} from '../../lib/logos.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Valid schema')
   .get('.json?url=https://example.com/badge')

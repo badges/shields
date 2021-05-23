@@ -1,5 +1,3 @@
-'use strict'
-
 /*
   Django versions will be specified in the form major.minor
   trying to sort with `semver.compare` will throw e.g:
@@ -105,10 +103,10 @@ function getPackageFormats(packageData) {
   }
 }
 
-module.exports = {
+export default {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
-}
+};

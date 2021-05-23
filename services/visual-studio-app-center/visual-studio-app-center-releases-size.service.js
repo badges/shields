@@ -1,19 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { nonNegativeInteger } = require('../validators')
-const {
-  BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
-} = require('./visual-studio-app-center-base')
+import Joi from 'joi';
+import prettyBytes from 'pretty-bytes';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
 
 const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesSize extends (
+export default class VisualStudioAppCenterReleasesSize extends (
   BaseVisualStudioAppCenterService
 ) {
   static category = 'size'
@@ -52,4 +46,4 @@ module.exports = class VisualStudioAppCenterReleasesSize extends (
     const { size } = await this.fetch({ owner, app, token, schema })
     return this.constructor.render({ size })
   }
-}
+};

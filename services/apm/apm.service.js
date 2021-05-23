@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderLicenseBadge } = require('../licenses')
-const { renderVersionBadge } = require('../version')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, InvalidResponse } = require('..')
+import Joi from 'joi';
+import {renderLicenseBadge} from '../licenses.js';
+import {renderVersionBadge} from '../version.js';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, InvalidResponse} from '..';
 
 const keywords = ['atom']
 
@@ -116,8 +114,8 @@ class APMLicense extends BaseAPMService {
   }
 }
 
-module.exports = {
+export default {
   APMDownloads,
   APMVersion,
   APMLicense,
-}
+};

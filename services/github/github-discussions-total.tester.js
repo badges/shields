@@ -1,7 +1,7 @@
-'use strict'
-
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {withRegex} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('GitHub Total Discussions (repo not found)')
   .get('/not-a-user/not-a-repo.json')

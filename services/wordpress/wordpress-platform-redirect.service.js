@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = redirector({
+export default redirector({
   category: 'platform-support',
   route: {
     base: 'wordpress/v',
@@ -10,4 +8,4 @@ module.exports = redirector({
   },
   transformPath: ({ slug }) => `/wordpress/plugin/tested/${slug}`,
   dateAdded: new Date('2019-04-17'),
-})
+});

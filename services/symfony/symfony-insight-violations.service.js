@@ -1,8 +1,6 @@
-'use strict'
+import {SymfonyInsightBase, keywords} from './symfony-insight-base.js';
 
-const { SymfonyInsightBase, keywords } = require('./symfony-insight-base')
-
-module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
+export default class SymfonyInsightViolations extends SymfonyInsightBase {
   static route = {
     base: 'symfony/i/violations',
     pattern: ':projectUuid',
@@ -78,4 +76,4 @@ module.exports = class SymfonyInsightViolations extends SymfonyInsightBase {
     const lastAnalysis = this.transform({ data })
     return this.constructor.render(lastAnalysis)
   }
-}
+};

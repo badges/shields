@@ -1,8 +1,6 @@
-'use strict'
-
 const config = require('config').util.toObject()
 console.log(config)
-const GithubConstellation = require('../services/github/github-constellation')
+import GithubConstellation from '../services/github/github-constellation.js';
 
 const { persistence } = new GithubConstellation({
   service: config.public.services.github,
@@ -15,7 +13,7 @@ async function main() {
   await persistence.stop()
 }
 
-;(async () => {
+(async () => {
   try {
     await main()
   } catch (e) {

@@ -1,29 +1,10 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const SymfonyInsightGrade = require('./symfony-insight-grade.service')
-const SymfonyInsightStars = require('./symfony-insight-stars.service')
-const SymfonyInsightViolations = require('./symfony-insight-violations.service')
-const {
-  sampleProjectUuid: projectUuid,
-  runningMockResponse,
-  platinumMockResponse,
-  goldMockResponse,
-  silverMockResponse,
-  bronzeMockResponse,
-  noMedalMockResponse,
-  noGradeMockResponse,
-  criticalViolation,
-  majorViolation,
-  minorViolation,
-  infoViolation,
-  multipleViolations,
-  user,
-  token,
-  config,
-} = require('./symfony-test-helpers')
+import {expect} from 'chai';
+import nock from 'nock';
+import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
+import SymfonyInsightGrade from './symfony-insight-grade.service.js';
+import SymfonyInsightStars from './symfony-insight-stars.service.js';
+import SymfonyInsightViolations from './symfony-insight-violations.service.js';
+import {sampleProjectUuid as projectUuid, runningMockResponse, platinumMockResponse, goldMockResponse, silverMockResponse, bronzeMockResponse, noMedalMockResponse, noGradeMockResponse, criticalViolation, majorViolation, minorViolation, infoViolation, multipleViolations, user, token, config} from './symfony-test-helpers.js';
 
 // These tests are organized in a fairly unusual way because the service uses
 // XML, so it's difficult to decouple the parsing from the transform + render.

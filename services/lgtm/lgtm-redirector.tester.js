@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'LgtmRedirect',
-  title: 'LgtmRedirect',
-  pathPrefix: '/lgtm',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('alerts')
   .get('/alerts/g/badges/shields.svg')

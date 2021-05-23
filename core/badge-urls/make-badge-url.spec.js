@@ -1,14 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const {
-  badgeUrlFromPath,
-  badgeUrlFromPattern,
-  encodeField,
-  staticBadgeUrl,
-  queryStringStaticBadgeUrl,
-  dynamicBadgeUrl,
-} = require('./make-badge-url')
+import {test, given} from 'sazerac';
+import {badgeUrlFromPath, badgeUrlFromPattern, encodeField, staticBadgeUrl, queryStringStaticBadgeUrl, dynamicBadgeUrl} from './make-badge-url.js';
 
 describe('Badge URL generation functions', function () {
   test(badgeUrlFromPath, () => {

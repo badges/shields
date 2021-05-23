@@ -1,8 +1,6 @@
-'use strict'
-
 const label = 'hsts preloaded'
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 const schema = Joi.object({
   status: Joi.string().required(),
 }).required()
@@ -21,7 +19,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class HSTS extends BaseJsonService {
+export default class HSTS extends BaseJsonService {
   static category = 'monitoring'
 
   static route = {
@@ -66,4 +64,4 @@ module.exports = class HSTS extends BaseJsonService {
     const { status } = await this.fetch({ domain })
     return this.constructor.render({ status })
   }
-}
+};

@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { codacyGrade } = require('./codacy-helpers')
+const t = (function() {
+  export default __a;
+}())
+import {codacyGrade} from './codacy-helpers.js';
 
 t.create('Code quality')
   .get('/e27821fb6289410b8f58338c7e0bc686.json')

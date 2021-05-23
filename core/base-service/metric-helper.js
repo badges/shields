@@ -1,6 +1,4 @@
-'use strict'
-
-const { performance } = require('perf_hooks')
+import {performance} from 'perf_hooks';
 
 class MetricHelper {
   constructor({ metricInstance }, { category, serviceFamily, name }) {
@@ -59,4 +57,4 @@ const MetricNames = Object.freeze({
   SERVICE_RESPONSE_SIZE: Symbol('service-response-size'),
 })
 
-module.exports = { MetricHelper, MetricNames }
+export default { MetricHelper, MetricNames };

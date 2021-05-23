@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 t.create('format (wheel, package version in request)')
   .get('/requests/2.18.4.json')

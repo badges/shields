@@ -1,18 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const {
-  dockerBlue,
-  buildDockerUrl,
-  getDockerHubUser,
-} = require('./docker-helpers')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
+import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
 
 const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),
 }).required()
 
-module.exports = class DockerAutomatedBuild extends BaseJsonService {
+export default class DockerAutomatedBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('automated')
   static examples = [
@@ -50,4 +44,4 @@ module.exports = class DockerAutomatedBuild extends BaseJsonService {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ isAutomated: data.is_automated })
   }
-}
+};

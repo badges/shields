@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseXmlService, NotFound } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {BaseXmlService, NotFound} from '..';
 
 const schema = Joi.object({
   metadata: Joi.object({
@@ -14,7 +12,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class MavenCentral extends BaseXmlService {
+export default class MavenCentral extends BaseXmlService {
   static category = 'version'
 
   static route = {
@@ -79,4 +77,4 @@ module.exports = class MavenCentral extends BaseXmlService {
     }
     return renderVersionBadge({ version })
   }
-}
+};

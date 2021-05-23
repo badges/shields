@@ -1,14 +1,10 @@
-'use strict'
-
-const { escapeFormat } = require('../../core/badge-urls/path-helpers')
-const { redirector } = require('..')
+import {escapeFormat} from '../../core/badge-urls/path-helpers.js';
+import {redirector} from '..';
 
 function escapeFormatSlashes(t) {
-  return (
-    escapeFormat(t)
-      // Double slash
-      .replace(/\/\//g, '/')
-  )
+  return escapeFormat(t)
+    // Double slash
+    .replace(/\/\//g, '/');
 }
 
 /*
@@ -51,7 +47,7 @@ Old documentation, for reference:
 </p>
 */
 
-module.exports = [
+export default [
   redirector({
     category: 'monitoring',
     route: {
@@ -104,4 +100,4 @@ module.exports = [
     }),
     dateAdded: new Date('2019-09-17'),
   }),
-]
+];

@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const statusSchema = Joi.object({
   status: Joi.string().required(),
 }).required()
 
-module.exports = class RequiresIo extends BaseJsonService {
+export default class RequiresIo extends BaseJsonService {
   static category = 'dependencies'
 
   static route = {
@@ -64,4 +62,4 @@ module.exports = class RequiresIo extends BaseJsonService {
     const { status } = await this.fetch({ service, user, repo, branch })
     return this.constructor.render({ status })
   }
-}
+};

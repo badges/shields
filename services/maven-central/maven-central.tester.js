@@ -1,9 +1,7 @@
-'use strict'
-
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('latest version')
   .get('/com.github.fabriziocucci/yacl4j.json') // http://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/

@@ -1,8 +1,6 @@
-'use strict'
+import {documentation, YouTubeChannelBase} from './youtube-base.js';
 
-const { documentation, YouTubeChannelBase } = require('./youtube-base')
-
-module.exports = class YouTubeSubscribes extends YouTubeChannelBase {
+export default class YouTubeSubscribes extends YouTubeChannelBase {
   static route = {
     base: 'youtube/channel/subscribers',
     pattern: ':channelId',
@@ -32,4 +30,4 @@ module.exports = class YouTubeSubscribes extends YouTubeChannelBase {
       id,
     })
   }
-}
+};

@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'JenkinsTestsRedirector',
-  title: 'JenkinsTestsRedirector',
-  pathPrefix: '/jenkins',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('old tests prefix + job url in path')
   .get(

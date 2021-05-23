@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   presence_count: nonNegativeInteger,
@@ -24,7 +22,7 @@ const documentation = `
 <iframe src="https://player.vimeo.com/video/364220040" width="640" height="210" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 `
 
-module.exports = class Discord extends BaseJsonService {
+export default class Discord extends BaseJsonService {
   static category = 'chat'
 
   static route = {
@@ -79,4 +77,4 @@ module.exports = class Discord extends BaseJsonService {
     const data = await this.fetch({ serverId })
     return this.constructor.render({ members: data.presence_count })
   }
-}
+};

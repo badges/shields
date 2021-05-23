@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'JitpackVersionRedirect',
-  title: 'JitpackVersionRedirect',
-  pathPrefix: '/jitpack/v',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('jitpack version redirect')
   .get('/jitpack/maven-simple.svg')

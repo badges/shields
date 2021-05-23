@@ -1,8 +1,6 @@
-'use strict'
+import {documentation, YouTubeVideoBase} from './youtube-base.js';
 
-const { documentation, YouTubeVideoBase } = require('./youtube-base')
-
-module.exports = class YouTubeViews extends YouTubeVideoBase {
+export default class YouTubeViews extends YouTubeVideoBase {
   static route = {
     base: 'youtube/views',
     pattern: ':videoId',
@@ -28,4 +26,4 @@ module.exports = class YouTubeViews extends YouTubeVideoBase {
   static render({ statistics, id }) {
     return super.renderSingleStat({ statistics, statisticName: 'view', id })
   }
-}
+};

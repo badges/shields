@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { isStarRating } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isStarRating} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Rating')
   .get('/rating/IndieGala-Helper.json')

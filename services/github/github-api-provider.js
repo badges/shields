@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const log = require('../../core/server/log')
-const { TokenPool } = require('../../core/token-pooling/token-pool')
-const { userAgent } = require('../../core/base-service/legacy-request-handler')
-const { nonNegativeInteger } = require('../validators')
+import Joi from 'joi';
+import log from '../../core/server/log.js';
+import {TokenPool} from '../../core/token-pooling/token-pool.js';
+import {userAgent} from '../../core/base-service/legacy-request-handler.js';
+import {nonNegativeInteger} from '../validators.js';
 
 const headerSchema = Joi.object({
   'x-ratelimit-limit': nonNegativeInteger,
@@ -214,4 +212,4 @@ class GithubApiProvider {
   }
 }
 
-module.exports = GithubApiProvider
+export default GithubApiProvider;

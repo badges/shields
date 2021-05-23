@@ -1,5 +1,4 @@
-'use strict'
-const Sentry = require('@sentry/node')
+import Sentry from '@sentry/node';
 
 const listeners = []
 
@@ -23,27 +22,27 @@ function date() {
   )
 }
 
-module.exports = function log(...msg) {
+export default function log(...msg) {
   const d = date()
   listeners.forEach(f => f(d, ...msg))
   console.log(d, ...msg)
-}
+};
 
-module.exports.error = function error(err) {
+export const error = function error(err) {
   const d = date()
   listeners.forEach(f => f(d, err))
   Sentry.captureException(err)
   console.error(d, err)
-}
+};
 
-module.exports.addListener = function addListener(func) {
+export const addListener = function addListener(func) {
   listeners.push(func)
-}
+};
 
-module.exports.removeListener = function removeListener(func) {
+export const removeListener = function removeListener(func) {
   const index = listeners.indexOf(func)
   if (index < 0) {
     return
   }
   listeners.splice(index, 1)
-}
+};

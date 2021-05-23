@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = [
+export default [
   deprecatedService({
     category: 'funding',
     label: 'codetally',
@@ -12,4 +10,4 @@ module.exports = [
     },
     dateAdded: new Date('2020-09-05'),
   }),
-]
+];

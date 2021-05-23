@@ -1,5 +1,3 @@
-'use strict'
-
 // Have you identified a contributing guideline that should be included here?
 // Please open a pull request!
 //
@@ -10,8 +8,8 @@
 // To test changes locally:
 // DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
 
-const { danger, fail, message, warn } = require('danger')
-const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts')
+import {danger, fail, message, warn} from 'danger';
+import {default as noTestShortcuts} from 'danger-plugin-no-test-shortcuts';
 const { fileMatch } = danger.git
 
 const documentation = fileMatch(

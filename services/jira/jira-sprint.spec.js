@@ -1,17 +1,8 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const JiraSprint = require('./jira-sprint.service')
-const {
-  user,
-  pass,
-  host,
-  config,
-  sprintId,
-  sprintQueryString,
-} = require('./jira-test-helpers')
+import {expect} from 'chai';
+import nock from 'nock';
+import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
+import JiraSprint from './jira-sprint.service.js';
+import {user, pass, host, config, sprintId, sprintQueryString} from './jira-test-helpers.js';
 
 describe('JiraSprint', function () {
   cleanUpNockAfterEach()

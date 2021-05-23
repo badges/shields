@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
-const { isSemver } = require('../test-validators')
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
+import {isSemver} from '../test-validators.js';
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
 

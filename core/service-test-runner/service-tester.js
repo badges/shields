@@ -1,10 +1,9 @@
-'use strict'
 /**
  * @module
  */
 
-const emojic = require('emojic')
-const trace = require('../base-service/trace')
+import emojic from 'emojic';
+import trace from '../base-service/trace.js';
 const frisby = require('./icedfrisby-shields')(
   // eslint-disable-next-line import/order
   require('icedfrisby-nock')(require('icedfrisby'))
@@ -140,4 +139,4 @@ class ServiceTester {
   }
 }
 
-module.exports = ServiceTester
+export default ServiceTester;

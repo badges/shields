@@ -1,7 +1,7 @@
-'use strict'
-
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isMetric} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Nucleus (pluginId nucleus)').get('/nucleus.json').expectBadge({
   label: 'downloads',

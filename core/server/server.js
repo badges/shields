@@ -1,27 +1,26 @@
-'use strict'
 /**
  * @module
  */
 
-const path = require('path')
-const url = require('url')
+import path from 'path';
+import url from 'url';
 const { URL } = url
-const cloudflareMiddleware = require('cloudflare-middleware')
-const bytes = require('bytes')
-const Camp = require('@shields_io/camp')
-const originalJoi = require('joi')
-const makeBadge = require('../../badge-maker/lib/make-badge')
-const GithubConstellation = require('../../services/github/github-constellation')
-const suggest = require('../../services/suggest')
-const { loadServiceClasses } = require('../base-service/loader')
-const { makeSend } = require('../base-service/legacy-result-sender')
-const { handleRequest } = require('../base-service/legacy-request-handler')
-const { clearRegularUpdateCache } = require('../legacy/regular-update')
-const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
-const { nonNegativeInteger } = require('../../services/validators')
-const log = require('./log')
-const PrometheusMetrics = require('./prometheus-metrics')
-const InfluxMetrics = require('./influx-metrics')
+import cloudflareMiddleware from 'cloudflare-middleware';
+import bytes from 'bytes';
+import Camp from '@shields_io/camp';
+import originalJoi from 'joi';
+import makeBadge from '../../badge-maker/lib/make-badge.js';
+import GithubConstellation from '../../services/github/github-constellation.js';
+import suggest from '../../services/suggest.js';
+import {loadServiceClasses} from '../base-service/loader.js';
+import {makeSend} from '../base-service/legacy-result-sender.js';
+import {handleRequest} from '../base-service/legacy-request-handler.js';
+import {clearRegularUpdateCache} from '../legacy/regular-update.js';
+import {rasterRedirectUrl} from '../badge-urls/make-badge-url.js';
+import {nonNegativeInteger} from '../../services/validators.js';
+import log from './log.js';
+import PrometheusMetrics from './prometheus-metrics.js';
+import InfluxMetrics from './influx-metrics.js';
 
 const Joi = originalJoi
   .extend(base => ({
@@ -522,4 +521,4 @@ class Server {
   }
 }
 
-module.exports = Server
+export default Server;

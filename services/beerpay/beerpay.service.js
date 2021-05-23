@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   total_amount: Joi.number().min(0).required(),
 }).required()
 
-module.exports = class Beerpay extends BaseJsonService {
+export default class Beerpay extends BaseJsonService {
   static category = 'funding'
   static route = { base: 'beerpay', pattern: ':user/:project' }
 
@@ -40,4 +38,4 @@ module.exports = class Beerpay extends BaseJsonService {
     })
     return this.constructor.render({ totalAmount })
   }
-}
+};

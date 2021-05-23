@@ -1,12 +1,8 @@
-'use strict'
-
-const { isMetric } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'GithubIssuesSearch',
-  title: 'Github Issues Search',
-  pathPrefix: '/github',
-}))
+import {isMetric} from '../test-validators.js';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('GitHub issue search (valid query string)')
   .get(

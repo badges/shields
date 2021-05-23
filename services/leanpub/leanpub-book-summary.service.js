@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   route: {
     base: 'leanpub/book',
     pattern: ':various+',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   category: 'funding',
   label: 'leanpub',
   dateAdded: new Date('2019-12-30'),
-})
+});

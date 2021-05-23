@@ -1,17 +1,10 @@
-'use strict'
+import Joi from 'joi';
+import {ServiceTester} from '../tester.js';
+import {isVPlusDottedVersionAtLeastOne, isComposerVersion} from '../test-validators.js';
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const {
-  isVPlusDottedVersionAtLeastOne,
-  isComposerVersion,
-} = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'WordpressPlatform',
-  title: 'WordPress Platform Tests',
-  pathPrefix: '/wordpress',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Plugin Required WP Version')
   .get('/plugin/wp-version/akismet.json')

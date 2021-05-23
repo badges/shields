@@ -1,12 +1,8 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = new ServiceTester({
-  id: 'AmoDownloads',
-  title: 'AmoDownloads',
-  pathPrefix: '/amo',
-}))
+import {ServiceTester} from '../tester.js';
+import {isMetricOverTimePeriod} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Weekly Downloads')
   .get('/dw/duckduckgo-for-firefox.json')

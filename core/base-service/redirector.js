@@ -1,18 +1,13 @@
-'use strict'
-
-const camelcase = require('camelcase')
-const emojic = require('emojic')
-const Joi = require('joi')
-const queryString = require('query-string')
-const BaseService = require('./base')
-const {
-  serverHasBeenUpSinceResourceCached,
-  setCacheHeadersForStaticResource,
-} = require('./cache-headers')
-const { isValidCategory } = require('./categories')
-const { MetricHelper } = require('./metric-helper')
-const { isValidRoute, prepareRoute, namedParamsForMatch } = require('./route')
-const trace = require('./trace')
+import camelcase from 'camelcase';
+import emojic from 'emojic';
+import Joi from 'joi';
+import queryString from 'query-string';
+import BaseService from './base.js';
+import {serverHasBeenUpSinceResourceCached, setCacheHeadersForStaticResource} from './cache-headers.js';
+import {isValidCategory} from './categories.js';
+import {MetricHelper} from './metric-helper.js';
+import {isValidRoute, prepareRoute, namedParamsForMatch} from './route.js';
+import trace from './trace.js';
 
 const attrSchema = Joi.object({
   name: Joi.string().min(3),
@@ -32,7 +27,7 @@ const attrSchema = Joi.object({
   overrideTransformedQueryParams: Joi.bool().optional(),
 }).required()
 
-module.exports = function redirector(attrs) {
+export default function redirector(attrs) {
   const {
     name,
     category,
@@ -121,5 +116,5 @@ module.exports = function redirector(attrs) {
         metricHandle.noteResponseSent()
       })
     }
-  }
-}
+  };
+};

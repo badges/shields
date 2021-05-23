@@ -1,8 +1,6 @@
-'use strict'
-
-const prettyBytes = require('pretty-bytes')
-const { NotFound } = require('..')
-const BaseMicrobadgerService = require('./microbadger-base')
+import prettyBytes from 'pretty-bytes';
+import {NotFound} from '..';
+import BaseMicrobadgerService from './microbadger-base.js';
 
 const documentation = `
 <p>
@@ -27,7 +25,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
+export default class MicrobadgerSize extends BaseMicrobadgerService {
   static route = {
     base: 'microbadger/image-size',
     pattern: ':user/:repo/:tag*',
@@ -71,4 +69,4 @@ module.exports = class MicrobadgerSize extends BaseMicrobadgerService {
     }
     return this.constructor.render({ size: image.DownloadSize })
   }
-}
+};

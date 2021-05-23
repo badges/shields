@@ -1,15 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'packagist',
-  title: 'Packagist Version',
-  pathPrefix: '/packagist',
-}))
+import Joi from 'joi';
+import {isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 /*
   validator for a packagist version number

@@ -1,9 +1,7 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
+import {ServiceTester} from '../tester.js';
 
 const t = new ServiceTester({ id: 'magnumci', title: 'Magnum CI' })
-module.exports = t
+export default t;
 
 t.create('no longer available')
   .get('/ci/96ffb83fa700f069024921b0702e76ff.json')

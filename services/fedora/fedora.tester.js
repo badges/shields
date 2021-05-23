@@ -1,9 +1,7 @@
-'use strict'
-
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Fedora package (default branch, valid)')
   .get('/rpm.json')

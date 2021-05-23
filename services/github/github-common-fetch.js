@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { InvalidResponse } = require('..')
-const { errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi';
+import {InvalidResponse} from '..';
+import {errorMessagesFor} from './github-helpers.js';
 
 const issueSchema = Joi.object({
   head: Joi.object({
@@ -77,8 +75,8 @@ async function fetchJsonFromRepo(
   }
 }
 
-module.exports = {
+export default {
   fetchIssue,
   fetchRepoContent,
   fetchJsonFromRepo,
-}
+};

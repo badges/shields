@@ -1,12 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const {
-  isMetric,
-  isVPlusDottedVersionNClauses,
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
+import Joi from 'joi';
+import {ServiceTester} from '../tester.js';
+import {isMetric, isVPlusDottedVersionNClauses, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
 const isPlatform = Joi.string().regex(
   /^(windows|linux|macos)( \| (windows|linux|macos))*$/
 )
@@ -15,7 +9,7 @@ const t = new ServiceTester({
   id: 'powershellgallery',
   title: 'PowerShell Gallery',
 })
-module.exports = t
+export default t;
 
 t.create('total downloads (valid)').get('/dt/ACMESharp.json').expectBadge({
   label: 'downloads',

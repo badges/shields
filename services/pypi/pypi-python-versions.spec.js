@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { render } = require('./pypi-python-versions.service')
+import {test, given} from 'sazerac';
+import {render} from './pypi-python-versions.service.js';
 
 describe('PyPI Python Version', function () {
   test(render, function () {

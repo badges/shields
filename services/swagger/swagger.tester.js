@@ -1,5 +1,3 @@
-'use strict'
-
 const getURL = '/3.0.json?specUrl=https://example.com/example.json'
 const getURLBase = '/3.0.json?specUrl='
 const apiURL = 'http://validator.swagger.io'
@@ -8,7 +6,9 @@ const apiGetQueryParams = {
   url: 'https://example.com/example.json',
 }
 
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Invalid')
   .get(getURL)

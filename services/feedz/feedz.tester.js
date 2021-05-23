@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'feedz',
-  title: 'Feedz',
-  pathPrefix: '',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 // The `shieldstests/public` repo is specifically made for these tests. It contains following packages:
 //  - Shields.NoV1: 0.1.0

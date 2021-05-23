@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'rating',
   route: {
     base: 'libscore/s',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   },
   label: 'libscore',
   dateAdded: new Date('2018-09-22'),
-})
+});

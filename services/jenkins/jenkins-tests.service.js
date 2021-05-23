@@ -1,19 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  documentation,
-  testResultQueryParamSchema,
-  renderTestResultBadge,
-} = require('../test-results')
-const { optionalNonNegativeInteger } = require('../validators')
-const { InvalidResponse } = require('..')
-const JenkinsBase = require('./jenkins-base')
-const {
-  buildTreeParamQueryString,
-  buildUrl,
-  queryParamSchema,
-} = require('./jenkins-common')
+import Joi from 'joi';
+import {documentation, testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
+import {optionalNonNegativeInteger} from '../validators.js';
+import {InvalidResponse} from '..';
+import JenkinsBase from './jenkins-base.js';
+import {buildTreeParamQueryString, buildUrl, queryParamSchema} from './jenkins-common.js';
 
 // In the API response, the `actions` array can be empty, and when it is not empty it will contain a
 // mix of objects. Some will be empty objects, and several will not have the test count properties.
@@ -35,7 +25,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class JenkinsTests extends JenkinsBase {
+export default class JenkinsTests extends JenkinsBase {
   static category = 'build'
 
   static route = {
@@ -135,4 +125,4 @@ module.exports = class JenkinsTests extends JenkinsBase {
       skippedLabel,
     })
   }
-}
+};

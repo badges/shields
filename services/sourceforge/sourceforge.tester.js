@@ -1,7 +1,7 @@
-'use strict'
-
-const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('total downloads').get('/dt/sevenzip.json').expectBadge({
   label: 'downloads',

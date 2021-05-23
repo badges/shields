@@ -1,14 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const gql = require('graphql-tag')
-const { nonNegativeInteger } = require('../validators')
-const { metric } = require('../text-formatters')
-const { GithubAuthV4Service } = require('./github-auth-service')
-const {
-  documentation: commonDocumentation,
-  transformErrors,
-} = require('./github-helpers')
+import Joi from 'joi';
+import gql from 'graphql-tag';
+import {nonNegativeInteger} from '../validators.js';
+import {metric} from '../text-formatters.js';
+import {GithubAuthV4Service} from './github-auth-service.js';
+import {documentation as commonDocumentation, transformErrors} from './github-helpers.js';
 
 const MAX_REPO_LIMIT = 200
 
@@ -133,7 +128,7 @@ const queryParamSchema = Joi.object({
   affiliations: Joi.string().default('OWNER').custom(validateAffiliations),
 }).required()
 
-module.exports = class GithubTotalStarService extends GithubAuthV4Service {
+export default class GithubTotalStarService extends GithubAuthV4Service {
   static defaultLabel = 'stars'
   static category = 'social'
 
@@ -243,4 +238,4 @@ module.exports = class GithubTotalStarService extends GithubAuthV4Service {
     const totalStars = await this.getTotalStars({ user }, queryParams)
     return this.constructor.render({ totalStars, user })
   }
-}
+};

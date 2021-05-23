@@ -1,9 +1,4 @@
-'use strict'
-
-const {
-  checkNames,
-  collectDefinitions,
-} = require('../core/base-service/loader')
+import {checkNames, collectDefinitions} from '../core/base-service/loader.js';
 
 // When these tests fail, they will throw AssertionErrors. Wrapping them in an
 // `expect().not.to.throw()` makes the error output unreadable.

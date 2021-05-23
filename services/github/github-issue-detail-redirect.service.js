@@ -1,13 +1,11 @@
-'use strict'
-
-const { redirector } = require('..')
+import {redirector} from '..';
 
 const variantMap = {
   s: 'state',
   u: 'author',
 }
 
-module.exports = [
+export default [
   redirector({
     category: 'issue-tracking',
     route: {
@@ -19,4 +17,4 @@ module.exports = [
       `/github/${issueKind}/detail/${variantMap[variant]}/${user}/${repo}/${number}`,
     dateAdded: new Date('2019-04-04'),
   }),
-]
+];

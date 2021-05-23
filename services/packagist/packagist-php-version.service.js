@@ -1,19 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { NotFound } = require('..')
-const {
-  allVersionsSchema,
-  BasePackagistService,
-  customServerDocumentationFragment,
-} = require('./packagist-base')
+import Joi from 'joi';
+import {optionalUrl} from '../validators.js';
+import {NotFound} from '..';
+import {allVersionsSchema, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistPhpVersion extends BasePackagistService {
+export default class PackagistPhpVersion extends BasePackagistService {
   static category = 'platform-support'
 
   static route = {
@@ -100,4 +94,4 @@ module.exports = class PackagistPhpVersion extends BasePackagistService {
     })
     return this.constructor.render({ php: phpVersion })
   }
-}
+};

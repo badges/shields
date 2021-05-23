@@ -1,7 +1,7 @@
-'use strict'
-
-const { isIntegerPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isIntegerPercentage} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('valid .nycrc')
   .get('/yargs/yargs.json?config=.nycrc')

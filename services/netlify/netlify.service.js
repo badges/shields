@@ -1,7 +1,5 @@
-'use strict'
-
-const { renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
+import {renderBuildStatusBadge} from '../build-status.js';
+import {BaseSvgScrapingService} from '..';
 
 const pendingStatus = 'building'
 const notBuiltStatus = 'not built'
@@ -16,7 +14,7 @@ const statusMap = {
   infrastructure_failure: 'failed',
 }
 
-module.exports = class Netlify extends BaseSvgScrapingService {
+export default class Netlify extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
@@ -64,4 +62,4 @@ module.exports = class Netlify extends BaseSvgScrapingService {
     const { message: status } = await this.fetch({ projectId, branch })
     return this.constructor.render({ status })
   }
-}
+};

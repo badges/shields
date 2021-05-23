@@ -1,7 +1,7 @@
-'use strict'
-
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {withRegex} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('level known project')
   .get(`/level/1.json`)

@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isIntegerPercentage } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isIntegerPercentage} from '../test-validators.js';
 
 t.create('Overall progress')
   .get(

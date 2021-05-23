@@ -1,10 +1,8 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {downloadCount} from '../color-formatters.js';
+import {BaseSpigetService, documentation, keywords} from './spiget-base.js';
 
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
-
-module.exports = class SpigetDownloads extends BaseSpigetService {
+export default class SpigetDownloads extends BaseSpigetService {
   static category = 'downloads'
 
   static route = {
@@ -39,4 +37,4 @@ module.exports = class SpigetDownloads extends BaseSpigetService {
     const { downloads } = await this.fetch({ resourceId })
     return this.constructor.render({ downloads })
   }
-}
+};

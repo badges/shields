@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderLicenseBadge } = require('../licenses')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {renderLicenseBadge} from '../licenses.js';
+import {renderVersionBadge} from '../version.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),
@@ -73,7 +71,7 @@ class CtanVersion extends BaseCtanService {
   }
 }
 
-module.exports = {
+export default {
   CtanLicense,
   CtanVersion,
-}
+};

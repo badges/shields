@@ -1,8 +1,6 @@
-'use strict'
-
-const { URL } = require('url')
-const queryString = require('query-string')
-const { compile } = require('path-to-regexp')
+import {URL} from 'url';
+import queryString from 'query-string';
+import {compile} from 'path-to-regexp';
 
 function badgeUrlFromPath({
   baseUrl = '',
@@ -52,7 +50,7 @@ function badgeUrlFromPattern({
 }
 
 function encodeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'))
+  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
 }
 
 function staticBadgeUrl({
@@ -153,7 +151,7 @@ function rasterRedirectUrl({ rasterUrl }, badgeUrl) {
   return result
 }
 
-module.exports = {
+export default {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,
@@ -161,4 +159,4 @@ module.exports = {
   queryStringStaticBadgeUrl,
   dynamicBadgeUrl,
   rasterRedirectUrl,
-}
+};

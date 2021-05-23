@@ -1,10 +1,7 @@
-'use strict'
-
-const {
-  isVPlusDottedVersionAtLeastOne,
-  withRegex,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionAtLeastOne, withRegex} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('version (valid)').get('/formatador.json').expectBadge({
   label: 'gem',

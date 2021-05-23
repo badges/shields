@@ -1,10 +1,5 @@
-'use strict'
-
-const { expect } = require('chai')
-const {
-  toSemver,
-  versionColorForWordpressVersion,
-} = require('./wordpress-version-color')
+import {expect} from 'chai';
+import {toSemver, versionColorForWordpressVersion} from './wordpress-version-color.js';
 
 describe('toSemver() function', function () {
   it('coerces versions', function () {

@@ -1,9 +1,7 @@
-'use strict'
-
 const config = require('config').util.toObject()
-const got = require('got')
-const minimist = require('minimist')
-const Server = require('../core/server/server')
+import got from 'got';
+import minimist from 'minimist';
+import Server from '../core/server/server.js';
 
 async function main() {
   const server = new Server(config)
@@ -16,7 +14,7 @@ async function main() {
   await server.stop()
 }
 
-;(async () => {
+(async () => {
   try {
     await main()
   } catch (e) {

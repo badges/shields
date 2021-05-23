@@ -1,13 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { addv, metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
-const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
-const { InvalidResponse } = require('..')
+import Joi from 'joi';
+import {floorCount as floorCountColor, age as ageColor} from '../color-formatters.js';
+import {addv, metric, formatDate} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, NotFound, InvalidResponse} from '..';
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -198,10 +193,10 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-module.exports = {
+export default {
   AurLicense,
   AurVersion,
   AurVotes,
   AurMaintainer,
   AurLastModified,
-}
+};

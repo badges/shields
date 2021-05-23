@@ -1,8 +1,6 @@
-'use strict'
+import {documentation, YouTubeVideoBase} from './youtube-base.js';
 
-const { documentation, YouTubeVideoBase } = require('./youtube-base')
-
-module.exports = class YouTubeComments extends YouTubeVideoBase {
+export default class YouTubeComments extends YouTubeVideoBase {
   static route = {
     base: 'youtube/comments',
     pattern: ':videoId',
@@ -28,4 +26,4 @@ module.exports = class YouTubeComments extends YouTubeVideoBase {
   static render({ statistics, id }) {
     return super.renderSingleStat({ statistics, statisticName: 'comment', id })
   }
-}
+};

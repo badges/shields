@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { floorCount } = require('../color-formatters')
-const { BaseJsonService, InvalidResponse } = require('..')
+import Joi from 'joi';
+import {floorCount} from '../color-formatters.js';
+import {BaseJsonService, InvalidResponse} from '..';
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number().allow(null).required(),
@@ -18,7 +16,7 @@ class AnsibleGalaxyContent extends BaseJsonService {
   }
 }
 
-module.exports = class AnsibleGalaxyContentQualityScore extends (
+export default class AnsibleGalaxyContentQualityScore extends (
   AnsibleGalaxyContent
 ) {
   static category = 'analysis'
@@ -54,4 +52,4 @@ module.exports = class AnsibleGalaxyContentQualityScore extends (
 
     return this.constructor.render({ qualityScore })
   }
-}
+};

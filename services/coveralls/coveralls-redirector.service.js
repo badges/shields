@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     name: 'CoverallsGitHubRedirect',
     category: 'coverage',
@@ -14,4 +12,4 @@ module.exports = [
       `/coveralls/github/${user}/${repo}${branch ? `/${branch}` : ''}`,
     dateAdded: new Date('2021-02-23'),
   }),
-]
+];

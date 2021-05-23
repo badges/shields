@@ -1,6 +1,4 @@
-'use strict'
-
-const chalk = require('chalk')
+import chalk from 'chalk';
 const config = require('config').util.toObject()
 
 // Config is loaded globally but it would be better to inject it. To do that,
@@ -37,6 +35,6 @@ function logTrace(stage, symbol, label, content, { deep = false } = {}) {
   }
 }
 
-module.exports = {
+export default {
   logTrace,
-}
+};

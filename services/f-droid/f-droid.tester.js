@@ -1,12 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'f-droid',
-  title: 'F-Droid',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 const testPkg = 'org.fdroid.fdroid.privileged'
 const testJson = `

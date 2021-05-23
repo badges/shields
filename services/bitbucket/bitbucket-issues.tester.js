@@ -1,13 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isMetric, isMetricOpenIssues} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const { isMetric, isMetricOpenIssues } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'BitbucketIssues',
-  title: 'Bitbucket Issues',
-  pathPrefix: '/bitbucket',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('issues-raw (valid)')
   .get('/issues-raw/atlassian/python-bitbucket.json')

@@ -1,7 +1,7 @@
-'use strict'
-
-const { nonNegativeInteger } = require('../validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {nonNegativeInteger} from '../validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('layers without a specified tag')
   .get('/_/alpine.json')

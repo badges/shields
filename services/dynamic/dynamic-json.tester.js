@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { expect } = require('chai')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {expect} from 'chai';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name')

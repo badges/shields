@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
+import Joi from 'joi';
+import {optionalUrl} from '../validators.js';
 
 const queryParamSchema = Joi.object({
   disableStrictSSL: Joi.equal(''),
@@ -21,9 +19,9 @@ const buildUrl = ({ jobUrl, lastCompletedBuild = true, plugin }) => {
   return `${jobUrl}/${lastCompletedBuildElement}${pluginElement}api/json`
 }
 
-module.exports = {
+export default {
   queryParamSchema,
   buildTreeParamQueryString: tree => ({ tree }),
   buildUrl,
   buildRedirectUrl,
-}
+};

@@ -1,10 +1,8 @@
-'use strict'
-
-const NPMBase = require('../npm/npm-base')
+import NPMBase from '../npm/npm-base.js';
 
 const keywords = ['npm']
 
-module.exports = class NodeVersionBase extends NPMBase {
+export default class NodeVersionBase extends NPMBase {
   static category = 'platform-support'
 
   static get examples() {
@@ -119,4 +117,4 @@ module.exports = class NodeVersionBase extends NPMBase {
 
     return this.constructor.render({ tag, nodeVersionRange })
   }
-}
+};

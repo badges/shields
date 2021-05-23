@@ -1,7 +1,7 @@
-'use strict'
-
-const { isComposerVersion } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isComposerVersion} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('gets the package version of symfony')
   .get('/symfony/symfony.json')

@@ -1,7 +1,5 @@
-'use strict'
-
-const { expect } = require('chai')
-const { loadServiceClasses, InvalidService } = require('./loader')
+import {expect} from 'chai';
+import {loadServiceClasses, InvalidService} from './loader.js';
 
 describe('loadServiceClasses function', function () {
   it('throws if module exports empty', function () {

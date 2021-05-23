@@ -1,7 +1,7 @@
-'use strict'
-
-const { isSemver } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isSemver} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('latest version of the component (can have v prefixed or without)')
   .get('/v/vaadinvaadin-grid.json')

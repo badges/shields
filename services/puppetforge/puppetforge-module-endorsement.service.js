@@ -1,9 +1,7 @@
-'use strict'
+import {NotFound} from '..';
+import {BasePuppetForgeModulesService} from './puppetforge-base.js';
 
-const { NotFound } = require('..')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
-
-module.exports = class PuppetforgeModuleEndorsement extends (
+export default class PuppetforgeModuleEndorsement extends (
   BasePuppetForgeModulesService
 ) {
   static category = 'rating'
@@ -45,4 +43,4 @@ module.exports = class PuppetforgeModuleEndorsement extends (
     }
     return this.constructor.render({ endorsement })
   }
-}
+};

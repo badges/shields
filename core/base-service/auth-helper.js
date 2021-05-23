@@ -1,7 +1,5 @@
-'use strict'
-
-const { URL } = require('url')
-const { InvalidParameter } = require('./errors')
+import {URL} from 'url';
+import {InvalidParameter} from './errors.js';
 
 class AuthHelper {
   constructor(
@@ -207,4 +205,4 @@ class AuthHelper {
   }
 }
 
-module.exports = { AuthHelper }
+export default { AuthHelper };

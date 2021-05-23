@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService, redirector } = require('..')
+import Joi from 'joi';
+import {renderBuildStatusBadge} from '../build-status.js';
+import {BaseJsonService, redirector} from '..';
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()
@@ -96,7 +94,7 @@ const BitbucketPipelinesRedirector = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-module.exports = {
+export default {
   BitbucketPipelines,
   BitbucketPipelinesRedirector,
-}
+};

@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // https://github.com/badges/shields/issues/5433
   redirector({
     name: 'OffsetEarthTreesRedirect',
@@ -14,4 +12,4 @@ module.exports = [
     transformPath: ({ username }) => `/ecologi/trees/${username}`,
     dateAdded: new Date('2020-08-16'),
   }),
-]
+];

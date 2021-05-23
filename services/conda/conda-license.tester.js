@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 t.create('license')
   .get('/l/conda-forge/setuptools.json')

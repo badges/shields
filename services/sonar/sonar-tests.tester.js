@@ -1,19 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'SonarTests',
-  title: 'SonarTests',
-  pathPrefix: '/sonar',
-}))
-const {
-  isDefaultTestTotals,
-  isDefaultCompactTestTotals,
-  isCustomTestTotals,
-  isCustomCompactTestTotals,
-} = require('../test-validators')
-const { isIntegerPercentage, isMetric } = require('../test-validators')
+import Joi from 'joi';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
+import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals, isIntegerPercentage, isMetric} from '../test-validators.js';
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
   Joi.number().valid(0).required()

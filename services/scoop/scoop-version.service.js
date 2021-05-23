@@ -1,12 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { NotFound } = require('..')
-const {
-  ConditionalGithubAuthV3Service,
-} = require('../github/github-auth-service')
-const { fetchJsonFromRepo } = require('../github/github-common-fetch')
-const { renderVersionBadge } = require('../version')
+import Joi from 'joi';
+import {NotFound} from '..';
+import {ConditionalGithubAuthV3Service} from '../github/github-auth-service.js';
+import {fetchJsonFromRepo} from '../github/github-common-fetch.js';
+import {renderVersionBadge} from '../version.js';
 
 const gitHubRepoRegExp =
   /https:\/\/github.com\/(?<user>.*?)\/(?<repo>.*?)(\/|$)/
@@ -20,7 +16,7 @@ const queryParamSchema = Joi.object({
   bucket: Joi.string(),
 })
 
-module.exports = class ScoopVersion extends ConditionalGithubAuthV3Service {
+export default class ScoopVersion extends ConditionalGithubAuthV3Service {
   // The buckets file (https://github.com/lukesampson/scoop/blob/master/buckets.json) changes very rarely.
   // Cache it for the lifetime of the current Node.js process.
   buckets = null
@@ -89,4 +85,4 @@ module.exports = class ScoopVersion extends ConditionalGithubAuthV3Service {
       throw error
     }
   }
-}
+};

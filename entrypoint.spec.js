@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const isSvg = require('is-svg')
-const got = require('./core/got-test-client')
+import {expect} from 'chai';
+import isSvg from 'is-svg';
+import got from './core/got-test-client.js';
 
 let server
 before(function () {

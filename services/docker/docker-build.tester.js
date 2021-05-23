@@ -1,6 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
+const t = (function() {
+  export default __a;
+}())
 
 const t = (module.exports = new ServiceTester({
   id: 'dockerbuild',

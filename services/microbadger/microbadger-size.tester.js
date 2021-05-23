@@ -1,7 +1,7 @@
-'use strict'
-
-const { isFileSize } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isFileSize} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('image size without a specified tag')
   .get('/fedora/apache.json')

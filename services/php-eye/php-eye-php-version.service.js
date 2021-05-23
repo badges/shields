@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = [
+export default [
   deprecatedService({
     category: 'platform-support',
     label: 'php tested',
@@ -12,4 +10,4 @@ module.exports = [
     },
     dateAdded: new Date('2018-04-20'),
   }),
-]
+];

@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'chat',
     route: {
@@ -15,4 +13,4 @@ module.exports = [
     }),
     dateAdded: new Date('2019-09-15'),
   }),
-]
+];

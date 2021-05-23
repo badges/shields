@@ -1,18 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
-} = require('./visual-studio-app-center-base')
+import Joi from 'joi';
+import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
 
 const schema = Joi.object({
   app_os: Joi.string().required(),
   min_os: Joi.string().required(),
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
+export default class VisualStudioAppCenterReleasesOSVersion extends (
   BaseVisualStudioAppCenterService
 ) {
   static category = 'version'
@@ -57,4 +51,4 @@ module.exports = class VisualStudioAppCenterReleasesOSVersion extends (
     })
     return this.constructor.render({ appOS, minOS })
   }
-}
+};

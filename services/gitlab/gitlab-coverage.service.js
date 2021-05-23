@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound } = require('..')
+import Joi from 'joi';
+import {coveragePercentage} from '../color-formatters.js';
+import {optionalUrl} from '../validators.js';
+import {BaseSvgScrapingService, NotFound} from '..';
 
 const schema = Joi.object({
   message: Joi.string()
@@ -38,7 +36,7 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 </p>
 `
 
-module.exports = class GitlabCoverage extends BaseSvgScrapingService {
+export default class GitlabCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
 
   static route = {
@@ -138,4 +136,4 @@ module.exports = class GitlabCoverage extends BaseSvgScrapingService {
       coverage: this.constructor.transform({ coverage }),
     })
   }
-}
+};

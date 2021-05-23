@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, InvalidResponse } = require('..')
+import Joi from 'joi';
+import {BaseJsonService, InvalidResponse} from '..';
 
 const sessionSchema = Joi.object({
   session: Joi.string().required(),
@@ -85,4 +83,4 @@ class BaseOreService extends BaseJsonService {
 
 BaseOreService.sessionToken = null
 
-module.exports = { keywords, documentation, BaseOreService }
+export default { keywords, documentation, BaseOreService };

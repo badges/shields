@@ -1,14 +1,7 @@
-'use strict'
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
-const {
-  documentation,
-  presetRegex,
-  getColor,
-  getMessage,
-  getSchema,
-} = require('./w3c-validation-helper')
+import Joi from 'joi';
+import {optionalUrl} from '../validators.js';
+import {BaseJsonService, NotFound} from '..';
+import {documentation, presetRegex, getColor, getMessage, getSchema} from './w3c-validation-helper.js';
 
 const schema = Joi.object({
   url: Joi.string().optional(),
@@ -30,7 +23,7 @@ const queryParamSchema = Joi.object({
   preset: Joi.string().regex(presetRegex).allow(''),
 }).required()
 
-module.exports = class W3cValidation extends BaseJsonService {
+export default class W3cValidation extends BaseJsonService {
   static category = 'analysis'
 
   static route = {
@@ -123,4 +116,4 @@ module.exports = class W3cValidation extends BaseJsonService {
       messageTypes: this.transform(url, messages),
     })
   }
-}
+};

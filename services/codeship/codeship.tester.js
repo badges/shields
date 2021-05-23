@@ -1,7 +1,7 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isBuildStatus} from '../build-status.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('codeship (valid, no branch)')
   .get('/d6c1ddd0-16a3-0132-5f85-2e35c05e22b1.json')

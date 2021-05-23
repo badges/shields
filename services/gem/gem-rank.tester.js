@@ -1,7 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
 
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
 const isOrdinalNumberDaily = Joi.string().regex(

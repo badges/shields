@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 const label = 'hsts preloaded'
 
 t.create('gets the hsts status of github').get('/github.com.json').expectBadge({

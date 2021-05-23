@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   count: nonNegativeInteger.required(),
 }).required()
 
-module.exports = class SourceforgeOpenTickets extends BaseJsonService {
+export default class SourceforgeOpenTickets extends BaseJsonService {
   static category = 'other'
 
   static route = {
@@ -55,4 +53,4 @@ module.exports = class SourceforgeOpenTickets extends BaseJsonService {
     const { count } = await this.fetch({ type, project })
     return this.constructor.render({ count })
   }
-}
+};

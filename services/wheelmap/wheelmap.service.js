@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   node: Joi.object({
@@ -9,7 +7,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class Wheelmap extends BaseJsonService {
+export default class Wheelmap extends BaseJsonService {
   static category = 'other'
 
   static route = {
@@ -66,4 +64,4 @@ module.exports = class Wheelmap extends BaseJsonService {
     const accessibility = json.node.wheelchair
     return this.constructor.render({ accessibility })
   }
-}
+};

@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'version',
     route: {
@@ -18,4 +16,4 @@ module.exports = [
     }),
     dateAdded: new Date('2019-07-26'),
   }),
-]
+];

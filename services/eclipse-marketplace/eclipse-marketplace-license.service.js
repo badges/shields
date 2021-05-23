@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
+import Joi from 'joi';
+import EclipseMarketplaceBase from './eclipse-marketplace-base.js';
 
 const licenseResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -11,7 +9,7 @@ const licenseResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceLicense extends (
+export default class EclipseMarketplaceLicense extends (
   EclipseMarketplaceBase
 ) {
   static category = 'license'
@@ -46,4 +44,4 @@ module.exports = class EclipseMarketplaceLicense extends (
     const license = marketplace.node.license
     return this.constructor.render({ license })
   }
-}
+};

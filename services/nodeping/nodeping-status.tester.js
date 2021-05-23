@@ -1,7 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('NodePing status')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')

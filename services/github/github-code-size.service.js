@@ -1,10 +1,8 @@
-'use strict'
+import prettyBytes from 'pretty-bytes';
+import {BaseGithubLanguage} from './github-languages-base.js';
+import {documentation} from './github-helpers.js';
 
-const prettyBytes = require('pretty-bytes')
-const { BaseGithubLanguage } = require('./github-languages-base')
-const { documentation } = require('./github-helpers')
-
-module.exports = class GithubCodeSize extends BaseGithubLanguage {
+export default class GithubCodeSize extends BaseGithubLanguage {
   static category = 'size'
   static route = {
     base: 'github/languages/code-size',
@@ -36,4 +34,4 @@ module.exports = class GithubCodeSize extends BaseGithubLanguage {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ size: this.getTotalSize(data) })
   }
-}
+};

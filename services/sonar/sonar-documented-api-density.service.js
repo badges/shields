@@ -1,17 +1,9 @@
-'use strict'
-
-const SonarBase = require('./sonar-base')
-const {
-  queryParamSchema,
-  getLabel,
-  positiveMetricColorScale,
-  keywords,
-  documentation,
-} = require('./sonar-helpers')
+import SonarBase from './sonar-base.js';
+import {queryParamSchema, getLabel, positiveMetricColorScale, keywords, documentation} from './sonar-helpers.js';
 
 const metric = 'public_documented_api_density'
 
-module.exports = class SonarDocumentedApiDensity extends SonarBase {
+export default class SonarDocumentedApiDensity extends SonarBase {
   static category = 'analysis'
 
   static route = {
@@ -55,4 +47,4 @@ module.exports = class SonarDocumentedApiDensity extends SonarBase {
     const metrics = this.transform({ json, sonarVersion })
     return this.constructor.render({ density: metrics[metric] })
   }
-}
+};

@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'CoverallsGitHubRedirect',
-  title: 'Coveralls GitHub Redirector',
-  pathPrefix: '/coveralls',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Coveralls VCS type missing')
   .get('/lemurheavy/coveralls-ruby.svg')

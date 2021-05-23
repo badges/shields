@@ -1,9 +1,7 @@
-'use strict'
-
-const BaseJsonService = require('../base-json')
+import BaseJsonService from '../base-json.js';
 
 class BadBaseService {}
 class GoodService extends BaseJsonService {}
 class BadService extends BadBaseService {}
 
-module.exports = [GoodService, BadService]
+export default [GoodService, BadService];

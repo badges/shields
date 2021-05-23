@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isPercentage } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isPercentage} from '../test-validators.js';
 
 t.create('NodePing uptime')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')

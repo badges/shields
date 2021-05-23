@@ -1,13 +1,9 @@
-'use strict'
+import {isMetric} from '../test-validators.js';
+import {ServiceTester} from '../tester.js';
 
-const { isMetric } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'GithubSponsors',
-  title: 'Github Sponsors',
-  pathPrefix: '/github',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Sponsors').get('/sponsors/Homebrew.json').expectBadge({
   label: 'sponsors',

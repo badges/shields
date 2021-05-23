@@ -1,11 +1,10 @@
-'use strict'
 /**
  * @module
  */
 
-const caller = require('caller')
-const BaseService = require('../base-service/base')
-const ServiceTester = require('./service-tester')
+import caller from 'caller';
+import BaseService from '../base-service/base.js';
+import ServiceTester from './service-tester.js';
 
 /**
  * Automatically create a ServiceTester.
@@ -30,4 +29,4 @@ function createServiceTester() {
   return ServiceTester.forServiceClass(ServiceClass)
 }
 
-module.exports = createServiceTester
+export default createServiceTester;

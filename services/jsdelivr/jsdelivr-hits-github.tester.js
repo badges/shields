@@ -1,11 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  isMetricOverTimePeriod,
-  isZeroOverTimePeriod,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isMetricOverTimePeriod, isZeroOverTimePeriod} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 const isDownloadsOverTimePeriod = Joi.alternatives().try(
   isMetricOverTimePeriod,

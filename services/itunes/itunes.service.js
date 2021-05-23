@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, NotFound} from '..';
 
 const schema = Joi.object({
   resultCount: nonNegativeInteger,
@@ -12,7 +10,7 @@ const schema = Joi.object({
     .min(0),
 }).required()
 
-module.exports = class Itunes extends BaseJsonService {
+export default class Itunes extends BaseJsonService {
   static category = 'version'
 
   static route = {
@@ -49,4 +47,4 @@ module.exports = class Itunes extends BaseJsonService {
 
     return renderVersionBadge({ version: data.results[0].version })
   }
-}
+};

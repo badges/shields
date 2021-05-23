@@ -1,10 +1,5 @@
-'use strict'
-
-const {
-  testResultQueryParamSchema,
-  renderTestResultBadge,
-} = require('../test-results')
-const AppVeyorBase = require('./appveyor-base')
+import {testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
+import AppVeyorBase from './appveyor-base.js';
 
 const documentation = `
 <p>
@@ -36,7 +31,7 @@ const commonPreviewProps = {
   isCompact: false,
 }
 
-module.exports = class AppVeyorTests extends AppVeyorBase {
+export default class AppVeyorTests extends AppVeyorBase {
   static route = {
     ...this.buildRoute('appveyor/tests'),
     queryParamSchema: testResultQueryParamSchema,
@@ -163,4 +158,4 @@ module.exports = class AppVeyorTests extends AppVeyorBase {
       isCompact,
     })
   }
-}
+};

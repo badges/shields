@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // The SymfonyInsight service was previously branded as SensioLabs, and
   // accordingly the badge path used to be /sensiolabs/i/projectUuid'.
   redirector({
@@ -14,4 +12,4 @@ module.exports = [
     transformPath: ({ projectUuid }) => `/symfony/i/grade/${projectUuid}`,
     dateAdded: new Date('2019-02-08'),
   }),
-]
+];

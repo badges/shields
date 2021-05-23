@@ -1,11 +1,7 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'CocoapodsApps',
-  title: 'CocoapodsApps',
-  pathPrefix: '/cocoapods',
-}))
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('apps (valid, weekly)')
   .get('/aw/AFNetworking.json')

@@ -1,6 +1,4 @@
-'use strict'
-
-const { redirector } = require('..')
+import {redirector} from '..';
 
 const vcsSNameShortFormMap = {
   bb: 'bitbucket',
@@ -8,7 +6,7 @@ const vcsSNameShortFormMap = {
   gl: 'gitlab',
 }
 
-module.exports = [
+export default [
   redirector({
     category: 'coverage',
     route: {
@@ -23,4 +21,4 @@ module.exports = [
     transformQueryParams: ({ token }) => ({ token }),
     dateAdded: new Date('2019-03-04'),
   }),
-]
+];

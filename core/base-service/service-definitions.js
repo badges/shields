@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi';
 
 // This should be kept in sync with the schema in
 // `frontend/lib/service-definitions/index.ts`.
@@ -72,9 +70,9 @@ function assertValidServiceDefinitionExport(examples, message = undefined) {
   Joi.assert(examples, serviceDefinitionExport, message)
 }
 
-module.exports = {
+export default {
   serviceDefinition,
   assertValidServiceDefinition,
   serviceDefinitionExport,
   assertValidServiceDefinitionExport,
-}
+};

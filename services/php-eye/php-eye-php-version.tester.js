@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'php-eye',
-  title: 'php-eye',
-  pathPrefix: '/php-eye',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('no longer available (previously default branch)')
   .get('/symfony/symfony.json')

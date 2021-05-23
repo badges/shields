@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {coveragePercentage} from '../color-formatters.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   covered_percent: Joi.number().min(0).max(100).required(),
 }).required()
 
-module.exports = class Coveralls extends BaseJsonService {
+export default class Coveralls extends BaseJsonService {
   static category = 'coverage'
   static route = {
     base: 'coveralls',
@@ -75,4 +73,4 @@ module.exports = class Coveralls extends BaseJsonService {
     const json = await this.fetch({ vcsType, user, repo, branch })
     return this.constructor.render({ coverage: json.covered_percent })
   }
-}
+};

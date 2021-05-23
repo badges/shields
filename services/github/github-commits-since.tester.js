@@ -1,7 +1,7 @@
-'use strict'
-
-const { withRegex, isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {withRegex, isMetric} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 const isCommitsSince = withRegex(/^(commits since){1}[\s\S]+$/)
 

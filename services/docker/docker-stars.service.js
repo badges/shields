@@ -1,15 +1,9 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseService} from '..';
+import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
 
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseService } = require('..')
-const {
-  dockerBlue,
-  buildDockerUrl,
-  getDockerHubUser,
-} = require('./docker-helpers')
-
-module.exports = class DockerStars extends BaseService {
+export default class DockerStars extends BaseService {
   static category = 'rating'
   static route = buildDockerUrl('stars')
   static examples = [
@@ -47,4 +41,4 @@ module.exports = class DockerStars extends BaseService {
     const stars = await this.fetch({ user, repo })
     return this.constructor.render({ stars })
   }
-}
+};

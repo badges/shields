@@ -1,8 +1,8 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isIntegerPercentage } = require('../test-validators')
-const { sprintId, sprintQueryString } = require('./jira-test-helpers')
+const t = (function() {
+  export default __a;
+}())
+import {isIntegerPercentage} from '../test-validators.js';
+import {sprintId, sprintQueryString} from './jira-test-helpers.js';
 
 t.create('unknown sprint')
   .get('/abc.json?baseUrl=https://jira.spring.io')

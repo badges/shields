@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService, NotFound } = require('..')
+import Joi from 'joi';
+import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
+import {BaseSvgScrapingService, NotFound} from '..';
 
 const keywords = ['documentation']
 
@@ -12,7 +10,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class ReadTheDocs extends BaseSvgScrapingService {
+export default class ReadTheDocs extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
@@ -60,4 +58,4 @@ module.exports = class ReadTheDocs extends BaseSvgScrapingService {
     }
     return this.constructor.render({ status })
   }
-}
+};

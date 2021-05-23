@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   version: Joi.string().required(),
 }).required()
 
-module.exports = class HomebrewCask extends BaseJsonService {
+export default class HomebrewCask extends BaseJsonService {
   static category = 'version'
   static route = { base: 'homebrew/cask/v', pattern: ':cask' }
 
@@ -33,4 +31,4 @@ module.exports = class HomebrewCask extends BaseJsonService {
     const data = await this.fetch({ cask })
     return renderVersionBadge({ version: data.version })
   }
-}
+};

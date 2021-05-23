@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'dependencies',
   route: {
     base: 'dotnetstatus',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   },
   label: 'dotnet status',
   dateAdded: new Date('2018-04-01'),
-})
+});

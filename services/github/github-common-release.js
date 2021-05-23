@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { latest } = require('../version')
-const { NotFound } = require('..')
-const { errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {latest} from '../version.js';
+import {NotFound} from '..';
+import {errorMessagesFor} from './github-helpers.js';
 
 const releaseInfoSchema = Joi.object({
   assets: Joi.array()
@@ -96,8 +94,8 @@ async function fetchLatestRelease(
   return latestRelease
 }
 
-module.exports = {
+export default {
   fetchLatestRelease,
   queryParamSchema,
   _getLatestRelease: getLatestRelease, // currently only used for tests
-}
+};

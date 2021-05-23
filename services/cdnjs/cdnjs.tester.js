@@ -1,7 +1,7 @@
-'use strict'
-
-const { isVPlusTripleDottedVersion } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusTripleDottedVersion} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('cdnjs (valid)').get('/jquery.json').expectBadge({
   label: 'cdnjs',

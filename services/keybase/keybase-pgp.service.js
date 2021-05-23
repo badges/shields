@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const KeybaseProfile = require('./keybase-profile')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import KeybaseProfile from './keybase-profile.js';
 
 const keyFingerprintSchema = Joi.object({
   status: Joi.object({
@@ -24,7 +22,7 @@ const keyFingerprintSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybasePGP extends KeybaseProfile {
+export default class KeybasePGP extends KeybaseProfile {
   static route = {
     base: 'keybase/pgp',
     pattern: ':username',
@@ -76,4 +74,4 @@ module.exports = class KeybasePGP extends KeybaseProfile {
 
     return this.constructor.render({ fingerprint: primaryKey.key_fingerprint })
   }
-}
+};

@@ -1,6 +1,7 @@
-'use strict'
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
 
 const isErrorOnly = Joi.string().regex(/^[0-9]+ errors?$/)
 

@@ -1,12 +1,7 @@
-'use strict'
-
-const {
-  isDefaultTestTotals,
-  isDefaultCompactTestTotals,
-  isCustomTestTotals,
-  isCustomCompactTestTotals,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 // The below page includes links to various publicly accessible Jenkins instances
 // although many of the links are dead, it is is still a helpful resource for finding

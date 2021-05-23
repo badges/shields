@@ -1,22 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const chai = require('chai')
+import Joi from 'joi';
+import chai from 'chai';
 const { expect } = chai
-const sinon = require('sinon')
-const prometheus = require('prom-client')
-const PrometheusMetrics = require('../server/prometheus-metrics')
-const trace = require('./trace')
-const {
-  NotFound,
-  Inaccessible,
-  InvalidResponse,
-  InvalidParameter,
-  Deprecated,
-} = require('./errors')
-const BaseService = require('./base')
-const { MetricHelper, MetricNames } = require('./metric-helper')
-require('../register-chai-plugins.spec')
+import sinon from 'sinon';
+import prometheus from 'prom-client';
+import PrometheusMetrics from '../server/prometheus-metrics.js';
+import trace from './trace.js';
+import {NotFound, Inaccessible, InvalidResponse, InvalidParameter, Deprecated} from './errors.js';
+import BaseService from './base.js';
+import {MetricHelper, MetricNames} from './metric-helper.js';
+import('../register-chai-plugins.spec');
 chai.use(require('chai-as-promised'))
 
 const queryParamSchema = Joi.object({
@@ -105,7 +97,7 @@ describe('BaseService', function () {
     it('Should throw if route is not overridden', function () {
       return expect(BaseService.invoke({}, {}, {})).to.be.rejectedWith(
         /^Route not defined for BaseService$/
-      )
+      );
     })
 
     class WithRoute extends BaseService {
@@ -114,7 +106,7 @@ describe('BaseService', function () {
     it('Should throw if handle() is not overridden', function () {
       return expect(WithRoute.invoke({}, {}, {})).to.be.rejectedWith(
         /^Handler not implemented for WithRoute$/
-      )
+      );
     })
 
     it('Should throw if category is not overridden', function () {

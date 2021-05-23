@@ -1,7 +1,7 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isBuildStatus} from '../build-status.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Job CI status')
   .timeout(10000)

@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'CoverityOnDemand',
-  title: 'Coverity On Demand',
-  pathPrefix: '/coverity/ondemand',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('no longer available (streams)')
   .get('/streams/44b25sjc9l3ntc2ngfi29tngro.json')

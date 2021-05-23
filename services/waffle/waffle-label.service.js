@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   route: {
     base: 'waffle/label',
     pattern: ':various*',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   label: 'waffle',
   category: 'issue-tracking',
   dateAdded: new Date('2019-05-21'),
-})
+});

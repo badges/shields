@@ -1,7 +1,5 @@
-'use strict'
-
-const { formatRelativeDate } = require('../text-formatters')
-const { BaseService } = require('..')
+import {formatRelativeDate} from '../text-formatters.js';
+import {BaseService} from '..';
 
 const documentation = `
 <p>
@@ -9,7 +7,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class Date extends BaseService {
+export default class Date extends BaseService {
   static category = 'other'
   static route = { base: 'date', pattern: ':timestamp([0-9]+)' }
 
@@ -38,4 +36,4 @@ module.exports = class Date extends BaseService {
       relativeDateString: formatRelativeDate(timestamp),
     })
   }
-}
+};

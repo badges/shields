@@ -1,16 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isVPlusDottedVersionNClausesWithOptionalSuffix, isMetric, isFormattedDate} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-  isMetric,
-} = require('../test-validators')
-const { isFormattedDate } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'aur',
-  title: 'Arch Linux AUR',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 // version tests
 

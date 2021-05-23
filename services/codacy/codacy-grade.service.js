@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseSvgScrapingService } = require('..')
-const { codacyGrade } = require('./codacy-helpers')
+import Joi from 'joi';
+import {BaseSvgScrapingService} from '..';
+import {codacyGrade} from './codacy-helpers.js';
 
 const schema = Joi.object({ message: codacyGrade }).required()
 
-module.exports = class CodacyGrade extends BaseSvgScrapingService {
+export default class CodacyGrade extends BaseSvgScrapingService {
   static category = 'analysis'
   static route = { base: 'codacy/grade', pattern: ':projectId/:branch*' }
 
@@ -58,4 +56,4 @@ module.exports = class CodacyGrade extends BaseSvgScrapingService {
     })
     return this.constructor.render({ grade })
   }
-}
+};

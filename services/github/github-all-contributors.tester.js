@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isMetric } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isMetric} from '../test-validators.js';
 
 t.create('all-contributors repo')
   .get('/all-contributors/all-contributors.json')

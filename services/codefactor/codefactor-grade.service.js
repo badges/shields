@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseSvgScrapingService } = require('..')
-const { isValidGrade, gradeColor } = require('./codefactor-helpers')
+import Joi from 'joi';
+import {BaseSvgScrapingService} from '..';
+import {isValidGrade, gradeColor} from './codefactor-helpers.js';
 
 const schema = Joi.object({
   message: isValidGrade,
 }).required()
 
-module.exports = class CodeFactorGrade extends BaseSvgScrapingService {
+export default class CodeFactorGrade extends BaseSvgScrapingService {
   static category = 'analysis'
   static route = {
     base: 'codefactor/grade',
@@ -47,4 +45,4 @@ module.exports = class CodeFactorGrade extends BaseSvgScrapingService {
     })
     return this.constructor.render({ grade: message })
   }
-}
+};

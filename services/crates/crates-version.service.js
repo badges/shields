@@ -1,10 +1,8 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import {InvalidResponse} from '..';
+import {BaseCratesService, keywords} from './crates-base.js';
 
-const { renderVersionBadge } = require('../version')
-const { InvalidResponse } = require('..')
-const { BaseCratesService, keywords } = require('./crates-base')
-
-module.exports = class CratesVersion extends BaseCratesService {
+export default class CratesVersion extends BaseCratesService {
   static category = 'version'
   static route = { base: 'crates/v', pattern: ':crate' }
 
@@ -29,4 +27,4 @@ module.exports = class CratesVersion extends BaseCratesService {
     const { version } = this.transform(json)
     return renderVersionBadge({ version })
   }
-}
+};

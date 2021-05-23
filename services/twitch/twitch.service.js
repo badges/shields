@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const TwitchBase = require('./twitch-base')
+import Joi from 'joi';
+import TwitchBase from './twitch-base.js';
 
 const helixSchema = Joi.object({
   data: Joi.array().required(),
 })
 
-module.exports = class TwitchStatus extends TwitchBase {
+export default class TwitchStatus extends TwitchBase {
   static category = 'social'
 
   static route = {
@@ -66,4 +64,4 @@ module.exports = class TwitchStatus extends TwitchBase {
     const data = await this.fetch({ user })
     return this.constructor.render({ user, isLive: data.data.length > 0 })
   }
-}
+};

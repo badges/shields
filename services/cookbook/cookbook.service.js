@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({ version: Joi.string().required() }).required()
 
-module.exports = class Cookbook extends BaseJsonService {
+export default class Cookbook extends BaseJsonService {
   static category = 'version'
   static route = { base: 'cookbook/v', pattern: ':cookbook' }
 
@@ -29,4 +27,4 @@ module.exports = class Cookbook extends BaseJsonService {
     const { version } = await this.fetch({ cookbook })
     return renderVersionBadge({ version })
   }
-}
+};

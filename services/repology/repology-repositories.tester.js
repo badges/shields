@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { nonNegativeInteger } = require('../validators')
+const t = (function() {
+  export default __a;
+}())
+import {nonNegativeInteger} from '../validators.js';
 
 t.create('Existing project').get('/starship.json').expectBadge({
   label: 'repositories',

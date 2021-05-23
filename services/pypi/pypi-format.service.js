@@ -1,9 +1,7 @@
-'use strict'
+import PypiBase from './pypi-base.js';
+import {getPackageFormats} from './pypi-helpers.js';
 
-const PypiBase = require('./pypi-base')
-const { getPackageFormats } = require('./pypi-helpers')
-
-module.exports = class PypiFormat extends PypiBase {
+export default class PypiFormat extends PypiBase {
   static category = 'other'
 
   static route = this.buildRoute('pypi/format')
@@ -44,4 +42,4 @@ module.exports = class PypiFormat extends PypiBase {
     const { hasWheel, hasEgg } = getPackageFormats(packageData)
     return this.constructor.render({ hasWheel, hasEgg })
   }
-}
+};

@@ -1,7 +1,7 @@
-'use strict'
-
-const { isVPlusDottedVersionNClauses } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionNClauses} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Flathub (valid)').get('/org.mozilla.firefox.json').expectBadge({
   label: 'flathub',

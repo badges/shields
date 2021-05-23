@@ -1,5 +1,3 @@
-'use strict'
-
 const sizeDataNoTagSemVerSort = [
   { name: 'master', full_size: 13449470 },
   { name: 'feature-smtps-support', full_size: 13449638 },
@@ -3035,11 +3033,11 @@ const versionDataWithVaryingArchitectures = [
   { name: '2.6', images: [] },
 ]
 
-module.exports = {
+export default {
   sizeDataNoTagSemVerSort,
   versionDataNoTagDateSort,
   versionPagedDataNoTagDateSort,
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
-}
+};

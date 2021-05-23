@@ -1,12 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const {
-  renderVersionBadge,
-  odataToObject,
-  stripBuildMetadata,
-  selectVersion,
-} = require('./nuget-helpers')
+import {test, given} from 'sazerac';
+import {renderVersionBadge, odataToObject, stripBuildMetadata, selectVersion} from './nuget-helpers.js';
 
 describe('NuGet helpers', function () {
   test(renderVersionBadge, () => {

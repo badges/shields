@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = [
+export default [
   { id: 'build', name: 'Build', keywords: ['build'] },
   { id: 'coverage', name: 'Code Coverage', keywords: ['coverage'] },
   { id: 'analysis', name: 'Analysis', keywords: ['analysis'] },
@@ -22,4 +20,4 @@ module.exports = [
   { id: 'monitoring', name: 'Monitoring', keywords: ['monitoring'] },
   { id: 'activity', name: 'Activity', keywords: ['activity'] },
   { id: 'other', name: 'Other', keywords: [] },
-]
+];

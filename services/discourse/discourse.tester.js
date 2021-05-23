@@ -1,12 +1,9 @@
-'use strict'
+import Joi from 'joi';
+import {ServiceTester} from '../tester.js';
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'discourse',
-  title: 'Discourse',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 const data = {
   topic_count: 22513,

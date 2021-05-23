@@ -3,13 +3,11 @@
  * using the algorithm followed by Composer (see
  * https://getcomposer.org/doc/04-schema.md#version).
  */
-'use strict'
-
-const { promisify } = require('util')
-const request = require('request')
-const { regularUpdate } = require('../core/legacy/regular-update')
-const { listCompare } = require('./version')
-const { omitv } = require('./text-formatters')
+import {promisify} from 'util';
+import request from 'request';
+import {regularUpdate} from '../core/legacy/regular-update.js';
+import {listCompare} from './version.js';
+import {omitv} from './text-formatters.js';
 
 // Return a negative value if v1 < v2,
 // zero if v1 = v2, a positive value otherwise.
@@ -237,14 +235,14 @@ async function getPhpReleases(githubApiProvider) {
       ),
     request: (url, options, cb) =>
       githubApiProvider.request(request, url, {}, cb),
-  })
+  });
 }
 
-module.exports = {
+export default {
   compare,
   latest,
   isStable,
   minorVersion,
   versionReduction,
   getPhpReleases,
-}
+};

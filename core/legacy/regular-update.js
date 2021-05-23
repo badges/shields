@@ -1,6 +1,4 @@
-'use strict'
-
-const { Inaccessible, InvalidResponse } = require('../base-service/errors')
+import {Inaccessible, InvalidResponse} from '../base-service/errors.js';
 
 // Map from URL to { timestamp: last fetch time, data: data }.
 let regularUpdateCache = Object.create(null)
@@ -95,7 +93,7 @@ function clearRegularUpdateCache() {
   regularUpdateCache = Object.create(null)
 }
 
-module.exports = {
+export default {
   regularUpdate,
   clearRegularUpdateCache,
-}
+};

@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const messageRegex = /passed|passed .* new defects|pending|failed/
 const schema = Joi.object({
   message: Joi.string().regex(messageRegex).required(),
 }).required()
 
-module.exports = class CoverityScan extends BaseJsonService {
+export default class CoverityScan extends BaseJsonService {
   static category = 'analysis'
   static route = { base: 'coverity/scan', pattern: ':projectId' }
 
@@ -66,4 +64,4 @@ module.exports = class CoverityScan extends BaseJsonService {
     })
     return this.constructor.render({ message: json.message })
   }
-}
+};

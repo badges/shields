@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // http://github.com/badges/shields/issues/1387
   // https://github.com/badges/shields/pull/3320#issuecomment-483795000
   redirector({
@@ -36,4 +34,4 @@ module.exports = [
     transformPath: ({ user, repo }) => `/codeclimate/coverage/${user}/${repo}`,
     dateAdded: new Date('2019-04-15'),
   }),
-]
+];

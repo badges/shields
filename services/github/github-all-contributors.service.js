@@ -1,16 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderContributorBadge } = require('../contributor-count')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation } = require('./github-helpers')
+import Joi from 'joi';
+import {renderContributorBadge} from '../contributor-count.js';
+import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
+import {fetchJsonFromRepo} from './github-common-fetch.js';
+import {documentation} from './github-helpers.js';
 
 const schema = Joi.object({
   contributors: Joi.array().required(),
 }).required()
 
-module.exports = class GithubAllContributorsService extends (
+export default class GithubAllContributorsService extends (
   ConditionalGithubAuthV3Service
 ) {
   static category = 'activity'
@@ -50,4 +48,4 @@ module.exports = class GithubAllContributorsService extends (
     const contributorCount = contributors.length
     return this.constructor.render({ contributorCount })
   }
-}
+};

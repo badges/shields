@@ -1,9 +1,7 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import {BaseService, InvalidResponse} from '..';
 
-const { renderVersionBadge } = require('../version')
-const { BaseService, InvalidResponse } = require('..')
-
-module.exports = class HackageVersion extends BaseService {
+export default class HackageVersion extends BaseService {
   static category = 'version'
 
   static route = {
@@ -30,7 +28,7 @@ module.exports = class HackageVersion extends BaseService {
   static transform(data) {
     const lines = data.split('\n')
     const versionLines = lines.filter(e => /^version:/i.test(e) === true)
-    return versionLines[0].split(/:/)[1].trim()
+    return versionLines[0].split(/:/)[1].trim();
   }
 
   async handle({ packageName }) {
@@ -42,4 +40,4 @@ module.exports = class HackageVersion extends BaseService {
       throw new InvalidResponse({ prettyMessage: 'invalid response data' })
     }
   }
-}
+};

@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = redirector({
+export default redirector({
   category: 'version',
   route: {
     base: 'maven-metadata/v',
@@ -13,4 +11,4 @@ module.exports = redirector({
     metadataUrl: `${protocol}://${hostAndPath}`,
   }),
   dateAdded: new Date('2019-09-16'),
-})
+});

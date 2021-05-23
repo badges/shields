@@ -1,16 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isMetric, isVPlusDottedVersionNClauses, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const {
-  isMetric,
-  isVPlusDottedVersionNClauses,
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'resharper',
-  title: 'ReSharper',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 // downloads
 

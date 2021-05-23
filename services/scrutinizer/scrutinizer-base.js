@@ -1,8 +1,6 @@
-'use strict'
+import {BaseJsonService, NotFound, InvalidResponse} from '..';
 
-const { BaseJsonService, NotFound, InvalidResponse } = require('..')
-
-module.exports = class ScrutinizerBase extends BaseJsonService {
+export default class ScrutinizerBase extends BaseJsonService {
   // https://scrutinizer-ci.com/docs/api/#repository-details
   async fetch({ schema, vcs, slug }) {
     return this._requestJson({
@@ -44,4 +42,4 @@ module.exports = class ScrutinizerBase extends BaseJsonService {
 
     return { value: metricValues[metric] }
   }
-}
+};

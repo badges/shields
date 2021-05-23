@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = [
+export default [
   deprecatedService({
     category: 'downloads',
     route: {
@@ -21,4 +19,4 @@ module.exports = [
     label: 'bintray',
     dateAdded: new Date('2021-04-24'),
   }),
-]
+];

@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale, coveragePercentage } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {colorScale, coveragePercentage} from '../color-formatters.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   badge_level: Joi.string().required(),
@@ -30,7 +28,7 @@ const summaryColorScale = colorScale(
   ]
 )
 
-module.exports = class CIIBestPracticesService extends BaseJsonService {
+export default class CIIBestPracticesService extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'cii',
@@ -130,4 +128,4 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
       return this.constructor.renderSummaryBadge({ percentage })
     }
   }
-}
+};

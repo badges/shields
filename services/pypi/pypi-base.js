@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   info: Joi.object({
@@ -24,7 +22,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class PypiBase extends BaseJsonService {
+export default class PypiBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
@@ -39,4 +37,4 @@ module.exports = class PypiBase extends BaseJsonService {
       errorMessages: { 404: 'package or version not found' },
     })
   }
-}
+};

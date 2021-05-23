@@ -1,10 +1,8 @@
-'use strict'
+import {currencyFromCode} from '../text-formatters.js';
+import {NotFound} from '..';
+import BaseChromeWebStoreService from './chrome-web-store-base.js';
 
-const { currencyFromCode } = require('../text-formatters')
-const { NotFound } = require('..')
-const BaseChromeWebStoreService = require('./chrome-web-store-base')
-
-module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
+export default class ChromeWebStorePrice extends BaseChromeWebStoreService {
   static category = 'funding'
   static route = { base: 'chrome-web-store/price', pattern: ':storeId' }
 
@@ -34,4 +32,4 @@ module.exports = class ChromeWebStorePrice extends BaseChromeWebStoreService {
     }
     return this.constructor.render({ priceCurrency, price })
   }
-}
+};

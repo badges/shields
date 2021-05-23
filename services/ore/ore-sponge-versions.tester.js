@@ -1,5 +1,3 @@
-'use strict'
-
 const Joi = require('joi').extend(joi => ({
   base: joi.array(),
   coerce: (value, helpers) => ({
@@ -8,7 +6,9 @@ const Joi = require('joi').extend(joi => ({
   type: 'versionArray',
 }))
 const isDottedVersionAtLeastOne = Joi.string().regex(/\d+(\.\d+)?(\.\d+)?$/)
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Nucleus (pluginId nucleus)')
   .get('/nucleus.json')

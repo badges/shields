@@ -1,8 +1,8 @@
-'use strict'
-
-const { isPercentage } = require('../test-validators')
-const { invalidJSON } = require('../response-fixtures')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isPercentage} from '../test-validators.js';
+import {invalidJSON} from '../response-fixtures.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Uptime Robot: Percentage (valid)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')

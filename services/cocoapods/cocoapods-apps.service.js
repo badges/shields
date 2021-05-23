@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   name: 'CocoapodsApps',
   category: 'other',
   route: {
@@ -11,4 +9,4 @@ module.exports = deprecatedService({
   },
   label: 'apps',
   dateAdded: new Date('2018-01-06'),
-})
+});

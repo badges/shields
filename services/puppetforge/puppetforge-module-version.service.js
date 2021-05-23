@@ -1,9 +1,7 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import {BasePuppetForgeModulesService} from './puppetforge-base.js';
 
-const { renderVersionBadge } = require('../version')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
-
-module.exports = class PuppetforgeModuleVersion extends (
+export default class PuppetforgeModuleVersion extends (
   BasePuppetForgeModulesService
 ) {
   static category = 'version'
@@ -30,4 +28,4 @@ module.exports = class PuppetforgeModuleVersion extends (
     const data = await this.fetch({ user, moduleName })
     return renderVersionBadge({ version: data.current_release.version })
   }
-}
+};

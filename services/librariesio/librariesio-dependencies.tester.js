@@ -1,12 +1,8 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isDependencyState } = require('../test-validators')
-const t = (module.exports = new ServiceTester({
-  id: 'LibrariesIoDependencies',
-  title: 'LibrariesIoDependencies',
-  pathPrefix: '/librariesio',
-}))
+import {ServiceTester} from '../tester.js';
+import {isDependencyState} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('dependencies for package (project name contains dot)')
   .timeout(10000)

@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import prettyBytes from 'pretty-bytes';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -12,7 +10,7 @@ const schema = Joi.object({
 
 const keywords = ['node', 'bundlephobia']
 
-module.exports = class Bundlephobia extends BaseJsonService {
+export default class Bundlephobia extends BaseJsonService {
   static category = 'size'
 
   static route = {
@@ -97,4 +95,4 @@ module.exports = class Bundlephobia extends BaseJsonService {
     const size = format === 'min' ? json.size : json.gzip
     return this.constructor.render({ format, size })
   }
-}
+};

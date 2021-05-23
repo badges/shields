@@ -1,7 +1,7 @@
-'use strict'
-
-const { invalidJSONString } = require('../response-fixtures')
-const t = (module.exports = require('../tester').createServiceTester())
+import {invalidJSONString} from '../response-fixtures.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('commit status - commit in branch')
   .get('/badges/shields/master/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json')

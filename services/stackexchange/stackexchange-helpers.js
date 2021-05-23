@@ -1,9 +1,7 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {floorCount as floorCountColor} from '../color-formatters.js';
 
-const { metric } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-
-module.exports = function renderQuestionsBadge({
+export default function renderQuestionsBadge({
   suffix,
   stackexchangesite,
   query,
@@ -15,4 +13,4 @@ module.exports = function renderQuestionsBadge({
     message: `${metric(numValue)}${suffix}`,
     color: floorCountColor(numValue, 1000, 10000, 20000),
   }
-}
+};

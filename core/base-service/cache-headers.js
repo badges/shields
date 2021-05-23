@@ -1,8 +1,6 @@
-'use strict'
-
-const assert = require('assert')
-const Joi = require('joi')
-const coalesce = require('./coalesce')
+import assert from 'assert';
+import Joi from 'joi';
+import coalesce from './coalesce.js';
 
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
@@ -104,10 +102,10 @@ function serverHasBeenUpSinceResourceCached(req) {
   )
 }
 
-module.exports = {
+export default {
   coalesceCacheLength,
   setCacheHeaders,
   setHeadersForCacheLength,
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
-}
+};

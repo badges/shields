@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { withRegex } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {withRegex} from '../test-validators.js';
 
 const isVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 

@@ -1,10 +1,8 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {floorCount as floorCountColor} from '../color-formatters.js';
+import {BasePuppetForgeUsersService} from './puppetforge-base.js';
 
-const { metric } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { BasePuppetForgeUsersService } = require('./puppetforge-base')
-
-module.exports = class PuppetForgeModuleCountService extends (
+export default class PuppetForgeModuleCountService extends (
   BasePuppetForgeUsersService
 ) {
   static category = 'other'
@@ -37,4 +35,4 @@ module.exports = class PuppetForgeModuleCountService extends (
     const data = await this.fetch({ user })
     return this.constructor.render({ modules: data.module_count })
   }
-}
+};

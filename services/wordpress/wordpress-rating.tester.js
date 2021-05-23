@@ -1,13 +1,11 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isStarRating } = require('../test-validators')
+import {ServiceTester} from '../tester.js';
+import {isStarRating} from '../test-validators.js';
 
 const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Rating Tests',
 })
-module.exports = t
+export default t;
 
 t.create('Plugin Rating - Stars')
   .get('/plugin/stars/akismet.json')

@@ -1,11 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'vso',
-  title: 'VSO',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Build: default branch')
   .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.svg')

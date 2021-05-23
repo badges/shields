@@ -1,9 +1,7 @@
-'use strict'
-
-const merge = require('deepmerge')
+import merge from 'deepmerge';
 const config = require('config').util.toObject()
-const portfinder = require('portfinder')
-const Server = require('./server')
+import portfinder from 'portfinder';
+import Server from './server.js';
 
 async function createTestServer(customConfig = {}) {
   const mergedConfig = merge(config, customConfig)
@@ -13,6 +11,6 @@ async function createTestServer(customConfig = {}) {
   return new Server(mergedConfig)
 }
 
-module.exports = {
+export default {
   createTestServer,
-}
+};

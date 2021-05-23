@@ -1,8 +1,6 @@
-'use strict'
+import path from 'path';
 
-const path = require('path')
-
-module.exports = {
+export default {
   siteMetadata: {
     title: 'Shields.io: Quality metadata badges for open source projects',
     description:
@@ -30,4 +28,4 @@ module.exports = {
     //   },
     // },
   ],
-}
+};

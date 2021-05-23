@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale } = require('../color-formatters')
-const { optionalUrl } = require('../validators')
+import Joi from 'joi';
+import {colorScale} from '../color-formatters.js';
+import {optionalUrl} from '../validators.js';
 
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
@@ -28,7 +26,7 @@ function isLegacyVersion({ sonarVersion }) {
 }
 
 function getLabel({ metric }) {
-  return metric ? metric.replace(/_/g, ' ') : undefined
+  return metric ? metric.replace(/_/g, ' ') : undefined;
 }
 const sonarVersionSchema = Joi.alternatives(
   Joi.string()
@@ -60,7 +58,7 @@ const documentation = `
   </p
 `
 
-module.exports = {
+export default {
   getLabel,
   isLegacyVersion,
   queryParamSchema,
@@ -69,4 +67,4 @@ module.exports = {
   positiveMetricColorScale,
   keywords,
   documentation,
-}
+};

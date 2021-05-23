@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'OffsetEarthTreesRedirect',
-  title: 'Offset Earth (Trees) Redirector',
-  pathPrefix: '/offset-earth',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Offset Earth trees alias')
   .get('/trees/ecologi.svg')

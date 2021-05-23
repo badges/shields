@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { withRegex, isMetric } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {withRegex, isMetric} from '../test-validators.js';
 
 const isVersionLabel = withRegex(/^downloads@(\d+\.\d+\.\d+)(\.\d+)?$/)
 

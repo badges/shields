@@ -1,9 +1,8 @@
-'use strict'
 /**
  * @module
  */
 
-const { loadTesters } = require('../base-service/loader')
+import {loadTesters} from '../base-service/loader.js';
 
 /**
  * Load a collection of ServiceTester objects and register them with Mocha.
@@ -72,4 +71,4 @@ class Runner {
     testers.forEach(tester => tester.toss({ baseUrl, skipIntercepted, retry }))
   }
 }
-module.exports = Runner
+export default Runner;

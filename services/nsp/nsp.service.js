@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   route: {
     base: 'nsp/npm',
     pattern: ':various*',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   label: 'nsp',
   category: 'other',
   dateAdded: new Date('2018-12-13'),
-})
+});

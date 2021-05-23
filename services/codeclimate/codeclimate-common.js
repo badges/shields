@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { NotFound } = require('..')
+import Joi from 'joi';
+import {NotFound} from '..';
 
 const keywords = ['codeclimate']
 
@@ -44,8 +42,8 @@ async function fetchRepo(serviceInstance, { user, repo }) {
   return repoInfo
 }
 
-module.exports = {
+export default {
   keywords,
   isLetterGrade,
   fetchRepo,
-}
+};

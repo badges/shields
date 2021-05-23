@@ -1,13 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderBuildStatusBadge } = require('../build-status')
-const JenkinsBase = require('./jenkins-base')
-const {
-  buildTreeParamQueryString,
-  buildUrl,
-  queryParamSchema,
-} = require('./jenkins-common')
+import Joi from 'joi';
+import {renderBuildStatusBadge} from '../build-status.js';
+import JenkinsBase from './jenkins-base.js';
+import {buildTreeParamQueryString, buildUrl, queryParamSchema} from './jenkins-common.js';
 
 // https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/model/BallColor.java#L56
 const colorStatusMap = {
@@ -33,7 +27,7 @@ const schema = Joi.object({
   color: Joi.allow(...Object.keys(colorStatusMap)).required(),
 }).required()
 
-module.exports = class JenkinsBuild extends JenkinsBase {
+export default class JenkinsBuild extends JenkinsBase {
   static category = 'build'
 
   static route = {
@@ -80,4 +74,4 @@ module.exports = class JenkinsBuild extends JenkinsBase {
     const { status } = this.transform({ json })
     return this.constructor.render({ status })
   }
-}
+};

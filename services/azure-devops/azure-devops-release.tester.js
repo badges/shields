@@ -1,7 +1,7 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isBuildStatus} from '../build-status.js';
+const t = (function() {
+  export default __a;
+}())
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project
 // solely created for Shields.io testing.

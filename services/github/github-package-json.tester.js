@@ -1,15 +1,11 @@
-'use strict'
+import Joi from 'joi';
+import {ServiceTester} from '../tester.js';
+import {isSemver} from '../test-validators.js';
+import {semverRange} from '../validators.js';
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const { isSemver } = require('../test-validators')
-const { semverRange } = require('../validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'GithubPackageJson',
-  title: 'GithubPackageJson',
-  pathPrefix: '/github/package-json',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Package version').get('/v/badges/shields.json').expectBadge({
   label: 'version',

@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = function toArray(val) {
+export default function toArray(val) {
   if (val === undefined) {
     return []
   } else if (Object(val) instanceof Array) {
@@ -8,4 +6,4 @@ module.exports = function toArray(val) {
   } else {
     return [val]
   }
-}
+};

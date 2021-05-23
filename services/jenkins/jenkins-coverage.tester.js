@@ -1,7 +1,7 @@
-'use strict'
-
-const { isIntegerPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isIntegerPercentage} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 // The below page includes links to various publicly accessible Jenkins instances
 // although many of the links are dead, it is is still a helpful resource for finding

@@ -1,7 +1,7 @@
-'use strict'
-
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {withRegex} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 // Note that Spigot versions can be anything (including just a string), so we'll make sure it's not returning 'not found'
 

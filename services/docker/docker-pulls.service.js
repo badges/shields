@@ -1,20 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
-const {
-  dockerBlue,
-  buildDockerUrl,
-  getDockerHubUser,
-} = require('./docker-helpers')
+import Joi from 'joi';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
+import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
 }).required()
 
-module.exports = class DockerPulls extends BaseJsonService {
+export default class DockerPulls extends BaseJsonService {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
   static examples = [
@@ -51,4 +45,4 @@ module.exports = class DockerPulls extends BaseJsonService {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ count: data.pull_count })
   }
-}
+};

@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'build',
     route: {
@@ -28,4 +26,4 @@ module.exports = [
       `/azure-devops/release/${organization}/${projectId}/${definitionId}/${environmentId}`,
     dateAdded: new Date('2019-02-08'),
   }),
-]
+];

@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   state: Joi.string()
@@ -45,7 +43,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class MozillaObservatory extends BaseJsonService {
+export default class MozillaObservatory extends BaseJsonService {
   // TODO: Once created, change to a more appropriate category,
   // see https://github.com/badges/shields/pull/2926#issuecomment-460777017
   static category = 'monitoring'
@@ -114,4 +112,4 @@ module.exports = class MozillaObservatory extends BaseJsonService {
     const { state, grade, score } = await this.fetch({ host, publish })
     return this.constructor.render({ format, state, grade, score })
   }
-}
+};

@@ -1,11 +1,9 @@
-'use strict'
-
-const NpmBase = require('./npm-base')
+import NpmBase from './npm-base.js';
 
 // For this badge to correctly detect type definitions, either the relevant
 // dependencies must be declared, or the `types` key must be set in
 // package.json.
-module.exports = class NpmTypeDefinitions extends NpmBase {
+export default class NpmTypeDefinitions extends NpmBase {
   static category = 'platform-support'
 
   static route = this.buildRoute('npm/types', { withTag: false })
@@ -72,4 +70,4 @@ module.exports = class NpmTypeDefinitions extends NpmBase {
     const props = this.constructor.transform(json)
     return this.constructor.render(props)
   }
-}
+};

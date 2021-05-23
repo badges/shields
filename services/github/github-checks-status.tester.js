@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isBuildStatus } = require('../build-status')
+const t = (function() {
+  export default __a;
+}())
+import {isBuildStatus} from '../build-status.js';
 
 t.create('branch checks (branch)')
   .get('/badges/shields/master.json')

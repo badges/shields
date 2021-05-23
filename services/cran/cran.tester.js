@@ -1,12 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isVPlusTripleDottedVersion} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const { isVPlusTripleDottedVersion } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'cran',
-  title: 'CRAN/METACRAN',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('version (valid)').get('/v/devtools.json').expectBadge({
   label: 'cran',

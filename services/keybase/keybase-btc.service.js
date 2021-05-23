@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const KeybaseProfile = require('./keybase-profile')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import KeybaseProfile from './keybase-profile.js';
 
 const bitcoinAddressSchema = Joi.object({
   status: Joi.object({
@@ -28,7 +26,7 @@ const bitcoinAddressSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybaseBTC extends KeybaseProfile {
+export default class KeybaseBTC extends KeybaseProfile {
   static route = {
     base: 'keybase/btc',
     pattern: ':username',
@@ -83,4 +81,4 @@ module.exports = class KeybaseBTC extends KeybaseProfile {
 
     return this.constructor.render({ address: bitcoinAddresses[0].address })
   }
-}
+};

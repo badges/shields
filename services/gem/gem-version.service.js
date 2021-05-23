@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge, latest } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge, latest} from '../version.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't
@@ -23,7 +21,7 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
 }).required()
 
-module.exports = class GemVersion extends BaseJsonService {
+export default class GemVersion extends BaseJsonService {
   static category = 'version'
   static route = { base: 'gem/v', pattern: ':gem', queryParamSchema }
   static examples = [
@@ -74,4 +72,4 @@ module.exports = class GemVersion extends BaseJsonService {
       return this.constructor.render({ version })
     }
   }
-}
+};

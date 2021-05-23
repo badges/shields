@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseXmlService, NotFound } = require('..')
+import Joi from 'joi';
+import {BaseXmlService, NotFound} from '..';
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
@@ -126,8 +124,8 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 }
 
-module.exports = {
+export default {
   SymfonyInsightBase,
   keywords,
   gradeColors,
-}
+};

@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { isMetric, withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isMetric, withRegex} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 const isViolationsLongFormMetric = Joi.alternatives(
   Joi.allow(0),
   withRegex(

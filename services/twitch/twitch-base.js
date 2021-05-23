@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const tokenSchema = Joi.object({
   access_token: Joi.string().required(),
@@ -16,7 +14,7 @@ function sleep(ms) {
 }
 
 // Abstract class for Twitch badges
-module.exports = class TwitchBase extends BaseJsonService {
+export default class TwitchBase extends BaseJsonService {
   static auth = {
     userKey: 'twitch_client_id',
     passKey: 'twitch_client_secret',
@@ -114,4 +112,4 @@ module.exports = class TwitchBase extends BaseJsonService {
     // one last time
     return super._requestJson(request)
   }
-}
+};

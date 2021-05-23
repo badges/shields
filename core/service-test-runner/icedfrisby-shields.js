@@ -1,10 +1,9 @@
-'use strict'
 /**
  * @module
  */
 
-const Joi = require('joi')
-const { expect } = require('chai')
+import Joi from 'joi';
+import {expect} from 'chai';
 
 /**
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
@@ -16,7 +15,7 @@ const { expect } = require('chai')
  * @returns {Function} wrapped class
  */
 const factory = superclass =>
-  class IcedFrisbyNock extends superclass {
+  (class IcedFrisbyNock extends superclass {
     constructor(message) {
       super(message)
       this.intercepted = false
@@ -83,6 +82,6 @@ const factory = superclass =>
         )
       }
     }
-  }
+  })
 
-module.exports = factory
+export default factory;

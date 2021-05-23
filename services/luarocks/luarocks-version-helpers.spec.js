@@ -1,11 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const {
-  parseVersion,
-  compareVersionLists,
-  latestVersion,
-} = require('./luarocks-version-helpers')
+import {test, given, forCases} from 'sazerac';
+import {parseVersion, compareVersionLists, latestVersion} from './luarocks-version-helpers.js';
 
 describe('LuaRocks-specific helpers', function () {
   test(compareVersionLists, () => {

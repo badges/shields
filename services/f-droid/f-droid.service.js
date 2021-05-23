@@ -1,13 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  optionalNonNegativeInteger,
-  nonNegativeInteger,
-} = require('../validators')
-const { addv } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi';
+import {optionalNonNegativeInteger, nonNegativeInteger} from '../validators.js';
+import {addv} from '../text-formatters.js';
+import {version as versionColor} from '../color-formatters.js';
+import {BaseJsonService, NotFound} from '..';
 
 const schema = Joi.object({
   packageName: Joi.string().required(),
@@ -22,7 +17,7 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
 }).required()
 
-module.exports = class FDroid extends BaseJsonService {
+export default class FDroid extends BaseJsonService {
   static category = 'version'
   static route = { base: 'f-droid/v', pattern: ':appId', queryParamSchema }
   static examples = [
@@ -82,4 +77,4 @@ module.exports = class FDroid extends BaseJsonService {
     const { version } = this.transform({ json, suggested })
     return this.constructor.render({ version })
   }
-}
+};

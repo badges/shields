@@ -1,7 +1,5 @@
-'use strict'
-
-const { BaseXmlService, NotFound } = require('..')
-const { parseJson } = require('../../core/base-service/json')
+import {BaseXmlService, NotFound} from '..';
+import {parseJson} from '../../core/base-service/json.js';
 
 /*
 JetBrains is a bit awkward. Sometimes we want to call an XML API
@@ -10,9 +8,9 @@ When the legacy IntelliJ (XML) API is retired we can simplify all this and
 switch JetbrainsDownloads, JetbrainsRating and JetbrainsVersion to just
 inherit from BaseJsonService directly.
 */
-module.exports = class JetbrainsBase extends BaseXmlService {
+export default class JetbrainsBase extends BaseXmlService {
   static _isLegacyPluginId(pluginId) {
-    return !pluginId.match(/^([0-9])+/)
+    return !pluginId.match(/^([0-9])+/);
   }
 
   static _cleanPluginId(pluginId) {
@@ -69,4 +67,4 @@ module.exports = class JetbrainsBase extends BaseXmlService {
     const json = this._parseJson(buffer)
     return this.constructor._validateJson(json, schema)
   }
-}
+};

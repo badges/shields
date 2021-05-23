@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'NexusRedirect',
-  title: 'NexusRedirect',
-  pathPrefix: '/nexus',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Nexus release')
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.svg')

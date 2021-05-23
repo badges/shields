@@ -1,11 +1,9 @@
-'use strict'
-
-const { URL } = require('url')
+import {URL} from 'url';
 const config = require('config').util.toObject()
-const got = require('got')
-const emojic = require('emojic')
-const Server = require('../core/server/server')
-const trace = require('../core/base-service/trace')
+import got from 'got';
+import emojic from 'emojic';
+import Server from '../core/server/server.js';
+import trace from '../core/base-service/trace.js';
 
 function normalizeBadgeUrl(url) {
   // Provide a base URL in order to accept fragments.
@@ -37,7 +35,7 @@ async function main() {
   await traceBadge(normalized)
 }
 
-;(async () => {
+(async () => {
   try {
     await main()
   } catch (e) {

@@ -1,11 +1,5 @@
-'use strict'
-
-const { starRating } = require('../text-formatters')
-const {
-  SymfonyInsightBase,
-  keywords,
-  gradeColors,
-} = require('./symfony-insight-base')
+import {starRating} from '../text-formatters.js';
+import {SymfonyInsightBase, keywords, gradeColors} from './symfony-insight-base.js';
 
 const gradeStars = {
   none: 0,
@@ -15,7 +9,7 @@ const gradeStars = {
   platinum: 4,
 }
 
-module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
+export default class SymfonyInsightStars extends SymfonyInsightBase {
   static route = {
     base: 'symfony/i/stars',
     pattern: ':projectUuid',
@@ -57,4 +51,4 @@ module.exports = class SymfonyInsightStars extends SymfonyInsightBase {
     const { grade, status } = this.transform({ data })
     return this.constructor.render({ grade, status })
   }
-}
+};

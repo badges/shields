@@ -1,14 +1,12 @@
-'use strict'
-
 /*
  * Implement Gatsby's Node APIs in this file.
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-const fs = require('fs')
-const yaml = require('js-yaml')
-const envFlag = require('node-env-flag')
+import fs from 'fs';
+import yaml from 'js-yaml';
+import envFlag from 'node-env-flag';
 
 const includeDevPages = envFlag(process.env.INCLUDE_DEV_PAGES, true)
 
@@ -46,4 +44,4 @@ async function createPages({ actions: { createPage } }) {
   })
 }
 
-module.exports = { createPages }
+export default { createPages };

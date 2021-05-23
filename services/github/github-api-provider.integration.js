@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
+import {expect} from 'chai';
 const config = require('config').util.toObject()
-const GithubApiProvider = require('./github-api-provider')
+import GithubApiProvider from './github-api-provider.js';
 
 describe('Github API provider', function () {
   const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'

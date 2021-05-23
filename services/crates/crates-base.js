@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const keywords = ['Rust']
 
@@ -51,4 +49,4 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
-module.exports = { BaseCratesService, keywords }
+export default { BaseCratesService, keywords };

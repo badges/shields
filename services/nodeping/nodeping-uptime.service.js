@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {colorScale} from '../color-formatters.js';
+import {BaseJsonService} from '..';
 
 const colorFormatter = colorScale([99, 99.5, 100])
 
@@ -23,7 +21,7 @@ const sampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 // TODO: support for custom '100%' label
 // TODO: support for custom # of decimal places
 
-module.exports = class NodePingUptime extends BaseJsonService {
+export default class NodePingUptime extends BaseJsonService {
   static category = 'monitoring'
 
   static route = { base: 'nodeping/uptime', pattern: ':checkUuid' }
@@ -76,4 +74,4 @@ module.exports = class NodePingUptime extends BaseJsonService {
     const { uptime } = await this.fetch({ checkUuid })
     return this.constructor.render({ uptime })
   }
-}
+};

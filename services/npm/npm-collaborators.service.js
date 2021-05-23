@@ -1,11 +1,9 @@
-'use strict'
-
-const { renderContributorBadge } = require('../contributor-count')
-const NpmBase = require('./npm-base')
+import {renderContributorBadge} from '../contributor-count.js';
+import NpmBase from './npm-base.js';
 
 const keywords = ['node']
 
-module.exports = class NpmCollaborators extends NpmBase {
+export default class NpmCollaborators extends NpmBase {
   static category = 'activity'
 
   static route = this.buildRoute('npm/collaborators', { withTag: false })
@@ -49,4 +47,4 @@ module.exports = class NpmCollaborators extends NpmBase {
     const collaborators = maintainers.length
     return this.constructor.render({ collaborators })
   }
-}
+};

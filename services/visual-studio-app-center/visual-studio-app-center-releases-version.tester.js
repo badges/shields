@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 // Note:
 // Unfortunately an Invalid user, invalid project, valid API token test is not possible due to the way Microsoft cache their responses.

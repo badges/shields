@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'build',
   route: {
     base: 'dockbit',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   },
   label: 'dockbit',
   dateAdded: new Date('2017-12-31'),
-})
+});

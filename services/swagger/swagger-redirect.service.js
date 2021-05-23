@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'other',
     name: 'SwaggerRedirect',
@@ -17,4 +15,4 @@ module.exports = [
     },
     dateAdded: new Date('2019-11-03'),
   }),
-]
+];

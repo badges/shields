@@ -1,6 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+const t = (function() {
+  export default __a;
+}())
 
 // Mocked response rather than real data as old builds are deleted after some time.
 t.create('Valid Build')

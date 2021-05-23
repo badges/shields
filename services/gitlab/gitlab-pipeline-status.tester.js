@@ -1,12 +1,8 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'GitlabPipeline',
-  title: 'Gitlab Pipeline',
-  pathPrefix: '/gitlab/pipeline',
-}))
+import {isBuildStatus} from '../build-status.js';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Pipeline status').get('/gitlab-org/gitlab/v10.7.6.json').expectBadge({
   label: 'build',

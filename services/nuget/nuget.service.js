@@ -1,6 +1,4 @@
-'use strict'
-
-const { createServiceFamily } = require('./nuget-v3-service-family')
+import {createServiceFamily} from './nuget-v3-service-family.js';
 
 const { NugetVersionService: Version, NugetDownloadService: Downloads } =
   createServiceFamily({
@@ -39,4 +37,4 @@ class NugetDownloadService extends Downloads {
   ]
 }
 
-module.exports = { NugetVersionService, NugetDownloadService }
+export default { NugetVersionService, NugetDownloadService };

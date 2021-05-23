@@ -1,13 +1,11 @@
-'use strict'
-
-const { redirector } = require('..')
+import {redirector} from '..';
 
 const commonAttrs = {
   dateAdded: new Date('2019-09-15'),
   category: 'build',
 }
 
-module.exports = [
+export default [
   redirector({
     ...commonAttrs,
     name: 'TeamCityBuildLegacyCodeBetterRedirect',
@@ -34,4 +32,4 @@ module.exports = [
       server: `${protocol}://${hostAndPath}`,
     }),
   }),
-]
+];

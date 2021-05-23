@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const projectsCountRegex = /^\s[0-9]*(\.[0-9]k)?\sprojects$/
 const schema = Joi.object({
   value: Joi.string().regex(projectsCountRegex).required(),
 }).required()
 
-module.exports = class Sourcegraph extends BaseJsonService {
+export default class Sourcegraph extends BaseJsonService {
   static category = 'other'
 
   static route = {
@@ -43,4 +41,4 @@ module.exports = class Sourcegraph extends BaseJsonService {
     })
     return this.constructor.render({ projectsCount: json.value.trim() })
   }
-}
+};

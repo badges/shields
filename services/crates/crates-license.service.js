@@ -1,8 +1,6 @@
-'use strict'
+import {BaseCratesService, keywords} from './crates-base.js';
 
-const { BaseCratesService, keywords } = require('./crates-base')
-
-module.exports = class CratesLicense extends BaseCratesService {
+export default class CratesLicense extends BaseCratesService {
   static category = 'license'
   static route = { base: 'crates/l', pattern: ':crate/:version?' }
 
@@ -47,4 +45,4 @@ module.exports = class CratesLicense extends BaseCratesService {
       license: json.version ? json.version.license : json.versions[0].license,
     })
   }
-}
+};

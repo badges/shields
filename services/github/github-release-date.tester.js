@@ -1,7 +1,7 @@
-'use strict'
-
-const { isFormattedDate } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isFormattedDate} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Release Date. e.g release date|today')
   .get('/release-date/mochajs/mocha.json')

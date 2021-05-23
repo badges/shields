@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const packageSchema = Joi.object()
   .pattern(
@@ -101,10 +99,10 @@ const cacheDocumentationFragment = `
   </p>
   `
 
-module.exports = {
+export default {
   allVersionsSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
-}
+};

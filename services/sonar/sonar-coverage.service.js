@@ -1,10 +1,8 @@
-'use strict'
+import {coveragePercentage} from '../color-formatters.js';
+import SonarBase from './sonar-base.js';
+import {documentation, keywords, queryParamSchema} from './sonar-helpers.js';
 
-const { coveragePercentage } = require('../color-formatters')
-const SonarBase = require('./sonar-base')
-const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
-
-module.exports = class SonarCoverage extends SonarBase {
+export default class SonarCoverage extends SonarBase {
   static category = 'coverage'
 
   static route = {
@@ -51,4 +49,4 @@ module.exports = class SonarCoverage extends SonarBase {
     })
     return this.constructor.render({ coverage })
   }
-}
+};

@@ -1,7 +1,7 @@
-'use strict'
-
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('marketplace version').get('/notepad4e.json').expectBadge({
   label: 'eclipse marketplace',

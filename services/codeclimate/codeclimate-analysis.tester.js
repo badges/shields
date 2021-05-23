@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { isIntegerPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isIntegerPercentage} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 // Examples for this service can be found through the explore page:
 // https://codeclimate.com/explore

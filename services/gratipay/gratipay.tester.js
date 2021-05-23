@@ -1,11 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'gratipay',
-  title: 'Gratipay',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Receiving').get('/Gratipay.json').expectBadge({
   label: 'gratipay',

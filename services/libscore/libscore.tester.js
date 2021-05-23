@@ -1,9 +1,7 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
+import {ServiceTester} from '../tester.js';
 
 const t = new ServiceTester({ id: 'libscore', title: 'libscore' })
-module.exports = t
+export default t;
 
 t.create('no longer available (previously usage statistics)')
   .get('/s/jQuery.json')

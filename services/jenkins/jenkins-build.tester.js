@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isBuildStatus} from '../build-status.js';
+const t = (function() {
+  export default __a;
+}())
 
 const isJenkinsBuildStatus = Joi.alternatives(
   isBuildStatus,

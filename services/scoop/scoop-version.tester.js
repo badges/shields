@@ -1,12 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isVPlusDottedVersionNClauses} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const { isVPlusDottedVersionNClauses } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'scoop',
-  title: 'Scoop',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 // version
 

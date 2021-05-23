@@ -1,9 +1,7 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import {BaseVaadinDirectoryService} from './vaadin-directory-base.js';
 
-const { renderVersionBadge } = require('../version')
-const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
-
-module.exports = class VaadinDirectoryVersion extends (
+export default class VaadinDirectoryVersion extends (
   BaseVaadinDirectoryService
 ) {
   static category = 'version'
@@ -32,4 +30,4 @@ module.exports = class VaadinDirectoryVersion extends (
     const lv = data.latestAvailableRelease.name.toLowerCase()
     return renderVersionBadge({ version: lv })
   }
-}
+};

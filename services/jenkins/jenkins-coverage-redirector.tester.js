@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'JenkinsCoverageRedirector',
-  title: 'JenkinsCoverageRedirector',
-  pathPrefix: '/jenkins',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('old Jacoco prefix + job url in path')
   .get(

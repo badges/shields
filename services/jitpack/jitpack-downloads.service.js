@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   route: {
     base: 'jitpack',
     pattern: ':interval(dw|dm)/:various*',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   label: 'jitpack',
   category: 'downloads',
   dateAdded: new Date('2020-04-05'),
-})
+});

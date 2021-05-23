@@ -1,7 +1,5 @@
-'use strict'
-
-const yaml = require('js-yaml')
-const { collectDefinitions } = require('../core/base-service/loader')
+import yaml from 'js-yaml';
+import {collectDefinitions} from '../core/base-service/loader.js';
 
 const definitions = collectDefinitions()
 

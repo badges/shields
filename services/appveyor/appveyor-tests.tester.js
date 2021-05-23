@@ -1,8 +1,8 @@
-'use strict'
-
-const queryString = require('querystring')
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import queryString from 'querystring';
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
 
 const isAppveyorTestTotals = Joi.string().regex(
   /^[0-9]+ passed(, [0-9]+ failed)?(, [0-9]+ skipped)?$/

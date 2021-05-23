@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { renderVersionBadge } = require('../version')
-const { BaseXmlService } = require('..')
+import Joi from 'joi';
+import {optionalUrl} from '../validators.js';
+import {renderVersionBadge} from '../version.js';
+import {BaseXmlService} from '..';
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),
@@ -19,7 +17,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class MavenMetadata extends BaseXmlService {
+export default class MavenMetadata extends BaseXmlService {
   static category = 'version'
 
   static route = {
@@ -58,4 +56,4 @@ module.exports = class MavenMetadata extends BaseXmlService {
       version: data.metadata.versioning.versions.version.slice(-1)[0],
     })
   }
-}
+};

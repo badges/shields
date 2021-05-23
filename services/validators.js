@@ -1,11 +1,9 @@
-'use strict'
-
-const { semver, semverRange } = require('joi-extension-semver')
+import {semver, semverRange} from 'joi-extension-semver';
 const Joi = require('joi').extend(semver).extend(semverRange)
 
 const optionalNonNegativeInteger = Joi.number().integer().min(0)
 
-module.exports = {
+export default {
   optionalNonNegativeInteger,
 
   nonNegativeInteger: optionalNonNegativeInteger.required(),
@@ -23,4 +21,4 @@ module.exports = {
   // TODO This accepts URLs with query strings and fragments, which for some
   // purposes should be rejected.
   optionalUrl: Joi.string().uri({ scheme: ['http', 'https'] }),
-}
+};

@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { NotFound } = require('..')
-const NpmBase = require('./npm-base')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {NotFound} from '..';
+import NpmBase from './npm-base.js';
 
 const keywords = ['node']
 
@@ -13,7 +11,7 @@ const schema = Joi.object()
   .pattern(/./, Joi.string())
   .required()
 
-module.exports = class NpmVersion extends NpmBase {
+export default class NpmVersion extends NpmBase {
   static category = 'version'
 
   static route = this.buildRoute('npm/v', { withTag: true })
@@ -94,4 +92,4 @@ module.exports = class NpmVersion extends NpmBase {
       version: packageData[tag || 'latest'],
     })
   }
-}
+};

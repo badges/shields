@@ -1,5 +1,3 @@
-'use strict'
-
 const data = {
   alerts: 0,
   languages: [
@@ -13,6 +11,6 @@ const data = {
   ],
 }
 
-module.exports = {
+export default {
   data,
-}
+};

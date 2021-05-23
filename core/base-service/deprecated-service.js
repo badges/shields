@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const camelcase = require('camelcase')
-const BaseService = require('./base')
-const { isValidCategory } = require('./categories')
-const { Deprecated } = require('./errors')
-const { isValidRoute } = require('./route')
+import Joi from 'joi';
+import camelcase from 'camelcase';
+import BaseService from './base.js';
+import {isValidCategory} from './categories.js';
+import {Deprecated} from './errors.js';
+import {isValidRoute} from './route.js';
 
 const attrSchema = Joi.object({
   route: isValidRoute,
@@ -41,7 +39,7 @@ function deprecatedService(attrs) {
     async handle() {
       throw new Deprecated({ prettyMessage: message })
     }
-  }
+  };
 }
 
-module.exports = deprecatedService
+export default deprecatedService;

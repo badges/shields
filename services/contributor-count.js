@@ -1,6 +1,4 @@
-'use strict'
-
-const { metric } = require('./text-formatters')
+import {metric} from './text-formatters.js';
 
 function contributorColor(contributorCount) {
   if (contributorCount > 2) {
@@ -20,7 +18,7 @@ function renderContributorBadge({ label, contributorCount }) {
   }
 }
 
-module.exports = {
+export default {
   contributorColor,
   renderContributorBadge,
-}
+};

@@ -1,12 +1,11 @@
-'use strict'
 /* eslint-disable import/order */
 
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs';
+import path from 'path';
 
 // Set up Sentry reporting as early in the process as possible.
 const config = require('config').util.toObject()
-const Sentry = require('@sentry/node')
+import Sentry from '@sentry/node';
 const disabledIntegrations = ['Console', 'Http']
 Sentry.init({
   dsn: process.env.SENTRY_DSN || config.private.sentry_dsn,
@@ -50,8 +49,10 @@ if (fs.existsSync(legacySecretsPath)) {
   process.exit(1)
 }
 
-const Server = require('./core/server/server')
-const server = (module.exports = new Server(config))
+import Server from './core/server/server.js';
+const server = (function() {
+  export default __a;
+}())
 
 ;(async () => {
   try {

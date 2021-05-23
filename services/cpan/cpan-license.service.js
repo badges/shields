@@ -1,8 +1,6 @@
-'use strict'
+import BaseCpanService from './cpan.js';
 
-const BaseCpanService = require('./cpan')
-
-module.exports = class CpanLicense extends BaseCpanService {
+export default class CpanLicense extends BaseCpanService {
   static category = 'license'
   static route = { base: 'cpan/l', pattern: ':packageName' }
 
@@ -27,4 +25,4 @@ module.exports = class CpanLicense extends BaseCpanService {
     const data = await this.fetch({ packageName })
     return this.constructor.render({ license: data.license[0] })
   }
-}
+};

@@ -1,7 +1,7 @@
-'use strict'
-
-const { isSemVer } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isSemVer} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('docker version (valid, library)').get('/_/alpine.json').expectBadge({
   label: 'version',

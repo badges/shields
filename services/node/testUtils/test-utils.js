@@ -1,8 +1,6 @@
-'use strict'
-
-const fs = require('fs')
-const path = require('path')
-const moment = require('moment')
+import fs from 'fs';
+import path from 'path';
+import moment from 'moment';
 
 const dateFormat = 'YYYY-MM-DD'
 
@@ -145,9 +143,9 @@ const mockReleaseSchedule = () => nock => {
     .reply(200, schedule)
 }
 
-module.exports = {
+export default {
   mockPackageData,
   mockCurrentSha,
   mockVersionsSha,
   mockReleaseSchedule,
-}
+};

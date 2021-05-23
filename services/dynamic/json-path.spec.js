@@ -1,8 +1,6 @@
-'use strict'
-
-const chai = require('chai')
+import chai from 'chai';
 const { expect } = chai
-const jsonPath = require('./json-path')
+import jsonPath from './json-path.js';
 
 chai.use(require('chai-as-promised'))
 

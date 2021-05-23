@@ -1,13 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, BaseXmlService, NotFound, redirector } = require('..')
-const {
-  renderVersionBadge,
-  renderDownloadBadge,
-  odataToObject,
-} = require('./nuget-helpers')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, BaseXmlService, NotFound, redirector} from '..';
+import {renderVersionBadge, renderDownloadBadge, odataToObject} from './nuget-helpers.js';
 
 function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases
@@ -224,8 +218,8 @@ function createServiceFamily({
   return { NugetVersionService, NugetVersionRedirector, NugetDownloadService }
 }
 
-module.exports = {
+export default {
   createFilter,
   fetch,
   createServiceFamily,
-}
+};

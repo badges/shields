@@ -1,9 +1,7 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import {BaseOreService, documentation, keywords} from './ore-base.js';
 
-const { renderVersionBadge } = require('../version')
-const { BaseOreService, documentation, keywords } = require('./ore-base')
-
-module.exports = class OreVersion extends BaseOreService {
+export default class OreVersion extends BaseOreService {
   static category = 'version'
 
   static route = {
@@ -49,4 +47,4 @@ module.exports = class OreVersion extends BaseOreService {
     const { version } = this.transform({ data })
     return this.constructor.render({ version })
   }
-}
+};

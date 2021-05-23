@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
 t.create('valid maven-metadata.xml uri')
   .get(

@@ -1,11 +1,9 @@
-'use strict'
-
-const gql = require('graphql-tag')
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV4Service } = require('./github-auth-service')
-const { documentation, transformErrors } = require('./github-helpers')
+import gql from 'graphql-tag';
+import Joi from 'joi';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {GithubAuthV4Service} from './github-auth-service.js';
+import {documentation, transformErrors} from './github-helpers.js';
 
 const issueCountSchema = Joi.object({
   data: Joi.object({
@@ -106,7 +104,7 @@ class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
   }
 }
 
-module.exports = {
+export default {
   GithubIssuesSearch,
   GithubRepoIssuesSearch,
-}
+};

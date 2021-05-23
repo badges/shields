@@ -1,8 +1,8 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
-const { dockerBlue } = require('./docker-helpers')
+import {isBuildStatus} from '../build-status.js';
+const t = (function() {
+  export default __a;
+}())
+import {dockerBlue} from './docker-helpers.js';
 
 t.create('docker cloud build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')

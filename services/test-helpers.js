@@ -1,9 +1,7 @@
-'use strict'
-
-const nock = require('nock')
-const request = require('request')
+import nock from 'nock';
+import request from 'request';
 const runnerConfig = require('config').util.toObject()
-const { promisify } = require('../core/base-service/legacy-request-handler')
+import {promisify} from '../core/base-service/legacy-request-handler.js';
 
 function cleanUpNockAfterEach() {
   afterEach(function () {
@@ -36,9 +34,9 @@ const sendAndCacheRequest = promisify(request)
 
 const defaultContext = { sendAndCacheRequest }
 
-module.exports = {
+export default {
   cleanUpNockAfterEach,
   noToken,
   sendAndCacheRequest,
   defaultContext,
-}
+};

@@ -1,12 +1,10 @@
-'use strict'
-
 const invalidJSONString = '{{{{{invalid json}}'
 
-module.exports = {
+export default {
   invalidJSON: () => [
     200,
     invalidJSONString,
     { 'Content-Type': 'application/json' },
   ],
   invalidJSONString,
-}
+};

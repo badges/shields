@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, NotFound} from '..';
 
 const schema = Joi.object({
   LayerCount: nonNegativeInteger,
@@ -25,7 +23,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BaseMicrobadgerService extends BaseJsonService {
+export default class BaseMicrobadgerService extends BaseJsonService {
   static category = 'size'
 
   async fetch({ user, repo }) {
@@ -50,4 +48,4 @@ module.exports = class BaseMicrobadgerService extends BaseJsonService {
     }
     return image
   }
-}
+};

@@ -1,7 +1,7 @@
-'use strict'
-
-const { isPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isPercentage} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('module feedback').get('/camptocamp/openssl.json').expectBadge({
   label: 'score',

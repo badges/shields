@@ -1,14 +1,9 @@
-'use strict'
-
-const { addv } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const { redirector } = require('..')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const {
-  fetchLatestRelease,
-  queryParamSchema,
-} = require('./github-common-release')
-const { documentation } = require('./github-helpers')
+import {addv} from '../text-formatters.js';
+import {version as versionColor} from '../color-formatters.js';
+import {redirector} from '..';
+import {GithubAuthV3Service} from './github-auth-service.js';
+import {fetchLatestRelease, queryParamSchema} from './github-common-release.js';
+import {documentation} from './github-helpers.js';
 
 class GithubRelease extends GithubAuthV3Service {
   static category = 'version'
@@ -122,7 +117,7 @@ const redirects = {
   }),
 }
 
-module.exports = {
+export default {
   GithubRelease,
   ...redirects,
-}
+};

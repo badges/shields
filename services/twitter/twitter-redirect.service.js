@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'social',
     name: 'TwitterUrlRedirect',
@@ -16,4 +14,4 @@ module.exports = [
     }),
     dateAdded: new Date('2019-09-17'),
   }),
-]
+];

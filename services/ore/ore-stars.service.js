@@ -1,9 +1,7 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {BaseOreService, documentation, keywords} from './ore-base.js';
 
-const { metric } = require('../text-formatters')
-const { BaseOreService, documentation, keywords } = require('./ore-base')
-
-module.exports = class OreStars extends BaseOreService {
+export default class OreStars extends BaseOreService {
   static category = 'rating'
 
   static route = {
@@ -39,4 +37,4 @@ module.exports = class OreStars extends BaseOreService {
     const { stars } = stats
     return this.constructor.render({ stars })
   }
-}
+};

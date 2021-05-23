@@ -1,10 +1,8 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {downloadCount as downloadsColor} from '../color-formatters.js';
+import {BaseClojarsService} from './clojars-base.js';
 
-const { metric } = require('../text-formatters')
-const { downloadCount: downloadsColor } = require('../color-formatters')
-const { BaseClojarsService } = require('./clojars-base')
-
-module.exports = class ClojarsDownloads extends BaseClojarsService {
+export default class ClojarsDownloads extends BaseClojarsService {
   static category = 'downloads'
   static route = { base: 'clojars/dt', pattern: ':clojar+' }
 
@@ -29,4 +27,4 @@ module.exports = class ClojarsDownloads extends BaseClojarsService {
     const json = await this.fetch({ clojar })
     return this.constructor.render({ downloads: json.downloads })
   }
-}
+};

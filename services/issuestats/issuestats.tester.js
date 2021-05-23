@@ -1,9 +1,7 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
+import {ServiceTester} from '../tester.js';
 
 const t = new ServiceTester({ id: 'issuestats', title: 'Issue Stats' })
-module.exports = t
+export default t;
 
 t.create('no longer available (previously issue analysis)')
   .get('/i/github/expressjs/express.json')

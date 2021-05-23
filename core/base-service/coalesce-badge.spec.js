@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { getShieldsIcon, getSimpleIcon } = require('../../lib/logos')
-const coalesceBadge = require('./coalesce-badge')
+import {expect} from 'chai';
+import {getShieldsIcon, getSimpleIcon} from '../../lib/logos.js';
+import coalesceBadge from './coalesce-badge.js';
 
 describe('coalesceBadge', function () {
   describe('Label', function () {

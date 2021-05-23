@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'GithubIssueDetailRedirect',
-  title: 'GithubIssueDetailRedirect',
-  pathPrefix: '/github',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('github issue detail (s shorthand)')
   .get('/issues/detail/s/badges/shields/979.svg')

@@ -1,12 +1,9 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isRelativeFormattedDate} from '../test-validators.js';
 
-const { ServiceTester } = require('../tester')
-const { isRelativeFormattedDate } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
-  id: 'date',
-  title: 'Relative Date Tests',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Relative date')
   .get('/1540814400.json')

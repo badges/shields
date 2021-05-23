@@ -1,8 +1,6 @@
-'use strict'
+import {deprecatedService} from '..';
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'downloads',
   route: {
     base: 'versioneye/d',
@@ -10,4 +8,4 @@ module.exports = deprecatedService({
   },
   label: 'versioneye',
   dateAdded: new Date('2018-08-20'),
-})
+});

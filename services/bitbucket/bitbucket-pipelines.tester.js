@@ -1,12 +1,8 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'BitbucketPipelines',
-  title: 'Bitbucket Pipelines',
-  pathPrefix: '/bitbucket/pipelines',
-}))
+import {isBuildStatus} from '../build-status.js';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 function bitbucketApiResponse(status) {
   return JSON.stringify({

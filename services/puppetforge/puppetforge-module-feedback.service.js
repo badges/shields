@@ -1,12 +1,8 @@
-'use strict'
+import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
+import {NotFound} from '..';
+import {BasePuppetForgeModulesService} from './puppetforge-base.js';
 
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
-const { NotFound } = require('..')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
-
-module.exports = class PuppetforgeModuleFeedback extends (
+export default class PuppetforgeModuleFeedback extends (
   BasePuppetForgeModulesService
 ) {
   static category = 'rating'
@@ -43,4 +39,4 @@ module.exports = class PuppetforgeModuleFeedback extends (
     }
     return this.constructor.render({ score: data.feedback_score })
   }
-}
+};

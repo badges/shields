@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isCurrencyOverTime } = require('./liberapay-base')
+const t = (function() {
+  export default __a;
+}())
+import {isCurrencyOverTime} from './liberapay-base.js';
 
 t.create('Receiving (valid)').get('/Changaco.json').expectBadge({
   label: 'receives',

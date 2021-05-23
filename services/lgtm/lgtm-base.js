@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   alerts: Joi.number().required(),
@@ -22,7 +20,7 @@ const hostMappings = {
   gitlab: 'gl',
 }
 
-module.exports = class LgtmBaseService extends BaseJsonService {
+export default class LgtmBaseService extends BaseJsonService {
   static category = 'analysis'
 
   static defaultBadgeData = { label: 'lgtm' }
@@ -41,4 +39,4 @@ module.exports = class LgtmBaseService extends BaseJsonService {
       },
     })
   }
-}
+};

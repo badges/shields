@@ -1,8 +1,6 @@
-'use strict'
+import BaseCocoaPodsService from './cocoapods-base.js';
 
-const BaseCocoaPodsService = require('./cocoapods-base')
-
-module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
+export default class CocoapodsPlatform extends BaseCocoaPodsService {
   static category = 'platform-support'
   static route = { base: 'cocoapods/p', pattern: ':spec' }
 
@@ -30,4 +28,4 @@ module.exports = class CocoapodsPlatform extends BaseCocoaPodsService {
     const { platforms } = await this.fetch({ spec })
     return this.constructor.render({ platforms: Object.keys(platforms) })
   }
-}
+};

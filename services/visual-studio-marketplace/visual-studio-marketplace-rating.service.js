@@ -1,10 +1,8 @@
-'use strict'
+import {starRating} from '../text-formatters.js';
+import {floorCount} from '../color-formatters.js';
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
 
-const { starRating } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
-const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
-
-module.exports = class VisualStudioMarketplaceRating extends (
+export default class VisualStudioMarketplaceRating extends (
   VisualStudioMarketplaceBase
 ) {
   static category = 'rating'
@@ -63,4 +61,4 @@ module.exports = class VisualStudioMarketplaceRating extends (
       ratingCount: statistics.ratingcount,
     })
   }
-}
+};

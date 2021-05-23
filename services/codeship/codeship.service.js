@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
+import Joi from 'joi';
+import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
+import {BaseSvgScrapingService} from '..';
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -26,7 +24,7 @@ const statusMap = {
   infrastructure_failure: 'failed',
 }
 
-module.exports = class Codeship extends BaseSvgScrapingService {
+export default class Codeship extends BaseSvgScrapingService {
   static category = 'build'
   static route = { base: 'codeship', pattern: ':projectId/:branch*' }
 
@@ -64,11 +62,11 @@ module.exports = class Codeship extends BaseSvgScrapingService {
       url,
       options: { qs: { branch } },
       valueMatcher: /<g id="status_2">(?:[.\s\S]*)\/><\/g><g id="([\w\s]*)"/,
-    })
+    });
   }
 
   async handle({ projectId, branch }) {
     const { message: status } = await this.fetch({ projectId, branch })
     return this.constructor.render({ status })
   }
-}
+};

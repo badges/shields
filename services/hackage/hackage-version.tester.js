@@ -1,7 +1,7 @@
-'use strict'
-
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('hackage version (valid)').get('/lens.json').expectBadge({
   label: 'hackage',

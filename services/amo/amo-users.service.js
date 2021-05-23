@@ -1,9 +1,7 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {BaseAmoService, keywords} from './amo-base.js';
 
-const { metric } = require('../text-formatters')
-const { BaseAmoService, keywords } = require('./amo-base')
-
-module.exports = class AmoUsers extends BaseAmoService {
+export default class AmoUsers extends BaseAmoService {
   static category = 'downloads'
   static route = { base: 'amo/users', pattern: ':addonId' }
 
@@ -29,4 +27,4 @@ module.exports = class AmoUsers extends BaseAmoService {
     const data = await this.fetch({ addonId })
     return this.constructor.render({ users: data.average_daily_users })
   }
-}
+};

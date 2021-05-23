@@ -1,8 +1,6 @@
-'use strict'
+import OpencollectiveBase from './opencollective-base.js';
 
-const OpencollectiveBase = require('./opencollective-base')
-
-module.exports = class OpencollectiveSponsors extends OpencollectiveBase {
+export default class OpencollectiveSponsors extends OpencollectiveBase {
   static route = this.buildRoute('sponsors')
 
   static examples = [
@@ -25,4 +23,4 @@ module.exports = class OpencollectiveSponsors extends OpencollectiveBase {
     )
     return this.constructor.render(backersCount)
   }
-}
+};

@@ -1,10 +1,8 @@
-'use strict'
+import {age} from '../color-formatters.js';
+import {formatDate} from '../text-formatters.js';
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
 
-const { age } = require('../color-formatters')
-const { formatDate } = require('../text-formatters')
-const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
-
-module.exports = class VisualStudioMarketplaceLastUpdated extends (
+export default class VisualStudioMarketplaceLastUpdated extends (
   VisualStudioMarketplaceBase
 ) {
   static category = 'activity'
@@ -47,4 +45,4 @@ module.exports = class VisualStudioMarketplaceLastUpdated extends (
     const { lastUpdated } = this.transform({ json })
     return this.constructor.render({ lastUpdated })
   }
-}
+};

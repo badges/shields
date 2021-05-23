@@ -1,10 +1,8 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isMetric } = require('../test-validators')
+import {ServiceTester} from '../tester.js';
+import {isMetric} from '../test-validators.js';
 
 const t = new ServiceTester({ id: 'tokei', title: 'Tokei LOC Tests' })
-module.exports = t
+export default t;
 
 t.create('GitHub LOC')
   .get('/lines/github/badges/shields.json')

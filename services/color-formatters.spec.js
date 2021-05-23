@@ -1,14 +1,6 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const { expect } = require('chai')
-const {
-  coveragePercentage,
-  colorScale,
-  letterScore,
-  age,
-  version,
-} = require('./color-formatters')
+import {test, given, forCases} from 'sazerac';
+import {expect} from 'chai';
+import {coveragePercentage, colorScale, letterScore, age, version} from './color-formatters.js';
 
 describe('Color formatters', function () {
   const byPercentage = colorScale([Number.EPSILON, 80, 90, 100])

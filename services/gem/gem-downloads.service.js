@@ -1,12 +1,10 @@
-'use strict'
-
-const semver = require('semver')
-const Joi = require('joi')
-const { downloadCount } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { latest: latestVersion } = require('../version')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
+import semver from 'semver';
+import Joi from 'joi';
+import {downloadCount} from '../color-formatters.js';
+import {metric} from '../text-formatters.js';
+import {latest as latestVersion} from '../version.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService, InvalidParameter, InvalidResponse} from '..';
 
 const keywords = ['ruby']
 
@@ -26,7 +24,7 @@ const versionSchema = Joi.array()
   .min(1)
   .required()
 
-module.exports = class GemDownloads extends BaseJsonService {
+export default class GemDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
   static examples = [
@@ -158,4 +156,4 @@ module.exports = class GemDownloads extends BaseJsonService {
     }
     return this.constructor.render({ variant, version, downloads })
   }
-}
+};

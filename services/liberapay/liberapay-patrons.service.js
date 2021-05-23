@@ -1,10 +1,8 @@
-'use strict'
+import {metric} from '../text-formatters.js';
+import {colorScale} from '../color-formatters.js';
+import {LiberapayBase} from './liberapay-base.js';
 
-const { metric } = require('../text-formatters')
-const { colorScale } = require('../color-formatters')
-const { LiberapayBase } = require('./liberapay-base')
-
-module.exports = class LiberapayPatrons extends LiberapayBase {
+export default class LiberapayPatrons extends LiberapayBase {
   static route = this.buildRoute('patrons')
 
   static examples = [
@@ -27,4 +25,4 @@ module.exports = class LiberapayPatrons extends LiberapayBase {
     const data = await this.fetch({ entity })
     return this.constructor.render({ patrons: data.npatrons })
   }
-}
+};

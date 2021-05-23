@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = {
+export default {
   exampleXml: `<?xml version="1.0"?>
 <catalog>
    <book id="bk101">
@@ -122,4 +120,4 @@ module.exports = {
    </book>
 </catalog>
 `,
-}
+};

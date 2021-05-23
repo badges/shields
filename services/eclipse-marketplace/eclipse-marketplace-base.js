@@ -1,8 +1,6 @@
-'use strict'
+import {BaseXmlService} from '..';
 
-const { BaseXmlService } = require('..')
-
-module.exports = class EclipseMarketplaceBase extends BaseXmlService {
+export default class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {
     return {
       base,
@@ -17,4 +15,4 @@ module.exports = class EclipseMarketplaceBase extends BaseXmlService {
       errorMessages: { 404: 'solution not found' },
     })
   }
-}
+};

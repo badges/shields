@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { withRegex, isStarRating } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {withRegex, isStarRating} from '../test-validators.js';
 
 const isVscodeRating = withRegex(/[0-5]\.[0-9]{1}\/5?\s*\([0-9]*\)$/)
 

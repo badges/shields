@@ -1,7 +1,7 @@
-'use strict'
-
-const { licenseToColor } = require('../licenses')
-const t = (module.exports = require('../tester').createServiceTester())
+import {licenseToColor} from '../licenses.js';
+const t = (function() {
+  export default __a;
+}())
 
 const publicDomainLicenseColor = licenseToColor('CC0-1.0')
 const unknownLicenseColor = licenseToColor()

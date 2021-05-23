@@ -1,7 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
 
 // Github allows versions with chars, etc.
 const isAnyV = Joi.string().regex(/^v.+$/)

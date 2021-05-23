@@ -1,7 +1,7 @@
-'use strict'
-
-const { isFormattedDate } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isFormattedDate} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('last update date').get('/notepad4e.json').expectBadge({
   label: 'updated',

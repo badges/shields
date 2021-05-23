@@ -1,8 +1,6 @@
-'use strict'
+import BaseMicrobadgerService from './microbadger-base.js';
 
-const BaseMicrobadgerService = require('./microbadger-base')
-
-module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
+export default class MicrobadgerLayers extends BaseMicrobadgerService {
   static route = {
     base: 'microbadger/layers',
     pattern: ':user/:repo/:tag*',
@@ -39,4 +37,4 @@ module.exports = class MicrobadgerLayers extends BaseMicrobadgerService {
     const image = this.constructor.getImage(data, tag)
     return this.constructor.render({ layers: image.LayerCount })
   }
-}
+};

@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { downloadCount } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {downloadCount} from '../color-formatters.js';
+import {BaseJsonService} from '..';
 
 const collectionSchema = Joi.object({
   payload: Joi.object({
@@ -12,7 +10,7 @@ const collectionSchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class BitComponents extends BaseJsonService {
+export default class BitComponents extends BaseJsonService {
   static category = 'other'
   static route = {
     base: 'bit/collection/total-components',
@@ -49,4 +47,4 @@ module.exports = class BitComponents extends BaseJsonService {
     const json = await this.fetch({ owner, collection })
     return this.constructor.render({ count: json.payload.totalComponents })
   }
-}
+};

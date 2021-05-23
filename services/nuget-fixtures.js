@@ -1,5 +1,3 @@
-'use strict'
-
 const queryIndex = JSON.stringify({
   resources: [
     {
@@ -50,10 +48,10 @@ const nuGetV3VersionJsonBuildMetadataWithDash = JSON.stringify({
   ],
 })
 
-module.exports = {
+export default {
   queryIndex,
   nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,
   nuGetV3VersionJsonBuildMetadataWithDash,
-}
+};

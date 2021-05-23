@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'AppveyorBuildRedirect',
-  title: 'AppveyorBuildRedirect',
-  pathPrefix: '/appveyor/ci',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Appveyor CI')
   .get('/gruntjs/grunt', {

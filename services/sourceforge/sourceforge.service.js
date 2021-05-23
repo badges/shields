@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const moment = require('moment')
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import moment from 'moment';
+import {metric} from '../text-formatters.js';
+import {downloadCount} from '../color-formatters.js';
+import {nonNegativeInteger} from '../validators.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   total: nonNegativeInteger,
@@ -31,7 +29,7 @@ const intervalMap = {
   },
 }
 
-module.exports = class Sourceforge extends BaseJsonService {
+export default class Sourceforge extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
@@ -105,4 +103,4 @@ module.exports = class Sourceforge extends BaseJsonService {
     const json = await this.fetch({ interval, project, folder })
     return this.constructor.render({ interval, downloads: json.total })
   }
-}
+};

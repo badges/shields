@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isMetricOverTimePeriod } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isMetricOverTimePeriod} from '../test-validators.js';
 
 t.create('daily downloads (valid)')
   .get('/installs/dm/cake.json')

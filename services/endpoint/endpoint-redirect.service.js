@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = redirector({
+export default redirector({
   category: 'other',
   route: {
     base: 'badge/endpoint',
@@ -10,4 +8,4 @@ module.exports = redirector({
   },
   transformPath: () => '/endpoint',
   dateAdded: new Date('2019-02-19'),
-})
+});

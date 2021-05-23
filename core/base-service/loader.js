@@ -1,11 +1,9 @@
-'use strict'
-
-const path = require('path')
-const glob = require('glob')
-const countBy = require('lodash.countby')
-const categories = require('../../services/categories')
-const BaseService = require('./base')
-const { assertValidServiceDefinitionExport } = require('./service-definitions')
+import path from 'path';
+import glob from 'glob';
+import countBy from 'lodash.countby';
+import categories from '../../services/categories.js';
+import BaseService from './base.js';
+import {assertValidServiceDefinitionExport} from './service-definitions.js';
 
 const serviceDir = path.join(__dirname, '..', '..', 'services')
 
@@ -109,10 +107,10 @@ function loadTesters() {
     .map(path => require(path))
 }
 
-module.exports = {
+export default {
   InvalidService,
   loadServiceClasses,
   checkNames,
   collectDefinitions,
   loadTesters,
-}
+};

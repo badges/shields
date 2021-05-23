@@ -1,12 +1,8 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
-  id: 'JiraIssueRedirect',
-  title: 'JiraIssueRedirect',
-  pathPrefix: '/jira/issue',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 t.create('jira issue')
   .get('/https/issues.apache.org/jira/kafka-2896.svg')

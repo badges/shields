@@ -1,8 +1,6 @@
-'use strict'
+import {redirector} from '..';
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     category: 'version',
     route: {
@@ -13,4 +11,4 @@ module.exports = [
       `/jitpack/v/github/${groupId}/${artifactId}`,
     dateAdded: new Date('2019-03-31'),
   }),
-]
+];

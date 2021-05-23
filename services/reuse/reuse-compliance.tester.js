@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isReuseCompliance, COLOR_MAP } = require('./reuse-compliance-helper')
+const t = (function() {
+  export default __a;
+}())
+import {isReuseCompliance, COLOR_MAP} from './reuse-compliance-helper.js';
 
 t.create('valid repo -- live')
   .get('/github.com/fsfe/reuse-tool.json')

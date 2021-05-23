@@ -1,8 +1,8 @@
-'use strict'
-
-const queryString = require('query-string')
-const t = (module.exports = require('../tester').createServiceTester())
-const { exampleXml } = require('./dynamic-response-fixtures')
+import queryString from 'query-string';
+const t = (function() {
+  export default __a;
+}())
+import {exampleXml} from './dynamic-response-fixtures.js';
 
 const exampleUrl = 'https://example.test/example.xml'
 const withExampleXml = nock =>

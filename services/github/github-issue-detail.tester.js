@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { isFormattedDate } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi';
+import {isFormattedDate} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('github issue state')
   .get('/issues/detail/state/badges/shields/979.json')

@@ -1,10 +1,9 @@
-'use strict'
 /**
  * @module
  */
 
-const crypto = require('crypto')
-const PriorityQueue = require('priorityqueuejs')
+import crypto from 'crypto';
+import PriorityQueue from 'priorityqueuejs';
 
 /**
  * Compute a one-way hash of the input string.
@@ -354,8 +353,8 @@ class TokenPool {
   }
 }
 
-module.exports = {
+export default {
   sanitizeToken,
   Token,
   TokenPool,
-}
+};

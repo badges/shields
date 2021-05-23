@@ -1,8 +1,6 @@
-'use strict'
+import LgtmBaseService from './lgtm-base.js';
 
-const LgtmBaseService = require('./lgtm-base')
-
-module.exports = class LgtmGrade extends LgtmBaseService {
+export default class LgtmGrade extends LgtmBaseService {
   static route = {
     base: 'lgtm/grade',
     pattern: `:language/${this.pattern}`,
@@ -87,4 +85,4 @@ module.exports = class LgtmGrade extends LgtmBaseService {
     const data = await this.fetch({ host, user, repo })
     return this.constructor.render({ language, data })
   }
-}
+};

@@ -1,7 +1,5 @@
-'use strict'
+import base from '../core/base-service.js';
 
-const base = require('../core/base-service')
-
-module.exports = {
+export default {
   ...base,
-}
+};

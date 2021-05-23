@@ -1,13 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
-  id: 'ScrutinizerBuild',
-  title: 'ScrutinizerBuild',
-  pathPrefix: '/scrutinizer/build',
-}))
+import Joi from 'joi';
+import {isBuildStatus} from '../build-status.js';
+import {ServiceTester} from '../tester.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('build (GitHub)')
   .get('/g/filp/whoops.json')

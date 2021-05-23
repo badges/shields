@@ -1,12 +1,10 @@
-'use strict'
-
-const { expect } = require('chai')
-const Camp = require('@shields_io/camp')
-const portfinder = require('portfinder')
+import {expect} from 'chai';
+import Camp from '@shields_io/camp';
+import portfinder from 'portfinder';
 const config = require('config').util.toObject()
-const got = require('../core/got-test-client')
-const { setRoutes } = require('./suggest')
-const GithubApiProvider = require('./github/github-api-provider')
+import got from '../core/got-test-client.js';
+import {setRoutes} from './suggest.js';
+import GithubApiProvider from './github/github-api-provider.js';
 
 describe('Badge suggestions for', function () {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'

@@ -1,19 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { NotFound } = require('..')
-const {
-  BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
-} = require('./visual-studio-app-center-base')
+import Joi from 'joi';
+import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
+import {NotFound} from '..';
+import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
 
 const schema = Joi.array().items({
   result: isBuildStatus.required(),
 })
 
-module.exports = class VisualStudioAppCenterBuilds extends (
+export default class VisualStudioAppCenterBuilds extends (
   BaseVisualStudioAppCenterService
 ) {
   static category = 'build'
@@ -53,4 +47,4 @@ module.exports = class VisualStudioAppCenterBuilds extends (
       throw new NotFound({ prettyMessage: 'no builds found' })
     return renderBuildStatusBadge({ status: json[0].result })
   }
-}
+};

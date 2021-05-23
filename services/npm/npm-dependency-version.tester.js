@@ -1,7 +1,7 @@
-'use strict'
-
-const { semverRange } = require('../validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {semverRange} from '../validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('gets the peer dependency version')
   .get('/react-boxplot/peer/react.json')

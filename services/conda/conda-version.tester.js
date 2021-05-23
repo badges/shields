@@ -1,7 +1,7 @@
-'use strict'
-
-const { isVPlusTripleDottedVersion } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusTripleDottedVersion} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('version').get('/v/conda-forge/zlib.json').expectBadge({
   label: 'conda|conda-forge',

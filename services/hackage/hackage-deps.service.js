@@ -1,8 +1,6 @@
-'use strict'
+import {BaseService} from '..';
 
-const { BaseService } = require('..')
-
-module.exports = class HackageDeps extends BaseService {
+export default class HackageDeps extends BaseService {
   static category = 'dependencies'
 
   static route = {
@@ -43,4 +41,4 @@ module.exports = class HackageDeps extends BaseService {
     const isOutdated = buffer.includes(outdatedStr)
     return this.constructor.render({ isOutdated })
   }
-}
+};

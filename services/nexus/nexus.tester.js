@@ -1,9 +1,7 @@
-'use strict'
-
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix: isVersion,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import {isVPlusDottedVersionNClausesWithOptionalSuffix as isVersion} from '../test-validators.js';
+const t = (function() {
+  export default __a;
+}())
 
 t.create('Nexus 2 - search release version valid artifact')
   .timeout(15000)

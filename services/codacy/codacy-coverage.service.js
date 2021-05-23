@@ -1,11 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
-const { BaseSvgScrapingService } = require('..')
-const { NotFound } = require('..')
+import Joi from 'joi';
+import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
+import {BaseSvgScrapingService, NotFound} from '..';
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -13,7 +8,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class CodacyCoverage extends BaseSvgScrapingService {
+export default class CodacyCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
   static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
 
@@ -47,7 +42,7 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
   static transform({ coverageString }) {
     return {
       percentage: parseFloat(coverageString.replace(/%$/, '')),
-    }
+    };
   }
 
   async handle({ projectId, branch }) {
@@ -75,4 +70,4 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
     const { percentage } = this.constructor.transform({ coverageString })
     return this.constructor.render({ percentage })
   }
-}
+};

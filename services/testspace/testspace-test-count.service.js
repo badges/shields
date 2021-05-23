@@ -1,9 +1,7 @@
-'use strict'
+import {metric as metricCount} from '../text-formatters.js';
+import TestspaceBase from './testspace-base.js';
 
-const { metric: metricCount } = require('../text-formatters')
-const TestspaceBase = require('./testspace-base')
-
-module.exports = class TestspaceTestCount extends TestspaceBase {
+export default class TestspaceTestCount extends TestspaceBase {
   static route = {
     base: 'testspace',
     pattern:
@@ -61,4 +59,4 @@ module.exports = class TestspaceTestCount extends TestspaceBase {
     const { value } = this.transform({ json, metric })
     return this.constructor.render({ value, metric })
   }
-}
+};

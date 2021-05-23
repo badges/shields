@@ -1,23 +1,11 @@
-'use strict'
+import {ServiceTester} from '../tester.js';
+import {isMetric, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
+import {queryIndex, nuGetV3VersionJsonWithDash, nuGetV3VersionJsonFirstCharZero, nuGetV3VersionJsonFirstCharNotZero} from '../nuget-fixtures.js';
+import {invalidJSON} from '../response-fixtures.js';
 
-const { ServiceTester } = require('../tester')
-const {
-  isMetric,
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
-const {
-  queryIndex,
-  nuGetV3VersionJsonWithDash,
-  nuGetV3VersionJsonFirstCharZero,
-  nuGetV3VersionJsonFirstCharNotZero,
-} = require('../nuget-fixtures')
-const { invalidJSON } = require('../response-fixtures')
-
-const t = (module.exports = new ServiceTester({
-  id: 'myget',
-  title: 'MyGet',
-  pathPrefix: '',
-}))
+const t = (function() {
+  export default __a;
+}())
 
 // downloads
 

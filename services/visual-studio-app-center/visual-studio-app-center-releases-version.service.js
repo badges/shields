@@ -1,19 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const {
-  BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
-} = require('./visual-studio-app-center-base')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
 
 const schema = Joi.object({
   version: Joi.string().required(),
   short_version: Joi.string().required(),
 }).required()
 
-module.exports = class VisualStudioAppCenterReleasesVersion extends (
+export default class VisualStudioAppCenterReleasesVersion extends (
   BaseVisualStudioAppCenterService
 ) {
   static category = 'version'
@@ -52,4 +46,4 @@ module.exports = class VisualStudioAppCenterReleasesVersion extends (
       version: `${shortVersion} (${version})`,
     })
   }
-}
+};

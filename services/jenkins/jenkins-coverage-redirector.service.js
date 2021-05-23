@@ -1,7 +1,5 @@
-'use strict'
-
-const { redirector } = require('..')
-const { buildRedirectUrl } = require('./jenkins-common')
+import {redirector} from '..';
+import {buildRedirectUrl} from './jenkins-common.js';
 
 const commonProps = {
   category: 'coverage',
@@ -10,7 +8,7 @@ const commonProps = {
   }),
 }
 
-module.exports = [
+export default [
   redirector({
     route: {
       base: 'jenkins',
@@ -32,4 +30,4 @@ module.exports = [
     dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
-]
+];

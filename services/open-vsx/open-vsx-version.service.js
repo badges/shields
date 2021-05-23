@@ -1,9 +1,7 @@
-'use strict'
+import {renderVersionBadge} from '../version.js';
+import OpenVSXBase from './open-vsx-base.js';
 
-const { renderVersionBadge } = require('../version')
-const OpenVSXBase = require('./open-vsx-base')
-
-module.exports = class OpenVSXVersion extends OpenVSXBase {
+export default class OpenVSXVersion extends OpenVSXBase {
   static category = 'version'
 
   static route = {
@@ -28,4 +26,4 @@ module.exports = class OpenVSXVersion extends OpenVSXBase {
     const { version } = await this.fetch({ namespace, extension })
     return this.constructor.render({ version })
   }
-}
+};

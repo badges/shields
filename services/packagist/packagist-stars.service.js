@@ -1,15 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { optionalUrl } = require('../validators')
-const {
-  keywords,
-  BasePackagistService,
-  customServerDocumentationFragment,
-  cacheDocumentationFragment,
-} = require('./packagist-base')
+import Joi from 'joi';
+import {metric} from '../text-formatters.js';
+import {nonNegativeInteger, optionalUrl} from '../validators.js';
+import {keywords, BasePackagistService, customServerDocumentationFragment, cacheDocumentationFragment} from './packagist-base.js';
 
 const schema = Joi.object({
   package: Joi.object({
@@ -21,7 +13,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistStars extends BasePackagistService {
+export default class PackagistStars extends BasePackagistService {
   static category = 'rating'
 
   static route = {
@@ -79,4 +71,4 @@ module.exports = class PackagistStars extends BasePackagistService {
       stars: favers,
     })
   }
-}
+};

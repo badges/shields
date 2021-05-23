@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi';
+import {renderVersionBadge} from '../version.js';
+import {BaseJsonService} from '..';
 
 const schema = Joi.object({
   pkgver: Joi.string().required(),
 }).required()
 
-module.exports = class ArchLinux extends BaseJsonService {
+export default class ArchLinux extends BaseJsonService {
   static category = 'version'
   static route = {
     base: 'archlinux/v',
@@ -40,4 +38,4 @@ module.exports = class ArchLinux extends BaseJsonService {
     })
     return renderVersionBadge({ version: data.pkgver })
   }
-}
+};

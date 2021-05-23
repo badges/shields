@@ -1,7 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isFormattedDate } = require('../test-validators')
+const t = (function() {
+  export default __a;
+}())
+import {isFormattedDate} from '../test-validators.js';
 
 t.create('release date invalid extension')
   .get('/release-date/badges/shields.json')

@@ -1,8 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
-const { data } = require('./lgtm-test-helpers')
+import Joi from 'joi';
+const t = (function() {
+  export default __a;
+}())
+import {data} from './lgtm-test-helpers.js';
 
 t.create('alerts: total alerts for a project')
   .get('/github/apache/cloudstack.json')
