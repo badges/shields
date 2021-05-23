@@ -1,10 +1,10 @@
-const config = require('config').util.toObject()
+import config from 'config';
 import got from 'got';
 import minimist from 'minimist';
 import Server from '../core/server/server.js';
 
 async function main() {
-  const server = new Server(config)
+  const server = new Server(config.util.toObject())
   await server.start()
   const args = minimist(process.argv)
   const iterations = parseInt(args.iterations) || 10000

@@ -1,10 +1,11 @@
-const config = require('config').util.toObject()
-console.log(config)
+import config from 'config';
+const objectConfig = config.util.toObject()
+console.log(objectConfig)
 import GithubConstellation from '../services/github/github-constellation.js';
 
 const { persistence } = new GithubConstellation({
-  service: config.public.services.github,
-  private: config.private,
+  service: objectConfig.public.services.github,
+  private: objectConfig.private,
 })
 
 async function main() {

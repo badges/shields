@@ -1,5 +1,5 @@
 import {fileURLToPath, URL} from 'url';
-const config = require('config').util.toObject()
+import config from 'config';
 import got from 'got';
 import emojic from 'emojic';
 import Server from '../core/server/server.js';
@@ -16,7 +16,7 @@ function normalizeBadgeUrl(url) {
 }
 
 async function traceBadge(badgeUrl) {
-  const server = new Server(config)
+  const server = new Server(config.util.toObject())
   await server.start()
   const body = await got(
     `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`

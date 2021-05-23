@@ -5,7 +5,8 @@ import path from 'path';
 import {fileURLToPath} from 'url'
 
 // Set up Sentry reporting as early in the process as possible.
-const config = require('config').util.toObject()
+import configModule from 'config';
+const config = configModule.util.toObject()
 import Sentry from '@sentry/node';
 const disabledIntegrations = ['Console', 'Http']
 Sentry.init({
@@ -51,9 +52,7 @@ if (fs.existsSync(legacySecretsPath)) {
 }
 
 import Server from './core/server/server.js';
-const server = (function() {
-  export default __a;
-}())
+export const server = new Server(config)
 
 ;(async () => {
   try {

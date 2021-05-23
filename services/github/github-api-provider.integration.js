@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-const config = require('config').util.toObject()
+import config from 'config';
 import GithubApiProvider from './github-api-provider.js';
 
 describe('Github API provider', function () {
@@ -8,7 +8,7 @@ describe('Github API provider', function () {
 
   let token
   before(function () {
-    token = config.private.gh_token
+    token = config.util.toObject().private.gh_token
     if (!token) {
       throw Error('The integration tests require a gh_token to be set')
     }
