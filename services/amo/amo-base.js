@@ -26,4 +26,4 @@ class BaseAmoService extends BaseJsonService {
   }
 }
 
-export default { BaseAmoService, keywords };
+export { BaseAmoService, keywords };

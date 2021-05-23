@@ -353,7 +353,7 @@ class TokenPool {
   }
 }
 
-export default {
+export {
   sanitizeToken,
   Token,
   TokenPool,

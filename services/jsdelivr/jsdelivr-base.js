@@ -29,4 +29,4 @@ class BaseJsDelivrService extends BaseJsonService {
   }
 }
 
-export default { schema, periodMap, BaseJsDelivrService };
+export { schema, periodMap, BaseJsDelivrService };

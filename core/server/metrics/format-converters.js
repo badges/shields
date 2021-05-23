@@ -23,4 +23,4 @@ function promClientJsonToInfluxV2(metrics, extraLabels = {}) {
     .join('\n')
 }
 
-export default { promClientJsonToInfluxV2 };
+export { promClientJsonToInfluxV2 };

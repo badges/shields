@@ -99,7 +99,7 @@ const cacheDocumentationFragment = `
   </p>
   `
 
-export default {
+export {
   allVersionsSchema,
   keywords,
   BasePackagistService,

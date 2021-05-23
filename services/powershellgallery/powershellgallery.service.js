@@ -92,7 +92,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
   }
 }
 
-export default {
+export {
   PowershellGalleryVersion,
   PowershellGalleryVersionRedirector,
   PowershellGalleryDownloads,

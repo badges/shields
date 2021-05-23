@@ -64,4 +64,4 @@ class CranVersion extends BaseCranService {
   }
 }
 
-export default { CranLicense, CranVersion };
+export { CranLicense, CranVersion };

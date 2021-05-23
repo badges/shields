@@ -81,4 +81,4 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
   })
 }
 
-export default { setRoutes };
+export { setRoutes };

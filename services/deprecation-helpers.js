@@ -6,6 +6,6 @@ function enforceDeprecation(effectiveDate) {
   }
 }
 
-export default {
+export {
   enforceDeprecation,
 };

@@ -62,7 +62,7 @@ class LiberapayBase extends BaseJsonService {
   }
 }
 
-export default {
+export {
   renderCurrencyBadge,
   LiberapayBase,
   isCurrencyOverTime,

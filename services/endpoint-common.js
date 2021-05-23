@@ -72,7 +72,7 @@ async function fetchEndpointData(
   })
 }
 
-export default {
+export {
   validateEndpointData,
   fetchEndpointData,
 };

@@ -97,7 +97,7 @@ const GitlabPipelineStatusRedirector = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-export default {
+export {
   GitlabPipelineStatus,
   GitlabPipelineStatusRedirector,
 };

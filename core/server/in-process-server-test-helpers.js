@@ -11,6 +11,6 @@ async function createTestServer(customConfig = {}) {
   return new Server(mergedConfig)
 }
 
-export default {
+export {
   createTestServer,
 };

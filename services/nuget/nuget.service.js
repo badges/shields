@@ -37,4 +37,4 @@ class NugetDownloadService extends Downloads {
   ]
 }
 
-export default { NugetVersionService, NugetDownloadService };
+export { NugetVersionService, NugetDownloadService };

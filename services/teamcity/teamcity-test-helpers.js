@@ -15,7 +15,7 @@ const config = {
   },
 }
 
-export default {
+export {
   user,
   pass,
   host,

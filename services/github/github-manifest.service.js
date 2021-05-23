@@ -198,7 +198,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
   }
 }
 
-export default {
+export {
   GithubManifestVersion,
   DynamicGithubManifest,
 };

@@ -23,4 +23,4 @@ class BaseGithubLanguage extends GithubAuthV3Service {
   }
 }
 
-export default { BaseGithubLanguage };
+export { BaseGithubLanguage };

@@ -19,7 +19,7 @@ const buildUrl = ({ jobUrl, lastCompletedBuild = true, plugin }) => {
   return `${jobUrl}/${lastCompletedBuildElement}${pluginElement}api/json`
 }
 
-export default {
+export {
   queryParamSchema,
   buildTreeParamQueryString: tree => ({ tree }),
   buildUrl,

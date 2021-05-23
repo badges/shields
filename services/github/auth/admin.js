@@ -29,4 +29,4 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   })
 }
 
-export default { setRoutes };
+export { setRoutes };

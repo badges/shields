@@ -151,7 +151,7 @@ function rasterRedirectUrl({ rasterUrl }, badgeUrl) {
   return result
 }
 
-export default {
+export {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,

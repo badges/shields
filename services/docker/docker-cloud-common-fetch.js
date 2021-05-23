@@ -20,6 +20,6 @@ async function fetchBuild(serviceInstance, { user, repo }) {
   })
 }
 
-export default {
+export {
   fetchBuild,
 };

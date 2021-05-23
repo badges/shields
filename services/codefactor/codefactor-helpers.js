@@ -29,4 +29,4 @@ function gradeColor(grade) {
   return color
 }
 
-export default { isValidGrade, gradeColor };
+export { isValidGrade, gradeColor };

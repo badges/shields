@@ -193,7 +193,7 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-export default {
+export {
   AurLicense,
   AurVersion,
   AurVotes,

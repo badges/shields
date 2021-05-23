@@ -3033,7 +3033,7 @@ const versionDataWithVaryingArchitectures = [
   { name: '2.6', images: [] },
 ]
 
-export default {
+export {
   sizeDataNoTagSemVerSort,
   versionDataNoTagDateSort,
   versionPagedDataNoTagDateSort,

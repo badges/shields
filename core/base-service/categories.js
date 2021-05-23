@@ -11,7 +11,7 @@ function assertValidCategory(category, message = undefined) {
   Joi.assert(category, isValidCategory, message)
 }
 
-export default {
+export {
   isValidCategory,
   assertValidCategory,
 };

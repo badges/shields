@@ -107,7 +107,7 @@ function loadTesters() {
     .map(path => require(path))
 }
 
-export default {
+export {
   InvalidService,
   loadServiceClasses,
   checkNames,

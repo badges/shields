@@ -26,4 +26,4 @@ async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
   return { status }
 }
 
-export default { keywords, fetch };
+export { keywords, fetch };

@@ -124,7 +124,7 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 }
 
-export default {
+export {
   SymfonyInsightBase,
   keywords,
   gradeColors,

@@ -42,7 +42,7 @@ class BasePuppetForgeModulesService extends BaseJsonService {
   }
 }
 
-export default {
+export {
   BasePuppetForgeModulesService,
   BasePuppetForgeUsersService,
 };

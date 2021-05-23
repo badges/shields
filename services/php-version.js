@@ -238,7 +238,7 @@ async function getPhpReleases(githubApiProvider) {
   });
 }
 
-export default {
+export {
   compare,
   latest,
   isStable,

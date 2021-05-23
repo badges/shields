@@ -143,7 +143,7 @@ const mockReleaseSchedule = () => nock => {
     .reply(200, schedule)
 }
 
-export default {
+export {
   mockPackageData,
   mockCurrentSha,
   mockVersionsSha,

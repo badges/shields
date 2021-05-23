@@ -43,7 +43,7 @@ function getDependencyVersion({
   return { range }
 }
 
-export default {
+export {
   isDependencyMap,
   isPackageJsonWithDependencies,
   getDependencyVersion,

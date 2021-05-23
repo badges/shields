@@ -218,7 +218,7 @@ function createServiceFamily({
   return { NugetVersionService, NugetVersionRedirector, NugetDownloadService }
 }
 
-export default {
+export {
   createFilter,
   fetch,
   createServiceFamily,

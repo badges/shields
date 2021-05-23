@@ -44,7 +44,7 @@ const ChromeWebStoreDownloads = redirector({
   dateAdded: new Date('2019-02-27'),
 })
 
-export default {
+export {
   ChromeWebStoreDownloads,
   ChromeWebStoreUsers,
 };

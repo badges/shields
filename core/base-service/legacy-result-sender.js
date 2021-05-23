@@ -30,6 +30,6 @@ function makeSend(format, askres, end) {
   }
 }
 
-export default {
+export {
   makeSend,
 };

@@ -102,7 +102,7 @@ function serverHasBeenUpSinceResourceCached(req) {
   )
 }
 
-export default {
+export {
   coalesceCacheLength,
   setCacheHeaders,
   setHeadersForCacheLength,

@@ -71,7 +71,7 @@ class CtanVersion extends BaseCtanService {
   }
 }
 
-export default {
+export {
   CtanLicense,
   CtanVersion,
 };

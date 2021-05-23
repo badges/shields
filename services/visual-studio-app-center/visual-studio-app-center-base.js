@@ -35,4 +35,4 @@ class BaseVisualStudioAppCenterService extends BaseJsonService {
   }
 }
 
-export default { keywords, documentation, BaseVisualStudioAppCenterService };
+export { keywords, documentation, BaseVisualStudioAppCenterService };

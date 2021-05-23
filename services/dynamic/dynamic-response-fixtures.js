@@ -1,4 +1,4 @@
-export default {
+export {
   exampleXml: `<?xml version="1.0"?>
 <catalog>
    <book id="bk101">

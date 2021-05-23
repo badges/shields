@@ -208,7 +208,7 @@ class Deprecated extends ShieldsRuntimeError {
  * badge when we catch and render the exception (Optional)
  */
 
-export default {
+export {
   ShieldsRuntimeError,
   NotFound,
   ImproperlyConfigured,

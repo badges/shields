@@ -160,7 +160,7 @@ function renderVersionBadge({ version, tag, defaultLabel }) {
   }
 }
 
-export default {
+export {
   latest,
   listCompare,
   slice,

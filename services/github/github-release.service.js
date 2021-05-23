@@ -117,7 +117,7 @@ const redirects = {
   }),
 }
 
-export default {
+export {
   GithubRelease,
   ...redirects,
 };

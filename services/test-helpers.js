@@ -34,7 +34,7 @@ const sendAndCacheRequest = promisify(request)
 
 const defaultContext = { sendAndCacheRequest }
 
-export default {
+export {
   cleanUpNockAfterEach,
   noToken,
   sendAndCacheRequest,

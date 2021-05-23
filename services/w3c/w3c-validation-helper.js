@@ -145,7 +145,7 @@ const documentation = `
   </p>
 `
 
-export default {
+export {
   documentation,
   presetRegex,
   getColor,

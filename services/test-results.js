@@ -104,7 +104,7 @@ const documentation = `
 </p>
 `
 
-export default {
+export {
   testResultQueryParamSchema,
   renderTestResultMessage,
   renderTestResultBadge,

@@ -27,4 +27,4 @@ class BaseVaadinDirectoryService extends BaseJsonService {
   }
 }
 
-export default { BaseVaadinDirectoryService };
+export { BaseVaadinDirectoryService };

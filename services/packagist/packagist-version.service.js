@@ -141,4 +141,4 @@ const PackagistVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export default { PackagistVersion, PackagistVersionRedirector };
+export { PackagistVersion, PackagistVersionRedirector };

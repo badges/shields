@@ -61,4 +61,4 @@ const ClojarsVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export default { ClojarsVersionService, ClojarsVersionRedirector };
+export { ClojarsVersionService, ClojarsVersionRedirector };

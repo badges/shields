@@ -98,6 +98,6 @@ class FeedzVersionService extends BaseJsonService {
   }
 }
 
-export default {
+export {
   FeedzVersionService,
 };

@@ -11,7 +11,7 @@ const isReuseCompliance = Joi.string()
   .valid('compliant', 'non-compliant', 'checking', 'unregistered')
   .required()
 
-export default {
+export {
   isReuseCompliance,
   COLOR_MAP,
 };

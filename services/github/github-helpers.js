@@ -31,7 +31,7 @@ function transformErrors(errors, entity = 'repo') {
 
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
-export default {
+export {
   documentation,
   stateColor,
   commentsColor,

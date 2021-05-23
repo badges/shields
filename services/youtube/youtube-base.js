@@ -90,4 +90,4 @@ class YouTubeChannelBase extends YouTubeBase {
   static type = 'channel'
 }
 
-export default { documentation, YouTubeVideoBase, YouTubeChannelBase };
+export { documentation, YouTubeVideoBase, YouTubeChannelBase };

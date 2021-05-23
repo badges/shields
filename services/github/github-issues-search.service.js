@@ -104,7 +104,7 @@ class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
   }
 }
 
-export default {
+export {
   GithubIssuesSearch,
   GithubRepoIssuesSearch,
 };

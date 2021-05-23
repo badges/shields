@@ -97,7 +97,7 @@ function inferPullRequest(env = process.env) {
  * @property {string} slug owner/repo/#pullRequest
  */
 
-export default {
+export {
   parseGithubPullRequestUrl,
   parseGithubRepoSlug,
   inferPullRequest,

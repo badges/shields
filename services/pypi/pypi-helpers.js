@@ -103,7 +103,7 @@ function getPackageFormats(packageData) {
   }
 }
 
-export default {
+export {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,

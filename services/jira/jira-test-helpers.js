@@ -19,7 +19,7 @@ const config = {
   private: { jira_user: user, jira_pass: pass },
 }
 
-export default {
+export {
   sprintId,
   sprintQueryString,
   user,

@@ -198,7 +198,7 @@ function setRoutes(allowedOrigin, githubApiProvider, server) {
   })
 }
 
-export default {
+export {
   findSuggestions,
   githubLicense,
   setRoutes,

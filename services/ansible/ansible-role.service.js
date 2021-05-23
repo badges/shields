@@ -78,7 +78,7 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   }
 }
 
-export default {
+export {
   AnsibleGalaxyRoleDownloads,
   AnsibleGalaxyRoleName,
 };

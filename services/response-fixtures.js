@@ -1,6 +1,6 @@
 const invalidJSONString = '{{{{{invalid json}}'
 
-export default {
+export {
   invalidJSON: () => [
     200,
     invalidJSONString,

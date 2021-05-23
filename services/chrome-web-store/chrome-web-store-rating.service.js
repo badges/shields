@@ -106,7 +106,7 @@ class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
   }
 }
 
-export default {
+export {
   ChromeWebStoreRating,
   ChromeWebStoreRatingCount,
   ChromeWebStoreRatingStars,

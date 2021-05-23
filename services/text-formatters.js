@@ -122,7 +122,7 @@ function formatRelativeDate(timestamp) {
     .toLowerCase()
 }
 
-export default {
+export {
   starRating,
   currencyFromCode,
   ordinalNumber,

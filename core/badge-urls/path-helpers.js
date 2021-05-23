@@ -9,6 +9,6 @@ function escapeFormat(t) {
     .replace(/--/g, '-');
 }
 
-export default {
+export {
   escapeFormat,
 };

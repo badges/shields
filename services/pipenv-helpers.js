@@ -50,7 +50,7 @@ function getDependencyVersion({
   }
 }
 
-export default {
+export {
   isLockfile,
   getDependencyVersion,
 };

@@ -18,6 +18,6 @@ function createRoute(which) {
   }
 }
 
-export default {
+export {
   createRoute,
 };

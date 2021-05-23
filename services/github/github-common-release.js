@@ -94,7 +94,7 @@ async function fetchLatestRelease(
   return latestRelease
 }
 
-export default {
+export {
   fetchLatestRelease,
   queryParamSchema,
   _getLatestRelease: getLatestRelease, // currently only used for tests

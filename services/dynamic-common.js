@@ -46,7 +46,7 @@ function renderDynamicBadge({
   }
 }
 
-export default {
+export {
   errorMessages,
   individualValueSchema,
   transformAndValidate,

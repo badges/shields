@@ -104,7 +104,7 @@ function age(date) {
   return colorByAge(daysElapsed)
 }
 
-export default {
+export {
   version,
   downloadCount,
   coveragePercentage,

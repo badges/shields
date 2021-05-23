@@ -75,7 +75,7 @@ async function fetchJsonFromRepo(
   }
 }
 
-export default {
+export {
   fetchIssue,
   fetchRepoContent,
   fetchJsonFromRepo,

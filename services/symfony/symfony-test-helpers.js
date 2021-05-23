@@ -88,7 +88,7 @@ import {noToken} from '../test-helpers.js';
 import {SymfonyInsightBase} from './symfony-insight-base.js';
 const noSymfonyToken = noToken(SymfonyInsightBase)
 
-export default {
+export {
   sampleProjectUuid,
   runningMockResponse,
   platinumMockResponse,

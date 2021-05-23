@@ -200,7 +200,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   };
 }
 
-export default {
+export {
   handleRequest,
   promisify,
   userAgent,

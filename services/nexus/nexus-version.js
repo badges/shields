@@ -3,6 +3,6 @@ function isSnapshotVersion(version) {
   return version && version.match(pattern)
 }
 
-export default {
+export {
   isSnapshotVersion,
 };

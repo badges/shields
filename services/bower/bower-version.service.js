@@ -55,4 +55,4 @@ const BowerVersionRedirect = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export default { BowerVersion, BowerVersionRedirect };
+export { BowerVersion, BowerVersionRedirect };

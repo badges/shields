@@ -58,7 +58,7 @@ const documentation = `
   </p
 `
 
-export default {
+export {
   getLabel,
   isLegacyVersion,
   queryParamSchema,

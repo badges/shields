@@ -114,7 +114,7 @@ class APMLicense extends BaseAPMService {
   }
 }
 
-export default {
+export {
   APMDownloads,
   APMVersion,
   APMLicense,

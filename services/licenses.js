@@ -128,4 +128,4 @@ function renderLicenseBadge({ license, licenses }) {
   }
 }
 
-export default { licenseToColor, renderLicenseBadge };
+export { licenseToColor, renderLicenseBadge };

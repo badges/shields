@@ -1,6 +1,6 @@
 import path from 'path';
 
-export default {
+export {
   siteMetadata: {
     title: 'Shields.io: Quality metadata badges for open source projects',
     description:

@@ -11,6 +11,6 @@ const data = {
   ],
 }
 
-export default {
+export {
   data,
 };

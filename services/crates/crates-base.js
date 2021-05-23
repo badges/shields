@@ -49,4 +49,4 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
-export default { BaseCratesService, keywords };
+export { BaseCratesService, keywords };

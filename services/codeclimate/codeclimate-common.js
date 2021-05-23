@@ -42,7 +42,7 @@ async function fetchRepo(serviceInstance, { user, repo }) {
   return repoInfo
 }
 
-export default {
+export {
   keywords,
   isLetterGrade,
   fetchRepo,

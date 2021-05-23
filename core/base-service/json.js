@@ -21,6 +21,6 @@ function parseJson(buffer) {
   return json
 }
 
-export default {
+export {
   parseJson,
 };

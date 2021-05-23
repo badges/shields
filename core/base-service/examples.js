@@ -153,7 +153,7 @@ function transformExample(inExample, index, ServiceClass) {
   }
 }
 
-export default {
+export {
   validateExample,
   transformExample,
 };

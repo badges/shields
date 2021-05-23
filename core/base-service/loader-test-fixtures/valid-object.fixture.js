@@ -9,4 +9,4 @@ class GoodServiceTwo extends BaseJsonService {
   static route = { base: 'good', pattern: 'two' }
 }
 
-export default { GoodServiceOne, GoodServiceTwo };
+export { GoodServiceOne, GoodServiceTwo };

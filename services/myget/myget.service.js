@@ -55,7 +55,7 @@ class MyGetDownloadService extends Downloads {
   ]
 }
 
-export default {
+export {
   MyGetVersionService,
   MyGetDownloadService,
 };

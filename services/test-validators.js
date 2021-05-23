@@ -138,7 +138,7 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
-export default {
+export {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,

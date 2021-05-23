@@ -28,7 +28,7 @@ function renderWebsiteStatus({
   }
 }
 
-export default {
+export {
   queryParamSchema,
   exampleQueryParams,
   renderWebsiteStatus,

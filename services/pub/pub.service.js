@@ -66,4 +66,4 @@ const PubVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export default { PubVersion, PubVersionRedirector };
+export { PubVersion, PubVersionRedirector };

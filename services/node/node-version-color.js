@@ -82,7 +82,7 @@ async function versionColorForRangeCurrent(range) {
   }
 }
 
-export default {
+export {
   versionColorForRangeCurrent,
   versionColorForRangeLts,
 };

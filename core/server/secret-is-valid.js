@@ -15,4 +15,4 @@ function makeSecretIsValid(shieldsSecret) {
   }
 }
 
-export default { makeSecretIsValid };
+export { makeSecretIsValid };

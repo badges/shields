@@ -34,4 +34,4 @@ class BaseSpigetService extends BaseJsonService {
   }
 }
 
-export default { keywords, documentation, BaseSpigetService };
+export { keywords, documentation, BaseSpigetService };

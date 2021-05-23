@@ -48,7 +48,7 @@ const nuGetV3VersionJsonBuildMetadataWithDash = JSON.stringify({
   ],
 })
 
-export default {
+export {
   queryIndex,
   nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,

@@ -9,7 +9,7 @@ import deprecatedService from './deprecated-service.js';
 import redirector from './redirector.js';
 import {NotFound, InvalidResponse, Inaccessible, InvalidParameter, Deprecated} from './errors.js';
 
-export default {
+export {
   BaseService,
   BaseJsonService,
   BaseGraphqlService,

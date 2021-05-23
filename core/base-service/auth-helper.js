@@ -205,4 +205,4 @@ class AuthHelper {
   }
 }
 
-export default { AuthHelper };
+export { AuthHelper };

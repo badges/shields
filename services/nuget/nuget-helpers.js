@@ -101,7 +101,7 @@ function selectVersion(versions, includePrereleases) {
   }
 }
 
-export default {
+export {
   renderVersionBadge,
   renderDownloadBadge,
   odataToObject,

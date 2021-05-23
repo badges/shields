@@ -52,7 +52,7 @@ const AmoLegacyRedirect = redirector({
   dateAdded: new Date('2019-02-23'),
 })
 
-export default {
+export {
   AmoWeeklyDownloads,
   AmoLegacyRedirect,
 };

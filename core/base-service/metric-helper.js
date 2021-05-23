@@ -57,4 +57,4 @@ const MetricNames = Object.freeze({
   SERVICE_RESPONSE_SIZE: Symbol('service-response-size'),
 })
 
-export default { MetricHelper, MetricNames };
+export { MetricHelper, MetricNames };

@@ -4,4 +4,4 @@ const authConfig = {
   serviceKey: 'jira',
 }
 
-export default { authConfig };
+export { authConfig };

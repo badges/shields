@@ -72,4 +72,4 @@ function renderBuildStatusBadge({ label, status }) {
   }
 }
 
-export default { isBuildStatus, renderBuildStatusBadge };
+export { isBuildStatus, renderBuildStatusBadge };

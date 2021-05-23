@@ -19,4 +19,4 @@ class BaseClojarsService extends BaseJsonService {
   }
 }
 
-export default { BaseClojarsService };
+export { BaseClojarsService };

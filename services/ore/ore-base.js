@@ -83,4 +83,4 @@ class BaseOreService extends BaseJsonService {
 
 BaseOreService.sessionToken = null
 
-export default { keywords, documentation, BaseOreService };
+export { keywords, documentation, BaseOreService };

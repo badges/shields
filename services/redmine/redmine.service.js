@@ -76,4 +76,4 @@ class RedminePluginStars extends BaseRedminePluginRating {
   }
 }
 
-export default { RedminePluginRating, RedminePluginStars };
+export { RedminePluginRating, RedminePluginStars };

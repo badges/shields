@@ -84,7 +84,7 @@ function latestVersion(versions) {
     .pop()
 }
 
-export default {
+export {
   parseVersion,
   compareVersionLists,
   latestVersion,

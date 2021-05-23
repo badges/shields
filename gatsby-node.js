@@ -44,4 +44,4 @@ async function createPages({ actions: { createPage } }) {
   })
 }
 
-export default { createPages };
+export { createPages };

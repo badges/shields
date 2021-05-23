@@ -87,7 +87,7 @@ All other things being equal, a graphql query will almost always be a smaller
 number of bytes over the wire and a smaller/simpler object to parse.
 */
 
-export default {
+export {
   GithubAuthV3Service,
   ConditionalGithubAuthV3Service,
   GithubAuthV4Service,

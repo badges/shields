@@ -59,7 +59,7 @@ async function versionColorForWordpressVersion(version) {
   }
 }
 
-export default {
+export {
   toSemver,
   getOfferedVersions,
   versionColorForWordpressVersion,

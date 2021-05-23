@@ -93,7 +93,7 @@ function clearRegularUpdateCache() {
   regularUpdateCache = Object.create(null)
 }
 
-export default {
+export {
   regularUpdate,
   clearRegularUpdateCache,
 };

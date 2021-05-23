@@ -53,7 +53,7 @@ function getDigestSemVerMatches({ data, digest }) {
   return version
 }
 
-export default {
+export {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,

@@ -18,7 +18,7 @@ function renderContributorBadge({ label, contributorCount }) {
   }
 }
 
-export default {
+export {
   contributorColor,
   renderContributorBadge,
 };

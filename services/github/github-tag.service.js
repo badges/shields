@@ -161,7 +161,7 @@ const redirects = {
   }),
 }
 
-export default {
+export {
   GithubTag,
   ...redirects,
 };

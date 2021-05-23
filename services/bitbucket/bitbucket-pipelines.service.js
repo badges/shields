@@ -94,7 +94,7 @@ const BitbucketPipelinesRedirector = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-export default {
+export {
   BitbucketPipelines,
   BitbucketPipelinesRedirector,
 };

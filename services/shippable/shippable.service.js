@@ -77,4 +77,4 @@ const ShippableRedirect = redirector({
   dateAdded: new Date('2020-07-18'),
 })
 
-export default { Shippable, ShippableRedirect };
+export { Shippable, ShippableRedirect };

@@ -3,7 +3,7 @@ const Joi = require('joi').extend(semver).extend(semverRange)
 
 const optionalNonNegativeInteger = Joi.number().integer().min(0)
 
-export default {
+export {
   optionalNonNegativeInteger,
 
   nonNegativeInteger: optionalNonNegativeInteger.required(),

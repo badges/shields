@@ -19,6 +19,6 @@ async function fetchProject(serviceInstance, { platform, scope, packageName }) {
   })
 }
 
-export default {
+export {
   fetchProject,
 };

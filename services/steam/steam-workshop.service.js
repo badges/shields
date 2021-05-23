@@ -400,7 +400,7 @@ class SteamFileViews extends SteamFileService {
   }
 }
 
-export default {
+export {
   SteamCollectionSize,
   SteamFileSize,
   SteamFileReleaseDate,

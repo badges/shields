@@ -72,7 +72,7 @@ function getQueryParamNames({ queryParamSchema }) {
   }
 }
 
-export default {
+export {
   makeFullUrl,
   isValidRoute,
   assertValidRoute,

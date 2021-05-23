@@ -205,6 +205,6 @@ function createServiceFamily({
   }
 }
 
-export default {
+export {
   createServiceFamily,
 };

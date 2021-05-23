@@ -70,7 +70,7 @@ function assertValidServiceDefinitionExport(examples, message = undefined) {
   Joi.assert(examples, serviceDefinitionExport, message)
 }
 
-export default {
+export {
   serviceDefinition,
   assertValidServiceDefinition,
   serviceDefinitionExport,
