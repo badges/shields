@@ -1,11 +1,12 @@
 import path from 'path';
+import {fileURLToPath} from 'url';
 import glob from 'glob';
 import countBy from 'lodash.countby';
 import categories from '../../services/categories.js';
 import BaseService from './base.js';
 import {assertValidServiceDefinitionExport} from './service-definitions.js';
 
-const serviceDir = path.join(__dirname, '..', '..', 'services')
+const serviceDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'services')
 
 class InvalidService extends Error {
   constructor(message) {

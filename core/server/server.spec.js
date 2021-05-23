@@ -1,4 +1,5 @@
 import path from 'path';
+import {fileURLToPath} from 'url'
 import {expect} from 'chai';
 import isSvg from 'is-svg';
 import config from 'config';
@@ -16,7 +17,7 @@ describe('The server', function () {
       this.timeout(10000)
       server = await createTestServer({
         public: {
-          documentRoot: path.resolve(__dirname, 'test-public'),
+          documentRoot: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'test-public'),
         },
       })
       baseUrl = server.baseUrl

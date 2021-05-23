@@ -1,4 +1,5 @@
 import path from 'path';
+import {fileURLToPath} from 'url'
 
 export {
   siteMetadata: {
@@ -11,7 +12,7 @@ export {
     {
       resolve: 'gatsby-plugin-page-creator',
       options: {
-        path: path.join(__dirname, 'frontend', 'pages'),
+        path: path.join(path.dirname(fileURLToPath(import.meta.url)), 'frontend', 'pages'),
       },
     },
     'gatsby-plugin-react-helmet',
@@ -24,7 +25,7 @@ export {
     //   resolve: 'gatsby-source-filesystem',
     //   options: {
     //     name: 'static',
-    //     path: `${__dirname}/frontend/static`,
+    //     path: `${path.dirname(fileURLToPath(import.meta.url))}/frontend/static`,
     //   },
     // },
   ],

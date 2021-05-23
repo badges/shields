@@ -3,7 +3,7 @@
  */
 
 import path from 'path';
-import url from 'url';
+import url, {fileURLToPath} from 'url';
 const { URL } = url
 import cloudflareMiddleware from 'cloudflare-middleware';
 import bytes from 'bytes';
@@ -142,7 +142,7 @@ const publicConfigSchema = Joi.object({
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
-    path.resolve(__dirname, '..', '..', 'public')
+    path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'public')
   ),
   requireCloudflare: Joi.boolean().required(),
 }).required()

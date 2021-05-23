@@ -1,4 +1,4 @@
-import {URL} from 'url';
+import {fileURLToPath, URL} from 'url';
 const config = require('config').util.toObject()
 import got from 'got';
 import emojic from 'emojic';
@@ -27,7 +27,7 @@ async function traceBadge(badgeUrl) {
 
 async function main() {
   if (process.argv.length < 3) {
-    console.error(`Usage: node ${__filename} badge-url`)
+    console.error(`Usage: node ${fileURLToPath(import.meta.url)} badge-url`)
     process.exit(1)
   }
   const [, , url] = process.argv

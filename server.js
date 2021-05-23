@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import {fileURLToPath} from 'url'
 
 // Set up Sentry reporting as early in the process as possible.
 const config = require('config').util.toObject()
@@ -41,7 +42,7 @@ if (fs.existsSync('.env')) {
   process.exit(1)
 }
 
-const legacySecretsPath = path.join(__dirname, 'private', 'secret.json')
+const legacySecretsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'private', 'secret.json')
 if (fs.existsSync(legacySecretsPath)) {
   console.error(
     `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`
