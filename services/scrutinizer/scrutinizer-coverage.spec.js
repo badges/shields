@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {test, given} from 'sazerac';
 import {InvalidResponse, NotFound} from '..';
-import [ScrutinizerCoverage] from './scrutinizer-coverage.service.js';
+import {ScrutinizerCoverage} from './scrutinizer-coverage.service.js';
 
 describe('ScrutinizerCoverage', function () {
   test(ScrutinizerCoverage.render, () => {
