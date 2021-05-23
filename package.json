@@ -244,6 +244,7 @@
     "node": "^12.18.3",
     "npm": ">=7.0.0"
   },
+  "type": "module",
   "babel": {
     "plugins": [
       [
