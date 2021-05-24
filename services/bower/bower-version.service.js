@@ -32,17 +32,15 @@ class BowerVersion extends BaseBowerService {
   async handle({ packageName }, queryParams) {
     const data = await this.fetch({ packageName })
     const includePrereleases = queryParams.include_prereleases !== undefined
+    const version = includePrereleases
+      ? data.latest_release_number
+      : data.latest_stable_release_number
 
-    if (includePrereleases) {
-      if (data.latest_release_number) {
-        return renderVersionBadge({ version: data.latest_release_number })
-      }
-    } else {
-      if (data.latest_stable_release) {
-        return renderVersionBadge({ version: data.latest_stable_release.name })
-      }
+    if (!version) {
+      throw new InvalidResponse({ prettyMessage: 'no releases' })
     }
-    throw new InvalidResponse({ prettyMessage: 'no releases' })
+
+    return renderVersionBadge({ version })
   }
 }
 
