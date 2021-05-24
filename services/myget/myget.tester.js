@@ -29,7 +29,7 @@ t.create('total downloads (valid)')
   })
 
 t.create('total downloads (tenant)')
-  .get('/dotnet.myget/dotnet-coreclr/dt/Microsoft.DotNet.CoreCLR.json')
+  .get('/cefsharp.myget/cefsharp/dt/CefSharp.Common.json')
   .expectBadge({
     label: 'downloads',
     message: isMetric,
@@ -70,10 +70,10 @@ t.create('version (valid)')
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
-t.create('total downloads (tenant)')
-  .get('/dotnet.myget/dotnet-coreclr/v/Microsoft.DotNet.CoreCLR.json')
+t.create('version (tenant)')
+  .get('/cefsharp.myget/cefsharp/v/cef.sdk.json')
   .expectBadge({
-    label: 'dotnet-coreclr',
+    label: 'cefsharp',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
