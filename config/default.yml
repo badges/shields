@@ -27,11 +27,12 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 120
 
-  rateLimit: true
-
   handleInternalErrors: true
 
   fetchLimit: '10MB'
+
+  requestTimeoutSeconds: 120
+  requestTimeoutMaxAgeSeconds: 30
 
   requireCloudflare: false
 

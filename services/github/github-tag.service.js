@@ -79,7 +79,7 @@ class GithubTag extends GithubAuthV4Service {
     const limit = sort === 'semver' ? 100 : 1
     return this._requestGraphql({
       query: gql`
-        query($user: String!, $repo: String!, $limit: Int!) {
+        query ($user: String!, $repo: String!, $limit: Int!) {
           repository(owner: $user, name: $repo) {
             refs(
               refPrefix: "refs/tags/"

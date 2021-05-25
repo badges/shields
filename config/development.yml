@@ -5,6 +5,4 @@ public:
   cors:
     allowedOrigin: ['http://localhost:3000']
 
-  rateLimit: false
-
   handleInternalErrors: false

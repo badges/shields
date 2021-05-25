@@ -42,14 +42,14 @@ module.exports = class VisualStudioAppCenterReleasesVersion extends (
   }
 
   async handle({ owner, app, token }) {
-    const { version, short_version } = await this.fetch({
+    const { version, short_version: shortVersion } = await this.fetch({
       owner,
       app,
       token,
       schema,
     })
     return renderVersionBadge({
-      version: `${short_version} (${version})`,
+      version: `${shortVersion} (${version})`,
     })
   }
 }

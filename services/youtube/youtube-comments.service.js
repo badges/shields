@@ -1,8 +1,8 @@
 'use strict'
 
-const YouTubeBase = require('./youtube-base')
+const { documentation, YouTubeVideoBase } = require('./youtube-base')
 
-module.exports = class YouTubeComments extends YouTubeBase {
+module.exports = class YouTubeComments extends YouTubeVideoBase {
   static route = {
     base: 'youtube/comments',
     pattern: ':videoId',
@@ -11,7 +11,7 @@ module.exports = class YouTubeComments extends YouTubeBase {
   static get examples() {
     const preview = this.render({
       statistics: { commentCount: 209 },
-      videoId: 'wGJHwc5ksMA',
+      id: 'wGJHwc5ksMA',
     })
     // link[] is not allowed in examples
     delete preview.link
@@ -20,15 +20,12 @@ module.exports = class YouTubeComments extends YouTubeBase {
         title: 'YouTube Video Comments',
         namedParams: { videoId: 'wGJHwc5ksMA' },
         staticPreview: preview,
+        documentation,
       },
     ]
   }
 
-  static render({ statistics, videoId }) {
-    return super.renderSingleStat({
-      statistics,
-      statisticName: 'comment',
-      videoId,
-    })
+  static render({ statistics, id }) {
+    return super.renderSingleStat({ statistics, statisticName: 'comment', id })
   }
 }

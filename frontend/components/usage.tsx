@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { advertisedStyles, shieldsLogos } from '../lib/supported-features'
-// @ts-ignore
+// ts-expect-error: because reasons?
 import StaticBadgeMaker from './static-badge-maker'
 import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
@@ -434,8 +434,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
         for use cases where SVG will not work. These requests should be made to
         our raster server <code>https://raster.shields.io</code>. For example,
         the raster equivalent of{' '}
-        <code>https://img.shields.io/v/npm/express</code> is{' '}
-        <code>https://raster.shields.io/v/npm/express</code>. For backward
+        <code>https://img.shields.io/npm/v/express</code> is{' '}
+        <code>https://raster.shields.io/npm/v/express</code>. For backward
         compatibility, the badge server will redirect <code>.png</code> badges
         to the raster server.
       </p>

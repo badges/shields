@@ -12,7 +12,7 @@ t.create('video comment count')
     label: 'comments',
     message: isMetric,
     color: 'red',
-    link: ['https://www.youtube.com/watch?v=wGJHwc5ksMA'],
+    link: ['https://www.youtube.com/video/wGJHwc5ksMA'],
   })
 
 t.create('video not found')

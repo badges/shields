@@ -83,10 +83,8 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   }
 
   const allowedKeys = flattenQueryParams(handlerOptions.queryParams)
-  const {
-    cacheLength: serviceDefaultCacheLengthSeconds,
-    fetchLimitBytes,
-  } = handlerOptions
+  const { cacheLength: serviceDefaultCacheLengthSeconds, fetchLimitBytes } =
+    handlerOptions
 
   return (queryParams, match, end, ask) => {
     /*
@@ -198,7 +196,9 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       },
       cachingRequest
     )
+    // eslint-disable-next-line promise/prefer-await-to-then
     if (result && result.catch) {
+      // eslint-disable-next-line promise/prefer-await-to-then
       result.catch(err => {
         throw err
       })

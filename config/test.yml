@@ -3,8 +3,6 @@ public:
     address: 'localhost'
     port: 1111
 
-  rateLimit: false
-
   redirectUrl: 'http://frontend.example.test'
 
   rasterUrl: 'http://raster.example.test'

@@ -47,7 +47,7 @@ module.exports = class GithubForks extends GithubAuthV4Service {
   static render({ user, repo, forkCount }) {
     return {
       message: metric(forkCount),
-      color: '4183C4',
+      color: 'blue',
       link: [
         `https://github.com/${user}/${repo}/fork`,
         `https://github.com/${user}/${repo}/network`,
@@ -58,7 +58,7 @@ module.exports = class GithubForks extends GithubAuthV4Service {
   async handle({ user, repo }) {
     const json = await this._requestGraphql({
       query: gql`
-        query($user: String!, $repo: String!) {
+        query ($user: String!, $repo: String!) {
           repository(owner: $user, name: $repo) {
             forkCount
           }

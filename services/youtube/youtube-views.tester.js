@@ -12,7 +12,7 @@ t.create('video view count')
     label: 'views',
     message: isMetric,
     color: 'red',
-    link: ['https://www.youtube.com/watch?v=abBdk8bSPKU'],
+    link: ['https://www.youtube.com/video/abBdk8bSPKU'],
   })
 
 t.create('video not found')

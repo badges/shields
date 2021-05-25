@@ -4,6 +4,29 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-05-01
+
+- Add setting which allows setting a timeout on HTTP requests
+  This is configured with the new `REQUEST_TIMEOUT_SECONDS` setting. If a request takes longer
+  than this number of seconds a `408 Request Timeout` response will be returned.
+- Deprecate [Bintray] service [#6423](https://github.com/badges/shields/issues/6423)
+- Support git hash in [nexus] SNAPSHOT version [#6369](https://github.com/badges/shields/issues/6369)
+- Replace 4183C4 with blue [#6366](https://github.com/badges/shields/issues/6366)
+- [Youtube] Added channel view count and subscriber count badges [#6333](https://github.com/badges/shields/issues/6333)
+- Fix Netlify badge by adding new color schema [#6340](https://github.com/badges/shields/issues/6340)
+- [REUSE] Add service badges [#6330](https://github.com/badges/shields/issues/6330)
+- Dependency updates
+
+## server-2021-04-01
+
+- Use NPM packages to provide fonts instead of Google Fonts [#6274](https://github.com/badges/shields/issues/6274)
+- Prevent duplication of parameters in badge examples [#6272](https://github.com/badges/shields/issues/6272)
+- Add docs for all types of releases [#6210](https://github.com/badges/shields/issues/6210)
+- refresh self-hosting docs [#6273](https://github.com/badges/shields/issues/6273)
+- allow missing 'goal' key in [liberapay] badges [#6258](https://github.com/badges/shields/issues/6258)
+- use got to push influx metrics [#6257](https://github.com/badges/shields/issues/6257)
+- Dependency updates
+
 ## server-2021-03-01
 
 - ensure redirect target path is correctly encoded [#6229](https://github.com/badges/shields/issues/6229)

@@ -2,14 +2,12 @@
 
 const { createServiceFamily } = require('../nuget/nuget-v3-service-family')
 
-const {
-  NugetVersionService: Version,
-  NugetDownloadService: Downloads,
-} = createServiceFamily({
-  defaultLabel: 'myget',
-  serviceBaseUrl: 'myget',
-  apiDomain: 'myget.org',
-})
+const { NugetVersionService: Version, NugetDownloadService: Downloads } =
+  createServiceFamily({
+    defaultLabel: 'myget',
+    serviceBaseUrl: 'myget',
+    apiDomain: 'myget.org',
+  })
 
 class MyGetVersionService extends Version {
   static examples = [
@@ -29,11 +27,11 @@ class MyGetVersionService extends Version {
       title: 'MyGet tenant',
       pattern: ':tenant.myget/:feed/v/:packageName',
       namedParams: {
-        tenant: 'dotnet',
-        feed: 'dotnet-coreclr',
-        packageName: 'Microsoft.DotNet.CoreCLR',
+        tenant: 'cefsharp',
+        feed: 'cefsharp',
+        packageName: 'cef.sdk',
       },
-      staticPreview: this.render({ version: '1.0.2-prerelease' }),
+      staticPreview: this.render({ version: '91.1.1' }),
     },
   ]
 }
@@ -50,9 +48,9 @@ class MyGetDownloadService extends Downloads {
       title: 'MyGet tenant',
       pattern: ':tenant.myget/:feed/dt/:packageName',
       namedParams: {
-        tenant: 'dotnet',
-        feed: 'dotnet-coreclr',
-        packageName: 'Microsoft.DotNet.CoreCLR',
+        tenant: 'cefsharp',
+        feed: 'cefsharp',
+        packageName: 'CefSharp',
       },
       staticPreview: this.render({ downloads: 9748 }),
     },

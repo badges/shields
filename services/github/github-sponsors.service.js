@@ -19,37 +19,32 @@ const schema = Joi.object({
 }).required()
 
 module.exports = class GithubSponsors extends GithubAuthV4Service {
-  static category = 'social'
+  static category = 'funding'
   static route = { base: 'github/sponsors', pattern: ':user' }
   static examples = [
     {
       title: 'GitHub Sponsors',
       namedParams: { user: 'Homebrew' },
-      queryParams: { style: 'social' },
-      staticPreview: {
-        message: '217',
-        style: 'social',
-      },
+      staticPreview: this.render({ count: 217 }),
       documentation,
     },
   ]
 
   static defaultBadgeData = {
     label: 'sponsors',
-    namedLogo: 'github',
   }
 
   static render({ count }) {
     return {
       message: metric(count),
-      color: '4183C4',
+      color: 'blue',
     }
   }
 
   async fetch({ user }) {
     return this._requestGraphql({
       query: gql`
-        query($user: String!) {
+        query ($user: String!) {
           repositoryOwner(login: $user) {
             ... on User {
               sponsorshipsAsMaintainer {

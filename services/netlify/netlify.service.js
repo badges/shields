@@ -54,9 +54,9 @@ module.exports = class Netlify extends BaseSvgScrapingService {
     const { buffer } = await this._request({
       url,
     })
-    if (buffer.includes('#EAFAF9')) return { message: 'passing' }
-    if (buffer.includes('#FFF3F4')) return { message: 'failing' }
-    if (buffer.includes('#FEFAEA')) return { message: 'building' }
+    if (buffer.includes('#0D544F')) return { message: 'passing' }
+    if (buffer.includes('#900B31')) return { message: 'failing' }
+    if (buffer.includes('#AB6F10')) return { message: 'building' }
     return { message: 'unknown' }
   }
 

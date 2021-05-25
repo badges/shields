@@ -18,8 +18,8 @@ const { makeSend } = require('../base-service/legacy-result-sender')
 const { handleRequest } = require('../base-service/legacy-request-handler')
 const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
+const { nonNegativeInteger } = require('../../services/validators')
 const log = require('./log')
-const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
 const InfluxMetrics = require('./influx-metrics')
 
@@ -137,12 +137,11 @@ const publicConfigSchema = Joi.object({
     teamcity: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
-  cacheHeaders: {
-    defaultCacheLengthSeconds: Joi.number().integer().required(),
-  },
-  rateLimit: Joi.boolean().required(),
+  cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  requestTimeoutSeconds: nonNegativeInteger,
+  requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
     path.resolve(__dirname, '..', '..', 'public')
   ),
@@ -151,8 +150,6 @@ const publicConfigSchema = Joi.object({
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
-  bintray_user: Joi.string(),
-  bintray_apikey: Joi.string(),
   discord_bot_token: Joi.string(),
   drone_token: Joi.string(),
   gh_client_id: Joi.string(),
@@ -432,7 +429,6 @@ class Server {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
       cors: { allowedOrigin },
-      rateLimit,
       requireCloudflare,
     } = this.config.public
 
@@ -452,13 +448,7 @@ class Server {
       this.requireCloudflare()
     }
 
-    const { metricInstance } = this
-    this.cleanupMonitor = sysMonitor.setRoutes(
-      { rateLimit },
-      { server: camp, metricInstance }
-    )
-
-    const { githubConstellation } = this
+    const { githubConstellation, metricInstance } = this
     await githubConstellation.initialize(camp)
     if (metricInstance) {
       if (this.config.public.metrics.prometheus.endpointEnabled) {
@@ -476,6 +466,19 @@ class Server {
     this.registerRedirects()
     this.registerServices()
 
+    camp.timeout = this.config.public.requestTimeoutSeconds * 1000
+    if (this.config.public.requestTimeoutSeconds > 0) {
+      camp.on('timeout', socket => {
+        const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
+        socket.write('HTTP/1.1 408 Request Timeout\r\n')
+        socket.write('Content-Type: text/html; charset=UTF-8\r\n')
+        socket.write('Content-Encoding: UTF-8\r\n')
+        socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\r\n`)
+        socket.write('Connection: close\r\n\r\n')
+        socket.write('Request Timeout')
+        socket.end()
+      })
+    }
     camp.listenAsConfigured()
 
     await new Promise(resolve => camp.on('listening', () => resolve()))
