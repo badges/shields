@@ -9,27 +9,27 @@ function testRender(params) {
 
 describe('XmlElement class', function () {
   test(testRender, () => {
-    given({ tag: 'tag' }).expect('<tag/>')
+    given({ name: 'tag' }).expect('<tag/>')
 
-    given({ tag: 'tag', content: ['text'] }).expect('<tag>text</tag>')
+    given({ name: 'tag', content: ['text'] }).expect('<tag>text</tag>')
 
     given({
-      tag: 'tag',
-      content: ['not xml>>>', 'text', new XmlElement({ tag: 'xml' })],
+      name: 'tag',
+      content: ['not xml>>>', 'text', new XmlElement({ name: 'xml' })],
     }).expect('<tag>not xml&gt;&gt;&gt; text <xml/></tag>')
 
     given({
-      tag: 'nested1',
+      name: 'nested1',
       content: [
         new XmlElement({
-          tag: 'nested2',
-          content: [new XmlElement({ tag: 'nested3' })],
+          name: 'nested2',
+          content: [new XmlElement({ name: 'nested3' })],
         }),
       ],
     }).expect('<nested1><nested2><nested3/></nested2></nested1>')
 
     given({
-      tag: 'tag',
+      name: 'tag',
       attrs: {
         int: 47,
         text: 'text',
@@ -38,7 +38,7 @@ describe('XmlElement class', function () {
     }).expect('<tag int="47" text="text" escape="&lt;escape me&gt;"/>')
 
     given({
-      tag: 'tag',
+      name: 'tag',
       content: ['text'],
       attrs: {
         int: 47,

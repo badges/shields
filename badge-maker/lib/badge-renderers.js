@@ -642,7 +642,7 @@ function forTheBadge({
   }
 
   const logoElement = new XmlElement({
-    tag: 'image',
+    name: 'image',
     attrs: {
       x: logoMinX,
       y: 0.5 * (BADGE_HEIGHT - LOGO_HEIGHT),
@@ -656,7 +656,7 @@ function forTheBadge({
     const { textColor } = colorsForBackground(outLabelColor)
     const midX = labelTextMinX + 0.5 * labelTextWidth
     const text = new XmlElement({
-      tag: 'text',
+      name: 'text',
       content: [label],
       attrs: {
         transform: FONT_SCALE_DOWN_VALUE,
@@ -669,7 +669,7 @@ function forTheBadge({
 
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
       const rect = new XmlElement({
-        tag: 'rect',
+        name: 'rect',
         attrs: {
           width: labelRectWidth,
           height: BADGE_HEIGHT,
@@ -677,7 +677,7 @@ function forTheBadge({
         },
       })
       return new XmlElement({
-        tag: 'a',
+        name: 'a',
         content: [rect, text],
         attrs: {
           target: '_blank',
@@ -693,7 +693,7 @@ function forTheBadge({
     const { textColor } = colorsForBackground(color)
     const midX = messageTextMinX + 0.5 * messageTextWidth
     const text = new XmlElement({
-      tag: 'text',
+      name: 'text',
       content: [message],
       attrs: {
         transform: FONT_SCALE_DOWN_VALUE,
@@ -707,7 +707,7 @@ function forTheBadge({
 
     if (hasRightLink) {
       const rect = new XmlElement({
-        tag: 'rect',
+        name: 'rect',
         attrs: {
           width: messageRectWidth,
           height: BADGE_HEIGHT,
@@ -716,7 +716,7 @@ function forTheBadge({
         },
       })
       return new XmlElement({
-        tag: 'a',
+        name: 'a',
         content: [rect, text],
         attrs: {
           target: '_blank',
@@ -732,7 +732,7 @@ function forTheBadge({
   if (needsLabelRect) {
     backgroundContent = [
       new XmlElement({
-        tag: 'rect',
+        name: 'rect',
         attrs: {
           width: labelRectWidth,
           height: BADGE_HEIGHT,
@@ -740,7 +740,7 @@ function forTheBadge({
         },
       }),
       new XmlElement({
-        tag: 'rect',
+        name: 'rect',
         attrs: {
           x: labelRectWidth,
           width: messageRectWidth,
@@ -752,7 +752,7 @@ function forTheBadge({
   } else {
     backgroundContent = [
       new XmlElement({
-        tag: 'rect',
+        name: 'rect',
         attrs: {
           width: messageRectWidth,
           height: BADGE_HEIGHT,
@@ -763,14 +763,14 @@ function forTheBadge({
   }
 
   const backgroundGroup = new XmlElement({
-    tag: 'g',
+    name: 'g',
     content: backgroundContent,
     attrs: {
       'shape-rendering': 'crispEdges',
     },
   })
   const foregroundGroup = new XmlElement({
-    tag: 'g',
+    name: 'g',
     content: [
       logo ? logoElement : '',
       hasLabel ? getLabelElement() : '',

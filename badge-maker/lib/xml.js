@@ -31,7 +31,7 @@ class XmlElement {
    * Xml Element Constructor
    *
    * @param {object} attrs Refer to individual attrs
-   * @param {string} attrs.tag
+   * @param {string} attrs.name
    *    Name of the XML tag
    * @param {Array.<string|module:badge-maker/lib/xml-element~XmlElement>} [attrs.content=[]]
    *    Array of objects to render inside the tag. content may contain a mix of
@@ -40,8 +40,8 @@ class XmlElement {
    * @param {object} [attrs.attrs={}]
    *    Object representing the tag's attributes as name/value pairs
    */
-  constructor({ tag, content = [], attrs = {} }) {
-    this.tag = tag
+  constructor({ name, content = [], attrs = {} }) {
+    this.name = name
     this.content = content
     this.attrs = attrs
   }
@@ -66,10 +66,10 @@ class XmlElement {
         })
         .join(' ')
       return stripXmlWhitespace(
-        `<${this.tag}${attrsStr}>${content}</${this.tag}>`
+        `<${this.name}${attrsStr}>${content}</${this.name}>`
       )
     }
-    return stripXmlWhitespace(`<${this.tag}${attrsStr}/>`)
+    return stripXmlWhitespace(`<${this.name}${attrsStr}/>`)
   }
 }
 
