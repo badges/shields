@@ -2,8 +2,14 @@
 
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
+const { XmlElement, escapeXml } = require('./xml')
 
-const fontFamily = 'font-family="Verdana,Geneva,DejaVu Sans,sans-serif"'
+// https://github.com/badges/shields/pull/1132
+const FONT_SCALE_UP_FACTOR = 10
+const FONT_SCALE_DOWN_VALUE = 'scale(.1)'
+
+const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
+const fontFamily = `font-family="${FONT_FAMILY}"`
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 const brightnessThreshold = 0.69
@@ -17,19 +23,6 @@ function colorsForBackground(color) {
     return { textColor: '#fff', shadowColor: '#010101' }
   } else {
     return { textColor: '#333', shadowColor: '#ccc' }
-  }
-}
-
-function escapeXml(s) {
-  if (s === undefined || typeof s !== 'string') {
-    return undefined
-  } else {
-    return s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;')
   }
 }
 
@@ -576,126 +569,232 @@ function forTheBadge({
   links,
   logo,
   logoWidth,
-  logoPadding,
   color = '#4c1',
   labelColor,
 }) {
-  // For the Badge is styled in all caps. Convert to caps here so widths can
-  // be measured using the correct characters.
+  const FONT_SIZE = 10
+  const BADGE_HEIGHT = 28
+  const LOGO_HEIGHT = 14
+  const TEXT_MARGIN = 12
+  const LOGO_MARGIN = 9
+  const LOGO_TEXT_GUTTER = 6
+  const LETTER_SPACING = 1.25
+
+  // Prepare content. For the Badge is styled in all caps. It's important to to
+  // convert to uppercase first so the widths can be measured using the correct
+  // symbols.
   label = label.toUpperCase()
   message = message.toUpperCase()
 
-  let labelWidth = preferredWidthOf(label, { font: '10px Verdana' }) || 0
-  let messageWidth =
-    preferredWidthOf(message, { font: 'bold 10px Verdana' }) || 0
-  const height = 28
-  const hasLabel = label.length || labelColor
-  if (labelColor == null) {
-    labelColor = '#555'
-  }
-  const horizPadding = 9
-  const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
-    logo,
-    badgeHeight: height,
-    horizPadding,
-    logoWidth,
-    logoPadding,
-  })
-
-  labelWidth += 10 + totalLogoWidth
-  if (label.length) {
-    // Add 10 px of padding, plus approximately 1 px of letter spacing per
-    // character.
-    labelWidth += 10 + 2 * label.length
-  } else if (hasLogo) {
-    if (hasLabel) {
-      labelWidth += 7
-    } else {
-      labelWidth -= 7
-    }
-  } else {
-    labelWidth -= 11
-  }
-
-  // Add 20 px of padding, plus approximately 1.5 px of letter spacing per
-  // character.
-  messageWidth += 20 + 1.5 * message.length
-  const leftWidth = hasLogo && !hasLabel ? 0 : labelWidth
-  const rightWidth =
-    hasLogo && !hasLabel ? messageWidth + labelWidth : messageWidth
-
-  labelColor = hasLabel || hasLogo ? labelColor : color
-
-  color = escapeXml(color)
-  labelColor = escapeXml(labelColor)
-
-  let [leftLink, rightLink] = links
-  leftLink = escapeXml(leftLink)
-  rightLink = escapeXml(rightLink)
+  const [leftLink, rightLink] = links
   const { hasLeftLink, hasRightLink } = hasLinks({ links })
 
-  const accessibleText = createAccessibleText({ label, message })
+  const outLabelColor = labelColor || '#555'
 
-  function renderLabelText() {
-    const { textColor } = colorsForBackground(labelColor)
-    const labelTextX = ((labelWidth + totalLogoWidth) / 2) * 10
-    const labelTextLength = (labelWidth - (24 + totalLogoWidth)) * 10
-    const escapedLabel = escapeXml(label)
+  // Compute text width.
+  // TODO: This really should count the symbols rather than just using `.length`.
+  // https://mathiasbynens.be/notes/javascript-unicode
+  // This is not using `preferredWidthOf()` as it tends to produce larger
+  // inconsistencies in the letter spacing. The badges look fine, however if you
+  // replace `textLength` with `letterSpacing` in the rendered SVG, you can see
+  // the discrepancy. Ideally, swapping out `textLength` for `letterSpacing`
+  // should not affect the appearance.
+  const labelTextWidth = label.length
+    ? (anafanafo(label, { font: `${FONT_SIZE}px Verdana` }) | 0) +
+      LETTER_SPACING * label.length
+    : 0
+  const messageTextWidth = message.length
+    ? (anafanafo(message, { font: `bold ${FONT_SIZE}px Verdana` }) | 0) +
+      LETTER_SPACING * message.length
+    : 0
 
-    const text = `<text fill="${textColor}" x="${labelTextX}" y="175" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+  // Compute horizontal layout.
+  // If a `labelColor` is set, the logo is always set against it, even when
+  // there is no label. When `needsLabelRect` is true, render a label rect and a
+  // message rect; when false, only a message rect.
+  const hasLabel = Boolean(label.length)
+  const needsLabelRect = hasLabel || (logo && labelColor)
+  let logoMinX, labelTextMinX
+  if (logo) {
+    logoMinX = LOGO_MARGIN
+    labelTextMinX = logoMinX + logoWidth + LOGO_TEXT_GUTTER
+  } else {
+    labelTextMinX = TEXT_MARGIN
+  }
+  let labelRectWidth, messageTextMinX, messageRectWidth
+  if (needsLabelRect) {
+    if (hasLabel) {
+      labelRectWidth = labelTextMinX + labelTextWidth + TEXT_MARGIN
+    } else {
+      labelRectWidth = 2 * LOGO_MARGIN + logoWidth
+    }
+    messageTextMinX = labelRectWidth + TEXT_MARGIN
+    messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
+  } else {
+    if (logo) {
+      messageTextMinX = TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER
+      messageRectWidth =
+        2 * TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER + messageTextWidth
+    } else {
+      messageTextMinX = TEXT_MARGIN
+      messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
+    }
+  }
+
+  const logoElement = new XmlElement({
+    name: 'image',
+    attrs: {
+      x: logoMinX,
+      y: 0.5 * (BADGE_HEIGHT - LOGO_HEIGHT),
+      width: logoWidth,
+      height: LOGO_HEIGHT,
+      'xlink:href': logo,
+    },
+  })
+
+  function getLabelElement() {
+    const { textColor } = colorsForBackground(outLabelColor)
+    const midX = labelTextMinX + 0.5 * labelTextWidth
+    const text = new XmlElement({
+      name: 'text',
+      content: [label],
+      attrs: {
+        transform: FONT_SCALE_DOWN_VALUE,
+        x: FONT_SCALE_UP_FACTOR * midX,
+        y: 175,
+        textLength: FONT_SCALE_UP_FACTOR * labelTextWidth,
+        fill: textColor,
+      },
+    })
 
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
-      return `
-        <a target="_blank" xlink:href="${leftLink}">
-          <rect width="${leftWidth}" height="${height}" fill="rgba(0,0,0,0)"/>
-          ${text}
-        </a>
-      `
+      const rect = new XmlElement({
+        name: 'rect',
+        attrs: {
+          width: labelRectWidth,
+          height: BADGE_HEIGHT,
+          fill: 'rgba(0,0,0,0)',
+        },
+      })
+      return new XmlElement({
+        name: 'a',
+        content: [rect, text],
+        attrs: {
+          target: '_blank',
+          'xlink:href': leftLink,
+        },
+      })
     } else {
       return text
     }
   }
 
-  function renderMessageText() {
+  function getMessageElement() {
     const { textColor } = colorsForBackground(color)
-
-    const text = `<text fill="${textColor}" x="${
-      (labelWidth + messageWidth / 2) * 10
-    }" y="175" font-weight="bold" transform="scale(.1)" textLength="${
-      (messageWidth - 24) * 10
-    }">
-      ${escapeXml(message)}</text>`
+    const midX = messageTextMinX + 0.5 * messageTextWidth
+    const text = new XmlElement({
+      name: 'text',
+      content: [message],
+      attrs: {
+        transform: FONT_SCALE_DOWN_VALUE,
+        x: FONT_SCALE_UP_FACTOR * midX,
+        y: 175,
+        textLength: FONT_SCALE_UP_FACTOR * messageTextWidth,
+        fill: textColor,
+        'font-weight': 'bold',
+      },
+    })
 
     if (hasRightLink) {
-      return `
-        <a target="_blank" xlink:href="${rightLink}">
-          <rect width="${rightWidth}" height="${height}" x="${labelWidth}" fill="rgba(0,0,0,0)"/>
-          ${text}
-        </a>
-      `
+      const rect = new XmlElement({
+        name: 'rect',
+        attrs: {
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          x: labelRectWidth || 0,
+          fill: 'rgba(0,0,0,0)',
+        },
+      })
+      return new XmlElement({
+        name: 'a',
+        content: [rect, text],
+        attrs: {
+          target: '_blank',
+          'xlink:href': rightLink,
+        },
+      })
     } else {
       return text
     }
   }
 
+  let backgroundContent
+  if (needsLabelRect) {
+    backgroundContent = [
+      new XmlElement({
+        name: 'rect',
+        attrs: {
+          width: labelRectWidth,
+          height: BADGE_HEIGHT,
+          fill: outLabelColor,
+        },
+      }),
+      new XmlElement({
+        name: 'rect',
+        attrs: {
+          x: labelRectWidth,
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          fill: color,
+        },
+      }),
+    ]
+  } else {
+    backgroundContent = [
+      new XmlElement({
+        name: 'rect',
+        attrs: {
+          width: messageRectWidth,
+          height: BADGE_HEIGHT,
+          fill: color,
+        },
+      }),
+    ]
+  }
+
+  const backgroundGroup = new XmlElement({
+    name: 'g',
+    content: backgroundContent,
+    attrs: {
+      'shape-rendering': 'crispEdges',
+    },
+  })
+  const foregroundGroup = new XmlElement({
+    name: 'g',
+    content: [
+      logo ? logoElement : '',
+      hasLabel ? getLabelElement() : '',
+      getMessageElement(),
+    ],
+    attrs: {
+      fill: '#fff',
+      'text-anchor': 'middle',
+      'font-family': FONT_FAMILY,
+      'text-rendering': 'geometricPrecision',
+      'font-size': FONT_SCALE_UP_FACTOR * FONT_SIZE,
+    },
+  })
+
+  // Render.
   return renderBadge(
     {
       links,
-      leftWidth,
-      rightWidth,
-      accessibleText,
-      height,
+      leftWidth: labelRectWidth || 0,
+      rightWidth: messageRectWidth,
+      accessibleText: createAccessibleText({ label, message }),
+      height: BADGE_HEIGHT,
     },
-    `
-    <g shape-rendering="crispEdges">
-      <rect width="${leftWidth}" height="${height}" fill="${labelColor}"/>
-      <rect x="${leftWidth}" width="${rightWidth}" height="${height}" fill="${color}"/>
-    </g>
-    <g fill="#fff" text-anchor="middle" ${fontFamily} text-rendering="geometricPrecision" font-size="100">
-      ${renderedLogo}
-      ${hasLabel ? renderLabelText() : ''}
-      ${renderMessageText()}
-    </g>`
+    [backgroundGroup.render(), foregroundGroup.render()].join('')
   )
 }
 
