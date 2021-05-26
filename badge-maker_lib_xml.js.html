@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/service-test-runner/services-for-title.js</title>
+    <title>JSDoc: Source: badge-maker/lib/xml.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/service-test-runner/services-for-title.js</h1>
+    <h1 class="page-title">Source: badge-maker/lib/xml.js</h1>
 
     
 
@@ -26,40 +26,82 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
-/**
+            <pre class="prettyprint source linenums"><code>/**
  * @module
  */
 
-const difference = require('lodash.difference')
+'use strict'
 
-/**
- * Given a pull request title like
- * '[Travis Sonar] Support user token authentication'
- * extract the list of service names in square brackets
- * as an array of strings.
- *
- * @param {string} title Pull Request title
- * @returns {string[]} Array of service names
- */
-function servicesForTitle(title) {
-  const bracketed = /\[([^\]]+)\]/g
-
-  const preNormalized = title.toLowerCase()
-
-  let services = []
-  let match
-  while ((match = bracketed.exec(preNormalized))) {
-    const [, bracketed] = match
-    services = services.concat(bracketed.split(' '))
-  }
-  services = services.filter(Boolean).map(service => service.toLowerCase())
-
-  const ignored = ['wip', 'rfc', 'security']
-  return difference(services, ignored)
+function stripXmlWhitespace(xml) {
+  return xml.replace(/>\s+/g, '>').replace(/&lt;\s+/g, '&lt;').trim()
 }
 
-module.exports = servicesForTitle
+function escapeXml(s) {
+  if (typeof s === 'number') {
+    return s
+  } else if (s === undefined || typeof s !== 'string') {
+    return undefined
+  } else {
+    return s
+      .replace(/&amp;/g, '&amp;amp;')
+      .replace(/&lt;/g, '&amp;lt;')
+      .replace(/>/g, '&amp;gt;')
+      .replace(/"/g, '&amp;quot;')
+      .replace(/'/g, '&amp;apos;')
+  }
+}
+
+/**
+ * Representation of an XML element
+ */
+class XmlElement {
+  /**
+   * Xml Element Constructor
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.name
+   *    Name of the XML tag
+   * @param {Array.&lt;string|module:badge-maker/lib/xml-element~XmlElement>} [attrs.content=[]]
+   *    Array of objects to render inside the tag. content may contain a mix of
+   *    string and XmlElement objects. If content is `[]` or ommitted the
+   *    element will be rendered as a self-closing element.
+   * @param {object} [attrs.attrs={}]
+   *    Object representing the tag's attributes as name/value pairs
+   */
+  constructor({ name, content = [], attrs = {} }) {
+    this.name = name
+    this.content = content
+    this.attrs = attrs
+  }
+
+  /**
+   * Render the XML element to a string, applying appropriate escaping
+   *
+   * @returns {string} String representation of the XML element
+   */
+  render() {
+    const attrsStr = Object.entries(this.attrs)
+      .map(([k, v]) => ` ${k}="${escapeXml(v)}"`)
+      .join('')
+    if (this.content.length > 0) {
+      const content = this.content
+        .map(function (el) {
+          if (el instanceof XmlElement) {
+            return el.render()
+          } else {
+            return escapeXml(el)
+          }
+        })
+        .join(' ')
+      return stripXmlWhitespace(
+        `&lt;${this.name}${attrsStr}>${content}&lt;/${this.name}>`
+      )
+    }
+    return stripXmlWhitespace(`&lt;${this.name}${attrsStr}/>`)
+  }
+}
+
+module.exports = { escapeXml, stripXmlWhitespace, XmlElement }
 </code></pre>
         </article>
     </section>

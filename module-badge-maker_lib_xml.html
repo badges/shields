@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/service-test-runner/services-for-title.js</title>
+    <title>JSDoc: Module: badge-maker/lib/xml</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,52 +17,59 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/service-test-runner/services-for-title.js</h1>
+    <h1 class="page-title">Module: badge-maker/lib/xml</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
-/**
- * @module
- */
+        
+    
+</header>
 
-const difference = require('lodash.difference')
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * Given a pull request title like
- * '[Travis Sonar] Support user token authentication'
- * extract the list of service names in square brackets
- * as an array of strings.
- *
- * @param {string} title Pull Request title
- * @returns {string[]} Array of service names
- */
-function servicesForTitle(title) {
-  const bracketed = /\[([^\]]+)\]/g
+        
+    
+    </div>
 
-  const preNormalized = title.toLowerCase()
+    
 
-  let services = []
-  let match
-  while ((match = bracketed.exec(preNormalized))) {
-    const [, bracketed] = match
-    services = services.concat(bracketed.split(' '))
-  }
-  services = services.filter(Boolean).map(service => service.toLowerCase())
+    
 
-  const ignored = ['wip', 'rfc', 'security']
-  return difference(services, ignored)
-}
+    
+        <h3 class="subsection-title">Classes</h3>
 
-module.exports = servicesForTitle
-</code></pre>
-        </article>
-    </section>
+        <dl>
+            <dt><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
