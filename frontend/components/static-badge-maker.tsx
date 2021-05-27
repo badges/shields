@@ -31,7 +31,7 @@ export default function StaticBadgeMaker({
     e.preventDefault()
 
     const { label, message, color } = values
-    window.location.href = staticBadgeUrl({ baseUrl, label, message, color })
+    window.open(staticBadgeUrl({ baseUrl, label, message, color }), '_blank')
   }
 
   return (
