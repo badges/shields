@@ -8,7 +8,7 @@ module.exports = redirector({
   route: {
     base: 'gradle-plugin-portal/v',
     // TODO: add /:versionPrefix? when maven-metadata have versionPrefix attribute.
-    pattern: ':pluginId'
+    pattern: ':pluginId',
   },
   examples: [
     {
@@ -42,7 +42,7 @@ module.exports = redirector({
   transformQueryParams: ({ pluginId }) => {
     const groupPath = pluginId.replaceAll('.', '/')
     const artifactId = `${pluginId}.gradle.plugin`
-    const metadataUrl = `https://plugins.gradle.org/m2/${groupPath}/${artifactId}/maven-metadata.xml`;
+    const metadataUrl = `https://plugins.gradle.org/m2/${groupPath}/${artifactId}/maven-metadata.xml`
     return {
       metadataUrl,
       label: 'plugin portal',
@@ -51,4 +51,4 @@ module.exports = redirector({
   },
   overrideTransformedQueryParams: true,
   dateAdded: new Date('2021-05-30'),
-});
+})

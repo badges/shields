@@ -62,7 +62,7 @@ describe('Redirector', function () {
         },
       },
     ]
-    expect(redirector({...attrs, examples}).examples).to.equal(examples)
+    expect(redirector({ ...attrs, examples }).examples).to.equal(examples)
   })
 
   describe('ScoutCamp integration', function () {
