@@ -40,7 +40,7 @@ module.exports = redirector({
   ],
   transformPath: () => `/maven-metadata/v`,
   transformQueryParams: ({ pluginId }) => {
-    const groupPath = pluginId.replaceAll('.', '/')
+    const groupPath = pluginId.replace(/\./g, '/')
     const artifactId = `${pluginId}.gradle.plugin`
     const metadataUrl = `https://plugins.gradle.org/m2/${groupPath}/${artifactId}/maven-metadata.xml`
     return {
