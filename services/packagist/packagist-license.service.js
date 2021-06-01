@@ -11,6 +11,7 @@ import {
 const packageSchema = Joi.array()
   .items(
     Joi.object({
+      version: Joi.string(),
       license: Joi.array(),
     }).required()
   )
@@ -57,7 +58,11 @@ export default class PackagistLicense extends BasePackagistService {
   transform({ json, user, repo }) {
     const packageName = this.getPackageName(user, repo)
 
-    const license = json.packages[packageName][0].license
+    const decompressed = this.decompressResponse(json, packageName)
+
+    const version = this.findRelease(decompressed)
+
+    const license = version.license
 
     if (!license) {
       throw new NotFound({ prettyMessage: 'license not found' })

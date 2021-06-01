@@ -66,25 +66,68 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  findVersionIndex(json, user, repo, version) {
-    const packageArr = json.packages[this.getPackageName(user, repo)]
-
-    return packageArr.findIndex(v => v.version === version)
+  findVersionIndex(json, version) {
+    return json.findIndex(v => v.version === version)
   }
 
-  transform({ json, user, repo, version = '' }) {
-    const packageVersion =
-      version === ''
-        ? json.packages[this.getPackageName(user, repo)][0]
-        : json.packages[this.getPackageName(user, repo)][
-            this.findVersionIndex(json, user, repo, version)
-          ]
+  async findSpecifiedVersion(json, user, repo, version, server) {
+    let release
+
+    if ((release = json[this.findVersionIndex(json, version)])) {
+      return release
+    } else {
+      try {
+        const allData = await this.fetchDev({
+          user,
+          repo,
+          schema: allVersionsSchema,
+          server,
+        })
+
+        const decompressed = this.decompressResponse(
+          allData,
+          this.getPackageName(user, repo)
+        )
+
+        return decompressed[this.findVersionIndex(decompressed, version)]
+      } catch (e) {
+        return release
+      }
+    }
+  }
+
+  async transform({ json, user, repo, version = '', server }) {
+    let packageVersion
+    const decompressed = this.decompressResponse(
+      json,
+      this.getPackageName(user, repo)
+    )
+
+    if (version === '') {
+      packageVersion = this.findRelease(decompressed)
+    } else {
+      try {
+        packageVersion = await this.findSpecifiedVersion(
+          decompressed,
+          user,
+          repo,
+          version,
+          server
+        )
+      } catch {
+        packageVersion = null
+      }
+    }
 
     if (!packageVersion) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
-    if (!packageVersion.require || !packageVersion.require.php) {
+    if (
+      !packageVersion.require ||
+      !packageVersion.require.php ||
+      packageVersion.require.php === '__unset'
+    ) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
@@ -98,11 +141,12 @@ export default class PackagistPhpVersion extends BasePackagistService {
       schema: allVersionsSchema,
       server,
     })
-    const { phpVersion } = this.transform({
+    const { phpVersion } = await this.transform({
       json: allData,
       user,
       repo,
       version,
+      server,
     })
     return this.constructor.render({ php: phpVersion })
   }
