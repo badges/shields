@@ -23,8 +23,8 @@ class Runner {
   /**
    * Prepare the runner by loading up all the ServiceTester objects.
    */
-  prepare() {
-    this.testers = loadTesters()
+  async prepare() {
+    this.testers = await loadTesters()
     this.testers.forEach(tester => {
       tester.beforeEach = () => {
         this.beforeEach()

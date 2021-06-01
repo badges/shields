@@ -398,11 +398,11 @@ class Server {
    * Iterate all the service classes defined in /services,
    * load each service and register a Scoutcamp route for each service.
    */
-  registerServices() {
+  async registerServices() {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
 
-    loadServiceClasses().forEach(serviceClass =>
+    ;(await loadServiceClasses()).forEach(serviceClass =>
       serviceClass.register(
         { camp, handleRequest, githubApiProvider, metricInstance },
         {
@@ -463,7 +463,7 @@ class Server {
 
     this.registerErrorHandlers()
     this.registerRedirects()
-    this.registerServices()
+    await this.registerServices()
 
     camp.timeout = this.config.public.requestTimeoutSeconds * 1000
     if (this.config.public.requestTimeoutSeconds > 0) {

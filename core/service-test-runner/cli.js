@@ -90,7 +90,7 @@ if (process.env.TESTED_SERVER_URL) {
 
 const skipIntercepted = envFlag(process.env.SKIP_INTERCEPTED, false)
 const runner = new Runner({ baseUrl, skipIntercepted, retry })
-runner.prepare()
+await runner.prepare()
 
 // The server's request cache causes side effects between tests.
 if (!process.env.TESTED_SERVER_URL) {

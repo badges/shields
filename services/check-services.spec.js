@@ -5,9 +5,9 @@ import {checkNames, collectDefinitions} from '../core/base-service/loader.js';
 
 it('Services have unique names', function () {
   this.timeout(30000)
-  checkNames()
+  await checkNames()
 })
 
 it('Can collect the service definitions', function () {
-  collectDefinitions()
+  await collectDefinitions()
 })
