@@ -8,21 +8,12 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - Changed creating badges to open a new Window/Tab [#6536](https://github.com/badges/shields/issues/6536)
 - Make for-the-badge letter spacing more predictable, and rewrite layout logic [#5754](https://github.com/badges/shields/issues/5754)
-- fix: bower version tests [#6533](https://github.com/badges/shields/issues/6533)
-- fix MyGet tenant-based service tests and examples [#6531](https://github.com/badges/shields/issues/6531)
-- Fix [Cran] devtools license [#6515](https://github.com/badges/shields/issues/6515)
 - deprecate DockerBuild service [#6529](https://github.com/badges/shields/issues/6529)
-- increase [David] service test timeouts [#5966](https://github.com/badges/shields/issues/5966)
 - Remove rate limiting functionality [#6513](https://github.com/badges/shields/issues/6513)
-- fix: correct GitHubSponsors example [#6512](https://github.com/badges/shields/issues/6512)
-- Increase server request rate limits [#6511](https://github.com/badges/shields/issues/6511)
 - [GitHub] Move to 'funding' category [#5846](https://github.com/badges/shields/issues/5846)
 - Add GitHub discussions total badge [GithubTotalDiscussions] [#6472](https://github.com/badges/shields/issues/6472)
-- Modify github action helper to autoclose typescript-eslint scoped bumps [#6468](https://github.com/badges/shields/issues/6468)
 - Add optional query parameter (include_prereleases) to [GemVersion] [#6451](https://github.com/badges/shields/issues/6451)
 - Add [PingPong] Service [#6327](https://github.com/badges/shields/issues/6327)
-- Fix Symfony branches for [TravisPHPVersion] [#6452](https://github.com/badges/shields/issues/6452)
-- Specification: Add better alt-text [#6448](https://github.com/badges/shields/issues/6448)
 - Dependency updates
 
 ## server-2021-05-01
