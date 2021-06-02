@@ -143,6 +143,8 @@ class BaseService {
       license: 3600,
       version: 300,
       debug: 60,
+      downloads: 900,
+      social: 900,
     }
     return cacheLengths[this.category]
   }

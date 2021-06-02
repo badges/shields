@@ -30,6 +30,8 @@ module.exports = class TwitchStatus extends TwitchBase {
     },
   ]
 
+  static _cacheLength = 30
+
   static defaultBadgeData = {
     label: 'twitch',
     namedLogo: 'twitch',
