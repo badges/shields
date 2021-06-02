@@ -14,22 +14,21 @@ set -euo pipefail
 node --version
 
 # Install the shields.io dependencies.
-if [[ "$NODE_VERSION" == "v10" ]]; then
-    # Avoid a depcheck error.
-    npm ci --ignore-scripts
-else
-    npm ci
-fi
+npm ci
 
 # Run the package tests.
 npm run test:package
 npm run check-types:package
 
-# Delete the shields.io dependencies.
+# Delete the full shields.io dependency tree
 rm -rf node_modules/
+
 
 # Run a smoke test (render a badge with the CLI) with only the package
 # dependencies installed.
 cd badge-maker
+
+npm install # install only the package dependencies for this test
 npm link
 badge cactus grown :green @flat
+rm package-lock.json && rm -rf node_modules/ # clean up package dependencies
