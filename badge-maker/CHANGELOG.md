@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.1
+
+- Improve font measuring in for-the-badge and social styles
+- Make for-the-badge letter spacing more predictable
+
 ## 3.3.0
 
 - Readability improvements: a dark font color is automatically used when the badge's background is too light. For example: ![](https://img.shields.io/badge/hello-world-white)
