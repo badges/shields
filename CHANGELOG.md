@@ -4,6 +4,18 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-06-01
+
+- Changed creating badges to open a new Window/Tab [#6536](https://github.com/badges/shields/issues/6536)
+- Make for-the-badge letter spacing more predictable, and rewrite layout logic [#5754](https://github.com/badges/shields/issues/5754)
+- deprecate DockerBuild service [#6529](https://github.com/badges/shields/issues/6529)
+- Remove rate limiting functionality [#6513](https://github.com/badges/shields/issues/6513)
+- [GitHub] Move to 'funding' category [#5846](https://github.com/badges/shields/issues/5846)
+- Add GitHub discussions total badge [GithubTotalDiscussions] [#6472](https://github.com/badges/shields/issues/6472)
+- Add optional query parameter (include_prereleases) to [GemVersion] [#6451](https://github.com/badges/shields/issues/6451)
+- Add [PingPong] Service [#6327](https://github.com/badges/shields/issues/6327)
+- Dependency updates
+
 ## server-2021-05-01
 
 - Add setting which allows setting a timeout on HTTP requests
