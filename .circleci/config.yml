@@ -107,15 +107,6 @@ package_steps: &package_steps
     - run:
         environment:
           mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v10/results.xml
-          NODE_VERSION: v10
-          CYPRESS_INSTALL_BINARY: 0
-        name: Run package tests on Node 10
-        command: scripts/run_package_tests.sh
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
           MOCHA_FILE: junit/badge-maker/v12/results.xml
           NODE_VERSION: v12
           CYPRESS_INSTALL_BINARY: 0
@@ -129,6 +120,15 @@ package_steps: &package_steps
           NODE_VERSION: v14
           CYPRESS_INSTALL_BINARY: 0
         name: Run package tests on Node 14
+        command: scripts/run_package_tests.sh
+
+    - run:
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/badge-maker/v16/results.xml
+          NODE_VERSION: v16
+          CYPRESS_INSTALL_BINARY: 0
+        name: Run package tests on Node 16
         command: scripts/run_package_tests.sh
 
     - store_test_results:
