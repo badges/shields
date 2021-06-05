@@ -16,9 +16,9 @@ module.exports = class BStatsManagedServers extends BaseJsonService {
     {
       title: 'bStats Managed Servers',
       namedParams: {
-        pluginid: '11269',
+        pluginid: '11269', // example is a bungee proxy plugin. id must be the id of a proxy plugin to have managed servers
       },
-      staticPreview: this.render({ servers: 11269 }),
+      staticPreview: this.render({ managed_servers: 8801 }),
     },
   ]
 
