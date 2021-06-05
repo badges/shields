@@ -22,7 +22,7 @@ module.exports = class BStatsManagedServers extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'managed_servers', color: 'blue' }
+  static defaultBadgeData = { label: 'managed servers', color: 'blue' }
 
   static render({ managed_servers }) {
     return {
