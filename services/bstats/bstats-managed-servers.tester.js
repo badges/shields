@@ -3,7 +3,7 @@
 const { isMetric } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('Servers').get('/1.json').expectBadge({
-  label: 'servers',
+t.create('Managed Servers').get('/1.json').expectBadge({
+  label: 'managed_servers',
   message: isMetric,
 })
