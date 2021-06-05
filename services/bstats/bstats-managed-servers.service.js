@@ -18,15 +18,15 @@ module.exports = class BStatsManagedServers extends BaseJsonService {
       namedParams: {
         pluginid: '11269', // example is a bungee proxy plugin. id must be the id of a proxy plugin to have managed servers
       },
-      staticPreview: this.render({ managed_servers: 8801 }),
+      staticPreview: this.render({ managedServers: 8801 }),
     },
   ]
 
   static defaultBadgeData = { label: 'managed servers', color: 'blue' }
 
-  static render({ managed_servers }) {
+  static render({ managedServers }) {
     return {
-      message: metric(managed_servers),
+      message: metric(managedServers),
     }
   }
 
@@ -45,13 +45,13 @@ module.exports = class BStatsManagedServers extends BaseJsonService {
   }
 
   transform({ json }) {
-    const managed_servers = json[0][1]
-    return { managed_servers }
+    const managedServers = json[0][1]
+    return { managedServers }
   }
 
   async handle({ pluginid }) {
     const json = await this.fetch({ pluginid })
-    const { managed_servers } = this.transform({ json })
-    return this.constructor.render({ managed_servers })
+    const { managedServers } = this.transform({ json })
+    return this.constructor.render({ managedServers })
   }
 }
