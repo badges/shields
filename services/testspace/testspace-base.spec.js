@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import TestspaceBase from './testspace-base.js';
 
 describe('TestspaceBase', function () {

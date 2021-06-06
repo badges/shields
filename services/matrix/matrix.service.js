@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, InvalidParameter} from '..';
+import {BaseJsonService, InvalidParameter} from '../index.js';
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),

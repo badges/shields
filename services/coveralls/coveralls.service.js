@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   covered_percent: Joi.number().min(0).max(100).required(),

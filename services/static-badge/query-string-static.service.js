@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseStaticService} from '..';
+import {BaseStaticService} from '../index.js';
 
 const queryParamSchema = Joi.object({
   message: Joi.string().required(),

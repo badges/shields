@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 import {documentation} from './github-helpers.js';
 
 const schema = Joi.object({

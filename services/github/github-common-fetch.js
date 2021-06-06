@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {errorMessagesFor} from './github-helpers.js';
 
 const issueSchema = Joi.object({

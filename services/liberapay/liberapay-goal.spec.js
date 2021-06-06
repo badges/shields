@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {test, given} from 'sazerac';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import LiberapayGoal from './liberapay-goal.service.js';
 
 describe('LiberapayGoal', function () {

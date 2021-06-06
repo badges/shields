@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   subject: Joi.string().required(),

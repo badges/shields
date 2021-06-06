@@ -1,5 +1,5 @@
 import {renderVersionBadge} from '../version.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {BasePuppetForgeModulesService} from './puppetforge-base.js';
 
 export default class PuppetforgeModulePdkVersion extends (

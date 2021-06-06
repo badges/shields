@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {coveragePercentage} from '../color-formatters.js';
 import {ConditionalGithubAuthV3Service} from '../github/github-auth-service.js';
 import {fetchJsonFromRepo} from '../github/github-common-fetch.js';
-import {InvalidParameter, InvalidResponse, NotFound} from '..';
+import {InvalidParameter, InvalidResponse, NotFound} from '../index.js';
 
 const nycrcSchema = Joi.object({
   branches: Joi.number().min(0).max(100),

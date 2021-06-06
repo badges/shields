@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 // unknown is a valid 'other' status for Buildkite
 const schema = Joi.object({

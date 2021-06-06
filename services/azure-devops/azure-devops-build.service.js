@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService, NotFound} from '..';
+import {BaseSvgScrapingService, NotFound} from '../index.js';
 import {keywords, fetch} from './azure-devops-helpers.js';
 
 const queryParamSchema = Joi.object({

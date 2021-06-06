@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 
 const schema = Joi.object({
   message: nonNegativeInteger,

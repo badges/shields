@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {addv} from '../text-formatters.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {latestVersion} from './luarocks-version-helpers.js';
 
 const schema = Joi.object({

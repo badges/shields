@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {colorScale, letterScore} from '../color-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {keywords, isLetterGrade, fetchRepo} from './codeclimate-common.js';
 
 const schema = Joi.object({

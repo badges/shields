@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
-import {BaseXmlService, NotFound} from '..';
+import {BaseXmlService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   metadata: Joi.object({

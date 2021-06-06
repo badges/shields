@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
 import {isDependencyMap} from '../package-json-helpers.js';
-import {BaseJsonService, InvalidResponse, NotFound} from '..';
+import {BaseJsonService, InvalidResponse, NotFound} from '../index.js';
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),

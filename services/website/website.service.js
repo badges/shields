@@ -2,7 +2,7 @@ import Joi from 'joi';
 import emojic from 'emojic';
 import {optionalUrl} from '../validators.js';
 import {queryParamSchema, exampleQueryParams, renderWebsiteStatus} from '../website-status.js';
-import {BaseService} from '..';
+import {BaseService} from '../index.js';
 import trace from '../../core/base-service/trace.js';
 
 const documentation = `

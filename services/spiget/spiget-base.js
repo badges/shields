@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const resourceSchema = Joi.object({
   downloads: Joi.number().required(),

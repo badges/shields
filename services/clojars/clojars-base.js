@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const clojarsSchema = Joi.object({
   downloads: nonNegativeInteger,

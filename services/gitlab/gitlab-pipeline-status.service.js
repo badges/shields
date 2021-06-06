@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
 import {optionalUrl} from '../validators.js';
-import {BaseSvgScrapingService, NotFound, redirector} from '..';
+import {BaseSvgScrapingService, NotFound, redirector} from '../index.js';
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()

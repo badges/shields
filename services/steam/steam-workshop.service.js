@@ -2,7 +2,7 @@ import Joi from 'joi';
 import prettyBytes from 'pretty-bytes';
 import {metric, formatDate} from '../text-formatters.js';
 import {age as ageColor, downloadCount} from '../color-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import BaseSteamAPI from './steam-base.js';
 
 const documentation = `

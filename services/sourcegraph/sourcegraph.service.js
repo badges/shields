@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const projectsCountRegex = /^\s[0-9]*(\.[0-9]k)?\sprojects$/
 const schema = Joi.object({

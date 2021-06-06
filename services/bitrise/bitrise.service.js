@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 // https://devcenter.bitrise.io/api/app-status-badge/
 const schema = Joi.object({

@@ -2,7 +2,7 @@ import camelcase from 'camelcase';
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger, optionalUrl} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   topic_count: nonNegativeInteger,

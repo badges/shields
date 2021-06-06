@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {optionalNonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const extensionQuerySchema = Joi.object({
   error: Joi.string(),

@@ -1,4 +1,4 @@
-import {BaseService} from '..';
+import {BaseService} from '../index.js';
 
 export default class Maintenance extends BaseService {
   static category = 'other'

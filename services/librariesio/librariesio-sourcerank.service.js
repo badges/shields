@@ -1,5 +1,5 @@
 import {colorScale} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {fetchProject} from './librariesio-common.js';
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])

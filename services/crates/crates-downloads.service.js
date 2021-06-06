@@ -1,6 +1,6 @@
 import {downloadCount as downloadCountColor} from '../color-formatters.js';
 import {metric} from '../text-formatters.js';
-import {InvalidParameter, NotFound} from '..';
+import {InvalidParameter, NotFound} from '../index.js';
 import {BaseCratesService, keywords} from './crates-base.js';
 
 export default class CratesDownloads extends BaseCratesService {

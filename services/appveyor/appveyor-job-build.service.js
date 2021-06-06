@@ -1,5 +1,5 @@
 import {renderBuildStatusBadge} from '../build-status.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import AppVeyorBase from './appveyor-base.js';
 
 export default class AppVeyorJobBuild extends AppVeyorBase {

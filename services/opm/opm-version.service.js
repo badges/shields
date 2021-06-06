@@ -1,5 +1,5 @@
 import {renderVersionBadge} from '../version.js';
-import {BaseService, NotFound, InvalidResponse} from '..';
+import {BaseService, NotFound, InvalidResponse} from '../index.js';
 
 export default class OpmVersion extends BaseService {
   static category = 'version'

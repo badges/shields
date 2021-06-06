@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge, latest} from '../version.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't

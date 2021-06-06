@@ -1,4 +1,4 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
 const commonAttrs = {
   dateAdded: new Date('2019-09-15'),

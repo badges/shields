@@ -1,7 +1,6 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
-export default [
-  redirector({
+export const VsoBuildRedirector = redirector({
     category: 'build',
     route: {
       base: 'vso/build',
@@ -15,8 +14,8 @@ export default [
       return path
     },
     dateAdded: new Date('2019-02-08'),
-  }),
-  redirector({
+  })
+export const VsoReleaseRedirector = redirector({
     category: 'build',
     route: {
       base: 'vso/release',
@@ -25,5 +24,4 @@ export default [
     transformPath: ({ organization, projectId, definitionId, environmentId }) =>
       `/azure-devops/release/${organization}/${projectId}/${definitionId}/${environmentId}`,
     dateAdded: new Date('2019-02-08'),
-  }),
-];
+  })

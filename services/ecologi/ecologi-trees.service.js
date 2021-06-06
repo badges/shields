@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {floorCount} from '../color-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const apiSchema = Joi.object({
   total: nonNegativeInteger,

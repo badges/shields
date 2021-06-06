@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {coveragePercentage} from '../color-formatters.js';
 import {optionalUrl} from '../validators.js';
-import {BaseSvgScrapingService, NotFound} from '..';
+import {BaseSvgScrapingService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   message: Joi.string()

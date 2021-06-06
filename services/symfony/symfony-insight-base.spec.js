@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {SymfonyInsightBase} from './symfony-insight-base.js';
 
 describe('SymfonyInsightBase', function () {

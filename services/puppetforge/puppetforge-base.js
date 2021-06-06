@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {nonNegativeInteger, semver} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const usersSchema = Joi.object({
   module_count: nonNegativeInteger,

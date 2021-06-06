@@ -1,5 +1,5 @@
 import {fetch, createServiceFamily} from '../nuget/nuget-v2-service-family.js';
-import {BaseXmlService} from '..';
+import {BaseXmlService} from '../index.js';
 
 const WINDOWS_TAG_NAME = 'windows'
 const MACOS_TAG_NAME = 'macos'

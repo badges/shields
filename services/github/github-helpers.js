@@ -1,5 +1,5 @@
 import {colorScale} from '../color-formatters.js';
-import {InvalidResponse, NotFound} from '..';
+import {InvalidResponse, NotFound} from '../index.js';
 
 const documentation = `
 <p>

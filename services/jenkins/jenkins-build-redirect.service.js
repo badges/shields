@@ -1,4 +1,4 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 import {buildRedirectUrl} from './jenkins-common.js';
 
 const commonProps = {

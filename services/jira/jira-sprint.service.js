@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {authConfig} from './jira-common.js';
 
 const queryParamSchema = Joi.object({

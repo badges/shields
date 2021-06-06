@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
 import {latest} from '../version.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {errorMessagesFor} from './github-helpers.js';
 
 const releaseInfoSchema = Joi.object({
@@ -97,5 +97,5 @@ async function fetchLatestRelease(
 export {
   fetchLatestRelease,
   queryParamSchema,
-  _getLatestRelease: getLatestRelease, // currently only used for tests
 };
+export const _getLatestRelease = getLatestRelease // currently only used for tests

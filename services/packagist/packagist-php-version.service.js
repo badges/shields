@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {allVersionsSchema, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
 
 const queryParamSchema = Joi.object({

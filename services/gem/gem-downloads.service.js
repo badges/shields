@@ -4,7 +4,7 @@ import {downloadCount} from '../color-formatters.js';
 import {metric} from '../text-formatters.js';
 import {latest as latestVersion} from '../version.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, InvalidParameter, InvalidResponse} from '..';
+import {BaseJsonService, InvalidParameter, InvalidResponse} from '../index.js';
 
 const keywords = ['ruby']
 

@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
 import {coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService, InvalidResponse} from '..';
+import {BaseJsonService, InvalidResponse} from '../index.js';
 
 const documentation = `
   <p>

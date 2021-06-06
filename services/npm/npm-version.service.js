@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import NpmBase from './npm-base.js';
 
 const keywords = ['node']

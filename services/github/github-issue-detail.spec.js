@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {test, given} from 'sazerac';
 import {age} from '../color-formatters.js';
 import {formatDate, metric} from '../text-formatters.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import GithubIssueDetail from './github-issue-detail.service.js';
 import {stateColor, commentsColor} from './github-helpers.js';
 

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {colorScale, coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   badge_level: Joi.string().required(),

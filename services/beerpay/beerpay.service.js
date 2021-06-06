@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   total_amount: Joi.number().min(0).required(),

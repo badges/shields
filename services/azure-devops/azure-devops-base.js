@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 const latestBuildSchema = Joi.object({
   count: Joi.number().required(),

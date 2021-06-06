@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {version as versionColor} from '../color-formatters.js';
-import {redirector} from '..';
+import {redirector} from '../index.js';
 import {BaseClojarsService} from './clojars-base.js';
 
 const queryParamSchema = Joi.object({

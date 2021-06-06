@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {coveragePercentage} from '../color-formatters.js';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 import {parseJson} from '../../core/base-service/json.js';
 
 // https://docs.codecov.io/reference#totals

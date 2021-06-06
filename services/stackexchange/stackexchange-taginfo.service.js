@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import renderQuestionsBadge from './stackexchange-helpers.js';
 
 const tagSchema = Joi.object({

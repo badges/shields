@@ -1,4 +1,4 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
 const variantMap = {
   s: 'state',

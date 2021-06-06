@@ -1,4 +1,4 @@
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const keywords = [
   'visual-studio',

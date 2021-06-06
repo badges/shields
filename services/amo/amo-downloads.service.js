@@ -1,6 +1,6 @@
 import {metric} from '../text-formatters.js';
 import {downloadCount} from '../color-formatters.js';
-import {redirector} from '..';
+import {redirector} from '../index.js';
 import {BaseAmoService, keywords} from './amo-base.js';
 
 const documentation = `

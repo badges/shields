@@ -1,5 +1,5 @@
 import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 import {keywords, fetch} from './azure-devops-helpers.js';
 
 const documentation = `

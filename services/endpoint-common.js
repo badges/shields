@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import validate from '../core/base-service/validate.js';
-import {InvalidResponse} from '.';
+import {InvalidResponse} from './index.js';
 
 const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   'namedLogo',

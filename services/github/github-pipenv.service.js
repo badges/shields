@@ -1,7 +1,7 @@
 import {renderVersionBadge} from '../version.js';
 import {isLockfile, getDependencyVersion} from '../pipenv-helpers.js';
 import {addv} from '../text-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
 import {fetchJsonFromRepo} from './github-common-fetch.js';
 import {documentation as githubDocumentation} from './github-helpers.js';

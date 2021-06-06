@@ -1,5 +1,5 @@
 import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {BasePuppetForgeModulesService} from './puppetforge-base.js';
 
 export default class PuppetforgeModuleFeedback extends (

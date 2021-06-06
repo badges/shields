@@ -1,5 +1,5 @@
 const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 
 function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {

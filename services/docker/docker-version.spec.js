@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {test, given} from 'sazerac';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import DockerVersion from './docker-version.service.js';
 import {versionDataNoTagDateSort, versionPagedDataNoTagDateSort, versionDataNoTagSemVerSort, versionDataWithTag, versionDataWithVaryingArchitectures} from './docker-fixtures.js';
 

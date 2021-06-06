@@ -3,7 +3,7 @@ import moment from 'moment';
 import {metric} from '../text-formatters.js';
 import {downloadCount} from '../color-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   total: nonNegativeInteger,

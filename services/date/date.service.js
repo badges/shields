@@ -1,5 +1,5 @@
 import {formatRelativeDate} from '../text-formatters.js';
-import {BaseService} from '..';
+import {BaseService} from '../index.js';
 
 const documentation = `
 <p>

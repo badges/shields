@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
 

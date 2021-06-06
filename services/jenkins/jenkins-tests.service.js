@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {documentation, testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
 import {optionalNonNegativeInteger} from '../validators.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import JenkinsBase from './jenkins-base.js';
 import {buildTreeParamQueryString, buildUrl, queryParamSchema} from './jenkins-common.js';
 

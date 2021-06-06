@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {renderVersionBadge, searchServiceUrl, stripBuildMetadata, selectVersion} from '../nuget/nuget-helpers.js';
 
 const schema = Joi.object({

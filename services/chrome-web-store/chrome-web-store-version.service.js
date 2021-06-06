@@ -1,5 +1,5 @@
 import {renderVersionBadge} from '../version.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import BaseChromeWebStoreService from './chrome-web-store-base.js';
 
 export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {

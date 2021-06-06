@@ -1,4 +1,4 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
 export default [
   // https://github.com/badges/shields/issues/5433

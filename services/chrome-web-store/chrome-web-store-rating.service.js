@@ -1,6 +1,6 @@
 import {floorCount as floorCountColor} from '../color-formatters.js';
 import {metric, starRating} from '../text-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import BaseChromeWebStoreService from './chrome-web-store-base.js';
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {

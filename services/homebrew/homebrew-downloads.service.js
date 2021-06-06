@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {downloadCount} from '../color-formatters.js';
 import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {nonNegativeInteger} from '../validators.js';
 
 function getSchema({ formula }) {

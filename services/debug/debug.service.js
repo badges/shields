@@ -1,4 +1,4 @@
-import {BaseService} from '..';
+import {BaseService} from '../index.js';
 
 const serverStartTime = new Date(new Date().toGMTString())
 let bitFlip = false

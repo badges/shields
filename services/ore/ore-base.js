@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, InvalidResponse} from '..';
+import {BaseJsonService, InvalidResponse} from '../index.js';
 
 const sessionSchema = Joi.object({
   session: Joi.string().required(),

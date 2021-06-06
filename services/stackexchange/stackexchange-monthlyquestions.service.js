@@ -1,7 +1,7 @@
 import moment from 'moment';
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import renderQuestionsBadge from './stackexchange-helpers.js';
 
 const tagSchema = Joi.object({

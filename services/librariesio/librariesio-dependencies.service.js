@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {transform, renderDependenciesBadge} from './librariesio-dependencies-helpers.js';
 
 const schema = Joi.object({

@@ -1,6 +1,6 @@
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseService} from '..';
+import {BaseService} from '../index.js';
 import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
 
 export default class DockerStars extends BaseService {

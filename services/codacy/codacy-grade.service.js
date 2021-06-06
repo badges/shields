@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 import {codacyGrade} from './codacy-helpers.js';
 
 const schema = Joi.object({ message: codacyGrade }).required()

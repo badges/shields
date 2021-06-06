@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
 
 const schema = Joi.array().items({

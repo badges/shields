@@ -1,4 +1,4 @@
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {renderCurrencyBadge, LiberapayBase} from './liberapay-base.js';
 
 export default class LiberapayReceives extends LiberapayBase {

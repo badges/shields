@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService, redirector} from '..';
+import {BaseJsonService, redirector} from '../index.js';
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()

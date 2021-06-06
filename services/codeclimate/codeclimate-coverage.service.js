@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {coveragePercentage, letterScore} from '../color-formatters.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {keywords, isLetterGrade, fetchRepo} from './codeclimate-common.js';
 
 const schema = Joi.object({

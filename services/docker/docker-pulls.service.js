@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
 
 const pullsSchema = Joi.object({

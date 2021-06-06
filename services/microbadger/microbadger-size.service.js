@@ -1,5 +1,5 @@
 import prettyBytes from 'pretty-bytes';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import BaseMicrobadgerService from './microbadger-base.js';
 
 const documentation = `

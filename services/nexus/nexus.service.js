@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {version as versionColor} from '../color-formatters.js';
 import {addv} from '../text-formatters.js';
 import {optionalUrl, optionalDottedVersionNClausesWithOptionalSuffix} from '../validators.js';
-import {BaseJsonService, InvalidResponse, NotFound} from '..';
+import {BaseJsonService, InvalidResponse, NotFound} from '../index.js';
 import {isSnapshotVersion} from './nexus-version.js';
 
 const nexus2SearchApiSchema = Joi.object({

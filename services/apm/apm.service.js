@@ -3,7 +3,7 @@ import {renderLicenseBadge} from '../licenses.js';
 import {renderVersionBadge} from '../version.js';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, InvalidResponse} from '..';
+import {BaseJsonService, InvalidResponse} from '../index.js';
 
 const keywords = ['atom']
 

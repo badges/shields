@@ -2,7 +2,7 @@ import Joi from 'joi';
 import prettyBytes from 'pretty-bytes';
 import {nonNegativeInteger} from '../validators.js';
 import {latest} from '../version.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {buildDockerUrl, getDockerHubUser, getMultiPageData} from './docker-helpers.js';
 
 const buildSchema = Joi.object({

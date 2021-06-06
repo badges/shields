@@ -3,7 +3,7 @@ import Joi from 'joi';
 import {errorMessages} from '../dynamic-common.js';
 import {optionalUrl} from '../validators.js';
 import {fetchEndpointData} from '../endpoint-common.js';
-import {BaseJsonService, InvalidParameter} from '..';
+import {BaseJsonService, InvalidParameter} from '../index.js';
 
 const blockedDomains = ['github.com', 'shields.io']
 

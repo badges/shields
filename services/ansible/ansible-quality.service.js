@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {floorCount} from '../color-formatters.js';
-import {BaseJsonService, InvalidResponse} from '..';
+import {BaseJsonService, InvalidResponse} from '../index.js';
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number().allow(null).required(),

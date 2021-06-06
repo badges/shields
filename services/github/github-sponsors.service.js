@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {GithubAuthV4Service} from './github-auth-service.js';
 import {documentation, transformErrors} from './github-helpers.js';
 

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, InvalidParameter, InvalidResponse} from '..';
+import {BaseJsonService, InvalidParameter, InvalidResponse} from '../index.js';
 
 const schema = Joi.object({
   status: Joi.string().required(),

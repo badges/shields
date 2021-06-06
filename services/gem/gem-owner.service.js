@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const ownerSchema = Joi.array().required()
 

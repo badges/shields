@@ -1,7 +1,7 @@
 import path from 'path';
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
-import {InvalidParameter} from '..';
+import {InvalidParameter} from '../index.js';
 import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
 import {documentation as commonDocumentation, errorMessagesFor} from './github-helpers.js';
 

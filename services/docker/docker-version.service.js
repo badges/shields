@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
 import {latest, renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound, InvalidResponse} from '..';
+import {BaseJsonService, NotFound, InvalidResponse} from '../index.js';
 import {buildDockerUrl, getDockerHubUser, getMultiPageData, getDigestSemVerMatches} from './docker-helpers.js';
 
 const buildSchema = Joi.object({

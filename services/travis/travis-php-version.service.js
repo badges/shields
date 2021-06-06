@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {minorVersion, versionReduction, getPhpReleases} from '../php-version.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const optionalNumberOrString = Joi.alternatives(Joi.string(), Joi.number())
 const schema = Joi.object({

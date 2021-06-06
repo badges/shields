@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger} from '../validators.js';
 import {downloadCount} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const collectionSchema = Joi.object({
   payload: Joi.object({

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
-import {InvalidResponse, redirector} from '..';
+import {InvalidResponse, redirector} from '../index.js';
 import BaseBowerService from './bower-base.js';
 
 const queryParamSchema = Joi.object({

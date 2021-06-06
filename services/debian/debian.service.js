@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {latest, renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound, InvalidResponse} from '..';
+import {BaseJsonService, NotFound, InvalidResponse} from '../index.js';
 
 const schema = Joi.array()
   .items(

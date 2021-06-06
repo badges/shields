@@ -2,7 +2,7 @@ import {DOMParser} from 'xmldom';
 import xpath from 'xpath';
 import {MetricNames} from '../../core/base-service/metric-helper.js';
 import {renderDynamicBadge, errorMessages} from '../dynamic-common.js';
-import {BaseService, InvalidResponse, InvalidParameter} from '..';
+import {BaseService, InvalidResponse, InvalidParameter} from '../index.js';
 import {createRoute} from './dynamic-helpers.js';
 
 // This service extends BaseService because it uses a different XML parser

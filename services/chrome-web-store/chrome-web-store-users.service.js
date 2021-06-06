@@ -1,6 +1,6 @@
 import {metric} from '../text-formatters.js';
 import {downloadCount} from '../color-formatters.js';
-import {redirector, NotFound} from '..';
+import {redirector, NotFound} from '../index.js';
 import BaseChromeWebStoreService from './chrome-web-store-base.js';
 
 class ChromeWebStoreUsers extends BaseChromeWebStoreService {

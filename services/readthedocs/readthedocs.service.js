@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService, NotFound} from '..';
+import {BaseSvgScrapingService, NotFound} from '../index.js';
 
 const keywords = ['documentation']
 

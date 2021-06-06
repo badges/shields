@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {documentation, presetRegex, getColor, getMessage, getSchema} from './w3c-validation-helper.js';
 
 const schema = Joi.object({

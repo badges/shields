@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import Joi from 'joi';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {GithubAuthV4Service} from './github-auth-service.js';
 import {documentation, transformErrors} from './github-helpers.js';
 

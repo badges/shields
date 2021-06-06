@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric, addv, maybePluralize} from '../text-formatters.js';
 import {downloadCount, version as versionColor} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const hexSchema = Joi.object({
   downloads: Joi.object({

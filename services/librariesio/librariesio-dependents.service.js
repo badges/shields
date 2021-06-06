@@ -1,5 +1,5 @@
 import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {fetchProject} from './librariesio-common.js';
 
 // https://libraries.io/api#project-dependents

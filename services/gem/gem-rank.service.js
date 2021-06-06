@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {floorCount} from '../color-formatters.js';
 import {ordinalNumber} from '../text-formatters.js';
-import {BaseJsonService, InvalidResponse} from '..';
+import {BaseJsonService, InvalidResponse} from '../index.js';
 
 const keywords = ['ruby']
 

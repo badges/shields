@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
 import {formatDate, metric} from '../text-formatters.js';
 import {age} from '../color-formatters.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {GithubAuthV3Service} from './github-auth-service.js';
 import {documentation, errorMessagesFor, stateColor, commentsColor} from './github-helpers.js';
 

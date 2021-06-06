@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {BaseSvgScrapingService, NotFound} from '..';
+import {BaseSvgScrapingService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   message: Joi.alternatives()

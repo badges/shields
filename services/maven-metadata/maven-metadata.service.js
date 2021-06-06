@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
 import {renderVersionBadge} from '../version.js';
-import {BaseXmlService} from '..';
+import {BaseXmlService} from '../index.js';
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),

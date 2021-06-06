@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
 import {fetchRepoContent} from './github-common-fetch.js';
 import {documentation} from './github-helpers.js';

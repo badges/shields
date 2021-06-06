@@ -1,5 +1,5 @@
 import {renderVersionBadge} from '../version.js';
-import {BaseService, InvalidResponse} from '..';
+import {BaseService, InvalidResponse} from '../index.js';
 
 export default class HackageVersion extends BaseService {
   static category = 'version'

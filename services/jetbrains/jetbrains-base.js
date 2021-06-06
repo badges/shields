@@ -1,4 +1,4 @@
-import {BaseXmlService, NotFound} from '..';
+import {BaseXmlService, NotFound} from '../index.js';
 import {parseJson} from '../../core/base-service/json.js';
 
 /*

@@ -1,5 +1,5 @@
 import {colorScale} from '../color-formatters.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {LiberapayBase} from './liberapay-base.js';
 
 export default class LiberapayGoal extends LiberapayBase {

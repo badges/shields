@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import validate from '../../core/base-service/validate.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 const extensionQuerySchema = Joi.object({
   results: Joi.array()

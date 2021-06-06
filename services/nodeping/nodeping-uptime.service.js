@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {colorScale} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const colorFormatter = colorScale([99, 99.5, 100])
 

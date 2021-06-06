@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderLicenseBadge} from '../licenses.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   info: Joi.object({ license: Joi.string().required() }).required(),

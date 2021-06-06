@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
 import {compare, isStable, latest} from '../php-version.js';
 import {optionalUrl} from '../validators.js';
-import {NotFound, redirector} from '..';
+import {NotFound, redirector} from '../index.js';
 import {allVersionsSchema, keywords, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
 
 const packageSchema = Joi.object()

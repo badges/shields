@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import prettyBytes from 'pretty-bytes';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   size: nonNegativeInteger,

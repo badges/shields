@@ -1,4 +1,4 @@
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
 export default [
   // The SymfonyInsight service was previously branded as SensioLabs, and

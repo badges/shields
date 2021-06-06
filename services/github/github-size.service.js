@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import prettyBytes from 'pretty-bytes';
 import {nonNegativeInteger} from '../validators.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {GithubAuthV3Service} from './github-auth-service.js';
 import {documentation, errorMessagesFor} from './github-helpers.js';
 

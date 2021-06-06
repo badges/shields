@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {IMPROVED_STATUS, NOT_FOUND_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS} from './constants.js';
 
 const schema = Joi.string()

@@ -1,4 +1,4 @@
-import {BaseXmlService} from '..';
+import {BaseXmlService} from '../index.js';
 
 export default class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {

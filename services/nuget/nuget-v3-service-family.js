@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import RouteBuilder from '../route-builder.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {renderVersionBadge, renderDownloadBadge, searchServiceUrl, stripBuildMetadata, selectVersion} from './nuget-helpers.js';
 
 /*

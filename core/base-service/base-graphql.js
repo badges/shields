@@ -2,7 +2,7 @@
  * @module
  */
 
-import {print} from 'graphql/language/printer';
+import {print} from 'graphql/language/printer.js';
 import BaseService from './base.js';
 import {InvalidResponse, ShieldsRuntimeError} from './errors.js';
 import {parseJson} from './json.js';

@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {renderLicenseBadge} from '../licenses.js';
 import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),

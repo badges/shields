@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {optionalUrl} from '../validators.js';
-import {BaseService, BaseJsonService, NotFound} from '..';
+import {BaseService, BaseJsonService, NotFound} from '../index.js';
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),

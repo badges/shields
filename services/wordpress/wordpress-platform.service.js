@@ -1,4 +1,4 @@
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {addv} from '../text-formatters.js';
 import {version as versionColor} from '../color-formatters.js';
 import BaseWordpress from './wordpress-base.js';

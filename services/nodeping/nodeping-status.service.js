@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {queryParamSchema, exampleQueryParams, renderWebsiteStatus} from '../website-status.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, BaseXmlService, NotFound, redirector} from '..';
+import {BaseJsonService, BaseXmlService, NotFound, redirector} from '../index.js';
 import {renderVersionBadge, renderDownloadBadge, odataToObject} from './nuget-helpers.js';
 
 function createFilter({ packageName, includePrereleases }) {

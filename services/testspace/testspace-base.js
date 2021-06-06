@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 // https://help.testspace.com/docs/reference/web-api#list-results
 // case_counts|array|The contained cases [passed, failed, na, errored]|counters of result

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 
 const keywords = ['codeclimate']
 

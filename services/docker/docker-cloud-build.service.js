@@ -1,4 +1,4 @@
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {dockerBlue, buildDockerUrl} from './docker-helpers.js';
 import {fetchBuild} from './docker-cloud-common-fetch.js';
 

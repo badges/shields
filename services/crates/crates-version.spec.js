@@ -1,6 +1,6 @@
 import {test, given} from 'sazerac';
 import {expect} from 'chai';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import CratesVersion from './crates-version.service.js';
 
 describe('CratesVersion', function () {

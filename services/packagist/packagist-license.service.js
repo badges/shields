@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {renderLicenseBadge} from '../licenses.js';
 import {optionalUrl} from '../validators.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import {keywords, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
 
 const packageSchema = Joi.object()

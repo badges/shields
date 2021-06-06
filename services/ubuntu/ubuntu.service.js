@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   entries: Joi.array()

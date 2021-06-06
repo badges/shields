@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {colorScale} from '../color-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import ScrutinizerBase from './scrutinizer-base.js';
 
 const schema = Joi.object({

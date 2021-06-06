@@ -1,5 +1,5 @@
 import {renderVersionBadge} from '../version.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {BaseCratesService, keywords} from './crates-base.js';
 
 export default class CratesVersion extends BaseCratesService {

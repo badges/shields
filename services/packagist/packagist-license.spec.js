@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import PackagistLicense from './packagist-license.service.js';
 
 describe('PackagistLicense', function () {

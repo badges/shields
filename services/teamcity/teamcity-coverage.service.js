@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {coveragePercentage} from '../color-formatters.js';
 import {optionalUrl} from '../validators.js';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import TeamCityBase from './teamcity-base.js';
 
 const buildStatisticsSchema = Joi.object({

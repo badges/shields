@@ -1,5 +1,5 @@
 import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 
 const pendingStatus = 'building'
 const notBuiltStatus = 'not built'

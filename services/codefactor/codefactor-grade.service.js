@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseSvgScrapingService} from '..';
+import {BaseSvgScrapingService} from '../index.js';
 import {isValidGrade, gradeColor} from './codefactor-helpers.js';
 
 const schema = Joi.object({

@@ -1,4 +1,4 @@
-import {BaseStaticService} from '..';
+import {BaseStaticService} from '../index.js';
 
 export default class Gitter extends BaseStaticService {
   static category = 'chat'

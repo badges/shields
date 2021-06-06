@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 import {isLegacyVersion} from './sonar-helpers.js';
 
 // It is possible to see HTTP 404 response codes and HTTP 200 responses

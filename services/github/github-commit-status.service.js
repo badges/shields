@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {NotFound, InvalidParameter} from '..';
+import {NotFound, InvalidParameter} from '../index.js';
 import {GithubAuthV3Service} from './github-auth-service.js';
 import {documentation, errorMessagesFor} from './github-helpers.js';
 

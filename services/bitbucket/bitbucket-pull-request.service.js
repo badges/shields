@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {AuthHelper} from '../../core/base-service/auth-helper.js';
 import {metric} from '../text-formatters.js';
 import {nonNegativeInteger, optionalUrl} from '../validators.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -126,4 +126,5 @@ function pullRequestClassGenerator(raw) {
   }
 }
 
-export default [true, false].map(pullRequestClassGenerator);
+export const BitbucketRawPullRequests = pullRequestClassGenerator(true)
+export const BitbucketNonRawPullRequests = pullRequestClassGenerator(false)

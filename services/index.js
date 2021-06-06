@@ -1,5 +1,1 @@
-import base from '../core/base-service.js';
-
-export {
-  ...base,
-};
+export * from '../core/base-service/index.js';

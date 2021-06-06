@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 import {isReuseCompliance, COLOR_MAP} from './reuse-compliance-helper.js';
 
 const responseSchema = Joi.object({

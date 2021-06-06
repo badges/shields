@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {optionalUrl} from '../validators.js';
-import {BaseService, NotFound} from '..';
+import {BaseService, NotFound} from '../index.js';
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),

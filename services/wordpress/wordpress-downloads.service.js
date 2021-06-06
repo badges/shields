@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {downloadCount} from '../color-formatters.js';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import BaseWordpress from './wordpress-base.js';
 
 const dateSchema = Joi.object()

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {test, given} from 'sazerac';
-import {NotFound} from '..';
+import {NotFound} from '../index.js';
 import AppveyorJobBuild from './appveyor-job-build.service.js';
 
 describe('AppveyorJobBuild', function () {

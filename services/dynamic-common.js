@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import toArray from '../core/base-service/to-array.js';
 import validate from '../core/base-service/validate.js';
-import {InvalidResponse} from '.';
+import {InvalidResponse} from './index.js';
 
 const errorMessages = {
   404: 'resource not found',

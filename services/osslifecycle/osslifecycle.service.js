@@ -1,4 +1,4 @@
-import {BaseService, InvalidResponse} from '..';
+import {BaseService, InvalidResponse} from '../index.js';
 
 const documentation = `
 <p>

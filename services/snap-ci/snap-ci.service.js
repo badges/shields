@@ -1,4 +1,4 @@
-import {deprecatedService} from '..';
+import {deprecatedService} from '../index.js';
 
 const commonAttrs = {
   category: 'build',

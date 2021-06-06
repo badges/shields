@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {starRating} from '../text-formatters.js';
 import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseXmlService} from '..';
+import {BaseXmlService} from '../index.js';
 
 const schema = Joi.object({
   'redmine-plugin': Joi.object({

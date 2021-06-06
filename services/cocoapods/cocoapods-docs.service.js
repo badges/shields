@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const schema = Joi.object({
   cocoadocs: Joi.object({

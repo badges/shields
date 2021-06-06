@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {optionalNonNegativeInteger} from '../validators.js';
 import {metric} from '../text-formatters.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   data: Joi.object({

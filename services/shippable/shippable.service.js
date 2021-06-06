@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService, NotFound, redirector} from '..';
+import {BaseJsonService, NotFound, redirector} from '../index.js';
 
 // source: https://github.com/badges/shields/pull/1362#discussion_r161693830
 const statusCodes = {

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {InvalidResponse} from '..';
+import {InvalidResponse} from '../index.js';
 import {formatDate} from '../text-formatters.js';
 import {age as ageColor} from '../color-formatters.js';
 import BaseWordpress from './wordpress-base.js';

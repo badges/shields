@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {metric} from '../text-formatters.js';
 import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseJsonService} from '..';
+import {BaseJsonService} from '../index.js';
 
 const reputationSchema = Joi.object({
   items: Joi.array()

@@ -2,7 +2,7 @@ import Joi from 'joi';
 import {optionalNonNegativeInteger, nonNegativeInteger} from '../validators.js';
 import {addv} from '../text-formatters.js';
 import {version as versionColor} from '../color-formatters.js';
-import {BaseJsonService, NotFound} from '..';
+import {BaseJsonService, NotFound} from '../index.js';
 
 const schema = Joi.object({
   packageName: Joi.string().required(),

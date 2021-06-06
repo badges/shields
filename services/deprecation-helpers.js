@@ -1,4 +1,4 @@
-import {Deprecated} from '.';
+import {Deprecated} from './index.js';
 
 function enforceDeprecation(effectiveDate) {
   if (Date.now() >= effectiveDate.getTime()) {

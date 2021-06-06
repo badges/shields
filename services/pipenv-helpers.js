@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {InvalidParameter} from '.';
+import {InvalidParameter} from './index.js';
 
 const isDependency = Joi.alternatives(
   Joi.object({

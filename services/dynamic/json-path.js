@@ -5,7 +5,7 @@
 import Joi from 'joi';
 import jp from 'jsonpath';
 import {renderDynamicBadge, errorMessages} from '../dynamic-common.js';
-import {InvalidParameter, InvalidResponse} from '..';
+import {InvalidParameter, InvalidResponse} from '../index.js';
 
 /**
  * Dynamic service class factory which wraps {@link module:core/base-service/base~BaseService} with support of {@link https://jsonpath.com/|JSONPath}.

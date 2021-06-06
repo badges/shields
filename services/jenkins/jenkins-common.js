@@ -21,7 +21,7 @@ const buildUrl = ({ jobUrl, lastCompletedBuild = true, plugin }) => {
 
 export {
   queryParamSchema,
-  buildTreeParamQueryString: tree => ({ tree }),
   buildUrl,
   buildRedirectUrl,
 };
+export const buildTreeParamQueryString = tree => ({ tree })

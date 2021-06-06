@@ -1,5 +1,5 @@
 import {escapeFormat} from '../../core/badge-urls/path-helpers.js';
-import {redirector} from '..';
+import {redirector} from '../index.js';
 
 function escapeFormatSlashes(t) {
   return escapeFormat(t)
