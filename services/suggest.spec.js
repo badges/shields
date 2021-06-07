@@ -157,8 +157,7 @@ describe('Badge suggestions', function () {
             },
             {
               title: 'Twitter',
-              link:
-                'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
+              link: 'https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fatom%2Fatom',
               example: {
                 pattern: '/twitter/url',
                 namedParams: {},

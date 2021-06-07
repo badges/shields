@@ -27,8 +27,6 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 120
 
-  rateLimit: true
-
   handleInternalErrors: true
 
   fetchLimit: '10MB'

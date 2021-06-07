@@ -19,27 +19,29 @@ const templates = {
 
 const getTemplate = template => JSON.parse(templates[template])
 
-const mockPackageData = ({ packageName, engines, scope, tag }) => nock => {
-  let packageJson
-  let urlPath
-  if (scope || tag) {
-    if (scope) {
-      urlPath = `/${scope}%2F${packageName}`
+const mockPackageData =
+  ({ packageName, engines, scope, tag }) =>
+  nock => {
+    let packageJson
+    let urlPath
+    if (scope || tag) {
+      if (scope) {
+        urlPath = `/${scope}%2F${packageName}`
+      } else {
+        urlPath = `/${packageName}`
+      }
+      packageJson = getTemplate('packageJsonVersionsTemplate')
+      packageJson['dist-tags'][tag || 'latest'] = '0.0.91'
+      packageJson.versions['0.0.91'].engines.node = engines
     } else {
-      urlPath = `/${packageName}`
+      urlPath = `/${packageName}/latest`
+      packageJson = getTemplate('packageJsonTemplate')
+      packageJson.engines.node = engines
     }
-    packageJson = getTemplate('packageJsonVersionsTemplate')
-    packageJson['dist-tags'][tag || 'latest'] = '0.0.91'
-    packageJson.versions['0.0.91'].engines.node = engines
-  } else {
-    urlPath = `/${packageName}/latest`
-    packageJson = getTemplate('packageJsonTemplate')
-    packageJson.engines.node = engines
+    return nock('https://registry.npmjs.org/')
+      .get(urlPath)
+      .reply(200, packageJson)
   }
-  return nock('https://registry.npmjs.org/')
-    .get(urlPath)
-    .reply(200, packageJson)
-}
 
 const mockCurrentSha = latestVersion => nock => {
   const latestSha = `node-v${latestVersion}.12.0-aix-ppc64.tar.gz`

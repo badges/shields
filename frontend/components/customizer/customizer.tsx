@@ -32,7 +32,8 @@ export default function Customizer({
 }): JSX.Element {
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
-  const indicatorRef = useRef<CopiedContentIndicatorHandle>() as React.MutableRefObject<CopiedContentIndicatorHandle>
+  const indicatorRef =
+    useRef<CopiedContentIndicatorHandle>() as React.MutableRefObject<CopiedContentIndicatorHandle>
   const [path, setPath] = useState('')
   const [queryString, setQueryString] = useState<string>()
   const [pathIsComplete, setPathIsComplete] = useState<boolean>()

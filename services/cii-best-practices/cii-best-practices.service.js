@@ -113,16 +113,14 @@ module.exports = class CIIBestPracticesService extends BaseJsonService {
 
   async handle({ metric, projectId }) {
     // No official API documentation is available.
-    const {
-      badge_level: level,
-      tiered_percentage: percentage,
-    } = await this._requestJson({
-      schema,
-      url: `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`,
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
+    const { badge_level: level, tiered_percentage: percentage } =
+      await this._requestJson({
+        schema,
+        url: `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`,
+        errorMessages: {
+          404: 'project not found',
+        },
+      })
 
     if (metric === 'level') {
       return this.constructor.renderLevelBadge({ level })

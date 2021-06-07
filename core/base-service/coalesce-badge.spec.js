@@ -268,8 +268,7 @@ describe('coalesceBadge', function () {
         coalesceBadge(
           { link: 'https://circleci.com/gh/badges/daily-tests' },
           {
-            link:
-              'https://circleci.com/workflow-run/184ef3de-4836-4805-a2e4-0ceba099f92d',
+            link: 'https://circleci.com/workflow-run/184ef3de-4836-4805-a2e4-0ceba099f92d',
           },
           {}
         ).links

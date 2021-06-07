@@ -20,7 +20,6 @@ const { clearRegularUpdateCache } = require('../legacy/regular-update')
 const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
 const { nonNegativeInteger } = require('../../services/validators')
 const log = require('./log')
-const sysMonitor = require('./monitor')
 const PrometheusMetrics = require('./prometheus-metrics')
 const InfluxMetrics = require('./influx-metrics')
 
@@ -139,7 +138,6 @@ const publicConfigSchema = Joi.object({
     trace: Joi.boolean().required(),
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
-  rateLimit: Joi.boolean().required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
   requestTimeoutSeconds: nonNegativeInteger,
@@ -431,7 +429,6 @@ class Server {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
       cors: { allowedOrigin },
-      rateLimit,
       requireCloudflare,
     } = this.config.public
 
@@ -451,13 +448,7 @@ class Server {
       this.requireCloudflare()
     }
 
-    const { metricInstance } = this
-    this.cleanupMonitor = sysMonitor.setRoutes(
-      { rateLimit },
-      { server: camp, metricInstance }
-    )
-
-    const { githubConstellation } = this
+    const { githubConstellation, metricInstance } = this
     await githubConstellation.initialize(camp)
     if (metricInstance) {
       if (this.config.public.metrics.prometheus.endpointEnabled) {

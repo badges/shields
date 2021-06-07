@@ -41,13 +41,8 @@ module.exports = class TestspaceTestCount extends TestspaceBase {
   }
 
   transform({ json, metric }) {
-    const {
-      passed,
-      failed,
-      skipped,
-      errored,
-      total,
-    } = this.transformCaseCounts(json)
+    const { passed, failed, skipped, errored, total } =
+      this.transformCaseCounts(json)
     if (metric === 'total') {
       return { value: total }
     } else if (metric === 'passed') {

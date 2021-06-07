@@ -64,7 +64,7 @@ describe('Main page', function () {
   })
 
   it('Do not duplicate example parameters', function () {
-    cy.visit('/category/social')
+    cy.visit('/category/funding')
 
     cy.contains('GitHub Sponsors').click()
     cy.get('[name="style"]').should($style => {

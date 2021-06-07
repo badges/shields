@@ -122,15 +122,12 @@ module.exports = class NpmDependencyVersion extends NpmBase {
       dependencyScope ? `${dependencyScope}/` : ''
     }${dependency}`
 
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = await this.fetchPackageData({
-      scope,
-      packageName,
-      registryUrl,
-    })
+    const { dependencies, devDependencies, peerDependencies } =
+      await this.fetchPackageData({
+        scope,
+        packageName,
+        registryUrl,
+      })
 
     const { range } = getDependencyVersion({
       kind,

@@ -2,16 +2,14 @@
 
 const { createServiceFamily } = require('./nuget-v3-service-family')
 
-const {
-  NugetVersionService: Version,
-  NugetDownloadService: Downloads,
-} = createServiceFamily({
-  defaultLabel: 'nuget',
-  serviceBaseUrl: 'nuget',
-  apiBaseUrl: 'https://api.nuget.org/v3',
-  withTenant: false,
-  withFeed: false,
-})
+const { NugetVersionService: Version, NugetDownloadService: Downloads } =
+  createServiceFamily({
+    defaultLabel: 'nuget',
+    serviceBaseUrl: 'nuget',
+    apiBaseUrl: 'https://api.nuget.org/v3',
+    withTenant: false,
+    withFeed: false,
+  })
 
 class NugetVersionService extends Version {
   static examples = [

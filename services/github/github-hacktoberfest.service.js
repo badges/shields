@@ -177,7 +177,7 @@ module.exports = class GithubHacktoberfestCombinedStatus extends (
       },
     } = await this._requestGraphql({
       query: gql`
-        query(
+        query (
           $user: String!
           $repo: String!
           $suggestionLabel: String!

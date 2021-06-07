@@ -92,7 +92,7 @@ module.exports = class GithubDeployments extends GithubAuthV4Service {
   async fetch({ user, repo, environment }) {
     return this._requestGraphql({
       query: gql`
-        query($user: String!, $repo: String!, $environment: String!) {
+        query ($user: String!, $repo: String!, $environment: String!) {
           repository(owner: $user, name: $repo) {
             deployments(last: 1, environments: [$environment]) {
               nodes {

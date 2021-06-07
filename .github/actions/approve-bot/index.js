@@ -2,7 +2,7 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const { isPointlessGatsbyBump, shouldAutoMerge } = require('./helpers')
+const { isPointlessVersionBump, shouldAutoMerge } = require('./helpers')
 
 async function run() {
   try {
@@ -18,9 +18,9 @@ async function run() {
     if (
       ['dependabot[bot]', 'dependabot-preview[bot]'].includes(pr.user.login)
     ) {
-      if (isPointlessGatsbyBump(pr.body)) {
+      if (isPointlessVersionBump(pr.body)) {
         core.debug(`Closing pull request #${pr.number}`)
-        await client.pulls.update({
+        await client.rest.pulls.update({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           pull_number: pr.number,
@@ -30,7 +30,7 @@ async function run() {
         core.debug(`Done.`)
       } else if (shouldAutoMerge(pr.body)) {
         core.debug(`Adding label to pull request #${pr.number}`)
-        await client.issues.addLabels({
+        await client.rest.issues.addLabels({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           issue_number: pr.number,
@@ -38,7 +38,7 @@ async function run() {
         })
 
         core.debug(`Creating approving review for pull request #${pr.number}`)
-        await client.pulls.createReview({
+        await client.rest.pulls.createReview({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           pull_number: pr.number,

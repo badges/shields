@@ -19,7 +19,7 @@ t.create('version (not found)')
 
 t.create('license (valid)')
   .get('/l/devtools.json')
-  .expectBadge({ label: 'license', message: 'GPL (>= 2)' })
+  .expectBadge({ label: 'license', message: 'MIT + file LICENSE' })
 
 t.create('license (not found)')
   .get('/l/some-bogus-package.json')

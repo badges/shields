@@ -30,7 +30,7 @@ class BaseGithubIssuesSearch extends GithubAuthV4Service {
   async fetch({ query }) {
     const data = await this._requestGraphql({
       query: gql`
-        query($query: String!) {
+        query ($query: String!) {
           search(query: $query, type: ISSUE) {
             issueCount
           }

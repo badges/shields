@@ -11,13 +11,12 @@ class MetricHelper {
         serviceFamily,
         name,
       })
-      this.serviceResponseSizeHistogram = metricInstance.createServiceResponseSizeHistogram(
-        {
+      this.serviceResponseSizeHistogram =
+        metricInstance.createServiceResponseSizeHistogram({
           category,
           serviceFamily,
           name,
-        }
-      )
+        })
     } else {
       this.metricInstance = undefined
       this.serviceRequestCounter = undefined

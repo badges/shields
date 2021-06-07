@@ -115,9 +115,8 @@ module.exports = class JenkinsCoverage extends JenkinsBase {
   }
 
   async handle({ format }, { jobUrl, disableStrictSSL }) {
-    const { schema, transform, treeQueryParam, pluginSpecificPath } = formatMap[
-      format
-    ]
+    const { schema, transform, treeQueryParam, pluginSpecificPath } =
+      formatMap[format]
     const json = await this.fetch({
       url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
       schema,

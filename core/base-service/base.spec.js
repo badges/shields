@@ -353,10 +353,8 @@ describe('BaseService', function () {
     it('handles the request', async function () {
       expect(mockHandleRequest).to.have.been.calledOnce
 
-      const {
-        queryParams: serviceQueryParams,
-        handler: requestHandler,
-      } = mockHandleRequest.getCall(0).args[1]
+      const { queryParams: serviceQueryParams, handler: requestHandler } =
+        mockHandleRequest.getCall(0).args[1]
       expect(serviceQueryParams).to.deep.equal([
         'queryParamA',
         'legacyQueryParamA',
@@ -390,13 +388,8 @@ describe('BaseService', function () {
 
   describe('getDefinition', function () {
     it('returns the expected result', function () {
-      const {
-        category,
-        name,
-        isDeprecated,
-        route,
-        examples,
-      } = DummyService.getDefinition()
+      const { category, name, isDeprecated, route, examples } =
+        DummyService.getDefinition()
       expect({
         category,
         name,
@@ -510,10 +503,11 @@ describe('BaseService', function () {
         buffer: 'x'.repeat(65536 + 1),
         res: { statusCode: 200 },
       })
-      const serviceInstance = new DummyServiceWithServiceResponseSizeMetricEnabled(
-        { sendAndCacheRequest, metricHelper },
-        defaultConfig
-      )
+      const serviceInstance =
+        new DummyServiceWithServiceResponseSizeMetricEnabled(
+          { sendAndCacheRequest, metricHelper },
+          defaultConfig
+        )
 
       await serviceInstance._request({ url })
 

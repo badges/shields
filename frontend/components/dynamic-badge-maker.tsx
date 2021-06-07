@@ -57,16 +57,19 @@ export default function DynamicBadgeMaker({
     e.preventDefault()
 
     const { datatype, label, dataUrl, query, color, prefix, suffix } = values
-    window.location.href = dynamicBadgeUrl({
-      baseUrl,
-      datatype,
-      label,
-      dataUrl,
-      query,
-      color,
-      prefix,
-      suffix,
-    })
+    window.open(
+      dynamicBadgeUrl({
+        baseUrl,
+        datatype,
+        label,
+        dataUrl,
+        query,
+        color,
+        prefix,
+        suffix,
+      }),
+      '_blank'
+    )
   }
 
   return (

@@ -57,8 +57,6 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
 
-  rateLimit: 'RATE_LIMIT'
-
   fetchLimit: 'FETCH_LIMIT'
 
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'

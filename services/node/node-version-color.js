@@ -40,8 +40,7 @@ async function getCurrentVersion() {
 
 async function getLtsVersions() {
   const versions = await promisify(regularUpdate)({
-    url:
-      'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
+    url: 'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
     intervalMillis: 24 * 3600 * 1000,
     json: true,
     scraper: ltsVersionsScraper,

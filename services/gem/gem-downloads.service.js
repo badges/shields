@@ -126,16 +126,14 @@ module.exports = class GemDownloads extends BaseJsonService {
   }
 
   async fetchDownloadCountForGem({ gem }) {
-    const {
-      downloads: totalDownloads,
-      version_downloads: versionDownloads,
-    } = await this._requestJson({
-      url: `https://rubygems.org/api/v1/gems/${gem}.json`,
-      schema: gemSchema,
-      errorMessages: {
-        404: 'gem not found',
-      },
-    })
+    const { downloads: totalDownloads, version_downloads: versionDownloads } =
+      await this._requestJson({
+        url: `https://rubygems.org/api/v1/gems/${gem}.json`,
+        schema: gemSchema,
+        errorMessages: {
+          404: 'gem not found',
+        },
+      })
     return { totalDownloads, versionDownloads }
   }
 
@@ -154,10 +152,8 @@ module.exports = class GemDownloads extends BaseJsonService {
       }
       downloads = await this.fetchDownloadCountForVersion({ gem, version })
     } else {
-      const {
-        totalDownloads,
-        versionDownloads,
-      } = await this.fetchDownloadCountForGem({ gem, variant })
+      const { totalDownloads, versionDownloads } =
+        await this.fetchDownloadCountForGem({ gem, variant })
       downloads = variant === 'dtv' ? versionDownloads : totalDownloads
     }
     return this.constructor.render({ variant, version, downloads })

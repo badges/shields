@@ -329,7 +329,7 @@ module.exports = class GithubIssues extends GithubAuthV4Service {
         },
       } = await this._requestGraphql({
         query: gql`
-          query(
+          query (
             $user: String!
             $repo: String!
             $states: [PullRequestState!]
@@ -359,7 +359,7 @@ module.exports = class GithubIssues extends GithubAuthV4Service {
         },
       } = await this._requestGraphql({
         query: gql`
-          query(
+          query (
             $user: String!
             $repo: String!
             $states: [IssueState!]

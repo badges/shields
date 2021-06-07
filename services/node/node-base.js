@@ -106,12 +106,8 @@ module.exports = class NodeVersionBase extends NPMBase {
   }
 
   async handle(namedParams, queryParams) {
-    const {
-      scope,
-      packageName,
-      tag,
-      registryUrl,
-    } = this.constructor.unpackParams(namedParams, queryParams)
+    const { scope, packageName, tag, registryUrl } =
+      this.constructor.unpackParams(namedParams, queryParams)
     const { engines } = await this.fetchPackageData({
       scope,
       packageName,
