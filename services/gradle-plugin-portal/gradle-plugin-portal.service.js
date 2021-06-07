@@ -22,21 +22,6 @@ module.exports = redirector({
         color: 'blue',
       },
     },
-    /*
-    {
-      title: 'Gradle Plugin Portal with version prefix filter',
-      pattern: ':pluginId/:versionPrefix',
-      namedParams: {
-        pluginId: 'com.gradle.plugin-publish',
-        versionPrefix: '0.10',
-      },
-      staticPreview: {
-        label: 'plugin portal',
-        message: 'v0.10.1',
-        color: 'blue',
-      },
-    },
-     */
   ],
   transformPath: () => `/maven-metadata/v`,
   transformQueryParams: ({ pluginId }) => {
