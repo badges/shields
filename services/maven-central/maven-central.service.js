@@ -37,6 +37,39 @@ module.exports = redirector({
         color: 'blue',
       },
     },
+    {
+      title: 'Maven Central with version suffix filter',
+      pattern: ':groupId/:artifactId',
+      queryParams: {
+        versionSuffix: '-android',
+      },
+      namedParams: {
+        groupId: 'com.google.guava',
+        artifactId: 'guava',
+      },
+      staticPreview: {
+        label: 'maven-central',
+        message: 'v30.1.1-android',
+        color: 'blue',
+      },
+    },
+    {
+      title: 'Maven Central with version prefix and suffix filter',
+      pattern: ':groupId/:artifactId/:versionPrefix',
+      queryParams: {
+        versionSuffix: '-android',
+      },
+      namedParams: {
+        groupId: 'com.google.guava',
+        artifactId: 'guava',
+        versionPrefix: '29',
+      },
+      staticPreview: {
+        label: 'maven-central',
+        message: 'v29.0-android',
+        color: 'blue',
+      },
+    },
   ],
   transformPath: () => `/maven-metadata/v`,
   transformQueryParams: ({ groupId, artifactId, versionPrefix }) => {
