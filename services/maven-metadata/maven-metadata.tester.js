@@ -1,5 +1,6 @@
 'use strict'
 
+const Joi = require('joi')
 const t = (module.exports = require('../tester').createServiceTester())
 const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
@@ -10,6 +11,33 @@ t.create('valid maven-metadata.xml uri')
   .expectBadge({
     label: 'maven',
     message: isVPlusDottedVersionAtLeastOne,
+  })
+
+t.create('with version prefix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionPrefix?=27.'
+  )
+  .expectBadge({
+    label: 'maven',
+    message: '27.1-jre',
+  })
+
+t.create('with version suffix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionSuffix?=-android'
+  )
+  .expectBadge({
+    label: 'maven',
+    message: '27.1-android',
+  })
+
+t.create('with version prefix and suffix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionSuffix&versionPrefix?=27.?=-android'
+  )
+  .expectBadge({
+    label: 'maven',
+    message: Joi.string().regex(/-android$/),
   })
 
 t.create('version ending with zero')
