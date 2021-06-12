@@ -75,7 +75,6 @@ module.exports = redirector({
     return {
       metadataUrl,
       label: 'plugin portal',
-      color: 'blue',
       versionPrefix,
     }
   },
