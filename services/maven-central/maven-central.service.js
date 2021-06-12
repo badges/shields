@@ -79,7 +79,6 @@ module.exports = redirector({
     return {
       metadataUrl,
       label: 'maven-central',
-      color: 'blue',
       versionPrefix,
     }
   },
