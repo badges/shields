@@ -15,16 +15,16 @@ t.create('valid maven-metadata.xml uri')
 
 t.create('with version prefix')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionPrefix?=27.'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionPrefix=27.'
   )
   .expectBadge({
     label: 'maven',
-    message: '27.1-jre',
+    message: 'v27.1-jre',
   })
 
 t.create('with version suffix')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionSuffix?=-android'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionSuffix=-android'
   )
   .expectBadge({
     label: 'maven',
@@ -33,7 +33,7 @@ t.create('with version suffix')
 
 t.create('with version prefix and suffix')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionSuffix&versionPrefix?=27.?=-android'
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml&versionPrefix=27.&versionSuffix=-android'
   )
   .expectBadge({
     label: 'maven',
