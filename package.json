@@ -218,7 +218,7 @@
     "nyc": "^15.1.0",
     "opn-cli": "^5.0.0",
     "portfinder": "^1.0.28",
-    "prettier": "2.3.0",
+    "prettier": "2.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-error-overlay": "^6.0.9",
