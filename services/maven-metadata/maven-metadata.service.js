@@ -3,10 +3,12 @@
 const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { renderVersionBadge } = require('../version')
-const { BaseXmlService } = require('..')
+const { BaseXmlService, NotFound } = require('..')
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),
+  versionPrefix: Joi.string().optional(),
+  versionSuffix: Joi.string().optional(),
 }).required()
 
 const schema = Joi.object({
@@ -38,6 +40,37 @@ module.exports = class MavenMetadata extends BaseXmlService {
       },
       staticPreview: renderVersionBadge({ version: '2.8.5' }),
     },
+    {
+      title: 'Maven metadata URL with version prefix',
+      namedParams: {},
+      queryParams: {
+        metadataUrl:
+          'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
+        versionPrefix: '1.',
+      },
+      staticPreview: renderVersionBadge({ version: '1.7.2' }),
+    },
+    {
+      title: 'Maven metadata URL with version suffix',
+      namedParams: {},
+      queryParams: {
+        metadataUrl:
+          'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
+        versionSuffix: '-android',
+      },
+      staticPreview: renderVersionBadge({ version: '30.1.1-android' }),
+    },
+    {
+      title: 'Maven metadata URL with both version prefix and version suffix',
+      namedParams: {},
+      queryParams: {
+        metadataUrl:
+          'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
+        versionPrefix: '29.',
+        versionSuffix: '-android',
+      },
+      staticPreview: renderVersionBadge({ version: '29.0-android' }),
+    },
   ]
 
   static defaultBadgeData = {
@@ -52,10 +85,25 @@ module.exports = class MavenMetadata extends BaseXmlService {
     })
   }
 
-  async handle(_namedParams, { metadataUrl }) {
+  async handle(_namedParams, { metadataUrl, versionPrefix, versionSuffix }) {
     const data = await this.fetch({ metadataUrl })
-    return renderVersionBadge({
-      version: data.metadata.versioning.versions.version.slice(-1)[0],
-    })
+    let versions = data.metadata.versioning.versions.version.reverse()
+    if (versionPrefix !== undefined) {
+      versions = versions.filter(v => v.toString().startsWith(versionPrefix))
+    }
+    if (versionSuffix !== undefined) {
+      versions = versions.filter(v => v.toString().endsWith(versionSuffix))
+    }
+    const version = versions[0]
+    // if the filter returned no results, throw a NotFound
+    if (
+      versionPrefix !== undefined &&
+      versionSuffix !== undefined &&
+      version === undefined
+    )
+      throw new NotFound({
+        prettyMessage: 'version prefix or suffix not found',
+      })
+    return renderVersionBadge({ version })
   }
 }
