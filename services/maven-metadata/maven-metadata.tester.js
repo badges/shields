@@ -37,7 +37,7 @@ t.create('with version prefix and suffix')
   )
   .expectBadge({
     label: 'maven',
-    message: '27.1-android',
+    message: 'v27.1-android',
   })
 
 t.create('version ending with zero')
