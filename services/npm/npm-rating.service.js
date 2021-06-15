@@ -5,39 +5,40 @@ const { starRating } = require('../text-formatters')
 const { BaseJsonService } = require('..')
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
+const numberSchema = Joi.number().min(0).max(1).required()
 const responseSchema = Joi.object({
   score: Joi.object({
-    final: Joi.number().required(),
+    final: numberSchema,
     detail: Joi.object({
-      maintenance: Joi.number().required(),
-      popularity: Joi.number().required(),
-      quality: Joi.number().required(),
+      maintenance: numberSchema,
+      popularity: numberSchema,
+      quality: numberSchema,
     }),
   }),
 }).required()
 
 module.exports = class NpmRating extends BaseJsonService {
-  static category = 'rating'
+  static category = 'analysis'
 
   static route = {
     base: 'npm',
     pattern:
-      'rating/:type(maintenance|popularity|quality)?/:scope(@.+)?/:packageName',
+      'rating/:type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
   }
 
   static examples = [
     {
       title: 'NPM Rating',
-      namedParams: { packageName: 'egg' },
+      namedParams: { type: 'final', packageName: 'egg' },
       staticPreview: this.render({ score: 0.9711 }),
       keywords: ['node'],
     },
-    {
-      title: 'NPM Rating (Popularity)',
-      namedParams: { type: 'popularity', packageName: '@vue/cli' },
-      staticPreview: this.render({ type: 'popularity', score: 0.89 }),
-      keywords: ['node'],
-    },
+    // {
+    //   title: 'NPM Rating (Popularity)',
+    //   namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
+    //   staticPreview: this.render({ type: 'popularity', score: 0.89 }),
+    //   keywords: ['node'],
+    // },
     {
       title: 'NPM Rating (Quality)',
       namedParams: { type: 'quality', packageName: 'egg' },
@@ -53,12 +54,12 @@ module.exports = class NpmRating extends BaseJsonService {
   ]
 
   static defaultBadgeData = {
-    label: 'Rating',
+    label: 'rating',
   }
 
   static render({ type, score }) {
     return {
-      label: !type ? 'Rating' : type[0].toUpperCase() + type.substring(1),
+      label: type === 'final' ? 'rating' : type,
       message: starRating(score * 5),
       color: score > 0.3 ? 'brightgreen' : 'red',
     }
@@ -74,8 +75,7 @@ module.exports = class NpmRating extends BaseJsonService {
       errorMessages: { 404: 'package not found or too new' },
     })
 
-    let score = json.score.final
-    if (type) score = json.score.detail[type]
+    const score = type === 'final' ? json.score.final : json.score.detail[type]
 
     return this.constructor.render({ type, score })
   }
