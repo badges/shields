@@ -61,7 +61,7 @@
     "request": "~2.88.2",
     "semver": "~7.3.5",
     "simple-icons": "5.1.0",
-    "webextension-store-meta": "^1.0.3",
+    "webextension-store-meta": "^1.0.4",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
   },
