@@ -1,8 +1,8 @@
 'use strict'
 
 const Joi = require('joi')
-const { starRating } = require('../text-formatters')
 const { BaseJsonService } = require('..')
+const { starRating } = require('../text-formatters')
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
 const numberSchema = Joi.number().min(0).max(1).required()
@@ -17,19 +17,44 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
+const queryParamSchema = Joi.object({
+  msg_type: Joi.string().pattern(/percentage|star|grade/),
+}).default('percentage')
+
+function formatMessage(score, msgType) {
+  switch (msgType) {
+    case 'star': {
+      return starRating(score * 5)
+    }
+    case 'grade': {
+      if (score >= 0.95) return 'A+'
+      if (score >= 0.75) return 'A'
+      if (score >= 0.5) return 'B'
+      if (score >= 0.25) return 'C'
+      if (score >= 0.05) return 'D'
+      return 'E'
+    }
+    case 'percentage':
+    default: {
+      return `${(score * 100).toFixed(1)}%`
+    }
+  }
+}
+
 module.exports = class NpmsIO extends BaseJsonService {
   static category = 'analysis'
 
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
+      ':type(rating|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
+    queryParamSchema,
   }
 
   static examples = [
     {
       title: 'npms.io',
-      namedParams: { type: 'final', packageName: 'egg' },
+      namedParams: { type: 'rating', packageName: 'egg' },
       staticPreview: this.render({ score: 0.9711 }),
       keywords: ['node'],
     },
@@ -52,21 +77,42 @@ module.exports = class NpmsIO extends BaseJsonService {
       staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
       keywords: ['node'],
     },
+    {
+      title: 'npms.io with percentage style',
+      namedParams: { type: 'rating', packageName: 'egg' },
+      queryParams: { msg_type: 'percentage' },
+      staticPreview: this.render({ score: 0.9711 }),
+      keywords: ['node'],
+    },
+    {
+      title: 'npms.io with grade style',
+      namedParams: { type: 'rating', packageName: 'egg' },
+      queryParams: { msg_type: 'grade' },
+      staticPreview: this.render({ score: 0.9711 }),
+      keywords: ['node'],
+    },
+    {
+      title: 'npms.io with star style)',
+      namedParams: { type: 'rating', packageName: 'egg' },
+      queryParams: { msg_type: 'star' },
+      staticPreview: this.render({ score: 0.9711 }),
+      keywords: ['node'],
+    },
   ]
 
   static defaultBadgeData = {
     label: 'rating',
   }
 
-  static render({ type, score }) {
+  static render({ type, score, msgType }) {
     return {
-      label: type === 'final' ? 'rating' : type,
-      message: starRating(score * 5),
+      label: type === 'rating' ? 'rating' : type,
+      message: formatMessage(score, msgType),
       color: score > 0.3 ? 'brightgreen' : 'red',
     }
   }
 
-  async handle({ type, scope, packageName }) {
+  async handle({ type, scope, packageName }, { msg_type: msgType }) {
     const slug = scope ? `${scope}/${packageName}` : packageName
     const url = `https://api.npms.io/v2/package/${encodeURIComponent(slug)}`
 
@@ -76,8 +122,8 @@ module.exports = class NpmsIO extends BaseJsonService {
       errorMessages: { 404: 'package not found or too new' },
     })
 
-    const score = type === 'final' ? json.score.final : json.score.detail[type]
+    const score = type === 'rating' ? json.score.final : json.score.detail[type]
 
-    return this.constructor.render({ type, score })
+    return this.constructor.render({ type, score, msgType })
   }
 }
