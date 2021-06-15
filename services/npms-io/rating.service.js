@@ -17,36 +17,37 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class NpmRating extends BaseJsonService {
+module.exports = class NpmsIO extends BaseJsonService {
   static category = 'analysis'
 
   static route = {
-    base: 'npm',
+    base: 'npms-io',
     pattern:
-      'rating/:type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
+      ':type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
   }
 
   static examples = [
     {
-      title: 'NPM Rating',
+      title: 'npms.io',
       namedParams: { type: 'final', packageName: 'egg' },
       staticPreview: this.render({ score: 0.9711 }),
       keywords: ['node'],
     },
-    // {
-    //   title: 'NPM Rating (Popularity)',
-    //   namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
-    //   staticPreview: this.render({ type: 'popularity', score: 0.89 }),
-    //   keywords: ['node'],
-    // },
     {
-      title: 'NPM Rating (Quality)',
+      title: 'npms.io (popularity)',
+      pattern: ':type/:scope/:packageName',
+      namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
+      staticPreview: this.render({ type: 'popularity', score: 0.89 }),
+      keywords: ['node'],
+    },
+    {
+      title: 'npms.io (quality)',
       namedParams: { type: 'quality', packageName: 'egg' },
       staticPreview: this.render({ type: 'quality', score: 0.98 }),
       keywords: ['node'],
     },
     {
-      title: 'NPM Rating (Maintenance)',
+      title: 'npms.io (maintenance)',
       namedParams: { type: 'maintenance', packageName: 'command' },
       staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
       keywords: ['node'],
