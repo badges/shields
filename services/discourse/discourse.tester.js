@@ -1,9 +1,10 @@
 import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'discourse',
+  title: 'Discourse',
+})
 
 const data = {
   topic_count: 22513,

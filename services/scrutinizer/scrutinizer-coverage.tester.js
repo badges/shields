@@ -1,8 +1,10 @@
 import {isIntegerPercentage} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ScrutinizerCoverage',
+  title: 'ScrutinizerCoverage',
+  pathPrefix: '/scrutinizer/coverage',
+})
 
 t.create('code coverage (GitHub)').get('/g/filp/whoops.json').expectBadge({
   label: 'coverage',

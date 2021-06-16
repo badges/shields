@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {codacyGrade} from './codacy-helpers.js';
 
 t.create('Code quality')

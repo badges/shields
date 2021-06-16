@@ -1,7 +1,6 @@
 import {nonNegativeInteger} from '../validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('layers without a specified tag')
   .get('/_/alpine.json')

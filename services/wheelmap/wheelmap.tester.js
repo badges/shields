@@ -1,8 +1,7 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {noToken} from '../test-helpers.js';
-import _noWheelmapToken from './wheelmap.service';
+import _noWheelmapToken from './wheelmap.service.js';
 const noWheelmapToken = noToken(_noWheelmapToken);
 
 t.create('node with accessibility')

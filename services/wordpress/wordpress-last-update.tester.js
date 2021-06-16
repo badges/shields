@@ -1,11 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isFormattedDate} from '../test-validators.js';
 
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Last Update',
 })
-export default t;
 
 t.create('Plugin Last Update')
   .get('/plugin/last-updated/akismet.json')

@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'continuousphp',
+  title: 'Continuousphp',
+})
 
 t.create('no longer available (previously build status on default branch)')
   .get('/git-hub/doctrine/dbal.json')

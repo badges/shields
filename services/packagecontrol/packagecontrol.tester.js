@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'packagecontrol',
+  title: 'Package Control',
+})
 
 t.create('monthly downloads').get('/dm/GitGutter.json').expectBadge({
   label: 'downloads',

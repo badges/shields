@@ -1,7 +1,6 @@
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Nucleus (pluginId nucleus)').get('/nucleus.json').expectBadge({
   label: 'version',

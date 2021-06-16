@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JenkinsCoverageRedirector',
+  title: 'JenkinsCoverageRedirector',
+  pathPrefix: '/jenkins',
+})
 
 t.create('old Jacoco prefix + job url in path')
   .get(

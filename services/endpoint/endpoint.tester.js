@@ -1,9 +1,8 @@
 import zlib from 'zlib';
 import {expect} from 'chai';
 import {getShieldsIcon} from '../../lib/logos.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Valid schema')
   .get('.json?url=https://example.com/badge')

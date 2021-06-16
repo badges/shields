@@ -18,9 +18,9 @@ import ServiceTester from './service-tester.js';
  * @returns {module:core/service-test-runner/service-tester~ServiceTester}
  *    ServiceTester instance
  */
-function createServiceTester() {
+async function createServiceTester() {
   const servicePath = caller().replace('.tester.js', '.service.js')
-  const ServiceClass = require(servicePath)
+  const ServiceClass = Object.values(await import(servicePath))[0]
   if (!(ServiceClass.prototype instanceof BaseService)) {
     throw Error(
       `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`

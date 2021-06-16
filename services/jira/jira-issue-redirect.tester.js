@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JiraIssueRedirect',
+  title: 'JiraIssueRedirect',
+  pathPrefix: '/jira/issue',
+})
 
 t.create('jira issue')
   .get('/https/issues.apache.org/jira/kafka-2896.svg')

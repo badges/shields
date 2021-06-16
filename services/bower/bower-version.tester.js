@@ -1,9 +1,11 @@
 import Joi from 'joi';
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'BowerVersion',
+  title: 'Bower Version',
+  pathPrefix: '/bower',
+})
 
 const isBowerPrereleaseVersion = Joi.string().regex(
   /^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/

@@ -1,8 +1,10 @@
 import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'SonarTests',
+  title: 'SonarTests',
+  pathPrefix: '/sonar',
+})
 import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals, isIntegerPercentage, isMetric} from '../test-validators.js';
 const isMetricAllowZero = Joi.alternatives(
   isMetric,

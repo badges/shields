@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isReuseCompliance, COLOR_MAP} from './reuse-compliance-helper.js';
 
 t.create('valid repo -- live')

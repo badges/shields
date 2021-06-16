@@ -1,8 +1,8 @@
 import {expect} from 'chai';
-import {Range} from 'semver';
-const t = (function() {
-  export default __a;
-}())
+import semverModule from 'semver';
+const {Range}  = semverModule;
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {mockPackageData, mockCurrentSha} from './testUtils/test-utils.js';
 
 function expectSemverRange(message) {

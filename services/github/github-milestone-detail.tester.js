@@ -1,7 +1,6 @@
 import {isMetric, isMetricOverMetric, isIntegerPercentage} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Milestone Open Issues')
   .get('/issues-open/MacroPower/milestone-test/1.json')

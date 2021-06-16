@@ -2,9 +2,11 @@ import Joi from 'joi';
 import {isSemver} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubRelease',
+  title: 'Github Release',
+  pathPrefix: '/github',
+})
 
 t.create('Release')
   .get('/v/release/expressjs/express.json')

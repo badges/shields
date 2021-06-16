@@ -1,9 +1,11 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric, isMetricOpenIssues} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'BitbucketPullRequest',
+  title: 'Bitbucket Pull Request',
+  pathPrefix: '/bitbucket',
+})
 
 t.create('pr-raw (valid)')
   .get('/pr-raw/atlassian/python-bitbucket.json')

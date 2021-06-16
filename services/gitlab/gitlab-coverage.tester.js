@@ -1,7 +1,6 @@
 import {isIntegerPercentage} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Coverage (branch)')
   .get('/gitlab-org/gitlab-runner/12-0-stable.json')

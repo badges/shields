@@ -60,7 +60,7 @@ import readAllStdinSync from 'read-all-stdin-sync';
 import {createTestServer} from '../server/in-process-server-test-helpers.js';
 import Runner from './runner.js';
 
-import('../unhandled-rejection.spec');
+import('../unhandled-rejection.spec.js');
 
 const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0
@@ -79,7 +79,7 @@ if (process.env.TESTED_SERVER_URL) {
         },
       },
     })
-    server.start()
+    await server.start()
   })
   after('Shut down the server', async function () {
     if (server) {

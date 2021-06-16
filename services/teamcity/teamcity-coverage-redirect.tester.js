@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'TeamCityCoverageRedirect',
+  title: 'TeamCityCoverageRedirect',
+  pathPrefix: '/teamcity/coverage',
+})
 
 t.create('coverage')
   .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.svg')

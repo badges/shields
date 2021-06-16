@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'NexusRedirect',
+  title: 'NexusRedirect',
+  pathPrefix: '/nexus',
+})
 
 t.create('Nexus release')
   .get('/r/https/oss.sonatype.org/com.google.guava/guava.svg')

@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isRelativeFormattedDate} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'date',
+  title: 'Relative Date Tests',
+})
 
 t.create('Relative date')
   .get('/1540814400.json')

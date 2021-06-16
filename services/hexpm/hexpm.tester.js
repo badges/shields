@@ -4,9 +4,7 @@ import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' })
 
 t.create('downloads per week')
   .get('/dw/cowboy.json')

@@ -2,9 +2,11 @@ import Joi from 'joi';
 import {isSemver} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubTag',
+  title: 'Github Tag',
+  pathPrefix: '/github',
+})
 
 t.create('Tag')
   .get('/v/tag/expressjs/express.json')

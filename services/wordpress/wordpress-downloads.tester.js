@@ -1,11 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
 
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Download Tests',
 })
-export default t;
 
 t.create('Plugin Downloads - Total')
   .get('/plugin/dt/akismet.json')

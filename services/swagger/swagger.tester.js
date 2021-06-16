@@ -6,9 +6,8 @@ const apiGetQueryParams = {
   url: 'https://example.com/example.json',
 }
 
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Invalid')
   .get(getURL)

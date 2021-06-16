@@ -1,7 +1,6 @@
 import {isMetric} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('releases by user').get('/camptocamp.json').expectBadge({
   label: 'releases',

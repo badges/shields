@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'CocoapodsDownloads',
+  title: 'CocoapodsDownloads',
+  pathPrefix: '/cocoapods',
+})
 
 t.create('downloads (valid, monthly)')
   .get('/dm/AFNetworking.json')

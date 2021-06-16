@@ -1,8 +1,7 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric, isFileSize, isFormattedDate} from '../test-validators.js';
 
-const t = new ServiceTester({ id: 'steam', title: 'Steam Workshop Tests' })
-export default t;
+export const t = new ServiceTester({ id: 'steam', title: 'Steam Workshop Tests' })
 
 t.create('Collection Files')
   .get('/collection-files/180077636.json')

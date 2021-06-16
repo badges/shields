@@ -6,9 +6,11 @@ import {isVPlusDottedVersionAtLeastOne, isVPlusDottedVersionNClausesWithOptional
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)
 const isShortSha = Joi.string().regex(/[0-9a-f]{7}/)
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubPipenv',
+  title: 'GithubPipenv',
+  pathPrefix: '/github/pipenv',
+})
 
 t.create('Locked Python version')
   .get('/locked/python-version/metabolize/rq-dashboard-on-heroku.json')

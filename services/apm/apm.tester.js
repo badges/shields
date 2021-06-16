@@ -2,9 +2,10 @@ import {ServiceTester} from '../tester.js';
 import {invalidJSON} from '../response-fixtures.js';
 import {isMetric, isVPlusTripleDottedVersion} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'apm',
+  title: 'Atom Package Manager',
+})
 
 t.create('Downloads')
   .get('/dm/vim-mode.json')

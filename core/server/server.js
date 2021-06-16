@@ -11,7 +11,7 @@ import Camp from '@shields_io/camp';
 import originalJoi from 'joi';
 import makeBadge from '../../badge-maker/lib/make-badge.js';
 import GithubConstellation from '../../services/github/github-constellation.js';
-import suggest from '../../services/suggest.js';
+import {setRoutes} from '../../services/suggest.js';
 import {loadServiceClasses} from '../base-service/loader.js';
 import {makeSend} from '../base-service/legacy-result-sender.js';
 import {handleRequest} from '../base-service/legacy-request-handler.js';
@@ -459,7 +459,7 @@ class Server {
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
+    setRoutes(allowedOrigin, githubApiProvider, camp)
 
     this.registerErrorHandlers()
     this.registerRedirects()

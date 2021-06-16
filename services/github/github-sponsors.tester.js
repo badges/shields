@@ -1,9 +1,11 @@
 import {isMetric} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubSponsors',
+  title: 'Github Sponsors',
+  pathPrefix: '/github',
+})
 
 t.create('Sponsors').get('/sponsors/Homebrew.json').expectBadge({
   label: 'sponsors',

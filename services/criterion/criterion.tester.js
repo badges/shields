@@ -1,7 +1,6 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS, NOT_FOUND_STATUS} from './constants.js';
 
 const isStatus = Joi.string()

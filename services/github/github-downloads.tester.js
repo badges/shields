@@ -1,8 +1,7 @@
 import Joi from 'joi';
 import {isMetric} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 const mockLatestRelease = release => nock =>
   nock('https://api.github.com')

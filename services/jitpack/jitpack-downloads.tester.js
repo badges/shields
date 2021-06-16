@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JitPackDownloads',
+  title: 'JitPackDownloads',
+  pathPrefix: '/jitpack',
+})
 
 t.create('no longer available (dw)')
   .get('/dw/github/jitpack/maven-simple.json')

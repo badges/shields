@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'feedz',
+  title: 'Feedz',
+  pathPrefix: '',
+})
 
 // The `shieldstests/public` repo is specifically made for these tests. It contains following packages:
 //  - Shields.NoV1: 0.1.0

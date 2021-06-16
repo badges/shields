@@ -2,9 +2,11 @@ import Joi from 'joi';
 import {isStarRating} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ChromeWebStoreRating',
+  title: 'Chrome Web Store Rating',
+  pathPrefix: '/chrome-web-store',
+})
 
 t.create('Rating')
   .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')

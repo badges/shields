@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isFileSize} from '../test-validators.js';
 
 t.create('8368844 bytes to 8.37 megabytes')

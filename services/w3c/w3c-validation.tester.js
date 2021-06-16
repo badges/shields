@@ -1,7 +1,6 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 const isErrorOnly = Joi.string().regex(/^[0-9]+ errors?$/)
 

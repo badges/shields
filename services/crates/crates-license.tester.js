@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'crates',
+  title: 'crates.io',
+  pathPrefix: '/crates/l',
+})
 
 t.create('license')
   .get('/libc.json')

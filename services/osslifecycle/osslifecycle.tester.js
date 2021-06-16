@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'osslifecycle',
+  title: 'OSS Lifecycle',
+})
 
 t.create('osslifecycle active status').get('/netflix/sureal.json').expectBadge({
   label: 'oss lifecycle',

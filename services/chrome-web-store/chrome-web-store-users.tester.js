@@ -1,9 +1,11 @@
 import {isMetric} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ChromeWebStoreUsers',
+  title: 'Chrome Web Store Users',
+  pathPrefix: '/chrome-web-store',
+})
 
 t.create('Downloads (redirect)')
   .get('/d/alhjnofcnnpeaphgeakdhkebafjcpeae.svg')

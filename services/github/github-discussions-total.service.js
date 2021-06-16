@@ -1,4 +1,4 @@
-import {default as gql} from 'graphql-tag';
+import  gql from 'graphql-tag';
 import Joi from 'joi';
 import {nonNegativeInteger} from '../validators.js';
 import {GithubAuthV4Service} from './github-auth-service.js';

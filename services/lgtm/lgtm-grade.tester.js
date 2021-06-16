@@ -1,7 +1,6 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {data} from './lgtm-test-helpers.js';
 
 t.create('grade: missing project')

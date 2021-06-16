@@ -1,7 +1,6 @@
 import {ServiceTester} from '../tester.js';
 
-const t = new ServiceTester({ id: 'libscore', title: 'libscore' })
-export default t;
+export const t = new ServiceTester({ id: 'libscore', title: 'libscore' })
 
 t.create('no longer available (previously usage statistics)')
   .get('/s/jQuery.json')

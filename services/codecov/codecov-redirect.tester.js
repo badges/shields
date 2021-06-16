@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'CodecovTokenRedirect',
+  title: 'CodecovTokenRedirect',
+  pathPrefix: '/codecov',
+})
 
 t.create('codecov token')
   .get('/c/token/abc123def456/gh/codecov/private-example.svg')

@@ -1,9 +1,11 @@
-import {ServiceTester} from '../tester.js';
 import {isMetric} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+import {ServiceTester} from '../tester.js'
+export const t = new ServiceTester({
+  id: 'AnsibleRole',
+  title: 'AnsibleRole',
+  pathPrefix: '/ansible/role',
+})
 
 t.create('role name (valid)')
   .get('/14542.json')

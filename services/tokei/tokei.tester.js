@@ -1,8 +1,7 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric} from '../test-validators.js';
 
-const t = new ServiceTester({ id: 'tokei', title: 'Tokei LOC Tests' })
-export default t;
+export const t = new ServiceTester({ id: 'tokei', title: 'Tokei LOC Tests' })
 
 t.create('GitHub LOC')
   .get('/lines/github/badges/shields.json')

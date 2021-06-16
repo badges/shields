@@ -1,7 +1,6 @@
 import {isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Arch Linux package (valid)')
   .get('/core/x86_64/pacman.json')

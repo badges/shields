@@ -1,7 +1,6 @@
 import queryString from 'query-string';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {exampleXml} from './dynamic-response-fixtures.js';
 
 const exampleUrl = 'https://example.test/example.xml'

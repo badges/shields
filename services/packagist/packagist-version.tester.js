@@ -1,9 +1,11 @@
 import Joi from 'joi';
 import {isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'packagist',
+  title: 'Packagist Version',
+  pathPrefix: '/packagist',
+})
 
 /*
   validator for a packagist version number

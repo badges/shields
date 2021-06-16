@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isValidGrade} from './codefactor-helpers.js';
 
 t.create('Grade').get('/github/google/guava.json').expectBadge({

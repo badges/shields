@@ -3,9 +3,7 @@ import {isMetric, isVPlusDottedVersionNClauses, isVPlusDottedVersionNClausesWith
 import {queryIndex, nuGetV3VersionJsonWithDash, nuGetV3VersionJsonFirstCharZero, nuGetV3VersionJsonFirstCharNotZero, nuGetV3VersionJsonBuildMetadataWithDash} from '../nuget-fixtures.js';
 import {invalidJSON} from '../response-fixtures.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({ id: 'nuget', title: 'NuGet' })
 
 // downloads
 

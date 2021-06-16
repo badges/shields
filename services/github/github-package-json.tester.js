@@ -3,9 +3,11 @@ import {ServiceTester} from '../tester.js';
 import {isSemver} from '../test-validators.js';
 import {semverRange} from '../validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubPackageJson',
+  title: 'GithubPackageJson',
+  pathPrefix: '/github/package-json',
+})
 
 t.create('Package version').get('/v/badges/shields.json').expectBadge({
   label: 'version',

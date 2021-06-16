@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isBuildStatus} from '../build-status.js';
 
 t.create('branch checks (branch)')

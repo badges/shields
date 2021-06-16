@@ -1,4 +1,5 @@
-const Joi = require('joi').extend(joi => ({
+import joiModule from 'joi';
+const Joi = joiModule.extend(joi => ({
   base: joi.array(),
   coerce: (value, helpers) => ({
     value: value.split ? value.split(' | ') : value,
@@ -6,9 +7,8 @@ const Joi = require('joi').extend(joi => ({
   type: 'versionArray',
 }))
 const isDottedVersionAtLeastOne = Joi.string().regex(/\d+(\.\d+)?(\.\d+)?$/)
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Nucleus (pluginId nucleus)')
   .get('/nucleus.json')

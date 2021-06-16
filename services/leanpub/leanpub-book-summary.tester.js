@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'LeanPub',
+  title: 'LeanPub',
+  pathPrefix: '/leanpub/book',
+})
 
 t.create('no longer available (previously book pages)')
   .get('/pages/juice-shop.json')

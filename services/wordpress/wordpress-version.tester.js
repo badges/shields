@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'wordpress',
+  title: 'WordPress Version Tests',
+})
 
 t.create('Plugin Version').get('/plugin/v/akismet.json').expectBadge({
   label: 'plugin',

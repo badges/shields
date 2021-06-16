@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'Waffle',
+  title: 'WaffleLabel',
+  pathPrefix: '/waffle/label',
+})
 
 t.create('no longer available')
   .get('/ritwickdey/vscode-live-server/bug.json')

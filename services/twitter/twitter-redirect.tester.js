@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'TwitterUrlRedirect',
+  title: 'TwitterUrlRedirect',
+  pathPrefix: '/twitter/url',
+})
 
 t.create('twitter')
   .get('/https/shields.io.svg')

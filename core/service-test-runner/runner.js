@@ -24,7 +24,7 @@ class Runner {
    * Prepare the runner by loading up all the ServiceTester objects.
    */
   async prepare() {
-    this.testers = await loadTesters()
+    this.testers = (await loadTesters()).flatMap(testerModule => Object.values(testerModule))
     this.testers.forEach(tester => {
       tester.beforeEach = () => {
         this.beforeEach()

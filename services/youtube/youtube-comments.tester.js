@@ -1,9 +1,8 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {noToken} from '../test-helpers.js';
 import {isMetric} from '../test-validators.js';
-import _noYouTubeToken from './youtube-comments.service';
+import _noYouTubeToken from './youtube-comments.service.js';
 const noYouTubeToken = noToken(_noYouTubeToken);
 
 t.create('video comment count')

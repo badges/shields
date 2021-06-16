@@ -1,7 +1,6 @@
 import {withRegex} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('GitHub Total Discussions (repo not found)')
   .get('/not-a-user/not-a-repo.json')

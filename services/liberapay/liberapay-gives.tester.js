@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isCurrencyOverTime} from './liberapay-base.js';
 
 t.create('Giving (valid)').get('/Changaco.json').expectBadge({

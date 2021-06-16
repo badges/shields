@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'bithound',
+  title: 'BitHound',
+})
 
 t.create('no longer available (code)')
   .get('/code/github/rexxars/sse-channel.json')

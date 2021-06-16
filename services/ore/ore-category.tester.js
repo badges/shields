@@ -1,7 +1,6 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 // Taken from https://ore.spongepowered.org/api#/Projects/showProject
 const CATEGORY_ENUM = [

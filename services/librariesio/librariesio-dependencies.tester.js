@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isDependencyState} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'LibrariesIoDependencies',
+  title: 'LibrariesIoDependencies',
+  pathPrefix: '/librariesio',
+})
 
 t.create('dependencies for package (project name contains dot)')
   .timeout(10000)

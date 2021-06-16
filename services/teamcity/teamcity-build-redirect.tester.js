@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'TeamCityBuildRedirect',
+  title: 'TeamCityBuildRedirect',
+  pathPrefix: '/teamcity',
+})
 
 t.create('codebetter')
   .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.svg')

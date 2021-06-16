@@ -1,7 +1,6 @@
 import {ServiceTester} from '../tester.js';
 
-const t = new ServiceTester({ id: 'versioneye', title: 'VersionEye' })
-export default t;
+export const t = new ServiceTester({ id: 'versioneye', title: 'VersionEye' })
 
 t.create('no longer available (previously dependencies status)')
   .get('/d/ruby/rails.json')

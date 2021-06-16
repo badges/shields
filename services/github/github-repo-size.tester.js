@@ -1,7 +1,6 @@
 import {isFileSize} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('repository size').get('/badges/shields.json').expectBadge({
   label: 'repo size',

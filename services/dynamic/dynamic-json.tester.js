@@ -1,8 +1,7 @@
 import Joi from 'joi';
 import {expect} from 'chai';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name')

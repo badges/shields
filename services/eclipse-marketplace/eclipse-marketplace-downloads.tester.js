@@ -1,9 +1,11 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'EclipseMarketplaceDownloads',
+  title: 'EclipseMarketplaceDownloads',
+  pathPrefix: '/eclipse-marketplace',
+})
 
 t.create('total marketplace downloads').get('/dt/notepad4e.json').expectBadge({
   label: 'downloads',

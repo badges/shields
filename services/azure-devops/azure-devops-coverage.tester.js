@@ -1,7 +1,6 @@
 import {isIntegerPercentage} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 const org = 'swellaby'
 const project = 'opensource'

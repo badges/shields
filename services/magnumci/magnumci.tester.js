@@ -1,7 +1,6 @@
 import {ServiceTester} from '../tester.js';
 
-const t = new ServiceTester({ id: 'magnumci', title: 'Magnum CI' })
-export default t;
+export const t = new ServiceTester({ id: 'magnumci', title: 'Magnum CI' })
 
 t.create('no longer available')
   .get('/ci/96ffb83fa700f069024921b0702e76ff.json')

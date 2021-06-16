@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'TravisPhpVersionRedirect',
+  title: 'TravisPhpVersionRedirect',
+  pathPrefix: '/',
+})
 
 t.create('travis-ci no branch')
   .get('travis-ci/php-v/symfony/symfony.svg')

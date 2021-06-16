@@ -2,9 +2,10 @@ import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
 import {isStarRating} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'redmine',
+  title: 'Redmine',
+})
 
 t.create('plugin rating')
   .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')

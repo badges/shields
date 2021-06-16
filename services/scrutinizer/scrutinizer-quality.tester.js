@@ -1,8 +1,10 @@
 import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ScrutinizerQuality',
+  title: 'ScrutinizerQuality',
+  pathPrefix: '/scrutinizer/quality',
+})
 
 const isQualityNumber = Joi.number().positive()
 

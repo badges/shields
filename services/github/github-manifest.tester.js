@@ -2,9 +2,11 @@ import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubManifest',
+  title: 'GithubManifest',
+  pathPrefix: '/github/manifest-json',
+})
 
 t.create('Manifest version')
   .get('/v/sindresorhus/show-all-github-issues.json')

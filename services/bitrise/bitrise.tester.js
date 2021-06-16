@@ -1,7 +1,6 @@
 import {isBuildStatus} from '../build-status.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('deploy status')
   .get('/cde737473028420d.json?token=GCIdEzacE4GW32jLVrZb7A')

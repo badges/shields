@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ScrutinizerQualityRedirect',
+  title: 'ScrutinizerQualityRedirect',
+  pathPrefix: '/scrutinizer',
+})
 
 t.create('scrutinizer quality GitHub')
   .get('/g/doctrine/orm.svg')

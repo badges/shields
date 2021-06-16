@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JenkinsTestsRedirector',
+  title: 'JenkinsTestsRedirector',
+  pathPrefix: '/jenkins',
+})
 
 t.create('old tests prefix + job url in path')
   .get(

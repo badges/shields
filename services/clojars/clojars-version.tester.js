@@ -1,7 +1,9 @@
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ClojarsVersion',
+  title: 'Clojars Version',
+  pathPrefix: '/clojars',
+})
 
 t.create('clojars version (valid)')
   .get('/v/prismic.json')

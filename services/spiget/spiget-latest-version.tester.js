@@ -1,7 +1,6 @@
 import {withRegex} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 // Note that Spigot versions can be anything (including just a string), so we'll make sure it's not returning 'not found'
 

@@ -1,7 +1,6 @@
 import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('daily downloads (valid, no package version specified)')
   .get('/dd/doctrine/orm.json')

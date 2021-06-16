@@ -5,11 +5,10 @@ const isPlatform = Joi.string().regex(
   /^(windows|linux|macos)( \| (windows|linux|macos))*$/
 )
 
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'powershellgallery',
   title: 'PowerShell Gallery',
 })
-export default t;
 
 t.create('total downloads (valid)').get('/dt/ACMESharp.json').expectBadge({
   label: 'downloads',

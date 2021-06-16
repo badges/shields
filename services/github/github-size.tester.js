@@ -1,7 +1,6 @@
 import {isFileSize} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('File size')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json')

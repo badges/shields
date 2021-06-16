@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'EndpointRedirect',
+  title: 'EndpointRedirect',
+  pathPrefix: '/badge/endpoint',
+})
 
 t.create('Build: default branch')
   .get('.svg?url=https://example.com/badge.json')

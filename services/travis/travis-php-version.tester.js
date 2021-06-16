@@ -1,7 +1,6 @@
 import {isPhpVersionReduction} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('gets the package version of symfony 5.1')
   .get('/symfony/symfony/5.1.json')

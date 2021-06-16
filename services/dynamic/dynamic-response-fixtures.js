@@ -1,5 +1,4 @@
-export {
-  exampleXml: `<?xml version="1.0"?>
+export const exampleXml = `<?xml version="1.0"?>
 <catalog>
    <book id="bk101">
       <author>Gambardella, Matthew</author>
@@ -119,5 +118,4 @@ export {
       environment.</description>
    </book>
 </catalog>
-`,
-};
+`

@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ctan',
+  title: 'Comprehensive TEX Archive Network',
+})
 
 t.create('license').get('/l/novel.json').expectBadge({
   label: 'license',

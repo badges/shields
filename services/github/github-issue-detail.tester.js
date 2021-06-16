@@ -1,8 +1,7 @@
 import Joi from 'joi';
 import {isFormattedDate} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('github issue state')
   .get('/issues/detail/state/badges/shields/979.json')

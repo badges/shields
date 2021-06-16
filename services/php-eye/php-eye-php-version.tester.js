@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'php-eye',
+  title: 'php-eye',
+  pathPrefix: '/php-eye',
+})
 
 t.create('no longer available (previously default branch)')
   .get('/symfony/symfony.json')

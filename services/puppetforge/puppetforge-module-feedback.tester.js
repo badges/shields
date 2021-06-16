@@ -1,7 +1,6 @@
 import {isPercentage} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('module feedback').get('/camptocamp/openssl.json').expectBadge({
   label: 'score',

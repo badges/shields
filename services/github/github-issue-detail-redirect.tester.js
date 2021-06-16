@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'GithubIssueDetailRedirect',
+  title: 'GithubIssueDetailRedirect',
+  pathPrefix: '/github',
+})
 
 t.create('github issue detail (s shorthand)')
   .get('/issues/detail/s/badges/shields/979.svg')

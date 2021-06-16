@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JiraSprintRedirect',
+  title: 'JiraSprintRedirect',
+  pathPrefix: '/jira/sprint',
+})
 
 t.create('jira sprint')
   .get('/https/jira.spring.io/94.svg')

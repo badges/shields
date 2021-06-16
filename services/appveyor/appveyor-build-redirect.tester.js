@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'AppveyorBuildRedirect',
+  title: 'AppveyorBuildRedirect',
+  pathPrefix: '/appveyor/ci',
+})
 
 t.create('Appveyor CI')
   .get('/gruntjs/grunt', {

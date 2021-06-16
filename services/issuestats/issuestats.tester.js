@@ -1,7 +1,6 @@
 import {ServiceTester} from '../tester.js';
 
-const t = new ServiceTester({ id: 'issuestats', title: 'Issue Stats' })
-export default t;
+export const t = new ServiceTester({ id: 'issuestats', title: 'Issue Stats' })
 
 t.create('no longer available (previously issue analysis)')
   .get('/i/github/expressjs/express.json')

@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'WaffleLabelRedirect',
+  title: 'WaffleLabelRedirect',
+  pathPrefix: '/waffle/label',
+})
 
 t.create('waffle label redirect')
   .get('/waffleio/waffle.io.svg')

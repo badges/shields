@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 // Mocked response rather than real data as old builds are deleted after some time.
 t.create('Valid Build')

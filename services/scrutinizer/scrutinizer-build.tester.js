@@ -1,9 +1,11 @@
 import Joi from 'joi';
 import {isBuildStatus} from '../build-status.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'ScrutinizerBuild',
+  title: 'ScrutinizerBuild',
+  pathPrefix: '/scrutinizer/build',
+})
 
 t.create('build (GitHub)')
   .get('/g/filp/whoops.json')

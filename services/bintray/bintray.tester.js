@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'bintray',
+  title: 'Bintray',
+})
 
 t.create('no longer available (previously downloads)')
   .get('/dt/asciidoctor/maven/asciidoctorj.json')

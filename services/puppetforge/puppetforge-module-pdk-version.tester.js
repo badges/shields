@@ -1,7 +1,6 @@
 import {isSemver} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('PDK version').get('/tragiccode/azure_key_vault.json').expectBadge({
   label: 'pdk version',

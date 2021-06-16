@@ -1,10 +1,9 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {noToken} from '../test-helpers.js';
 import {isMetric} from '../test-validators.js';
-import _noYouTubeToken from './youtube-likes.service';
+import _noYouTubeToken from './youtube-likes.service.js';
 const noYouTubeToken = noToken(_noYouTubeToken);
 
 t.create('video like count')

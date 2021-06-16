@@ -1,7 +1,6 @@
 import {semverRange} from '../validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('gets the peer dependency version')
   .get('/react-boxplot/peer/react.json')

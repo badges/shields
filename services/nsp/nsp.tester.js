@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'nsp',
+  title: 'nsp',
+  pathPrefix: '/nsp/npm',
+})
 
 t.create('no longer available (previously package)')
   .get('/gh-badges.json')

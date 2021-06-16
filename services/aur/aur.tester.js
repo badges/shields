@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionNClausesWithOptionalSuffix, isMetric, isFormattedDate} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'aur',
+  title: 'Arch Linux AUR',
+})
 
 // version tests
 

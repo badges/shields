@@ -2,9 +2,11 @@ import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionAtLeastOne, isComposerVersion} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'WordpressPlatform',
+  title: 'WordPress Platform Tests',
+  pathPrefix: '/wordpress',
+})
 
 t.create('Plugin Required WP Version')
   .get('/plugin/wp-version/akismet.json')

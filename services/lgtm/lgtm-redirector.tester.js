@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'LgtmRedirect',
+  title: 'LgtmRedirect',
+  pathPrefix: '/lgtm',
+})
 
 t.create('alerts')
   .get('/alerts/g/badges/shields.svg')

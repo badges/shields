@@ -1,7 +1,6 @@
 import Joi from 'joi';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {sampleProjectUuid, noSymfonyToken} from './symfony-test-helpers.js';
 
 t.create('valid project grade')

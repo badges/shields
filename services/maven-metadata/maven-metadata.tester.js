@@ -1,6 +1,5 @@
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
 t.create('valid maven-metadata.xml uri')

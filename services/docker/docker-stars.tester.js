@@ -1,7 +1,6 @@
 import {isMetric} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 import {dockerBlue} from './docker-helpers.js';
 
 t.create('docker stars (valid, library)')

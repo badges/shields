@@ -1,9 +1,11 @@
 import {ServiceTester} from '../tester.js';
 import {isMetric} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'crates',
+  title: 'crates.io',
+  pathPrefix: '/crates',
+})
 
 t.create('total downloads')
   .get('/d/libc.json')

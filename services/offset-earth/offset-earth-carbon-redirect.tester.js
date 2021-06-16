@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'OffsetEarthCarbonRedirect',
+  title: 'Offset Earth (Carbon Offset) Redirector',
+  pathPrefix: '/offset-earth',
+})
 
 t.create('Offset Earth carbon alias')
   .get('/carbon/ecologi.svg')

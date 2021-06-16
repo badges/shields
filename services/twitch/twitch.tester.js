@@ -1,12 +1,13 @@
 import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
 import {noToken} from '../test-helpers.js';
-import _noTwitchToken from './twitch.service';
+import _noTwitchToken from './twitch.service.js';
 const noTwitchToken = noToken(_noTwitchToken);
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'twitch',
+  title: 'Twitch',
+})
 
 // the first request would take longer since we need to wait for a token
 t.create('Status of andyonthewings')

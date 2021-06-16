@@ -1,8 +1,7 @@
 import Joi from 'joi';
 import {isMetric, isMetricOpenIssues} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+import {createServiceTester} from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')

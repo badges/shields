@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'f-droid',
+  title: 'F-Droid',
+})
 
 const testPkg = 'org.fdroid.fdroid.privileged'
 const testJson = `

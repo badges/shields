@@ -1,11 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isStarRating} from '../test-validators.js';
 
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Rating Tests',
 })
-export default t;
 
 t.create('Plugin Rating - Stars')
   .get('/plugin/stars/akismet.json')

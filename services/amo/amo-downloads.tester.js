@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isMetricOverTimePeriod} from '../test-validators.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'AmoDownloads',
+  title: 'AmoDownloads',
+  pathPrefix: '/amo',
+})
 
 t.create('Weekly Downloads')
   .get('/dw/duckduckgo-for-firefox.json')

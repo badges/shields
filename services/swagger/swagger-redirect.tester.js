@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'SwaggerUrlRedirect',
+  title: 'SwaggerUrlRedirect',
+  pathPrefix: '/swagger/valid/2.0',
+})
 
 t.create('swagger json')
   .get('/https/example.com/example.svg')

@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'CodeclimateCoverageRedirector',
+  title: 'Code Climate Coverage Redirector',
+  pathPrefix: '/codeclimate',
+})
 
 t.create('Maintainability letter alias')
   .get('/maintainability-letter/jekyll/jekyll.svg')

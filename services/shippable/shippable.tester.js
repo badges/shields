@@ -1,8 +1,10 @@
 import {isBuildStatus} from '../build-status.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'Shippable',
+  title: 'Shippable',
+  pathPrefix: '/shippable',
+})
 
 t.create('build status (valid)')
   .get('/5444c5ecb904a4b21567b0ff/master.json')

@@ -1,9 +1,10 @@
 import {ServiceTester} from '../tester.js';
 import {isVPlusDottedVersionNClauses} from '../test-validators.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'scoop',
+  title: 'Scoop',
+})
 
 // version
 

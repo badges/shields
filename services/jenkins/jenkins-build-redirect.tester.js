@@ -1,8 +1,10 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'JenkinsBuildRedirect',
+  title: 'JenkinsBuildRedirect',
+  pathPrefix: '/',
+})
 
 t.create('old jenkins ci prefix + job url in path')
   .get('jenkins-ci/s/https/updates.jenkins-ci.org/job/foo.svg')

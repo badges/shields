@@ -1,8 +1,10 @@
 import {isVPlusTripleDottedVersion} from '../test-validators.js';
 import {ServiceTester} from '../tester.js';
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'PubVersion',
+  title: 'Pub Version',
+  pathPrefix: '/pub',
+})
 
 t.create('package version').get('/v/box2d.json').expectBadge({
   label: 'pub',

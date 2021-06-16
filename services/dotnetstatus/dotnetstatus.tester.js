@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'dotnetstatus',
+  title: 'dotnet-status',
+})
 
 t.create('no longer available (previously get package status)')
   .get('/gh/jaredcnance/dotnet-status/API.json')

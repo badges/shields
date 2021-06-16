@@ -1,8 +1,9 @@
 import {ServiceTester} from '../tester.js';
 
-const t = (function() {
-  export default __a;
-}())
+export const t = new ServiceTester({
+  id: 'gemnasium',
+  title: 'gemnasium',
+})
 
 t.create('no longer available (previously dependencies)')
   .get('/mathiasbynens/he.json')
