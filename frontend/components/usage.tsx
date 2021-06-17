@@ -336,7 +336,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
                   simple-icons
                 </a>
                 . Simple-icons are referenced using icon slugs which can be
-                found on the simple-icons site or in the
+                found on the simple-icons site or in the{' '}
                 <a href="https://github.com/simple-icons/simple-icons/blob/develop/slugs.md">
                   slugs.md file
                 </a>{' '}
