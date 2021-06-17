@@ -70,8 +70,11 @@ module.exports = class SonarBase extends BaseJsonService {
     } else {
       schema = modernSchema
       url = `${server}/api/measures/component`
+      // componentKey query param was renamed in version 6.6
+      const componentKey =
+        parseFloat(sonarVersion) < 6.6 ? 'componentKey' : 'component'
       qs = {
-        componentKey: component,
+        [componentKey]: component,
         metricKeys: metricName,
       }
     }
