@@ -2,20 +2,21 @@ import {expect} from 'chai';
 import isSvg from 'is-svg';
 import got from './core/got-test-client.js';
 
-let server
-before(function () {
-  this.timeout('5s')
+let serverModule
+before(async function () {
+  this.timeout('30s')
   // remove args coming from mocha
   // https://github.com/badges/shields/issues/3365
   process.argv = []
-  server = require('./server')
+  serverModule = await import('./server.js')
 })
 
 after('shut down the server', async function () {
-  await server.stop()
+  await serverModule.server.stop()
 })
 
 it('should render a badge', async function () {
+  this.timeout('30s')
   const { statusCode, body } = await got(
     'http://localhost:1111/badge/fruit-apple-green.svg'
   )
