@@ -137,8 +137,8 @@ class ScrutinizerCoveragePlainGit extends ScrutinizerCoverageBase {
   }
 }
 
-export default [
+export {
   ScrutinizerCoverage,
   ScrutinizerCoverageGitLab,
   ScrutinizerCoveragePlainGit,
-];
+};

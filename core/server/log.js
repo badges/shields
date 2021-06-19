@@ -22,27 +22,32 @@ function date() {
   )
 }
 
-export default function log(...msg) {
+const log = (...msg) => {
   const d = date()
   listeners.forEach(f => f(d, ...msg))
   console.log(d, ...msg)
 };
 
-export const error = function error(err) {
+const error = err => {
   const d = date()
   listeners.forEach(f => f(d, err))
   Sentry.captureException(err)
   console.error(d, err)
 };
 
-export const addListener = function addListener(func) {
-  listeners.push(func)
-};
+const addListener = func =>  listeners.push(func)
 
-export const removeListener = function removeListener(func) {
+const removeListener = func => {
   const index = listeners.indexOf(func)
   if (index < 0) {
     return
   }
   listeners.splice(index, 1)
+};
+
+export default {
+  log,
+  error,
+  addListener,
+  removeListener,
 };

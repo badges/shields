@@ -1,8 +1,8 @@
 import {test, given} from 'sazerac';
-import {render} from './pypi-python-versions.service.js';
+import PypiPythonVersions from './pypi-python-versions.service.js';
 
 describe('PyPI Python Version', function () {
-  test(render, function () {
+  test(PypiPythonVersions.render, function () {
     // Major versions are hidden if minor are present.
     given({ versions: ['3', '3.4', '3.5', '3.6', '2', '2.7'] }).expect({
       message: '2.7 | 3.4 | 3.5 | 3.6',

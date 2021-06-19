@@ -8,8 +8,9 @@ import trace from './trace.js';
 import {NotFound, Inaccessible, InvalidResponse, InvalidParameter, Deprecated} from './errors.js';
 import BaseService from './base.js';
 import {MetricHelper, MetricNames} from './metric-helper.js';
-import('../register-chai-plugins.spec');
-chai.use(require('chai-as-promised'))
+import '../register-chai-plugins.spec.js';
+import chaiAsPromised from 'chai-as-promised'
+chai.use(chaiAsPromised)
 
 const queryParamSchema = Joi.object({
   queryParamA: Joi.string(),

@@ -431,7 +431,7 @@ class Server {
       requireCloudflare,
     } = this.config.public
 
-    log(`Server is starting up: ${this.baseUrl}`)
+    log.log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.create({
       documentRoot: this.config.public.documentRoot,

@@ -1,5 +1,5 @@
 import {test, given} from 'sazerac';
-const SonarTests = require('./sonar-tests.service')[1]
+import {SonarTests} from './sonar-tests.service.js'
 
 describe('SonarTests', function () {
   test(SonarTests.render, () => {

@@ -1,4 +1,6 @@
 import {use} from 'chai';
 
-use(require('chai-string'))
-use(require('sinon-chai'))
+import chaiString from'chai-string'
+import sinonChai from'sinon-chai'
+use(chaiString)
+use(sinonChai)

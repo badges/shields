@@ -7,7 +7,7 @@ import queryString from 'query-string';
 import nock from 'nock';
 import got from '../../../core/got-test-client.js';
 import GithubConstellation from '../github-constellation.js';
-import acceptor from './acceptor.js';
+import {setRoutes} from './acceptor.js';
 
 const fakeClientId = 'githubdabomb'
 
@@ -37,7 +37,7 @@ describe('Github token acceptor', function () {
   let onTokenAccepted
   beforeEach(function () {
     onTokenAccepted = sinon.stub()
-    acceptor.setRoutes({
+    setRoutes({
       server: camp,
       authHelper: oauthHelper,
       onTokenAccepted,

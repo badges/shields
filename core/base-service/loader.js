@@ -22,29 +22,28 @@ async function loadServiceClasses(servicePaths) {
 
   const serviceClasses = []
   for await (const servicePath of servicePaths) {
-    const module = await import(`file://${servicePath}`)
-
-    if (typeof module === 'object' && Object.keys(module).length > 0) {
-      Object.values(module)
-        .flatMap(element => typeof element === 'object' ? Object.values(element) : element)
-        .forEach(serviceClass => {
-          if (!(serviceClass.prototype instanceof BaseService)) {
-            throw new InvalidService(
-              `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`
-            )
-          }
+    const currentServiceClasses = Object.values(await import(`file://${servicePath}`))
+      .flatMap(element => typeof element === 'object' ? Object.values(element) : element)
+      
+    if (currentServiceClasses.length === 0) {
+      throw new InvalidService(
+        `Expected ${servicePath} to export a service or a collection of services`
+      )
+    }
+    currentServiceClasses
+      .forEach(serviceClass => {
+        if (serviceClass && serviceClass.prototype instanceof BaseService) {
           // Decorate each service class with the directory that contains it.
           serviceClass.serviceFamily = servicePath
             .replace(serviceDir, '')
             .split(path.sep)[1]
           serviceClass.validateDefinition()
           return serviceClasses.push(serviceClass)
-        })
-    } else {
-      throw new InvalidService(
-        `Expected ${servicePath} to export a service or a collection of services; got ${module}`
-      )
-    }
+        }
+        throw new InvalidService(
+          `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`
+        )
+      })
   }
 
   return serviceClasses

@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 import gql from 'graphql-tag';
-import {print} from 'graphql/language/printer';
+import {print} from 'graphql/language/printer.js';
 import {mergeQueries} from './graphql.js';
 
-import('../register-chai-plugins.spec');
+import '../register-chai-plugins.spec.js';
 
 describe('mergeQueries function', function () {
   it('merges valid gql queries', function () {

@@ -230,4 +230,4 @@ class SonarTests extends SonarBase {
   }
 }
 
-export default [SonarTestsSummary, SonarTests];
+export {SonarTestsSummary, SonarTests};

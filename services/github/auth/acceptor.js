@@ -25,7 +25,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
 
   server.route(/^\/github-auth\/done$/, (data, match, end, ask) => {
     if (!data.code) {
-      log(`GitHub OAuth data: ${JSON.stringify(data)}`)
+      log.log(`GitHub OAuth data: ${JSON.stringify(data)}`)
       return end('GitHub OAuth authentication failed to provide a code.')
     }
 

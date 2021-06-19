@@ -27,7 +27,7 @@ class GithubConstellation {
 
     const { redis_url: redisUrl, gh_token: globalToken } = config.private
     if (redisUrl) {
-      log('Token persistence configured with redisUrl')
+      log.log('Token persistence configured with redisUrl')
       this.persistence = new RedisTokenPersistence({
         url: redisUrl,
         key: 'githubUserTokens',
@@ -47,7 +47,7 @@ class GithubConstellation {
   scheduleDebugLogging() {
     if (this._debugEnabled) {
       this.debugInterval = setInterval(() => {
-        log(this.apiProvider.getTokenDebugInfo())
+        log.log(this.apiProvider.getTokenDebugInfo())
       }, 1000 * this._debugIntervalSeconds)
     }
   }
