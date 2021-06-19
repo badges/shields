@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import config from 'config';
+import request from 'request';
 import GithubApiProvider from './github-api-provider.js';
 
 describe('Github API provider', function () {
@@ -30,7 +31,7 @@ describe('Github API provider', function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
         await githubApiProvider.requestAsPromise(
-          require('request'),
+          request,
           '/repos/rust-lang/rust',
           {}
         )
@@ -52,7 +53,7 @@ describe('Github API provider', function () {
     const headers = []
     async function performOneRequest() {
       const { res } = await githubApiProvider.requestAsPromise(
-        require('request'),
+        request,
         '/repos/rust-lang/rust',
         {}
       )
