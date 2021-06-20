@@ -65,6 +65,20 @@ import('../unhandled-rejection.spec.js')
 const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0
 retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
+
+const args = minimist(process.argv.slice(3))
+const stdinOption = args.stdin
+const onlyOption = args.only
+let onlyServices
+if (stdinOption && onlyOption) {
+  console.error('Do not use --only with --stdin')
+} else if (stdinOption) {
+  const allStdin = readAllStdinSync().trim()
+  onlyServices = allStdin ? allStdin.split('\n') : []
+} else if (onlyOption) {
+  onlyServices = onlyOption.split(',')
+}
+
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {
   baseUrl = process.env.TESTED_SERVER_URL
@@ -97,21 +111,6 @@ if (!process.env.TESTED_SERVER_URL) {
   runner.beforeEach = () => {
     server.reset()
   }
-}
-
-const args = minimist(process.argv.slice(3))
-const stdinOption = args.stdin
-const onlyOption = args.only
-
-let onlyServices
-
-if (stdinOption && onlyOption) {
-  console.error('Do not use --only with --stdin')
-} else if (stdinOption) {
-  const allStdin = readAllStdinSync().trim()
-  onlyServices = allStdin ? allStdin.split('\n') : []
-} else if (onlyOption) {
-  onlyServices = onlyOption.split(',')
 }
 
 if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
