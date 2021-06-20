@@ -1,7 +1,7 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isIntegerPercentage} from '../test-validators.js';
 import {sprintId, sprintQueryString} from './jira-test-helpers.js';
+export const t = await createServiceTester()
 
 t.create('unknown sprint')
   .get('/abc.json?baseUrl=https://jira.spring.io')

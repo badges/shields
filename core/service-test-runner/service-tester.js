@@ -3,10 +3,10 @@
  */
 
 import emojic from 'emojic';
-import trace from '../base-service/trace.js';
-import icedfrisbyShieldsModule from './icedfrisby-shields.js'
 import icedfrisbyNockModule from 'icedfrisby-nock'
 import icedfrisbyModule from 'icedfrisby'
+import trace from '../base-service/trace.js';
+import icedfrisbyShieldsModule from './icedfrisby-shields.js'
 const frisby = icedfrisbyShieldsModule(icedfrisbyNockModule(icedfrisbyModule))
 
 /**

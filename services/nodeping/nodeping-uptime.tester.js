@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isPercentage} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('NodePing uptime')
   .get('/jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei.json')

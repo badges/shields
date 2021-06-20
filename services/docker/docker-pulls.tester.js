@@ -1,7 +1,7 @@
 import {isMetric} from '../test-validators.js';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {dockerBlue} from './docker-helpers.js';
+export const t = await createServiceTester()
 
 t.create('docker pulls (valid, library)')
   .get('/_/ubuntu.json')

@@ -1,15 +1,15 @@
 import Joi from 'joi';
 import chai from 'chai';
-const { expect } = chai
 import sinon from 'sinon';
 import prometheus from 'prom-client';
+import chaiAsPromised from 'chai-as-promised'
 import PrometheusMetrics from '../server/prometheus-metrics.js';
 import trace from './trace.js';
 import {NotFound, Inaccessible, InvalidResponse, InvalidParameter, Deprecated} from './errors.js';
 import BaseService from './base.js';
 import {MetricHelper, MetricNames} from './metric-helper.js';
 import '../register-chai-plugins.spec.js';
-import chaiAsPromised from 'chai-as-promised'
+const { expect } = chai
 chai.use(chaiAsPromised)
 
 const queryParamSchema = Joi.object({

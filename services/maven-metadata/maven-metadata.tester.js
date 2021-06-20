@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('valid maven-metadata.xml uri')
   .get(

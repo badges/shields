@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isFormattedDate} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('date')
   .get('/visual-studio-marketplace/release-date/yasht.terminal-all-in-one.json')

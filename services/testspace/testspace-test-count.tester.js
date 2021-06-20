@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isMetric} from '../test-validators.js';
+export const t = await createServiceTester()
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
   Joi.number().valid(0).required()

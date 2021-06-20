@@ -1,7 +1,7 @@
 import config from 'config';
+import GithubConstellation from '../services/github/github-constellation.js';
 const objectConfig = config.util.toObject()
 console.log(objectConfig)
-import GithubConstellation from '../services/github/github-constellation.js';
 
 const { persistence } = new GithubConstellation({
   service: objectConfig.public.services.github,

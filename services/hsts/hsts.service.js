@@ -1,6 +1,6 @@
-const label = 'hsts preloaded'
 import Joi from 'joi';
 import {BaseJsonService} from '../index.js';
+const label = 'hsts preloaded'
 const schema = Joi.object({
   status: Joi.string().required(),
 }).required()

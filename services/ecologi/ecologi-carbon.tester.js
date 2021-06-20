@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {withRegex} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('request for existing username')
   .get('/ecologi.json')

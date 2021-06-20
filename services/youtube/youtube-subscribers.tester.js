@@ -1,8 +1,8 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {noToken} from '../test-helpers.js';
 import {isMetric} from '../test-validators.js';
 import _noYouTubeToken from './youtube-subscribers.service.js';
+export const t = await createServiceTester()
 const noYouTubeToken = noToken(_noYouTubeToken);
 
 t.create('subscriber count')

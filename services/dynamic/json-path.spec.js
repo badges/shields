@@ -1,7 +1,7 @@
 import chai from 'chai';
-const { expect } = chai
-import jsonPath from './json-path.js';
 import chaiAsPromised from 'chai-as-promised'
+import jsonPath from './json-path.js';
+const { expect } = chai
 chai.use(chaiAsPromised)
 
 describe('JSON Path service factory', function () {

@@ -1,5 +1,4 @@
 import {isMetric} from '../test-validators.js';
-
 import {ServiceTester} from '../tester.js'
 export const t = new ServiceTester({
   id: 'AnsibleRole',

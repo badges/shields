@@ -1,3 +1,5 @@
+import {createServiceTester} from '../tester.js'
+
 const getURL = '/3.0.json?specUrl=https://example.com/example.json'
 const getURLBase = '/3.0.json?specUrl='
 const apiURL = 'http://validator.swagger.io'
@@ -5,8 +7,6 @@ const apiGetURL = '/validator/debug'
 const apiGetQueryParams = {
   url: 'https://example.com/example.json',
 }
-
-import {createServiceTester} from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Invalid')

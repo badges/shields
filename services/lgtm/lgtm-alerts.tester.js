@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {data} from './lgtm-test-helpers.js';
+export const t = await createServiceTester()
 
 t.create('alerts: total alerts for a project')
   .get('/github/apache/cloudstack.json')

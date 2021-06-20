@@ -1,8 +1,8 @@
 import nock from 'nock';
 import request from 'request';
 import config from 'config';
-const runnerConfig = config.util.toObject()
 import {promisify} from '../core/base-service/legacy-request-handler.js';
+const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
   afterEach(function () {

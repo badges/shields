@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isIntegerPercentage} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('Non-existent or unauthorized org')
   .get('/swellaby1239017823123/swellaby:testspace-sample/main.json')

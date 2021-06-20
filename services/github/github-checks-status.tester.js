@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isBuildStatus} from '../build-status.js';
+export const t = await createServiceTester()
 
 t.create('branch checks (branch)')
   .get('/badges/shields/master.json')

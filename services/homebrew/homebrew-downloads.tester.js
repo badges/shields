@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isMetricOverTimePeriod} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('daily downloads (valid)')
   .get('/installs/dm/cake.json')

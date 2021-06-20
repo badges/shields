@@ -1,7 +1,7 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {withRegex} from '../test-validators.js';
 import {sampleProjectUuid, noSymfonyToken} from './symfony-test-helpers.js';
+export const t = await createServiceTester()
 
 t.create('valid project stars')
   .skipWhen(noSymfonyToken)

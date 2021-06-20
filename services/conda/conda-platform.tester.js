@@ -1,6 +1,6 @@
 import Joi from 'joi';
-const isCondaPlatform = Joi.string().regex(/^\w+-[\w\d]+( \| \w+-[\w\d]+)*$/)
 import {createServiceTester} from '../tester.js'
+const isCondaPlatform = Joi.string().regex(/^\w+-[\w\d]+( \| \w+-[\w\d]+)*$/)
 export const t = await createServiceTester()
 
 t.create('platform').get('/p/conda-forge/zlib.json').expectBadge({

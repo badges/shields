@@ -1,7 +1,7 @@
 import {isBuildStatus} from '../build-status.js';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {dockerBlue} from './docker-helpers.js';
+export const t = await createServiceTester()
 
 t.create('docker cloud build status (valid, user)')
   .get('/jrottenberg/ffmpeg.json')

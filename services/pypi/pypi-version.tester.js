@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isSemver} from '../test-validators.js';
+export const t = await createServiceTester()
 
 const isPsycopg2Version = Joi.string().regex(/^v([0-9][.]?)+$/)
 

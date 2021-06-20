@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {exampleXml} from './dynamic-response-fixtures.js';
+export const t = await createServiceTester()
 
 const exampleUrl = 'https://example.test/example.xml'
 const withExampleXml = nock =>

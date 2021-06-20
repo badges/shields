@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('Tests')
   .get('/swellaby/swellaby:testspace-sample/main.json')

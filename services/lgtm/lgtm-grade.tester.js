@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {data} from './lgtm-test-helpers.js';
+export const t = await createServiceTester()
 
 t.create('grade: missing project')
   .get('/java/github/some-org/this-project-doesnt-exist.json')

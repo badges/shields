@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {nonNegativeInteger} from '../validators.js';
+export const t = await createServiceTester()
 
 t.create('Existing project').get('/starship.json').expectBadge({
   label: 'repositories',

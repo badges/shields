@@ -1,5 +1,4 @@
 import requestModule from 'request';
-const { request } = requestModule;
 import {Inaccessible, InvalidResponse} from '../base-service/errors.js';
 
 // Map from URL to { timestamp: last fetch time, data: data }.

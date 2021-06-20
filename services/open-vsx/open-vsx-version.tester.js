@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {withRegex} from '../test-validators.js';
+export const t = await createServiceTester()
 
 const isVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 

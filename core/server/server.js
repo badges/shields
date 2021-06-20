@@ -4,7 +4,6 @@
 
 import path from 'path';
 import url, {fileURLToPath} from 'url';
-const { URL } = url
 import cloudflareMiddleware from 'cloudflare-middleware';
 import bytes from 'bytes';
 import Camp from '@shields_io/camp';
@@ -21,6 +20,7 @@ import {nonNegativeInteger} from '../../services/validators.js';
 import log from './log.js';
 import PrometheusMetrics from './prometheus-metrics.js';
 import InfluxMetrics from './influx-metrics.js';
+const { URL } = url
 
 const Joi = originalJoi
   .extend(base => ({

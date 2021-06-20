@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isValidGrade} from './codefactor-helpers.js';
+export const t = await createServiceTester()
 
 t.create('Grade').get('/github/google/guava.json').expectBadge({
   label: 'code quality',

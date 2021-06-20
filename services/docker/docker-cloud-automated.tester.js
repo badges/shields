@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {dockerBlue} from './docker-helpers.js';
+export const t = await createServiceTester()
 
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 

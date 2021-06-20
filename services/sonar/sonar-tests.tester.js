@@ -1,11 +1,11 @@
 import Joi from 'joi';
 import {ServiceTester} from '../tester.js';
+import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals, isIntegerPercentage, isMetric} from '../test-validators.js';
 export const t = new ServiceTester({
   id: 'SonarTests',
   title: 'SonarTests',
   pathPrefix: '/sonar',
 })
-import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals, isIntegerPercentage, isMetric} from '../test-validators.js';
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
   Joi.number().valid(0).required()

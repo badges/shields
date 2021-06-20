@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {codacyGrade} from './codacy-helpers.js';
+export const t = await createServiceTester()
 
 t.create('Code quality')
   .get('/e27821fb6289410b8f58338c7e0bc686.json')

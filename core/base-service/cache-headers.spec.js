@@ -2,6 +2,7 @@ import { test, given } from 'sazerac'
 import chai, {expect} from 'chai'
 import sinon from 'sinon'
 import httpMocks from 'node-mocks-http'
+import chaiDatetime from 'chai-datetime'
 import {
   coalesceCacheLength,
   setHeadersForCacheLength,
@@ -9,7 +10,6 @@ import {
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
 } from './cache-headers.js'
-import chaiDatetime from 'chai-datetime'
 chai.use(chaiDatetime)
 
 describe('Cache header functions', function () {

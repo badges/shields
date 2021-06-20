@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 import semverModule from 'semver';
-const {Range}  = semverModule;
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {mockPackageData, mockReleaseSchedule, mockVersionsSha} from './testUtils/test-utils.js';
+const {Range}  = semverModule;
+export const t = await createServiceTester()
 
 function expectSemverRange(message) {
   expect(() => new Range(message)).not.to.throw()

@@ -1,6 +1,6 @@
 import {createServiceTester} from '../tester.js'
-export const t = await createServiceTester()
 import {isMetric} from '../test-validators.js';
+export const t = await createServiceTester()
 
 t.create('all-contributors repo')
   .get('/all-contributors/all-contributors.json')
