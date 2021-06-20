@@ -1,5 +1,3 @@
-'use strict'
-
 import { test, given } from 'sazerac'
 import chai, {expect} from 'chai'
 import sinon from 'sinon'

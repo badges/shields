@@ -1,5 +1,3 @@
-'use strict'
-
 import loadLogos from '../lib/load-logos.js'
 import loadSimpleIcons from '../lib/load-simple-icons.js'
 const shieldsLogos = Object.keys(loadLogos())

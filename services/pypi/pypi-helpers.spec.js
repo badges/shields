@@ -1,5 +1,3 @@
-'use strict'
-
 import { test, given, forCases } from 'sazerac'
 import {
   parseClassifiers,
