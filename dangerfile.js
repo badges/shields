@@ -9,7 +9,7 @@
 // DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
 
 import {danger, fail, message, warn} from 'danger';
-import {default as noTestShortcuts} from 'danger-plugin-no-test-shortcuts';
+import noTestShortcuts from 'danger-plugin-no-test-shortcuts';
 const { fileMatch } = danger.git
 
 const documentation = fileMatch(
@@ -129,7 +129,7 @@ if (allFiles.length > 100) {
         )
       }
 
-      if (diff.includes("require('@hapi/joi')")) {
+      if (diff.includes("from '@hapi/joi'")) {
         fail(
           [
             `Found import of '@hapi/joi' in \`${file}\`. <br>`,
