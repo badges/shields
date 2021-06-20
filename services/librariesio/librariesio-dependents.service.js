@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
-import {fetchProject} from './librariesio-common.js';
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
+import { fetchProject } from './librariesio-common.js'
 
 // https://libraries.io/api#project-dependents
 export default class LibrariesIoDependents extends BaseJsonService {
@@ -52,4 +52,4 @@ export default class LibrariesIoDependents extends BaseJsonService {
     })
     return this.constructor.render({ dependentCount })
   }
-};
+}

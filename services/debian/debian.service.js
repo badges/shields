@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {latest, renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { latest, renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 
 const schema = Joi.array()
   .items(
@@ -62,4 +62,4 @@ export default class Debian extends BaseJsonService {
     const versions = Object.keys(packageData[distKeys[0]])
     return renderVersionBadge({ version: latest(versions) })
   }
-};
+}

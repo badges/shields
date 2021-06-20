@@ -3040,4 +3040,4 @@ export {
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
-};
+}

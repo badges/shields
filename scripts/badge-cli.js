@@ -1,9 +1,9 @@
-import {fileURLToPath, URL} from 'url';
-import config from 'config';
-import got from 'got';
-import emojic from 'emojic';
-import Server from '../core/server/server.js';
-import trace from '../core/base-service/trace.js';
+import { fileURLToPath, URL } from 'url'
+import config from 'config'
+import got from 'got'
+import emojic from 'emojic'
+import Server from '../core/server/server.js'
+import trace from '../core/base-service/trace.js'
 
 function normalizeBadgeUrl(url) {
   // Provide a base URL in order to accept fragments.
@@ -35,7 +35,7 @@ async function main() {
   await traceBadge(normalized)
 }
 
-(async () => {
+;(async () => {
   try {
     await main()
   } catch (e) {

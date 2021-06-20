@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {invalidJSON} from '../response-fixtures.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { invalidJSON } from '../response-fixtures.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isUptimeStatus = Joi.string().valid(

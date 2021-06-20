@@ -1,5 +1,5 @@
-import joiModule from 'joi';
-import {createServiceTester} from '../tester.js'
+import joiModule from 'joi'
+import { createServiceTester } from '../tester.js'
 const Joi = joiModule.extend(joi => ({
   base: joi.array(),
   coerce: (value, helpers) => ({

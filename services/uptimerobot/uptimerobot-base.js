@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService, InvalidParameter, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
 
 // https://uptimerobot.com/api
 // POST getMonitors
@@ -83,4 +83,4 @@ export default class UptimeRobotBase extends BaseJsonService {
 
     return { monitors }
   }
-};
+}

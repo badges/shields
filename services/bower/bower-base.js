@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object()
   .keys({
@@ -27,4 +27,4 @@ export default class BaseBowerService extends BaseJsonService {
       },
     })
   }
-};
+}

@@ -1,4 +1,4 @@
-import {BaseJsonService} from '../index.js';
+import { BaseJsonService } from '../index.js'
 
 export default class TeamCityBase extends BaseJsonService {
   static auth = {
@@ -23,4 +23,4 @@ export default class TeamCityBase extends BaseJsonService {
       })
     )
   }
-};
+}

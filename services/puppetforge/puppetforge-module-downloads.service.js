@@ -1,10 +1,8 @@
-import {downloadCount} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {BasePuppetForgeModulesService} from './puppetforge-base.js';
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-export default class PuppetforgeModuleDownloads extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModuleDownloads extends BasePuppetForgeModulesService {
   static category = 'downloads'
 
   static route = {
@@ -36,4 +34,4 @@ export default class PuppetforgeModuleDownloads extends (
     const data = await this.fetch({ user, moduleName })
     return this.constructor.render({ downloads: data.downloads })
   }
-};
+}

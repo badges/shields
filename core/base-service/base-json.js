@@ -2,8 +2,8 @@
  * @module
  */
 
-import BaseService from './base.js';
-import {parseJson} from './json.js';
+import BaseService from './base.js'
+import { parseJson } from './json.js'
 
 /**
  * Services which query a JSON endpoint should extend BaseJsonService
@@ -52,4 +52,4 @@ class BaseJsonService extends BaseService {
   }
 }
 
-export default BaseJsonService;
+export default BaseJsonService

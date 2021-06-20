@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'build',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'magnum ci',
   dateAdded: new Date('2018-07-08'),
-});
+})

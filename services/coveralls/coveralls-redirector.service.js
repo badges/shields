@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   redirector({
@@ -12,4 +12,4 @@ export default [
       `/coveralls/github/${user}/${repo}${branch ? `/${branch}` : ''}`,
     dateAdded: new Date('2021-02-23'),
   }),
-];
+]

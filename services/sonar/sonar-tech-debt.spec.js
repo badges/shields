@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import SonarTechDebt from './sonar-tech-debt.service.js';
+import { test, given } from 'sazerac'
+import SonarTechDebt from './sonar-tech-debt.service.js'
 
 describe('SonarTechDebt', function () {
   test(SonarTechDebt.render, () => {

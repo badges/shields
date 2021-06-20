@@ -1,6 +1,11 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
-import {IMPROVED_STATUS, NOT_FOUND_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS} from './constants.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import {
+  IMPROVED_STATUS,
+  NOT_FOUND_STATUS,
+  REGRESSED_STATUS,
+  NO_CHANGE_STATUS,
+} from './constants.js'
 
 const schema = Joi.string()
   .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
@@ -58,4 +63,4 @@ export default class Criterion extends BaseJsonService {
 
     return this.constructor.render({ status })
   }
-};
+}

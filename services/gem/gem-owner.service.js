@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const ownerSchema = Joi.array().required()
 
@@ -37,4 +37,4 @@ export default class GemOwner extends BaseJsonService {
     const json = await this.fetch({ user })
     return this.constructor.render({ count: json.length })
   }
-};
+}

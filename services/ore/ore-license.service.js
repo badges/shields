@@ -1,5 +1,5 @@
-import {renderLicenseBadge} from '../licenses.js';
-import {BaseOreService, documentation, keywords} from './ore-base.js';
+import { renderLicenseBadge } from '../licenses.js'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
 export default class OreLicense extends BaseOreService {
   static category = 'license'
@@ -45,4 +45,4 @@ export default class OreLicense extends BaseOreService {
     const { license } = this.transform({ data })
     return this.constructor.render({ license })
   }
-};
+}

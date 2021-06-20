@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
 
 const keywords = ['documentation']
 
@@ -58,4 +58,4 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     }
     return this.constructor.render({ status })
   }
-};
+}

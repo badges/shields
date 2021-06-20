@@ -1,8 +1,8 @@
-import {promisify} from 'util';
-import semver from 'semver';
-import {metric, addv} from '../text-formatters.js';
-import {downloadCount as downloadCountColor} from '../color-formatters.js';
-import {regularUpdate} from '../../core/legacy/regular-update.js';
+import { promisify } from 'util'
+import semver from 'semver'
+import { metric, addv } from '../text-formatters.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 function renderVersionBadge({ version, feed }) {
   let color
@@ -108,4 +108,4 @@ export {
   searchServiceUrl,
   stripBuildMetadata,
   selectVersion,
-};
+}

@@ -2,7 +2,7 @@
  * Commonly-used functions for determining the colour to use for a badge,
  * including colours based off download count, version number, etc.
  */
-import moment from 'moment';
+import moment from 'moment'
 
 function version(version) {
   if (typeof version !== 'string' && typeof version !== 'number') {
@@ -112,4 +112,4 @@ export {
   letterScore,
   colorScale,
   age,
-};
+}

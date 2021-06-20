@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import AzureDevOpsBase from './azure-devops-base.js';
-import {keywords} from './azure-devops-helpers.js';
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import AzureDevOpsBase from './azure-devops-base.js'
+import { keywords } from './azure-devops-helpers.js'
 
 const documentation = `
 <p>
@@ -126,4 +126,4 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
     const coverage = covered ? (covered / total) * 100 : 0
     return this.constructor.render({ coverage })
   }
-};
+}

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isMetric, isMetricOpenIssues} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { isMetric, isMetricOpenIssues } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('GitHub closed pull requests')

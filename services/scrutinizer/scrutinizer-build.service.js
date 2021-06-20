@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import ScrutinizerBase from './scrutinizer-base.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import ScrutinizerBase from './scrutinizer-base.js'
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
@@ -109,4 +109,4 @@ export default [
   ScrutinizerBuild,
   ScrutinizerGitLabBuild,
   ScrutinizerPlainGitBuild,
-];
+]

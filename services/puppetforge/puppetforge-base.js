@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger, semver} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger, semver } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const usersSchema = Joi.object({
   module_count: nonNegativeInteger,
@@ -42,7 +42,4 @@ class BasePuppetForgeModulesService extends BaseJsonService {
   }
 }
 
-export {
-  BasePuppetForgeModulesService,
-  BasePuppetForgeUsersService,
-};
+export { BasePuppetForgeModulesService, BasePuppetForgeUsersService }

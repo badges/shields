@@ -1,4 +1,4 @@
-import {BaseService} from '../index.js';
+import { BaseService } from '../index.js'
 
 export default class Maintenance extends BaseService {
   static category = 'other'
@@ -72,4 +72,4 @@ export default class Maintenance extends BaseService {
       message: maintained,
     })
   }
-};
+}

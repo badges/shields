@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 const vcsSNameShortFormMap = {
   bb: 'bitbucket',
@@ -21,4 +21,4 @@ export default [
     transformQueryParams: ({ token }) => ({ token }),
     dateAdded: new Date('2019-03-04'),
   }),
-];
+]

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
-import {isReuseCompliance, COLOR_MAP} from './reuse-compliance-helper.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { isReuseCompliance, COLOR_MAP } from './reuse-compliance-helper.js'
 
 const responseSchema = Joi.object({
   status: isReuseCompliance,
@@ -51,4 +51,4 @@ export default class Reuse extends BaseJsonService {
     const { status } = await this.fetch({ remote })
     return this.constructor.render({ status })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import coalesce from './coalesce.js';
+import { test, given } from 'sazerac'
+import coalesce from './coalesce.js'
 
 // Sticking with our one-line spread implementation, and defaulting to
 // `undefined` instead of `null`, though h/t to

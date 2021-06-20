@@ -1,5 +1,10 @@
-import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import {
+  isDefaultTestTotals,
+  isDefaultCompactTestTotals,
+  isCustomTestTotals,
+  isCustomCompactTestTotals,
+} from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 // The below page includes links to various publicly accessible Jenkins instances

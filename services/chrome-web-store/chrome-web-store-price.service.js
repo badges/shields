@@ -1,6 +1,6 @@
-import {currencyFromCode} from '../text-formatters.js';
-import {NotFound} from '../index.js';
-import BaseChromeWebStoreService from './chrome-web-store-base.js';
+import { currencyFromCode } from '../text-formatters.js'
+import { NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 export default class ChromeWebStorePrice extends BaseChromeWebStoreService {
   static category = 'funding'
@@ -32,4 +32,4 @@ export default class ChromeWebStorePrice extends BaseChromeWebStoreService {
     }
     return this.constructor.render({ priceCurrency, price })
   }
-};
+}

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
-import {authConfig} from './jira-common.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
+import { authConfig } from './jira-common.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -91,4 +91,4 @@ export default class JiraIssue extends BaseJsonService {
       statusColor,
     })
   }
-};
+}

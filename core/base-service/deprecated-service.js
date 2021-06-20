@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import camelcase from 'camelcase';
-import BaseService from './base.js';
-import {isValidCategory} from './categories.js';
-import {Deprecated} from './errors.js';
-import {isValidRoute} from './route.js';
+import Joi from 'joi'
+import camelcase from 'camelcase'
+import BaseService from './base.js'
+import { isValidCategory } from './categories.js'
+import { Deprecated } from './errors.js'
+import { isValidRoute } from './route.js'
 
 const attrSchema = Joi.object({
   route: isValidRoute,
@@ -39,7 +39,7 @@ function deprecatedService(attrs) {
     async handle() {
       throw new Deprecated({ prettyMessage: message })
     }
-  };
+  }
 }
 
-export default deprecatedService;
+export default deprecatedService

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {floorCount} from '../color-formatters.js';
-import {BaseJsonService, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { floorCount } from '../color-formatters.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number().allow(null).required(),
@@ -16,9 +16,7 @@ class AnsibleGalaxyContent extends BaseJsonService {
   }
 }
 
-export default class AnsibleGalaxyContentQualityScore extends (
-  AnsibleGalaxyContent
-) {
+export default class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyContent {
   static category = 'analysis'
   static route = { base: 'ansible/quality', pattern: ':projectId' }
 
@@ -52,4 +50,4 @@ export default class AnsibleGalaxyContentQualityScore extends (
 
     return this.constructor.render({ qualityScore })
   }
-};
+}

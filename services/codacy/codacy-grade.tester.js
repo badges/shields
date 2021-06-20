@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {codacyGrade} from './codacy-helpers.js';
+import { createServiceTester } from '../tester.js'
+import { codacyGrade } from './codacy-helpers.js'
 export const t = await createServiceTester()
 
 t.create('Code quality')

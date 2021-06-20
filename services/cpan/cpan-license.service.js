@@ -1,4 +1,4 @@
-import BaseCpanService from './cpan.js';
+import BaseCpanService from './cpan.js'
 
 export default class CpanLicense extends BaseCpanService {
   static category = 'license'
@@ -25,4 +25,4 @@ export default class CpanLicense extends BaseCpanService {
     const data = await this.fetch({ packageName })
     return this.constructor.render({ license: data.license[0] })
   }
-};
+}

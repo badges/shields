@@ -1,6 +1,10 @@
-import Joi from 'joi';
-import {queryParamSchema, exampleQueryParams, renderWebsiteStatus} from '../website-status.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import {
+  queryParamSchema,
+  exampleQueryParams,
+  renderWebsiteStatus,
+} from '../website-status.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))
@@ -63,4 +67,4 @@ export default class NodePingStatus extends BaseJsonService {
       downColor,
     })
   }
-};
+}

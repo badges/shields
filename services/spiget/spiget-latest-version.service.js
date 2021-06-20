@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseSpigetService, documentation, keywords} from './spiget-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
 const versionSchema = Joi.object({
   downloads: Joi.number().required(),
@@ -40,4 +40,4 @@ export default class SpigetLatestVersion extends BaseSpigetService {
     })
     return renderVersionBadge({ version: name })
   }
-};
+}

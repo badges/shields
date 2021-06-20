@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
-import {ServiceTester} from '../tester.js';
+import Joi from 'joi'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'BowerVersion',
   title: 'Bower Version',

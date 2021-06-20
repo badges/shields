@@ -1,6 +1,6 @@
-import {renderLicenseBadge} from '../licenses.js';
-import toArray from '../../core/base-service/to-array.js';
-import NpmBase from './npm-base.js';
+import { renderLicenseBadge } from '../licenses.js'
+import toArray from '../../core/base-service/to-array.js'
+import NpmBase from './npm-base.js'
 
 export default class NpmLicense extends NpmBase {
   static category = 'license'
@@ -44,4 +44,4 @@ export default class NpmLicense extends NpmBase {
     )
     return this.constructor.render({ licenses })
   }
-};
+}

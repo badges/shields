@@ -1,5 +1,10 @@
-import {createServiceTester} from '../tester.js'
-import {isDefaultTestTotals, isDefaultCompactTestTotals, isCustomTestTotals, isCustomCompactTestTotals} from '../test-validators.js';
+import { createServiceTester } from '../tester.js'
+import {
+  isDefaultTestTotals,
+  isDefaultCompactTestTotals,
+  isCustomTestTotals,
+  isCustomCompactTestTotals,
+} from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('Tests')

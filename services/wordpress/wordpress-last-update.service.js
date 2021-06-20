@@ -1,8 +1,8 @@
-import moment from 'moment';
-import {InvalidResponse} from '../index.js';
-import {formatDate} from '../text-formatters.js';
-import {age as ageColor} from '../color-formatters.js';
-import BaseWordpress from './wordpress-base.js';
+import moment from 'moment'
+import { InvalidResponse } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -74,4 +74,4 @@ function LastUpdateForType(extensionType) {
 }
 
 const lastupdate = ['plugin', 'theme'].map(LastUpdateForType)
-export default [...lastupdate];
+export default [...lastupdate]

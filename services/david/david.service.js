@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.allow(
@@ -95,4 +95,4 @@ export default class David extends BaseJsonService {
     const json = await this.fetch({ kind, user, repo, path })
     return this.constructor.render({ status: json.status, kind })
   }
-};
+}

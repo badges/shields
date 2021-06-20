@@ -1,10 +1,8 @@
-import {metric} from '../text-formatters.js';
-import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseVaadinDirectoryService} from './vaadin-directory-base.js';
+import { metric } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-export default class VaadinDirectoryRatingCount extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryRatingCount extends BaseVaadinDirectoryService {
   static category = 'rating'
 
   static route = {
@@ -37,4 +35,4 @@ export default class VaadinDirectoryRatingCount extends (
     const { ratingCount } = await this.fetch({ packageName })
     return this.constructor.render({ ratingCount })
   }
-};
+}

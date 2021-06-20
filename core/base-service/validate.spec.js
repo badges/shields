@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import {expect} from 'chai';
-import sinon from 'sinon';
-import trace from './trace.js';
-import {InvalidParameter} from './errors.js';
-import validate from './validate.js';
+import Joi from 'joi'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import trace from './trace.js'
+import { InvalidParameter } from './errors.js'
+import validate from './validate.js'
 
 describe('validate', function () {
   const schema = Joi.object({

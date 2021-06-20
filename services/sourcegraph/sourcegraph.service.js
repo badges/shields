@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const projectsCountRegex = /^\s[0-9]*(\.[0-9]k)?\sprojects$/
 const schema = Joi.object({
@@ -41,4 +41,4 @@ export default class Sourcegraph extends BaseJsonService {
     })
     return this.constructor.render({ projectsCount: json.value.trim() })
   }
-};
+}

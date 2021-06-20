@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {isValidGrade} from './codefactor-helpers.js';
+import { createServiceTester } from '../tester.js'
+import { isValidGrade } from './codefactor-helpers.js'
 export const t = await createServiceTester()
 
 t.create('Grade').get('/github/google/guava.json').expectBadge({

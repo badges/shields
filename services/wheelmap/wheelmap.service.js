@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   node: Joi.object({
@@ -64,4 +64,4 @@ export default class Wheelmap extends BaseJsonService {
     const accessibility = json.node.wheelchair
     return this.constructor.render({ accessibility })
   }
-};
+}

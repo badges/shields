@@ -1,6 +1,6 @@
-import {URL} from 'url';
-import Redis from 'ioredis';
-import log from '../server/log.js';
+import { URL } from 'url'
+import Redis from 'ioredis'
+import log from '../server/log.js'
 
 export default class RedisTokenPersistence {
   constructor({ url, key }) {
@@ -54,4 +54,4 @@ export default class RedisTokenPersistence {
       log.error(e)
     }
   }
-};
+}

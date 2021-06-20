@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 const label = 'hsts preloaded'
 const schema = Joi.object({
   status: Joi.string().required(),
@@ -64,4 +64,4 @@ export default class HSTS extends BaseJsonService {
     const { status } = await this.fetch({ domain })
     return this.constructor.render({ status })
   }
-};
+}

@@ -1,4 +1,4 @@
-import BaseCondaService from './conda-base.js';
+import BaseCondaService from './conda-base.js'
 
 export default class CondaPlatform extends BaseCondaService {
   static category = 'platform-support'
@@ -27,4 +27,4 @@ export default class CondaPlatform extends BaseCondaService {
     const json = await this.fetch({ channel, pkg })
     return this.constructor.render({ variant, platforms: json.conda_platforms })
   }
-};
+}

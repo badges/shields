@@ -1,5 +1,5 @@
-import chalk from 'chalk';
-import config from 'config';
+import chalk from 'chalk'
+import config from 'config'
 const objectConfig = config.util.toObject()
 
 // Config is loaded globally but it would be better to inject it. To do that,
@@ -38,4 +38,4 @@ function logTrace(stage, symbol, label, content, { deep = false } = {}) {
 
 export default {
   logTrace,
-};
+}

@@ -1,9 +1,9 @@
-import {expect} from 'chai';
-import Camp from '@shields_io/camp';
-import portfinder from 'portfinder';
-import got from '../../../core/got-test-client.js';
-import GithubApiProvider from '../github-api-provider.js';
-import {setRoutes} from './admin.js';
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import got from '../../../core/got-test-client.js'
+import GithubApiProvider from '../github-api-provider.js'
+import { setRoutes } from './admin.js'
 
 describe('GitHub admin route', function () {
   const shieldsSecret = '7'.repeat(40)

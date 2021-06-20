@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 // This should be kept in sync with the schema in
 // `frontend/lib/service-definitions/index.ts`.
@@ -75,4 +75,4 @@ export {
   assertValidServiceDefinition,
   serviceDefinitionExport,
   assertValidServiceDefinitionExport,
-};
+}

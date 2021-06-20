@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {NotFound} from '../index.js';
-import TestspaceBase from './testspace-base.js';
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import TestspaceBase from './testspace-base.js'
 
 describe('TestspaceBase', function () {
   it('throws NotFound when response is missing space results', function () {

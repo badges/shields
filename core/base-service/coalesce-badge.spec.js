@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {getShieldsIcon, getSimpleIcon} from '../../lib/logos.js';
-import coalesceBadge from './coalesce-badge.js';
+import { expect } from 'chai'
+import { getShieldsIcon, getSimpleIcon } from '../../lib/logos.js'
+import coalesceBadge from './coalesce-badge.js'
 
 describe('coalesceBadge', function () {
   describe('Label', function () {

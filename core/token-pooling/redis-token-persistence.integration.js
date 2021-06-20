@@ -1,7 +1,7 @@
-import RedisServer from 'redis-server';
-import Redis from 'ioredis';
-import {expect} from 'chai';
-import RedisTokenPersistence from './redis-token-persistence.js';
+import RedisServer from 'redis-server'
+import Redis from 'ioredis'
+import { expect } from 'chai'
+import RedisTokenPersistence from './redis-token-persistence.js'
 
 describe('Redis token persistence', function () {
   let server

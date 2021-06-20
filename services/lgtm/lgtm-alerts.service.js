@@ -1,5 +1,5 @@
-import {metric} from '../text-formatters.js';
-import LgtmBaseService from './lgtm-base.js';
+import { metric } from '../text-formatters.js'
+import LgtmBaseService from './lgtm-base.js'
 
 export default class LgtmAlerts extends LgtmBaseService {
   static route = {
@@ -42,4 +42,4 @@ export default class LgtmAlerts extends LgtmBaseService {
     const { alerts } = await this.fetch({ host, user, repo })
     return this.constructor.render({ alerts })
   }
-};
+}

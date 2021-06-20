@@ -1,5 +1,5 @@
-import {isBuildStatus} from '../build-status.js';
-import {ServiceTester} from '../tester.js';
+import { isBuildStatus } from '../build-status.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'BitbucketPipelines',
   title: 'Bitbucket Pipelines',

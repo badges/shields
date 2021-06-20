@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
 
@@ -79,4 +79,4 @@ export default class BaseWordpress extends BaseJsonService {
     }
     return json
   }
-};
+}

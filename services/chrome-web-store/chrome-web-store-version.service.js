@@ -1,6 +1,6 @@
-import {renderVersionBadge} from '../version.js';
-import {NotFound} from '../index.js';
-import BaseChromeWebStoreService from './chrome-web-store-base.js';
+import { renderVersionBadge } from '../version.js'
+import { NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
   static category = 'version'
@@ -24,4 +24,4 @@ export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
     }
     return renderVersionBadge({ version })
   }
-};
+}

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService, InvalidParameter} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
@@ -194,4 +194,4 @@ export default class Matrix extends BaseJsonService {
     const members = await this.fetch({ roomAlias, serverFQDN })
     return this.constructor.render({ members })
   }
-};
+}

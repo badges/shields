@@ -1,10 +1,15 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {formatDate, metric} from '../text-formatters.js';
-import {age} from '../color-formatters.js';
-import {InvalidResponse} from '../index.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor, stateColor, commentsColor} from './github-helpers.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { formatDate, metric } from '../text-formatters.js'
+import { age } from '../color-formatters.js'
+import { InvalidResponse } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import {
+  documentation,
+  errorMessagesFor,
+  stateColor,
+  commentsColor,
+} from './github-helpers.js'
 
 const commonSchemaFields = {
   number: nonNegativeInteger,
@@ -210,4 +215,4 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
     const { value, isPR } = this.transform({ json, property, issueKind })
     return this.constructor.render({ property, value, isPR, number })
   }
-};
+}

@@ -1,9 +1,9 @@
-import {createServiceTester} from '../tester.js'
-import {noToken} from '../test-helpers.js';
-import {isMetric} from '../test-validators.js';
-import _noYouTubeToken from './youtube-subscribers.service.js';
+import { createServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import { isMetric } from '../test-validators.js'
+import _noYouTubeToken from './youtube-subscribers.service.js'
 export const t = await createServiceTester()
-const noYouTubeToken = noToken(_noYouTubeToken);
+const noYouTubeToken = noToken(_noYouTubeToken)
 
 t.create('subscriber count')
   .skipWhen(noYouTubeToken)

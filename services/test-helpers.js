@@ -1,7 +1,7 @@
-import nock from 'nock';
-import request from 'request';
-import config from 'config';
-import {promisify} from '../core/base-service/legacy-request-handler.js';
+import nock from 'nock'
+import request from 'request'
+import config from 'config'
+import { promisify } from '../core/base-service/legacy-request-handler.js'
 const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
@@ -35,9 +35,4 @@ const sendAndCacheRequest = promisify(request)
 
 const defaultContext = { sendAndCacheRequest }
 
-export {
-  cleanUpNockAfterEach,
-  noToken,
-  sendAndCacheRequest,
-  defaultContext,
-};
+export { cleanUpNockAfterEach, noToken, sendAndCacheRequest, defaultContext }

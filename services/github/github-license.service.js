@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderLicenseBadge} from '../licenses.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   // Some repos do not have a license, in which case GitHub returns `{ license: null }`.
@@ -46,4 +46,4 @@ export default class GithubLicense extends GithubAuthV3Service {
     const license = licenseObject ? licenseObject.spdx_id : undefined
     return this.constructor.render({ license })
   }
-};
+}

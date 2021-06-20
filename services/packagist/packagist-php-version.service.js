@@ -1,7 +1,11 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {NotFound} from '../index.js';
-import {allVersionsSchema, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { NotFound } from '../index.js'
+import {
+  allVersionsSchema,
+  BasePackagistService,
+  customServerDocumentationFragment,
+} from './packagist-base.js'
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
@@ -94,4 +98,4 @@ export default class PackagistPhpVersion extends BasePackagistService {
     })
     return this.constructor.render({ php: phpVersion })
   }
-};
+}

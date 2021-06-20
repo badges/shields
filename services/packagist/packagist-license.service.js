@@ -1,8 +1,12 @@
-import Joi from 'joi';
-import {renderLicenseBadge} from '../licenses.js';
-import {optionalUrl} from '../validators.js';
-import {NotFound} from '../index.js';
-import {keywords, BasePackagistService, customServerDocumentationFragment} from './packagist-base.js';
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { optionalUrl } from '../validators.js'
+import { NotFound } from '../index.js'
+import {
+  keywords,
+  BasePackagistService,
+  customServerDocumentationFragment,
+} from './packagist-base.js'
 
 const packageSchema = Joi.object()
   .pattern(
@@ -66,4 +70,4 @@ export default class PackagistLicense extends BasePackagistService {
     const { license } = this.transform({ json, user, repo })
     return renderLicenseBadge({ license })
   }
-};
+}

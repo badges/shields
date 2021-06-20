@@ -1,6 +1,6 @@
-import {test, given} from 'sazerac';
-import {metric} from '../text-formatters.js';
-import SonarViolations from './sonar-violations.service.js';
+import { test, given } from 'sazerac'
+import { metric } from '../text-formatters.js'
+import SonarViolations from './sonar-violations.service.js'
 
 describe('SonarViolations', function () {
   test(SonarViolations.render, () => {

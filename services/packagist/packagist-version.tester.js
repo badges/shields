@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
-import {ServiceTester} from '../tester.js';
+import Joi from 'joi'
+import { isVPlusDottedVersionNClausesWithOptionalSuffix } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'packagist',
   title: 'Packagist Version',

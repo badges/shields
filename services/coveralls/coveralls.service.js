@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   covered_percent: Joi.number().min(0).max(100).required(),
@@ -73,4 +73,4 @@ export default class Coveralls extends BaseJsonService {
     const json = await this.fetch({ vcsType, user, repo, branch })
     return this.constructor.render({ coverage: json.covered_percent })
   }
-};
+}

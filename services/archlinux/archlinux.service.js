@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   pkgver: Joi.string().required(),
@@ -38,4 +38,4 @@ export default class ArchLinux extends BaseJsonService {
     })
     return renderVersionBadge({ version: data.pkgver })
   }
-};
+}

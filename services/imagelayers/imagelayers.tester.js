@@ -1,4 +1,4 @@
-import {ServiceTester} from '../tester.js';
+import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
   id: 'imagelayers',

@@ -2,8 +2,8 @@
  * @module
  */
 
-import Joi from 'joi';
-import {expect} from 'chai';
+import Joi from 'joi'
+import { expect } from 'chai'
 
 /**
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
@@ -15,7 +15,7 @@ import {expect} from 'chai';
  * @returns {Function} wrapped class
  */
 const factory = superclass =>
-  (class IcedFrisbyNock extends superclass {
+  class IcedFrisbyNock extends superclass {
     constructor(message) {
       super(message)
       this.intercepted = false
@@ -82,6 +82,6 @@ const factory = superclass =>
         )
       }
     }
-  })
+  }
 
-export default factory;
+export default factory

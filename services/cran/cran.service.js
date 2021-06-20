@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   License: Joi.string().required(),
@@ -64,4 +64,4 @@ class CranVersion extends BaseCranService {
   }
 }
 
-export { CranLicense, CranVersion };
+export { CranLicense, CranVersion }

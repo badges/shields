@@ -1,9 +1,9 @@
-import {expect} from 'chai';
-import sinon from 'sinon';
-import xpath from 'xpath';
-import {test, given} from 'sazerac';
-import {InvalidResponse} from '../index.js';
-import DynamicXml from './dynamic-xml.service.js';
+import { expect } from 'chai'
+import sinon from 'sinon'
+import xpath from 'xpath'
+import { test, given } from 'sazerac'
+import { InvalidResponse } from '../index.js'
+import DynamicXml from './dynamic-xml.service.js'
 
 const exampleXml = `<?xml version="1.0"?>
 <catalog>

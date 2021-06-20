@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {colorScale} from '../color-formatters.js';
-import {NotFound} from '../index.js';
-import ScrutinizerBase from './scrutinizer-base.js';
+import Joi from 'joi'
+import { colorScale } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import ScrutinizerBase from './scrutinizer-base.js'
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
@@ -141,4 +141,4 @@ export {
   ScrutinizerCoverage,
   ScrutinizerCoverageGitLab,
   ScrutinizerCoveragePlainGit,
-};
+}

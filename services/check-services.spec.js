@@ -1,4 +1,4 @@
-import {checkNames, collectDefinitions} from '../core/base-service/loader.js';
+import { checkNames, collectDefinitions } from '../core/base-service/loader.js'
 
 // When these tests fail, they will throw AssertionErrors. Wrapping them in an
 // `expect().not.to.throw()` makes the error output unreadable.

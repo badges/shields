@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 // unknown is a valid 'other' status for Buildkite
 const schema = Joi.object({
@@ -47,4 +47,4 @@ export default class Buildkite extends BaseJsonService {
     const json = await this.fetch({ identifier, branch })
     return renderBuildStatusBadge({ status: json.status })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {metric} from '../text-formatters.js';
-import {BaseAmoService, keywords} from './amo-base.js';
+import { metric } from '../text-formatters.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
 export default class AmoUsers extends BaseAmoService {
   static category = 'downloads'
@@ -27,4 +27,4 @@ export default class AmoUsers extends BaseAmoService {
     const data = await this.fetch({ addonId })
     return this.constructor.render({ users: data.average_daily_users })
   }
-};
+}

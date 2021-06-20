@@ -1,7 +1,11 @@
-import {expect} from 'chai';
-import Joi from 'joi';
-import {test, given, forCases} from 'sazerac';
-import {prepareRoute, namedParamsForMatch, getQueryParamNames} from './route.js';
+import { expect } from 'chai'
+import Joi from 'joi'
+import { test, given, forCases } from 'sazerac'
+import {
+  prepareRoute,
+  namedParamsForMatch,
+  getQueryParamNames,
+} from './route.js'
 
 describe('Route helpers', function () {
   context('A `pattern` with a named param is declared', function () {

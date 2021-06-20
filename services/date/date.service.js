@@ -1,5 +1,5 @@
-import {formatRelativeDate} from '../text-formatters.js';
-import {BaseService} from '../index.js';
+import { formatRelativeDate } from '../text-formatters.js'
+import { BaseService } from '../index.js'
 
 const documentation = `
 <p>
@@ -36,4 +36,4 @@ export default class Date extends BaseService {
       relativeDateString: formatRelativeDate(timestamp),
     })
   }
-};
+}

@@ -1,4 +1,4 @@
-import {BaseService, InvalidResponse} from '../index.js';
+import { BaseService, InvalidResponse } from '../index.js'
 
 const documentation = `
 <p>
@@ -94,4 +94,4 @@ export default class OssTracker extends BaseService {
       })
     }
   }
-};
+}

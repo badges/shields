@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {colorScale, coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { colorScale, coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   badge_level: Joi.string().required(),
@@ -128,4 +128,4 @@ export default class CIIBestPracticesService extends BaseJsonService {
       return this.constructor.renderSummaryBadge({ percentage })
     }
   }
-};
+}

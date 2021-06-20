@@ -1,6 +1,6 @@
-import {colorScale} from '../color-formatters.js';
-import {InvalidResponse} from '../index.js';
-import {LiberapayBase} from './liberapay-base.js';
+import { colorScale } from '../color-formatters.js'
+import { InvalidResponse } from '../index.js'
+import { LiberapayBase } from './liberapay-base.js'
 
 export default class LiberapayGoal extends LiberapayBase {
   static route = this.buildRoute('goal')
@@ -40,4 +40,4 @@ export default class LiberapayGoal extends LiberapayBase {
     const { percentAchieved } = this.transform({ goal, receiving })
     return this.constructor.render({ percentAchieved })
   }
-};
+}

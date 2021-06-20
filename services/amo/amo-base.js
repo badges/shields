@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const keywords = ['amo', 'firefox']
 
@@ -26,4 +26,4 @@ class BaseAmoService extends BaseJsonService {
   }
 }
 
-export { BaseAmoService, keywords };
+export { BaseAmoService, keywords }

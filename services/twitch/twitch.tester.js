@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
-import {noToken} from '../test-helpers.js';
-import _noTwitchToken from './twitch.service.js';
-const noTwitchToken = noToken(_noTwitchToken);
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import _noTwitchToken from './twitch.service.js'
+const noTwitchToken = noToken(_noTwitchToken)
 
 export const t = new ServiceTester({
   id: 'twitch',

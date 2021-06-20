@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 const ciRedirect = redirector({
   category: 'platform-support',
@@ -23,4 +23,4 @@ const branchRedirect = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-export { ciRedirect, branchRedirect };
+export { ciRedirect, branchRedirect }

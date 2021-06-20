@@ -1,5 +1,5 @@
 import { test, given } from 'sazerac'
-import chai, {expect} from 'chai'
+import chai, { expect } from 'chai'
 import sinon from 'sinon'
 import httpMocks from 'node-mocks-http'
 import chaiDatetime from 'chai-datetime'

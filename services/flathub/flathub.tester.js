@@ -1,5 +1,5 @@
-import {isVPlusDottedVersionNClauses} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { isVPlusDottedVersionNClauses } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Flathub (valid)').get('/org.mozilla.firefox.json').expectBadge({

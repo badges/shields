@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 // https://devcenter.bitrise.io/api/app-status-badge/
 const schema = Joi.object({
@@ -65,4 +65,4 @@ export default class Bitrise extends BaseJsonService {
     const { status } = await this.fetch({ appId, branch, token })
     return this.constructor.render({ status })
   }
-};
+}

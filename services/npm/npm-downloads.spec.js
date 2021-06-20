@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import NpmDownloads from './npm-downloads.service.js';
+import { test, given } from 'sazerac'
+import NpmDownloads from './npm-downloads.service.js'
 
 describe('NpmDownloads', function () {
   test(NpmDownloads._intervalMap.dt.transform, () => {

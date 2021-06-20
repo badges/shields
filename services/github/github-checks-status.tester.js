@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {isBuildStatus} from '../build-status.js';
+import { createServiceTester } from '../tester.js'
+import { isBuildStatus } from '../build-status.js'
 export const t = await createServiceTester()
 
 t.create('branch checks (branch)')

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {expect} from 'chai';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { expect } from 'chai'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('No URL specified')

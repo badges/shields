@@ -1,6 +1,9 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
-import {isVPlusDottedVersionAtLeastOne, isComposerVersion} from '../test-validators.js';
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import {
+  isVPlusDottedVersionAtLeastOne,
+  isComposerVersion,
+} from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'WordpressPlatform',

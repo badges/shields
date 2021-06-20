@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {isIntegerPercentage} from '../test-validators.js';
+import { createServiceTester } from '../tester.js'
+import { isIntegerPercentage } from '../test-validators.js'
 export const t = await createServiceTester()
 
 // The service tests targeting the legacy SonarQube API are mocked

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {renderVersionBadge} from '../version.js';
-import {BaseXmlService} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { renderVersionBadge } from '../version.js'
+import { BaseXmlService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),
@@ -56,4 +56,4 @@ export default class MavenMetadata extends BaseXmlService {
       version: data.metadata.versioning.versions.version.slice(-1)[0],
     })
   }
-};
+}

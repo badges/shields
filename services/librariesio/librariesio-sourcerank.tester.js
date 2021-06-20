@@ -1,5 +1,5 @@
-import {anyInteger} from '../validators.js';
-import {createServiceTester} from '../tester.js'
+import { anyInteger } from '../validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('sourcerank').timeout(10000).get('/npm/got.json').expectBadge({

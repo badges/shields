@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default [
   deprecatedService({
@@ -10,4 +10,4 @@ export default [
     },
     dateAdded: new Date('2020-09-05'),
   }),
-];
+]

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { errorMessagesFor } from './github-helpers.js'
 
 /*
 We're expecting a response like { "Python": 39624, "Shell": 104 }
@@ -23,4 +23,4 @@ class BaseGithubLanguage extends GithubAuthV3Service {
   }
 }
 
-export { BaseGithubLanguage };
+export { BaseGithubLanguage }

@@ -1,8 +1,8 @@
-import camelcase from 'camelcase';
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger, optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import camelcase from 'camelcase'
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   topic_count: nonNegativeInteger,
@@ -103,4 +103,4 @@ const metricIntegrations = [
   { metricName: 'likes', property: 'like_count' },
 ].map(DiscourseMetricIntegrationFactory)
 
-export default [...metricIntegrations, DiscourseStatus];
+export default [...metricIntegrations, DiscourseStatus]

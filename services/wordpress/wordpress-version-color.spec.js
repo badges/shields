@@ -1,5 +1,8 @@
-import {expect} from 'chai';
-import {toSemver, versionColorForWordpressVersion} from './wordpress-version-color.js';
+import { expect } from 'chai'
+import {
+  toSemver,
+  versionColorForWordpressVersion,
+} from './wordpress-version-color.js'
 
 describe('toSemver() function', function () {
   it('coerces versions', function () {

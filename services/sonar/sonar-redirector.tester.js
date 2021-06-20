@@ -1,5 +1,5 @@
-import queryString from 'querystring';
-import {ServiceTester} from '../tester.js';
+import queryString from 'querystring'
+import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
   id: 'SonarRedirect',

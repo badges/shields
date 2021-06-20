@@ -1,4 +1,4 @@
-import {BaseJsonService} from '../index.js';
+import { BaseJsonService } from '../index.js'
 
 const keywords = [
   'visual-studio',
@@ -35,4 +35,4 @@ class BaseVisualStudioAppCenterService extends BaseJsonService {
   }
 }
 
-export { keywords, documentation, BaseVisualStudioAppCenterService };
+export { keywords, documentation, BaseVisualStudioAppCenterService }

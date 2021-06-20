@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const statusSchema = Joi.object({
   status: Joi.string().required(),
@@ -62,4 +62,4 @@ export default class RequiresIo extends BaseJsonService {
     const { status } = await this.fetch({ service, user, repo, branch })
     return this.constructor.render({ status })
   }
-};
+}

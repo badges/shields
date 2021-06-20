@@ -1,3 +1,3 @@
 class BadService {}
 
-export default BadService;
+export default BadService

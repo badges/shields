@@ -1,5 +1,5 @@
-import {colorScale} from '../color-formatters.js';
-import {InvalidResponse, NotFound} from '../index.js';
+import { colorScale } from '../color-formatters.js'
+import { InvalidResponse, NotFound } from '../index.js'
 
 const documentation = `
 <p>
@@ -37,4 +37,4 @@ export {
   commentsColor,
   errorMessagesFor,
   transformErrors,
-};
+}

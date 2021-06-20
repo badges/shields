@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   entries: Joi.array()
@@ -68,4 +68,4 @@ export default class Ubuntu extends BaseJsonService {
       version: data.entries[0].source_package_version,
     })
   }
-};
+}

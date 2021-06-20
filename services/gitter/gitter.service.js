@@ -1,4 +1,4 @@
-import {BaseStaticService} from '../index.js';
+import { BaseStaticService } from '../index.js'
 
 export default class Gitter extends BaseStaticService {
   static category = 'chat'
@@ -28,4 +28,4 @@ export default class Gitter extends BaseStaticService {
   handle() {
     return this.constructor.render()
   }
-};
+}

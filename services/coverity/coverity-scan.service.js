@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const messageRegex = /passed|passed .* new defects|pending|failed/
 const schema = Joi.object({
@@ -64,4 +64,4 @@ export default class CoverityScan extends BaseJsonService {
     })
     return this.constructor.render({ message: json.message })
   }
-};
+}

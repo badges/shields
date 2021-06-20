@@ -1,5 +1,9 @@
-import {test, given, forCases} from 'sazerac';
-import {parseVersion, compareVersionLists, latestVersion} from './luarocks-version-helpers.js';
+import { test, given, forCases } from 'sazerac'
+import {
+  parseVersion,
+  compareVersionLists,
+  latestVersion,
+} from './luarocks-version-helpers.js'
 
 describe('LuaRocks-specific helpers', function () {
   test(compareVersionLists, () => {

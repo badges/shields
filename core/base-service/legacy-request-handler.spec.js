@@ -1,10 +1,10 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import portfinder from 'portfinder';
-import Camp from '@shields_io/camp';
-import got from '../got-test-client.js';
-import coalesceBadge from './coalesce-badge.js';
-import {handleRequest} from './legacy-request-handler.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import portfinder from 'portfinder'
+import Camp from '@shields_io/camp'
+import got from '../got-test-client.js'
+import coalesceBadge from './coalesce-badge.js'
+import { handleRequest } from './legacy-request-handler.js'
 
 async function performTwoRequests(baseUrl, first, second) {
   expect((await got(`${baseUrl}${first}`)).statusCode).to.equal(200)

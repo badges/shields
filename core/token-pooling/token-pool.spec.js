@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import sinon from 'sinon';
-import times from 'lodash.times';
-import {Token, TokenPool} from './token-pool.js';
+import { expect } from 'chai'
+import sinon from 'sinon'
+import times from 'lodash.times'
+import { Token, TokenPool } from './token-pool.js'
 
 function expectPoolToBeExhausted(pool) {
   expect(() => {

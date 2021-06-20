@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import {BaseOreService, documentation, keywords} from './ore-base.js';
+import { renderVersionBadge } from '../version.js'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
 export default class OreVersion extends BaseOreService {
   static category = 'version'
@@ -47,4 +47,4 @@ export default class OreVersion extends BaseOreService {
     const { version } = this.transform({ data })
     return this.constructor.render({ version })
   }
-};
+}

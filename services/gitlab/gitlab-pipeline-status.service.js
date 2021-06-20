@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {optionalUrl} from '../validators.js';
-import {BaseSvgScrapingService, NotFound, redirector} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { optionalUrl } from '../validators.js'
+import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -97,7 +97,4 @@ const GitlabPipelineStatusRedirector = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-export {
-  GitlabPipelineStatus,
-  GitlabPipelineStatusRedirector,
-};
+export { GitlabPipelineStatus, GitlabPipelineStatusRedirector }

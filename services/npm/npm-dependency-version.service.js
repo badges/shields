@@ -1,5 +1,5 @@
-import {getDependencyVersion} from '../package-json-helpers.js';
-import NpmBase from './npm-base.js';
+import { getDependencyVersion } from '../package-json-helpers.js'
+import NpmBase from './npm-base.js'
 
 const { queryParamSchema } = NpmBase
 const keywords = ['node']
@@ -140,4 +140,4 @@ export default class NpmDependencyVersion extends NpmBase {
       range,
     })
   }
-};
+}

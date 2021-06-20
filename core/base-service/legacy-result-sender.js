@@ -1,4 +1,4 @@
-import stream from 'stream';
+import stream from 'stream'
 
 function streamFromString(str) {
   const newStream = new stream.Readable()
@@ -30,6 +30,4 @@ function makeSend(format, askres, end) {
   }
 }
 
-export {
-  makeSend,
-};
+export { makeSend }

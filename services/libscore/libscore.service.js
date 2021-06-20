@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'rating',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'libscore',
   dateAdded: new Date('2018-09-22'),
-});
+})

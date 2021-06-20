@@ -1,10 +1,12 @@
-import {escapeFormat} from '../../core/badge-urls/path-helpers.js';
-import {redirector} from '../index.js';
+import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import { redirector } from '../index.js'
 
 function escapeFormatSlashes(t) {
-  return escapeFormat(t)
-    // Double slash
-    .replace(/\/\//g, '/');
+  return (
+    escapeFormat(t)
+      // Double slash
+      .replace(/\/\//g, '/')
+  )
 }
 
 /*
@@ -100,4 +102,4 @@ export default [
     }),
     dateAdded: new Date('2019-09-17'),
   }),
-];
+]

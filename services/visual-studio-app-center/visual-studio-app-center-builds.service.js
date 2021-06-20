@@ -1,15 +1,17 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {NotFound} from '../index.js';
-import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { NotFound } from '../index.js'
+import {
+  BaseVisualStudioAppCenterService,
+  keywords,
+  documentation,
+} from './visual-studio-app-center-base.js'
 
 const schema = Joi.array().items({
   result: isBuildStatus.required(),
 })
 
-export default class VisualStudioAppCenterBuilds extends (
-  BaseVisualStudioAppCenterService
-) {
+export default class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCenterService {
   static category = 'build'
 
   static route = {
@@ -47,4 +49,4 @@ export default class VisualStudioAppCenterBuilds extends (
       throw new NotFound({ prettyMessage: 'no builds found' })
     return renderBuildStatusBadge({ status: json[0].result })
   }
-};
+}

@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default redirector({
   category: 'version',
@@ -11,4 +11,4 @@ export default redirector({
     metadataUrl: `${protocol}://${hostAndPath}`,
   }),
   dateAdded: new Date('2019-09-16'),
-});
+})

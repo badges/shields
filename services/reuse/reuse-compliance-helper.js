@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 const COLOR_MAP = {
   checking: 'brightgreen',
@@ -11,7 +11,4 @@ const isReuseCompliance = Joi.string()
   .valid('compliant', 'non-compliant', 'checking', 'unregistered')
   .required()
 
-export {
-  isReuseCompliance,
-  COLOR_MAP,
-};
+export { isReuseCompliance, COLOR_MAP }

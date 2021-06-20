@@ -1,4 +1,4 @@
-import {schema, periodMap, BaseJsDelivrService} from './jsdelivr-base.js';
+import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 
 export default class JsDelivrHitsGitHub extends BaseJsDelivrService {
   static route = {
@@ -29,4 +29,4 @@ export default class JsDelivrHitsGitHub extends BaseJsDelivrService {
     const { total } = await this.fetch({ period, user, repo })
     return this.constructor.render({ period, hits: total })
   }
-};
+}

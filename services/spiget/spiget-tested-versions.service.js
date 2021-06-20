@@ -1,4 +1,4 @@
-import {BaseSpigetService, documentation, keywords} from './spiget-base.js';
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
 export default class SpigetTestedVersions extends BaseSpigetService {
   static category = 'platform-support'
@@ -48,4 +48,4 @@ export default class SpigetTestedVersions extends BaseSpigetService {
     const { versions } = this.transform({ testedVersions })
     return this.constructor.render({ versions })
   }
-};
+}

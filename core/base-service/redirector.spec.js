@@ -1,8 +1,8 @@
-import Camp from '@shields_io/camp';
-import portfinder from 'portfinder';
-import {expect} from 'chai';
-import got from '../got-test-client.js';
-import redirector from './redirector.js';
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import { expect } from 'chai'
+import got from '../got-test-client.js'
+import redirector from './redirector.js'
 
 describe('Redirector', function () {
   const route = {

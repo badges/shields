@@ -1,6 +1,16 @@
-import {test, given} from 'sazerac';
-import sinon from 'sinon';
-import {starRating, currencyFromCode, ordinalNumber, metric, omitv, addv, maybePluralize, formatDate, formatRelativeDate} from './text-formatters.js';
+import { test, given } from 'sazerac'
+import sinon from 'sinon'
+import {
+  starRating,
+  currencyFromCode,
+  ordinalNumber,
+  metric,
+  omitv,
+  addv,
+  maybePluralize,
+  formatDate,
+  formatRelativeDate,
+} from './text-formatters.js'
 
 describe('Text formatters', function () {
   test(starRating, () => {

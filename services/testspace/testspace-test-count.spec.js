@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import TestspaceTestCount from './testspace-test-count.service.js';
+import { test, given } from 'sazerac'
+import TestspaceTestCount from './testspace-test-count.service.js'
 
 describe('TestspaceTestCount', function () {
   test(TestspaceTestCount.render, () => {

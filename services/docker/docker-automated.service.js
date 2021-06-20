@@ -1,6 +1,10 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
-import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import {
+  dockerBlue,
+  buildDockerUrl,
+  getDockerHubUser,
+} from './docker-helpers.js'
 
 const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),
@@ -44,4 +48,4 @@ export default class DockerAutomatedBuild extends BaseJsonService {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ isAutomated: data.is_automated })
   }
-};
+}

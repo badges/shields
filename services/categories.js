@@ -20,4 +20,4 @@ export default [
   { id: 'monitoring', name: 'Monitoring', keywords: ['monitoring'] },
   { id: 'activity', name: 'Activity', keywords: ['activity'] },
   { id: 'other', name: 'Other', keywords: [] },
-];
+]

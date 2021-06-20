@@ -1,9 +1,7 @@
-import {renderVersionBadge} from '../version.js';
-import {BasePuppetForgeModulesService} from './puppetforge-base.js';
+import { renderVersionBadge } from '../version.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-export default class PuppetforgeModuleVersion extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModuleVersion extends BasePuppetForgeModulesService {
   static category = 'version'
 
   static route = {
@@ -28,4 +26,4 @@ export default class PuppetforgeModuleVersion extends (
     const data = await this.fetch({ user, moduleName })
     return renderVersionBadge({ version: data.current_release.version })
   }
-};
+}

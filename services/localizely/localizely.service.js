@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseJsonService, InvalidResponse} from '../index.js';
-import {coveragePercentage} from '../color-formatters.js';
+import Joi from 'joi'
+import { BaseJsonService, InvalidResponse } from '../index.js'
+import { coveragePercentage } from '../color-formatters.js'
 
 const keywords = [
   'l10n',
@@ -141,4 +141,4 @@ export default class Localizely extends BaseJsonService {
 
     return this.constructor.render({ langName, reviewedProgress })
   }
-};
+}

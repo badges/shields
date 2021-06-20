@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {documentation, YouTubeVideoBase} from './youtube-base.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { documentation, YouTubeVideoBase } from './youtube-base.js'
 
 const documentationWithDislikes = `
   ${documentation}
@@ -71,4 +71,4 @@ export default class YouTubeLikes extends YouTubeVideoBase {
     }
     return renderedBadge
   }
-};
+}

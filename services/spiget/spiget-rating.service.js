@@ -1,6 +1,6 @@
-import {starRating, metric} from '../text-formatters.js';
-import {floorCount} from '../color-formatters.js';
-import {BaseSpigetService, documentation, keywords} from './spiget-base.js';
+import { starRating, metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
 export default class SpigetRatings extends BaseSpigetService {
   static category = 'rating'
@@ -59,4 +59,4 @@ export default class SpigetRatings extends BaseSpigetService {
       average: rating.average.toFixed(2),
     })
   }
-};
+}

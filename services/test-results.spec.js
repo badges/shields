@@ -1,5 +1,8 @@
-import {test, given} from 'sazerac';
-import {renderTestResultMessage, renderTestResultBadge} from './test-results.js';
+import { test, given } from 'sazerac'
+import {
+  renderTestResultMessage,
+  renderTestResultBadge,
+} from './test-results.js'
 
 describe('Test result helpers', function () {
   function renderBothStyles(props) {

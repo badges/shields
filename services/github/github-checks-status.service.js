@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: isBuildStatus,
@@ -67,4 +67,4 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
 
     return renderBuildStatusBadge({ status: state })
   }
-};
+}

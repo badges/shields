@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const cdnjsSchema = Joi.object({
   // optional due to non-standard 'not found' condition
@@ -43,4 +43,4 @@ export default class Cdnjs extends BaseJsonService {
 
     return this.constructor.render({ version: json.version })
   }
-};
+}

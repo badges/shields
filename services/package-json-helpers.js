@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {InvalidParameter} from './index.js';
+import Joi from 'joi'
+import { InvalidParameter } from './index.js'
 
 const isDependencyMap = Joi.object()
   .pattern(
@@ -43,8 +43,4 @@ function getDependencyVersion({
   return { range }
 }
 
-export {
-  isDependencyMap,
-  isPackageJsonWithDependencies,
-  getDependencyVersion,
-};
+export { isDependencyMap, isPackageJsonWithDependencies, getDependencyVersion }

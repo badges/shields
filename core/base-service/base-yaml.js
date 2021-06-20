@@ -2,11 +2,11 @@
  * @module
  */
 
-import emojic from 'emojic';
-import yaml from 'js-yaml';
-import BaseService from './base.js';
-import {InvalidResponse} from './errors.js';
-import trace from './trace.js';
+import emojic from 'emojic'
+import yaml from 'js-yaml'
+import BaseService from './base.js'
+import { InvalidResponse } from './errors.js'
+import trace from './trace.js'
 
 /**
  * Services which query a YAML endpoint should extend BaseYamlService
@@ -70,4 +70,4 @@ class BaseYamlService extends BaseService {
   }
 }
 
-export default BaseYamlService;
+export default BaseYamlService

@@ -1,9 +1,7 @@
-import {NotFound} from '../index.js';
-import {BasePuppetForgeModulesService} from './puppetforge-base.js';
+import { NotFound } from '../index.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-export default class PuppetforgeModuleEndorsement extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModuleEndorsement extends BasePuppetForgeModulesService {
   static category = 'rating'
 
   static route = {
@@ -43,4 +41,4 @@ export default class PuppetforgeModuleEndorsement extends (
     }
     return this.constructor.render({ endorsement })
   }
-};
+}

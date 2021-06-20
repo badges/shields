@@ -1,7 +1,7 @@
-import merge from 'deepmerge';
-import config from 'config';
-import portfinder from 'portfinder';
-import Server from './server.js';
+import merge from 'deepmerge'
+import config from 'config'
+import portfinder from 'portfinder'
+import Server from './server.js'
 
 async function createTestServer(customConfig = {}) {
   const mergedConfig = merge(config.util.toObject(), customConfig)
@@ -11,6 +11,4 @@ async function createTestServer(customConfig = {}) {
   return new Server(mergedConfig)
 }
 
-export {
-  createTestServer,
-};
+export { createTestServer }

@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import SonarBase from './sonar-base.js';
-import {queryParamSchema, getLabel} from './sonar-helpers.js';
+import { metric } from '../text-formatters.js'
+import SonarBase from './sonar-base.js'
+import { queryParamSchema, getLabel } from './sonar-helpers.js'
 
 // This service is intended to be a temporary solution to avoid breaking
 // any existing users/badges that were utilizing the "other" Sonar metrics
@@ -137,4 +137,4 @@ export default class SonarGeneric extends SonarBase {
       metricValue: metrics[metricName],
     })
   }
-};
+}

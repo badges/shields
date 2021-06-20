@@ -1,5 +1,10 @@
-import {test, given} from 'sazerac';
-import {renderVersionBadge, odataToObject, stripBuildMetadata, selectVersion} from './nuget-helpers.js';
+import { test, given } from 'sazerac'
+import {
+  renderVersionBadge,
+  odataToObject,
+  stripBuildMetadata,
+  selectVersion,
+} from './nuget-helpers.js'
 
 describe('NuGet helpers', function () {
   test(renderVersionBadge, () => {

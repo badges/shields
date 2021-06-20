@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {floorCount} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const apiSchema = Joi.object({
   total: Joi.number().positive().required(),
@@ -41,4 +41,4 @@ export default class EcologiCarbonOffset extends BaseJsonService {
 
     return this.constructor.render({ count: total })
   }
-};
+}

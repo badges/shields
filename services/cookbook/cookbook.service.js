@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({ version: Joi.string().required() }).required()
 
@@ -27,4 +27,4 @@ export default class Cookbook extends BaseJsonService {
     const { version } = await this.fetch({ cookbook })
     return renderVersionBadge({ version })
   }
-};
+}

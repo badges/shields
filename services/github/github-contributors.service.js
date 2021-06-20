@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import parseLinkHeader from 'parse-link-header';
-import {renderContributorBadge} from '../contributor-count.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import parseLinkHeader from 'parse-link-header'
+import { renderContributorBadge } from '../contributor-count.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
@@ -54,4 +54,4 @@ export default class GithubContributors extends GithubAuthV3Service {
 
     return this.constructor.render({ contributorCount })
   }
-};
+}

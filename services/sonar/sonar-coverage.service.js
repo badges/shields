@@ -1,6 +1,6 @@
-import {coveragePercentage} from '../color-formatters.js';
-import SonarBase from './sonar-base.js';
-import {documentation, keywords, queryParamSchema} from './sonar-helpers.js';
+import { coveragePercentage } from '../color-formatters.js'
+import SonarBase from './sonar-base.js'
+import { documentation, keywords, queryParamSchema } from './sonar-helpers.js'
 
 export default class SonarCoverage extends SonarBase {
   static category = 'coverage'
@@ -49,4 +49,4 @@ export default class SonarCoverage extends SonarBase {
     })
     return this.constructor.render({ coverage })
   }
-};
+}

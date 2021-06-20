@@ -1,4 +1,4 @@
-import {createServiceFamily} from './nuget-v3-service-family.js';
+import { createServiceFamily } from './nuget-v3-service-family.js'
 
 const { NugetVersionService: Version, NugetDownloadService: Downloads } =
   createServiceFamily({
@@ -37,4 +37,4 @@ class NugetDownloadService extends Downloads {
   ]
 }
 
-export { NugetVersionService, NugetDownloadService };
+export { NugetVersionService, NugetDownloadService }

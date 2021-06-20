@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {SonarTests} from './sonar-tests.service.js'
+import { test, given } from 'sazerac'
+import { SonarTests } from './sonar-tests.service.js'
 
 describe('SonarTests', function () {
   test(SonarTests.render, () => {

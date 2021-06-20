@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
 
 const queryParamSchema = Joi.object({
   disableStrictSSL: Joi.equal(''),
@@ -19,9 +19,5 @@ const buildUrl = ({ jobUrl, lastCompletedBuild = true, plugin }) => {
   return `${jobUrl}/${lastCompletedBuildElement}${pluginElement}api/json`
 }
 
-export {
-  queryParamSchema,
-  buildUrl,
-  buildRedirectUrl,
-};
+export { queryParamSchema, buildUrl, buildRedirectUrl }
 export const buildTreeParamQueryString = tree => ({ tree })

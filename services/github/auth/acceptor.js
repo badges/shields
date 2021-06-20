@@ -1,7 +1,7 @@
-import queryString from 'query-string';
-import request from 'request';
-import {userAgent} from '../../../core/base-service/legacy-request-handler.js';
-import log from '../../../core/server/log.js';
+import queryString from 'query-string'
+import request from 'request'
+import { userAgent } from '../../../core/base-service/legacy-request-handler.js'
+import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
@@ -81,4 +81,4 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
   })
 }
 
-export { setRoutes };
+export { setRoutes }

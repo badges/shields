@@ -1,5 +1,5 @@
-import {renderContributorBadge} from '../contributor-count.js';
-import NpmBase from './npm-base.js';
+import { renderContributorBadge } from '../contributor-count.js'
+import NpmBase from './npm-base.js'
 
 const keywords = ['node']
 
@@ -47,4 +47,4 @@ export default class NpmCollaborators extends NpmBase {
     const collaborators = maintainers.length
     return this.constructor.render({ collaborators })
   }
-};
+}

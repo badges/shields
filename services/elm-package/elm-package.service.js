@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {semver} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { semver } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({ version: semver }).required()
 
@@ -33,4 +33,4 @@ export default class ElmPackage extends BaseJsonService {
     })
     return this.constructor.render({ version })
   }
-};
+}

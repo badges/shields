@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {isDependencyMap} from '../package-json-helpers.js';
-import {BaseJsonService, InvalidResponse, NotFound} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { isDependencyMap } from '../package-json-helpers.js'
+import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
@@ -32,7 +32,7 @@ const packageDataSchema = Joi.object({
 
 export const queryParamSchema = Joi.object({
   registry_uri: optionalUrl,
-}).required();
+}).required()
 
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
@@ -140,4 +140,4 @@ export default class NpmBase extends BaseJsonService {
 
     return this.constructor._validate(packageData, packageDataSchema)
   }
-};
+}

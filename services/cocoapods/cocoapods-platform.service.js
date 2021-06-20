@@ -1,4 +1,4 @@
-import BaseCocoaPodsService from './cocoapods-base.js';
+import BaseCocoaPodsService from './cocoapods-base.js'
 
 export default class CocoapodsPlatform extends BaseCocoaPodsService {
   static category = 'platform-support'
@@ -28,4 +28,4 @@ export default class CocoapodsPlatform extends BaseCocoaPodsService {
     const { platforms } = await this.fetch({ spec })
     return this.constructor.render({ platforms: Object.keys(platforms) })
   }
-};
+}

@@ -1,6 +1,6 @@
-import {addv as versionText} from '../text-formatters.js';
-import {version as versionColor} from '../color-formatters.js';
-import BaseCondaService from './conda-base.js';
+import { addv as versionText } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import BaseCondaService from './conda-base.js'
 
 export default class CondaVersion extends BaseCondaService {
   static category = 'version'
@@ -45,4 +45,4 @@ export default class CondaVersion extends BaseCondaService {
       version: json.latest_version,
     })
   }
-};
+}

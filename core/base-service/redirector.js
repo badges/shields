@@ -1,13 +1,16 @@
-import camelcase from 'camelcase';
-import emojic from 'emojic';
-import Joi from 'joi';
-import queryString from 'query-string';
-import BaseService from './base.js';
-import {serverHasBeenUpSinceResourceCached, setCacheHeadersForStaticResource} from './cache-headers.js';
-import {isValidCategory} from './categories.js';
-import {MetricHelper} from './metric-helper.js';
-import {isValidRoute, prepareRoute, namedParamsForMatch} from './route.js';
-import trace from './trace.js';
+import camelcase from 'camelcase'
+import emojic from 'emojic'
+import Joi from 'joi'
+import queryString from 'query-string'
+import BaseService from './base.js'
+import {
+  serverHasBeenUpSinceResourceCached,
+  setCacheHeadersForStaticResource,
+} from './cache-headers.js'
+import { isValidCategory } from './categories.js'
+import { MetricHelper } from './metric-helper.js'
+import { isValidRoute, prepareRoute, namedParamsForMatch } from './route.js'
+import trace from './trace.js'
 
 const attrSchema = Joi.object({
   name: Joi.string().min(3),
@@ -116,5 +119,5 @@ export default function redirector(attrs) {
         metricHandle.noteResponseSent()
       })
     }
-  };
-};
+  }
+}

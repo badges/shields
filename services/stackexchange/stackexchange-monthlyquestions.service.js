@@ -1,8 +1,8 @@
-import moment from 'moment';
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
-import renderQuestionsBadge from './stackexchange-helpers.js';
+import moment from 'moment'
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
+import renderQuestionsBadge from './stackexchange-helpers.js'
 
 const tagSchema = Joi.object({
   total: nonNegativeInteger,
@@ -74,4 +74,4 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
       numValue,
     })
   }
-};
+}

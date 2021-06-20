@@ -1,13 +1,13 @@
-import path from 'path';
-import {fileURLToPath} from 'url'
-import {expect} from 'chai';
-import isSvg from 'is-svg';
-import config from 'config';
-import nock from 'nock';
-import sinon from 'sinon';
-import got from '../got-test-client.js';
-import Server from './server.js';
-import {createTestServer} from './in-process-server-test-helpers.js';
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { expect } from 'chai'
+import isSvg from 'is-svg'
+import config from 'config'
+import nock from 'nock'
+import sinon from 'sinon'
+import got from '../got-test-client.js'
+import Server from './server.js'
+import { createTestServer } from './in-process-server-test-helpers.js'
 
 describe('The server', function () {
   describe('running', function () {
@@ -17,7 +17,10 @@ describe('The server', function () {
       this.timeout(10000)
       server = await createTestServer({
         public: {
-          documentRoot: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'test-public'),
+          documentRoot: path.resolve(
+            path.dirname(fileURLToPath(import.meta.url)),
+            'test-public'
+          ),
         },
       })
       baseUrl = server.baseUrl

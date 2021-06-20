@@ -1,4 +1,4 @@
-import UptimeRobotBase from './uptimerobot-base.js';
+import UptimeRobotBase from './uptimerobot-base.js'
 
 export default class UptimeRobotStatus extends UptimeRobotBase {
   static route = {
@@ -42,4 +42,4 @@ export default class UptimeRobotStatus extends UptimeRobotBase {
     const { status } = monitors[0]
     return this.constructor.render({ status })
   }
-};
+}

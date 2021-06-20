@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount as downloadsColor} from '../color-formatters.js';
-import {BaseClojarsService} from './clojars-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount as downloadsColor } from '../color-formatters.js'
+import { BaseClojarsService } from './clojars-base.js'
 
 export default class ClojarsDownloads extends BaseClojarsService {
   static category = 'downloads'
@@ -27,4 +27,4 @@ export default class ClojarsDownloads extends BaseClojarsService {
     const json = await this.fetch({ clojar })
     return this.constructor.render({ downloads: json.downloads })
   }
-};
+}

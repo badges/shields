@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import BaseCondaService from './conda-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import BaseCondaService from './conda-base.js'
 
 export default class CondaDownloads extends BaseCondaService {
   static category = 'downloads'
@@ -31,4 +31,4 @@ export default class CondaDownloads extends BaseCondaService {
     )
     return this.constructor.render({ variant, downloads })
   }
-};
+}

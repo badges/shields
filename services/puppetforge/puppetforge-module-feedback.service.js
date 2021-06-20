@@ -1,10 +1,8 @@
-import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {NotFound} from '../index.js';
-import {BasePuppetForgeModulesService} from './puppetforge-base.js';
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-export default class PuppetforgeModuleFeedback extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
   static category = 'rating'
 
   static route = {
@@ -39,4 +37,4 @@ export default class PuppetforgeModuleFeedback extends (
     }
     return this.constructor.render({ score: data.feedback_score })
   }
-};
+}

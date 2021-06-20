@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import Camp from '@shields_io/camp';
-import portfinder from 'portfinder';
-import got from '../got-test-client.js';
-import Metrics from './prometheus-metrics.js';
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import got from '../got-test-client.js'
+import Metrics from './prometheus-metrics.js'
 
 describe('Prometheus metrics route', function () {
   let port, baseUrl, camp, metrics

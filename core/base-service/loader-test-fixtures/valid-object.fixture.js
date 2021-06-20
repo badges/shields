@@ -1,4 +1,4 @@
-import BaseJsonService from '../base-json.js';
+import BaseJsonService from '../base-json.js'
 
 class GoodServiceOne extends BaseJsonService {
   static category = 'build'
@@ -9,4 +9,4 @@ class GoodServiceTwo extends BaseJsonService {
   static route = { base: 'good', pattern: 'two' }
 }
 
-export { GoodServiceOne, GoodServiceTwo };
+export { GoodServiceOne, GoodServiceTwo }

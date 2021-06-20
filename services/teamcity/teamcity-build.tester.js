@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {withRegex} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()

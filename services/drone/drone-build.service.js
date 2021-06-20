@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.alternatives()
@@ -82,4 +82,4 @@ export default class DroneBuild extends BaseJsonService {
     )
     return renderBuildStatusBadge({ status: json.status })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {ServiceTester} from '../tester.js';
-import {isVPlusDottedVersionNClauses} from '../test-validators.js';
+import { ServiceTester } from '../tester.js'
+import { isVPlusDottedVersionNClauses } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'scoop',

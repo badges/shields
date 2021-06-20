@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {colorScale} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { colorScale } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const colorFormatter = colorScale([99, 99.5, 100])
 
@@ -74,4 +74,4 @@ export default class NodePingUptime extends BaseJsonService {
     const { uptime } = await this.fetch({ checkUuid })
     return this.constructor.render({ uptime })
   }
-};
+}

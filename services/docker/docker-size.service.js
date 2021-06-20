@@ -1,9 +1,13 @@
-import Joi from 'joi';
-import prettyBytes from 'pretty-bytes';
-import {nonNegativeInteger} from '../validators.js';
-import {latest} from '../version.js';
-import {BaseJsonService, NotFound} from '../index.js';
-import {buildDockerUrl, getDockerHubUser, getMultiPageData} from './docker-helpers.js';
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { nonNegativeInteger } from '../validators.js'
+import { latest } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
+  buildDockerUrl,
+  getDockerHubUser,
+  getMultiPageData,
+} from './docker-helpers.js'
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
@@ -110,4 +114,4 @@ export default class DockerSize extends BaseJsonService {
     const { size } = await this.transform({ tag, sort, data })
     return this.constructor.render({ size })
   }
-};
+}

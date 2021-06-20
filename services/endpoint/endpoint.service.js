@@ -1,9 +1,9 @@
-import {URL} from 'url';
-import Joi from 'joi';
-import {errorMessages} from '../dynamic-common.js';
-import {optionalUrl} from '../validators.js';
-import {fetchEndpointData} from '../endpoint-common.js';
-import {BaseJsonService, InvalidParameter} from '../index.js';
+import { URL } from 'url'
+import Joi from 'joi'
+import { errorMessages } from '../dynamic-common.js'
+import { optionalUrl } from '../validators.js'
+import { fetchEndpointData } from '../endpoint-common.js'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -77,4 +77,4 @@ export default class Endpoint extends BaseJsonService {
 
     return this.constructor.render(validated)
   }
-};
+}

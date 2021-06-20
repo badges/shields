@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default redirector({
   category: 'platform-support',
@@ -8,4 +8,4 @@ export default redirector({
   },
   transformPath: ({ slug }) => `/wordpress/plugin/tested/${slug}`,
   dateAdded: new Date('2019-04-17'),
-});
+})

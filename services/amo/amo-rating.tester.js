@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isStarRating} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { isStarRating } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Rating')

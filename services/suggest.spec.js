@@ -1,10 +1,10 @@
-import Camp from '@shields_io/camp';
-import {expect} from 'chai';
-import nock from 'nock';
-import portfinder from 'portfinder';
-import got from '../core/got-test-client.js';
-import {setRoutes, githubLicense} from './suggest.js';
-import GithubApiProvider from './github/github-api-provider.js';
+import Camp from '@shields_io/camp'
+import { expect } from 'chai'
+import nock from 'nock'
+import portfinder from 'portfinder'
+import got from '../core/got-test-client.js'
+import { setRoutes, githubLicense } from './suggest.js'
+import GithubApiProvider from './github/github-api-provider.js'
 
 describe('Badge suggestions', function () {
   const githubApiBaseUrl = 'https://api.github.test'

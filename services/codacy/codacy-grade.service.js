@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseSvgScrapingService} from '../index.js';
-import {codacyGrade} from './codacy-helpers.js';
+import Joi from 'joi'
+import { BaseSvgScrapingService } from '../index.js'
+import { codacyGrade } from './codacy-helpers.js'
 
 const schema = Joi.object({ message: codacyGrade }).required()
 
@@ -56,4 +56,4 @@ export default class CodacyGrade extends BaseSvgScrapingService {
     })
     return this.constructor.render({ grade })
   }
-};
+}

@@ -1,4 +1,4 @@
-import {Deprecated} from './index.js';
+import { Deprecated } from './index.js'
 
 function enforceDeprecation(effectiveDate) {
   if (Date.now() >= effectiveDate.getTime()) {
@@ -6,6 +6,4 @@ function enforceDeprecation(effectiveDate) {
   }
 }
 
-export {
-  enforceDeprecation,
-};
+export { enforceDeprecation }

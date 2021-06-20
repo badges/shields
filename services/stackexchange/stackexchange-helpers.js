@@ -1,5 +1,5 @@
-import {metric} from '../text-formatters.js';
-import {floorCount as floorCountColor} from '../color-formatters.js';
+import { metric } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
 
 export default function renderQuestionsBadge({
   suffix,
@@ -13,4 +13,4 @@ export default function renderQuestionsBadge({
     message: `${metric(numValue)}${suffix}`,
     color: floorCountColor(numValue, 1000, 10000, 20000),
   }
-};
+}

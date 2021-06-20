@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric, addv, maybePluralize} from '../text-formatters.js';
-import {downloadCount, version as versionColor} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric, addv, maybePluralize } from '../text-formatters.js'
+import { downloadCount, version as versionColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
@@ -147,4 +147,4 @@ function DownloadsForInterval(interval) {
 
 const downloadsServices = ['day', 'week', 'all'].map(DownloadsForInterval)
 
-export default [...downloadsServices, HexPmLicense, HexPmVersion];
+export default [...downloadsServices, HexPmLicense, HexPmVersion]

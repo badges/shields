@@ -1,6 +1,6 @@
-import {isPercentage} from '../test-validators.js';
-import {invalidJSON} from '../response-fixtures.js';
-import {createServiceTester} from '../tester.js'
+import { isPercentage } from '../test-validators.js'
+import { invalidJSON } from '../response-fixtures.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Uptime Robot: Percentage (valid)')

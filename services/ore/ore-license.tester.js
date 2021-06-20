@@ -1,4 +1,4 @@
-import {createServiceTester} from '../tester.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Nucleus (pluginId nucleus)').get('/nucleus.json').expectBadge({

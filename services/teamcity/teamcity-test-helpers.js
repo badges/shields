@@ -15,9 +15,4 @@ const config = {
   },
 }
 
-export {
-  user,
-  pass,
-  host,
-  config,
-};
+export { user, pass, host, config }

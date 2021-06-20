@@ -1,16 +1,14 @@
-import Joi from 'joi';
-import {renderContributorBadge} from '../contributor-count.js';
-import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
-import {fetchJsonFromRepo} from './github-common-fetch.js';
-import {documentation} from './github-helpers.js';
+import Joi from 'joi'
+import { renderContributorBadge } from '../contributor-count.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const schema = Joi.object({
   contributors: Joi.array().required(),
 }).required()
 
-export default class GithubAllContributorsService extends (
-  ConditionalGithubAuthV3Service
-) {
+export default class GithubAllContributorsService extends ConditionalGithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/all-contributors',
@@ -48,4 +46,4 @@ export default class GithubAllContributorsService extends (
     const contributorCount = contributors.length
     return this.constructor.render({ contributorCount })
   }
-};
+}

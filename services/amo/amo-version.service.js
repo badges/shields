@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import {BaseAmoService, keywords} from './amo-base.js';
+import { renderVersionBadge } from '../version.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
 export default class AmoVersion extends BaseAmoService {
   static category = 'version'
@@ -18,4 +18,4 @@ export default class AmoVersion extends BaseAmoService {
     const data = await this.fetch({ addonId })
     return renderVersionBadge({ version: data.current_version.version })
   }
-};
+}

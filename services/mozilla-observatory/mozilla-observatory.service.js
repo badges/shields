@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   state: Joi.string()
@@ -112,4 +112,4 @@ export default class MozillaObservatory extends BaseJsonService {
     const { state, grade, score } = await this.fetch({ host, publish })
     return this.constructor.render({ format, state, grade, score })
   }
-};
+}

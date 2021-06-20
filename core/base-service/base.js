@@ -3,20 +3,33 @@
  */
 
 // See available emoji at http://emoji.muan.co/
-import emojic from 'emojic';
-import Joi from 'joi';
-import log from '../server/log.js';
-import {AuthHelper} from './auth-helper.js';
-import {MetricHelper, MetricNames} from './metric-helper.js';
-import {assertValidCategory} from './categories.js';
-import checkErrorResponse from './check-error-response.js';
-import coalesceBadge from './coalesce-badge.js';
-import {NotFound, InvalidResponse, Inaccessible, ImproperlyConfigured, InvalidParameter, Deprecated} from './errors.js';
-import {validateExample, transformExample} from './examples.js';
-import {makeFullUrl, assertValidRoute, prepareRoute, namedParamsForMatch, getQueryParamNames} from './route.js';
-import {assertValidServiceDefinition} from './service-definitions.js';
-import trace from './trace.js';
-import validate from './validate.js';
+import emojic from 'emojic'
+import Joi from 'joi'
+import log from '../server/log.js'
+import { AuthHelper } from './auth-helper.js'
+import { MetricHelper, MetricNames } from './metric-helper.js'
+import { assertValidCategory } from './categories.js'
+import checkErrorResponse from './check-error-response.js'
+import coalesceBadge from './coalesce-badge.js'
+import {
+  NotFound,
+  InvalidResponse,
+  Inaccessible,
+  ImproperlyConfigured,
+  InvalidParameter,
+  Deprecated,
+} from './errors.js'
+import { validateExample, transformExample } from './examples.js'
+import {
+  makeFullUrl,
+  assertValidRoute,
+  prepareRoute,
+  namedParamsForMatch,
+  getQueryParamNames,
+} from './route.js'
+import { assertValidServiceDefinition } from './service-definitions.js'
+import trace from './trace.js'
+import validate from './validate.js'
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -551,4 +564,4 @@ class BaseService {
  *    An HTML string that is included in the badge popup.
  */
 
-export default BaseService;
+export default BaseService

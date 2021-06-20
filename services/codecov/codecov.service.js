@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import {BaseSvgScrapingService} from '../index.js';
-import {parseJson} from '../../core/base-service/json.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { parseJson } from '../../core/base-service/json.js'
 
 // https://docs.codecov.io/reference#totals
 // A new repository that's been added but never had any coverage reports
@@ -175,4 +175,4 @@ export default class Codecov extends BaseSvgScrapingService {
     const { coverage } = this.transform({ data })
     return this.constructor.render({ coverage })
   }
-};
+}

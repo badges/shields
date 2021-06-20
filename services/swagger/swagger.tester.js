@@ -1,4 +1,4 @@
-import {createServiceTester} from '../tester.js'
+import { createServiceTester } from '../tester.js'
 
 const getURL = '/3.0.json?specUrl=https://example.com/example.json'
 const getURLBase = '/3.0.json?specUrl='

@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   // http://github.com/badges/shields/issues/1387
@@ -34,4 +34,4 @@ export default [
     transformPath: ({ user, repo }) => `/codeclimate/coverage/${user}/${repo}`,
     dateAdded: new Date('2019-04-15'),
   }),
-];
+]

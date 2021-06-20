@@ -3,11 +3,11 @@
  */
 
 // See available emoji at http://emoji.muan.co/
-import emojic from 'emojic';
-import fastXmlParser from 'fast-xml-parser';
-import BaseService from './base.js';
-import trace from './trace.js';
-import {InvalidResponse} from './errors.js';
+import emojic from 'emojic'
+import fastXmlParser from 'fast-xml-parser'
+import BaseService from './base.js'
+import trace from './trace.js'
+import { InvalidResponse } from './errors.js'
 
 /**
  * Services which query a XML endpoint should extend BaseXmlService
@@ -66,4 +66,4 @@ class BaseXmlService extends BaseService {
   }
 }
 
-export default BaseXmlService;
+export default BaseXmlService

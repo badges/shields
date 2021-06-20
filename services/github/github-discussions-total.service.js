@@ -1,8 +1,8 @@
-import  gql from 'graphql-tag';
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {transformErrors} from './github-helpers.js';
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -69,4 +69,4 @@ export default class GithubTotalDiscussions extends GithubAuthV4Service {
     } = json
     return this.constructor.render({ discussions: `${totalCount} total` })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {ServiceTester} from '../tester.js';
-import {isMetric, isMetricOpenIssues} from '../test-validators.js';
+import { ServiceTester } from '../tester.js'
+import { isMetric, isMetricOpenIssues } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'BitbucketPullRequest',

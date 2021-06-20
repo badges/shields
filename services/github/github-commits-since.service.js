@@ -1,9 +1,12 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {fetchLatestRelease, queryParamSchema} from './github-common-release.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import {
+  fetchLatestRelease,
+  queryParamSchema,
+} from './github-common-release.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
@@ -153,4 +156,4 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
 
     return this.constructor.render({ version, commitCount })
   }
-};
+}

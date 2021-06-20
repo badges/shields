@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {expect} from 'chai';
-import sinon from 'sinon';
-import BaseXmlService from './base-xml.js';
+import Joi from 'joi'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import BaseXmlService from './base-xml.js'
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

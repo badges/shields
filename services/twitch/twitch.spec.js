@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import TwitchStatus from './twitch.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import TwitchStatus from './twitch.service.js'
 
 describe('TwitchStatus', function () {
   describe('auth', function () {

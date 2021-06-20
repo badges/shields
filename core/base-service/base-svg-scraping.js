@@ -3,10 +3,10 @@
  */
 
 // See available emoji at http://emoji.muan.co/
-import emojic from 'emojic';
-import BaseService from './base.js';
-import trace from './trace.js';
-import {InvalidResponse} from './errors.js';
+import emojic from 'emojic'
+import BaseService from './base.js'
+import trace from './trace.js'
+import { InvalidResponse } from './errors.js'
 
 const defaultValueMatcher = />([^<>]+)<\/text><\/g>/
 const leadingWhitespace = /(?:\r\n\s*|\r\s*|\n\s*)/g
@@ -88,4 +88,4 @@ class BaseSvgScrapingService extends BaseService {
   }
 }
 
-export default BaseSvgScrapingService;
+export default BaseSvgScrapingService

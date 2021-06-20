@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 const queryParamSchema = Joi.object({
   up_message: Joi.string(),
@@ -28,8 +28,4 @@ function renderWebsiteStatus({
   }
 }
 
-export {
-  queryParamSchema,
-  exampleQueryParams,
-  renderWebsiteStatus,
-};
+export { queryParamSchema, exampleQueryParams, renderWebsiteStatus }

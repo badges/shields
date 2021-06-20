@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {AurVersion} from './aur.service.js';
+import { test, given } from 'sazerac'
+import { AurVersion } from './aur.service.js'
 
 describe('AurVersion', function () {
   test(AurVersion.render, () => {

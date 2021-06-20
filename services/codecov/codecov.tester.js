@@ -1,5 +1,5 @@
-import {isIntegerPercentage} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { isIntegerPercentage } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('gets coverage status')

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.string().required(),
@@ -50,4 +50,4 @@ export default class DependabotSemverCompatibility extends BaseJsonService {
       message: json.status,
     }
   }
-};
+}

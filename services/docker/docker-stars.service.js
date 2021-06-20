@@ -1,7 +1,11 @@
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseService} from '../index.js';
-import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseService } from '../index.js'
+import {
+  dockerBlue,
+  buildDockerUrl,
+  getDockerHubUser,
+} from './docker-helpers.js'
 
 export default class DockerStars extends BaseService {
   static category = 'rating'
@@ -41,4 +45,4 @@ export default class DockerStars extends BaseService {
     const stars = await this.fetch({ user, repo })
     return this.constructor.render({ stars })
   }
-};
+}

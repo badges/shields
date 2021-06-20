@@ -1,10 +1,13 @@
-import gql from 'graphql-tag';
-import Joi from 'joi';
-import moment from 'moment';
-import {metric, maybePluralize} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {documentation as githubDocumentation, transformErrors} from './github-helpers.js';
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import moment from 'moment'
+import { metric, maybePluralize } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import {
+  documentation as githubDocumentation,
+  transformErrors,
+} from './github-helpers.js'
 
 const documentation = `
   <p>
@@ -53,9 +56,7 @@ const queryParamSchema = Joi.object({
   suggestion_label: Joi.string(),
 }).required()
 
-export default class GithubHacktoberfestCombinedStatus extends (
-  GithubAuthV4Service
-) {
+export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',
@@ -232,4 +233,4 @@ export default class GithubHacktoberfestCombinedStatus extends (
       year,
     })
   }
-};
+}

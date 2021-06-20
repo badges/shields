@@ -1,6 +1,6 @@
-import {isMetric} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
-import {dockerBlue} from './docker-helpers.js';
+import { isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+import { dockerBlue } from './docker-helpers.js'
 export const t = await createServiceTester()
 
 t.create('docker stars (valid, library)')

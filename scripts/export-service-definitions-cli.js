@@ -1,5 +1,5 @@
-import yaml from 'js-yaml';
-import {collectDefinitions} from '../core/base-service/loader.js';
+import yaml from 'js-yaml'
+import { collectDefinitions } from '../core/base-service/loader.js'
 
 const definitions = await collectDefinitions()
 

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   cocoadocs: Joi.object({
@@ -41,4 +41,4 @@ export default class CocoapodsDocs extends BaseJsonService {
     const percentage = data.cocoadocs.doc_percent || 0
     return this.constructor.render({ percentage })
   }
-};
+}

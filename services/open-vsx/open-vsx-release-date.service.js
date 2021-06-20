@@ -1,6 +1,6 @@
-import {age} from '../color-formatters.js';
-import {formatDate} from '../text-formatters.js';
-import OpenVSXBase from './open-vsx-base.js';
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
 export default class OpenVSXReleaseDate extends OpenVSXBase {
   static category = 'activity'
@@ -39,4 +39,4 @@ export default class OpenVSXReleaseDate extends OpenVSXBase {
       releaseDate: timestamp,
     })
   }
-};
+}

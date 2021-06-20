@@ -1,5 +1,5 @@
-import SonarBase from './sonar-base.js';
-import {queryParamSchema, keywords, documentation} from './sonar-helpers.js';
+import SonarBase from './sonar-base.js'
+import { queryParamSchema, keywords, documentation } from './sonar-helpers.js'
 
 const colorMap = {
   0: 'red',
@@ -63,4 +63,4 @@ export default class SonarFortifyRating extends SonarBase {
       rating: metrics['fortify-security-rating'],
     })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {renderLicenseBadge} from '../licenses.js';
-import BaseBowerService from './bower-base.js';
+import { renderLicenseBadge } from '../licenses.js'
+import BaseBowerService from './bower-base.js'
 
 export default class BowerLicense extends BaseBowerService {
   static category = 'license'
@@ -19,4 +19,4 @@ export default class BowerLicense extends BaseBowerService {
     const data = await this.fetch({ packageName })
     return renderLicenseBadge({ licenses: data.normalized_licenses })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {InvalidResponse} from '../index.js';
-import {renderCurrencyBadge, LiberapayBase} from './liberapay-base.js';
+import { InvalidResponse } from '../index.js'
+import { renderCurrencyBadge, LiberapayBase } from './liberapay-base.js'
 
 export default class LiberapayGives extends LiberapayBase {
   static route = this.buildRoute('gives')
@@ -28,4 +28,4 @@ export default class LiberapayGives extends LiberapayBase {
       throw new InvalidResponse({ prettyMessage: 'no public giving stats' })
     }
   }
-};
+}

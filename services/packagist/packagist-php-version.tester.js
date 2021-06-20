@@ -1,5 +1,5 @@
-import {isComposerVersion} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { isComposerVersion } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('gets the package version of symfony')

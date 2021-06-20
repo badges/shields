@@ -1,4 +1,4 @@
-import toArray from '../core/base-service/to-array.js';
+import toArray from '../core/base-service/to-array.js'
 
 const licenseTypes = {
   // permissive licenses - not public domain and not copyleft
@@ -128,4 +128,4 @@ function renderLicenseBadge({ license, licenses }) {
   }
 }
 
-export { licenseToColor, renderLicenseBadge };
+export { licenseToColor, renderLicenseBadge }

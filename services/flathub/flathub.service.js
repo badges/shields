@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   currentReleaseVersion: Joi.string().required(),
@@ -28,4 +28,4 @@ export default class Flathub extends BaseJsonService {
     })
     return renderVersionBadge({ version: data.currentReleaseVersion })
   }
-};
+}

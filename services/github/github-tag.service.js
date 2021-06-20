@@ -1,12 +1,12 @@
-import gql from 'graphql-tag';
-import Joi from 'joi';
-import {addv} from '../text-formatters.js';
-import {version as versionColor} from '../color-formatters.js';
-import {latest} from '../version.js';
-import {NotFound, redirector} from '../index.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {queryParamSchema} from './github-common-release.js';
-import {documentation, transformErrors} from './github-helpers.js';
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { addv } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import { latest } from '../version.js'
+import { NotFound, redirector } from '../index.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { queryParamSchema } from './github-common-release.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -161,7 +161,4 @@ const redirects = {
   }),
 }
 
-export {
-  GithubTag,
-  redirects,
-};
+export { GithubTag, redirects }

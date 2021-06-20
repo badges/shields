@@ -1,4 +1,4 @@
-import BaseCocoaPodsService from './cocoapods-base.js';
+import BaseCocoaPodsService from './cocoapods-base.js'
 
 export default class CocoapodsLicense extends BaseCocoaPodsService {
   static category = 'license'
@@ -35,4 +35,4 @@ export default class CocoapodsLicense extends BaseCocoaPodsService {
       typeof data.license === 'object' ? data.license.type : data.license
     return this.constructor.render({ license })
   }
-};
+}

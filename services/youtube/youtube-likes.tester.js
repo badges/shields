@@ -1,10 +1,10 @@
-import Joi from 'joi';
-import {createServiceTester} from '../tester.js'
-import {noToken} from '../test-helpers.js';
-import {isMetric} from '../test-validators.js';
-import _noYouTubeToken from './youtube-likes.service.js';
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import { isMetric } from '../test-validators.js'
+import _noYouTubeToken from './youtube-likes.service.js'
 export const t = await createServiceTester()
-const noYouTubeToken = noToken(_noYouTubeToken);
+const noYouTubeToken = noToken(_noYouTubeToken)
 
 t.create('video like count')
   .skipWhen(noYouTubeToken)

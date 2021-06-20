@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import servicesForTitle from './services-for-title.js';
+import { test, given } from 'sazerac'
+import servicesForTitle from './services-for-title.js'
 
 describe('Services from PR title', function () {
   test(servicesForTitle, () => {

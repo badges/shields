@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import prettyBytes from 'pretty-bytes';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -45,4 +45,4 @@ export default class GithubRepoSize extends GithubAuthV3Service {
     const { size } = await this.fetch({ user, repo })
     return this.constructor.render({ size })
   }
-};
+}

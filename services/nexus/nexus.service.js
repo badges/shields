@@ -1,9 +1,12 @@
-import Joi from 'joi';
-import {version as versionColor} from '../color-formatters.js';
-import {addv} from '../text-formatters.js';
-import {optionalUrl, optionalDottedVersionNClausesWithOptionalSuffix} from '../validators.js';
-import {BaseJsonService, InvalidResponse, NotFound} from '../index.js';
-import {isSnapshotVersion} from './nexus-version.js';
+import Joi from 'joi'
+import { version as versionColor } from '../color-formatters.js'
+import { addv } from '../text-formatters.js'
+import {
+  optionalUrl,
+  optionalDottedVersionNClausesWithOptionalSuffix,
+} from '../validators.js'
+import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
+import { isSnapshotVersion } from './nexus-version.js'
 
 const nexus2SearchApiSchema = Joi.object({
   data: Joi.array()
@@ -332,4 +335,4 @@ export default class Nexus extends BaseJsonService {
     const { version } = this.transform({ repo, json, actualNexusVersion })
     return this.constructor.render({ version })
   }
-};
+}

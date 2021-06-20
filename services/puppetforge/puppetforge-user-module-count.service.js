@@ -1,10 +1,8 @@
-import {metric} from '../text-formatters.js';
-import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BasePuppetForgeUsersService} from './puppetforge-base.js';
+import { metric } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BasePuppetForgeUsersService } from './puppetforge-base.js'
 
-export default class PuppetForgeModuleCountService extends (
-  BasePuppetForgeUsersService
-) {
+export default class PuppetForgeModuleCountService extends BasePuppetForgeUsersService {
   static category = 'other'
 
   static route = {
@@ -35,4 +33,4 @@ export default class PuppetForgeModuleCountService extends (
     const data = await this.fetch({ user })
     return this.constructor.render({ modules: data.module_count })
   }
-};
+}

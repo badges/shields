@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const bitbucketIssuesSchema = Joi.object({
   size: nonNegativeInteger,

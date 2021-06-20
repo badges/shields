@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   ratingCount: nonNegativeInteger,
@@ -27,4 +27,4 @@ class BaseVaadinDirectoryService extends BaseJsonService {
   }
 }
 
-export { BaseVaadinDirectoryService };
+export { BaseVaadinDirectoryService }

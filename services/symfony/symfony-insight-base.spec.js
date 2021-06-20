@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {NotFound} from '../index.js';
-import {SymfonyInsightBase} from './symfony-insight-base.js';
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import { SymfonyInsightBase } from './symfony-insight-base.js'
 
 describe('SymfonyInsightBase', function () {
   context('transform()', function () {

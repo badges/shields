@@ -1,5 +1,5 @@
-import PypiBase from './pypi-base.js';
-import {parseClassifiers} from './pypi-helpers.js';
+import PypiBase from './pypi-base.js'
+import { parseClassifiers } from './pypi-helpers.js'
 
 export default class PypiStatus extends PypiBase {
   static category = 'other'
@@ -60,4 +60,4 @@ export default class PypiStatus extends PypiBase {
 
     return this.constructor.render({ status })
   }
-};
+}

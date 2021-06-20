@@ -1,17 +1,23 @@
-import fs from 'fs';
-import path from 'path';
-import {fileURLToPath} from 'url'
-import moment from 'moment';
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import moment from 'moment'
 
 const dateFormat = 'YYYY-MM-DD'
 
 const templates = {
   packageJsonVersionsTemplate: fs.readFileSync(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), `packageJsonVersionsTemplate.json`),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      `packageJsonVersionsTemplate.json`
+    ),
     'utf-8'
   ),
   packageJsonTemplate: fs.readFileSync(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), `packageJsonTemplate.json`),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      `packageJsonTemplate.json`
+    ),
     'utf-8'
   ),
 }
@@ -144,9 +150,4 @@ const mockReleaseSchedule = () => nock => {
     .reply(200, schedule)
 }
 
-export {
-  mockPackageData,
-  mockCurrentSha,
-  mockVersionsSha,
-  mockReleaseSchedule,
-};
+export { mockPackageData, mockCurrentSha, mockVersionsSha, mockReleaseSchedule }

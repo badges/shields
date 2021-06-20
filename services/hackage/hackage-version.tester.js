@@ -1,5 +1,5 @@
-import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('hackage version (valid)').get('/lens.json').expectBadge({

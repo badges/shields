@@ -1,5 +1,5 @@
-import {BaseGithubLanguage} from './github-languages-base.js';
-import {documentation} from './github-helpers.js';
+import { BaseGithubLanguage } from './github-languages-base.js'
+import { documentation } from './github-helpers.js'
 
 export default class GithubTopLanguage extends BaseGithubLanguage {
   static category = 'analysis'
@@ -49,4 +49,4 @@ export default class GithubTopLanguage extends BaseGithubLanguage {
       totalSize: this.getTotalSize(data),
     })
   }
-};
+}

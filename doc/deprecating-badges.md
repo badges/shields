@@ -14,7 +14,7 @@ Locate the source file(s) for the service, which can be found in `*.service.js` 
 Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service. For example:
 
 ```js
-import {deprecatedService} from '../index.js'
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'size',
@@ -34,7 +34,7 @@ Locate the test file(s) for the service, which can be found in `*.tester.js` fil
 With `DeprecatedService` classes we cannot use `createServiceTester()` so you will need to create the `ServiceTester` class directly. For example:
 
 ```js
-import { ServiceTester } from '../tester.js';
+import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
   id: 'imagelayers',
@@ -58,7 +58,7 @@ Make sure to have a live (non-mocked) test for each badge the service provides t
 Here is an example of what the final result would look like for a test file:
 
 ```js
-import { ServiceTester } from '../tester.js';
+import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
   id: 'imagelayers',

@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const documentation = `
 <p>
@@ -11,9 +11,7 @@ const documentation = `
 </p>
 `
 
-export default class VisualStudioMarketplaceDownloads extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
   static category = 'downloads'
 
   static route = {
@@ -60,4 +58,4 @@ export default class VisualStudioMarketplaceDownloads extends (
         : statistics.install + statistics.updateCount
     return this.constructor.render({ measure, count })
   }
-};
+}

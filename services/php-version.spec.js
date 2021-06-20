@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {compare, minorVersion, versionReduction} from './php-version.js';
+import { test, given } from 'sazerac'
+import { compare, minorVersion, versionReduction } from './php-version.js'
 
 const phpReleases = [
   '5.0',

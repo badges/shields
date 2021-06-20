@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const werckerSchema = Joi.array()
   .items(
@@ -124,4 +124,4 @@ export default class Wercker extends BaseJsonService {
     const { result } = json[0]
     return this.constructor.render({ result })
   }
-};
+}

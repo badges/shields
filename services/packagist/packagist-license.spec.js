@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {NotFound} from '../index.js';
-import PackagistLicense from './packagist-license.service.js';
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import PackagistLicense from './packagist-license.service.js'
 
 describe('PackagistLicense', function () {
   it('should throw NotFound when default branch is missing', function () {

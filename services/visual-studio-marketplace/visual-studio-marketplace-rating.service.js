@@ -1,10 +1,8 @@
-import {starRating} from '../text-formatters.js';
-import {floorCount} from '../color-formatters.js';
-import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
+import { starRating } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-export default class VisualStudioMarketplaceRating extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceRating extends VisualStudioMarketplaceBase {
   static category = 'rating'
 
   static route = {
@@ -61,4 +59,4 @@ export default class VisualStudioMarketplaceRating extends (
       ratingCount: statistics.ratingcount,
     })
   }
-};
+}

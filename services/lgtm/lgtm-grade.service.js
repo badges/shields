@@ -1,4 +1,4 @@
-import LgtmBaseService from './lgtm-base.js';
+import LgtmBaseService from './lgtm-base.js'
 
 export default class LgtmGrade extends LgtmBaseService {
   static route = {
@@ -85,4 +85,4 @@ export default class LgtmGrade extends LgtmBaseService {
     const data = await this.fetch({ host, user, repo })
     return this.constructor.render({ language, data })
   }
-};
+}

@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {InvalidResponse} from '../index.js';
-import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
-import {fetchRepoContent} from './github-common-fetch.js';
-import {documentation} from './github-helpers.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { InvalidResponse } from '../index.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchRepoContent } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   filename: Joi.string(),
@@ -13,9 +13,7 @@ const goVersionRegExp = /^go (.+)$/m
 
 const keywords = ['golang']
 
-export default class GithubGoModGoVersion extends (
-  ConditionalGithubAuthV3Service
-) {
+export default class GithubGoModGoVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/go-mod/go-version',
@@ -93,4 +91,4 @@ export default class GithubGoModGoVersion extends (
     const { go } = this.constructor.transform(content)
     return this.constructor.render({ version: go, branch })
   }
-};
+}

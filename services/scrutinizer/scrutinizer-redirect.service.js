@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 const commonAttrs = {
   category: 'analysis',
@@ -37,4 +37,4 @@ export default [
       `/scrutinizer/quality/gp/${slug}${branch ? `/${branch}` : ''}`,
     ...commonAttrs,
   }),
-];
+]

@@ -1,5 +1,5 @@
-import {redirector} from '../index.js';
-import {buildRedirectUrl} from './jenkins-common.js';
+import { redirector } from '../index.js'
+import { buildRedirectUrl } from './jenkins-common.js'
 
 const commonProps = {
   category: 'build',
@@ -26,4 +26,4 @@ export default [
     dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
-];
+]

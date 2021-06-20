@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {AuthHelper} from '../../core/base-service/auth-helper.js';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger, optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { AuthHelper } from '../../core/base-service/auth-helper.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,

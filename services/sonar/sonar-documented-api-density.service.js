@@ -1,5 +1,11 @@
-import SonarBase from './sonar-base.js';
-import {queryParamSchema, getLabel, positiveMetricColorScale, keywords, documentation} from './sonar-helpers.js';
+import SonarBase from './sonar-base.js'
+import {
+  queryParamSchema,
+  getLabel,
+  positiveMetricColorScale,
+  keywords,
+  documentation,
+} from './sonar-helpers.js'
 
 const metric = 'public_documented_api_density'
 
@@ -47,4 +53,4 @@ export default class SonarDocumentedApiDensity extends SonarBase {
     const metrics = this.transform({ json, sonarVersion })
     return this.constructor.render({ density: metrics[metric] })
   }
-};
+}

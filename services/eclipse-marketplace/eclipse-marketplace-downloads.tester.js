@@ -1,5 +1,5 @@
-import {ServiceTester} from '../tester.js';
-import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
+import { ServiceTester } from '../tester.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'EclipseMarketplaceDownloads',

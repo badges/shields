@@ -1,4 +1,4 @@
-import {performance} from 'perf_hooks';
+import { performance } from 'perf_hooks'
 
 class MetricHelper {
   constructor({ metricInstance }, { category, serviceFamily, name }) {
@@ -57,4 +57,4 @@ const MetricNames = Object.freeze({
   SERVICE_RESPONSE_SIZE: Symbol('service-response-size'),
 })
 
-export { MetricHelper, MetricNames };
+export { MetricHelper, MetricNames }

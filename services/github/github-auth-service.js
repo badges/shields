@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
-import {mergeQueries} from '../../core/base-service/graphql.js';
-import {BaseGraphqlService, BaseJsonService} from '../index.js';
+import gql from 'graphql-tag'
+import { mergeQueries } from '../../core/base-service/graphql.js'
+import { BaseGraphqlService, BaseJsonService } from '../index.js'
 
 function createRequestFetcher(context, config) {
   const { sendAndCacheRequestWithCallbacks, githubApiProvider } = context
@@ -91,4 +91,4 @@ export {
   GithubAuthV3Service,
   ConditionalGithubAuthV3Service,
   GithubAuthV4Service,
-};
+}

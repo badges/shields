@@ -2,8 +2,8 @@
  * @module
  */
 
-import crypto from 'crypto';
-import PriorityQueue from 'priorityqueuejs';
+import crypto from 'crypto'
+import PriorityQueue from 'priorityqueuejs'
 
 /**
  * Compute a one-way hash of the input string.
@@ -353,8 +353,4 @@ class TokenPool {
   }
 }
 
-export {
-  sanitizeToken,
-  Token,
-  TokenPool,
-};
+export { sanitizeToken, Token, TokenPool }

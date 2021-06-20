@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import BaseCocoaPodsService from './cocoapods-base.js';
+import { renderVersionBadge } from '../version.js'
+import BaseCocoaPodsService from './cocoapods-base.js'
 
 export default class CocoapodsVersion extends BaseCocoaPodsService {
   static category = 'version'
@@ -19,4 +19,4 @@ export default class CocoapodsVersion extends BaseCocoaPodsService {
     const { version } = await this.fetch({ spec })
     return renderVersionBadge({ version })
   }
-};
+}

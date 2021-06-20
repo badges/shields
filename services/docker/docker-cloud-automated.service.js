@@ -1,6 +1,6 @@
-import {BaseJsonService} from '../index.js';
-import {dockerBlue, buildDockerUrl} from './docker-helpers.js';
-import {fetchBuild} from './docker-cloud-common-fetch.js';
+import { BaseJsonService } from '../index.js'
+import { dockerBlue, buildDockerUrl } from './docker-helpers.js'
+import { fetchBuild } from './docker-cloud-common-fetch.js'
 
 export default class DockerCloudAutomatedBuild extends BaseJsonService {
   static category = 'build'
@@ -32,4 +32,4 @@ export default class DockerCloudAutomatedBuild extends BaseJsonService {
       buildSettings: data.objects[0].build_settings,
     })
   }
-};
+}

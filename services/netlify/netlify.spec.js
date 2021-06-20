@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import Netlify from './netlify.service.js';
+import { test, given } from 'sazerac'
+import Netlify from './netlify.service.js'
 
 const building = { message: 'building', label: undefined, color: 'yellow' }
 const notBuilt = { message: 'not built', label: undefined, color: undefined }

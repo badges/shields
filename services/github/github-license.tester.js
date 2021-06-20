@@ -1,5 +1,5 @@
-import {licenseToColor} from '../licenses.js';
-import {createServiceTester} from '../tester.js'
+import { licenseToColor } from '../licenses.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const publicDomainLicenseColor = licenseToColor('CC0-1.0')

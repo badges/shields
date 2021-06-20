@@ -1,5 +1,5 @@
-import {semverRange} from '../validators.js';
-import {createServiceTester} from '../tester.js'
+import { semverRange } from '../validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('gets the peer dependency version')

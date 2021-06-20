@@ -1,6 +1,6 @@
-import assert from 'assert';
-import Joi from 'joi';
-import coalesce from './coalesce.js';
+import assert from 'assert'
+import Joi from 'joi'
+import coalesce from './coalesce.js'
 
 const serverStartTimeGMTString = new Date().toGMTString()
 const serverStartTimestamp = Date.now()
@@ -108,4 +108,4 @@ export {
   setHeadersForCacheLength,
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
-};
+}

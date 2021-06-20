@@ -1,14 +1,14 @@
 /* eslint-disable import/order */
 
-import fs from 'fs';
-import path from 'path';
-import {fileURLToPath} from 'url'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 // Set up Sentry reporting as early in the process as possible.
-import configModule from 'config';
-import Sentry from '@sentry/node';
+import configModule from 'config'
+import Sentry from '@sentry/node'
 
-import Server from './core/server/server.js';
+import Server from './core/server/server.js'
 const config = configModule.util.toObject()
 const disabledIntegrations = ['Console', 'Http']
 Sentry.init({
@@ -45,7 +45,11 @@ if (fs.existsSync('.env')) {
   process.exit(1)
 }
 
-const legacySecretsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'private', 'secret.json')
+const legacySecretsPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'private',
+  'secret.json'
+)
 if (fs.existsSync(legacySecretsPath)) {
   console.error(
     `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`

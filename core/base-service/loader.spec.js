@@ -1,12 +1,15 @@
-import path from 'path';
-import {fileURLToPath} from 'url';
-import chai from 'chai';
+import path from 'path'
+import { fileURLToPath } from 'url'
+import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import {loadServiceClasses, InvalidService} from './loader.js';
+import { loadServiceClasses, InvalidService } from './loader.js'
 chai.use(chaiAsPromised)
 
 const { expect } = chai
-const fixturesDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'loader-test-fixtures')
+const fixturesDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'loader-test-fixtures'
+)
 
 describe('loadServiceClasses function', function () {
   it('throws if module exports empty', async function () {
@@ -36,7 +39,9 @@ describe('loadServiceClasses function', function () {
       loadServiceClasses([path.join(fixturesDir, 'invalid-no-base.fixture.js')])
     ).to.be.rejectedWith(InvalidService)
     await expect(
-      loadServiceClasses([path.join(fixturesDir, 'invalid-wrong-base.fixture.js')])
+      loadServiceClasses([
+        path.join(fixturesDir, 'invalid-wrong-base.fixture.js'),
+      ])
     ).to.be.rejectedWith(InvalidService)
     await expect(
       loadServiceClasses([path.join(fixturesDir, 'invalid-mixed.fixture.js')])

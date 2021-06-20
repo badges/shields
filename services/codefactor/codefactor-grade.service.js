@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseSvgScrapingService} from '../index.js';
-import {isValidGrade, gradeColor} from './codefactor-helpers.js';
+import Joi from 'joi'
+import { BaseSvgScrapingService } from '../index.js'
+import { isValidGrade, gradeColor } from './codefactor-helpers.js'
 
 const schema = Joi.object({
   message: isValidGrade,
@@ -45,4 +45,4 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
     })
     return this.constructor.render({ grade: message })
   }
-};
+}

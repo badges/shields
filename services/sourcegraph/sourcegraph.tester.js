@@ -1,5 +1,5 @@
-import {withRegex} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 // Matches API responses such as "0 projects", "1 projects", "182 projects", "14.0k projects".

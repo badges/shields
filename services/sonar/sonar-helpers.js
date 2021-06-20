@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {colorScale} from '../color-formatters.js';
-import {optionalUrl} from '../validators.js';
+import Joi from 'joi'
+import { colorScale } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
 
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
@@ -26,7 +26,7 @@ function isLegacyVersion({ sonarVersion }) {
 }
 
 function getLabel({ metric }) {
-  return metric ? metric.replace(/_/g, ' ') : undefined;
+  return metric ? metric.replace(/_/g, ' ') : undefined
 }
 const sonarVersionSchema = Joi.alternatives(
   Joi.string()
@@ -67,4 +67,4 @@ export {
   positiveMetricColorScale,
   keywords,
   documentation,
-};
+}

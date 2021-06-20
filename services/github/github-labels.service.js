@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   color: Joi.string().hex().required(),
@@ -43,4 +43,4 @@ export default class GithubLabels extends GithubAuthV3Service {
     const { color } = await this.fetch({ user, repo, name })
     return this.constructor.render({ name, color })
   }
-};
+}

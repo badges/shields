@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 
@@ -41,4 +41,4 @@ export default class Bountysource extends BaseJsonService {
     const json = await this.fetch({ team })
     return this.constructor.render({ total: json.activity_total })
   }
-};
+}

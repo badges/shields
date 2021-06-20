@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   route: {
@@ -8,4 +8,4 @@ export default deprecatedService({
   label: 'jitpack',
   category: 'downloads',
   dateAdded: new Date('2020-04-05'),
-});
+})

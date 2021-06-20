@@ -1,4 +1,4 @@
-import {BaseOreService, documentation, keywords} from './ore-base.js';
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
 export default class OreCategory extends BaseOreService {
   static category = 'other'
@@ -41,4 +41,4 @@ export default class OreCategory extends BaseOreService {
     const { category } = this.transform({ data })
     return this.constructor.render({ category })
   }
-};
+}

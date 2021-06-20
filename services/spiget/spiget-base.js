@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const resourceSchema = Joi.object({
   downloads: Joi.number().required(),
@@ -34,4 +34,4 @@ class BaseSpigetService extends BaseJsonService {
   }
 }
 
-export { keywords, documentation, BaseSpigetService };
+export { keywords, documentation, BaseSpigetService }

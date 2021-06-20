@@ -1,6 +1,9 @@
-import Joi from 'joi';
-import {isMetricOverTimePeriod, isZeroOverTimePeriod} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import {
+  isMetricOverTimePeriod,
+  isZeroOverTimePeriod,
+} from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isCommitActivity = Joi.alternatives().try(

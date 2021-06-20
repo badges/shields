@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import OreVersion from './ore-version.service.js';
+import { test, given } from 'sazerac'
+import OreVersion from './ore-version.service.js'
 
 describe('OreVersion', function () {
   test(OreVersion.prototype.transform, () => {

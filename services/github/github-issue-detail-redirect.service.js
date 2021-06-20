@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 const variantMap = {
   s: 'state',
@@ -17,4 +17,4 @@ export default [
       `/github/${issueKind}/detail/${variantMap[variant]}/${user}/${repo}/${number}`,
     dateAdded: new Date('2019-04-04'),
   }),
-];
+]

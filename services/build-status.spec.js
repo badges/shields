@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {test, given, forCases} from 'sazerac';
-import {renderBuildStatusBadge} from './build-status.js';
+import { expect } from 'chai'
+import { test, given, forCases } from 'sazerac'
+import { renderBuildStatusBadge } from './build-status.js'
 
 test(renderBuildStatusBadge, () => {
   given({ label: 'build', status: 'passed' }).expect({

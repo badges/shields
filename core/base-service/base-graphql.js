@@ -2,10 +2,10 @@
  * @module
  */
 
-import {print} from 'graphql/language/printer.js';
-import BaseService from './base.js';
-import {InvalidResponse, ShieldsRuntimeError} from './errors.js';
-import {parseJson} from './json.js';
+import { print } from 'graphql/language/printer.js'
+import BaseService from './base.js'
+import { InvalidResponse, ShieldsRuntimeError } from './errors.js'
+import { parseJson } from './json.js'
 
 function defaultTransformErrors(errors) {
   return new InvalidResponse({ prettyMessage: errors[0].message })
@@ -91,4 +91,4 @@ class BaseGraphqlService extends BaseService {
   }
 }
 
-export default BaseGraphqlService;
+export default BaseGraphqlService

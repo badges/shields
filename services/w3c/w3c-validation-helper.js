@@ -145,10 +145,4 @@ const documentation = `
   </p>
 `
 
-export {
-  documentation,
-  presetRegex,
-  getColor,
-  getMessage,
-  getSchema,
-};
+export { documentation, presetRegex, getColor, getMessage, getSchema }

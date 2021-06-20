@@ -1,6 +1,6 @@
-import {BaseJsonService} from '../index.js';
-import {dockerBlue, buildDockerUrl} from './docker-helpers.js';
-import {fetchBuild} from './docker-cloud-common-fetch.js';
+import { BaseJsonService } from '../index.js'
+import { dockerBlue, buildDockerUrl } from './docker-helpers.js'
+import { fetchBuild } from './docker-cloud-common-fetch.js'
 
 export default class DockerCloudBuild extends BaseJsonService {
   static category = 'build'
@@ -33,4 +33,4 @@ export default class DockerCloudBuild extends BaseJsonService {
     const data = await fetchBuild(this, { user, repo })
     return this.constructor.render({ state: data.objects[0].state })
   }
-};
+}

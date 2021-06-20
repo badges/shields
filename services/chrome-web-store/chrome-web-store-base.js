@@ -1,6 +1,6 @@
-import ChromeWebStore from 'webextension-store-meta/lib/chrome-web-store/index.js';
-import checkErrorResponse from '../../core/base-service/check-error-response.js';
-import {BaseService, Inaccessible} from '../index.js';
+import ChromeWebStore from 'webextension-store-meta/lib/chrome-web-store/index.js'
+import checkErrorResponse from '../../core/base-service/check-error-response.js'
+import { BaseService, Inaccessible } from '../index.js'
 
 export default class BaseChromeWebStoreService extends BaseService {
   async fetch({ storeId }) {
@@ -15,4 +15,4 @@ export default class BaseChromeWebStoreService extends BaseService {
       return checkErrorResponse({})({ buffer: '', res: e })
     }
   }
-};
+}

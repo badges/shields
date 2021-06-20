@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import OpenVSXRating from './open-vsx-rating.service.js';
+import { test, given } from 'sazerac'
+import OpenVSXRating from './open-vsx-rating.service.js'
 
 describe('OpenVSXRating', function () {
   test(OpenVSXRating.render, () => {

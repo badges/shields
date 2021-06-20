@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   route: {
@@ -8,4 +8,4 @@ export default deprecatedService({
   label: 'coverity',
   category: 'analysis',
   dateAdded: new Date('2018-12-18'),
-});
+})

@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import NodeVersion from './node-current.service.js';
+import { test, given } from 'sazerac'
+import NodeVersion from './node-current.service.js'
 
 describe('node static renderStaticPreview', function () {
   it('should have parity with render()', async function () {

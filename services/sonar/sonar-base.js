@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseJsonService, NotFound} from '../index.js';
-import {isLegacyVersion} from './sonar-helpers.js';
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
+import { isLegacyVersion } from './sonar-helpers.js'
 
 // It is possible to see HTTP 404 response codes and HTTP 200 responses
 // with empty arrays of metric values, with both the legacy (pre v5.3) and modern APIs.
@@ -114,4 +114,4 @@ export default class SonarBase extends BaseJsonService {
 
     return metrics
   }
-};
+}

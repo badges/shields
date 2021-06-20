@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {NotFound} from '../index.js';
-import {ConditionalGithubAuthV3Service} from '../github/github-auth-service.js';
-import {fetchJsonFromRepo} from '../github/github-common-fetch.js';
-import {renderVersionBadge} from '../version.js';
+import Joi from 'joi'
+import { NotFound } from '../index.js'
+import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
+import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
+import { renderVersionBadge } from '../version.js'
 
 const gitHubRepoRegExp =
   /https:\/\/github.com\/(?<user>.*?)\/(?<repo>.*?)(\/|$)/
@@ -85,4 +85,4 @@ export default class ScoopVersion extends ConditionalGithubAuthV3Service {
       throw error
     }
   }
-};
+}

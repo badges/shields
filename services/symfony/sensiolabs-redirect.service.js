@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   // The SymfonyInsight service was previously branded as SensioLabs, and
@@ -12,4 +12,4 @@ export default [
     transformPath: ({ projectUuid }) => `/symfony/i/grade/${projectUuid}`,
     dateAdded: new Date('2019-02-08'),
   }),
-];
+]

@@ -1,5 +1,5 @@
-import decamelize from 'decamelize';
-import prometheus from 'prom-client';
+import decamelize from 'decamelize'
+import prometheus from 'prom-client'
 
 export default class PrometheusMetrics {
   constructor({ register } = {}) {
@@ -82,4 +82,4 @@ export default class PrometheusMetrics {
       service
     )
   }
-};
+}

@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   redirector({
@@ -14,4 +14,4 @@ export default [
     }),
     dateAdded: new Date('2019-09-17'),
   }),
-];
+]

@@ -1,6 +1,9 @@
-import Joi from 'joi';
-import {testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
-import AzureDevOpsBase from './azure-devops-base.js';
+import Joi from 'joi'
+import {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} from '../test-results.js'
+import AzureDevOpsBase from './azure-devops-base.js'
 
 const commonAttrs = {
   keywords: ['vso', 'vsts', 'azure-devops'],
@@ -228,4 +231,4 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       isCompact,
     })
   }
-};
+}

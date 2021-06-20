@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const depfuSchema = Joi.object({
   text: Joi.string().required(),
@@ -38,4 +38,4 @@ export default class Depfu extends BaseJsonService {
     const { text, colorscheme } = await this.fetch({ user, repo })
     return this.constructor.render({ text, colorscheme })
   }
-};
+}

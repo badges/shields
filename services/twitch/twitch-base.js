@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const tokenSchema = Joi.object({
   access_token: Joi.string().required(),
@@ -112,4 +112,4 @@ export default class TwitchBase extends BaseJsonService {
     // one last time
     return super._requestJson(request)
   }
-};
+}

@@ -1,7 +1,11 @@
-import Joi from 'joi';
-import {renderBuildStatusBadge} from '../build-status.js';
-import JenkinsBase from './jenkins-base.js';
-import {buildTreeParamQueryString, buildUrl, queryParamSchema} from './jenkins-common.js';
+import Joi from 'joi'
+import { renderBuildStatusBadge } from '../build-status.js'
+import JenkinsBase from './jenkins-base.js'
+import {
+  buildTreeParamQueryString,
+  buildUrl,
+  queryParamSchema,
+} from './jenkins-common.js'
 
 // https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/model/BallColor.java#L56
 const colorStatusMap = {
@@ -74,4 +78,4 @@ export default class JenkinsBuild extends JenkinsBase {
     const { status } = this.transform({ json })
     return this.constructor.render({ status })
   }
-};
+}

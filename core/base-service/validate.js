@@ -1,6 +1,6 @@
-import emojic from 'emojic';
-import Joi from 'joi';
-import trace from './trace.js';
+import emojic from 'emojic'
+import Joi from 'joi'
+import trace from './trace.js'
 
 function validate(
   {
@@ -48,4 +48,4 @@ function validate(
   }
 }
 
-export default validate;
+export default validate

@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {downloadCount} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
-import {nonNegativeInteger} from '../validators.js';
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
 
 function getSchema({ formula }) {
   return Joi.object({
@@ -72,4 +72,4 @@ export default class HomebrewDownloads extends BaseJsonService {
       downloads: data.analytics.install[periodMap[interval].api_field][formula],
     })
   }
-};
+}

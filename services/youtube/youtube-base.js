@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {BaseJsonService, NotFound} from '../index.js';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
 
 const documentation = `
 <p>By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service. These can be found here:
@@ -90,4 +90,4 @@ class YouTubeChannelBase extends YouTubeBase {
   static type = 'channel'
 }
 
-export { documentation, YouTubeVideoBase, YouTubeChannelBase };
+export { documentation, YouTubeVideoBase, YouTubeChannelBase }

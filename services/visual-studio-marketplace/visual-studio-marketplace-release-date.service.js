@@ -1,10 +1,8 @@
-import {age} from '../color-formatters.js';
-import {formatDate} from '../text-formatters.js';
-import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-export default class VisualStudioMarketplaceReleaseDate extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceReleaseDate extends VisualStudioMarketplaceBase {
   static category = 'activity'
 
   static route = {
@@ -45,4 +43,4 @@ export default class VisualStudioMarketplaceReleaseDate extends (
     const { releaseDate } = this.transform({ json })
     return this.constructor.render({ releaseDate })
   }
-};
+}

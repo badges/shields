@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import TeamCityBuild from './teamcity-build.service.js';
-import {user, pass, host, config} from './teamcity-test-helpers.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import TeamCityBuild from './teamcity-build.service.js'
+import { user, pass, host, config } from './teamcity-test-helpers.js'
 
 describe('TeamCityBuild', function () {
   cleanUpNockAfterEach()

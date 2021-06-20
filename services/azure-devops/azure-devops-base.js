@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const latestBuildSchema = Joi.object({
   count: Joi.number().required(),
@@ -65,4 +65,4 @@ export default class AzureDevOpsBase extends BaseJsonService {
 
     return json.value[0].id
   }
-};
+}

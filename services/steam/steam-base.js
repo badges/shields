@@ -2,7 +2,7 @@
  * @module
  */
 
-import {BaseJsonService} from '../index.js';
+import { BaseJsonService } from '../index.js'
 
 /**
  * The steam api is based like /{interface}/{method}/v{version}/
@@ -53,4 +53,4 @@ class BaseSteamAPI extends BaseJsonService {
   }
 }
 
-export default BaseSteamAPI;
+export default BaseSteamAPI

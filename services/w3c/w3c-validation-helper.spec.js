@@ -1,6 +1,11 @@
-import {expect} from 'chai';
-import {test, given, forCases} from 'sazerac';
-import {presetRegex, getMessage, getColor, getSchema} from './w3c-validation-helper.js';
+import { expect } from 'chai'
+import { test, given, forCases } from 'sazerac'
+import {
+  presetRegex,
+  getMessage,
+  getColor,
+  getSchema,
+} from './w3c-validation-helper.js'
 
 describe('w3c-validation-helper', function () {
   describe('presetRegex', function () {

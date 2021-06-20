@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService, InvalidParameter} from '../index.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const schema = Joi.object({
   uptime: Joi.number().min(0).max(100).required(),
@@ -56,4 +56,4 @@ export default class PingPongUptime extends BaseJsonService {
     const { uptime } = await this.fetch({ apiKey })
     return this.constructor.render({ uptime })
   }
-};
+}

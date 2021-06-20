@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import config from 'config';
-import request from 'request';
-import GithubApiProvider from './github-api-provider.js';
+import { expect } from 'chai'
+import config from 'config'
+import request from 'request'
+import GithubApiProvider from './github-api-provider.js'
 
 describe('Github API provider', function () {
   const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'

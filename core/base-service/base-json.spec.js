@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {expect} from 'chai';
-import sinon from 'sinon';
-import BaseJsonService from './base-json.js';
+import Joi from 'joi'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import BaseJsonService from './base-json.js'
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

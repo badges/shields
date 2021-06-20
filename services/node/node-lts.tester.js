@@ -1,8 +1,12 @@
-import {expect} from 'chai';
-import semverModule from 'semver';
-import {createServiceTester} from '../tester.js'
-import {mockPackageData, mockReleaseSchedule, mockVersionsSha} from './testUtils/test-utils.js';
-const {Range}  = semverModule;
+import { expect } from 'chai'
+import semverModule from 'semver'
+import { createServiceTester } from '../tester.js'
+import {
+  mockPackageData,
+  mockReleaseSchedule,
+  mockVersionsSha,
+} from './testUtils/test-utils.js'
+const { Range } = semverModule
 export const t = await createServiceTester()
 
 function expectSemverRange(message) {

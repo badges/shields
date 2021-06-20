@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const packageSchema = Joi.object()
   .pattern(
@@ -105,4 +105,4 @@ export {
   BasePackagistService,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
-};
+}

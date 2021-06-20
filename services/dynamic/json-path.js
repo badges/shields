@@ -2,10 +2,10 @@
  * @module
  */
 
-import Joi from 'joi';
-import jp from 'jsonpath';
-import {renderDynamicBadge, errorMessages} from '../dynamic-common.js';
-import {InvalidParameter, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import jp from 'jsonpath'
+import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
+import { InvalidParameter, InvalidResponse } from '../index.js'
 
 /**
  * Dynamic service class factory which wraps {@link module:core/base-service/base~BaseService} with support of {@link https://jsonpath.com/|JSONPath}.
@@ -14,7 +14,7 @@ import {InvalidParameter, InvalidResponse} from '../index.js';
  * @returns {Function} wrapped class
  */
 export default superclass =>
-  (class extends superclass {
+  class extends superclass {
     static category = 'dynamic'
     static defaultBadgeData = { label: 'custom badge' }
 
@@ -75,4 +75,4 @@ export default superclass =>
 
       return renderDynamicBadge({ value: values, prefix, suffix })
     }
-  });
+  }

@@ -1,5 +1,5 @@
-import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '../index.js';
+import { renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
 
 const pendingStatus = 'building'
 const notBuiltStatus = 'not built'
@@ -62,4 +62,4 @@ export default class Netlify extends BaseSvgScrapingService {
     const { message: status } = await this.fetch({ projectId, branch })
     return this.constructor.render({ status })
   }
-};
+}

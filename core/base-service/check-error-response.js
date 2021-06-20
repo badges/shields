@@ -1,4 +1,4 @@
-import {NotFound, InvalidResponse, Inaccessible} from './errors.js';
+import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
 const defaultErrorMessages = {
   404: 'not found',
@@ -32,4 +32,4 @@ export default function checkErrorResponse(errorMessages = {}) {
       return { buffer, res }
     }
   }
-};
+}

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -84,4 +84,4 @@ export default class TravisBuild extends BaseSvgScrapingService {
 
     return this.constructor.render({ status })
   }
-};
+}

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.array().items(Joi.number().required(), Joi.number().required()))
@@ -52,4 +52,4 @@ export default class BStatsServers extends BaseJsonService {
     const { servers } = this.transform({ json })
     return this.constructor.render({ servers })
   }
-};
+}

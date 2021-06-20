@@ -1,7 +1,16 @@
-import {testResultQueryParamSchema, renderTestResultBadge, documentation as testResultsDocumentation} from '../test-results.js';
-import {metric as metricCount} from '../text-formatters.js';
-import SonarBase from './sonar-base.js';
-import {documentation, keywords, queryParamSchema, getLabel} from './sonar-helpers.js';
+import {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+  documentation as testResultsDocumentation,
+} from '../test-results.js'
+import { metric as metricCount } from '../text-formatters.js'
+import SonarBase from './sonar-base.js'
+import {
+  documentation,
+  keywords,
+  queryParamSchema,
+  getLabel,
+} from './sonar-helpers.js'
 
 class SonarTestsSummary extends SonarBase {
   static category = 'build'
@@ -230,4 +239,4 @@ class SonarTests extends SonarBase {
   }
 }
 
-export {SonarTestsSummary, SonarTests};
+export { SonarTestsSummary, SonarTests }

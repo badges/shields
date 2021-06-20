@@ -1,4 +1,4 @@
-import {documentation, YouTubeChannelBase} from './youtube-base.js';
+import { documentation, YouTubeChannelBase } from './youtube-base.js'
 
 export default class YouTubeSubscribes extends YouTubeChannelBase {
   static route = {
@@ -30,4 +30,4 @@ export default class YouTubeSubscribes extends YouTubeChannelBase {
       id,
     })
   }
-};
+}

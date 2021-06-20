@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   presence_count: nonNegativeInteger,
@@ -77,4 +77,4 @@ export default class Discord extends BaseJsonService {
     const data = await this.fetch({ serverId })
     return this.constructor.render({ members: data.presence_count })
   }
-};
+}

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
@@ -86,4 +86,4 @@ export default class NpmDownloads extends BaseJsonService {
 
     return this.constructor.render({ interval, downloadCount })
   }
-};
+}

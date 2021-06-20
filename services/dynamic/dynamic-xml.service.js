@@ -1,9 +1,9 @@
-import {DOMParser} from 'xmldom';
-import xpath from 'xpath';
-import {MetricNames} from '../../core/base-service/metric-helper.js';
-import {renderDynamicBadge, errorMessages} from '../dynamic-common.js';
-import {BaseService, InvalidResponse, InvalidParameter} from '../index.js';
-import {createRoute} from './dynamic-helpers.js';
+import { DOMParser } from 'xmldom'
+import xpath from 'xpath'
+import { MetricNames } from '../../core/base-service/metric-helper.js'
+import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
+import { BaseService, InvalidResponse, InvalidParameter } from '../index.js'
+import { createRoute } from './dynamic-helpers.js'
 
 // This service extends BaseService because it uses a different XML parser
 // than BaseXmlService which can be used with xpath.
@@ -76,4 +76,4 @@ export default class DynamicXml extends BaseService {
 
     return renderDynamicBadge({ value, prefix, suffix })
   }
-};
+}

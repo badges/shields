@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {optionalUrl, nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { optionalUrl, nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   username: Joi.string().required(),
@@ -76,4 +76,4 @@ export default class MastodonFollow extends BaseJsonService {
       domain,
     })
   }
-};
+}

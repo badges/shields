@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {BaseService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
@@ -91,4 +91,4 @@ export default class SecurityHeaders extends BaseService {
 
     return this.constructor.render({ grade })
   }
-};
+}

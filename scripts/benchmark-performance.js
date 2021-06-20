@@ -1,7 +1,7 @@
-import config from 'config';
-import got from 'got';
-import minimist from 'minimist';
-import Server from '../core/server/server.js';
+import config from 'config'
+import got from 'got'
+import minimist from 'minimist'
+import Server from '../core/server/server.js'
 
 async function main() {
   const server = new Server(config.util.toObject())
@@ -14,7 +14,7 @@ async function main() {
   await server.stop()
 }
 
-(async () => {
+;(async () => {
   try {
     await main()
   } catch (e) {

@@ -1,4 +1,4 @@
-import TestspaceBase from './testspace-base.js';
+import TestspaceBase from './testspace-base.js'
 
 export default class TestspacePassRatio extends TestspaceBase {
   static route = {
@@ -40,4 +40,4 @@ export default class TestspacePassRatio extends TestspaceBase {
     const { passed, total } = this.transform(json)
     return this.constructor.render({ passed, total })
   }
-};
+}

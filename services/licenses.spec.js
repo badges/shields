@@ -1,5 +1,5 @@
-import {test, given, forCases} from 'sazerac';
-import {licenseToColor, renderLicenseBadge} from './licenses.js';
+import { test, given, forCases } from 'sazerac'
+import { licenseToColor, renderLicenseBadge } from './licenses.js'
 
 describe('license helpers', function () {
   test(licenseToColor, () => {

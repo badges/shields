@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import GithubLicense from './github-license.service.js';
+import { test, given } from 'sazerac'
+import GithubLicense from './github-license.service.js'
 
 test(GithubLicense.render, () => {
   given({ license: undefined }).expect({ message: 'not specified' })

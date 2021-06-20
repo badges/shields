@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import {BaseService, InvalidResponse} from '../index.js';
+import { renderVersionBadge } from '../version.js'
+import { BaseService, InvalidResponse } from '../index.js'
 
 export default class HackageVersion extends BaseService {
   static category = 'version'
@@ -28,7 +28,7 @@ export default class HackageVersion extends BaseService {
   static transform(data) {
     const lines = data.split('\n')
     const versionLines = lines.filter(e => /^version:/i.test(e) === true)
-    return versionLines[0].split(/:/)[1].trim();
+    return versionLines[0].split(/:/)[1].trim()
   }
 
   async handle({ packageName }) {
@@ -40,4 +40,4 @@ export default class HackageVersion extends BaseService {
       throw new InvalidResponse({ prettyMessage: 'invalid response data' })
     }
   }
-};
+}

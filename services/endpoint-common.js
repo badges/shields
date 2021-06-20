@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import validate from '../core/base-service/validate.js';
-import {InvalidResponse} from './index.js';
+import Joi from 'joi'
+import validate from '../core/base-service/validate.js'
+import { InvalidResponse } from './index.js'
 
 const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   'namedLogo',
@@ -72,7 +72,4 @@ async function fetchEndpointData(
   })
 }
 
-export {
-  validateEndpointData,
-  fetchEndpointData,
-};
+export { validateEndpointData, fetchEndpointData }

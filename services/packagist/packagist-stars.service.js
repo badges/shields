@@ -1,7 +1,12 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger, optionalUrl} from '../validators.js';
-import {keywords, BasePackagistService, customServerDocumentationFragment, cacheDocumentationFragment} from './packagist-base.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import {
+  keywords,
+  BasePackagistService,
+  customServerDocumentationFragment,
+  cacheDocumentationFragment,
+} from './packagist-base.js'
 
 const schema = Joi.object({
   package: Joi.object({
@@ -71,4 +76,4 @@ export default class PackagistStars extends BasePackagistService {
       stars: favers,
     })
   }
-};
+}

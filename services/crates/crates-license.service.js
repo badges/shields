@@ -1,4 +1,4 @@
-import {BaseCratesService, keywords} from './crates-base.js';
+import { BaseCratesService, keywords } from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
   static category = 'license'
@@ -45,4 +45,4 @@ export default class CratesLicense extends BaseCratesService {
       license: json.version ? json.version.license : json.versions[0].license,
     })
   }
-};
+}

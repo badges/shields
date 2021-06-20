@@ -1,5 +1,5 @@
-import {withRegex, isStarRating} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { withRegex, isStarRating } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isRatingWithReviews = withRegex(

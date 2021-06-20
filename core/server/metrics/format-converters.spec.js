@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import prometheus from 'prom-client';
-import {promClientJsonToInfluxV2} from './format-converters.js';
+import { expect } from 'chai'
+import prometheus from 'prom-client'
+import { promClientJsonToInfluxV2 } from './format-converters.js'
 
 describe('Metric format converters', function () {
   describe('prom-client JSON to InfluxDB line protocol (version 2)', function () {

@@ -1,5 +1,5 @@
-import {isBuildStatus} from '../build-status.js';
-import {createServiceTester} from '../tester.js'
+import { isBuildStatus } from '../build-status.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 // https://dev.azure.com/totodem/Shields.io is a public Azure DevOps project

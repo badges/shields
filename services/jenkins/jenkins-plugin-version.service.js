@@ -1,7 +1,7 @@
-import {promisify} from 'util';
-import {regularUpdate} from '../../core/legacy/regular-update.js';
-import {renderVersionBadge} from '../version.js';
-import {BaseService, NotFound} from '../index.js';
+import { promisify } from 'util'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { renderVersionBadge } from '../version.js'
+import { BaseService, NotFound } from '../index.js'
 
 export default class JenkinsPluginVersion extends BaseService {
   static category = 'version'
@@ -51,4 +51,4 @@ export default class JenkinsPluginVersion extends BaseService {
     }
     return this.constructor.render({ version })
   }
-};
+}

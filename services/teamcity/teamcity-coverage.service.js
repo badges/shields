@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import {optionalUrl} from '../validators.js';
-import {InvalidResponse} from '../index.js';
-import TeamCityBase from './teamcity-base.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
+import { InvalidResponse } from '../index.js'
+import TeamCityBase from './teamcity-base.js'
 
 const buildStatisticsSchema = Joi.object({
   property: Joi.array()
@@ -87,4 +87,4 @@ export default class TeamCityCoverage extends TeamCityBase {
     const { coverage } = this.transform({ data })
     return this.constructor.render({ coverage })
   }
-};
+}

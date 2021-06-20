@@ -1,6 +1,10 @@
-import Joi from 'joi';
-import {minorVersion, versionReduction, getPhpReleases} from '../php-version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import {
+  minorVersion,
+  versionReduction,
+  getPhpReleases,
+} from '../php-version.js'
+import { BaseJsonService } from '../index.js'
 
 const optionalNumberOrString = Joi.alternatives(Joi.string(), Joi.number())
 const schema = Joi.object({
@@ -93,4 +97,4 @@ export default class TravisPhpVersion extends BaseJsonService {
     const { reduction, hasHhvm } = await this.transform(travisConfig)
     return this.constructor.render({ reduction, hasHhvm })
   }
-};
+}

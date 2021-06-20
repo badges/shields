@@ -2,10 +2,10 @@
  * @module
  */
 
-import emojic from 'emojic';
+import emojic from 'emojic'
 import icedfrisbyNockModule from 'icedfrisby-nock'
 import icedfrisbyModule from 'icedfrisby'
-import trace from '../base-service/trace.js';
+import trace from '../base-service/trace.js'
 import icedfrisbyShieldsModule from './icedfrisby-shields.js'
 const frisby = icedfrisbyShieldsModule(icedfrisbyNockModule(icedfrisbyModule))
 
@@ -139,4 +139,4 @@ class ServiceTester {
   }
 }
 
-export default ServiceTester;
+export default ServiceTester

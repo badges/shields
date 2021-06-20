@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import PypiPythonVersions from './pypi-python-versions.service.js';
+import { test, given } from 'sazerac'
+import PypiPythonVersions from './pypi-python-versions.service.js'
 
 describe('PyPI Python Version', function () {
   test(PypiPythonVersions.render, function () {

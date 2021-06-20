@@ -1,10 +1,8 @@
-import {renderVersionBadge} from '../version.js';
-import {NotFound} from '../index.js';
-import {BasePuppetForgeModulesService} from './puppetforge-base.js';
+import { renderVersionBadge } from '../version.js'
+import { NotFound } from '../index.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-export default class PuppetforgeModulePdkVersion extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesService {
   static category = 'platform-support'
 
   static route = {
@@ -35,4 +33,4 @@ export default class PuppetforgeModulePdkVersion extends (
       throw new NotFound({ prettyMessage: 'none' })
     }
   }
-};
+}

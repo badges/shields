@@ -5,9 +5,9 @@
  *
  * For utilities specific to PHP version ranges, see php-version.js.
  */
-import semver from 'semver';
-import {addv} from './text-formatters.js';
-import {version as versionColor} from './color-formatters.js';
+import semver from 'semver'
+import { addv } from './text-formatters.js'
+import { version as versionColor } from './color-formatters.js'
 
 function listCompare(a, b) {
   const alen = a.length
@@ -160,10 +160,4 @@ function renderVersionBadge({ version, tag, defaultLabel }) {
   }
 }
 
-export {
-  latest,
-  listCompare,
-  slice,
-  rangeStart,
-  renderVersionBadge,
-};
+export { latest, listCompare, slice, rangeStart, renderVersionBadge }

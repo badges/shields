@@ -1,4 +1,4 @@
-import {createServiceTester} from '../tester.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('grade of https://shields.io')

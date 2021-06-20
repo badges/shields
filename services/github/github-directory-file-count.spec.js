@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import {test, given} from 'sazerac';
-import {InvalidParameter} from '../index.js';
-import GithubDirectoryFileCount from './github-directory-file-count.service.js';
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidParameter } from '../index.js'
+import GithubDirectoryFileCount from './github-directory-file-count.service.js'
 
 describe('GithubDirectoryFileCount', function () {
   const contents = [

@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {formatDate} from '../text-formatters.js';
-import {age as ageColor} from '../color-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import EclipseMarketplaceBase from './eclipse-marketplace-base.js';
+import Joi from 'joi'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
 const updateResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -40,4 +40,4 @@ export default class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
     const date = 1000 * parseInt(marketplace.node.changed)
     return this.constructor.render({ date })
   }
-};
+}

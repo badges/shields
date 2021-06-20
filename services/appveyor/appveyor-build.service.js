@@ -1,5 +1,5 @@
-import {renderBuildStatusBadge} from '../build-status.js';
-import AppVeyorBase from './appveyor-base.js';
+import { renderBuildStatusBadge } from '../build-status.js'
+import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorBuild extends AppVeyorBase {
   static route = this.buildRoute('appveyor/build')
@@ -31,4 +31,4 @@ export default class AppVeyorBuild extends AppVeyorBase {
     }
     return this.constructor.render({ status: data.build.status })
   }
-};
+}

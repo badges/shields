@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.string().required()
 
@@ -28,4 +28,4 @@ export default class DubVersion extends BaseJsonService {
     const version = await this.fetch({ packageName })
     return renderVersionBadge({ version })
   }
-};
+}

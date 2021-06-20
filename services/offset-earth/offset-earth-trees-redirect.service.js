@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   // https://github.com/badges/shields/issues/5433
@@ -12,4 +12,4 @@ export default [
     transformPath: ({ username }) => `/ecologi/trees/${username}`,
     dateAdded: new Date('2020-08-16'),
   }),
-];
+]

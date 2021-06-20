@@ -1,7 +1,17 @@
-import {ServiceTester} from '../tester.js';
-import {isMetric, isVPlusDottedVersionNClauses, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
-import {queryIndex, nuGetV3VersionJsonWithDash, nuGetV3VersionJsonFirstCharZero, nuGetV3VersionJsonFirstCharNotZero, nuGetV3VersionJsonBuildMetadataWithDash} from '../nuget-fixtures.js';
-import {invalidJSON} from '../response-fixtures.js';
+import { ServiceTester } from '../tester.js'
+import {
+  isMetric,
+  isVPlusDottedVersionNClauses,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
+import {
+  queryIndex,
+  nuGetV3VersionJsonWithDash,
+  nuGetV3VersionJsonFirstCharZero,
+  nuGetV3VersionJsonFirstCharNotZero,
+  nuGetV3VersionJsonBuildMetadataWithDash,
+} from '../nuget-fixtures.js'
+import { invalidJSON } from '../response-fixtures.js'
 
 export const t = new ServiceTester({ id: 'nuget', title: 'NuGet' })
 

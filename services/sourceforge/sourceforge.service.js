@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import moment from 'moment';
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import moment from 'moment'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   total: nonNegativeInteger,
@@ -103,4 +103,4 @@ export default class Sourceforge extends BaseJsonService {
     const json = await this.fetch({ interval, project, folder })
     return this.constructor.render({ interval, downloads: json.total })
   }
-};
+}

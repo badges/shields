@@ -1,5 +1,8 @@
-import {testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
-import AppVeyorBase from './appveyor-base.js';
+import {
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} from '../test-results.js'
+import AppVeyorBase from './appveyor-base.js'
 
 const documentation = `
 <p>
@@ -158,4 +161,4 @@ export default class AppVeyorTests extends AppVeyorBase {
       isCompact,
     })
   }
-};
+}

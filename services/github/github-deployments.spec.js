@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import GithubDeployments from './github-deployments.service.js';
+import { test, given } from 'sazerac'
+import GithubDeployments from './github-deployments.service.js'
 
 describe('GithubDeployments', function () {
   test(GithubDeployments.render, () => {

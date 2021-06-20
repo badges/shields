@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'downloads',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'versioneye',
   dateAdded: new Date('2018-08-20'),
-});
+})

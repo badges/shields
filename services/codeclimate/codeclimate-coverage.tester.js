@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isIntegerPercentage} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { isIntegerPercentage } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 // Examples for this service can be found through the explore page:

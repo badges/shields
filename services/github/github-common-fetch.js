@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {InvalidResponse} from '../index.js';
-import {errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { InvalidResponse } from '../index.js'
+import { errorMessagesFor } from './github-helpers.js'
 
 const issueSchema = Joi.object({
   head: Joi.object({
@@ -75,8 +75,4 @@ async function fetchJsonFromRepo(
   }
 }
 
-export {
-  fetchIssue,
-  fetchRepoContent,
-  fetchJsonFromRepo,
-};
+export { fetchIssue, fetchRepoContent, fetchJsonFromRepo }

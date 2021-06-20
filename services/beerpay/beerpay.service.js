@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   total_amount: Joi.number().min(0).required(),
@@ -38,4 +38,4 @@ export default class Beerpay extends BaseJsonService {
     })
     return this.constructor.render({ totalAmount })
   }
-};
+}

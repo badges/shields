@@ -1,15 +1,17 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import {
+  BaseVisualStudioAppCenterService,
+  keywords,
+  documentation,
+} from './visual-studio-app-center-base.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
   short_version: Joi.string().required(),
 }).required()
 
-export default class VisualStudioAppCenterReleasesVersion extends (
-  BaseVisualStudioAppCenterService
-) {
+export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStudioAppCenterService {
   static category = 'version'
 
   static route = {
@@ -46,4 +48,4 @@ export default class VisualStudioAppCenterReleasesVersion extends (
       version: `${shortVersion} (${version})`,
     })
   }
-};
+}

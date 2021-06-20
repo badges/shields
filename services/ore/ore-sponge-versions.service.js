@@ -1,4 +1,4 @@
-import {BaseOreService, documentation, keywords} from './ore-base.js';
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
 export default class OreSpongeVersions extends BaseOreService {
   static category = 'platform-support'
@@ -48,4 +48,4 @@ export default class OreSpongeVersions extends BaseOreService {
     const { versions } = this.transform({ data })
     return this.constructor.render({ versions })
   }
-};
+}

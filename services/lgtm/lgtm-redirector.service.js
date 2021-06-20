@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 const commonAttrs = {
   category: 'analysis',
@@ -23,4 +23,4 @@ export default [
       `/lgtm/grade/${language}/github/${user}/${repo}`,
     ...commonAttrs,
   }),
-];
+]

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService, redirector} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService, redirector } from '../index.js'
 
 const circleSchema = Joi.object({ message: isBuildStatus }).required()
 const queryParamSchema = Joi.object({ token: Joi.string() }).required()
@@ -96,4 +96,4 @@ const legacyRoutes = [
   }),
 ]
 
-export default {...legacyRoutes, CircleCi};
+export default { ...legacyRoutes, CircleCi }

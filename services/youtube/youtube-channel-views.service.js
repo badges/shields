@@ -1,4 +1,4 @@
-import {documentation, YouTubeChannelBase} from './youtube-base.js';
+import { documentation, YouTubeChannelBase } from './youtube-base.js'
 
 export default class YouTubeChannelViews extends YouTubeChannelBase {
   static route = {
@@ -26,4 +26,4 @@ export default class YouTubeChannelViews extends YouTubeChannelBase {
   static render({ statistics, id }) {
     return super.renderSingleStat({ statistics, statisticName: 'view', id })
   }
-};
+}

@@ -2,9 +2,9 @@
  * @module
  */
 
-import caller from 'caller';
-import BaseService from '../base-service/base.js';
-import ServiceTester from './service-tester.js';
+import caller from 'caller'
+import BaseService from '../base-service/base.js'
+import ServiceTester from './service-tester.js'
 
 /**
  * Automatically create a ServiceTester.
@@ -29,4 +29,4 @@ async function createServiceTester() {
   return ServiceTester.forServiceClass(ServiceClass)
 }
 
-export default createServiceTester;
+export default createServiceTester

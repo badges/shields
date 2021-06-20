@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import GitHubHacktoberfest from './github-hacktoberfest.service.js';
+import { test, given } from 'sazerac'
+import GitHubHacktoberfest from './github-hacktoberfest.service.js'
 
 describe('GitHubHacktoberfest', function () {
   test(GitHubHacktoberfest.render, () => {

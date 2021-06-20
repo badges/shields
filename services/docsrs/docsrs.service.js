@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(
@@ -57,4 +57,4 @@ export default class DocsRs extends BaseJsonService {
     ).pop()
     return this.constructor.render({ version, buildStatus })
   }
-};
+}

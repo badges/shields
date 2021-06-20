@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '../index.js';
-import {documentation} from './github-helpers.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { documentation } from './github-helpers.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -97,4 +97,4 @@ export default class GithubWorkflowStatus extends BaseSvgScrapingService {
     const { status } = await this.fetch({ user, repo, workflow, branch, event })
     return renderBuildStatusBadge({ status })
   }
-};
+}

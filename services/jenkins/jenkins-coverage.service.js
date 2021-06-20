@@ -1,7 +1,11 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import JenkinsBase from './jenkins-base.js';
-import {buildTreeParamQueryString, buildUrl, queryParamSchema} from './jenkins-common.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import JenkinsBase from './jenkins-base.js'
+import {
+  buildTreeParamQueryString,
+  buildUrl,
+  queryParamSchema,
+} from './jenkins-common.js'
 
 const formatMap = {
   jacoco: {
@@ -123,4 +127,4 @@ export default class JenkinsCoverage extends JenkinsBase {
     const { coverage } = transform(json)
     return this.constructor.render({ coverage })
   }
-};
+}

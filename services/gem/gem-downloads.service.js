@@ -1,10 +1,10 @@
-import semver from 'semver';
-import Joi from 'joi';
-import {downloadCount} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {latest as latestVersion} from '../version.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, InvalidParameter, InvalidResponse} from '../index.js';
+import semver from 'semver'
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { latest as latestVersion } from '../version.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
 
 const keywords = ['ruby']
 
@@ -156,4 +156,4 @@ export default class GemDownloads extends BaseJsonService {
     }
     return this.constructor.render({ variant, version, downloads })
   }
-};
+}

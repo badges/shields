@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {semver as isSemver} from './validators.js';
+import Joi from 'joi'
+import { semver as isSemver } from './validators.js'
 
 /*
   Note:
@@ -167,4 +167,4 @@ export {
   isCustomCompactTestTotals,
   makeTestTotalsValidator,
   makeCompactTestTotalsValidator,
-};
+}

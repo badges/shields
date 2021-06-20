@@ -1,9 +1,9 @@
-import {AuthHelper} from '../../core/base-service/auth-helper.js';
-import RedisTokenPersistence from '../../core/token-pooling/redis-token-persistence.js';
-import log from '../../core/server/log.js';
-import GithubApiProvider from './github-api-provider.js';
-import {setRoutes as setAdminRoutes} from './auth/admin.js';
-import {setRoutes as setAcceptorRoutes} from './auth/acceptor.js';
+import { AuthHelper } from '../../core/base-service/auth-helper.js'
+import RedisTokenPersistence from '../../core/token-pooling/redis-token-persistence.js'
+import log from '../../core/server/log.js'
+import GithubApiProvider from './github-api-provider.js'
+import { setRoutes as setAdminRoutes } from './auth/admin.js'
+import { setRoutes as setAcceptorRoutes } from './auth/acceptor.js'
 
 // Convenience class with all the stuff related to the Github API and its
 // authorization tokens, to simplify server initialization.
@@ -128,4 +128,4 @@ class GithubConstellation {
   }
 }
 
-export default GithubConstellation;
+export default GithubConstellation

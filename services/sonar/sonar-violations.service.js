@@ -1,7 +1,12 @@
-import {colorScale} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import SonarBase from './sonar-base.js';
-import {getLabel, documentation, keywords, queryParamWithFormatSchema} from './sonar-helpers.js';
+import { colorScale } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import SonarBase from './sonar-base.js'
+import {
+  getLabel,
+  documentation,
+  keywords,
+  queryParamWithFormatSchema,
+} from './sonar-helpers.js'
 
 const violationsColorScale = colorScale(
   [1, 2, 3, 5],
@@ -162,4 +167,4 @@ export default class SonarViolations extends SonarBase {
     })
     return this.constructor.render({ violations, metricName: metric, format })
   }
-};
+}

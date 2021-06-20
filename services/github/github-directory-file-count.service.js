@@ -1,9 +1,12 @@
-import path from 'path';
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {InvalidParameter} from '../index.js';
-import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
-import {documentation as commonDocumentation, errorMessagesFor} from './github-helpers.js';
+import path from 'path'
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { InvalidParameter } from '../index.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import {
+  documentation as commonDocumentation,
+  errorMessagesFor,
+} from './github-helpers.js'
 
 const documentation = `${commonDocumentation}
 <p>
@@ -40,9 +43,7 @@ const queryParamSchema = Joi.object({
   extension: Joi.string(),
 })
 
-export default class GithubDirectoryFileCount extends (
-  ConditionalGithubAuthV3Service
-) {
+export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Service {
   static category = 'size'
 
   static route = {
@@ -153,4 +154,4 @@ export default class GithubDirectoryFileCount extends (
     const { count } = this.constructor.transform(content, { type, extension })
     return this.constructor.render({ count })
   }
-};
+}

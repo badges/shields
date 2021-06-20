@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import KeybaseProfile from './keybase-profile.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import KeybaseProfile from './keybase-profile.js'
 
 const keyFingerprintSchema = Joi.object({
   status: Joi.object({
@@ -74,4 +74,4 @@ export default class KeybasePGP extends KeybaseProfile {
 
     return this.constructor.render({ fingerprint: primaryKey.key_fingerprint })
   }
-};
+}

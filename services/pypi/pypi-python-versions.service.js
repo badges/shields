@@ -1,6 +1,6 @@
-import semver from 'semver';
-import PypiBase from './pypi-base.js';
-import {parseClassifiers} from './pypi-helpers.js';
+import semver from 'semver'
+import PypiBase from './pypi-base.js'
+import { parseClassifiers } from './pypi-helpers.js'
 
 export default class PypiPythonVersions extends PypiBase {
   static category = 'platform-support'
@@ -63,4 +63,4 @@ export default class PypiPythonVersions extends PypiBase {
 
     return this.constructor.render({ versions })
   }
-};
+}

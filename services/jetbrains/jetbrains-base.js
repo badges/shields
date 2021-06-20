@@ -1,5 +1,5 @@
-import {BaseXmlService, NotFound} from '../index.js';
-import {parseJson} from '../../core/base-service/json.js';
+import { BaseXmlService, NotFound } from '../index.js'
+import { parseJson } from '../../core/base-service/json.js'
 
 /*
 JetBrains is a bit awkward. Sometimes we want to call an XML API
@@ -10,7 +10,7 @@ inherit from BaseJsonService directly.
 */
 export default class JetbrainsBase extends BaseXmlService {
   static _isLegacyPluginId(pluginId) {
-    return !pluginId.match(/^([0-9])+/);
+    return !pluginId.match(/^([0-9])+/)
   }
 
   static _cleanPluginId(pluginId) {
@@ -67,4 +67,4 @@ export default class JetbrainsBase extends BaseXmlService {
     const json = this._parseJson(buffer)
     return this.constructor._validateJson(json, schema)
   }
-};
+}

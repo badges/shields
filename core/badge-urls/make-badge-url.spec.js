@@ -1,5 +1,12 @@
-import {test, given} from 'sazerac';
-import {badgeUrlFromPath, badgeUrlFromPattern, encodeField, staticBadgeUrl, queryStringStaticBadgeUrl, dynamicBadgeUrl} from './make-badge-url.js';
+import { test, given } from 'sazerac'
+import {
+  badgeUrlFromPath,
+  badgeUrlFromPattern,
+  encodeField,
+  staticBadgeUrl,
+  queryStringStaticBadgeUrl,
+  dynamicBadgeUrl,
+} from './make-badge-url.js'
 
 describe('Badge URL generation functions', function () {
   test(badgeUrlFromPath, () => {

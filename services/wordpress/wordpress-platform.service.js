@@ -1,8 +1,8 @@
-import {NotFound} from '../index.js';
-import {addv} from '../text-formatters.js';
-import {version as versionColor} from '../color-formatters.js';
-import BaseWordpress from './wordpress-base.js';
-import {versionColorForWordpressVersion} from './wordpress-version-color.js';
+import { NotFound } from '../index.js'
+import { addv } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
+import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
 const extensionData = {
   plugin: {
@@ -166,4 +166,4 @@ export default [
   ...requiredPhp,
   ...requiresVersion,
   WordpressPluginTestedVersion,
-];
+]

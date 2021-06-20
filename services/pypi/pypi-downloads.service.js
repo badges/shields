@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {downloadCount} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const keywords = ['python']
 
@@ -75,4 +75,4 @@ export default class PypiDownloads extends BaseJsonService {
       downloads: json.data[periodMap[period].api_field],
     })
   }
-};
+}

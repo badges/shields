@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -31,4 +31,4 @@ export default class HomebrewCask extends BaseJsonService {
     const data = await this.fetch({ cask })
     return renderVersionBadge({ version: data.version })
   }
-};
+}

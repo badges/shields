@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '..//version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '..//version.js'
+import { BaseJsonService } from '../index.js'
 const schema = Joi.object({
   latest_version: Joi.string().required(),
 }).required()
@@ -43,4 +43,4 @@ export default class SpackVersion extends BaseJsonService {
     const pkg = await this.fetch({ packageName })
     return this.constructor.render({ version: pkg.latest_version })
   }
-};
+}

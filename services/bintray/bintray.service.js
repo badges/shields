@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default [
   deprecatedService({
@@ -19,4 +19,4 @@ export default [
     label: 'bintray',
     dateAdded: new Date('2021-04-24'),
   }),
-];
+]

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import EclipseMarketplaceBase from './eclipse-marketplace-base.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
 const favoritesResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -10,9 +10,7 @@ const favoritesResponseSchema = Joi.object({
   }),
 }).required()
 
-export default class EclipseMarketplaceFavorites extends (
-  EclipseMarketplaceBase
-) {
+export default class EclipseMarketplaceFavorites extends EclipseMarketplaceBase {
   static category = 'other'
   static route = this.buildRoute('eclipse-marketplace/favorites')
   static examples = [
@@ -40,4 +38,4 @@ export default class EclipseMarketplaceFavorites extends (
     const favorited = marketplace.node.favorited
     return this.constructor.render({ favorited })
   }
-};
+}

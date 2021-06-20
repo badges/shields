@@ -1,4 +1,4 @@
-import {makeSecretIsValid} from '../../../core/server/secret-is-valid.js';
+import { makeSecretIsValid } from '../../../core/server/secret-is-valid.js'
 
 function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   const secretIsValid = makeSecretIsValid(shieldsSecret)
@@ -29,4 +29,4 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   })
 }
 
-export { setRoutes };
+export { setRoutes }

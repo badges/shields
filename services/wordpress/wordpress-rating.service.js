@@ -1,6 +1,6 @@
-import {starRating, metric} from '../text-formatters.js';
-import {floorCount} from '../color-formatters.js';
-import BaseWordpress from './wordpress-base.js';
+import { starRating, metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -101,4 +101,4 @@ const ratingsServices = ['plugin', 'theme'].map(RatingForExtensionType)
 const starsServices = ['plugin', 'theme'].map(StarsForExtensionType)
 const modules = [...ratingsServices, ...starsServices]
 
-export default modules;
+export default modules

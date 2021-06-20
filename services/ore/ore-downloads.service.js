@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import {BaseOreService, documentation, keywords} from './ore-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
 export default class OreDownloads extends BaseOreService {
   static category = 'downloads'
@@ -39,4 +39,4 @@ export default class OreDownloads extends BaseOreService {
     } = await this.fetch({ pluginId })
     return this.constructor.render({ downloads })
   }
-};
+}

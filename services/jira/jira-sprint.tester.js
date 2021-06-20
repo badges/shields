@@ -1,6 +1,6 @@
-import {createServiceTester} from '../tester.js'
-import {isIntegerPercentage} from '../test-validators.js';
-import {sprintId, sprintQueryString} from './jira-test-helpers.js';
+import { createServiceTester } from '../tester.js'
+import { isIntegerPercentage } from '../test-validators.js'
+import { sprintId, sprintQueryString } from './jira-test-helpers.js'
 export const t = await createServiceTester()
 
 t.create('unknown sprint')

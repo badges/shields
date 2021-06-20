@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import {BitbucketRawPullRequests} from './bitbucket-pull-request.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import { BitbucketRawPullRequests } from './bitbucket-pull-request.service.js'
 
 describe('BitbucketPullRequest', function () {
   cleanUpNockAfterEach()

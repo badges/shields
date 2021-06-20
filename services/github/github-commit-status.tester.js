@@ -1,5 +1,5 @@
-import {invalidJSONString} from '../response-fixtures.js';
-import {createServiceTester} from '../tester.js'
+import { invalidJSONString } from '../response-fixtures.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('commit status - commit in branch')

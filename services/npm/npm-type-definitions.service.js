@@ -1,4 +1,4 @@
-import NpmBase from './npm-base.js';
+import NpmBase from './npm-base.js'
 
 // For this badge to correctly detect type definitions, either the relevant
 // dependencies must be declared, or the `types` key must be set in
@@ -70,4 +70,4 @@ export default class NpmTypeDefinitions extends NpmBase {
     const props = this.constructor.transform(json)
     return this.constructor.render(props)
   }
-};
+}

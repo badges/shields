@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderLicenseBadge} from '../licenses.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   info: Joi.object({ license: Joi.string().required() }).required(),
@@ -30,4 +30,4 @@ export default class DubLicense extends BaseJsonService {
     const data = await this.fetch({ packageName })
     return renderLicenseBadge({ licenses: [data.info.license] })
   }
-};
+}

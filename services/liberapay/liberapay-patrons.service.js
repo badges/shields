@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {colorScale} from '../color-formatters.js';
-import {LiberapayBase} from './liberapay-base.js';
+import { metric } from '../text-formatters.js'
+import { colorScale } from '../color-formatters.js'
+import { LiberapayBase } from './liberapay-base.js'
 
 export default class LiberapayPatrons extends LiberapayBase {
   static route = this.buildRoute('patrons')
@@ -25,4 +25,4 @@ export default class LiberapayPatrons extends LiberapayBase {
     const data = await this.fetch({ entity })
     return this.constructor.render({ patrons: data.npatrons })
   }
-};
+}

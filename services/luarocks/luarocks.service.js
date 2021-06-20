@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {addv} from '../text-formatters.js';
-import {BaseJsonService, NotFound} from '../index.js';
-import {latestVersion} from './luarocks-version-helpers.js';
+import Joi from 'joi'
+import { addv } from '../text-formatters.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import { latestVersion } from './luarocks-version-helpers.js'
 
 const schema = Joi.object({
   repository: Joi.object()
@@ -86,4 +86,4 @@ export default class Luarocks extends BaseJsonService {
     }
     return this.constructor.render({ version })
   }
-};
+}

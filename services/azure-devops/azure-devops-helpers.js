@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {isBuildStatus} from '../build-status.js';
+import Joi from 'joi'
+import { isBuildStatus } from '../build-status.js'
 
 const keywords = ['vso', 'vsts', 'azure-devops']
 
@@ -26,4 +26,4 @@ async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
   return { status }
 }
 
-export { keywords, fetch };
+export { keywords, fetch }

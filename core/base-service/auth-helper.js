@@ -1,5 +1,5 @@
-import {URL} from 'url';
-import {InvalidParameter} from './errors.js';
+import { URL } from 'url'
+import { InvalidParameter } from './errors.js'
 
 class AuthHelper {
   constructor(
@@ -205,4 +205,4 @@ class AuthHelper {
   }
 }
 
-export { AuthHelper };
+export { AuthHelper }

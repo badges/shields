@@ -1,5 +1,5 @@
-import PypiBase from './pypi-base.js';
-import {parseClassifiers} from './pypi-helpers.js';
+import PypiBase from './pypi-base.js'
+import { parseClassifiers } from './pypi-helpers.js'
 
 export default class PypiImplementation extends PypiBase {
   static category = 'platform-support'
@@ -39,4 +39,4 @@ export default class PypiImplementation extends PypiBase {
 
     return this.constructor.render({ implementations })
   }
-};
+}

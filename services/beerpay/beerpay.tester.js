@@ -1,5 +1,5 @@
-import {withRegex} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const amountOfMoney = withRegex(/^\$[0-9]+(\.[0-9]+)?/)

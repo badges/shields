@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const documentation = `
   <p>
@@ -12,9 +12,7 @@ const documentation = `
 // This service exists separately from the other Marketplace downloads badges (in ./visual-studio-marketplace-downloads.js)
 // due differences in how the Marketplace tracks metrics for Azure DevOps extensions vs. other extension types.
 // See https://github.com/badges/shields/pull/2748 for more information on the discussion and decision.
-export default class VisualStudioMarketplaceAzureDevOpsInstalls extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceAzureDevOpsInstalls extends VisualStudioMarketplaceBase {
   static category = 'downloads'
 
   static route = {
@@ -60,4 +58,4 @@ export default class VisualStudioMarketplaceAzureDevOpsInstalls extends (
       return this.constructor.render({ count: statistics.onpremDownloads })
     }
   }
-};
+}

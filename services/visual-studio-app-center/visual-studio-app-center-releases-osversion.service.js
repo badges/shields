@@ -1,14 +1,16 @@
-import Joi from 'joi';
-import {BaseVisualStudioAppCenterService, keywords, documentation} from './visual-studio-app-center-base.js';
+import Joi from 'joi'
+import {
+  BaseVisualStudioAppCenterService,
+  keywords,
+  documentation,
+} from './visual-studio-app-center-base.js'
 
 const schema = Joi.object({
   app_os: Joi.string().required(),
   min_os: Joi.string().required(),
 }).required()
 
-export default class VisualStudioAppCenterReleasesOSVersion extends (
-  BaseVisualStudioAppCenterService
-) {
+export default class VisualStudioAppCenterReleasesOSVersion extends BaseVisualStudioAppCenterService {
   static category = 'version'
 
   static route = {
@@ -51,4 +53,4 @@ export default class VisualStudioAppCenterReleasesOSVersion extends (
     })
     return this.constructor.render({ appOS, minOS })
   }
-};
+}

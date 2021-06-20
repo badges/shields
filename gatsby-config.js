@@ -1,5 +1,5 @@
-import path from 'path';
-import {fileURLToPath} from 'url'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 export const siteMetadata = {
   title: 'Shields.io: Quality metadata badges for open source projects',
@@ -11,7 +11,11 @@ export const plugins = [
   {
     resolve: 'gatsby-plugin-page-creator',
     options: {
-      path: path.join(path.dirname(fileURLToPath(import.meta.url)), 'frontend', 'pages'),
+      path: path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        'frontend',
+        'pages'
+      ),
     },
   },
   'gatsby-plugin-react-helmet',

@@ -1,5 +1,5 @@
-import {test, forCases, given} from 'sazerac';
-import OreSpongeVersions from './ore-sponge-versions.service.js';
+import { test, forCases, given } from 'sazerac'
+import OreSpongeVersions from './ore-sponge-versions.service.js'
 
 const PROMOTED_VERSIONS = [
   {

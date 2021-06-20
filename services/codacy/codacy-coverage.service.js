@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {coveragePercentage as coveragePercentageColor} from '../color-formatters.js';
-import {BaseSvgScrapingService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -42,7 +42,7 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
   static transform({ coverageString }) {
     return {
       percentage: parseFloat(coverageString.replace(/%$/, '')),
-    };
+    }
   }
 
   async handle({ projectId, branch }) {
@@ -70,4 +70,4 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
     const { percentage } = this.constructor.transform({ coverageString })
     return this.constructor.render({ percentage })
   }
-};
+}

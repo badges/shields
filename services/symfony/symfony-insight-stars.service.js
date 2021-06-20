@@ -1,5 +1,9 @@
-import {starRating} from '../text-formatters.js';
-import {SymfonyInsightBase, keywords, gradeColors} from './symfony-insight-base.js';
+import { starRating } from '../text-formatters.js'
+import {
+  SymfonyInsightBase,
+  keywords,
+  gradeColors,
+} from './symfony-insight-base.js'
 
 const gradeStars = {
   none: 0,
@@ -51,4 +55,4 @@ export default class SymfonyInsightStars extends SymfonyInsightBase {
     const { grade, status } = this.transform({ data })
     return this.constructor.render({ grade, status })
   }
-};
+}

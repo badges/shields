@@ -1,4 +1,4 @@
-import {createServiceFamily} from '../nuget/nuget-v2-service-family.js';
+import { createServiceFamily } from '../nuget/nuget-v2-service-family.js'
 
 export default createServiceFamily({
   defaultLabel: 'chocolatey',
@@ -10,4 +10,4 @@ export default createServiceFamily({
   exampleVersion: '2.19.2',
   examplePrereleaseVersion: '2.19.2',
   exampleDownloadCount: 2.2e6,
-});
+})

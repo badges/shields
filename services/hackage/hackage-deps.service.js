@@ -1,4 +1,4 @@
-import {BaseService} from '../index.js';
+import { BaseService } from '../index.js'
 
 export default class HackageDeps extends BaseService {
   static category = 'dependencies'
@@ -41,4 +41,4 @@ export default class HackageDeps extends BaseService {
     const isOutdated = buffer.includes(outdatedStr)
     return this.constructor.render({ isOutdated })
   }
-};
+}

@@ -1,8 +1,6 @@
-import {BaseVaadinDirectoryService} from './vaadin-directory-base.js';
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-export default class VaadinDirectoryStatus extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
   static category = 'other'
 
   static route = {
@@ -34,4 +32,4 @@ export default class VaadinDirectoryStatus extends (
     const { status } = await this.fetch({ packageName })
     return this.constructor.render({ status })
   }
-};
+}

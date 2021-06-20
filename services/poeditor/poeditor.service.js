@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {coveragePercentage} from '../color-formatters.js';
-import {BaseJsonService, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const documentation = `
   <p>
@@ -99,4 +99,4 @@ export default class POEditor extends BaseJsonService {
       language: languages.find(lang => lang.code === languageCode),
     })
   }
-};
+}

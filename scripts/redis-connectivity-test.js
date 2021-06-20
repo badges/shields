@@ -1,5 +1,5 @@
-import config from 'config';
-import GithubConstellation from '../services/github/github-constellation.js';
+import config from 'config'
+import GithubConstellation from '../services/github/github-constellation.js'
 const objectConfig = config.util.toObject()
 console.log(objectConfig)
 
@@ -14,7 +14,7 @@ async function main() {
   await persistence.stop()
 }
 
-(async () => {
+;(async () => {
   try {
     await main()
   } catch (e) {

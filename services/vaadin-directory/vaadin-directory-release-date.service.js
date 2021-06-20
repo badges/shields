@@ -1,10 +1,8 @@
-import {formatDate} from '../text-formatters.js';
-import {age as ageColor} from '../color-formatters.js';
-import {BaseVaadinDirectoryService} from './vaadin-directory-base.js';
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-export default class VaadinDirectoryReleaseDate extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryService {
   static category = 'activity'
 
   static route = {
@@ -36,4 +34,4 @@ export default class VaadinDirectoryReleaseDate extends (
       date: data.latestAvailableRelease.publicationDate,
     })
   }
-};
+}

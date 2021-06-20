@@ -1,5 +1,5 @@
-import {test, forCases, given} from 'sazerac';
-import OreCategory from './ore-category.service.js';
+import { test, forCases, given } from 'sazerac'
+import OreCategory from './ore-category.service.js'
 
 describe('OreCategory', function () {
   test(OreCategory.prototype.transform, () => {

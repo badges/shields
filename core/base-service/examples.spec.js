@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {test, given} from 'sazerac';
-import {validateExample, transformExample} from './examples.js';
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { validateExample, transformExample } from './examples.js'
 
 describe('validateExample function', function () {
   it('passes valid examples', function () {

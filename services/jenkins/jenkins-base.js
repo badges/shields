@@ -1,4 +1,4 @@
-import {BaseJsonService} from '../index.js';
+import { BaseJsonService } from '../index.js'
 
 export default class JenkinsBase extends BaseJsonService {
   static auth = {
@@ -26,4 +26,4 @@ export default class JenkinsBase extends BaseJsonService {
       })
     )
   }
-};
+}

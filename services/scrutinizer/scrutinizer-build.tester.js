@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus} from '../build-status.js';
-import {ServiceTester} from '../tester.js';
+import Joi from 'joi'
+import { isBuildStatus } from '../build-status.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'ScrutinizerBuild',
   title: 'ScrutinizerBuild',

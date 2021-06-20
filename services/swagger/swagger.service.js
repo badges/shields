@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object()
   .keys({
@@ -83,4 +83,4 @@ export default class SwaggerValidatorService extends BaseJsonService {
     const { status } = this.transform({ json, specUrl })
     return this.constructor.render({ status })
   }
-};
+}

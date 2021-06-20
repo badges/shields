@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -21,4 +21,4 @@ export default class BaseCocoaPodsService extends BaseJsonService {
       url: `https://trunk.cocoapods.org/api/v1/pods/${spec}/specs/latest`,
     })
   }
-};
+}

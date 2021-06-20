@@ -1,13 +1,13 @@
-import {expect} from 'chai';
-import Camp from '@shields_io/camp';
-import FormData from 'form-data';
-import sinon from 'sinon';
-import portfinder from 'portfinder';
-import queryString from 'query-string';
-import nock from 'nock';
-import got from '../../../core/got-test-client.js';
-import GithubConstellation from '../github-constellation.js';
-import {setRoutes} from './acceptor.js';
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import FormData from 'form-data'
+import sinon from 'sinon'
+import portfinder from 'portfinder'
+import queryString from 'query-string'
+import nock from 'nock'
+import got from '../../../core/got-test-client.js'
+import GithubConstellation from '../github-constellation.js'
+import { setRoutes } from './acceptor.js'
 
 const fakeClientId = 'githubdabomb'
 

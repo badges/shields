@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {getDependencyVersion} from './package-json-helpers.js';
+import { test, given } from 'sazerac'
+import { getDependencyVersion } from './package-json-helpers.js'
 
 describe('Contributor count helpers', function () {
   test(getDependencyVersion, () => {

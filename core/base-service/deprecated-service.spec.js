@@ -1,5 +1,5 @@
-import {expect} from 'chai';
-import deprecatedService from './deprecated-service.js';
+import { expect } from 'chai'
+import deprecatedService from './deprecated-service.js'
 
 describe('DeprecatedService', function () {
   const route = {

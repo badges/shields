@@ -1,5 +1,5 @@
-import {isMetric, isMetricOverTimePeriod} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('total downloads').get('/dt/sevenzip.json').expectBadge({

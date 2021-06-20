@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {starRating, metric} from '../text-formatters.js';
-import {colorScale} from '../color-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { starRating, metric } from '../text-formatters.js'
+import { colorScale } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const pkgReviewColor = colorScale([2, 3, 4])
 
@@ -80,4 +80,4 @@ export default class PkgreviewRating extends BaseJsonService {
       rating: rating * 5,
     })
   }
-};
+}

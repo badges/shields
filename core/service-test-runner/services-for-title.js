@@ -2,7 +2,7 @@
  * @module
  */
 
-import difference from 'lodash.difference';
+import difference from 'lodash.difference'
 
 /**
  * Given a pull request title like
@@ -30,4 +30,4 @@ function servicesForTitle(title) {
   return difference(services, ignored)
 }
 
-export default servicesForTitle;
+export default servicesForTitle

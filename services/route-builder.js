@@ -1,4 +1,4 @@
-import toArray from '../core/base-service/to-array.js';
+import toArray from '../core/base-service/to-array.js'
 
 /*
  * Factory class for building a BaseService `route` object. This class is useful
@@ -31,4 +31,4 @@ export default class RouteBuilder {
     const { base, format, capture } = this
     return { base, format, capture }
   }
-};
+}

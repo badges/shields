@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {NotFound} from '../index.js';
-import NpmBase from './npm-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { NotFound } from '../index.js'
+import NpmBase from './npm-base.js'
 
 const keywords = ['node']
 
@@ -92,4 +92,4 @@ export default class NpmVersion extends NpmBase {
       version: packageData[tag || 'latest'],
     })
   }
-};
+}

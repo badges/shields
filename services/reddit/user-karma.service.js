@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -83,4 +83,4 @@ export default class RedditUserKarma extends BaseJsonService {
       user,
     })
   }
-};
+}

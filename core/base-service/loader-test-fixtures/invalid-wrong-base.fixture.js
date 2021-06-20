@@ -1,4 +1,4 @@
 class BadBaseService {}
 class BadService extends BadBaseService {}
 
-export default BadService;
+export default BadService

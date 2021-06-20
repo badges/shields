@@ -1,11 +1,14 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {transformAndValidate, renderDynamicBadge} from '../dynamic-common.js';
-import {isPackageJsonWithDependencies, getDependencyVersion} from '../package-json-helpers.js';
-import {semver} from '../validators.js';
-import {ConditionalGithubAuthV3Service} from './github-auth-service.js';
-import {fetchJsonFromRepo} from './github-common-fetch.js';
-import {documentation} from './github-helpers.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { transformAndValidate, renderDynamicBadge } from '../dynamic-common.js'
+import {
+  isPackageJsonWithDependencies,
+  getDependencyVersion,
+} from '../package-json-helpers.js'
+import { semver } from '../validators.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const keywords = ['npm', 'node']
 
@@ -243,4 +246,4 @@ export default [
   GithubPackageJsonVersion,
   GithubPackageJsonDependencyVersion,
   DynamicGithubPackageJson,
-];
+]

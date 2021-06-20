@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
 // use NPM Version as an example implementation of NpmBase for this test
-import NpmVersion from './npm-version.service.js';
+import NpmVersion from './npm-version.service.js'
 
 describe('npm', function () {
   describe('auth', function () {

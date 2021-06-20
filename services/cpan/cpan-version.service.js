@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import BaseCpanService from './cpan.js';
+import { renderVersionBadge } from '../version.js'
+import BaseCpanService from './cpan.js'
 
 export default class CpanVersion extends BaseCpanService {
   static category = 'version'
@@ -18,4 +18,4 @@ export default class CpanVersion extends BaseCpanService {
     const { version } = await this.fetch({ packageName })
     return renderVersionBadge({ version })
   }
-};
+}

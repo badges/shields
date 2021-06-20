@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
@@ -18,6 +18,4 @@ function createRoute(which) {
   }
 }
 
-export {
-  createRoute,
-};
+export { createRoute }

@@ -48,4 +48,4 @@ function mergeQueries(...queries) {
   return merged
 }
 
-export { mergeQueries };
+export { mergeQueries }

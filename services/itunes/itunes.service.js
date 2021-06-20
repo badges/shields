@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   resultCount: nonNegativeInteger,
@@ -47,4 +47,4 @@ export default class Itunes extends BaseJsonService {
 
     return renderVersionBadge({ version: data.results[0].version })
   }
-};
+}

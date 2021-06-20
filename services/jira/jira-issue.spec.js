@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import JiraIssue from './jira-issue.service.js';
-import {user, pass, host, config} from './jira-test-helpers.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import JiraIssue from './jira-issue.service.js'
+import { user, pass, host, config } from './jira-test-helpers.js'
 
 describe('JiraIssue', function () {
   cleanUpNockAfterEach()

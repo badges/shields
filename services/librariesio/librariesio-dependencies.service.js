@@ -1,6 +1,9 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
-import {transform, renderDependenciesBadge} from './librariesio-dependencies-helpers.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import {
+  transform,
+  renderDependenciesBadge,
+} from './librariesio-dependencies-helpers.js'
 
 const schema = Joi.object({
   dependencies: Joi.array()
@@ -129,4 +132,4 @@ class LibrariesIoRepoDependencies extends BaseJsonService {
   }
 }
 
-export default [LibrariesIoProjectDependencies, LibrariesIoRepoDependencies];
+export default [LibrariesIoProjectDependencies, LibrariesIoRepoDependencies]

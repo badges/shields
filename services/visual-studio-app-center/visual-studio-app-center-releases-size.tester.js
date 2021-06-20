@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {isFileSize} from '../test-validators.js';
+import { createServiceTester } from '../tester.js'
+import { isFileSize } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('8368844 bytes to 8.37 megabytes')

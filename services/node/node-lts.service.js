@@ -1,5 +1,5 @@
-import NodeVersionBase from './node-base.js';
-import {versionColorForRangeLts} from './node-version-color.js';
+import NodeVersionBase from './node-base.js'
+import { versionColorForRangeLts } from './node-version-color.js'
 
 export default class NodeLtsVersion extends NodeVersionBase {
   static route = this.buildRoute('node/v-lts', { withTag: true })
@@ -13,4 +13,4 @@ export default class NodeLtsVersion extends NodeVersionBase {
   static colorResolver = versionColorForRangeLts
 
   static documentation = `This badge indicates whether the package supports <b>all</b> LTS node versions`
-};
+}

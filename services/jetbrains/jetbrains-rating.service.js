@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {starRating} from '../text-formatters.js';
-import {colorScale} from '../color-formatters.js';
-import JetbrainsBase from './jetbrains-base.js';
+import Joi from 'joi'
+import { starRating } from '../text-formatters.js'
+import { colorScale } from '../color-formatters.js'
+import JetbrainsBase from './jetbrains-base.js'
 
 const pluginRatingColor = colorScale([2, 3, 4])
 
@@ -94,4 +94,4 @@ export default class JetbrainsRating extends JetbrainsBase {
 
     return this.constructor.render({ rating, format })
   }
-};
+}

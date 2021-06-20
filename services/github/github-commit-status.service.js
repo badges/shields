@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {NotFound, InvalidParameter} from '../index.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { NotFound, InvalidParameter } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   // https://stackoverflow.com/a/23969867/893113
@@ -71,4 +71,4 @@ export default class GithubCommitStatus extends GithubAuthV3Service {
     const isInBranch = status === 'identical' || status === 'behind'
     return this.constructor.render({ isInBranch, branch })
   }
-};
+}

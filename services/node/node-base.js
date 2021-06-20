@@ -1,4 +1,4 @@
-import NPMBase from '../npm/npm-base.js';
+import NPMBase from '../npm/npm-base.js'
 
 const keywords = ['npm']
 
@@ -117,4 +117,4 @@ export default class NodeVersionBase extends NPMBase {
 
     return this.constructor.render({ tag, nodeVersionRange })
   }
-};
+}

@@ -1,5 +1,11 @@
-import SonarBase from './sonar-base.js';
-import {negativeMetricColorScale, getLabel, documentation, keywords, queryParamSchema} from './sonar-helpers.js';
+import SonarBase from './sonar-base.js'
+import {
+  negativeMetricColorScale,
+  getLabel,
+  documentation,
+  keywords,
+  queryParamSchema,
+} from './sonar-helpers.js'
 
 export default class SonarTechDebt extends SonarBase {
   static category = 'analysis'
@@ -51,4 +57,4 @@ export default class SonarTechDebt extends SonarBase {
     const { sqale_debt_ratio: debt } = this.transform({ json, sonarVersion })
     return this.constructor.render({ debt, metric })
   }
-};
+}

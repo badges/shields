@@ -1,5 +1,5 @@
-import {test, forCases, given} from 'sazerac';
-import Codecov from './codecov.service.js';
+import { test, forCases, given } from 'sazerac'
+import Codecov from './codecov.service.js'
 
 describe('Codecov', function () {
   test(Codecov.prototype.legacyTransform, () => {

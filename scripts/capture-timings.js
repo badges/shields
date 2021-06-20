@@ -1,5 +1,5 @@
-import readline from 'readline';
-import minimist from 'minimist';
+import readline from 'readline'
+import minimist from 'minimist'
 
 async function captureTimings(warmupIterations) {
   const rl = readline.createInterface({
@@ -49,7 +49,7 @@ async function main() {
   logResults({ times, iterations, warmupIterations })
 }
 
-(async () => {
+;(async () => {
   try {
     await main()
   } catch (e) {

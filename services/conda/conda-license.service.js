@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderLicenseBadge} from '../licenses.js';
-import toArray from '../../core/base-service/to-array.js';
-import BaseCondaService from './conda-base.js';
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import toArray from '../../core/base-service/to-array.js'
+import BaseCondaService from './conda-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
@@ -42,4 +42,4 @@ export default class CondaLicense extends BaseCondaService {
       licenses: toArray(json.license),
     })
   }
-};
+}

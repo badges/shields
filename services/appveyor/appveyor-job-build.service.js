@@ -1,6 +1,6 @@
-import {renderBuildStatusBadge} from '../build-status.js';
-import {NotFound} from '../index.js';
-import AppVeyorBase from './appveyor-base.js';
+import { renderBuildStatusBadge } from '../build-status.js'
+import { NotFound } from '../index.js'
+import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorJobBuild extends AppVeyorBase {
   static route = {
@@ -59,4 +59,4 @@ export default class AppVeyorJobBuild extends AppVeyorBase {
     const { status } = this.transform({ data, jobName: job })
     return renderBuildStatusBadge({ status })
   }
-};
+}

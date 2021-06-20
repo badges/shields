@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import countBy from 'lodash.countby';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {fetchIssue} from './github-common-fetch.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import countBy from 'lodash.countby'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { fetchIssue } from './github-common-fetch.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success').required(),
@@ -98,4 +98,4 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
 
     return this.constructor.render({ variant, state, stateCounts })
   }
-};
+}

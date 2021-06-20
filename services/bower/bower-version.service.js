@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import {InvalidResponse, redirector} from '../index.js';
-import BaseBowerService from './bower-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { InvalidResponse, redirector } from '../index.js'
+import BaseBowerService from './bower-base.js'
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
@@ -55,4 +55,4 @@ const BowerVersionRedirect = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export { BowerVersion, BowerVersionRedirect };
+export { BowerVersion, BowerVersionRedirect }

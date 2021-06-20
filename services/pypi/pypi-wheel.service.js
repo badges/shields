@@ -1,5 +1,5 @@
-import PypiBase from './pypi-base.js';
-import {getPackageFormats} from './pypi-helpers.js';
+import PypiBase from './pypi-base.js'
+import { getPackageFormats } from './pypi-helpers.js'
 
 export default class PypiWheel extends PypiBase {
   static category = 'platform-support'
@@ -37,4 +37,4 @@ export default class PypiWheel extends PypiBase {
     const { hasWheel } = getPackageFormats(packageData)
     return this.constructor.render({ hasWheel })
   }
-};
+}

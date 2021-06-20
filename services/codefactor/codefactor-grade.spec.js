@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import CodeFactorGrade from './codefactor-grade.service.js';
+import { test, given } from 'sazerac'
+import CodeFactorGrade from './codefactor-grade.service.js'
 
 describe('CodeFactorGrade', function () {
   test(CodeFactorGrade.render, () => {

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import EclipseMarketplaceBase from './eclipse-marketplace-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
 const versionResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -10,9 +10,7 @@ const versionResponseSchema = Joi.object({
   }),
 }).required()
 
-export default class EclipseMarketplaceVersion extends (
-  EclipseMarketplaceBase
-) {
+export default class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
   static category = 'version'
   static route = this.buildRoute('eclipse-marketplace/v')
   static examples = [
@@ -37,4 +35,4 @@ export default class EclipseMarketplaceVersion extends (
     const version = marketplace.node.version
     return this.constructor.render({ version })
   }
-};
+}

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {isBuildStatus} from '../build-status.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { isBuildStatus } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   build: Joi.object({
@@ -39,4 +39,4 @@ export default class AppVeyorBase extends BaseJsonService {
       pattern: ':user/:repo/:branch*',
     }
   }
-};
+}

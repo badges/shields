@@ -1,6 +1,6 @@
-import {starRating} from '../text-formatters.js';
-import {floorCount as floorCountColor} from '../color-formatters.js';
-import {BaseAmoService, keywords} from './amo-base.js';
+import { starRating } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
 export default class AmoRating extends BaseAmoService {
   static category = 'rating'
@@ -36,4 +36,4 @@ export default class AmoRating extends BaseAmoService {
     const data = await this.fetch({ addonId })
     return this.constructor.render({ format, rating: data.ratings.average })
   }
-};
+}

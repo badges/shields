@@ -1,6 +1,6 @@
-import {renderVersionBadge} from '../version.js';
-import {InvalidResponse} from '../index.js';
-import {BaseCratesService, keywords} from './crates-base.js';
+import { renderVersionBadge } from '../version.js'
+import { InvalidResponse } from '../index.js'
+import { BaseCratesService, keywords } from './crates-base.js'
 
 export default class CratesVersion extends BaseCratesService {
   static category = 'version'
@@ -27,4 +27,4 @@ export default class CratesVersion extends BaseCratesService {
     const { version } = this.transform(json)
     return renderVersionBadge({ version })
   }
-};
+}

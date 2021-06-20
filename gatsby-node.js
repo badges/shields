@@ -4,9 +4,9 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-import fs from 'fs';
-import yaml from 'js-yaml';
-import envFlag from 'node-env-flag';
+import fs from 'fs'
+import yaml from 'js-yaml'
+import envFlag from 'node-env-flag'
 
 const includeDevPages = envFlag(process.env.INCLUDE_DEV_PAGES, true)
 
@@ -44,4 +44,4 @@ async function createPages({ actions: { createPage } }) {
   })
 }
 
-export { createPages };
+export { createPages }

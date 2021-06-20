@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import SonarDocumentedApiDensity from './sonar-documented-api-density.service.js';
+import { test, given } from 'sazerac'
+import SonarDocumentedApiDensity from './sonar-documented-api-density.service.js'
 
 describe('SonarDocumentedApiDensity', function () {
   test(SonarDocumentedApiDensity.render, () => {

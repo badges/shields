@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 const commonAttrs = {
   category: 'funding',
@@ -21,4 +21,4 @@ export default [
     },
     ...commonAttrs,
   }),
-];
+]

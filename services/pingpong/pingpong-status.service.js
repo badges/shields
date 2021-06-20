@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService, InvalidParameter, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.string().required(),
@@ -65,4 +65,4 @@ export default class PingPongStatus extends BaseJsonService {
     const { status } = await this.fetch({ apiKey })
     return this.constructor.render({ status })
   }
-};
+}

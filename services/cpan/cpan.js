@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.alternatives(Joi.string().required(), Joi.number().required()),
@@ -13,4 +13,4 @@ export default class BaseCpanService extends BaseJsonService {
     const url = `https://fastapi.metacpan.org/v1/release/${packageName}`
     return this._requestJson({ schema, url })
   }
-};
+}

@@ -1,8 +1,8 @@
-import os from 'os';
-import got from 'got';
-import generateInstanceId from './instance-id-generator.js';
-import {promClientJsonToInfluxV2} from './metrics/format-converters.js';
-import log from './log.js';
+import os from 'os'
+import got from 'got'
+import generateInstanceId from './instance-id-generator.js'
+import { promClientJsonToInfluxV2 } from './metrics/format-converters.js'
+import log from './log.js'
 
 export default class InfluxMetrics {
   constructor(metricInstance, config) {
@@ -78,4 +78,4 @@ export default class InfluxMetrics {
       this._intervalId = undefined
     }
   }
-};
+}

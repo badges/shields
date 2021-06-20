@@ -1,4 +1,4 @@
-import {BaseService} from '../index.js';
+import { BaseService } from '../index.js'
 
 const serverStartTime = new Date(new Date().toGMTString())
 let bitFlip = false
@@ -39,4 +39,4 @@ export default class Debug extends BaseService {
         }
     }
   }
-};
+}

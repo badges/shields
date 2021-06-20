@@ -1,5 +1,9 @@
-import {documentation, testResultQueryParamSchema, renderTestResultBadge} from '../test-results.js';
-import TestspaceBase from './testspace-base.js';
+import {
+  documentation,
+  testResultQueryParamSchema,
+  renderTestResultBadge,
+} from '../test-results.js'
+import TestspaceBase from './testspace-base.js'
 
 export default class TestspaceTests extends TestspaceBase {
   static route = {
@@ -94,4 +98,4 @@ export default class TestspaceTests extends TestspaceBase {
       skippedLabel,
     })
   }
-};
+}

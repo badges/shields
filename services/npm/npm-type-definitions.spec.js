@@ -1,5 +1,5 @@
-import {test, given, forCases} from 'sazerac';
-import NpmTypeDefinitions from './npm-type-definitions.service.js';
+import { test, given, forCases } from 'sazerac'
+import NpmTypeDefinitions from './npm-type-definitions.service.js'
 
 describe('NPM type definitions badge', function () {
   test(NpmTypeDefinitions.transform, () => {

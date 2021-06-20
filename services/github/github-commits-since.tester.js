@@ -1,5 +1,5 @@
-import {withRegex, isMetric} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import { withRegex, isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isCommitsSince = withRegex(/^(commits since){1}[\s\S]+$/)

@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 const greenStatuses = [
   'fixed',
@@ -72,4 +72,4 @@ function renderBuildStatusBadge({ label, status }) {
   }
 }
 
-export { isBuildStatus, renderBuildStatusBadge };
+export { isBuildStatus, renderBuildStatusBadge }

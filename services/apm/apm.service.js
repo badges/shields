@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import {renderLicenseBadge} from '../licenses.js';
-import {renderVersionBadge} from '../version.js';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { renderVersionBadge } from '../version.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const keywords = ['atom']
 
@@ -114,8 +114,4 @@ class APMLicense extends BaseAPMService {
   }
 }
 
-export {
-  APMDownloads,
-  APMVersion,
-  APMLicense,
-};
+export { APMDownloads, APMVersion, APMLicense }

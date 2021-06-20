@@ -1,6 +1,6 @@
-import {renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '../index.js';
-import {keywords, fetch} from './azure-devops-helpers.js';
+import { renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { keywords, fetch } from './azure-devops-helpers.js'
 
 const documentation = `
 <p>
@@ -57,4 +57,4 @@ export default class AzureDevOpsRelease extends BaseSvgScrapingService {
     })
     return renderBuildStatusBadge(props)
   }
-};
+}

@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import KeybaseProfile from './keybase-profile.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import KeybaseProfile from './keybase-profile.js'
 
 const stellarAddressSchema = Joi.object({
   status: Joi.object({
@@ -79,4 +79,4 @@ export default class KeybaseXLM extends KeybaseProfile {
 
     return this.constructor.render({ address: accountId })
   }
-};
+}

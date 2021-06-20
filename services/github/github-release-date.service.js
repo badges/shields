@@ -1,9 +1,9 @@
-import moment from 'moment';
-import Joi from 'joi';
-import {age} from '../color-formatters.js';
-import {formatDate} from '../text-formatters.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import moment from 'moment'
+import Joi from 'joi'
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.alternatives(
   Joi.object({
@@ -77,4 +77,4 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
     }
     return this.constructor.render({ date: body.created_at })
   }
-};
+}

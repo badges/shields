@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.array()
   .items(
@@ -78,4 +78,4 @@ export default class GithubMilestone extends GithubAuthV3Service {
     const milestones = await this.fetch({ user, repo, variant })
     return this.constructor.render({ user, repo, variant, milestones })
   }
-};
+}

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseXmlService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { BaseXmlService, NotFound } from '../index.js'
 
 const violationSchema = Joi.object({
   severity: Joi.equal('info', 'minor', 'major', 'critical').required(),
@@ -124,8 +124,4 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 }
 
-export {
-  SymfonyInsightBase,
-  keywords,
-  gradeColors,
-};
+export { SymfonyInsightBase, keywords, gradeColors }

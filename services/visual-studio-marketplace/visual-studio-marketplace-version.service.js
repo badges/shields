@@ -1,9 +1,7 @@
-import {renderVersionBadge} from '../version.js';
-import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js';
+import { renderVersionBadge } from '../version.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-export default class VisualStudioMarketplaceVersion extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
   static category = 'version'
 
   static route = {
@@ -41,4 +39,4 @@ export default class VisualStudioMarketplaceVersion extends (
 
     return this.constructor.render({ version })
   }
-};
+}

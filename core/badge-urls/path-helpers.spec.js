@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {escapeFormat} from './path-helpers.js';
+import { test, given } from 'sazerac'
+import { escapeFormat } from './path-helpers.js'
 
 describe('Badge URL helper functions', function () {
   test(escapeFormat, () => {

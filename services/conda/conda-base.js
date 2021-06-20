@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const condaSchema = Joi.object({
   latest_version: Joi.string().required(),
@@ -23,4 +23,4 @@ export default class BaseCondaService extends BaseJsonService {
       url: `https://api.anaconda.org/package/${channel}/${pkg}`,
     })
   }
-};
+}

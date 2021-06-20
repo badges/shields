@@ -1,6 +1,6 @@
-import prettyBytes from 'pretty-bytes';
-import {BaseGithubLanguage} from './github-languages-base.js';
-import {documentation} from './github-helpers.js';
+import prettyBytes from 'pretty-bytes'
+import { BaseGithubLanguage } from './github-languages-base.js'
+import { documentation } from './github-helpers.js'
 
 export default class GithubCodeSize extends BaseGithubLanguage {
   static category = 'size'
@@ -34,4 +34,4 @@ export default class GithubCodeSize extends BaseGithubLanguage {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ size: this.getTotalSize(data) })
   }
-};
+}

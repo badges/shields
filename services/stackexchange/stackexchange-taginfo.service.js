@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
-import renderQuestionsBadge from './stackexchange-helpers.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import renderQuestionsBadge from './stackexchange-helpers.js'
 
 const tagSchema = Joi.object({
   items: Joi.array()
@@ -62,4 +62,4 @@ export default class StackExchangeQuestions extends BaseJsonService {
       numValue,
     })
   }
-};
+}

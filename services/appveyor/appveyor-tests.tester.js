@@ -1,6 +1,6 @@
-import queryString from 'querystring';
-import Joi from 'joi';
-import {createServiceTester} from '../tester.js'
+import queryString from 'querystring'
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isAppveyorTestTotals = Joi.string().regex(

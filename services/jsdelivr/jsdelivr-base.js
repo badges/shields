@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {downloadCount} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   total: Joi.number().required(),
@@ -29,4 +29,4 @@ class BaseJsDelivrService extends BaseJsonService {
   }
 }
 
-export { schema, periodMap, BaseJsDelivrService };
+export { schema, periodMap, BaseJsDelivrService }

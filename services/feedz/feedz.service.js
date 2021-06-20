@@ -1,6 +1,11 @@
-import Joi from 'joi';
-import {BaseJsonService, NotFound} from '../index.js';
-import {renderVersionBadge, searchServiceUrl, stripBuildMetadata, selectVersion} from '../nuget/nuget-helpers.js';
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
+  renderVersionBadge,
+  searchServiceUrl,
+  stripBuildMetadata,
+  selectVersion,
+} from '../nuget/nuget-helpers.js'
 
 const schema = Joi.object({
   items: Joi.array()
@@ -98,6 +103,4 @@ class FeedzVersionService extends BaseJsonService {
   }
 }
 
-export {
-  FeedzVersionService,
-};
+export { FeedzVersionService }

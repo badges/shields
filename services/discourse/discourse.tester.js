@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
   id: 'discourse',

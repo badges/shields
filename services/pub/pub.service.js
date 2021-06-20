@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {latest, renderVersionBadge} from '../version.js';
-import {BaseJsonService, redirector} from '../index.js';
+import Joi from 'joi'
+import { latest, renderVersionBadge } from '../version.js'
+import { BaseJsonService, redirector } from '../index.js'
 
 const schema = Joi.object({
   versions: Joi.array().items(Joi.string()).required(),
@@ -66,4 +66,4 @@ const PubVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-export { PubVersion, PubVersionRedirector };
+export { PubVersion, PubVersionRedirector }

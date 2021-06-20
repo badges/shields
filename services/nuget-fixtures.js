@@ -54,4 +54,4 @@ export {
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,
   nuGetV3VersionJsonBuildMetadataWithDash,
-};
+}

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {createServiceTester} from '../tester.js'
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
 const isCondaPlatform = Joi.string().regex(/^\w+-[\w\d]+( \| \w+-[\w\d]+)*$/)
 export const t = await createServiceTester()
 

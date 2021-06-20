@@ -1,7 +1,7 @@
-import {floorCount as floorCountColor} from '../color-formatters.js';
-import {metric, starRating} from '../text-formatters.js';
-import {NotFound} from '../index.js';
-import BaseChromeWebStoreService from './chrome-web-store-base.js';
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { metric, starRating } from '../text-formatters.js'
+import { NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
   static category = 'rating'
@@ -110,4 +110,4 @@ export {
   ChromeWebStoreRating,
   ChromeWebStoreRatingCount,
   ChromeWebStoreRatingStars,
-};
+}

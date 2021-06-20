@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import DroneBuild from './drone-build.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import DroneBuild from './drone-build.service.js'
 
 describe('DroneBuild', function () {
   cleanUpNockAfterEach()

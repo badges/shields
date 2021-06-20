@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {FeedzVersionService} from './feedz.service.js';
+import { test, given } from 'sazerac'
+import { FeedzVersionService } from './feedz.service.js'
 
 function json(versions) {
   return {

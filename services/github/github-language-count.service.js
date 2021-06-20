@@ -1,5 +1,5 @@
-import {BaseGithubLanguage} from './github-languages-base.js';
-import {documentation} from './github-helpers.js';
+import { BaseGithubLanguage } from './github-languages-base.js'
+import { documentation } from './github-helpers.js'
 
 export default class GithubLanguageCount extends BaseGithubLanguage {
   static category = 'analysis'
@@ -29,4 +29,4 @@ export default class GithubLanguageCount extends BaseGithubLanguage {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ count: Object.keys(data).length })
   }
-};
+}

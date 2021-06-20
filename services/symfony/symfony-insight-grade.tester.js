@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {createServiceTester} from '../tester.js'
-import {sampleProjectUuid, noSymfonyToken} from './symfony-test-helpers.js';
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { sampleProjectUuid, noSymfonyToken } from './symfony-test-helpers.js'
 export const t = await createServiceTester()
 
 t.create('valid project grade')

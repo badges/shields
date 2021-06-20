@@ -1,6 +1,6 @@
-import escapeStringRegexp from 'escape-string-regexp';
-import Joi from 'joi';
-import {pathToRegexp} from 'path-to-regexp';
+import escapeStringRegexp from 'escape-string-regexp'
+import Joi from 'joi'
+import { pathToRegexp } from 'path-to-regexp'
 
 function makeFullUrl(base, partialUrl) {
   return `/${[base, partialUrl].filter(Boolean).join('/')}`
@@ -79,4 +79,4 @@ export {
   prepareRoute,
   namedParamsForMatch,
   getQueryParamNames,
-};
+}

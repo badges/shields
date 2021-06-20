@@ -1,7 +1,13 @@
-import Joi from 'joi';
-import RouteBuilder from '../route-builder.js';
-import {BaseJsonService, NotFound} from '../index.js';
-import {renderVersionBadge, renderDownloadBadge, searchServiceUrl, stripBuildMetadata, selectVersion} from './nuget-helpers.js';
+import Joi from 'joi'
+import RouteBuilder from '../route-builder.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
+  renderVersionBadge,
+  renderDownloadBadge,
+  searchServiceUrl,
+  stripBuildMetadata,
+  selectVersion,
+} from './nuget-helpers.js'
 
 /*
  * Build the Shields service URL object for the given service configuration. Return
@@ -205,6 +211,4 @@ function createServiceFamily({
   }
 }
 
-export {
-  createServiceFamily,
-};
+export { createServiceFamily }

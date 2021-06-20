@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default redirector({
   category: 'other',
@@ -8,4 +8,4 @@ export default redirector({
   },
   transformPath: () => '/endpoint',
   dateAdded: new Date('2019-02-19'),
-});
+})

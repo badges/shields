@@ -1,4 +1,4 @@
-import {BaseJsonService, NotFound, InvalidResponse} from '../index.js';
+import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 
 export default class ScrutinizerBase extends BaseJsonService {
   // https://scrutinizer-ci.com/docs/api/#repository-details
@@ -42,4 +42,4 @@ export default class ScrutinizerBase extends BaseJsonService {
 
     return { value: metricValues[metric] }
   }
-};
+}

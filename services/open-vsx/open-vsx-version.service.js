@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import OpenVSXBase from './open-vsx-base.js';
+import { renderVersionBadge } from '../version.js'
+import OpenVSXBase from './open-vsx-base.js'
 
 export default class OpenVSXVersion extends OpenVSXBase {
   static category = 'version'
@@ -26,4 +26,4 @@ export default class OpenVSXVersion extends OpenVSXBase {
     const { version } = await this.fetch({ namespace, extension })
     return this.constructor.render({ version })
   }
-};
+}

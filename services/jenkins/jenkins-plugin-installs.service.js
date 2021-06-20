@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {downloadCount as downloadCountColor} from '../color-formatters.js';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schemaInstallations = Joi.object()
   .keys({
@@ -113,4 +113,4 @@ export default class JenkinsPluginInstalls extends BaseJsonService {
 
     return this.constructor.render({ label, installs })
   }
-};
+}

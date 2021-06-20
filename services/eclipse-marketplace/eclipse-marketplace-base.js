@@ -1,4 +1,4 @@
-import {BaseXmlService} from '../index.js';
+import { BaseXmlService } from '../index.js'
 
 export default class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {
@@ -15,4 +15,4 @@ export default class EclipseMarketplaceBase extends BaseXmlService {
       errorMessages: { 404: 'solution not found' },
     })
   }
-};
+}

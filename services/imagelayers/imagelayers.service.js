@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'size',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'imagelayers',
   dateAdded: new Date('2018-11-18'),
-});
+})

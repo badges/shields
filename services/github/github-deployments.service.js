@@ -1,8 +1,8 @@
-import gql from 'graphql-tag';
-import Joi from 'joi';
-import {NotFound} from '../index.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {documentation, transformErrors} from './github-helpers.js';
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { NotFound } from '../index.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
 const greenStates = ['SUCCESS']
 const redStates = ['ERROR', 'FAILURE']
@@ -127,4 +127,4 @@ export default class GithubDeployments extends GithubAuthV4Service {
     const { state } = this.transform({ data: json.data })
     return this.constructor.render({ state })
   }
-};
+}

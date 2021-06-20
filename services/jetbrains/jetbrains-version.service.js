@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge} from '../version.js';
-import JetbrainsBase from './jetbrains-base.js';
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import JetbrainsBase from './jetbrains-base.js'
 
 const intelliJschema = Joi.object({
   'plugin-repository': Joi.object({
@@ -74,4 +74,4 @@ export default class JetbrainsVersion extends JetbrainsBase {
 
     return this.constructor.render({ version })
   }
-};
+}

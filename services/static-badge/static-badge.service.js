@@ -1,5 +1,5 @@
-import {escapeFormat} from '../../core/badge-urls/path-helpers.js';
-import {BaseStaticService} from '../index.js';
+import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import { BaseStaticService } from '../index.js'
 
 export default class StaticBadge extends BaseStaticService {
   static category = 'static'
@@ -13,4 +13,4 @@ export default class StaticBadge extends BaseStaticService {
   handle({ label, message, color }) {
     return { label: escapeFormat(label), message: escapeFormat(message), color }
   }
-};
+}

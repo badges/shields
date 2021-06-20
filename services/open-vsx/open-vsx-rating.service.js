@@ -1,6 +1,6 @@
-import {starRating} from '../text-formatters.js';
-import {floorCount} from '../color-formatters.js';
-import OpenVSXBase from './open-vsx-base.js';
+import { starRating } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
 export default class OpenVSXRating extends OpenVSXBase {
   static category = 'rating'
@@ -75,4 +75,4 @@ export default class OpenVSXRating extends OpenVSXBase {
       ratingCount: reviewCount,
     })
   }
-};
+}

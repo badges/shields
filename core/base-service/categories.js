@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import categories from '../../services/categories.js';
+import Joi from 'joi'
+import categories from '../../services/categories.js'
 
 const isRealCategory = Joi.equal(...categories.map(({ id }) => id)).required()
 
@@ -11,7 +11,4 @@ function assertValidCategory(category, message = undefined) {
   Joi.assert(category, isValidCategory, message)
 }
 
-export {
-  isValidCategory,
-  assertValidCategory,
-};
+export { isValidCategory, assertValidCategory }

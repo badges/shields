@@ -1,10 +1,10 @@
-import {expect} from 'chai';
-import Camp from '@shields_io/camp';
-import portfinder from 'portfinder';
-import config from 'config';
-import got from '../core/got-test-client.js';
-import {setRoutes} from './suggest.js';
-import GithubApiProvider from './github/github-api-provider.js';
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import config from 'config'
+import got from '../core/got-test-client.js'
+import { setRoutes } from './suggest.js'
+import GithubApiProvider from './github/github-api-provider.js'
 
 describe('Badge suggestions for', function () {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'

@@ -1,7 +1,7 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import {redirector} from '../index.js';
-import {BaseAmoService, keywords} from './amo-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { redirector } from '../index.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
 const documentation = `
 <p>
@@ -52,7 +52,4 @@ const AmoLegacyRedirect = redirector({
   dateAdded: new Date('2019-02-23'),
 })
 
-export {
-  AmoWeeklyDownloads,
-  AmoLegacyRedirect,
-};
+export { AmoWeeklyDownloads, AmoLegacyRedirect }

@@ -1,1 +1,1 @@
-export * from '../core/base-service/index.js';
+export * from '../core/base-service/index.js'

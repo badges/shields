@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {InvalidParameter} from './index.js';
+import Joi from 'joi'
+import { InvalidParameter } from './index.js'
 
 const isDependency = Joi.alternatives(
   Joi.object({
@@ -50,7 +50,4 @@ function getDependencyVersion({
   }
 }
 
-export {
-  isLockfile,
-  getDependencyVersion,
-};
+export { isLockfile, getDependencyVersion }

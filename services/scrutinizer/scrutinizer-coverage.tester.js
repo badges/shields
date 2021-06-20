@@ -1,5 +1,5 @@
-import {isIntegerPercentage} from '../test-validators.js';
-import {ServiceTester} from '../tester.js';
+import { isIntegerPercentage } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'ScrutinizerCoverage',
   title: 'ScrutinizerCoverage',

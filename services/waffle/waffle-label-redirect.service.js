@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   // The WaffleLabel service originally had 'label' as an optional parameter
@@ -16,4 +16,4 @@ export default [
     transformPath: ({ user, repo }) => `/waffle/label/${user}/${repo}/ready`,
     dateAdded: new Date('2019-03-05'),
   }),
-];
+]

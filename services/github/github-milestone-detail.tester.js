@@ -1,5 +1,9 @@
-import {isMetric, isMetricOverMetric, isIntegerPercentage} from '../test-validators.js';
-import {createServiceTester} from '../tester.js'
+import {
+  isMetric,
+  isMetricOverMetric,
+  isIntegerPercentage,
+} from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Milestone Open Issues')

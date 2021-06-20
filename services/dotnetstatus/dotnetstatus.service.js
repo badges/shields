@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'dependencies',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'dotnet status',
   dateAdded: new Date('2018-04-01'),
-});
+})

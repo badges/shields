@@ -1,6 +1,6 @@
-import prettyBytes from 'pretty-bytes';
-import {NotFound} from '../index.js';
-import BaseMicrobadgerService from './microbadger-base.js';
+import prettyBytes from 'pretty-bytes'
+import { NotFound } from '../index.js'
+import BaseMicrobadgerService from './microbadger-base.js'
 
 const documentation = `
 <p>
@@ -69,4 +69,4 @@ export default class MicrobadgerSize extends BaseMicrobadgerService {
     }
     return this.constructor.render({ size: image.DownloadSize })
   }
-};
+}

@@ -1,5 +1,5 @@
-import {createServiceTester} from '../tester.js'
-import {isMetric} from '../test-validators.js';
+import { createServiceTester } from '../tester.js'
+import { isMetric } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('Contributors').get('/contributors/badges/shields.json').expectBadge({

@@ -1,9 +1,9 @@
-import request from 'request';
-import makeBadge from '../../badge-maker/lib/make-badge.js';
-import {setCacheHeaders} from './cache-headers.js';
-import {Inaccessible, InvalidResponse, ShieldsRuntimeError} from './errors.js';
-import {makeSend} from './legacy-result-sender.js';
-import coalesceBadge from './coalesce-badge.js';
+import request from 'request'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import { setCacheHeaders } from './cache-headers.js'
+import { Inaccessible, InvalidResponse, ShieldsRuntimeError } from './errors.js'
+import { makeSend } from './legacy-result-sender.js'
+import coalesceBadge from './coalesce-badge.js'
 
 const userAgent = 'Shields.io/2003a'
 
@@ -197,11 +197,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         throw err
       })
     }
-  };
+  }
 }
 
-export {
-  handleRequest,
-  promisify,
-  userAgent,
-};
+export { handleRequest, promisify, userAgent }

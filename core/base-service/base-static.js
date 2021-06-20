@@ -1,10 +1,13 @@
-import makeBadge from '../../badge-maker/lib/make-badge.js';
-import BaseService from './base.js';
-import {serverHasBeenUpSinceResourceCached, setCacheHeadersForStaticResource} from './cache-headers.js';
-import {makeSend} from './legacy-result-sender.js';
-import {MetricHelper} from './metric-helper.js';
-import coalesceBadge from './coalesce-badge.js';
-import {prepareRoute, namedParamsForMatch} from './route.js';
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import BaseService from './base.js'
+import {
+  serverHasBeenUpSinceResourceCached,
+  setCacheHeadersForStaticResource,
+} from './cache-headers.js'
+import { makeSend } from './legacy-result-sender.js'
+import { MetricHelper } from './metric-helper.js'
+import coalesceBadge from './coalesce-badge.js'
+import { prepareRoute, namedParamsForMatch } from './route.js'
 
 export default class BaseStaticService extends BaseService {
   static register({ camp, metricInstance }, serviceConfig) {
@@ -52,4 +55,4 @@ export default class BaseStaticService extends BaseService {
       metricHandle.noteResponseSent()
     })
   }
-};
+}

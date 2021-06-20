@@ -1,7 +1,7 @@
 // See available emoji at http://emoji.muan.co/
-import emojic from 'emojic';
-import {InvalidResponse} from './errors.js';
-import trace from './trace.js';
+import emojic from 'emojic'
+import { InvalidResponse } from './errors.js'
+import trace from './trace.js'
 
 function parseJson(buffer) {
   const logTrace = (...args) => trace.logTrace('fetch', ...args)
@@ -21,6 +21,4 @@ function parseJson(buffer) {
   return json
 }
 
-export {
-  parseJson,
-};
+export { parseJson }

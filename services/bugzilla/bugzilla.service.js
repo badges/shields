@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl,
@@ -113,4 +113,4 @@ export default class Bugzilla extends BaseJsonService {
       resolution: data.bugs[0].resolution,
     })
   }
-};
+}

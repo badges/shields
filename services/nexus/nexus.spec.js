@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import {InvalidResponse, NotFound} from '../index.js';
-import Nexus from './nexus.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import { InvalidResponse, NotFound } from '../index.js'
+import Nexus from './nexus.service.js'
 
 describe('Nexus', function () {
   context('transform2()', function () {

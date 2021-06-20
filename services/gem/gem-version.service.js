@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {renderVersionBadge, latest} from '../version.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { renderVersionBadge, latest } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't
@@ -72,4 +72,4 @@ export default class GemVersion extends BaseJsonService {
       return this.constructor.render({ version })
     }
   }
-};
+}

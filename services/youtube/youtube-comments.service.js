@@ -1,4 +1,4 @@
-import {documentation, YouTubeVideoBase} from './youtube-base.js';
+import { documentation, YouTubeVideoBase } from './youtube-base.js'
 
 export default class YouTubeComments extends YouTubeVideoBase {
   static route = {
@@ -26,4 +26,4 @@ export default class YouTubeComments extends YouTubeVideoBase {
   static render({ statistics, id }) {
     return super.renderSingleStat({ statistics, statisticName: 'comment', id })
   }
-};
+}

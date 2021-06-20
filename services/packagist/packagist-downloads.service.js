@@ -1,8 +1,13 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import {optionalUrl} from '../validators.js';
-import {keywords, BasePackagistService, customServerDocumentationFragment, cacheDocumentationFragment} from './packagist-base.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
+import {
+  keywords,
+  BasePackagistService,
+  customServerDocumentationFragment,
+  cacheDocumentationFragment,
+} from './packagist-base.js'
 
 const periodMap = {
   dm: {
@@ -96,4 +101,4 @@ export default class PackagistDownloads extends BasePackagistService {
       interval,
     })
   }
-};
+}

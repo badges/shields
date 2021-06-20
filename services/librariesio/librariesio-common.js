@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {nonNegativeInteger, anyInteger} from '../validators.js';
+import Joi from 'joi'
+import { nonNegativeInteger, anyInteger } from '../validators.js'
 
 // API doc: https://libraries.io/api#project
 const projectSchema = Joi.object({
@@ -19,6 +19,4 @@ async function fetchProject(serviceInstance, { platform, scope, packageName }) {
   })
 }
 
-export {
-  fetchProject,
-};
+export { fetchProject }

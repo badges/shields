@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import Bugzilla from './bugzilla.service.js';
+import { test, given } from 'sazerac'
+import Bugzilla from './bugzilla.service.js'
 
 describe('getDisplayStatus function', function () {
   it('formats status correctly', async function () {

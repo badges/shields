@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import isSvg from 'is-svg';
-import got from './core/got-test-client.js';
+import { expect } from 'chai'
+import isSvg from 'is-svg'
+import got from './core/got-test-client.js'
 
 let serverModule
 before(async function () {

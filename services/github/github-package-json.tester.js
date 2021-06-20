@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
-import {isSemver} from '../test-validators.js';
-import {semverRange} from '../validators.js';
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import { isSemver } from '../test-validators.js'
+import { semverRange } from '../validators.js'
 
 export const t = new ServiceTester({
   id: 'GithubPackageJson',

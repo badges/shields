@@ -1,5 +1,5 @@
-import {renderVersionBadge} from '../version.js';
-import PypiBase from './pypi-base.js';
+import { renderVersionBadge } from '../version.js'
+import PypiBase from './pypi-base.js'
 
 export default class PypiVersion extends PypiBase {
   static category = 'version'
@@ -28,4 +28,4 @@ export default class PypiVersion extends PypiBase {
     } = await this.fetch({ egg })
     return this.constructor.render({ version })
   }
-};
+}

@@ -1,6 +1,10 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
-import {isMetric, isVPlusDottedVersionNClauses, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import {
+  isMetric,
+  isVPlusDottedVersionNClauses,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
 const isPlatform = Joi.string().regex(
   /^(windows|linux|macos)( \| (windows|linux|macos))*$/
 )

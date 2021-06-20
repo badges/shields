@@ -1,6 +1,9 @@
-import Joi from 'joi';
-import {ServiceTester} from '../tester.js';
-import {isVPlusDottedVersionAtLeastOne, isVPlusDottedVersionNClausesWithOptionalSuffix} from '../test-validators.js';
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import {
+  isVPlusDottedVersionAtLeastOne,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
 
 // e.g. v19.3b0
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)

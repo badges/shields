@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   info: Joi.object({
@@ -37,4 +37,4 @@ export default class PypiBase extends BaseJsonService {
       errorMessages: { 404: 'package or version not found' },
     })
   }
-};
+}

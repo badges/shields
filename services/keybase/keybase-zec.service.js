@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import KeybaseProfile from './keybase-profile.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import KeybaseProfile from './keybase-profile.js'
 
 const zcachAddressSchema = Joi.object({
   status: Joi.object({
@@ -81,4 +81,4 @@ export default class KeybaseZEC extends KeybaseProfile {
 
     return this.constructor.render({ address: zcashAddresses[0].address })
   }
-};
+}

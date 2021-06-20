@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import {expect} from 'chai';
-import gql from 'graphql-tag';
-import sinon from 'sinon';
-import BaseGraphqlService from './base-graphql.js';
-import {InvalidResponse} from './errors.js';
+import Joi from 'joi'
+import { expect } from 'chai'
+import gql from 'graphql-tag'
+import sinon from 'sinon'
+import BaseGraphqlService from './base-graphql.js'
+import { InvalidResponse } from './errors.js'
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

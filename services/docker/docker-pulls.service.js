@@ -1,8 +1,12 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
-import {dockerBlue, buildDockerUrl, getDockerHubUser} from './docker-helpers.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
+import {
+  dockerBlue,
+  buildDockerUrl,
+  getDockerHubUser,
+} from './docker-helpers.js'
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
@@ -45,4 +49,4 @@ export default class DockerPulls extends BaseJsonService {
     const data = await this.fetch({ user, repo })
     return this.constructor.render({ count: data.pull_count })
   }
-};
+}

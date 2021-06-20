@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   category: 'build',
@@ -8,4 +8,4 @@ export default deprecatedService({
   },
   label: 'continuousphp',
   dateAdded: new Date('2020-12-12'),
-});
+})

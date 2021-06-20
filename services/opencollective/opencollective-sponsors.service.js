@@ -1,4 +1,4 @@
-import OpencollectiveBase from './opencollective-base.js';
+import OpencollectiveBase from './opencollective-base.js'
 
 export default class OpencollectiveSponsors extends OpencollectiveBase {
   static route = this.buildRoute('sponsors')
@@ -23,4 +23,4 @@ export default class OpencollectiveSponsors extends OpencollectiveBase {
     )
     return this.constructor.render(backersCount)
   }
-};
+}

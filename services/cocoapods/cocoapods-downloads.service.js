@@ -1,4 +1,4 @@
-import {deprecatedService} from '../index.js';
+import { deprecatedService } from '../index.js'
 
 export default deprecatedService({
   name: 'CocoapodsDownloads',
@@ -9,4 +9,4 @@ export default deprecatedService({
   },
   label: 'downloads',
   dateAdded: new Date('2018-01-06'),
-});
+})

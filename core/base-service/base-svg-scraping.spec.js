@@ -1,8 +1,8 @@
-import {expect} from 'chai';
-import sinon from 'sinon';
-import Joi from 'joi';
-import makeBadge from '../../badge-maker/lib/make-badge.js';
-import BaseSvgScrapingService from './base-svg-scraping.js';
+import { expect } from 'chai'
+import sinon from 'sinon'
+import Joi from 'joi'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import BaseSvgScrapingService from './base-svg-scraping.js'
 
 const schema = Joi.object({
   message: Joi.string().required(),
@@ -114,7 +114,7 @@ describe('BaseSvgScrapingService', function () {
             schema,
             valueMatcher: />([^<>]+)<\/desc>/,
             url: 'http://example.com/foo.svg',
-          });
+          })
         }
       }
       const sendAndCacheRequest = async () => ({

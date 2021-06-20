@@ -1,4 +1,4 @@
-import {metric} from './text-formatters.js';
+import { metric } from './text-formatters.js'
 
 function contributorColor(contributorCount) {
   if (contributorCount > 2) {
@@ -18,7 +18,4 @@ function renderContributorBadge({ label, contributorCount }) {
   }
 }
 
-export {
-  contributorColor,
-  renderContributorBadge,
-};
+export { contributorColor, renderContributorBadge }

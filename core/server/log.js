@@ -1,4 +1,4 @@
-import Sentry from '@sentry/node';
+import Sentry from '@sentry/node'
 
 const listeners = []
 
@@ -26,16 +26,16 @@ const log = (...msg) => {
   const d = date()
   listeners.forEach(f => f(d, ...msg))
   console.log(d, ...msg)
-};
+}
 
 const error = err => {
   const d = date()
   listeners.forEach(f => f(d, err))
   Sentry.captureException(err)
   console.error(d, err)
-};
+}
 
-const addListener = func =>  listeners.push(func)
+const addListener = func => listeners.push(func)
 
 const removeListener = func => {
   const index = listeners.indexOf(func)
@@ -43,11 +43,11 @@ const removeListener = func => {
     return
   }
   listeners.splice(index, 1)
-};
+}
 
 export default {
   log,
   error,
   addListener,
   removeListener,
-};
+}

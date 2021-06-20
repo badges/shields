@@ -1,9 +1,9 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {test, forCases, given} from 'sazerac';
-import {renderBuildStatusBadge} from '../build-status.js';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import JenkinsBuild from './jenkins-build.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { test, forCases, given } from 'sazerac'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import JenkinsBuild from './jenkins-build.service.js'
 
 describe('JenkinsBuild', function () {
   test(JenkinsBuild.prototype.transform, () => {

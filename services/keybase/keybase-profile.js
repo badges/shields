@@ -1,4 +1,4 @@
-import {BaseJsonService, NotFound} from '../index.js';
+import { BaseJsonService, NotFound } from '../index.js'
 
 export default class KeybaseProfile extends BaseJsonService {
   static get apiVersion() {
@@ -30,4 +30,4 @@ export default class KeybaseProfile extends BaseJsonService {
 
     return { user: data.them[0] }
   }
-};
+}

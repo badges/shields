@@ -26,4 +26,4 @@ function renderDependenciesBadge({ deprecatedCount, outdatedCount }) {
   }
 }
 
-export { transform, renderDependenciesBadge };
+export { transform, renderDependenciesBadge }

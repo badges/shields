@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {isBuildStatus, renderBuildStatusBadge} from '../build-status.js';
-import {BaseSvgScrapingService} from '../index.js';
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -62,11 +62,11 @@ export default class Codeship extends BaseSvgScrapingService {
       url,
       options: { qs: { branch } },
       valueMatcher: /<g id="status_2">(?:[.\s\S]*)\/><\/g><g id="([\w\s]*)"/,
-    });
+    })
   }
 
   async handle({ projectId, branch }) {
     const { message: status } = await this.fetch({ projectId, branch })
     return this.constructor.render({ status })
   }
-};
+}

@@ -1,8 +1,11 @@
-import Joi from 'joi';
-import {floorCount as floorCountColor, age as ageColor} from '../color-formatters.js';
-import {addv, metric, formatDate} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import {
+  floorCount as floorCountColor,
+  age as ageColor,
+} from '../color-formatters.js'
+import { addv, metric, formatDate } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -193,10 +196,4 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-export {
-  AurLicense,
-  AurVersion,
-  AurVotes,
-  AurMaintainer,
-  AurLastModified,
-};
+export { AurLicense, AurVersion, AurVotes, AurMaintainer, AurLastModified }

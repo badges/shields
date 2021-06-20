@@ -54,13 +54,13 @@
 //    Relying on npm scripts is safer. Using "pre" makes it impossible to run
 //    the second step without the first.
 
-import minimist from 'minimist';
-import envFlag from 'node-env-flag';
-import readAllStdinSync from 'read-all-stdin-sync';
-import {createTestServer} from '../server/in-process-server-test-helpers.js';
-import Runner from './runner.js';
+import minimist from 'minimist'
+import envFlag from 'node-env-flag'
+import readAllStdinSync from 'read-all-stdin-sync'
+import { createTestServer } from '../server/in-process-server-test-helpers.js'
+import Runner from './runner.js'
 
-import('../unhandled-rejection.spec.js');
+import('../unhandled-rejection.spec.js')
 
 const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0

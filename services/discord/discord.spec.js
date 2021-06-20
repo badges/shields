@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import nock from 'nock';
-import {cleanUpNockAfterEach, defaultContext} from '../test-helpers.js';
-import Discord from './discord.service.js';
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import Discord from './discord.service.js'
 
 describe('Discord', function () {
   cleanUpNockAfterEach()

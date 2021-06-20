@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   alerts: Joi.number().required(),
@@ -39,4 +39,4 @@ export default class LgtmBaseService extends BaseJsonService {
       },
     })
   }
-};
+}

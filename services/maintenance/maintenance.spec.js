@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import Maintenance from './maintenance.service.js';
+import { test, given } from 'sazerac'
+import Maintenance from './maintenance.service.js'
 
 describe('Maintenance', function () {
   test(Maintenance.prototype.transform, () => {

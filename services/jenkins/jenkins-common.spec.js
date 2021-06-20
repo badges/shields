@@ -1,5 +1,5 @@
-import {expect} from 'chai';
-import {buildRedirectUrl, buildUrl} from './jenkins-common.js';
+import { expect } from 'chai'
+import { buildRedirectUrl, buildUrl } from './jenkins-common.js'
 
 describe('jenkins-common', function () {
   describe('buildUrl', function () {

@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import {pathToRegexp, compile} from 'path-to-regexp';
-import categories from '../../services/categories.js';
-import coalesceBadge from './coalesce-badge.js';
-import {makeFullUrl} from './route.js';
+import Joi from 'joi'
+import { pathToRegexp, compile } from 'path-to-regexp'
+import categories from '../../services/categories.js'
+import coalesceBadge from './coalesce-badge.js'
+import { makeFullUrl } from './route.js'
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
   /./,
@@ -153,7 +153,4 @@ function transformExample(inExample, index, ServiceClass) {
   }
 }
 
-export {
-  validateExample,
-  transformExample,
-};
+export { validateExample, transformExample }

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {coveragePercentage} from '../color-formatters.js';
-import {optionalUrl} from '../validators.js';
-import {BaseSvgScrapingService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.string()
@@ -136,4 +136,4 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
       coverage: this.constructor.transform({ coverage }),
     })
   }
-};
+}

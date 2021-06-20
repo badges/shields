@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {NotFound, InvalidResponse, Inaccessible} from './errors.js';
-import checkErrorResponse from './check-error-response.js';
+import { expect } from 'chai'
+import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
+import checkErrorResponse from './check-error-response.js'
 
 describe('async error handler', function () {
   const buffer = Buffer.from('some stuff')

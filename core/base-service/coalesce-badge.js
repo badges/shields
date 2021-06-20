@@ -1,7 +1,10 @@
-import {decodeDataUrlFromQueryParam, prepareNamedLogo} from '../../lib/logos.js';
-import {svg2base64} from '../../lib/svg-helpers.js';
-import coalesce from './coalesce.js';
-import toArray from './to-array.js';
+import {
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} from '../../lib/logos.js'
+import { svg2base64 } from '../../lib/svg-helpers.js'
+import coalesce from './coalesce.js'
+import toArray from './to-array.js'
 
 // Translate modern badge data to the legacy schema understood by the badge
 // maker. Allow the user to override the label, color, logo, etc. through the
@@ -180,4 +183,4 @@ export default function coalesceBadge(
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
   }
-};
+}

@@ -1,6 +1,6 @@
-import {metric} from '../text-formatters.js';
-import {downloadCount} from '../color-formatters.js';
-import OpenVSXBase from './open-vsx-base.js';
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
 export default class OpenVSXDownloads extends OpenVSXBase {
   static category = 'downloads'
@@ -55,4 +55,4 @@ export default class OpenVSXDownloads extends OpenVSXBase {
       downloads: downloadCount,
     })
   }
-};
+}

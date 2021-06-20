@@ -1,4 +1,4 @@
-import {redirector} from '../index.js';
+import { redirector } from '../index.js'
 
 export default [
   redirector({
@@ -11,4 +11,4 @@ export default [
       `/appveyor/build/${user}/${repo}${branch ? `/${branch}` : ''}`,
     dateAdded: new Date('2019-12-10'),
   }),
-];
+]

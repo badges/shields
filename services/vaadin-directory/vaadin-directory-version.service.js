@@ -1,9 +1,7 @@
-import {renderVersionBadge} from '../version.js';
-import {BaseVaadinDirectoryService} from './vaadin-directory-base.js';
+import { renderVersionBadge } from '../version.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-export default class VaadinDirectoryVersion extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
   static category = 'version'
 
   static route = {
@@ -30,4 +28,4 @@ export default class VaadinDirectoryVersion extends (
     const lv = data.latestAvailableRelease.name.toLowerCase()
     return renderVersionBadge({ version: lv })
   }
-};
+}

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseStaticService} from '../index.js';
+import Joi from 'joi'
+import { BaseStaticService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   message: Joi.string().required(),
@@ -19,4 +19,4 @@ export default class QueryStringStaticBadge extends BaseStaticService {
   handle(namedParams, queryParams) {
     return { message: queryParams.message }
   }
-};
+}

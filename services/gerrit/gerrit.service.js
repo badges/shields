@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -77,4 +77,4 @@ export default class Gerrit extends BaseJsonService {
       status: data.status,
     })
   }
-};
+}

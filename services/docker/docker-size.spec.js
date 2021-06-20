@@ -1,6 +1,6 @@
-import {test, given} from 'sazerac';
-import DockerSize from './docker-size.service.js';
-import {sizeDataNoTagSemVerSort} from './docker-fixtures.js';
+import { test, given } from 'sazerac'
+import DockerSize from './docker-size.service.js'
+import { sizeDataNoTagSemVerSort } from './docker-fixtures.js'
 
 describe('DockerSize', function () {
   test(DockerSize.prototype.transform, () => {

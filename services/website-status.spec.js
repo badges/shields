@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {renderWebsiteStatus} from './website-status.js';
+import { test, given } from 'sazerac'
+import { renderWebsiteStatus } from './website-status.js'
 
 describe('Website status helpers', function () {
   const customOptions = {

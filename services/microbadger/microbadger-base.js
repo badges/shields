@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService, NotFound} from '../index.js';
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   LayerCount: nonNegativeInteger,
@@ -48,4 +48,4 @@ export default class BaseMicrobadgerService extends BaseJsonService {
     }
     return image
   }
-};
+}

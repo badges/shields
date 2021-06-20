@@ -1,5 +1,5 @@
-import {metric as metricCount} from '../text-formatters.js';
-import TestspaceBase from './testspace-base.js';
+import { metric as metricCount } from '../text-formatters.js'
+import TestspaceBase from './testspace-base.js'
 
 export default class TestspaceTestCount extends TestspaceBase {
   static route = {
@@ -59,4 +59,4 @@ export default class TestspaceTestCount extends TestspaceBase {
     const { value } = this.transform({ json, metric })
     return this.constructor.render({ value, metric })
   }
-};
+}

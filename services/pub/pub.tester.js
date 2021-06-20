@@ -1,5 +1,5 @@
-import {isVPlusTripleDottedVersion} from '../test-validators.js';
-import {ServiceTester} from '../tester.js';
+import { isVPlusTripleDottedVersion } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'PubVersion',
   title: 'Pub Version',

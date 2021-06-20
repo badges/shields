@@ -3,6 +3,4 @@ function isSnapshotVersion(version) {
   return version && version.match(pattern)
 }
 
-export {
-  isSnapshotVersion,
-};
+export { isSnapshotVersion }

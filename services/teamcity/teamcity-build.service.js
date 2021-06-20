@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import {optionalUrl} from '../validators.js';
-import TeamCityBase from './teamcity-base.js';
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import TeamCityBase from './teamcity-base.js'
 
 const buildStatusSchema = Joi.object({
   status: Joi.equal('SUCCESS', 'FAILURE', 'ERROR').required(),
@@ -94,4 +94,4 @@ export default class TeamCityBuild extends TeamCityBase {
       useVerbose,
     })
   }
-};
+}

@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {BaseJsonService} from '../index.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   lines: nonNegativeInteger,
@@ -75,4 +75,4 @@ export default class Tokei extends BaseJsonService {
     const { lines } = await this.fetch({ provider, user, repo })
     return this.constructor.render({ lines })
   }
-};
+}

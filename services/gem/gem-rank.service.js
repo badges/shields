@@ -1,7 +1,7 @@
-import Joi from 'joi';
-import {floorCount} from '../color-formatters.js';
-import {ordinalNumber} from '../text-formatters.js';
-import {BaseJsonService, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { floorCount } from '../color-formatters.js'
+import { ordinalNumber } from '../text-formatters.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const keywords = ['ruby']
 
@@ -82,4 +82,4 @@ export default class GemRank extends BaseJsonService {
     }
     return this.constructor.render({ period, rank })
   }
-};
+}

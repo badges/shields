@@ -109,4 +109,4 @@ export {
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
-};
+}

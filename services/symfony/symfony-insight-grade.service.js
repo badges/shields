@@ -1,4 +1,8 @@
-import {SymfonyInsightBase, keywords, gradeColors} from './symfony-insight-base.js';
+import {
+  SymfonyInsightBase,
+  keywords,
+  gradeColors,
+} from './symfony-insight-base.js'
 
 export default class SymfonyInsightGrade extends SymfonyInsightBase {
   static route = {
@@ -44,4 +48,4 @@ export default class SymfonyInsightGrade extends SymfonyInsightBase {
 
     return this.constructor.render({ grade, status })
   }
-};
+}

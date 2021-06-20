@@ -1,4 +1,4 @@
-import {BaseSpigetService, documentation, keywords} from './spiget-base.js';
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
 export default class SpigetDownloadSize extends BaseSpigetService {
   static category = 'size'
@@ -45,4 +45,4 @@ export default class SpigetDownloadSize extends BaseSpigetService {
       type: file.type,
     })
   }
-};
+}

@@ -1,11 +1,11 @@
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {downloadCount as downloadCountColor} from '../color-formatters.js';
-import {NotFound} from '../index.js';
-import {GithubAuthV3Service} from './github-auth-service.js';
-import {fetchLatestRelease} from './github-common-release.js';
-import {documentation, errorMessagesFor} from './github-helpers.js';
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { fetchLatestRelease } from './github-common-release.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
@@ -263,4 +263,4 @@ export default class GithubDownloads extends GithubAuthV3Service {
 
     return this.constructor.render({ tag, assetName, downloadCount })
   }
-};
+}

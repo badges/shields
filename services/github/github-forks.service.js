@@ -1,9 +1,9 @@
-import gql from 'graphql-tag';
-import Joi from 'joi';
-import {metric} from '../text-formatters.js';
-import {nonNegativeInteger} from '../validators.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {documentation, transformErrors} from './github-helpers.js';
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -72,4 +72,4 @@ export default class GithubForks extends GithubAuthV4Service {
       forkCount: json.data.repository.forkCount,
     })
   }
-};
+}

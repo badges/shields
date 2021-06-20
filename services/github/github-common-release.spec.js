@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {_getLatestRelease} from './github-common-release.js';
+import { test, given } from 'sazerac'
+import { _getLatestRelease } from './github-common-release.js'
 
 describe('GithubRelease', function () {
   test(_getLatestRelease, () => {

@@ -1,4 +1,4 @@
-import {schema, periodMap, BaseJsDelivrService} from './jsdelivr-base.js';
+import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 
 export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   static route = {
@@ -42,4 +42,4 @@ export default class JsDelivrHitsNPM extends BaseJsDelivrService {
     })
     return this.constructor.render({ period, hits: total })
   }
-};
+}

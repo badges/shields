@@ -1,4 +1,4 @@
-import BaseMicrobadgerService from './microbadger-base.js';
+import BaseMicrobadgerService from './microbadger-base.js'
 
 export default class MicrobadgerLayers extends BaseMicrobadgerService {
   static route = {
@@ -37,4 +37,4 @@ export default class MicrobadgerLayers extends BaseMicrobadgerService {
     const image = this.constructor.getImage(data, tag)
     return this.constructor.render({ layers: image.LayerCount })
   }
-};
+}

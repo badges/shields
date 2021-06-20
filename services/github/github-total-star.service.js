@@ -1,9 +1,12 @@
-import Joi from 'joi';
-import gql from 'graphql-tag';
-import {nonNegativeInteger} from '../validators.js';
-import {metric} from '../text-formatters.js';
-import {GithubAuthV4Service} from './github-auth-service.js';
-import {documentation as commonDocumentation, transformErrors} from './github-helpers.js';
+import Joi from 'joi'
+import gql from 'graphql-tag'
+import { nonNegativeInteger } from '../validators.js'
+import { metric } from '../text-formatters.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import {
+  documentation as commonDocumentation,
+  transformErrors,
+} from './github-helpers.js'
 
 const MAX_REPO_LIMIT = 200
 
@@ -238,4 +241,4 @@ export default class GithubTotalStarService extends GithubAuthV4Service {
     const totalStars = await this.getTotalStars({ user }, queryParams)
     return this.constructor.render({ totalStars, user })
   }
-};
+}

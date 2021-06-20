@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import {BaseJsonService, InvalidResponse} from '../index.js';
+import Joi from 'joi'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const sessionSchema = Joi.object({
   session: Joi.string().required(),
@@ -83,4 +83,4 @@ class BaseOreService extends BaseJsonService {
 
 BaseOreService.sessionToken = null
 
-export { keywords, documentation, BaseOreService };
+export { keywords, documentation, BaseOreService }

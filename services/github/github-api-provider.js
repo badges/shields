@@ -1,8 +1,8 @@
-import Joi from 'joi';
-import log from '../../core/server/log.js';
-import {TokenPool} from '../../core/token-pooling/token-pool.js';
-import {userAgent} from '../../core/base-service/legacy-request-handler.js';
-import {nonNegativeInteger} from '../validators.js';
+import Joi from 'joi'
+import log from '../../core/server/log.js'
+import { TokenPool } from '../../core/token-pooling/token-pool.js'
+import { userAgent } from '../../core/base-service/legacy-request-handler.js'
+import { nonNegativeInteger } from '../validators.js'
 
 const headerSchema = Joi.object({
   'x-ratelimit-limit': nonNegativeInteger,
@@ -212,4 +212,4 @@ class GithubApiProvider {
   }
 }
 
-export default GithubApiProvider;
+export default GithubApiProvider

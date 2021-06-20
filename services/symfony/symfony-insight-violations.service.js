@@ -1,4 +1,4 @@
-import {SymfonyInsightBase, keywords} from './symfony-insight-base.js';
+import { SymfonyInsightBase, keywords } from './symfony-insight-base.js'
 
 export default class SymfonyInsightViolations extends SymfonyInsightBase {
   static route = {
@@ -76,4 +76,4 @@ export default class SymfonyInsightViolations extends SymfonyInsightBase {
     const lastAnalysis = this.transform({ data })
     return this.constructor.render(lastAnalysis)
   }
-};
+}

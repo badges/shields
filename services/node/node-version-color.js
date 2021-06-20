@@ -1,7 +1,7 @@
-import {promisify} from 'util';
-import moment from 'moment';
-import semver from 'semver';
-import {regularUpdate} from '../../core/legacy/regular-update.js';
+import { promisify } from 'util'
+import moment from 'moment'
+import semver from 'semver'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 const dateFormat = 'YYYY-MM-DD'
 
@@ -82,7 +82,4 @@ async function versionColorForRangeCurrent(range) {
   }
 }
 
-export {
-  versionColorForRangeCurrent,
-  versionColorForRangeLts,
-};
+export { versionColorForRangeCurrent, versionColorForRangeLts }

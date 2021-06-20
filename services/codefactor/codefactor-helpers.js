@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi'
 
 // https://support.codefactor.io/i14-glossary
 // https://github.com/badges/shields/issues/4269
@@ -29,4 +29,4 @@ function gradeColor(grade) {
   return color
 }
 
-export { isValidGrade, gradeColor };
+export { isValidGrade, gradeColor }

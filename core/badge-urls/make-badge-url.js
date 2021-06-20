@@ -1,6 +1,6 @@
-import {URL} from 'url';
-import queryString from 'query-string';
-import {compile} from 'path-to-regexp';
+import { URL } from 'url'
+import queryString from 'query-string'
+import { compile } from 'path-to-regexp'
 
 function badgeUrlFromPath({
   baseUrl = '',
@@ -50,7 +50,7 @@ function badgeUrlFromPattern({
 }
 
 function encodeField(s) {
-  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'));
+  return encodeURIComponent(s.replace(/-/g, '--').replace(/_/g, '__'))
 }
 
 function staticBadgeUrl({
@@ -159,4 +159,4 @@ export {
   queryStringStaticBadgeUrl,
   dynamicBadgeUrl,
   rasterRedirectUrl,
-};
+}

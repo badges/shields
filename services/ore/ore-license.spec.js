@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import OreLicense from './ore-license.service.js';
+import { test, given } from 'sazerac'
+import OreLicense from './ore-license.service.js'
 
 describe('OreLicense', function () {
   test(OreLicense.prototype.transform, () => {

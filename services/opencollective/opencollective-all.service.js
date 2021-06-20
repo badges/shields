@@ -1,4 +1,4 @@
-import OpencollectiveBase from './opencollective-base.js';
+import OpencollectiveBase from './opencollective-base.js'
 
 export default class OpencollectiveAll extends OpencollectiveBase {
   static route = this.buildRoute('all')
@@ -20,4 +20,4 @@ export default class OpencollectiveAll extends OpencollectiveBase {
     const { backersCount } = await this.fetchCollectiveInfo(collective)
     return this.constructor.render(backersCount)
   }
-};
+}

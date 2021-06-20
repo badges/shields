@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import SonarQualityGate from './sonar-quality-gate.service.js';
+import { test, given } from 'sazerac'
+import SonarQualityGate from './sonar-quality-gate.service.js'
 
 describe('SonarQualityGate', function () {
   test(SonarQualityGate.render, () => {

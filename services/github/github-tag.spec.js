@@ -1,5 +1,5 @@
-import {test, given} from 'sazerac';
-import {GithubTag} from './github-tag.service.js';
+import { test, given } from 'sazerac'
+import { GithubTag } from './github-tag.service.js'
 
 describe('GithubTag', function () {
   test(GithubTag.getLatestTag, () => {

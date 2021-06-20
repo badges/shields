@@ -1,5 +1,5 @@
-import {ServiceTester} from '../tester.js';
-import {isVPlusDottedVersionAtLeastOne} from '../test-validators.js';
+import { ServiceTester } from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'wordpress',
