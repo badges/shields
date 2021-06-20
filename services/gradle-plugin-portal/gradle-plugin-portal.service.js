@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = redirector({
+export default redirector({
   category: 'version',
   isDeprecated: false,
   route: {
