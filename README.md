@@ -101,8 +101,8 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 ## Development
 
-1. Install Node 12 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 12 and 14.
+1. Install Node 14 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 14 and 16.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
