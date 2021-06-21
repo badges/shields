@@ -17,7 +17,9 @@ const trace = require('./trace')
 const attrSchema = Joi.object({
   name: Joi.string().min(3),
   category: isValidCategory,
+  isDeprecated: Joi.boolean().default(true),
   route: isValidRoute,
+  examples: Joi.array().has(Joi.object()).default([]),
   transformPath: Joi.func()
     .maxArity(1)
     .required()
@@ -34,7 +36,9 @@ module.exports = function redirector(attrs) {
   const {
     name,
     category,
+    isDeprecated,
     route,
+    examples,
     transformPath,
     transformQueryParams,
     overrideTransformedQueryParams,
@@ -48,8 +52,9 @@ module.exports = function redirector(attrs) {
       })}Redirect`
 
     static category = category
-    static isDeprecated = true
+    static isDeprecated = isDeprecated
     static route = route
+    static examples = examples
 
     static register({ camp, metricInstance }, { rasterUrl }) {
       const { regex, captureNames } = prepareRoute({

@@ -12,16 +12,10 @@ const schema = Joi.object()
       )
       .required(),
 
-    // latest_stable_release can be object or NULL
-    latest_stable_release: Joi.object()
-      .keys({
-        name: Joi.string().required(),
-      })
-      .allow(null),
-
-    // latest_release_number can be NULL for bower because bower
+    // Keys can be NULL for bower because bower
     // has no registry to enforce any release exists
     latest_release_number: Joi.string().allow(null),
+    latest_stable_release_number: Joi.string().allow(null),
   })
   .required()
 

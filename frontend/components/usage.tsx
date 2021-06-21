@@ -335,10 +335,12 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
                 >
                   simple-icons
                 </a>
-                . Simple-icons are referenced using names as they appear on the
-                simple-icons site. If the name includes spaces, replace them
-                with dashes (e.g:{' '}
-                <StyledCode>?logo=visual-studio-code</StyledCode>)
+                . Simple-icons are referenced using icon slugs which can be
+                found on the simple-icons site or in the{' '}
+                <a href="https://github.com/simple-icons/simple-icons/blob/develop/slugs.md">
+                  slugs.md file
+                </a>{' '}
+                in the simple-icons repository.
               </span>
             }
             key="logo"
