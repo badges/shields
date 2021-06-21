@@ -228,7 +228,7 @@ jobs:
 
     <<: *services_steps
 
-  services@node-14:
+  services@node-16:
     docker:
       - image: circleci/node:16
 
