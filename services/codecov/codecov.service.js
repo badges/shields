@@ -24,7 +24,7 @@ const queryParamSchema = Joi.object({
   // https://docs.codecov.io/docs/flags
   // Flags Must consist only of alphanumeric characters, '_', '-', or '.' and 
   // not exceed 45 characters.
-  flag: Joi.string().regex(/^[\w\.\-]{1,45}$/),
+  flag: Joi.string().regex(/^[\w.-]{1,45}$/),
 }).required()
 
 const schema = Joi.object({
