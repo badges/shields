@@ -13,51 +13,6 @@ module.exports = redirector({
     {
       title: 'Maven Central',
       pattern: ':groupId/:artifactId',
-      namedParams: {
-        groupId: 'org.apache.maven',
-        artifactId: 'apache-maven',
-      },
-      staticPreview: {
-        label: 'maven-central',
-        message: 'v3.6.0',
-        color: 'blue',
-      },
-    },
-    {
-      title: 'Maven Central with version prefix filter',
-      pattern: ':groupId/:artifactId',
-      queryParams: {
-        versionPrefix: '2',
-      },
-      namedParams: {
-        groupId: 'org.apache.maven',
-        artifactId: 'apache-maven',
-      },
-      staticPreview: {
-        label: 'maven-central',
-        message: 'v2.2.1',
-        color: 'blue',
-      },
-    },
-    {
-      title: 'Maven Central with version suffix filter',
-      pattern: ':groupId/:artifactId',
-      queryParams: {
-        versionSuffix: '-android',
-      },
-      namedParams: {
-        groupId: 'com.google.guava',
-        artifactId: 'guava',
-      },
-      staticPreview: {
-        label: 'maven-central',
-        message: 'v30.1.1-android',
-        color: 'blue',
-      },
-    },
-    {
-      title: 'Maven Central with version prefix and suffix filter',
-      pattern: ':groupId/:artifactId',
       queryParams: {
         versionSuffix: '-android',
         versionPrefix: '29',

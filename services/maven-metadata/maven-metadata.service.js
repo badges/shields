@@ -36,35 +36,6 @@ module.exports = class MavenMetadata extends BaseXmlService {
       namedParams: {},
       queryParams: {
         metadataUrl:
-          'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
-      },
-      staticPreview: renderVersionBadge({ version: '2.8.5' }),
-    },
-    {
-      title: 'Maven metadata URL with version prefix',
-      namedParams: {},
-      queryParams: {
-        metadataUrl:
-          'https://repo1.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml',
-        versionPrefix: '1.',
-      },
-      staticPreview: renderVersionBadge({ version: '1.7.2' }),
-    },
-    {
-      title: 'Maven metadata URL with version suffix',
-      namedParams: {},
-      queryParams: {
-        metadataUrl:
-          'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
-        versionSuffix: '-android',
-      },
-      staticPreview: renderVersionBadge({ version: '30.1.1-android' }),
-    },
-    {
-      title: 'Maven metadata URL with both version prefix and version suffix',
-      namedParams: {},
-      queryParams: {
-        metadataUrl:
           'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
         versionPrefix: '29.',
         versionSuffix: '-android',
