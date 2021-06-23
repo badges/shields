@@ -7,7 +7,7 @@ module.exports = redirector({
   isDeprecated: false,
   route: {
     base: 'gradle-plugin-portal/v',
-    pattern: ':pluginId/:versionPrefix?',
+    pattern: ':pluginId',
   },
   examples: [
     {
@@ -24,10 +24,12 @@ module.exports = redirector({
     },
     {
       title: 'Gradle Plugin Portal with version prefix filter',
-      pattern: ':pluginId/:versionPrefix',
+      pattern: ':pluginId',
+      queryParams: {
+        versionPrefix: '0.13',
+      },
       namedParams: {
         pluginId: 'com.gradle.plugin-publish',
-        versionPrefix: '0.13',
       },
       staticPreview: {
         label: 'plugin portal',
@@ -52,13 +54,13 @@ module.exports = redirector({
     },
     {
       title: 'Gradle Plugin Portal with version prefix and suffix filter',
-      pattern: ':pluginId/:versionPrefix',
+      pattern: ':pluginId',
       queryParams: {
         versionSuffix: '.1',
+        versionPrefix: '0.10',
       },
       namedParams: {
         pluginId: 'com.gradle.plugin-publish',
-        versionPrefix: '0.10',
       },
       staticPreview: {
         label: 'maven-central',
@@ -68,14 +70,13 @@ module.exports = redirector({
     },
   ],
   transformPath: () => `/maven-metadata/v`,
-  transformQueryParams: ({ pluginId, versionPrefix }) => {
+  transformQueryParams: ({ pluginId }) => {
     const groupPath = pluginId.replace(/\./g, '/')
     const artifactId = `${pluginId}.gradle.plugin`
     const metadataUrl = `https://plugins.gradle.org/m2/${groupPath}/${artifactId}/maven-metadata.xml`
     return {
       metadataUrl,
       label: 'plugin portal',
-      versionPrefix,
     }
   },
   overrideTransformedQueryParams: true,
