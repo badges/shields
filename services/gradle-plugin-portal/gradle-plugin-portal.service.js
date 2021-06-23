@@ -12,7 +12,6 @@ module.exports = redirector({
   examples: [
     {
       title: 'Gradle Plugin Portal',
-      pattern: ':pluginId',
       namedParams: {
         pluginId: 'com.gradle.plugin-publish',
       },
@@ -24,7 +23,6 @@ module.exports = redirector({
     },
     {
       title: 'Gradle Plugin Portal with version prefix filter',
-      pattern: ':pluginId',
       queryParams: {
         versionPrefix: '0.13',
       },
@@ -39,7 +37,6 @@ module.exports = redirector({
     },
     {
       title: 'Gradle Plugin Portal with version suffix filter',
-      pattern: ':pluginId',
       queryParams: {
         versionSuffix: '.1',
       },
@@ -54,7 +51,6 @@ module.exports = redirector({
     },
     {
       title: 'Gradle Plugin Portal with version prefix and suffix filter',
-      pattern: ':pluginId',
       queryParams: {
         versionSuffix: '.1',
         versionPrefix: '0.10',
