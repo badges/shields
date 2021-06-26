@@ -20,7 +20,7 @@ module.exports = redirector({
         pluginId: 'com.gradle.plugin-publish',
       },
       staticPreview: {
-        label: 'maven-central',
+        label: 'plugin portal',
         message: 'v29.0-android',
         color: 'blue',
       },
