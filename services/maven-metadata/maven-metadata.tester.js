@@ -72,3 +72,21 @@ t.create('invalid maven-metadata.xml uri')
     '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/code/gson/gson/foobar.xml'
   )
   .expectBadge({ label: 'maven', message: 'not found' })
+
+t.create('inexistent version prefix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/maven-metadata.xml&versionPrefix=99'
+  )
+  .expectBadge({
+    label: 'maven',
+    message: 'version prefix or suffix not found',
+  })
+
+t.create('inexistent version suffix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/github/fabriziocucci/yacl4j/maven-metadata.xml&versionSuffix=test'
+  )
+  .expectBadge({
+    label: 'maven',
+    message: 'version prefix or suffix not found',
+  })
