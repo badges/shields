@@ -3,6 +3,7 @@
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
 const { optionalUrl } = require('../validators')
+const { colorScale } = require('../color-formatters')
 
 const schema = Joi.object({
   translated_percent: Joi.number().required(),
@@ -48,13 +49,8 @@ module.exports = class WeblateProjectTranslatedPercentage extends (
    * @returns {object} Format for the badge.
    */
   static render({ translatedPercent }) {
-    if (translatedPercent >= 90)
-      return { message: `${translatedPercent}%`, color: 'success' }
-
-    if (translatedPercent >= 75)
-      return { message: `${translatedPercent}%`, color: 'yellow' }
-
-    return { message: `${translatedPercent}%`, color: 'critical' }
+    const color = colorScale([75, 90])(translatedPercent)
+    return { message: `${translatedPercent}%`, color }
   }
 
   async fetch({ project, server }) {
