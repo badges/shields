@@ -4,6 +4,7 @@ const Joi = require('joi')
 const { optionalUrl } = require('../validators')
 const { renderVersionBadge } = require('../version')
 const { BaseXmlService, NotFound } = require('..')
+const { documentation } = require('./maven-metadata')
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),
@@ -41,6 +42,7 @@ module.exports = class MavenMetadata extends BaseXmlService {
         versionSuffix: '-android',
       },
       staticPreview: renderVersionBadge({ version: '29.0-android' }),
+      documentation,
     },
   ]
 

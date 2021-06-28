@@ -1,6 +1,7 @@
 'use strict'
 
 const { redirector } = require('..')
+const { documentation } = require('../maven-metadata/maven-metadata')
 
 module.exports = redirector({
   category: 'version',
@@ -26,6 +27,7 @@ module.exports = redirector({
         message: 'v29.0-android',
         color: 'blue',
       },
+      documentation,
     },
   ],
   transformPath: () => `/maven-metadata/v`,
