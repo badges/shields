@@ -70,8 +70,7 @@ module.exports = class MavenMetadata extends BaseXmlService {
     const version = versions[0]
     // if the filter returned no results, throw a NotFound
     if (
-      versionPrefix !== undefined &&
-      versionSuffix !== undefined &&
+      (versionPrefix !== undefined || versionSuffix !== undefined) &&
       version === undefined
     )
       throw new NotFound({
