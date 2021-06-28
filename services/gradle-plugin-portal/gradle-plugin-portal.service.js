@@ -22,7 +22,7 @@ module.exports = redirector({
       },
       staticPreview: {
         label: 'plugin portal',
-        message: 'v29.0-android',
+        message: 'v0.10.1',
         color: 'blue',
       },
       documentation,
