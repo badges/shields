@@ -23,11 +23,6 @@ t.create('Projects')
   .get('/projects.json?server=https://hosted.weblate.org')
   .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ projects/) })
 
-t.create('Units')
-  .timeout(15000)
-  .get('/units.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ units/) })
-
 t.create('Users')
   .get('/users.json?server=https://hosted.weblate.org')
   .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ users/) })

@@ -70,7 +70,6 @@ const entityCounts = [
   { entityName: 'components', exampleValue: 2799 },
   { entityName: 'languages', exampleValue: 384 },
   { entityName: 'projects', exampleValue: 533 },
-  { entityName: 'units', exampleValue: 16539728 },
   { entityName: 'users', exampleValue: 33058 },
 ].map(WeblateEntityCountFactory)
 
