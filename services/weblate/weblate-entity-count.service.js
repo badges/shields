@@ -4,6 +4,7 @@ const Joi = require('joi')
 const camelcase = require('camelcase')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
+const { metric } = require('../text-formatters')
 
 const schema = Joi.object({
   count: nonNegativeInteger,
@@ -55,7 +56,7 @@ function WeblateEntityCountFactory({ entityName, exampleValue }) {
     ]
 
     static render({ count }) {
-      return { message: `${count} ${entityName}` }
+      return { message: `${metric(count)} ${entityName}` }
     }
 
     async handle(routeParams, { server }) {

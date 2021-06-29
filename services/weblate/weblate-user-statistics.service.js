@@ -4,6 +4,7 @@ const Joi = require('joi')
 const camelcase = require('camelcase')
 const { BaseJsonService } = require('..')
 const { nonNegativeInteger, optionalUrl } = require('../validators')
+const { metric } = require('../text-formatters')
 
 const schema = Joi.object({
   translated: nonNegativeInteger,
@@ -66,7 +67,7 @@ function WeblateUserStatisticFactory({
     ]
 
     static render({ count }) {
-      return { message: `${count} ${statisticName}` }
+      return { message: `${metric(count)} ${statisticName}` }
     }
 
     async handle({ user }, { server }) {

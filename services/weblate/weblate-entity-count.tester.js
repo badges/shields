@@ -1,7 +1,7 @@
 'use strict'
 
 const { ServiceTester } = require('../tester')
-const { withRegex } = require('../test-validators')
+const { isMetricWithPattern } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
   id: 'weblate',
@@ -10,21 +10,24 @@ const t = (module.exports = new ServiceTester({
 
 t.create('Components')
   .get('/components.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: withRegex(/^\d+ components$/) })
+  .expectBadge({
+    label: 'weblate',
+    message: isMetricWithPattern(/ components/),
+  })
 
 t.create('Languages')
   .get('/languages.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: withRegex(/^\d+ languages$/) })
+  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ languages/) })
 
 t.create('Projects')
   .get('/projects.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: withRegex(/^\d+ projects$/) })
+  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ projects/) })
 
 t.create('Units')
   .timeout(15000)
   .get('/units.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: withRegex(/^\d+ units$/) })
+  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ units/) })
 
 t.create('Users')
   .get('/users.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: withRegex(/^\d+ users$/) })
+  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ users/) })
