@@ -1,0 +1,44 @@
+name: '🐛 Bug Report'
+description: Report errors and problems
+labels: [question]
+body:
+  - type: dropdown
+    id: product
+    attributes:
+      label: Are you experiencing an issue with...
+      options:
+        - shields.io
+        - My own instance of shields
+        - badge-maker NPM package
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: '🐞 Description'
+      description: A clear and concise description of the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: link
+    attributes:
+      label: '🔗 Link to the badge'
+      description: If you are reporting a problem with a specific badge on shields.io, provide a link to a badge demonstrating the error
+    validations:
+      required: false
+
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: '💡 Possible Solution'
+      description: 'Optional: only if you have suggestions on a fix/reason for the bug'
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## :heart: Love Shields?
+        Please consider donating $10 to sustain our activities: [https://opencollective.com/shields](https://opencollective.com/shields)

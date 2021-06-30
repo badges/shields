@@ -4,9 +4,11 @@
 
 ### SimpleIcons
 
-We support a wide range of logos via [SimpleIcons][]. They can be referenced by name e.g:
+We support a wide range of logos via [SimpleIcons][]. They should be referenced by the logo slug e.g:
 
-![](https://img.shields.io/npm/v/npm.svg?logo=javascript) - https://img.shields.io/npm/v/npm.svg?logo=javascript
+![](https://img.shields.io/npm/v/npm.svg?logo=nodedotjs) - https://img.shields.io/npm/v/npm.svg?logo=nodedotjs
+
+The set of Simple Icon slugs can be found in the [slugs.md](https://github.com/simple-icons/simple-icons/blob/develop/slugs.md) file in the Simple Icons repository. NB - the Simple Icons site and that slugs.md page may at times contain new icons that haven't yet been pulled into the Shields.io runtime. More information on how and when we incorporate icon updates can be found [here](https://github.com/badges/shields/discussions/5369).
 
 ### Shields logos
 

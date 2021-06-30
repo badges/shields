@@ -21,11 +21,11 @@ Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/
 
 You should have [git](https://git-scm.com/) installed.
 If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
-and learn about the [Github workflow](http://try.github.io/).
+and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=12 and NPM >=7 is required. If you don't already have them,
+Node >=14 and NPM >=7 is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install

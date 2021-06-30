@@ -4,7 +4,7 @@ This document describes how to host your own shields server either from source o
 
 ## Installing from Source
 
-You will need Node 12 or later, which you can install using a
+You will need Node 14 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:

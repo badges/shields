@@ -96,8 +96,8 @@ package_steps: &package_steps
           set +e
           export NVM_DIR="/opt/circleci/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install v12
-          nvm use v12
+          nvm install v14
+          nvm use v14
           npm install -g npm
 
     # Run the package tests on each currently supported node version. See:
@@ -137,33 +137,33 @@ package_steps: &package_steps
 jobs:
   main:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
 
     <<: *main_steps
 
-  main@node-14:
+  main@node-16:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
 
     <<: *main_steps
 
   integration:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
       - image: redis
 
     <<: *integration_steps
 
-  integration@node-14:
+  integration@node-16:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
       - image: redis
 
     <<: *integration_steps
 
   danger:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
 
@@ -183,7 +183,7 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
 
@@ -224,19 +224,19 @@ jobs:
 
   services:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
 
     <<: *services_steps
 
-  services@node-14:
+  services@node-16:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
 
     <<: *services_steps
 
   e2e:
     docker:
-      - image: cypress/base:12
+      - image: cypress/base:14
     steps:
       - checkout
 
@@ -285,11 +285,11 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - main@node-14:
+      - main@node-16:
           filters:
             branches:
               ignore: gh-pages
-      - integration@node-14:
+      - integration@node-16:
           filters:
             branches:
               ignore: gh-pages
@@ -307,7 +307,7 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - services@node-14:
+      - services@node-16:
           filters:
             branches:
               ignore:
