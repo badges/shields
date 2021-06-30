@@ -21,7 +21,7 @@ Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/
 
 You should have [git](https://git-scm.com/) installed.
 If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
-and learn about the [Github workflow](http://try.github.io/).
+and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
