@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 const { BaseJsonService } = require('..')
-const { starRating } = require('../text-formatters')
+const { coveragePercentage } = require('../color-formatters')
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
 const numberSchema = Joi.number().min(0).max(1).required()
@@ -17,29 +17,7 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
-const queryParamSchema = Joi.object({
-  msg_type: Joi.string().pattern(/percentage|star|grade/),
-}).default('percentage')
-
-function formatMessage(score, msgType) {
-  switch (msgType) {
-    case 'star': {
-      return starRating(score * 5)
-    }
-    case 'grade': {
-      if (score >= 0.95) return 'A+'
-      if (score >= 0.75) return 'A'
-      if (score >= 0.5) return 'B'
-      if (score >= 0.25) return 'C'
-      if (score >= 0.05) return 'D'
-      return 'E'
-    }
-    case 'percentage':
-    default: {
-      return `${(score * 100).toFixed(1)}%`
-    }
-  }
-}
+const keywords = ['node', 'npm score']
 
 module.exports = class NpmsIO extends BaseJsonService {
   static category = 'analysis'
@@ -47,72 +25,50 @@ module.exports = class NpmsIO extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(rating|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
-    queryParamSchema,
+      ':type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
   }
 
   static examples = [
     {
-      title: 'npms.io',
-      namedParams: { type: 'rating', packageName: 'egg' },
+      title: 'npms.io (final)',
+      namedParams: { type: 'final', packageName: 'egg' },
       staticPreview: this.render({ score: 0.9711 }),
-      keywords: ['node'],
+      keywords,
     },
     {
       title: 'npms.io (popularity)',
       pattern: ':type/:scope/:packageName',
       namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
       staticPreview: this.render({ type: 'popularity', score: 0.89 }),
-      keywords: ['node'],
+      keywords,
     },
     {
       title: 'npms.io (quality)',
       namedParams: { type: 'quality', packageName: 'egg' },
       staticPreview: this.render({ type: 'quality', score: 0.98 }),
-      keywords: ['node'],
+      keywords,
     },
     {
       title: 'npms.io (maintenance)',
       namedParams: { type: 'maintenance', packageName: 'command' },
       staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
-      keywords: ['node'],
-    },
-    {
-      title: 'npms.io with percentage style',
-      namedParams: { type: 'rating', packageName: 'egg' },
-      queryParams: { msg_type: 'percentage' },
-      staticPreview: this.render({ score: 0.9711 }),
-      keywords: ['node'],
-    },
-    {
-      title: 'npms.io with grade style',
-      namedParams: { type: 'rating', packageName: 'egg' },
-      queryParams: { msg_type: 'grade' },
-      staticPreview: this.render({ score: 0.9711 }),
-      keywords: ['node'],
-    },
-    {
-      title: 'npms.io with star style)',
-      namedParams: { type: 'rating', packageName: 'egg' },
-      queryParams: { msg_type: 'star' },
-      staticPreview: this.render({ score: 0.9711 }),
-      keywords: ['node'],
+      keywords,
     },
   ]
 
   static defaultBadgeData = {
-    label: 'rating',
+    label: 'score',
   }
 
-  static render({ type, score, msgType }) {
+  static render({ type, score }) {
     return {
-      label: type === 'rating' ? 'rating' : type,
-      message: formatMessage(score, msgType),
-      color: score > 0.3 ? 'brightgreen' : 'red',
+      label: type === 'final' ? 'score' : type,
+      message: `${(score * 100).toFixed(1)}%`,
+      color: coveragePercentage(score * 100),
     }
   }
 
-  async handle({ type, scope, packageName }, { msg_type: msgType }) {
+  async handle({ type, scope, packageName }) {
     const slug = scope ? `${scope}/${packageName}` : packageName
     const url = `https://api.npms.io/v2/package/${encodeURIComponent(slug)}`
 
@@ -122,8 +78,8 @@ module.exports = class NpmsIO extends BaseJsonService {
       errorMessages: { 404: 'package not found or too new' },
     })
 
-    const score = type === 'rating' ? json.score.final : json.score.detail[type]
+    const score = type === 'final' ? json.score.final : json.score.detail[type]
 
-    return this.constructor.render({ type, score, msgType })
+    return this.constructor.render({ type, score })
   }
 }
