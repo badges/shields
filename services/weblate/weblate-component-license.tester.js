@@ -2,10 +2,7 @@
 
 const { ServiceTester } = require('../tester')
 
-const t = (module.exports = new ServiceTester({
-  id: 'weblate',
-  title: 'Weblate',
-}))
+const t = (module.exports = require('../tester').createServiceTester())
 
 t.create('License')
   .get('/license/godot-engine/godot.json?server=https://hosted.weblate.org')
