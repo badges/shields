@@ -12,12 +12,9 @@ const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
 }).required()
 
-const documentation = `
-  <p>
-    This badge displays the license of a component on a Weblate instance.
-  </p>
-`
-
+/**
+ * This badge displays the license of a component on a Weblate instance.
+ */
 module.exports = class WeblateComponentLicense extends BaseJsonService {
   static category = 'license'
   static route = {
@@ -32,12 +29,11 @@ module.exports = class WeblateComponentLicense extends BaseJsonService {
       namedParams: { project: 'godot-engine', component: 'godot' },
       queryParams: { server: 'https://hosted.weblate.org' },
       staticPreview: this.render({ license: 'MIT' }),
-      documentation,
       keywords: ['i18n', 'translation', 'internationalization'],
     },
   ]
 
-  static defaultBadgeData = { label: 'license', color: 'blue' }
+  static defaultBadgeData = { label: 'license', color: 'informational' }
 
   static render({ license }) {
     return { message: `${license}` }
@@ -48,8 +44,8 @@ module.exports = class WeblateComponentLicense extends BaseJsonService {
       schema,
       url: `${server}/api/components/${project}/${component}/`,
       errorMessages: {
-        403: 'access denied',
-        404: 'not found',
+        403: 'access denied by remote server',
+        404: 'component not found',
         429: 'rate limited by remote server',
       },
     })

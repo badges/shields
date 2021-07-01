@@ -1,12 +1,8 @@
 'use strict'
 
-const { ServiceTester } = require('../tester')
-const { isPercentage } = require('../test-validators')
+const t = (module.exports = require('../tester').createServiceTester())
 
-const t = (module.exports = new ServiceTester({
-  id: 'weblate',
-  title: 'Weblate',
-}))
+const { isPercentage } = require('../test-validators')
 
 t.create('License')
   .get('/godot-engine.json?server=https://hosted.weblate.org')
@@ -14,4 +10,4 @@ t.create('License')
 
 t.create('Not Valid')
   .get('/fake-project.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'translated', message: 'not found' })
+  .expectBadge({ label: 'translated', message: 'project not found' })

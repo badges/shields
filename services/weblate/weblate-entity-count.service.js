@@ -25,14 +25,14 @@ class WeblateEntityCountBase extends BaseJsonService {
     }
   }
 
-  static defaultBadgeData = { label: 'weblate', color: 'brightgreen' }
+  static defaultBadgeData = { color: 'informational' }
 
   async fetch({ entityName, server }) {
     return this._requestJson({
       schema,
       url: `${server}/api/${entityName}/`,
       errorMessages: {
-        403: 'access denied',
+        403: 'access denied by remote server',
         429: 'rate limited by remote server',
       },
     })
@@ -50,13 +50,12 @@ function WeblateEntityCountFactory({ entityName, exampleValue }) {
         namedParams: {},
         queryParams: { server: 'https://hosted.weblate.org' },
         staticPreview: this.render({ count: exampleValue }),
-        documentation: `<p>This badge displays the number of ${entityName} on a Weblate instance.</p>`,
         keywords: ['i18n', 'internationalization'],
       },
     ]
 
     static render({ count }) {
-      return { message: `${metric(count)} ${entityName}` }
+      return { label: entityName, message: metric(count) }
     }
 
     async handle(routeParams, { server }) {
@@ -68,7 +67,6 @@ function WeblateEntityCountFactory({ entityName, exampleValue }) {
 
 const entityCounts = [
   { entityName: 'components', exampleValue: 2799 },
-  { entityName: 'languages', exampleValue: 384 },
   { entityName: 'projects', exampleValue: 533 },
   { entityName: 'users', exampleValue: 33058 },
 ].map(WeblateEntityCountFactory)

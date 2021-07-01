@@ -13,13 +13,10 @@ const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
 }).required()
 
-const documentation = `
-  <p>
-    This badge displays the percentage of strings translated on a project on a
-    Weblate instance.
-  </p>
-`
-
+/**
+ * This badge displays the percentage of strings translated on a project on a
+ * Weblate instance.
+ */
 module.exports = class WeblateProjectTranslatedPercentage extends (
   BaseJsonService
 ) {
@@ -32,7 +29,6 @@ module.exports = class WeblateProjectTranslatedPercentage extends (
       namedParams: { project: 'godot-engine' },
       queryParams: { server: 'https://hosted.weblate.org' },
       staticPreview: this.render({ translatedPercent: 20.5 }),
-      documentation,
       keywords: ['i18n', 'translation', 'internationalization'],
     },
   ]
@@ -50,7 +46,7 @@ module.exports = class WeblateProjectTranslatedPercentage extends (
    */
   static render({ translatedPercent }) {
     const color = colorScale([75, 90])(translatedPercent)
-    return { message: `${translatedPercent}%`, color }
+    return { message: `${translatedPercent.toFixed(0)}%`, color }
   }
 
   async fetch({ project, server }) {
@@ -58,8 +54,8 @@ module.exports = class WeblateProjectTranslatedPercentage extends (
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
       errorMessages: {
-        403: 'access denied',
-        404: 'not found',
+        403: 'access denied by remote server',
+        404: 'project not found',
         429: 'rate limited by remote server',
       },
     })

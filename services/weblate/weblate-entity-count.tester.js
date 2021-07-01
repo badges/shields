@@ -1,28 +1,22 @@
 'use strict'
 
 const { ServiceTester } = require('../tester')
-const { isMetricWithPattern } = require('../test-validators')
+const { isMetric } = require('../test-validators')
 
 const t = (module.exports = new ServiceTester({
-  id: 'weblate',
-  title: 'Weblate',
+  id: 'WeblateEntity',
+  title: 'Weblate Entity',
+  pathPrefix: '/weblate',
 }))
 
 t.create('Components')
   .get('/components.json?server=https://hosted.weblate.org')
-  .expectBadge({
-    label: 'weblate',
-    message: isMetricWithPattern(/ components/),
-  })
-
-t.create('Languages')
-  .get('/languages.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ languages/) })
+  .expectBadge({ label: 'components', message: isMetric })
 
 t.create('Projects')
   .get('/projects.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ projects/) })
+  .expectBadge({ label: 'projects', message: isMetric })
 
 t.create('Users')
   .get('/users.json?server=https://hosted.weblate.org')
-  .expectBadge({ label: 'weblate', message: isMetricWithPattern(/ users/) })
+  .expectBadge({ label: 'users', message: isMetric })

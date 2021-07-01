@@ -29,15 +29,15 @@ class WeblateUserStatisticBase extends BaseJsonService {
     }
   }
 
-  static defaultBadgeData = { label: 'weblate', color: 'brightgreen' }
+  static defaultBadgeData = { color: 'informational' }
 
   async fetch({ user, server }) {
     return this._requestJson({
       schema,
       url: `${server}/api/users/${user}/statistics/`,
       errorMessages: {
-        403: 'access denied',
-        404: 'not found',
+        403: 'access denied by remote server',
+        404: 'user not found',
         429: 'rate limited by remote server',
       },
     })
@@ -67,7 +67,7 @@ function WeblateUserStatisticFactory({
     ]
 
     static render({ count }) {
-      return { message: `${metric(count)} ${statisticName}` }
+      return { label: statisticName, message: metric(count) }
     }
 
     async handle({ user }, { server }) {
@@ -84,8 +84,6 @@ const userStatistics = [
     exampleValue: 30585,
   },
   { statisticName: 'suggestions', property: 'suggested', exampleValue: 7 },
-  { statisticName: 'uploads', property: 'uploaded', exampleValue: 12 },
-  { statisticName: 'comments', property: 'commented', exampleValue: 152 },
   { statisticName: 'languages', property: 'languages', exampleValue: 1 },
 ].map(WeblateUserStatisticFactory)
 
