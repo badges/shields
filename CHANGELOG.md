@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-07-01
+
+- improve [MavenCentral], [MavenMetadata], and [GradlePluginPortal] [#6628](https://github.com/badges/shields/issues/6628)
+- docs: broken links and typos [#6676](https://github.com/badges/shields/issues/6676)
+- test: add generic metric helper [#6684](https://github.com/badges/shields/issues/6684)
+- convert bug report issue template to issue form [#6681](https://github.com/badges/shields/issues/6681)
+- fix: fix regex to match [codecov]'s flags [#6655](https://github.com/badges/shields/issues/6655)
+- Run on node 14 in production, drop node 10 support for badge-maker and update test matrix [#6652](https://github.com/badges/shields/issues/6652)
+- fix usage style [#6638](https://github.com/badges/shields/issues/6638)
+- Build(deps-dev): bump webextension-store-meta from 1.0.3 to 1.0.4 [#6631](https://github.com/badges/shields/issues/6631)
+- update simple-icons to v5 with by-name lookup backwards compatibility [#6591](https://github.com/badges/shields/issues/6591)
+- [GradlePluginPortal] add gradle plugin portal [#6449](https://github.com/badges/shields/issues/6449)
+- badge-maker 3.3.1 release [#6568](https://github.com/badges/shields/issues/6568)
+- convert [discord] to use static properties [#6566](https://github.com/badges/shields/issues/6566)
+- upgrade some vulnerable packages [#6569](https://github.com/badges/shields/issues/6569)
+- increase max-age for download and social badges [#6567](https://github.com/badges/shields/issues/6567)
+- run package tests on node 16, drop node 10 testing [#6570](https://github.com/badges/shields/issues/6570)
+- Dependency updates
+
 ## server-2021-06-01
 
 - Changed creating badges to open a new Window/Tab [#6536](https://github.com/badges/shields/issues/6536)
