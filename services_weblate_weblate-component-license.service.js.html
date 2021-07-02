@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: badge-urls</title>
+    <title>JSDoc: Source: services/weblate/weblate-component-license.service.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,56 +17,79 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: badge-urls</h1>
+    <h1 class="page-title">Source: services/weblate/weblate-component-license.service.js</h1>
 
-    <section>
-
-<header>
     
 
-    <h2>badge-urls</h2>
-</header>
 
-<article>
-    <h1>Badge URL Conventions</h1>
-<ul>
-<li>The format of new badges should be of the form <code>/SERVICE/NOUN/PARAMETERS?QUERYSTRING</code> e.g:
-<code>/github/issues/:user/:repo</code>. The service is github, the
-badge is for issues, and the parameters are <code>:user/:repo</code>.</li>
-<li>Parameters should always be part of the route if they are required to display a badge e.g: <code>:packageName</code>.</li>
-<li>Common optional params like, <code>:branch</code> or <code>:tag</code> should also be passed as part of the route.</li>
-<li>Query string parameters should be used when:
-<ul>
-<li>The parameter is related to formatting. e.g: <code>/appveyor/tests/:user/:repo?compact_message</code>.</li>
-<li>The parameter is for an uncommon optional attribute, like an alternate registry URL.</li>
-<li>The parameter triggers application of alternative logic, like version semantics. e.g: <code>/github/v/tag/:user/:repo?sort=semver</code>.</li>
-<li>Services which require a url/hostname parameter always should use a query string parameter to accept that value. e.g: <code>/discourse/topics?server=https://meta.discourse.org</code>.</li>
-</ul>
-</li>
-</ul>
-<p>It is convention to use the following standard routes and abbreviations across services:</p>
-<ul>
-<li>Coverage: <code>/coverage</code></li>
-<li>Downloads or Installs:
-<ul>
-<li>Total: <code>/dt</code> - Use this even for services that only provide the total download/install data</li>
-<li>Per month: <code>/dm</code></li>
-<li>Per week: <code>/dw</code></li>
-<li>Per day: <code>/dd</code></li>
-</ul>
-</li>
-<li>Rating:
-<ul>
-<li>Numeric: <code>/rating</code></li>
-<li>Stars: <code>/stars</code></li>
-</ul>
-</li>
-<li>License: <code>/l</code></li>
-<li>Version or Release: <code>/v</code></li>
-</ul>
-</article>
 
-</section>
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const Joi = require('joi')
+const { BaseJsonService } = require('..')
+const { optionalUrl } = require('../validators')
+
+const schema = Joi.object({
+  license: Joi.string().required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  server: optionalUrl.required(),
+}).required()
+
+/**
+ * This badge displays the license of a component on a Weblate instance.
+ */
+module.exports = class WeblateComponentLicense extends BaseJsonService {
+  static category = 'license'
+  static route = {
+    base: 'weblate/license',
+    pattern: ':project/:component',
+    queryParamSchema,
+  }
+
+  static examples = [
+    {
+      title: 'Weblate component license',
+      namedParams: { project: 'godot-engine', component: 'godot' },
+      queryParams: { server: 'https://hosted.weblate.org' },
+      staticPreview: this.render({ license: 'MIT' }),
+      keywords: ['i18n', 'translation', 'internationalization'],
+    },
+  ]
+
+  static defaultBadgeData = { label: 'license', color: 'informational' }
+
+  static render({ license }) {
+    return { message: `${license}` }
+  }
+
+  async fetch({ project, component, server }) {
+    return this._requestJson({
+      schema,
+      url: `${server}/api/components/${project}/${component}/`,
+      errorMessages: {
+        403: 'access denied by remote server',
+        404: 'component not found',
+        429: 'rate limited by remote server',
+      },
+    })
+  }
+
+  async handle({ project, component }, { server }) {
+    const { license } = await this.fetch({ project, component, server })
+    return this.constructor.render({ license })
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
 
 </div>
 
