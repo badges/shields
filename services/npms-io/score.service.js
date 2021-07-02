@@ -63,7 +63,7 @@ module.exports = class NpmsIO extends BaseJsonService {
   static render({ type, score }) {
     return {
       label: type === 'final' ? 'score' : type,
-      message: `${(score * 100).toFixed(1)}%`,
+      message: `${(score * 100).toFixed(0)}%`,
       color: coveragePercentage(score * 100),
     }
   }
