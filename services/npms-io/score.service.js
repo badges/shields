@@ -25,7 +25,7 @@ module.exports = class NpmsIO extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
+      ':type(final|maintenance|popularity|quality)-score/:scope(@.+)?/:packageName',
   }
 
   static examples = [
