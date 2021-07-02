@@ -3,13 +3,13 @@
 const { isPercentage } = require('../test-validators')
 const t = (module.exports = require('../tester').createServiceTester())
 
-t.create('should show final score').get('/final/vue.json').expectBadge({
+t.create('should show final score').get('/final-score/vue.json').expectBadge({
   label: 'score',
   message: isPercentage,
 })
 
 t.create('should show color')
-  .get('/final/mock-for-package-score.json')
+  .get('/final-score/mock-for-package-score.json')
   .intercept(nock => {
     nock.enableNetConnect()
 
@@ -28,29 +28,33 @@ t.create('should show color')
   })
 
 t.create('should show final score with scope')
-  .get('/final/@vue/cli.json')
+  .get('/final-score/@vue/cli.json')
   .expectBadge({
     label: 'score',
     message: isPercentage,
   })
 
-t.create('should show maintenance').get('/maintenance/vue.json').expectBadge({
-  label: 'maintenance',
-  message: isPercentage,
-})
+t.create('should show maintenance')
+  .get('/maintenance-score/vue.json')
+  .expectBadge({
+    label: 'maintenance',
+    message: isPercentage,
+  })
 
-t.create('should show popularity').get('/popularity/vue.json').expectBadge({
-  label: 'popularity',
-  message: isPercentage,
-})
+t.create('should show popularity')
+  .get('/popularity-score/vue.json')
+  .expectBadge({
+    label: 'popularity',
+    message: isPercentage,
+  })
 
-t.create('should show quality').get('/quality/vue.json').expectBadge({
+t.create('should show quality').get('/quality-score/vue.json').expectBadge({
   label: 'quality',
   message: isPercentage,
 })
 
 t.create('unknown package')
-  .get('/final/npm-api-does-not-have-this-package.json')
+  .get('/final-score/npm-api-does-not-have-this-package.json')
   .expectBadge({
     label: 'score',
     message: 'package not found or too new',
