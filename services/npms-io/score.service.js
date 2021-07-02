@@ -19,7 +19,7 @@ const responseSchema = Joi.object({
 
 const keywords = ['node', 'npm score']
 
-module.exports = class NpmsIO extends BaseJsonService {
+module.exports = class NpmsIOScore extends BaseJsonService {
   static category = 'analysis'
 
   static route = {
