@@ -1,12 +1,14 @@
+'use strict'
+
 /*
  * Implement Gatsby's Node APIs in this file.
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-import fs from 'fs'
-import yaml from 'js-yaml'
-import envFlag from 'node-env-flag'
+const fs = require('fs')
+const yaml = require('js-yaml')
+const envFlag = require('node-env-flag')
 
 const includeDevPages = envFlag(process.env.INCLUDE_DEV_PAGES, true)
 
@@ -22,13 +24,13 @@ async function createPages({ actions: { createPage } }) {
     createPage({
       path: '/dev/styles',
       component: require.resolve(
-        './frontend/components/development/style-page.tsx'
+        './components/development/style-page.tsx'
       ),
     })
     createPage({
       path: '/dev/logos',
       component: require.resolve(
-        './frontend/components/development/logo-page.tsx'
+        './components/development/logo-page.tsx'
       ),
     })
   }
@@ -37,11 +39,11 @@ async function createPages({ actions: { createPage } }) {
     const { id } = category
     createPage({
       path: `/category/${id}`,
-      component: require.resolve('./frontend/components/main.tsx'),
+      component: require.resolve('./components/main.tsx'),
       // `context` provided here becomes `props.pageContext` on the page.
       context: { category },
     })
   })
 }
 
-export { createPages }
+module.exports = { createPages }

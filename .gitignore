@@ -104,8 +104,8 @@ service-definitions.yml
 !/config/local*.template.yml
 
 # Gatsby
-/.cache
-/public
+.cache
+public
 
 # Cypress
 /cypress/videos/
