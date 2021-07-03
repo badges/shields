@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const { optionalUrl } = require('../validators')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { optionalUrl } from '../validators.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
@@ -15,7 +13,7 @@ const queryParamSchema = Joi.object({
 /**
  * This badge displays the license of a component on a Weblate instance.
  */
-module.exports = class WeblateComponentLicense extends BaseJsonService {
+export default class WeblateComponentLicense extends BaseJsonService {
   static category = 'license'
   static route = {
     base: 'weblate/license',

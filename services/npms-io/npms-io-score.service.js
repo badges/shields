@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const { coveragePercentage } = require('../color-formatters')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { coveragePercentage } from '../color-formatters.js'
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
 const numberSchema = Joi.number().min(0).max(1).required()
@@ -19,7 +17,7 @@ const responseSchema = Joi.object({
 
 const keywords = ['node', 'npm score']
 
-module.exports = class NpmsIOScore extends BaseJsonService {
+export default class NpmsIOScore extends BaseJsonService {
   static category = 'analysis'
 
   static route = {

@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const { optionalUrl } = require('../validators')
-const { colorScale } = require('../color-formatters')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { optionalUrl } from '../validators.js'
+import { colorScale } from '../color-formatters.js'
 
 const schema = Joi.object({
   translated_percent: Joi.number().required(),
@@ -17,9 +15,7 @@ const queryParamSchema = Joi.object({
  * This badge displays the percentage of strings translated on a project on a
  * Weblate instance.
  */
-module.exports = class WeblateProjectTranslatedPercentage extends (
-  BaseJsonService
-) {
+export default class WeblateProjectTranslatedPercentage extends BaseJsonService {
   static category = 'other'
   static route = { base: 'weblate', pattern: ':project', queryParamSchema }
 

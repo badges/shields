@@ -1,13 +1,10 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isMetric } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+import { ServiceTester } from '../tester.js'
+import { isMetric } from '../test-validators.js'
+export const t = new ServiceTester({
   id: 'WeblateEntity',
   title: 'Weblate Entity',
   pathPrefix: '/weblate',
-}))
+})
 
 t.create('Components')
   .get('/components.json?server=https://hosted.weblate.org')

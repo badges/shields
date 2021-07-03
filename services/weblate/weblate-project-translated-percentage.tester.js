@@ -1,8 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-
-const { isPercentage } = require('../test-validators')
+import { createServiceTester } from '../tester.js'
+import { isPercentage } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('License')
   .get('/godot-engine.json?server=https://hosted.weblate.org')

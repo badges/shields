@@ -1,7 +1,6 @@
-'use strict'
-
-const { isPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+import { isPercentage } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('should show final score').get('/final-score/vue.json').expectBadge({
   label: 'score',

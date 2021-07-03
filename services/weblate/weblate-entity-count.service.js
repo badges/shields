@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const camelcase = require('camelcase')
-const { BaseJsonService } = require('..')
-const { nonNegativeInteger, optionalUrl } = require('../validators')
-const { metric } = require('../text-formatters')
+import Joi from 'joi'
+import camelcase from 'camelcase'
+import { BaseJsonService } from '../index.js'
+import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { metric } from '../text-formatters.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger,
@@ -71,4 +69,4 @@ const entityCounts = [
   { entityName: 'users', exampleValue: 33058 },
 ].map(WeblateEntityCountFactory)
 
-module.exports = [...entityCounts]
+export default [...entityCounts]

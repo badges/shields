@@ -5,7 +5,6 @@ export default redirector({
   category: 'version',
   isDeprecated: false,
   route: {
-
     base: 'maven-central/v',
     pattern: ':groupId/:artifactId/:versionPrefix?',
   },
