@@ -211,9 +211,11 @@ Alumni:
 
 - [poser PHP library][poser]
 - [pybadges python library][pybadges]
+- [badge4j Java library][badge4j]
 
 [poser]: https://github.com/badges/poser
 [pybadges]: https://github.com/google/pybadges
+[badge4j]: https://github.com/silentsoft/badge4j
 
 ## License
 
