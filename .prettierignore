@@ -2,10 +2,10 @@ package.json
 package-lock.json
 /__snapshots__
 /.next
-/.cache
+.cache
 /api-docs
 /build
-/public
+public
 /coverage
 private/*.json
 /.nyc_output

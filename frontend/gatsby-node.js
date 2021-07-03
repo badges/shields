@@ -23,15 +23,11 @@ async function createPages({ actions: { createPage } }) {
   if (includeDevPages) {
     createPage({
       path: '/dev/styles',
-      component: require.resolve(
-        './components/development/style-page.tsx'
-      ),
+      component: require.resolve('./components/development/style-page.tsx'),
     })
     createPage({
       path: '/dev/logos',
-      component: require.resolve(
-        './components/development/logo-page.tsx'
-      ),
+      component: require.resolve('./components/development/logo-page.tsx'),
     })
   }
 
