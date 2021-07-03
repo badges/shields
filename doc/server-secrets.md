@@ -121,12 +121,12 @@ Drone instance and obtain a token from the user profile page.
 - `GITHUB_URL` (yml: `public.services.github.baseUri`)
 - `GH_TOKEN` (yml: `private.gh_token`)
 
-Because of Github rate limits, you will need to provide a token, or else badges
+Because of GitHub rate limits, you will need to provide a token, or else badges
 will stop working once you hit 60 requests per hour, the
 [unauthenticated rate limit][github rate limit].
 
 You can [create a personal access token][personal access tokens] through the
-Github website. When you create the token, you can choose to give read access
+GitHub website. When you create the token, you can choose to give read access
 to your repositories. If you do that, your self-hosted Shields installation
 will have access to your private repositories.
 
