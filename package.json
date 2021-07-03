@@ -135,7 +135,6 @@
       "**/*.tester.js",
       "**/*.integration.js",
       "frontend/",
-      "public/",
       "build/",
       "cypress/"
     ]
