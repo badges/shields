@@ -1,26 +1,31 @@
 'use strict'
 
 const { redirector } = require('..')
+const { documentation } = require('../maven-metadata/maven-metadata')
 
 module.exports = redirector({
   category: 'version',
   isDeprecated: false,
   route: {
     base: 'gradle-plugin-portal/v',
-    // TODO: add /:versionPrefix? when maven-metadata have versionPrefix attribute.
     pattern: ':pluginId',
   },
   examples: [
     {
       title: 'Gradle Plugin Portal',
+      queryParams: {
+        versionSuffix: '.1',
+        versionPrefix: '0.10',
+      },
       namedParams: {
         pluginId: 'com.gradle.plugin-publish',
       },
       staticPreview: {
         label: 'plugin portal',
-        message: 'v0.14.0',
+        message: 'v0.10.1',
         color: 'blue',
       },
+      documentation,
     },
   ],
   transformPath: () => `/maven-metadata/v`,
@@ -31,7 +36,6 @@ module.exports = redirector({
     return {
       metadataUrl,
       label: 'plugin portal',
-      color: 'blue',
     }
   },
   overrideTransformedQueryParams: true,
