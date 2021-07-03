@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-07-01
+
+- improve [MavenCentral], [MavenMetadata], and [GradlePluginPortal] [#6628](https://github.com/badges/shields/issues/6628)
+- fix: fix regex to match [codecov]'s flags [#6655](https://github.com/badges/shields/issues/6655)
+- fix usage style [#6638](https://github.com/badges/shields/issues/6638)
+- update simple-icons to v5 with by-name lookup backwards compatibility [#6591](https://github.com/badges/shields/issues/6591)
+- [GradlePluginPortal] add gradle plugin portal [#6449](https://github.com/badges/shields/issues/6449)
+- upgrade some vulnerable packages [#6569](https://github.com/badges/shields/issues/6569)
+- increase max-age for download and social badges [#6567](https://github.com/badges/shields/issues/6567)
+- Dependency updates
+
 ## server-2021-06-01
 
 - Changed creating badges to open a new Window/Tab [#6536](https://github.com/badges/shields/issues/6536)
