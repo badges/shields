@@ -1,18 +1,14 @@
 'use strict'
 
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+const { ServiceTester } = require('../tester')
+const t = (module.exports = new ServiceTester({
+  id: 'beerpay',
+  title: 'Beerpay',
+}))
 
-const amountOfMoney = withRegex(/^\$[0-9]+(\.[0-9]+)?/)
-
-t.create('funding').get('/hashdog/scrapfy-chrome-extension.json').expectBadge({
-  label: 'beerpay',
-  message: amountOfMoney,
-})
-
-t.create('funding (unknown project)')
-  .get('/hashdog/not-a-real-project.json')
+t.create('no longer available (previously beerpay)')
+  .get('/hashdog/scrapfy-chrome-extension.json')
   .expectBadge({
     label: 'beerpay',
-    message: 'project not found',
+    message: 'no longer available',
   })
