@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import camelcase from 'camelcase'
 import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
@@ -9,64 +8,46 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: optionalUrl,
 }).required()
 
-class WeblateEntityCountBase extends BaseJsonService {
+module.exports = class WeblateEntityCount extends BaseJsonService {
   static category = 'other'
-
-  static buildRoute(entityName) {
-    return {
-      base: 'weblate',
-      pattern: entityName,
-      queryParamSchema,
-    }
+  static route = {
+    base: 'weblate/count',
+    pattern: ':type(components|projects|users|languages)',
+    queryParamSchema,
   }
+
+  static examples = [
+    {
+      title: `Weblate entity count`,
+      namedParams: { type: 'projects' },
+      queryParams: { server: 'https://hosted.weblate.org' },
+      staticPreview: this.render({ type: 'projects', count: 533 }),
+      keywords: ['i18n', 'internationalization'],
+    },
+  ]
 
   static defaultBadgeData = { color: 'informational' }
 
-  async fetch({ entityName, server }) {
+  static render({ type, count }) {
+    return { label: type, message: metric(count) }
+  }
+
+  async fetch({ type, server = 'https://hosted.weblate.org' }) {
     return this._requestJson({
       schema,
-      url: `${server}/api/${entityName}/`,
+      url: `${server}/api/${type}/`,
       errorMessages: {
         403: 'access denied by remote server',
         429: 'rate limited by remote server',
       },
     })
   }
-}
 
-function WeblateEntityCountFactory({ entityName, exampleValue }) {
-  return class WeblateEntityCountService extends WeblateEntityCountBase {
-    static name = camelcase(`Weblate ${entityName}`, { pascalCase: true })
-    static route = this.buildRoute(entityName)
-
-    static examples = [
-      {
-        title: `Weblate ${entityName}`,
-        namedParams: {},
-        queryParams: { server: 'https://hosted.weblate.org' },
-        staticPreview: this.render({ count: exampleValue }),
-        keywords: ['i18n', 'internationalization'],
-      },
-    ]
-
-    static render({ count }) {
-      return { label: entityName, message: metric(count) }
-    }
-
-    async handle(routeParams, { server }) {
-      const { count } = await this.fetch({ entityName, server })
-      return this.constructor.render({ count })
-    }
+  async handle({ type }, { server }) {
+    const { count } = await this.fetch({ type, server })
+    return this.constructor.render({ type, count })
   }
 }
-
-const entityCounts = [
-  { entityName: 'components', exampleValue: 2799 },
-  { entityName: 'projects', exampleValue: 533 },
-  { entityName: 'users', exampleValue: 33058 },
-].map(WeblateEntityCountFactory)
-
-export default [...entityCounts]

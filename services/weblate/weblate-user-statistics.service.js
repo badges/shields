@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import camelcase from 'camelcase'
 import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
@@ -13,23 +12,35 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: optionalUrl,
 }).required()
 
-class WeblateUserStatisticBase extends BaseJsonService {
+export default class WeblateUserStatistic extends BaseJsonService {
   static category = 'other'
-
-  static buildRoute(statistic) {
-    return {
-      base: 'weblate/user',
-      pattern: `:user/${statistic}`,
-      queryParamSchema,
-    }
+  static route = {
+    base: 'weblate/user',
+    pattern:
+      ':user/:statistic(translated|suggested|languages|uploaded|commented)',
+    queryParamSchema,
   }
+
+  static examples = [
+    {
+      title: `Weblate user statistic`,
+      namedParams: { user: 'nijel', statistic: 'translated' },
+      queryParams: { server: 'https://hosted.weblate.org' },
+      staticPreview: this.render({ type: 'translated', count: 30585 }),
+      keywords: ['i18n', 'internationalization'],
+    },
+  ]
 
   static defaultBadgeData = { color: 'informational' }
 
-  async fetch({ user, server }) {
+  static render({ type, count }) {
+    return { label: type, message: metric(count) }
+  }
+
+  async fetch({ user, server = 'https://hosted.weblate.org' }) {
     return this._requestJson({
       schema,
       url: `${server}/api/users/${user}/statistics/`,
@@ -40,49 +51,9 @@ class WeblateUserStatisticBase extends BaseJsonService {
       },
     })
   }
-}
 
-function WeblateUserStatisticFactory({
-  statisticName,
-  property,
-  exampleValue,
-}) {
-  return class WeblateUserStatistic extends WeblateUserStatisticBase {
-    static name = camelcase(`Weblate user ${statisticName}`, {
-      pascalCase: true,
-    })
-
-    static route = this.buildRoute(statisticName)
-
-    static examples = [
-      {
-        title: `Weblate user ${statisticName}`,
-        namedParams: { user: 'nijel' },
-        queryParams: { server: 'https://hosted.weblate.org' },
-        staticPreview: this.render({ count: exampleValue }),
-        keywords: ['i18n', 'internationalization'],
-      },
-    ]
-
-    static render({ count }) {
-      return { label: statisticName, message: metric(count) }
-    }
-
-    async handle({ user }, { server }) {
-      const data = await this.fetch({ user, server })
-      return this.constructor.render({ count: data[property] })
-    }
+  async handle({ user, statistic }, { server }) {
+    const data = await this.fetch({ user, server })
+    return this.constructor.render({ type: statistic, count: data[statistic] })
   }
 }
-
-const userStatistics = [
-  {
-    statisticName: 'translations',
-    property: 'translated',
-    exampleValue: 30585,
-  },
-  { statisticName: 'suggestions', property: 'suggested', exampleValue: 7 },
-  { statisticName: 'languages', property: 'languages', exampleValue: 1 },
-].map(WeblateUserStatisticFactory)
-
-export default [...userStatistics]
