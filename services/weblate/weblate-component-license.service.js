@@ -1,24 +1,20 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import { optionalUrl } from '../validators.js'
+import WeblateBase from './weblate-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
 }).required()
 
-const queryParamSchema = Joi.object({
-  server: optionalUrl,
-}).required()
-
 /**
  * This badge displays the license of a component on a Weblate instance.
  */
-export default class WeblateComponentLicense extends BaseJsonService {
+export default class WeblateComponentLicense extends WeblateBase {
   static category = 'license'
+
   static route = {
     base: 'weblate/l',
     pattern: ':project/:component',
-    queryParamSchema,
+    queryParamSchema: this.queryParamSchema,
   }
 
   static examples = [
@@ -38,7 +34,7 @@ export default class WeblateComponentLicense extends BaseJsonService {
   }
 
   async fetch({ project, component, server = 'https://hosted.weblate.org' }) {
-    return this._requestJson({
+    return super.fetch({
       schema,
       url: `${server}/api/components/${project}/${component}/`,
       errorMessages: {

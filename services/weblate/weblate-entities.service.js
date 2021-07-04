@@ -1,22 +1,19 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
+import WeblateBase from './weblate-base.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger,
 }).required()
 
-const queryParamSchema = Joi.object({
-  server: optionalUrl,
-}).required()
-
-export default class WeblateEntities extends BaseJsonService {
+export default class WeblateEntities extends WeblateBase {
   static category = 'other'
+
   static route = {
     base: 'weblate',
     pattern: ':type(components|projects|users|languages)',
-    queryParamSchema,
+    queryParamSchema: this.queryParamSchema,
   }
 
   static examples = [
@@ -36,7 +33,7 @@ export default class WeblateEntities extends BaseJsonService {
   }
 
   async fetch({ type, server = 'https://hosted.weblate.org' }) {
-    return this._requestJson({
+    return super.fetch({
       schema,
       url: `${server}/api/${type}/`,
       errorMessages: {

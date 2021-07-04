@@ -7,5 +7,6 @@ private:
   gh_token: '...'
   twitch_client_id: '...'
   twitch_client_secret: '...'
+  weblate_api_key: '...'
   wheelmap_token: '...'
   youtube_api_key: '...'
