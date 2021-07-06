@@ -4,32 +4,27 @@ import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
 
 const schema = Joi.object({
-  translated: nonNegativeInteger,
-  suggested: nonNegativeInteger,
-  uploaded: nonNegativeInteger,
-  commented: nonNegativeInteger,
-  languages: nonNegativeInteger,
+  count: nonNegativeInteger,
 }).required()
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-export default class WeblateUserStatistic extends BaseJsonService {
+export default class WeblateEntities extends BaseJsonService {
   static category = 'other'
   static route = {
-    base: 'weblate/user',
-    pattern:
-      ':user/:statistic(translated|suggested|languages|uploaded|commented)',
+    base: 'weblate',
+    pattern: ':type(components|projects|users|languages)',
     queryParamSchema,
   }
 
   static examples = [
     {
-      title: `Weblate user statistic`,
-      namedParams: { user: 'nijel', statistic: 'translated' },
+      title: `Weblate entities`,
+      namedParams: { type: 'projects' },
       queryParams: { server: 'https://hosted.weblate.org' },
-      staticPreview: this.render({ type: 'translated', count: 30585 }),
+      staticPreview: this.render({ type: 'projects', count: 533 }),
       keywords: ['i18n', 'internationalization'],
     },
   ]
@@ -40,20 +35,19 @@ export default class WeblateUserStatistic extends BaseJsonService {
     return { label: type, message: metric(count) }
   }
 
-  async fetch({ user, server = 'https://hosted.weblate.org' }) {
+  async fetch({ type, server = 'https://hosted.weblate.org' }) {
     return this._requestJson({
       schema,
-      url: `${server}/api/users/${user}/statistics/`,
+      url: `${server}/api/${type}/`,
       errorMessages: {
         403: 'access denied by remote server',
-        404: 'user not found',
         429: 'rate limited by remote server',
       },
     })
   }
 
-  async handle({ user, statistic }, { server }) {
-    const data = await this.fetch({ user, server })
-    return this.constructor.render({ type: statistic, count: data[statistic] })
+  async handle({ type }, { server }) {
+    const { count } = await this.fetch({ type, server })
+    return this.constructor.render({ type, count })
   }
 }
