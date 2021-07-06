@@ -1,17 +1,10 @@
 import path from 'path'
-console.error("LOG 7")
 import { fileURLToPath } from 'url'
-console.error("LOG 8")
 import glob from 'glob'
-console.error("LOG 9")
 import countBy from 'lodash.countby'
-console.error("LOG 10")
 import categories from '../../services/categories.js'
-console.error("LOG 11")
 import BaseService from './base.js'
-console.error("LOG 12")
 import { assertValidServiceDefinitionExport } from './service-definitions.js'
-console.error("LOG 13")
 
 const serviceDir = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
