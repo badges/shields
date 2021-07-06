@@ -51,7 +51,7 @@ module.exports = class WikiapiaryInstalls extends BaseJsonService {
 
   static validate({ results }) {
     if (Array.isArray(results))
-      throw new NotFound({ prettyMessage: 'does not exist' })
+      throw new NotFound({ prettyMessage: 'not found' })
   }
 
   async fetch({ variant, name }) {
