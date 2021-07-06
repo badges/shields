@@ -22,3 +22,23 @@ t.create('Name Lowercase')
 t.create('Name Title Case')
   .get('/extension/installs/parserFunctions.json')
   .expectBadge({ label: 'installs', message: isMetric })
+
+t.create('Malformed API Response')
+  .get('/extension/installs/ParserFunctions.json')
+  .intercept(nock =>
+    nock('https://wikiapiary.com')
+      .get('/w/api.php')
+      .query({
+        action: 'ask',
+        query: '[[extension:ParserFunctions]]|?Has_website_count',
+        format: 'json',
+      })
+      .reply(200, {
+        query: {
+          results: {
+            'Extension:Malformed': { printouts: { 'Has website count': [0] } },
+          },
+        },
+      })
+  )
+  .expectBadge({ label: 'installs', message: 'not found' })

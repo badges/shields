@@ -79,7 +79,7 @@ module.exports = class WikiapiaryInstalls extends BaseJsonService {
   async fetch({ variant, name }) {
     return this._requestJson({
       schema,
-      url: `https://wikiapiary.com/w/api.php?action=ask&query=[[${variant}:${name}]]|?Has_website_count&format=json`,
+      url: `https://wikiapiary.com/w/api.php?action=ask&query=%5B%5B${variant}%3A${name}%5D%5D%7C%3FHas_website_count&format=json`,
     })
   }
 
@@ -94,7 +94,8 @@ module.exports = class WikiapiaryInstalls extends BaseJsonService {
       key => keyLowerCase === key.toLowerCase()
     )
 
-    if (!resultKey) throw new NotFound({ prettyMessage: 'not found' })
+    if (resultKey === undefined)
+      throw new NotFound({ prettyMessage: 'not found' })
 
     const [usage] = results[resultKey].printouts['Has website count']
     return this.constructor.render({ usage })
