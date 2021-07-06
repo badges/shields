@@ -236,7 +236,7 @@ jobs:
 
   e2e:
     docker:
-      - image: cypress/base:14
+      - image: cypress/base:14.16.0
     steps:
       - checkout
 
