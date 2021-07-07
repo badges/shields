@@ -54,6 +54,15 @@ function parseClassifiers(parsedData, pattern, preserveCase = false) {
   return results
 }
 
+function parsePyRequires(parsedData, pattern) {
+  let results = ''
+  const matched = pattern.exec(parsedData.info.requires_python)
+  if (matched && matched[1]) {
+    results = matched[0]
+  }
+  return results
+}
+
 function getLicenses(packageData) {
   const {
     info: { license },
@@ -106,6 +115,7 @@ function getPackageFormats(packageData) {
 }
 
 module.exports = {
+  parsePyRequires,
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
