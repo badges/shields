@@ -58,9 +58,4 @@ if (fs.existsSync(legacySecretsPath)) {
 }
 export const server = new Server(config)
 
-try {
-  await server.start()
-} catch (e) {
-  console.error(e)
-  process.exit(1)
-}
+await server.start()
