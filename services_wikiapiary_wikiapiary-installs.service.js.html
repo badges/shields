@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/service-test-runner/create-service-tester.js</title>
+    <title>JSDoc: Source: services/wikiapiary/wikiapiary-installs.service.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/service-test-runner/create-service-tester.js</h1>
+    <h1 class="page-title">Source: services/wikiapiary/wikiapiary-installs.service.js</h1>
 
     
 
@@ -27,38 +27,115 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
-/**
- * @module
- */
 
-const caller = require('caller')
-const BaseService = require('../base-service/base')
-const ServiceTester = require('./service-tester')
+const Joi = require('joi')
+const { metric } = require('../text-formatters')
+const { BaseJsonService, NotFound } = require('..')
+
+const documentation = `
+  &lt;p>
+    The name of an extension is case-sensitive excluding the first character.
+  &lt;/p>
+  &lt;p>
+    For example, in the case of &lt;code>ParserFunctions&lt;/code>, the following are
+    valid:
+    &lt;ul>
+      &lt;li>&lt;code>ParserFunctions&lt;/code>&lt;/li>
+      &lt;li>&lt;code>parserFunctions&lt;/code>&lt;/li>
+    &lt;/ul>
+
+    However, the following are invalid:
+    &lt;ul>
+      &lt;li>&lt;code>parserfunctions&lt;/code>&lt;/li>
+      &lt;li>&lt;code>Parserfunctions&lt;/code>&lt;/li>
+      &lt;li>&lt;code>pARSERfUNCTIONS&lt;/code>&lt;/li>
+    &lt;/ul>
+  &lt;/p>
+`
+
+const schema = Joi.object({
+  query: Joi.object({
+    results: Joi.alternatives([
+      Joi.object()
+        .required()
+        .pattern(/^\w+:.+$/, {
+          printouts: Joi.object({
+            'Has website count': Joi.array()
+              .required()
+              .items(Joi.number().required()),
+          }).required(),
+        }),
+      Joi.array().required(),
+    ]).required(),
+  }).required(),
+}).required()
 
 /**
- * Automatically create a ServiceTester.
+ * This badge displays the total installations of a MediaWiki extensions, skins,
+ * etc via Wikiapiary.
  *
- * When run from e.g. `gem-rank.tester.js`, this will create a tester that
- * attaches to the service found in `gem-rank.service.js`.
- *
- * This can't be used for `.service.js` files which export more than one
- * service.
- *
- * @returns {module:core/service-test-runner/service-tester~ServiceTester}
- *    ServiceTester instance
+ * {@link https://www.mediawiki.org/wiki/Manual:Extensions MediaWiki Extensions Manual}
  */
-function createServiceTester() {
-  const servicePath = caller().replace('.tester.js', '.service.js')
-  const ServiceClass = require(servicePath)
-  if (!(ServiceClass.prototype instanceof BaseService)) {
-    throw Error(
-      `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`
-    )
+module.exports = class WikiapiaryInstalls extends BaseJsonService {
+  static category = 'downloads'
+  static route = {
+    base: 'wikiapiary',
+    pattern: ':variant(extension|skin|farm|generator|host)/installs/:name',
   }
-  return ServiceTester.forServiceClass(ServiceClass)
-}
 
-module.exports = createServiceTester
+  static examples = [
+    {
+      title: 'Wikiapiary installs',
+      namedParams: { variant: 'extension', name: 'ParserFunctions' },
+      staticPreview: this.render({ usage: 11170 }),
+      documentation,
+      keywords: ['mediawiki'],
+    },
+  ]
+
+  static defaultBadgeData = { label: 'installs', color: 'informational' }
+
+  static render({ usage }) {
+    return { message: metric(usage) }
+  }
+
+  static validate({ results }) {
+    if (Array.isArray(results))
+      throw new NotFound({ prettyMessage: 'not found' })
+  }
+
+  async fetch({ variant, name }) {
+    return this._requestJson({
+      schema,
+      url: `https://wikiapiary.com/w/api.php`,
+      options: {
+        qs: {
+          action: 'ask',
+          query: `[[${variant}:${name}]]|?Has_website_count`,
+          format: 'json',
+        },
+      },
+    })
+  }
+
+  async handle({ variant, name }) {
+    const response = await this.fetch({ variant, name })
+    const { results } = response.query
+
+    this.constructor.validate({ results })
+
+    const keyLowerCase = `${variant}:${name.toLowerCase()}`
+    const resultKey = Object.keys(results).find(
+      key => keyLowerCase === key.toLowerCase()
+    )
+
+    if (resultKey === undefined)
+      throw new NotFound({ prettyMessage: 'not found' })
+
+    const [usage] = results[resultKey].printouts['Has website count']
+    return this.constructor.render({ usage })
+  }
+}
 </code></pre>
         </article>
     </section>
