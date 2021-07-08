@@ -1,3 +1,4 @@
+// Avoid "Attempted import error: 'URL' is not exported from 'url'" in frontend.
 import url from 'url'
 import queryString from 'query-string'
 import { compile } from 'path-to-regexp'
