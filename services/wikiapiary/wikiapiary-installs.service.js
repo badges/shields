@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const documentation = `
   <p>
@@ -48,7 +46,7 @@ const schema = Joi.object({
  *
  * {@link https://www.mediawiki.org/wiki/Manual:Extensions MediaWiki Extensions Manual}
  */
-module.exports = class WikiapiaryInstalls extends BaseJsonService {
+export default class WikiapiaryInstalls extends BaseJsonService {
   static category = 'downloads'
   static route = {
     base: 'wikiapiary',
