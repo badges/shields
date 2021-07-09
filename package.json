@@ -97,7 +97,7 @@
     "test": "run-s --silent --continue-on-error lint test:frontend test:package test:core test:entrypoint check-types:package check-types:frontend prettier:check",
     "check-types:package": "tsd badge-maker",
     "check-types:frontend": "tsc --noEmit --project .",
-    "depcheck": "check-node-version --node \">= 12.0\"",
+    "depcheck": "check-node-version --node \">= 14.0\"",
     "prebuild": "run-s --silent depcheck",
     "features": "node scripts/export-supported-features-cli.js > ./frontend/supported-features.json",
     "defs": "node scripts/export-service-definitions-cli.js > ./frontend/service-definitions.yml",
