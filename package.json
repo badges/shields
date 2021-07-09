@@ -22,7 +22,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@fontsource/lato": "^4.4.5",
+    "@fontsource/lato": "^4.5.0",
     "@fontsource/lekton": "^4.4.5",
     "@sentry/node": "^6.8.0",
     "@shields_io/camp": "^18.1.1",
@@ -60,7 +60,7 @@
     "query-string": "^7.0.1",
     "request": "~2.88.2",
     "semver": "~7.3.5",
-    "simple-icons": "5.4.0",
+    "simple-icons": "5.5.0",
     "webextension-store-meta": "^1.0.4",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
@@ -188,9 +188,9 @@
     "eslint-plugin-sort-class-members": "^1.11.0",
     "fetch-ponyfill": "^7.1.0",
     "form-data": "^4.0.0",
-    "gatsby": "3.8.1",
+    "gatsby": "3.9.0",
     "gatsby-plugin-catch-links": "^3.1.0",
-    "gatsby-plugin-page-creator": "^3.8.0",
+    "gatsby-plugin-page-creator": "^3.9.0",
     "gatsby-plugin-react-helmet": "^4.1.0",
     "gatsby-plugin-remove-trailing-slashes": "^3.1.0",
     "gatsby-plugin-styled-components": "^4.6.0",
