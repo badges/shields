@@ -126,19 +126,17 @@ class for the badges or one may already exist.</li>
 </ul>
 <p>As a first step we will look at the code for an example which generates a badge without contacting an API.</p>
 <pre class="prettyprint source lang-js"><code>// (1)
-'use strict'
-// (2)
-const { BaseService } = require('..')
+import { BaseService } from '../index.js'
 
-// (3)
-module.exports = class Example extends BaseService {
-  // (4)
+// (2)
+export default class Example extends BaseService {
+  // (3)
   static category = 'build'
 
-  // (5)
+  // (4)
   static route = { base: 'example', pattern: ':text' }
 
-  // (6)
+  // (5)
   async handle({ text }) {
     return {
       label: 'example',
@@ -150,7 +148,6 @@ module.exports = class Example extends BaseService {
 </code></pre>
 <p>Description of the code:</p>
 <ol>
-<li>We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.</li>
 <li>Our service badge class will extend <code>BaseService</code> so we need to require it. Variables are declared with <code>const</code> and <code>let</code> in preference to <code>var</code>.</li>
 <li>Our module must export a class which extends <code>BaseService</code>.</li>
 <li>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</li>
@@ -185,36 +182,33 @@ It should look like this: <img src="https://img.shields.io/badge/example-foo-blu
 <p>The example above was completely static. In order to make a useful service badge we will need to get some data from somewhere. The most common case is that we will query an API which serves up some JSON data, but other formats (e.g: XML) may be used.</p>
 <p>This example is based on the <a href="https://github.com/badges/shields/blob/master/services/gem/gem-version.service.js">Ruby Gems version</a> badge:</p>
 <pre class="prettyprint source lang-js"><code>// (1)
-'use strict'
-
+import { renderVersionBadge } from '../version.js'
 // (2)
-const { renderVersionBadge } = require('..//version')
-// (3)
-const { BaseJsonService } = require('..')
+import { BaseJsonService } from '../index.js'
 
-// (4)
-const Joi = require('joi')
+// (3)
+import Joi from 'joi'
 const schema = Joi.object({
   version: Joi.string().required(),
 }).required()
 
-// (5)
-module.exports = class GemVersion extends BaseJsonService {
-  // (6)
+// (4)
+export default class GemVersion extends BaseJsonService {
+  // (5)
   static category = 'version'
 
-  // (7)
+  // (6)
   static route = { base: 'gem/v', pattern: ':gem' }
 
-  // (8)
+  // (7)
   static defaultBadgeData = { label: 'gem' }
 
-  // (11)
+  // (10)
   static render({ version }) {
     return renderVersionBadge({ version })
   }
 
-  // (10)
+  // (9)
   async fetch({ gem }) {
     return this._requestJson({
       schema,
@@ -222,7 +216,7 @@ module.exports = class GemVersion extends BaseJsonService {
     })
   }
 
-  // (9)
+  // (8)
   async handle({ gem }) {
     const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
@@ -231,9 +225,6 @@ module.exports = class GemVersion extends BaseJsonService {
 </code></pre>
 <p>Description of the code:</p>
 <ol>
-<li>
-<p>As with the first example, we declare strict mode at the start of each file.</p>
-</li>
 <li>
 <p>In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in <code>/services</code>. Some useful generic helpers can be found in:</p>
 <ul>
@@ -301,13 +292,13 @@ module.exports = class GemVersion extends BaseJsonService {
 non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at
 <a href="https://contributing.shields.io/module-core_base-service_errors.html">errors</a>
 and can be imported via the import shortcut and then thrown:</p>
-<pre class="prettyprint source lang-js"><code>const { NotFound } = require('..')
+<pre class="prettyprint source lang-js"><code>import { NotFound } from '../index.js'
 
 throw new NotFound({ prettyMessage: 'package not found' })
 </code></pre>
 <h3>(4.4) Adding an Example to the Front Page</h3>
 <p>Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method <code>examples()</code> to our class.</p>
-<pre class="prettyprint source lang-js"><code>module.exports = class GemVersion extends BaseJsonService {
+<pre class="prettyprint source lang-js"><code>export default class GemVersion extends BaseJsonService {
   // ...
 
   // (1)
@@ -380,13 +371,13 @@ will review your contribution.</li>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isMetricWithPattern">isMetricWithPattern</a></li><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_infer-pull-request.html">core/service-test-runner/infer-pull-request</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createNumRequestCounter">createNumRequestCounter</a></li><li><a href="global.html#getColor">getColor</a></li><li><a href="global.html#isMetricWithPattern">isMetricWithPattern</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#validateAffiliations">validateAffiliations</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jul 07 2021 20:41:26 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jul 09 2021 11:55:19 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
