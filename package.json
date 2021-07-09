@@ -227,7 +227,6 @@
     "react-select": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
-    "require-hacker": "^3.0.1",
     "rimraf": "^3.0.2",
     "sazerac": "^2.0.0",
     "sinon": "^11.1.1",
