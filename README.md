@@ -207,13 +207,21 @@ Alumni:
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
 
-## Related projects
+## awesome-badges
 
-- [poser PHP library][poser]
-- [pybadges python library][pybadges]
+Status badges are used widely across open-source and private software projects.
+Academics have studied the "signal" badges provide about software project
+quality. There are many existing libraries for rendering these badges, and
+alternatives to the hosted Shields badge service.
 
-[poser]: https://github.com/badges/poser
-[pybadges]: https://github.com/google/pybadges
+While Shields does not endorse any of these projects, [awesome-badges][] is a
+curated collection of such resources and
+[contributions][contributing to awesome-badges] may be considered there.
+
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+
+[awesome-badges]: https://github.com/badges/awesome-badges
+[contributing to awesome-badges]: https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md
 
 ## License
 
