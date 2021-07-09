@@ -214,9 +214,9 @@ Alumni:
 Status badges are used widely across open-source and private software projects.
 Academics have studied the "signal" badges provide about software project
 quality. There are many existing libraries for rendering these badges, and
-alternatives to the hosted Shields badge service. While Shields does not endorse
-these projects, [awesome-badges][] is a curated collection of such resources.
-[Contributions][contributing to awesome-badges] may be considered there.
+alternatives to the hosted Shields badge service. [awesome-badges][] is a
+curated collection of such resources. [Contributions][contributing to awesome-badges] may be considered there. (Shields does not endorse these
+projects.)
 
 [awesome-badges]: https://github.com/badges/awesome-badges
 [contributing to awesome-badges]: https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md
