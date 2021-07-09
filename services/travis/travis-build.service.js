@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -10,7 +8,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class TravisBuild extends BaseSvgScrapingService {
+export default class TravisBuild extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {

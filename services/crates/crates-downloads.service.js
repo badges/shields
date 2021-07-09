@@ -1,11 +1,9 @@
-'use strict'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { InvalidParameter, NotFound } from '../index.js'
+import { BaseCratesService, keywords } from './crates-base.js'
 
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { InvalidParameter, NotFound } = require('..')
-const { BaseCratesService, keywords } = require('./crates-base')
-
-module.exports = class CratesDownloads extends BaseCratesService {
+export default class CratesDownloads extends BaseCratesService {
   static category = 'downloads'
   static route = {
     base: 'crates',

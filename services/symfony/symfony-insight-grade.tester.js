@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
-const { sampleProjectUuid, noSymfonyToken } = require('./symfony-test-helpers')
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { sampleProjectUuid, noSymfonyToken } from './symfony-test-helpers.js'
+export const t = await createServiceTester()
 
 t.create('valid project grade')
   .skipWhen(noSymfonyToken)

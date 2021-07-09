@@ -1,9 +1,8 @@
-'use strict'
 /**
  * @module
  */
 
-const difference = require('lodash.difference')
+import difference from 'lodash.difference'
 
 /**
  * Given a pull request title like
@@ -31,4 +30,4 @@ function servicesForTitle(title) {
   return difference(services, ignored)
 }
 
-module.exports = servicesForTitle
+export default servicesForTitle

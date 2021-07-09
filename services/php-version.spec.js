@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { compare, minorVersion, versionReduction } = require('./php-version')
+import { test, given } from 'sazerac'
+import { compare, minorVersion, versionReduction } from './php-version.js'
 
 const phpReleases = [
   '5.0',

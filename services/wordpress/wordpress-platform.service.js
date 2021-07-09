@@ -1,10 +1,8 @@
-'use strict'
-
-const { NotFound } = require('..')
-const { addv } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const BaseWordpress = require('./wordpress-base')
-const { versionColorForWordpressVersion } = require('./wordpress-version-color')
+import { NotFound } from '../index.js'
+import { addv } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
+import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
 const extensionData = {
   plugin: {
@@ -164,7 +162,7 @@ function RequiresPHPVersionForType(extensionType) {
 
 const requiredPhp = ['plugin', 'theme'].map(RequiresPHPVersionForType)
 const requiresVersion = ['plugin', 'theme'].map(WordpressRequiresVersion)
-module.exports = [
+export default [
   ...requiredPhp,
   ...requiresVersion,
   WordpressPluginTestedVersion,

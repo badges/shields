@@ -1,18 +1,16 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const {
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import {
   fetchLatestRelease,
   queryParamSchema,
-} = require('./github-common-release')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+} from './github-common-release.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
-module.exports = class GithubCommitsSince extends GithubAuthV3Service {
+export default class GithubCommitsSince extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/commits-since',

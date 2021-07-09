@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { isBuildStatus } = require('../build-status')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { isBuildStatus } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   build: Joi.object({
@@ -20,7 +18,7 @@ const schema = Joi.object({
   }),
 }).required()
 
-module.exports = class AppVeyorBase extends BaseJsonService {
+export default class AppVeyorBase extends BaseJsonService {
   static category = 'build'
 
   async fetch({ user, repo, branch }) {

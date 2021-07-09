@@ -1,10 +1,8 @@
-'use strict'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const OpenVSXBase = require('./open-vsx-base')
-
-module.exports = class OpenVSXDownloads extends OpenVSXBase {
+export default class OpenVSXDownloads extends OpenVSXBase {
   static category = 'downloads'
 
   static route = {

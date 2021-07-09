@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   ratingCount: nonNegativeInteger,
@@ -29,4 +27,4 @@ class BaseVaadinDirectoryService extends BaseJsonService {
   }
 }
 
-module.exports = { BaseVaadinDirectoryService }
+export { BaseVaadinDirectoryService }

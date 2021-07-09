@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { createServiceFamily } = require('./nuget-v3-service-family')
+import { test, given } from 'sazerac'
+import { createServiceFamily } from './nuget-v3-service-family.js'
 
 const { NugetVersionService, NugetDownloadService } = createServiceFamily({
   defaultLabel: 'nuget',

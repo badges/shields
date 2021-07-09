@@ -13,11 +13,9 @@
 //
 // TRAVIS=1 TRAVIS_REPO_SLUG=badges/shields TRAVIS_PULL_REQUEST=1108 npm run test:services:pr:prepare
 
-'use strict'
-
-const got = require('got')
-const { inferPullRequest } = require('./infer-pull-request')
-const servicesForTitle = require('./services-for-title')
+import got from 'got'
+import { inferPullRequest } from './infer-pull-request.js'
+import servicesForTitle from './services-for-title.js'
 
 async function getTitle(owner, repo, pullRequest) {
   const {

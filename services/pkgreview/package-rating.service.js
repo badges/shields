@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { starRating, metric } = require('../text-formatters')
-const { colorScale } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { starRating, metric } from '../text-formatters.js'
+import { colorScale } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const pkgReviewColor = colorScale([2, 3, 4])
 
@@ -15,7 +13,7 @@ const schema = Joi.object({
 
 // Repository for this service is: https://github.com/iqubex-technologies/pkgreview.dev
 // Internally the service leverages the npms.io API (https://api.npms.io/v2)
-module.exports = class PkgreviewRating extends BaseJsonService {
+export default class PkgreviewRating extends BaseJsonService {
   static category = 'rating'
 
   static route = {

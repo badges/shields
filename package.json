@@ -99,9 +99,9 @@
     "check-types:frontend": "tsc --noEmit --project .",
     "depcheck": "check-node-version --node \">= 12.0\"",
     "prebuild": "run-s --silent depcheck",
-    "features": "node scripts/export-supported-features-cli.js > supported-features.json",
-    "defs": "node scripts/export-service-definitions-cli.js > service-definitions.yml",
-    "build": "run-s defs features && gatsby build",
+    "features": "node scripts/export-supported-features-cli.js > ./frontend/supported-features.json",
+    "defs": "node scripts/export-service-definitions-cli.js > ./frontend/service-definitions.yml",
+    "build": "run-s defs features && cd frontend && gatsby build && mv public ..",
     "heroku-postbuild": "run-s --silent build",
     "start:server:prod": "node server",
     "now-start": "npm run start:server:prod",
@@ -111,7 +111,7 @@
     "profile:server": "cross-env NODE_CONFIG_ENV=development node --prof server 8080",
     "benchmark:badge": "cross-env NODE_CONFIG_ENV=test node scripts/benchmark-performance.js --iterations 10100 | node scripts/capture-timings.js --warmup-iterations 100",
     "prestart": "run-s --silent depcheck defs features",
-    "start": "concurrently --names server,frontend \"npm run start:server\" \"cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
+    "start": "concurrently --names server,frontend \"npm run start:server\" \"cd frontend && cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
@@ -135,7 +135,6 @@
       "**/*.tester.js",
       "**/*.integration.js",
       "frontend/",
-      "public/",
       "build/",
       "cypress/"
     ]
@@ -228,7 +227,6 @@
     "react-select": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
-    "require-hacker": "^3.0.1",
     "rimraf": "^3.0.2",
     "sazerac": "^2.0.0",
     "sinon": "^11.1.1",
@@ -244,18 +242,8 @@
     "node": "^14.17.1",
     "npm": ">=7.0.0"
   },
+  "type": "module",
   "babel": {
-    "plugins": [
-      [
-        "inline-react-svg",
-        {
-          "svgo": false
-        }
-      ]
-    ],
-    "presets": [
-      "babel-preset-gatsby"
-    ],
     "env": {
       "test": {
         "plugins": [

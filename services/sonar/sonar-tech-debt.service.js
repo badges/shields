@@ -1,15 +1,13 @@
-'use strict'
-
-const SonarBase = require('./sonar-base')
-const {
+import SonarBase from './sonar-base.js'
+import {
   negativeMetricColorScale,
   getLabel,
   documentation,
   keywords,
   queryParamSchema,
-} = require('./sonar-helpers')
+} from './sonar-helpers.js'
 
-module.exports = class SonarTechDebt extends SonarBase {
+export default class SonarTechDebt extends SonarBase {
   static category = 'analysis'
 
   static route = {

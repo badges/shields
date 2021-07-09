@@ -1,9 +1,6 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = new ServiceTester({ id: 'versioneye', title: 'VersionEye' })
-module.exports = t
+export const t = new ServiceTester({ id: 'versioneye', title: 'VersionEye' })
 
 t.create('no longer available (previously dependencies status)')
   .get('/d/ruby/rails.json')

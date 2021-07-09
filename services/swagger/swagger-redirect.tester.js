@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'SwaggerUrlRedirect',
   title: 'SwaggerUrlRedirect',
   pathPrefix: '/swagger/valid/2.0',
-}))
+})
 
 t.create('swagger json')
   .get('/https/example.com/example.svg')

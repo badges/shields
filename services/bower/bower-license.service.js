@@ -1,9 +1,7 @@
-'use strict'
+import { renderLicenseBadge } from '../licenses.js'
+import BaseBowerService from './bower-base.js'
 
-const { renderLicenseBadge } = require('../licenses')
-const BaseBowerService = require('./bower-base')
-
-module.exports = class BowerLicense extends BaseBowerService {
+export default class BowerLicense extends BaseBowerService {
   static category = 'license'
   static route = { base: 'bower/l', pattern: ':packageName' }
 

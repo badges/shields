@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const servicesForTitle = require('./services-for-title')
+import { test, given } from 'sazerac'
+import servicesForTitle from './services-for-title.js'
 
 describe('Services from PR title', function () {
   test(servicesForTitle, () => {

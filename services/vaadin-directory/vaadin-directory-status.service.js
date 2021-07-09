@@ -1,10 +1,6 @@
-'use strict'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
-
-module.exports = class VaadinDirectoryStatus extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
   static category = 'other'
 
   static route = {

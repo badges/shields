@@ -1,10 +1,8 @@
-'use strict'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { NotFound } from '../index.js'
+import AppVeyorBase from './appveyor-base.js'
 
-const { renderBuildStatusBadge } = require('../build-status')
-const { NotFound } = require('..')
-const AppVeyorBase = require('./appveyor-base')
-
-module.exports = class AppVeyorJobBuild extends AppVeyorBase {
+export default class AppVeyorJobBuild extends AppVeyorBase {
   static route = {
     base: 'appveyor/job/build',
     pattern: ':user/:repo/:job/:branch*',

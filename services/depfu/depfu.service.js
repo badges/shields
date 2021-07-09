@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const depfuSchema = Joi.object({
   text: Joi.string().required(),
   colorscheme: Joi.string().required(),
 }).required()
 
-module.exports = class Depfu extends BaseJsonService {
+export default class Depfu extends BaseJsonService {
   static category = 'dependencies'
   static route = { base: 'depfu', pattern: ':user/:repo' }
   static examples = [

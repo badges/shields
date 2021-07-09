@@ -1,9 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const {
-  renderDependenciesBadge,
-} = require('./librariesio-dependencies-helpers')
+import { test, given, forCases } from 'sazerac'
+import { renderDependenciesBadge } from './librariesio-dependencies-helpers.js'
 
 describe('Libraries.io dependency helpers', function () {
   test(renderDependenciesBadge, () => {

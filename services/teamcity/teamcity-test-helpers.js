@@ -1,5 +1,3 @@
-'use strict'
-
 const user = 'admin'
 const pass = 'password'
 const host = 'mycompany.teamcity.com'
@@ -17,9 +15,4 @@ const config = {
   },
 }
 
-module.exports = {
-  user,
-  pass,
-  host,
-  config,
-}
+export { user, pass, host, config }

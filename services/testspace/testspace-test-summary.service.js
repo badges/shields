@@ -1,13 +1,11 @@
-'use strict'
-
-const {
+import {
   documentation,
   testResultQueryParamSchema,
   renderTestResultBadge,
-} = require('../test-results')
-const TestspaceBase = require('./testspace-base')
+} from '../test-results.js'
+import TestspaceBase from './testspace-base.js'
 
-module.exports = class TestspaceTests extends TestspaceBase {
+export default class TestspaceTests extends TestspaceBase {
   static route = {
     base: 'testspace/tests',
     pattern: ':org/:project/:space+',

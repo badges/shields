@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const stringOrFalse = Joi.alternatives(Joi.string(), Joi.bool())
 
@@ -42,7 +40,7 @@ const notFoundSchema = Joi.object()
 const pluginSchemas = Joi.alternatives(pluginSchema, notFoundSchema)
 const themeSchemas = Joi.alternatives(themeSchema, notFoundSchema)
 
-module.exports = class BaseWordpress extends BaseJsonService {
+export default class BaseWordpress extends BaseJsonService {
   async fetch({ extensionType, slug }) {
     const url = `https://api.wordpress.org/${extensionType}s/info/1.2/`
     let schemas

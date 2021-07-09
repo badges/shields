@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseStaticService } = require('..')
+import Joi from 'joi'
+import { BaseStaticService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   message: Joi.string().required(),
 }).required()
 
-module.exports = class QueryStringStaticBadge extends BaseStaticService {
+export default class QueryStringStaticBadge extends BaseStaticService {
   static category = 'static'
 
   static route = {

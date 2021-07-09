@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
-const checkErrorResponse = require('./check-error-response')
+import { expect } from 'chai'
+import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
+import checkErrorResponse from './check-error-response.js'
 
 describe('async error handler', function () {
   const buffer = Buffer.from('some stuff')

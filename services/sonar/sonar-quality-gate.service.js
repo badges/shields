@@ -1,9 +1,7 @@
-'use strict'
+import SonarBase from './sonar-base.js'
+import { documentation, keywords, queryParamSchema } from './sonar-helpers.js'
 
-const SonarBase = require('./sonar-base')
-const { documentation, keywords, queryParamSchema } = require('./sonar-helpers')
-
-module.exports = class SonarQualityGate extends SonarBase {
+export default class SonarQualityGate extends SonarBase {
   static category = 'analysis'
 
   static route = {

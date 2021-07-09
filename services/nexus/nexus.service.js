@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { version: versionColor } = require('../color-formatters')
-const { addv } = require('../text-formatters')
-const { optionalUrl } = require('../validators')
-const {
+import Joi from 'joi'
+import { version as versionColor } from '../color-formatters.js'
+import { addv } from '../text-formatters.js'
+import {
+  optionalUrl,
   optionalDottedVersionNClausesWithOptionalSuffix,
-} = require('../validators')
-const { BaseJsonService, InvalidResponse, NotFound } = require('..')
-const { isSnapshotVersion } = require('./nexus-version')
+} from '../validators.js'
+import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
+import { isSnapshotVersion } from './nexus-version.js'
 
 const nexus2SearchApiSchema = Joi.object({
   data: Joi.array()
@@ -53,7 +51,7 @@ const queryParamSchema = Joi.object({
   nexusVersion: Joi.equal('2', '3'),
 }).required()
 
-module.exports = class Nexus extends BaseJsonService {
+export default class Nexus extends BaseJsonService {
   static category = 'version'
 
   static route = {

@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name')

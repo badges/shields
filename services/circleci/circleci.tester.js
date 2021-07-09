@@ -1,12 +1,10 @@
-'use strict'
+import { isBuildStatus } from '../build-status.js'
+import { ServiceTester } from '../tester.js'
 
-const { isBuildStatus } = require('../build-status')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'circleci',
   title: 'Circle CI',
-}))
+})
 
 t.create('circle ci (valid, without branch)')
   .get('/build/gh/RedSparr0w/node-csgo-parser.json')

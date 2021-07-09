@@ -1,10 +1,9 @@
-'use strict'
 /**
  * @module
  */
 
-const Joi = require('joi')
-const { expect } = require('chai')
+import Joi from 'joi'
+import { expect } from 'chai'
 
 /**
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
@@ -85,4 +84,4 @@ const factory = superclass =>
     }
   }
 
-module.exports = factory
+export default factory

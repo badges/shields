@@ -1,18 +1,23 @@
-'use strict'
-
-const fs = require('fs')
-const path = require('path')
-const moment = require('moment')
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import moment from 'moment'
 
 const dateFormat = 'YYYY-MM-DD'
 
 const templates = {
   packageJsonVersionsTemplate: fs.readFileSync(
-    path.join(__dirname, `packageJsonVersionsTemplate.json`),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      `packageJsonVersionsTemplate.json`
+    ),
     'utf-8'
   ),
   packageJsonTemplate: fs.readFileSync(
-    path.join(__dirname, `packageJsonTemplate.json`),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      `packageJsonTemplate.json`
+    ),
     'utf-8'
   ),
 }
@@ -145,9 +150,4 @@ const mockReleaseSchedule = () => nock => {
     .reply(200, schedule)
 }
 
-module.exports = {
-  mockPackageData,
-  mockCurrentSha,
-  mockVersionsSha,
-  mockReleaseSchedule,
-}
+export { mockPackageData, mockCurrentSha, mockVersionsSha, mockReleaseSchedule }

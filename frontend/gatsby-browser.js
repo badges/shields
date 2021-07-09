@@ -1,4 +1,4 @@
-import redirectLegacyRoutes from './frontend/lib/redirect-legacy-routes'
+import redirectLegacyRoutes from './lib/redirect-legacy-routes'
 
 // Adapted from https://github.com/gatsbyjs/gatsby/issues/8413
 function scrollToElementId(id) {

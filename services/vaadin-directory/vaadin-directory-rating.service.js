@@ -1,12 +1,8 @@
-'use strict'
+import { starRating } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-const { starRating } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
-
-module.exports = class VaadinDirectoryRating extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryRating extends BaseVaadinDirectoryService {
   static category = 'rating'
 
   static route = {

@@ -1,7 +1,6 @@
-'use strict'
-
-const { isMetricOverTimePeriod, isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isMetricOverTimePeriod, isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('weekly downloads of left-pad').get('/dw/left-pad.json').expectBadge({
   label: 'downloads',

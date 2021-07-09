@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const buildStatusValues = Joi.equal('passing', 'failure', 'error').required()
 const buildStatusTextRegex =

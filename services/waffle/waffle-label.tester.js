@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'Waffle',
   title: 'WaffleLabel',
   pathPrefix: '/waffle/label',
-}))
+})
 
 t.create('no longer available')
   .get('/ritwickdey/vscode-live-server/bug.json')

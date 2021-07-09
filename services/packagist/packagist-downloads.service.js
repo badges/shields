@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { optionalUrl } = require('../validators')
-const {
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
+import {
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
-} = require('./packagist-base')
+} from './packagist-base.js'
 
 const periodMap = {
   dm: {
@@ -40,7 +38,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistDownloads extends BasePackagistService {
+export default class PackagistDownloads extends BasePackagistService {
   static category = 'downloads'
 
   static route = {

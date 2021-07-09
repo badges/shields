@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'TwitterUrlRedirect',
   title: 'TwitterUrlRedirect',
   pathPrefix: '/twitter/url',
-}))
+})
 
 t.create('twitter')
   .get('/https/shields.io.svg')

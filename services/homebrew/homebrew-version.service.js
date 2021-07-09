@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   versions: Joi.object({
@@ -10,7 +8,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class HomebrewVersion extends BaseJsonService {
+export default class HomebrewVersion extends BaseJsonService {
   static category = 'version'
 
   static route = { base: 'homebrew/v', pattern: ':formula' }

@@ -2,9 +2,7 @@
  * Commonly-used functions for determining the colour to use for a badge,
  * including colours based off download count, version number, etc.
  */
-'use strict'
-
-const moment = require('moment')
+import moment from 'moment'
 
 function version(version) {
   if (typeof version !== 'string' && typeof version !== 'number') {
@@ -106,7 +104,7 @@ function age(date) {
   return colorByAge(daysElapsed)
 }
 
-module.exports = {
+export {
   version,
   downloadCount,
   coveragePercentage,

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'crates',
   title: 'crates.io',
   pathPrefix: '/crates/l',
-}))
+})
 
 t.create('license')
   .get('/libc.json')

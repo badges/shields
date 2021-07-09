@@ -1,8 +1,6 @@
-'use strict'
+import { BaseStaticService } from '../index.js'
 
-const { BaseStaticService } = require('..')
-
-module.exports = class Gitter extends BaseStaticService {
+export default class Gitter extends BaseStaticService {
   static category = 'chat'
 
   static route = {

@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { nonNegativeInteger } = require('../validators')
-const { NotFound } = require('..')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { nonNegativeInteger } from '../validators.js'
+import { NotFound } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.alternatives(
   Joi.object({
@@ -14,7 +12,7 @@ const schema = Joi.alternatives(
   Joi.array().required()
 )
 
-module.exports = class GithubSize extends GithubAuthV3Service {
+export default class GithubSize extends GithubAuthV3Service {
   static category = 'size'
 
   static route = {

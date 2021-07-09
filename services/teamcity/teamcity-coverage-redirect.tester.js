@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'TeamCityCoverageRedirect',
   title: 'TeamCityCoverageRedirect',
   pathPrefix: '/teamcity/coverage',
-}))
+})
 
 t.create('coverage')
   .get('/https/teamcity.jetbrains.com/ReactJSNet_PullRequests.svg')

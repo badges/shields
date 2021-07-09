@@ -1,6 +1,4 @@
-'use strict'
-
-const { makeSecretIsValid } = require('../../../core/server/secret-is-valid')
+import { makeSecretIsValid } from '../../../core/server/secret-is-valid.js'
 
 function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   const secretIsValid = makeSecretIsValid(shieldsSecret)
@@ -31,4 +29,4 @@ function setRoutes({ shieldsSecret }, { apiProvider, server }) {
   })
 }
 
-module.exports = { setRoutes }
+export { setRoutes }

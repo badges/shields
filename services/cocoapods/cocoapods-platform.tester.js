@@ -1,7 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const isPlatform = Joi.string().regex(
   /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/

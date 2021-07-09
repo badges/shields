@@ -1,9 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import BaseCocoaPodsService from './cocoapods-base.js'
 
-const { renderVersionBadge } = require('../version')
-const BaseCocoaPodsService = require('./cocoapods-base')
-
-module.exports = class CocoapodsVersion extends BaseCocoaPodsService {
+export default class CocoapodsVersion extends BaseCocoaPodsService {
   static category = 'version'
   static route = { base: 'cocoapods/v', pattern: ':spec' }
 

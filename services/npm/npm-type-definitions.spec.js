@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const NpmTypeDefinitions = require('./npm-type-definitions.service')
+import { test, given, forCases } from 'sazerac'
+import NpmTypeDefinitions from './npm-type-definitions.service.js'
 
 describe('NPM type definitions badge', function () {
   test(NpmTypeDefinitions.transform, () => {

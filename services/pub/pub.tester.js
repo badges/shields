@@ -1,12 +1,10 @@
-'use strict'
-
-const { isVPlusTripleDottedVersion } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
+import { isVPlusTripleDottedVersion } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
   id: 'PubVersion',
   title: 'Pub Version',
   pathPrefix: '/pub',
-}))
+})
 
 t.create('package version').get('/v/box2d.json').expectBadge({
   label: 'pub',

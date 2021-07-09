@@ -1,16 +1,14 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { InvalidResponse } = require('..')
-const DockerVersion = require('./docker-version.service')
-const {
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidResponse } from '../index.js'
+import DockerVersion from './docker-version.service.js'
+import {
   versionDataNoTagDateSort,
   versionPagedDataNoTagDateSort,
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
-} = require('./docker-fixtures')
+} from './docker-fixtures.js'
 
 describe('DockerVersion', function () {
   test(DockerVersion.prototype.transform, () => {

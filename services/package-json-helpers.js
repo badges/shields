@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { InvalidParameter } = require('.')
+import Joi from 'joi'
+import { InvalidParameter } from './index.js'
 
 const isDependencyMap = Joi.object()
   .pattern(
@@ -45,8 +43,4 @@ function getDependencyVersion({
   return { range }
 }
 
-module.exports = {
-  isDependencyMap,
-  isPackageJsonWithDependencies,
-  getDependencyVersion,
-}
+export { isDependencyMap, isPackageJsonWithDependencies, getDependencyVersion }

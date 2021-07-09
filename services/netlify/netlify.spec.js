@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const Netlify = require('./netlify.service')
+import { test, given } from 'sazerac'
+import Netlify from './netlify.service.js'
 
 const building = { message: 'building', label: undefined, color: 'yellow' }
 const notBuilt = { message: 'not built', label: undefined, color: undefined }

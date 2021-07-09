@@ -1,6 +1,4 @@
-'use strict'
-
-const { redirector } = require('..')
+import { redirector } from '../index.js'
 
 const ciRedirect = redirector({
   category: 'platform-support',
@@ -25,4 +23,4 @@ const branchRedirect = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-module.exports = { ciRedirect, branchRedirect }
+export { ciRedirect, branchRedirect }

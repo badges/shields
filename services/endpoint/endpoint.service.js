@@ -1,11 +1,9 @@
-'use strict'
-
-const { URL } = require('url')
-const Joi = require('joi')
-const { errorMessages } = require('../dynamic-common')
-const { optionalUrl } = require('../validators')
-const { fetchEndpointData } = require('../endpoint-common')
-const { BaseJsonService, InvalidParameter } = require('..')
+import { URL } from 'url'
+import Joi from 'joi'
+import { errorMessages } from '../dynamic-common.js'
+import { optionalUrl } from '../validators.js'
+import { fetchEndpointData } from '../endpoint-common.js'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -13,7 +11,7 @@ const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-module.exports = class Endpoint extends BaseJsonService {
+export default class Endpoint extends BaseJsonService {
   static category = 'dynamic'
   static route = {
     base: 'endpoint',

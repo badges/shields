@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('format (wheel, package version in request)')
   .get('/requests/2.18.4.json')

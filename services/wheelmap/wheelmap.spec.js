@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const Wheelmap = require('./wheelmap.service')
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import Wheelmap from './wheelmap.service.js'
 
 describe('Wheelmap', function () {
   cleanUpNockAfterEach()

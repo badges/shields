@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { NotFound } = require('..')
-const PackagistPhpVersion = require('./packagist-php-version.service')
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import PackagistPhpVersion from './packagist-php-version.service.js'
 
 describe('PackagistPhpVersion', function () {
   const json = {

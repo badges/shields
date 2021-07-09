@@ -1,9 +1,7 @@
-'use strict'
+import { metric } from '../text-formatters.js'
+import LgtmBaseService from './lgtm-base.js'
 
-const { metric } = require('../text-formatters')
-const LgtmBaseService = require('./lgtm-base')
-
-module.exports = class LgtmAlerts extends LgtmBaseService {
+export default class LgtmAlerts extends LgtmBaseService {
   static route = {
     base: 'lgtm/alerts',
     pattern: this.pattern,

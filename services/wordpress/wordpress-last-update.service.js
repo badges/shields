@@ -1,10 +1,8 @@
-'use strict'
-
-const moment = require('moment')
-const { InvalidResponse } = require('..')
-const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
-const BaseWordpress = require('./wordpress-base')
+import moment from 'moment'
+import { InvalidResponse } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -76,4 +74,4 @@ function LastUpdateForType(extensionType) {
 }
 
 const lastupdate = ['plugin', 'theme'].map(LastUpdateForType)
-module.exports = [...lastupdate]
+export default [...lastupdate]

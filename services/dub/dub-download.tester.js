@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const isDownloadsColor = Joi.equal(
   'red',

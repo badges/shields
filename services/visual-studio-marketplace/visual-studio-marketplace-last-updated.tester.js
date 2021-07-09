@@ -1,7 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isFormattedDate } = require('../test-validators')
+import { createServiceTester } from '../tester.js'
+import { isFormattedDate } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('date')
   .get('/visual-studio-marketplace/last-updated/yasht.terminal-all-in-one.json')

@@ -1,10 +1,8 @@
-'use strict'
-
-const gql = require('graphql-tag')
-const Joi = require('joi')
-const { NotFound } = require('..')
-const { GithubAuthV4Service } = require('./github-auth-service')
-const { documentation, transformErrors } = require('./github-helpers')
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { NotFound } from '../index.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
 const greenStates = ['SUCCESS']
 const redStates = ['ERROR', 'FAILURE']
@@ -44,7 +42,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class GithubDeployments extends GithubAuthV4Service {
+export default class GithubDeployments extends GithubAuthV4Service {
   static category = 'other'
   static route = {
     base: 'github/deployments',

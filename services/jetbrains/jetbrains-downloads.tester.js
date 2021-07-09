@@ -1,7 +1,6 @@
-'use strict'
-
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('downloads (number as a plugin id)')
   .get('/7495.json')

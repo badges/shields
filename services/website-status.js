@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const queryParamSchema = Joi.object({
   up_message: Joi.string(),
@@ -30,8 +28,4 @@ function renderWebsiteStatus({
   }
 }
 
-module.exports = {
-  queryParamSchema,
-  exampleQueryParams,
-  renderWebsiteStatus,
-}
+export { queryParamSchema, exampleQueryParams, renderWebsiteStatus }

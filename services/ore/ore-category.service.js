@@ -1,8 +1,6 @@
-'use strict'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
-const { BaseOreService, documentation, keywords } = require('./ore-base')
-
-module.exports = class OreCategory extends BaseOreService {
+export default class OreCategory extends BaseOreService {
   static category = 'other'
 
   static route = {

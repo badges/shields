@@ -1,10 +1,8 @@
-'use strict'
-
-const BaseJsonService = require('../base-json')
+import BaseJsonService from '../base-json.js'
 
 class GoodService extends BaseJsonService {
   static category = 'build'
   static route = { base: 'it/is', pattern: 'good' }
 }
 
-module.exports = GoodService
+export default GoodService

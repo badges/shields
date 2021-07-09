@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const TeamCityBase = require('./teamcity-base')
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import TeamCityBase from './teamcity-base.js'
 
 const buildStatusSchema = Joi.object({
   status: Joi.equal('SUCCESS', 'FAILURE', 'ERROR').required(),
@@ -13,7 +11,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class TeamCityBuild extends TeamCityBase {
+export default class TeamCityBuild extends TeamCityBase {
   static category = 'build'
 
   static route = {

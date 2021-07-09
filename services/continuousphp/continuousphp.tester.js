@@ -1,11 +1,9 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'continuousphp',
   title: 'Continuousphp',
-}))
+})
 
 t.create('no longer available (previously build status on default branch)')
   .get('/git-hub/doctrine/dbal.json')

@@ -1,9 +1,4 @@
-'use strict'
+import createServiceTester from '../core/service-test-runner/create-service-tester.js'
+import ServiceTester from '../core/service-test-runner/service-tester.js'
 
-const createServiceTester = require('../core/service-test-runner/create-service-tester')
-const ServiceTester = require('../core/service-test-runner/service-tester')
-
-module.exports = {
-  createServiceTester,
-  ServiceTester,
-}
+export { createServiceTester, ServiceTester }

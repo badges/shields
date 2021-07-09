@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('github pull request check state')
   .get('/s/pulls/badges/shields/1110.json')

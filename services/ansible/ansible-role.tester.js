@@ -1,13 +1,10 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const { isMetric } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+import { isMetric } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
   id: 'AnsibleRole',
   title: 'AnsibleRole',
   pathPrefix: '/ansible/role',
-}))
+})
 
 t.create('role name (valid)')
   .get('/14542.json')

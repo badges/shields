@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isStarRating } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isStarRating } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('stars of component displayed in star icons')
   .get('/star/vaadinvaadin-grid.json')

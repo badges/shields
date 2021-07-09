@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { InvalidResponse, NotFound } = require('..')
-const [ScrutinizerCoverage] = require('./scrutinizer-coverage.service')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidResponse, NotFound } from '../index.js'
+import { ScrutinizerCoverage } from './scrutinizer-coverage.service.js'
 
 describe('ScrutinizerCoverage', function () {
   test(ScrutinizerCoverage.render, () => {

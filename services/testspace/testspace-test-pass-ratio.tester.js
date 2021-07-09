@@ -1,7 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isIntegerPercentage } = require('../test-validators')
+import { createServiceTester } from '../tester.js'
+import { isIntegerPercentage } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('Non-existent or unauthorized org')
   .get('/swellaby1239017823123/swellaby:testspace-sample/main.json')

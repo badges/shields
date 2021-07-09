@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const reputationSchema = Joi.object({
   items: Joi.array()
@@ -16,7 +14,7 @@ const reputationSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class StackExchangeReputation extends BaseJsonService {
+export default class StackExchangeReputation extends BaseJsonService {
   static category = 'chat'
 
   static route = {

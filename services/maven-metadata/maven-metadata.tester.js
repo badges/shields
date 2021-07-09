@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('valid maven-metadata.xml uri')
   .get(

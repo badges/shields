@@ -1,10 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   cocoadocs: Joi.object({
@@ -12,7 +8,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class CocoapodsDocs extends BaseJsonService {
+export default class CocoapodsDocs extends BaseJsonService {
   static category = 'analysis'
   static route = { base: 'cocoapods/metrics/doc-percent', pattern: ':spec' }
 

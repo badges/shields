@@ -1,6 +1,4 @@
-'use strict'
-
-const { BaseJsonService } = require('..')
+import { BaseJsonService } from '../index.js'
 
 const keywords = [
   'visual-studio',
@@ -37,4 +35,4 @@ class BaseVisualStudioAppCenterService extends BaseJsonService {
   }
 }
 
-module.exports = { keywords, documentation, BaseVisualStudioAppCenterService }
+export { keywords, documentation, BaseVisualStudioAppCenterService }

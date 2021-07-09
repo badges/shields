@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, NotFound } = require('..')
-const {
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
   renderVersionBadge,
   searchServiceUrl,
   stripBuildMetadata,
   selectVersion,
-} = require('../nuget/nuget-helpers')
+} from '../nuget/nuget-helpers.js'
 
 const schema = Joi.object({
   items: Joi.array()
@@ -105,6 +103,4 @@ class FeedzVersionService extends BaseJsonService {
   }
 }
 
-module.exports = {
-  FeedzVersionService,
-}
+export { FeedzVersionService }

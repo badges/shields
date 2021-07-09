@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { getDependencyVersion } = require('./package-json-helpers')
+import { test, given } from 'sazerac'
+import { getDependencyVersion } from './package-json-helpers.js'
 
 describe('Contributor count helpers', function () {
   test(getDependencyVersion, () => {

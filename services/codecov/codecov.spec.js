@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, forCases, given } = require('sazerac')
-const Codecov = require('./codecov.service')
+import { test, forCases, given } from 'sazerac'
+import Codecov from './codecov.service.js'
 
 describe('Codecov', function () {
   test(Codecov.prototype.legacyTransform, () => {

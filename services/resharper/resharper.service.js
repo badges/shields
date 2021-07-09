@@ -1,8 +1,6 @@
-'use strict'
+import { createServiceFamily } from '../nuget/nuget-v2-service-family.js'
 
-const { createServiceFamily } = require('../nuget/nuget-v2-service-family')
-
-module.exports = createServiceFamily({
+export default createServiceFamily({
   name: 'ResharperPlugin',
   defaultLabel: 'resharper',
   serviceBaseUrl: 'resharper',

@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const t = (module.exports = require('../tester').createServiceTester())
-const { dockerBlue } = require('./docker-helpers')
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { dockerBlue } from './docker-helpers.js'
+export const t = await createServiceTester()
 
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 

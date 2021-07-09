@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isMetric, isMetricOpenIssues } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isMetric, isMetricOpenIssues } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')

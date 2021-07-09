@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const TestspacePassRatio = require('./testspace-test-pass-ratio.service')
+import { test, given } from 'sazerac'
+import TestspacePassRatio from './testspace-test-pass-ratio.service.js'
 
 describe('TestspacePassRatio', function () {
   test(TestspacePassRatio.render, () => {

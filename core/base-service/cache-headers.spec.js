@@ -1,19 +1,16 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const chai = require('chai')
-const { expect } = require('chai')
-const sinon = require('sinon')
-const httpMocks = require('node-mocks-http')
-const {
+import { test, given } from 'sazerac'
+import chai, { expect } from 'chai'
+import sinon from 'sinon'
+import httpMocks from 'node-mocks-http'
+import chaiDatetime from 'chai-datetime'
+import {
   coalesceCacheLength,
   setHeadersForCacheLength,
   setCacheHeaders,
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
-} = require('./cache-headers')
-
-chai.use(require('chai-datetime'))
+} from './cache-headers.js'
+chai.use(chaiDatetime)
 
 describe('Cache header functions', function () {
   let res

@@ -1,11 +1,9 @@
-'use strict'
-
-const moment = require('moment')
-const Joi = require('joi')
-const { age } = require('../color-formatters')
-const { formatDate } = require('../text-formatters')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import moment from 'moment'
+import Joi from 'joi'
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.alternatives(
   Joi.object({
@@ -20,7 +18,7 @@ const schema = Joi.alternatives(
     .min(1)
 )
 
-module.exports = class GithubReleaseDate extends GithubAuthV3Service {
+export default class GithubReleaseDate extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github',

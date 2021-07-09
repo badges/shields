@@ -1,8 +1,6 @@
-'use strict'
+import { BaseService } from '../index.js'
 
-const { BaseService } = require('..')
-
-module.exports = class Maintenance extends BaseService {
+export default class Maintenance extends BaseService {
   static category = 'other'
 
   static route = {

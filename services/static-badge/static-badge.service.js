@@ -1,9 +1,7 @@
-'use strict'
+import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import { BaseStaticService } from '../index.js'
 
-const { escapeFormat } = require('../../core/badge-urls/path-helpers')
-const { BaseStaticService } = require('..')
-
-module.exports = class StaticBadge extends BaseStaticService {
+export default class StaticBadge extends BaseStaticService {
   static category = 'static'
 
   static route = {

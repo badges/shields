@@ -1,12 +1,10 @@
-'use strict'
-
-const { colorScale } = require('../color-formatters')
-const { BaseJsonService } = require('..')
-const { fetchProject } = require('./librariesio-common')
+import { colorScale } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
+import { fetchProject } from './librariesio-common.js'
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])
 
-module.exports = class LibrariesIoSourcerank extends BaseJsonService {
+export default class LibrariesIoSourcerank extends BaseJsonService {
   static category = 'rating'
 
   static route = {

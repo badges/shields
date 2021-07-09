@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('status (valid, stable, package version in request)')
   .get('/django/1.11.json')

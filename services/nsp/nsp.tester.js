@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'nsp',
   title: 'nsp',
   pathPrefix: '/nsp/npm',
-}))
+})
 
 t.create('no longer available (previously package)')
   .get('/gh-badges.json')

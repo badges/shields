@@ -1,6 +1,5 @@
-'use strict'
-const { expect } = require('chai')
-const { buildRedirectUrl, buildUrl } = require('./jenkins-common')
+import { expect } from 'chai'
+import { buildRedirectUrl, buildUrl } from './jenkins-common.js'
 
 describe('jenkins-common', function () {
   describe('buildUrl', function () {

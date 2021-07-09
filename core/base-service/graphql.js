@@ -1,4 +1,3 @@
-'use strict'
 /**
  * @module
  */
@@ -49,4 +48,4 @@ function mergeQueries(...queries) {
   return merged
 }
 
-module.exports = { mergeQueries }
+export { mergeQueries }

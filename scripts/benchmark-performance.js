@@ -1,12 +1,10 @@
-'use strict'
-
-const config = require('config').util.toObject()
-const got = require('got')
-const minimist = require('minimist')
-const Server = require('../core/server/server')
+import config from 'config'
+import got from 'got'
+import minimist from 'minimist'
+import Server from '../core/server/server.js'
 
 async function main() {
-  const server = new Server(config)
+  const server = new Server(config.util.toObject())
   await server.start()
   const args = minimist(process.argv)
   const iterations = parseInt(args.iterations) || 10000

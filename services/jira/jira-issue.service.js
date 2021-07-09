@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseJsonService } = require('..')
-const { authConfig } = require('./jira-common')
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
+import { authConfig } from './jira-common.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -20,7 +18,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class JiraIssue extends BaseJsonService {
+export default class JiraIssue extends BaseJsonService {
   static category = 'issue-tracking'
 
   static route = {

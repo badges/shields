@@ -1,7 +1,6 @@
-'use strict'
-
-const { isFormattedDate } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isFormattedDate } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('latest release date of the component (format: yyyy-mm-dd)')
   .get('/rd/vaadinvaadin-grid.json')

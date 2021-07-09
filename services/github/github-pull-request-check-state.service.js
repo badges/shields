@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const countBy = require('lodash.countby')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { fetchIssue } = require('./github-common-fetch')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import countBy from 'lodash.countby'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { fetchIssue } from './github-common-fetch.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success').required(),
@@ -19,7 +17,7 @@ const schema = Joi.object({
 
 const keywords = ['pullrequest', 'detail']
 
-module.exports = class GithubPullRequestCheckState extends GithubAuthV3Service {
+export default class GithubPullRequestCheckState extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/status',

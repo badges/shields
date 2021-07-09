@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const prometheus = require('prom-client')
-const { promClientJsonToInfluxV2 } = require('./format-converters')
+import { expect } from 'chai'
+import prometheus from 'prom-client'
+import { promClientJsonToInfluxV2 } from './format-converters.js'
 
 describe('Metric format converters', function () {
   describe('prom-client JSON to InfluxDB line protocol (version 2)', function () {

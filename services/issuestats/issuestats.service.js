@@ -1,8 +1,6 @@
-'use strict'
+import { deprecatedService } from '../index.js'
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'issue-tracking',
   route: { base: 'issuestats', pattern: ':various+' },
   label: 'issue stats',

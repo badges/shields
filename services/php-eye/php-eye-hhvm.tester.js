@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'hhvm',
   title: 'hhvm',
   pathPrefix: '/hhvm',
-}))
+})
 
 t.create('no longer available (previously default branch)')
   .get('/symfony/symfony.json')

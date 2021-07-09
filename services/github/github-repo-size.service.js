@@ -1,16 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
-module.exports = class GithubRepoSize extends GithubAuthV3Service {
+export default class GithubRepoSize extends GithubAuthV3Service {
   static category = 'size'
   static route = { base: 'github/repo-size', pattern: ':user/:repo' }
   static examples = [

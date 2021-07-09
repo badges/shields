@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { nonNegativeInteger } = require('../validators')
-const { latest } = require('../version')
-const { BaseJsonService, NotFound } = require('..')
-const {
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { nonNegativeInteger } from '../validators.js'
+import { latest } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
-} = require('./docker-helpers')
+} from './docker-helpers.js'
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
@@ -30,7 +28,7 @@ const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
-module.exports = class DockerSize extends BaseJsonService {
+export default class DockerSize extends BaseJsonService {
   static category = 'size'
   static route = { ...buildDockerUrl('image-size', true), queryParamSchema }
   static examples = [

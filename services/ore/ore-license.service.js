@@ -1,9 +1,7 @@
-'use strict'
+import { renderLicenseBadge } from '../licenses.js'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
-const { renderLicenseBadge } = require('../licenses')
-const { BaseOreService, documentation, keywords } = require('./ore-base')
-
-module.exports = class OreLicense extends BaseOreService {
+export default class OreLicense extends BaseOreService {
   static category = 'license'
 
   static route = {

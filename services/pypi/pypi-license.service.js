@@ -1,10 +1,8 @@
-'use strict'
+import { renderLicenseBadge } from '../licenses.js'
+import PypiBase from './pypi-base.js'
+import { getLicenses } from './pypi-helpers.js'
 
-const { renderLicenseBadge } = require('../licenses')
-const PypiBase = require('./pypi-base')
-const { getLicenses } = require('./pypi-helpers')
-
-module.exports = class PypiLicense extends PypiBase {
+export default class PypiLicense extends PypiBase {
   static category = 'license'
 
   static route = this.buildRoute('pypi/l')

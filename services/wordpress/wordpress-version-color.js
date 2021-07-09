@@ -1,8 +1,6 @@
-'use strict'
-
-const { promisify } = require('util')
-const semver = require('semver')
-const { regularUpdate } = require('../../core/legacy/regular-update')
+import { promisify } from 'util'
+import semver from 'semver'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 // TODO: Incorporate this schema.
 // const schema = Joi.object()
@@ -61,8 +59,4 @@ async function versionColorForWordpressVersion(version) {
   }
 }
 
-module.exports = {
-  toSemver,
-  getOfferedVersions,
-  versionColorForWordpressVersion,
-}
+export { toSemver, getOfferedVersions, versionColorForWordpressVersion }

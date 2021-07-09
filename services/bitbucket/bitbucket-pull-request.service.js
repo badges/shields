@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { AuthHelper } = require('../../core/base-service/auth-helper')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger, optionalUrl } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { AuthHelper } from '../../core/base-service/auth-helper.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -128,4 +126,5 @@ function pullRequestClassGenerator(raw) {
   }
 }
 
-module.exports = [true, false].map(pullRequestClassGenerator)
+export const BitbucketRawPullRequests = pullRequestClassGenerator(true)
+export const BitbucketNonRawPullRequests = pullRequestClassGenerator(false)

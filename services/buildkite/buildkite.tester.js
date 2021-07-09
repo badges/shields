@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isBuildStatus } from '../build-status.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('buildkite invalid pipeline')
   .get('/unknown-identifier/unknown-branch.json')

@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.array().items(Joi.number().required(), Joi.number().required()))
   .required()
 
-module.exports = class BStatsServers extends BaseJsonService {
+export default class BStatsServers extends BaseJsonService {
   static category = 'other'
   static route = { base: 'bstats/servers', pattern: ':pluginid' }
 

@@ -1,8 +1,6 @@
-'use strict'
+import { BaseXmlService } from '../index.js'
 
-const { BaseXmlService } = require('..')
-
-module.exports = class EclipseMarketplaceBase extends BaseXmlService {
+export default class EclipseMarketplaceBase extends BaseXmlService {
   static buildRoute(base) {
     return {
       base,

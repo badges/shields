@@ -1,9 +1,7 @@
-'use strict'
+import { redirector } from '../index.js'
+import { documentation } from '../maven-metadata/maven-metadata.js'
 
-const { redirector } = require('..')
-const { documentation } = require('../maven-metadata/maven-metadata')
-
-module.exports = redirector({
+export default redirector({
   category: 'version',
   isDeprecated: false,
   route: {

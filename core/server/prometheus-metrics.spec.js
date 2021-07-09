@@ -1,10 +1,8 @@
-'use strict'
-
-const { expect } = require('chai')
-const Camp = require('@shields_io/camp')
-const portfinder = require('portfinder')
-const got = require('../got-test-client')
-const Metrics = require('./prometheus-metrics')
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import got from '../got-test-client.js'
+import Metrics from './prometheus-metrics.js'
 
 describe('Prometheus metrics route', function () {
   let port, baseUrl, camp, metrics

@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { NotFound } = require('..')
-const PackagistLicense = require('./packagist-license.service')
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import PackagistLicense from './packagist-license.service.js'
 
 describe('PackagistLicense', function () {
   it('should throw NotFound when default branch is missing', function () {

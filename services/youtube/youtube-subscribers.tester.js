@@ -1,9 +1,9 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { noToken } = require('../test-helpers')
-const { isMetric } = require('../test-validators')
-const noYouTubeToken = noToken(require('./youtube-subscribers.service'))
+import { createServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import { isMetric } from '../test-validators.js'
+import _noYouTubeToken from './youtube-subscribers.service.js'
+export const t = await createServiceTester()
+const noYouTubeToken = noToken(_noYouTubeToken)
 
 t.create('subscriber count')
   .skipWhen(noYouTubeToken)

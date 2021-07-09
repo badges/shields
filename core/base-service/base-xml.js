@@ -2,14 +2,12 @@
  * @module
  */
 
-'use strict'
-
 // See available emoji at http://emoji.muan.co/
-const emojic = require('emojic')
-const fastXmlParser = require('fast-xml-parser')
-const BaseService = require('./base')
-const trace = require('./trace')
-const { InvalidResponse } = require('./errors')
+import emojic from 'emojic'
+import fastXmlParser from 'fast-xml-parser'
+import BaseService from './base.js'
+import trace from './trace.js'
+import { InvalidResponse } from './errors.js'
 
 /**
  * Services which query a XML endpoint should extend BaseXmlService
@@ -68,4 +66,4 @@ class BaseXmlService extends BaseService {
   }
 }
 
-module.exports = BaseXmlService
+export default BaseXmlService

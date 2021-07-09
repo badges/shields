@@ -1,7 +1,6 @@
-'use strict'
-
-const { isBuildStatus } = require('../build-status')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isBuildStatus } from '../build-status.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('deploy status')
   .get('/cde737473028420d.json?token=GCIdEzacE4GW32jLVrZb7A')

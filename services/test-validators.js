@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { semver: isSemver } = require('./validators')
+import Joi from 'joi'
+import { semver as isSemver } from './validators.js'
 
 /*
   Note:
@@ -148,7 +146,7 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
-module.exports = {
+export {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,

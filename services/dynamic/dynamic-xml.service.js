@@ -1,11 +1,9 @@
-'use strict'
-
-const { DOMParser } = require('xmldom')
-const xpath = require('xpath')
-const { MetricNames } = require('../../core/base-service/metric-helper')
-const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
-const { BaseService, InvalidResponse, InvalidParameter } = require('..')
-const { createRoute } = require('./dynamic-helpers')
+import { DOMParser } from 'xmldom'
+import xpath from 'xpath'
+import { MetricNames } from '../../core/base-service/metric-helper.js'
+import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
+import { BaseService, InvalidResponse, InvalidParameter } from '../index.js'
+import { createRoute } from './dynamic-helpers.js'
 
 // This service extends BaseService because it uses a different XML parser
 // than BaseXmlService which can be used with xpath.
@@ -13,7 +11,7 @@ const { createRoute } = require('./dynamic-helpers')
 // One way to create a more performant version would be to use the BaseXml
 // JSON parser and write the queries in jsonpath instead. Then eventually
 // deprecate the old version.
-module.exports = class DynamicXml extends BaseService {
+export default class DynamicXml extends BaseService {
   static category = 'dynamic'
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('xml')

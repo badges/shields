@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { _getLatestRelease } = require('./github-common-release')
+import { test, given } from 'sazerac'
+import { _getLatestRelease } from './github-common-release.js'
 
 describe('GithubRelease', function () {
   test(_getLatestRelease, () => {

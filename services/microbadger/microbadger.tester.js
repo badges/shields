@@ -1,10 +1,9 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'microbadger',
   title: 'Microbadger',
-}))
+})
 
 t.create('no longer available (previously image size)')
   .get('/image-size/fedora/apache.json')

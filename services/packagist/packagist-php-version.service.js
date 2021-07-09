@@ -1,19 +1,17 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { NotFound } = require('..')
-const {
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { NotFound } from '../index.js'
+import {
   allVersionsSchema,
   BasePackagistService,
   customServerDocumentationFragment,
-} = require('./packagist-base')
+} from './packagist-base.js'
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistPhpVersion extends BasePackagistService {
+export default class PackagistPhpVersion extends BasePackagistService {
   static category = 'platform-support'
 
   static route = {

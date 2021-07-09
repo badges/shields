@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 // Change open since December 2010, hopefully won't get merged or abandoned anytime soon.
 t.create('Gerrit new change')

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'CocoapodsDownloads',
   title: 'CocoapodsDownloads',
   pathPrefix: '/cocoapods',
-}))
+})
 
 t.create('downloads (valid, monthly)')
   .get('/dm/AFNetworking.json')

@@ -1,8 +1,6 @@
-'use strict'
+import BaseCondaService from './conda-base.js'
 
-const BaseCondaService = require('./conda-base')
-
-module.exports = class CondaPlatform extends BaseCondaService {
+export default class CondaPlatform extends BaseCondaService {
   static category = 'platform-support'
   static route = { base: 'conda', pattern: ':variant(p|pn)/:channel/:pkg' }
 

@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given, forCases } = require('sazerac')
-const { renderBuildStatusBadge } = require('./build-status')
+import { expect } from 'chai'
+import { test, given, forCases } from 'sazerac'
+import { renderBuildStatusBadge } from './build-status.js'
 
 test(renderBuildStatusBadge, () => {
   given({ label: 'build', status: 'passed' }).expect({

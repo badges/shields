@@ -1,11 +1,9 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'osslifecycle',
   title: 'OSS Lifecycle',
-}))
+})
 
 t.create('osslifecycle active status').get('/netflix/sureal.json').expectBadge({
   label: 'oss lifecycle',

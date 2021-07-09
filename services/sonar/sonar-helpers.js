@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale } = require('../color-formatters')
-const { optionalUrl } = require('../validators')
+import Joi from 'joi'
+import { colorScale } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
 
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
@@ -60,7 +58,7 @@ const documentation = `
   </p
 `
 
-module.exports = {
+export {
   getLabel,
   isLegacyVersion,
   queryParamSchema,

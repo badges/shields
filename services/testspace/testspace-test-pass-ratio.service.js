@@ -1,8 +1,6 @@
-'use strict'
+import TestspaceBase from './testspace-base.js'
 
-const TestspaceBase = require('./testspace-base')
-
-module.exports = class TestspacePassRatio extends TestspaceBase {
+export default class TestspacePassRatio extends TestspaceBase {
   static route = {
     base: 'testspace/pass-ratio',
     pattern: ':org/:project/:space+',

@@ -1,4 +1,4 @@
-'use strict'
+import { createServiceTester } from '../tester.js'
 
 const getURL = '/3.0.json?specUrl=https://example.com/example.json'
 const getURLBase = '/3.0.json?specUrl='
@@ -7,8 +7,7 @@ const apiGetURL = '/validator/debug'
 const apiGetQueryParams = {
   url: 'https://example.com/example.json',
 }
-
-const t = (module.exports = require('../tester').createServiceTester())
+export const t = await createServiceTester()
 
 t.create('Invalid')
   .get(getURL)

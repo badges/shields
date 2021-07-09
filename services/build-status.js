@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const greenStatuses = [
   'fixed',
@@ -74,4 +72,4 @@ function renderBuildStatusBadge({ label, status }) {
   }
 }
 
-module.exports = { isBuildStatus, renderBuildStatusBadge }
+export { isBuildStatus, renderBuildStatusBadge }

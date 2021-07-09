@@ -1,12 +1,10 @@
-'use strict'
-
-const { renderVersionBadge } = require('../version')
-const { isLockfile, getDependencyVersion } = require('../pipenv-helpers')
-const { addv } = require('../text-formatters')
-const { NotFound } = require('..')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation: githubDocumentation } = require('./github-helpers')
+import { renderVersionBadge } from '../version.js'
+import { isLockfile, getDependencyVersion } from '../pipenv-helpers.js'
+import { addv } from '../text-formatters.js'
+import { NotFound } from '../index.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation as githubDocumentation } from './github-helpers.js'
 
 const keywords = ['pipfile']
 
@@ -174,7 +172,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
   }
 }
 
-module.exports = [
+export default [
   GithubPipenvLockedPythonVersion,
   GithubPipenvLockedDependencyVersion,
 ]

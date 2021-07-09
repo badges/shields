@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
@@ -45,7 +43,7 @@ const intervalMap = {
 
 // This hits an entirely different API from the rest of the NPM services, so
 // it does not use NpmBase.
-module.exports = class NpmDownloads extends BaseJsonService {
+export default class NpmDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {

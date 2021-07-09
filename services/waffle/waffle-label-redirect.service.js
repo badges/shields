@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // The WaffleLabel service originally had 'label' as an optional parameter
   // with a default value of 'ready'. However, after some discussion it was
   // agreed that 'ready' didn't make sense as a default, nor was there any other

@@ -1,10 +1,8 @@
-'use strict'
-
-const { promisify } = require('util')
-const semver = require('semver')
-const { metric, addv } = require('../text-formatters')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { regularUpdate } = require('../../core/legacy/regular-update')
+import { promisify } from 'util'
+import semver from 'semver'
+import { metric, addv } from '../text-formatters.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 function renderVersionBadge({ version, feed }) {
   let color
@@ -103,7 +101,7 @@ function selectVersion(versions, includePrereleases) {
   }
 }
 
-module.exports = {
+export {
   renderVersionBadge,
   renderDownloadBadge,
   odataToObject,

@@ -1,11 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-const { renderVersionBadge } = require('../version')
-const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
-
-module.exports = class VaadinDirectoryVersion extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
   static category = 'version'
 
   static route = {

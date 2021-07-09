@@ -1,8 +1,6 @@
-'use strict'
+import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 
-const { schema, periodMap, BaseJsDelivrService } = require('./jsdelivr-base')
-
-module.exports = class JsDelivrHitsNPM extends BaseJsDelivrService {
+export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   static route = {
     base: 'jsdelivr/npm',
     pattern: ':period(hd|hw|hm|hy)/:scope(@[^/]+)?/:packageName',

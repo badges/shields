@@ -1,6 +1,4 @@
-'use strict'
-
-const { deprecatedService } = require('..')
+import { deprecatedService } from '../index.js'
 
 const commonAttrs = {
   category: 'build',
@@ -8,7 +6,7 @@ const commonAttrs = {
   dateAdded: new Date('2018-01-23'),
 }
 
-module.exports = [
+export default [
   deprecatedService({
     route: {
       base: 'snap',

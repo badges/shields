@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const {
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import {
   individualValueSchema,
   transformAndValidate,
   renderDynamicBadge,
-} = require('../dynamic-common')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation } = require('./github-helpers')
+} from '../dynamic-common.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const schema = Joi.object({
   version: individualValueSchema,
@@ -204,7 +202,4 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
   }
 }
 
-module.exports = {
-  GithubManifestVersion,
-  DynamicGithubManifest,
-}
+export { GithubManifestVersion, DynamicGithubManifest }

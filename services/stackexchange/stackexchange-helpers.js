@@ -1,9 +1,7 @@
-'use strict'
+import { metric } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
 
-const { metric } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-
-module.exports = function renderQuestionsBadge({
+export default function renderQuestionsBadge({
   suffix,
   stackexchangesite,
   query,

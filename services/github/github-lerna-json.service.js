@@ -1,17 +1,15 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { semver } = require('../validators')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation } = require('./github-helpers')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { semver } from '../validators.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const versionSchema = Joi.object({
   version: Joi.alternatives().try(semver, Joi.equal('independent').required()),
 }).required()
 
-module.exports = class GithubLernaJson extends ConditionalGithubAuthV3Service {
+export default class GithubLernaJson extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/lerna-json/v',

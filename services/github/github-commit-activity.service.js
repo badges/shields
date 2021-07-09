@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { errorMessagesFor, documentation } = require('./github-helpers')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { errorMessagesFor, documentation } from './github-helpers.js'
 
 const schema = Joi.array()
   .items(
@@ -14,7 +12,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubCommitActivity extends GithubAuthV3Service {
+export default class GithubCommitActivity extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/commit-activity',

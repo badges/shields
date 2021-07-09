@@ -1,10 +1,8 @@
-'use strict'
+import { addv as versionText } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import BaseCondaService from './conda-base.js'
 
-const { addv: versionText } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const BaseCondaService = require('./conda-base')
-
-module.exports = class CondaVersion extends BaseCondaService {
+export default class CondaVersion extends BaseCondaService {
   static category = 'version'
   static route = { base: 'conda', pattern: ':variant(v|vn)/:channel/:pkg' }
 

@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { escapeFormat } = require('./path-helpers')
+import { test, given } from 'sazerac'
+import { escapeFormat } from './path-helpers.js'
 
 describe('Badge URL helper functions', function () {
   test(escapeFormat, () => {

@@ -1,7 +1,6 @@
-'use strict'
-
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Go version').get('/gohugoio/hugo.json').expectBadge({
   label: 'Go',

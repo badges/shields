@@ -1,7 +1,6 @@
-'use strict'
-
-const { isMetricOverTimePeriod } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isMetricOverTimePeriod } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Monthly Questions for StackOverflow Momentjs')
   .get('/stackoverflow/qm/momentjs.json')

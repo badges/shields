@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const Bugzilla = require('./bugzilla.service')
+import { test, given } from 'sazerac'
+import Bugzilla from './bugzilla.service.js'
 
 describe('getDisplayStatus function', function () {
   it('formats status correctly', async function () {

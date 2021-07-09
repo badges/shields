@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { coveragePercentage } = require('../color-formatters')
-const { BaseJsonService, InvalidResponse } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const documentation = `
   <p>
@@ -36,7 +34,7 @@ const queryParamSchema = Joi.object({
   token: Joi.string().required(),
 }).required()
 
-module.exports = class POEditor extends BaseJsonService {
+export default class POEditor extends BaseJsonService {
   static category = 'other'
 
   static route = {

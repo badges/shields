@@ -1,10 +1,8 @@
-'use strict'
-
-const { expect } = require('chai')
-const sinon = require('sinon')
-const Joi = require('joi')
-const makeBadge = require('../../badge-maker/lib/make-badge')
-const BaseSvgScrapingService = require('./base-svg-scraping')
+import { expect } from 'chai'
+import sinon from 'sinon'
+import Joi from 'joi'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import BaseSvgScrapingService from './base-svg-scraping.js'
 
 const schema = Joi.object({
   message: Joi.string().required(),

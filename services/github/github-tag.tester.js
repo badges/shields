@@ -1,14 +1,12 @@
-'use strict'
+import Joi from 'joi'
+import { isSemver } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 
-const Joi = require('joi')
-const { isSemver } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'GithubTag',
   title: 'Github Tag',
   pathPrefix: '/github',
-}))
+})
 
 t.create('Tag')
   .get('/v/tag/expressjs/express.json')

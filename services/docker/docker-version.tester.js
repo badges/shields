@@ -1,32 +1,31 @@
-'use strict'
-
-const { isSemVer } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isSemver } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('docker version (valid, library)').get('/_/alpine.json').expectBadge({
   label: 'version',
-  message: isSemVer,
+  message: isSemver,
 })
 
 t.create('docker version (valid, library with tag)')
   .get('/_/alpine/latest.json')
   .expectBadge({
     label: 'version',
-    message: isSemVer,
+    message: isSemver,
   })
 
 t.create('docker version (valid, user)')
   .get('/jrottenberg/ffmpeg.json')
   .expectBadge({
     label: 'version',
-    message: isSemVer,
+    message: isSemver,
   })
 
 t.create('docker version (valid, user with tag)')
   .get('/jrottenberg/ffmpeg/3.2-alpine.json')
   .expectBadge({
     label: 'version',
-    message: isSemVer,
+    message: isSemver,
   })
 
 t.create('docker version (invalid, incorrect tag)')

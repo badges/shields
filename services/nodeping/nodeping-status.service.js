@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const {
+import Joi from 'joi'
+import {
   queryParamSchema,
   exampleQueryParams,
   renderWebsiteStatus,
-} = require('../website-status')
-const { BaseJsonService } = require('..')
+} from '../website-status.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))
@@ -17,7 +15,7 @@ const schema = Joi.array()
  */
 const exampleCheckUuid = 'jkiwn052-ntpp-4lbb-8d45-ihew6d9ucoei'
 
-module.exports = class NodePingStatus extends BaseJsonService {
+export default class NodePingStatus extends BaseJsonService {
   static category = 'monitoring'
 
   static route = {

@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const ownerSchema = Joi.array().required()
 
-module.exports = class GemOwner extends BaseJsonService {
+export default class GemOwner extends BaseJsonService {
   static category = 'other'
   static route = { base: 'gem/u', pattern: ':user' }
   static examples = [

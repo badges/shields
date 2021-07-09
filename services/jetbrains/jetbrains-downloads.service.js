@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const JetbrainsBase = require('./jetbrains-base')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import JetbrainsBase from './jetbrains-base.js'
 
 const intelliJschema = Joi.object({
   'plugin-repository': Joi.object({
@@ -24,7 +22,7 @@ const intelliJschema = Joi.object({
 
 const jetbrainsSchema = Joi.object({ downloads: nonNegativeInteger }).required()
 
-module.exports = class JetbrainsDownloads extends JetbrainsBase {
+export default class JetbrainsDownloads extends JetbrainsBase {
   static category = 'downloads'
 
   static route = {

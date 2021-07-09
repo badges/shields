@@ -1,13 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Download Tests',
 })
-module.exports = t
 
 t.create('Plugin Downloads - Total')
   .get('/plugin/dt/akismet.json')

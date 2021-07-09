@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const categories = require('../../services/categories')
+import Joi from 'joi'
+import categories from '../../services/categories.js'
 
 const isRealCategory = Joi.equal(...categories.map(({ id }) => id)).required()
 
@@ -13,7 +11,4 @@ function assertValidCategory(category, message = undefined) {
   Joi.assert(category, isValidCategory, message)
 }
 
-module.exports = {
-  isValidCategory,
-  assertValidCategory,
-}
+export { isValidCategory, assertValidCategory }

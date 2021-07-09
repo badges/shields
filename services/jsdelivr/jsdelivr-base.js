@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { downloadCount } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   total: Joi.number().required(),
@@ -31,4 +29,4 @@ class BaseJsDelivrService extends BaseJsonService {
   }
 }
 
-module.exports = { schema, periodMap, BaseJsDelivrService }
+export { schema, periodMap, BaseJsDelivrService }

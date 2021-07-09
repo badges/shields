@@ -1,13 +1,11 @@
-'use strict'
-
-const { redirector } = require('..')
+import { redirector } from '../index.js'
 
 const commonAttrs = {
   category: 'analysis',
   dateAdded: new Date('2019-04-30'),
 }
 
-module.exports = [
+export default [
   redirector({
     route: {
       base: 'lgtm/alerts/g',

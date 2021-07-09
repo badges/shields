@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.string().required()
 
-module.exports = class DubVersion extends BaseJsonService {
+export default class DubVersion extends BaseJsonService {
   static category = 'version'
   static route = { base: 'dub/v', pattern: ':packageName' }
   static examples = [

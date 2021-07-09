@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const Discord = require('./discord.service')
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import Discord from './discord.service.js'
 
 describe('Discord', function () {
   cleanUpNockAfterEach()

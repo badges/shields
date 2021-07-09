@@ -13,7 +13,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-page-creator',
       options: {
-        path: path.join(__dirname, 'frontend', 'pages'),
+        path: path.join(__dirname, 'pages'),
       },
     },
     'gatsby-plugin-react-helmet',

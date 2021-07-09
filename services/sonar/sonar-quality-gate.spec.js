@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const SonarQualityGate = require('./sonar-quality-gate.service')
+import { test, given } from 'sazerac'
+import SonarQualityGate from './sonar-quality-gate.service.js'
 
 describe('SonarQualityGate', function () {
   test(SonarQualityGate.render, () => {

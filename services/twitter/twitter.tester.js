@@ -1,12 +1,10 @@
-'use strict'
+import { isMetric } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 
-const { isMetric } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'twitter',
   title: 'Twitter',
-}))
+})
 
 t.create('Followers')
   .get('/follow/shields_io.json')

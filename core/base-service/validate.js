@@ -1,8 +1,6 @@
-'use strict'
-
-const emojic = require('emojic')
-const Joi = require('joi')
-const trace = require('./trace')
+import emojic from 'emojic'
+import Joi from 'joi'
+import trace from './trace.js'
 
 function validate(
   {
@@ -50,4 +48,4 @@ function validate(
   }
 }
 
-module.exports = validate
+export default validate

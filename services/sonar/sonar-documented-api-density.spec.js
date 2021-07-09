@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const SonarDocumentedApiDensity = require('./sonar-documented-api-density.service')
+import { test, given } from 'sazerac'
+import SonarDocumentedApiDensity from './sonar-documented-api-density.service.js'
 
 describe('SonarDocumentedApiDensity', function () {
   test(SonarDocumentedApiDensity.render, () => {

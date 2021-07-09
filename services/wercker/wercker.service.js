@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const werckerSchema = Joi.array()
   .items(
@@ -32,7 +30,7 @@ const werckerCIDocumentation = `
 </p>
 `
 
-module.exports = class Wercker extends BaseJsonService {
+export default class Wercker extends BaseJsonService {
   static category = 'build'
 
   static route = {

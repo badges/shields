@@ -1,10 +1,9 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'beerpay',
   title: 'Beerpay',
-}))
+})
 
 t.create('no longer available (previously beerpay)')
   .get('/hashdog/scrapfy-chrome-extension.json')

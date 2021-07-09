@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const { BaseSvgScrapingService } = require('..')
-const { parseJson } = require('../../core/base-service/json')
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { parseJson } from '../../core/base-service/json.js'
 
 // https://docs.codecov.io/reference#totals
 // A new repository that's been added but never had any coverage reports
@@ -46,7 +44,7 @@ const documentation = `
   </p>
 `
 
-module.exports = class Codecov extends BaseSvgScrapingService {
+export default class Codecov extends BaseSvgScrapingService {
   static category = 'coverage'
   static route = {
     base: 'codecov/c',

@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const JetbrainsBase = require('./jetbrains-base')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import JetbrainsBase from './jetbrains-base.js'
 
 const intelliJschema = Joi.object({
   'plugin-repository': Joi.object({
@@ -29,7 +27,7 @@ const jetbrainsSchema = Joi.array()
   )
   .required()
 
-module.exports = class JetbrainsVersion extends JetbrainsBase {
+export default class JetbrainsVersion extends JetbrainsBase {
   static category = 'version'
 
   static route = {

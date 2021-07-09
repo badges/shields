@@ -1,7 +1,6 @@
-'use strict'
-
-const { isFileSize } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isFileSize } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('File size')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json')

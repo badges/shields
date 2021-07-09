@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const ScrutinizerBase = require('./scrutinizer-base')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import ScrutinizerBase from './scrutinizer-base.js'
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
@@ -107,7 +105,7 @@ class ScrutinizerPlainGitBuild extends ScrutinizerBuildBase {
   }
 }
 
-module.exports = [
+export default [
   ScrutinizerBuild,
   ScrutinizerGitLabBuild,
   ScrutinizerPlainGitBuild,

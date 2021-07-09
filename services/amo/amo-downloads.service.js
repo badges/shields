@@ -1,9 +1,7 @@
-'use strict'
-
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { redirector } = require('..')
-const { BaseAmoService, keywords } = require('./amo-base')
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { redirector } from '../index.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
 const documentation = `
 <p>
@@ -54,7 +52,4 @@ const AmoLegacyRedirect = redirector({
   dateAdded: new Date('2019-02-23'),
 })
 
-module.exports = {
-  AmoWeeklyDownloads,
-  AmoLegacyRedirect,
-}
+export { AmoWeeklyDownloads, AmoLegacyRedirect }

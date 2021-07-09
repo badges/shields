@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, InvalidParameter } = require('..')
+import Joi from 'joi'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
@@ -52,7 +50,7 @@ const documentation = `
   </p>
   `
 
-module.exports = class Matrix extends BaseJsonService {
+export default class Matrix extends BaseJsonService {
   static category = 'chat'
 
   static route = {
