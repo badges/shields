@@ -207,18 +207,16 @@ Alumni:
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
 
-## awesome-badges
+## Related projects
+
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
 Status badges are used widely across open-source and private software projects.
 Academics have studied the "signal" badges provide about software project
 quality. There are many existing libraries for rendering these badges, and
-alternatives to the hosted Shields badge service.
-
-While Shields does not endorse any of these projects, [awesome-badges][] is a
-curated collection of such resources and
-[contributions][contributing to awesome-badges] may be considered there.
-
-[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+alternatives to the hosted Shields badge service. While Shields does not endorse
+these projects, [awesome-badges][] is a curated collection of such resources.
+[Contributions][contributing to awesome-badges] may be considered there.
 
 [awesome-badges]: https://github.com/badges/awesome-badges
 [contributing to awesome-badges]: https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md
