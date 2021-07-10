@@ -1,10 +1,6 @@
-import { ServiceTester } from '../tester.js'
+import { createServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
-export const t = new ServiceTester({
-  id: 'WeblateEntity',
-  title: 'Weblate Entity',
-  pathPrefix: '/weblate',
-})
+export const t = await createServiceTester()
 
 t.create('Components')
   .get('/components.json?server=https://hosted.weblate.org')

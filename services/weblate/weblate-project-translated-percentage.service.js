@@ -8,7 +8,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: optionalUrl,
 }).required()
 
 /**
@@ -17,7 +17,11 @@ const queryParamSchema = Joi.object({
  */
 export default class WeblateProjectTranslatedPercentage extends BaseJsonService {
   static category = 'other'
-  static route = { base: 'weblate', pattern: ':project', queryParamSchema }
+  static route = {
+    base: 'weblate/progress',
+    pattern: ':project',
+    queryParamSchema,
+  }
 
   static examples = [
     {
@@ -45,7 +49,7 @@ export default class WeblateProjectTranslatedPercentage extends BaseJsonService 
     return { message: `${translatedPercent.toFixed(0)}%`, color }
   }
 
-  async fetch({ project, server }) {
+  async fetch({ project, server = 'https://hosted.weblate.org' }) {
     return this._requestJson({
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
