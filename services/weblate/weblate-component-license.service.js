@@ -7,7 +7,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: optionalUrl,
 }).required()
 
 /**
@@ -16,7 +16,7 @@ const queryParamSchema = Joi.object({
 export default class WeblateComponentLicense extends BaseJsonService {
   static category = 'license'
   static route = {
-    base: 'weblate/license',
+    base: 'weblate/l',
     pattern: ':project/:component',
     queryParamSchema,
   }
@@ -37,7 +37,7 @@ export default class WeblateComponentLicense extends BaseJsonService {
     return { message: `${license}` }
   }
 
-  async fetch({ project, component, server }) {
+  async fetch({ project, component, server = 'https://hosted.weblate.org' }) {
     return this._requestJson({
       schema,
       url: `${server}/api/components/${project}/${component}/`,
