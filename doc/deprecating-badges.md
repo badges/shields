@@ -80,6 +80,37 @@ t.create('no longer available (previously number of layers)')
   })
 ```
 
+## What Happens Next?
+
+Once a service is deprecated, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows:
+![](https://img.shields.io/badge/gratipay-no%20longer%20available-inactive)
+
+Past that point, all related code will be deleted, and a not found error will be rendered instead:
+![](https://img.shields.io/badge/404-badge%20not%20found-critical)
+
+Here is a listing of all deleted badges that were once part of the Shields.io service:
+
+- bitHound
+- Cauditor
+- CocoaPods Apps
+- CocoaPods Downloads
+- Coverity
+- Dockbit
+- Dotnet Status
+- Gemnasium
+- Gratipay/Gittip
+- ImageLayers
+- Issue Stats
+- JitPack Downloads
+- Leanpub
+- Libscore
+- Magnum CI
+- NSP
+- PHP Eye
+- Snap CI
+- VersionEye
+- Waffle
+
 ## Additional Information
 
 Some other information that may be useful:
