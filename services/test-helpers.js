@@ -1,7 +1,7 @@
+import bytes from 'bytes'
 import nock from 'nock'
-import request from 'request'
 import config from 'config'
-import { promisify } from '../core/base-service/legacy-request-handler.js'
+import { fetchFactory } from '../core/base-service/got.js'
 const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
@@ -31,7 +31,7 @@ function noToken(serviceClass) {
   }
 }
 
-const sendAndCacheRequest = promisify(request)
+const sendAndCacheRequest = fetchFactory(bytes(runnerConfig.public.fetchLimit))
 
 const defaultContext = { sendAndCacheRequest }
 

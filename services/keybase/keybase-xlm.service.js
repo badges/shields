@@ -56,7 +56,7 @@ export default class KeybaseXLM extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      form: {
+      qs: {
         usernames: username,
         fields: 'stellar',
       },
