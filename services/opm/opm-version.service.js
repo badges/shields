@@ -39,8 +39,8 @@ export default class OpmVersion extends BaseService {
       },
     })
 
-    // XXX: intercept 302 redirects and set followRedirect to false
-    const location = res.request.path
+    // TODO: set followRedirect to false and intercept 302 redirects
+    const location = res.request.redirects[0]
     if (!location) {
       throw new NotFound({ prettyMessage: 'module not found' })
     }
