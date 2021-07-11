@@ -148,7 +148,7 @@ Request performance is monitored in two places:
   [#monitor chat room][monitor discord]
 
 [metrics]: https://metrics.shields.io/
-[status]: https://status.shields.io/
+[status]: https://stats.uptimerobot.com/PjXogHB5p
 [server metrics]: https://metrics.shields.io/
 [uptimerobot]: https://uptimerobot.com/
 [monitor]: https://shields.redsparr0w.com/1568/
