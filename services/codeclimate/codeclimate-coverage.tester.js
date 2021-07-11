@@ -28,7 +28,7 @@ t.create('test coverage percentage for non-existent repo')
   })
 
 t.create('test coverage percentage for repo without test reports')
-  .get('/coverage/angular/angular.js.json')
+  .get('/coverage/angular/angular.json')
   .expectBadge({
     label: 'coverage',
     message: 'test report not found',
