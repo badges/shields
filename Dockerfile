@@ -21,4 +21,6 @@ ENV NODE_ENV production
 
 CMD node server
 
+ENV BIND_ADDRESS 0.0.0.0
+ENV INFOSITE badges.cucumber.io
 EXPOSE 80

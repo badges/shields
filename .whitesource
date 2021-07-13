@@ -1,0 +1,13 @@
+{
+  "settingsInheritedFrom": "SmartBear/whitesource-config@main",
+  "scanSettings": {
+    "baseBranches": []
+  },
+  "checkRunSettings": {
+    "vulnerableCheckRunConclusionLevel": "success",
+    "displayMode": "diff"
+  },
+  "issueSettings": {
+    "minSeverityLevel": "MEDIUM"
+  },
+}
