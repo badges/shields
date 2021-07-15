@@ -3,7 +3,7 @@ import { isPercentage } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('License')
-  .get('/godot-engine.json?server=https://hosted.weblate.org')
+  .get('/godot-engine.json')
   .expectBadge({ label: 'translated', message: isPercentage })
 
 t.create('Not Valid')

@@ -15,6 +15,14 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
+const statisticKeyNames = {
+  translations: 'translated',
+  suggestions: 'suggested',
+  uploads: 'uploaded',
+  comments: 'commented',
+  languages: 'languages',
+}
+
 export default class WeblateUserStatistic extends BaseJsonService {
   static category = 'other'
   static route = {
@@ -53,29 +61,8 @@ export default class WeblateUserStatistic extends BaseJsonService {
   }
 
   async handle({ user, statistic }, { server }) {
-    let upstreamStatisticName
-
-    switch (statistic) {
-      case 'translations':
-        upstreamStatisticName = 'translated'
-        break
-      case 'suggestions':
-        upstreamStatisticName = 'suggested'
-        break
-      case 'uploads':
-        upstreamStatisticName = 'uploaded'
-        break
-      case 'comments':
-        upstreamStatisticName = 'commented'
-        break
-      default:
-        upstreamStatisticName = statistic
-    }
-
     const data = await this.fetch({ user, server })
-    return this.constructor.render({
-      statistic,
-      count: data[upstreamStatisticName],
-    })
+    const key = statisticKeyNames[statistic]
+    return this.constructor.render({ statistic, count: data[key] })
   }
 }
