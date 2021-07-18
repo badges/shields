@@ -15,7 +15,7 @@ t.create('docker version (valid, library with tag)')
   })
 
 t.create('docker version (valid, user)')
-  .get('/jrottenberg/ffmpeg.json')
+  .get('/datadog/agent.json')
   .expectBadge({
     label: 'version',
     message: isSemver,
