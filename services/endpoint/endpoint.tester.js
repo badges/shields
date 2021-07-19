@@ -281,3 +281,23 @@ t.create('gzipped endpoint')
       )
   )
   .expectBadge({ label: '', message: 'yo' })
+
+t.create('endpoint+query')
+  .get('.json?url=https://example.com/badge&query=$.badgeOne')
+  .intercept(nock =>
+    nock('https://example.com/')
+      .get('/badge')
+      .reply(200, {
+        badgeOne: {
+          schemaVersion: 1,
+          label: 'Badge One',
+          message: 'yo',
+        },
+        badgeTwo: {
+          schemaVersion: 1,
+          label: 'Badge Two',
+          message: 'hey',
+        },
+      })
+  )
+  .expectBadge({ label: 'Badge One', message: 'yo' })
