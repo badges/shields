@@ -7,13 +7,46 @@ import jp from 'jsonpath'
 import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
 import { InvalidParameter, InvalidResponse } from '../index.js'
 
+function filterJsonPathData(data, pathExpression) {
+  // JSONPath only works on objects and arrays.
+  // https://github.com/badges/shields/issues/4018
+  if (typeof data !== 'object') {
+    throw new InvalidResponse({
+      prettyMessage: 'resource must contain an object or array',
+    })
+  }
+
+  let values
+  try {
+    values = jp.query(data, pathExpression)
+  } catch (e) {
+    const { message } = e
+    if (
+      message.startsWith('Lexical error') ||
+      message.startsWith('Parse error') ||
+      message.includes('Unexpected token')
+    ) {
+      throw new InvalidParameter({
+        prettyMessage: 'unparseable jsonpath query',
+      })
+    } else {
+      throw e
+    }
+  }
+
+  if (!values.length) {
+    throw new InvalidResponse({ prettyMessage: 'no result' })
+  }
+  return values
+}
+
 /**
  * Dynamic service class factory which wraps {@link module:core/base-service/base~BaseService} with support of {@link https://jsonpath.com/|JSONPath}.
  *
  * @param {Function} superclass class to extend
  * @returns {Function} wrapped class
  */
-export default superclass =>
+const jsonPath = superclass =>
   class extends superclass {
     static category = 'dynamic'
     static defaultBadgeData = { label: 'custom badge' }
@@ -42,37 +75,9 @@ export default superclass =>
         url,
         errorMessages,
       })
-
-      // JSONPath only works on objects and arrays.
-      // https://github.com/badges/shields/issues/4018
-      if (typeof data !== 'object') {
-        throw new InvalidResponse({
-          prettyMessage: 'resource must contain an object or array',
-        })
-      }
-
-      let values
-      try {
-        values = jp.query(data, pathExpression)
-      } catch (e) {
-        const { message } = e
-        if (
-          message.startsWith('Lexical error') ||
-          message.startsWith('Parse error') ||
-          message.includes('Unexpected token')
-        ) {
-          throw new InvalidParameter({
-            prettyMessage: 'unparseable jsonpath query',
-          })
-        } else {
-          throw e
-        }
-      }
-
-      if (!values.length) {
-        throw new InvalidResponse({ prettyMessage: 'no result' })
-      }
-
+      const values = filterJsonPathData(data, pathExpression)
       return renderDynamicBadge({ value: values, prefix, suffix })
     }
   }
+
+export { jsonPath, filterJsonPathData }

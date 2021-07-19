@@ -1,6 +1,6 @@
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import jsonPath from './json-path.js'
+import { jsonPath } from './json-path.js'
 const { expect } = chai
 chai.use(chaiAsPromised)
 
