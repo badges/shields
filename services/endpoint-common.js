@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import validate from '../core/base-service/validate.js'
+import { filterJsonPathData } from './dynamic/json-path.js'
 import { InvalidResponse } from './index.js'
 
 const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
@@ -58,14 +59,17 @@ const anySchema = Joi.any()
 
 async function fetchEndpointData(
   serviceInstance,
-  { url, errorMessages, validationPrettyErrorMessage, includeKeys }
+  { url, errorMessages, validationPrettyErrorMessage, includeKeys, query }
 ) {
-  const json = await serviceInstance._requestJson({
+  let json = await serviceInstance._requestJson({
     schema: anySchema,
     url,
     errorMessages,
     options: { gzip: true },
   })
+  if (query) {
+    json = filterJsonPathData(json, query)[0]
+  }
   return validateEndpointData(json, {
     prettyErrorMessage: validationPrettyErrorMessage,
     includeKeys,

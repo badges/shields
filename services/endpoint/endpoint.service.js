@@ -9,6 +9,7 @@ const blockedDomains = ['github.com', 'shields.io']
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
+  query: Joi.string(),
 }).required()
 
 export default class Endpoint extends BaseJsonService {
@@ -52,7 +53,7 @@ export default class Endpoint extends BaseJsonService {
     }
   }
 
-  async handle(namedParams, { url }) {
+  async handle(namedParams, { url, query }) {
     let protocol, hostname
     try {
       const parsedUrl = new URL(url)
@@ -73,6 +74,7 @@ export default class Endpoint extends BaseJsonService {
       errorMessages,
       validationPrettyErrorMessage: 'invalid properties',
       includeKeys: true,
+      query,
     })
 
     return this.constructor.render(validated)
