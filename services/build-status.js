@@ -13,6 +13,7 @@ const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
 
 const redStatuses = [
   'error',
+  'errored',
   'failed',
   'failing',
   'failure',
