@@ -1,7 +1,7 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import { nonNegativeInteger, optionalUrl } from '../validators.js'
+import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
+import WeblateBase from './weblate-base.js'
 
 const schema = Joi.object({
   translated: nonNegativeInteger,
@@ -9,10 +9,6 @@ const schema = Joi.object({
   uploaded: nonNegativeInteger,
   commented: nonNegativeInteger,
   languages: nonNegativeInteger,
-}).required()
-
-const queryParamSchema = Joi.object({
-  server: optionalUrl,
 }).required()
 
 const statisticKeyNames = {
@@ -23,13 +19,14 @@ const statisticKeyNames = {
   languages: 'languages',
 }
 
-export default class WeblateUserStatistic extends BaseJsonService {
+export default class WeblateUserStatistic extends WeblateBase {
   static category = 'other'
+
   static route = {
     base: 'weblate',
     pattern:
       ':statistic(translations|suggestions|languages|uploads|comments)/:user',
-    queryParamSchema,
+    queryParamSchema: this.queryParamSchema,
   }
 
   static examples = [
@@ -49,7 +46,7 @@ export default class WeblateUserStatistic extends BaseJsonService {
   }
 
   async fetch({ user, server = 'https://hosted.weblate.org' }) {
-    return this._requestJson({
+    return super.fetch({
       schema,
       url: `${server}/api/users/${user}/statistics/`,
       errorMessages: {
