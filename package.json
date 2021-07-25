@@ -201,7 +201,7 @@
     "humanize-string": "^2.1.0",
     "husky": "^4.3.8",
     "icedfrisby": "4.0.0",
-    "icedfrisby-nock": "^2.0.0",
+    "icedfrisby-nock": "^2.1.0",
     "is-svg": "^4.3.1",
     "js-yaml-loader": "^1.2.2",
     "jsdoc": "^3.6.7",
