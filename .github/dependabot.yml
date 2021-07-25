@@ -1,0 +1,126 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: friday
+    time: "12:00"
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: gatsby-plugin-react-helmet
+    versions:
+    - 4.10.0
+    - 4.4.0
+    - 4.5.0
+    - 4.6.0
+    - 4.7.1
+    - 4.8.0
+    - 4.9.0
+  - dependency-name: gatsby-plugin-catch-links
+    versions:
+    - 3.10.0
+    - 3.4.0
+    - 3.5.0
+    - 3.6.0
+    - 3.7.1
+    - 3.8.0
+    - 3.9.0
+  - dependency-name: gatsby-plugin-remove-trailing-slashes
+    versions:
+    - 3.10.0
+    - 3.4.0
+    - 3.5.0
+    - 3.6.0
+    - 3.7.1
+    - 3.8.0
+    - 3.9.0
+  - dependency-name: babel-preset-gatsby
+    versions:
+    - 1.10.0
+    - 1.4.0
+    - 1.5.0
+    - 1.6.0
+    - 1.7.1
+    - 1.8.0
+    - 1.9.0
+  - dependency-name: gatsby-plugin-typescript
+    versions:
+    - 3.10.0
+    - 3.4.0
+    - 3.5.0
+    - 3.6.0
+    - 3.7.1
+    - 3.8.0
+    - 3.9.0
+  - dependency-name: gatsby
+    versions:
+    - 3.4.0
+    - 3.4.1
+  - dependency-name: gatsby-plugin-page-creator
+    versions:
+    - 3.4.1
+    - 3.5.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.22.1
+    - 4.24.0
+    - 4.25.0
+    - 4.26.0
+    - 4.26.1
+    - 4.28.0
+    - 4.28.1
+    - 4.28.2
+    - 4.28.3
+    - 4.28.4
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.22.1
+    - 4.28.1
+    - 4.28.2
+    - 4.28.3
+    - 4.28.4
+  - dependency-name: "@types/node"
+    versions:
+    - 15.0.3
+  - dependency-name: husky
+    versions:
+    - 6.0.0
+    - 7.0.0
+    - 7.0.1
+  - dependency-name: tsd
+    versions:
+    - 0.15.1
+  - dependency-name: escape-string-regexp
+    versions:
+    - 5.0.0
+  - dependency-name: "@fontsource/lato"
+    versions:
+    - 4.4.0
+  - dependency-name: simple-icons
+    versions:
+    - 5.0.0
+    - 5.1.0
+  - dependency-name: gatsby-plugin-styled-components
+    versions:
+    - 4.10.0
+    - 4.7.1
+    - 4.8.0
+    - 4.9.0
+  - dependency-name: nodemon
+    versions:
+    - 2.0.10
+- package-ecosystem: npm
+  directory: "/badge-maker"
+  schedule:
+    interval: weekly
+    day: friday
+    time: "12:00"
+  open-pull-requests-limit: 99
+- package-ecosystem: npm
+  directory: "/.github/actions/approve-bot"
+  schedule:
+    interval: weekly
+    day: friday
+    time: "12:00"
+  open-pull-requests-limit: 99
