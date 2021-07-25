@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { AurVersion } = require('./aur.service')
+import { test, given } from 'sazerac'
+import { AurVersion } from './aur.service.js'
 
 describe('AurVersion', function () {
   test(AurVersion.render, () => {

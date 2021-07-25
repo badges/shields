@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 // https://help.testspace.com/docs/reference/web-api#list-results
 // case_counts|array|The contained cases [passed, failed, na, errored]|counters of result
@@ -25,7 +23,7 @@ const schema = Joi.array()
 // Org is owner/account
 // Project is generally a repository
 // Space is a container, often a branch
-module.exports = class TestspaceBase extends BaseJsonService {
+export default class TestspaceBase extends BaseJsonService {
   static category = 'build'
   static defaultBadgeData = { label: 'tests' }
 

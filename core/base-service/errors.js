@@ -4,8 +4,6 @@
  * @module
  */
 
-'use strict'
-
 /**
  * Base error class
  *
@@ -210,7 +208,7 @@ class Deprecated extends ShieldsRuntimeError {
  * badge when we catch and render the exception (Optional)
  */
 
-module.exports = {
+export {
   ShieldsRuntimeError,
   NotFound,
   ImproperlyConfigured,

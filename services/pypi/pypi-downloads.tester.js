@@ -1,7 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isMetricOverTimePeriod } = require('../test-validators')
+import { createServiceTester } from '../tester.js'
+import { isMetricOverTimePeriod } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('daily downloads (valid)')
   .get('/dd/djangorestframework.json')

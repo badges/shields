@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
 const versionSchema = Joi.object({
   downloads: Joi.number().required(),
   name: Joi.string().required(),
 }).required()
 
-module.exports = class SpigetLatestVersion extends BaseSpigetService {
+export default class SpigetLatestVersion extends BaseSpigetService {
   static category = 'version'
 
   static route = {

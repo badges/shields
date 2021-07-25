@@ -1,9 +1,7 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { expect } = require('chai')
-const { InvalidResponse } = require('..')
-const CratesVersion = require('./crates-version.service')
+import { test, given } from 'sazerac'
+import { expect } from 'chai'
+import { InvalidResponse } from '../index.js'
+import CratesVersion from './crates-version.service.js'
 
 describe('CratesVersion', function () {
   test(CratesVersion.prototype.transform, () => {

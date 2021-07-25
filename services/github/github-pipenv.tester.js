@@ -1,21 +1,19 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const {
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import {
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
+} from '../test-validators.js'
 
 // e.g. v19.3b0
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)
 const isShortSha = Joi.string().regex(/[0-9a-f]{7}/)
 
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'GithubPipenv',
   title: 'GithubPipenv',
   pathPrefix: '/github/pipenv',
-}))
+})
 
 t.create('Locked Python version')
   .get('/locked/python-version/metabolize/rq-dashboard-on-heroku.json')

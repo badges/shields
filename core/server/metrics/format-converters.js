@@ -1,5 +1,4 @@
-'use strict'
-const groupBy = require('lodash.groupby')
+import groupBy from 'lodash.groupby'
 
 function promClientJsonToInfluxV2(metrics, extraLabels = {}) {
   return metrics
@@ -24,4 +23,4 @@ function promClientJsonToInfluxV2(metrics, extraLabels = {}) {
     .join('\n')
 }
 
-module.exports = { promClientJsonToInfluxV2 }
+export { promClientJsonToInfluxV2 }

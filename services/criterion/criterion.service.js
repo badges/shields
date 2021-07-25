@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const {
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import {
   IMPROVED_STATUS,
   NOT_FOUND_STATUS,
   REGRESSED_STATUS,
   NO_CHANGE_STATUS,
-} = require('./constants')
+} from './constants.js'
 
 const schema = Joi.string()
   .allow(IMPROVED_STATUS, REGRESSED_STATUS, NO_CHANGE_STATUS)
@@ -22,7 +20,7 @@ const schema = Joi.string()
  * API Documentation:
  * - https://app.swaggerhub.com/apis-docs/chmoder/Criterion.dev
  */
-module.exports = class Criterion extends BaseJsonService {
+export default class Criterion extends BaseJsonService {
   static category = 'analysis'
   static route = { base: 'criterion', pattern: ':user/:repo' }
 

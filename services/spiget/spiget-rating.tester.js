@@ -1,7 +1,6 @@
-'use strict'
-
-const { isStarRating, withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isStarRating, withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Stars - EssentialsX (id 9089)').get('/stars/9089.json').expectBadge({
   label: 'rating',

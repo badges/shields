@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = [
+export default [
   { id: 'build', name: 'Build', keywords: ['build'] },
   { id: 'coverage', name: 'Code Coverage', keywords: ['coverage'] },
   { id: 'analysis', name: 'Analysis', keywords: ['analysis'] },

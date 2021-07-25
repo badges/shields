@@ -1,5 +1,3 @@
-'use strict'
-
 class BadService {}
 
-module.exports = BadService
+export default BadService

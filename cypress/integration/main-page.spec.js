@@ -1,5 +1,3 @@
-'use strict'
-
 describe('Main page', function () {
   const backendUrl = Cypress.env('backend_url')
   const SEARCH_INPUT = 'input[placeholder="search / project URL"]'

@@ -1,9 +1,7 @@
-'use strict'
-
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { redirector, NotFound } = require('..')
-const BaseChromeWebStoreService = require('./chrome-web-store-base')
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { redirector, NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static category = 'downloads'
@@ -46,7 +44,4 @@ const ChromeWebStoreDownloads = redirector({
   dateAdded: new Date('2019-02-27'),
 })
 
-module.exports = {
-  ChromeWebStoreDownloads,
-  ChromeWebStoreUsers,
-}
+export { ChromeWebStoreDownloads, ChromeWebStoreUsers }

@@ -1,5 +1,3 @@
-'use strict'
-
 function constEq(a, b) {
   if (a.length !== b.length) {
     return false
@@ -17,4 +15,4 @@ function makeSecretIsValid(shieldsSecret) {
   }
 }
 
-module.exports = { makeSecretIsValid }
+export { makeSecretIsValid }

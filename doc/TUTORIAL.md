@@ -21,11 +21,11 @@ Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/
 
 You should have [git](https://git-scm.com/) installed.
 If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
-and learn about the [Github workflow](http://try.github.io/).
+and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=12 and NPM >=7 is required. If you don't already have them,
+Node >=14 and NPM >=7 is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
@@ -109,19 +109,17 @@ As a first step we will look at the code for an example which generates a badge 
 
 ```js
 // (1)
-'use strict'
-// (2)
-const { BaseService } = require('..')
+import { BaseService } from '../index.js'
 
-// (3)
-module.exports = class Example extends BaseService {
-  // (4)
+// (2)
+export default class Example extends BaseService {
+  // (3)
   static category = 'build'
 
-  // (5)
+  // (4)
   static route = { base: 'example', pattern: ':text' }
 
-  // (6)
+  // (5)
   async handle({ text }) {
     return {
       label: 'example',
@@ -134,18 +132,17 @@ module.exports = class Example extends BaseService {
 
 Description of the code:
 
-1. We declare strict mode at the start of each file. This prevents certain classes of error such as undeclared variables.
-2. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
-3. Our module must export a class which extends `BaseService`.
-4. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
-5. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+1. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
+2. Our module must export a class which extends `BaseService`.
+3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
+4. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
      regular expressions by [`path-to-regexp`][path-to-regexp].
      Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
    - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
-6. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
+5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
    - `color`: the background color of the right side of the badge
@@ -171,36 +168,33 @@ This example is based on the [Ruby Gems version](https://github.com/badges/shiel
 
 ```js
 // (1)
-'use strict'
-
+import { renderVersionBadge } from '../version.js'
 // (2)
-const { renderVersionBadge } = require('..//version')
-// (3)
-const { BaseJsonService } = require('..')
+import { BaseJsonService } from '../index.js'
 
-// (4)
-const Joi = require('joi')
+// (3)
+import Joi from 'joi'
 const schema = Joi.object({
   version: Joi.string().required(),
 }).required()
 
-// (5)
-module.exports = class GemVersion extends BaseJsonService {
-  // (6)
+// (4)
+export default class GemVersion extends BaseJsonService {
+  // (5)
   static category = 'version'
 
-  // (7)
+  // (6)
   static route = { base: 'gem/v', pattern: ':gem' }
 
-  // (8)
+  // (7)
   static defaultBadgeData = { label: 'gem' }
 
-  // (11)
+  // (10)
   static render({ version }) {
     return renderVersionBadge({ version })
   }
 
-  // (10)
+  // (9)
   async fetch({ gem }) {
     return this._requestJson({
       schema,
@@ -208,7 +202,7 @@ module.exports = class GemVersion extends BaseJsonService {
     })
   }
 
-  // (9)
+  // (8)
   async handle({ gem }) {
     const { version } = await this.fetch({ gem })
     return this.constructor.render({ version })
@@ -218,39 +212,38 @@ module.exports = class GemVersion extends BaseJsonService {
 
 Description of the code:
 
-1. As with the first example, we declare strict mode at the start of each file.
-2. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/services`. Some useful generic helpers can be found in:
+1. In this case we are making a version badge, which is a common pattern. Instead of directly returning an object in this badge we will use a helper function to format our data consistently. There are a variety of helper functions to help with common tasks in `/services`. Some useful generic helpers can be found in:
    - [build-status.js](https://github.com/badges/shields/blob/master/services/build-status.js)
    - [color-formatters.js](https://github.com/badges/shields/blob/master/services/color-formatters.js)
    - [licenses.js](https://github.com/badges/shields/blob/master/services/licenses.js)
    - [text-formatters.js](https://github.com/badges/shields/blob/master/services/text-formatters.js)
    - [version.js](https://github.com/badges/shields/blob/master/services/version.js)
-3. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
-4. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string. There is further documentation on [input validation](input-validation.md).
-5. Our module exports a class which extends `BaseJsonService`
-6. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
-7. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
-8. We can use `defaultBadgeData()` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData()` here to define it declaratively.
-9. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
-10. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
+2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
+3. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string. There is further documentation on [input validation](input-validation.md).
+4. Our module exports a class which extends `BaseJsonService`
+5. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
+6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
+7. We can use `defaultBadgeData()` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData()` here to define it declaratively.
+8. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
+9. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
 
-    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
-    - `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
-    - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
-    - A more complex call to `_requestJson()` might look like this:
-      ```js
-      return this._requestJson({
-        schema: mySchema,
-        url,
-        options: { qs: { branch: 'master' } },
-        errorMessages: {
-          401: 'private application not supported',
-          404: 'application not found',
-        },
-      })
-      ```
+   - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
+   - `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
+   - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
+   - A more complex call to `_requestJson()` might look like this:
+     ```js
+     return this._requestJson({
+       schema: mySchema,
+       url,
+       options: { qs: { branch: 'master' } },
+       errorMessages: {
+         401: 'private application not supported',
+         404: 'application not found',
+       },
+     })
+     ```
 
-11. Upward still, the `static render()` method is responsible for formatting the data for display. `render()` is a pure function so we can make it a `static` method. By convention we declare functions which don't reference `this` as `static`. We could explicitly return an object here, as we did in the previous example. In this case, we will hand the version string off to `renderVersionBadge()` which will format it consistently and set an appropriate color. Because `renderVersionBadge()` doesn't return a `label` key, the default label we defined in `defaultBadgeData()` will be used when we generate the badge.
+10. Upward still, the `static render()` method is responsible for formatting the data for display. `render()` is a pure function so we can make it a `static` method. By convention we declare functions which don't reference `this` as `static`. We could explicitly return an object here, as we did in the previous example. In this case, we will hand the version string off to `renderVersionBadge()` which will format it consistently and set an appropriate color. Because `renderVersionBadge()` doesn't return a `label` key, the default label we defined in `defaultBadgeData()` will be used when we generate the badge.
 
 This code allows us to call this URL <https://img.shields.io/gem/v/formatador> to generate this badge: ![](https://img.shields.io/gem/v/formatador)
 
@@ -269,7 +262,7 @@ non-standard error condition. If so, there are several standard exceptions that 
 and can be imported via the import shortcut and then thrown:
 
 ```js
-const { NotFound } = require('..')
+import { NotFound } from '../index.js'
 
 throw new NotFound({ prettyMessage: 'package not found' })
 ```
@@ -279,7 +272,7 @@ throw new NotFound({ prettyMessage: 'package not found' })
 Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method `examples()` to our class.
 
 ```js
-module.exports = class GemVersion extends BaseJsonService {
+export default class GemVersion extends BaseJsonService {
   // ...
 
   // (1)

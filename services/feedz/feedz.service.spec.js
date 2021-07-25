@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { FeedzVersionService } = require('./feedz.service')
+import { test, given } from 'sazerac'
+import { FeedzVersionService } from './feedz.service.js'
 
 function json(versions) {
   return {

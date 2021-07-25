@@ -1,11 +1,7 @@
-'use strict'
-
-const queryString = require('query-string')
-const request = require('request')
-const {
-  userAgent,
-} = require('../../../core/base-service/legacy-request-handler')
-const log = require('../../../core/server/log')
+import queryString from 'query-string'
+import request from 'request'
+import { userAgent } from '../../../core/base-service/legacy-request-handler.js'
+import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
@@ -29,7 +25,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
 
   server.route(/^\/github-auth\/done$/, (data, match, end, ask) => {
     if (!data.code) {
-      log(`GitHub OAuth data: ${JSON.stringify(data)}`)
+      log.log(`GitHub OAuth data: ${JSON.stringify(data)}`)
       return end('GitHub OAuth authentication failed to provide a code.')
     }
 
@@ -85,4 +81,4 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
   })
 }
 
-module.exports = { setRoutes }
+export { setRoutes }

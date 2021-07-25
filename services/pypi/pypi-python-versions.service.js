@@ -1,10 +1,8 @@
-'use strict'
+import semver from 'semver'
+import PypiBase from './pypi-base.js'
+import { parseClassifiers } from './pypi-helpers.js'
 
-const semver = require('semver')
-const PypiBase = require('./pypi-base')
-const { parseClassifiers } = require('./pypi-helpers')
-
-module.exports = class PypiPythonVersions extends PypiBase {
+export default class PypiPythonVersions extends PypiBase {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/pyversions')

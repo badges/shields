@@ -1,9 +1,7 @@
-'use strict'
+import PypiBase from './pypi-base.js'
+import { sortDjangoVersions, parseClassifiers } from './pypi-helpers.js'
 
-const PypiBase = require('./pypi-base')
-const { sortDjangoVersions, parseClassifiers } = require('./pypi-helpers')
-
-module.exports = class PypiDjangoVersions extends PypiBase {
+export default class PypiDjangoVersions extends PypiBase {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/djversions')

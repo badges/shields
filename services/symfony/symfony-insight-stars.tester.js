@@ -1,8 +1,7 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { withRegex } = require('../test-validators')
-const { sampleProjectUuid, noSymfonyToken } = require('./symfony-test-helpers')
+import { createServiceTester } from '../tester.js'
+import { withRegex } from '../test-validators.js'
+import { sampleProjectUuid, noSymfonyToken } from './symfony-test-helpers.js'
+export const t = await createServiceTester()
 
 t.create('valid project stars')
   .skipWhen(noSymfonyToken)

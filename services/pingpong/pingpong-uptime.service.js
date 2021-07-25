@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const { BaseJsonService, InvalidParameter } = require('..')
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseJsonService, InvalidParameter } from '../index.js'
 
 const schema = Joi.object({
   uptime: Joi.number().min(0).max(100).required(),
@@ -15,7 +13,7 @@ const pingpongDocumentation = `
 </p>
 `
 
-module.exports = class PingPongUptime extends BaseJsonService {
+export default class PingPongUptime extends BaseJsonService {
   static category = 'monitoring'
   static route = { base: 'pingpong/uptime', pattern: ':apiKey' }
 

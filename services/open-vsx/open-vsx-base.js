@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalNonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { optionalNonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const extensionQuerySchema = Joi.object({
   error: Joi.string(),
@@ -17,7 +15,7 @@ const extensionQuerySchema = Joi.object({
   }),
 }).required()
 
-module.exports = class OpenVSXBase extends BaseJsonService {
+export default class OpenVSXBase extends BaseJsonService {
   static keywords = [
     'ovsx',
     'open-vsx',

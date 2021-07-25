@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given, forCases } = require('sazerac')
-const { AuthHelper } = require('./auth-helper')
-const { InvalidParameter } = require('./errors')
+import { expect } from 'chai'
+import { test, given, forCases } from 'sazerac'
+import { AuthHelper } from './auth-helper.js'
+import { InvalidParameter } from './errors.js'
 
 describe('AuthHelper', function () {
   describe('constructor checks', function () {

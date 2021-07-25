@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: isBuildStatus,
 }).required()
 
-module.exports = class GithubChecksStatus extends GithubAuthV3Service {
+export default class GithubChecksStatus extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/checks-status',

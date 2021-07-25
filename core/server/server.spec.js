@@ -1,14 +1,13 @@
-'use strict'
-
-const path = require('path')
-const { expect } = require('chai')
-const isSvg = require('is-svg')
-const config = require('config')
-const nock = require('nock')
-const sinon = require('sinon')
-const got = require('../got-test-client')
-const Server = require('./server')
-const { createTestServer } = require('./in-process-server-test-helpers')
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { expect } from 'chai'
+import isSvg from 'is-svg'
+import config from 'config'
+import nock from 'nock'
+import sinon from 'sinon'
+import got from '../got-test-client.js'
+import Server from './server.js'
+import { createTestServer } from './in-process-server-test-helpers.js'
 
 describe('The server', function () {
   describe('running', function () {
@@ -18,7 +17,10 @@ describe('The server', function () {
       this.timeout(10000)
       server = await createTestServer({
         public: {
-          documentRoot: path.resolve(__dirname, 'test-public'),
+          documentRoot: path.resolve(
+            path.dirname(fileURLToPath(import.meta.url)),
+            'test-public'
+          ),
         },
       })
       baseUrl = server.baseUrl

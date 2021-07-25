@@ -1,9 +1,7 @@
-'use strict'
+import PypiBase from './pypi-base.js'
+import { getPackageFormats } from './pypi-helpers.js'
 
-const PypiBase = require('./pypi-base')
-const { getPackageFormats } = require('./pypi-helpers')
-
-module.exports = class PypiWheel extends PypiBase {
+export default class PypiWheel extends PypiBase {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/wheel')

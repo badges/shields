@@ -1,19 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const {
-  transformAndValidate,
-  renderDynamicBadge,
-} = require('../dynamic-common')
-const {
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { transformAndValidate, renderDynamicBadge } from '../dynamic-common.js'
+import {
   isPackageJsonWithDependencies,
   getDependencyVersion,
-} = require('../package-json-helpers')
-const { semver } = require('../validators')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const { fetchJsonFromRepo } = require('./github-common-fetch')
-const { documentation } = require('./github-helpers')
+} from '../package-json-helpers.js'
+import { semver } from '../validators.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { fetchJsonFromRepo } from './github-common-fetch.js'
+import { documentation } from './github-helpers.js'
 
 const keywords = ['npm', 'node']
 
@@ -247,7 +242,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthV3Service {
   }
 }
 
-module.exports = [
+export default [
   GithubPackageJsonVersion,
   GithubPackageJsonDependencyVersion,
   DynamicGithubPackageJson,

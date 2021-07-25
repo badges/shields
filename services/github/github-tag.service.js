@@ -1,14 +1,12 @@
-'use strict'
-
-const gql = require('graphql-tag')
-const Joi = require('joi')
-const { addv } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const { latest } = require('../version')
-const { NotFound, redirector } = require('..')
-const { GithubAuthV4Service } = require('./github-auth-service')
-const { queryParamSchema } = require('./github-common-release')
-const { documentation, transformErrors } = require('./github-helpers')
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { addv } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import { latest } from '../version.js'
+import { NotFound, redirector } from '../index.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { queryParamSchema } from './github-common-release.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -163,7 +161,4 @@ const redirects = {
   }),
 }
 
-module.exports = {
-  GithubTag,
-  ...redirects,
-}
+export { GithubTag, redirects }

@@ -1,7 +1,6 @@
-'use strict'
-
-const { isSemver } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isSemver } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('module version').get('/camptocamp/openssl.json').expectBadge({
   label: 'puppetforge',

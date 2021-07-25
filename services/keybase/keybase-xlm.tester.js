@@ -1,7 +1,6 @@
-'use strict'
-
-const { withRegex } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { withRegex } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('existing stellar address')
   .get('/skyplabs.json')

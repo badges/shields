@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { InvalidParameter } = require('..')
-const GithubDirectoryFileCount = require('./github-directory-file-count.service')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidParameter } from '../index.js'
+import GithubDirectoryFileCount from './github-directory-file-count.service.js'
 
 describe('GithubDirectoryFileCount', function () {
   const contents = [

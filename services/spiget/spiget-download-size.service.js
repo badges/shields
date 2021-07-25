@@ -1,8 +1,6 @@
-'use strict'
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
-const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
-
-module.exports = class SpigetDownloadSize extends BaseSpigetService {
+export default class SpigetDownloadSize extends BaseSpigetService {
   static category = 'size'
 
   static route = {

@@ -1,10 +1,8 @@
-'use strict'
-
-const { default: gql } = require('graphql-tag')
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV4Service } = require('./github-auth-service')
-const { transformErrors } = require('./github-helpers')
+import gql from 'graphql-tag'
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -16,7 +14,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class GithubTotalDiscussions extends GithubAuthV4Service {
+export default class GithubTotalDiscussions extends GithubAuthV4Service {
   static category = 'other'
   static route = {
     base: 'github/discussions',

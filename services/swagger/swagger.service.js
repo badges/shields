@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object()
   .keys({
@@ -19,7 +17,7 @@ const queryParamSchema = Joi.object({
   specUrl: optionalUrl.required(),
 }).required()
 
-module.exports = class SwaggerValidatorService extends BaseJsonService {
+export default class SwaggerValidatorService extends BaseJsonService {
   static category = 'other'
 
   static route = {

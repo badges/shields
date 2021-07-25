@@ -1,7 +1,6 @@
-'use strict'
-
-const { isPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isPercentage } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 // The service tests targeting the legacy SonarQube API are mocked
 // because of the lack of publicly accessible, self-hosted, legacy SonarQube instances

@@ -1,7 +1,6 @@
-'use strict'
-
-const { isPhpVersionReduction } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isPhpVersionReduction } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('gets the package version of symfony 5.1')
   .get('/symfony/symfony/5.1.json')

@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const Codeship = require('./codeship.service')
+import { test, given } from 'sazerac'
+import Codeship from './codeship.service.js'
 
 const pending = { message: 'pending', label: undefined, color: undefined }
 const notBuilt = { message: 'not built', label: undefined, color: undefined }

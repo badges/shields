@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const cdnjsSchema = Joi.object({
   // optional due to non-standard 'not found' condition
   version: Joi.string(),
 }).required()
 
-module.exports = class Cdnjs extends BaseJsonService {
+export default class Cdnjs extends BaseJsonService {
   static category = 'version'
   static route = { base: 'cdnjs/v', pattern: ':library' }
 

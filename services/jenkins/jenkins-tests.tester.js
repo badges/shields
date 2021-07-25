@@ -1,12 +1,11 @@
-'use strict'
-
-const {
+import {
   isDefaultTestTotals,
   isDefaultCompactTestTotals,
   isCustomTestTotals,
   isCustomCompactTestTotals,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+} from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 // The below page includes links to various publicly accessible Jenkins instances
 // although many of the links are dead, it is is still a helpful resource for finding
@@ -57,11 +56,9 @@ t.create('Test status with compact message and custom labels')
   })
 
 t.create('Test status on job with no tests')
-  .get(
-    '/tests.json?jobUrl=https://ci.eclipse.org/openj9/job/Build-Doc-Push_to_ghpages'
-  )
+  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/orbit-recipes')
   .expectBadge({ label: 'tests', message: 'no tests found' })
 
 t.create('Test status on non-existent job')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/openj9/job/does-not-exist')
+  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/does-not-exist')
   .expectBadge({ label: 'tests', message: 'instance or job not found' })

@@ -1,6 +1,4 @@
-'use strict'
-
-const toArray = require('../core/base-service/to-array')
+import toArray from '../core/base-service/to-array.js'
 
 const licenseTypes = {
   // permissive licenses - not public domain and not copyleft
@@ -130,4 +128,4 @@ function renderLicenseBadge({ license, licenses }) {
   }
 }
 
-module.exports = { licenseToColor, renderLicenseBadge }
+export { licenseToColor, renderLicenseBadge }

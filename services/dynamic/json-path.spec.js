@@ -1,10 +1,8 @@
-'use strict'
-
-const chai = require('chai')
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
+import jsonPath from './json-path.js'
 const { expect } = chai
-const jsonPath = require('./json-path')
-
-chai.use(require('chai-as-promised'))
+chai.use(chaiAsPromised)
 
 describe('JSON Path service factory', function () {
   describe('fetch()', function () {

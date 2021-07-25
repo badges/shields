@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const { BaseSvgScrapingService } = require('..')
-const { parseJson } = require('../../core/base-service/json')
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { parseJson } from '../../core/base-service/json.js'
 
 // https://docs.codecov.io/reference#totals
 // A new repository that's been added but never had any coverage reports
@@ -22,8 +20,9 @@ const legacySchema = Joi.object({
 const queryParamSchema = Joi.object({
   token: Joi.string(),
   // https://docs.codecov.io/docs/flags
-  // Flags must be lowercase, alphanumeric, and not exceed 45 characters
-  flag: Joi.string().regex(/^[a-z0-9_]{1,45}$/),
+  // Flags Must consist only of alphanumeric characters, '_', '-', or '.'
+  // and not exceed 45 characters.
+  flag: Joi.string().regex(/^[\w.-]{1,45}$/),
 }).required()
 
 const schema = Joi.object({
@@ -45,7 +44,7 @@ const documentation = `
   </p>
 `
 
-module.exports = class Codecov extends BaseSvgScrapingService {
+export default class Codecov extends BaseSvgScrapingService {
   static category = 'coverage'
   static route = {
     base: 'codecov/c',

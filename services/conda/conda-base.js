@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const condaSchema = Joi.object({
   latest_version: Joi.string().required(),
@@ -16,7 +14,7 @@ const condaSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class BaseCondaService extends BaseJsonService {
+export default class BaseCondaService extends BaseJsonService {
   static defaultBadgeData = { label: 'conda' }
 
   async fetch({ channel, pkg }) {

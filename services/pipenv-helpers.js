@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { InvalidParameter } = require('.')
+import Joi from 'joi'
+import { InvalidParameter } from './index.js'
 
 const isDependency = Joi.alternatives(
   Joi.object({
@@ -52,7 +50,4 @@ function getDependencyVersion({
   }
 }
 
-module.exports = {
-  isLockfile,
-  getDependencyVersion,
-}
+export { isLockfile, getDependencyVersion }

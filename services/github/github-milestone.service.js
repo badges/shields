@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.array()
   .items(
@@ -13,7 +11,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubMilestone extends GithubAuthV3Service {
+export default class GithubMilestone extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github/milestones',

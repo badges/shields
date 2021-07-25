@@ -5,7 +5,9 @@ import Meta from '../components/meta'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import { BaseFont, GlobalStyle, H3 } from '../components/common'
-
+import Heroku from '../../static/images/heroku-logotype-horizontal-purple.svg'
+import NodePing from '../../static/images/nodeping.svg'
+import Sentry from '../../static/images/sentry-logo-black.svg'
 const MainContainer = styled(BaseFont)`
   text-align: center;
 `
@@ -16,6 +18,10 @@ const SponsorContainer = styled.div`
   margin: 0 auto;
   text-align: left;
   padding-top: 20px;
+`
+
+const SponsorItems = styled.div`
+  text-align: left;
 `
 
 export default function SponsorsPage(): JSX.Element {
@@ -36,29 +42,23 @@ export default function SponsorsPage(): JSX.Element {
         <h4>Sponsors</h4>
         ❤️ These companies help us by donating their services to shields:
         <ul style={{ listStyleType: 'none' }}>
-          <li>
-            <a href="https://www.heroku.com/">
-              <img
-                alt="heroku logo"
-                height="80"
-                src="/images/heroku-logotype-horizontal-purple.svg"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://nodeping.com/">
-              <img alt="nodeping logo" height="80" src="/images/nodeping.svg" />
-            </a>
-          </li>
-          <li>
-            <a href="https://sentry.io/">
-              <img
-                alt="sentry logo"
-                height="80"
-                src="/images/sentry-logo-black.svg"
-              />
-            </a>
-          </li>
+          <SponsorItems>
+            <li>
+              <a href="https://www.heroku.com/">
+                <Heroku alt="heroku_logo" height={120} />
+              </a>
+            </li>
+            <li>
+              <a href="https://nodeping.com/">
+                <NodePing alt="nodeping_logo" height={60} />
+              </a>
+            </li>
+            <li>
+              <a href="https://sentry.io/">
+                <Sentry alt="sentry_logo" height={100} />
+              </a>
+            </li>
+          </SponsorItems>
         </ul>
         💵 These organisations help keep shields running by donating on
         OpenCollective. Your organisation can support this project by{' '}

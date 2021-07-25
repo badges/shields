@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const NpmDownloads = require('./npm-downloads.service')
+import { test, given } from 'sazerac'
+import NpmDownloads from './npm-downloads.service.js'
 
 describe('NpmDownloads', function () {
   test(NpmDownloads._intervalMap.dt.transform, () => {

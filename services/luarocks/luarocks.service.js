@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { addv } = require('../text-formatters')
-const { BaseJsonService, NotFound } = require('..')
-const { latestVersion } = require('./luarocks-version-helpers')
+import Joi from 'joi'
+import { addv } from '../text-formatters.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import { latestVersion } from './luarocks-version-helpers.js'
 
 const schema = Joi.object({
   repository: Joi.object()
@@ -14,7 +12,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Luarocks extends BaseJsonService {
+export default class Luarocks extends BaseJsonService {
   static category = 'version'
 
   static route = {

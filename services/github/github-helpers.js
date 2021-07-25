@@ -1,7 +1,5 @@
-'use strict'
-
-const { colorScale } = require('../color-formatters')
-const { InvalidResponse, NotFound } = require('..')
+import { colorScale } from '../color-formatters.js'
+import { InvalidResponse, NotFound } from '../index.js'
 
 const documentation = `
 <p>
@@ -33,7 +31,7 @@ function transformErrors(errors, entity = 'repo') {
 
 const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
-module.exports = {
+export {
   documentation,
   stateColor,
   commentsColor,

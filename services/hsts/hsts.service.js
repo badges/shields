@@ -1,8 +1,6 @@
-'use strict'
-
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 const label = 'hsts preloaded'
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
 const schema = Joi.object({
   status: Joi.string().required(),
 }).required()
@@ -21,7 +19,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class HSTS extends BaseJsonService {
+export default class HSTS extends BaseJsonService {
   static category = 'monitoring'
 
   static route = {

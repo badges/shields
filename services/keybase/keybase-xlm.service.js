@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const KeybaseProfile = require('./keybase-profile')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import KeybaseProfile from './keybase-profile.js'
 
 const stellarAddressSchema = Joi.object({
   status: Joi.object({
@@ -26,7 +24,7 @@ const stellarAddressSchema = Joi.object({
     .max(1),
 }).required()
 
-module.exports = class KeybaseXLM extends KeybaseProfile {
+export default class KeybaseXLM extends KeybaseProfile {
   static route = {
     base: 'keybase/xlm',
     pattern: ':username',
@@ -58,7 +56,7 @@ module.exports = class KeybaseXLM extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      form: {
+      qs: {
         usernames: username,
         fields: 'stellar',
       },

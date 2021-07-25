@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const { licenseToColor, renderLicenseBadge } = require('./licenses')
+import { test, given, forCases } from 'sazerac'
+import { licenseToColor, renderLicenseBadge } from './licenses.js'
 
 describe('license helpers', function () {
   test(licenseToColor, () => {

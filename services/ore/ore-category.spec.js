@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, forCases, given } = require('sazerac')
-const OreCategory = require('./ore-category.service')
+import { test, forCases, given } from 'sazerac'
+import OreCategory from './ore-category.service.js'
 
 describe('OreCategory', function () {
   test(OreCategory.prototype.transform, () => {

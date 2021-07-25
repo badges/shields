@@ -1,7 +1,6 @@
-'use strict'
-
-const { nonNegativeInteger } = require('../validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { nonNegativeInteger } from '../validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('renders correctly')
   .get('/shields.json')

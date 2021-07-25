@@ -1,9 +1,9 @@
-'use strict'
-
-const { expect } = require('chai')
-const { Range } = require('semver')
-const t = (module.exports = require('../tester').createServiceTester())
-const { mockPackageData, mockCurrentSha } = require('./testUtils/test-utils')
+import { expect } from 'chai'
+import semverModule from 'semver'
+import { createServiceTester } from '../tester.js'
+import { mockPackageData, mockCurrentSha } from './testUtils/test-utils.js'
+const { Range } = semverModule
+export const t = await createServiceTester()
 
 function expectSemverRange(message) {
   expect(() => new Range(message)).not.to.throw()

@@ -2,13 +2,11 @@
  * @module
  */
 
-'use strict'
-
-const emojic = require('emojic')
-const yaml = require('js-yaml')
-const BaseService = require('./base')
-const { InvalidResponse } = require('./errors')
-const trace = require('./trace')
+import emojic from 'emojic'
+import yaml from 'js-yaml'
+import BaseService from './base.js'
+import { InvalidResponse } from './errors.js'
+import trace from './trace.js'
 
 /**
  * Services which query a YAML endpoint should extend BaseYamlService
@@ -72,4 +70,4 @@ class BaseYamlService extends BaseService {
   }
 }
 
-module.exports = BaseYamlService
+export default BaseYamlService

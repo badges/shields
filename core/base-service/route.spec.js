@@ -1,13 +1,11 @@
-'use strict'
-
-const { expect } = require('chai')
-const Joi = require('joi')
-const { test, given, forCases } = require('sazerac')
-const {
+import { expect } from 'chai'
+import Joi from 'joi'
+import { test, given, forCases } from 'sazerac'
+import {
   prepareRoute,
   namedParamsForMatch,
   getQueryParamNames,
-} = require('./route')
+} from './route.js'
 
 describe('Route helpers', function () {
   context('A `pattern` with a named param is declared', function () {

@@ -1,7 +1,6 @@
-'use strict'
-
-const { isVPlusDottedVersionNClauses } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { isVPlusDottedVersionNClauses } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('version (user friendly plugin id)')
   .get('/1347-scala.json')

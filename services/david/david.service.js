@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.allow(
@@ -40,7 +38,7 @@ const statusMap = {
   },
 }
 
-module.exports = class David extends BaseJsonService {
+export default class David extends BaseJsonService {
   static category = 'dependencies'
   static route = {
     base: 'david',

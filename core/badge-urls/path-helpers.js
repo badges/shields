@@ -1,5 +1,3 @@
-'use strict'
-
 // Escapes `t` using the format specified in
 // <https://github.com/espadrine/gh-badges/issues/12#issuecomment-31518129>
 function escapeFormat(t) {
@@ -13,6 +11,4 @@ function escapeFormat(t) {
   )
 }
 
-module.exports = {
-  escapeFormat,
-}
+export { escapeFormat }

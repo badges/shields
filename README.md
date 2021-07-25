@@ -96,13 +96,13 @@ You can read a [tutorial on how to add a badge][tutorial].
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
-[tutorial]: doc/TUTORIAL.md
-[contributing]: CONTRIBUTING.md
+[tutorial]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md
+[contributing]: https://github.com/badges/shields/blob/master/CONTRIBUTING.md
 
 ## Development
 
-1. Install Node 12 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 12 and 14.
+1. Install Node 14 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 14 and 16.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -142,9 +142,9 @@ Daily tests, including a full run of the service tests and overall code coverage
 [gitpod]: https://www.gitpod.io/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [prometheus]: https://prometheus.io/
-[prometheus configuration]: doc/self-hosting.md#prometheus
+[prometheus configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus
 [sentry]: https://sentry.io/
-[sentry configuration]: doc/self-hosting.md#sentry
+[sentry configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry
 [daily-tests]: https://github.com/badges/daily-tests
 [nodemon]: https://nodemon.io/
 [nodemon debug]: https://github.com/Microsoft/vscode-recipes/tree/master/nodemon
@@ -154,7 +154,22 @@ Daily tests, including a full run of the service tests and overall code coverage
 
 There is documentation about [hosting your own server][self-hosting].
 
-[self-hosting]: doc/self-hosting.md
+[self-hosting]: https://github.com/badges/shields/blob/master/doc/self-hosting.md
+
+## Related projects
+
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+
+Status badges are used widely across open-source and private software projects.
+Academics have studied the "signal" badges provide about software project
+quality. There are many existing libraries for rendering these badges, and
+alternatives to the hosted Shields badge service. [awesome-badges][] is a
+curated collection of such resources.
+[Contributions][contributing to awesome-badges] may be considered there.
+(The presence of a project in that collection should not be interpreted as an endorsement nor promotion from the Shields project)
+
+[awesome-badges]: https://github.com/badges/awesome-badges
+[contributing to awesome-badges]: https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md
 
 ## History
 
@@ -179,8 +194,8 @@ You can read more about [the project's inception][thread],
 [olivierlacan]: https://github.com/olivierlacan
 [espadrine]: https://github.com/espadrine
 [old-gh-badges]: https://github.com/badges/gh-badges
-[motivation]: spec/motivation.md
-[spec]: spec/SPECIFICATION.md
+[motivation]: https://github.com/badges/shields/blob/master/spec/motivation.md
+[spec]: https://github.com/badges/shields/blob/master/spec/SPECIFICATION.md
 [thread]: https://github.com/h5bp/lazyweb-requests/issues/150
 
 ## Project leaders
@@ -206,14 +221,6 @@ Alumni:
 
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
-
-## Related projects
-
-- [poser PHP library][poser]
-- [pybadges python library][pybadges]
-
-[poser]: https://github.com/badges/poser
-[pybadges]: https://github.com/google/pybadges
 
 ## License
 

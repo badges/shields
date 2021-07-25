@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const latestBuildSchema = Joi.object({
   count: Joi.number().required(),
@@ -14,7 +12,7 @@ const latestBuildSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsBase extends BaseJsonService {
+export default class AzureDevOpsBase extends BaseJsonService {
   static auth = {
     passKey: 'azure_devops_token',
     authorizedOrigins: ['https://dev.azure.com'],

@@ -1,9 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import PypiBase from './pypi-base.js'
 
-const { renderVersionBadge } = require('../version')
-const PypiBase = require('./pypi-base')
-
-module.exports = class PypiVersion extends PypiBase {
+export default class PypiVersion extends PypiBase {
   static category = 'version'
 
   static route = this.buildRoute('pypi/v')

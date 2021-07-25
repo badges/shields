@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.string().required(),
   colour: Joi.string().required(),
 })
 
-module.exports = class DependabotSemverCompatibility extends BaseJsonService {
+export default class DependabotSemverCompatibility extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'dependabot/semver',

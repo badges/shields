@@ -1,11 +1,10 @@
-'use strict'
-const os = require('os')
-const got = require('got')
-const generateInstanceId = require('./instance-id-generator')
-const { promClientJsonToInfluxV2 } = require('./metrics/format-converters')
-const log = require('./log')
+import os from 'os'
+import got from 'got'
+import generateInstanceId from './instance-id-generator.js'
+import { promClientJsonToInfluxV2 } from './metrics/format-converters.js'
+import log from './log.js'
 
-module.exports = class InfluxMetrics {
+export default class InfluxMetrics {
   constructor(metricInstance, config) {
     this._metricInstance = metricInstance
     this._config = config

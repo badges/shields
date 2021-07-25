@@ -1,10 +1,8 @@
-'use strict'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { BaseOreService, documentation, keywords } from './ore-base.js'
 
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { BaseOreService, documentation, keywords } = require('./ore-base')
-
-module.exports = class OreDownloads extends BaseOreService {
+export default class OreDownloads extends BaseOreService {
   static category = 'downloads'
 
   static route = {

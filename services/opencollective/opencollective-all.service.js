@@ -1,8 +1,6 @@
-'use strict'
+import OpencollectiveBase from './opencollective-base.js'
 
-const OpencollectiveBase = require('./opencollective-base')
-
-module.exports = class OpencollectiveAll extends OpencollectiveBase {
+export default class OpencollectiveAll extends OpencollectiveBase {
   static route = this.buildRoute('all')
 
   static examples = [

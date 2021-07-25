@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { starRating } = require('../text-formatters')
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { BaseXmlService } = require('..')
+import Joi from 'joi'
+import { starRating } from '../text-formatters.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { BaseXmlService } from '../index.js'
 
 const schema = Joi.object({
   'redmine-plugin': Joi.object({
@@ -78,4 +76,4 @@ class RedminePluginStars extends BaseRedminePluginRating {
   }
 }
 
-module.exports = { RedminePluginRating, RedminePluginStars }
+export { RedminePluginRating, RedminePluginStars }

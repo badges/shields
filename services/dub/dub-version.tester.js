@@ -1,10 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isVPlusDottedVersionNClausesWithOptionalSuffix } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('version (valid)')
   .get('/vibe-d.json')

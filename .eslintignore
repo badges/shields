@@ -2,6 +2,6 @@
 /build
 /coverage
 /__snapshots__
-/public
+public
 badge-maker/node_modules/
 !.github/

@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const OreLicense = require('./ore-license.service')
+import { test, given } from 'sazerac'
+import OreLicense from './ore-license.service.js'
 
 describe('OreLicense', function () {
   test(OreLicense.prototype.transform, () => {

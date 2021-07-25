@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const werckerSchema = Joi.array()
   .items(
@@ -32,7 +30,7 @@ const werckerCIDocumentation = `
 </p>
 `
 
-module.exports = class Wercker extends BaseJsonService {
+export default class Wercker extends BaseJsonService {
   static category = 'build'
 
   static route = {
@@ -93,16 +91,21 @@ module.exports = class Wercker extends BaseJsonService {
     }
   }
 
-  async fetch({ baseUrl, branch }) {
+  async fetch({ projectId, applicationName, branch }) {
+    let url
+    const qs = { branch, limit: 1 }
+
+    if (applicationName) {
+      url = `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
+    } else {
+      url = 'https://app.wercker.com/api/v3/runs'
+      qs.applicationId = projectId
+    }
+
     return this._requestJson({
       schema: werckerSchema,
-      url: baseUrl,
-      options: {
-        qs: {
-          branch,
-          limit: 1,
-        },
-      },
+      url,
+      options: { qs },
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',
@@ -112,10 +115,8 @@ module.exports = class Wercker extends BaseJsonService {
 
   async handle({ projectId, applicationName, branch }) {
     const json = await this.fetch({
-      baseUrl: this.constructor.getBaseUrl({
-        projectId,
-        applicationName,
-      }),
+      projectId,
+      applicationName,
       branch,
     })
     if (json.length === 0) {

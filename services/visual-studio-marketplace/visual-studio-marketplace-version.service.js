@@ -1,11 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-const { renderVersionBadge } = require('../version')
-const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
-
-module.exports = class VisualStudioMarketplaceVersion extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
   static category = 'version'
 
   static route = {

@@ -1,16 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderLicenseBadge } = require('../licenses')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   // Some repos do not have a license, in which case GitHub returns `{ license: null }`.
   license: Joi.object({ spdx_id: Joi.string().required() }).allow(null),
 }).required()
 
-module.exports = class GithubLicense extends GithubAuthV3Service {
+export default class GithubLicense extends GithubAuthV3Service {
   static category = 'license'
   static route = { base: 'github/license', pattern: ':user/:repo' }
   static examples = [

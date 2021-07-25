@@ -1,21 +1,17 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { NotFound } = require('..')
-const {
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { NotFound } from '../index.js'
+import {
   BaseVisualStudioAppCenterService,
   keywords,
   documentation,
-} = require('./visual-studio-app-center-base')
+} from './visual-studio-app-center-base.js'
 
 const schema = Joi.array().items({
   result: isBuildStatus.required(),
 })
 
-module.exports = class VisualStudioAppCenterBuilds extends (
-  BaseVisualStudioAppCenterService
-) {
+export default class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCenterService {
   static category = 'build'
 
   static route = {

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'JenkinsBuildRedirect',
   title: 'JenkinsBuildRedirect',
   pathPrefix: '/',
-}))
+})
 
 t.create('old jenkins ci prefix + job url in path')
   .get('jenkins-ci/s/https/updates.jenkins-ci.org/job/foo.svg')

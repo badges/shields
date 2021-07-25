@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   License: Joi.string().required(),
@@ -66,4 +64,4 @@ class CranVersion extends BaseCranService {
   }
 }
 
-module.exports = { CranLicense, CranVersion }
+export { CranLicense, CranVersion }

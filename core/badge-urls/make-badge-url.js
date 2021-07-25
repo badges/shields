@@ -1,8 +1,7 @@
-'use strict'
-
-const { URL } = require('url')
-const queryString = require('query-string')
-const { compile } = require('path-to-regexp')
+// Avoid "Attempted import error: 'URL' is not exported from 'url'" in frontend.
+import url from 'url'
+import queryString from 'query-string'
+import { compile } from 'path-to-regexp'
 
 function badgeUrlFromPath({
   baseUrl = '',
@@ -147,13 +146,13 @@ function dynamicBadgeUrl({
 function rasterRedirectUrl({ rasterUrl }, badgeUrl) {
   // Ensure we're always using the `rasterUrl` by using just the path from
   // the request URL.
-  const { pathname, search } = new URL(badgeUrl, 'https://bogus.test')
-  const result = new URL(pathname, rasterUrl)
+  const { pathname, search } = new url.URL(badgeUrl, 'https://bogus.test')
+  const result = new url.URL(pathname, rasterUrl)
   result.search = search
   return result
 }
 
-module.exports = {
+export {
   badgeUrlFromPath,
   badgeUrlFromPattern,
   encodeField,

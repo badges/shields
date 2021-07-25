@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   open_issues: nonNegativeInteger,
@@ -12,7 +10,7 @@ const schema = Joi.object({
   title: Joi.string().required(),
 }).required()
 
-module.exports = class GithubMilestoneDetail extends GithubAuthV3Service {
+export default class GithubMilestoneDetail extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github/milestones',

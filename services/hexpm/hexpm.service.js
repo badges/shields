@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric, addv, maybePluralize } = require('../text-formatters')
-const { downloadCount, version: versionColor } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric, addv, maybePluralize } from '../text-formatters.js'
+import { downloadCount, version as versionColor } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
@@ -149,4 +147,4 @@ function DownloadsForInterval(interval) {
 
 const downloadsServices = ['day', 'week', 'all'].map(DownloadsForInterval)
 
-module.exports = [...downloadsServices, HexPmLicense, HexPmVersion]
+export default [...downloadsServices, HexPmLicense, HexPmVersion]

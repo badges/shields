@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { invalidJSON } = require('../response-fixtures')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { invalidJSON } from '../response-fixtures.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const isUptimeStatus = Joi.string().valid(
   'paused',

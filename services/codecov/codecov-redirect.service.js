@@ -1,6 +1,4 @@
-'use strict'
-
-const { redirector } = require('..')
+import { redirector } from '../index.js'
 
 const vcsSNameShortFormMap = {
   bb: 'bitbucket',
@@ -8,7 +6,7 @@ const vcsSNameShortFormMap = {
   gl: 'gitlab',
 }
 
-module.exports = [
+export default [
   redirector({
     category: 'coverage',
     route: {

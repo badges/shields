@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const { expect } = require('chai')
-const gql = require('graphql-tag')
-const sinon = require('sinon')
-const BaseGraphqlService = require('./base-graphql')
-const { InvalidResponse } = require('./errors')
+import Joi from 'joi'
+import { expect } from 'chai'
+import gql from 'graphql-tag'
+import sinon from 'sinon'
+import BaseGraphqlService from './base-graphql.js'
+import { InvalidResponse } from './errors.js'
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

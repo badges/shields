@@ -1,6 +1,6 @@
 import groupBy from 'lodash.groupby'
 // load using js-yaml-loader
-import definitions from '../../../service-definitions.yml'
+import definitions from '../../service-definitions.yml'
 
 export interface Category {
   id: string

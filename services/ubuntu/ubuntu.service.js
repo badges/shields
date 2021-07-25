@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   entries: Joi.array()
@@ -14,7 +12,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class Ubuntu extends BaseJsonService {
+export default class Ubuntu extends BaseJsonService {
   static category = 'version'
 
   static route = {

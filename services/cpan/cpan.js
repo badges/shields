@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.alternatives(Joi.string().required(), Joi.number().required()),
   license: Joi.array().items(Joi.string()).min(1).required(),
 }).required()
 
-module.exports = class BaseCpanService extends BaseJsonService {
+export default class BaseCpanService extends BaseJsonService {
   static defaultBadgeData = { label: 'cpan' }
 
   async fetch({ packageName }) {

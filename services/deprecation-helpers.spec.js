@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { Deprecated } = require('../core/base-service/errors')
-const { enforceDeprecation } = require('./deprecation-helpers')
+import { expect } from 'chai'
+import { Deprecated } from '../core/base-service/errors.js'
+import { enforceDeprecation } from './deprecation-helpers.js'
 
 describe('enforceDeprecation', function () {
   it('throws Deprecated for a date in the past', function () {

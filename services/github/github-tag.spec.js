@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { GithubTag } = require('./github-tag.service')
+import { test, given } from 'sazerac'
+import { GithubTag } from './github-tag.service.js'
 
 describe('GithubTag', function () {
   test(GithubTag.getLatestTag, () => {

@@ -1,7 +1,5 @@
-'use strict'
-
-const { escapeFormat } = require('../../core/badge-urls/path-helpers')
-const { redirector } = require('..')
+import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import { redirector } from '../index.js'
 
 function escapeFormatSlashes(t) {
   return (
@@ -51,7 +49,7 @@ Old documentation, for reference:
 </p>
 */
 
-module.exports = [
+export default [
   redirector({
     category: 'monitoring',
     route: {

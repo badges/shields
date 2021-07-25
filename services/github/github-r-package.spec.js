@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { InvalidResponse } = require('..')
-const GithubRPackageVersion = require('./github-r-package.service')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidResponse } from '../index.js'
+import GithubRPackageVersion from './github-r-package.service.js'
 
 describe('GithubRPackageVersion', function () {
   const content = versionLine =>

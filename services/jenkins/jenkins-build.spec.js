@@ -1,11 +1,9 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { test, forCases, given } = require('sazerac')
-const { renderBuildStatusBadge } = require('../build-status')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const JenkinsBuild = require('./jenkins-build.service')
+import { expect } from 'chai'
+import nock from 'nock'
+import { test, forCases, given } from 'sazerac'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import JenkinsBuild from './jenkins-build.service.js'
 
 describe('JenkinsBuild', function () {
   test(JenkinsBuild.prototype.transform, () => {

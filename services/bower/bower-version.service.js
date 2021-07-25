@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { InvalidResponse, redirector } = require('..')
-const BaseBowerService = require('./bower-base')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { InvalidResponse, redirector } from '../index.js'
+import BaseBowerService from './bower-base.js'
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
@@ -57,4 +55,4 @@ const BowerVersionRedirect = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-module.exports = { BowerVersion, BowerVersionRedirect }
+export { BowerVersion, BowerVersionRedirect }

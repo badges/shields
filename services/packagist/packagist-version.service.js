@@ -1,16 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { compare, isStable, latest } = require('../php-version')
-const { optionalUrl } = require('../validators')
-const { NotFound, redirector } = require('..')
-const {
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { compare, isStable, latest } from '../php-version.js'
+import { optionalUrl } from '../validators.js'
+import { NotFound, redirector } from '../index.js'
+import {
   allVersionsSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
-} = require('./packagist-base')
+} from './packagist-base.js'
 
 const packageSchema = Joi.object()
   .pattern(
@@ -148,4 +146,4 @@ const PackagistVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-module.exports = { PackagistVersion, PackagistVersionRedirector }
+export { PackagistVersion, PackagistVersionRedirector }

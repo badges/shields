@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.array()
   .items(
@@ -12,7 +10,7 @@ const schema = Joi.array()
   .min(1)
   .required()
 
-module.exports = class DocsRs extends BaseJsonService {
+export default class DocsRs extends BaseJsonService {
   static category = 'build'
   static route = { base: 'docsrs', pattern: ':crate/:version?' }
   static examples = [

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'TeamCityBuildRedirect',
   title: 'TeamCityBuildRedirect',
   pathPrefix: '/teamcity',
-}))
+})
 
 t.create('codebetter')
   .get('/codebetter/IntelliJIdeaCe_JavaDecompilerEngineTests.svg')

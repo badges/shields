@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
 
 const isDependencyStatus = Joi.string().valid(
   'insecure',
@@ -10,7 +8,7 @@ const isDependencyStatus = Joi.string().valid(
   'stale'
 )
 
-const t = (module.exports = new ServiceTester({ id: 'depfu', title: 'Depfu' }))
+export const t = new ServiceTester({ id: 'depfu', title: 'Depfu' })
 
 t.create('depfu dependencies (valid)')
   .get('/depfu/example-ruby.json')

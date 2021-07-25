@@ -1,13 +1,11 @@
-'use strict'
-
-const { redirector } = require('..')
+import { redirector } from '../index.js'
 
 const variantMap = {
   s: 'state',
   u: 'author',
 }
 
-module.exports = [
+export default [
   redirector({
     category: 'issue-tracking',
     route: {

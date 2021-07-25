@@ -1,8 +1,8 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { noToken } = require('../test-helpers')
-const noWheelmapToken = noToken(require('./wheelmap.service'))
+import { createServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import _noWheelmapToken from './wheelmap.service.js'
+export const t = await createServiceTester()
+const noWheelmapToken = noToken(_noWheelmapToken)
 
 t.create('node with accessibility')
   .skipWhen(noWheelmapToken)

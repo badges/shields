@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const prettyBytes = require('pretty-bytes')
-const { metric, formatDate } = require('../text-formatters')
-const { age: ageColor, downloadCount } = require('../color-formatters')
-const { NotFound } = require('..')
-const BaseSteamAPI = require('./steam-base')
+import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
+import { metric, formatDate } from '../text-formatters.js'
+import { age as ageColor, downloadCount } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import BaseSteamAPI from './steam-base.js'
 
 const documentation = `
 <p>
@@ -402,7 +400,7 @@ class SteamFileViews extends SteamFileService {
   }
 }
 
-module.exports = {
+export {
   SteamCollectionSize,
   SteamFileSize,
   SteamFileReleaseDate,

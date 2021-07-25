@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
   status: Joi.string().valid('ok').required(),
 }).required()
 
-module.exports = class JitPackVersion extends BaseJsonService {
+export default class JitPackVersion extends BaseJsonService {
   static category = 'version'
 
   static route = {

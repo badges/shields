@@ -1,36 +1,36 @@
-'use strict'
 /**
  * @module
  */
 
 // See available emoji at http://emoji.muan.co/
-const emojic = require('emojic')
-const Joi = require('joi')
-const log = require('../server/log')
-const { AuthHelper } = require('./auth-helper')
-const { MetricHelper, MetricNames } = require('./metric-helper')
-const { assertValidCategory } = require('./categories')
-const checkErrorResponse = require('./check-error-response')
-const coalesceBadge = require('./coalesce-badge')
-const {
+import emojic from 'emojic'
+import Joi from 'joi'
+import log from '../server/log.js'
+import { AuthHelper } from './auth-helper.js'
+import { MetricHelper, MetricNames } from './metric-helper.js'
+import { assertValidCategory } from './categories.js'
+import checkErrorResponse from './check-error-response.js'
+import coalesceBadge from './coalesce-badge.js'
+import {
   NotFound,
   InvalidResponse,
   Inaccessible,
   ImproperlyConfigured,
   InvalidParameter,
   Deprecated,
-} = require('./errors')
-const { validateExample, transformExample } = require('./examples')
-const {
+} from './errors.js'
+import { validateExample, transformExample } from './examples.js'
+import { fetchFactory } from './got.js'
+import {
   makeFullUrl,
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
   getQueryParamNames,
-} = require('./route')
-const { assertValidServiceDefinition } = require('./service-definitions')
-const trace = require('./trace')
-const validate = require('./validate')
+} from './route.js'
+import { assertValidServiceDefinition } from './service-definitions.js'
+import trace from './trace.js'
+import validate from './validate.js'
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -432,6 +432,8 @@ class BaseService {
       ServiceClass: this,
     })
 
+    const fetcher = fetchFactory(fetchLimitBytes)
+
     camp.route(
       regex,
       handleRequest(cacheHeaderConfig, {
@@ -442,7 +444,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              sendAndCacheRequest: request.asPromise,
+              sendAndCacheRequest: fetcher,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
               metricHelper,
@@ -565,4 +567,4 @@ class BaseService {
  *    An HTML string that is included in the badge popup.
  */
 
-module.exports = BaseService
+export default BaseService

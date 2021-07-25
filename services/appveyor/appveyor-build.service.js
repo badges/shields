@@ -1,9 +1,7 @@
-'use strict'
+import { renderBuildStatusBadge } from '../build-status.js'
+import AppVeyorBase from './appveyor-base.js'
 
-const { renderBuildStatusBadge } = require('../build-status')
-const AppVeyorBase = require('./appveyor-base')
-
-module.exports = class AppVeyorBuild extends AppVeyorBase {
+export default class AppVeyorBuild extends AppVeyorBase {
   static route = this.buildRoute('appveyor/build')
 
   static examples = [

@@ -1,13 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isFormattedDate } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isFormattedDate } = require('../test-validators')
-
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Last Update',
 })
-module.exports = t
 
 t.create('Plugin Last Update')
   .get('/plugin/last-updated/akismet.json')

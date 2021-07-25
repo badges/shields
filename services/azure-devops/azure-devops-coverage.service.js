@@ -1,11 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
-const AzureDevOpsBase = require('./azure-devops-base')
-const { keywords } = require('./azure-devops-helpers')
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import AzureDevOpsBase from './azure-devops-base.js'
+import { keywords } from './azure-devops-helpers.js'
 
 const documentation = `
 <p>
@@ -46,7 +42,7 @@ const buildCodeCoverageSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class AzureDevOpsCoverage extends AzureDevOpsBase {
+export default class AzureDevOpsCoverage extends AzureDevOpsBase {
   static category = 'coverage'
 
   static route = {

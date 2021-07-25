@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { renderWebsiteStatus } = require('./website-status')
+import { test, given } from 'sazerac'
+import { renderWebsiteStatus } from './website-status.js'
 
 describe('Website status helpers', function () {
   const customOptions = {

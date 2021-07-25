@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   redirector({
     name: 'SonarVersionPrefixRedirector',
     category: 'analysis',

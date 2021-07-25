@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const OpenVSXRating = require('./open-vsx-rating.service')
+import { test, given } from 'sazerac'
+import OpenVSXRating from './open-vsx-rating.service.js'
 
 describe('OpenVSXRating', function () {
   test(OpenVSXRating.render, () => {

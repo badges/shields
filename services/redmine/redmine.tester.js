@@ -1,13 +1,11 @@
-'use strict'
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import { isStarRating } from '../test-validators.js'
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const { isStarRating } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'redmine',
   title: 'Redmine',
-}))
+})
 
 t.create('plugin rating')
   .get('/plugin/rating/redmine_xlsx_format_issue_exporter.json')

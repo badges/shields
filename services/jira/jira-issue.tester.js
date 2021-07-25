@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('unknown issue')
   .get('/notArealIssue-000.json?baseUrl=https://issues.apache.org/jira')

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'packagecontrol',
   title: 'Package Control',
-}))
+})
 
 t.create('monthly downloads').get('/dm/GitGutter.json').expectBadge({
   label: 'downloads',

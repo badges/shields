@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({ activity_total: nonNegativeInteger })
 
-module.exports = class Bountysource extends BaseJsonService {
+export default class Bountysource extends BaseJsonService {
   static category = 'funding'
   static route = { base: 'bountysource/team', pattern: ':team/activity' }
 

@@ -1,9 +1,7 @@
-'use strict'
+import PypiBase from './pypi-base.js'
+import { parseClassifiers } from './pypi-helpers.js'
 
-const PypiBase = require('./pypi-base')
-const { parseClassifiers } = require('./pypi-helpers')
-
-module.exports = class PypiStatus extends PypiBase {
+export default class PypiStatus extends PypiBase {
   static category = 'other'
 
   static route = this.buildRoute('pypi/status')

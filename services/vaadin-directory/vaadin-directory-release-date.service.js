@@ -1,12 +1,8 @@
-'use strict'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
-const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
-const { BaseVaadinDirectoryService } = require('./vaadin-directory-base')
-
-module.exports = class VaadinDirectoryReleaseDate extends (
-  BaseVaadinDirectoryService
-) {
+export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryService {
   static category = 'activity'
 
   static route = {

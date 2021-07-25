@@ -2,10 +2,8 @@
  * @module
  */
 
-'use strict'
-
-const BaseService = require('./base')
-const { parseJson } = require('./json')
+import BaseService from './base.js'
+import { parseJson } from './json.js'
 
 /**
  * Services which query a JSON endpoint should extend BaseJsonService
@@ -54,4 +52,4 @@ class BaseJsonService extends BaseService {
   }
 }
 
-module.exports = BaseJsonService
+export default BaseJsonService

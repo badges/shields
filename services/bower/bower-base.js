@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object()
   .keys({
@@ -19,7 +17,7 @@ const schema = Joi.object()
   })
   .required()
 
-module.exports = class BaseBowerService extends BaseJsonService {
+export default class BaseBowerService extends BaseJsonService {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,

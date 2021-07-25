@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   downloads: Joi.object({
@@ -34,7 +32,7 @@ const intervalMap = {
   },
 }
 
-module.exports = class DubDownloads extends BaseJsonService {
+export default class DubDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = {
     base: 'dub',

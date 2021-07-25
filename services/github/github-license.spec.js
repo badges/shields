@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const GithubLicense = require('./github-license.service')
+import { test, given } from 'sazerac'
+import GithubLicense from './github-license.service.js'
 
 test(GithubLicense.render, () => {
   given({ license: undefined }).expect({ message: 'not specified' })

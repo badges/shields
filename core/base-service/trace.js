@@ -1,7 +1,6 @@
-'use strict'
-
-const chalk = require('chalk')
-const config = require('config').util.toObject()
+import chalk from 'chalk'
+import config from 'config'
+const objectConfig = config.util.toObject()
 
 // Config is loaded globally but it would be better to inject it. To do that,
 // there needs to be one instance of the service created at registration time,
@@ -10,7 +9,7 @@ const config = require('config').util.toObject()
 // thereby gaining access to the injected config.
 const {
   services: { trace: enableTraceLogging },
-} = config.public
+} = objectConfig.public
 
 function _formatLabelForStage(stage, label) {
   const colorFn = {
@@ -37,6 +36,6 @@ function logTrace(stage, symbol, label, content, { deep = false } = {}) {
   }
 }
 
-module.exports = {
+export default {
   logTrace,
 }

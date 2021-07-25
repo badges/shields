@@ -1,10 +1,8 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import { NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
-const { renderVersionBadge } = require('../version')
-const { NotFound } = require('..')
-const BaseChromeWebStoreService = require('./chrome-web-store-base')
-
-module.exports = class ChromeWebStoreVersion extends BaseChromeWebStoreService {
+export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
   static category = 'version'
   static route = { base: 'chrome-web-store/v', pattern: ':storeId' }
 

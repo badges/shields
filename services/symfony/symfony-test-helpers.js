@@ -1,4 +1,5 @@
-'use strict'
+import { noToken } from '../test-helpers.js'
+import { SymfonyInsightBase } from './symfony-insight-base.js'
 
 const sampleProjectUuid = '825be328-29f8-44f7-a750-f82818ae9111'
 
@@ -85,12 +86,9 @@ const config = {
     sl_insight_apiToken: token,
   },
 }
-
-const { noToken } = require('../test-helpers')
-const { SymfonyInsightBase } = require('./symfony-insight-base')
 const noSymfonyToken = noToken(SymfonyInsightBase)
 
-module.exports = {
+export {
   sampleProjectUuid,
   runningMockResponse,
   platinumMockResponse,

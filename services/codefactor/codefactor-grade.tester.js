@@ -1,7 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isValidGrade } = require('./codefactor-helpers')
+import { createServiceTester } from '../tester.js'
+import { isValidGrade } from './codefactor-helpers.js'
+export const t = await createServiceTester()
 
 t.create('Grade').get('/github/google/guava.json').expectBadge({
   label: 'code quality',

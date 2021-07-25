@@ -1,7 +1,6 @@
-'use strict'
-
-const dockerBlue = '066da5' // see https://github.com/badges/shields/pull/1690
-const { NotFound } = require('..')
+// see https://github.com/badges/shields/pull/1690
+import { NotFound } from '../index.js'
+const dockerBlue = '066da5'
 
 function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {
@@ -55,7 +54,7 @@ function getDigestSemVerMatches({ data, digest }) {
   return version
 }
 
-module.exports = {
+export {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,

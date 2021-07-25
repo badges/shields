@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // The SymfonyInsight service was previously branded as SensioLabs, and
   // accordingly the badge path used to be /sensiolabs/i/projectUuid'.
   redirector({

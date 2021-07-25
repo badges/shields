@@ -1,8 +1,6 @@
-'use strict'
+import { deprecatedService } from '../index.js'
 
-const { deprecatedService } = require('..')
-
-module.exports = [
+export default [
   deprecatedService({
     category: 'funding',
     label: 'codetally',

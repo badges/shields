@@ -104,7 +104,8 @@ service-definitions.yml
 !/config/local*.template.yml
 
 # Gatsby
-/.cache
+/frontend/.cache
+/frontend/public
 /public
 
 # Cypress

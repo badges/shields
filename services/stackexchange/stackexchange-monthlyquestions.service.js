@@ -1,16 +1,14 @@
-'use strict'
-
-const moment = require('moment')
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
-const renderQuestionsBadge = require('./stackexchange-helpers')
+import moment from 'moment'
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
+import renderQuestionsBadge from './stackexchange-helpers.js'
 
 const tagSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-module.exports = class StackExchangeMonthlyQuestions extends BaseJsonService {
+export default class StackExchangeMonthlyQuestions extends BaseJsonService {
   static category = 'chat'
 
   static route = {

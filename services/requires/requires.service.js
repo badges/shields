@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
 const statusSchema = Joi.object({
   status: Joi.string().required(),
 }).required()
 
-module.exports = class RequiresIo extends BaseJsonService {
+export default class RequiresIo extends BaseJsonService {
   static category = 'dependencies'
 
   static route = {

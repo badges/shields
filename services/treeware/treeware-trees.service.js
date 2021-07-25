@@ -1,16 +1,14 @@
-'use strict'
-
-const crypto = require('crypto')
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import crypto from 'crypto'
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const apiSchema = Joi.object({
   total: Joi.number().required(),
 }).required()
 
-module.exports = class TreewareTrees extends BaseJsonService {
+export default class TreewareTrees extends BaseJsonService {
   static category = 'other'
 
   static route = {

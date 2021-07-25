@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { optionalUrl } = require('../validators')
-const { BaseService, BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { optionalUrl } from '../validators.js'
+import { BaseService, BaseJsonService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
@@ -115,4 +113,4 @@ class TwitterFollow extends BaseJsonService {
   }
 }
 
-module.exports = [TwitterUrl, TwitterFollow]
+export default [TwitterUrl, TwitterFollow]

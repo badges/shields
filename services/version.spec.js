@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { latest, slice, rangeStart, renderVersionBadge } = require('./version')
+import { test, given } from 'sazerac'
+import { latest, slice, rangeStart, renderVersionBadge } from './version.js'
 const includePre = true
 
 describe('Version helpers', function () {

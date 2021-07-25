@@ -1,9 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import { BaseService, InvalidResponse } from '../index.js'
 
-const { renderVersionBadge } = require('../version')
-const { BaseService, InvalidResponse } = require('..')
-
-module.exports = class HackageVersion extends BaseService {
+export default class HackageVersion extends BaseService {
   static category = 'version'
 
   static route = {

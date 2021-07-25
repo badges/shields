@@ -1,10 +1,8 @@
-'use strict'
+import { starRating } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
-const { starRating } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
-const OpenVSXBase = require('./open-vsx-base')
-
-module.exports = class OpenVSXRating extends OpenVSXBase {
+export default class OpenVSXRating extends OpenVSXBase {
   static category = 'rating'
 
   static route = {

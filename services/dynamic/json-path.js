@@ -2,12 +2,10 @@
  * @module
  */
 
-'use strict'
-
-const Joi = require('joi')
-const jp = require('jsonpath')
-const { renderDynamicBadge, errorMessages } = require('../dynamic-common')
-const { InvalidParameter, InvalidResponse } = require('..')
+import Joi from 'joi'
+import jp from 'jsonpath'
+import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
+import { InvalidParameter, InvalidResponse } from '../index.js'
 
 /**
  * Dynamic service class factory which wraps {@link module:core/base-service/base~BaseService} with support of {@link https://jsonpath.com/|JSONPath}.
@@ -15,7 +13,7 @@ const { InvalidParameter, InvalidResponse } = require('..')
  * @param {Function} superclass class to extend
  * @returns {Function} wrapped class
  */
-module.exports = superclass =>
+export default superclass =>
   class extends superclass {
     static category = 'dynamic'
     static defaultBadgeData = { label: 'custom badge' }

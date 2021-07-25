@@ -1,7 +1,5 @@
-'use strict'
-
-const readline = require('readline')
-const minimist = require('minimist')
+import readline from 'readline'
+import minimist from 'minimist'
 
 async function captureTimings(warmupIterations) {
   const rl = readline.createInterface({

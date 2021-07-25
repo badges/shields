@@ -1,13 +1,12 @@
-'use strict'
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const { isReuseCompliance, COLOR_MAP } = require('./reuse-compliance-helper')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { isReuseCompliance, COLOR_MAP } from './reuse-compliance-helper.js'
 
 const responseSchema = Joi.object({
   status: isReuseCompliance,
 }).required()
 
-module.exports = class Reuse extends BaseJsonService {
+export default class Reuse extends BaseJsonService {
   static category = 'license'
 
   static route = {

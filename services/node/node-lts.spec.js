@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const NodeVersion = require('./node-lts.service')
+import { test, given } from 'sazerac'
+import NodeVersion from './node-lts.service.js'
 
 describe('node-lts renderStaticPreview', function () {
   it('should have parity with render()', async function () {

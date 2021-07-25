@@ -24,9 +24,7 @@
  * https://github.com/luarocks/luarocks/blob/405ee29ba8444d97646f62e72effeaff2bfe3f79/src/luarocks/search.lua#L182
  * https://github.com/luarocks/luarocks/blob/405ee29ba8444d97646f62e72effeaff2bfe3f79/src/luarocks/core/vers.lua#L83
  */
-'use strict'
-
-const { omitv } = require('../text-formatters')
+import { omitv } from '../text-formatters.js'
 
 // Compare two arrays containing split and transformed to
 // positive/negative numbers parts of version strings,
@@ -86,8 +84,4 @@ function latestVersion(versions) {
     .pop()
 }
 
-module.exports = {
-  parseVersion,
-  compareVersionLists,
-  latestVersion,
-}
+export { parseVersion, compareVersionLists, latestVersion }

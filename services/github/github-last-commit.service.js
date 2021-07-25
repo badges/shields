@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 const commonExampleAttrs = {
   keywords: ['latest'],
   documentation,
@@ -22,7 +20,7 @@ const schema = Joi.array()
   )
   .required()
 
-module.exports = class GithubLastCommit extends GithubAuthV3Service {
+export default class GithubLastCommit extends GithubAuthV3Service {
   static category = 'activity'
   static route = { base: 'github/last-commit', pattern: ':user/:repo/:branch*' }
   static examples = [

@@ -1,11 +1,9 @@
-'use strict'
-
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
   id: 'ClojarsVersion',
   title: 'Clojars Version',
   pathPrefix: '/clojars',
-}))
+})
 
 t.create('clojars version (valid)')
   .get('/v/prismic.json')

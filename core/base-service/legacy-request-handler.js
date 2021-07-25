@@ -1,15 +1,9 @@
-'use strict'
-
-const request = require('request')
-const makeBadge = require('../../badge-maker/lib/make-badge')
-const { setCacheHeaders } = require('./cache-headers')
-const {
-  Inaccessible,
-  InvalidResponse,
-  ShieldsRuntimeError,
-} = require('./errors')
-const { makeSend } = require('./legacy-result-sender')
-const coalesceBadge = require('./coalesce-badge')
+import request from 'request'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import { setCacheHeaders } from './cache-headers.js'
+import { Inaccessible, InvalidResponse, ShieldsRuntimeError } from './errors.js'
+import { makeSend } from './legacy-result-sender.js'
+import coalesceBadge from './coalesce-badge.js'
 
 const userAgent = 'Shields.io/2003a'
 
@@ -206,8 +200,4 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   }
 }
 
-module.exports = {
-  handleRequest,
-  promisify,
-  userAgent,
-}
+export { handleRequest, promisify, userAgent }

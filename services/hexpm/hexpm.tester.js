@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const { isMetric, isMetricOverTimePeriod } = require('../test-validators')
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 
 const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
 
-const t = (module.exports = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' }))
+export const t = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' })
 
 t.create('downloads per week')
   .get('/dw/cowboy.json')

@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'wordpress',
   title: 'WordPress Version Tests',
-}))
+})
 
 t.create('Plugin Version').get('/plugin/v/akismet.json').expectBadge({
   label: 'plugin',

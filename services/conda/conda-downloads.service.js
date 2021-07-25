@@ -1,10 +1,8 @@
-'use strict'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import BaseCondaService from './conda-base.js'
 
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const BaseCondaService = require('./conda-base')
-
-module.exports = class CondaDownloads extends BaseCondaService {
+export default class CondaDownloads extends BaseCondaService {
   static category = 'downloads'
   static route = { base: 'conda', pattern: ':variant(d|dn)/:channel/:pkg' }
 

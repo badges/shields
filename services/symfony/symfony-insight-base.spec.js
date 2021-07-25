@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { NotFound } = require('..')
-const { SymfonyInsightBase } = require('./symfony-insight-base')
+import { expect } from 'chai'
+import { NotFound } from '../index.js'
+import { SymfonyInsightBase } from './symfony-insight-base.js'
 
 describe('SymfonyInsightBase', function () {
   context('transform()', function () {
