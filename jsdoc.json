@@ -8,7 +8,8 @@
       "node_modules",
       "private",
       "public"
-    ]
+    ],
+    "excludePattern": ".+\\.(service|spec|tester)\\.js$"
   },
   "plugins": ["plugins/markdown"],
   "opts": {
