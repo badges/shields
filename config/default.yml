@@ -22,6 +22,8 @@ public:
       debug:
         enabled: false
         intervalSeconds: 200
+    weblate:
+      authorizedOrigins: 'https://hosted.weblate.org'
     trace: false
 
   cacheHeaders:
