@@ -31,6 +31,10 @@
     "TWITCH_CLIENT_SECRET": {
       "description": "Configure the client secret to be used for the Twitch service.",
       "required": false
+    },
+    "WEBLATE_API_KEY": {
+      "description": "Configure the API key to be used for the Weblate service.",
+      "required": false
     }
   },
   "formation": {

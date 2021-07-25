@@ -135,6 +135,7 @@ const publicConfigSchema = Joi.object({
     npm: defaultService,
     sonar: defaultService,
     teamcity: defaultService,
+    weblate: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
@@ -182,6 +183,7 @@ const privateConfigSchema = Joi.object({
   wheelmap_token: Joi.string(),
   influx_username: Joi.string(),
   influx_password: Joi.string(),
+  weblate_api_key: Joi.string(),
   youtube_api_key: Joi.string(),
 }).required()
 const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
