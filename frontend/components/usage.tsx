@@ -340,7 +340,15 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
                 <a href="https://github.com/simple-icons/simple-icons/blob/develop/slugs.md">
                   slugs.md file
                 </a>{' '}
-                in the simple-icons repository.
+                in the simple-icons repository. These {' '}
+                <a
+                  href="https://github.com/badges/awesome-badges#user-content-static-badge-collections"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  static badge collections
+                </a>{' '}
+                may also help you create badges with icon easily.  
               </span>
             }
             key="logo"
