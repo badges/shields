@@ -1,4 +1,4 @@
-name: Auto approve
+name: Auto close
 on: pull_request_target
 
 permissions:
@@ -12,8 +12,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install action dependencies
-        run: cd .github/actions/approve-bot && npm ci
+        run: cd .github/actions/close-bot && npm ci
 
-      - uses: ./.github/actions/approve-bot
+      - uses: ./.github/actions/close-bot
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
