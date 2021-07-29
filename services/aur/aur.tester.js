@@ -47,19 +47,22 @@ t.create('license (no license)')
     nock('https://aur.archlinux.org')
       .get('/rpc.php')
       .query({
+        v: 5,
         type: 'info',
         arg: 'vscodium-bin',
       })
       .reply(200, {
         resultcount: 1,
-        results: {
-          License: null,
-          NumVotes: 1,
-          Version: '1',
-          OutOfDate: null,
-          Maintainer: null,
-          LastModified: 1,
-        },
+        results: [
+          {
+            License: null,
+            NumVotes: 1,
+            Version: '1',
+            OutOfDate: null,
+            Maintainer: null,
+            LastModified: 1,
+          },
+        ],
       })
   )
   .expectBadge({ label: 'license', message: 'not specified' })
