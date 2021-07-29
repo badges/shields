@@ -3,23 +3,25 @@ import {
   floorCount as floorCountColor,
   age as ageColor,
 } from '../color-formatters.js'
+import { renderLicenseBadge } from '../licenses.js'
 import { addv, metric, formatDate } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
-  results: Joi.alternatives(
-    Joi.array().length(0).required(),
-    Joi.object({
-      License: Joi.string().required().allow(null),
-      NumVotes: nonNegativeInteger,
-      Version: Joi.string().required(),
-      OutOfDate: nonNegativeInteger.allow(null),
-      Maintainer: Joi.string().required().allow(null),
-      LastModified: nonNegativeInteger,
-    }).required()
-  ),
+  results: Joi.array()
+    .items(
+      Joi.object({
+        License: Joi.array().items(Joi.string().required()).allow(null),
+        NumVotes: nonNegativeInteger,
+        Version: Joi.string().required(),
+        OutOfDate: nonNegativeInteger.allow(null),
+        Maintainer: Joi.string().required().allow(null),
+        LastModified: nonNegativeInteger,
+      })
+    )
+    .required(),
 }).required()
 
 class BaseAurService extends BaseJsonService {
@@ -41,7 +43,7 @@ class BaseAurService extends BaseJsonService {
     return this._requestJson({
       schema: aurSchema,
       url: 'https://aur.archlinux.org/rpc.php',
-      options: { qs: { type: 'info', arg: packageName } },
+      options: { qs: { v: 5, type: 'info', arg: packageName } },
     })
   }
 }
@@ -54,29 +56,25 @@ class AurLicense extends BaseAurService {
     {
       title: 'AUR license',
       namedParams: { packageName: 'android-studio' },
-      staticPreview: this.render({ license: 'Apache' }),
+      staticPreview: renderLicenseBadge({ license: 'Apache' }),
     },
   ]
 
   static defaultBadgeData = { label: 'license' }
 
-  static render({ license }) {
-    return { message: license, color: 'blue' }
-  }
-
   transform(json) {
-    const license = json.results.License
-    if (!license) {
+    const licenses = json.results[0].License
+    if (!licenses) {
       throw new NotFound({ prettyMessage: 'not specified' })
     }
 
-    return { license }
+    return { licenses }
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    const { license } = this.transform(json)
-    return this.constructor.render({ license })
+    const { licenses } = this.transform(json)
+    return renderLicenseBadge({ licenses, color: 'blue' })
   }
 }
 
@@ -104,7 +102,7 @@ class AurVotes extends BaseAurService {
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ votes: json.results.NumVotes })
+    return this.constructor.render({ votes: json.results[0].NumVotes })
   }
 }
 
@@ -127,10 +125,12 @@ class AurVersion extends BaseAurService {
   }
 
   async handle({ packageName }) {
-    const json = await this.fetch({ packageName })
+    const {
+      results: [{ Version: version, OutOfDate: outOfDate }],
+    } = await this.fetch({ packageName })
     return this.constructor.render({
-      version: json.results.Version,
-      outOfDate: json.results.OutOfDate,
+      version,
+      outOfDate,
     })
   }
 }
@@ -156,7 +156,7 @@ class AurMaintainer extends BaseAurService {
 
   async handle({ packageName }) {
     const {
-      results: { Maintainer: maintainer },
+      results: [{ Maintainer: maintainer }],
     } = await this.fetch({ packageName })
     if (!maintainer) {
       throw new InvalidResponse({ prettyMessage: 'No maintainer' })
@@ -191,7 +191,7 @@ class AurLastModified extends BaseAurService {
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    const date = 1000 * parseInt(json.results.LastModified)
+    const date = 1000 * parseInt(json.results[0].LastModified)
     return this.constructor.render({ date })
   }
 }
