@@ -56,7 +56,7 @@ class AurLicense extends BaseAurService {
     {
       title: 'AUR license',
       namedParams: { packageName: 'android-studio' },
-      staticPreview: renderLicenseBadge({ license: 'Apache' }),
+      staticPreview: renderLicenseBadge({ license: 'Apache', color: 'blue' }),
     },
   ]
 
