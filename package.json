@@ -231,7 +231,7 @@
     "redis-server": "^1.2.2",
     "rimraf": "^3.0.2",
     "sazerac": "^2.0.0",
-    "sinon": "^11.1.1",
+    "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.6",
     "start-server-and-test": "1.13.0",
