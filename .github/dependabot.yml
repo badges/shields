@@ -18,9 +18,9 @@ updates:
       time: '12:00'
     open-pull-requests-limit: 99
 
-  # approve-bot package dependencies
+  # close-bot package dependencies
   - package-ecosystem: npm
-    directory: '/.github/actions/approve-bot'
+    directory: '/.github/actions/close-bot'
     schedule:
       interval: weekly
       day: friday
