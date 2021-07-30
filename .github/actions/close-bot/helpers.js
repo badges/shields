@@ -59,10 +59,4 @@ function isPointlessVersionBump(body) {
   return allChangelogLinesAreVersionBump(changelogLines)
 }
 
-function shouldAutoMerge(body) {
-  return body.includes(
-    'If all status checks pass Dependabot will automatically merge this pull request'
-  )
-}
-
-module.exports = { isPointlessVersionBump, shouldAutoMerge }
+module.exports = { isPointlessVersionBump }
