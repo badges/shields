@@ -4,6 +4,39 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-08-01
+
+- update auto close action for dependabot native [#6834](https://github.com/badges/shields/issues/6834)
+- use v5 API for [AUR] badges [#6836](https://github.com/badges/shields/issues/6836)
+- tests: add live Sonar tests with >=6.6 API changes [#6817](https://github.com/badges/shields/issues/6817)
+- fix: authenticate weblate requests [#6790](https://github.com/badges/shields/issues/6790)
+- chore: exclude services and tests from docs [#6791](https://github.com/badges/shields/issues/6791)
+- [Sonar] Fix invalid fetch query to sonarqube >=6.6 [#6636](https://github.com/badges/shields/issues/6636)
+- added a correct the path to the sponsers logo [#6813](https://github.com/badges/shields/issues/6813)
+- tests: fix scrutinizerbuild service test [#6785](https://github.com/badges/shields/issues/6785)
+- tests: fix Docker Version test for user repo [#6783](https://github.com/badges/shields/issues/6783)
+- tests: fix codacy service tests [#6781](https://github.com/badges/shields/issues/6781)
+- chore: switch to c8 for code coverage [#6778](https://github.com/badges/shields/issues/6778)
+- Delegate discord logo to simple-icons, which matches the current branding [#6764](https://github.com/badges/shields/issues/6764)
+- chore: refactor weblate code [#6765](https://github.com/badges/shields/issues/6765)
+- Fix [CodeClimateCoverage] test [#6759](https://github.com/badges/shields/issues/6759)
+- Fix [JenkinsTests] test [#6758](https://github.com/badges/shields/issues/6758)
+- Re-apply 'Migrate request to got (part 1)' [#6755](https://github.com/badges/shields/issues/6755)
+- Fix UptimeRobot status endpoint [#6757](https://github.com/badges/shields/issues/6757)
+- Delete old deprecated badges [#6756](https://github.com/badges/shields/issues/6756)
+- fix: weblate badges to better fit repo guidelines [Weblate] [#6712](https://github.com/badges/shields/issues/6712)
+- Delegate related projects to awesome-badges list [#6746](https://github.com/badges/shields/issues/6746)
+- Replace opn-cli with open-cli [#6747](https://github.com/badges/shields/issues/6747)
+- Verify that Node 14 is installed in development [#6748](https://github.com/badges/shields/issues/6748)
+- Migrate from CommonJS to ESM [#6651](https://github.com/badges/shields/issues/6651)
+- Add Wikiapiary Extension Badge [WikiapiaryInstalls] [#6678](https://github.com/badges/shields/issues/6678)
+- deprecate [beerpay] [#6708](https://github.com/badges/shields/issues/6708)
+- deprecate [microbadger] [#6709](https://github.com/badges/shields/issues/6709)
+- fix [github] commit since tests [#6705](https://github.com/badges/shields/issues/6705)
+- [npmsioscore] Support npm score [#6630](https://github.com/badges/shields/issues/6630)
+- Add [Weblate] badges [#6677](https://github.com/badges/shields/issues/6677)
+- Dependency updates
+
 ## server-2021-07-01
 
 - improve [MavenCentral], [MavenMetadata], and [GradlePluginPortal] [#6628](https://github.com/badges/shields/issues/6628)
