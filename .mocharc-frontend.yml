@@ -3,4 +3,3 @@ require:
   - '@babel/polyfill'
   - '@babel/register'
   - mocha-yaml-loader
-  - frontend/mocha-ignore-pngs

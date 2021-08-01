@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const TestspaceTestCount = require('./testspace-test-count.service')
+import { test, given } from 'sazerac'
+import TestspaceTestCount from './testspace-test-count.service.js'
 
 describe('TestspaceTestCount', function () {
   test(TestspaceTestCount.render, () => {

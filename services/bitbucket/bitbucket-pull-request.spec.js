@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const [BitbucketPullRequest] = require('./bitbucket-pull-request.service')
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import { BitbucketRawPullRequests } from './bitbucket-pull-request.service.js'
 
 describe('BitbucketPullRequest', function () {
   cleanUpNockAfterEach()
@@ -18,7 +16,7 @@ describe('BitbucketPullRequest', function () {
       .reply(200, { size: 42 })
 
     expect(
-      await BitbucketPullRequest.invoke(
+      await BitbucketRawPullRequests.invoke(
         defaultContext,
         {
           public: {
@@ -47,7 +45,7 @@ describe('BitbucketPullRequest', function () {
       .reply(200, { size: 42 })
 
     expect(
-      await BitbucketPullRequest.invoke(
+      await BitbucketRawPullRequests.invoke(
         defaultContext,
         {
           public: {

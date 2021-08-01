@@ -1,17 +1,15 @@
-'use strict'
-
-const makeBadge = require('../../badge-maker/lib/make-badge')
-const BaseService = require('./base')
-const {
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import BaseService from './base.js'
+import {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
-} = require('./cache-headers')
-const { makeSend } = require('./legacy-result-sender')
-const { MetricHelper } = require('./metric-helper')
-const coalesceBadge = require('./coalesce-badge')
-const { prepareRoute, namedParamsForMatch } = require('./route')
+} from './cache-headers.js'
+import { makeSend } from './legacy-result-sender.js'
+import { MetricHelper } from './metric-helper.js'
+import coalesceBadge from './coalesce-badge.js'
+import { prepareRoute, namedParamsForMatch } from './route.js'
 
-module.exports = class BaseStaticService extends BaseService {
+export default class BaseStaticService extends BaseService {
   static register({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
 

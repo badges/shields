@@ -1,17 +1,18 @@
-'use strict'
+import { createServiceTester } from '../tester.js'
+import { codacyGrade } from './codacy-helpers.js'
+export const t = await createServiceTester()
 
-const t = (module.exports = require('../tester').createServiceTester())
-const { codacyGrade } = require('./codacy-helpers')
-
+// https://github.com/netdata/netdata/
+// https://app.codacy.com/manual/netdata/netdata/dashboard
 t.create('Code quality')
-  .get('/e27821fb6289410b8f58338c7e0bc686.json')
+  .get('/a994873f30d045b9b4b83606c3eb3498.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,
   })
 
 t.create('Code quality on branch')
-  .get('/e27821fb6289410b8f58338c7e0bc686/master.json')
+  .get('/a994873f30d045b9b4b83606c3eb3498/master.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,

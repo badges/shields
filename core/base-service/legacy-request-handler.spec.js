@@ -1,12 +1,10 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const portfinder = require('portfinder')
-const Camp = require('@shields_io/camp')
-const got = require('../got-test-client')
-const coalesceBadge = require('./coalesce-badge')
-const { handleRequest } = require('./legacy-request-handler')
+import { expect } from 'chai'
+import nock from 'nock'
+import portfinder from 'portfinder'
+import Camp from '@shields_io/camp'
+import got from '../got-test-client.js'
+import coalesceBadge from './coalesce-badge.js'
+import { handleRequest } from './legacy-request-handler.js'
 
 async function performTwoRequests(baseUrl, first, second) {
   expect((await got(`${baseUrl}${first}`)).statusCode).to.equal(200)

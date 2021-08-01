@@ -1,7 +1,5 @@
-'use strict'
-
-const SonarBase = require('./sonar-base')
-const { queryParamSchema, keywords, documentation } = require('./sonar-helpers')
+import SonarBase from './sonar-base.js'
+import { queryParamSchema, keywords, documentation } from './sonar-helpers.js'
 
 const colorMap = {
   0: 'red',
@@ -12,7 +10,7 @@ const colorMap = {
   5: 'brightgreen',
 }
 
-module.exports = class SonarFortifyRating extends SonarBase {
+export default class SonarFortifyRating extends SonarBase {
   static category = 'analysis'
 
   static route = {

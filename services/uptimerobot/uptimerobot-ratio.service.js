@@ -1,11 +1,9 @@
-'use strict'
-
-const { colorScale } = require('../color-formatters')
-const UptimeRobotBase = require('./uptimerobot-base')
+import { colorScale } from '../color-formatters.js'
+import UptimeRobotBase from './uptimerobot-base.js'
 
 const ratioColor = colorScale([10, 30, 50, 70])
 
-module.exports = class UptimeRobotRatio extends UptimeRobotBase {
+export default class UptimeRobotRatio extends UptimeRobotBase {
   static route = {
     base: 'uptimerobot/ratio',
     pattern: ':numberOfDays(\\d+)?/:monitorSpecificKey',

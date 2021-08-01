@@ -1,6 +1,4 @@
-'use strict'
-
-const { BaseService, InvalidResponse } = require('..')
+import { BaseService, InvalidResponse } from '../index.js'
 
 const documentation = `
 <p>
@@ -13,7 +11,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class OssTracker extends BaseService {
+export default class OssTracker extends BaseService {
   static category = 'other'
 
   static route = {

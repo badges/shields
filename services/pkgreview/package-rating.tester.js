@@ -1,7 +1,6 @@
-'use strict'
-
-const { withRegex, isStarRating } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { withRegex, isStarRating } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const isRatingWithReviews = withRegex(
   /^(([0-4](.?([0-9]))?)|5)\/5?\s*\([0-9]*\)$/

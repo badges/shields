@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-const t = (module.exports = new ServiceTester({
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
   id: 'ScrutinizerQuality',
   title: 'ScrutinizerQuality',
   pathPrefix: '/scrutinizer/quality',
-}))
+})
 
 const isQualityNumber = Joi.number().positive()
 

@@ -1,10 +1,9 @@
-'use strict'
 /**
  * @module
  */
 
-const Joi = require('joi')
-const { expect } = require('chai')
+import Joi from 'joi'
+import { expect } from 'chai'
 
 /**
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
@@ -20,6 +19,7 @@ const factory = superclass =>
     constructor(message) {
       super(message)
       this.intercepted = false
+      super.networkOn()
     }
 
     get(uri, options = { followRedirect: false }) {
@@ -32,6 +32,7 @@ const factory = superclass =>
 
     intercept(setup) {
       super.intercept(setup)
+      super.networkOff()
       this.intercepted = true
       return this
     }
@@ -85,4 +86,4 @@ const factory = superclass =>
     }
   }
 
-module.exports = factory
+export default factory

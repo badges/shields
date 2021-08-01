@@ -14,11 +14,9 @@ Locate the source file(s) for the service, which can be found in `*.service.js` 
 Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service. For example:
 
 ```js
-'use strict'
+import { deprecatedService } from '../index.js'
 
-const { deprecatedService } = require('..')
-
-module.exports = deprecatedService({
+export default deprecatedService({
   category: 'size',
   route: {
     base: 'imagelayers',
@@ -36,12 +34,12 @@ Locate the test file(s) for the service, which can be found in `*.tester.js` fil
 With `DeprecatedService` classes we cannot use `createServiceTester()` so you will need to create the `ServiceTester` class directly. For example:
 
 ```js
-const { ServiceTester } = require('../tester')
+import { ServiceTester } from '../tester.js'
 
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'imagelayers',
   title: 'ImageLayers',
-}))
+})
 ```
 
 Next you will need to replace/refactor the existing tests to validate the new deprecated badge behavior for this service. Deprecated badges always return a message of `no longer available` (such as `imagelayers | no longer available`) so the tests need to be updated to reflect that message value. For example:
@@ -60,14 +58,12 @@ Make sure to have a live (non-mocked) test for each badge the service provides t
 Here is an example of what the final result would look like for a test file:
 
 ```js
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'imagelayers',
   title: 'ImageLayers',
-}))
+})
 
 t.create('no longer available (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
@@ -83,6 +79,37 @@ t.create('no longer available (previously number of layers)')
     message: 'no longer available',
   })
 ```
+
+## What Happens Next?
+
+Once a service is deprecated, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows:
+![](https://img.shields.io/badge/gratipay-no%20longer%20available-inactive)
+
+Past that point, all related code will be deleted, and a not found error will be rendered instead:
+![](https://img.shields.io/badge/404-badge%20not%20found-critical)
+
+Here is a listing of all deleted badges that were once part of the Shields.io service:
+
+- bitHound
+- Cauditor
+- CocoaPods Apps
+- CocoaPods Downloads
+- Coverity
+- Dockbit
+- Dotnet Status
+- Gemnasium
+- Gratipay/Gittip
+- ImageLayers
+- Issue Stats
+- JitPack Downloads
+- Leanpub
+- Libscore
+- Magnum CI
+- NSP
+- PHP Eye
+- Snap CI
+- VersionEye
+- Waffle
 
 ## Additional Information
 

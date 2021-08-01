@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // http://github.com/badges/shields/issues/1387
   // https://github.com/badges/shields/pull/3320#issuecomment-483795000
   redirector({

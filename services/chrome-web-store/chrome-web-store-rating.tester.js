@@ -1,14 +1,12 @@
-'use strict'
+import Joi from 'joi'
+import { isStarRating } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 
-const Joi = require('joi')
-const { isStarRating } = require('../test-validators')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'ChromeWebStoreRating',
   title: 'Chrome Web Store Rating',
   pathPrefix: '/chrome-web-store',
-}))
+})
 
 t.create('Rating')
   .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')

@@ -1,9 +1,7 @@
-'use strict'
-
-const { floorCount: floorCountColor } = require('../color-formatters')
-const { metric, starRating } = require('../text-formatters')
-const { NotFound } = require('..')
-const BaseChromeWebStoreService = require('./chrome-web-store-base')
+import { floorCount as floorCountColor } from '../color-formatters.js'
+import { metric, starRating } from '../text-formatters.js'
+import { NotFound } from '../index.js'
+import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
   static category = 'rating'
@@ -108,7 +106,7 @@ class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
   }
 }
 
-module.exports = {
+export {
   ChromeWebStoreRating,
   ChromeWebStoreRatingCount,
   ChromeWebStoreRatingStars,

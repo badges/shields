@@ -1,10 +1,8 @@
-'use strict'
+import { URL } from 'url'
+import Redis from 'ioredis'
+import log from '../server/log.js'
 
-const { URL } = require('url')
-const Redis = require('ioredis')
-const log = require('../server/log')
-
-module.exports = class RedisTokenPersistence {
+export default class RedisTokenPersistence {
   constructor({ url, key }) {
     this.url = url
     this.key = key

@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const validate = require('../../core/base-service/validate')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import validate from '../../core/base-service/validate.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const extensionQuerySchema = Joi.object({
   results: Joi.array()
@@ -45,7 +43,7 @@ const statisticSchema = Joi.object().keys({
   ratingcount: Joi.number().default(0),
 })
 
-module.exports = class VisualStudioMarketplaceBase extends BaseJsonService {
+export default class VisualStudioMarketplaceBase extends BaseJsonService {
   static keywords = [
     'vscode',
     'tfs',

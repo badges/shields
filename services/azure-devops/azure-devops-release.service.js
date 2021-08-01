@@ -1,8 +1,6 @@
-'use strict'
-
-const { renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
-const { keywords, fetch } = require('./azure-devops-helpers')
+import { renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { keywords, fetch } from './azure-devops-helpers.js'
 
 const documentation = `
 <p>
@@ -22,7 +20,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class AzureDevOpsRelease extends BaseSvgScrapingService {
+export default class AzureDevOpsRelease extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {

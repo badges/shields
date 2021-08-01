@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { NotFound } = require('..')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { fetchLatestRelease } = require('./github-common-release')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { fetchLatestRelease } from './github-common-release.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
@@ -27,7 +25,7 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().length(0)
 )
 
-module.exports = class GithubDownloads extends GithubAuthV3Service {
+export default class GithubDownloads extends GithubAuthV3Service {
   static category = 'downloads'
   static route = {
     base: 'github',

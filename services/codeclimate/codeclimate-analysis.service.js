@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale, letterScore } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
-const { keywords, isLetterGrade, fetchRepo } = require('./codeclimate-common')
+import Joi from 'joi'
+import { colorScale, letterScore } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import { keywords, isLetterGrade, fetchRepo } from './codeclimate-common.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -87,7 +85,7 @@ const variantMap = {
   },
 }
 
-module.exports = class CodeclimateAnalysis extends BaseJsonService {
+export default class CodeclimateAnalysis extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'codeclimate',

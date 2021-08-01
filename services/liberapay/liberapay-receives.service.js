@@ -1,9 +1,7 @@
-'use strict'
+import { InvalidResponse } from '../index.js'
+import { renderCurrencyBadge, LiberapayBase } from './liberapay-base.js'
 
-const { InvalidResponse } = require('..')
-const { renderCurrencyBadge, LiberapayBase } = require('./liberapay-base')
-
-module.exports = class LiberapayReceives extends LiberapayBase {
+export default class LiberapayReceives extends LiberapayBase {
   static route = this.buildRoute('receives')
 
   static examples = [

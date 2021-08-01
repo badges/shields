@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const apiSchema = Joi.object({
   total: Joi.number().positive().required(),
 }).required()
 
-module.exports = class EcologiCarbonOffset extends BaseJsonService {
+export default class EcologiCarbonOffset extends BaseJsonService {
   static category = 'other'
   static route = { base: 'ecologi/carbon', pattern: ':username' }
   static examples = [

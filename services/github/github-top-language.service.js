@@ -1,9 +1,7 @@
-'use strict'
+import { BaseGithubLanguage } from './github-languages-base.js'
+import { documentation } from './github-helpers.js'
 
-const { BaseGithubLanguage } = require('./github-languages-base')
-const { documentation } = require('./github-helpers')
-
-module.exports = class GithubTopLanguage extends BaseGithubLanguage {
+export default class GithubTopLanguage extends BaseGithubLanguage {
   static category = 'analysis'
 
   static route = {

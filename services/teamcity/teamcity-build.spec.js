@@ -1,10 +1,8 @@
-'use strict'
-
-const { expect } = require('chai')
-const nock = require('nock')
-const { cleanUpNockAfterEach, defaultContext } = require('../test-helpers')
-const TeamCityBuild = require('./teamcity-build.service')
-const { user, pass, host, config } = require('./teamcity-test-helpers')
+import { expect } from 'chai'
+import nock from 'nock'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import TeamCityBuild from './teamcity-build.service.js'
+import { user, pass, host, config } from './teamcity-test-helpers.js'
 
 describe('TeamCityBuild', function () {
   cleanUpNockAfterEach()

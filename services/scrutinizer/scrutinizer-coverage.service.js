@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { colorScale } = require('../color-formatters')
-const { NotFound } = require('..')
-const ScrutinizerBase = require('./scrutinizer-base')
+import Joi from 'joi'
+import { colorScale } from '../color-formatters.js'
+import { NotFound } from '../index.js'
+import ScrutinizerBase from './scrutinizer-base.js'
 
 const schema = Joi.object({
   default_branch: Joi.string().required(),
@@ -139,8 +137,8 @@ class ScrutinizerCoveragePlainGit extends ScrutinizerCoverageBase {
   }
 }
 
-module.exports = [
+export {
   ScrutinizerCoverage,
   ScrutinizerCoverageGitLab,
   ScrutinizerCoveragePlainGit,
-]
+}

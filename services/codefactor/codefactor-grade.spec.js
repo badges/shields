@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const CodeFactorGrade = require('./codefactor-grade.service')
+import { test, given } from 'sazerac'
+import CodeFactorGrade from './codefactor-grade.service.js'
 
 describe('CodeFactorGrade', function () {
   test(CodeFactorGrade.render, () => {

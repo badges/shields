@@ -1,9 +1,8 @@
-'use strict'
 /**
  * @module
  */
 
-const { URL, format: urlFormat } = require('url')
+import { URL, format as urlFormat } from 'url'
 
 function formatSlug(owner, repo, pullRequest) {
   return `${owner}/${repo}#${pullRequest}`
@@ -98,8 +97,4 @@ function inferPullRequest(env = process.env) {
  * @property {string} slug owner/repo/#pullRequest
  */
 
-module.exports = {
-  parseGithubPullRequestUrl,
-  parseGithubRepoSlug,
-  inferPullRequest,
-}
+export { parseGithubPullRequestUrl, parseGithubRepoSlug, inferPullRequest }

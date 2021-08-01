@@ -1,6 +1,5 @@
-'use strict'
-
-const { Inaccessible, InvalidResponse } = require('../base-service/errors')
+import requestModule from 'request'
+import { Inaccessible, InvalidResponse } from '../base-service/errors.js'
 
 // Map from URL to { timestamp: last fetch time, data: data }.
 let regularUpdateCache = Object.create(null)
@@ -11,8 +10,8 @@ let regularUpdateCache = Object.create(null)
 //
 // To use this from a service:
 //
-// const { promisify } = require('util')
-// const { regularUpdate } = require('../../core/legacy/regular-update')
+// import { promisify } from 'util'
+// import { regularUpdate } from '../../core/legacy/regular-update.js'
 //
 // function getThing() {
 //   return promisify(regularUpdate)({
@@ -32,7 +31,7 @@ function regularUpdate(
     json = true,
     scraper = buffer => buffer,
     options = {},
-    request = require('request'),
+    request = requestModule,
   },
   cb
 ) {
@@ -95,7 +94,4 @@ function clearRegularUpdateCache() {
   regularUpdateCache = Object.create(null)
 }
 
-module.exports = {
-  regularUpdate,
-  clearRegularUpdateCache,
-}
+export { regularUpdate, clearRegularUpdateCache }

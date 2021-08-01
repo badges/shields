@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const cloudBuildSchema = Joi.object({
   objects: Joi.array()
@@ -22,6 +20,4 @@ async function fetchBuild(serviceInstance, { user, repo }) {
   })
 }
 
-module.exports = {
-  fetchBuild,
-}
+export { fetchBuild }

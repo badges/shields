@@ -131,7 +131,7 @@ if (allFiles.length > 100) {
         )
       }
 
-      if (diff.includes("require('@hapi/joi')")) {
+      if (diff.includes("from '@hapi/joi'")) {
         fail(
           [
             `Found import of '@hapi/joi' in \`${file}\`. <br>`,

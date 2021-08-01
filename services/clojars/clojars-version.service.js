@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { version: versionColor } = require('../color-formatters')
-const { redirector } = require('..')
-const { BaseClojarsService } = require('./clojars-base')
+import Joi from 'joi'
+import { version as versionColor } from '../color-formatters.js'
+import { redirector } from '../index.js'
+import { BaseClojarsService } from './clojars-base.js'
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
@@ -63,4 +61,4 @@ const ClojarsVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-module.exports = { ClojarsVersionService, ClojarsVersionRedirector }
+export { ClojarsVersionService, ClojarsVersionRedirector }

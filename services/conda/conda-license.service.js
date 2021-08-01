@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderLicenseBadge } = require('../licenses')
-const toArray = require('../../core/base-service/to-array')
-const BaseCondaService = require('./conda-base')
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import toArray from '../../core/base-service/to-array.js'
+import BaseCondaService from './conda-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
 }).required()
 
-module.exports = class CondaLicense extends BaseCondaService {
+export default class CondaLicense extends BaseCondaService {
   static category = 'license'
   static route = { base: 'conda', pattern: 'l/:channel/:pkg' }
 

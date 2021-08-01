@@ -1,6 +1,6 @@
-'use strict'
-
-const Joi = require('joi').extend(joi => ({
+import joiModule from 'joi'
+import { createServiceTester } from '../tester.js'
+const Joi = joiModule.extend(joi => ({
   base: joi.array(),
   coerce: (value, helpers) => ({
     value: value.split ? value.split(' | ') : value,
@@ -8,7 +8,7 @@ const Joi = require('joi').extend(joi => ({
   type: 'versionArray',
 }))
 const isDottedVersionAtLeastOne = Joi.string().regex(/\d+(\.\d+)?(\.\d+)?$/)
-const t = (module.exports = require('../tester').createServiceTester())
+export const t = await createServiceTester()
 
 t.create('Nucleus (pluginId nucleus)')
   .get('/nucleus.json')

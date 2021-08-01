@@ -1,11 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const {
-  coveragePercentage: coveragePercentageColor,
-} = require('../color-formatters')
-const { BaseSvgScrapingService } = require('..')
-const { NotFound } = require('..')
+import Joi from 'joi'
+import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -13,7 +8,7 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class CodacyCoverage extends BaseSvgScrapingService {
+export default class CodacyCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
   static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
 
@@ -21,14 +16,14 @@ module.exports = class CodacyCoverage extends BaseSvgScrapingService {
     {
       title: 'Codacy coverage',
       pattern: ':projectId',
-      namedParams: { projectId: '59d607d0e311408885e418004068ea58' },
+      namedParams: { projectId: 'e02de8d738bb4701b6345624ea2de66c' },
       staticPreview: this.render({ percentage: 90 }),
     },
     {
       title: 'Codacy branch coverage',
       pattern: ':projectId/:branch',
       namedParams: {
-        projectId: '59d607d0e311408885e418004068ea58',
+        projectId: 'e02de8d738bb4701b6345624ea2de66c',
         branch: 'master',
       },
       staticPreview: this.render({ percentage: 90 }),

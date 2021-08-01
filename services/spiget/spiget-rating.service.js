@@ -1,10 +1,8 @@
-'use strict'
+import { starRating, metric } from '../text-formatters.js'
+import { floorCount } from '../color-formatters.js'
+import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
 
-const { starRating, metric } = require('../text-formatters')
-const { floorCount } = require('../color-formatters')
-const { BaseSpigetService, documentation, keywords } = require('./spiget-base')
-
-module.exports = class SpigetRatings extends BaseSpigetService {
+export default class SpigetRatings extends BaseSpigetService {
   static category = 'rating'
 
   static route = {

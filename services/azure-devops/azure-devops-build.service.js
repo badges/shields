@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService, NotFound } = require('..')
-const { keywords, fetch } = require('./azure-devops-helpers')
+import Joi from 'joi'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
+import { keywords, fetch } from './azure-devops-helpers.js'
 
 const queryParamSchema = Joi.object({
   stage: Joi.string(),
@@ -33,7 +31,7 @@ const documentation = `
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-module.exports = class AzureDevOpsBuild extends BaseSvgScrapingService {
+export default class AzureDevOpsBuild extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {

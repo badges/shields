@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('../version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -11,7 +9,7 @@ const schema = Joi.object({
 // No way to permalink to current "stable", https://pagure.io/mdapi/issue/69
 const defaultBranch = 'rawhide'
 
-module.exports = class Fedora extends BaseJsonService {
+export default class Fedora extends BaseJsonService {
   static category = 'version'
   static route = { base: 'fedora/v', pattern: ':packageName/:branch?' }
   static examples = [

@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { errorMessagesFor } from './github-helpers.js'
 
 /*
 We're expecting a response like { "Python": 39624, "Shell": 104 }
@@ -25,4 +23,4 @@ class BaseGithubLanguage extends GithubAuthV3Service {
   }
 }
 
-module.exports = { BaseGithubLanguage }
+export { BaseGithubLanguage }

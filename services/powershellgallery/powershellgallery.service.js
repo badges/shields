@@ -1,10 +1,5 @@
-'use strict'
-
-const {
-  fetch,
-  createServiceFamily,
-} = require('../nuget/nuget-v2-service-family')
-const { BaseXmlService } = require('..')
+import { fetch, createServiceFamily } from '../nuget/nuget-v2-service-family.js'
+import { BaseXmlService } from '../index.js'
 
 const WINDOWS_TAG_NAME = 'windows'
 const MACOS_TAG_NAME = 'macos'
@@ -97,7 +92,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
   }
 }
 
-module.exports = {
+export {
   PowershellGalleryVersion,
   PowershellGalleryVersionRedirector,
   PowershellGalleryDownloads,

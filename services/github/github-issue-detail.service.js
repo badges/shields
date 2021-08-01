@@ -1,17 +1,15 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger } = require('../validators')
-const { formatDate, metric } = require('../text-formatters')
-const { age } = require('../color-formatters')
-const { InvalidResponse } = require('..')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const {
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
+import { formatDate, metric } from '../text-formatters.js'
+import { age } from '../color-formatters.js'
+import { InvalidResponse } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import {
   documentation,
   errorMessagesFor,
   stateColor,
   commentsColor,
-} = require('./github-helpers')
+} from './github-helpers.js'
 
 const commonSchemaFields = {
   number: nonNegativeInteger,
@@ -152,7 +150,7 @@ const propertyMap = {
   'last-update': ageUpdateMap,
 }
 
-module.exports = class GithubIssueDetail extends GithubAuthV3Service {
+export default class GithubIssueDetail extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github',

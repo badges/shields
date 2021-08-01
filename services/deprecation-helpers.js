@@ -1,6 +1,4 @@
-'use strict'
-
-const { Deprecated } = require('.')
+import { Deprecated } from './index.js'
 
 function enforceDeprecation(effectiveDate) {
   if (Date.now() >= effectiveDate.getTime()) {
@@ -8,6 +6,4 @@ function enforceDeprecation(effectiveDate) {
   }
 }
 
-module.exports = {
-  enforceDeprecation,
-}
+export { enforceDeprecation }

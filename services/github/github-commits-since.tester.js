@@ -1,7 +1,6 @@
-'use strict'
-
-const { withRegex, isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import { withRegex, isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const isCommitsSince = withRegex(/^(commits since){1}[\s\S]+$/)
 
@@ -30,7 +29,7 @@ t.create('Commits since by latest release')
   })
 
 t.create('Commits since by latest release (branch)')
-  .get('/microsoft/typescript/latest/master.json')
+  .get('/microsoft/typescript/latest/main.json')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,
@@ -44,7 +43,7 @@ t.create('Commits since by latest SemVer release')
   })
 
 t.create('Commits since by latest pre-release')
-  .get('/microsoft/typescript/latest/master.json?include_prereleases')
+  .get('/microsoft/typescript/latest/main.json?include_prereleases')
   .expectBadge({
     label: isCommitsSince,
     message: isMetric,

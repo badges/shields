@@ -1,13 +1,11 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const {
+import { test, given, forCases } from 'sazerac'
+import {
   parseClassifiers,
   parseDjangoVersionString,
   sortDjangoVersions,
   getLicenses,
   getPackageFormats,
-} = require('./pypi-helpers')
+} from './pypi-helpers.js'
 
 const classifiersFixture = {
   info: {

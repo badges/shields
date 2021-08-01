@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const testResultQueryParamSchema = Joi.object({
   compact_message: Joi.equal(''),
@@ -106,7 +104,7 @@ const documentation = `
 </p>
 `
 
-module.exports = {
+export {
   testResultQueryParamSchema,
   renderTestResultMessage,
   renderTestResultBadge,

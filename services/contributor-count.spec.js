@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const { renderContributorBadge } = require('./contributor-count')
+import { test, given } from 'sazerac'
+import { renderContributorBadge } from './contributor-count.js'
 
 describe('Contributor count helpers', function () {
   test(renderContributorBadge, () => {

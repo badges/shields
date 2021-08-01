@@ -1,14 +1,13 @@
-'use strict'
 /**
  * @module
  */
 
-const emojic = require('emojic')
-const trace = require('../base-service/trace')
-const frisby = require('./icedfrisby-shields')(
-  // eslint-disable-next-line import/order
-  require('icedfrisby-nock')(require('icedfrisby'))
-)
+import emojic from 'emojic'
+import icedfrisbyNockModule from 'icedfrisby-nock'
+import icedfrisbyModule from 'icedfrisby'
+import trace from '../base-service/trace.js'
+import icedfrisbyShieldsModule from './icedfrisby-shields.js'
+const frisby = icedfrisbyShieldsModule(icedfrisbyNockModule(icedfrisbyModule))
 
 /**
  * Encapsulate a suite of tests. Create new tests using create() and register
@@ -140,4 +139,4 @@ class ServiceTester {
   }
 }
 
-module.exports = ServiceTester
+export default ServiceTester

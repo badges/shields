@@ -1,10 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isMetric, isFileSize, isFormattedDate } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isMetric, isFileSize, isFormattedDate } = require('../test-validators')
-
-const t = new ServiceTester({ id: 'steam', title: 'Steam Workshop Tests' })
-module.exports = t
+export const t = new ServiceTester({
+  id: 'steam',
+  title: 'Steam Workshop Tests',
+})
 
 t.create('Collection Files')
   .get('/collection-files/180077636.json')

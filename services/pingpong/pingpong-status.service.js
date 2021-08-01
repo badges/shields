@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, InvalidParameter, InvalidResponse } = require('..')
+import Joi from 'joi'
+import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
 
 const schema = Joi.object({
   status: Joi.string().required(),
@@ -14,7 +12,7 @@ const pingpongDocumentation = `
 </p>
 `
 
-module.exports = class PingPongStatus extends BaseJsonService {
+export default class PingPongStatus extends BaseJsonService {
   static category = 'monitoring'
   static route = { base: 'pingpong/status', pattern: ':apiKey' }
 

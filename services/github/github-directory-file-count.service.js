@@ -1,14 +1,12 @@
-'use strict'
-
-const path = require('path')
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { InvalidParameter } = require('..')
-const { ConditionalGithubAuthV3Service } = require('./github-auth-service')
-const {
-  documentation: commonDocumentation,
+import path from 'path'
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { InvalidParameter } from '../index.js'
+import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import {
+  documentation as commonDocumentation,
   errorMessagesFor,
-} = require('./github-helpers')
+} from './github-helpers.js'
 
 const documentation = `${commonDocumentation}
 <p>
@@ -45,9 +43,7 @@ const queryParamSchema = Joi.object({
   extension: Joi.string(),
 })
 
-module.exports = class GithubDirectoryFileCount extends (
-  ConditionalGithubAuthV3Service
-) {
+export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Service {
   static category = 'size'
 
   static route = {

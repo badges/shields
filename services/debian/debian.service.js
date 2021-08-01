@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { latest, renderVersionBadge } = require('../version')
-const { BaseJsonService, NotFound, InvalidResponse } = require('..')
+import Joi from 'joi'
+import { latest, renderVersionBadge } from '../version.js'
+import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 
 const schema = Joi.array()
   .items(
@@ -18,7 +16,7 @@ const schema = Joi.array()
 
 const defaultDistribution = 'stable'
 
-module.exports = class Debian extends BaseJsonService {
+export default class Debian extends BaseJsonService {
   static category = 'version'
   static route = {
     base: 'debian/v',

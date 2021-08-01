@@ -1,9 +1,7 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import { BaseAmoService, keywords } from './amo-base.js'
 
-const { renderVersionBadge } = require('../version')
-const { BaseAmoService, keywords } = require('./amo-base')
-
-module.exports = class AmoVersion extends BaseAmoService {
+export default class AmoVersion extends BaseAmoService {
   static category = 'version'
   static route = { base: 'amo/v', pattern: ':addonId' }
 

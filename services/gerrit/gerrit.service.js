@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -12,7 +10,7 @@ const schema = Joi.object({
   status: Joi.equal('NEW', 'MERGED', 'ABANDONED').required(),
 }).required()
 
-module.exports = class Gerrit extends BaseJsonService {
+export default class Gerrit extends BaseJsonService {
   static category = 'issue-tracking'
   static route = { base: 'gerrit', pattern: ':changeId', queryParamSchema }
   static examples = [

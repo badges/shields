@@ -1,13 +1,11 @@
-'use strict'
-
-const { redirector } = require('..')
+import { redirector } from '../index.js'
 
 const commonAttrs = {
   dateAdded: new Date('2019-09-15'),
   category: 'build',
 }
 
-module.exports = [
+export default [
   redirector({
     ...commonAttrs,
     name: 'TeamCityBuildLegacyCodeBetterRedirect',

@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { downloadCount: downloadCountColor } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schemaInstallations = Joi.object()
   .keys({
@@ -24,7 +22,7 @@ const schemaInstallationsPerVersion = Joi.object()
   })
   .required()
 
-module.exports = class JenkinsPluginInstalls extends BaseJsonService {
+export default class JenkinsPluginInstalls extends BaseJsonService {
   static _getSchema(version) {
     if (version) {
       return schemaInstallationsPerVersion

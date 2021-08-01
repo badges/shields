@@ -1,27 +1,27 @@
-'use strict'
 /**
  * @module
  */
 
-const path = require('path')
-const url = require('url')
+import path from 'path'
+import url, { fileURLToPath } from 'url'
+import { bootstrap } from 'global-agent'
+import cloudflareMiddleware from 'cloudflare-middleware'
+import bytes from 'bytes'
+import Camp from '@shields_io/camp'
+import originalJoi from 'joi'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
+import GithubConstellation from '../../services/github/github-constellation.js'
+import { setRoutes } from '../../services/suggest.js'
+import { loadServiceClasses } from '../base-service/loader.js'
+import { makeSend } from '../base-service/legacy-result-sender.js'
+import { handleRequest } from '../base-service/legacy-request-handler.js'
+import { clearRegularUpdateCache } from '../legacy/regular-update.js'
+import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
+import { nonNegativeInteger } from '../../services/validators.js'
+import log from './log.js'
+import PrometheusMetrics from './prometheus-metrics.js'
+import InfluxMetrics from './influx-metrics.js'
 const { URL } = url
-const cloudflareMiddleware = require('cloudflare-middleware')
-const bytes = require('bytes')
-const Camp = require('@shields_io/camp')
-const originalJoi = require('joi')
-const makeBadge = require('../../badge-maker/lib/make-badge')
-const GithubConstellation = require('../../services/github/github-constellation')
-const suggest = require('../../services/suggest')
-const { loadServiceClasses } = require('../base-service/loader')
-const { makeSend } = require('../base-service/legacy-result-sender')
-const { handleRequest } = require('../base-service/legacy-request-handler')
-const { clearRegularUpdateCache } = require('../legacy/regular-update')
-const { rasterRedirectUrl } = require('../badge-urls/make-badge-url')
-const { nonNegativeInteger } = require('../../services/validators')
-const log = require('./log')
-const PrometheusMetrics = require('./prometheus-metrics')
-const InfluxMetrics = require('./influx-metrics')
 
 const Joi = originalJoi
   .extend(base => ({
@@ -135,6 +135,7 @@ const publicConfigSchema = Joi.object({
     npm: defaultService,
     sonar: defaultService,
     teamcity: defaultService,
+    weblate: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
@@ -143,7 +144,12 @@ const publicConfigSchema = Joi.object({
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
-    path.resolve(__dirname, '..', '..', 'public')
+    path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '..',
+      '..',
+      'public'
+    )
   ),
   requireCloudflare: Joi.boolean().required(),
 }).required()
@@ -177,6 +183,7 @@ const privateConfigSchema = Joi.object({
   wheelmap_token: Joi.string(),
   influx_username: Joi.string(),
   influx_password: Joi.string(),
+  weblate_api_key: Joi.string(),
   youtube_api_key: Joi.string(),
 }).required()
 const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
@@ -399,11 +406,11 @@ class Server {
    * Iterate all the service classes defined in /services,
    * load each service and register a Scoutcamp route for each service.
    */
-  registerServices() {
+  async registerServices() {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
 
-    loadServiceClasses().forEach(serviceClass =>
+    ;(await loadServiceClasses()).forEach(serviceClass =>
       serviceClass.register(
         { camp, handleRequest, githubApiProvider, metricInstance },
         {
@@ -416,6 +423,25 @@ class Server {
         }
       )
     )
+  }
+
+  bootstrapAgent() {
+    /*
+    Bootstrap global agent.
+    This allows self-hosting users to configure a proxy with
+    HTTP_PROXY, HTTPS_PROXY, NO_PROXY variables
+    */
+    if (!('GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE' in process.env)) {
+      process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE = ''
+    }
+
+    const proxyPrefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
+    const HTTP_PROXY = process.env[`${proxyPrefix}HTTP_PROXY`] || null
+    const HTTPS_PROXY = process.env[`${proxyPrefix}HTTPS_PROXY`] || null
+
+    if (HTTP_PROXY || HTTPS_PROXY) {
+      bootstrap()
+    }
   }
 
   /**
@@ -432,7 +458,9 @@ class Server {
       requireCloudflare,
     } = this.config.public
 
-    log(`Server is starting up: ${this.baseUrl}`)
+    this.bootstrapAgent()
+
+    log.log(`Server is starting up: ${this.baseUrl}`)
 
     const camp = (this.camp = Camp.create({
       documentRoot: this.config.public.documentRoot,
@@ -460,11 +488,11 @@ class Server {
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    suggest.setRoutes(allowedOrigin, githubApiProvider, camp)
+    setRoutes(allowedOrigin, githubApiProvider, camp)
 
     this.registerErrorHandlers()
     this.registerRedirects()
-    this.registerServices()
+    await this.registerServices()
 
     camp.timeout = this.config.public.requestTimeoutSeconds * 1000
     if (this.config.public.requestTimeoutSeconds > 0) {
@@ -522,4 +550,4 @@ class Server {
   }
 }
 
-module.exports = Server
+export default Server

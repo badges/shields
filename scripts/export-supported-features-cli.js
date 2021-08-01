@@ -1,9 +1,7 @@
-'use strict'
-
-const logos = require('../lib/load-logos')()
-const simpleIcons = require('../lib/load-simple-icons')()
-
-const shieldsLogos = Object.keys(logos)
+import loadLogos from '../lib/load-logos.js'
+import loadSimpleIcons from '../lib/load-simple-icons.js'
+const shieldsLogos = Object.keys(loadLogos())
+const simpleIcons = loadSimpleIcons()
 
 const simpleIconSet = new Set(Object.keys(simpleIcons))
 shieldsLogos.forEach(logo => simpleIconSet.delete(logo))

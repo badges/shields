@@ -1,13 +1,11 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderVersionBadge } = require('..//version')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { renderVersionBadge } from '..//version.js'
+import { BaseJsonService } from '../index.js'
 const schema = Joi.object({
   latest_version: Joi.string().required(),
 }).required()
 
-module.exports = class SpackVersion extends BaseJsonService {
+export default class SpackVersion extends BaseJsonService {
   static category = 'version'
 
   static route = {

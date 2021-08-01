@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const {
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import {
   transform,
   renderDependenciesBadge,
-} = require('./librariesio-dependencies-helpers')
+} from './librariesio-dependencies-helpers.js'
 
 const schema = Joi.object({
   dependencies: Joi.array()
@@ -134,4 +132,4 @@ class LibrariesIoRepoDependencies extends BaseJsonService {
   }
 }
 
-module.exports = [LibrariesIoProjectDependencies, LibrariesIoRepoDependencies]
+export default [LibrariesIoProjectDependencies, LibrariesIoRepoDependencies]

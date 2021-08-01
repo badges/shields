@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const SonarTests = require('./sonar-tests.service')[1]
+import { test, given } from 'sazerac'
+import { SonarTests } from './sonar-tests.service.js'
 
 describe('SonarTests', function () {
   test(SonarTests.render, () => {

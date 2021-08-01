@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const coalesce = require('./coalesce')
+import { test, given } from 'sazerac'
+import coalesce from './coalesce.js'
 
 // Sticking with our one-line spread implementation, and defaulting to
 // `undefined` instead of `null`, though h/t to

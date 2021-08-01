@@ -1,10 +1,8 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const {
+import { test, given, forCases } from 'sazerac'
+import {
   parseGithubPullRequestUrl,
   inferPullRequest,
-} = require('./infer-pull-request')
+} from './infer-pull-request.js'
 
 describe('Pull request inference', function () {
   test(parseGithubPullRequestUrl, () => {

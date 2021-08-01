@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { downloadCount } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
-const { nonNegativeInteger } = require('../validators')
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
 
 function getSchema({ formula }) {
   return Joi.object({
@@ -33,7 +31,7 @@ const periodMap = {
   },
 }
 
-module.exports = class HomebrewDownloads extends BaseJsonService {
+export default class HomebrewDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {

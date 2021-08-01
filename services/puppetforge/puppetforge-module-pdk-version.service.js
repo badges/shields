@@ -1,12 +1,8 @@
-'use strict'
+import { renderVersionBadge } from '../version.js'
+import { NotFound } from '../index.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-const { renderVersionBadge } = require('../version')
-const { NotFound } = require('..')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
-
-module.exports = class PuppetforgeModulePdkVersion extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesService {
   static category = 'platform-support'
 
   static route = {

@@ -1,14 +1,12 @@
-'use strict'
-
-const { colorScale } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const SonarBase = require('./sonar-base')
-const {
+import { colorScale } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import SonarBase from './sonar-base.js'
+import {
   getLabel,
   documentation,
   keywords,
   queryParamWithFormatSchema,
-} = require('./sonar-helpers')
+} from './sonar-helpers.js'
 
 const violationsColorScale = colorScale(
   [1, 2, 3, 5],
@@ -23,7 +21,7 @@ const violationCategoryColorMap = {
   info_violations: 'green',
 }
 
-module.exports = class SonarViolations extends SonarBase {
+export default class SonarViolations extends SonarBase {
   static category = 'analysis'
 
   static route = {

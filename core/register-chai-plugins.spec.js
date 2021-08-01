@@ -1,6 +1,5 @@
-'use strict'
-
-const { use } = require('chai')
-
-use(require('chai-string'))
-use(require('sinon-chai'))
+import { use } from 'chai'
+import chaiString from 'chai-string'
+import sinonChai from 'sinon-chai'
+use(chaiString)
+use(sinonChai)

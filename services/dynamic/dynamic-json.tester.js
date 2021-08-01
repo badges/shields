@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { expect } = require('chai')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { expect } from 'chai'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('No URL specified')
   .get('.json?query=$.name&label=Package Name')
@@ -28,7 +27,7 @@ t.create('Malformed url')
   )
   .expectBadge({
     label: 'Package Name',
-    message: 'invalid',
+    message: 'inaccessible',
     color: 'lightgrey',
   })
 

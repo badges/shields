@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { latest, renderVersionBadge } = require('../version')
-const { BaseJsonService, redirector } = require('..')
+import Joi from 'joi'
+import { latest, renderVersionBadge } from '../version.js'
+import { BaseJsonService, redirector } from '../index.js'
 
 const schema = Joi.object({
   versions: Joi.array().items(Joi.string()).required(),
@@ -68,4 +66,4 @@ const PubVersionRedirector = redirector({
   dateAdded: new Date('2019-12-15'),
 })
 
-module.exports = { PubVersion, PubVersionRedirector }
+export { PubVersion, PubVersionRedirector }

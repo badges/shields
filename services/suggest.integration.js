@@ -1,19 +1,17 @@
-'use strict'
-
-const { expect } = require('chai')
-const Camp = require('@shields_io/camp')
-const portfinder = require('portfinder')
-const config = require('config').util.toObject()
-const got = require('../core/got-test-client')
-const { setRoutes } = require('./suggest')
-const GithubApiProvider = require('./github/github-api-provider')
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import portfinder from 'portfinder'
+import config from 'config'
+import got from '../core/got-test-client.js'
+import { setRoutes } from './suggest.js'
+import GithubApiProvider from './github/github-api-provider.js'
 
 describe('Badge suggestions for', function () {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
   let token, apiProvider
   before(function () {
-    token = config.private.gh_token
+    token = config.util.toObject().private.gh_token
     if (!token) {
       throw Error('The integration tests require a gh_token to be set')
     }

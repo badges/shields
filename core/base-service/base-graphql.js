@@ -2,12 +2,10 @@
  * @module
  */
 
-'use strict'
-
-const { print } = require('graphql/language/printer')
-const BaseService = require('./base')
-const { InvalidResponse, ShieldsRuntimeError } = require('./errors')
-const { parseJson } = require('./json')
+import { print } from 'graphql/language/printer.js'
+import BaseService from './base.js'
+import { InvalidResponse, ShieldsRuntimeError } from './errors.js'
+import { parseJson } from './json.js'
 
 function defaultTransformErrors(errors) {
   return new InvalidResponse({ prettyMessage: errors[0].message })
@@ -93,4 +91,4 @@ class BaseGraphqlService extends BaseService {
   }
 }
 
-module.exports = BaseGraphqlService
+export default BaseGraphqlService

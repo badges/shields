@@ -1,12 +1,10 @@
-'use strict'
-
-const {
+import {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
-} = require('../../lib/logos')
-const { svg2base64 } = require('../../lib/svg-helpers')
-const coalesce = require('./coalesce')
-const toArray = require('./to-array')
+} from '../../lib/logos.js'
+import { svg2base64 } from '../../lib/svg-helpers.js'
+import coalesce from './coalesce.js'
+import toArray from './to-array.js'
 
 // Translate modern badge data to the legacy schema understood by the badge
 // maker. Allow the user to override the label, color, logo, etc. through the
@@ -34,7 +32,7 @@ const toArray = require('./to-array')
 // 3. In the case of the `social` style only, the last precedence is the
 //    service's default logo. The `logoColor` can be overridden by the query
 //    string.
-module.exports = function coalesceBadge(
+export default function coalesceBadge(
   overrides,
   serviceData,
   // These two parameters were kept separate to make tests clearer.

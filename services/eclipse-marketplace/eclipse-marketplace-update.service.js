@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { formatDate } = require('../text-formatters')
-const { age: ageColor } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const EclipseMarketplaceBase = require('./eclipse-marketplace-base')
+import Joi from 'joi'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
 const updateResponseSchema = Joi.object({
   marketplace: Joi.object({
@@ -14,7 +12,7 @@ const updateResponseSchema = Joi.object({
   }),
 }).required()
 
-module.exports = class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
+export default class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
   static category = 'activity'
   static route = this.buildRoute('eclipse-marketplace/last-update')
   static examples = [

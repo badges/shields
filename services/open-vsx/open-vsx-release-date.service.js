@@ -1,10 +1,8 @@
-'use strict'
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
+import OpenVSXBase from './open-vsx-base.js'
 
-const { age } = require('../color-formatters')
-const { formatDate } = require('../text-formatters')
-const OpenVSXBase = require('./open-vsx-base')
-
-module.exports = class OpenVSXReleaseDate extends OpenVSXBase {
+export default class OpenVSXReleaseDate extends OpenVSXBase {
   static category = 'activity'
 
   static route = {

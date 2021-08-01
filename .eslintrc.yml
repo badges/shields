@@ -136,7 +136,6 @@ rules:
   # Shields additions.
   no-var: 'error'
   prefer-const: 'error'
-  strict: 'error'
   arrow-body-style: ['error', 'as-needed']
   no-extension-in-require/main: 'error'
   object-shorthand: ['error', 'properties']

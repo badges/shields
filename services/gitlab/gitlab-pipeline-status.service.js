@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { optionalUrl } = require('../validators')
-const { BaseSvgScrapingService, NotFound, redirector } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { optionalUrl } from '../validators.js'
+import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -99,7 +97,4 @@ const GitlabPipelineStatusRedirector = redirector({
   dateAdded: new Date('2020-07-12'),
 })
 
-module.exports = {
-  GitlabPipelineStatus,
-  GitlabPipelineStatusRedirector,
-}
+export { GitlabPipelineStatus, GitlabPipelineStatusRedirector }

@@ -1,14 +1,11 @@
-'use strict'
+import Joi from 'joi'
+import { ServiceTester } from '../tester.js'
 
-const Joi = require('joi')
-const { ServiceTester } = require('../tester')
-
-const t = new ServiceTester({
+export const t = new ServiceTester({
   id: 'jenkins-plugin',
   title: 'JenkinsPluginVersion',
   pathPrefix: '/jenkins',
 })
-module.exports = t
 
 t.create('latest version')
   .get('/plugin/v/blueocean.json')

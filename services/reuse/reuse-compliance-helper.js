@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const COLOR_MAP = {
   checking: 'brightgreen',
@@ -13,7 +11,4 @@ const isReuseCompliance = Joi.string()
   .valid('compliant', 'non-compliant', 'checking', 'unregistered')
   .required()
 
-module.exports = {
-  isReuseCompliance,
-  COLOR_MAP,
-}
+export { isReuseCompliance, COLOR_MAP }

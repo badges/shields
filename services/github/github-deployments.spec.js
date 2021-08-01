@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const GithubDeployments = require('./github-deployments.service')
+import { test, given } from 'sazerac'
+import GithubDeployments from './github-deployments.service.js'
 
 describe('GithubDeployments', function () {
   test(GithubDeployments.render, () => {

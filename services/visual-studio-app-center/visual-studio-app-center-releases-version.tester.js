@@ -1,6 +1,5 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 // Note:
 // Unfortunately an Invalid user, invalid project, valid API token test is not possible due to the way Microsoft cache their responses.

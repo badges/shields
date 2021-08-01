@@ -1,4 +1,2 @@
 /* eslint-disable */
-'use strict'
-
-class BadService {}
+class BadService {} // lgtm [js/unused-local-variable]

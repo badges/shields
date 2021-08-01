@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const emojic = require('emojic')
-const { optionalUrl } = require('../validators')
-const {
+import Joi from 'joi'
+import emojic from 'emojic'
+import { optionalUrl } from '../validators.js'
+import {
   queryParamSchema,
   exampleQueryParams,
   renderWebsiteStatus,
-} = require('../website-status')
-const { BaseService } = require('..')
-const trace = require('../../core/base-service/trace')
+} from '../website-status.js'
+import { BaseService } from '../index.js'
+import trace from '../../core/base-service/trace.js'
 
 const documentation = `
 <p>
@@ -35,7 +33,7 @@ const urlQueryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-module.exports = class Website extends BaseService {
+export default class Website extends BaseService {
   static category = 'monitoring'
 
   static route = {

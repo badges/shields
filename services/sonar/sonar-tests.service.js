@@ -1,18 +1,16 @@
-'use strict'
-
-const {
+import {
   testResultQueryParamSchema,
   renderTestResultBadge,
-  documentation: testResultsDocumentation,
-} = require('../test-results')
-const { metric: metricCount } = require('../text-formatters')
-const SonarBase = require('./sonar-base')
-const {
+  documentation as testResultsDocumentation,
+} from '../test-results.js'
+import { metric as metricCount } from '../text-formatters.js'
+import SonarBase from './sonar-base.js'
+import {
   documentation,
   keywords,
   queryParamSchema,
   getLabel,
-} = require('./sonar-helpers')
+} from './sonar-helpers.js'
 
 class SonarTestsSummary extends SonarBase {
   static category = 'build'
@@ -241,4 +239,4 @@ class SonarTests extends SonarBase {
   }
 }
 
-module.exports = [SonarTestsSummary, SonarTests]
+export { SonarTestsSummary, SonarTests }

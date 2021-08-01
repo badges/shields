@@ -54,19 +54,31 @@
 //    Relying on npm scripts is safer. Using "pre" makes it impossible to run
 //    the second step without the first.
 
-'use strict'
+import minimist from 'minimist'
+import envFlag from 'node-env-flag'
+import readAllStdinSync from 'read-all-stdin-sync'
+import { createTestServer } from '../server/in-process-server-test-helpers.js'
+import Runner from './runner.js'
 
-const minimist = require('minimist')
-const envFlag = require('node-env-flag')
-const readAllStdinSync = require('read-all-stdin-sync')
-const { createTestServer } = require('../server/in-process-server-test-helpers')
-const Runner = require('./runner')
-
-require('../unhandled-rejection.spec')
+import('../unhandled-rejection.spec.js')
 
 const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0
 retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
+
+const args = minimist(process.argv.slice(3))
+const stdinOption = args.stdin
+const onlyOption = args.only
+let onlyServices
+if (stdinOption && onlyOption) {
+  console.error('Do not use --only with --stdin')
+} else if (stdinOption) {
+  const allStdin = readAllStdinSync().trim()
+  onlyServices = allStdin ? allStdin.split('\n') : []
+} else if (onlyOption) {
+  onlyServices = onlyOption.split(',')
+}
+
 let baseUrl, server
 if (process.env.TESTED_SERVER_URL) {
   baseUrl = process.env.TESTED_SERVER_URL
@@ -81,7 +93,7 @@ if (process.env.TESTED_SERVER_URL) {
         },
       },
     })
-    server.start()
+    await server.start()
   })
   after('Shut down the server', async function () {
     if (server) {
@@ -92,28 +104,13 @@ if (process.env.TESTED_SERVER_URL) {
 
 const skipIntercepted = envFlag(process.env.SKIP_INTERCEPTED, false)
 const runner = new Runner({ baseUrl, skipIntercepted, retry })
-runner.prepare()
+await runner.prepare()
 
 // The server's request cache causes side effects between tests.
 if (!process.env.TESTED_SERVER_URL) {
   runner.beforeEach = () => {
     server.reset()
   }
-}
-
-const args = minimist(process.argv.slice(3))
-const stdinOption = args.stdin
-const onlyOption = args.only
-
-let onlyServices
-
-if (stdinOption && onlyOption) {
-  console.error('Do not use --only with --stdin')
-} else if (stdinOption) {
-  const allStdin = readAllStdinSync().trim()
-  onlyServices = allStdin ? allStdin.split('\n') : []
-} else if (onlyOption) {
-  onlyServices = onlyOption.split(',')
 }
 
 if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {

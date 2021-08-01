@@ -1,8 +1,6 @@
-'use strict'
+import BaseCocoaPodsService from './cocoapods-base.js'
 
-const BaseCocoaPodsService = require('./cocoapods-base')
-
-module.exports = class CocoapodsLicense extends BaseCocoaPodsService {
+export default class CocoapodsLicense extends BaseCocoaPodsService {
   static category = 'license'
   static route = { base: 'cocoapods/l', pattern: ':spec' }
 

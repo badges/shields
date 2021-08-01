@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   subject: Joi.string().required(),
@@ -15,7 +13,7 @@ const queryParamSchema = Joi.object({
   script: Joi.string(),
 }).required()
 
-module.exports = class Cirrus extends BaseJsonService {
+export default class Cirrus extends BaseJsonService {
   static category = 'build'
   static route = {
     base: 'cirrus',

@@ -1,8 +1,7 @@
-'use strict'
-
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
-const { dockerBlue } = require('./docker-helpers')
+import { isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+import { dockerBlue } from './docker-helpers.js'
+export const t = await createServiceTester()
 
 t.create('docker stars (valid, library)')
   .get('/_/ubuntu.json')

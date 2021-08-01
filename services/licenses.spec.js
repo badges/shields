@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const { licenseToColor, renderLicenseBadge } = require('./licenses')
+import { test, given, forCases } from 'sazerac'
+import { licenseToColor, renderLicenseBadge } from './licenses.js'
 
 describe('license helpers', function () {
   test(licenseToColor, () => {
@@ -41,6 +39,10 @@ describe('license helpers', function () {
     given({ licenses: ['MPL-2.0', 'MIT'] }).expect({
       message: 'MPL-2.0, MIT',
       color: 'green',
+    })
+    given({ license: 'MIT', color: 'pink' }).expect({
+      message: 'MIT',
+      color: 'pink',
     })
   })
 })

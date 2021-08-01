@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
 
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'DiscourseRedirect',
   title: 'DiscourseRedirect',
   pathPrefix: '/discourse',
-}))
+})
 
 t.create('discourse status')
   .get('/https/meta.discourse.org/status.svg')

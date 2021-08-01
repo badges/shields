@@ -1,6 +1,4 @@
-'use strict'
-
-const toArray = require('../core/base-service/to-array')
+import toArray from '../core/base-service/to-array.js'
 
 /*
  * Factory class for building a BaseService `route` object. This class is useful
@@ -10,7 +8,7 @@ const toArray = require('../core/base-service/to-array')
  * Patterns based on path-to-regex may obviate the need for this, though they
  * haven't done so yet.
  */
-module.exports = class RouteBuilder {
+export default class RouteBuilder {
   constructor({ base = '' } = {}) {
     this.base = base
 

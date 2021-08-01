@@ -1,8 +1,6 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { validateExample, transformExample } = require('./examples')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { validateExample, transformExample } from './examples.js'
 
 describe('validateExample function', function () {
   it('passes valid examples', function () {

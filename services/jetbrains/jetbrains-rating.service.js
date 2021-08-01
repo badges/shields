@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { starRating } = require('../text-formatters')
-const { colorScale } = require('../color-formatters')
-const JetbrainsBase = require('./jetbrains-base')
+import Joi from 'joi'
+import { starRating } from '../text-formatters.js'
+import { colorScale } from '../color-formatters.js'
+import JetbrainsBase from './jetbrains-base.js'
 
 const pluginRatingColor = colorScale([2, 3, 4])
 
@@ -27,7 +25,7 @@ const jetbrainsSchema = Joi.object({
   meanRating: Joi.number().min(0).required(),
 }).required()
 
-module.exports = class JetbrainsRating extends JetbrainsBase {
+export default class JetbrainsRating extends JetbrainsBase {
   static category = 'rating'
 
   static route = {

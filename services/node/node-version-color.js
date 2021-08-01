@@ -1,9 +1,7 @@
-'use strict'
-
-const { promisify } = require('util')
-const moment = require('moment')
-const semver = require('semver')
-const { regularUpdate } = require('../../core/legacy/regular-update')
+import { promisify } from 'util'
+import moment from 'moment'
+import semver from 'semver'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 const dateFormat = 'YYYY-MM-DD'
 
@@ -84,7 +82,4 @@ async function versionColorForRangeCurrent(range) {
   }
 }
 
-module.exports = {
-  versionColorForRangeCurrent,
-  versionColorForRangeLts,
-}
+export { versionColorForRangeCurrent, versionColorForRangeLts }

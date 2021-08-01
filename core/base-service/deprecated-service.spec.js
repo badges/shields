@@ -1,7 +1,5 @@
-'use strict'
-
-const { expect } = require('chai')
-const deprecatedService = require('./deprecated-service')
+import { expect } from 'chai'
+import deprecatedService from './deprecated-service.js'
 
 describe('DeprecatedService', function () {
   const route = {

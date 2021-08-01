@@ -1,11 +1,9 @@
-'use strict'
-
-const Joi = require('joi')
-const {
+import Joi from 'joi'
+import {
   testResultQueryParamSchema,
   renderTestResultBadge,
-} = require('../test-results')
-const AzureDevOpsBase = require('./azure-devops-base')
+} from '../test-results.js'
+import AzureDevOpsBase from './azure-devops-base.js'
 
 const commonAttrs = {
   keywords: ['vso', 'vsts', 'azure-devops'],
@@ -61,7 +59,7 @@ const buildTestResultSummarySchema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class AzureDevOpsTests extends AzureDevOpsBase {
+export default class AzureDevOpsTests extends AzureDevOpsBase {
   static category = 'build'
 
   static route = {

@@ -1,15 +1,13 @@
-'use strict'
-
-const { expect } = require('chai')
-const Camp = require('@shields_io/camp')
-const FormData = require('form-data')
-const sinon = require('sinon')
-const portfinder = require('portfinder')
-const queryString = require('query-string')
-const nock = require('nock')
-const got = require('../../../core/got-test-client')
-const GithubConstellation = require('../github-constellation')
-const acceptor = require('./acceptor')
+import { expect } from 'chai'
+import Camp from '@shields_io/camp'
+import FormData from 'form-data'
+import sinon from 'sinon'
+import portfinder from 'portfinder'
+import queryString from 'query-string'
+import nock from 'nock'
+import got from '../../../core/got-test-client.js'
+import GithubConstellation from '../github-constellation.js'
+import { setRoutes } from './acceptor.js'
 
 const fakeClientId = 'githubdabomb'
 
@@ -39,7 +37,7 @@ describe('Github token acceptor', function () {
   let onTokenAccepted
   beforeEach(function () {
     onTokenAccepted = sinon.stub()
-    acceptor.setRoutes({
+    setRoutes({
       server: camp,
       authHelper: oauthHelper,
       onTokenAccepted,

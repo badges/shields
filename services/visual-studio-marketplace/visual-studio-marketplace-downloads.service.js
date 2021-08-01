@@ -1,8 +1,6 @@
-'use strict'
-
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const VisualStudioMarketplaceBase = require('./visual-studio-marketplace-base')
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const documentation = `
 <p>
@@ -13,9 +11,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class VisualStudioMarketplaceDownloads extends (
-  VisualStudioMarketplaceBase
-) {
+export default class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
   static category = 'downloads'
 
   static route = {

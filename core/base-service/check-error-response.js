@@ -1,12 +1,10 @@
-'use strict'
-
-const { NotFound, InvalidResponse, Inaccessible } = require('./errors')
+import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
 const defaultErrorMessages = {
   404: 'not found',
 }
 
-module.exports = function checkErrorResponse(errorMessages = {}) {
+export default function checkErrorResponse(errorMessages = {}) {
   return async function ({ buffer, res }) {
     let error
     errorMessages = { ...defaultErrorMessages, ...errorMessages }

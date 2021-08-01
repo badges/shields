@@ -1,12 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { coveragePercentage } = require('../color-formatters')
-const {
-  ConditionalGithubAuthV3Service,
-} = require('../github/github-auth-service')
-const { fetchJsonFromRepo } = require('../github/github-common-fetch')
-const { InvalidParameter, InvalidResponse, NotFound } = require('..')
+import Joi from 'joi'
+import { coveragePercentage } from '../color-formatters.js'
+import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
+import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
+import { InvalidParameter, InvalidResponse, NotFound } from '../index.js'
 
 const nycrcSchema = Joi.object({
   branches: Joi.number().min(0).max(100),
@@ -35,7 +31,7 @@ const documentation = `<p>
 
 const validThresholds = ['branches', 'lines', 'functions']
 
-module.exports = class Nycrc extends ConditionalGithubAuthV3Service {
+export default class Nycrc extends ConditionalGithubAuthV3Service {
   static category = 'coverage'
 
   static route = {

@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const GitHubHacktoberfest = require('./github-hacktoberfest.service')
+import { test, given } from 'sazerac'
+import GitHubHacktoberfest from './github-hacktoberfest.service.js'
 
 describe('GitHubHacktoberfest', function () {
   test(GitHubHacktoberfest.render, () => {

@@ -1,9 +1,7 @@
-'use strict'
+import decamelize from 'decamelize'
+import prometheus from 'prom-client'
 
-const decamelize = require('decamelize')
-const prometheus = require('prom-client')
-
-module.exports = class PrometheusMetrics {
+export default class PrometheusMetrics {
   constructor({ register } = {}) {
     this.register = register || new prometheus.Registry()
     this.counters = {

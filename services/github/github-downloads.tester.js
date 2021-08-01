@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isMetric } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isMetric } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 const mockLatestRelease = release => nock =>
   nock('https://api.github.com')

@@ -1,59 +1,67 @@
-'use strict'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
+import { loadServiceClasses, InvalidService } from './loader.js'
+chai.use(chaiAsPromised)
 
-const { expect } = require('chai')
-const { loadServiceClasses, InvalidService } = require('./loader')
+const { expect } = chai
+const fixturesDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'loader-test-fixtures'
+)
 
 describe('loadServiceClasses function', function () {
-  it('throws if module exports empty', function () {
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/empty-undefined.fixture.js'])
-    ).to.throw(InvalidService)
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/empty-array.fixture.js'])
-    ).to.throw()
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/empty-object.fixture.js'])
-    ).to.throw(InvalidService)
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/empty-no-export.fixture.js'])
-    ).to.throw(InvalidService)
-    expect(() =>
+  it('throws if module exports empty', async function () {
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'empty-undefined.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'empty-array.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'empty-object.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'empty-no-export.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
       loadServiceClasses([
-        './loader-test-fixtures/valid-array.fixture.js',
-        './loader-test-fixtures/valid-class.fixture.js',
-        './loader-test-fixtures/empty-array.fixture.js',
+        path.join(fixturesDir, 'valid-array.fixture.js'),
+        path.join(fixturesDir, 'valid-class.fixture.js'),
+        path.join(fixturesDir, 'empty-array.fixture.js'),
       ])
-    ).to.throw(InvalidService)
+    ).to.be.rejectedWith(InvalidService)
   })
 
-  it('throws if module exports invalid', function () {
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/invalid-no-base.fixture.js'])
-    ).to.throw(InvalidService)
-    expect(() =>
+  it('throws if module exports invalid', async function () {
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'invalid-no-base.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
       loadServiceClasses([
-        './loader-test-fixtures/invalid-wrong-base.fixture.js',
+        path.join(fixturesDir, 'invalid-wrong-base.fixture.js'),
       ])
-    ).to.throw(InvalidService)
-    expect(() =>
-      loadServiceClasses(['./loader-test-fixtures/invalid-mixed.fixture.js'])
-    ).to.throw(InvalidService)
-    expect(() =>
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
+      loadServiceClasses([path.join(fixturesDir, 'invalid-mixed.fixture.js')])
+    ).to.be.rejectedWith(InvalidService)
+    await expect(
       loadServiceClasses([
-        './loader-test-fixtures/valid-array.fixture.js',
-        './loader-test-fixtures/valid-class.fixture.js',
-        './loader-test-fixtures/invalid-no-base.fixture.js',
+        path.join(fixturesDir, 'valid-array.fixture.js'),
+        path.join(fixturesDir, 'valid-class.fixture.js'),
+        path.join(fixturesDir, 'invalid-no-base.fixture.js'),
       ])
-    ).to.throw(InvalidService)
+    ).to.be.rejectedWith(InvalidService)
   })
 
-  it('registers services if module exports valid service classes', function () {
-    expect(
+  it('registers services if module exports valid service classes', async function () {
+    await expect(
       loadServiceClasses([
-        './loader-test-fixtures/valid-array.fixture.js',
-        './loader-test-fixtures/valid-object.fixture.js',
-        './loader-test-fixtures/valid-class.fixture.js',
+        path.join(fixturesDir, 'valid-array.fixture.js'),
+        path.join(fixturesDir, 'valid-object.fixture.js'),
+        path.join(fixturesDir, 'valid-class.fixture.js'),
       ])
-    ).to.have.length(5)
+    ).to.eventually.have.length(5)
   })
 })

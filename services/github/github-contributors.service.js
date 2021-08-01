@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const parseLinkHeader = require('parse-link-header')
-const { renderContributorBadge } = require('../contributor-count')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import parseLinkHeader from 'parse-link-header'
+import { renderContributorBadge } from '../contributor-count.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
 
-module.exports = class GithubContributors extends GithubAuthV3Service {
+export default class GithubContributors extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github',

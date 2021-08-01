@@ -1,12 +1,11 @@
-'use strict'
-const { expect } = require('chai')
-const { test, given, forCases } = require('sazerac')
-const {
+import { expect } from 'chai'
+import { test, given, forCases } from 'sazerac'
+import {
   presetRegex,
   getMessage,
   getColor,
   getSchema,
-} = require('./w3c-validation-helper')
+} from './w3c-validation-helper.js'
 
 describe('w3c-validation-helper', function () {
   describe('presetRegex', function () {

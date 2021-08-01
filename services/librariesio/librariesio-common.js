@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { nonNegativeInteger, anyInteger } = require('../validators')
+import Joi from 'joi'
+import { nonNegativeInteger, anyInteger } from '../validators.js'
 
 // API doc: https://libraries.io/api#project
 const projectSchema = Joi.object({
@@ -21,6 +19,4 @@ async function fetchProject(serviceInstance, { platform, scope, packageName }) {
   })
 }
 
-module.exports = {
-  fetchProject,
-}
+export { fetchProject }

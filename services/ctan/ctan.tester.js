@@ -1,12 +1,10 @@
-'use strict'
+import { ServiceTester } from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 
-const { ServiceTester } = require('../tester')
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'ctan',
   title: 'Comprehensive TEX Archive Network',
-}))
+})
 
 t.create('license').get('/l/novel.json').expectBadge({
   label: 'license',

@@ -1,11 +1,10 @@
-'use strict'
-
-const {
+import {
   isMetric,
   isMetricOverMetric,
   isIntegerPercentage,
-} = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+} from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Milestone Open Issues')
   .get('/issues-open/MacroPower/milestone-test/1.json')

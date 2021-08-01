@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { semver: isSemver } = require('./validators')
+import Joi from 'joi'
+import { semver as isSemver } from './validators.js'
 
 /*
   Note:
@@ -64,16 +62,24 @@ const isStarRating = withRegex(
 // Required to be > 0, because accepting zero masks many problems.
 const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
-const isMetricOpenIssues = withRegex(
-  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) open$/
+/**
+ * @param {RegExp} nestedRegexp Pattern that must appear after the metric.
+ * @returns {Function} A function that returns a RegExp that matches a metric followed by another pattern.
+ */
+const isMetricWithPattern = nestedRegexp => {
+  const pattern = `^([1-9][0-9]*[kMGTPEZY]?|[1-9]\\.[1-9][kMGTPEZY])${nestedRegexp.source}$`
+  const regexp = new RegExp(pattern)
+  return withRegex(regexp)
+}
+
+const isMetricOpenIssues = isMetricWithPattern(/ open/)
+
+const isMetricOverMetric = isMetricWithPattern(
+  /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/
 )
 
-const isMetricOverMetric = withRegex(
-  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/
-)
-
-const isMetricOverTimePeriod = withRegex(
-  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])\/(year|month|four weeks|quarter|week|day)$/
+const isMetricOverTimePeriod = isMetricWithPattern(
+  /\/(year|month|four weeks|quarter|week|day)/
 )
 
 const isZeroOverTimePeriod = withRegex(
@@ -140,7 +146,7 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
-module.exports = {
+export {
   isSemver,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
@@ -151,6 +157,7 @@ module.exports = {
   isPhpVersionReduction,
   isStarRating,
   isMetric,
+  isMetricWithPattern,
   isMetricOpenIssues,
   isMetricOverMetric,
   isMetricOverTimePeriod,

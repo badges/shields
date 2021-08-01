@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   lines: nonNegativeInteger,
@@ -26,7 +24,7 @@ const documentation = `
 </p>
 `
 
-module.exports = class Tokei extends BaseJsonService {
+export default class Tokei extends BaseJsonService {
   static category = 'size'
 
   static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }

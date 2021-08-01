@@ -1,7 +1,6 @@
-'use strict'
-
-const t = (module.exports = require('../tester').createServiceTester())
-const { isFileSize } = require('../test-validators')
+import { createServiceTester } from '../tester.js'
+import { isFileSize } from '../test-validators.js'
+export const t = await createServiceTester()
 
 t.create('8368844 bytes to 8.37 megabytes')
   .get('/nock/nock/nock.json')

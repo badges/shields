@@ -1,14 +1,12 @@
-'use strict'
-
-const Joi = require('joi')
-const { renderLicenseBadge } = require('../licenses')
-const { optionalUrl } = require('../validators')
-const { NotFound } = require('..')
-const {
+import Joi from 'joi'
+import { renderLicenseBadge } from '../licenses.js'
+import { optionalUrl } from '../validators.js'
+import { NotFound } from '../index.js'
+import {
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
-} = require('./packagist-base')
+} from './packagist-base.js'
 
 const packageSchema = Joi.object()
   .pattern(
@@ -28,7 +26,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-module.exports = class PackagistLicense extends BasePackagistService {
+export default class PackagistLicense extends BasePackagistService {
   static category = 'license'
 
   static route = {

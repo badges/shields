@@ -1,5 +1,3 @@
-'use strict'
-
 const html5Expression =
   '^HTML\\s?,\\s?SVG\\s?1\\.1\\s?,\\s?MathML\\s?3\\.0(\\s?,\\s?((ITS\\s?2\\.0)|(RDFa\\s?Lite\\s?1\\.1)))?$'
 const html4Expression =
@@ -147,10 +145,4 @@ const documentation = `
   </p>
 `
 
-module.exports = {
-  documentation,
-  presetRegex,
-  getColor,
-  getMessage,
-  getSchema,
-}
+export { documentation, presetRegex, getColor, getMessage, getSchema }

@@ -1,11 +1,9 @@
-'use strict'
-
-const { BaseService } = require('..')
+import { BaseService } from '../index.js'
 
 const serverStartTime = new Date(new Date().toGMTString())
 let bitFlip = false
 
-module.exports = class Debug extends BaseService {
+export default class Debug extends BaseService {
   static category = 'debug'
   static route = { base: 'debug', pattern: ':variant(time|starttime|flip)' }
 

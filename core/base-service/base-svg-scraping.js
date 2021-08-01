@@ -2,13 +2,11 @@
  * @module
  */
 
-'use strict'
-
 // See available emoji at http://emoji.muan.co/
-const emojic = require('emojic')
-const BaseService = require('./base')
-const trace = require('./trace')
-const { InvalidResponse } = require('./errors')
+import emojic from 'emojic'
+import BaseService from './base.js'
+import trace from './trace.js'
+import { InvalidResponse } from './errors.js'
 
 const defaultValueMatcher = />([^<>]+)<\/text><\/g>/
 const leadingWhitespace = /(?:\r\n\s*|\r\s*|\n\s*)/g
@@ -90,4 +88,4 @@ class BaseSvgScrapingService extends BaseService {
   }
 }
 
-module.exports = BaseSvgScrapingService
+export default BaseSvgScrapingService

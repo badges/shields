@@ -1,5 +1,3 @@
-'use strict'
-
 function transform({ dependencies }) {
   return {
     deprecatedCount: dependencies.filter(dep => dep.deprecated).length,
@@ -28,4 +26,4 @@ function renderDependenciesBadge({ deprecatedCount, outdatedCount }) {
   }
 }
 
-module.exports = { transform, renderDependenciesBadge }
+export { transform, renderDependenciesBadge }

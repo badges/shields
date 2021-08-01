@@ -1,6 +1,4 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 const greenStatuses = [
   'fixed',
@@ -15,6 +13,7 @@ const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
 
 const redStatuses = [
   'error',
+  'errored',
   'failed',
   'failing',
   'failure',
@@ -74,4 +73,4 @@ function renderBuildStatusBadge({ label, status }) {
   }
 }
 
-module.exports = { isBuildStatus, renderBuildStatusBadge }
+export { isBuildStatus, renderBuildStatusBadge }

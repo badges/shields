@@ -1,11 +1,9 @@
-'use strict'
-
-const { metric } = require('../text-formatters')
-const { BaseJsonService } = require('..')
-const { fetchProject } = require('./librariesio-common')
+import { metric } from '../text-formatters.js'
+import { BaseJsonService } from '../index.js'
+import { fetchProject } from './librariesio-common.js'
 
 // https://libraries.io/api#project-dependent-repositories
-module.exports = class LibrariesIoDependentRepos extends BaseJsonService {
+export default class LibrariesIoDependentRepos extends BaseJsonService {
   static category = 'other'
 
   static route = {

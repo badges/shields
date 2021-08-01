@@ -1,12 +1,10 @@
-'use strict'
-
-const Joi = require('joi')
-const {
+import Joi from 'joi'
+import {
   minorVersion,
   versionReduction,
   getPhpReleases,
-} = require('../php-version')
-const { BaseJsonService } = require('..')
+} from '../php-version.js'
+import { BaseJsonService } from '../index.js'
 
 const optionalNumberOrString = Joi.alternatives(Joi.string(), Joi.number())
 const schema = Joi.object({
@@ -23,7 +21,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-module.exports = class TravisPhpVersion extends BaseJsonService {
+export default class TravisPhpVersion extends BaseJsonService {
   static category = 'platform-support'
 
   static route = {

@@ -1,8 +1,6 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const sinon = require('sinon')
-const {
+import { test, given } from 'sazerac'
+import sinon from 'sinon'
+import {
   starRating,
   currencyFromCode,
   ordinalNumber,
@@ -12,7 +10,7 @@ const {
   maybePluralize,
   formatDate,
   formatRelativeDate,
-} = require('./text-formatters')
+} from './text-formatters.js'
 
 describe('Text formatters', function () {
   test(starRating, () => {

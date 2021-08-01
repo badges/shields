@@ -1,8 +1,6 @@
-'use strict'
+import { BaseJsonService } from '../index.js'
 
-const { BaseJsonService } = require('..')
-
-module.exports = class TeamCityBase extends BaseJsonService {
+export default class TeamCityBase extends BaseJsonService {
   static auth = {
     userKey: 'teamcity_user',
     passKey: 'teamcity_pass',

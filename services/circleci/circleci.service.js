@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService, redirector } = require('..')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService, redirector } from '../index.js'
 
 const circleSchema = Joi.object({ message: isBuildStatus }).required()
 const queryParamSchema = Joi.object({ token: Joi.string() }).required()
@@ -98,4 +96,4 @@ const legacyRoutes = [
   }),
 ]
 
-module.exports = [...legacyRoutes, CircleCi]
+export default { ...legacyRoutes, CircleCi }

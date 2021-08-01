@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { downloadCount } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const ansibleRoleSchema = Joi.object({
   download_count: nonNegativeInteger,
@@ -80,7 +78,4 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   }
 }
 
-module.exports = {
-  AnsibleGalaxyRoleDownloads,
-  AnsibleGalaxyRoleName,
-}
+export { AnsibleGalaxyRoleDownloads, AnsibleGalaxyRoleName }

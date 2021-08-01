@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const Luarocks = require('./luarocks.service')
+import { test, given } from 'sazerac'
+import Luarocks from './luarocks.service.js'
 
 test(Luarocks.render, () => {
   given({ version: 'dev-1' }).expect({ message: 'dev-1', color: 'yellow' })

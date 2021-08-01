@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { optionalUrl } = require('../validators')
-const { BaseService, NotFound } = require('..')
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import { BaseService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
@@ -20,7 +18,7 @@ const documentation = `
 <p>
 `
 
-module.exports = class SecurityHeaders extends BaseService {
+export default class SecurityHeaders extends BaseService {
   static category = 'monitoring'
 
   static route = {

@@ -1,8 +1,6 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService } = require('..')
-const renderQuestionsBadge = require('./stackexchange-helpers')
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import renderQuestionsBadge from './stackexchange-helpers.js'
 
 const tagSchema = Joi.object({
   items: Joi.array()
@@ -15,7 +13,7 @@ const tagSchema = Joi.object({
     .required(),
 }).required()
 
-module.exports = class StackExchangeQuestions extends BaseJsonService {
+export default class StackExchangeQuestions extends BaseJsonService {
   static category = 'chat'
 
   static route = {

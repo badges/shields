@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { expect } = require('chai')
-const sinon = require('sinon')
-const BaseYamlService = require('./base-yaml')
+import Joi from 'joi'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import BaseYamlService from './base-yaml.js'
 
 const dummySchema = Joi.object({
   requiredString: Joi.string().required(),

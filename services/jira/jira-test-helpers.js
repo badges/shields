@@ -1,5 +1,3 @@
-'use strict'
-
 const sprintId = 8
 const sprintQueryString = {
   jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
@@ -21,11 +19,4 @@ const config = {
   private: { jira_user: user, jira_pass: pass },
 }
 
-module.exports = {
-  sprintId,
-  sprintQueryString,
-  user,
-  pass,
-  host,
-  config,
-}
+export { sprintId, sprintQueryString, user, pass, host, config }

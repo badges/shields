@@ -1,10 +1,8 @@
-'use strict'
-
-const Joi = require('joi')
-const { metric } = require('../text-formatters')
-const { downloadCount } = require('../color-formatters')
-const { nonNegativeInteger } = require('../validators')
-const { BaseJsonService } = require('..')
+import Joi from 'joi'
+import { metric } from '../text-formatters.js'
+import { downloadCount } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService } from '../index.js'
 
 const keywords = ['sublime', 'sublimetext', 'packagecontrol']
 
@@ -116,4 +114,4 @@ function DownloadsForInterval(interval) {
   }
 }
 
-module.exports = ['day', 'week', 'month', 'total'].map(DownloadsForInterval)
+export default ['day', 'week', 'month', 'total'].map(DownloadsForInterval)

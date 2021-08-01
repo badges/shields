@@ -1,13 +1,17 @@
-'use strict'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import glob from 'glob'
+import countBy from 'lodash.countby'
+import categories from '../../services/categories.js'
+import BaseService from './base.js'
+import { assertValidServiceDefinitionExport } from './service-definitions.js'
 
-const path = require('path')
-const glob = require('glob')
-const countBy = require('lodash.countby')
-const categories = require('../../services/categories')
-const BaseService = require('./base')
-const { assertValidServiceDefinitionExport } = require('./service-definitions')
-
-const serviceDir = path.join(__dirname, '..', '..', 'services')
+const serviceDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..',
+  'services'
+)
 
 class InvalidService extends Error {
   constructor(message) {
@@ -16,54 +20,38 @@ class InvalidService extends Error {
   }
 }
 
-function loadServiceClasses(servicePaths) {
+async function loadServiceClasses(servicePaths) {
   if (!servicePaths) {
     servicePaths = glob.sync(path.join(serviceDir, '**', '*.service.js'))
   }
 
-  let serviceClasses = []
-  servicePaths.forEach(servicePath => {
-    const module = require(servicePath)
+  const serviceClasses = []
+  for await (const servicePath of servicePaths) {
+    const currentServiceClasses = Object.values(
+      await import(`file://${servicePath}`)
+    ).flatMap(element =>
+      typeof element === 'object' ? Object.values(element) : element
+    )
 
-    const theseServiceClasses = []
-    if (
-      !module ||
-      (module.constructor === Array && module.length === 0) ||
-      (module.constructor === Object && Object.keys(module).length === 0)
-    ) {
+    if (currentServiceClasses.length === 0) {
       throw new InvalidService(
         `Expected ${servicePath} to export a service or a collection of services`
       )
-    } else if (module.prototype instanceof BaseService) {
-      theseServiceClasses.push(module)
-    } else if (module.constructor === Array || module.constructor === Object) {
-      for (const key in module) {
-        const serviceClass = module[key]
-        if (serviceClass.prototype instanceof BaseService) {
-          theseServiceClasses.push(serviceClass)
-        } else {
-          throw new InvalidService(
-            `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`
-          )
-        }
-      }
-    } else {
-      throw new InvalidService(
-        `Expected ${servicePath} to export a service or a collection of services; got ${module}`
-      )
     }
-
-    // Decorate each service class with the directory that contains it.
-    theseServiceClasses.forEach(serviceClass => {
-      serviceClass.serviceFamily = servicePath
-        .replace(serviceDir, '')
-        .split(path.sep)[1]
+    currentServiceClasses.forEach(serviceClass => {
+      if (serviceClass && serviceClass.prototype instanceof BaseService) {
+        // Decorate each service class with the directory that contains it.
+        serviceClass.serviceFamily = servicePath
+          .replace(serviceDir, '')
+          .split(path.sep)[1]
+        serviceClass.validateDefinition()
+        return serviceClasses.push(serviceClass)
+      }
+      throw new InvalidService(
+        `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`
+      )
     })
-
-    serviceClasses = serviceClasses.concat(theseServiceClasses)
-  })
-
-  serviceClasses.forEach(ServiceClass => ServiceClass.validateDefinition())
+  }
 
   return serviceClasses
 }
@@ -80,8 +68,8 @@ function assertNamesUnique(names, { message }) {
   }
 }
 
-function checkNames() {
-  const services = loadServiceClasses()
+async function checkNames() {
+  const services = await loadServiceClasses()
   assertNamesUnique(
     services.map(({ name }) => name),
     {
@@ -90,8 +78,8 @@ function checkNames() {
   )
 }
 
-function collectDefinitions() {
-  const services = loadServiceClasses()
+async function collectDefinitions() {
+  const services = (await loadServiceClasses())
     // flatMap.
     .map(ServiceClass => ServiceClass.getDefinition())
     .reduce((accum, these) => accum.concat(these), [])
@@ -103,13 +91,15 @@ function collectDefinitions() {
   return result
 }
 
-function loadTesters() {
-  return glob
-    .sync(path.join(serviceDir, '**', '*.tester.js'))
-    .map(path => require(path))
+async function loadTesters() {
+  return Promise.all(
+    glob
+      .sync(path.join(serviceDir, '**', '*.tester.js'))
+      .map(async path => await import(`file://${path}`))
+  )
 }
 
-module.exports = {
+export {
   InvalidService,
   loadServiceClasses,
   checkNames,

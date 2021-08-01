@@ -1,8 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isIntegerPercentage } = require('../test-validators')
-const t = (module.exports = require('../tester').createServiceTester())
+import Joi from 'joi'
+import { isIntegerPercentage } from '../test-validators.js'
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 // Examples for this service can be found through the explore page:
 // https://codeclimate.com/explore
@@ -29,7 +28,7 @@ t.create('test coverage percentage for non-existent repo')
   })
 
 t.create('test coverage percentage for repo without test reports')
-  .get('/coverage/angular/angular.js.json')
+  .get('/coverage/angular/angular.json')
   .expectBadge({
     label: 'coverage',
     message: 'test report not found',

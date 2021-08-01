@@ -1,15 +1,13 @@
-'use strict'
-
-const Joi = require('joi')
-const RouteBuilder = require('../route-builder')
-const { BaseJsonService, NotFound } = require('..')
-const {
+import Joi from 'joi'
+import RouteBuilder from '../route-builder.js'
+import { BaseJsonService, NotFound } from '../index.js'
+import {
   renderVersionBadge,
   renderDownloadBadge,
   searchServiceUrl,
   stripBuildMetadata,
   selectVersion,
-} = require('./nuget-helpers')
+} from './nuget-helpers.js'
 
 /*
  * Build the Shields service URL object for the given service configuration. Return
@@ -213,6 +211,4 @@ function createServiceFamily({
   }
 }
 
-module.exports = {
-  createServiceFamily,
-}
+export { createServiceFamily }

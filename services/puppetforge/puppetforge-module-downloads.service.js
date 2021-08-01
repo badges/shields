@@ -1,12 +1,8 @@
-'use strict'
+import { downloadCount } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
-const { downloadCount } = require('../color-formatters')
-const { metric } = require('../text-formatters')
-const { BasePuppetForgeModulesService } = require('./puppetforge-base')
-
-module.exports = class PuppetforgeModuleDownloads extends (
-  BasePuppetForgeModulesService
-) {
+export default class PuppetforgeModuleDownloads extends BasePuppetForgeModulesService {
   static category = 'downloads'
 
   static route = {

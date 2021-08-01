@@ -1,8 +1,6 @@
-'use strict'
-
-const { addv } = require('../text-formatters')
-const { version: versionColor } = require('../color-formatters')
-const BaseWordpress = require('./wordpress-base')
+import { addv } from '../text-formatters.js'
+import { version as versionColor } from '../color-formatters.js'
+import BaseWordpress from './wordpress-base.js'
 
 function VersionForExtensionType(extensionType) {
   const { capt, exampleSlug } = {
@@ -53,4 +51,4 @@ function VersionForExtensionType(extensionType) {
   }
 }
 
-module.exports = ['theme', 'plugin'].map(VersionForExtensionType)
+export default ['theme', 'plugin'].map(VersionForExtensionType)

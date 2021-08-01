@@ -1,9 +1,7 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { InvalidResponse } = require('..')
-const LiberapayGoal = require('./liberapay-goal.service')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { InvalidResponse } from '../index.js'
+import LiberapayGoal from './liberapay-goal.service.js'
 
 describe('LiberapayGoal', function () {
   test(LiberapayGoal.prototype.transform, () => {

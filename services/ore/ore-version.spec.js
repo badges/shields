@@ -1,7 +1,5 @@
-'use strict'
-
-const { test, given } = require('sazerac')
-const OreVersion = require('./ore-version.service')
+import { test, given } from 'sazerac'
+import OreVersion from './ore-version.service.js'
 
 describe('OreVersion', function () {
   test(OreVersion.prototype.transform, () => {

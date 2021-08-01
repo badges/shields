@@ -1,8 +1,6 @@
-'use strict'
+import { redirector } from '../index.js'
 
-const { redirector } = require('..')
-
-module.exports = [
+export default [
   // https://github.com/badges/shields/issues/5433
   redirector({
     name: 'OffsetEarthCarbonRedirect',

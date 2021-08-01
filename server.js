@@ -1,12 +1,15 @@
-'use strict'
 /* eslint-disable import/order */
 
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 // Set up Sentry reporting as early in the process as possible.
-const config = require('config').util.toObject()
-const Sentry = require('@sentry/node')
+import configModule from 'config'
+import Sentry from '@sentry/node'
+
+import Server from './core/server/server.js'
+const config = configModule.util.toObject()
 const disabledIntegrations = ['Console', 'Http']
 Sentry.init({
   dsn: process.env.SENTRY_DSN || config.private.sentry_dsn,
@@ -42,22 +45,17 @@ if (fs.existsSync('.env')) {
   process.exit(1)
 }
 
-const legacySecretsPath = path.join(__dirname, 'private', 'secret.json')
+const legacySecretsPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  'private',
+  'secret.json'
+)
 if (fs.existsSync(legacySecretsPath)) {
   console.error(
     `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`
   )
   process.exit(1)
 }
+export const server = new Server(config)
 
-const Server = require('./core/server/server')
-const server = (module.exports = new Server(config))
-
-;(async () => {
-  try {
-    await server.start()
-  } catch (e) {
-    console.error(e)
-    process.exit(1)
-  }
-})()
+await server.start()

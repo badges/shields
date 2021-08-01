@@ -121,12 +121,12 @@ Drone instance and obtain a token from the user profile page.
 - `GITHUB_URL` (yml: `public.services.github.baseUri`)
 - `GH_TOKEN` (yml: `private.gh_token`)
 
-Because of Github rate limits, you will need to provide a token, or else badges
+Because of GitHub rate limits, you will need to provide a token, or else badges
 will stop working once you hit 60 requests per hour, the
 [unauthenticated rate limit][github rate limit].
 
 You can [create a personal access token][personal access tokens] through the
-Github website. When you create the token, you can choose to give read access
+GitHub website. When you create the token, you can choose to give read access
 to your repositories. If you do that, your self-hosted Shields installation
 will have access to your private repositories.
 
@@ -218,6 +218,21 @@ access to your private nexus repositories.
 
 Register an application in the [Twitch developer console](https://dev.twitch.tv/console)
 in order to obtain a client id and a client secret for making Twitch API calls.
+
+### Weblate
+
+- `WEBLATE_ORIGINS` (yml: `public.services.weblate.authorizedOrigins`)
+- `WEBLATE_API_KEY` (yml: `private.weblate_api_key`)
+
+By default Weblate throttles [unauthenticated request][weblate authentication]
+to only 100 requests per day, after this you will need an API key or else
+badges will stop working.
+
+You can find your Weblate API key in your profile under
+["API access"][weblate api key location].
+
+[weblate authentication]: https://docs.weblate.org/en/latest/api.html#authentication-and-generic-parameters
+[weblate api key location]: https://hosted.weblate.org/accounts/profile/#api
 
 ### Wheelmap
 

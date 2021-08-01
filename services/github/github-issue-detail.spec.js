@@ -1,12 +1,10 @@
-'use strict'
-
-const { expect } = require('chai')
-const { test, given } = require('sazerac')
-const { age } = require('../color-formatters')
-const { formatDate, metric } = require('../text-formatters')
-const { InvalidResponse } = require('..')
-const GithubIssueDetail = require('./github-issue-detail.service')
-const { stateColor, commentsColor } = require('./github-helpers')
+import { expect } from 'chai'
+import { test, given } from 'sazerac'
+import { age } from '../color-formatters.js'
+import { formatDate, metric } from '../text-formatters.js'
+import { InvalidResponse } from '../index.js'
+import GithubIssueDetail from './github-issue-detail.service.js'
+import { stateColor, commentsColor } from './github-helpers.js'
 
 describe('GithubIssueDetail', function () {
   test(GithubIssueDetail.render, () => {

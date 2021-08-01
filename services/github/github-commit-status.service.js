@@ -1,16 +1,14 @@
-'use strict'
-
-const Joi = require('joi')
-const { NotFound, InvalidParameter } = require('..')
-const { GithubAuthV3Service } = require('./github-auth-service')
-const { documentation, errorMessagesFor } = require('./github-helpers')
+import Joi from 'joi'
+import { NotFound, InvalidParameter } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   // https://stackoverflow.com/a/23969867/893113
   status: Joi.equal('identical', 'ahead', 'behind', 'diverged'),
 }).required()
 
-module.exports = class GithubCommitStatus extends GithubAuthV3Service {
+export default class GithubCommitStatus extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github/commit-status',

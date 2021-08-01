@@ -1,11 +1,10 @@
-'use strict'
-const os = require('os')
-const nock = require('nock')
-const sinon = require('sinon')
-const { expect } = require('chai')
-const log = require('./log')
-const InfluxMetrics = require('./influx-metrics')
-require('../register-chai-plugins.spec')
+import os from 'os'
+import nock from 'nock'
+import sinon from 'sinon'
+import { expect } from 'chai'
+import log from './log.js'
+import InfluxMetrics from './influx-metrics.js'
+import '../register-chai-plugins.spec.js'
 describe('Influx metrics', function () {
   const metricInstance = {
     metrics() {

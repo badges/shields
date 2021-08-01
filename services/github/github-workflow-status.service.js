@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
-const { isBuildStatus, renderBuildStatusBadge } = require('../build-status')
-const { BaseSvgScrapingService } = require('..')
-const { documentation } = require('./github-helpers')
+import Joi from 'joi'
+import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { BaseSvgScrapingService } from '../index.js'
+import { documentation } from './github-helpers.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -17,7 +15,7 @@ const queryParamSchema = Joi.object({
 
 const keywords = ['action', 'actions']
 
-module.exports = class GithubWorkflowStatus extends BaseSvgScrapingService {
+export default class GithubWorkflowStatus extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {

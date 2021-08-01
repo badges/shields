@@ -1,9 +1,8 @@
-'use strict'
 /**
  * @module
  */
 
-const { loadTesters } = require('../base-service/loader')
+import { loadTesters } from '../base-service/loader.js'
 
 /**
  * Load a collection of ServiceTester objects and register them with Mocha.
@@ -24,8 +23,10 @@ class Runner {
   /**
    * Prepare the runner by loading up all the ServiceTester objects.
    */
-  prepare() {
-    this.testers = loadTesters()
+  async prepare() {
+    this.testers = (await loadTesters()).flatMap(testerModule =>
+      Object.values(testerModule)
+    )
     this.testers.forEach(tester => {
       tester.beforeEach = () => {
         this.beforeEach()
@@ -72,4 +73,4 @@ class Runner {
     testers.forEach(tester => tester.toss({ baseUrl, skipIntercepted, retry }))
   }
 }
-module.exports = Runner
+export default Runner

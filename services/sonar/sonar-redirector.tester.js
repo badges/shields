@@ -1,13 +1,11 @@
-'use strict'
+import queryString from 'querystring'
+import { ServiceTester } from '../tester.js'
 
-const queryString = require('querystring')
-const { ServiceTester } = require('../tester')
-
-const t = (module.exports = new ServiceTester({
+export const t = new ServiceTester({
   id: 'SonarRedirect',
   title: 'SonarRedirect',
   pathPrefix: '/sonar',
-}))
+})
 
 t.create('sonar version')
   .get(

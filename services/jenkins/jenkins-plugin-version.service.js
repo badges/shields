@@ -1,11 +1,9 @@
-'use strict'
+import { promisify } from 'util'
+import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { renderVersionBadge } from '../version.js'
+import { BaseService, NotFound } from '../index.js'
 
-const { promisify } = require('util')
-const { regularUpdate } = require('../../core/legacy/regular-update')
-const { renderVersionBadge } = require('../version')
-const { BaseService, NotFound } = require('..')
-
-module.exports = class JenkinsPluginVersion extends BaseService {
+export default class JenkinsPluginVersion extends BaseService {
   static category = 'version'
 
   static route = {
