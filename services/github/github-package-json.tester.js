@@ -47,6 +47,13 @@ t.create('Peer dependency version')
     message: semverRange,
   })
 
+t.create('Optional dependency version')
+  .get('/dependency-version/IcedFrisby/IcedFrisby/optional/@hapi/joi.json')
+  .expectBadge({
+    label: '@hapi/joi',
+    message: semverRange,
+  })
+
 t.create('Dev dependency version')
   .get(
     '/dependency-version/paulmelnikow/react-boxplot/dev/react.json?label=react%20tested'
