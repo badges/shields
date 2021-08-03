@@ -56,11 +56,9 @@ t.create('Test status with compact message and custom labels')
   })
 
 t.create('Test status on job with no tests')
-  .get(
-    '/tests.json?jobUrl=https://ci.eclipse.org/openj9/job/Build-Doc-Push_to_ghpages'
-  )
+  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/orbit-recipes')
   .expectBadge({ label: 'tests', message: 'no tests found' })
 
 t.create('Test status on non-existent job')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/openj9/job/does-not-exist')
+  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/does-not-exist')
   .expectBadge({ label: 'tests', message: 'instance or job not found' })

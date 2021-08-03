@@ -40,5 +40,9 @@ describe('license helpers', function () {
       message: 'MPL-2.0, MIT',
       color: 'green',
     })
+    given({ license: 'MIT', color: 'pink' }).expect({
+      message: 'MIT',
+      color: 'pink',
+    })
   })
 })

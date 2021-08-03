@@ -27,7 +27,7 @@ t.create('Malformed url')
   )
   .expectBadge({
     label: 'Package Name',
-    message: 'invalid',
+    message: 'inaccessible',
     color: 'lightgrey',
   })
 

@@ -47,3 +47,14 @@ t.create('Quality Gate (Alert Status)')
     label: 'quality gate',
     message: 'passed',
   })
+
+// Public instance shared by community member and permission granted for usage in tests
+// https://github.com/badges/shields/pull/6636#issuecomment-886172161
+t.create('Quality Gate (version >= 6.6)')
+  .get(
+    '/quality_gate/de.chkpnt%3Atruststorebuilder-gradle-plugin.json?server=https://sonar.chkpnt.de&sonarVersion=8.9'
+  )
+  .expectBadge({
+    label: 'quality gate',
+    message: isQualityGateStatus,
+  })

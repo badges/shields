@@ -1,23 +1,23 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import { optionalUrl } from '../validators.js'
 import { colorScale } from '../color-formatters.js'
+import WeblateBase from './weblate-base.js'
 
 const schema = Joi.object({
   translated_percent: Joi.number().required(),
-}).required()
-
-const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
 }).required()
 
 /**
  * This badge displays the percentage of strings translated on a project on a
  * Weblate instance.
  */
-export default class WeblateProjectTranslatedPercentage extends BaseJsonService {
+export default class WeblateProjectTranslatedPercentage extends WeblateBase {
   static category = 'other'
-  static route = { base: 'weblate', pattern: ':project', queryParamSchema }
+
+  static route = {
+    base: 'weblate/progress',
+    pattern: ':project',
+    queryParamSchema: this.queryParamSchema,
+  }
 
   static examples = [
     {
@@ -45,8 +45,8 @@ export default class WeblateProjectTranslatedPercentage extends BaseJsonService 
     return { message: `${translatedPercent.toFixed(0)}%`, color }
   }
 
-  async fetch({ project, server }) {
-    return this._requestJson({
+  async fetch({ project, server = 'https://hosted.weblate.org' }) {
+    return super.fetch({
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
       errorMessages: {
