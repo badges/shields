@@ -2,7 +2,7 @@ name: Auto close
 on: pull_request_target
 
 permissions:
-  pull_request: write
+  pull-requests: write
 
 jobs:
   build:
