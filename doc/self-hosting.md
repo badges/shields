@@ -140,11 +140,6 @@ preconfigured raster server.
 [raster server]: https://github.com/badges/svg-to-image-proxy
 [micro]: https://github.com/zeit/micro
 
-## Persistence
-
-To enable Redis-backed GitHub token persistence, point `REDIS_URL` to your
-Redis installation.
-
 ## Server secrets
 
 You can add your own server secrets in environment variables or `config/local.yml`.
