@@ -20,6 +20,24 @@ t.create('Prerelease')
     color: Joi.string().allow('blue', 'orange').required(),
   })
 
+t.create('Release (custom release name)')
+  .get('/v/release/expressjs/express.json')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/expressjs/express/releases/latest')
+      .reply(200, {
+        assets: [],
+        name: 'custom release name',
+        tag_name: '1.0.0',
+        prerelease: false,
+      })
+  )
+  .expectBadge({
+    label: 'release',
+    message: 'custom release name',
+    color: 'blue',
+  })
+
 t.create('Release (No releases)')
   .get('/v/release/badges/daily-tests.json')
   .expectBadge({ label: 'release', message: 'no releases or repo not found' })

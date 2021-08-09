@@ -79,7 +79,8 @@ class GithubRelease extends GithubAuthV3Service {
       queryParams
     )
     return this.constructor.render({
-      version: latestRelease.tag_name,
+      version:
+        latestRelease.name !== '' ? latestRelease.name : latestRelease.tag_name,
       sort: queryParams.sort,
       isPrerelease: latestRelease.prerelease,
     })
