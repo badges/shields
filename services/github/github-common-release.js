@@ -11,7 +11,6 @@ const releaseInfoSchema = Joi.object({
       download_count: nonNegativeInteger,
     })
     .required(),
-  name: Joi.string().allow('').required(),
   tag_name: Joi.string().required(),
   prerelease: Joi.boolean().required(),
 }).required()
