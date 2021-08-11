@@ -52,6 +52,21 @@ function shouldWrapBodyWithLink({ links }) {
   return hasLeftLink && !hasRightLink
 }
 
+function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
+  const logoHeight = 14
+  if (!logo) return new NullElement()
+  return new XmlElement({
+    name: 'image',
+    attrs: {
+      x: horizPadding,
+      y: 0.5 * (badgeHeight - logoHeight),
+      width: logoWidth,
+      height: logoHeight,
+      'xlink:href': logo,
+    },
+  })
+}
+
 function renderBadge(
   { links, leftWidth, rightWidth, height, accessibleText },
   content
@@ -150,7 +165,6 @@ class Badge {
     const width = leftWidth + rightWidth
 
     this.horizPadding = horizPadding
-    this.hasLogo = hasLogo
     this.labelMargin = labelMargin
     this.messageMargin = messageMargin
     this.links = links
@@ -164,32 +178,18 @@ class Badge {
     this.label = label
     this.message = message
     this.accessibleText = accessibleText
-    this.logo = logo
-    this.logoWidth = logoWidth
 
-    this.logoElement = this.getLogoElement()
+    this.logoElement = getLogoElement({
+      logo,
+      horizPadding,
+      badgeHeight: this.constructor.height,
+      logoWidth,
+    })
     this.foregroundGroupElement = this.getForegroundGroupElement()
   }
 
   static render(params) {
     return new this(params).render()
-  }
-
-  getLogoElement() {
-    const logoHeight = 14
-    if (!this.hasLogo) {
-      return new NullElement()
-    }
-    return new XmlElement({
-      name: 'image',
-      attrs: {
-        x: this.horizPadding,
-        y: 0.5 * (this.constructor.height - logoHeight),
-        width: this.logoWidth,
-        height: logoHeight,
-        'xlink:href': this.logo,
-      },
-    })
   }
 
   getTextElement({ leftMargin, content, link, color, textWidth, linkWidth }) {
@@ -502,7 +502,6 @@ function social({
   const labelHorizPadding = 5
   const messageHorizPadding = 4
   const horizGutter = 6
-  const logoHeight = 14
   const totalLogoWidth = logoWidth + logoPadding
   const hasMessage = message.length
 
@@ -736,18 +735,12 @@ function social({
       'line-height': '14px',
     },
   })
-  const logoElement = !logo
-    ? new NullElement()
-    : new XmlElement({
-        name: 'image',
-        attrs: {
-          x: labelHorizPadding,
-          y: 0.5 * (externalHeight - logoHeight),
-          width: logoWidth,
-          height: logoHeight,
-          'xlink:href': logo,
-        },
-      })
+  const logoElement = getLogoElement({
+    logo,
+    horizPadding: labelHorizPadding,
+    badgeHeight: externalHeight,
+    logoWidth,
+  })
 
   return renderBadge(
     {
@@ -772,7 +765,6 @@ function forTheBadge({
 }) {
   const FONT_SIZE = 10
   const BADGE_HEIGHT = 28
-  const LOGO_HEIGHT = 14
   const TEXT_MARGIN = 12
   const LOGO_MARGIN = 9
   const LOGO_TEXT_GUTTER = 6
@@ -839,15 +831,11 @@ function forTheBadge({
     }
   }
 
-  const logoElement = new XmlElement({
-    name: 'image',
-    attrs: {
-      x: logoMinX,
-      y: 0.5 * (BADGE_HEIGHT - LOGO_HEIGHT),
-      width: logoWidth,
-      height: LOGO_HEIGHT,
-      'xlink:href': logo,
-    },
+  const logoElement = getLogoElement({
+    logo,
+    horizPadding: logoMinX,
+    badgeHeight: BADGE_HEIGHT,
+    logoWidth,
   })
 
   function getLabelElement() {
@@ -970,7 +958,7 @@ function forTheBadge({
   const foregroundGroup = new XmlElement({
     name: 'g',
     content: [
-      logo ? logoElement : '',
+      logoElement,
       hasLabel ? getLabelElement() : '',
       getMessageElement(),
     ],
