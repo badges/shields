@@ -1,13 +1,7 @@
 {
-  "settingsInheritedFrom": "SmartBear/whitesource-config@main",
-  "scanSettings": {
-    "baseBranches": []
-  },
+  "settingsInheritedFrom": "hiptest/whitesource-config@main",
   "checkRunSettings": {
     "vulnerableCheckRunConclusionLevel": "success",
-    "displayMode": "diff"
-  },
-  "issueSettings": {
-    "minSeverityLevel": "MEDIUM"
-  },
+    "licenseCheckRunConclusionLevel": "success"
+  }
 }
