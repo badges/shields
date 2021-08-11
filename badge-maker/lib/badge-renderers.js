@@ -559,8 +559,9 @@ function social({
 
   function getLabelText() {
     const labelTextX =
-      10 * (totalLogoWidth + labelTextWidth / 2 + labelHorizPadding)
-    const labelTextLength = 10 * labelTextWidth
+      FONT_SCALE_UP_FACTOR *
+      (totalLogoWidth + labelTextWidth / 2 + labelHorizPadding)
+    const labelTextLength = FONT_SCALE_UP_FACTOR * labelTextWidth
     const shouldWrapWithLink = hasLeftLink && !shouldWrapBodyWithLink({ links })
 
     const rect = new XmlElement({
@@ -584,7 +585,7 @@ function social({
         x: labelTextX,
         y: 150,
         fill: '#fff',
-        transform: 'scale(.1)',
+        transform: FONT_SCALE_DOWN_VALUE,
         textLength: labelTextLength,
       },
     })
@@ -594,7 +595,7 @@ function social({
       attrs: {
         x: labelTextX,
         y: 140,
-        transform: 'scale(.1)',
+        transform: FONT_SCALE_DOWN_VALUE,
         textLength: labelTextLength,
       },
     })
@@ -614,8 +615,9 @@ function social({
     }
 
     const messageTextX =
-      10 * (labelRectWidth + horizGutter + messageRectWidth / 2)
-    const messageTextLength = 10 * messageTextWidth
+      FONT_SCALE_UP_FACTOR *
+      (labelRectWidth + horizGutter + messageRectWidth / 2)
+    const messageTextLength = FONT_SCALE_UP_FACTOR * messageTextWidth
 
     const rect = new XmlElement({
       name: 'rect',
@@ -634,7 +636,7 @@ function social({
         x: messageTextX,
         y: 150,
         fill: '#fff',
-        transform: 'scale(.1)',
+        transform: FONT_SCALE_DOWN_VALUE,
         textLength: messageTextLength,
       },
     })
@@ -645,7 +647,7 @@ function social({
         id: 'rlink',
         x: messageTextX,
         y: 140,
-        transform: 'scale(.1)',
+        transform: FONT_SCALE_DOWN_VALUE,
         textLength: messageTextLength,
       },
     })
