@@ -10,8 +10,7 @@ const FONT_SCALE_DOWN_VALUE = 'scale(.1)'
 
 const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
 const WIDTH_FONT = '11px Verdana'
-const socialFontFamily =
-  'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
+const SOCIAL_FONT_FAMILY = 'Helvetica Neue,Helvetica,Arial,sans-serif'
 
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
@@ -500,41 +499,13 @@ function social({
   // width can be measured using the correct characters.
   label = capitalize(label)
 
-  function renderLogo({
-    logo,
-    badgeHeight,
-    horizPadding,
-    logoWidth = 14,
-    logoPadding = 0,
-  }) {
-    if (logo) {
-      const logoHeight = 14
-      const y = (badgeHeight - logoHeight) / 2
-      const x = horizPadding
-      return {
-        hasLogo: true,
-        totalLogoWidth: logoWidth + logoPadding,
-        renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="${logoHeight}" xlink:href="${escapeXml(
-          logo
-        )}"/>`,
-      }
-    } else {
-      return { hasLogo: false, totalLogoWidth: 0, renderedLogo: '' }
-    }
-  }
-
   const externalHeight = 20
   const internalHeight = 19
   const labelHorizPadding = 5
   const messageHorizPadding = 4
   const horizGutter = 6
-  const { totalLogoWidth, renderedLogo } = renderLogo({
-    logo,
-    badgeHeight: externalHeight,
-    horizPadding: labelHorizPadding,
-    logoWidth,
-    logoPadding,
-  })
+  const logoHeight = 14
+  const totalLogoWidth = logoWidth + logoPadding
   const hasMessage = message.length
 
   const font = 'bold 11px Helvetica'
@@ -543,74 +514,242 @@ function social({
   const labelRectWidth = labelTextWidth + totalLogoWidth + 2 * labelHorizPadding
   const messageRectWidth = messageTextWidth + 2 * messageHorizPadding
 
-  let [leftLink, rightLink] = links
-  leftLink = escapeXml(leftLink)
-  rightLink = escapeXml(rightLink)
+  const [leftLink, rightLink] = links
   const { hasLeftLink, hasRightLink, hasLink } = hasLinks({ links })
 
   const accessibleText = createAccessibleText({ label, message })
 
-  function renderMessageBubble() {
+  function getMessageBubble() {
+    if (!hasMessage) {
+      return new NullElement()
+    }
+
     const messageBubbleMainX = labelRectWidth + horizGutter + 0.5
     const messageBubbleNotchX = labelRectWidth + horizGutter
-    return `
-      <rect x="${messageBubbleMainX}" y="0.5" width="${messageRectWidth}" height="${internalHeight}" rx="2" fill="#fafafa"/>
-      <rect x="${messageBubbleNotchX}" y="7.5" width="0.5" height="5" stroke="#fafafa"/>
-      <path d="M${messageBubbleMainX} 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa"/>
-    `
+    const content = [
+      new XmlElement({
+        name: 'rect',
+        attrs: {
+          x: `${messageBubbleMainX}`,
+          y: '0.5',
+          width: `${messageRectWidth}`,
+          height: `${internalHeight}`,
+          rx: '2',
+          fill: '#fafafa',
+        },
+      }),
+      new XmlElement({
+        name: 'rect',
+        attrs: {
+          x: `${messageBubbleNotchX}`,
+          y: '7.5',
+          width: '0.5',
+          height: '5',
+          stroke: '#fafafa',
+        },
+      }),
+      new XmlElement({
+        name: 'path',
+        attrs: {
+          d: `M${messageBubbleMainX} 6.5 l-3 3v1 l3 3`,
+          stroke: 'd5d5d5',
+          fill: '#fafafa',
+        },
+      }),
+    ]
+    return new ElementList({ content })
   }
 
-  function renderLabelText() {
+  function getLabelText() {
     const labelTextX =
       10 * (totalLogoWidth + labelTextWidth / 2 + labelHorizPadding)
     const labelTextLength = 10 * labelTextWidth
-    const escapedLabel = escapeXml(label)
     const shouldWrapWithLink = hasLeftLink && !shouldWrapBodyWithLink({ links })
 
-    const rect = `<rect id="llink" stroke="#d5d5d5" fill="url(#a)" x=".5" y=".5" width="${labelRectWidth}" height="${internalHeight}" rx="2" />`
-    const shadow = `<text aria-hidden="true" x="${labelTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
-    const text = `<text x="${labelTextX}" y="140" transform="scale(.1)" textLength="${labelTextLength}">${escapedLabel}</text>`
+    const rect = new XmlElement({
+      name: 'rect',
+      attrs: {
+        id: 'llink',
+        stroke: '#d5d5d5',
+        fill: 'url(#a)',
+        x: '.5',
+        y: '.5',
+        width: labelRectWidth,
+        height: internalHeight,
+        rx: 2,
+      },
+    })
+    const shadow = new XmlElement({
+      name: 'text',
+      content: [label],
+      attrs: {
+        'aria-hidden': 'true',
+        x: labelTextX,
+        y: 150,
+        fill: '#fff',
+        transform: 'scale(.1)',
+        textLength: labelTextLength,
+      },
+    })
+    const text = new XmlElement({
+      name: 'text',
+      content: [label],
+      attrs: {
+        x: labelTextX,
+        y: 140,
+        transform: 'scale(.1)',
+        textLength: labelTextLength,
+      },
+    })
 
     return shouldWrapWithLink
-      ? `
-        <a target="_blank" xlink:href="${leftLink}">
-          ${shadow}
-          ${text}
-          ${rect}
-        </a>
-      `
-      : `
-      ${rect}
-      ${shadow}
-      ${text}
-    `
+      ? new XmlElement({
+          name: 'a',
+          content: [shadow, text, rect],
+          attrs: { target: '_blank', 'xlink:href': leftLink },
+        })
+      : new ElementList({ content: [rect, shadow, text] })
   }
 
-  function renderMessageText() {
+  function getMessageText() {
+    if (!hasMessage) {
+      return new NullElement()
+    }
+
     const messageTextX =
       10 * (labelRectWidth + horizGutter + messageRectWidth / 2)
     const messageTextLength = 10 * messageTextWidth
-    const escapedMessage = escapeXml(message)
 
-    const rect = `<rect width="${messageRectWidth + 1}" x="${
-      labelRectWidth + horizGutter
-    }" height="${internalHeight + 1}" fill="rgba(0,0,0,0)" />`
-    const shadow = `<text aria-hidden="true" x="${messageTextX}" y="150" fill="#fff" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
-    const text = `<text id="rlink" x="${messageTextX}" y="140" transform="scale(.1)" textLength="${messageTextLength}">${escapedMessage}</text>`
+    const rect = new XmlElement({
+      name: 'rect',
+      attrs: {
+        width: messageRectWidth + 1,
+        x: labelRectWidth + horizGutter,
+        height: internalHeight + 1,
+        fill: 'rgba(0,0,0,0)',
+      },
+    })
+    const shadow = new XmlElement({
+      name: 'text',
+      content: [message],
+      attrs: {
+        'aria-hidden': 'true',
+        x: messageTextX,
+        y: 150,
+        fill: '#fff',
+        transform: 'scale(.1)',
+        textLength: messageTextLength,
+      },
+    })
+    const text = new XmlElement({
+      name: 'text',
+      content: [message],
+      attrs: {
+        id: 'rlink',
+        x: messageTextX,
+        y: 140,
+        transform: 'scale(.1)',
+        textLength: messageTextLength,
+      },
+    })
 
     return hasRightLink
-      ? `
-        <a target="_blank" xlink:href="${rightLink}">
-          ${rect}
-          ${shadow}
-          ${text}
-        </a>
-      `
-      : `
-      ${shadow}
-      ${text}
-    `
+      ? new XmlElement({
+          name: 'a',
+          content: [rect, shadow, text],
+          attrs: { target: '_blank', 'xlink:href': rightLink },
+        })
+      : new ElementList({ content: [shadow, text] })
   }
+
+  const style = new XmlElement({
+    name: 'style',
+    content: [
+      'a:hover #llink{fill:url(#b);stroke:#ccc}a:hover #rlink{fill:#4183c4}',
+    ],
+  })
+  const gradients = new ElementList({
+    content: [
+      new XmlElement({
+        name: 'linearGradient',
+        content: [
+          new XmlElement({
+            name: 'stop',
+            attrs: {
+              offset: '0',
+              'stop-color': '#fcfcfc',
+              'stop-opacity': '0',
+            },
+          }),
+          new XmlElement({
+            name: 'stop',
+            attrs: { offset: '1', 'stop-opacity': '.1' },
+          }),
+        ],
+        attrs: { id: 'a', x2: '0', y2: '100%' },
+      }),
+      new XmlElement({
+        name: 'linearGradient',
+        content: [
+          new XmlElement({
+            name: 'stop',
+            attrs: { offset: '0', 'stop-color': '#ccc', 'stop-opacity': '.1' },
+          }),
+          new XmlElement({
+            name: 'stop',
+            attrs: { offset: '1', 'stop-opacity': '.1' },
+          }),
+        ],
+        attrs: { id: 'b', x2: '0', y2: '100%' },
+      }),
+    ],
+  })
+  const labelRect = new XmlElement({
+    name: 'rect',
+    attrs: {
+      stroke: 'none',
+      fill: '#fcfcfc',
+      x: '0.5',
+      y: '0.5',
+      width: labelRectWidth,
+      height: internalHeight,
+      rx: 2,
+    },
+  })
+  const messageBubble = getMessageBubble()
+  const labelText = getLabelText()
+  const messageText = getMessageText()
+  const backgroundGroup = new XmlElement({
+    name: 'g',
+    content: [labelRect, messageBubble],
+    attrs: { stroke: '#d5d5d5' },
+  })
+  const foregroundGroup = new XmlElement({
+    name: 'g',
+    content: [labelText, messageText],
+    attrs: {
+      'aria-hidden': `${!hasLink}`,
+      fill: '#333',
+      'text-anchor': 'middle',
+      'font-family': SOCIAL_FONT_FAMILY,
+      'text-rendering': 'geometricPrecision',
+      'font-weight': 700,
+      'font-size': '110px',
+      'line-height': '14px',
+    },
+  })
+  const logoElement = !logo
+    ? new NullElement()
+    : new XmlElement({
+        name: 'image',
+        attrs: {
+          x: labelHorizPadding,
+          y: 0.5 * (externalHeight - logoHeight),
+          width: logoWidth,
+          height: logoHeight,
+          'xlink:href': logo,
+        },
+      })
 
   return renderBadge(
     {
@@ -620,26 +759,13 @@ function social({
       accessibleText,
       height: externalHeight,
     },
-    `
-    <style>a:hover #llink{fill:url(#b);stroke:#ccc}a:hover #rlink{fill:#4183c4}</style>
-    <linearGradient id="a" x2="0" y2="100%">
-      <stop offset="0" stop-color="#fcfcfc" stop-opacity="0"/>
-      <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-    <linearGradient id="b" x2="0" y2="100%">
-      <stop offset="0" stop-color="#ccc" stop-opacity=".1"/>
-      <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-    <g stroke="#d5d5d5">
-      <rect stroke="none" fill="#fcfcfc" x="0.5" y="0.5" width="${labelRectWidth}" height="${internalHeight}" rx="2"/>
-      ${hasMessage ? renderMessageBubble() : ''}
-    </g>
-    ${renderedLogo}
-    <g aria-hidden="${!hasLink}" fill="#333" text-anchor="middle" ${socialFontFamily} text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
-      ${renderLabelText()}
-      ${hasMessage ? renderMessageText() : ''}
-    </g>
-    `
+    [
+      style.render(),
+      gradients.render(),
+      backgroundGroup.render(),
+      logoElement.render(),
+      foregroundGroup.render(),
+    ].join('')
   )
 }
 
