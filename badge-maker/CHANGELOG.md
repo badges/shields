@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0 [WIP]
+
+- Drop compatibility with Node 10
+
 ## 3.3.1
 
 - Improve font measuring in for-the-badge and social styles
