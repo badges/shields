@@ -27,5 +27,5 @@ t.create('Bugzilla valid bug status with custom baseUrl')
   })
 
 t.create('Bugzilla invalid bug status')
-  .get('/102.json?baseUrl=https://bugzilla.gnome.org')
+  .get('/001.json')
   .expectBadge({ label: 'bugzilla', message: 'not found' })
