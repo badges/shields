@@ -2,14 +2,14 @@
 
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
-const { XmlElement, escapeXml } = require('./xml')
+const { XmlElement, NullElement, ElementList, escapeXml } = require('./xml')
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
 const FONT_SCALE_DOWN_VALUE = 'scale(.1)'
 
 const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
-const fontFamily = `font-family="${FONT_FAMILY}"`
+const WIDTH_FONT = '11px Verdana'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
 const brightnessThreshold = 0.69
@@ -86,68 +86,6 @@ function renderLogo({
   }
 }
 
-function renderLink({
-  link,
-  height,
-  textLength,
-  horizPadding,
-  leftMargin,
-  renderedText,
-}) {
-  const rectHeight = height
-  const rectWidth = textLength + horizPadding * 2
-  const rectX = leftMargin > 1 ? leftMargin + 1 : 0
-  return `<a target="_blank" xlink:href="${escapeXml(link)}">
-    <rect width="${rectWidth}" x="${rectX}" height="${rectHeight}" fill="rgba(0,0,0,0)" />
-    ${renderedText}
-  </a>`
-}
-
-function renderText({
-  leftMargin,
-  horizPadding = 0,
-  content,
-  link,
-  height,
-  verticalMargin = 0,
-  shadow = false,
-  color,
-}) {
-  if (!content.length) {
-    return { renderedText: '', width: 0 }
-  }
-
-  const textLength = preferredWidthOf(content, { font: '11px Verdana' })
-  const escapedContent = escapeXml(content)
-
-  const shadowMargin = 150 + verticalMargin
-  const textMargin = 140 + verticalMargin
-
-  const outTextLength = 10 * textLength
-  const x = 10 * (leftMargin + 0.5 * textLength + horizPadding)
-
-  let renderedText = ''
-  const { textColor, shadowColor } = colorsForBackground(color)
-  if (shadow) {
-    renderedText = `<text aria-hidden="true" x="${x}" y="${shadowMargin}" fill="${shadowColor}" fill-opacity=".3" transform="scale(.1)" textLength="${outTextLength}">${escapedContent}</text>`
-  }
-  renderedText += `<text x="${x}" y="${textMargin}" transform="scale(.1)" fill="${textColor}" textLength="${outTextLength}">${escapedContent}</text>`
-
-  return {
-    renderedText: link
-      ? renderLink({
-          link,
-          height,
-          textLength,
-          horizPadding,
-          leftMargin,
-          renderedText,
-        })
-      : renderedText,
-    width: textLength,
-  }
-}
-
 function renderBadge(
   { links, leftWidth, rightWidth, height, accessibleText },
   main
@@ -170,10 +108,6 @@ function renderBadge(
 }
 
 class Badge {
-  static get fontFamily() {
-    throw new Error('Not implemented')
-  }
-
   static get height() {
     throw new Error('Not implemented')
   }
@@ -197,41 +131,25 @@ class Badge {
     labelColor,
   }) {
     const horizPadding = 5
-    const { hasLogo, totalLogoWidth, renderedLogo } = renderLogo({
-      logo,
-      badgeHeight: this.constructor.height,
-      horizPadding,
-      logoWidth,
-      logoPadding,
-    })
+    const hasLogo = !!logo
+    const totalLogoWidth = logoWidth + logoPadding
+    const accessibleText = createAccessibleText({ label, message })
+
     const hasLabel = label.length || labelColor
     if (labelColor == null) {
       labelColor = '#555'
     }
-
-    const [leftLink, rightLink] = links
-
     labelColor = hasLabel || hasLogo ? labelColor : color
-    labelColor = escapeXml(labelColor)
-    color = escapeXml(color)
 
     const labelMargin = totalLogoWidth + 1
-
-    const { renderedText: renderedLabel, width: labelWidth } = renderText({
-      leftMargin: labelMargin,
-      horizPadding,
-      content: label,
-      link: !shouldWrapBodyWithLink({ links }) && leftLink,
-      height: this.constructor.height,
-      verticalMargin: this.constructor.verticalMargin,
-      shadow: this.constructor.shadow,
-      color: labelColor,
-    })
-
+    const labelWidth = label.length
+      ? preferredWidthOf(label, { font: WIDTH_FONT })
+      : 0
     const leftWidth = hasLabel
       ? labelWidth + 2 * horizPadding + totalLogoWidth
       : 0
 
+    const messageWidth = preferredWidthOf(message, { font: WIDTH_FONT })
     let messageMargin = leftWidth - (message.length ? 1 : 0)
     if (!hasLabel) {
       if (hasLogo) {
@@ -240,18 +158,6 @@ class Badge {
         messageMargin = messageMargin + 1
       }
     }
-
-    const { renderedText: renderedMessage, width: messageWidth } = renderText({
-      leftMargin: messageMargin,
-      horizPadding,
-      content: message,
-      link: rightLink,
-      height: this.constructor.height,
-      verticalMargin: this.constructor.verticalMargin,
-      shadow: this.constructor.shadow,
-      color,
-    })
-
     let rightWidth = messageWidth + 2 * horizPadding
     if (hasLogo && !hasLabel) {
       rightWidth += totalLogoWidth + horizPadding - 1
@@ -259,9 +165,13 @@ class Badge {
 
     const width = leftWidth + rightWidth
 
-    const accessibleText = createAccessibleText({ label, message })
-
+    this.horizPadding = horizPadding
+    this.hasLogo = hasLogo
+    this.labelMargin = labelMargin
+    this.messageMargin = messageMargin
     this.links = links
+    this.labelWidth = labelWidth
+    this.messageWidth = messageWidth
     this.leftWidth = leftWidth
     this.rightWidth = rightWidth
     this.width = width
@@ -270,13 +180,180 @@ class Badge {
     this.label = label
     this.message = message
     this.accessibleText = accessibleText
-    this.renderedLogo = renderedLogo
-    this.renderedLabel = renderedLabel
-    this.renderedMessage = renderedMessage
+    this.logo = logo
+    this.logoWidth = logoWidth
+
+    this.logoElement = this.getLogoElement()
+    this.foregroundGroupElement = this.getForegroundGroupElement()
   }
 
   static render(params) {
     return new this(params).render()
+  }
+
+  getLogoElement() {
+    const logoHeight = 14
+    if (!this.hasLogo) {
+      return new NullElement()
+    }
+    return new XmlElement({
+      name: 'image',
+      attrs: {
+        x: this.horizPadding,
+        y: 0.5 * (this.constructor.height - logoHeight),
+        width: this.logoWidth,
+        height: logoHeight,
+        'xlink:href': this.logo,
+      },
+    })
+  }
+
+  getTextElement({ leftMargin, content, link, color, textWidth, linkWidth }) {
+    if (!content.length) {
+      return new NullElement()
+    }
+
+    const { textColor, shadowColor } = colorsForBackground(color)
+    const x =
+      FONT_SCALE_UP_FACTOR * (leftMargin + 0.5 * textWidth + this.horizPadding)
+
+    const text = new XmlElement({
+      name: 'text',
+      content: [content],
+      attrs: {
+        x,
+        y: 140 + this.constructor.verticalMargin,
+        transform: FONT_SCALE_DOWN_VALUE,
+        fill: textColor,
+        textLength: FONT_SCALE_UP_FACTOR * textWidth,
+      },
+    })
+
+    const shadowText = new XmlElement({
+      name: 'text',
+      content: [content],
+      attrs: {
+        'aria-hidden': 'true',
+        x,
+        y: 150 + this.constructor.verticalMargin,
+        fill: shadowColor,
+        'fill-opacity': '.3',
+        transform: FONT_SCALE_DOWN_VALUE,
+        textLength: FONT_SCALE_UP_FACTOR * textWidth,
+      },
+    })
+    const shadow = this.constructor.shadow ? shadowText : new NullElement()
+
+    if (!link) {
+      return new ElementList({ content: [shadow, text] })
+    }
+
+    const rect = new XmlElement({
+      name: 'rect',
+      attrs: {
+        width: linkWidth,
+        x: leftMargin > 1 ? leftMargin + 1 : 0,
+        height: this.constructor.height,
+        fill: 'rgba(0,0,0,0)',
+      },
+    })
+    return new XmlElement({
+      name: 'a',
+      content: [rect, shadow, text],
+      attrs: { target: '_blank', 'xlink:href': link },
+    })
+  }
+
+  getLabelElement() {
+    const leftLink = this.links[0]
+    return this.getTextElement({
+      leftMargin: this.labelMargin,
+      content: this.label,
+      link: !shouldWrapBodyWithLink({ links: this.links }) && leftLink,
+      color: this.labelColor,
+      textWidth: this.labelWidth,
+      linkWidth: this.leftWidth,
+    })
+  }
+
+  getMessageElement() {
+    const rightLink = this.links[1]
+    return this.getTextElement({
+      leftMargin: this.messageMargin,
+      content: this.message,
+      link: rightLink,
+      color: this.messageColor,
+      textWidth: this.messageWidth,
+      linkWidth: this.rightWidth,
+    })
+  }
+
+  getClipPathElement(rx) {
+    return new XmlElement({
+      name: 'clipPath',
+      content: [
+        new XmlElement({
+          name: 'rect',
+          attrs: {
+            width: this.width,
+            height: this.constructor.height,
+            rx,
+            fill: '#fff',
+          },
+        }),
+      ],
+      attrs: { id: 'r' },
+    })
+  }
+
+  getBackgroundGroupElement({ withGradient, attrs }) {
+    const leftRect = new XmlElement({
+      name: 'rect',
+      attrs: {
+        width: this.leftWidth,
+        height: this.constructor.height,
+        fill: this.labelColor,
+      },
+    })
+    const rightRect = new XmlElement({
+      name: 'rect',
+      attrs: {
+        x: this.leftWidth,
+        width: this.rightWidth,
+        height: this.constructor.height,
+        fill: this.color,
+      },
+    })
+    const gradient = new XmlElement({
+      name: 'rect',
+      attrs: {
+        width: this.width,
+        height: this.constructor.height,
+        fill: 'url(#s)',
+      },
+    })
+    const content = withGradient
+      ? [leftRect, rightRect, gradient]
+      : [leftRect, rightRect]
+    return new XmlElement({ name: 'g', content, attrs })
+  }
+
+  getForegroundGroupElement() {
+    return new XmlElement({
+      name: 'g',
+      content: [
+        this.logoElement,
+        this.getLabelElement(),
+        this.getMessageElement(),
+      ],
+      attrs: {
+        fill: '#fff',
+        'text-anchor': 'middle',
+        'font-family': FONT_FAMILY,
+        'text-rendering': 'geometricPrecision',
+        'font-size': '110',
+      },
+    })
   }
 
   render() {
@@ -285,10 +362,6 @@ class Badge {
 }
 
 class Plastic extends Badge {
-  static get fontFamily() {
-    return fontFamily
-  }
-
   static get height() {
     return 18
   }
@@ -302,6 +375,36 @@ class Plastic extends Badge {
   }
 
   render() {
+    const gradient = new XmlElement({
+      name: 'linearGradient',
+      content: [
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '0', 'stop-color': '#fff', 'stop-opacity': '.7' },
+        }),
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '.1', 'stop-color': '#aaa', 'stop-opacity': '.1' },
+        }),
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '.9', 'stop-color': '#000', 'stop-opacity': '.3' },
+        }),
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '1', 'stop-color': '#000', 'stop-opacity': '.5' },
+        }),
+      ],
+      attrs: { id: 's', x2: '0', y2: '100%' },
+    })
+
+    const clipPath = this.getClipPathElement(4)
+
+    const backgroundGroup = this.getBackgroundGroupElement({
+      withGradient: true,
+      attrs: { 'clip-path': 'url(#r)' },
+    })
+
     return renderBadge(
       {
         links: this.links,
@@ -310,38 +413,17 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      `
-      <linearGradient id="s" x2="0" y2="100%">
-        <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
-        <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
-        <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
-        <stop offset="1"  stop-color="#000" stop-opacity=".5"/>
-      </linearGradient>
-
-      <clipPath id="r">
-        <rect width="${this.width}" height="${this.constructor.height}" rx="4" fill="#fff"/>
-      </clipPath>
-
-      <g clip-path="url(#r)">
-        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
-        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
-        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
-      </g>
-
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
-        ${this.renderedLogo}
-        ${this.renderedLabel}
-        ${this.renderedMessage}
-      </g>`
+      [
+        gradient.render(),
+        clipPath.render(),
+        backgroundGroup.render(),
+        this.foregroundGroupElement.render(),
+      ].join('')
     )
   }
 }
 
 class Flat extends Badge {
-  static get fontFamily() {
-    return fontFamily
-  }
-
   static get height() {
     return 20
   }
@@ -355,6 +437,28 @@ class Flat extends Badge {
   }
 
   render() {
+    const gradient = new XmlElement({
+      name: 'linearGradient',
+      content: [
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '0', 'stop-color': '#bbb', 'stop-opacity': '.1' },
+        }),
+        new XmlElement({
+          name: 'stop',
+          attrs: { offset: '1', 'stop-opacity': '.1' },
+        }),
+      ],
+      attrs: { id: 's', x2: '0', y2: '100%' },
+    })
+
+    const clipPath = this.getClipPathElement(3)
+
+    const backgroundGroup = this.getBackgroundGroupElement({
+      withGradient: true,
+      attrs: { 'clip-path': 'url(#r)' },
+    })
+
     return renderBadge(
       {
         links: this.links,
@@ -363,36 +467,17 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      `
-      <linearGradient id="s" x2="0" y2="100%">
-        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-        <stop offset="1" stop-opacity=".1"/>
-      </linearGradient>
-
-      <clipPath id="r">
-        <rect width="${this.width}" height="${this.constructor.height}" rx="3" fill="#fff"/>
-      </clipPath>
-
-      <g clip-path="url(#r)">
-        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
-        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
-        <rect width="${this.width}" height="${this.constructor.height}" fill="url(#s)"/>
-      </g>
-
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
-        ${this.renderedLogo}
-        ${this.renderedLabel}
-        ${this.renderedMessage}
-      </g>`
+      [
+        gradient.render(),
+        clipPath.render(),
+        backgroundGroup.render(),
+        this.foregroundGroupElement.render(),
+      ].join('')
     )
   }
 }
 
 class FlatSquare extends Badge {
-  static get fontFamily() {
-    return fontFamily
-  }
-
   static get height() {
     return 20
   }
@@ -406,6 +491,11 @@ class FlatSquare extends Badge {
   }
 
   render() {
+    const backgroundGroup = this.getBackgroundGroupElement({
+      withGradient: false,
+      attrs: { 'shape-rendering': 'crispEdges' },
+    })
+
     return renderBadge(
       {
         links: this.links,
@@ -414,17 +504,7 @@ class FlatSquare extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      `
-      <g shape-rendering="crispEdges">
-        <rect width="${this.leftWidth}" height="${this.constructor.height}" fill="${this.labelColor}"/>
-        <rect x="${this.leftWidth}" width="${this.rightWidth}" height="${this.constructor.height}" fill="${this.color}"/>
-      </g>
-
-      <g fill="#fff" text-anchor="middle" ${this.constructor.fontFamily} text-rendering="geometricPrecision" font-size="110">
-        ${this.renderedLogo}
-        ${this.renderedLabel}
-        ${this.renderedMessage}
-      </g>`
+      [backgroundGroup.render(), this.foregroundGroupElement.render()].join('')
     )
   }
 }

@@ -58,7 +58,7 @@ class XmlElement {
     if (this.content.length > 0) {
       const content = this.content
         .map(function (el) {
-          if (el instanceof XmlElement) {
+          if (typeof el.render === 'function') {
             return el.render()
           } else {
             return escapeXml(el)
@@ -73,4 +73,27 @@ class XmlElement {
   }
 }
 
-module.exports = { escapeXml, stripXmlWhitespace, XmlElement }
+class NullElement {
+  // TODO: we can remove this later
+  render() {
+    return ''
+  }
+}
+
+class ElementList {
+  constructor({ content = [] }) {
+    this.content = content
+  }
+
+  render() {
+    return this.content.reduce((acc, el) => acc + el.render(), '')
+  }
+}
+
+module.exports = {
+  escapeXml,
+  stripXmlWhitespace,
+  XmlElement,
+  NullElement,
+  ElementList,
+}
