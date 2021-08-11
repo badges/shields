@@ -73,27 +73,24 @@ class XmlElement {
   }
 }
 
-class NullElement {
-  // TODO: we can remove this later
-  render() {
-    return ''
-  }
-}
-
+/**
+ * Convenience class. Sometimes it is useful to return an object that behaves
+ * like an XmlElement but renders multiple XML tags (not wrapped in a <g>).
+ */
 class ElementList {
   constructor({ content = [] }) {
     this.content = content
   }
 
   render() {
-    return this.content.reduce((acc, el) => acc + el.render(), '')
+    return this.content.reduce(
+      (acc, el) =>
+        typeof el.render === 'function'
+          ? acc + el.render()
+          : acc + escapeXml(el),
+      ''
+    )
   }
 }
 
-module.exports = {
-  escapeXml,
-  stripXmlWhitespace,
-  XmlElement,
-  NullElement,
-  ElementList,
-}
+module.exports = { escapeXml, stripXmlWhitespace, XmlElement, ElementList }

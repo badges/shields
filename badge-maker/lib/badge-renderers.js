@@ -2,7 +2,7 @@
 
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
-const { XmlElement, NullElement, ElementList } = require('./xml')
+const { XmlElement, ElementList } = require('./xml')
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
@@ -54,7 +54,7 @@ function shouldWrapBodyWithLink({ links }) {
 
 function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
   const logoHeight = 14
-  if (!logo) return new NullElement()
+  if (!logo) return ''
   return new XmlElement({
     name: 'image',
     attrs: {
@@ -76,7 +76,7 @@ function renderBadge(
   const { hasLink } = hasLinks({ links })
 
   const title = hasLink
-    ? new NullElement()
+    ? ''
     : new XmlElement({ name: 'title', content: [accessibleText] })
 
   const body = shouldWrapBodyWithLink({ links })
@@ -193,9 +193,7 @@ class Badge {
   }
 
   getTextElement({ leftMargin, content, link, color, textWidth, linkWidth }) {
-    if (!content.length) {
-      return new NullElement()
-    }
+    if (!content.length) return ''
 
     const { textColor, shadowColor } = colorsForBackground(color)
     const x =
@@ -226,7 +224,7 @@ class Badge {
         textLength: FONT_SCALE_UP_FACTOR * textWidth,
       },
     })
-    const shadow = this.constructor.shadow ? shadowText : new NullElement()
+    const shadow = this.constructor.shadow ? shadowText : ''
 
     if (!link) {
       return new ElementList({ content: [shadow, text] })
@@ -517,9 +515,7 @@ function social({
   const accessibleText = createAccessibleText({ label, message })
 
   function getMessageBubble() {
-    if (!hasMessage) {
-      return new NullElement()
-    }
+    if (!hasMessage) return ''
 
     const messageBubbleMainX = labelRectWidth + horizGutter + 0.5
     const messageBubbleNotchX = labelRectWidth + horizGutter
@@ -610,9 +606,7 @@ function social({
   }
 
   function getMessageText() {
-    if (!hasMessage) {
-      return new NullElement()
-    }
+    if (!hasMessage) return ''
 
     const messageTextX =
       FONT_SCALE_UP_FACTOR *
