@@ -2,7 +2,7 @@
 
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
-const { XmlElement, NullElement, ElementList, escapeXml } = require('./xml')
+const { XmlElement, NullElement, ElementList } = require('./xml')
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
@@ -52,35 +52,43 @@ function shouldWrapBodyWithLink({ links }) {
   return hasLeftLink && !hasRightLink
 }
 
-function renderAriaAttributes({ accessibleText, links }) {
-  const { hasLink } = hasLinks({ links })
-  return hasLink ? '' : `role="img" aria-label="${escapeXml(accessibleText)}"`
-}
-
-function renderTitle({ accessibleText, links }) {
-  const { hasLink } = hasLinks({ links })
-  return hasLink ? '' : `<title>${escapeXml(accessibleText)}</title>`
-}
-
 function renderBadge(
   { links, leftWidth, rightWidth, height, accessibleText },
-  main
+  content
 ) {
   const width = leftWidth + rightWidth
-  const leftLink = escapeXml(links[0])
+  const leftLink = links[0]
+  const { hasLink } = hasLinks({ links })
 
-  return `
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" ${renderAriaAttributes(
-    { links, accessibleText }
-  )}>
+  const title = hasLink
+    ? new NullElement()
+    : new XmlElement({ name: 'title', content: [accessibleText] })
 
-    ${renderTitle({ accessibleText, links })}
-    ${
-      shouldWrapBodyWithLink({ links })
-        ? `<a target="_blank" xlink:href="${leftLink}">${main}</a>`
-        : main
-    }
-    </svg>`
+  const body = shouldWrapBodyWithLink({ links })
+    ? new XmlElement({
+        name: 'a',
+        content,
+        attrs: { target: '_blank', 'xlink:href': leftLink },
+      })
+    : new ElementList({ content })
+
+  const svgAttrs = {
+    xmlns: 'http://www.w3.org/2000/svg',
+    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+    width,
+    height,
+  }
+  if (!hasLink) {
+    svgAttrs.role = 'img'
+    svgAttrs['aria-label'] = accessibleText
+  }
+
+  const svg = new XmlElement({
+    name: 'svg',
+    content: [title, body],
+    attrs: svgAttrs,
+  })
+  return svg.render()
 }
 
 class Badge {
@@ -389,12 +397,7 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [
-        gradient.render(),
-        clipPath.render(),
-        backgroundGroup.render(),
-        this.foregroundGroupElement.render(),
-      ].join('')
+      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement]
     )
   }
 }
@@ -443,12 +446,7 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [
-        gradient.render(),
-        clipPath.render(),
-        backgroundGroup.render(),
-        this.foregroundGroupElement.render(),
-      ].join('')
+      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement]
     )
   }
 }
@@ -480,7 +478,7 @@ class FlatSquare extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [backgroundGroup.render(), this.foregroundGroupElement.render()].join('')
+      [backgroundGroup, this.foregroundGroupElement]
     )
   }
 }
@@ -759,13 +757,7 @@ function social({
       accessibleText,
       height: externalHeight,
     },
-    [
-      style.render(),
-      gradients.render(),
-      backgroundGroup.render(),
-      logoElement.render(),
-      foregroundGroup.render(),
-    ].join('')
+    [style, gradients, backgroundGroup, logoElement, foregroundGroup]
   )
 }
 
@@ -1000,7 +992,7 @@ function forTheBadge({
       accessibleText: createAccessibleText({ label, message }),
       height: BADGE_HEIGHT,
     },
-    [backgroundGroup.render(), foregroundGroup.render()].join('')
+    [backgroundGroup, foregroundGroup]
   )
 }
 
