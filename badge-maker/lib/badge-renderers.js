@@ -12,13 +12,13 @@ const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
 const WIDTH_FONT = '11px Verdana'
 const socialFontFamily =
   'font-family="Helvetica Neue,Helvetica,Arial,sans-serif"'
-const brightnessThreshold = 0.69
 
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
 }
 
 function colorsForBackground(color) {
+  const brightnessThreshold = 0.69
   if (brightness(color) <= brightnessThreshold) {
     return { textColor: '#fff', shadowColor: '#010101' }
   } else {
