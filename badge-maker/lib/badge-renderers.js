@@ -63,29 +63,6 @@ function renderTitle({ accessibleText, links }) {
   return hasLink ? '' : `<title>${escapeXml(accessibleText)}</title>`
 }
 
-function renderLogo({
-  logo,
-  badgeHeight,
-  horizPadding,
-  logoWidth = 14,
-  logoPadding = 0,
-}) {
-  if (logo) {
-    const logoHeight = 14
-    const y = (badgeHeight - logoHeight) / 2
-    const x = horizPadding
-    return {
-      hasLogo: true,
-      totalLogoWidth: logoWidth + logoPadding,
-      renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="${logoHeight}" xlink:href="${escapeXml(
-        logo
-      )}"/>`,
-    }
-  } else {
-    return { hasLogo: false, totalLogoWidth: 0, renderedLogo: '' }
-  }
-}
-
 function renderBadge(
   { links, leftWidth, rightWidth, height, accessibleText },
   main
@@ -522,6 +499,29 @@ function social({
   // Social label is styled with a leading capital. Convert to caps here so
   // width can be measured using the correct characters.
   label = capitalize(label)
+
+  function renderLogo({
+    logo,
+    badgeHeight,
+    horizPadding,
+    logoWidth = 14,
+    logoPadding = 0,
+  }) {
+    if (logo) {
+      const logoHeight = 14
+      const y = (badgeHeight - logoHeight) / 2
+      const x = horizPadding
+      return {
+        hasLogo: true,
+        totalLogoWidth: logoWidth + logoPadding,
+        renderedLogo: `<image x="${x}" y="${y}" width="${logoWidth}" height="${logoHeight}" xlink:href="${escapeXml(
+          logo
+        )}"/>`,
+      }
+    } else {
+      return { hasLogo: false, totalLogoWidth: 0, renderedLogo: '' }
+    }
+  }
 
   const externalHeight = 20
   const internalHeight = 19
