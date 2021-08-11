@@ -19,6 +19,7 @@ const factory = superclass =>
     constructor(message) {
       super(message)
       this.intercepted = false
+      super.networkOn()
     }
 
     get(uri, options = { followRedirect: false }) {
@@ -31,6 +32,7 @@ const factory = superclass =>
 
     intercept(setup) {
       super.intercept(setup)
+      super.networkOff()
       this.intercepted = true
       return this
     }

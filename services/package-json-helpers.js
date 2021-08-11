@@ -13,6 +13,7 @@ const isPackageJsonWithDependencies = Joi.object({
   dependencies: isDependencyMap,
   devDependencies: isDependencyMap,
   peerDependencies: isDependencyMap,
+  optionalDependencies: isDependencyMap,
 }).required()
 
 function getDependencyVersion({
@@ -21,19 +22,19 @@ function getDependencyVersion({
   dependencies,
   devDependencies,
   peerDependencies,
+  optionalDependencies,
 }) {
-  let dependenciesOfKind
-  if (kind === 'peer') {
-    dependenciesOfKind = peerDependencies
-  } else if (kind === 'dev') {
-    dependenciesOfKind = devDependencies
-  } else if (kind === 'prod') {
-    dependenciesOfKind = dependencies
-  } else {
-    throw Error(`Not very kind: ${kind}`)
+  const dependencyMaps = {
+    peer: peerDependencies,
+    optional: optionalDependencies,
+    dev: devDependencies,
+    prod: dependencies,
   }
 
-  const range = dependenciesOfKind[wantedDependency]
+  if (!(kind in dependencyMaps)) {
+    throw Error(`Not very kind: ${kind}`)
+  }
+  const range = dependencyMaps[kind][wantedDependency]
   if (range === undefined) {
     throw new InvalidParameter({
       prettyMessage: `${kind} dependency not found`,

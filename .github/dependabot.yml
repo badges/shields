@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # shields.io dependencies
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: friday
+      time: '12:00'
+    open-pull-requests-limit: 99
+
+  # badge-maker package dependencies
+  - package-ecosystem: npm
+    directory: '/badge-maker'
+    schedule:
+      interval: weekly
+      day: friday
+      time: '12:00'
+    open-pull-requests-limit: 99
+
+  # close-bot package dependencies
+  - package-ecosystem: npm
+    directory: '/.github/actions/close-bot'
+    schedule:
+      interval: weekly
+      day: friday
+      time: '12:00'
+    open-pull-requests-limit: 99

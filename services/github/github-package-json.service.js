@@ -75,7 +75,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
   static route = {
     base: 'github/package-json/dependency-version',
     pattern:
-      ':user/:repo/:kind(dev|peer)?/:scope(@[^/]+)?/:packageName/:branch*',
+      ':user/:repo/:kind(dev|peer|optional)?/:scope(@[^/]+)?/:packageName/:branch*',
     queryParamSchema: dependencyQueryParamSchema,
   }
 
@@ -146,14 +146,18 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     { user, repo, kind, branch = 'HEAD', scope, packageName },
     { filename = 'package.json' }
   ) {
-    const { dependencies, devDependencies, peerDependencies } =
-      await fetchJsonFromRepo(this, {
-        schema: isPackageJsonWithDependencies,
-        user,
-        repo,
-        branch,
-        filename,
-      })
+    const {
+      dependencies,
+      devDependencies,
+      peerDependencies,
+      optionalDependencies,
+    } = await fetchJsonFromRepo(this, {
+      schema: isPackageJsonWithDependencies,
+      user,
+      repo,
+      branch,
+      filename,
+    })
 
     const wantedDependency = scope ? `${scope}/${packageName}` : packageName
     const { range } = getDependencyVersion({
@@ -162,6 +166,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
       dependencies,
       devDependencies,
       peerDependencies,
+      optionalDependencies,
     })
 
     return this.constructor.render({

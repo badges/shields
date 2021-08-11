@@ -1,16 +1,20 @@
-name: Auto approve
-on: pull_request
+name: Auto close
+on: pull_request_target
+
+permissions:
+  pull-requests: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install action dependencies
-        run: cd .github/actions/approve-bot && npm ci
+        run: cd .github/actions/close-bot && npm ci
 
-      - uses: ./.github/actions/approve-bot
+      - uses: ./.github/actions/close-bot
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
