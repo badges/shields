@@ -327,7 +327,7 @@ class Badge {
         'text-anchor': 'middle',
         'font-family': FONT_FAMILY,
         'text-rendering': 'geometricPrecision',
-        'font-size': '110',
+        'font-size': 110,
       },
     })
   }
@@ -356,7 +356,7 @@ class Plastic extends Badge {
       content: [
         new XmlElement({
           name: 'stop',
-          attrs: { offset: '0', 'stop-color': '#fff', 'stop-opacity': '.7' },
+          attrs: { offset: 0, 'stop-color': '#fff', 'stop-opacity': '.7' },
         }),
         new XmlElement({
           name: 'stop',
@@ -368,10 +368,10 @@ class Plastic extends Badge {
         }),
         new XmlElement({
           name: 'stop',
-          attrs: { offset: '1', 'stop-color': '#000', 'stop-opacity': '.5' },
+          attrs: { offset: 1, 'stop-color': '#000', 'stop-opacity': '.5' },
         }),
       ],
-      attrs: { id: 's', x2: '0', y2: '100%' },
+      attrs: { id: 's', x2: 0, y2: '100%' },
     })
 
     const clipPath = this.getClipPathElement(4)
@@ -418,14 +418,14 @@ class Flat extends Badge {
       content: [
         new XmlElement({
           name: 'stop',
-          attrs: { offset: '0', 'stop-color': '#bbb', 'stop-opacity': '.1' },
+          attrs: { offset: 0, 'stop-color': '#bbb', 'stop-opacity': '.1' },
         }),
         new XmlElement({
           name: 'stop',
-          attrs: { offset: '1', 'stop-opacity': '.1' },
+          attrs: { offset: 1, 'stop-opacity': '.1' },
         }),
       ],
-      attrs: { id: 's', x2: '0', y2: '100%' },
+      attrs: { id: 's', x2: 0, y2: '100%' },
     })
 
     const clipPath = this.getClipPathElement(3)
@@ -530,21 +530,21 @@ function social({
       new XmlElement({
         name: 'rect',
         attrs: {
-          x: `${messageBubbleMainX}`,
-          y: '0.5',
-          width: `${messageRectWidth}`,
-          height: `${internalHeight}`,
-          rx: '2',
+          x: messageBubbleMainX,
+          y: 0.5,
+          width: messageRectWidth,
+          height: internalHeight,
+          rx: 2,
           fill: '#fafafa',
         },
       }),
       new XmlElement({
         name: 'rect',
         attrs: {
-          x: `${messageBubbleNotchX}`,
-          y: '7.5',
-          width: '0.5',
-          height: '5',
+          x: messageBubbleNotchX,
+          y: 7.5,
+          width: 0.5,
+          height: 5,
           stroke: '#fafafa',
         },
       }),
@@ -676,31 +676,31 @@ function social({
           new XmlElement({
             name: 'stop',
             attrs: {
-              offset: '0',
+              offset: 0,
               'stop-color': '#fcfcfc',
-              'stop-opacity': '0',
+              'stop-opacity': 0,
             },
           }),
           new XmlElement({
             name: 'stop',
-            attrs: { offset: '1', 'stop-opacity': '.1' },
+            attrs: { offset: 1, 'stop-opacity': '.1' },
           }),
         ],
-        attrs: { id: 'a', x2: '0', y2: '100%' },
+        attrs: { id: 'a', x2: 0, y2: '100%' },
       }),
       new XmlElement({
         name: 'linearGradient',
         content: [
           new XmlElement({
             name: 'stop',
-            attrs: { offset: '0', 'stop-color': '#ccc', 'stop-opacity': '.1' },
+            attrs: { offset: 0, 'stop-color': '#ccc', 'stop-opacity': '.1' },
           }),
           new XmlElement({
             name: 'stop',
-            attrs: { offset: '1', 'stop-opacity': '.1' },
+            attrs: { offset: 1, 'stop-opacity': '.1' },
           }),
         ],
-        attrs: { id: 'b', x2: '0', y2: '100%' },
+        attrs: { id: 'b', x2: 0, y2: '100%' },
       }),
     ],
   })
@@ -709,8 +709,8 @@ function social({
     attrs: {
       stroke: 'none',
       fill: '#fcfcfc',
-      x: '0.5',
-      y: '0.5',
+      x: 0.5,
+      y: 0.5,
       width: labelRectWidth,
       height: internalHeight,
       rx: 2,
