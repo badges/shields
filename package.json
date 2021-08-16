@@ -199,7 +199,6 @@
     "gatsby-plugin-styled-components": "^4.6.0",
     "gatsby-plugin-typescript": "^3.2.0",
     "humanize-string": "^2.1.0",
-    "husky": "^4.3.8",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
     "is-svg": "^4.3.1",
@@ -231,6 +230,7 @@
     "redis-server": "^1.2.2",
     "rimraf": "^3.0.2",
     "sazerac": "^2.0.0",
+    "simple-git-hooks": "^2.5.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.6",
@@ -259,9 +259,7 @@
     "url": "https://opencollective.com/shields",
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   }
 }
