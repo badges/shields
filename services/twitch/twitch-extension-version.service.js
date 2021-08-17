@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { renderVersionBadge } from '../version.js'
 import TwitchBase from './twitch-base.js'
 
 const helixSchema = Joi.object({
@@ -19,20 +20,12 @@ export default class TwitchExtensionVersion extends TwitchBase {
       namedParams: {
         extensionId: '2nq5cu1nc9f4p75b791w8d3yo9d195',
       },
-      staticPreview: this.render({ version: '1.0.0' }),
+      staticPreview: renderVersionBadge({ version: '1.0.0' }),
     },
   ]
 
   static defaultBadgeData = {
     label: 'twitch extension',
-  }
-
-  static render({ version }) {
-    return {
-      label: 'twitch extension',
-      message: `v${version}`,
-      color: '6441A4',
-    }
   }
 
   async fetch({ extensionId }) {
@@ -49,9 +42,7 @@ export default class TwitchExtensionVersion extends TwitchBase {
 
   async handle({ extensionId }) {
     const data = await this.fetch({ extensionId })
-    return this.constructor.render({
-      extensionId,
-      version: data.data[0].version,
-    })
+
+    return renderVersionBadge({ version: data.data[0].version })
   }
 }
