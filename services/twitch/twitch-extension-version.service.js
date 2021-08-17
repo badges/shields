@@ -3,7 +3,10 @@ import { renderVersionBadge } from '../version.js'
 import TwitchBase from './twitch-base.js'
 
 const helixSchema = Joi.object({
-  data: Joi.array().required(),
+  data: Joi.array()
+    .items(Joi.object({ version: Joi.string().required() }).required())
+    .min(1)
+    .required(),
 })
 
 export default class TwitchExtensionVersion extends TwitchBase {
