@@ -12,15 +12,11 @@ export default class JenkinsBase extends BaseJsonService {
     schema,
     qs,
     errorMessages = { 404: 'instance or job not found' },
-    disableStrictSSL,
   }) {
     return this._requestJson(
       this.authHelper.withBasicAuth({
         url,
-        options: {
-          qs,
-          strictSSL: disableStrictSSL === undefined,
-        },
+        options: { qs },
         schema,
         errorMessages,
       })
