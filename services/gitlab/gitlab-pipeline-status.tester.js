@@ -33,7 +33,7 @@ t.create('Pipeline status (nonexistent repo)')
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get('/GNOME/pango/master.json?gitlab_url=https://gitlab.gnome.org')
+  .get('/GNOME/pango/main.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
