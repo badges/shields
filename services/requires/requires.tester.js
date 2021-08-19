@@ -7,14 +7,14 @@ const isRequireStatus = Joi.string().regex(
 )
 
 t.create('requirements (valid, without branch)')
-  .get('/github/celery/celery.json')
+  .get('/github/zulip/zulip.json')
   .expectBadge({
     label: 'requirements',
     message: isRequireStatus,
   })
 
 t.create('requirements (valid, with branch)')
-  .get('/github/celery/celery/master.json')
+  .get('/github/zulip/zulip/master.json')
   .expectBadge({
     label: 'requirements',
     message: isRequireStatus,
