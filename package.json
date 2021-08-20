@@ -197,7 +197,7 @@
     "gatsby-plugin-react-helmet": "^4.1.0",
     "gatsby-plugin-remove-trailing-slashes": "^3.1.0",
     "gatsby-plugin-styled-components": "^4.6.0",
-    "gatsby-plugin-typescript": "^3.2.0",
+    "gatsby-plugin-typescript": "^3.12.0",
     "humanize-string": "^2.1.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
