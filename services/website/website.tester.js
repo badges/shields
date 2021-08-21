@@ -1,8 +1,8 @@
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('status of https://shields.io')
-  .get('/website.json?url=https://shields.io')
+t.create('status of http://shields.io')
+  .get('/website.json?url=http://shields.io')
   .timeout(7500)
   .expectBadge({ label: 'website', message: 'up', color: 'brightgreen' })
 
