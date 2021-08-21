@@ -139,7 +139,7 @@ function StyleTable({ style }: { style: string }): JSX.Element {
             <td>
               <Badges
                 badges={badges}
-                baseUrl="http://img.shields.io"
+                baseUrl="https://img.shields.io"
                 style={style}
               />
             </td>
