@@ -90,20 +90,20 @@ Each service has a directory for its files:
 All service badge classes inherit from [BaseService] or another class which extends it.
 Other classes implement useful behavior on top of [BaseService].
 
-- [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-basejsonservice)
+- [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html)
   implements methods for performing requests to a JSON API and schema validation.
-- [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-basexmlservice)
+- [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html)
   implements methods for performing requests to an XML API and schema validation.
-- [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-baseyamlservice)
+- [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html)
   implements methods for performing requests to a YAML API and schema validation.
-- [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-basesvgscrapingservice)
+- [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html)
   implements methods for retrieving information from existing third-party badges.
-- [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-basegraphqlservice)
+- [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html)
   implements methods for performing requests to a GraphQL API and schema validation.
 - If you are contributing to a _service family_, you may define a common super
   class for the badges or one may already exist.
 
-[baseservice]: https://contributing.shields.io/module-core_base-service_base-baseservice
+[baseservice]: https://contributing.shields.io/module-core_base-service_base.html
 
 As a first step we will look at the code for an example which generates a badge without contacting an API.
 

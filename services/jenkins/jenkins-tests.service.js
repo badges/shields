@@ -107,7 +107,6 @@ export default class JenkinsTests extends JenkinsBase {
   async handle(
     namedParams,
     {
-      disableStrictSSL,
       jobUrl,
       compact_message: compactMessage,
       passed_label: passedLabel,
@@ -119,7 +118,6 @@ export default class JenkinsTests extends JenkinsBase {
       url: buildUrl({ jobUrl }),
       schema,
       qs: buildTreeParamQueryString('actions[failCount,skipCount,totalCount]'),
-      disableStrictSSL,
     })
     const { passed, failed, skipped, total } = this.transform({ json })
     return this.constructor.render({

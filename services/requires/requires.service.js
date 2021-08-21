@@ -17,7 +17,7 @@ export default class RequiresIo extends BaseJsonService {
     {
       title: 'Requires.io',
       pattern: ':service/:user/:repo',
-      namedParams: { service: 'github', user: 'celery', repo: 'celery' },
+      namedParams: { service: 'github', user: 'zulip', repo: 'zulip' },
       staticPreview: this.render({ status: 'up-to-date' }),
     },
     {
@@ -25,8 +25,8 @@ export default class RequiresIo extends BaseJsonService {
       pattern: ':service/:user/:repo/:branch',
       namedParams: {
         service: 'github',
-        user: 'celery',
-        repo: 'celery',
+        user: 'zulip',
+        repo: 'zulip',
         branch: 'master',
       },
       staticPreview: this.render({ status: 'up-to-date' }),
