@@ -251,7 +251,7 @@ class Badge {
     return this.getTextElement({
       leftMargin: this.labelMargin,
       content: this.label,
-      link: !shouldWrapBodyWithLink({ links: this.links }) && leftLink,
+      link: leftLink && !shouldWrapBodyWithLink({ links: this.links }),
       color: this.labelColor,
       textWidth: this.labelWidth,
       linkWidth: this.leftWidth,
