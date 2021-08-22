@@ -87,7 +87,7 @@ describe('Influx metrics', function () {
     })
 
     it('should send metrics', async function () {
-      const scope = nock('http://shields-metrics.io/', {
+      const scope = nock('https://shields-metrics.io/', {
         reqheaders: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -101,7 +101,7 @@ describe('Influx metrics', function () {
         .reply(200)
       process.env.INSTANCE_ID = 'instance2'
       influxMetrics = new InfluxMetrics(metricInstance, {
-        url: 'http://shields-metrics.io/metrics',
+        url: 'https://shields-metrics.io/metrics',
         timeoutMillseconds: 100,
         intervalSeconds: 0.001,
         username: 'metrics-username',
@@ -132,7 +132,7 @@ describe('Influx metrics', function () {
     })
 
     const influxMetrics = new InfluxMetrics(metricInstance, {
-      url: 'http://shields-metrics.io/metrics',
+      url: 'https://shields-metrics.io/metrics',
       timeoutMillseconds: 50,
       intervalSeconds: 0,
       username: 'metrics-username',
@@ -149,14 +149,14 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:80/metrics"'
+              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:443/metrics"'
             )
           )
       )
     })
 
     it('should log error responses', async function () {
-      nock('http://shields-metrics.io/').persist().post('/metrics').reply(400)
+      nock('https://shields-metrics.io/').persist().post('/metrics').reply(400)
 
       await influxMetrics.sendMetrics()
 
@@ -166,7 +166,7 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. http://shields-metrics.io/metrics responded with status code 400'
+              'Cannot push metrics. https://shields-metrics.io/metrics responded with status code 400'
             )
           )
       )

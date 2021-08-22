@@ -29,4 +29,4 @@ As you can see below, without increasing the footprint of these badges, I've tri
 
 ![Badge design](proportions.png)
 
-This badge design corresponds to an old and now deprecated version which has since been replaced by beautiful and scalable SVG versions that can be found on [shields.io](http://shields.io)
+This badge design corresponds to an old and now deprecated version which has since been replaced by beautiful and scalable SVG versions that can be found on [shields.io](https://shields.io)
