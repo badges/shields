@@ -1,14 +1,11 @@
-/* eslint-disable import/order */
-
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-
-// Set up Sentry reporting as early in the process as possible.
 import configModule from 'config'
 import Sentry from '@sentry/node'
-
 import Server from './core/server/server.js'
+
+// Set up Sentry reporting as early in the process as possible.
 const config = configModule.util.toObject()
 const disabledIntegrations = ['Console', 'Http']
 Sentry.init({
