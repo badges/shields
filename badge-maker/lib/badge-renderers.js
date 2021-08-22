@@ -266,7 +266,7 @@ class Badge {
       leftMargin: this.messageMargin,
       content: this.message,
       link: rightLink,
-      color: this.messageColor,
+      color: this.color,
       textWidth: this.messageWidth,
       linkWidth: this.rightWidth,
     })

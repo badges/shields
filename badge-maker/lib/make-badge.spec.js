@@ -210,6 +210,28 @@ describe('The badge generator', function () {
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
       })
     })
+
+    it('should match snapshots: black text when the label color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'flat',
+        color: '#000',
+        labelColor: '#f3f3f3',
+      })
+    })
+
+    it('should match snapshots: black text when the message color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'flat',
+        color: '#e2ffe1',
+        labelColor: '#000',
+      })
+    })
   })
 
   describe('"flat-square" template badge generation', function () {
@@ -280,6 +302,28 @@ describe('The badge generator', function () {
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
       })
     })
+
+    it('should match snapshots: black text when the label color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'flat-square',
+        color: '#000',
+        labelColor: '#f3f3f3',
+      })
+    })
+
+    it('should match snapshots: black text when the message color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'flat-square',
+        color: '#e2ffe1',
+        labelColor: '#000',
+      })
+    })
   })
 
   describe('"plastic" template badge generation', function () {
@@ -348,6 +392,28 @@ describe('The badge generator', function () {
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
+      })
+    })
+
+    it('should match snapshots: black text when the label color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'plastic',
+        color: '#000',
+        labelColor: '#f3f3f3',
+      })
+    })
+
+    it('should match snapshots: black text when the message color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'plastic',
+        color: '#e2ffe1',
+        labelColor: '#000',
       })
     })
   })
@@ -445,6 +511,28 @@ describe('The badge generator', function () {
         color: '#b3e',
         labelColor: '#0f0',
         links: ['https://shields.io/', 'https://www.google.co.uk/'],
+      })
+    })
+
+    it('should match snapshots: black text when the label color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'for-the-badge',
+        color: '#000',
+        labelColor: '#f3f3f3',
+      })
+    })
+
+    it('should match snapshots: black text when the message color is light', function () {
+      expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'for-the-badge',
+        color: '#e2ffe1',
+        labelColor: '#000',
       })
     })
   })
@@ -553,30 +641,6 @@ describe('The badge generator', function () {
         message: 'message',
         format: 'svg',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
-      })
-    })
-  })
-
-  describe('text colors', function () {
-    it('should use black text when the label color is light', function () {
-      expectBadgeToMatchSnapshot({
-        label: 'cactus',
-        message: 'grown',
-        format: 'svg',
-        style: 'flat',
-        color: '#000',
-        labelColor: '#f3f3f3',
-      })
-    })
-
-    it('should use black text when the message color is light', function () {
-      expectBadgeToMatchSnapshot({
-        label: 'cactus',
-        message: 'grown',
-        format: 'svg',
-        style: 'for-the-badge',
-        color: '#e2ffe1',
-        labelColor: '#000',
       })
     })
   })
