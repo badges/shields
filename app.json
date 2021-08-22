@@ -4,7 +4,7 @@
   "keywords": ["badge", "github", "svg", "status"],
   "website": "https://shields.io/",
   "repository": "https://github.com/badges/shields",
-  "logo": "http://shields.io/favicon.png",
+  "logo": "https://shields.io/favicon.png",
   "env": {
     "CYPRESS_INSTALL_BINARY": {
       "description": "Disable the cypress binary installation",
