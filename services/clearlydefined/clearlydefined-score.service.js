@@ -9,8 +9,8 @@ export default class ClearlyDefinedScore extends BaseClearlyDefinedService {
     {
       title: 'ClearlyDefined',
       pattern: ':type/:provider/:namespace/:name/:revision',
-      namedParams: { type: 'git', provider: 'github', namespace: 'jquery', name: 'jquery', revision: '75f7e963708b60f37a42b777f35825d33c4f8e7a' },
-      staticPreview: this.render({ score: 80 }),
+      namedParams: { type: 'npm', provider: 'npmjs', namespace: '-', name: 'jquery', revision: '3.4.1' },
+      staticPreview: this.render({ score: 88 }),
       keywords,
     },
   ]
