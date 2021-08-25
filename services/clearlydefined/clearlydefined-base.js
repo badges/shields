@@ -16,7 +16,7 @@ class BaseClearlyDefinedService extends BaseJsonService {
   async fetch({ type, provider, namespace, name, revision }) {
     return this._requestJson({
       schema,
-      url: `https://api.clearlydefined.io/definitions//${type}/${provider}/${namespace}/${name}/${revision}`,
+      url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
     })
   }
 }
