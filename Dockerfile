@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine AS Builder
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
@@ -17,8 +17,13 @@ RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
+# Use multi-stage build to reduce size
+FROM node:14-alpine
 # Run the server using production configs.
 ENV NODE_ENV production
+
+WORKDIR /usr/src/app
+COPY --from=Builder /usr/src/app /usr/src/app
 
 CMD node server
 
