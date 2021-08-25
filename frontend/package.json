@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Shields.io frontend",
   "private": true,
-  "homepage": "http://shields.io",
+  "homepage": "https://shields.io",
   "license": "CC0-1.0",
   "repository": {
     "type": "git",

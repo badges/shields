@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/badges/shields/issues"
   },
-  "homepage": "http://shields.io",
+  "homepage": "https://shields.io",
   "bin": {
     "badge": "lib/badge-cli.js"
   },
