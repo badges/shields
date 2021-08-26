@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import { isStarRating } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -11,7 +10,7 @@ t.create('Score')
   })
 
 t.create('Score (not found)')
-.get('/npm/npmjs/-/not-a-real-repo/0.0.0/not-found.json')
+  .get('/npm/npmjs/-/not-a-real-repo/0.0.0/not-found.json')
   .expectBadge({
     label: 'ClearlyDefined',
     message: 'not found',
