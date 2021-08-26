@@ -3,13 +3,21 @@ import { BaseClearlyDefinedService, keywords } from './clearlydefined-base.js'
 
 export default class ClearlyDefinedScore extends BaseClearlyDefinedService {
   static category = 'license'
-  static route = { base: 'clearlydefined', pattern: 'score/:type/:provider/:namespace/:name/:revision' }
+  static route = { 
+    base: 'clearlydefined/score',
+    pattern: ':type/:provider/:namespace/:name/:revision'
+  }
 
   static examples = [
     {
       title: 'ClearlyDefined',
-      pattern: 'score/:type/:provider/:namespace/:name/:revision',
-      namedParams: { type: 'npm', provider: 'npmjs', namespace: '-', name: 'jquery', revision: '3.4.1' },
+      namedParams: { 
+        type: 'npm', 
+        provider: 'npmjs', 
+        namespace: '-', 
+        name: 'jquery', 
+        revision: '3.4.1' 
+      },
       staticPreview: this.render({ score: 88 }),
       keywords,
     },
