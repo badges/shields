@@ -155,7 +155,7 @@
     "@types/react-modal": "^3.12.1",
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "5.1.12",
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-istanbul": "^6.0.0",
