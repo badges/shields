@@ -18,8 +18,6 @@ export default class ClearlyDefinedService extends BaseJsonService {
     pattern: 'score/:type/:provider/:namespace/:name/:revision'
   }
 
-  static defaultBadgeData = { label: 'score' }
-
   static examples = [
     {
       title: 'ClearlyDefined Score',
@@ -33,6 +31,8 @@ export default class ClearlyDefinedService extends BaseJsonService {
       staticPreview: this.render({ score: 88 }),
     }
   ]
+
+  static defaultBadgeData = { label: 'score' }
 
   static render({ score }) {
     score = Math.round(score)
