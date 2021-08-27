@@ -11,7 +11,7 @@ const schema = Joi.object({
 
 // This service based on the REST API for clearlydefined.io
 // https://api.clearlydefined.io/api-docs/
-class BaseClearlyDefinedService extends BaseJsonService {
+export default class ClearlyDefinedService extends BaseJsonService {
   static category = 'analysis'
   static route = { 
     base: 'clearlydefined',
