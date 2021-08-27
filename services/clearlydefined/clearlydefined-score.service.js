@@ -1,16 +1,28 @@
+import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseClearlyDefinedService, keywords } from './clearlydefined-base.js'
+import { BaseJsonService } from '../index.js'
 
-export default class ClearlyDefinedScore extends BaseClearlyDefinedService {
-  static category = 'license'
+const schema = Joi.object({
+  score: Joi.object({
+    effective: nonNegativeInteger,
+  }).required(),  
+}).required()
+
+// This service based on the REST API for clearlydefined.io
+// https://api.clearlydefined.io/api-docs/
+class BaseClearlyDefinedService extends BaseJsonService {
+  static category = 'analysis'
   static route = { 
-    base: 'clearlydefined/score',
-    pattern: ':type/:provider/:namespace/:name/:revision'
+    base: 'clearlydefined',
+    pattern: 'score/:type/:provider/:namespace/:name/:revision'
   }
+
+  static defaultBadgeData = { label: 'score' }
 
   static examples = [
     {
-      title: 'ClearlyDefined',
+      title: 'ClearlyDefined Score',
       namedParams: { 
         type: 'npm', 
         provider: 'npmjs', 
@@ -19,17 +31,23 @@ export default class ClearlyDefinedScore extends BaseClearlyDefinedService {
         revision: '3.4.1' 
       },
       staticPreview: this.render({ score: 88 }),
-      keywords,
-    },
+    }
   ]
 
   static render({ score }) {
     score = Math.round(score)
     return {
-      label: 'ClearlyDefined',
+      label: 'score',
       message: `${score}/100`,
       color: floorCountColor(score, 40, 60, 100),
     }
+  }
+
+  async fetch({ type, provider, namespace, name, revision }) {
+    return this._requestJson({
+      schema,
+      url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
+    })
   }
 
   async handle({ type, provider, namespace, name, revision }) {
