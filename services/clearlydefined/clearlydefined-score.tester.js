@@ -20,5 +20,5 @@ t.create('ClearlyDefined Score (type not found)')
   .get('/score/abc/xyz/-/not-a-real-package/0.0.0.json')
   .expectBadge({
     label: 'score',
-    message: 'not found',
+    message: 'inaccessible',
   })
