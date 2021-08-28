@@ -4,7 +4,7 @@ import { floorCount as floorCountColor } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
-  score: Joi.object({
+  scores: Joi.object({
     effective: nonNegativeInteger,
   }).required(),
 }).required()
