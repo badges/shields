@@ -52,6 +52,6 @@ export default class ClearlyDefinedService extends BaseJsonService {
 
   async handle({ type, provider, namespace, name, revision }) {
     const data = await this.fetch({ type, provider, namespace, name, revision })
-    return this.constructor.render({ score: data.score.effective })
+    return this.constructor.render({ score: data.scores.effective })
   }
 }

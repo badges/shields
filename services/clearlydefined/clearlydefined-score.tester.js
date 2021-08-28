@@ -12,6 +12,6 @@ t.create('ClearlyDefined Score')
 t.create('ClearlyDefined Score (not found)')
   .get('/score/npm/npmjs/-/not-a-real-package/0.0.0.json')
   .expectBadge({
-    label: '404',
+    label: 'score',
     message: 'badge not found',
   })
