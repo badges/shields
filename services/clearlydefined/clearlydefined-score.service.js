@@ -6,30 +6,30 @@ import { BaseJsonService } from '../index.js'
 const schema = Joi.object({
   score: Joi.object({
     effective: nonNegativeInteger,
-  }).required(),  
+  }).required(),
 }).required()
 
 // This service based on the REST API for clearlydefined.io
 // https://api.clearlydefined.io/api-docs/
 export default class ClearlyDefinedService extends BaseJsonService {
   static category = 'analysis'
-  static route = { 
+  static route = {
     base: 'clearlydefined',
-    pattern: 'score/:type/:provider/:namespace/:name/:revision'
+    pattern: 'score/:type/:provider/:namespace/:name/:revision',
   }
 
   static examples = [
     {
       title: 'ClearlyDefined Score',
-      namedParams: { 
-        type: 'npm', 
-        provider: 'npmjs', 
-        namespace: '-', 
-        name: 'jquery', 
-        revision: '3.4.1' 
+      namedParams: {
+        type: 'npm',
+        provider: 'npmjs',
+        namespace: '-',
+        name: 'jquery',
+        revision: '3.4.1',
       },
       staticPreview: this.render({ score: 88 }),
-    }
+    },
   ]
 
   static defaultBadgeData = { label: 'score' }
