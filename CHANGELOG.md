@@ -6,28 +6,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2021-09-01
 
+- use multi-stage build to reduce size of docker images [#6938](https://github.com/badges/shields/issues/6938)
+- remove disableStrictSsl param from [jenkins] [#6887](https://github.com/badges/shields/issues/6887)
 - refactor(GitHubCommitActivity): switch to v4/GraphQL API [#6959](https://github.com/badges/shields/issues/6959)
 - feat: add freecodecamp badge [#6958](https://github.com/badges/shields/issues/6958)
-- use multi-stage build to reduce size [#6938](https://github.com/badges/shields/issues/6938)
 - use the right version of NPM in docker build [#6941](https://github.com/badges/shields/issues/6941)
-- Fix [MyGet] version example and test [#6940](https://github.com/badges/shields/issues/6940)
-- Tidy up server imports [#6937](https://github.com/badges/shields/issues/6937)
-- Switch all shields.io links to https [#6935](https://github.com/badges/shields/issues/6935)
-- fix incorrect colorsForBackground detection [#6939](https://github.com/badges/shields/issues/6939)
-- Migrate flat, flat-square, plastic and social to use `XmlElement` [#6883](https://github.com/badges/shields/issues/6883)
-- update [requires] test/example [#6913](https://github.com/badges/shields/issues/6913)
-- Fix badge classes links in tutorial [#6911](https://github.com/badges/shields/issues/6911)
 - [TwitchExtensionVersion] New badge [#6900](https://github.com/badges/shields/issues/6900)
-- remove disableStrictSsl param from [jenkins] [#6887](https://github.com/badges/shields/issues/6887)
-- switch from husky to simple-git-hooks [#6904](https://github.com/badges/shields/issues/6904)
 - enforce strict SSL checking for [coverity] [#6886](https://github.com/badges/shields/issues/6886)
-- fix failing [gitlab] test [#6885](https://github.com/badges/shields/issues/6885)
-- update [bugzilla] not found test [#6884](https://github.com/badges/shields/issues/6884)
-- Revert "prefer release.name in [Github] release badge (#6879)" [#6880](https://github.com/badges/shields/issues/6880)
-- prefer release.name in [Github] release badge [#6879](https://github.com/badges/shields/issues/6879)
 - Update self hosting docs [#6877](https://github.com/badges/shields/issues/6877)
-- fix auto-close action [#6876](https://github.com/badges/shields/issues/6876)
-- fix DockerHub snapshot build [#6878](https://github.com/badges/shields/issues/6878)
 - Support optionalDependencies in [GithubPackageJson] [#6749](https://github.com/badges/shields/issues/6749)
 - Dependency updates
 
