@@ -1,7 +1,5 @@
-'use strict'
-
-const Joi = require('joi')
-const { BaseJsonService, NotFound } = require('..')
+import Joi from 'joi'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.array().items(
   Joi.object({
@@ -9,7 +7,7 @@ const schema = Joi.array().items(
   })
 )
 
-module.exports = class GitlabTag extends BaseJsonService {
+export default class GitlabTag extends BaseJsonService {
   static category = 'version'
 
   static route = {
