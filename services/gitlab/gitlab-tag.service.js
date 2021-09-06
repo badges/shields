@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound } from '../index.js'
+import { NotFound } from '../index.js'
+import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
   Joi.object({
@@ -7,7 +8,7 @@ const schema = Joi.array().items(
   })
 )
 
-export default class GitlabTag extends BaseJsonService {
+export default class GitlabTag extends GitLabBase {
   static category = 'version'
 
   static route = {
@@ -36,7 +37,7 @@ export default class GitlabTag extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
+    return super.fetch({
       schema,
       url: `https://gitlab.com/api/v4/projects/${user}%2F${repo}/repository/tags`,
       errorMessages: {
