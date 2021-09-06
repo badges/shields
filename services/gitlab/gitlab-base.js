@@ -4,7 +4,6 @@ export default class GitLabBase extends BaseJsonService {
   static auth = {
     passKey: 'gitlab_token',
     serviceKey: 'gitlab',
-    defaultToEmptyStringForUser: true,
   }
 
   async fetch({ url, options, schema, errorMessages }) {
