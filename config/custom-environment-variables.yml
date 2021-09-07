@@ -50,6 +50,8 @@ public:
       authorizedOrigins: 'NEXUS_ORIGINS'
     npm:
       authorizedOrigins: 'NPM_ORIGINS'
+    obs:
+      instance: 'OBS_INSTANCE'
     sonar:
       authorizedOrigins: 'SONAR_ORIGINS'
     teamcity:
@@ -87,6 +89,8 @@ private:
   nexus_user: 'NEXUS_USER'
   nexus_pass: 'NEXUS_PASS'
   npm_token: 'NPM_TOKEN'
+  obs_userName: 'OBS_USER_NAME'
+  obs_userPass: 'OBS_USER_PASS'
   redis_url: 'REDIS_URL'
   sentry_dsn: 'SENTRY_DSN'
   shields_secret: 'SHIELDS_SECRET'

@@ -22,6 +22,8 @@ public:
       debug:
         enabled: false
         intervalSeconds: 200
+    obs:
+      instance: 'https://api.opensuse.org'
     weblate:
       authorizedOrigins: 'https://hosted.weblate.org'
     trace: false

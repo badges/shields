@@ -134,6 +134,9 @@ const publicConfigSchema = Joi.object({
     }).default({ authorizedOrigins: [] }),
     nexus: defaultService,
     npm: defaultService,
+    obs: Joi.object({
+      instance: requiredUrl,
+    }),
     sonar: defaultService,
     teamcity: defaultService,
     weblate: defaultService,
@@ -172,6 +175,8 @@ const privateConfigSchema = Joi.object({
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
+  obs_userName: Joi.string(),
+  obs_userPass: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
   shields_secret: Joi.string(),

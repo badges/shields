@@ -193,6 +193,22 @@ installation access to private npm packages
 
 [npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
+## Open Build Service
+
+- `OBS_INSTANCE` (yml: `public.services.obs.instance`)
+- `OBS_USER_NAME` (yml: `private.obs_userName`)
+- `OBS_USER_PASS` (yml: `private.obs_userPass`)
+
+Only authenticated users are allowed to access the Open Build Service API.
+Authentication is done by sending a Basic HTTP Authorisation header. A user
+account for the [reference instance](https://build.opensuse.org) is a SUSE
+IdP account, which can be created [here](https://idp-portal.suse.com/univention/self-service/#page=createaccount).
+
+While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.authorization.token.html#id-1.5.10.16.4),
+they can only be scoped to execute specific actions on a POST request. This
+means however, that an actual account is required to read the build status
+of a package.
+
 ### SymfonyInsight (formerly Sensiolabs)
 
 - `SL_INSIGHT_USER_UUID` (yml: `private.sl_insight_userUuid`)
