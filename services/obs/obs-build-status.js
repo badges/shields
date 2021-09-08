@@ -60,7 +60,7 @@ function renderBuildStatusBadge({ repository, status }) {
   const color = statusmap[status]
 
   return {
-    label: repository.replaceAll('_', ' '),
+    label: repository.replace(/_/g, ' '),
     message: status.charAt(0).toUpperCase() + status.slice(1),
     color,
   }
