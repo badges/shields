@@ -14,6 +14,7 @@ export default class ObsService extends BaseXmlService {
     base: 'obs',
     pattern: ':project/:packageName/:repository/:arch',
   }
+
   static auth = {
     userKey: 'obs_userName',
     passKey: 'obs_userPass',
