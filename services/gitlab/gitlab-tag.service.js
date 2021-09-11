@@ -58,6 +58,19 @@ export default class GitlabTag extends GitLabBase {
       },
       staticPreview: this.render({ name: 'v5.0.0-beta.1' }),
     },
+    {
+      title: 'GitLab tag (custom instance)',
+      namedParams: {
+        user: 'GNOME',
+        repo: 'librsvg',
+      },
+      queryParams: {
+        sort: 'semver',
+        include_prereleases: null,
+        gitlab_url: 'https://gitlab.gnome.org',
+      },
+      staticPreview: this.render({ name: 'v2.51.4' }),
+    },
   ]
 
   static defaultBadgeData = { label: 'tag' }
