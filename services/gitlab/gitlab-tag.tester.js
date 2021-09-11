@@ -1,10 +1,22 @@
-import Joi from 'joi'
+import { isSemver } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Tag (latest by date)')
-  .get('/fdroid/fdroidclient.json')
-  .expectBadge({ label: 'tag', message: Joi.string(), color: 'blue' })
+  .get('/shields-ops-group/tag-test.json')
+  .expectBadge({ label: 'tag', message: 'v2.0.0', color: 'blue' })
+
+t.create('Tag (latest by SemVer)')
+  .get('/shields-ops-group/tag-test.json?sort=semver')
+  .expectBadge({ label: 'tag', message: 'v4.0.0', color: 'blue' })
+
+t.create('Tag (latest by SemVer pre-release)')
+  .get('/shields-ops-group/tag-test.json?sort=semver&include_prereleases')
+  .expectBadge({ label: 'tag', message: 'v5.0.0-beta.1', color: 'orange' })
+
+t.create('Tag (custom instance')
+  .get('/GNOME/librsvg.json?gitlab_url=https://gitlab.gnome.org')
+  .expectBadge({ label: 'tag', message: isSemver, color: 'blue' })
 
 t.create('Tag (repo not found)')
   .get('/fdroid/nonexistant.json')

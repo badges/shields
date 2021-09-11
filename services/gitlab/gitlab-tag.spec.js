@@ -23,7 +23,7 @@ describe('GitLabTag', function () {
 
     it('sends the auth information as configured', async function () {
       const scope = nock('https://gitlab.com/')
-        .get('/api/v4/projects/foo%2Fbar/repository/tags')
+        .get('/api/v4/projects/foo%2Fbar/repository/tags?order_by=updated')
         // This ensures that the expected credentials are actually being sent with the HTTP request.
         // Without this the request wouldn't match and the test would fail.
         .basicAuth({ user: '', pass: fakeToken })
@@ -37,7 +37,7 @@ describe('GitLabTag', function () {
           {}
         )
       ).to.deep.equal({
-        message: '1.9',
+        message: 'v1.9',
         color: 'blue',
       })
 
