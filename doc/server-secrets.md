@@ -149,8 +149,8 @@ but will not be necessary for most self-hosted installations. See
 
 ### GitLab
 
-- `GITLAB_ORIGINS` (yml: `public.services.drone.authorizedOrigins`)
-- `GITLAB_TOKEN` (yml: `private.drone_token`)
+- `GITLAB_ORIGINS` (yml: `public.services.gitlab.authorizedOrigins`)
+- `GITLAB_TOKEN` (yml: `private.gitlab_token`)
 
 A GitLab [Personal Access Token][gitlab-pat] is required for accessing private content. If you need a GitLab token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
 
