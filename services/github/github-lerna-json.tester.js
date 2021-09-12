@@ -14,12 +14,10 @@ t.create('Lerna version (independent)')
     message: 'independent',
   })
 
-t.create('Lerna version (branch)')
-  .get('/facebook/jest/master.json')
-  .expectBadge({
-    label: 'lerna@master',
-    message: isSemver,
-  })
+t.create('Lerna version (branch)').get('/facebook/jest/main.json').expectBadge({
+  label: 'lerna@main',
+  message: isSemver,
+})
 
 t.create('Lerna version (lerna.json missing)')
   .get('/PyvesB/empty-repo.json')
