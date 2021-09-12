@@ -34,8 +34,8 @@ export default class GitlabTag extends GitLabBase {
         user: 'shields-ops-group',
         repo: 'tag-test',
       },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({ name: 'v2.0.0' }),
+      queryParams: { sort: 'date' },
+      staticPreview: this.render({ version: 'v2.0.0' }),
     },
     {
       title: 'GitLab tag (latest by SemVer)',
@@ -44,7 +44,7 @@ export default class GitlabTag extends GitLabBase {
         repo: 'tag-test',
       },
       queryParams: { sort: 'semver' },
-      staticPreview: this.render({ name: 'v4.0.0' }),
+      staticPreview: this.render({ version: 'v4.0.0' }),
     },
     {
       title: 'GitLab tag (latest by SemVer pre-release)',
@@ -56,7 +56,7 @@ export default class GitlabTag extends GitLabBase {
         sort: 'semver',
         include_prereleases: null,
       },
-      staticPreview: this.render({ name: 'v5.0.0-beta.1' }),
+      staticPreview: this.render({ version: 'v5.0.0-beta.1', sort: 'semver' }),
     },
     {
       title: 'GitLab tag (custom instance)',
@@ -69,7 +69,7 @@ export default class GitlabTag extends GitLabBase {
         include_prereleases: null,
         gitlab_url: 'https://gitlab.gnome.org',
       },
-      staticPreview: this.render({ name: 'v2.51.4' }),
+      staticPreview: this.render({ version: 'v2.51.4' }),
     },
   ]
 
