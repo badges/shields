@@ -22,7 +22,7 @@ export default class GitlabTag extends GitLabBase {
   static category = 'version'
 
   static route = {
-    base: 'gitlab/tag',
+    base: 'gitlab/v/tag',
     pattern: ':user/:repo',
     queryParamSchema,
   }
@@ -89,7 +89,8 @@ export default class GitlabTag extends GitLabBase {
     // explicitly in case that changes upstream.
     return super.fetch({
       schema,
-      url: `${baseUrl}/api/v4/projects/${user}%2F${repo}/repository/tags?order_by=updated`,
+      url: `${baseUrl}/api/v4/projects/${user}%2F${repo}/repository/tags`,
+      options: { qs: { order_by: 'updated' } },
       errorMessages: {
         404: 'repo not found',
       },
