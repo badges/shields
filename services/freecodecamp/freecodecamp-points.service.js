@@ -2,11 +2,17 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
 
+/**
+ * Validates that the schema response is what we're expecting.
+ * The username pattern should match the freeCodeCamp repository.
+ *
+ * @see https://github.com/freeCodeCamp/freeCodeCamp/blob/main/utils/validate.js#L14
+ */
 const schema = Joi.object({
   entities: Joi.object({
     user: Joi.object()
       .required()
-      .pattern(/^\w+$/, {
+      .pattern(/^[a-zA-Z0-9\-_+]*$/, {
         points: Joi.number().allow(null).required(),
       }),
   }).optional(),
