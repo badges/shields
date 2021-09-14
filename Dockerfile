@@ -1,5 +1,6 @@
 FROM node:14-alpine AS Builder
 
+RUN exit 3
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
 WORKDIR /usr/src/app
