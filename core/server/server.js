@@ -125,6 +125,7 @@ const publicConfigSchema = Joi.object({
         intervalSeconds: Joi.number().integer().min(1).required(),
       },
     },
+    gitlab: defaultService,
     jira: defaultService,
     jenkins: Joi.object({
       authorizedOrigins: origins,
@@ -161,6 +162,7 @@ const privateConfigSchema = Joi.object({
   gh_client_id: Joi.string(),
   gh_client_secret: Joi.string(),
   gh_token: Joi.string(),
+  gitlab_token: Joi.string(),
   jenkins_user: Joi.string(),
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),

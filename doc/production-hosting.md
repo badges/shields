@@ -32,6 +32,8 @@ Production hosting is managed by the Shields ops team:
 | Twitch                        | OAuth app                       | @PyvesB                                                         |
 | Discord                       | OAuth app                       | @PyvesB                                                         |
 | YouTube                       | Account owner                   | @PyvesB                                                         |
+| GitLab                        | Account owner                   | @calebcartwright                                                |
+| GitLab                        | Account access                  | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB             |
 | OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                   |
 | DNS                           | Account owner                   | @olivierlacan                                                   |
 | DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                            |
