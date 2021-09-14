@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseXmlService } from '../index.js'
+import { optionalUrl } from '../validators.js'
 import { isBuildStatus, renderBuildStatusBadge } from './obs-build-status.js'
 
 const schema = Joi.object({
@@ -13,6 +14,9 @@ export default class ObsService extends BaseXmlService {
   static route = {
     base: 'obs',
     pattern: ':project/:packageName/:repository/:arch',
+    queryParamSchema: Joi.object({
+      instance: optionalUrl,
+    }).required(),
   }
 
   static auth = {
@@ -47,16 +51,19 @@ export default class ObsService extends BaseXmlService {
 
   constructor(context, config) {
     super(context, config)
-    this.instance = config.public.services.obs.instance
-    const { protocol, host } = new URL(this.instance)
-    this.authHelper._authorizedOrigins = [`${protocol}//${host}`]
+    const origins = []
+    config.public.services.obs.authorizedOrigins.forEach(origin => {
+      const { protocol, host } = new URL(origin)
+      origins.push(`${protocol}//${host}`)
+    })
+    this.authHelper._authorizedOrigins = origins
   }
 
-  async fetch({ project, packageName, repository, arch }) {
+  async fetch({ instance, project, packageName, repository, arch }) {
     return this._requestXml(
       this.authHelper.withBasicAuth({
         schema,
-        url: `${this.instance}/build/${project}/${repository}/${arch}/${packageName}/_status`,
+        url: `${instance}/build/${project}/${repository}/${arch}/${packageName}/_status`,
         errorMessages: {
           401: 'Not authorized',
           404: 'Package not found', // extend this to project/package/repository/arch?
@@ -68,8 +75,17 @@ export default class ObsService extends BaseXmlService {
     )
   }
 
-  async handle({ project, packageName, repository, arch }) {
-    const resp = await this.fetch({ project, packageName, repository, arch })
+  async handle(
+    { project, packageName, repository, arch },
+    { instance = 'https://api.opensuse.org' }
+  ) {
+    const resp = await this.fetch({
+      instance,
+      project,
+      packageName,
+      repository,
+      arch,
+    })
     return this.constructor.render({
       repository,
       status: resp.status['@_code'],

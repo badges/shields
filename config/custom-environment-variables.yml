@@ -51,7 +51,7 @@ public:
     npm:
       authorizedOrigins: 'NPM_ORIGINS'
     obs:
-      instance: 'OBS_INSTANCE'
+      authorizedOrigins: 'OBS_ORIGINS'
     sonar:
       authorizedOrigins: 'SONAR_ORIGINS'
     teamcity:

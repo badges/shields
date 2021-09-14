@@ -134,9 +134,7 @@ const publicConfigSchema = Joi.object({
     }).default({ authorizedOrigins: [] }),
     nexus: defaultService,
     npm: defaultService,
-    obs: Joi.object({
-      instance: requiredUrl,
-    }),
+    obs: defaultService,
     sonar: defaultService,
     teamcity: defaultService,
     weblate: defaultService,
