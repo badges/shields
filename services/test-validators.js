@@ -93,7 +93,9 @@ const isPercentage = Joi.alternatives().try(
   isDecimalPercentage
 )
 
-const isFileSize = withRegex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/)
+const isFileSize = withRegex(
+  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
+)
 
 const isFormattedDate = Joi.alternatives().try(
   Joi.equal('today', 'yesterday'),
