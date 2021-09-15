@@ -40,6 +40,8 @@ public:
       debug:
         enabled: 'GITHUB_DEBUG_ENABLED'
         intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
+    gitlab:
+      authorizedOrigins: 'GITLAB_ORIGINS'
     jenkins:
       authorizedOrigins: 'JENKINS_ORIGINS'
     jira:

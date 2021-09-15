@@ -147,6 +147,15 @@ These settings are used by shields.io for GitHub OAuth app authorization
 but will not be necessary for most self-hosted installations. See
 [production-hosting.md](./production-hosting.md).
 
+### GitLab
+
+- `GITLAB_ORIGINS` (yml: `public.services.gitlab.authorizedOrigins`)
+- `GITLAB_TOKEN` (yml: `private.gitlab_token`)
+
+A GitLab [Personal Access Token][gitlab-pat] is required for accessing private content. If you need a GitLab token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
+
+[gitlab-pat]: https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html
+
 ### Jenkins CI
 
 - `JENKINS_ORIGINS` (yml: `public.services.jenkins.authorizedOrigins`)

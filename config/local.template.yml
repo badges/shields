@@ -5,6 +5,7 @@ private:
   # you can also set these values through environment variables, which may be
   # preferable for self hosting.
   gh_token: '...'
+  gitlab_token: '...'
   twitch_client_id: '...'
   twitch_client_secret: '...'
   weblate_api_key: '...'
