@@ -96,7 +96,9 @@ Successfully built 4471b442c220
 
 Optionally, alter the default values for configuration via one of the two methods : through a configuration file (ex : `local.yml`) or through environnement variables.
 See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for possible values.
-In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environnement variable keys are defined in the quotes.
+In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environnement variable keys are defined in the quotes in uppercase.
+
+Dockerfile to configure shields through a configuration file :
 
 ```docker
 FROM shieldsio/shields:next
@@ -107,14 +109,14 @@ Then run the container:
 
 ```console
 $ docker run --rm -p 8080:80 --name shields shieldsio/shields:next
-# Use the container you configured with your local.yml if you have configured it.
-# And for env var configurations : 
+# Use the container you configured with your local.yml that you have configured it eventually.
+# And with env var configurations :
 $ docker run --rm -p 8080:8080 --env PORT=8080 --env METRICS_PROMETHEUS_ENABLED=true --env METRICS_PROMETHEUS_ENDPOINT_ENABLED=true --name shields shieldsio/shields:next
-# Note : for port configuration, use the same exposed port as the configured PORT inside shields for propre badges urls.
+# Note : the port value configured should be the same as the one exposed outside shields to have propre badges urls.
 
-> Configuration:
-> ...
-> 0916211515 Server is starting up: http://0.0.0.0:8080/ 
+Configuration:
+...
+0916211515 Server is starting up: http://0.0.0.0:8080/
 ```
 
 Assuming Docker is running locally, you should be able to get to the
