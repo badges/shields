@@ -94,20 +94,27 @@ Sending build context to Docker daemon 3.923 MB
 Successfully built 4471b442c220
 ```
 
-Optionally, create a file called `shields.env` that contains the needed
-configuration. See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for examples.
+Optionally, alter the default values for configuration via one of the two methods : through a configuration file (ex : `local.yml`) or through environnement variables.
+See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for possible values.
+In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environnement variable keys are defined in the quotes.
+
+```docker
+FROM shieldsio/shields:next
+COPY local.yml ./config/local.yml
+```
 
 Then run the container:
 
 ```console
-$ docker run --rm -p 8080:80 --name shields shields
-# or if you have shields.env file, run the following instead
-$ docker run --rm -p 8080:80 --env-file shields.env --name shields shields
+$ docker run --rm -p 8080:80 --name shields shieldsio/shields:next
+# Use the container you configured with your local.yml if you have configured it.
+# And for env var configurations : 
+$ docker run --rm -p 8080:8080 --env PORT=8080 --env METRICS_PROMETHEUS_ENABLED=true --env METRICS_PROMETHEUS_ENDPOINT_ENABLED=true --name shields shieldsio/shields:next
+# Note : for port configuration, use the same exposed port as the configured PORT inside shields for propre badges urls.
 
-> badge-maker@3.0.0 start /usr/src/app
-> node server.js
-
-http://[::1]/
+> Configuration:
+> ...
+> 0916211515 Server is starting up: http://0.0.0.0:8080/ 
 ```
 
 Assuming Docker is running locally, you should be able to get to the
@@ -117,7 +124,6 @@ If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
 then you will need to replace `localhost` with the IP address of that virtual
 machine.
 
-[shields.example.env]: ../shields.example.env
 
 ## Raster server
 
