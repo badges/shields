@@ -126,7 +126,6 @@ If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
 then you will need to replace `localhost` with the IP address of that virtual
 machine.
 
-
 ## Raster server
 
 If you want to host PNG badges, you can also self-host a [raster server][]
