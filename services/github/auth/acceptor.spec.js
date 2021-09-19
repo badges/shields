@@ -41,6 +41,7 @@ describe('Github token acceptor', function () {
       server: camp,
       authHelper: oauthHelper,
       onTokenAccepted,
+      tokenScopes: 'read:packages',
     })
   })
 
@@ -52,6 +53,7 @@ describe('Github token acceptor', function () {
     const qs = queryString.stringify({
       client_id: fakeClientId,
       redirect_uri: 'https://img.shields.io/github-auth/done',
+      scope: 'read:packages',
     })
     const expectedLocationHeader = `https://github.com/login/oauth/authorize?${qs}`
     expect(res.headers.location).to.equal(expectedLocationHeader)

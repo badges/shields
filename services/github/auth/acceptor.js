@@ -3,7 +3,7 @@ import request from 'request'
 import { userAgent } from '../../../core/base-service/legacy-request-handler.js'
 import log from '../../../core/server/log.js'
 
-function setRoutes({ server, authHelper, onTokenAccepted }) {
+function setRoutes({ server, authHelper, onTokenAccepted, tokenScopes }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
@@ -15,6 +15,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       // it's not setting a bad example.
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
+      scope: tokenScopes,
     })
     ask.res.setHeader(
       'Location',
