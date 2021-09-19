@@ -38,6 +38,7 @@ class GithubApiProvider {
     onTokenInvalidated = tokenString => {},
     globalToken,
     reserveFraction = 0.25,
+    tokenScopeNames = {},
   }) {
     Object.assign(this, {
       baseUrl,
@@ -45,12 +46,14 @@ class GithubApiProvider {
       onTokenInvalidated,
       globalToken,
       reserveFraction,
+      tokenScopeNames,
     })
 
     if (this.withPooling) {
       this.standardTokens = new TokenPool({ batchSize: 25 })
       this.searchTokens = new TokenPool({ batchSize: 5 })
       this.graphqlTokens = new TokenPool({ batchSize: 25 })
+      this.packageScopedTokens = new TokenPool({ batchSize: 25 })
     }
   }
 
@@ -60,17 +63,41 @@ class GithubApiProvider {
         standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
         searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
         graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
+        packageScopedTokens: this.packageScopedTokens.serializeDebugInfo({
+          sanitize,
+        }),
       }
     } else {
       return {}
     }
   }
 
-  addToken(tokenString) {
+  numReservedScopedTokens() {
+    return this.packageScopedTokens.count()
+  }
+
+  addReservedScopedToken(tokenString, data) {
+    if (!this.withPooling) {
+      throw Error('When not using a token pool, do not provide tokens')
+    }
+
+    const { scopes } = data
+    if (!scopes) {
+      throw new Error('Cannot add unscoped token to reserved token pools')
+    }
+
+    scopes.split('%20').forEach(scope => {
+      if (scope === this.tokenScopeNames.readPackages) {
+        this.packageScopedTokens.add(tokenString, data)
+      }
+    })
+  }
+
+  addToken(tokenString, data) {
     if (this.withPooling) {
-      this.standardTokens.add(tokenString)
-      this.searchTokens.add(tokenString)
-      this.graphqlTokens.add(tokenString)
+      this.standardTokens.add(tokenString, data)
+      this.searchTokens.add(tokenString, data)
+      this.graphqlTokens.add(tokenString, data)
     } else {
       throw Error('When not using a token pool, do not provide tokens')
     }
@@ -141,7 +168,11 @@ class GithubApiProvider {
     this.onTokenInvalidated(token.id)
   }
 
-  tokenForUrl(url) {
+  tokenForUrl(url, { needsPackageScope }) {
+    if (needsPackageScope) {
+      return this.packageScopedTokens.next()
+    }
+
     if (url.startsWith('/search')) {
       return this.searchTokens.next()
     } else if (url.startsWith('/graphql')) {
@@ -154,14 +185,14 @@ class GithubApiProvider {
   // Act like request(), but tweak headers and query to avoid hitting a rate
   // limit. Inject `request` so we can pass in `cachingRequest` from
   // `request-handler.js`.
-  request(request, url, options = {}, callback) {
+  request({ request, url, options = {}, neededScopes = {}, callback }) {
     const { baseUrl } = this
 
     let token
     let tokenString
     if (this.withPooling) {
       try {
-        token = this.tokenForUrl(url)
+        token = this.tokenForUrl(url, neededScopes)
       } catch (e) {
         callback(e)
         return
@@ -198,14 +229,20 @@ class GithubApiProvider {
     })
   }
 
-  requestAsPromise(request, url, options) {
+  requestAsPromise({ request, url, options, neededScopes }) {
     return new Promise((resolve, reject) => {
-      this.request(request, url, options, (err, res, buffer) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve({ res, buffer })
-        }
+      this.request({
+        request,
+        url,
+        options,
+        neededScopes,
+        callback: (err, res, buffer) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve({ res, buffer })
+          }
+        },
       })
     })
   }

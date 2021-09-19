@@ -6,7 +6,11 @@ describe('Github API provider', function () {
   const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
-  let mockStandardToken, mockSearchToken, mockGraphqlToken, provider
+  let mockStandardToken,
+    mockSearchToken,
+    mockGraphqlToken,
+    mockPackagesScopedToken,
+    provider
   beforeEach(function () {
     provider = new GithubApiProvider({ baseUrl, reserveFraction })
 
@@ -18,6 +22,11 @@ describe('Github API provider', function () {
 
     mockGraphqlToken = { update: sinon.spy(), invalidate: sinon.spy() }
     sinon.stub(provider.graphqlTokens, 'next').returns(mockGraphqlToken)
+
+    mockPackagesScopedToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    sinon
+      .stub(provider.packageScopedTokens, 'next')
+      .returns(mockPackagesScopedToken)
   })
 
   context('a search API request', function () {
@@ -25,12 +34,16 @@ describe('Github API provider', function () {
       callback()
     }
     it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/search', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).to.have.been.calledOnce
-        expect(provider.standardTokens.next).not.to.have.been.called
-        expect(provider.graphqlTokens.next).not.to.have.been.called
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/search',
+        callback: (err, res, buffer) => {
+          expect(err).to.be.undefined
+          expect(provider.searchTokens.next).to.have.been.calledOnce
+          expect(provider.standardTokens.next).not.to.have.been.called
+          expect(provider.graphqlTokens.next).not.to.have.been.called
+          done()
+        },
       })
     })
   })
@@ -40,12 +53,37 @@ describe('Github API provider', function () {
       callback()
     }
     it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).not.to.have.been.called
-        expect(provider.standardTokens.next).not.to.have.been.called
-        expect(provider.graphqlTokens.next).to.have.been.calledOnce
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/graphql',
+        callback: (err, res, buffer) => {
+          expect(err).to.be.undefined
+          expect(provider.searchTokens.next).not.to.have.been.called
+          expect(provider.standardTokens.next).not.to.have.been.called
+          expect(provider.graphqlTokens.next).to.have.been.calledOnce
+          done()
+        },
+      })
+    })
+  })
+
+  context('a request requiring the read:packages scope', function () {
+    const mockRequest = (options, callback) => {
+      callback()
+    }
+    it('should obtain an appropriate token', function (done) {
+      provider.request({
+        request: mockRequest,
+        url: '/graphql',
+        neededScopes: { needsPackageScope: true },
+        callback: (err, res, buffer) => {
+          expect(err).to.be.undefined
+          expect(provider.searchTokens.next).not.to.have.been.called
+          expect(provider.standardTokens.next).not.to.have.been.called
+          expect(provider.graphqlTokens.next).not.to.have.been.called
+          expect(provider.packageScopedTokens.next).to.have.been.calledOnce
+          done()
+        },
       })
     })
   })
@@ -55,12 +93,16 @@ describe('Github API provider', function () {
       callback()
     }
     it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/repo', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).not.to.have.been.called
-        expect(provider.standardTokens.next).to.have.been.calledOnce
-        expect(provider.graphqlTokens.next).not.to.have.been.called
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/repo',
+        callback: (err, res, buffer) => {
+          expect(err).to.be.undefined
+          expect(provider.searchTokens.next).not.to.have.been.called
+          expect(provider.standardTokens.next).to.have.been.calledOnce
+          expect(provider.graphqlTokens.next).not.to.have.been.called
+          done()
+        },
       })
     })
   })
@@ -84,25 +126,33 @@ describe('Github API provider', function () {
     }
 
     it('should invoke the callback', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(Object.is(res, mockResponse)).to.be.true
-        expect(Object.is(buffer, mockBuffer)).to.be.true
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/foo',
+        callback: (err, res, buffer) => {
+          expect(err).to.equal(null)
+          expect(Object.is(res, mockResponse)).to.be.true
+          expect(Object.is(buffer, mockBuffer)).to.be.true
+          done()
+        },
       })
     })
 
     it('should update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        const expectedUsesRemaining =
-          remaining - Math.ceil(reserveFraction * rateLimit)
-        expect(mockStandardToken.update).to.have.been.calledWith(
-          expectedUsesRemaining,
-          nextReset
-        )
-        expect(mockStandardToken.invalidate).not.to.have.been.called
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/foo',
+        callback: (err, res, buffer) => {
+          expect(err).to.equal(null)
+          const expectedUsesRemaining =
+            remaining - Math.ceil(reserveFraction * rateLimit)
+          expect(mockStandardToken.update).to.have.been.calledWith(
+            expectedUsesRemaining,
+            nextReset
+          )
+          expect(mockStandardToken.invalidate).not.to.have.been.called
+          done()
+        },
       })
     })
   })
@@ -132,25 +182,33 @@ describe('Github API provider', function () {
     }
 
     it('should invoke the callback', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(Object.is(res, mockResponse)).to.be.true
-        expect(Object.is(buffer, mockBuffer)).to.be.true
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/graphql',
+        callback: (err, res, buffer) => {
+          expect(err).to.equal(null)
+          expect(Object.is(res, mockResponse)).to.be.true
+          expect(Object.is(buffer, mockBuffer)).to.be.true
+          done()
+        },
       })
     })
 
     it('should update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        const expectedUsesRemaining =
-          remaining - Math.ceil(reserveFraction * rateLimit)
-        expect(mockGraphqlToken.update).to.have.been.calledWith(
-          expectedUsesRemaining,
-          nextReset
-        )
-        expect(mockGraphqlToken.invalidate).not.to.have.been.called
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/graphql',
+        callback: (err, res, buffer) => {
+          expect(err).to.equal(null)
+          const expectedUsesRemaining =
+            remaining - Math.ceil(reserveFraction * rateLimit)
+          expect(mockGraphqlToken.update).to.have.been.calledWith(
+            expectedUsesRemaining,
+            nextReset
+          )
+          expect(mockGraphqlToken.invalidate).not.to.have.been.called
+          done()
+        },
       })
     })
   })
@@ -164,11 +222,15 @@ describe('Github API provider', function () {
     }
 
     it('should invoke the callback and update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(mockStandardToken.invalidate).to.have.been.calledOnce
-        expect(mockStandardToken.update).not.to.have.been.called
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/foo',
+        callback: (err, res, buffer) => {
+          expect(err).to.equal(null)
+          expect(mockStandardToken.invalidate).to.have.been.calledOnce
+          expect(mockStandardToken.update).not.to.have.been.called
+          done()
+        },
       })
     })
   })
@@ -180,10 +242,14 @@ describe('Github API provider', function () {
     }
 
     it('should pass the error to the callback', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.be.an.instanceof(Error)
-        expect(err.message).to.equal('connection timeout')
-        done()
+      provider.request({
+        request: mockRequest,
+        url: '/foo',
+        callback: (err, res, buffer) => {
+          expect(err).to.be.an.instanceof(Error)
+          expect(err.message).to.equal('connection timeout')
+          done()
+        },
       })
     })
   })

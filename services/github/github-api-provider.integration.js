@@ -30,11 +30,10 @@ describe('Github API provider', function () {
     it('should be able to run 10 requests', async function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
-        await githubApiProvider.requestAsPromise(
+        await githubApiProvider.requestAsPromise({
           request,
-          '/repos/rust-lang/rust',
-          {}
-        )
+          url: '/repos/rust-lang/rust',
+        })
       }
     })
   })
@@ -52,11 +51,10 @@ describe('Github API provider', function () {
 
     const headers = []
     async function performOneRequest() {
-      const { res } = await githubApiProvider.requestAsPromise(
+      const { res } = await githubApiProvider.requestAsPromise({
         request,
-        '/repos/rust-lang/rust',
-        {}
-      )
+        url: '/repos/rust-lang/rust',
+      })
       expect(res.statusCode).to.equal(200)
       headers.push(res.headers)
     }

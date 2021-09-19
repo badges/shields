@@ -75,10 +75,10 @@ async function githubLicense(githubApiProvider, user, repo) {
 
   let link = `https://github.com/${repoSlug}`
 
-  const { buffer } = await githubApiProvider.requestAsPromise(
+  const { buffer } = await githubApiProvider.requestAsPromise({
     request,
-    `/repos/${repoSlug}/license`
-  )
+    url: `/repos/${repoSlug}/license`,
+  })
   try {
     const data = JSON.parse(buffer)
     if ('html_url' in data) {
