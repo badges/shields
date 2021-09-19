@@ -188,6 +188,10 @@ class TokenPool {
     this.priorityQueue = new PriorityQueue(this.constructor.compareTokens)
   }
 
+  count() {
+    return this.tokenIds.size
+  }
+
   /**
    * compareTokens
    *
