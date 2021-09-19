@@ -2,21 +2,22 @@ import gql from 'graphql-tag'
 import { mergeQueries } from '../../core/base-service/graphql.js'
 import { BaseGraphqlService, BaseJsonService } from '../index.js'
 
-function createRequestFetcher(context, config) {
+function createRequestFetcher(context, config, neededScopes) {
   const { sendAndCacheRequestWithCallbacks, githubApiProvider } = context
 
   return async (url, options) =>
-    githubApiProvider.requestAsPromise(
-      sendAndCacheRequestWithCallbacks,
+    githubApiProvider.requestAsPromise({
+      request: sendAndCacheRequestWithCallbacks,
       url,
-      options
-    )
+      options,
+      neededScopes,
+    })
 }
 
 class GithubAuthV3Service extends BaseJsonService {
-  constructor(context, config) {
+  constructor(context, config, neededScopes) {
     super(context, config)
-    this._requestFetcher = createRequestFetcher(context, config)
+    this._requestFetcher = createRequestFetcher(context, config, neededScopes)
     this.staticAuthConfigured = true
   }
 }
@@ -27,10 +28,10 @@ class GithubAuthV3Service extends BaseJsonService {
 // useful when consuming GitHub endpoints which are not rate-limited: it
 // avoids wasting API quota on them in production.
 class ConditionalGithubAuthV3Service extends BaseJsonService {
-  constructor(context, config) {
+  constructor(context, config, neededScopes) {
     super(context, config)
     if (context.githubApiProvider.globalToken) {
-      this._requestFetcher = createRequestFetcher(context, config)
+      this._requestFetcher = createRequestFetcher(context, config, neededScopes)
       this.staticAuthConfigured = true
     } else {
       this.staticAuthConfigured = false
@@ -39,9 +40,9 @@ class ConditionalGithubAuthV3Service extends BaseJsonService {
 }
 
 class GithubAuthV4Service extends BaseGraphqlService {
-  constructor(context, config) {
+  constructor(context, config, neededScopes) {
     super(context, config)
-    this._requestFetcher = createRequestFetcher(context, config)
+    this._requestFetcher = createRequestFetcher(context, config, neededScopes)
     this.staticAuthConfigured = true
   }
 
