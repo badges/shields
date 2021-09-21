@@ -1,5 +1,8 @@
 import Joi from 'joi'
-import { nonNegativeInteger } from '../validators.js'
+import {
+  nonNegativeInteger,
+  optionalNonNegativeInteger,
+} from '../validators.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
 
@@ -8,7 +11,7 @@ const schema = Joi.object({
     effective: nonNegativeInteger,
   }).required(),
   described: Joi.object({
-    files: nonNegativeInteger,
+    files: optionalNonNegativeInteger,
   }),
 }).required()
 
