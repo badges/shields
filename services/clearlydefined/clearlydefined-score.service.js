@@ -7,6 +7,9 @@ const schema = Joi.object({
   scores: Joi.object({
     effective: nonNegativeInteger,
   }).required(),
+  described: Joi.object({
+    files: nonNegativeInteger,
+  }),
 }).required()
 
 // This service based on the REST API for clearlydefined.io
@@ -43,6 +46,14 @@ export default class ClearlyDefinedService extends BaseJsonService {
     }
   }
 
+  static renderError() {
+    return {
+      label: 'score',
+      message: 'unknown namespace, name, or revision',
+      color: 'red',
+    }
+  }
+
   async fetch({ type, provider, namespace, name, revision }) {
     return this._requestJson({
       schema,
@@ -55,6 +66,12 @@ export default class ClearlyDefinedService extends BaseJsonService {
 
   async handle({ type, provider, namespace, name, revision }) {
     const data = await this.fetch({ type, provider, namespace, name, revision })
-    return this.constructor.render({ score: data.scores.effective })
+    // Return score only if definition contains some files,
+    // else it was an incomplete response due to unknown coordinates
+    if (data.described.files > 0) {
+      return this.constructor.render({ score: data.scores.effective })
+    } else {
+      return this.constructor.renderError()
+    }
   }
 }

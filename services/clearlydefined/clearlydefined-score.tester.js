@@ -9,11 +9,11 @@ t.create('ClearlyDefined Score')
     message: Joi.string().regex(/^\d+\/\d+$/),
   })
 
-t.create('ClearlyDefined Score (package not found)')
+t.create('ClearlyDefined Score (name not found)')
   .get('/score/npm/npmjs/-/not-a-real-package/0.0.0.json')
   .expectBadge({
     label: 'score',
-    message: '0/100',
+    message: 'unknown namespace, name, or revision',
   })
 
 t.create('ClearlyDefined Score (type not found)')
