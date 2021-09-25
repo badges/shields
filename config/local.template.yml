@@ -6,8 +6,8 @@ private:
   # preferable for self hosting.
   gh_token: '...'
   gitlab_token: '...'
-  obs_userName: '...'
-  obs_userPass: '...'
+  obs_user: '...'
+  obs_pass: '...'
   twitch_client_id: '...'
   twitch_client_secret: '...'
   weblate_api_key: '...'

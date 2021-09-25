@@ -195,9 +195,8 @@ installation access to private npm packages
 
 ## Open Build Service
 
-- `OBS_INSTANCE` (yml: `public.services.obs.instance`)
-- `OBS_USER_NAME` (yml: `private.obs_userName`)
-- `OBS_USER_PASS` (yml: `private.obs_userPass`)
+- `OBS_USER` (yml: `private.obs_user`)
+- `OBS_PASS` (yml: `private.obs_user`)
 
 Only authenticated users are allowed to access the Open Build Service API.
 Authentication is done by sending a Basic HTTP Authorisation header. A user

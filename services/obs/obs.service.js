@@ -20,8 +20,8 @@ export default class ObsService extends BaseXmlService {
   }
 
   static auth = {
-    userKey: 'obs_userName',
-    passKey: 'obs_userPass',
+    userKey: 'obs_user',
+    passKey: 'obs_pass',
     authorizedOrigins: [],
     isRequired: true,
   }
