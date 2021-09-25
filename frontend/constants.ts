@@ -21,11 +21,11 @@ export function getBaseUrl(): string {
   https://img.shields.io/
   */
   try {
-    const { protocol, hostname } = window.location
+    const { protocol, hostname, port } = window.location
     if (['shields.io', 'www.shields.io'].includes(hostname)) {
       return 'https://img.shields.io'
     }
-    return `${protocol}//${hostname}`
+    return `${protocol}//${hostname}:${port}`
   } catch (e) {
     // server-side rendering
     return ''
