@@ -55,10 +55,6 @@ export default class ObsService extends BaseXmlService {
       this.authHelper.withBasicAuth({
         schema,
         url: `${instance}/build/${project}/${repository}/${arch}/${packageName}/_status`,
-        errorMessages: {
-          401: 'Not authorized',
-          404: 'Package not found', // extend this to project/package/repository/arch?
-        },
         parserOptions: {
           ignoreAttributes: false,
         },
