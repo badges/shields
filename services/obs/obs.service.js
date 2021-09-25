@@ -28,13 +28,14 @@ export default class ObsService extends BaseXmlService {
 
   static examples = [
     {
-      title: 'openSUSE OBS package build status',
+      title: 'OBS package build status',
       namedParams: {
         project: 'openSUSE:Tools',
         packageName: 'osc',
         repository: 'Debian_11',
         arch: 'x86_64',
       },
+      queryParams: { instance: 'https://api.opensuse.org' },
       staticPreview: this.render({
         repository: 'Debian_11',
         status: 'succeeded',
@@ -43,7 +44,7 @@ export default class ObsService extends BaseXmlService {
     },
   ]
 
-  static defaultBadgeData = { label: 'OBS' }
+  static defaultBadgeData = { label: 'build' }
 
   static render({ repository, status }) {
     return renderBuildStatusBadge({ repository, status })

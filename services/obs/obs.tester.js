@@ -1,7 +1,7 @@
 import { ServiceTester } from '../tester.js'
 import { noToken } from '../test-helpers.js'
 import ObsService from './obs.service.js'
-import { getIsMessageStatus } from './obs-build-status.js'
+import { isBuildStatus } from './obs-build-status.js'
 
 export const t = new ServiceTester({
   id: 'obs',
@@ -10,16 +10,16 @@ export const t = new ServiceTester({
 
 t.create('status (valid)')
   .skipWhen(noToken(ObsService))
-  .get('/openSUSE:Factory/aaa_base/standard/x86_64.json')
+  .get('/openSUSE:Factory/aaa_base/standard/x86_64.json?label=standard')
   .expectBadge({
     label: 'standard',
-    message: getIsMessageStatus(),
+    message: isBuildStatus,
   })
 
 t.create('status (invalid)')
   .skipWhen(noToken(ObsService))
   .get('/home:sp1rit/this_package_will_never_exist/repo/arch.json')
   .expectBadge({
-    label: 'OBS',
-    message: 'Package not found',
+    label: 'build',
+    message: 'not found',
   })
