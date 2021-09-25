@@ -99,14 +99,11 @@ describe('Cache header functions', function () {
   })
 
   describe('setHeadersForCacheLength', function () {
-    let sandbox
     beforeEach(function () {
-      sandbox = sinon.createSandbox()
-      sandbox.useFakeTimers()
+      sinon.useFakeTimers()
     })
     afterEach(function () {
-      sandbox.restore()
-      sandbox = undefined
+      sinon.restore()
     })
 
     it('should set the correct Date header', function () {

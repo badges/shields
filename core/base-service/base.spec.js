@@ -124,15 +124,11 @@ describe('BaseService', function () {
   })
 
   describe('Logging', function () {
-    let sandbox
     beforeEach(function () {
-      sandbox = sinon.createSandbox()
+      sinon.stub(trace, 'logTrace')
     })
     afterEach(function () {
-      sandbox.restore()
-    })
-    beforeEach(function () {
-      sandbox.stub(trace, 'logTrace')
+      sinon.restore()
     })
     it('Invokes the logger as expected', async function () {
       await DummyService.invoke(
@@ -426,15 +422,11 @@ describe('BaseService', function () {
   })
 
   describe('request', function () {
-    let sandbox
     beforeEach(function () {
-      sandbox = sinon.createSandbox()
+      sinon.stub(trace, 'logTrace')
     })
     afterEach(function () {
-      sandbox.restore()
-    })
-    beforeEach(function () {
-      sandbox.stub(trace, 'logTrace')
+      sinon.restore()
     })
 
     it('logs appropriate information', async function () {
