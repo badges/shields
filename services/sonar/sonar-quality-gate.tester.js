@@ -19,6 +19,15 @@ t.create('Quality Gate')
     message: isQualityGateStatus,
   })
 
+t.create('Quality Gate (branch)')
+  .get(
+    '/quality_gate/swellaby%3Aazdo-shellcheck/master.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'quality gate',
+    message: isQualityGateStatus,
+  })
+
 t.create('Quality Gate (Alert Status)')
   .get(
     '/alert_status/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
