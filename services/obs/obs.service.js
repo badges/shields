@@ -22,7 +22,7 @@ export default class ObsService extends BaseXmlService {
   static auth = {
     userKey: 'obs_user',
     passKey: 'obs_pass',
-    authorizedOrigins: [],
+    serviceKey: 'obs',
     isRequired: true,
   }
 
@@ -47,16 +47,6 @@ export default class ObsService extends BaseXmlService {
 
   static render({ repository, status }) {
     return renderBuildStatusBadge({ repository, status })
-  }
-
-  constructor(context, config) {
-    super(context, config)
-    const origins = []
-    config.public.services.obs.authorizedOrigins.forEach(origin => {
-      const { protocol, host } = new URL(origin)
-      origins.push(`${protocol}//${host}`)
-    })
-    this.authHelper._authorizedOrigins = origins
   }
 
   async fetch({ instance, project, packageName, repository, arch }) {
