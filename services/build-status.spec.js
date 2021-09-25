@@ -53,6 +53,7 @@ test(renderBuildStatusBadge, () => {
 
 test(renderBuildStatusBadge, () => {
   forCases([
+    given({ status: 'broken' }),
     given({ status: 'error' }),
     given({ status: 'errored' }),
     given({ status: 'failed' }),
