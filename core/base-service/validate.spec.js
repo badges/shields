@@ -10,15 +10,11 @@ describe('validate', function () {
     requiredString: Joi.string().required(),
   }).required()
 
-  let sandbox
   beforeEach(function () {
-    sandbox = sinon.createSandbox()
+    sinon.stub(trace, 'logTrace')
   })
   afterEach(function () {
-    sandbox.restore()
-  })
-  beforeEach(function () {
-    sandbox.stub(trace, 'logTrace')
+    sinon.restore()
   })
 
   const ErrorClass = InvalidParameter
