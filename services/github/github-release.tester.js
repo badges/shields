@@ -20,6 +20,10 @@ t.create('Prerelease')
     color: Joi.string().allow('blue', 'orange').required(),
   })
 
+t.create('Release (release name instead of tag name)')
+  .get('/v/release/expressjs/express.json?display_name=release')
+  .expectBadge({ label: 'release', message: isSemver, color: 'blue' })
+
 t.create('Release (No releases)')
   .get('/v/release/badges/daily-tests.json')
   .expectBadge({ label: 'release', message: 'no releases or repo not found' })
