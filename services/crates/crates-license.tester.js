@@ -13,6 +13,7 @@ t.create('license (not found)')
   .get('/not-a-real-package.json')
   .expectBadge({ label: 'license', message: 'not found' })
 
+// https://github.com/badges/shields/issues/7073
 t.create('license (null licenses in history)')
   .get('/stun.json')
   .expectBadge({ label: 'license', message: 'MIT/Apache-2.0' })
