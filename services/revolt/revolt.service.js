@@ -3,8 +3,6 @@ import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
-  server_name: Joi.string(),
-  channel_name: Joi.string(),
   member_count: nonNegativeInteger,
 }).required()
 
@@ -30,14 +28,14 @@ export default class RevoltServerInvite extends BaseJsonService {
   ]
 
   static defaultBadgeData = {
-    label: 'revolt',
+    label: 'chat',
     namedLogo: 'revolt',
   }
 
-  static render({ inviteId, serverName, channelName, memberCount }) {
+  static render({ inviteId, memberCount }) {
     return {
-      label: `${serverName} #${channelName}`,
-      message: memberCount,
+      label: 'chat',
+      message: `${memberCount} members`,
       color: 'brightgreen',
       link: [`https://app.revolt.chat/invites/${inviteId}`],
     }
@@ -51,15 +49,9 @@ export default class RevoltServerInvite extends BaseJsonService {
   }
 
   async handle({ inviteId }) {
-    const {
-      server_name: serverName,
-      channel_name: channelName,
-      member_count: memberCount,
-    } = await this.fetch({ inviteId })
+    const { member_count: memberCount } = await this.fetch({ inviteId })
     return this.constructor.render({
       inviteId,
-      serverName,
-      channelName,
       memberCount,
     })
   }
