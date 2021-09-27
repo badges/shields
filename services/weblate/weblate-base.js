@@ -15,7 +15,10 @@ export default class WeblateBase extends BaseJsonService {
 
   async fetch(requestParams) {
     return this._requestJson(
-      this.authHelper.withBearerAuthHeader(requestParams, 'Token')
+      this.authHelper.withBearerAuthHeader(
+        requestParams,
+        'Token' // lgtm [js/hardcoded-credentials]
+      )
     )
   }
 }
