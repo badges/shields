@@ -51,7 +51,7 @@ export default class JenkinsTests extends JenkinsBase {
         passed_label: 'passed',
         failed_label: 'failed',
         skipped_label: 'skipped',
-        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_gerrit',
       },
       staticPreview: this.render({
         passed: 477,
