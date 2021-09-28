@@ -7,14 +7,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 ## server-2021-09-01
 
 - use multi-stage build to reduce size of docker images [#6938](https://github.com/badges/shields/issues/6938)
-- remove disableStrictSsl param from [jenkins] [#6887](https://github.com/badges/shields/issues/6887)
+- remove disableStrictSsl param from [jenkins][#6887](https://github.com/badges/shields/issues/6887)
 - refactor(GitHubCommitActivity): switch to v4/GraphQL API [#6959](https://github.com/badges/shields/issues/6959)
 - feat: add freecodecamp badge [#6958](https://github.com/badges/shields/issues/6958)
 - use the right version of NPM in docker build [#6941](https://github.com/badges/shields/issues/6941)
 - [TwitchExtensionVersion] New badge [#6900](https://github.com/badges/shields/issues/6900)
-- enforce strict SSL checking for [coverity] [#6886](https://github.com/badges/shields/issues/6886)
+- enforce strict SSL checking for [coverity][#6886](https://github.com/badges/shields/issues/6886)
 - Update self hosting docs [#6877](https://github.com/badges/shields/issues/6877)
-- Support optionalDependencies in [GithubPackageJson] [#6749](https://github.com/badges/shields/issues/6749)
+- Support optionalDependencies in [GithubPackageJson][#6749](https://github.com/badges/shields/issues/6749)
 - Dependency updates
 
 ## server-2021-08-01
@@ -27,16 +27,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 - Replace opn-cli with open-cli [#6747](https://github.com/badges/shields/issues/6747)
 - Verify that Node 14 is installed in development [#6748](https://github.com/badges/shields/issues/6748)
 - Migrate from CommonJS to ESM [#6651](https://github.com/badges/shields/issues/6651)
-- Add Wikiapiary Extension Badge [WikiapiaryInstalls] [#6678](https://github.com/badges/shields/issues/6678)
-- deprecate [beerpay] [#6708](https://github.com/badges/shields/issues/6708)
-- deprecate [microbadger] [#6709](https://github.com/badges/shields/issues/6709)
+- Add Wikiapiary Extension Badge [WikiapiaryInstalls][#6678](https://github.com/badges/shields/issues/6678)
+- deprecate [beerpay][#6708](https://github.com/badges/shields/issues/6708)
+- deprecate [microbadger][#6709](https://github.com/badges/shields/issues/6709)
 - [npmsioscore] Support npm score [#6630](https://github.com/badges/shields/issues/6630)
 - Add [Weblate] badges [#6677](https://github.com/badges/shields/issues/6677)
 - Dependency updates
 
 ## server-2021-07-01
 
-- improve [MavenCentral], [MavenMetadata], and [GradlePluginPortal] [#6628](https://github.com/badges/shields/issues/6628)
+- improve [MavenCentral], [MavenMetadata], and [GradlePluginPortal][#6628](https://github.com/badges/shields/issues/6628)
 - fix: fix regex to match [codecov]'s flags [#6655](https://github.com/badges/shields/issues/6655)
 - fix usage style [#6638](https://github.com/badges/shields/issues/6638)
 - update simple-icons to v5 with by-name lookup backwards compatibility [#6591](https://github.com/badges/shields/issues/6591)
@@ -52,8 +52,8 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 - deprecate DockerBuild service [#6529](https://github.com/badges/shields/issues/6529)
 - Remove rate limiting functionality [#6513](https://github.com/badges/shields/issues/6513)
 - [GitHub] Move to 'funding' category [#5846](https://github.com/badges/shields/issues/5846)
-- Add GitHub discussions total badge [GithubTotalDiscussions] [#6472](https://github.com/badges/shields/issues/6472)
-- Add optional query parameter (include_prereleases) to [GemVersion] [#6451](https://github.com/badges/shields/issues/6451)
+- Add GitHub discussions total badge [GithubTotalDiscussions][#6472](https://github.com/badges/shields/issues/6472)
+- Add optional query parameter (include_prereleases) to [GemVersion][#6451](https://github.com/badges/shields/issues/6451)
 - Add [PingPong] Service [#6327](https://github.com/badges/shields/issues/6327)
 - Dependency updates
 
