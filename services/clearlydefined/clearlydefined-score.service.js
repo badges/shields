@@ -4,7 +4,7 @@ import {
   optionalNonNegativeInteger,
 } from '../validators.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   scores: Joi.object({
@@ -49,14 +49,6 @@ export default class ClearlyDefinedService extends BaseJsonService {
     }
   }
 
-  static renderError() {
-    return {
-      label: 'score',
-      message: 'unknown namespace, name, or revision',
-      color: 'red',
-    }
-  }
-
   async fetch({ type, provider, namespace, name, revision }) {
     return this._requestJson({
       schema,
@@ -74,7 +66,9 @@ export default class ClearlyDefinedService extends BaseJsonService {
     if (data.described.files > 0) {
       return this.constructor.render({ score: data.scores.effective })
     } else {
-      return this.constructor.renderError()
+      throw new NotFound({
+        prettyMessage: 'unknown namespace, name, or revision',
+      })
     }
   }
 }
