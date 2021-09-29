@@ -16,7 +16,7 @@ Production hosting is managed by the Shields ops team:
 
 | Component                     | Subcomponent                    | People with access                                              |
 | ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| shields-production-us         | Account owner                   | @paulmelnikow                                                   |
+| shields-production-us         | Account owner                   | @calebcartwright, @paulmelnikow                                 |
 | shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
@@ -32,6 +32,8 @@ Production hosting is managed by the Shields ops team:
 | Twitch                        | OAuth app                       | @PyvesB                                                         |
 | Discord                       | OAuth app                       | @PyvesB                                                         |
 | YouTube                       | Account owner                   | @PyvesB                                                         |
+| GitLab                        | Account owner                   | @calebcartwright                                                |
+| GitLab                        | Account access                  | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB             |
 | OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                   |
 | DNS                           | Account owner                   | @olivierlacan                                                   |
 | DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                            |
