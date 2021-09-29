@@ -11,6 +11,7 @@ import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
+import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
 import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
@@ -170,6 +171,7 @@ const privateConfigSchema = Joi.object({
   jira_pass: Joi.string(),
   bitbucket_server_username: Joi.string(),
   bitbucket_server_password: Joi.string(),
+  librariesio_tokens: Joi.arrayFromString().items(Joi.string()),
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
@@ -239,6 +241,11 @@ class Server {
 
     this.githubConstellation = new GithubConstellation({
       service: publicConfig.services.github,
+      private: privateConfig,
+    })
+
+    this.librariesioConstellation = new LibrariesIoConstellation({
+      service: publicConfig.services.librariesio,
       private: privateConfig,
     })
 
@@ -414,10 +421,17 @@ class Server {
   async registerServices() {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
-
+    const { apiProvider: librariesIoApiProvider } =
+      this.librariesioConstellation
     ;(await loadServiceClasses()).forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider, metricInstance },
+        {
+          camp,
+          handleRequest,
+          githubApiProvider,
+          librariesIoApiProvider,
+          metricInstance,
+        },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,

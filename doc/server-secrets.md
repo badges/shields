@@ -174,6 +174,24 @@ access to a private Jenkins CI instance.
 Provide a username and password to give your self-hosted Shields installation
 access to a private JIRA instance.
 
+### Libraries.io/Bower
+
+- `LIBRARIESIO_TOKENS` (yml: `private.librariesio_tokens`)
+
+Note that the Bower badges utilize the Libraries.io API, so use this secret for both Libraries.io badges and/or Bower badges.
+
+Just like the `*_ORIGINS` type secrets, this value can accept a single token as a string, or a group of tokens provided as an array of strings. For example:
+
+```yaml
+private:
+  librariesio_tokens: my-token
+## Or
+private:
+  librariesio_tokens: [my-token some-other-token]
+```
+
+When using the environment variable with multiple tokens, be sure to use a space to separate the tokens, e.g. `LIBRARIESIO_TOKENS="my-token some-other-token"`
+
 ### Nexus
 
 - `NEXUS_ORIGINS` (yml: `public.services.nexus.authorizedOrigins`)
