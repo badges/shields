@@ -34,24 +34,6 @@ t.create('Pre Version for Invalid Package')
   .get('/v/it-is-a-invalid-package-should-error.json?include_prereleases')
   .expectBadge({ label: 'bower', message: 'package not found' })
 
-t.create('Version label should be `no releases` if no stable version')
-  .get('/v/bootstrap.json')
-  .intercept(nock =>
-    nock('https://libraries.io')
-      .get('/api/bower/bootstrap')
-      .reply(200, { normalized_licenses: [], latest_stable_release: null })
-  )
-  .expectBadge({ label: 'bower', message: 'no releases' })
-
-t.create('Version label should be `no releases` if no pre-release')
-  .get('/v/bootstrap.json?include_prereleases')
-  .intercept(nock =>
-    nock('https://libraries.io')
-      .get('/api/bower/bootstrap')
-      .reply(200, { normalized_licenses: [], latest_release_number: null })
-  )
-  .expectBadge({ label: 'bower', message: 'no releases' })
-
 t.create('Version (legacy redirect: vpre)')
   .get('/vpre/bootstrap.svg')
   .expectRedirect('/bower/v/bootstrap.svg?include_prereleases')
