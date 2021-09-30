@@ -1,4 +1,5 @@
 private:
   # These are the keys which are set on the production servers.
   gh_token: 'SHIELDS_GITHUB_TOKEN'
+  gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
