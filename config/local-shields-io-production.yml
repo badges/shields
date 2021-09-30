@@ -1,0 +1,3 @@
+private:
+  # These are the keys which are set on the production servers.
+  gh_client_secret: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
