@@ -4,5 +4,8 @@ private:
   # The possible values are documented in `doc/server-secrets.md`. Note that
   # you can also set these values through environment variables, which may be
   # preferable for self hosting.
-  private.gh_token: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
+  gh_token: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
   # github_token: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
+  
+  public:
+  services.github.baseUri = 'https://symbldk-shields.herokuapp.com/github'
