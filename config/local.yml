@@ -1,8 +1,4 @@
 # Copy this file to `config/local.yml` and fill it in! It will be gitignored.
-
-public:
-  services.github.baseUri = 'https://github.com/larsa4d'
-  
 private:
   # The possible values are documented in `doc/server-secrets.md`. Note that
   # you can also set these values through environment variables, which may be
