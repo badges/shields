@@ -2,7 +2,7 @@
 public:
   services:
     github:
-      authorizedOrigins: ['https://api.github.com']
+      baseUri: ['https://api.github.com']
 private:
   # The possible values are documented in `doc/server-secrets.md`. Note that
   # you can also set these values through environment variables, which may be
