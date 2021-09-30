@@ -5,3 +5,4 @@ private:
   # you can also set these values through environment variables, which may be
   # preferable for self hosting.
   gh_token: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
+  github_token: '${{ secrets.SHIELDS_GITHUB_TOKEN }}'
