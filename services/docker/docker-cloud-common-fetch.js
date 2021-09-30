@@ -8,7 +8,7 @@ const cloudBuildSchema = Joi.object({
         build_settings: Joi.array(),
       }).required()
     )
-    .required(),
+  ,
 }).required()
 
 async function fetchBuild(serviceInstance, { user, repo }) {
