@@ -8,4 +8,5 @@ private:
   # you can also set these values through environment variables, which may be
   # preferable for self hosting.
   gh_token: 'SHIELDS_GITHUB_TOKEN'
-  # github_token: 'SHIELDS_GITHUB_TOKEN'
+  gh_client_id: 'GH_CLIENT_ID'
+  gh_client_secret: 'GH_CLIENT_SECRET'
