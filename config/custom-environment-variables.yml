@@ -80,7 +80,7 @@ private:
   drone_token: 'DRONE_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
-  gh_token: 'GH_TOKEN'
+  gh_token: 'SHIELDS_GITHUB_TOKEN'
   gitlab_token: 'GITLAB_TOKEN'
   jenkins_user: 'JENKINS_USER'
   jenkins_pass: 'JENKINS_PASS'
