@@ -18,7 +18,7 @@ public:
 
   services:
     github:
-      baseUri: 'https://api.github.com/'
+      baseUri: 'https://symbldk-shields.herokuapp.com/api/v3'
       debug:
         enabled: false
         intervalSeconds: 200
