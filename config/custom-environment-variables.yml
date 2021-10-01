@@ -36,7 +36,7 @@ public:
     drone:
       authorizedOrigins: 'DRONE_ORIGINS'
     github:
-      baseUri: 'GITHUB_URL'
+      baseUri: 'https://symbldk-shields.herokuapp.com/api/v3'
       debug:
         enabled: 'GITHUB_DEBUG_ENABLED'
         intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
