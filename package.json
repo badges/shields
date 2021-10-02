@@ -34,7 +34,7 @@
     "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.6",
     "cross-env": "^7.0.3",
-    "decamelize": "^5.0.0",
+    "decamelize": "^6.0.0",
     "emojic": "^1.1.16",
     "escape-string-regexp": "^4.0.0",
     "fast-xml-parser": "^3.20.3",
