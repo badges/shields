@@ -8,27 +8,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - feat: add 2021 support to GitHub Hacktoberfest [#7086](https://github.com/badges/shields/issues/7086)
 - Add [ClearlyDefined] service [#6944](https://github.com/badges/shields/issues/6944)
-- Update Shields production access doc [#7079](https://github.com/badges/shields/issues/7079)
-- refactor: cleanup AppveyorTests with by using shared helpers [#7077](https://github.com/badges/shields/issues/7077)
 - handle null licenses in crates.io response schema, run [crates] [#7074](https://github.com/badges/shields/issues/7074)
-- add documentation guide for adding new secrets [#7072](https://github.com/badges/shields/issues/7072)
-- change [JenkinsTests] targets to get service tests working again [#7068](https://github.com/badges/shields/issues/7068)
-- refactor: switch to David status API and update error handling [#7070](https://github.com/badges/shields/issues/7070)
-- refactor: cleanup legacy sinon sandboxing [#7066](https://github.com/badges/shields/issues/7066)
-- fix: annotate false lgtm hardcoded creds alert [#7069](https://github.com/badges/shields/issues/7069)
 - [OBS] add Open Build Service service-badge [#6993](https://github.com/badges/shields/issues/6993)
 - Correction of badges url in self-hosting configuration with a custom port. Issue 7025 [#7036](https://github.com/badges/shields/issues/7036)
 - fix: support gitlab token via env var [#7023](https://github.com/badges/shields/issues/7023)
-- ensure docker image builds on PRs [#7019](https://github.com/badges/shields/issues/7019)
 - Add API-based support for [GitLab] badges, add new GitLab Tag badge [#6988](https://github.com/badges/shields/issues/6988)
-- tests: fix dockerversion service test [#7014](https://github.com/badges/shields/issues/7014)
-- tests: fix spigetdownloadsize service test [#7018](https://github.com/badges/shields/issues/7018)
 - [freecodecamp]: allow + symbol in username [#7016](https://github.com/badges/shields/issues/7016)
-- Stop attempting to override Accept header in [GitHub] API provider [#7013](https://github.com/badges/shields/issues/7013)
-- update branch in [githublernajson] test [#7012](https://github.com/badges/shields/issues/7012)
 - Rename Riot to Element in Matrix badge help [#6996](https://github.com/badges/shields/issues/6996)
 - Fixed Reddit Negative Karma Issue [#6992](https://github.com/badges/shields/issues/6992)
-- refactor: update VS Marketplace Ratings badges for unrated extensions [#6986](https://github.com/badges/shields/issues/6986)
 - Dependency updates
 
 ## server-2021-09-01
