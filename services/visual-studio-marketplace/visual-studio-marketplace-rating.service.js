@@ -40,6 +40,13 @@ export default class VisualStudioMarketplaceRating extends VisualStudioMarketpla
   }
 
   static render({ format, averageRating, ratingCount }) {
+    if (ratingCount < 1) {
+      return {
+        message: 'no ratings',
+        color: 'inactive',
+      }
+    }
+
     const message =
       format === 'r'
         ? `${averageRating.toFixed(1)}/5 (${ratingCount})`

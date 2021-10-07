@@ -33,6 +33,13 @@ t.create('commit activity (1 week)').get('/w/eslint/eslint.json').expectBadge({
   message: isCommitActivity,
 })
 
+t.create('commit activity (custom branch)')
+  .get('/y/badges/squint/main.json')
+  .expectBadge({
+    label: 'commit activity',
+    message: isCommitActivity,
+  })
+
 t.create('commit activity (repo not found)')
   .get('/w/badges/helmets.json')
   .expectBadge({

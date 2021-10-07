@@ -69,9 +69,9 @@ t.create('version (valid)')
   })
 
 t.create('version (tenant)')
-  .get('/cefsharp.myget/cefsharp/v/cef.sdk.json')
+  .get('/tizen.myget/dotnet/v/Tizen.NET.json')
   .expectBadge({
-    label: 'cefsharp',
+    label: 'dotnet',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 

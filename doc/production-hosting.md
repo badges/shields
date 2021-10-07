@@ -16,7 +16,7 @@ Production hosting is managed by the Shields ops team:
 
 | Component                     | Subcomponent                    | People with access                                              |
 | ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| shields-production-us         | Account owner                   | @paulmelnikow                                                   |
+| shields-production-us         | Account owner                   | @calebcartwright, @paulmelnikow                                 |
 | shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
@@ -32,6 +32,8 @@ Production hosting is managed by the Shields ops team:
 | Twitch                        | OAuth app                       | @PyvesB                                                         |
 | Discord                       | OAuth app                       | @PyvesB                                                         |
 | YouTube                       | Account owner                   | @PyvesB                                                         |
+| GitLab                        | Account owner                   | @calebcartwright                                                |
+| GitLab                        | Account access                  | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB             |
 | OpenStreetMap (for Wheelmap)  | Account owner                   | @paulmelnikow                                                   |
 | DNS                           | Account owner                   | @olivierlacan                                                   |
 | DNS                           | Read-only account access        | @espadrine, @paulmelnikow, @chris48s                            |
@@ -102,7 +104,7 @@ hosted on [Zeit Now][]. It's managed in the
 
 Both the badge server and frontend are served from Heroku.
 
-After merging a commit to master, heroku should create a staging deploy. Check this has deployed correctly in the `shields-staging` pipeline and review http://shields-staging.herokuapp.com/
+After merging a commit to master, heroku should create a staging deploy. Check this has deployed correctly in the `shields-staging` pipeline and review https://shields-staging.herokuapp.com/
 
 If we're happy with it, "promote to production". This will deploy what's on staging to the `shields-production-eu` and `shields-production-us` pieplines.
 

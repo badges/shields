@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine AS Builder
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
@@ -8,6 +8,7 @@ COPY package.json package-lock.json /usr/src/app/
 # Without the badge-maker package.json and CLI script in place, `npm ci` will fail.
 COPY badge-maker /usr/src/app/badge-maker/
 
+RUN npm install -g "npm@>=7"
 # We need dev deps to build the front end. We don't need Cypress, though.
 RUN NODE_ENV=development CYPRESS_INSTALL_BINARY=0 npm ci
 
@@ -16,8 +17,13 @@ RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 
+# Use multi-stage build to reduce size
+FROM node:14-alpine
 # Run the server using production configs.
 ENV NODE_ENV production
+
+WORKDIR /usr/src/app
+COPY --from=Builder /usr/src/app /usr/src/app
 
 CMD node server
 

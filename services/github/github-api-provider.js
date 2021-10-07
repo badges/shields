@@ -54,18 +54,6 @@ class GithubApiProvider {
     }
   }
 
-  serializeDebugInfo({ sanitize = true } = {}) {
-    if (this.withPooling) {
-      return {
-        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
-        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
-        graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
-      }
-    } else {
-      return {}
-    }
-  }
-
   addToken(tokenString) {
     if (this.withPooling) {
       this.standardTokens.add(tokenString)
@@ -178,7 +166,6 @@ class GithubApiProvider {
         baseUrl,
         headers: {
           'User-Agent': userAgent,
-          Accept: 'application/vnd.github.v3+json',
           Authorization: `token ${tokenString}`,
           ...options.headers,
         },

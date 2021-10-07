@@ -83,8 +83,8 @@ t.create('zero rating')
   )
   .expectBadge({
     label: 'rating',
-    message: '0.0/5 (0)',
-    color: 'red',
+    message: 'no ratings',
+    color: 'lightgrey',
   })
 
 t.create('stars')

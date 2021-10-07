@@ -10,7 +10,7 @@
   "author": "chris48s",
   "license": "CC0",
   "dependencies": {
-    "@actions/core": "^1.4.0",
+    "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0"
   }
 }

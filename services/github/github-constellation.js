@@ -2,7 +2,6 @@ import { AuthHelper } from '../../core/base-service/auth-helper.js'
 import RedisTokenPersistence from '../../core/token-pooling/redis-token-persistence.js'
 import log from '../../core/server/log.js'
 import GithubApiProvider from './github-api-provider.js'
-import { setRoutes as setAdminRoutes } from './auth/admin.js'
 import { setRoutes as setAcceptorRoutes } from './auth/acceptor.js'
 
 // Convenience class with all the stuff related to the Github API and its
@@ -23,7 +22,6 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
-    this.shieldsSecret = config.private.shields_secret
 
     const { redis_url: redisUrl, gh_token: globalToken } = config.private
     if (redisUrl) {
@@ -73,9 +71,6 @@ class GithubConstellation {
     tokens.forEach(tokenString => {
       this.apiProvider.addToken(tokenString)
     })
-
-    const { shieldsSecret, apiProvider } = this
-    setAdminRoutes({ shieldsSecret }, { apiProvider, server })
 
     if (this.oauthHelper.isConfigured) {
       setAcceptorRoutes({

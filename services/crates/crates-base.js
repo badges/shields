@@ -14,7 +14,7 @@ const crateSchema = Joi.object({
     .items(
       Joi.object({
         downloads: nonNegativeInteger,
-        license: Joi.string().required(),
+        license: Joi.string().required().allow(null),
       })
     )
     .min(1)
@@ -25,7 +25,7 @@ const versionSchema = Joi.object({
   version: Joi.object({
     downloads: nonNegativeInteger,
     num: Joi.string().required(),
-    license: Joi.string().required(),
+    license: Joi.string().required().allow(null),
   }).required(),
 }).required()
 

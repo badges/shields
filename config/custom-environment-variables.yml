@@ -40,6 +40,8 @@ public:
       debug:
         enabled: 'GITHUB_DEBUG_ENABLED'
         intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
+    gitlab:
+      authorizedOrigins: 'GITLAB_ORIGINS'
     jenkins:
       authorizedOrigins: 'JENKINS_ORIGINS'
     jira:
@@ -48,6 +50,8 @@ public:
       authorizedOrigins: 'NEXUS_ORIGINS'
     npm:
       authorizedOrigins: 'NPM_ORIGINS'
+    obs:
+      authorizedOrigins: 'OBS_ORIGINS'
     sonar:
       authorizedOrigins: 'SONAR_ORIGINS'
     teamcity:
@@ -77,6 +81,7 @@ private:
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
   gh_token: 'GH_TOKEN'
+  gitlab_token: 'GITLAB_TOKEN'
   jenkins_user: 'JENKINS_USER'
   jenkins_pass: 'JENKINS_PASS'
   jira_user: 'JIRA_USER'
@@ -84,9 +89,10 @@ private:
   nexus_user: 'NEXUS_USER'
   nexus_pass: 'NEXUS_PASS'
   npm_token: 'NPM_TOKEN'
+  obs_user: 'OBS_USER'
+  obs_pass: 'OBS_PASS'
   redis_url: 'REDIS_URL'
   sentry_dsn: 'SENTRY_DSN'
-  shields_secret: 'SHIELDS_SECRET'
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
   sonarqube_token: 'SONARQUBE_TOKEN'
