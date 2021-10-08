@@ -20,7 +20,7 @@ import {
   Deprecated,
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
-import { fetchFactory } from './got.js'
+import { sendRequest } from './node-fetch.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -432,7 +432,7 @@ class BaseService {
       ServiceClass: this,
     })
 
-    const fetcher = fetchFactory(fetchLimitBytes)
+    const fetcher = sendRequest.bind(sendRequest, fetchLimitBytes)
 
     camp.route(
       regex,
