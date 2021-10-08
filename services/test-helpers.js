@@ -1,7 +1,7 @@
 import bytes from 'bytes'
 import nock from 'nock'
 import config from 'config'
-import { fetchFactory } from '../core/base-service/got.js'
+import { sendRequest } from '../core/base-service/node-fetch.js'
 const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
@@ -31,7 +31,10 @@ function noToken(serviceClass) {
   }
 }
 
-const sendAndCacheRequest = fetchFactory(bytes(runnerConfig.public.fetchLimit))
+const sendAndCacheRequest = sendRequest.bind(
+  sendRequest,
+  bytes(runnerConfig.public.fetchLimit)
+)
 
 const defaultContext = { sendAndCacheRequest }
 
