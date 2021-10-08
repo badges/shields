@@ -83,7 +83,7 @@ export default class SecurityHeaders extends BaseService {
       },
     })
 
-    const grade = res.headers['x-grade']
+    const grade = res.headers.get('x-grade')
 
     if (!grade) {
       throw new NotFound({ prettyMessage: 'not available' })
