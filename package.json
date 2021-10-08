@@ -205,7 +205,7 @@
     "is-svg": "^4.3.1",
     "js-yaml-loader": "^1.2.2",
     "jsdoc": "^3.6.7",
-    "lint-staged": "^11.1.2",
+    "lint-staged": "^11.2.0",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.5",
