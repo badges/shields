@@ -4,6 +4,20 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-10-04
+
+- feat: add 2021 support to GitHub Hacktoberfest [#7086](https://github.com/badges/shields/issues/7086)
+- Add [ClearlyDefined] service [#6944](https://github.com/badges/shields/issues/6944)
+- handle null licenses in crates.io response schema, run [crates] [#7074](https://github.com/badges/shields/issues/7074)
+- [OBS] add Open Build Service service-badge [#6993](https://github.com/badges/shields/issues/6993)
+- Correction of badges url in self-hosting configuration with a custom port. Issue 7025 [#7036](https://github.com/badges/shields/issues/7036)
+- fix: support gitlab token via env var [#7023](https://github.com/badges/shields/issues/7023)
+- Add API-based support for [GitLab] badges, add new GitLab Tag badge [#6988](https://github.com/badges/shields/issues/6988)
+- [freecodecamp]: allow + symbol in username [#7016](https://github.com/badges/shields/issues/7016)
+- Rename Riot to Element in Matrix badge help [#6996](https://github.com/badges/shields/issues/6996)
+- Fixed Reddit Negative Karma Issue [#6992](https://github.com/badges/shields/issues/6992)
+- Dependency updates
+
 ## server-2021-09-01
 
 - use multi-stage build to reduce size of docker images [#6938](https://github.com/badges/shields/issues/6938)
