@@ -16,7 +16,7 @@ Production hosting is managed by the Shields ops team:
 
 | Component                     | Subcomponent                    | People with access                                              |
 | ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| shields-production-us         | Account owner                   | @paulmelnikow                                                   |
+| shields-production-us         | Account owner                   | @calebcartwright, @paulmelnikow                                 |
 | shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
