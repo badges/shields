@@ -2,9 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
 
 const schema = Joi.object({
-  downloads: Joi.number().required(),
+  downloads: nonNegativeInteger,
 }).required()
 
 export default class Modrinth extends BaseJsonService {
