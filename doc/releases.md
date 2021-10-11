@@ -2,7 +2,7 @@
 
 Shields is a community project that is stewarded by a handful of core maintainers who contribute on a volunteer basis. We do our best to maintain the availability and reliability of the service, and enhance and improve the project overall. However, if you've spotted something wrong or would like to see a specific feature implemented, please consider helping us resolve it by submitting a pull request. All community contributions, even documentation improvements, are welcome!
 
-https://github.com/badges/shields is a monorepo and hosts the Shields frontend and server code as well as the [badge-maker][npm package] NPM library (and the [badge design specification](https://github.com/badges/shields/tree/master/spec)). The packaging and release processes for these items is described in the respective sections below.
+https://github.com/badges/shields is a monorepo and hosts the Shields frontend and server code as well as the [badge-maker][npm package] NPM library (and the [badge design specification](https://github.com/badges/shields/tree/master/spec)). The packaging and release processes for these items are described in the respective sections below.
 
 ## badge-maker package
 
