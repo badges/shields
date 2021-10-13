@@ -7,7 +7,7 @@ export default class SonarCoverage extends SonarBase {
 
   static route = {
     base: 'sonar/coverage',
-    pattern: ':component',
+    pattern: ':component/:branch*',
     queryParamSchema,
   }
 
@@ -16,6 +16,7 @@ export default class SonarCoverage extends SonarBase {
       title: 'Sonar Coverage',
       namedParams: {
         component: 'org.ow2.petals:petals-se-ase',
+        branch: 'master',
       },
       queryParams: {
         server: 'http://sonar.petalslink.com',
@@ -36,11 +37,12 @@ export default class SonarCoverage extends SonarBase {
     }
   }
 
-  async handle({ component }, { server, sonarVersion }) {
+  async handle({ component, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       metricName: 'coverage',
     })
     const { coverage } = this.transform({
