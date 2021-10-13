@@ -23,7 +23,9 @@ const intelliJschema = Joi.object({
 }).required()
 
 const jetbrainsSchema = Joi.object({
-  votes: Joi.object().pattern(Joi.string(), Joi.number()).required(),
+  votes: Joi.object()
+    .pattern(Joi.string().required(), Joi.number().required())
+    .required(),
   meanVotes: Joi.number().min(0).required(),
   meanRating: Joi.number().min(0).required(),
 }).required()
