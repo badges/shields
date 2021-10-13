@@ -60,7 +60,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',
-    pattern: ':year(2019|2020)/:user/:repo',
+    pattern: ':year(2019|2020|2021)/:user/:repo',
     queryParamSchema,
   }
 
@@ -68,7 +68,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
     {
       title: 'GitHub Hacktoberfest combined status',
       namedParams: {
-        year: '2020',
+        year: '2021',
         user: 'snyk',
         repo: 'snyk',
       },
@@ -82,7 +82,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
     {
       title: 'GitHub Hacktoberfest combined status (suggestion label override)',
       namedParams: {
-        year: '2020',
+        year: '2021',
         user: 'tmrowco',
         repo: 'tmrowapp-contrib',
       },
@@ -90,7 +90,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
         suggestion_label: 'help wanted',
       },
       staticPreview: this.render({
-        year: '2020',
+        year: '2021',
         suggestedIssueCount: 12,
         contributionCount: 8,
         daysLeft: 15,

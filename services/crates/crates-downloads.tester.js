@@ -1,11 +1,6 @@
-import { ServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
-
-export const t = new ServiceTester({
-  id: 'crates',
-  title: 'crates.io',
-  pathPrefix: '/crates',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('total downloads')
   .get('/d/libc.json')
