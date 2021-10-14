@@ -254,7 +254,7 @@ By checking code coverage, we can make sure we've covered all our bases.
 We can generate a coverage report and open it:
 
 ```
-npm run coverage:test:services -- --only=wercker
+npm run coverage:test:services -- -- --only=wercker
 npm run coverage:report:open
 ```
 

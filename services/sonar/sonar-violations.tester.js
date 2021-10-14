@@ -25,6 +25,16 @@ t.create('Violations')
     message: isMetric,
   })
 
+t.create('Violations (branch)')
+  .timeout(10000)
+  .get(
+    '/violations/org.sonarsource.sonarqube%3Asonarqube/master.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'violations',
+    message: isMetric,
+  })
+
 t.create('Violations (legacy API supported)')
   .get(
     '/violations/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'

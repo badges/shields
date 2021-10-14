@@ -1,3 +1,4 @@
+import { InvalidResponse } from '../index.js'
 import { BaseCratesService, keywords } from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
@@ -21,28 +22,30 @@ export default class CratesLicense extends BaseCratesService {
     },
   ]
 
-  static render({ license }) {
-    return {
-      label: 'license',
-      message: license,
-      color: 'blue',
+  static defaultBadgeData = { label: 'license', color: 'blue' }
+
+  static render({ license: message }) {
+    return { message }
+  }
+
+  static transform({ errors, version, versions }) {
+    // crates.io returns a 200 response with an errors object in
+    // error scenarios, e.g. https://crates.io/api/v1/crates/libc/0.1
+    if (errors) {
+      throw new InvalidResponse({ prettyMessage: errors[0].detail })
     }
+
+    const license = version ? version.license : versions[0].license
+    if (!license) {
+      throw new InvalidResponse({ prettyMessage: 'invalid null license' })
+    }
+
+    return { license }
   }
 
   async handle({ crate, version }) {
     const json = await this.fetch({ crate, version })
-
-    if (json.errors) {
-      /* a call like
-         https://crates.io/api/v1/crates/libc/0.1
-         or
-         https://crates.io/api/v1/crates/libc/0.1.76
-         returns a 200 OK with an errors object */
-      return { message: json.errors[0].detail }
-    }
-
-    return this.constructor.render({
-      license: json.version ? json.version.license : json.versions[0].license,
-    })
+    const { license } = this.constructor.transform(json)
+    return this.constructor.render({ license })
   }
 }

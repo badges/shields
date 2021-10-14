@@ -14,7 +14,7 @@ export default class SonarDocumentedApiDensity extends SonarBase {
 
   static route = {
     base: `sonar/${metric}`,
-    pattern: ':component',
+    pattern: ':component/:branch*',
     queryParamSchema,
   }
 
@@ -23,6 +23,7 @@ export default class SonarDocumentedApiDensity extends SonarBase {
       title: 'Sonar Documented API Density',
       namedParams: {
         component: 'org.ow2.petals:petals-se-ase',
+        branch: 'master',
       },
       queryParams: {
         server: 'http://sonar.petalslink.com',
@@ -43,11 +44,12 @@ export default class SonarDocumentedApiDensity extends SonarBase {
     }
   }
 
-  async handle({ component }, { server, sonarVersion }) {
+  async handle({ component, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       metricName: metric,
     })
     const metrics = this.transform({ json, sonarVersion })
