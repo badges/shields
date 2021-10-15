@@ -15,6 +15,13 @@ t.create('Coverage')
     message: isIntegerPercentage,
   })
 
+t.create('Coverage (branch)')
+  .get('/swellaby%3Aletra/master.json?server=https://sonarcloud.io')
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
+
 t.create('Coverage (legacy API supported)')
   .get(
     '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
