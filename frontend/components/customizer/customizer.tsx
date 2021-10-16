@@ -55,7 +55,6 @@ export default function Customizer({
     // parameters changed.
     let src
     if (pathIsComplete) {
-      console.log('ellodave')
       src = generateBuiltBadgeUrl()
     } else {
       src = staticBadgeUrl({
