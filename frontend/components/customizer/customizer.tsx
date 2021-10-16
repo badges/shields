@@ -93,7 +93,7 @@ export default function Customizer({
         indicatorRef.current.trigger()
       }
     },
-    [generateBuiltBadgeUrl, link, title, setMessage]
+    [generateBuiltBadgeUrl, link, title, setMessage, setMarkup]
   )
 
   function renderMarkupAndLivePreview(): JSX.Element {
