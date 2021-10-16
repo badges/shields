@@ -8,6 +8,10 @@ t.create('Release (latest by date)')
   .get('/shields-ops-group/tag-test.json')
   .expectBadge({ label: 'release', message: 'v2.0.0', color: 'blue' })
 
+t.create('Release (project id latest by date)')
+  .get('/29538796.json')
+  .expectBadge({ label: 'release', message: 'v2.0.0', color: 'blue' })
+
 t.create('Release (latest by semver)')
   .get('/shields-ops-group/tag-test.json?sort=semver')
   .expectBadge({ label: 'release', message: 'v4.0.0', color: 'blue' })

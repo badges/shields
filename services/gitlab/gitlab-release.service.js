@@ -18,9 +18,16 @@ const queryParamSchema = Joi.object({
   display_name: Joi.string().valid('tag', 'release').default('tag'),
 }).required()
 
-const namedParams = {
-  user: 'shields-ops-group',
-  repo: 'repo-test',
+const documentation = `
+<p>
+  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
+</p>
+`
+const commonProps = {
+  namedParams: {
+    project: 'shields-ops-group/tag-test',
+  },
+  documentation,
 }
 
 export default class GitLabRelease extends GitLabBase {
@@ -28,26 +35,26 @@ export default class GitLabRelease extends GitLabBase {
 
   static route = {
     base: 'gitlab/v/release',
-    pattern: ':user/:repo',
+    pattern: ':project+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'GitLab Release (latest by date)',
-      namedParams,
+      ...commonProps,
       queryParams: { sort: 'date' },
       staticPreview: renderVersionBadge({ version: 'v2.0.0' }),
     },
     {
       title: 'GitLab Release (latest by SemVer)',
-      namedParams,
+      ...commonProps,
       queryParams: { sort: 'semver' },
       staticPreview: renderVersionBadge({ version: 'v4.0.0' }),
     },
     {
       title: 'GitLab Release (latest by SemVer pre-release)',
-      namedParams,
+      ...commonProps,
       queryParams: {
         sort: 'semver',
         include_prereleases: null,
@@ -57,9 +64,9 @@ export default class GitLabRelease extends GitLabBase {
     {
       title: 'GitLab Release (custom instance)',
       namedParams: {
-        user: 'GNOME',
-        repo: 'librsvg',
+        project: 'GNOME/librsvg',
       },
+      documentation,
       queryParams: {
         sort: 'semver',
         include_prereleases: null,
@@ -70,9 +77,9 @@ export default class GitLabRelease extends GitLabBase {
     {
       title: 'GitLab Release (by release name)',
       namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab',
+        project: 'gitlab-org/gitlab',
       },
+      documentation,
       queryParams: {
         sort: 'semver',
         include_prereleases: null,
@@ -85,11 +92,11 @@ export default class GitLabRelease extends GitLabBase {
 
   static defaultBadgeData = { label: 'release' }
 
-  async fetch({ user, repo, baseUrl, isSemver }) {
+  async fetch({ project, baseUrl, isSemver }) {
     // https://docs.gitlab.com/ee/api/releases/
     return this.fetchPaginatedArrayData({
       schema,
-      url: `${baseUrl}/api/v4/projects/${user}%2F${repo}/releases`,
+      url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
       errorMessages: {
         404: 'project not found',
       },
@@ -115,7 +122,7 @@ export default class GitLabRelease extends GitLabBase {
   }
 
   async handle(
-    { user, repo },
+    { project },
     {
       gitlab_url: baseUrl = 'https://gitlab.com',
       include_prereleases: pre,
@@ -124,7 +131,7 @@ export default class GitLabRelease extends GitLabBase {
     }
   ) {
     const isSemver = sort === 'semver'
-    const releases = await this.fetch({ user, repo, baseUrl, isSemver })
+    const releases = await this.fetch({ project, baseUrl, isSemver })
     const version = this.constructor.transform({
       releases,
       isSemver,
