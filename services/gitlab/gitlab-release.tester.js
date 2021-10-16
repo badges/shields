@@ -8,6 +8,10 @@ t.create('Release (latest by date)')
   .get('/shields-ops-group/tag-test.json')
   .expectBadge({ label: 'release', message: 'v2.0.0', color: 'blue' })
 
+t.create('Release (nested groups latest by date)')
+  .get('/gitlab-org/frontend/eslint-plugin.json')
+  .expectBadge({ label: 'release', message: isSemver, color: 'blue' })
+
 t.create('Release (latest by date, order by created_at)')
   .get('/shields-ops-group/tag-test.json?date_order_by=created_at')
   .expectBadge({ label: 'release', message: 'v2.0.0', color: 'blue' })
