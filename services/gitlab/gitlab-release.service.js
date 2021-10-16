@@ -16,6 +16,9 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
   sort: Joi.string().valid('date', 'semver').default('date'),
   display_name: Joi.string().valid('tag', 'release').default('tag'),
+  date_order_by: Joi.string()
+    .valid('created_at', 'released_at')
+    .default('created_at'),
 }).required()
 
 const documentation = `
@@ -43,7 +46,7 @@ export default class GitLabRelease extends GitLabBase {
     {
       title: 'GitLab Release (latest by date)',
       ...commonProps,
-      queryParams: { sort: 'date' },
+      queryParams: { sort: 'date', date_order_by: 'created_at' },
       staticPreview: renderVersionBadge({ version: 'v2.0.0' }),
     },
     {
@@ -71,6 +74,7 @@ export default class GitLabRelease extends GitLabBase {
         sort: 'semver',
         include_prereleases: null,
         gitlab_url: 'https://gitlab.gnome.org',
+        date_order_by: 'created_at',
       },
       staticPreview: renderVersionBadge({ version: 'v2.51.4' }),
     },
@@ -85,6 +89,7 @@ export default class GitLabRelease extends GitLabBase {
         include_prereleases: null,
         gitlab_url: 'https://gitlab.com',
         display_name: 'release',
+        date_order_by: 'created_at',
       },
       staticPreview: renderVersionBadge({ version: 'GitLab 14.2' }),
     },
@@ -92,13 +97,16 @@ export default class GitLabRelease extends GitLabBase {
 
   static defaultBadgeData = { label: 'release' }
 
-  async fetch({ project, baseUrl, isSemver }) {
+  async fetch({ project, baseUrl, isSemver, orderBy }) {
     // https://docs.gitlab.com/ee/api/releases/
     return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
       errorMessages: {
         404: 'project not found',
+      },
+      options: {
+        qs: { order_by: orderBy },
       },
       firstPageOnly: !isSemver,
     })
@@ -128,10 +136,11 @@ export default class GitLabRelease extends GitLabBase {
       include_prereleases: pre,
       sort,
       display_name: displayName,
+      date_order_by: orderBy,
     }
   ) {
     const isSemver = sort === 'semver'
-    const releases = await this.fetch({ project, baseUrl, isSemver })
+    const releases = await this.fetch({ project, baseUrl, isSemver, orderBy })
     const version = this.constructor.transform({
       releases,
       isSemver,
