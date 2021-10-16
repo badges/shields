@@ -14,7 +14,9 @@ t.create('Pipeline status')
   })
 
 t.create('Pipeline status (nested groups)')
-  .get('/pipeline-status/megabyte-labs/dockerfile/ci-pipeline/ansible-lint.json')
+  .get(
+    '/pipeline-status/megabyte-labs/dockerfile/ci-pipeline/ansible-lint.json'
+  )
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
