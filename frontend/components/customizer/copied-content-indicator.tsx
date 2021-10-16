@@ -50,13 +50,16 @@ function _CopiedContentIndicator(
     },
   }))
 
-  function handlePoseComplete(): void {
-    if (pose === 'effectStart') {
-      setPose('effectEnd')
-    } else {
-      setPose('hidden')
-    }
-  }
+  const handlePoseComplete = React.useCallback(
+    function (): void {
+      if (pose === 'effectStart') {
+        setPose('effectEnd')
+      } else {
+        setPose('hidden')
+      }
+    },
+    [pose, setPose]
+  )
 
   return (
     <ContentAnchor>

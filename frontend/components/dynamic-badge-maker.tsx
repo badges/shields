@@ -44,33 +44,39 @@ export default function DynamicBadgeMaker({
   const isValid =
     values.datatype && values.label && values.dataUrl && values.query
 
-  function onChange({
-    target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
-    setValues({
-      ...values,
-      [name]: value,
-    })
-  }
+  const onChange = React.useCallback(
+    function ({
+      target: { name, value },
+    }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+      setValues({
+        ...values,
+        [name]: value,
+      })
+    },
+    [values]
+  )
 
-  function onSubmit(e: React.FormEvent): void {
-    e.preventDefault()
+  const onSubmit = React.useCallback(
+    function onSubmit(e: React.FormEvent): void {
+      e.preventDefault()
 
-    const { datatype, label, dataUrl, query, color, prefix, suffix } = values
-    window.open(
-      dynamicBadgeUrl({
-        baseUrl,
-        datatype,
-        label,
-        dataUrl,
-        query,
-        color,
-        prefix,
-        suffix,
-      }),
-      '_blank'
-    )
-  }
+      const { datatype, label, dataUrl, query, color, prefix, suffix } = values
+      window.open(
+        dynamicBadgeUrl({
+          baseUrl,
+          datatype,
+          label,
+          dataUrl,
+          query,
+          color,
+          prefix,
+          suffix,
+        }),
+        '_blank'
+      )
+    },
+    [baseUrl, values]
+  )
 
   return (
     <form onSubmit={onSubmit}>

@@ -54,24 +54,28 @@ export default function Main({
   const searchTimeout = useRef(0)
   const baseUrl = getBaseUrl()
 
-  function performSearch(query: string): void {
-    setSearchIsInProgress(false)
+  const performSearch = React.useCallback(
+    function (query: string): void {
+      setSearchIsInProgress(false)
 
-    setQueryIsTooShort(query.length === 1)
+      setQueryIsTooShort(query.length === 1)
 
-    if (query.length >= 2) {
-      const flat = ServiceDefinitionSetHelper.create(services)
-        .notDeprecated()
-        .search(query)
-        .toArray()
-      setSearchResults(groupBy(flat, 'category'))
-    } else {
-      setSearchResults(undefined)
-    }
-  }
+      if (query.length >= 2) {
+        const flat = ServiceDefinitionSetHelper.create(services)
+          .notDeprecated()
+          .search(query)
+          .toArray()
+        setSearchResults(groupBy(flat, 'category'))
+      } else {
+        setSearchResults(undefined)
+      }
+    },
+    [setSearchIsInProgress, setQueryIsTooShort, setSearchResults]
+  )
 
-  function searchQueryChanged(query: string): void {
-    /*
+  const searchQueryChanged = React.useCallback(
+    function (query: string): void {
+      /*
     Add a small delay before showing search results
     so that we wait until the user has stopped typing
     before we start loading stuff.
@@ -81,22 +85,27 @@ export default function Main({
     b) stops the page from 'flashing' as the user types, like this:
     https://user-images.githubusercontent.com/7288322/42600206-9b278470-85b5-11e8-9f63-eb4a0c31cb4a.gif
     */
-    setSearchIsInProgress(true)
-    window.clearTimeout(searchTimeout.current)
-    searchTimeout.current = window.setTimeout(() => performSearch(query), 500)
-  }
+      setSearchIsInProgress(true)
+      window.clearTimeout(searchTimeout.current)
+      searchTimeout.current = window.setTimeout(() => performSearch(query), 500)
+    },
+    [setSearchIsInProgress, performSearch]
+  )
 
-  function exampleClicked(
-    example: RenderableExample,
-    isSuggestion: boolean
-  ): void {
-    setSelectedExample(example)
-    setSelectedExampleIsSuggestion(isSuggestion)
-  }
+  const exampleClicked = React.useCallback(
+    function (example: RenderableExample, isSuggestion: boolean): void {
+      setSelectedExample(example)
+      setSelectedExampleIsSuggestion(isSuggestion)
+    },
+    [setSelectedExample, setSelectedExampleIsSuggestion]
+  )
 
-  function dismissMarkupModal(): void {
-    setSelectedExample(undefined)
-  }
+  const dismissMarkupModal = React.useCallback(
+    function (): void {
+      setSelectedExample(undefined)
+    },
+    [setSelectedExample]
+  )
 
   function Category({
     category,
