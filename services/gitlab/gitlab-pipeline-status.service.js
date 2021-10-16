@@ -89,7 +89,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'master' }
+    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' }
   ) {
     const data = await this.fetch({
       project,

@@ -15,7 +15,7 @@ t.create('Pipeline status')
 
 t.create('Pipeline status (nested groups)')
   .get(
-    '/pipeline-status/megabyte-labs/dockerfile/ci-pipeline/ansible-lint.json'
+    '/pipeline-status/megabyte-labs/dockerfile/ci-pipeline/ansible-lint.json?branch=master'
   )
   .expectBadge({
     label: 'build',
@@ -44,9 +44,7 @@ t.create('Pipeline status (nonexistent repo)')
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get(
-    '/pipeline-status/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org&branch=main'
-  )
+  .get('/pipeline-status/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
