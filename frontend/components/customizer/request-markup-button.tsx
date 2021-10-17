@@ -86,24 +86,30 @@ export default function GetMarkupButton({
     Select<Option>
   >
 
-  async function onControlMouseDown(event: MouseEvent): Promise<void> {
-    if (onMarkupRequested) {
-      await onMarkupRequested('link')
-    }
-    if (selectRef.current) {
-      selectRef.current.blur()
-    }
-  }
+  const onControlMouseDown = React.useCallback(
+    async function (event: MouseEvent): Promise<void> {
+      if (onMarkupRequested) {
+        await onMarkupRequested('link')
+      }
+      if (selectRef.current) {
+        selectRef.current.blur()
+      }
+    },
+    [onMarkupRequested, selectRef]
+  )
 
-  async function onOptionClick(
-    // Eeesh.
-    value: Option | readonly Option[] | null | undefined
-  ): Promise<void> {
-    const { value: markupFormat } = value as Option
-    if (onMarkupRequested) {
-      await onMarkupRequested(markupFormat)
-    }
-  }
+  const onOptionClick = React.useCallback(
+    async function onOptionClick(
+      // Eeesh.
+      value: Option | readonly Option[] | null | undefined
+    ): Promise<void> {
+      const { value: markupFormat } = value as Option
+      if (onMarkupRequested) {
+        await onMarkupRequested(markupFormat)
+      }
+    },
+    [onMarkupRequested]
+  )
 
   return (
     // TODO It doesn't seem to be possible to check the types and wrap with
