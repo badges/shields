@@ -87,7 +87,20 @@ async function sendRequest(fetchLimitBytes, url, options) {
     const resp = await fetch(nodeFetchUrl, nodeFetchOptions)
     const body = await resp.text()
     resp.statusCode = resp.status
-    return { res: resp, buffer: body }
+    const headers = Array.from(resp.headers.entries()).reduce(
+      (headers, [name, value]) => {
+        headers[name] = value
+        return headers
+      },
+      {}
+    )
+    return {
+      res: {
+        ...resp,
+        headers,
+      },
+      buffer: body,
+    }
   } catch (err) {
     if (err.type === 'max-size') {
       throw new InvalidResponse({
