@@ -22,7 +22,7 @@ labels: 'keep-service-tests-green'
 
 <!-- Provide a link to the failing test in CircleCI. -->
 
-:beetle: **Stack trace**
+:lady_beetle: **Stack trace**
 
 ```
 <!-- Provide the complete stack trace from the CircleCI test summary. -->

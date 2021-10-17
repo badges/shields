@@ -11,11 +11,12 @@ const badgeSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
+  branch: Joi.string(),
 }).required()
 
 const documentation = `
 <p>
-  Important: If your project is publicly visible, but the badge is like this:
+  Important: You must use the Project Path, not the Project Id. Additionally, if your project is publicly visible, but the badge is like this:
   <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
 </p>
 <p>
@@ -39,26 +40,23 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
-    base: 'gitlab/pipeline',
-    pattern: ':user/:repo/:branch+',
+    base: 'gitlab/pipeline-status',
+    pattern: ':project+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Gitlab pipeline status',
-      namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab',
-        branch: 'master',
-      },
+      namedParams: { project: 'gitlab-org/gitlab' },
+      queryParams: { branch: 'master' },
       staticPreview: this.render({ status: 'passed' }),
       documentation,
     },
     {
       title: 'Gitlab pipeline status (self-hosted)',
-      namedParams: { user: 'GNOME', repo: 'pango', branch: 'master' },
-      queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+      namedParams: { project: 'GNOME/pango' },
+      queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
       staticPreview: this.render({ status: 'passed' }),
       documentation,
     },
@@ -68,33 +66,67 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle(
-    { user, repo, branch },
-    { gitlab_url: baseUrl = 'https://gitlab.com' }
-  ) {
-    const { message: status } = await this._requestSvg({
+  async fetch({ project, branch, baseUrl }) {
+    return this._requestSvg({
       schema: badgeSchema,
-      url: `${baseUrl}/${user}/${repo}/badges/${branch}/pipeline.svg`,
+      url: `${baseUrl}/${decodeURIComponent(
+        project
+      )}/badges/${branch}/pipeline.svg`,
       errorMessages: {
         401: 'repo not found',
         404: 'repo not found',
       },
     })
+  }
+
+  static transform(data) {
+    const { message: status } = data
     if (status === 'unknown') {
       throw new NotFound({ prettyMessage: 'branch not found' })
     }
+    return { status }
+  }
+
+  async handle(
+    { project },
+    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' }
+  ) {
+    const data = await this.fetch({
+      project,
+      branch,
+      baseUrl,
+    })
+    const { status } = this.constructor.transform(data)
     return this.constructor.render({ status })
   }
 }
 
 const GitlabPipelineStatusRedirector = redirector({
   category: 'build',
+  name: 'GitlabPipelineStatusRedirector',
   route: {
     base: 'gitlab/pipeline',
     pattern: ':user/:repo',
   },
-  transformPath: ({ user, repo }) => `/gitlab/pipeline/${user}/${repo}/master`,
+  transformPath: ({ user, repo }) => `/gitlab/pipeline-status/${user}/${repo}`,
+  transformQueryParams: ({ _b }) => ({ branch: 'master' }),
   dateAdded: new Date('2020-07-12'),
 })
 
-export { GitlabPipelineStatus, GitlabPipelineStatusRedirector }
+const GitlabPipelineStatusBranchRouteParamRedirector = redirector({
+  category: 'build',
+  name: 'GitlabPipelineStatusBranchRouteParamRedirector',
+  route: {
+    base: 'gitlab/pipeline',
+    pattern: ':user/:repo/:branch+',
+  },
+  transformPath: ({ user, repo }) => `/gitlab/pipeline-status/${user}/${repo}`,
+  transformQueryParams: ({ branch }) => ({ branch }),
+  dateAdded: new Date('2021-10-20'),
+})
+
+export {
+  GitlabPipelineStatus,
+  GitlabPipelineStatusRedirector,
+  GitlabPipelineStatusBranchRouteParamRedirector,
+}
