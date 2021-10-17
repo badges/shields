@@ -33,7 +33,7 @@ describe('GitLabTag', function () {
         await GitLabTag.invoke(
           defaultContext,
           config,
-          { user: 'foo', repo: 'bar' },
+          { project: 'foo/bar' },
           {}
         )
       ).to.deep.equal({

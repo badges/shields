@@ -17,7 +17,7 @@ class SonarTestsSummary extends SonarBase {
 
   static route = {
     base: 'sonar/tests',
-    pattern: ':component',
+    pattern: ':component/:branch*',
     queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
   }
 
@@ -26,6 +26,7 @@ class SonarTestsSummary extends SonarBase {
       title: 'Sonar Tests',
       namedParams: {
         component: 'org.ow2.petals:petals-se-ase',
+        branch: 'master',
       },
       queryParams: {
         server: 'http://sonar.petalslink.com',
@@ -95,7 +96,7 @@ class SonarTestsSummary extends SonarBase {
   }
 
   async handle(
-    { component },
+    { component, branch },
     {
       server,
       sonarVersion,
@@ -109,6 +110,7 @@ class SonarTestsSummary extends SonarBase {
       sonarVersion,
       server,
       component,
+      branch,
       metricName: 'tests,test_failures,skipped_tests',
     })
     const { total, passed, failed, skipped } = this.transform({
@@ -134,7 +136,7 @@ class SonarTests extends SonarBase {
   static route = {
     base: 'sonar',
     pattern:
-      ':metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)/:component',
+      ':metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)/:component/:branch*',
     queryParamSchema,
   }
 
@@ -142,10 +144,11 @@ class SonarTests extends SonarBase {
     {
       title: 'Sonar Test Count',
       pattern:
-        ':metric(total_tests|skipped_tests|test_failures|test_errors)/:component',
+        ':metric(total_tests|skipped_tests|test_failures|test_errors)/:component/:branch*',
       namedParams: {
         component: 'org.ow2.petals:petals-log',
         metric: 'total_tests',
+        branch: 'master',
       },
       queryParams: {
         server: 'http://sonar.petalslink.com',
@@ -160,9 +163,10 @@ class SonarTests extends SonarBase {
     },
     {
       title: 'Sonar Test Execution Time',
-      pattern: 'test_execution_time/:component',
+      pattern: 'test_execution_time/:component/:branch*',
       namedParams: {
         component: 'swellaby:azure-pipelines-templates',
+        branch: 'master',
       },
       queryParams: {
         server: 'https://sonarcloud.io',
@@ -177,9 +181,10 @@ class SonarTests extends SonarBase {
     },
     {
       title: 'Sonar Test Success Rate',
-      pattern: 'test_success_density/:component',
+      pattern: 'test_success_density/:component/:branch*',
       namedParams: {
         component: 'swellaby:azure-pipelines-templates',
+        branch: 'master',
       },
       queryParams: {
         server: 'https://sonarcloud.io',
@@ -218,11 +223,12 @@ class SonarTests extends SonarBase {
     }
   }
 
-  async handle({ component, metric }, { server, sonarVersion }) {
+  async handle({ component, metric, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       // We're using 'tests' as the metric key to provide our standard
       // formatted test badge (passed, failed, skipped) that exists for other
       // services. Therefore, we're exposing 'total_tests' to the user, and

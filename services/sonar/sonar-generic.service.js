@@ -109,7 +109,7 @@ export default class SonarGeneric extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern: `:metricName(${metricNameRouteParam})/:component`,
+    pattern: `:metricName(${metricNameRouteParam})/:component/:branch*`,
     queryParamSchema,
   }
 
@@ -123,11 +123,12 @@ export default class SonarGeneric extends SonarBase {
     }
   }
 
-  async handle({ component, metricName }, { server, sonarVersion }) {
+  async handle({ component, metricName, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       metricName,
     })
 

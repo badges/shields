@@ -12,6 +12,7 @@ const releaseInfoSchema = Joi.object({
     })
     .required(),
   tag_name: Joi.string().required(),
+  name: Joi.string().allow(null),
   prerelease: Joi.boolean().required(),
 }).required()
 

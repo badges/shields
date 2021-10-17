@@ -15,7 +15,7 @@ export default class SonarFortifyRating extends SonarBase {
 
   static route = {
     base: 'sonar/fortify-security-rating',
-    pattern: ':component',
+    pattern: ':component/:branch*',
     queryParamSchema,
   }
 
@@ -50,11 +50,12 @@ export default class SonarFortifyRating extends SonarBase {
     }
   }
 
-  async handle({ component }, { server, sonarVersion }) {
+  async handle({ component, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       metricName: 'fortify-security-rating',
     })
 

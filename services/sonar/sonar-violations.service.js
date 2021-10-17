@@ -27,7 +27,7 @@ export default class SonarViolations extends SonarBase {
   static route = {
     base: 'sonar',
     pattern:
-      ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component',
+      ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component/:branch*',
     queryParamSchema: queryParamWithFormatSchema,
   }
 
@@ -37,6 +37,7 @@ export default class SonarViolations extends SonarBase {
       namedParams: {
         component: 'swellaby:azdo-shellcheck',
         metric: 'violations',
+        branch: 'master',
       },
       queryParams: {
         server: 'https://sonarcloud.io',
@@ -56,6 +57,7 @@ export default class SonarViolations extends SonarBase {
       namedParams: {
         component: 'org.ow2.petals:petals-se-ase',
         metric: 'violations',
+        branch: 'master',
       },
       queryParams: {
         server: 'http://sonar.petalslink.com',
@@ -144,7 +146,10 @@ export default class SonarViolations extends SonarBase {
     return { violations: metrics }
   }
 
-  async handle({ component, metric }, { server, sonarVersion, format }) {
+  async handle(
+    { component, metric, branch },
+    { server, sonarVersion, format }
+  ) {
     // If the user has requested the long format for the violations badge
     // then we need to include each individual violation metric in the call to the API
     // in order to get the count breakdown per each violation category.
@@ -156,6 +161,7 @@ export default class SonarViolations extends SonarBase {
       sonarVersion,
       server,
       component,
+      branch,
       metricName: metricKeys,
     })
 

@@ -18,40 +18,43 @@ const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
+const documentation = `
+<p>
+  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
+</p>
+`
+const commonProps = {
+  namedParams: {
+    project: 'shields-ops-group/tag-test',
+  },
+  documentation,
+}
+
 export default class GitlabTag extends GitLabBase {
   static category = 'version'
 
   static route = {
     base: 'gitlab/v/tag',
-    pattern: ':user/:repo',
+    pattern: ':project+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'GitLab tag (latest by date)',
-      namedParams: {
-        user: 'shields-ops-group',
-        repo: 'tag-test',
-      },
+      ...commonProps,
       queryParams: { sort: 'date' },
       staticPreview: this.render({ version: 'v2.0.0' }),
     },
     {
       title: 'GitLab tag (latest by SemVer)',
-      namedParams: {
-        user: 'shields-ops-group',
-        repo: 'tag-test',
-      },
+      ...commonProps,
       queryParams: { sort: 'semver' },
       staticPreview: this.render({ version: 'v4.0.0' }),
     },
     {
       title: 'GitLab tag (latest by SemVer pre-release)',
-      namedParams: {
-        user: 'shields-ops-group',
-        repo: 'tag-test',
-      },
+      ...commonProps,
       queryParams: {
         sort: 'semver',
         include_prereleases: null,
@@ -61,9 +64,9 @@ export default class GitlabTag extends GitLabBase {
     {
       title: 'GitLab tag (custom instance)',
       namedParams: {
-        user: 'GNOME',
-        repo: 'librsvg',
+        project: 'GNOME/librsvg',
       },
+      documentation,
       queryParams: {
         sort: 'semver',
         include_prereleases: null,
@@ -82,14 +85,16 @@ export default class GitlabTag extends GitLabBase {
     }
   }
 
-  async fetch({ user, repo, baseUrl }) {
+  async fetch({ project, baseUrl }) {
     // https://docs.gitlab.com/ee/api/tags.html
     // N.B. the documentation has contradictory information about default sort order.
     // As of 2020-10-11 the default is by date, but we add the `order_by` query param
     // explicitly in case that changes upstream.
     return super.fetch({
       schema,
-      url: `${baseUrl}/api/v4/projects/${user}%2F${repo}/repository/tags`,
+      url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
+        project
+      )}/repository/tags`,
       options: { qs: { order_by: 'updated' } },
       errorMessages: {
         404: 'repo not found',
@@ -113,14 +118,14 @@ export default class GitlabTag extends GitLabBase {
   }
 
   async handle(
-    { user, repo },
+    { project },
     {
       gitlab_url: baseUrl = 'https://gitlab.com',
       include_prereleases: pre,
       sort,
     }
   ) {
-    const tags = await this.fetch({ user, repo, baseUrl })
+    const tags = await this.fetch({ project, baseUrl })
     const version = this.constructor.transform({
       tags,
       sort,

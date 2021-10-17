@@ -6,7 +6,7 @@ export default class SonarQualityGate extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern: ':metric(quality_gate|alert_status)/:component',
+    pattern: ':metric(quality_gate|alert_status)/:component/:branch*',
     queryParamSchema,
   }
 
@@ -16,6 +16,7 @@ export default class SonarQualityGate extends SonarBase {
       namedParams: {
         component: 'swellaby:azdo-shellcheck',
         metric: 'quality_gate',
+        branch: 'master',
       },
       queryParams: {
         server: 'https://sonarcloud.io',
@@ -42,11 +43,12 @@ export default class SonarQualityGate extends SonarBase {
     }
   }
 
-  async handle({ component }, { server, sonarVersion }) {
+  async handle({ component, branch }, { server, sonarVersion }) {
     const json = await this.fetch({
       sonarVersion,
       server,
       component,
+      branch,
       metricName: 'alert_status',
     })
     const { alert_status: qualityState } = this.transform({
