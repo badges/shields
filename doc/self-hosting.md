@@ -94,15 +94,14 @@ Sending build context to Docker daemon 3.923 MB
 Successfully built 4471b442c220
 ```
 
-Optionally, alter the default values for configuration through environnement variables.
+Optionally, alter the default values for configuration by setting them via [environment variables](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
 See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for possible values.
-In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environnement variable keys are defined in the quotes in uppercase.
+In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environment variable names are specified as the quoted, uppercase key values (e.g. `GH_TOKEN`).
 
-Run the container:
+Then run the container, and be sure to specify the same mapped port as the one Shields is listening on :
 
 ```console
-$ docker run --rm -p 8080:8080 --env PORT=8080 --env METRICS_PROMETHEUS_ENABLED=true --env METRICS_PROMETHEUS_ENDPOINT_ENABLED=true --name shields shieldsio/shields:next
-# Note : the port value configured should be the same as the one exposed outside shields to have propre badges urls.
+$ docker run --rm -p 8080:8080 --env PORT=8080 --name shields shieldsio/shields:next
 
 Configuration:
 ...
