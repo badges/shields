@@ -52,7 +52,7 @@ const legacySchema = Joi.array()
 export default class SonarBase extends BaseJsonService {
   static auth = { userKey: 'sonarqube_token', serviceKey: 'sonar' }
 
-  async fetch({ sonarVersion, server, component, metricName }) {
+  async fetch({ sonarVersion, server, component, metricName, branch }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
     let qs, url, schema
@@ -64,6 +64,7 @@ export default class SonarBase extends BaseJsonService {
         depth: 0,
         metrics: metricName,
         includeTrends: true,
+        branch,
       }
     } else {
       schema = modernSchema
@@ -74,6 +75,7 @@ export default class SonarBase extends BaseJsonService {
       qs = {
         [componentKey]: component,
         metricKeys: metricName,
+        branch,
       }
     }
 

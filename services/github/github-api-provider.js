@@ -54,18 +54,6 @@ class GithubApiProvider {
     }
   }
 
-  serializeDebugInfo({ sanitize = true } = {}) {
-    if (this.withPooling) {
-      return {
-        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
-        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
-        graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
-      }
-    } else {
-      return {}
-    }
-  }
-
   addToken(tokenString) {
     if (this.withPooling) {
       this.standardTokens.add(tokenString)

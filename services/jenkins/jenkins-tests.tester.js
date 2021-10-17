@@ -13,43 +13,34 @@ export const t = await createServiceTester()
 // https://wiki.jenkins.io/pages/viewpage.action?pageId=58001258
 
 t.create('Test status')
-  .get('/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_coverage')
+  .get('/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_gerrit')
   .expectBadge({ label: 'tests', message: isDefaultTestTotals })
 
 t.create('Test status with compact message')
-  .get(
-    '/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_coverage',
-    {
-      qs: { compact_message: null },
-    }
-  )
+  .get('/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_gerrit', {
+    qs: { compact_message: null },
+  })
   .expectBadge({ label: 'tests', message: isDefaultCompactTestTotals })
 
 t.create('Test status with custom labels')
-  .get(
-    '/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_coverage',
-    {
-      qs: {
-        passed_label: 'good',
-        failed_label: 'bad',
-        skipped_label: 'n/a',
-      },
-    }
-  )
+  .get('/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_gerrit', {
+    qs: {
+      passed_label: 'good',
+      failed_label: 'bad',
+      skipped_label: 'n/a',
+    },
+  })
   .expectBadge({ label: 'tests', message: isCustomTestTotals })
 
 t.create('Test status with compact message and custom labels')
-  .get(
-    '/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_coverage',
-    {
-      qs: {
-        compact_message: null,
-        passed_label: '💃',
-        failed_label: '🤦‍♀️',
-        skipped_label: '🤷',
-      },
-    }
-  )
+  .get('/tests.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_gerrit', {
+    qs: {
+      compact_message: null,
+      passed_label: '💃',
+      failed_label: '🤦‍♀️',
+      skipped_label: '🤷',
+    },
+  })
   .expectBadge({
     label: 'tests',
     message: isCustomCompactTestTotals,

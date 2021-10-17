@@ -18,21 +18,27 @@ export default function StaticBadgeMaker({
 
   const isValid = values.message && values.color
 
-  function onChange({
-    target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
-    setValues({
-      ...values,
-      [name]: value,
-    })
-  }
+  const onChange = React.useCallback(
+    function onChange({
+      target: { name, value },
+    }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+      setValues({
+        ...values,
+        [name]: value,
+      })
+    },
+    [setValues, values]
+  )
 
-  function onSubmit(e: React.FormEvent): void {
-    e.preventDefault()
+  const onSubmit = React.useCallback(
+    function (e: React.FormEvent): void {
+      e.preventDefault()
 
-    const { label, message, color } = values
-    window.open(staticBadgeUrl({ baseUrl, label, message, color }), '_blank')
-  }
+      const { label, message, color } = values
+      window.open(staticBadgeUrl({ baseUrl, label, message, color }), '_blank')
+    },
+    [baseUrl, values]
+  )
 
   return (
     <form onSubmit={onSubmit}>

@@ -12,3 +12,14 @@ t.create('Security Rating')
     message: isMetric,
     color: 'blue',
   })
+
+t.create('Security Rating (branch)')
+  .timeout(10000)
+  .get(
+    '/security_rating/com.luckybox:luckybox/master.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'security rating',
+    message: isMetric,
+    color: 'blue',
+  })

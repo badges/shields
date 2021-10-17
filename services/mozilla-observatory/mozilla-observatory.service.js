@@ -103,7 +103,7 @@ export default class MozillaObservatory extends BaseJsonService {
       options: {
         method: 'POST',
         qs: { host },
-        form: { hidden: !publish },
+        form: { hidden: (!publish).toString() },
       },
     })
   }
