@@ -27,7 +27,7 @@ t.create('Malformed url')
   )
   .expectBadge({
     label: 'Package Name',
-    message: 'invalid',
+    message: 'inaccessible',
     color: 'lightgrey',
   })
 
@@ -136,8 +136,7 @@ t.create('request should set Accept header')
   )
   .expectBadge({ label: 'custom badge', message: 'test' })
   .after(() => {
-    expect(headers).to.have.property('accept')
-    expect(headers.accept).to.deep.equal(['application/json'])
+    expect(headers).to.have.property('accept', 'application/json')
   })
 
 t.create('query with lexical error')
