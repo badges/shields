@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 import {
@@ -28,11 +28,8 @@ export default class DockerPulls extends BaseJsonService {
 
   static defaultBadgeData = { label: 'docker pulls' }
 
-  static render({ count }) {
-    return {
-      message: metric(count),
-      color: dockerBlue,
-    }
+  static render({ count: downloads }) {
+    return renderDownloadsBadge({ downloads, colorOverride: dockerBlue })
   }
 
   async fetch({ user, repo }) {

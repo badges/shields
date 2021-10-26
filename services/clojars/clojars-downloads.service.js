@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount as downloadsColor } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { BaseClojarsService } from './clojars-base.js'
 
 export default class ClojarsDownloads extends BaseClojarsService {
@@ -9,22 +8,14 @@ export default class ClojarsDownloads extends BaseClojarsService {
   static examples = [
     {
       namedParams: { clojar: 'prismic' },
-      staticPreview: this.render({ downloads: 117 }),
+      staticPreview: renderDownloadsBadge({ downloads: 117 }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  static render({ downloads }) {
-    return {
-      label: 'downloads',
-      message: metric(downloads),
-      color: downloadsColor(downloads),
-    }
-  }
-
   async handle({ clojar }) {
     const json = await this.fetch({ clojar })
-    return this.constructor.render({ downloads: json.downloads })
+    return renderDownloadsBadge({ downloads: json.downloads })
   }
 }

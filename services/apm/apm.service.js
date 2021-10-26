@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderLicenseBadge } from '../licenses.js'
 import { renderVersionBadge } from '../version.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService, InvalidResponse } from '../index.js'
 
@@ -45,7 +45,7 @@ class APMDownloads extends BaseAPMService {
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
-    return { message: metric(downloads), color: 'green' }
+    return renderDownloadsBadge({ downloads, colorOverride: 'green' })
   }
 
   async handle({ packageName }) {
