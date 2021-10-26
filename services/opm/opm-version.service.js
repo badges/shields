@@ -40,10 +40,11 @@ export default class OpmVersion extends BaseService {
     })
 
     // TODO: set followRedirect to false and intercept 302 redirects
-    if (!res.redirected) {
+    const location = res.request.redirects[0]
+    if (!location) {
       throw new NotFound({ prettyMessage: 'module not found' })
     }
-    const version = res.url.match(`${moduleName}-(.+).opm`)[1]
+    const version = location.match(`${moduleName}-(.+).opm`)[1]
     if (!version) {
       throw new InvalidResponse({ prettyMessage: 'version invalid' })
     }
