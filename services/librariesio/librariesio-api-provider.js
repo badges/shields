@@ -1,3 +1,4 @@
+import { ImproperlyConfigured } from '../index.js'
 import log from '../../core/server/log.js'
 import { TokenPool } from '../../core/token-pooling/token-pool.js'
 import { userAgent } from '../../core/base-service/legacy-request-handler.js'
@@ -71,9 +72,10 @@ export default class LibrariesIoApiProvider {
       try {
         token = this.standardTokens.next()
       } catch (e) {
-        console.error('Unable to select next Libraries.io token from pool')
         log.error(e)
-        return
+        throw new ImproperlyConfigured({
+          prettyMessage: 'Unable to select next Libraries.io token from pool',
+        })
       }
       tokenString = token.id
     } else {

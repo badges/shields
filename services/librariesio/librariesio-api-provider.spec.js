@@ -1,5 +1,7 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
+import { ImproperlyConfigured } from '../index.js'
+import log from '../../core/server/log.js'
 import LibrariesIoApiProvider from './librariesio-api-provider.js'
 
 describe('LibrariesIoApiProvider', function () {
@@ -20,7 +22,7 @@ describe('LibrariesIoApiProvider', function () {
     buffer: {},
   }
 
-  let token, provider
+  let token, provider, nextTokenStub
   beforeEach(function () {
     provider = new LibrariesIoApiProvider({ baseUrl, tokens })
 
@@ -29,7 +31,7 @@ describe('LibrariesIoApiProvider', function () {
       invalidate: sinon.spy(),
       decrementedUsesRemaining: remaining - 1,
     }
-    sinon.stub(provider.standardTokens, 'next').returns(token)
+    nextTokenStub = sinon.stub(provider.standardTokens, 'next').returns(token)
   })
 
   afterEach(function () {
@@ -43,6 +45,20 @@ describe('LibrariesIoApiProvider', function () {
       await provider.fetch(mockRequest, '/npm/badge-maker')
       expect(provider.standardTokens.next).to.have.been.calledOnce
     })
+
+    it('should throw an error when the next token fails', async function () {
+      nextTokenStub.throws(Error)
+      sinon.stub(log, 'error')
+      try {
+        await provider.fetch(mockRequest, '/npm/badge-maker')
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(ImproperlyConfigured)
+        expect(e.prettyMessage).to.equal(
+          'Unable to select next Libraries.io token from pool'
+        )
+      }
+    })
   })
 
   context('a valid API response', function () {
@@ -55,10 +71,7 @@ describe('LibrariesIoApiProvider', function () {
     })
 
     it('should return the response', async function () {
-      const res = await provider.fetch(
-        mockRequest,
-        '/npm/badge-maker'
-      )
+      const res = await provider.fetch(mockRequest, '/npm/badge-maker')
       expect(Object.is(res, mockResponse)).to.be.true
     })
 
