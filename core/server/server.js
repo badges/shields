@@ -245,7 +245,6 @@ class Server {
     })
 
     this.librariesioConstellation = new LibrariesIoConstellation({
-      service: publicConfig.services.librariesio,
       private: privateConfig,
     })
 
