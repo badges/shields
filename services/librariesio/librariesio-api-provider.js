@@ -62,7 +62,7 @@ export default class LibrariesIoApiProvider {
     token.update(totalUsesRemaining, nextReset)
   }
 
-  async requestAsPromise(request, url, options = {}) {
+  async fetch(requestFetcher, url, options = {}) {
     const { baseUrl } = this
 
     let token
@@ -93,7 +93,7 @@ export default class LibrariesIoApiProvider {
         },
       },
     }
-    const response = await request(`${baseUrl}${url}`, mergedOptions)
+    const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
     if (this.withPooling) {
       if (response.res.statusCode === 401) {
         this.invalidateToken(token)

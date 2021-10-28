@@ -14,11 +14,7 @@ function createRequestFetcher(context, config) {
   const { sendAndCacheRequest, librariesIoApiProvider } = context
 
   return async (url, options) =>
-    await librariesIoApiProvider.requestAsPromise(
-      sendAndCacheRequest,
-      url,
-      options
-    )
+    await librariesIoApiProvider.fetch(sendAndCacheRequest, url, options)
 }
 
 export default class LibrariesIoBase extends BaseJsonService {

@@ -40,7 +40,7 @@ describe('LibrariesIoApiProvider', function () {
     const mockResponse = { res: { headers: {} } }
     const mockRequest = sinon.stub().resolves(mockResponse)
     it('should obtain an appropriate token', async function () {
-      await provider.requestAsPromise(mockRequest, '/npm/badge-maker')
+      await provider.fetch(mockRequest, '/npm/badge-maker')
       expect(provider.standardTokens.next).to.have.been.calledOnce
     })
   })
@@ -55,7 +55,7 @@ describe('LibrariesIoApiProvider', function () {
     })
 
     it('should return the response', async function () {
-      const res = await provider.requestAsPromise(
+      const res = await provider.fetch(
         mockRequest,
         '/npm/badge-maker'
       )
@@ -63,7 +63,7 @@ describe('LibrariesIoApiProvider', function () {
     })
 
     it('should update the token with the expected values when headers are present', async function () {
-      await provider.requestAsPromise(mockRequest, '/npm/badge-maker')
+      await provider.fetch(mockRequest, '/npm/badge-maker')
 
       expect(token.update).to.have.been.calledWith(
         remaining,
@@ -83,7 +83,7 @@ describe('LibrariesIoApiProvider', function () {
         },
       }
       const mockRequest = sinon.stub().resolves(response)
-      await provider.requestAsPromise(mockRequest, '/npm/badge-maker')
+      await provider.fetch(mockRequest, '/npm/badge-maker')
 
       expect(token.update).to.have.been.calledWith(remaining, tickTime)
       expect(token.invalidate).not.to.have.been.called
@@ -94,7 +94,7 @@ describe('LibrariesIoApiProvider', function () {
         res: { statusCode: 200, headers: {} },
       }
       const mockRequest = sinon.stub().resolves(response)
-      await provider.requestAsPromise(mockRequest, '/npm/badge-maker')
+      await provider.fetch(mockRequest, '/npm/badge-maker')
 
       expect(token.update).to.have.been.calledWith(remaining - 1, tickTime)
       expect(token.invalidate).not.to.have.been.called
@@ -108,7 +108,7 @@ describe('LibrariesIoApiProvider', function () {
 
     it('should pass the error to the callback', async function () {
       try {
-        await provider.requestAsPromise(mockRequest, '/npm/badge-maker')
+        await provider.fetch(mockRequest, '/npm/badge-maker')
         expect(false).to.be.true
       } catch (err) {
         expect(err).to.be.an.instanceof(Error)
