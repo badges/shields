@@ -420,7 +420,13 @@ class BaseService {
   }
 
   static register(
-    { camp, handleRequest, githubApiProvider, metricInstance },
+    {
+      camp,
+      handleRequest,
+      githubApiProvider,
+      librariesIoApiProvider,
+      metricInstance,
+    },
     serviceConfig
   ) {
     const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
@@ -447,6 +453,7 @@ class BaseService {
               sendAndCacheRequest: fetcher,
               sendAndCacheRequestWithCallbacks: request,
               githubApiProvider,
+              librariesIoApiProvider,
               metricHelper,
             },
             serviceConfig,

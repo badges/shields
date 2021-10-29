@@ -86,6 +86,7 @@ private:
   jenkins_pass: 'JENKINS_PASS'
   jira_user: 'JIRA_USER'
   jira_pass: 'JIRA_PASS'
+  librariesio_tokens: 'LIBRARIESIO_TOKENS'
   nexus_user: 'NEXUS_USER'
   nexus_pass: 'NEXUS_PASS'
   npm_token: 'NPM_TOKEN'

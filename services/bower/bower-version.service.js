@@ -27,9 +27,7 @@ class BowerVersion extends BaseBowerService {
 
   static defaultBadgeData = { label: 'bower' }
 
-  async handle({ packageName }, queryParams) {
-    const data = await this.fetch({ packageName })
-    const includePrereleases = queryParams.include_prereleases !== undefined
+  static transform(data, includePrereleases) {
     const version = includePrereleases
       ? data.latest_release_number
       : data.latest_stable_release_number
@@ -37,6 +35,14 @@ class BowerVersion extends BaseBowerService {
     if (!version) {
       throw new InvalidResponse({ prettyMessage: 'no releases' })
     }
+
+    return version
+  }
+
+  async handle({ packageName }, queryParams) {
+    const data = await this.fetch({ packageName })
+    const includePrereleases = queryParams.include_prereleases !== undefined
+    const version = this.constructor.transform(data, includePrereleases)
 
     return renderVersionBadge({ version })
   }

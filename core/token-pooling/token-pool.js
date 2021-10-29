@@ -80,6 +80,10 @@ class Token {
     return this.usesRemaining <= 0 && !this.hasReset
   }
 
+  get decrementedUsesRemaining() {
+    return this._usesRemaining - 1
+  }
+
   /**
    * Update the uses remaining and next reset time for a token.
    *

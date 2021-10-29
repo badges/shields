@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import LibrariesIoBase from './librariesio-base.js'
 import {
   transform,
   renderDependenciesBadge,
@@ -16,7 +16,7 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
-class LibrariesIoProjectDependencies extends BaseJsonService {
+class LibrariesIoProjectDependencies extends LibrariesIoBase {
   static category = 'dependencies'
 
   static route = {
@@ -82,7 +82,7 @@ class LibrariesIoProjectDependencies extends BaseJsonService {
   ]
 
   async handle({ platform, scope, packageName, version = 'latest' }) {
-    const url = `https://libraries.io/api/${encodeURIComponent(platform)}/${
+    const url = `/${encodeURIComponent(platform)}/${
       scope ? encodeURIComponent(`${scope}/`) : ''
     }${encodeURIComponent(packageName)}/${encodeURIComponent(
       version
@@ -97,7 +97,7 @@ class LibrariesIoProjectDependencies extends BaseJsonService {
   }
 }
 
-class LibrariesIoRepoDependencies extends BaseJsonService {
+class LibrariesIoRepoDependencies extends LibrariesIoBase {
   static category = 'dependencies'
 
   static route = {
@@ -117,9 +117,9 @@ class LibrariesIoRepoDependencies extends BaseJsonService {
   ]
 
   async handle({ user, repo }) {
-    const url = `https://libraries.io/api/github/${encodeURIComponent(
-      user
-    )}/${encodeURIComponent(repo)}/dependencies`
+    const url = `/github/${encodeURIComponent(user)}/${encodeURIComponent(
+      repo
+    )}/dependencies`
     const json = await this._requestJson({
       url,
       schema,

@@ -1,9 +1,8 @@
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
-import { fetchProject } from './librariesio-common.js'
+import LibrariesIoBase from './librariesio-base.js'
 
 // https://libraries.io/api#project-dependents
-export default class LibrariesIoDependents extends BaseJsonService {
+export default class LibrariesIoDependents extends LibrariesIoBase {
   static category = 'other'
 
   static route = {
@@ -45,7 +44,7 @@ export default class LibrariesIoDependents extends BaseJsonService {
   }
 
   async handle({ platform, scope, packageName }) {
-    const { dependents_count: dependentCount } = await fetchProject(this, {
+    const { dependents_count: dependentCount } = await this.fetchProject({
       platform,
       scope,
       packageName,
