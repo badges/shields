@@ -34,6 +34,16 @@ t.create('Tests')
     message: isDefaultTestTotals,
   })
 
+t.create('Tests (branch)')
+  .timeout(10000)
+  .get(
+    '/tests/swellaby:azure-pipelines-templates/master.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'tests',
+    message: isDefaultTestTotals,
+  })
+
 t.create('Tests (legacy API supported)')
   .get(
     '/tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
@@ -113,6 +123,16 @@ t.create('Total Test Count')
   .timeout(10000)
   .get(
     '/total_tests/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'total tests',
+    message: isMetric,
+  })
+
+t.create('Total Test Count (branch)')
+  .timeout(10000)
+  .get(
+    '/total_tests/swellaby:azdo-shellcheck/master.json?server=https://sonarcloud.io'
   )
   .expectBadge({
     label: 'total tests',

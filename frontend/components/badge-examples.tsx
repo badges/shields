@@ -43,9 +43,12 @@ function Example({
   exampleData: RenderableExample
   isBadgeSuggestion: boolean
 }): JSX.Element {
-  function handleClick(): void {
-    onClick(exampleData, isBadgeSuggestion)
-  }
+  const handleClick = React.useCallback(
+    function (): void {
+      onClick(exampleData, isBadgeSuggestion)
+    },
+    [exampleData, isBadgeSuggestion, onClick]
+  )
 
   let exampleUrl, previewUrl
   if (isBadgeSuggestion) {

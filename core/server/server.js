@@ -179,7 +179,6 @@ const privateConfigSchema = Joi.object({
   obs_pass: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
-  shields_secret: Joi.string(),
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),

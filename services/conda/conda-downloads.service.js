@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import BaseCondaService from './conda-base.js'
 
 export default class CondaDownloads extends BaseCondaService {
@@ -16,11 +15,8 @@ export default class CondaDownloads extends BaseCondaService {
   ]
 
   static render({ variant, downloads }) {
-    return {
-      label: variant === 'dn' ? 'downloads' : 'conda|downloads',
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
+    const labelOverride = variant === 'dn' ? 'downloads' : 'conda|downloads'
+    return renderDownloadsBadge({ downloads, labelOverride })
   }
 
   async handle({ variant, channel, pkg }) {

@@ -94,7 +94,6 @@ private:
   obs_pass: 'OBS_PASS'
   redis_url: 'REDIS_URL'
   sentry_dsn: 'SENTRY_DSN'
-  shields_secret: 'SHIELDS_SECRET'
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
   sonarqube_token: 'SONARQUBE_TOKEN'

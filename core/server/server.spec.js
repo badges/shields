@@ -87,12 +87,28 @@ describe('The server', function () {
       )
     })
 
-    it('should produce json badges', async function () {
+    it('should produce SVG badges with expected headers', async function () {
+      const { statusCode, headers } = await got(
+        `${baseUrl}:fruit-apple-green.svg`
+      )
+      expect(statusCode).to.equal(200)
+      expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
+      expect(headers['content-length']).to.equal('1130')
+    })
+
+    it('correctly calculates the content-length header for multi-byte unicode characters', async function () {
+      const { headers } = await got(`${baseUrl}:fruit-apple🍏-green.json`)
+      expect(headers['content-length']).to.equal('100')
+    })
+
+    it('should produce JSON badges with expected headers', async function () {
       const { statusCode, body, headers } = await got(
-        `${baseUrl}twitter/follow/_Pyves.json`
+        `${baseUrl}:fruit-apple-green.json`
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('application/json')
+      expect(headers['access-control-allow-origin']).to.equal('*')
+      expect(headers['content-length']).to.equal('92')
       expect(() => JSON.parse(body)).not.to.throw()
     })
 
