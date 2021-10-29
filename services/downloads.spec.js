@@ -20,6 +20,11 @@ describe('downloads', function () {
       color,
       message,
     })
+    given({ downloads, versionedLabelPrefix: 'installs', version: 'v1.0.0' }).expect({
+      label: 'installs@v1.0.0',
+      color,
+      message,
+    })
     given({
       downloads,
       messageSuffixOverride: '[foo.tar.gz]',

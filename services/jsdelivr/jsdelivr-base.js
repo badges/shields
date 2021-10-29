@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { downloadCount } from '../color-formatters.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
@@ -21,11 +20,8 @@ class BaseJsDelivrService extends BaseJsonService {
     label: 'jsdelivr',
   }
 
-  static render({ period, hits }) {
-    return {
-      message: `${metric(hits)}/${periodMap[period]}`,
-      color: downloadCount(hits),
-    }
+  static render({ period, hits: downloads }) {
+    return renderDownloadsBadge({ downloads, interval: periodMap[period] })
   }
 }
 
