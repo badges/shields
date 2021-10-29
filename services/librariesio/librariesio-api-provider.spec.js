@@ -14,9 +14,9 @@ describe('LibrariesIoApiProvider', function () {
     res: {
       statusCode: 200,
       headers: {
-        'x-ratelimit-limit': rateLimit,
-        'x-ratelimit-remaining': remaining,
-        'retry-after': nextReset,
+        'x-ratelimit-limit': `${rateLimit}`,
+        'x-ratelimit-remaining': `${remaining}`,
+        'retry-after': `${nextReset}`,
       },
     },
     buffer: {},
