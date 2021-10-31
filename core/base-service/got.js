@@ -64,7 +64,8 @@ async function sendRequest(gotWrapper, url, options) {
   }
 }
 
-function fetchFactory(fetchLimitBytes) {
+const TEN_MB = 10485760
+function fetchFactory(fetchLimitBytes = TEN_MB) {
   const gotWithLimit = got.extend({
     handlers: [
       (options, next) => {

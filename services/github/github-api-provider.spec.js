@@ -21,47 +21,35 @@ describe('Github API provider', function () {
   })
 
   context('a search API request', function () {
-    const mockRequest = (options, callback) => {
-      callback()
-    }
-    it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/search', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).to.have.been.calledOnce
-        expect(provider.standardTokens.next).not.to.have.been.called
-        expect(provider.graphqlTokens.next).not.to.have.been.called
-        done()
-      })
+    it('should obtain an appropriate token', async function () {
+      const mockResponse = { res: { headers: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/search', {})
+      expect(provider.searchTokens.next).to.have.been.calledOnce
+      expect(provider.standardTokens.next).not.to.have.been.called
+      expect(provider.graphqlTokens.next).not.to.have.been.called
     })
   })
 
   context('a graphql API request', function () {
-    const mockRequest = (options, callback) => {
-      callback()
-    }
-    it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).not.to.have.been.called
-        expect(provider.standardTokens.next).not.to.have.been.called
-        expect(provider.graphqlTokens.next).to.have.been.calledOnce
-        done()
-      })
+    it('should obtain an appropriate token', async function () {
+      const mockResponse = { res: { headers: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/graphql', {})
+      expect(provider.searchTokens.next).not.to.have.been.called
+      expect(provider.standardTokens.next).not.to.have.been.called
+      expect(provider.graphqlTokens.next).to.have.been.calledOnce
     })
   })
 
   context('a core API request', function () {
-    const mockRequest = (options, callback) => {
-      callback()
-    }
-    it('should obtain an appropriate token', function (done) {
-      provider.request(mockRequest, '/repo', {}, (err, res, buffer) => {
-        expect(err).to.be.undefined
-        expect(provider.searchTokens.next).not.to.have.been.called
-        expect(provider.standardTokens.next).to.have.been.calledOnce
-        expect(provider.graphqlTokens.next).not.to.have.been.called
-        done()
-      })
+    it('should obtain an appropriate token', async function () {
+      const mockResponse = { res: { headers: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/repo', {})
+      expect(provider.searchTokens.next).not.to.have.been.called
+      expect(provider.standardTokens.next).to.have.been.calledOnce
+      expect(provider.graphqlTokens.next).not.to.have.been.called
     })
   })
 
@@ -70,40 +58,32 @@ describe('Github API provider', function () {
     const remaining = 7955
     const nextReset = 123456789
     const mockResponse = {
-      statusCode: 200,
-      headers: {
-        'x-ratelimit-limit': rateLimit,
-        'x-ratelimit-remaining': remaining,
-        'x-ratelimit-reset': nextReset,
+      res: {
+        statusCode: 200,
+        headers: {
+          'x-ratelimit-limit': rateLimit,
+          'x-ratelimit-remaining': remaining,
+          'x-ratelimit-reset': nextReset,
+        },
+        buffer: Buffer.alloc(0),
       },
     }
-    const mockBuffer = Buffer.alloc(0)
-    const mockRequest = (...args) => {
-      const callback = args.pop()
-      callback(null, mockResponse, mockBuffer)
-    }
+    const mockRequest = sinon.stub().resolves(mockResponse)
 
-    it('should invoke the callback', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(Object.is(res, mockResponse)).to.be.true
-        expect(Object.is(buffer, mockBuffer)).to.be.true
-        done()
-      })
+    it('should return the response', async function () {
+      const res = await provider.fetch(mockRequest, '/repo', {})
+      expect(Object.is(res, mockResponse)).to.be.true
     })
 
-    it('should update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        const expectedUsesRemaining =
-          remaining - Math.ceil(reserveFraction * rateLimit)
-        expect(mockStandardToken.update).to.have.been.calledWith(
-          expectedUsesRemaining,
-          nextReset
-        )
-        expect(mockStandardToken.invalidate).not.to.have.been.called
-        done()
-      })
+    it('should update the token with the expected values', async function () {
+      await provider.fetch(mockRequest, '/foo', {})
+      const expectedUsesRemaining =
+        remaining - Math.ceil(reserveFraction * rateLimit)
+      expect(mockStandardToken.update).to.have.been.calledWith(
+        expectedUsesRemaining,
+        nextReset
+      )
+      expect(mockStandardToken.invalidate).not.to.have.been.called
     })
   })
 
@@ -112,9 +92,10 @@ describe('Github API provider', function () {
     const remaining = 7955
     const nextReset = 123456789
     const mockResponse = {
-      statusCode: 200,
-      headers: {},
-      body: `{
+      res: {
+        statusCode: 200,
+        headers: {},
+        body: `{
         "data": {
           "rateLimit": {
             "limit": 12500,
@@ -124,67 +105,46 @@ describe('Github API provider', function () {
           }
         }
       }`,
+      },
     }
-    const mockBuffer = Buffer.alloc(0)
-    const mockRequest = (...args) => {
-      const callback = args.pop()
-      callback(null, mockResponse, mockBuffer)
-    }
+    const mockRequest = sinon.stub().resolves(mockResponse)
 
-    it('should invoke the callback', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(Object.is(res, mockResponse)).to.be.true
-        expect(Object.is(buffer, mockBuffer)).to.be.true
-        done()
-      })
+    it('should return the response', async function () {
+      const res = await provider.fetch(mockRequest, '/graphql', {})
+      expect(Object.is(res, mockResponse)).to.be.true
     })
 
-    it('should update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/graphql', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        const expectedUsesRemaining =
-          remaining - Math.ceil(reserveFraction * rateLimit)
-        expect(mockGraphqlToken.update).to.have.been.calledWith(
-          expectedUsesRemaining,
-          nextReset
-        )
-        expect(mockGraphqlToken.invalidate).not.to.have.been.called
-        done()
-      })
+    it('should update the token with the expected values', async function () {
+      await provider.fetch(mockRequest, '/graphql', {})
+      const expectedUsesRemaining =
+        remaining - Math.ceil(reserveFraction * rateLimit)
+      expect(mockGraphqlToken.update).to.have.been.calledWith(
+        expectedUsesRemaining,
+        nextReset
+      )
+      expect(mockGraphqlToken.invalidate).not.to.have.been.called
     })
   })
 
   context('an unauthorized response', function () {
-    const mockResponse = { statusCode: 401 }
-    const mockBuffer = Buffer.alloc(0)
-    const mockRequest = (...args) => {
-      const callback = args.pop()
-      callback(null, mockResponse, mockBuffer)
-    }
-
-    it('should invoke the callback and update the token with the expected values', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.equal(null)
-        expect(mockStandardToken.invalidate).to.have.been.calledOnce
-        expect(mockStandardToken.update).not.to.have.been.called
-        done()
-      })
+    it('should invoke the callback and update the token with the expected values', async function () {
+      const mockResponse = { res: { statusCode: 401, headers: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/foo', {})
+      expect(mockStandardToken.invalidate).to.have.been.calledOnce
+      expect(mockStandardToken.update).not.to.have.been.called
     })
   })
 
   context('a connection error', function () {
-    const mockRequest = (...args) => {
-      const callback = args.pop()
-      callback(Error('connection timeout'))
-    }
-
-    it('should pass the error to the callback', function (done) {
-      provider.request(mockRequest, '/foo', {}, (err, res, buffer) => {
-        expect(err).to.be.an.instanceof(Error)
-        expect(err.message).to.equal('connection timeout')
-        done()
-      })
+    it('should throw an exception', function () {
+      const msg = 'connection timeout'
+      const requestError = new Error(msg)
+      const mockRequest = sinon.stub().rejects(requestError)
+      return expect(provider.fetch(mockRequest, '/foo', {})).to.be.rejectedWith(
+        Error,
+        'connection timeout'
+      )
     })
   })
 })
