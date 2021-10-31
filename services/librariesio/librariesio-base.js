@@ -10,17 +10,14 @@ const projectSchema = Joi.object({
   rank: anyInteger,
 }).required()
 
-function createRequestFetcher(context, config) {
-  const { sendAndCacheRequest, librariesIoApiProvider } = context
-
-  return async (url, options) =>
-    await librariesIoApiProvider.fetch(sendAndCacheRequest, url, options)
-}
-
 export default class LibrariesIoBase extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
-    this._requestFetcher = createRequestFetcher(context, config)
+    const { sendAndCacheRequest, librariesIoApiProvider } = context
+    this._requestFetcher = librariesIoApiProvider.fetch.bind(
+      librariesIoApiProvider,
+      sendAndCacheRequest
+    )
   }
 
   async fetchProject({ platform, scope, packageName }) {
