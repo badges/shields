@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import OpenVSXBase from './open-vsx-base.js'
 
 export default class OpenVSXDownloads extends OpenVSXBase {
@@ -18,7 +17,7 @@ export default class OpenVSXDownloads extends OpenVSXBase {
         namespace: 'redhat',
         extension: 'java',
       },
-      staticPreview: this.render({ downloads: 29000 }),
+      staticPreview: renderDownloadsBadge({ downloads: 29000 }),
       keywords: this.keywords,
     },
     {
@@ -29,30 +28,25 @@ export default class OpenVSXDownloads extends OpenVSXBase {
         extension: 'java',
         version: '0.69.0',
       },
-      staticPreview: this.render({ version: '0.69.0', downloads: 29000 }),
+      staticPreview: renderDownloadsBadge({
+        version: '0.69.0',
+        downloads: 29000,
+      }),
       keywords: this.keywords,
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  static render({ version, downloads }) {
-    return {
-      label: version ? `downloads@${version}` : 'downloads',
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
-  }
-
   async handle({ namespace, extension, version }) {
-    const { version: tag, downloadCount } = await this.fetch({
+    const { version: tag, downloadCount: downloads } = await this.fetch({
       namespace,
       extension,
       version,
     })
-    return this.constructor.render({
+    return renderDownloadsBadge({
+      downloads,
       version: version ? tag : undefined,
-      downloads: downloadCount,
     })
   }
 }

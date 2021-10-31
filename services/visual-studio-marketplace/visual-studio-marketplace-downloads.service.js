@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const documentation = `
@@ -25,7 +24,7 @@ export default class VisualStudioMarketplaceDownloads extends VisualStudioMarket
       title: 'Visual Studio Marketplace Installs',
       pattern: 'visual-studio-marketplace/i/:extensionId',
       namedParams: { extensionId: 'ritwickdey.LiveServer' },
-      staticPreview: this.render({ measure: 'i', count: 843 }),
+      staticPreview: this.render({ measure: 'i', downloads: 843 }),
       keywords: this.keywords,
       documentation,
     },
@@ -33,29 +32,24 @@ export default class VisualStudioMarketplaceDownloads extends VisualStudioMarket
       title: 'Visual Studio Marketplace Downloads',
       pattern: 'visual-studio-marketplace/d/:extensionId',
       namedParams: { extensionId: 'ritwickdey.LiveServer' },
-      staticPreview: this.render({ measure: 'd', count: 1239 }),
+      staticPreview: this.render({ measure: 'd', downloads: 1239 }),
       keywords: this.keywords,
       documentation,
     },
   ]
 
-  static render({ measure, count }) {
-    const label = measure === 'd' ? 'downloads' : 'installs'
-
-    return {
-      label,
-      message: metric(count),
-      color: downloadCount(count),
-    }
+  static render({ measure, downloads }) {
+    const labelOverride = measure === 'd' ? 'downloads' : 'installs'
+    return renderDownloadsBadge({ downloads, labelOverride })
   }
 
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
     const { statistics } = this.transformStatistics({ json })
-    const count =
+    const downloads =
       measure === 'i'
         ? statistics.install
         : statistics.install + statistics.updateCount
-    return this.constructor.render({ measure, count })
+    return this.constructor.render({ measure, downloads })
   }
 }

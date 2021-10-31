@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
@@ -21,11 +20,11 @@ const schema = Joi.object({
   }).required(),
 })
 
-function DownloadsForInterval(interval) {
-  const { base, messageSuffix, transform, name } = {
+function DownloadsForInterval(downloadInterval) {
+  const { base, interval, transform, name } = {
     day: {
       base: 'packagecontrol/dd',
-      messageSuffix: '/day',
+      interval: 'day',
       transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
@@ -39,7 +38,7 @@ function DownloadsForInterval(interval) {
     },
     week: {
       base: 'packagecontrol/dw',
-      messageSuffix: '/week',
+      interval: 'week',
       transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
@@ -55,7 +54,7 @@ function DownloadsForInterval(interval) {
     },
     month: {
       base: 'packagecontrol/dm',
-      messageSuffix: '/month',
+      interval: 'month',
       transform: resp => {
         const platforms = resp.installs.daily.data
         let downloads = 0
@@ -71,11 +70,10 @@ function DownloadsForInterval(interval) {
     },
     total: {
       base: 'packagecontrol/dt',
-      messageSuffix: '',
       transform: resp => resp.installs.total,
       name: 'PackageControlDownloadsTotal',
     },
-  }[interval]
+  }[downloadInterval]
 
   return class PackageControlDownloads extends BaseJsonService {
     static name = name
@@ -88,19 +86,12 @@ function DownloadsForInterval(interval) {
       {
         title: 'Package Control',
         namedParams: { packageName: 'GitGutter' },
-        staticPreview: this.render({ downloads: 12000 }),
+        staticPreview: renderDownloadsBadge({ downloads: 12000 }),
         keywords,
       },
     ]
 
     static defaultBadgeData = { label: 'downloads' }
-
-    static render({ downloads }) {
-      return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCount(downloads),
-      }
-    }
 
     async fetch({ packageName }) {
       const url = `https://packagecontrol.io/packages/${packageName}.json`
@@ -109,7 +100,10 @@ function DownloadsForInterval(interval) {
 
     async handle({ packageName }) {
       const data = await this.fetch({ packageName })
-      return this.constructor.render({ downloads: transform(data) })
+      return renderDownloadsBadge({
+        downloads: transform(data),
+        interval,
+      })
     }
   }
 }
