@@ -1,5 +1,4 @@
-import { downloadCount } from '../color-formatters.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
 export default class PuppetforgeModuleDownloads extends BasePuppetForgeModulesService {
@@ -17,21 +16,14 @@ export default class PuppetforgeModuleDownloads extends BasePuppetForgeModulesSe
         user: 'camptocamp',
         moduleName: 'openldap',
       },
-      staticPreview: this.render({ downloads: 720000 }),
+      staticPreview: renderDownloadsBadge({ downloads: 720000 }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  static render({ downloads }) {
-    return {
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
-  }
-
   async handle({ user, moduleName }) {
-    const data = await this.fetch({ user, moduleName })
-    return this.constructor.render({ downloads: data.downloads })
+    const { downloads } = await this.fetch({ user, moduleName })
+    return renderDownloadsBadge({ downloads })
   }
 }

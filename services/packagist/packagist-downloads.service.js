@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { optionalUrl } from '../validators.js'
 import {
   keywords,
@@ -12,15 +11,14 @@ import {
 const periodMap = {
   dm: {
     field: 'monthly',
-    suffix: '/month',
+    interval: 'month',
   },
   dd: {
     field: 'daily',
-    suffix: '/day',
+    interval: 'day',
   },
   dt: {
     field: 'total',
-    suffix: '',
   },
 }
 
@@ -55,9 +53,9 @@ export default class PackagistDownloads extends BasePackagistService {
         user: 'doctrine',
         repo: 'orm',
       },
-      staticPreview: this.render({
+      staticPreview: renderDownloadsBadge({
         downloads: 1000000,
-        interval: 'dm',
+        interval: 'month',
       }),
       keywords,
       documentation: cacheDocumentationFragment,
@@ -69,9 +67,9 @@ export default class PackagistDownloads extends BasePackagistService {
         user: 'doctrine',
         repo: 'orm',
       },
-      staticPreview: this.render({
+      staticPreview: renderDownloadsBadge({
         downloads: 1000000,
-        interval: 'dm',
+        interval: 'month',
       }),
       queryParams: { server: 'https://packagist.org' },
       keywords,
@@ -80,24 +78,20 @@ export default class PackagistDownloads extends BasePackagistService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'downloads',
-  }
+  static defaultBadgeData = { label: 'downloads' }
 
-  static render({ downloads, interval }) {
-    return {
-      message: metric(downloads) + periodMap[interval].suffix,
-      color: downloadCount(downloads),
-    }
-  }
-
-  async handle({ interval, user, repo }, { server }) {
+  async handle({ interval: period, user, repo }, { server }) {
     const {
       package: { downloads },
-    } = await this.fetchByJsonAPI({ user, repo, schema, server })
-
-    return this.constructor.render({
-      downloads: downloads[periodMap[interval].field],
+    } = await this.fetchByJsonAPI({
+      user,
+      repo,
+      schema,
+      server,
+    })
+    const { interval, field } = periodMap[period]
+    return renderDownloadsBadge({
+      downloads: downloads[field],
       interval,
     })
   }

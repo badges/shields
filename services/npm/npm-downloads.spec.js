@@ -16,8 +16,9 @@ describe('NpmDownloads', function () {
       interval: 'dt',
       downloadCount: 0,
     }).expect({
-      message: '0',
       color: 'red',
+      message: '0',
+      label: undefined,
     })
   })
 })

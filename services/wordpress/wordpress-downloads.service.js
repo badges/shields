@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { NotFound } from '../index.js'
 import BaseWordpress from './wordpress-base.js'
 
@@ -22,23 +21,22 @@ const extensionData = {
 const intervalMap = {
   dd: {
     limit: 1,
-    messageSuffix: '/day',
+    interval: 'day',
   },
   dw: {
     limit: 7,
-    messageSuffix: '/week',
+    interval: 'week',
   },
   dm: {
     limit: 30,
-    messageSuffix: '/month',
+    interval: 'month',
   },
   dy: {
     limit: 365,
-    messageSuffix: '/year',
+    interval: 'year',
   },
   dt: {
     limit: null,
-    messageSuffix: '',
   },
 }
 
@@ -66,12 +64,10 @@ function DownloadsForExtensionType(extensionType) {
     static defaultBadgeData = { label: 'downloads' }
 
     static render({ interval, downloads }) {
-      const { messageSuffix } = intervalMap[interval]
-
-      return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCount(downloads),
-      }
+      return renderDownloadsBadge({
+        downloads,
+        interval: intervalMap[interval].interval,
+      })
     }
 
     async handle({ interval, slug }) {
@@ -130,25 +126,18 @@ function InstallsForExtensionType(extensionType) {
       {
         title: `WordPress ${capt} Active Installs`,
         namedParams: { slug: exampleSlug },
-        staticPreview: this.render({ installCount: 300000 }),
+        staticPreview: renderDownloadsBadge({ downloads: 300000 }),
       },
     ]
 
     static defaultBadgeData = { label: 'active installs' }
-
-    static render({ installCount }) {
-      return {
-        message: metric(installCount),
-        color: downloadCount(installCount),
-      }
-    }
 
     async handle({ slug }) {
       const { active_installs: installCount } = await this.fetch({
         extensionType,
         slug,
       })
-      return this.constructor.render({ installCount })
+      return renderDownloadsBadge({ downloads: installCount })
     }
   }
 }
