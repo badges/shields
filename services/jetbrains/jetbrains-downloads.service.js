@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import JetbrainsBase from './jetbrains-base.js'
 
@@ -36,16 +35,9 @@ export default class JetbrainsDownloads extends JetbrainsBase {
       namedParams: {
         pluginId: '1347',
       },
-      staticPreview: this.render({ downloads: 10200000 }),
+      staticPreview: renderDownloadsBadge({ downloads: 10200000 }),
     },
   ]
-
-  static render({ downloads }) {
-    return {
-      message: `${metric(downloads)}`,
-      color: downloadCountColor(downloads),
-    }
-  }
 
   async handle({ pluginId }) {
     let downloads
@@ -69,6 +61,6 @@ export default class JetbrainsDownloads extends JetbrainsBase {
       downloads = jetbrainsPluginData.downloads
     }
 
-    return this.constructor.render({ downloads })
+    return renderDownloadsBadge({ downloads })
   }
 }
