@@ -89,9 +89,9 @@ t.create('Scoped dependency')
   })
 
 t.create('Scoped dependency on branch')
-  .get('/dependency-version/zeit/next.js/dev/babel-eslint/alpha.json')
+  .get('/dependency-version/zeit/next.js/dev/@babel/eslint-parser/canary.json')
   .expectBadge({
-    label: 'babel-eslint',
+    label: '@babel/eslint-parser',
     message: semverRange,
   })
 

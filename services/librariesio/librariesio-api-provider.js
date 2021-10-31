@@ -31,13 +31,13 @@ export default class LibrariesIoApiProvider {
     // The standard rate limit is 60/requests/minute, so fallback to that default
     // if the header isn't present.
     // https://libraries.io/api#rate-limit
-    const rateLimit = headers['x-ratelimit-limit'] || this.defaultRateLimit
+    const rateLimit = +headers['x-ratelimit-limit'] || this.defaultRateLimit
 
     // If the remaining header is missing, then we're in the 404 response phase, and simply
     // subtract one from the `usesRemaining` count on the token, since the 404 responses do count
     // against the rate limits.
     const totalUsesRemaining =
-      headers['x-ratelimit-remaining'] || token.decrementedUsesRemaining
+      +headers['x-ratelimit-remaining'] || token.decrementedUsesRemaining
 
     // The `retry-after` header is only present post-rate limit excess, and contains the value in
     // seconds the client needs to wait before the limits are reset.
@@ -46,7 +46,7 @@ export default class LibrariesIoApiProvider {
     // If the header is absent, we just use the current timestamp to
     // advance the value to _something_
     const retryAfter = headers['retry-after']
-    const nextReset = Date.now() + (retryAfter ? retryAfter * 1000 : 0)
+    const nextReset = Date.now() + (retryAfter ? +retryAfter * 1000 : 0)
 
     return {
       rateLimit,
