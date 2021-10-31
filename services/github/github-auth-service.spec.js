@@ -14,7 +14,7 @@ describe('GithubAuthV3Service', function () {
         schema: Joi.object({
           requiredString: Joi.string().required(),
         }).required(),
-        url: 'https://github-api.example.com/repos/badges/shields/check-runs',
+        url: '/repos/badges/shields/check-runs',
         options: {
           headers: {
             Accept: 'application/vnd.github.antiope-preview+json',
@@ -26,10 +26,17 @@ describe('GithubAuthV3Service', function () {
   }
 
   it('forwards custom Accept header', async function () {
-    const sendAndCacheRequestWithCallbacks = sinon.stub().returns(
+    const sendAndCacheRequest = sinon.stub().returns(
       Promise.resolve({
         buffer: '{"requiredString": "some-string"}',
-        res: { statusCode: 200 },
+        res: {
+          statusCode: 200,
+          headers: {
+            'x-ratelimit-limit': 12500,
+            'x-ratelimit-remaining': 7955,
+            'x-ratelimit-reset': 123456789,
+          },
+        },
       })
     )
     const githubApiProvider = new GithubApiProvider({
@@ -39,18 +46,19 @@ describe('GithubAuthV3Service', function () {
     sinon.stub(githubApiProvider.standardTokens, 'next').returns(mockToken)
 
     DummyGithubAuthV3Service.invoke({
-      sendAndCacheRequestWithCallbacks,
+      sendAndCacheRequest,
       githubApiProvider,
     })
 
-    expect(sendAndCacheRequestWithCallbacks).to.have.been.calledOnceWith({
-      headers: {
-        'User-Agent': 'Shields.io/2003a',
-        Accept: 'application/vnd.github.antiope-preview+json',
-        Authorization: 'token undefined',
-      },
-      url: 'https://github-api.example.com/repos/badges/shields/check-runs',
-      baseUrl: 'https://github-api.example.com',
-    })
+    expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+      'https://github-api.example.com/repos/badges/shields/check-runs',
+      {
+        headers: {
+          'User-Agent': 'Shields.io/2003a',
+          Accept: 'application/vnd.github.antiope-preview+json',
+          Authorization: 'token undefined',
+        },
+      }
+    )
   })
 })

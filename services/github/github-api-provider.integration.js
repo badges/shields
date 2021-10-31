@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import config from 'config'
-import request from 'request'
+import { fetchFactory } from '../../core/base-service/got.js'
 import GithubApiProvider from './github-api-provider.js'
+const requestFetcher = fetchFactory()
 
 describe('Github API provider', function () {
   const baseUrl = process.env.GITHUB_URL || 'https://api.github.com'
@@ -30,8 +31,8 @@ describe('Github API provider', function () {
     it('should be able to run 10 requests', async function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
-        await githubApiProvider.requestAsPromise(
-          request,
+        await githubApiProvider.fetch(
+          requestFetcher,
           '/repos/rust-lang/rust',
           {}
         )
@@ -52,8 +53,8 @@ describe('Github API provider', function () {
 
     const headers = []
     async function performOneRequest() {
-      const { res } = await githubApiProvider.requestAsPromise(
-        request,
+      const { res } = await githubApiProvider.fetch(
+        requestFetcher,
         '/repos/rust-lang/rust',
         {}
       )

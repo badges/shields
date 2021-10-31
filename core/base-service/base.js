@@ -450,8 +450,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              sendAndCacheRequest: fetcher,
-              sendAndCacheRequestWithCallbacks: request,
+              sendAndCacheRequest: fetcher, // TODO: rename sendAndCacheRequest
               githubApiProvider,
               librariesIoApiProvider,
               metricHelper,

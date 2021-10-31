@@ -5,7 +5,8 @@
 // This endpoint is called from frontend/components/suggestion-and-search.js.
 
 import { URL } from 'url'
-import request from 'request'
+import { fetchFactory } from '../core/base-service/got.js'
+const requestFetcher = fetchFactory()
 
 function twitterPage(url) {
   if (url.protocol === null) {
@@ -75,8 +76,8 @@ async function githubLicense(githubApiProvider, user, repo) {
 
   let link = `https://github.com/${repoSlug}`
 
-  const { buffer } = await githubApiProvider.requestAsPromise(
-    request,
+  const { buffer } = await githubApiProvider.fetch(
+    requestFetcher,
     `/repos/${repoSlug}/license`
   )
   try {
