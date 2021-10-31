@@ -1,8 +1,7 @@
 import Joi from 'joi'
-import { downloadCount } from '../color-formatters.js'
-import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
+import { renderDownloadsBadge } from '../downloads.js'
 
 const keywords = ['python']
 
@@ -16,16 +15,16 @@ const schema = Joi.object({
 
 const periodMap = {
   dd: {
-    api_field: 'last_day',
-    suffix: '/day',
+    apiField: 'last_day',
+    interval: 'day',
   },
   dw: {
-    api_field: 'last_week',
-    suffix: '/week',
+    apiField: 'last_week',
+    interval: 'week',
   },
   dm: {
-    api_field: 'last_month',
-    suffix: '/month',
+    apiField: 'last_month',
+    interval: 'month',
   },
 }
 
@@ -46,19 +45,15 @@ export default class PypiDownloads extends BaseJsonService {
         period: 'dd',
         packageName: 'Django',
       },
-      staticPreview: this.render({ period: 'dd', downloads: 14000 }),
+      staticPreview: renderDownloadsBadge({
+        interval: 'day',
+        downloads: 14000,
+      }),
       keywords,
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
-
-  static render({ period, downloads }) {
-    return {
-      message: `${metric(downloads)}${periodMap[period].suffix}`,
-      color: downloadCount(downloads),
-    }
-  }
 
   async fetch({ packageName }) {
     return this._requestJson({
@@ -69,10 +64,11 @@ export default class PypiDownloads extends BaseJsonService {
   }
 
   async handle({ period, packageName }) {
-    const json = await this.fetch({ packageName })
-    return this.constructor.render({
-      period,
-      downloads: json.data[periodMap[period].api_field],
+    const { apiField, interval } = periodMap[period]
+    const { data } = await this.fetch({ packageName })
+    return renderDownloadsBadge({
+      downloads: data[apiField],
+      interval,
     })
   }
 }
