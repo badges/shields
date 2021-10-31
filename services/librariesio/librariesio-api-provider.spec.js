@@ -119,14 +119,10 @@ describe('LibrariesIoApiProvider', function () {
     const requestError = new Error(msg)
     const mockRequest = sinon.stub().rejects(requestError)
 
-    it('should pass the error to the callback', async function () {
-      try {
-        await provider.fetch(mockRequest, '/npm/badge-maker')
-        expect(false).to.be.true
-      } catch (err) {
-        expect(err).to.be.an.instanceof(Error)
-        expect(err.message).to.equal(msg)
-      }
+    it('should throw an exception', async function () {
+      return expect(
+        provider.fetch(mockRequest, '/npm/badge-maker', {})
+      ).to.be.rejectedWith(Error, 'connection timeout')
     })
   })
 })
