@@ -1,4 +1,3 @@
-import { promisify } from 'util'
 import semver from 'semver'
 import { metric, addv } from '../text-formatters.js'
 import { downloadCount as downloadCountColor } from '../color-formatters.js'
@@ -52,7 +51,7 @@ function randomElementFrom(items) {
  */
 async function searchServiceUrl(baseUrl, serviceType = 'SearchQueryService') {
   // Should we really be caching all these NuGet feeds in memory?
-  const searchQueryServices = await promisify(regularUpdate)({
+  const searchQueryServices = await regularUpdate({
     url: `${baseUrl}/index.json`,
     // The endpoint changes once per year (ie, a period of n = 1 year).
     // We minimize the users' waiting time for information.

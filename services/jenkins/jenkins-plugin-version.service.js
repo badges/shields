@@ -1,4 +1,3 @@
-import { promisify } from 'util'
 import { regularUpdate } from '../../core/legacy/regular-update.js'
 import { renderVersionBadge } from '../version.js'
 import { BaseService, NotFound } from '../index.js'
@@ -32,7 +31,7 @@ export default class JenkinsPluginVersion extends BaseService {
   }
 
   async fetch() {
-    return promisify(regularUpdate)({
+    return regularUpdate({
       url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
       intervalMillis: 4 * 3600 * 1000,
       scraper: json =>

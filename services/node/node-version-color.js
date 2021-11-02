@@ -1,16 +1,15 @@
-import { promisify } from 'util'
 import moment from 'moment'
 import semver from 'semver'
 import { regularUpdate } from '../../core/legacy/regular-update.js'
 
 const dateFormat = 'YYYY-MM-DD'
 
-function getVersion(version) {
+async function getVersion(version) {
   let semver = ``
   if (version) {
     semver = `-${version}.x`
   }
-  return promisify(regularUpdate)({
+  return regularUpdate({
     url: `https://nodejs.org/dist/latest${semver}/SHASUMS256.txt`,
     intervalMillis: 24 * 3600 * 1000,
     json: false,
@@ -37,7 +36,7 @@ async function getCurrentVersion() {
 }
 
 async function getLtsVersions() {
-  const versions = await promisify(regularUpdate)({
+  const versions = await regularUpdate({
     url: 'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
     intervalMillis: 24 * 3600 * 1000,
     json: true,

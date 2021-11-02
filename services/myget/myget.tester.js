@@ -43,7 +43,7 @@ t.create('total downloads (connection error)')
   .networkOff()
   .expectBadge({
     label: 'downloads',
-    message: 'intermediate resource inaccessible',
+    message: 'inaccessible',
   })
 
 // This tests the erroring behavior in regular-update.
