@@ -33,7 +33,7 @@ class XmlElement {
    * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.name
    *    Name of the XML tag
-   * @param {Array.<string|module:badge-maker/lib/xml-element~XmlElement>} [attrs.content=[]]
+   * @param {Array.<string|module:badge-maker/lib/xml~XmlElement>} [attrs.content=[]]
    *    Array of objects to render inside the tag. content may contain a mix of
    *    string and XmlElement objects. If content is `[]` or ommitted the
    *    element will be rendered as a self-closing element.
