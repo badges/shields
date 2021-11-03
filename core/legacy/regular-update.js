@@ -1,93 +1,62 @@
-import requestModule from 'request'
-import { Inaccessible, InvalidResponse } from '../base-service/errors.js'
+/**
+ * @module
+ */
+
+import { InvalidResponse } from '../base-service/errors.js'
+import { fetchFactory } from '../../core/base-service/got.js'
+import checkErrorResponse from '../../core/base-service/check-error-response.js'
+const fetcher = fetchFactory()
 
 // Map from URL to { timestamp: last fetch time, data: data }.
 let regularUpdateCache = Object.create(null)
 
-// url: a string, scraper: a function that takes string data at that URL.
-// interval: number in milliseconds.
-// cb: a callback function that takes an error and data returned by the scraper.
-//
-// To use this from a service:
-//
-// import { promisify } from 'util'
-// import { regularUpdate } from '../../core/legacy/regular-update.js'
-//
-// function getThing() {
-//   return promisify(regularUpdate)({
-//     url: ...,
-//     ...
-//   })
-// }
-//
-// in handle():
-//
-// const thing = await getThing()
-
-function regularUpdate(
-  {
-    url,
-    intervalMillis,
-    json = true,
-    scraper = buffer => buffer,
-    options = {},
-    request = requestModule,
-  },
-  cb
-) {
+/**
+ * Make a HTTP request using an in-memory cache
+ *
+ * @param {object} attrs Refer to individual attrs
+ * @param {string} attrs.url URL to request
+ * @param {number} attrs.intervalMillis Number of milliseconds to keep cached value for
+ * @param {boolean} [attrs.json=true] True if we expect to parse the response as JSON
+ * @param {Function} [attrs.scraper=buffer => buffer] Function to extract value from the response
+ * @param {object} [attrs.options={}] Options to pass to got
+ * @param {Function} [attrs.requestFetcher=fetcher] Custom fetch function
+ * @returns {*} Parsed response
+ */
+async function regularUpdate({
+  url,
+  intervalMillis,
+  json = true,
+  scraper = buffer => buffer,
+  options = {},
+  requestFetcher = fetcher,
+}) {
   const timestamp = Date.now()
   const cached = regularUpdateCache[url]
   if (cached != null && timestamp - cached.timestamp < intervalMillis) {
-    cb(null, cached.data)
-    return
+    return cached.data
   }
-  request(url, options, (err, res, buffer) => {
-    if (err != null) {
-      cb(
-        new Inaccessible({
-          prettyMessage: 'intermediate resource inaccessible',
-          underlyingError: err,
-        })
-      )
-      return
-    }
 
-    if (res.statusCode < 200 || res.statusCode >= 300) {
-      cb(
-        new InvalidResponse({
-          prettyMessage: 'intermediate resource inaccessible',
-        })
-      )
-    }
+  const { buffer } = await checkErrorResponse({})(
+    await requestFetcher(url, options)
+  )
 
-    let reqData
-    if (json) {
-      try {
-        reqData = JSON.parse(buffer)
-      } catch (e) {
-        cb(
-          new InvalidResponse({
-            prettyMessage: 'unparseable intermediate json response',
-            underlyingError: e,
-          })
-        )
-        return
-      }
-    } else {
-      reqData = buffer
-    }
-
-    let data
+  let reqData
+  if (json) {
     try {
-      data = scraper(reqData)
+      reqData = JSON.parse(buffer)
     } catch (e) {
-      cb(e)
-      return
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable intermediate json response',
+        underlyingError: e,
+      })
     }
+  } else {
+    reqData = buffer
+  }
 
-    regularUpdateCache[url] = { timestamp, data }
-    cb(null, data)
-  })
+  const data = scraper(reqData)
+  regularUpdateCache[url] = { timestamp, data }
+  return data
 }
 
 function clearRegularUpdateCache() {

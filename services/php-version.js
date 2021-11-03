@@ -3,8 +3,7 @@
  * using the algorithm followed by Composer (see
  * https://getcomposer.org/doc/04-schema.md#version).
  */
-import { promisify } from 'util'
-import request from 'request'
+import { fetchFactory } from '../core/base-service/got.js'
 import { regularUpdate } from '../core/legacy/regular-update.js'
 import { listCompare } from './version.js'
 import { omitv } from './text-formatters.js'
@@ -218,7 +217,7 @@ function versionReduction(versions, phpReleases) {
 }
 
 async function getPhpReleases(githubApiProvider) {
-  return promisify(regularUpdate)({
+  return regularUpdate({
     url: '/repos/php/php-src/git/refs/tags',
     intervalMillis: 24 * 3600 * 1000, // 1 day
     scraper: tags =>
@@ -233,8 +232,10 @@ async function getPhpReleases(githubApiProvider) {
             .map(tag => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
         )
       ),
-    request: (url, options, cb) =>
-      githubApiProvider.request(request, url, {}, cb),
+    requestFetcher: githubApiProvider.fetch.bind(
+      githubApiProvider,
+      fetchFactory()
+    ),
   })
 }
 

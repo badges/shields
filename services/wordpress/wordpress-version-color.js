@@ -1,4 +1,3 @@
-import { promisify } from 'util'
 import semver from 'semver'
 import { regularUpdate } from '../../core/legacy/regular-update.js'
 
@@ -19,8 +18,8 @@ import { regularUpdate } from '../../core/legacy/regular-update.js'
 //   })
 //   .required()
 
-function getOfferedVersions() {
-  return promisify(regularUpdate)({
+async function getOfferedVersions() {
+  return regularUpdate({
     url: 'https://api.wordpress.org/core/version-check/1.7/',
     intervalMillis: 24 * 3600 * 1000,
     json: true,
