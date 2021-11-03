@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/graphql.js</title>
+    <title>JSDoc: Source: core/legacy/regular-update.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/graphql.js</h1>
+    <h1 class="page-title">Source: core/legacy/regular-update.js</h1>
 
     
 
@@ -30,53 +30,68 @@
  * @module
  */
 
+import { InvalidResponse } from '../base-service/errors.js'
+import { fetchFactory } from '../../core/base-service/got.js'
+import checkErrorResponse from '../../core/base-service/check-error-response.js'
+const fetcher = fetchFactory()
+
+// Map from URL to { timestamp: last fetch time, data: data }.
+let regularUpdateCache = Object.create(null)
+
 /**
- * Utility function to merge two graphql queries together
- * This is basically copied from
- * [graphql-query-merge](https://www.npmjs.com/package/graphql-query-merge)
- * but can't use that due to incorrect packaging.
+ * Make a HTTP request using an in-memory cache
  *
- * @param {...object} queries queries to merge
- * @returns {object} merged query
+ * @param {object} attrs Refer to individual attrs
+ * @param {string} attrs.url URL to request
+ * @param {number} attrs.intervalMillis Number of milliseconds to keep cached value for
+ * @param {boolean} [attrs.json=true] True if we expect to parse the response as JSON
+ * @param {Function} [attrs.scraper=buffer => buffer] Function to extract value from the response
+ * @param {object} [attrs.options={}] Options to pass to got
+ * @param {Function} [attrs.requestFetcher=fetcher] Custom fetch function
+ * @returns {*} Parsed response
  */
-function mergeQueries(...queries) {
-  const merged = {
-    kind: 'Document',
-    definitions: [
-      {
-        directives: [],
-        operation: 'query',
-        variableDefinitions: [],
-        kind: 'OperationDefinition',
-        selectionSet: { kind: 'SelectionSet', selections: [] },
-      },
-    ],
+async function regularUpdate({
+  url,
+  intervalMillis,
+  json = true,
+  scraper = buffer => buffer,
+  options = {},
+  requestFetcher = fetcher,
+}) {
+  const timestamp = Date.now()
+  const cached = regularUpdateCache[url]
+  if (cached != null &amp;&amp; timestamp - cached.timestamp &lt; intervalMillis) {
+    return cached.data
   }
 
-  queries.forEach(query => {
-    const parsedQuery = query
-    parsedQuery.definitions.forEach(definition => {
-      merged.definitions[0].directives = [
-        ...merged.definitions[0].directives,
-        ...definition.directives,
-      ]
+  const { buffer } = await checkErrorResponse({})(
+    await requestFetcher(url, options)
+  )
 
-      merged.definitions[0].variableDefinitions = [
-        ...merged.definitions[0].variableDefinitions,
-        ...definition.variableDefinitions,
-      ]
+  let reqData
+  if (json) {
+    try {
+      reqData = JSON.parse(buffer)
+    } catch (e) {
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable intermediate json response',
+        underlyingError: e,
+      })
+    }
+  } else {
+    reqData = buffer
+  }
 
-      merged.definitions[0].selectionSet.selections = [
-        ...merged.definitions[0].selectionSet.selections,
-        ...definition.selectionSet.selections,
-      ]
-    })
-  })
-
-  return merged
+  const data = scraper(reqData)
+  regularUpdateCache[url] = { timestamp, data }
+  return data
 }
 
-export { mergeQueries }
+function clearRegularUpdateCache() {
+  regularUpdateCache = Object.create(null)
+}
+
+export { regularUpdate, clearRegularUpdateCache }
 </code></pre>
         </article>
     </section>
