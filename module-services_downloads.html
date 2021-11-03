@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/service-test-runner/infer-pull-request</title>
+    <title>JSDoc: Module: services/downloads</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/service-test-runner/infer-pull-request</h1>
+    <h1 class="page-title">Module: services/downloads</h1>
 
     
 
@@ -64,7 +64,7 @@
     
 
     
-    <h4 class="name" id="~inferPullRequest"><span class="type-signature">(inner) </span>inferPullRequest<span class="signature">(env<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="module-core_service-test-runner_infer-pull-request.html#~PullRequest">module:core/service-test-runner/infer-pull-request~PullRequest</a>}</span></h4>
+    <h4 class="name" id="~renderDownloadsBadge"><span class="type-signature">(inner) </span>renderDownloadsBadge<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -72,8 +72,8 @@
 
 
 <div class="description">
-    <p>When called inside a CI build, infer the details
-of a pull request from the environment variables.</p>
+    <p>Handles rendering concerns of badges that display
+download counts, with override/customization support</p>
 </div>
 
 
@@ -97,11 +97,7 @@ of a pull request from the environment variables.</p>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -113,13 +109,88 @@ of a pull request from the environment variables.</p>
 
         <tr>
             
-                <td class="name"><code>env</code></td>
+                <td class="name"><code>attrs</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attrs</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>downloads</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of downloads</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
             
@@ -138,14 +209,187 @@ of a pull request from the environment variables.</p>
             
 
             
-                <td class="default">
+
+            <td class="description last"><p>Period or interval the downloads occurred
+(e.g. day, week, month). If provided then this Will be reflected
+in the badge message unless overridden by other message-related parameters</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
                 
-                    process.env
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last"><p>Environment variables</p></td>
+            
+
+            <td class="description last"><p>Version or tag that was downloaded
+which will be reflected in the badge label (unless the label is overridden)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>labelOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge label is set to this
+value overriding any other label-related parameters</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colorOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge color is set to this
+value instead of the color being based on the count of downloads</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>messageSuffixOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge message will
+will have this value added to the download count, separated with a space</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>versionedLabelPrefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then the badge label will use
+this value as the prefix for versioned badges, e.g. <code>foobar@v1.23</code>. Defaults to 'downloads'</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -186,7 +430,7 @@ of a pull request from the environment variables.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_infer-pull-request.js.html">core/service-test-runner/infer-pull-request.js</a>, <a href="core_service-test-runner_infer-pull-request.js.html#line73">line 73</a>
+        <a href="services_downloads.js.html">services/downloads.js</a>, <a href="services_downloads.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -215,7 +459,7 @@ of a pull request from the environment variables.</p>
 
         
 <div class="param-desc">
-    <p>Pull Request</p>
+    <p>Badge</p>
 </div>
 
 
@@ -226,7 +470,7 @@ of a pull request from the environment variables.</p>
     </dt>
     <dd>
         
-<span class="param-type"><a href="module-core_service-test-runner_infer-pull-request.html#~PullRequest">module:core/service-test-runner/infer-pull-request~PullRequest</a></span>
+<span class="param-type">object</span>
 
 
     </dd>
@@ -241,216 +485,6 @@ of a pull request from the environment variables.</p>
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="~PullRequest">PullRequest</h4>
-
-
-
-
-<div class="description">
-    <p>Pull Request</p>
-</div>
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>pr.baseUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>(returned for travis CI only)</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>owner</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>repo</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pullRequest</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>PR/issue number</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>slug</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>owner/repo/#pullRequest</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_infer-pull-request.js.html">core/service-test-runner/infer-pull-request.js</a>, <a href="core_service-test-runner_infer-pull-request.js.html#line89">line 89</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
     
 
     
