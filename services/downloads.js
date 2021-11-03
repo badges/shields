@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 import { downloadCount } from './color-formatters.js'
 import { metric } from './text-formatters.js'
 
