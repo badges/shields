@@ -4,6 +4,26 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-11-04
+
+- migrate regularUpdate() from request-->got [#7215](https://github.com/badges/shields/issues/7215)
+- migrate github badges to use got instead of request; affects [github librariesio] [#7212](https://github.com/badges/shields/issues/7212)
+- deprecate David badges [#7197](https://github.com/badges/shields/issues/7197)
+- fix: ensure libraries.io header values are processed numerically [#7196](https://github.com/badges/shields/issues/7196)
+- Add authentication for Libraries.io-based badges, run [Libraries Bower] [#7080](https://github.com/badges/shields/issues/7080)
+- fixes and tests for pipenv helpers [#7194](https://github.com/badges/shields/issues/7194)
+- add GitLab Release badge, run all [GitLab] [#7021](https://github.com/badges/shields/issues/7021)
+- set content-length header on badge responses [#7179](https://github.com/badges/shields/issues/7179)
+- fix [github] release/tag/download schema [#7170](https://github.com/badges/shields/issues/7170)
+- Supported nested groups on [GitLabPipeline] badge [#7159](https://github.com/badges/shields/issues/7159)
+- Support nested groups on [GitLabTag] badge [#7158](https://github.com/badges/shields/issues/7158)
+- Fixing incorrect JetBrains Plugin rating values for [JetBrainsRating] [#7140](https://github.com/badges/shields/issues/7140)
+- support using release or tag name in [GitHub] Release version badge [#7075](https://github.com/badges/shields/issues/7075)
+- feat: support branches in sonar badges [#7065](https://github.com/badges/shields/issues/7065)
+- Add [Modrinth] total downloads badge [#7132](https://github.com/badges/shields/issues/7132)
+- remove [github] admin routes [#7105](https://github.com/badges/shields/issues/7105)
+- Dependency updates
+
 ## server-2021-10-04
 
 - feat: add 2021 support to GitHub Hacktoberfest [#7086](https://github.com/badges/shields/issues/7086)
