@@ -94,4 +94,4 @@ function fetchFactory(fetchLimitBytes = TEN_MB) {
   return sendRequest.bind(sendRequest, gotWithLimit)
 }
 
-export { requestOptions2GotOptions, fetchFactory }
+export { requestOptions2GotOptions, fetchFactory, userAgent }
