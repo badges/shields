@@ -1,6 +1,7 @@
 export default [
   { id: 'build', name: 'Build', keywords: ['build'] },
   { id: 'coverage', name: 'Code Coverage', keywords: ['coverage'] },
+  { id: 'test-results', name: 'Test Results', keywords: ['tests'] },
   { id: 'analysis', name: 'Analysis', keywords: ['analysis'] },
   { id: 'chat', name: 'Chat', keywords: ['chat'] },
   { id: 'dependencies', name: 'Dependencies', keywords: ['dependencies'] },
