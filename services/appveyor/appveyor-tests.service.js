@@ -14,6 +14,7 @@ const commonPreviewProps = {
 }
 
 export default class AppVeyorTests extends AppVeyorBase {
+  static category = 'test-results'
   static route = {
     ...this.buildRoute('appveyor/tests'),
     queryParamSchema: testResultQueryParamSchema,
