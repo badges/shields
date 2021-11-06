@@ -13,8 +13,7 @@ import {
 } from './sonar-helpers.js'
 
 class SonarTestsSummary extends SonarBase {
-  static category = 'build'
-
+  static category = 'test-results'
   static route = {
     base: 'sonar/tests',
     pattern: ':component/:branch*',
