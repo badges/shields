@@ -32,9 +32,9 @@ export default class OreSpongeVersions extends BaseOreService {
   }
 
   transform({ data }) {
-    const { promoted_versions } = data
+    const { promoted_versions: promotedVersions } = data
     return {
-      versions: promoted_versions
+      versions: promotedVersions
         .reduce((acc, { tags }) => acc.concat(tags), [])
         .filter(({ name }) => name.toLowerCase() === 'sponge')
         .map(({ display_data: displayData }) => displayData)
