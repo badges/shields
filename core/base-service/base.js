@@ -444,7 +444,7 @@ class BaseService {
       regex,
       handleRequest(cacheHeaderConfig, {
         queryParams,
-        handler: async (queryParams, match, sendBadge, request) => {
+        handler: async (queryParams, match, sendBadge) => {
           const metricHandle = metricHelper.startRequest()
 
           const namedParams = namedParamsForMatch(captureNames, match, this)
@@ -473,7 +473,6 @@ class BaseService {
           metricHandle.noteResponseSent()
         },
         cacheLength: this._cacheLength,
-        fetchLimitBytes,
       })
     )
   }

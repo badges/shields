@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 import request from 'request'
-import { userAgent } from '../../../core/base-service/legacy-request-handler.js'
+import { userAgent } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {

@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import nock from 'nock'
 import portfinder from 'portfinder'
 import Camp from '@shields_io/camp'
 import got from '../got-test-client.js'
@@ -40,28 +39,6 @@ function createFakeHandlerWithCacheLength(cacheLengthSeconds) {
     )
     sendBadge(format, badgeData)
   }
-}
-
-function fakeHandlerWithNetworkIo(queryParams, match, sendBadge, request) {
-  const [, someValue, format] = match
-  request('https://www.google.com/foo/bar', (err, res, buffer) => {
-    let message
-    if (err) {
-      message = err.prettyMessage
-    } else {
-      message = someValue
-    }
-    const badgeData = coalesceBadge(
-      queryParams,
-      {
-        label: 'testing',
-        message,
-        format,
-      },
-      {}
-    )
-    sendBadge(format, badgeData)
-  })
 }
 
 describe('The request handler', function () {
@@ -130,60 +107,6 @@ describe('The request handler', function () {
         color: 'lightgrey',
         link: [],
       })
-    })
-  })
-
-  describe('the response size limit', function () {
-    beforeEach(function () {
-      camp.route(
-        /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-        handleRequest(standardCacheHeaders, {
-          handler: fakeHandlerWithNetworkIo,
-          fetchLimitBytes: 100,
-        })
-      )
-    })
-
-    it('should not throw an error if the response <= fetchLimitBytes', async function () {
-      nock('https://www.google.com')
-        .get('/foo/bar')
-        .once()
-        .reply(200, 'x'.repeat(100))
-      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        responseType: 'json',
-      })
-      expect(statusCode).to.equal(200)
-      expect(body).to.deep.equal({
-        name: 'testing',
-        value: '123',
-        label: 'testing',
-        message: '123',
-        color: 'lightgrey',
-        link: [],
-      })
-    })
-
-    it('should throw an error if the response is > fetchLimitBytes', async function () {
-      nock('https://www.google.com')
-        .get('/foo/bar')
-        .once()
-        .reply(200, 'x'.repeat(101))
-      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        responseType: 'json',
-      })
-      expect(statusCode).to.equal(200)
-      expect(body).to.deep.equal({
-        name: 'testing',
-        value: 'Maximum response size exceeded',
-        label: 'testing',
-        message: 'Maximum response size exceeded',
-        color: 'lightgrey',
-        link: [],
-      })
-    })
-
-    afterEach(function () {
-      nock.cleanAll()
     })
   })
 
