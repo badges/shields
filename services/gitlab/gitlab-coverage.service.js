@@ -95,13 +95,7 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     }
   }
 
-  async fetch({
-    user,
-    repo,
-    branch,
-    gitlab_url: baseUrl = 'https://gitlab.com',
-    job_name: jobName,
-  }) {
+  async fetch({ user, repo, branch, baseUrl = 'https://gitlab.com', jobName }) {
     // Since the URL doesn't return a usable value when an invalid job name is specified,
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
@@ -124,13 +118,16 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     return Number(coverage.slice(0, -1))
   }
 
-  async handle({ user, repo, branch }, { gitlab_url, job_name }) {
+  async handle(
+    { user, repo, branch },
+    { gitlab_url: baseUrl, job_name: jobName }
+  ) {
     const { message: coverage } = await this.fetch({
       user,
       repo,
       branch,
-      gitlab_url,
-      job_name,
+      baseUrl,
+      jobName,
     })
     return this.constructor.render({
       coverage: this.constructor.transform({ coverage }),

@@ -58,7 +58,10 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
   }
 
   async handle({ project }, { server }) {
-    const { translated_percent } = await this.fetch({ project, server })
-    return this.constructor.render({ translatedPercent: translated_percent })
+    const { translated_percent: translatedPercent } = await this.fetch({
+      project,
+      server,
+    })
+    return this.constructor.render({ translatedPercent })
   }
 }

@@ -358,8 +358,8 @@ class SteamFileDownloads extends SteamFileService {
 
   static defaultBadgeData = { label: 'downloads' }
 
-  async onRequest({ response: { lifetime_subscriptions } }) {
-    return renderDownloadsBadge({ downloads: lifetime_subscriptions })
+  async onRequest({ response: { lifetime_subscriptions: downloads } }) {
+    return renderDownloadsBadge({ downloads })
   }
 }
 
