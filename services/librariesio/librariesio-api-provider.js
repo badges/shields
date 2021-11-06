@@ -1,7 +1,7 @@
 import { ImproperlyConfigured } from '../index.js'
 import log from '../../core/server/log.js'
 import { TokenPool } from '../../core/token-pooling/token-pool.js'
-import { userAgent } from '../../core/base-service/legacy-request-handler.js'
+import { userAgent } from '../../core/base-service/got.js'
 
 // Provides an interface to the Libraries.io API.
 export default class LibrariesIoApiProvider {

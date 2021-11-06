@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import log from '../../core/server/log.js'
 import { TokenPool } from '../../core/token-pooling/token-pool.js'
-import { userAgent } from '../../core/base-service/legacy-request-handler.js'
+import { userAgent } from '../../core/base-service/got.js'
 import { nonNegativeInteger } from '../validators.js'
 import { ImproperlyConfigured } from '../index.js'
 
