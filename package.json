@@ -214,7 +214,7 @@
     "mocha-yaml-loader": "^1.0.3",
     "nock": "13.1.4",
     "node-mocks-http": "^1.11.0",
-    "nodemon": "^2.0.14",
+    "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
     "open-cli": "^7.0.1",
     "portfinder": "^1.0.28",
