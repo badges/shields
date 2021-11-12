@@ -10,10 +10,11 @@ import GithubConstellation from '../github-constellation.js'
 import { setRoutes } from './acceptor.js'
 
 const fakeClientId = 'githubdabomb'
+const fakeClientSecret = 'foobar'
 
 describe('Github token acceptor', function () {
   const oauthHelper = GithubConstellation._createOauthHelper({
-    private: { gh_client_id: fakeClientId },
+    private: { gh_client_id: fakeClientId, gh_client_secret: fakeClientSecret },
   })
 
   let port, baseUrl
@@ -78,7 +79,10 @@ describe('Github token acceptor', function () {
         scope = nock('https://github.com')
           .post('/login/oauth/access_token')
           .reply((url, requestBody) => {
-            expect(queryString.parse(requestBody).code).to.equal(fakeCode)
+            const parsedBody = queryString.parse(requestBody)
+            expect(parsedBody.client_id).to.equal(fakeClientId)
+            expect(parsedBody.client_secret).to.equal(fakeClientSecret)
+            expect(parsedBody.code).to.equal(fakeCode)
             return [
               200,
               queryString.stringify({ access_token: fakeAccessToken }),
