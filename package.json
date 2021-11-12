@@ -60,7 +60,6 @@
     "prom-client": "^14.0.1",
     "qs": "^6.10.1",
     "query-string": "^7.0.1",
-    "request": "~2.88.2",
     "semver": "~7.3.5",
     "simple-icons": "5.21.1",
     "webextension-store-meta": "^1.0.4",
