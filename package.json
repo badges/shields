@@ -223,7 +223,7 @@
     "react-dom": "^17.0.2",
     "react-error-overlay": "^6.0.9",
     "react-helmet": "^6.1.0",
-    "react-modal": "^3.14.3",
+    "react-modal": "^3.14.4",
     "react-pose": "^4.0.10",
     "react-select": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
