@@ -74,7 +74,7 @@ class AuthHelper {
   }
 
   static _isInsecureSslRequest({ options = {} }) {
-    const { strictSSL = true } = options
+    const strictSSL = options?.https?.rejectUnauthorized ?? true
     return strictSSL !== true
   }
 

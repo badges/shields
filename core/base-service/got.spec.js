@@ -14,7 +14,7 @@ describe('requestOptions2GotOptions function', function () {
         url: 'url',
         qs: 'qs',
         decompress: 'gzip',
-        strictSSL: 'strictSSL',
+        https: { rejectUnauthorized: 'rejectUnauthorized' },
         auth: { user: 'user', pass: 'pass' },
       })
     ).to.deep.equal({
@@ -25,7 +25,7 @@ describe('requestOptions2GotOptions function', function () {
       url: 'url',
       searchParams: 'qs',
       decompress: 'gzip',
-      https: { rejectUnauthorized: 'strictSSL' },
+      https: { rejectUnauthorized: 'rejectUnauthorized' },
       username: 'user',
       password: 'pass',
     })

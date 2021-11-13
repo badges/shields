@@ -131,15 +131,18 @@ describe('AuthHelper', function () {
       forCases([
         given({ url: 'http://example.test' }),
         given({ url: 'http://example.test', options: {} }),
-        given({ url: 'http://example.test', options: { strictSSL: true } }),
         given({
           url: 'http://example.test',
-          options: { strictSSL: undefined },
+          options: { https: { rejectUnauthorized: true } },
+        }),
+        given({
+          url: 'http://example.test',
+          options: { https: { rejectUnauthorized: undefined } },
         }),
       ]).expect(false)
       given({
         url: 'http://example.test',
-        options: { strictSSL: false },
+        options: { https: { rejectUnauthorized: false } },
       }).expect(true)
     })
   })
@@ -163,7 +166,9 @@ describe('AuthHelper', function () {
       })
       it('throws for insecure requests', function () {
         expect(() =>
-          authHelper.enforceStrictSsl({ options: { strictSSL: false } })
+          authHelper.enforceStrictSsl({
+            options: { https: { rejectUnauthorized: false } },
+          })
         ).to.throw(InvalidParameter)
       })
     })
@@ -185,7 +190,9 @@ describe('AuthHelper', function () {
       })
       it('does not throw for insecure requests', function () {
         expect(() =>
-          authHelper.enforceStrictSsl({ options: { strictSSL: false } })
+          authHelper.enforceStrictSsl({
+            options: { https: { rejectUnauthorized: false } },
+          })
         ).not.to.throw()
       })
     })
@@ -220,7 +227,7 @@ describe('AuthHelper', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test/api',
-            options: { strictSSL: false },
+            options: { https: { rejectUnauthorized: false } },
           }).expect(false)
         })
       })
@@ -258,7 +265,7 @@ describe('AuthHelper', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test',
-            options: { strictSSL: false },
+            options: { https: { rejectUnauthorized: false } },
           }).expect(true)
         })
       })
@@ -366,7 +373,7 @@ describe('AuthHelper', function () {
       expect(() =>
         withBasicAuth({
           url: 'https://myci.test/api',
-          options: { strictSSL: false },
+          options: { https: { rejectUnauthorized: false } },
         })
       ).to.throw(InvalidParameter)
     })

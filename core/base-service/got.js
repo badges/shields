@@ -11,6 +11,7 @@ function requestOptions2GotOptions(options) {
     'decompress',
     'form',
     'headers',
+    'https',
     'method',
     'url',
   ]
@@ -25,13 +26,6 @@ function requestOptions2GotOptions(options) {
   if ('qs' in requestOptions) {
     gotOptions.searchParams = requestOptions.qs
     delete requestOptions.qs
-  }
-
-  if ('strictSSL' in requestOptions) {
-    gotOptions.https = {
-      rejectUnauthorized: requestOptions.strictSSL,
-    }
-    delete requestOptions.strictSSL
   }
 
   if ('auth' in requestOptions) {
