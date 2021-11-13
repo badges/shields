@@ -3,38 +3,8 @@ import { Inaccessible, InvalidResponse } from './errors.js'
 
 const userAgent = 'Shields.io/2003a'
 
-function requestOptions2GotOptions(options) {
-  const requestOptions = Object.assign({}, options)
-  const gotOptions = {}
-  const interchangableOptions = [
-    'body',
-    'decompress',
-    'form',
-    'headers',
-    'https',
-    'method',
-    'password',
-    'searchParams',
-    'url',
-    'username',
-  ]
-
-  interchangableOptions.forEach(function (opt) {
-    if (opt in requestOptions) {
-      gotOptions[opt] = requestOptions[opt]
-      delete requestOptions[opt]
-    }
-  })
-
-  if (Object.keys(requestOptions).length > 0) {
-    throw new Error(`Found unrecognised options ${Object.keys(requestOptions)}`)
-  }
-
-  return gotOptions
-}
-
 async function sendRequest(gotWrapper, url, options) {
-  const gotOptions = requestOptions2GotOptions(options)
+  const gotOptions = Object.assign({}, options)
   gotOptions.throwHttpErrors = false
   gotOptions.retry = 0
   gotOptions.headers = gotOptions.headers || {}
@@ -82,4 +52,4 @@ function fetchFactory(fetchLimitBytes = TEN_MB) {
   return sendRequest.bind(sendRequest, gotWithLimit)
 }
 
-export { requestOptions2GotOptions, fetchFactory, userAgent }
+export { fetchFactory, userAgent }
