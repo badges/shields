@@ -50,7 +50,7 @@ export default class CodacyGrade extends BaseSvgScrapingService {
       url: `https://api.codacy.com/project/badge/grade/${encodeURIComponent(
         projectId
       )}`,
-      options: { qs: { branch } },
+      options: { searchParams: { branch } },
       errorMessages: { 404: 'project or branch not found' },
       valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
     })

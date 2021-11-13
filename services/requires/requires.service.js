@@ -54,7 +54,7 @@ export default class RequiresIo extends BaseJsonService {
     return this._requestJson({
       url,
       schema: statusSchema,
-      options: { qs: { branch } },
+      options: { searchParams: { branch } },
     })
   }
 

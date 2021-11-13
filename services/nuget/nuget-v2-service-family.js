@@ -58,14 +58,16 @@ async function fetch(
   { odataFormat, baseUrl, packageName, includePrereleases = false }
 ) {
   const url = `${baseUrl}/Packages()`
-  const qs = { $filter: createFilter({ packageName, includePrereleases }) }
+  const searchParams = {
+    $filter: createFilter({ packageName, includePrereleases }),
+  }
 
   let packageData
   if (odataFormat === 'xml') {
     const data = await serviceInstance._requestXml({
       schema: xmlSchema,
       url,
-      options: { qs },
+      options: { searchParams },
     })
     packageData = odataToObject(data.feed.entry)
   } else if (odataFormat === 'json') {
@@ -74,7 +76,7 @@ async function fetch(
       url,
       options: {
         headers: { Accept: 'application/atom+json,application/json' },
-        qs,
+        searchParams,
       },
     })
     packageData = data.d.results[0]

@@ -72,7 +72,7 @@ export default class JenkinsBuild extends JenkinsBase {
     const json = await this.fetch({
       url: buildUrl({ jobUrl, lastCompletedBuild: false }),
       schema,
-      qs: buildTreeParamQueryString('color'),
+      searchParams: buildTreeParamQueryString('color'),
     })
     const { status } = this.transform({ json })
     return this.constructor.render({ status })

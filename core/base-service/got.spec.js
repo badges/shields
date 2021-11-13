@@ -12,7 +12,7 @@ describe('requestOptions2GotOptions function', function () {
         headers: 'headers',
         method: 'method',
         url: 'url',
-        qs: 'qs',
+        searchParams: 'qs',
         decompress: 'gzip',
         https: { rejectUnauthorized: 'rejectUnauthorized' },
         username: 'user',

@@ -48,7 +48,7 @@ export default class Coveralls extends BaseJsonService {
       vcsType || 'github'
     }/${user}/${repo}.json`
     const options = {
-      qs: {
+      searchParams: {
         // The API returns the latest result (across any branch) if no branch is explicitly specified,
         // whereas the Coveralls native badge (and the Shields.io badges for Coveralls) show
         // the coverage for the default branch if no branch is explicitly specified. If the user

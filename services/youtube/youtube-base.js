@@ -62,7 +62,7 @@ class YouTubeBase extends BaseJsonService {
           schema,
           url: `https://www.googleapis.com/youtube/v3/${this.constructor.type}s`,
           options: {
-            qs: { id, part: 'statistics' },
+            searchParams: { id, part: 'statistics' },
           },
         }
       )

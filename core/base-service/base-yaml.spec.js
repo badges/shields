@@ -71,7 +71,7 @@ describe('BaseYamlService', function () {
           const { requiredString } = await this._requestYaml({
             schema: dummySchema,
             url: 'http://example.com/foo.yaml',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: { method: 'POST', searchParams: { queryParam: 123 } },
           })
           return { message: requiredString }
         }
@@ -90,7 +90,7 @@ describe('BaseYamlService', function () {
               'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
           },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })

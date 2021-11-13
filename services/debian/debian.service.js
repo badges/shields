@@ -38,7 +38,7 @@ export default class Debian extends BaseJsonService {
       schema,
       url: 'https://api.ftp-master.debian.org/madison',
       options: {
-        qs: {
+        searchParams: {
           f: 'json',
           s: distribution,
           package: packageName,

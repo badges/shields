@@ -38,7 +38,7 @@ export default class GithubContributors extends GithubAuthV3Service {
 
     const { res, buffer } = await this._request({
       url: `/repos/${user}/${repo}/contributors`,
-      options: { qs: { page: '1', per_page: '1', anon: isAnon } },
+      options: { searchParams: { page: '1', per_page: '1', anon: isAnon } },
       errorMessages: errorMessagesFor('repo not found'),
     })
 

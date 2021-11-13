@@ -93,19 +93,19 @@ export default class Wercker extends BaseJsonService {
 
   async fetch({ projectId, applicationName, branch }) {
     let url
-    const qs = { branch, limit: 1 }
+    const searchParams = { branch, limit: 1 }
 
     if (applicationName) {
       url = `https://app.wercker.com/api/v3/applications/${applicationName}/builds`
     } else {
       url = 'https://app.wercker.com/api/v3/runs'
-      qs.applicationId = projectId
+      searchParams.applicationId = projectId
     }
 
     return this._requestJson({
       schema: werckerSchema,
       url,
-      options: { qs },
+      options: { searchParams },
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',

@@ -66,7 +66,7 @@ describe('BaseGraphqlService', function () {
                 requiredString
               }
             `,
-            options: { qs: { queryParam: 123 } },
+            options: { searchParams: { queryParam: 123 } },
           })
           return { message: value }
         }
@@ -83,7 +83,7 @@ describe('BaseGraphqlService', function () {
           body: '{"query":"{\\n  requiredString\\n}\\n","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })

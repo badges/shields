@@ -78,7 +78,7 @@ export default class TravisBuild extends BaseSvgScrapingService {
     const { message: status } = await this._requestSvg({
       schema,
       url: `https://api.travis-ci.${domain}/${userRepo}.svg`,
-      options: { qs: { branch } },
+      options: { searchParams: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 

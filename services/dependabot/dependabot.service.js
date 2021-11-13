@@ -39,7 +39,9 @@ export default class DependabotSemverCompatibility extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      options: { qs: this._getQuery({ packageManager, dependencyName }) },
+      options: {
+        searchParams: this._getQuery({ packageManager, dependencyName }),
+      },
     })
   }
 

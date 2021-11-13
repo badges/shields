@@ -44,7 +44,7 @@ export default class GithubSearch extends GithubAuthV3Service {
     const { total_count: totalCount } = await this._requestJson({
       url: '/search/code',
       options: {
-        qs: {
+        searchParams: {
           q: `${query} repo:${user}/${repo}`,
         },
       },

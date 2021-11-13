@@ -29,7 +29,7 @@ export default class OpmVersion extends BaseService {
       url: `https://opm.openresty.org/api/pkg/fetch`,
       options: {
         method: 'HEAD',
-        qs: {
+        searchParams: {
           account: user,
           name: moduleName,
         },

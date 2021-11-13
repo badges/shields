@@ -118,7 +118,7 @@ export default class JenkinsCoverage extends JenkinsBase {
     const json = await this.fetch({
       url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
       schema,
-      qs: buildTreeParamQueryString(treeQueryParam),
+      searchParams: buildTreeParamQueryString(treeQueryParam),
       errorMessages: {
         404: 'job or coverage not found',
       },

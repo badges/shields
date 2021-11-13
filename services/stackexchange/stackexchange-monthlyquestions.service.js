@@ -55,7 +55,7 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
       schema: tagSchema,
       options: {
         decompress: true,
-        qs: {
+        searchParams: {
           site: stackexchangesite,
           fromdate: prevMonthStart,
           todate: prevMonthEnd,

@@ -14,6 +14,7 @@ function requestOptions2GotOptions(options) {
     'https',
     'method',
     'password',
+    'searchParams',
     'url',
     'username',
   ]
@@ -24,11 +25,6 @@ function requestOptions2GotOptions(options) {
       delete requestOptions[opt]
     }
   })
-
-  if ('qs' in requestOptions) {
-    gotOptions.searchParams = requestOptions.qs
-    delete requestOptions.qs
-  }
 
   if (Object.keys(requestOptions).length > 0) {
     throw new Error(`Found unrecognised options ${Object.keys(requestOptions)}`)
