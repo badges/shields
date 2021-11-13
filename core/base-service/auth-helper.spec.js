@@ -104,14 +104,14 @@ describe('AuthHelper', function () {
           { userKey: 'myci_user', passKey: 'myci_pass' },
           { myci_user: 'admin', myci_pass: 'abc123' }
         ),
-      ]).expect({ user: 'admin', pass: 'abc123' })
+      ]).expect({ username: 'admin', password: 'abc123' })
       given({ userKey: 'myci_user' }, { myci_user: 'admin' }).expect({
-        user: 'admin',
-        pass: undefined,
+        username: 'admin',
+        password: undefined,
       })
       given({ passKey: 'myci_pass' }, { myci_pass: 'abc123' }).expect({
-        user: undefined,
-        pass: 'abc123',
+        username: undefined,
+        password: 'abc123',
       })
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
         undefined
@@ -120,8 +120,8 @@ describe('AuthHelper', function () {
         { passKey: 'myci_pass', defaultToEmptyStringForUser: true },
         { myci_pass: 'abc123' }
       ).expect({
-        user: '',
-        pass: 'abc123',
+        username: '',
+        password: 'abc123',
       })
     })
   })
@@ -330,7 +330,8 @@ describe('AuthHelper', function () {
         }).expect({
           url: 'https://myci.test/api',
           options: {
-            auth: { user: 'admin', pass: 'abc123' },
+            username: 'admin',
+            password: 'abc123',
           },
         })
         given({
@@ -342,7 +343,8 @@ describe('AuthHelper', function () {
           url: 'https://myci.test/api',
           options: {
             headers: { Accept: 'application/json' },
-            auth: { user: 'admin', pass: 'abc123' },
+            username: 'admin',
+            password: 'abc123',
           },
         })
       })

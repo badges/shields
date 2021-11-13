@@ -13,7 +13,9 @@ function requestOptions2GotOptions(options) {
     'headers',
     'https',
     'method',
+    'password',
     'url',
+    'username',
   ]
 
   interchangableOptions.forEach(function (opt) {
@@ -26,12 +28,6 @@ function requestOptions2GotOptions(options) {
   if ('qs' in requestOptions) {
     gotOptions.searchParams = requestOptions.qs
     delete requestOptions.qs
-  }
-
-  if ('auth' in requestOptions) {
-    gotOptions.username = requestOptions.auth.user
-    gotOptions.password = requestOptions.auth.pass
-    delete requestOptions.auth
   }
 
   if (Object.keys(requestOptions).length > 0) {

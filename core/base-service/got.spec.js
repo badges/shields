@@ -15,7 +15,8 @@ describe('requestOptions2GotOptions function', function () {
         qs: 'qs',
         decompress: 'gzip',
         https: { rejectUnauthorized: 'rejectUnauthorized' },
-        auth: { user: 'user', pass: 'pass' },
+        username: 'user',
+        password: 'pass',
       })
     ).to.deep.equal({
       body: 'body',

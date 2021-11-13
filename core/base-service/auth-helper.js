@@ -107,8 +107,8 @@ class AuthHelper {
   }
 
   get _basicAuth() {
-    const { _user: user, _pass: pass } = this
-    return this.isConfigured ? { user, pass } : undefined
+    const { _user: username, _pass: password } = this
+    return this.isConfigured ? { username, password } : undefined
   }
 
   /*
@@ -131,7 +131,7 @@ class AuthHelper {
     const { options, ...rest } = requestParams
     return {
       options: {
-        auth,
+        ...auth,
         ...options,
       },
       ...rest,
