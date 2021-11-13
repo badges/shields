@@ -54,7 +54,7 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
     const parsedData = await this._requestJson({
       schema: tagSchema,
       options: {
-        gzip: true,
+        decompress: true,
         qs: {
           site: stackexchangesite,
           fromdate: prevMonthStart,

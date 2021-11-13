@@ -6,7 +6,14 @@ const userAgent = 'Shields.io/2003a'
 function requestOptions2GotOptions(options) {
   const requestOptions = Object.assign({}, options)
   const gotOptions = {}
-  const interchangableOptions = ['body', 'form', 'headers', 'method', 'url']
+  const interchangableOptions = [
+    'body',
+    'decompress',
+    'form',
+    'headers',
+    'method',
+    'url',
+  ]
 
   interchangableOptions.forEach(function (opt) {
     if (opt in requestOptions) {
@@ -18,11 +25,6 @@ function requestOptions2GotOptions(options) {
   if ('qs' in requestOptions) {
     gotOptions.searchParams = requestOptions.qs
     delete requestOptions.qs
-  }
-
-  if ('gzip' in requestOptions) {
-    gotOptions.decompress = requestOptions.gzip
-    delete requestOptions.gzip
   }
 
   if ('strictSSL' in requestOptions) {

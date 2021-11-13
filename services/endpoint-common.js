@@ -64,7 +64,7 @@ async function fetchEndpointData(
     schema: anySchema,
     url,
     errorMessages,
-    options: { gzip: true },
+    options: { decompress: true },
   })
   return validateEndpointData(json, {
     prettyErrorMessage: validationPrettyErrorMessage,

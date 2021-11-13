@@ -13,7 +13,7 @@ describe('requestOptions2GotOptions function', function () {
         method: 'method',
         url: 'url',
         qs: 'qs',
-        gzip: 'gzip',
+        decompress: 'gzip',
         strictSSL: 'strictSSL',
         auth: { user: 'user', pass: 'pass' },
       })
