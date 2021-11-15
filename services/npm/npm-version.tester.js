@@ -15,8 +15,8 @@ t.create('gets the package version of @cycle/core')
   .expectBadge({ label: 'npm', message: isSemver })
 
 t.create('gets a tagged package version of npm')
-  .get('/npm/next.json')
-  .expectBadge({ label: 'npm@next', message: isSemver })
+  .get('/npm/next-8.json')
+  .expectBadge({ label: 'npm@next-8', message: isSemver })
 
 t.create('gets the correct tagged package version of npm')
   .intercept(nock =>
