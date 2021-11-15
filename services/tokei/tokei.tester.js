@@ -8,7 +8,8 @@ t.create('GitHub LOC')
   .expectBadge({ label: 'total lines', message: isMetric })
 
 t.create('GitLab LOC')
-  .get('/lines/gitlab/tezos/tezos.json')
+  .get('/lines/gitlab/shields-ops-group/tag-test.json')
+  .timeout(15000)
   .expectBadge({ label: 'total lines', message: isMetric })
 
 t.create('GitHub LOC (with .com)')
@@ -16,7 +17,8 @@ t.create('GitHub LOC (with .com)')
   .expectBadge({ label: 'total lines', message: isMetric })
 
 t.create('GitLab LOC (with .com)')
-  .get('/lines/gitlab.com/tezos/tezos.json')
+  .get('/lines/gitlab.com/shields-ops-group/tag-test.json')
+  .timeout(15000)
   .expectBadge({ label: 'total lines', message: isMetric })
 
 t.create('BitBucket LOC')
