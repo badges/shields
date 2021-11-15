@@ -53,7 +53,7 @@ export default class TwitchStatus extends TwitchBase {
       schema: helixSchema,
       url: `https://api.twitch.tv/helix/streams`,
       options: {
-        qs: { user_login: user },
+        searchParams: { user_login: user },
       },
     })
 

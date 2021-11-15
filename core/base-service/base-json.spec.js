@@ -52,7 +52,7 @@ describe('BaseJsonService', function () {
           const { value } = await this._requestJson({
             schema: dummySchema,
             url: 'http://example.com/foo.json',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: { method: 'POST', searchParams: { queryParam: 123 } },
           })
           return { message: value }
         }
@@ -68,7 +68,7 @@ describe('BaseJsonService', function () {
         {
           headers: { Accept: 'application/json' },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })

@@ -65,7 +65,7 @@ export default class Cirrus extends BaseJsonService {
     const json = await this._requestJson({
       schema,
       url: `https://api.cirrus-ci.com/github/${user}/${repo}.json`,
-      options: { qs: { branch, script, task } },
+      options: { searchParams: { branch, script, task } },
     })
 
     return this.constructor.render(json)

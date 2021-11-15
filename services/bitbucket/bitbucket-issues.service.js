@@ -44,7 +44,7 @@ function issueClassGenerator(raw) {
         schema: bitbucketIssuesSchema,
         // https://developer.atlassian.com/bitbucket/api/2/reference/meta/filtering#query-issues
         options: {
-          qs: { limit: 0, q: '(state = "new" OR state = "open")' },
+          searchParams: { limit: 0, q: '(state = "new" OR state = "open")' },
         },
         errorMessages: { 403: 'private repo' },
       })

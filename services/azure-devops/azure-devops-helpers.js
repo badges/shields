@@ -15,12 +15,15 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-async function fetch(serviceInstance, { url, qs = {}, errorMessages }) {
+async function fetch(
+  serviceInstance,
+  { url, searchParams = {}, errorMessages }
+) {
   // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
   const { message: status } = await serviceInstance._requestSvg({
     schema,
     url,
-    options: { qs },
+    options: { searchParams },
     errorMessages,
   })
   return { status }

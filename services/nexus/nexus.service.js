@@ -162,7 +162,7 @@ export default class Nexus extends BaseJsonService {
     }
   }
 
-  addQueryParamsToQueryString({ qs, queryOpt }) {
+  addQueryParamsToQueryString({ searchParams, queryOpt }) {
     // Users specify query options with 'key=value' pairs, using a
     // colon delimiter between pairs ([:k1=v1[:k2=v2[...]]]).
     // queryOpt will be a string containing those key/value pairs,
@@ -172,7 +172,7 @@ export default class Nexus extends BaseJsonService {
       const paramParts = keyValuePair.split('=')
       const paramKey = paramParts[0]
       const paramValue = paramParts[1]
-      qs[paramKey] = paramValue
+      searchParams[paramKey] = paramValue
     })
   }
 
@@ -194,7 +194,7 @@ export default class Nexus extends BaseJsonService {
   }
 
   async fetch2({ server, repo, groupId, artifactId, queryOpt }) {
-    const qs = {
+    const searchParams = {
       g: groupId,
       a: artifactId,
     }
@@ -209,19 +209,19 @@ export default class Nexus extends BaseJsonService {
     } else {
       schema = nexus2ResolveApiSchema
       url += 'service/local/artifact/maven/resolve'
-      qs.r = repo
-      qs.v = 'LATEST'
+      searchParams.r = repo
+      searchParams.v = 'LATEST'
     }
 
     if (queryOpt) {
-      this.addQueryParamsToQueryString({ qs, queryOpt })
+      this.addQueryParamsToQueryString({ searchParams, queryOpt })
     }
 
     const json = await this._requestJson(
       this.authHelper.withBasicAuth({
         schema,
         url,
-        options: { qs },
+        options: { searchParams },
         errorMessages: {
           404: 'artifact not found',
         },
@@ -232,7 +232,7 @@ export default class Nexus extends BaseJsonService {
   }
 
   async fetch3({ server, repo, groupId, artifactId, queryOpt }) {
-    const qs = {
+    const searchParams = {
       group: groupId,
       name: artifactId,
       sort: 'version',
@@ -240,18 +240,18 @@ export default class Nexus extends BaseJsonService {
 
     switch (repo) {
       case 's':
-        qs.prerelease = 'true'
+        searchParams.prerelease = 'true'
         break
       case 'r':
-        qs.prerelease = 'false'
+        searchParams.prerelease = 'false'
         break
       default:
-        qs.repository = repo
+        searchParams.repository = repo
         break
     }
 
     if (queryOpt) {
-      this.addQueryParamsToQueryString({ qs, queryOpt })
+      this.addQueryParamsToQueryString({ searchParams, queryOpt })
     }
 
     const url = `${server}${
@@ -262,7 +262,7 @@ export default class Nexus extends BaseJsonService {
       this.authHelper.withBasicAuth({
         schema: nexus3SearchApiSchema,
         url,
-        options: { qs },
+        options: { searchParams },
         errorMessages: {
           404: 'artifact not found',
         },

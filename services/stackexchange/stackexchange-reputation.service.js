@@ -53,7 +53,7 @@ export default class StackExchangeReputation extends BaseJsonService {
 
     const parsedData = await this._requestJson({
       schema: reputationSchema,
-      options: { gzip: true, qs: { site: stackexchangesite } },
+      options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
       errorMessages: {
         400: 'invalid parameters',

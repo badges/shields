@@ -55,7 +55,7 @@ export default class SwaggerValidatorService extends BaseJsonService {
       url: 'http://validator.swagger.io/validator/debug',
       schema,
       options: {
-        qs: {
+        searchParams: {
           url: specUrl,
         },
       },

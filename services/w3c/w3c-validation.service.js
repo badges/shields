@@ -67,7 +67,7 @@ export default class W3cValidation extends BaseJsonService {
       url: 'https://validator.nu/',
       schema,
       options: {
-        qs: {
+        searchParams: {
           schema: getSchema(preset),
           parser: parser === 'default' ? undefined : parser,
           doc: encodeURI(targetUrl),

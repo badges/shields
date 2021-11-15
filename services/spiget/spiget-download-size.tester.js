@@ -6,8 +6,8 @@ t.create('EssentialsX (hosted resource)')
   .get('/771.json')
   .expectBadge({ label: 'size', message: isFileSize })
 
-t.create('Pet Master (external resource)').get('/15904.json').expectBadge({
-  lavel: 'size',
+t.create('external resource').get('/9089.json').expectBadge({
+  label: 'size',
   message: 'resource hosted externally',
 })
 
