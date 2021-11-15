@@ -137,33 +137,33 @@ package_steps: &package_steps
 jobs:
   main:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
 
     <<: *main_steps
 
-  main@node-16:
+  main@node-17:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:17
 
     <<: *main_steps
 
   integration:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
       - image: redis
 
     <<: *integration_steps
 
-  integration@node-16:
+  integration@node-17:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:17
       - image: redis
 
     <<: *integration_steps
 
   danger:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     steps:
       - checkout
 
@@ -183,7 +183,7 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     steps:
       - checkout
 
@@ -224,19 +224,19 @@ jobs:
 
   services:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
 
     <<: *services_steps
 
-  services@node-16:
+  services@node-17:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:17
 
     <<: *services_steps
 
   e2e:
     docker:
-      - image: cypress/base:14.16.0
+      - image: cypress/base:16.13.0
     steps:
       - checkout
 
@@ -285,11 +285,11 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - main@node-16:
+      - main@node-17:
           filters:
             branches:
               ignore: gh-pages
-      - integration@node-16:
+      - integration@node-17:
           filters:
             branches:
               ignore: gh-pages
@@ -307,7 +307,7 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - services@node-16:
+      - services@node-17:
           filters:
             branches:
               ignore:
