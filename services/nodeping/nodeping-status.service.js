@@ -40,7 +40,7 @@ export default class NodePingStatus extends BaseJsonService {
       schema,
       url: `https://nodeping.com/reports/results/${checkUuid}/1`,
       options: {
-        qs: { format: 'json' },
+        searchParams: { format: 'json' },
         headers: {
           'cache-control': 'no-cache',
         },

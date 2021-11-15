@@ -151,7 +151,7 @@ export default class Codecov extends BaseSvgScrapingService {
       valueMatcher: svgValueMatcher,
       url,
       options: {
-        qs: { token, flag },
+        searchParams: { token, flag },
       },
       errorMessages: token ? { 400: 'invalid token pattern' } : {},
     })

@@ -54,7 +54,7 @@ describe('BaseXmlService', function () {
           const { requiredString } = await this._requestXml({
             schema: dummySchema,
             url: 'http://example.com/foo.xml',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: { method: 'POST', searchParams: { queryParam: 123 } },
           })
           return { message: requiredString }
         }
@@ -70,7 +70,7 @@ describe('BaseXmlService', function () {
         {
           headers: { Accept: 'application/xml, text/xml' },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })

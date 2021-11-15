@@ -66,7 +66,7 @@ describe('BaseSvgScrapingService', function () {
             url: 'http://example.com/foo.svg',
             options: {
               method: 'POST',
-              qs: { queryParam: 123 },
+              searchParams: { queryParam: 123 },
             },
           })
           return { message }
@@ -83,7 +83,7 @@ describe('BaseSvgScrapingService', function () {
         {
           method: 'POST',
           headers: { Accept: 'image/svg+xml' },
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })

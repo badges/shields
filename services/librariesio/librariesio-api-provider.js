@@ -89,9 +89,9 @@ export default class LibrariesIoApiProvider {
           'User-Agent': userAgent,
           ...options.headers,
         },
-        qs: {
+        searchParams: {
           api_key: tokenString,
-          ...options.qs,
+          ...options.searchParams,
         },
       },
     }

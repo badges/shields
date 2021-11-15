@@ -1,42 +1,7 @@
 import { expect } from 'chai'
 import nock from 'nock'
-import { requestOptions2GotOptions, fetchFactory } from './got.js'
+import { fetchFactory } from './got.js'
 import { Inaccessible, InvalidResponse } from './errors.js'
-
-describe('requestOptions2GotOptions function', function () {
-  it('translates valid options', function () {
-    expect(
-      requestOptions2GotOptions({
-        body: 'body',
-        form: 'form',
-        headers: 'headers',
-        method: 'method',
-        url: 'url',
-        qs: 'qs',
-        gzip: 'gzip',
-        strictSSL: 'strictSSL',
-        auth: { user: 'user', pass: 'pass' },
-      })
-    ).to.deep.equal({
-      body: 'body',
-      form: 'form',
-      headers: 'headers',
-      method: 'method',
-      url: 'url',
-      searchParams: 'qs',
-      decompress: 'gzip',
-      https: { rejectUnauthorized: 'strictSSL' },
-      username: 'user',
-      password: 'pass',
-    })
-  })
-
-  it('throws if unrecognised options are found', function () {
-    expect(() =>
-      requestOptions2GotOptions({ body: 'body', foobar: 'foobar' })
-    ).to.throw(Error, 'Found unrecognised options foobar')
-  })
-})
 
 describe('got wrapper', function () {
   it('should not throw an error if the response <= fetchLimitBytes', async function () {

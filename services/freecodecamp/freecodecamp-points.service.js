@@ -48,7 +48,7 @@ export default class FreeCodeCampPoints extends BaseJsonService {
       schema,
       url: `https://api.freecodecamp.org/api/users/get-public-profile`,
       options: {
-        qs: {
+        searchParams: {
           username,
         },
       },

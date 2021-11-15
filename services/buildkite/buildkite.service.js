@@ -35,7 +35,7 @@ export default class Buildkite extends BaseJsonService {
 
   async fetch({ identifier, branch }) {
     const url = `https://badge.buildkite.com/${identifier}.json`
-    const options = { qs: { branch } }
+    const options = { searchParams: { branch } }
     return this._requestJson({
       schema,
       url,

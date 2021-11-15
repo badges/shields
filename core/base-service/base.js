@@ -108,11 +108,14 @@ class BaseService {
    *
    * See also the config schema in `./server.js` and `doc/server-secrets.md`.
    *
-   * To use the configured auth in the handler or fetch method, pass the
-   * credentials to the request. For example:
-   * - `{ options: { auth: this.authHelper.basicAuth } }`
-   * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
-   * - `{ options: { qs: { token: this.authHelper._pass } } }`
+   * To use the configured auth in the handler or fetch method, wrap the
+   * _request() input params in a call to one of:
+   * - this.authHelper.withBasicAuth()
+   * - this.authHelper.withBearerAuthHeader()
+   * - this.authHelper.withQueryStringAuth()
+   *
+   * For example:
+   * this._request(this.authHelper.withBasicAuth({ url, schema, options }))
    *
    * @abstract
    * @type {module:core/base-service/base~Auth}
@@ -217,10 +220,10 @@ class BaseService {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
-    if ('qs' in options) {
-      const params = new URLSearchParams(options.qs)
+    if ('searchParams' in options) {
+      const params = new URLSearchParams(options.searchParams)
       logUrl = `${url}?${params.toString()}`
-      delete logOptions.qs
+      delete logOptions.searchParams
     }
     logTrace(
       emojic.bowAndArrow,

@@ -75,7 +75,7 @@ export default class SecurityHeaders extends BaseService {
       url: `https://securityheaders.com`,
       options: {
         method: 'HEAD',
-        qs: {
+        searchParams: {
           q: url,
           hide: 'on',
           followRedirects: ignoreRedirects !== undefined ? null : 'on',

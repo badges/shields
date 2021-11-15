@@ -42,7 +42,7 @@ export default class TwitchBase extends BaseJsonService {
           url: `https://id.twitch.tv/oauth2/token`,
           options: {
             method: 'POST',
-            qs: {
+            searchParams: {
               grant_type: 'client_credentials',
             },
           },

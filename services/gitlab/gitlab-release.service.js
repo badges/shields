@@ -106,7 +106,7 @@ export default class GitLabRelease extends GitLabBase {
         404: 'project not found',
       },
       options: {
-        qs: { order_by: orderBy },
+        searchParams: { order_by: orderBy },
       },
       firstPageOnly: !isSemver,
     })

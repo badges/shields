@@ -44,7 +44,7 @@ export default class Ubuntu extends BaseJsonService {
       schema,
       url: 'https://api.launchpad.net/1.0/ubuntu/+archive/primary',
       options: {
-        qs: {
+        searchParams: {
           'ws.op': 'getPublishedSources',
           exact_match: 'true',
           order_by_date: 'true',

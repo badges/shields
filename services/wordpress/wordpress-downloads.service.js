@@ -85,7 +85,7 @@ function DownloadsForExtensionType(extensionType) {
           schema: dateSchema,
           url: `https://api.wordpress.org/stats/${extType}/1.0/downloads.php`,
           options: {
-            qs: {
+            searchParams: {
               slug,
               limit,
             },

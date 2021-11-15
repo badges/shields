@@ -102,7 +102,7 @@ export default class MozillaObservatory extends BaseJsonService {
       url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
       options: {
         method: 'POST',
-        qs: { host },
+        searchParams: { host },
         form: { hidden: !publish },
       },
     })

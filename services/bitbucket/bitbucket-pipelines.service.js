@@ -54,7 +54,7 @@ class BitbucketPipelines extends BaseJsonService {
       url,
       schema: bitbucketPipelinesSchema,
       options: {
-        qs: {
+        searchParams: {
           fields: 'values.state',
           page: 1,
           pagelen: 2,

@@ -38,8 +38,8 @@ class BaseGraphqlService extends BaseService {
    *    representing the query clause of GraphQL POST body
    *    e.g. gql`{ query { ... } }`
    * @param {object} attrs.variables Variables clause of GraphQL POST body
-   * @param {object} [attrs.options={}] Options to pass to request. See
-   *    [documentation](https://github.com/request/request#requestoptions-callback)
+   * @param {object} [attrs.options={}] Options to pass to got. See
+   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
    * @param {object} [attrs.httpErrorMessages={}] Key-value map of HTTP status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
@@ -53,7 +53,7 @@ class BaseGraphqlService extends BaseService {
    *    The default is to return the first entry of the `errors` array as
    *    an InvalidResponse.
    * @returns {object} Parsed response
-   * @see https://github.com/request/request#requestoptions-callback
+   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
   async _requestGraphql({
     schema,

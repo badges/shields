@@ -36,7 +36,7 @@ export default class TwitchExtensionVersion extends TwitchBase {
       schema: helixSchema,
       url: `https://api.twitch.tv/helix/extensions/released`,
       options: {
-        qs: { extension_id: extensionId },
+        searchParams: { extension_id: extensionId },
       },
     })
 
