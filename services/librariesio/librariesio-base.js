@@ -13,10 +13,10 @@ const projectSchema = Joi.object({
 export default class LibrariesIoBase extends BaseJsonService {
   constructor(context, config) {
     super(context, config)
-    const { sendAndCacheRequest, librariesIoApiProvider } = context
+    const { requestFetcher, librariesIoApiProvider } = context
     this._requestFetcher = librariesIoApiProvider.fetch.bind(
       librariesIoApiProvider,
-      sendAndCacheRequest
+      requestFetcher
     )
   }
 

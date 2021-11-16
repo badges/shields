@@ -31,8 +31,8 @@ function noToken(serviceClass) {
   }
 }
 
-const sendAndCacheRequest = fetchFactory(bytes(runnerConfig.public.fetchLimit))
+const requestFetcher = fetchFactory(bytes(runnerConfig.public.fetchLimit))
 
-const defaultContext = { sendAndCacheRequest }
+const defaultContext = { requestFetcher }
 
-export { cleanUpNockAfterEach, noToken, sendAndCacheRequest, defaultContext }
+export { cleanUpNockAfterEach, noToken, defaultContext }
