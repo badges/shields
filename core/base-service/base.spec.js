@@ -430,12 +430,12 @@ describe('BaseService', function () {
     })
 
     it('logs appropriate information', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '',
         res: { statusCode: 200 },
       })
       const serviceInstance = new DummyService(
-        { sendAndCacheRequest },
+        { requestFetcher },
         defaultConfig
       )
 
@@ -458,12 +458,12 @@ describe('BaseService', function () {
     })
 
     it('handles errors', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '',
         res: { statusCode: 404 },
       })
       const serviceInstance = new DummyService(
-        { sendAndCacheRequest },
+        { requestFetcher },
         defaultConfig
       )
 
@@ -490,13 +490,13 @@ describe('BaseService', function () {
         metricInstance: new PrometheusMetrics({ register }),
         ServiceClass: DummyServiceWithServiceResponseSizeMetricEnabled,
       })
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: 'x'.repeat(65536 + 1),
         res: { statusCode: 200 },
       })
       const serviceInstance =
         new DummyServiceWithServiceResponseSizeMetricEnabled(
-          { sendAndCacheRequest, metricHelper },
+          { requestFetcher, metricHelper },
           defaultConfig
         )
 
@@ -516,12 +516,12 @@ describe('BaseService', function () {
         metricInstance: new PrometheusMetrics({ register }),
         ServiceClass: DummyService,
       })
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: 'x',
         res: { statusCode: 200 },
       })
       const serviceInstance = new DummyService(
-        { sendAndCacheRequest, metricHelper },
+        { requestFetcher, metricHelper },
         defaultConfig
       )
 

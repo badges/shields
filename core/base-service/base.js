@@ -207,10 +207,10 @@ class BaseService {
   }
 
   constructor(
-    { sendAndCacheRequest, authHelper, metricHelper },
+    { requestFetcher, authHelper, metricHelper },
     { handleInternalErrors }
   ) {
-    this._requestFetcher = sendAndCacheRequest
+    this._requestFetcher = requestFetcher
     this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
     this._metricHelper = metricHelper
@@ -278,7 +278,7 @@ class BaseService {
   /**
    * Asynchronous function to handle requests for this service. Take the route
    * parameters (as defined in the `route` property), perform a request using
-   * `this._sendAndCacheRequest`, and return the badge data.
+   * `this._requestFetcher`, and return the badge data.
    *
    * @abstract
    * @param {object} namedParams Params parsed from route pattern
@@ -453,7 +453,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              sendAndCacheRequest: fetcher, // TODO: rename sendAndCacheRequest
+              requestFetcher: fetcher,
               githubApiProvider,
               librariesIoApiProvider,
               metricHelper,
