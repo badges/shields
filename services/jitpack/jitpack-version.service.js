@@ -12,7 +12,7 @@ export default class JitPackVersion extends BaseJsonService {
 
   static route = {
     base: 'jitpack/v',
-    pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
+    pattern: ':vcs(github|github\\.io|bitbucket|gitlab|gitee)/:user/:repo',
   }
 
   static examples = [
@@ -31,7 +31,9 @@ export default class JitPackVersion extends BaseJsonService {
   static defaultBadgeData = { label: 'jitpack' }
 
   async fetch({ vcs, user, repo }) {
-    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latest`
+    vcs = vcs.includes('.') ? vcs.split('.').reverse().join('.') : `com.${vcs}`
+
+    const url = `https://jitpack.io/api/builds/${vcs}.${user}/${repo}/latest`
 
     return this._requestJson({
       schema,
