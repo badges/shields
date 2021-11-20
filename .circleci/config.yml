@@ -137,7 +137,7 @@ package_steps: &package_steps
 jobs:
   main:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:16.13
 
     <<: *main_steps
 
@@ -149,7 +149,7 @@ jobs:
 
   integration:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:16.13
       - image: redis
 
     <<: *integration_steps
@@ -163,7 +163,7 @@ jobs:
 
   danger:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:16.13
     steps:
       - checkout
 
@@ -183,7 +183,7 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:16.13
     steps:
       - checkout
 
@@ -224,7 +224,7 @@ jobs:
 
   services:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:16.13
 
     <<: *services_steps
 
