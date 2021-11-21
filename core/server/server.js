@@ -18,7 +18,7 @@ import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
 import { clearRegularUpdateCache } from '../legacy/regular-update.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
-import { nonNegativeInteger } from '../../services/validators.js'
+import { fileSize, nonNegativeInteger } from '../../services/validators.js'
 import log from './log.js'
 import PrometheusMetrics from './prometheus-metrics.js'
 import InfluxMetrics from './influx-metrics.js'
@@ -143,7 +143,7 @@ const publicConfigSchema = Joi.object({
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
-  fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  fetchLimit: fileSize,
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(

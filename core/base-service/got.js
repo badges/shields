@@ -1,7 +1,9 @@
 import got from 'got'
 import { Inaccessible, InvalidResponse } from './errors.js'
-
-const userAgent = 'Shields.io/2003a'
+import {
+  fetchLimitBytes as fetchLimitBytesDefault,
+  userAgent,
+} from './got-config.js'
 
 async function sendRequest(gotWrapper, url, options) {
   const gotOptions = Object.assign({}, options)
@@ -22,8 +24,7 @@ async function sendRequest(gotWrapper, url, options) {
   }
 }
 
-const TEN_MB = 10485760
-function fetchFactory(fetchLimitBytes = TEN_MB) {
+function fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
   const gotWithLimit = got.extend({
     handlers: [
       (options, next) => {
@@ -52,4 +53,4 @@ function fetchFactory(fetchLimitBytes = TEN_MB) {
   return sendRequest.bind(sendRequest, gotWithLimit)
 }
 
-export { fetchFactory, userAgent }
+export { fetchFactory }
