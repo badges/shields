@@ -6,7 +6,6 @@ import path from 'path'
 import url, { fileURLToPath } from 'url'
 import { bootstrap } from 'global-agent'
 import cloudflareMiddleware from 'cloudflare-middleware'
-import bytes from 'bytes'
 import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
@@ -433,7 +432,6 @@ class Server {
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
-          fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,

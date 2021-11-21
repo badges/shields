@@ -20,7 +20,7 @@ import {
   Deprecated,
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
-import { fetchFactory } from './got.js'
+import { fetch } from './got.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -432,7 +432,7 @@ class BaseService {
     },
     serviceConfig
   ) {
-    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
@@ -440,8 +440,6 @@ class BaseService {
       metricInstance,
       ServiceClass: this,
     })
-
-    const fetcher = fetchFactory(fetchLimitBytes)
 
     camp.route(
       regex,
@@ -453,7 +451,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              requestFetcher: fetcher,
+              requestFetcher: fetch,
               githubApiProvider,
               librariesIoApiProvider,
               metricHelper,

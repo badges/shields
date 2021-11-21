@@ -3,7 +3,7 @@
  * using the algorithm followed by Composer (see
  * https://getcomposer.org/doc/04-schema.md#version).
  */
-import { fetchFactory } from '../core/base-service/got.js'
+import { fetch } from '../core/base-service/got.js'
 import { regularUpdate } from '../core/legacy/regular-update.js'
 import { listCompare } from './version.js'
 import { omitv } from './text-formatters.js'
@@ -232,10 +232,7 @@ async function getPhpReleases(githubApiProvider) {
             .map(tag => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
         )
       ),
-    requestFetcher: githubApiProvider.fetch.bind(
-      githubApiProvider,
-      fetchFactory()
-    ),
+    requestFetcher: githubApiProvider.fetch.bind(githubApiProvider, fetch),
   })
 }
 

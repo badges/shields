@@ -24,7 +24,7 @@ async function sendRequest(gotWrapper, url, options) {
   }
 }
 
-function fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
+function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
   const gotWithLimit = got.extend({
     handlers: [
       (options, next) => {
@@ -53,4 +53,6 @@ function fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
   return sendRequest.bind(sendRequest, gotWithLimit)
 }
 
-export { fetchFactory }
+const fetch = _fetchFactory()
+
+export { fetch, _fetchFactory }
