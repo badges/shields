@@ -2,8 +2,10 @@ import got from 'got'
 import { Inaccessible, InvalidResponse } from './errors.js'
 import {
   fetchLimitBytes as fetchLimitBytesDefault,
-  userAgent,
+  getUserAgent,
 } from './got-config.js'
+
+const userAgent = getUserAgent()
 
 async function sendRequest(gotWrapper, url, options) {
   const gotOptions = Object.assign({}, options)

@@ -45,3 +45,5 @@ jobs:
           context: .
           push: true
           tags: shieldsio/shields:server-${{ steps.date.outputs.date }}
+          build-args: |
+            version=server-${{ steps.date.outputs.date }}

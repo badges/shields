@@ -49,7 +49,7 @@ describe('got wrapper', function () {
     nock('https://www.google.com', {
       reqheaders: {
         'user-agent': function (agent) {
-          return agent.startsWith('Shields.io')
+          return agent.startsWith('shields (self-hosted)')
         },
       },
     })

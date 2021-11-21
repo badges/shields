@@ -54,7 +54,7 @@ describe('GithubAuthV3Service', function () {
       'https://github-api.example.com/repos/badges/shields/check-runs',
       {
         headers: {
-          'User-Agent': 'Shields.io/2003a',
+          'User-Agent': 'shields (self-hosted)/dev',
           Accept: 'application/vnd.github.antiope-preview+json',
           Authorization: 'token undefined',
         },

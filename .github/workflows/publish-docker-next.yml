@@ -26,3 +26,5 @@ jobs:
           context: .
           push: true
           tags: shieldsio/shields:next
+          build-args: |
+            version=${GITHUB_SHA::7}
