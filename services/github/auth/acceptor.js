@@ -1,8 +1,6 @@
 import queryString from 'query-string'
-import { fetchFactory } from '../../../core/base-service/got.js'
+import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
-
-const requestFetcher = fetchFactory()
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
@@ -48,10 +46,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
 
     let resp
     try {
-      resp = await requestFetcher(
-        'https://github.com/login/oauth/access_token',
-        options
-      )
+      resp = await fetch('https://github.com/login/oauth/access_token', options)
     } catch (e) {
       return end('The connection to GitHub failed.')
     }

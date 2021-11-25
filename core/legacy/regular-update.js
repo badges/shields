@@ -3,9 +3,8 @@
  */
 
 import { InvalidResponse } from '../base-service/errors.js'
-import { fetchFactory } from '../../core/base-service/got.js'
+import { fetch } from '../../core/base-service/got.js'
 import checkErrorResponse from '../../core/base-service/check-error-response.js'
-const fetcher = fetchFactory()
 
 // Map from URL to { timestamp: last fetch time, data: data }.
 let regularUpdateCache = Object.create(null)
@@ -28,7 +27,7 @@ async function regularUpdate({
   json = true,
   scraper = buffer => buffer,
   options = {},
-  requestFetcher = fetcher,
+  requestFetcher = fetch,
 }) {
   const timestamp = Date.now()
   const cached = regularUpdateCache[url]

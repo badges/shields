@@ -20,6 +20,10 @@ RUN npm cache clean --force
 
 # Use multi-stage build to reduce size
 FROM node:16-alpine
+
+ARG version=dev
+ENV DOCKER_SHIELDS_VERSION=$version
+
 # Run the server using production configs.
 ENV NODE_ENV production
 
