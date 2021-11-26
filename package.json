@@ -200,7 +200,7 @@
     "humanize-string": "^3.0.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
-    "is-svg": "^4.3.1",
+    "is-svg": "^4.3.2",
     "js-yaml-loader": "^1.2.2",
     "jsdoc": "^3.6.7",
     "lint-staged": "^12.0.3",
