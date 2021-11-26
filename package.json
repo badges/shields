@@ -29,7 +29,7 @@
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.1",
     "camelcase": "^6.2.1",
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.0",
     "check-node-version": "^4.2.1",
     "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.6",
