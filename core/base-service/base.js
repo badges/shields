@@ -20,7 +20,7 @@ import {
   Deprecated,
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
-import { fetchFactory } from './got.js'
+import { fetch } from './got.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -108,11 +108,14 @@ class BaseService {
    *
    * See also the config schema in `./server.js` and `doc/server-secrets.md`.
    *
-   * To use the configured auth in the handler or fetch method, pass the
-   * credentials to the request. For example:
-   * - `{ options: { auth: this.authHelper.basicAuth } }`
-   * - `{ options: { headers: this.authHelper.bearerAuthHeader } }`
-   * - `{ options: { qs: { token: this.authHelper._pass } } }`
+   * To use the configured auth in the handler or fetch method, wrap the
+   * _request() input params in a call to one of:
+   * - this.authHelper.withBasicAuth()
+   * - this.authHelper.withBearerAuthHeader()
+   * - this.authHelper.withQueryStringAuth()
+   *
+   * For example:
+   * this._request(this.authHelper.withBasicAuth({ url, schema, options }))
    *
    * @abstract
    * @type {module:core/base-service/base~Auth}
@@ -204,10 +207,10 @@ class BaseService {
   }
 
   constructor(
-    { sendAndCacheRequest, authHelper, metricHelper },
+    { requestFetcher, authHelper, metricHelper },
     { handleInternalErrors }
   ) {
-    this._requestFetcher = sendAndCacheRequest
+    this._requestFetcher = requestFetcher
     this.authHelper = authHelper
     this._handleInternalErrors = handleInternalErrors
     this._metricHelper = metricHelper
@@ -217,10 +220,10 @@ class BaseService {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
-    if ('qs' in options) {
-      const params = new URLSearchParams(options.qs)
+    if ('searchParams' in options) {
+      const params = new URLSearchParams(options.searchParams)
       logUrl = `${url}?${params.toString()}`
-      delete logOptions.qs
+      delete logOptions.searchParams
     }
     logTrace(
       emojic.bowAndArrow,
@@ -275,7 +278,7 @@ class BaseService {
   /**
    * Asynchronous function to handle requests for this service. Take the route
    * parameters (as defined in the `route` property), perform a request using
-   * `this._sendAndCacheRequest`, and return the badge data.
+   * `this._requestFetcher`, and return the badge data.
    *
    * @abstract
    * @param {object} namedParams Params parsed from route pattern
@@ -429,7 +432,7 @@ class BaseService {
     },
     serviceConfig
   ) {
-    const { cacheHeaders: cacheHeaderConfig, fetchLimitBytes } = serviceConfig
+    const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
@@ -437,8 +440,6 @@ class BaseService {
       metricInstance,
       ServiceClass: this,
     })
-
-    const fetcher = fetchFactory(fetchLimitBytes)
 
     camp.route(
       regex,
@@ -450,7 +451,7 @@ class BaseService {
           const namedParams = namedParamsForMatch(captureNames, match, this)
           const serviceData = await this.invoke(
             {
-              sendAndCacheRequest: fetcher, // TODO: rename sendAndCacheRequest
+              requestFetcher: fetch,
               githubApiProvider,
               librariesIoApiProvider,
               metricHelper,

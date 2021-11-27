@@ -51,7 +51,7 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
       url: `https://api.codacy.com/project/badge/coverage/${encodeURIComponent(
         projectId
       )}`,
-      options: { qs: { branch } },
+      options: { searchParams: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
       errorMessages: {
         404: 'project not found',

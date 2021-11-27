@@ -95,7 +95,7 @@ export default class GitlabTag extends GitLabBase {
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
         project
       )}/repository/tags`,
-      options: { qs: { order_by: 'updated' } },
+      options: { searchParams: { order_by: 'updated' } },
       errorMessages: {
         404: 'repo not found',
       },

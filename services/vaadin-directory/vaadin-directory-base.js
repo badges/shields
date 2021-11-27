@@ -18,7 +18,7 @@ class BaseVaadinDirectoryService extends BaseJsonService {
       schema,
       url: `https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier`,
       options: {
-        qs: {
+        searchParams: {
           projection: 'summary',
           urlIdentifier: packageName,
         },

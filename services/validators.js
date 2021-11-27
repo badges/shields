@@ -17,3 +17,9 @@ export const optionalDottedVersionNClausesWithOptionalSuffix =
 // TODO This accepts URLs with query strings and fragments, which for some
 // purposes should be rejected.
 export const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
+
+// validator for a file size we are going to pass to bytes.parse
+// see https://github.com/visionmedia/bytes.js#bytesparsestringnumber-value-numbernull
+export const fileSize = Joi.string()
+  .regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
+  .required()

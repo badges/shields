@@ -79,7 +79,7 @@ export default class Bundlephobia extends BaseJsonService {
     const packageQuery = `${scope ? `${scope}/` : ''}${packageName}${
       version ? `@${version}` : ''
     }`
-    const options = { qs: { package: packageQuery } }
+    const options = { searchParams: { package: packageQuery } }
     return this._requestJson({
       schema,
       url: 'https://bundlephobia.com/api/size',

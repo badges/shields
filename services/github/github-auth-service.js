@@ -3,8 +3,8 @@ import { mergeQueries } from '../../core/base-service/graphql.js'
 import { BaseGraphqlService, BaseJsonService } from '../index.js'
 
 function createRequestFetcher(context) {
-  const { sendAndCacheRequest, githubApiProvider } = context
-  return githubApiProvider.fetch.bind(githubApiProvider, sendAndCacheRequest)
+  const { requestFetcher, githubApiProvider } = context
+  return githubApiProvider.fetch.bind(githubApiProvider, requestFetcher)
 }
 
 class GithubAuthV3Service extends BaseJsonService {

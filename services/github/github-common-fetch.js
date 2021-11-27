@@ -33,7 +33,7 @@ async function fetchRepoContent(
     const { content } = await serviceInstance._requestJson({
       schema: contentSchema,
       url: `/repos/${user}/${repo}/contents/${filename}`,
-      options: { qs: { ref: branch } },
+      options: { searchParams: { ref: branch } },
       errorMessages,
     })
 

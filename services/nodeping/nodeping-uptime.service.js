@@ -61,7 +61,11 @@ export default class NodePingUptime extends BaseJsonService {
       schema,
       url: `https://nodeping.com/reports/uptime/${checkUuid}`,
       options: {
-        qs: { format: 'json', interval: 'days', start: thirtyDaysAgo },
+        searchParams: {
+          format: 'json',
+          interval: 'days',
+          start: thirtyDaysAgo,
+        },
         headers: {
           'cache-control': 'no-cache',
         },

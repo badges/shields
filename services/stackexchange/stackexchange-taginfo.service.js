@@ -50,7 +50,7 @@ export default class StackExchangeQuestions extends BaseJsonService {
 
     const parsedData = await this._requestJson({
       schema: tagSchema,
-      options: { gzip: true, qs: { site: stackexchangesite } },
+      options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
     })
 

@@ -22,8 +22,8 @@ class BaseXmlService extends BaseService {
    * @param {object} attrs Refer to individual attrs
    * @param {Joi} attrs.schema Joi schema to validate the response against
    * @param {string} attrs.url URL to request
-   * @param {object} [attrs.options={}] Options to pass to request. See
-   *    [documentation](https://github.com/request/request#requestoptions-callback)
+   * @param {object} [attrs.options={}] Options to pass to got. See
+   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
    * @param {object} [attrs.errorMessages={}] Key-value map of status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
@@ -31,7 +31,7 @@ class BaseXmlService extends BaseService {
    * @param {object} [attrs.parserOptions={}] Options to pass to fast-xml-parser. See
    *    [documentation](https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json)
    * @returns {object} Parsed response
-   * @see https://github.com/request/request#requestoptions-callback
+   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    * @see https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json
    */
   async _requestXml({

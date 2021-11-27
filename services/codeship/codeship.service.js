@@ -60,7 +60,7 @@ export default class Codeship extends BaseSvgScrapingService {
     return this._requestSvg({
       schema,
       url,
-      options: { qs: { branch } },
+      options: { searchParams: { branch } },
       valueMatcher: /<g id="status_2">(?:[.\s\S]*)\/><\/g><g id="([\w\s]*)"/,
     })
   }

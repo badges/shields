@@ -240,7 +240,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       const allReleases = await this._requestJson({
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
-        options: { qs: { per_page: 500 } },
+        options: { searchParams: { per_page: 500 } },
         errorMessages: errorMessagesFor('repo not found'),
       })
       releases = allReleases

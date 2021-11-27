@@ -18,3 +18,5 @@ jobs:
           context: .
           push: false
           tags: shieldsio/shields:pr-validation
+          build-args: |
+            version=${GITHUB_SHA::7}

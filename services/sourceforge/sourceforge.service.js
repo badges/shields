@@ -81,7 +81,7 @@ export default class Sourceforge extends BaseJsonService {
     const endDate = moment().subtract(24, 'hours')
     const startDate = intervalMap[interval].startDate(endDate)
     const options = {
-      qs: {
+      searchParams: {
         start_date: startDate.format('YYYY-MM-DD'),
         end_date: endDate.format('YYYY-MM-DD'),
       },

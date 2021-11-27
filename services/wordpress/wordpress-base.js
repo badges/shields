@@ -75,7 +75,7 @@ export default class BaseWordpress extends BaseJsonService {
       url,
       schema: schemas,
       options: {
-        qs: queryString,
+        searchParams: queryString,
       },
     })
     if ('error' in json) {

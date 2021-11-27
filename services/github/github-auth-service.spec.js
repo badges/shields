@@ -26,7 +26,7 @@ describe('GithubAuthV3Service', function () {
   }
 
   it('forwards custom Accept header', async function () {
-    const sendAndCacheRequest = sinon.stub().returns(
+    const requestFetcher = sinon.stub().returns(
       Promise.resolve({
         buffer: '{"requiredString": "some-string"}',
         res: {
@@ -46,15 +46,15 @@ describe('GithubAuthV3Service', function () {
     sinon.stub(githubApiProvider.standardTokens, 'next').returns(mockToken)
 
     DummyGithubAuthV3Service.invoke({
-      sendAndCacheRequest,
+      requestFetcher,
       githubApiProvider,
     })
 
-    expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+    expect(requestFetcher).to.have.been.calledOnceWith(
       'https://github-api.example.com/repos/badges/shields/check-runs',
       {
         headers: {
-          'User-Agent': 'Shields.io/2003a',
+          'User-Agent': 'shields (self-hosted)/dev',
           Accept: 'application/vnd.github.antiope-preview+json',
           Authorization: 'token undefined',
         },

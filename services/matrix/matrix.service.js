@@ -106,7 +106,7 @@ export default class Matrix extends BaseJsonService {
       schema: matrixRegisterSchema,
       options: {
         method: 'POST',
-        qs: guest
+        searchParams: guest
           ? {
               kind: 'guest',
             }
@@ -131,7 +131,7 @@ export default class Matrix extends BaseJsonService {
       )}`,
       schema: matrixAliasLookupSchema,
       options: {
-        qs: {
+        searchParams: {
           access_token: accessToken,
         },
       },
@@ -170,7 +170,7 @@ export default class Matrix extends BaseJsonService {
       )}/state`,
       schema: matrixStateSchema,
       options: {
-        qs: {
+        searchParams: {
           access_token: accessToken,
         },
       },

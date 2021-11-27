@@ -160,7 +160,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
     return await this.fetch({
       url: `https://dev.azure.com/${organization}/${project}/_apis/test/ResultSummaryByBuild`,
       options: {
-        qs: { buildId },
+        searchParams: { buildId },
       },
       schema: buildTestResultSummarySchema,
       errorMessages,

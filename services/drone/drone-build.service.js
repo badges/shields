@@ -73,7 +73,7 @@ export default class DroneBuild extends BaseJsonService {
         schema,
         url: `${server}/api/repos/${user}/${repo}/builds/latest`,
         options: {
-          qs: { ref: branch ? `refs/heads/${branch}` : undefined },
+          searchParams: { ref: branch ? `refs/heads/${branch}` : undefined },
         },
         errorMessages: {
           401: 'repo not found or not authorized',

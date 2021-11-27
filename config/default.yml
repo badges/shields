@@ -34,6 +34,7 @@ public:
   handleInternalErrors: true
 
   fetchLimit: '10MB'
+  userAgentBase: 'shields (self-hosted)'
 
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30

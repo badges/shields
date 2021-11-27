@@ -20,7 +20,7 @@ export default class GitLabBase extends BaseJsonService {
   async fetchPage({ page, requestParams, schema }) {
     const { res, buffer } = await this._request({
       ...requestParams,
-      ...{ options: { qs: { page } } },
+      ...{ options: { searchParams: { page } } },
     })
 
     const json = this._parseJson(buffer)
@@ -39,7 +39,7 @@ export default class GitLabBase extends BaseJsonService {
       url,
       options: {
         headers: { Accept: 'application/json' },
-        qs: { per_page: 100 },
+        searchParams: { per_page: 100 },
         ...options,
       },
       errorMessages,

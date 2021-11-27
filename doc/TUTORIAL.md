@@ -25,7 +25,7 @@ and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=14 and NPM >=7 is required. If you don't already have them,
+Node >=16 and NPM >=7 is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
@@ -228,14 +228,14 @@ Description of the code:
 9. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
 
    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
-   - `_requestJson()` uses [request](https://github.com/request/request) to perform the HTTP request. Options can be passed to request, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `request` docs for [supported options](https://github.com/request/request#requestoptions-callback).
+   - `_requestJson()` uses [got](https://github.com/sindresorhus/got) to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `got` docs for [supported options](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md).
    - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
    - A more complex call to `_requestJson()` might look like this:
      ```js
      return this._requestJson({
        schema: mySchema,
        url,
-       options: { qs: { branch: 'master' } },
+       options: { searchParams: { branch: 'master' } },
        errorMessages: {
          401: 'private application not supported',
          404: 'application not found',

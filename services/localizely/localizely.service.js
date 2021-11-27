@@ -108,7 +108,7 @@ export default class Localizely extends BaseJsonService {
       schema,
       url: `https://api.localizely.com/v1/projects/${projectId}/status`,
       options: {
-        qs: { branch },
+        searchParams: { branch },
         headers: { 'X-Api-Token': apiToken },
       },
       errorMessages: {

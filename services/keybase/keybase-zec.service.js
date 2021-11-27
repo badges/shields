@@ -58,7 +58,7 @@ export default class KeybaseZEC extends KeybaseProfile {
 
   async handle({ username }) {
     const options = {
-      qs: {
+      searchParams: {
         usernames: username,
         fields: 'cryptocurrency_addresses',
       },

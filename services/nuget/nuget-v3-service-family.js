@@ -78,7 +78,7 @@ async function fetch(
     schema,
     url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
-      qs: {
+      searchParams: {
         q: `packageid:${encodeURIComponent(packageName.toLowerCase())}`,
         // Include prerelease versions.
         prerelease: 'true',

@@ -77,7 +77,7 @@ export default class WikiapiaryInstalls extends BaseJsonService {
       schema,
       url: `https://wikiapiary.com/w/api.php`,
       options: {
-        qs: {
+        searchParams: {
           action: 'ask',
           query: `[[${variant}:${name}]]|?Has_website_count`,
           format: 'json',

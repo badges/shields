@@ -38,7 +38,7 @@ export default class TreewareTrees extends BaseJsonService {
       url,
       schema: apiSchema,
       options: {
-        qs: { ref: reference },
+        searchParams: { ref: reference },
       },
     })
   }

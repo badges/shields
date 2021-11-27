@@ -34,7 +34,7 @@ export default class BStatsServers extends BaseJsonService {
     return this._requestJson({
       schema,
       options: {
-        qs: {
+        searchParams: {
           maxElements: 1,
         },
       },

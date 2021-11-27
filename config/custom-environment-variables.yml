@@ -64,6 +64,7 @@ public:
     defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
 
   fetchLimit: 'FETCH_LIMIT'
+  userAgentBase: 'USER_AGENT_BASE'
 
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
   requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'

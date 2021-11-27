@@ -49,7 +49,7 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
       url: `https://readthedocs.org/projects/${encodeURIComponent(
         project
       )}/badge/`,
-      options: { qs: { version } },
+      options: { searchParams: { version } },
     })
     if (status === 'unknown') {
       throw new NotFound({
