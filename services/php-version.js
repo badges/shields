@@ -4,7 +4,7 @@
  * https://getcomposer.org/doc/04-schema.md#version).
  */
 import { fetch } from '../core/base-service/got.js'
-import { regularUpdate } from '../core/legacy/regular-update.js'
+import { getCachedResource } from '../core/base-service/resource-cache.js'
 import { listCompare } from './version.js'
 import { omitv } from './text-formatters.js'
 
@@ -217,9 +217,9 @@ function versionReduction(versions, phpReleases) {
 }
 
 async function getPhpReleases(githubApiProvider) {
-  return regularUpdate({
+  return getCachedResource({
     url: '/repos/php/php-src/git/refs/tags',
-    intervalMillis: 24 * 3600 * 1000, // 1 day
+    ttl: 24 * 3600 * 1000, // 1 day
     scraper: tags =>
       Array.from(
         new Set(
