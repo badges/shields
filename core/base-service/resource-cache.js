@@ -6,6 +6,8 @@ import { InvalidResponse } from './errors.js'
 import { fetch } from './got.js'
 import checkErrorResponse from './check-error-response.js'
 
+const oneDay = 24 * 3600 * 1000 // 1 day in milliseconds
+
 // Map from URL to { timestamp: last fetch time, data: data }.
 let resourceCache = Object.create(null)
 
@@ -23,7 +25,7 @@ let resourceCache = Object.create(null)
  */
 async function getCachedResource({
   url,
-  ttl,
+  ttl = oneDay,
   json = true,
   scraper = buffer => buffer,
   options = {},

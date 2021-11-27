@@ -11,7 +11,6 @@ async function getVersion(version) {
   }
   return getCachedResource({
     url: `https://nodejs.org/dist/latest${semver}/SHASUMS256.txt`,
-    ttl: 24 * 3600 * 1000,
     json: false,
     scraper: shasums => {
       // tarball index start, tarball index end
@@ -38,8 +37,6 @@ async function getCurrentVersion() {
 async function getLtsVersions() {
   const versions = await getCachedResource({
     url: 'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
-    ttl: 24 * 3600 * 1000,
-    json: true,
     scraper: ltsVersionsScraper,
   })
   return Promise.all(versions.map(getVersion))

@@ -219,7 +219,6 @@ function versionReduction(versions, phpReleases) {
 async function getPhpReleases(githubApiProvider) {
   return getCachedResource({
     url: '/repos/php/php-src/git/refs/tags',
-    ttl: 24 * 3600 * 1000, // 1 day
     scraper: tags =>
       Array.from(
         new Set(

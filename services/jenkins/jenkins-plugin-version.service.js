@@ -33,7 +33,7 @@ export default class JenkinsPluginVersion extends BaseService {
   async fetch() {
     return getCachedResource({
       url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
-      ttl: 4 * 3600 * 1000,
+      ttl: 4 * 3600 * 1000, // 4 hours in milliseconds
       scraper: json =>
         Object.keys(json.plugins).reduce((previous, current) => {
           previous[current] = json.plugins[current].version

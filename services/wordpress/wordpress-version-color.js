@@ -21,8 +21,6 @@ import { getCachedResource } from '../../core/base-service/resource-cache.js'
 async function getOfferedVersions() {
   return getCachedResource({
     url: 'https://api.wordpress.org/core/version-check/1.7/',
-    ttl: 24 * 3600 * 1000,
-    json: true,
     scraper: json => json.offers.map(v => v.version),
   })
 }

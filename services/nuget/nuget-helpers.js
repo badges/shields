@@ -62,7 +62,6 @@ async function searchServiceUrl(baseUrl, serviceType = 'SearchQueryService') {
     // So the waiting time within n years is n*l/x + x years, for which a
     // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
     ttl: 42 * 60 * 1000,
-    json: true,
     scraper: json =>
       json.resources.filter(resource => resource['@type'] === serviceType),
   })
