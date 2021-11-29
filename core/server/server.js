@@ -15,7 +15,7 @@ import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
-import { clearRegularUpdateCache } from '../legacy/regular-update.js'
+import { clearResourceCache } from '../base-service/resource-cache.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
 import { fileSize, nonNegativeInteger } from '../../services/validators.js'
 import log from './log.js'
@@ -531,7 +531,7 @@ class Server {
   static resetGlobalState() {
     // This state should be migrated to instance state. When possible, do not add new
     // global state.
-    clearRegularUpdateCache()
+    clearResourceCache()
   }
 
   reset() {
