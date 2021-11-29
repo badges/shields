@@ -37,7 +37,7 @@ t.create('total downloads (not found)')
   .get('/myget/mongodb/dt/not-a-real-package.json')
   .expectBadge({ label: 'downloads', message: 'package not found' })
 
-// This tests the erroring behavior in regular-update.
+// This tests the erroring behavior in getCachedResource.
 t.create('total downloads (connection error)')
   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
   .networkOff()
@@ -46,7 +46,7 @@ t.create('total downloads (connection error)')
     message: 'inaccessible',
   })
 
-// This tests the erroring behavior in regular-update.
+// This tests the erroring behavior in getCachedResource.
 t.create('total downloads (unexpected first response)')
   .get('/myget/mongodb/dt/MongoDB.Driver.Core.json')
   .intercept(nock =>

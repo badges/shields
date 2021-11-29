@@ -2,36 +2,38 @@
  * @module
  */
 
-import { InvalidResponse } from '../base-service/errors.js'
-import { fetch } from '../../core/base-service/got.js'
-import checkErrorResponse from '../../core/base-service/check-error-response.js'
+import { InvalidResponse } from './errors.js'
+import { fetch } from './got.js'
+import checkErrorResponse from './check-error-response.js'
+
+const oneDay = 24 * 3600 * 1000 // 1 day in milliseconds
 
 // Map from URL to { timestamp: last fetch time, data: data }.
-let regularUpdateCache = Object.create(null)
+let resourceCache = Object.create(null)
 
 /**
  * Make a HTTP request using an in-memory cache
  *
  * @param {object} attrs Refer to individual attrs
  * @param {string} attrs.url URL to request
- * @param {number} attrs.intervalMillis Number of milliseconds to keep cached value for
+ * @param {number} attrs.ttl Number of milliseconds to keep cached value for
  * @param {boolean} [attrs.json=true] True if we expect to parse the response as JSON
  * @param {Function} [attrs.scraper=buffer => buffer] Function to extract value from the response
  * @param {object} [attrs.options={}] Options to pass to got
- * @param {Function} [attrs.requestFetcher=fetcher] Custom fetch function
+ * @param {Function} [attrs.requestFetcher=fetch] Custom fetch function
  * @returns {*} Parsed response
  */
-async function regularUpdate({
+async function getCachedResource({
   url,
-  intervalMillis,
+  ttl = oneDay,
   json = true,
   scraper = buffer => buffer,
   options = {},
   requestFetcher = fetch,
 }) {
   const timestamp = Date.now()
-  const cached = regularUpdateCache[url]
-  if (cached != null && timestamp - cached.timestamp < intervalMillis) {
+  const cached = resourceCache[url]
+  if (cached != null && timestamp - cached.timestamp < ttl) {
     return cached.data
   }
 
@@ -54,12 +56,12 @@ async function regularUpdate({
   }
 
   const data = scraper(reqData)
-  regularUpdateCache[url] = { timestamp, data }
+  resourceCache[url] = { timestamp, data }
   return data
 }
 
-function clearRegularUpdateCache() {
-  regularUpdateCache = Object.create(null)
+function clearResourceCache() {
+  resourceCache = Object.create(null)
 }
 
-export { regularUpdate, clearRegularUpdateCache }
+export { getCachedResource, clearResourceCache }

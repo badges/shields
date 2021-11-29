@@ -49,11 +49,11 @@ Shields has mercifully little persistent state:
 1. The GitHub tokens we collect are saved on each server in a cloud Redis
    database. They can also be fetched from the [GitHub auth admin endpoint][]
    for debugging.
-2. The server keeps the [regular-update cache][] in memory. It is neither
+2. The server keeps the [resource cache][] in memory. It is neither
    persisted nor inspectable.
 
 [github auth admin endpoint]: https://github.com/badges/shields/blob/master/services/github/auth/admin.js
-[regular-update cache]: https://github.com/badges/shields/blob/master/core/legacy/regular-update.js
+[resource cache]: https://github.com/badges/shields/blob/master/core/base-service/resource-cache.js
 
 ## Configuration
 

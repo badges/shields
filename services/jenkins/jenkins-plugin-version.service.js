@@ -1,4 +1,4 @@
-import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { getCachedResource } from '../../core/base-service/resource-cache.js'
 import { renderVersionBadge } from '../version.js'
 import { BaseService, NotFound } from '../index.js'
 
@@ -31,9 +31,9 @@ export default class JenkinsPluginVersion extends BaseService {
   }
 
   async fetch() {
-    return regularUpdate({
+    return getCachedResource({
       url: 'https://updates.jenkins-ci.org/current/update-center.actual.json',
-      intervalMillis: 4 * 3600 * 1000,
+      ttl: 4 * 3600 * 1000, // 4 hours in milliseconds
       scraper: json =>
         Object.keys(json.plugins).reduce((previous, current) => {
           previous[current] = json.plugins[current].version
