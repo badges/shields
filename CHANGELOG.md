@@ -4,6 +4,18 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2021-12-01
+
+- Send better user-agent values [#7309](https://github.com/badges/shields/issues/7309)
+  Self-hosting users now send a user agent which indicates the server version and starts `shields (self-hosted)/` by default.
+  This can be configured using the env var `USER_AGENT_BASE`
+- upgrade to node 16 [#7271](https://github.com/badges/shields/issues/7271)
+- feat: deprecate dependabot badges [#7274](https://github.com/badges/shields/issues/7274)
+- fix: npmversion tagged service test [#7269](https://github.com/badges/shields/issues/7269)
+- feat: create new Test Results category [#7218](https://github.com/badges/shields/issues/7218)
+- Migration from Request to Got for all HTTP requests is completed in this release
+- Dependency updates
+
 ## server-2021-11-04
 
 - migrate regularUpdate() from request-->got [#7215](https://github.com/badges/shields/issues/7215)
