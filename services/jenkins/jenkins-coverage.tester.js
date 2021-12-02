@@ -39,6 +39,6 @@ t.create('code coverage API: job not found')
 
 t.create('code coverage API: job found')
   .get(
-    '/api.json?jobUrl=https://jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master'
+    '/api.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master/'
   )
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
