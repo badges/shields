@@ -7,7 +7,7 @@ Please follow this guidance when reporting security issues affecting:
 - [Shields.io](https://shields.io)
 - [Raster.shields.io](https://raster.shields.io)
 - Self-hosted Shields instances
-- The [svg-to-image-proxy](https://www.npmjs.com/package/svg-to-image-proxy) NPM package
+- The [squint](https://github.com/badges/squint) raster proxy
 - The [badge-maker](https://www.npmjs.com/package/badge-maker) NPM package
 
 The [gh-badges](https://www.npmjs.com/package/gh-badges) NPM package is now deprecated and will no longer receive fixes for bugs or security issues.
