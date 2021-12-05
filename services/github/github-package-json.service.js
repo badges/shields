@@ -16,11 +16,16 @@ const versionSchema = Joi.object({
   version: semver,
 }).required()
 
+const dependencyQueryParamSchema = Joi.object({
+  filename: Joi.string(),
+}).required()
+
 class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/package-json/v',
     pattern: ':user/:repo/:branch*',
+    queryParamSchema: dependencyQueryParamSchema,
   }
 
   static examples = [
@@ -44,6 +49,20 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
       documentation,
       keywords,
     },
+    {
+      title: 'GitHub package.json version (subfolder of monorepo)',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'metabolize',
+        repo: 'anafanafo',
+      },
+      queryParams: {
+        filename: 'packages/char-width-table-builder/package.json',
+      },
+      staticPreview: this.render({ version: '2.0.0' }),
+      documentation,
+      keywords,
+    },
   ]
 
   static render({ version, branch }) {
@@ -54,21 +73,17 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
     })
   }
 
-  async handle({ user, repo, branch }) {
+  async handle({ user, repo, branch }, { filename = 'package.json' }) {
     const { version } = await fetchJsonFromRepo(this, {
       schema: versionSchema,
       user,
       repo,
       branch,
-      filename: 'package.json',
+      filename,
     })
     return this.constructor.render({ version, branch })
   }
 }
-
-const dependencyQueryParamSchema = Joi.object({
-  filename: Joi.string(),
-}).required()
 
 class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service {
   static category = 'platform-support'
