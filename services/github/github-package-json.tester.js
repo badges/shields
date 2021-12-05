@@ -21,6 +21,17 @@ t.create('Package version (repo not found)')
     message: 'repo not found, branch not found, or package.json missing',
   })
 
+t.create('Package version (monorepo)')
+  .get(
+    `/v/metabolize/anafanafo.json?filename=${encodeURIComponent(
+      'packages/char-width-table-builder/package.json'
+    )}`
+  )
+  .expectBadge({
+    label: 'version',
+    message: isSemver,
+  })
+
 t.create('Package name')
   .get('/n/badges/shields.json')
   .expectBadge({ label: 'name', message: 'shields.io' })
