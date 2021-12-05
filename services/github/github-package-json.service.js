@@ -16,7 +16,7 @@ const versionSchema = Joi.object({
   version: semver,
 }).required()
 
-const dependencyQueryParamSchema = Joi.object({
+const subfolderQueryParamSchema = Joi.object({
   filename: Joi.string(),
 }).required()
 
@@ -25,7 +25,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
   static route = {
     base: 'github/package-json/v',
     pattern: ':user/:repo/:branch*',
-    queryParamSchema: dependencyQueryParamSchema,
+    queryParamSchema: subfolderQueryParamSchema,
   }
 
   static examples = [
@@ -91,7 +91,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     base: 'github/package-json/dependency-version',
     pattern:
       ':user/:repo/:kind(dev|peer|optional)?/:scope(@[^/]+)?/:packageName/:branch*',
-    queryParamSchema: dependencyQueryParamSchema,
+    queryParamSchema: subfolderQueryParamSchema,
   }
 
   static examples = [
