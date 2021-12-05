@@ -22,8 +22,6 @@ Production hosting is managed by the Shields ops team:
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
 | Compose.io Redis              | Account access                  | @paulmelnikow                                                   |
 | Compose.io Redis              | Database connection credentials | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
-| Zeit Now                      | Team owner                      | @paulmelnikow                                                   |
-| Zeit Now                      | Team members                    | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
 | Raster server                 | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
 | shields-server.com redirector | Full access as team members     | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
 | Cloudflare (CDN)              | Account owner                   | @espadrine                                                      |
@@ -94,11 +92,8 @@ Cloudflare is configured to respect the servers' cache headers.
 ## Raster server
 
 The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is
-hosted on [Zeit Now][]. It's managed in the
-[svg-to-image-proxy repo][svg-to-image-proxy].
-
-[zeit now]: https://zeit.co/now
-[svg-to-image-proxy]: https://github.com/badges/svg-to-image-proxy
+hosted on Heroku. It's managed in the
+[squint](https://github.com/badges/squint/) repo.
 
 ### Heroku Deployment
 
