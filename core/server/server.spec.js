@@ -64,6 +64,12 @@ describe('The server', function () {
       expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
     })
 
+    it('should return cors header for the request', async function () {
+      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      expect(statusCode).to.equal(200)
+      expect(headers['access-control-allow-origin']).to.equal('*')
+    })
+
     it('should redirect colorscheme PNG badges as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.png`,
@@ -200,6 +206,12 @@ describe('The server', function () {
         .to.satisfy(isSvg)
         .and.to.include('410')
         .and.to.include('jpg no longer available')
+    })
+
+    it('should return cors header for the request', async function () {
+      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      expect(statusCode).to.equal(200)
+      expect(headers['access-control-allow-origin']).to.equal('*')
     })
   })
 
