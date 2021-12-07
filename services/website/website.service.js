@@ -75,6 +75,8 @@ export default class Website extends BaseService {
       down_message: downMessage,
       up_color: upColor,
       down_color: downColor,
+      status_code_less_than: statusCodeLessThan,
+      status_code_more_than: statusCodeMoreThan,
       url,
     }
   ) {
@@ -88,8 +90,11 @@ export default class Website extends BaseService {
           method: 'HEAD',
         },
       })
-      // We consider all HTTP status codes below 310 as success.
-      isUp = statusCode < 310
+      // By default:
+      // statusCodeLessThan = 310
+      // statusCodeMoreThan = 0
+      // Meaning we consider all HTTP status codes below 310, other than 0, as success.
+      isUp = statusCode < statusCodeLessThan && statusCode > statusCodeMoreThan
     } catch (e) {
       // Catch all errors thrown by the request.
       isUp = false
