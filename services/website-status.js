@@ -5,6 +5,8 @@ const queryParamSchema = Joi.object({
   down_message: Joi.string(),
   up_color: Joi.alternatives(Joi.string(), Joi.number()),
   down_color: Joi.alternatives(Joi.string(), Joi.number()),
+  status_code_less_than: Joi.number(),
+  status_code_more_than: Joi.number(),
 }).required()
 
 const exampleQueryParams = {
@@ -12,6 +14,8 @@ const exampleQueryParams = {
   up_color: 'blue',
   down_message: 'offline',
   down_color: 'lightgrey',
+  status_code_less_than: '400',
+  status_code_more_than: '199',
 }
 
 function renderWebsiteStatus({
@@ -20,6 +24,8 @@ function renderWebsiteStatus({
   downMessage = 'down',
   upColor = 'brightgreen',
   downColor = 'red',
+  statusCodeLessThan = 310,
+  statusCodeMoreThan = 0,
 }) {
   if (isUp) {
     return { message: upMessage, color: upColor }
