@@ -46,8 +46,12 @@ t.create('status is down if response code is 401')
   .intercept(nock => nock('http://offline.com').head('/').reply(401))
   .expectBadge({ label: 'website', message: 'down' })
 
-t.create('status is up if response code is 401 and less than is 402 and more than is 400')
-  .get('/website.json?url=http://offline.com&status_code_more_than=400&status_code_less_than=402')
+t.create(
+  'status is up if response code is 401 and less than is 402 and more than is 400'
+)
+  .get(
+    '/website.json?url=http://offline.com&status_code_more_than=400&status_code_less_than=402'
+  )
   .intercept(nock => nock('http://offline.com').head('/').reply(401))
   .expectBadge({ label: 'website', message: 'up' })
 
