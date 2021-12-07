@@ -5,8 +5,8 @@ const queryParamSchema = Joi.object({
   down_message: Joi.string(),
   up_color: Joi.alternatives(Joi.string(), Joi.number()),
   down_color: Joi.alternatives(Joi.string(), Joi.number()),
-  status_code_less_than: Joi.number(),
-  status_code_more_than: Joi.number(),
+  status_code_less_than: Joi.number().integer().min(1).max(999),
+  status_code_more_than: Joi.number().integer().min(0).max(998),
 }).required()
 
 const exampleQueryParams = {

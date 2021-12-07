@@ -94,7 +94,15 @@ export default class Website extends BaseService {
       // statusCodeLessThan = 310
       // statusCodeMoreThan = 0
       // Meaning we consider all HTTP status codes below 310, other than 0, as success.
-      isUp = statusCode < statusCodeLessThan && statusCode > statusCodeMoreThan
+      if (typeof statusCodeLessThan === 'undefined') {
+        statusCodeLessThan = 310
+      }
+      if (typeof statusCodeMoreThan === 'undefined') {
+        statusCodeMoreThan = 0
+      }
+      isUp =
+        statusCode < parseInt(statusCodeLessThan) &&
+        statusCode > parseInt(statusCodeMoreThan)
     } catch (e) {
       // Catch all errors thrown by the request.
       isUp = false
@@ -106,6 +114,8 @@ export default class Website extends BaseService {
       downMessage,
       upColor,
       downColor,
+      statusCodeLessThan,
+      statusCodeMoreThan,
     })
   }
 }
