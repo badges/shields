@@ -49,14 +49,29 @@ const factory = superclass =>
       return this
     }
 
-    expectBadge({ label, message, logoWidth, labelColor, color, link }) {
+    expectBadge(badge) {
+      const expectedKeys = [
+        'label',
+        'message',
+        'logoWidth',
+        'labelColor',
+        'color',
+        'link',
+      ]
+
+      for (const key of Object.keys(badge)) {
+        if (!expectedKeys.includes(key)) {
+          throw new Error(`Found unexpected object key '${key}'`)
+        }
+      }
+
       return this.afterJSON(json => {
-        this.constructor._expectField(json, 'label', label)
-        this.constructor._expectField(json, 'message', message)
-        this.constructor._expectField(json, 'logoWidth', logoWidth)
-        this.constructor._expectField(json, 'labelColor', labelColor)
-        this.constructor._expectField(json, 'color', color)
-        this.constructor._expectField(json, 'link', link)
+        this.constructor._expectField(json, 'label', badge.label)
+        this.constructor._expectField(json, 'message', badge.message)
+        this.constructor._expectField(json, 'logoWidth', badge.logoWidth)
+        this.constructor._expectField(json, 'labelColor', badge.labelColor)
+        this.constructor._expectField(json, 'color', badge.color)
+        this.constructor._expectField(json, 'link', badge.link)
       })
     }
 
