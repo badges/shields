@@ -2,17 +2,17 @@ import { createServiceTester } from '../tester.js'
 import { codacyGrade } from './codacy-helpers.js'
 export const t = await createServiceTester()
 
-// https://github.com/netdata/netdata/
-// https://app.codacy.com/manual/netdata/netdata/dashboard
+// https://app.codacy.com/gh/NicolasCARPi/jquery_jeditable/dashboard
+// https://github.com/NicolasCARPi/jquery_jeditable
 t.create('Code quality')
-  .get('/a994873f30d045b9b4b83606c3eb3498.json')
+  .get('/0cb32ce695b743d68257021455330c66.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,
   })
 
 t.create('Code quality on branch')
-  .get('/a994873f30d045b9b4b83606c3eb3498/master.json')
+  .get('/0cb32ce695b743d68257021455330c66/master.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,

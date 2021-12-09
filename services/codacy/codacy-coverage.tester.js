@@ -17,7 +17,7 @@ t.create('Coverage on branch')
   })
 
 t.create('Coverage not enabled')
-  .get('/e27821fb6289410b8f58338c7e0bc686.json')
+  .get('/0cb32ce695b743d68257021455330c66.json')
   .expectBadge({
     label: 'coverage',
     message: 'not enabled for this project',
