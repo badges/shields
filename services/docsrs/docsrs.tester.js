@@ -14,5 +14,5 @@ t.create('Getting latest version works')
   .get('/rand/latest.json')
   .expectBadge({
     label: 'docs',
-    messsage: Joi.allow('passing', 'failing'),
+    message: Joi.allow('passing', 'failing'),
   })
