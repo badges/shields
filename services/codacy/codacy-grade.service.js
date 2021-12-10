@@ -12,14 +12,14 @@ export default class CodacyGrade extends BaseSvgScrapingService {
     {
       title: 'Codacy grade',
       pattern: ':projectId',
-      namedParams: { projectId: 'a994873f30d045b9b4b83606c3eb3498' },
+      namedParams: { projectId: '0cb32ce695b743d68257021455330c66' },
       staticPreview: this.render({ grade: 'A' }),
     },
     {
       title: 'Codacy branch grade',
       pattern: ':projectId/:branch',
       namedParams: {
-        projectId: 'a994873f30d045b9b4b83606c3eb3498',
+        projectId: '0cb32ce695b743d68257021455330c66',
         branch: 'master',
       },
       staticPreview: this.render({ grade: 'A' }),
