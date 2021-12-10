@@ -58,10 +58,10 @@
     "pretty-bytes": "^5.6.0",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^14.0.1",
-    "qs": "^6.10.1",
+    "qs": "^6.10.2",
     "query-string": "^7.0.1",
     "semver": "~7.3.5",
-    "simple-icons": "6.0.0",
+    "simple-icons": "6.1.0",
     "webextension-store-meta": "^1.0.5",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
@@ -153,8 +153,8 @@
     "@types/react-helmet": "^6.1.4",
     "@types/react-modal": "^3.13.1",
     "@types/react-select": "^4.0.17",
-    "@types/styled-components": "5.1.16",
-    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@types/styled-components": "5.1.17",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.3.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-istanbul": "^6.1.1",
@@ -237,7 +237,7 @@
     "styled-components": "^5.3.3",
     "ts-mocha": "^8.0.0",
     "tsd": "^0.19.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.3"
   },
   "engines": {
     "node": "^16.13.0",
