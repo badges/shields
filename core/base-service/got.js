@@ -10,7 +10,7 @@ const userAgent = getUserAgent()
 async function sendRequest(gotWrapper, url, options) {
   const gotOptions = Object.assign({}, options)
   gotOptions.throwHttpErrors = false
-  gotOptions.retry = 0
+  gotOptions.retry = { limit: 0 }
   gotOptions.headers = gotOptions.headers || {}
   gotOptions.headers['User-Agent'] = userAgent
   try {
