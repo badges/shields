@@ -1,4 +1,4 @@
-import got from 'got'
+import got, { CancelError } from 'got'
 import { Inaccessible, InvalidResponse } from './errors.js'
 import {
   fetchLimitBytes as fetchLimitBytesDefault,
@@ -17,7 +17,7 @@ async function sendRequest(gotWrapper, url, options) {
     const resp = await gotWrapper(url, gotOptions)
     return { res: resp, buffer: resp.body }
   } catch (err) {
-    if (err instanceof got.CancelError) {
+    if (err instanceof CancelError) {
       throw new InvalidResponse({
         underlyingError: new Error('Maximum response size exceeded'),
       })
