@@ -4,7 +4,7 @@ import { age } from '../color-formatters.js'
 import { formatDate, metric } from '../text-formatters.js'
 import { InvalidResponse } from '../index.js'
 import GithubIssueDetail from './github-issue-detail.service.js'
-import { stateColor, commentsColor } from './github-helpers.js'
+import { issueStateColor, commentsColor } from './github-helpers.js'
 
 describe('GithubIssueDetail', function () {
   test(GithubIssueDetail.render, () => {
@@ -16,7 +16,7 @@ describe('GithubIssueDetail', function () {
     }).expect({
       label: 'pull request 12',
       message: 'open',
-      color: stateColor('open'),
+      color: issueStateColor('open'),
     })
     given({
       property: 'state',
@@ -26,7 +26,7 @@ describe('GithubIssueDetail', function () {
     }).expect({
       label: 'issue 15',
       message: 'closed',
-      color: stateColor('closed'),
+      color: issueStateColor('closed'),
     })
     given({
       property: 'title',
