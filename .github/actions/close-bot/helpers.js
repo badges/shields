@@ -56,6 +56,12 @@ function isPointlessVersionBump(body) {
       line => !line.startsWith('See <a href="https://conventionalcommits.org">')
     )
     .filter(line => !line.startsWith('<!--'))
+    .filter(
+      line =>
+        !line.startsWith(
+          '<p><a href="https://www.gatsbyjs.com/docs/reference/release-notes/'
+        )
+    )
   return allChangelogLinesAreVersionBump(changelogLines)
 }
 
