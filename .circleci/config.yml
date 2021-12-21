@@ -7,7 +7,6 @@ main_steps: &main_steps
     - run:
         name: Install dependencies
         command: |
-          npm config list
           npm install --dry-run
           npm ci
         environment:
@@ -51,7 +50,6 @@ integration_steps: &integration_steps
     - run:
         name: Install dependencies
         command: |
-          npm config list
           npm install --dry-run
           npm ci
         environment:
@@ -75,7 +73,6 @@ services_steps: &services_steps
     - run:
         name: Install dependencies
         command: |
-          npm config list
           npm install --dry-run
           npm ci
         environment:
@@ -208,7 +205,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm config list
             npm install --dry-run
             npm ci
           environment:
@@ -275,7 +271,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm config list
             npm install --dry-run
             npm ci
 
