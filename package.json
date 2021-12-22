@@ -12,8 +12,7 @@
   ],
   "homepage": "https://shields.io",
   "bugs": {
-    "url": "https://github.com/badges/shields/issues",
-    "email": "thaddee.tyl@gmail.com"
+    "url": "https://github.com/badges/shields/issues"
   },
   "license": "CC0-1.0",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
