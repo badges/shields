@@ -24,6 +24,12 @@ const schema = Joi.object({
         Joi.object({
           viewCount: nonNegativeInteger,
           subscriberCount: nonNegativeInteger,
+        }),
+        Joi.object({
+          viewCount: nonNegativeInteger,
+          likeCount: nonNegativeInteger,
+          commentCount: nonNegativeInteger,
+          favoriteCount: nonNegativeInteger,
         })
       ),
     })
