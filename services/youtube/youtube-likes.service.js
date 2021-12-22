@@ -62,11 +62,11 @@ export default class YouTubeLikes extends YouTubeVideoBase {
       id,
     })
     if (queryParams && typeof queryParams.withDislikes !== 'undefined') {
+      const likes = metric(statistics.likeCount) + ' 👍'
+      const dislikes = statistics.dislikeCount != undefined ? metric(statistics.dislikeCount) + ' 👎' : ''
       renderedBadge = {
         ...renderedBadge,
-        message: `${metric(statistics.likeCount)} 👍 ${metric(
-          statistics.dislikeCount
-        )} 👎`,
+        message: `${likes} ${dislikes}`,
       }
     }
     return renderedBadge
