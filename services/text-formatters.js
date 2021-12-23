@@ -53,20 +53,24 @@ const metricPower = metricPrefix.map((a, i) => Math.pow(1000, i + 1))
 function metric(n) {
   for (let i = metricPrefix.length - 1; i >= 0; i--) {
     const limit = metricPower[i]
-    if (n >= limit) {
-      const scaledN = n / limit
+    const absN = Math.abs(n)
+    if (absN >= limit) {
+      const scaledN = absN / limit
       if (scaledN < 10) {
         // For "small" numbers, display one decimal digit unless it is 0.
         const oneDecimalN = scaledN.toFixed(1)
         if (oneDecimalN.charAt(oneDecimalN.length - 1) !== '0') {
-          return `${oneDecimalN}${metricPrefix[i]}`
+          const res = `${oneDecimalN}${metricPrefix[i]}`
+          return n > 0 ? res : `-${res}`
         }
       }
       const roundedN = Math.round(scaledN)
       if (roundedN < 1000) {
-        return `${roundedN}${metricPrefix[i]}`
+        const res = `${roundedN}${metricPrefix[i]}`
+        return n > 0 ? res : `-${res}`
       } else {
-        return `1${metricPrefix[i + 1]}`
+        const res = `1${metricPrefix[i + 1]}`
+        return n > 0 ? res : `-${res}`
       }
     }
   }

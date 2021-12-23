@@ -62,6 +62,10 @@ const isStarRating = withRegex(
 // Required to be > 0, because accepting zero masks many problems.
 const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
+const isMetricAllowNegative = withRegex(
+  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]?|-[1-9][0-9]*[kMGTPEZY]?|-[1-9]\.[1-9][kMGTPEZY]?)$/
+)
+
 /**
  * @param {RegExp} nestedRegexp Pattern that must appear after the metric.
  * @returns {Function} A function that returns a RegExp that matches a metric followed by another pattern.
@@ -159,6 +163,7 @@ export {
   isPhpVersionReduction,
   isStarRating,
   isMetric,
+  isMetricAllowNegative,
   isMetricWithPattern,
   isMetricOpenIssues,
   isMetricOverMetric,
