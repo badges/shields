@@ -62,6 +62,7 @@ const isStarRating = withRegex(
 // Required to be > 0, because accepting zero masks many problems.
 const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
+// Same as isMetric, but tests for negative numbers also.
 const isMetricAllowNegative = withRegex(
   /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]?|-[1-9][0-9]*[kMGTPEZY]?|-[1-9]\.[1-9][kMGTPEZY]?)$/
 )

@@ -46,7 +46,7 @@ function ordinalNumber(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
 
-// Given a number, string with appropriate unit in the metric system, SI.
+// Given a number (positive or negative), string with appropriate unit in the metric system, SI.
 // Note: numbers beyond the peta- cannot be represented as integers in JS.
 const metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 const metricPower = metricPrefix.map((a, i) => Math.pow(1000, i + 1))
