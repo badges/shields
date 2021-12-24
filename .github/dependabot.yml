@@ -8,6 +8,8 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    ignore:
+      - dependency-name: '@types/node'
 
   # badge-maker package dependencies
   - package-ecosystem: npm
