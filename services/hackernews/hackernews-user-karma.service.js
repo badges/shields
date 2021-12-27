@@ -4,7 +4,6 @@ import { BaseJsonService, NotFound } from '../index.js'
 import { anyInteger } from '../validators.js'
 
 const schema = Joi.object({
-  id: Joi.string(),
   karma: anyInteger,
 })
   .allow(null)
@@ -15,57 +14,51 @@ export default class HackerNewsUserKarma extends BaseJsonService {
 
   static route = {
     base: 'hackernews/user-karma',
-    pattern: ':userid',
+    pattern: ':id',
   }
 
   static examples = [
     {
       title: 'HackerNews User Karma',
-      namedParams: { userid: 'drumstick' },
-      staticPreview: this.render({ userid: 'drumstick', karma: 15536 }),
+      namedParams: { id: 'drumstick' },
+      staticPreview: this.render({ id: 'drumstick', karma: 15536 }),
     },
   ]
 
   static defaultBadgeData = {
-    label: 'HackerNews User Karma',
+    label: 'Karma',
     namedLogo: 'ycombinator',
   }
 
-  static render({ karma, userid }) {
+  static render({ karma, id }) {
     const color = karma > 0 ? 'brightgreen' : karma === 0 ? 'orange' : 'red'
     return {
-      label: userid,
+      label: id,
       message: metric(karma),
       color,
       style: 'social',
     }
   }
 
-  async fetch({ userid }) {
+  async fetch({ id }) {
     return this._requestJson({
       schema,
-      url: `https://hacker-news.firebaseio.com/v0/user/${userid}.json`,
+      url: `https://hacker-news.firebaseio.com/v0/user/${id}.json`,
       errorMessages: {
         404: 'user not found',
       },
     })
   }
 
-  transform({ json }) {
+  async handle({ id }) {
+    const json = await this.fetch({ id })
     if (json == null) {
       throw new NotFound({ prettyMessage: 'user not found' })
     }
-
-    const { karma, id } = json
-    return { karma, id }
-  }
-
-  async handle({ userid }) {
-    const json = await this.fetch({ userid })
-    const { karma, id } = this.transform({ json })
+    const { karma } = json
     return this.constructor.render({
       karma,
-      userid: id,
+      id,
     })
   }
 }
