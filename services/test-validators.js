@@ -64,7 +64,7 @@ const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
 // Same as isMetric, but tests for negative numbers also.
 const isMetricAllowNegative = withRegex(
-  /^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]?|-[1-9][0-9]*[kMGTPEZY]?|-[1-9]\.[1-9][kMGTPEZY]?)$/
+  /^(0|-?[1-9][0-9]*[kMGTPEZY]?|-?[0-9]\.[0-9][kMGTPEZY])$/
 )
 
 /**
