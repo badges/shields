@@ -6,7 +6,9 @@ main_steps: &main_steps
 
     - run:
         name: Install dependencies
-        command: npm ci
+        command: |
+          npm install --dry-run
+          npm ci
         environment:
           # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
           # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
@@ -47,7 +49,9 @@ integration_steps: &integration_steps
 
     - run:
         name: Install dependencies
-        command: npm ci
+        command: |
+          npm install --dry-run
+          npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
 
@@ -68,7 +72,9 @@ services_steps: &services_steps
 
     - run:
         name: Install dependencies
-        command: npm ci
+        command: |
+          npm install --dry-run
+          npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
 
@@ -138,6 +144,9 @@ jobs:
   main:
     docker:
       - image: circleci/node:16
+        environment:
+          NPM_CONFIG_ENGINE_STRICT: 'true'
+          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
 
     <<: *main_steps
 
@@ -150,6 +159,9 @@ jobs:
   integration:
     docker:
       - image: circleci/node:16
+        environment:
+          NPM_CONFIG_ENGINE_STRICT: 'true'
+          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
       - image: redis
 
     <<: *integration_steps
@@ -184,12 +196,17 @@ jobs:
   frontend:
     docker:
       - image: circleci/node:16
+        environment:
+          NPM_CONFIG_ENGINE_STRICT: 'true'
+          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
     steps:
       - checkout
 
       - run:
           name: Install dependencies
-          command: npm ci
+          command: |
+            npm install --dry-run
+            npm ci
           environment:
             CYPRESS_INSTALL_BINARY: 0
 
@@ -225,6 +242,9 @@ jobs:
   services:
     docker:
       - image: circleci/node:16
+        environment:
+          NPM_CONFIG_ENGINE_STRICT: 'true'
+          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
 
     <<: *services_steps
 
@@ -237,6 +257,9 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:16.13.0
+        environment:
+          NPM_CONFIG_ENGINE_STRICT: 'true'
+          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
     steps:
       - checkout
 
@@ -247,7 +270,9 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: npm ci
+          command: |
+            npm install --dry-run
+            npm ci
 
       - run:
           name: Frontend build
