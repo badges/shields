@@ -20,8 +20,8 @@ export default class HackerNewsUserKarma extends BaseJsonService {
   static examples = [
     {
       title: 'HackerNews User Karma',
-      namedParams: { id: 'drumstick' },
-      staticPreview: this.render({ id: 'drumstick', karma: 15536 }),
+      namedParams: { id: 'pg' },
+      staticPreview: this.render({ id: 'pg', karma: 15536 }),
     },
   ]
 
