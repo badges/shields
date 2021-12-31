@@ -140,9 +140,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
+    "@babel/core": "^7.16.7",
     "@babel/polyfill": "^7.12.1",
-    "@babel/register": "7.16.5",
+    "@babel/register": "7.16.7",
     "@mapbox/react-click-to-select": "^2.2.1",
     "@types/chai": "^4.3.0",
     "@types/lodash.debounce": "^4.0.6",
@@ -153,11 +153,11 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "5.1.19",
-    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.3.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-preset-gatsby": "^2.2.0",
-    "c8": "^7.10.0",
+    "c8": "^7.11.0",
     "caller": "^1.0.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
@@ -234,7 +234,7 @@
     "start-server-and-test": "1.14.0",
     "styled-components": "^5.3.3",
     "ts-mocha": "^8.0.0",
-    "tsd": "^0.19.0",
+    "tsd": "^0.19.1",
     "typescript": "^4.5.4"
   },
   "engines": {
