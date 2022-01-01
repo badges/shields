@@ -4,6 +4,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-01-01
+
+- minor [reddit] improvements [#7436](https://github.com/badges/shields/issues/7436)
+- [HackerNews] Show User Karma [#7411](https://github.com/badges/shields/issues/7411)
+- [YouTube] Drop support for removed dislikes [#7410](https://github.com/badges/shields/issues/7410)
+- change closed GitHub issue color to purple [#7374](https://github.com/badges/shields/issues/7374)
+- restore cors header injection from #4171 [#4255](https://github.com/badges/shields/issues/4255)
+- [GithubPackageJson] Get version from monorepo subfolder package.json [#7350](https://github.com/badges/shields/issues/7350)
+- Dependency updates
+
 ## server-2021-12-01
 
 - Send better user-agent values [#7309](https://github.com/badges/shields/issues/7309)
