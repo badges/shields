@@ -8,21 +8,10 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - minor [reddit] improvements [#7436](https://github.com/badges/shields/issues/7436)
 - [HackerNews] Show User Karma [#7411](https://github.com/badges/shields/issues/7411)
-- ignore @types/node updates (for now) [#7430](https://github.com/badges/shields/issues/7430)
-- chore: remove old email from package.json [#7413](https://github.com/badges/shields/issues/7413)
 - [YouTube] Drop support for removed dislikes [#7410](https://github.com/badges/shields/issues/7410)
-- check engine and peer deps before installing [#7403](https://github.com/badges/shields/issues/7403)
-- deps: remove unused babel-plugin-istanbul [#7414](https://github.com/badges/shields/issues/7414)
 - change closed GitHub issue color to purple [#7374](https://github.com/badges/shields/issues/7374)
-- fix: update filtering logic for useless dep bumps [#7376](https://github.com/badges/shields/issues/7376)
-- update [codacy] tests/examples [#7355](https://github.com/badges/shields/issues/7355)
-- throw on unexpected keys in `expectBadge()` [#7354](https://github.com/badges/shields/issues/7354)
-- restore cors header injection from #4171, run [npm travis] [#4255](https://github.com/badges/shields/issues/4255)
+- restore cors header injection from #4171 [#4255](https://github.com/badges/shields/issues/4255)
 - [GithubPackageJson] Get version from monorepo subfolder package.json [#7350](https://github.com/badges/shields/issues/7350)
-- update raster proxy docs [#7348](https://github.com/badges/shields/issues/7348)
-- tests: fix Jenkins Coverage service test [#7323](https://github.com/badges/shields/issues/7323)
-- tests: fix GitLab Tag service test [#7322](https://github.com/badges/shields/issues/7322)
-- tests: increase timeout for tokei gitlab tests [#7275](https://github.com/badges/shields/issues/7275)
 - Dependency updates
 
 ## server-2021-12-01
