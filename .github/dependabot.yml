@@ -9,6 +9,13 @@ updates:
       time: '12:00'
     open-pull-requests-limit: 99
     ignore:
+      # https://github.com/badges/shields/issues/7324
+      # https://github.com/badges/shields/issues/7447
+      # we're stuck with these versions until Safari is compatible with lookbehind regex syntax
+      # https://caniuse.com/js-regexp-lookbehind
+      - dependency-name: 'decamelize'
+      - dependency-name: 'humanize-string'
+
       # https://github.com/badges/shields/pull/7288#issuecomment-974699240
       - dependency-name: '@types/node'
 
