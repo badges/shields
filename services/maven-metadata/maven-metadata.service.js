@@ -52,7 +52,7 @@ export default class MavenMetadata extends BaseXmlService {
     return this._requestXml({
       schema,
       url: metadataUrl,
-      parserOptions: { parseNodeValue: false },
+      parserOptions: { parseTagValue: false },
     })
   }
 
