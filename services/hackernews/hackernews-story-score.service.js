@@ -8,7 +8,7 @@ const schema = Joi.object({
   .allow(null)
   .required()
 
-export default class HackerNewsUserKarma extends BaseJsonService {
+export default class HackerNewsStoryScore extends BaseJsonService {
   static category = 'analysis'
 
   static route = {
