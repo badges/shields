@@ -48,7 +48,7 @@ describe('BaseGraphqlService', function () {
       expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/graphql',
         {
-          body: '{"query":"{\\n  requiredString\\n}\\n","variables":{}}',
+          body: '{"query":"{\\n  requiredString\\n}","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
         }
@@ -80,7 +80,7 @@ describe('BaseGraphqlService', function () {
       expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/graphql',
         {
-          body: '{"query":"{\\n  requiredString\\n}\\n","variables":{}}',
+          body: '{"query":"{\\n  requiredString\\n}","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
           searchParams: { queryParam: 123 },
