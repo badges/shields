@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, NotFound } from '../index.js'
-import getColorOfBadge from './hackernews-helper'
+import getColorOfBadge from './hackernews-helper.js'
 
 const schema = Joi.object({
   score: Joi.number(),
