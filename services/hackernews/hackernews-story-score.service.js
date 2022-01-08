@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, NotFound } from '../index.js'
+import getColorOfBadge from './hackernews-helper'
 
 const schema = Joi.object({
   score: Joi.number(),
@@ -30,7 +31,7 @@ export default class HackerNewsStoryScore extends BaseJsonService {
   }
 
   static render({ score }) {
-    const color = score > 0 ? 'brightgreen' : score === 0 ? 'orange' : 'red'
+    const color = getColorOfBadge(score)
     return {
       label: 'score',
       message: metric(score),

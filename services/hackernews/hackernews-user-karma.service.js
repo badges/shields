@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, NotFound } from '../index.js'
 import { anyInteger } from '../validators.js'
+import getColorOfBadge from './hackernews-helper.js'
 
 const schema = Joi.object({
   karma: anyInteger,
@@ -31,7 +32,7 @@ export default class HackerNewsUserKarma extends BaseJsonService {
   }
 
   static render({ karma, id }) {
-    const color = karma > 0 ? 'brightgreen' : karma === 0 ? 'orange' : 'red'
+    const color = getColorOfBadge(karma)
     return {
       label: id,
       message: metric(karma),
