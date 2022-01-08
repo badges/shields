@@ -165,7 +165,7 @@
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
-    "concurrently": "^6.5.1",
+    "concurrently": "^7.0.0",
     "cypress": "^9.2.0",
     "danger": "^10.7.1",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
