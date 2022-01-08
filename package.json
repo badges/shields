@@ -58,7 +58,7 @@
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^14.0.1",
     "qs": "^6.10.2",
-    "query-string": "^7.0.1",
+    "query-string": "^7.1.0",
     "semver": "~7.3.5",
     "simple-icons": "6.4.0",
     "webextension-store-meta": "^1.0.5",
