@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
-import getColorOfBadge from './hackernews-helper.js'
+import { NotFound } from '../index.js'
+import HackerNewsBase, { getColorOfBadge } from './hackernews-base.js'
 
 const schema = Joi.object({
   descendants: Joi.number(),
@@ -9,11 +9,11 @@ const schema = Joi.object({
   .allow(null)
   .required()
 
-export default class HackerNewsStoryComments extends BaseJsonService {
+export default class HackerNewsStoryComments extends HackerNewsBase {
   static category = 'analysis'
 
   static route = {
-    base: 'hackernews/story/comments',
+    base: 'hackernews/item/comments',
     pattern: ':id',
   }
 
@@ -27,7 +27,6 @@ export default class HackerNewsStoryComments extends BaseJsonService {
 
   static defaultBadgeData = {
     label: 'comments',
-    namedLogo: 'ycombinator',
   }
 
   static render({ comments }) {
@@ -40,12 +39,9 @@ export default class HackerNewsStoryComments extends BaseJsonService {
   }
 
   async fetch({ id }) {
-    return this._requestJson({
+    return super.fetchHNStory({
       schema,
-      url: `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
-      errorMessages: {
-        404: 'story not found',
-      },
+      id,
     })
   }
 

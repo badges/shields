@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, NotFound } from '../index.js'
 import { anyInteger } from '../validators.js'
-import getColorOfBadge from './hackernews-helper.js'
+import { getColorOfBadge } from './hackernews-base.js'
 
 const schema = Joi.object({
   karma: anyInteger,
