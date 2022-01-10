@@ -5,8 +5,10 @@ const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
   afterEach(function () {
+    nock.restore()
     nock.cleanAll()
     nock.enableNetConnect()
+    nock.activate()
   })
 }
 
