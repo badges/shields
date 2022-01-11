@@ -1,4 +1,4 @@
-import { isMetric } from '../test-validators.js'
+import { isMetricAllowNegative } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -6,21 +6,21 @@ t.create('user-karma (valid - link)')
   .get('/link/user_simulator.json')
   .expectBadge({
     label: 'u/user_simulator karma (link)',
-    message: isMetric,
+    message: isMetricAllowNegative,
   })
 
 t.create('user-karma (valid - comment')
   .get('/comment/user_simulator.json')
   .expectBadge({
     label: 'u/user_simulator karma (comment)',
-    message: isMetric,
+    message: isMetricAllowNegative,
   })
 
 t.create('user-karma (valid - combined)')
   .get('/combined/user_simulator.json')
   .expectBadge({
     label: 'u/user_simulator karma',
-    message: isMetric,
+    message: isMetricAllowNegative,
   })
 
 t.create('user-karma (non-existing user)')

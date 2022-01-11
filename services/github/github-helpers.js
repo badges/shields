@@ -10,8 +10,8 @@ const documentation = `
 </p>
 `
 
-function stateColor(s) {
-  return { open: '2cbe4e', closed: 'cb2431', merged: '6f42c1' }[s]
+function issueStateColor(s) {
+  return { open: '2cbe4e', closed: '6f42c1' }[s]
 }
 
 function errorMessagesFor(notFoundMessage = 'repo not found') {
@@ -33,7 +33,7 @@ const commentsColor = colorScale([1, 3, 10, 25], undefined, true)
 
 export {
   documentation,
-  stateColor,
+  issueStateColor,
   commentsColor,
   errorMessagesFor,
   transformErrors,
