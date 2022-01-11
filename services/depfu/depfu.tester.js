@@ -11,12 +11,16 @@ const isDependencyStatus = Joi.string().valid(
 export const t = new ServiceTester({ id: 'depfu', title: 'Depfu' })
 
 t.create('depfu dependencies (valid)')
-  .get('/depfu/example-ruby.json')
+  .get('/github/depfu/example-ruby.json')
   .expectBadge({
     label: 'dependencies',
     message: isDependencyStatus,
   })
 
 t.create('depfu dependencies (repo not found)')
-  .get('/pyvesb/emptyrepo.json')
+  .get('/github/pyvesb/emptyrepo.json')
   .expectBadge({ label: 'dependencies', message: 'not found' })
+
+t.create('legacy route (assume "github" as a default VCS)')
+  .get('/depfu/example-ruby.svg')
+  .expectRedirect('/depfu/github/depfu/example-ruby.svg')
