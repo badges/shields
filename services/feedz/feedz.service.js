@@ -11,6 +11,7 @@ const schema = Joi.object({
   items: Joi.array()
     .items(
       Joi.object({
+        '@id': Joi.string().required(),
         items: Joi.array().items(
           Joi.object({
             catalogEntry: Joi.object({
@@ -19,6 +20,18 @@ const schema = Joi.object({
           })
         ),
       }).required()
+    )
+    .default([]),
+}).required()
+
+const singlePageSchema = Joi.object({
+  items: Joi.array()
+    .items(
+      Joi.object({
+        catalogEntry: Joi.object({
+          version: Joi.string().required(),
+        }).required(),
+      })
     )
     .default([]),
 }).required()
@@ -80,6 +93,25 @@ class FeedzVersionService extends BaseJsonService {
     })
   }
 
+  async fetchItems({ json }) {
+    if (json.items.length > 0 && json.items.every(i => !i.catalogEntry)) {
+      const items = []
+      for (const item of json.items) {
+        const page = await this._requestJson({
+          schema: singlePageSchema,
+          url: item['@id'],
+          errorMessages: {
+            404: 'repository or package not found',
+          },
+        })
+        items.push(page)
+      }
+      return { items }
+    } else {
+      return json
+    }
+  }
+
   transform({ json, includePrereleases }) {
     const versions = json.items.flatMap(tl =>
       tl.items.map(i => stripBuildMetadata(i.catalogEntry.version))
@@ -95,7 +127,8 @@ class FeedzVersionService extends BaseJsonService {
     const includePrereleases = which === 'vpre'
     const baseUrl = this.apiUrl({ organization, repository })
     const json = await this.fetch({ baseUrl, packageName })
-    const version = this.transform({ json, includePrereleases })
+    const fetchedJson = await this.fetchItems({ json })
+    const version = this.transform({ json: fetchedJson, includePrereleases })
     return this.constructor.render({
       version,
       feed: FeedzVersionService.defaultBadgeData.label,
