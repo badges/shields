@@ -167,7 +167,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.0.0",
-    "cypress": "^9.2.0",
+    "cypress": "^9.2.1",
     "danger": "^10.8.0",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
