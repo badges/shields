@@ -234,7 +234,7 @@
     "snap-shot-it": "^7.9.6",
     "start-server-and-test": "1.14.0",
     "styled-components": "^5.3.3",
-    "ts-mocha": "^8.0.0",
+    "ts-mocha": "^9.0.2",
     "tsd": "^0.19.1",
     "typescript": "^4.5.4"
   },
