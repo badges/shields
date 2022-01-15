@@ -95,17 +95,17 @@ class FeedzVersionService extends BaseJsonService {
 
   async fetchItems({ json }) {
     if (json.items.length > 0 && json.items.every(i => !i.catalogEntry)) {
-      const items = []
-      for (const item of json.items) {
-        const page = await this._requestJson({
-          schema: singlePageSchema,
-          url: item['@id'],
-          errorMessages: {
-            404: 'repository or package not found',
-          },
-        })
-        items.push(page)
-      }
+      const items = await Promise.all(
+        json.items.map(i =>
+          this._requestJson({
+            schema: singlePageSchema,
+            url: i['@id'],
+            errorMessages: {
+              404: 'repository or package not found',
+            },
+          })
+        )
+      )
       return { items }
     } else {
       return json
