@@ -97,6 +97,14 @@ self-hosted Shields installation access to private repositories hosted on bitbuc
 Bitbucket badges use basic auth. Provide a username and password to give your
 self-hosted Shields installation access to a private Bitbucket Server instance.
 
+### Curseforge
+
+- `CURSEFORGE_API_TOKEN` (yml: `private.curseforge_api_token`)
+
+A [Curseforge API Token][cf_api_token] is required for accessing the curseforge API.
+
+[cf_api_token]: https://support.curseforge.com/en/support/solutions/articles/9000208346-about-the-curseforge-api-and-how-to-apply-for-a-key#key
+
 ### Discord
 
 Using a token for Dicsord is optional but will allow higher API rates.

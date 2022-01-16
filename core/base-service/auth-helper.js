@@ -151,6 +151,11 @@ class AuthHelper {
       : undefined
   }
 
+  _apiKeyHeader(apiKeyHeader) {
+    const { _pass: pass } = this
+    return this.isConfigured ? { [apiKeyHeader]: pass } : undefined
+  }
+
   static _mergeHeaders(requestParams, headers) {
     const {
       options: { headers: existingHeaders, ...restOptions } = {},
@@ -166,6 +171,12 @@ class AuthHelper {
       },
       ...rest,
     }
+  }
+
+  withApiKeyHeader(requestParams, header = 'x-api-key') {
+    return this._withAnyAuth(requestParams, requestParams =>
+      this.constructor._mergeHeaders(requestParams, this._apiKeyHeader(header))
+    )
   }
 
   withBearerAuthHeader(
