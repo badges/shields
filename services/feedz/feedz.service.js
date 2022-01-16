@@ -82,7 +82,9 @@ class FeedzVersionService extends BaseJsonService {
   }
 
   async fetchItems({ json }) {
-    if (json.items.length > 0 && json.items.every(i => !i.catalogEntry)) {
+    if (json.items.length === 0 || json.items.some(i => i.catalogEntry)) {
+      return json
+    } else {
       const items = await Promise.all(
         json.items.map(i =>
           this._requestJson({
@@ -95,8 +97,6 @@ class FeedzVersionService extends BaseJsonService {
         )
       )
       return { items }
-    } else {
-      return json
     }
   }
 
