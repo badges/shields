@@ -7,24 +7,8 @@ import {
   selectVersion,
 } from '../nuget/nuget-helpers.js'
 
-const schema = Joi.object({
-  items: Joi.array()
-    .items(
-      Joi.object({
-        '@id': Joi.string().required(),
-        items: Joi.array().items(
-          Joi.object({
-            catalogEntry: Joi.object({
-              version: Joi.string().required(),
-            }).required(),
-          })
-        ),
-      }).required()
-    )
-    .default([]),
-}).required()
-
 const singlePageSchema = Joi.object({
+  '@id': Joi.string().required(),
   items: Joi.array()
     .items(
       Joi.object({
@@ -34,6 +18,10 @@ const singlePageSchema = Joi.object({
       })
     )
     .default([]),
+}).required()
+
+const packageSchema = Joi.object({
+  items: Joi.array().items(singlePageSchema).default([]),
 }).required()
 
 class FeedzVersionService extends BaseJsonService {
@@ -85,7 +73,7 @@ class FeedzVersionService extends BaseJsonService {
       'RegistrationsBaseUrl'
     )
     return await this._requestJson({
-      schema,
+      schema: packageSchema,
       url: `${registrationsBaseUrl}${packageName}/index.json`,
       errorMessages: {
         404: 'repository or package not found',
