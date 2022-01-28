@@ -12,6 +12,7 @@ nvm use $NODE_VERSION
 # Stricter.
 set -euo pipefail
 node --version
+npm --version
 
 # Install the shields.io dependencies.
 npm ci
