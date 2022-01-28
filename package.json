@@ -160,7 +160,7 @@
     "babel-preset-gatsby": "^2.5.1",
     "c8": "^7.11.0",
     "caller": "^1.0.1",
-    "chai": "^4.3.4",
+    "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "chai-datetime": "^1.8.0",
     "chai-string": "^1.4.0",
