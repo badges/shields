@@ -26,7 +26,7 @@
     "@sentry/node": "^6.16.1",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
-    "bytes": "^3.1.1",
+    "bytes": "^3.1.2",
     "camelcase": "^6.3.0",
     "chalk": "^5.0.0",
     "check-node-version": "^4.2.1",
