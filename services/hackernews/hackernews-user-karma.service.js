@@ -33,7 +33,7 @@ export default class HackerNewsUserKarma extends BaseJsonService {
   static render({ karma, id }) {
     const color = karma > 0 ? 'brightgreen' : karma === 0 ? 'orange' : 'red'
     return {
-      label: id,
+      label: `U/${id} karma`,
       message: metric(karma),
       color,
       style: 'social',

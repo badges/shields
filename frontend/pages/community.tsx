@@ -5,7 +5,6 @@ import Meta from '../components/meta'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import { BaseFont, GlobalStyle, H3 } from '../components/common'
-import Heroku from '../../static/images/heroku-logotype-horizontal-purple.svg'
 import NodePing from '../../static/images/nodeping.svg'
 import Sentry from '../../static/images/sentry-logo-black.svg'
 const MainContainer = styled(BaseFont)`
@@ -43,11 +42,6 @@ export default function SponsorsPage(): JSX.Element {
         ❤️ These companies help us by donating their services to shields:
         <ul style={{ listStyleType: 'none' }}>
           <SponsorItems>
-            <li>
-              <a href="https://www.heroku.com/">
-                <Heroku alt="heroku_logo" height={120} />
-              </a>
-            </li>
             <li>
               <a href="https://nodeping.com/">
                 <NodePing alt="nodeping_logo" height={60} />

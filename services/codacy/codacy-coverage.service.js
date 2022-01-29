@@ -16,14 +16,14 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
     {
       title: 'Codacy coverage',
       pattern: ':projectId',
-      namedParams: { projectId: 'e02de8d738bb4701b6345624ea2de66c' },
+      namedParams: { projectId: 'd5402a91aa7b4234bd1c19b5e86a63be' },
       staticPreview: this.render({ percentage: 90 }),
     },
     {
       title: 'Codacy branch coverage',
       pattern: ':projectId/:branch',
       namedParams: {
-        projectId: 'e02de8d738bb4701b6345624ea2de66c',
+        projectId: 'd5402a91aa7b4234bd1c19b5e86a63be',
         branch: 'master',
       },
       staticPreview: this.render({ percentage: 90 }),
