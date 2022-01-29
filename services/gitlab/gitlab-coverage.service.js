@@ -69,7 +69,7 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     },
     {
       title: 'Gitlab code coverage (self-hosted)',
-      namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+      namedParams: { user: 'GNOME', repo: 'at-spi2-core', branch: 'master' },
       queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
       staticPreview: this.render({ coverage: 93 }),
       documentation,
