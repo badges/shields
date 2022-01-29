@@ -35,7 +35,7 @@ export default class JetbrainsBase extends BaseXmlService {
 
   async fetchIntelliJPluginData({ pluginId, schema }) {
     const parserOptions = {
-      parseNodeValue: false,
+      parseTagValue: false,
       ignoreAttributes: false,
     }
     return this._requestXml({
