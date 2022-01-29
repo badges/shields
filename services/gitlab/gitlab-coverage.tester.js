@@ -47,7 +47,7 @@ t.create('Coverage (custom invalid job)')
   })
 
 t.create('Coverage (custom gitlab URL)')
-  .get('/GNOME/libhandy/master.json?gitlab_url=https://gitlab.gnome.org')
+  .get('/GNOME/at-spi2-core/master.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
