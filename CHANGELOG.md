@@ -6,17 +6,9 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2022-02-01
 
-- Fix [Drone] tests and examples [#7549](https://github.com/badges/shields/issues/7549)
-- Fix [GitlabCoverage] self-hosted test and example [#7548](https://github.com/badges/shields/issues/7548)
-- Fix [Nexus] test [#7547](https://github.com/badges/shields/issues/7547)
 - [Depfu] Add support for Gitlab [#7475](https://github.com/badges/shields/issues/7475)
-- remove heroku from sponsors [#7517](https://github.com/badges/shields/issues/7517)
 - replace label in hn-user-karma with U/ [#7500](https://github.com/badges/shields/issues/7500)
 - Support [Feedz] response with multiple pages without items [#7476](https://github.com/badges/shields/issues/7476)
-- Fix [CodacyCoverage] tests and examples [#7470](https://github.com/badges/shields/issues/7470)
-- Fix [CodeFactor] tests and example [#7471](https://github.com/badges/shields/issues/7471)
-- Fix [Nexus] tests [#7472](https://github.com/badges/shields/issues/7472)
-- Fix c8 coverage [#7468](https://github.com/badges/shields/issues/7468)
 - revert decamelize and humanize-string to old versions [#7449](https://github.com/badges/shields/issues/7449)
 - Dependency updates
 
