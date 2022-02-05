@@ -94,6 +94,8 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - Cauditor
 - CocoaPods Apps
 - CocoaPods Downloads
+- Codetally
+- continuousphp
 - Coverity
 - Dockbit
 - Dotnet Status
