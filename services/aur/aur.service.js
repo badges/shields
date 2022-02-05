@@ -42,7 +42,7 @@ class BaseAurService extends BaseJsonService {
     // https://wiki.archlinux.org/index.php/Aurweb_RPC_interface
     return this._requestJson({
       schema: aurSchema,
-      url: 'https://aur.archlinux.org/rpc.php',
+      url: 'https://aur.archlinux.org/rpc',
       options: { searchParams: { v: 5, type: 'info', arg: packageName } },
     })
   }
