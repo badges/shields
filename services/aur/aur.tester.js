@@ -45,7 +45,7 @@ t.create('license (no license)')
   .get('/license/vscodium-bin.json')
   .intercept(nock =>
     nock('https://aur.archlinux.org')
-      .get('/rpc.php')
+      .get('/rpc')
       .query({
         v: 5,
         type: 'info',
