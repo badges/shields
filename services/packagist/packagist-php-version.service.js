@@ -96,7 +96,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  async transform({ json, user, repo, version = '', server }) {
+  async getPhpVersion({ json, user, repo, version = '', server }) {
     let packageVersion
     const decompressed = this.decompressResponse(
       json,
@@ -141,7 +141,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
       schema: allVersionsSchema,
       server,
     })
-    const { phpVersion } = await this.transform({
+    const { phpVersion } = await this.getPhpVersion({
       json: allData,
       user,
       repo,

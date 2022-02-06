@@ -23,7 +23,7 @@ describe('PackagistPhpVersion', function () {
 
   it('should throw NotFound when package version is missing', async function () {
     await expect(
-      PackagistPhpVersion.prototype.transform({
+      PackagistPhpVersion.prototype.getPhpVersion({
         json,
         user: 'frodo',
         repo: 'the-one-package',
@@ -51,7 +51,7 @@ describe('PackagistPhpVersion', function () {
       },
     }
     await expect(
-      PackagistPhpVersion.prototype.transform({
+      PackagistPhpVersion.prototype.getPhpVersion({
         json: specJson,
         user: 'frodo',
         repo: 'the-one-package',
@@ -79,7 +79,7 @@ describe('PackagistPhpVersion', function () {
       },
     }
     await expect(
-      PackagistPhpVersion.prototype.transform({
+      PackagistPhpVersion.prototype.getPhpVersion({
         json: specJson,
         user: 'frodo',
         repo: 'the-one-package',
@@ -90,7 +90,7 @@ describe('PackagistPhpVersion', function () {
 
   it('should return PHP version for the default release', async function () {
     expect(
-      await PackagistPhpVersion.prototype.transform({
+      await PackagistPhpVersion.prototype.getPhpVersion({
         json,
         user: 'frodo',
         repo: 'the-one-package',
@@ -102,7 +102,7 @@ describe('PackagistPhpVersion', function () {
 
   it('should return PHP version for the specified release', async function () {
     expect(
-      await PackagistPhpVersion.prototype.transform({
+      await PackagistPhpVersion.prototype.getPhpVersion({
         json,
         user: 'frodo',
         repo: 'the-one-package',
