@@ -125,13 +125,9 @@ class BasePackagistService extends BaseJsonService {
     return expanded
   }
 
-  findLatestRelease(json, versions = []) {
-    json.forEach(version => {
-      versions.push(version.version)
-    })
-
+  findLatestRelease(json) {
+    const versions = json.map(version => version.version)
     const release = latest(versions.filter(isStable)) || latest(versions)
-
     return json.filter(version => version.version === release)[0]
   }
 }
