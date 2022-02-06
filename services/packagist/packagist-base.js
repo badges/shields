@@ -4,7 +4,7 @@ import { isStable, latest } from '../php-version.js'
 
 const packageSchema = Joi.array().items(
   Joi.object({
-    version: Joi.string(),
+    version: Joi.string().required(),
     require: Joi.object({
       php: Joi.string(),
     }),

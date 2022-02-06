@@ -12,8 +12,7 @@ import {
 
 const packageSchema = Joi.array().items(
   Joi.object({
-    version: Joi.string(),
-    extra: Joi.any(),
+    version: Joi.string().required(),
   })
 )
 
