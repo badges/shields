@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { compare, isStable, latest } from '../php-version.js'
+import { isStable, latest } from '../php-version.js'
 import { optionalUrl } from '../validators.js'
 import { NotFound, redirector } from '../index.js'
 import {
@@ -82,30 +82,7 @@ class PackagistVersion extends BasePackagistService {
 
   transform({ includePrereleases, json, user, repo }) {
     const versionsData = json.packages[this.getPackageName(user, repo)]
-
-    let versions = []
-    const aliasesMap = {}
-
-    versionsData.forEach(version => {
-      if (version.extra && version.extra['branch-alias']) {
-        // eg, version is 'dev-master', mapped to '2.0.x-dev'.
-        const validVersion =
-          version.extra['branch-alias'][
-            Object.keys(version.extra['branch-alias'])
-          ]
-        if (
-          aliasesMap[validVersion] === undefined ||
-          compare(aliasesMap[validVersion], validVersion) < 0
-        ) {
-          versions.push(validVersion)
-          aliasesMap[validVersion] = version.version
-        }
-      }
-
-      versions.push(version.version)
-    })
-
-    versions = versions.filter(version => !/^dev-/.test(version))
+    const versions = versionsData.map(version => version.version)
 
     if (includePrereleases) {
       return { version: latest(versions) }
