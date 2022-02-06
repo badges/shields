@@ -74,9 +74,6 @@ class PackagistVersion extends BasePackagistService {
   }
 
   static render({ version }) {
-    if (version === undefined) {
-      throw new NotFound({ prettyMessage: 'no released version found' })
-    }
     return renderVersionBadge({ version })
   }
 
@@ -104,6 +101,9 @@ class PackagistVersion extends BasePackagistService {
       server,
     })
     const { version } = this.transform({ includePrereleases, json, user, repo })
+    if (version === undefined) {
+      throw new NotFound({ prettyMessage: 'no released version found' })
+    }
     return this.constructor.render({ version })
   }
 }
