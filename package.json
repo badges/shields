@@ -167,7 +167,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.0.0",
-    "cypress": "^9.3.1",
+    "cypress": "^9.4.1",
     "danger": "^11.0.2",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
@@ -236,7 +236,8 @@
     "styled-components": "^5.3.3",
     "ts-mocha": "^9.0.2",
     "tsd": "^0.19.1",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "url": "^0.11.0"
   },
   "engines": {
     "node": "^16.13.0",
