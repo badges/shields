@@ -104,7 +104,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
     )
 
     if (version === '') {
-      packageVersion = this.findRelease(decompressed)
+      packageVersion = this.findLatestRelease(decompressed)
     } else {
       try {
         packageVersion = await this.findSpecifiedVersion(
@@ -114,7 +114,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
           version,
           server
         )
-      } catch {
+      } catch (e) {
         packageVersion = null
       }
     }

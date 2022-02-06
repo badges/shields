@@ -94,13 +94,6 @@ class BasePackagistService extends BaseJsonService {
     })
   }
 
-  getDefaultBranch(json, user, repo) {
-    const packageName = this.getPackageName(user, repo)
-    return Object.values(json.packages[packageName]).find(
-      b => b['default-branch'] === true
-    )
-  }
-
   getPackageName(user, repo) {
     return `${user.toLowerCase()}/${repo.toLowerCase()}`
   }
@@ -132,7 +125,7 @@ class BasePackagistService extends BaseJsonService {
     return expanded
   }
 
-  findRelease(json, versions = []) {
+  findLatestRelease(json, versions = []) {
     json.forEach(version => {
       versions.push(version.version)
     })

@@ -60,7 +60,7 @@ export default class PackagistLicense extends BasePackagistService {
 
     const decompressed = this.decompressResponse(json, packageName)
 
-    const version = this.findRelease(decompressed)
+    const version = this.findLatestRelease(decompressed)
 
     const license = version.license
 
