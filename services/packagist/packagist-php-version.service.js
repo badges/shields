@@ -84,12 +84,12 @@ export default class PackagistPhpVersion extends BasePackagistService {
           server,
         })
 
-        const decompressed = this.decompressResponse(
+        const versions = BasePackagistService.expandPackageVersions(
           allData,
           this.getPackageName(user, repo)
         )
 
-        return decompressed[this.findVersionIndex(decompressed, version)]
+        return versions[this.findVersionIndex(versions, version)]
       } catch (e) {
         return release
       }
@@ -98,17 +98,17 @@ export default class PackagistPhpVersion extends BasePackagistService {
 
   async getPhpVersion({ json, user, repo, version = '', server }) {
     let packageVersion
-    const decompressed = this.decompressResponse(
+    const versions = BasePackagistService.expandPackageVersions(
       json,
       this.getPackageName(user, repo)
     )
 
     if (version === '') {
-      packageVersion = this.findLatestRelease(decompressed)
+      packageVersion = this.findLatestRelease(versions)
     } else {
       try {
         packageVersion = await this.findSpecifiedVersion(
-          decompressed,
+          versions,
           user,
           repo,
           version,

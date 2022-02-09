@@ -98,29 +98,38 @@ class BasePackagistService extends BaseJsonService {
     return `${user.toLowerCase()}/${repo.toLowerCase()}`
   }
 
-  decompressResponse(json, packageName) {
+  /**
+   * Extract the array of minified versions of the given packageName,
+   * expand them back to their original format then return.
+   *
+   * @param {object} json The response of Packagist v2 API.
+   * @param {string} packageName The package name.
+   *
+   * @returns {object[]} An array of version metadata object.
+   *
+   * @see https://github.com/composer/metadata-minifier/blob/c549d23829536f0d0e984aaabbf02af91f443207/src/MetadataMinifier.php#L16-L46
+   */
+  static expandPackageVersions(json, packageName) {
     const versions = json.packages[packageName]
     const expanded = []
     let expandedVersion = null
 
-    versions.forEach(versionData => {
+    for (const i in versions) {
+      const versionData = versions[i]
       if (!expandedVersion) {
-        expandedVersion = versionData
+        expandedVersion = { ...versionData }
         expanded.push(expandedVersion)
+        continue
       }
 
-      Object.entries(versionData).forEach(([key, value]) => {
-        if (value === '__unset') {
+      expandedVersion = { ...expandedVersion, ...versionData }
+      for (const key in expandedVersion) {
+        if (expandedVersion[key] === '__unset') {
           delete expandedVersion[key]
-        } else {
-          expandedVersion[key] = value
         }
-      })
-
-      expandedVersion = { ...expandedVersion }
-
+      }
       expanded.push(expandedVersion)
-    })
+    }
 
     return expanded
   }
