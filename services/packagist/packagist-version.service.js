@@ -1,6 +1,5 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { isStable, latest } from '../php-version.js'
 import { optionalUrl } from '../validators.js'
 import { NotFound, redirector } from '../index.js'
 import {
@@ -77,18 +76,6 @@ class PackagistVersion extends BasePackagistService {
     return renderVersionBadge({ version })
   }
 
-  transform({ includePrereleases, json, user, repo }) {
-    const versionsData = json.packages[this.getPackageName(user, repo)]
-    const versions = versionsData.map(version => version.version)
-
-    if (includePrereleases) {
-      return { version: latest(versions) }
-    } else {
-      const stableVersion = latest(versions.filter(isStable))
-      return { version: stableVersion || latest(versions) }
-    }
-  }
-
   async handle(
     { user, repo },
     { include_prereleases: includePrereleases, server }
@@ -100,7 +87,8 @@ class PackagistVersion extends BasePackagistService {
       schema: includePrereleases ? schema : allVersionsSchema,
       server,
     })
-    const { version } = this.transform({ includePrereleases, json, user, repo })
+    const versions = json.packages[this.getPackageName(user, repo)]
+    const { version } = this.findLatestRelease(versions, includePrereleases)
     if (version === undefined) {
       throw new NotFound({ prettyMessage: 'no released version found' })
     }

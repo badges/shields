@@ -134,10 +134,21 @@ class BasePackagistService extends BaseJsonService {
     return expanded
   }
 
-  findLatestRelease(json) {
-    const versions = json.map(version => version.version)
-    const release = latest(versions.filter(isStable)) || latest(versions)
-    return json.filter(version => version.version === release)[0]
+  /**
+   * Find the object representation of the latest release.
+   *
+   * @param {object[]} versions An array of object representing a version.
+   * @param {boolean} includePrereleases Includes pre-release semver for the search.
+   *
+   * @returns {object} The object of the latest version.
+   */
+  findLatestRelease(versions, includePrereleases = false) {
+    const versionStrings = versions.map(version => version.version)
+    let release = latest(versionStrings)
+    if (!includePrereleases) {
+      release = latest(versionStrings.filter(isStable)) || release
+    }
+    return versions.filter(version => version.version === release)[0]
   }
 }
 
