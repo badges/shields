@@ -123,11 +123,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
-    if (
-      !packageVersion.require ||
-      !packageVersion.require.php ||
-      packageVersion.require.php === '__unset'
-    ) {
+    if (!packageVersion.require || !packageVersion.require.php) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
