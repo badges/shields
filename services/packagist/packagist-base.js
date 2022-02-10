@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, NotFound } from '../index.js'
 import { isStable, latest } from '../php-version.js'
 
 const packageSchema = Joi.array().items(
@@ -141,9 +141,21 @@ class BasePackagistService extends BaseJsonService {
    * @param {boolean} includePrereleases Includes pre-release semver for the search.
    *
    * @returns {object} The object of the latest version.
+   * @throws {NotFound} Thrown if there is no item from the version array.
    */
   findLatestRelease(versions, includePrereleases = false) {
-    const versionStrings = versions.map(version => version.version)
+    // Find the latest version string, if not found, throw NotFound.
+    const versionStrings = versions
+      .filter(
+        version =>
+          typeof version.version === 'string' ||
+          version.version instanceof String
+      )
+      .map(version => version.version)
+    if (versionStrings.length < 1) {
+      throw new NotFound({ prettyMessage: 'no released version found' })
+    }
+
     let release = latest(versionStrings)
     if (!includePrereleases) {
       release = latest(versionStrings.filter(isStable)) || release

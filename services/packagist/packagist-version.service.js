@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
 import { optionalUrl } from '../validators.js'
-import { NotFound, redirector } from '../index.js'
+import { redirector } from '../index.js'
 import {
   allVersionsSchema,
   keywords,
@@ -89,9 +89,6 @@ class PackagistVersion extends BasePackagistService {
     })
     const versions = json.packages[this.getPackageName(user, repo)]
     const { version } = this.findLatestRelease(versions, includePrereleases)
-    if (version === undefined) {
-      throw new NotFound({ prettyMessage: 'no released version found' })
-    }
     return this.constructor.render({ version })
   }
 }

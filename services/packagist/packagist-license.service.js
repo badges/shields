@@ -64,10 +64,6 @@ export default class PackagistLicense extends BasePackagistService {
     )
 
     const version = this.findLatestRelease(versions)
-    if (version === undefined) {
-      throw new NotFound({ prettyMessage: 'no released version found' })
-    }
-
     const license = version.license
     if (!license) {
       throw new NotFound({ prettyMessage: 'license not found' })
