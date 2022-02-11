@@ -73,7 +73,7 @@ describe('PackagistPhpVersion', function () {
           },
           {
             version: '1.0.0',
-            require: { php: '__unset' },
+            require: '__unset',
           },
         ],
       },
