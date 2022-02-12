@@ -2,7 +2,7 @@ import moment from 'moment'
 import { InvalidResponse } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import BaseWordpress from './wordpress-base.js'
+import { documentation, BaseWordpress } from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -35,6 +35,7 @@ function LastUpdateForType(extensionType) {
         title: `WordPress ${capt} Last Updated`,
         namedParams: { slug: exampleSlug },
         staticPreview: this.render({ lastUpdated: '2020-08-11' }),
+        documentation,
       },
     ]
 
