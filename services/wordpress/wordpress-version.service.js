@@ -1,6 +1,6 @@
 import { addv } from '../text-formatters.js'
 import { version as versionColor } from '../color-formatters.js'
-import BaseWordpress from './wordpress-base.js'
+import { documentation, BaseWordpress } from './wordpress-base.js'
 
 function VersionForExtensionType(extensionType) {
   const { capt, exampleSlug } = {
@@ -29,6 +29,7 @@ function VersionForExtensionType(extensionType) {
         title: `WordPress ${capt} Version`,
         namedParams: { slug: exampleSlug },
         staticPreview: this.render({ version: 2.5 }),
+        documentation,
       },
     ]
 
