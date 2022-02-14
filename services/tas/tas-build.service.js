@@ -43,7 +43,7 @@ export default class TasBuildStatus extends BaseJsonService {
   async fetch({ provider, org, repo }) {
     return this._requestJson({
       schema,
-      url: `https://stage-api.tas.lambdatest.com/repo/badge?git_provider=${provider}&org=${org}&repo=${repo}`,
+      url: `https://api.tas.lambdatest.com/repo/badge?git_provider=${provider}&org=${org}&repo=${repo}`,
       errorMessages: {
         401: 'private application not supported',
         404: 'application not found',
