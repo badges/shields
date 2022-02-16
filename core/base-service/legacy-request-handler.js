@@ -1,11 +1,7 @@
-import request from 'request'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import { setCacheHeaders } from './cache-headers.js'
-import { Inaccessible, InvalidResponse, ShieldsRuntimeError } from './errors.js'
 import { makeSend } from './legacy-result-sender.js'
 import coalesceBadge from './coalesce-badge.js'
-
-const userAgent = 'Shields.io/2003a'
 
 // These query parameters are available to any badge. They are handled by
 // `coalesceBadge`.
@@ -32,32 +28,12 @@ function flattenQueryParams(queryParams) {
   return Array.from(union).sort()
 }
 
-function promisify(cachingRequest) {
-  return (uri, options) =>
-    new Promise((resolve, reject) => {
-      cachingRequest(uri, options, (err, res, buffer) => {
-        if (err) {
-          if (err instanceof ShieldsRuntimeError) {
-            reject(err)
-          } else {
-            // Wrap the error in an Inaccessible so it can be identified
-            // by the BaseService handler.
-            reject(new Inaccessible({ underlyingError: err }))
-          }
-        } else {
-          resolve({ res, buffer })
-        }
-      })
-    })
-}
-
 // handlerOptions can contain:
 // - handler: The service's request handler function
 // - queryParams: An array of the field names of any custom query parameters
 //   the service uses
 // - cacheLength: An optional badge or category-specific cache length
 //   (in number of seconds) to be used in preference to the default
-// - fetchLimitBytes: A limit on the response size we're willing to parse
 //
 // For safety, the service must declare the query parameters it wants to use.
 // Only the declared parameters (and the global parameters) are provided to
@@ -77,8 +53,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   }
 
   const allowedKeys = flattenQueryParams(handlerOptions.queryParams)
-  const { cacheLength: serviceDefaultCacheLengthSeconds, fetchLimitBytes } =
-    handlerOptions
+  const { cacheLength: serviceDefaultCacheLengthSeconds } = handlerOptions
 
   return (queryParams, match, end, ask) => {
     /*
@@ -139,40 +114,6 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       makeSend(extension, ask.res, end)(svg)
     }, 25000)
 
-    function cachingRequest(uri, options, callback) {
-      if (typeof options === 'function' && !callback) {
-        callback = options
-      }
-      if (options && typeof options === 'object') {
-        options.uri = uri
-      } else if (typeof uri === 'string') {
-        options = { uri }
-      } else {
-        options = uri
-      }
-      options.headers = options.headers || {}
-      options.headers['User-Agent'] = userAgent
-
-      let bufferLength = 0
-      const r = request(options, callback)
-      r.on('data', chunk => {
-        bufferLength += chunk.length
-        if (bufferLength > fetchLimitBytes) {
-          r.abort()
-          r.emit(
-            'error',
-            new InvalidResponse({
-              prettyMessage: 'Maximum response size exceeded',
-            })
-          )
-        }
-      })
-    }
-
-    // Wrapper around `cachingRequest` that returns a promise rather than needing
-    // to pass a callback.
-    cachingRequest.asPromise = promisify(cachingRequest)
-
     const result = handlerOptions.handler(
       filteredQueryParams,
       match,
@@ -187,8 +128,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         const svg = makeBadge(badgeData)
         setCacheHeadersOnResponse(ask.res, badgeData.cacheLengthSeconds)
         makeSend(format, ask.res, end)(svg)
-      },
-      cachingRequest
+      }
     )
     // eslint-disable-next-line promise/prefer-await-to-then
     if (result && result.catch) {
@@ -200,4 +140,4 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
   }
 }
 
-export { handleRequest, promisify, userAgent }
+export { handleRequest }

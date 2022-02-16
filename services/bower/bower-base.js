@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import LibrariesIoBase from '../librariesio/librariesio-base.js'
 
 const schema = Joi.object()
   .keys({
@@ -17,11 +17,11 @@ const schema = Joi.object()
   })
   .required()
 
-export default class BaseBowerService extends BaseJsonService {
+export default class BaseBowerService extends LibrariesIoBase {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
-      url: `https://libraries.io/api/bower/${packageName}`,
+      url: `/bower/${packageName}`,
       errorMessages: {
         404: 'package not found',
       },

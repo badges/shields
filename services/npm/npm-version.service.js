@@ -34,14 +34,14 @@ export default class NpmVersion extends NpmBase {
     {
       title: 'npm (tag)',
       pattern: ':packageName/:tag',
-      namedParams: { packageName: 'npm', tag: 'next' },
+      namedParams: { packageName: 'npm', tag: 'next-8' },
       staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
       keywords,
     },
     {
       title: 'npm (custom registry)',
       pattern: ':packageName/:tag',
-      namedParams: { packageName: 'npm', tag: 'next' },
+      namedParams: { packageName: 'npm', tag: 'next-8' },
       queryParams: { registry_uri: 'https://registry.npmjs.com' },
       staticPreview: this.render({ tag: 'latest', version: '7.0.0' }),
       keywords,

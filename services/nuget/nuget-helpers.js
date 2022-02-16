@@ -1,8 +1,7 @@
-import { promisify } from 'util'
 import semver from 'semver'
 import { metric, addv } from '../text-formatters.js'
 import { downloadCount as downloadCountColor } from '../color-formatters.js'
-import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { getCachedResource } from '../../core/base-service/resource-cache.js'
 
 function renderVersionBadge({ version, feed }) {
   let color
@@ -52,7 +51,7 @@ function randomElementFrom(items) {
  */
 async function searchServiceUrl(baseUrl, serviceType = 'SearchQueryService') {
   // Should we really be caching all these NuGet feeds in memory?
-  const searchQueryServices = await promisify(regularUpdate)({
+  const searchQueryServices = await getCachedResource({
     url: `${baseUrl}/index.json`,
     // The endpoint changes once per year (ie, a period of n = 1 year).
     // We minimize the users' waiting time for information.
@@ -62,8 +61,7 @@ async function searchServiceUrl(baseUrl, serviceType = 'SearchQueryService') {
     // right endpoint.
     // So the waiting time within n years is n*l/x + x years, for which a
     // derivation yields an optimum at x = sqrt(n*l), roughly 42 minutes.
-    intervalMillis: 42 * 60 * 1000,
-    json: true,
+    ttl: 42 * 60 * 1000,
     scraper: json =>
       json.resources.filter(resource => resource['@type'] === serviceType),
   })

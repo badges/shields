@@ -29,7 +29,7 @@ export default class OpmVersion extends BaseService {
       url: `https://opm.openresty.org/api/pkg/fetch`,
       options: {
         method: 'HEAD',
-        qs: {
+        searchParams: {
           account: user,
           name: moduleName,
         },
@@ -40,7 +40,7 @@ export default class OpmVersion extends BaseService {
     })
 
     // TODO: set followRedirect to false and intercept 302 redirects
-    const location = res.request.redirects[0]
+    const location = res.redirectUrls[0].toString()
     if (!location) {
       throw new NotFound({ prettyMessage: 'module not found' })
     }

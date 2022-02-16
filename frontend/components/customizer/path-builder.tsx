@@ -149,14 +149,17 @@ export default function PathBuilder({
     }
   }, [tokens, namedParams, onChange])
 
-  function handleTokenChange({
-    target: { name, value },
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
-    setNamedParams({
-      ...namedParams,
-      [name]: value,
-    })
-  }
+  const handleTokenChange = React.useCallback(
+    function ({
+      target: { name, value },
+    }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+      setNamedParams({
+        ...namedParams,
+        [name]: value,
+      })
+    },
+    [setNamedParams, namedParams]
+  )
 
   function renderLiteral(
     literal: string,

@@ -100,7 +100,7 @@ class TwitterFollow extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `http://cdn.syndication.twimg.com/widgets/followbutton/info.json`,
-      options: { qs: { screen_names: user } },
+      options: { searchParams: { screen_names: user } },
     })
   }
 

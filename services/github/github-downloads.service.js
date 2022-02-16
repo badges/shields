@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { NotFound } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchLatestRelease } from './github-common-release.js'
@@ -43,7 +42,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       },
       staticPreview: this.render({
         assetName: 'total',
-        downloadCount: 857000,
+        downloads: 857000,
       }),
       documentation,
     },
@@ -58,7 +57,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'total',
-        downloadCount: 27000,
+        downloads: 27000,
       }),
       documentation,
     },
@@ -74,7 +73,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'total',
-        downloadCount: 27000,
+        downloads: 27000,
       }),
       documentation,
     },
@@ -89,7 +88,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'total',
-        downloadCount: 2000,
+        downloads: 2000,
       }),
       documentation,
     },
@@ -105,7 +104,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'total',
-        downloadCount: 2000,
+        downloads: 2000,
       }),
       documentation,
     },
@@ -120,7 +119,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'v0.190.0',
         assetName: 'total',
-        downloadCount: 490000,
+        downloads: 490000,
       }),
       documentation,
     },
@@ -136,7 +135,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'atom-amd64.deb',
-        downloadCount: 3000,
+        downloads: 3000,
       }),
       documentation,
     },
@@ -153,7 +152,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'atom-amd64.deb',
-        downloadCount: 3000,
+        downloads: 3000,
       }),
       documentation,
     },
@@ -169,7 +168,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'atom-amd64.deb',
-        downloadCount: 237,
+        downloads: 237,
       }),
       documentation,
     },
@@ -187,7 +186,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       staticPreview: this.render({
         tag: 'latest',
         assetName: 'atom-amd64.deb',
-        downloadCount: 237,
+        downloads: 237,
       }),
       documentation,
     },
@@ -195,19 +194,14 @@ export default class GithubDownloads extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'downloads', namedLogo: 'github' }
 
-  static render({ tag, assetName, downloadCount }) {
-    return {
-      label: tag ? `downloads@${tag}` : 'downloads',
-      message:
-        assetName === 'total'
-          ? metric(downloadCount)
-          : `${metric(downloadCount)} [${assetName}]`,
-      color: downloadCountColor(downloadCount),
-    }
+  static render({ tag: version, assetName, downloads }) {
+    const messageSuffixOverride =
+      assetName !== 'total' ? `[${assetName}]` : undefined
+    return renderDownloadsBadge({ downloads, messageSuffixOverride, version })
   }
 
   static transform({ releases, assetName }) {
-    const downloadCount = releases.reduce((accum1, { assets }) => {
+    const downloads = releases.reduce((accum1, { assets }) => {
       const filteredAssets =
         assetName === 'total'
           ? assets
@@ -217,12 +211,12 @@ export default class GithubDownloads extends GithubAuthV3Service {
       return (
         accum1 +
         filteredAssets.reduce(
-          (accum2, { download_count: downloadCount }) => accum2 + downloadCount,
+          (accum2, { download_count: downloads }) => accum2 + downloads,
           0
         )
       )
     }, 0)
-    return { downloadCount }
+    return { downloads }
   }
 
   async handle({ kind, user, repo, tag, assetName }, { sort }) {
@@ -246,7 +240,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       const allReleases = await this._requestJson({
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
-        options: { qs: { per_page: 500 } },
+        options: { searchParams: { per_page: 500 } },
         errorMessages: errorMessagesFor('repo not found'),
       })
       releases = allReleases
@@ -256,11 +250,11 @@ export default class GithubDownloads extends GithubAuthV3Service {
       throw new NotFound({ prettyMessage: 'no releases' })
     }
 
-    const { downloadCount } = this.constructor.transform({
+    const { downloads } = this.constructor.transform({
       releases,
       assetName,
     })
 
-    return this.constructor.render({ tag, assetName, downloadCount })
+    return this.constructor.render({ tag, assetName, downloads })
   }
 }

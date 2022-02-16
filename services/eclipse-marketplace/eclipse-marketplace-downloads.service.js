@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { downloadCount as downloadCountColor } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
@@ -20,16 +19,16 @@ const totalResponseSchema = Joi.object({
   }),
 }).required()
 
-function DownloadsForInterval(interval) {
+function DownloadsForInterval(downloadsInterval) {
   const {
     base,
     schema,
-    messageSuffix = '',
+    interval = '',
     name,
   } = {
     month: {
       base: 'eclipse-marketplace/dm',
-      messageSuffix: '/month',
+      interval: 'month',
       schema: monthlyResponseSchema,
       name: 'EclipseMarketplaceDownloadsMonth',
     },
@@ -38,7 +37,7 @@ function DownloadsForInterval(interval) {
       schema: totalResponseSchema,
       name: 'EclipseMarketplaceDownloadsTotal',
     },
-  }[interval]
+  }[downloadsInterval]
 
   return class EclipseMarketplaceDownloads extends EclipseMarketplaceBase {
     static name = name
@@ -53,16 +52,13 @@ function DownloadsForInterval(interval) {
     ]
 
     static render({ downloads }) {
-      return {
-        message: `${metric(downloads)}${messageSuffix}`,
-        color: downloadCountColor(downloads),
-      }
+      return renderDownloadsBadge({ downloads, interval })
     }
 
     async handle({ name }) {
       const { marketplace } = await this.fetch({ name, schema })
       const downloads =
-        interval === 'total'
+        downloadsInterval === 'total'
           ? marketplace.node.installstotal
           : marketplace.node.installsrecent
       return this.constructor.render({ downloads })

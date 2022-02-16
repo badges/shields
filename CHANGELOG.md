@@ -4,6 +4,83 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-02-01
+
+- [Depfu] Add support for Gitlab [#7475](https://github.com/badges/shields/issues/7475)
+- replace label in hn-user-karma with U/ [#7500](https://github.com/badges/shields/issues/7500)
+- Support [Feedz] response with multiple pages without items [#7476](https://github.com/badges/shields/issues/7476)
+- revert decamelize and humanize-string to old versions [#7449](https://github.com/badges/shields/issues/7449)
+- Dependency updates
+
+## server-2022-01-01
+
+- minor [reddit] improvements [#7436](https://github.com/badges/shields/issues/7436)
+- [HackerNews] Show User Karma [#7411](https://github.com/badges/shields/issues/7411)
+- [YouTube] Drop support for removed dislikes [#7410](https://github.com/badges/shields/issues/7410)
+- change closed GitHub issue color to purple [#7374](https://github.com/badges/shields/issues/7374)
+- restore cors header injection from #4171 [#4255](https://github.com/badges/shields/issues/4255)
+- [GithubPackageJson] Get version from monorepo subfolder package.json [#7350](https://github.com/badges/shields/issues/7350)
+- Dependency updates
+
+## server-2021-12-01
+
+- Send better user-agent values [#7309](https://github.com/badges/shields/issues/7309)
+  Self-hosting users now send a user agent which indicates the server version and starts `shields (self-hosted)/` by default.
+  This can be configured using the env var `USER_AGENT_BASE`
+- upgrade to node 16 [#7271](https://github.com/badges/shields/issues/7271)
+- feat: deprecate dependabot badges [#7274](https://github.com/badges/shields/issues/7274)
+- fix: npmversion tagged service test [#7269](https://github.com/badges/shields/issues/7269)
+- feat: create new Test Results category [#7218](https://github.com/badges/shields/issues/7218)
+- Migration from Request to Got for all HTTP requests is completed in this release
+- Dependency updates
+
+## server-2021-11-04
+
+- migrate regularUpdate() from request-->got [#7215](https://github.com/badges/shields/issues/7215)
+- migrate github badges to use got instead of request; affects [github librariesio] [#7212](https://github.com/badges/shields/issues/7212)
+- deprecate David badges [#7197](https://github.com/badges/shields/issues/7197)
+- fix: ensure libraries.io header values are processed numerically [#7196](https://github.com/badges/shields/issues/7196)
+- Add authentication for Libraries.io-based badges, run [Libraries Bower] [#7080](https://github.com/badges/shields/issues/7080)
+- fixes and tests for pipenv helpers [#7194](https://github.com/badges/shields/issues/7194)
+- add GitLab Release badge, run all [GitLab] [#7021](https://github.com/badges/shields/issues/7021)
+- set content-length header on badge responses [#7179](https://github.com/badges/shields/issues/7179)
+- fix [github] release/tag/download schema [#7170](https://github.com/badges/shields/issues/7170)
+- Supported nested groups on [GitLabPipeline] badge [#7159](https://github.com/badges/shields/issues/7159)
+- Support nested groups on [GitLabTag] badge [#7158](https://github.com/badges/shields/issues/7158)
+- Fixing incorrect JetBrains Plugin rating values for [JetBrainsRating] [#7140](https://github.com/badges/shields/issues/7140)
+- support using release or tag name in [GitHub] Release version badge [#7075](https://github.com/badges/shields/issues/7075)
+- feat: support branches in sonar badges [#7065](https://github.com/badges/shields/issues/7065)
+- Add [Modrinth] total downloads badge [#7132](https://github.com/badges/shields/issues/7132)
+- remove [github] admin routes [#7105](https://github.com/badges/shields/issues/7105)
+- Dependency updates
+
+## server-2021-10-04
+
+- feat: add 2021 support to GitHub Hacktoberfest [#7086](https://github.com/badges/shields/issues/7086)
+- Add [ClearlyDefined] service [#6944](https://github.com/badges/shields/issues/6944)
+- handle null licenses in crates.io response schema, run [crates] [#7074](https://github.com/badges/shields/issues/7074)
+- [OBS] add Open Build Service service-badge [#6993](https://github.com/badges/shields/issues/6993)
+- Correction of badges url in self-hosting configuration with a custom port. Issue 7025 [#7036](https://github.com/badges/shields/issues/7036)
+- fix: support gitlab token via env var [#7023](https://github.com/badges/shields/issues/7023)
+- Add API-based support for [GitLab] badges, add new GitLab Tag badge [#6988](https://github.com/badges/shields/issues/6988)
+- [freecodecamp]: allow + symbol in username [#7016](https://github.com/badges/shields/issues/7016)
+- Rename Riot to Element in Matrix badge help [#6996](https://github.com/badges/shields/issues/6996)
+- Fixed Reddit Negative Karma Issue [#6992](https://github.com/badges/shields/issues/6992)
+- Dependency updates
+
+## server-2021-09-01
+
+- use multi-stage build to reduce size of docker images [#6938](https://github.com/badges/shields/issues/6938)
+- remove disableStrictSsl param from [jenkins] [#6887](https://github.com/badges/shields/issues/6887)
+- refactor(GitHubCommitActivity): switch to v4/GraphQL API [#6959](https://github.com/badges/shields/issues/6959)
+- feat: add freecodecamp badge [#6958](https://github.com/badges/shields/issues/6958)
+- use the right version of NPM in docker build [#6941](https://github.com/badges/shields/issues/6941)
+- [TwitchExtensionVersion] New badge [#6900](https://github.com/badges/shields/issues/6900)
+- enforce strict SSL checking for [coverity] [#6886](https://github.com/badges/shields/issues/6886)
+- Update self hosting docs [#6877](https://github.com/badges/shields/issues/6877)
+- Support optionalDependencies in [GithubPackageJson] [#6749](https://github.com/badges/shields/issues/6749)
+- Dependency updates
+
 ## server-2021-08-01
 
 - use v5 API for [AUR] badges [#6836](https://github.com/badges/shields/issues/6836)

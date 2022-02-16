@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { downloadCount } from '../color-formatters.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
@@ -19,15 +18,15 @@ function getSchema({ formula }) {
 const periodMap = {
   dm: {
     api_field: '30d',
-    suffix: '/month',
+    interval: 'month',
   },
   dq: {
     api_field: '90d',
-    suffix: '/quarter',
+    interval: 'quarter',
   },
   dy: {
     api_field: '365d',
-    suffix: '/year',
+    interval: 'year',
   },
 }
 
@@ -43,18 +42,11 @@ export default class HomebrewDownloads extends BaseJsonService {
     {
       title: 'homebrew downloads',
       namedParams: { interval: 'dm', formula: 'cake' },
-      staticPreview: this.render({ interval: 'dm', downloads: 93 }),
+      staticPreview: renderDownloadsBadge({ interval: 'month', downloads: 93 }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
-
-  static render({ interval, downloads }) {
-    return {
-      message: `${metric(downloads)}${periodMap[interval].suffix}`,
-      color: downloadCount(downloads),
-    }
-  }
 
   async fetch({ formula }) {
     const schema = getSchema({ formula })
@@ -66,10 +58,12 @@ export default class HomebrewDownloads extends BaseJsonService {
   }
 
   async handle({ interval, formula }) {
-    const data = await this.fetch({ formula })
-    return this.constructor.render({
-      interval,
-      downloads: data.analytics.install[periodMap[interval].api_field][formula],
+    const {
+      analytics: { install },
+    } = await this.fetch({ formula })
+    return renderDownloadsBadge({
+      downloads: install[periodMap[interval].api_field][formula],
+      interval: periodMap[interval].interval,
     })
   }
 }

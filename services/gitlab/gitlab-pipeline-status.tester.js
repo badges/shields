@@ -3,16 +3,27 @@ import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'GitlabPipeline',
   title: 'Gitlab Pipeline',
-  pathPrefix: '/gitlab/pipeline',
+  pathPrefix: '/gitlab',
 })
 
-t.create('Pipeline status').get('/gitlab-org/gitlab/v10.7.6.json').expectBadge({
-  label: 'build',
-  message: isBuildStatus,
-})
+t.create('Pipeline status')
+  .get('/pipeline-status/gitlab-org/gitlab.json?branch=v10.7.6')
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
+
+t.create('Pipeline status (nested groups)')
+  .get(
+    '/pipeline-status/megabyte-labs/dockerfile/ci-pipeline/ansible-lint.json?branch=master'
+  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
 
 t.create('Pipeline status (nonexistent branch)')
-  .get('/gitlab-org/gitlab/nope-not-a-branch.json')
+  .get('/pipeline-status/gitlab-org/gitlab.json?branch=nope-not-a-branch')
   .expectBadge({
     label: 'build',
     message: 'branch not found',
@@ -26,19 +37,25 @@ t.create('Pipeline status (nonexistent branch)')
 // error message, we will simply display inaccessible
 // https://github.com/badges/shields/pull/5538
 t.create('Pipeline status (nonexistent repo)')
-  .get('/this-repo/does-not-exist/master.json')
+  .get('/pipeline-status/this-repo/does-not-exist.json?branch=master')
   .expectBadge({
     label: 'build',
     message: 'inaccessible',
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get('/GNOME/pango/master.json?gitlab_url=https://gitlab.gnome.org')
+  .get('/pipeline-status/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
   })
 
 t.create('Pipeline no branch redirect')
-  .get('/gitlab-org/gitlab.svg')
-  .expectRedirect('/gitlab/pipeline/gitlab-org/gitlab/master.svg')
+  .get('/pipeline/gitlab-org/gitlab.svg')
+  .expectRedirect('/gitlab/pipeline-status/gitlab-org/gitlab.svg?branch=master')
+
+t.create('Pipeline legacy route with branch redirect')
+  .get('/pipeline/gitlab-org/gitlab/v10.7.6?style=flat')
+  .expectRedirect(
+    '/gitlab/pipeline-status/gitlab-org/gitlab.svg?branch=v10.7.6&style=flat'
+  )

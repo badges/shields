@@ -1,12 +1,12 @@
 import Joi from 'joi'
-import { nonNegativeInteger } from '../validators.js'
+import { anyInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   data: Joi.object({
-    link_karma: nonNegativeInteger,
-    comment_karma: nonNegativeInteger,
+    link_karma: anyInteger,
+    comment_karma: anyInteger,
   }).required(),
 }).required()
 
@@ -25,7 +25,7 @@ export default class RedditUserKarma extends BaseJsonService {
       staticPreview: {
         label: 'combined karma',
         message: 56,
-        color: 'red',
+        color: 'brightgreen',
         style: 'social',
       },
     },
@@ -44,7 +44,7 @@ export default class RedditUserKarma extends BaseJsonService {
     return {
       label,
       message: metric(karma),
-      color: 'red',
+      color: karma > 0 ? 'brightgreen' : karma === 0 ? 'orange' : 'red',
       link: [`https://www.reddit.com/u/${user}`],
     }
   }

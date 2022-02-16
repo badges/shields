@@ -62,6 +62,11 @@ const isStarRating = withRegex(
 // Required to be > 0, because accepting zero masks many problems.
 const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
+// Same as isMetric, but tests for negative numbers also.
+const isMetricAllowNegative = withRegex(
+  /^(0|-?[1-9][0-9]*[kMGTPEZY]?|-?[0-9]\.[0-9][kMGTPEZY])$/
+)
+
 /**
  * @param {RegExp} nestedRegexp Pattern that must appear after the metric.
  * @returns {Function} A function that returns a RegExp that matches a metric followed by another pattern.
@@ -93,7 +98,9 @@ const isPercentage = Joi.alternatives().try(
   isDecimalPercentage
 )
 
-const isFileSize = withRegex(/^[0-9]*[.]?[0-9]+\s(B|kB|MB|GB|TB|PB|EB|ZB|YB)$/)
+const isFileSize = withRegex(
+  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
+)
 
 const isFormattedDate = Joi.alternatives().try(
   Joi.equal('today', 'yesterday'),
@@ -157,6 +164,7 @@ export {
   isPhpVersionReduction,
   isStarRating,
   isMetric,
+  isMetricAllowNegative,
   isMetricWithPattern,
   isMetricOpenIssues,
   isMetricOverMetric,

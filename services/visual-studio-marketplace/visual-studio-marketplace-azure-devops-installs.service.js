@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const documentation = `
@@ -27,35 +26,29 @@ export default class VisualStudioMarketplaceAzureDevOpsInstalls extends VisualSt
         measure: 'total',
         extensionId: 'swellaby.mirror-git-repository',
       },
-      staticPreview: this.render({ count: 651 }),
+      staticPreview: renderDownloadsBadge({ downloads: 651 }),
       keywords: this.keywords,
       documentation,
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'installs',
-  }
+  static defaultBadgeData = { label: 'installs' }
 
-  static render({ count }) {
-    return {
-      message: metric(count),
-      color: downloadCount(count),
+  transform({ json, measure }) {
+    const { statistics } = this.transformStatistics({ json })
+    const { onpremDownloads, install } = statistics
+    if (measure === 'total') {
+      return { downloads: onpremDownloads + install }
     }
+    if (measure === 'services') {
+      return { downloads: install }
+    }
+    return { downloads: onpremDownloads }
   }
 
   async handle({ measure, extensionId }) {
     const json = await this.fetch({ extensionId })
-    const { statistics } = this.transformStatistics({ json })
-
-    if (measure === 'total') {
-      return this.constructor.render({
-        count: statistics.onpremDownloads + statistics.install,
-      })
-    } else if (measure === 'services') {
-      return this.constructor.render({ count: statistics.install })
-    } else {
-      return this.constructor.render({ count: statistics.onpremDownloads })
-    }
+    const { downloads } = this.transform({ json, measure })
+    return renderDownloadsBadge({ downloads })
   }
 }

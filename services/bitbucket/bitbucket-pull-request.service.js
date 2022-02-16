@@ -86,7 +86,7 @@ function pullRequestClassGenerator(raw) {
         this.bitbucketAuthHelper.withBasicAuth({
           url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
           schema,
-          options: { qs: { state: 'OPEN', limit: 0 } },
+          options: { searchParams: { state: 'OPEN', limit: 0 } },
           errorMessages,
         })
       )
@@ -99,7 +99,7 @@ function pullRequestClassGenerator(raw) {
           url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
           schema,
           options: {
-            qs: {
+            searchParams: {
               state: 'OPEN',
               limit: 100,
               withProperties: false,

@@ -34,8 +34,7 @@ const schema = Joi.object({
 }).required()
 
 export default class JenkinsTests extends JenkinsBase {
-  static category = 'build'
-
+  static category = 'test-results'
   static route = {
     base: 'jenkins',
     pattern: 'tests',
@@ -51,7 +50,7 @@ export default class JenkinsTests extends JenkinsBase {
         passed_label: 'passed',
         failed_label: 'failed',
         skipped_label: 'skipped',
-        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_gerrit',
       },
       staticPreview: this.render({
         passed: 477,
@@ -107,7 +106,6 @@ export default class JenkinsTests extends JenkinsBase {
   async handle(
     namedParams,
     {
-      disableStrictSSL,
       jobUrl,
       compact_message: compactMessage,
       passed_label: passedLabel,
@@ -118,8 +116,9 @@ export default class JenkinsTests extends JenkinsBase {
     const json = await this.fetch({
       url: buildUrl({ jobUrl }),
       schema,
-      qs: buildTreeParamQueryString('actions[failCount,skipCount,totalCount]'),
-      disableStrictSSL,
+      searchParams: buildTreeParamQueryString(
+        'actions[failCount,skipCount,totalCount]'
+      ),
     })
     const { passed, failed, skipped, total } = this.transform({ json })
     return this.constructor.render({

@@ -33,7 +33,7 @@ class XmlElement {
    * @param {object} attrs Refer to individual attrs
    * @param {string} attrs.name
    *    Name of the XML tag
-   * @param {Array.<string|module:badge-maker/lib/xml-element~XmlElement>} [attrs.content=[]]
+   * @param {Array.<string|module:badge-maker/lib/xml~XmlElement>} [attrs.content=[]]
    *    Array of objects to render inside the tag. content may contain a mix of
    *    string and XmlElement objects. If content is `[]` or ommitted the
    *    element will be rendered as a self-closing element.
@@ -58,7 +58,7 @@ class XmlElement {
     if (this.content.length > 0) {
       const content = this.content
         .map(function (el) {
-          if (el instanceof XmlElement) {
+          if (typeof el.render === 'function') {
             return el.render()
           } else {
             return escapeXml(el)
@@ -73,4 +73,24 @@ class XmlElement {
   }
 }
 
-module.exports = { escapeXml, stripXmlWhitespace, XmlElement }
+/**
+ * Convenience class. Sometimes it is useful to return an object that behaves
+ * like an XmlElement but renders multiple XML tags (not wrapped in a <g>).
+ */
+class ElementList {
+  constructor({ content = [] }) {
+    this.content = content
+  }
+
+  render() {
+    return this.content.reduce(
+      (acc, el) =>
+        typeof el.render === 'function'
+          ? acc + el.render()
+          : acc + escapeXml(el),
+      ''
+    )
+  }
+}
+
+module.exports = { escapeXml, stripXmlWhitespace, XmlElement, ElementList }

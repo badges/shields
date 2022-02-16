@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { redirector, NotFound } from '../index.js'
 import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
@@ -11,18 +10,11 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     {
       title: 'Chrome Web Store',
       namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
-      staticPreview: this.render({ downloads: 573 }),
+      staticPreview: renderDownloadsBadge({ downloads: 573 }),
     },
   ]
 
   static defaultBadgeData = { label: 'users' }
-
-  static render({ downloads }) {
-    return {
-      message: `${metric(downloads)}`,
-      color: downloadCount(downloads),
-    }
-  }
 
   async handle({ storeId }) {
     const chromeWebStore = await this.fetch({ storeId })
@@ -30,7 +22,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     if (downloads == null) {
       throw new NotFound({ prettyMessage: 'not found' })
     }
-    return this.constructor.render({ downloads })
+    return renderDownloadsBadge({ downloads })
   }
 }
 

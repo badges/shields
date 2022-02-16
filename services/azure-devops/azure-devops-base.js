@@ -40,7 +40,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`
     const options = {
-      qs: {
+      searchParams: {
         definitions: definitionId,
         $top: 1,
         statusFilter: 'completed',
@@ -49,7 +49,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
     }
 
     if (branch) {
-      options.qs.branchName = `refs/heads/${branch}`
+      options.searchParams.branchName = `refs/heads/${branch}`
     }
 
     const json = await this.fetch({

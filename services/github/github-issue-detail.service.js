@@ -7,7 +7,7 @@ import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   documentation,
   errorMessagesFor,
-  stateColor,
+  issueStateColor,
   commentsColor,
 } from './github-helpers.js'
 
@@ -33,7 +33,7 @@ const stateMap = {
 
     if (!isPR || state === 'open') {
       return {
-        color: stateColor(state),
+        color: issueStateColor(state),
         label,
         message: state,
       }

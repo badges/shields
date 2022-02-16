@@ -22,9 +22,9 @@ class DummyXmlService extends BaseXmlService {
 
 describe('BaseXmlService', function () {
   describe('Making requests', function () {
-    let sendAndCacheRequest
+    let requestFetcher
     beforeEach(function () {
-      sendAndCacheRequest = sinon.stub().returns(
+      requestFetcher = sinon.stub().returns(
         Promise.resolve({
           buffer: '<requiredString>some-string</requiredString>',
           res: { statusCode: 200 },
@@ -32,13 +32,13 @@ describe('BaseXmlService', function () {
       )
     })
 
-    it('invokes _sendAndCacheRequest', async function () {
+    it('invokes _requestFetcher', async function () {
       await DummyXmlService.invoke(
-        { sendAndCacheRequest },
+        { requestFetcher },
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+      expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.xml',
         {
           headers: { Accept: 'application/xml, text/xml' },
@@ -46,7 +46,7 @@ describe('BaseXmlService', function () {
       )
     })
 
-    it('forwards options to _sendAndCacheRequest', async function () {
+    it('forwards options to _requestFetcher', async function () {
       class WithCustomOptions extends BaseXmlService {
         static route = {}
 
@@ -54,23 +54,23 @@ describe('BaseXmlService', function () {
           const { requiredString } = await this._requestXml({
             schema: dummySchema,
             url: 'http://example.com/foo.xml',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: { method: 'POST', searchParams: { queryParam: 123 } },
           })
           return { message: requiredString }
         }
       }
 
       await WithCustomOptions.invoke(
-        { sendAndCacheRequest },
+        { requestFetcher },
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+      expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.xml',
         {
           headers: { Accept: 'application/xml, text/xml' },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })
@@ -78,13 +78,13 @@ describe('BaseXmlService', function () {
 
   describe('Making badges', function () {
     it('handles valid xml responses', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '<requiredString>some-string</requiredString>',
         res: { statusCode: 200 },
       })
       expect(
         await DummyXmlService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
@@ -104,14 +104,14 @@ describe('BaseXmlService', function () {
           return { message: requiredString }
         }
       }
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer:
           '<requiredString>some-string with trailing whitespace   </requiredString>',
         res: { statusCode: 200 },
       })
       expect(
         await DummyXmlServiceWithParserOption.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
@@ -120,13 +120,13 @@ describe('BaseXmlService', function () {
     })
 
     it('handles xml responses which do not match the schema', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '<unexpectedAttribute>some-string</unexpectedAttribute>',
         res: { statusCode: 200 },
       })
       expect(
         await DummyXmlService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
@@ -137,13 +137,13 @@ describe('BaseXmlService', function () {
     })
 
     it('handles unparseable xml responses', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: 'not xml',
         res: { statusCode: 200 },
       })
       expect(
         await DummyXmlService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({

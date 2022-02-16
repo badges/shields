@@ -33,12 +33,10 @@ export default class OreVersion extends BaseOreService {
   }
 
   transform({ data }) {
-    const { promoted_versions } = data
+    const { promoted_versions: promotedVersions } = data
     return {
       version:
-        promoted_versions.length === 0
-          ? undefined
-          : promoted_versions[0].version,
+        promotedVersions.length === 0 ? undefined : promotedVersions[0].version,
     }
   }
 

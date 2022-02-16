@@ -13,6 +13,7 @@ import {
   Inaccessible,
   InvalidParameter,
   Deprecated,
+  ImproperlyConfigured,
 } from './errors.js'
 
 export {
@@ -29,5 +30,6 @@ export {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
+  ImproperlyConfigured,
   Deprecated,
 }

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService, NotFound } from '../index.js'
 
 const documentation = `
@@ -65,13 +65,11 @@ export default class WikiapiaryInstalls extends BaseJsonService {
 
   static defaultBadgeData = { label: 'installs', color: 'informational' }
 
-  static render({ usage }) {
-    return { message: metric(usage) }
-  }
-
-  static validate({ results }) {
-    if (Array.isArray(results))
-      throw new NotFound({ prettyMessage: 'not found' })
+  static render({ usage: downloads }) {
+    return renderDownloadsBadge({
+      downloads,
+      colorOverride: 'informational',
+    })
   }
 
   async fetch({ variant, name }) {
@@ -79,7 +77,7 @@ export default class WikiapiaryInstalls extends BaseJsonService {
       schema,
       url: `https://wikiapiary.com/w/api.php`,
       options: {
-        qs: {
+        searchParams: {
           action: 'ask',
           query: `[[${variant}:${name}]]|?Has_website_count`,
           format: 'json',
@@ -88,12 +86,10 @@ export default class WikiapiaryInstalls extends BaseJsonService {
     })
   }
 
-  async handle({ variant, name }) {
-    const response = await this.fetch({ variant, name })
-    const { results } = response.query
-
-    this.constructor.validate({ results })
-
+  static transform({ results, variant, name }) {
+    if (Array.isArray(results)) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
     const keyLowerCase = `${variant}:${name.toLowerCase()}`
     const resultKey = Object.keys(results).find(
       key => keyLowerCase === key.toLowerCase()
@@ -103,6 +99,14 @@ export default class WikiapiaryInstalls extends BaseJsonService {
       throw new NotFound({ prettyMessage: 'not found' })
 
     const [usage] = results[resultKey].printouts['Has website count']
+    return { usage }
+  }
+
+  async handle({ variant, name }) {
+    const {
+      query: { results },
+    } = await this.fetch({ variant, name })
+    const { usage } = this.constructor.transform({ results, name, variant })
     return this.constructor.render({ usage })
   }
 }

@@ -24,7 +24,7 @@ const schema = Joi.array()
 // Project is generally a repository
 // Space is a container, often a branch
 export default class TestspaceBase extends BaseJsonService {
-  static category = 'build'
+  static category = 'test-results'
   static defaultBadgeData = { label: 'tests' }
 
   async fetch({ org, project, space }) {

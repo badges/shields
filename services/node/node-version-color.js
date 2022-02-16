@@ -1,18 +1,16 @@
-import { promisify } from 'util'
 import moment from 'moment'
 import semver from 'semver'
-import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { getCachedResource } from '../../core/base-service/resource-cache.js'
 
 const dateFormat = 'YYYY-MM-DD'
 
-function getVersion(version) {
+async function getVersion(version) {
   let semver = ``
   if (version) {
     semver = `-${version}.x`
   }
-  return promisify(regularUpdate)({
+  return getCachedResource({
     url: `https://nodejs.org/dist/latest${semver}/SHASUMS256.txt`,
-    intervalMillis: 24 * 3600 * 1000,
     json: false,
     scraper: shasums => {
       // tarball index start, tarball index end
@@ -37,10 +35,8 @@ async function getCurrentVersion() {
 }
 
 async function getLtsVersions() {
-  const versions = await promisify(regularUpdate)({
+  const versions = await getCachedResource({
     url: 'https://raw.githubusercontent.com/nodejs/Release/master/schedule.json',
-    intervalMillis: 24 * 3600 * 1000,
-    json: true,
     scraper: ltsVersionsScraper,
   })
   return Promise.all(versions.map(getVersion))

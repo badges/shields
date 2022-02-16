@@ -402,6 +402,126 @@ exports['The badge generator "flat" template badge generation should match snaps
 
 `
 
+exports['The badge generator "flat" template badge generation should match snapshots: black text when the label color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="45" height="20" fill="#f3f3f3" />
+    <rect x="45" width="45" height="20" fill="#000" />
+    <rect width="90" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#ccc"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="235" y="140" transform="scale(.1)" fill="#333" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "flat" template badge generation should match snapshots: black text when the message color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="45" height="20" fill="#000" />
+    <rect x="45" width="45" height="20" fill="#e2ffe1" />
+    <rect width="90" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#ccc"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="665" y="140" transform="scale(.1)" fill="#333" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -604,6 +724,70 @@ exports['The badge generator "flat-square" template badge generation should matc
         grown
       </text>
     </a>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "flat-square" template badge generation should match snapshots: black text when the label color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <g shape-rendering="crispEdges">
+    <rect width="45" height="20" fill="#f3f3f3" />
+    <rect x="45" width="45" height="20" fill="#000" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text x="235" y="140" transform="scale(.1)" fill="#333" textLength="350">
+      cactus
+    </text>
+    <text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "flat-square" template badge generation should match snapshots: black text when the message color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <g shape-rendering="crispEdges">
+    <rect width="45" height="20" fill="#000" />
+    <rect x="45" width="45" height="20" fill="#e2ffe1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text x="665" y="140" transform="scale(.1)" fill="#333" textLength="350">
+      grown
+    </text>
   </g>
 </svg>
 
@@ -965,6 +1149,130 @@ exports['The badge generator "plastic" template badge generation should match sn
 
 `
 
+exports['The badge generator "plastic" template badge generation should match snapshots: black text when the label color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="18"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r"><rect width="90" height="18" rx="4" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="45" height="18" fill="#f3f3f3" />
+    <rect x="45" width="45" height="18" fill="#000" />
+    <rect width="90" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text
+      aria-hidden="true"
+      x="235"
+      y="140"
+      fill="#ccc"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="235" y="130" transform="scale(.1)" fill="#333" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="665" y="130" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "plastic" template badge generation should match snapshots: black text when the message color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="90"
+  height="18"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r"><rect width="90" height="18" rx="4" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="45" height="18" fill="#000" />
+    <rect x="45" width="45" height="18" fill="#e2ffe1" />
+    <rect width="90" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <text
+      aria-hidden="true"
+      x="235"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="235" y="130" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="140"
+      fill="#ccc"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="665" y="130" transform="scale(.1)" fill="#333" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -1213,6 +1521,84 @@ exports['The badge generator "for-the-badge" template badge generation should ma
         GROWN
       </text>
     </a>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "for-the-badge" template badge generation should match snapshots: black text when the label color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="146.75"
+  height="28"
+  role="img"
+  aria-label="CACTUS: GROWN"
+>
+  <title>CACTUS: GROWN</title>
+  <g shape-rendering="crispEdges">
+    <rect width="72.5" height="28" fill="#f3f3f3" />
+    <rect x="72.5" width="74.25" height="28" fill="#000" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <text transform="scale(.1)" x="362.5" y="175" textLength="485" fill="#333">
+      CACTUS
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1096.25"
+      y="175"
+      textLength="502.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      GROWN
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "for-the-badge" template badge generation should match snapshots: black text when the message color is light 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="146.75"
+  height="28"
+  role="img"
+  aria-label="CACTUS: GROWN"
+>
+  <title>CACTUS: GROWN</title>
+  <g shape-rendering="crispEdges">
+    <rect width="72.5" height="28" fill="#000" />
+    <rect x="72.5" width="74.25" height="28" fill="#e2ffe1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <text transform="scale(.1)" x="362.5" y="175" textLength="485" fill="#fff">
+      CACTUS
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1096.25"
+      y="175"
+      textLength="502.5"
+      fill="#333"
+      font-weight="bold"
+    >
+      GROWN
+    </text>
   </g>
 </svg>
 
@@ -1838,105 +2224,6 @@ exports['The badge generator badges with logos should always produce the same ba
     </text>
     <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
       message
-    </text>
-  </g>
-</svg>
-
-`
-
-exports['The badge generator text colors should use black text when the label color is light 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="90"
-  height="20"
-  role="img"
-  aria-label="cactus: grown"
->
-  <title>cactus: grown</title>
-  <linearGradient id="s" x2="0" y2="100%">
-    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
-    <stop offset="1" stop-opacity=".1" />
-  </linearGradient>
-  <clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff" /></clipPath>
-  <g clip-path="url(#r)">
-    <rect width="45" height="20" fill="#f3f3f3" />
-    <rect x="45" width="45" height="20" fill="#000" />
-    <rect width="90" height="20" fill="url(#s)" />
-  </g>
-  <g
-    fill="#fff"
-    text-anchor="middle"
-    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
-    text-rendering="geometricPrecision"
-    font-size="110"
-  >
-    <text
-      aria-hidden="true"
-      x="235"
-      y="150"
-      fill="#ccc"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="350"
-    >
-      cactus
-    </text>
-    <text x="235" y="140" transform="scale(.1)" fill="#333" textLength="350">
-      cactus
-    </text>
-    <text
-      aria-hidden="true"
-      x="665"
-      y="150"
-      fill="#010101"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="350"
-    >
-      grown
-    </text>
-    <text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">
-      grown
-    </text>
-  </g>
-</svg>
-
-`
-
-exports['The badge generator text colors should use black text when the message color is light 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="146.75"
-  height="28"
-  role="img"
-  aria-label="CACTUS: GROWN"
->
-  <title>CACTUS: GROWN</title>
-  <g shape-rendering="crispEdges">
-    <rect width="72.5" height="28" fill="#000" />
-    <rect x="72.5" width="74.25" height="28" fill="#e2ffe1" />
-  </g>
-  <g
-    fill="#fff"
-    text-anchor="middle"
-    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
-    text-rendering="geometricPrecision"
-    font-size="100"
-  >
-    <text transform="scale(.1)" x="362.5" y="175" textLength="485" fill="#fff">
-      CACTUS
-    </text>
-    <text
-      transform="scale(.1)"
-      x="1096.25"
-      y="175"
-      textLength="502.5"
-      fill="#333"
-      font-weight="bold"
-    >
-      GROWN
     </text>
   </g>
 </svg>

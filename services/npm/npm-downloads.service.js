@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
@@ -13,19 +13,19 @@ const intervalMap = {
     query: 'point/last-week',
     schema: pointResponseSchema,
     transform: json => json.downloads,
-    messageSuffix: '/week',
+    interval: 'week',
   },
   dm: {
     query: 'point/last-month',
     schema: pointResponseSchema,
     transform: json => json.downloads,
-    messageSuffix: '/month',
+    interval: 'month',
   },
   dy: {
     query: 'point/last-year',
     schema: pointResponseSchema,
     transform: json => json.downloads,
-    messageSuffix: '/year',
+    interval: 'year',
   },
   dt: {
     query: 'range/1000-01-01:3000-01-01',
@@ -37,7 +37,6 @@ const intervalMap = {
       json.downloads
         .map(item => item.downloads)
         .reduce((accum, current) => accum + current),
-    messageSuffix: '',
   },
 }
 
@@ -63,13 +62,12 @@ export default class NpmDownloads extends BaseJsonService {
   // For testing.
   static _intervalMap = intervalMap
 
-  static render({ interval, downloadCount }) {
-    const { messageSuffix } = intervalMap[interval]
-
-    return {
-      message: `${metric(downloadCount)}${messageSuffix}`,
-      color: downloadCount > 0 ? 'brightgreen' : 'red',
-    }
+  static render({ interval, downloadCount: downloads }) {
+    return renderDownloadsBadge({
+      downloads,
+      interval: intervalMap[interval].interval,
+      colorOverride: downloads > 0 ? 'brightgreen' : 'red',
+    })
   }
 
   async handle({ interval, scope, packageName }) {

@@ -41,7 +41,7 @@ const notFoundSchema = Joi.object()
 const pluginSchemas = Joi.alternatives(pluginSchema, notFoundSchema)
 const themeSchemas = Joi.alternatives(themeSchema, notFoundSchema)
 
-export default class BaseWordpress extends BaseJsonService {
+export class BaseWordpress extends BaseJsonService {
   async fetch({ extensionType, slug }) {
     const url = `https://api.wordpress.org/${extensionType}s/info/1.2/`
     let schemas
@@ -75,7 +75,7 @@ export default class BaseWordpress extends BaseJsonService {
       url,
       schema: schemas,
       options: {
-        qs: queryString,
+        searchParams: queryString,
       },
     })
     if ('error' in json) {
@@ -84,3 +84,12 @@ export default class BaseWordpress extends BaseJsonService {
     return json
   }
 }
+
+export const documentation = `
+<p>
+  These badges rely on an API that is no longer supported by Wordpress. You are
+  still free to use them, simply bear in mind that Shields.io cannot guarantee
+  that they'll keep on working in the future. Please also double-check the
+  provided slug, as an incorrect value may lead to unexpected results.
+</p>
+`

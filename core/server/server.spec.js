@@ -64,6 +64,12 @@ describe('The server', function () {
       expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
     })
 
+    it('should return cors header for the request', async function () {
+      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      expect(statusCode).to.equal(200)
+      expect(headers['access-control-allow-origin']).to.equal('*')
+    })
+
     it('should redirect colorscheme PNG badges as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.png`,
@@ -87,12 +93,28 @@ describe('The server', function () {
       )
     })
 
-    it('should produce json badges', async function () {
+    it('should produce SVG badges with expected headers', async function () {
+      const { statusCode, headers } = await got(
+        `${baseUrl}:fruit-apple-green.svg`
+      )
+      expect(statusCode).to.equal(200)
+      expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
+      expect(headers['content-length']).to.equal('1130')
+    })
+
+    it('correctly calculates the content-length header for multi-byte unicode characters', async function () {
+      const { headers } = await got(`${baseUrl}:fruit-apple🍏-green.json`)
+      expect(headers['content-length']).to.equal('100')
+    })
+
+    it('should produce JSON badges with expected headers', async function () {
       const { statusCode, body, headers } = await got(
-        `${baseUrl}twitter/follow/_Pyves.json`
+        `${baseUrl}:fruit-apple-green.json`
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('application/json')
+      expect(headers['access-control-allow-origin']).to.equal('*')
+      expect(headers['content-length']).to.equal('92')
       expect(() => JSON.parse(body)).not.to.throw()
     })
 
@@ -184,6 +206,12 @@ describe('The server', function () {
         .to.satisfy(isSvg)
         .and.to.include('410')
         .and.to.include('jpg no longer available')
+    })
+
+    it('should return cors header for the request', async function () {
+      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      expect(statusCode).to.equal(200)
+      expect(headers['access-control-allow-origin']).to.equal('*')
     })
   })
 

@@ -18,7 +18,6 @@ const schema = Joi.object({
         Joi.object({
           viewCount: nonNegativeInteger,
           likeCount: nonNegativeInteger,
-          dislikeCount: nonNegativeInteger,
           commentCount: nonNegativeInteger,
         }),
         Joi.object({
@@ -62,7 +61,7 @@ class YouTubeBase extends BaseJsonService {
           schema,
           url: `https://www.googleapis.com/youtube/v3/${this.constructor.type}s`,
           options: {
-            qs: { id, part: 'statistics' },
+            searchParams: { id, part: 'statistics' },
           },
         }
       )

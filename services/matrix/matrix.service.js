@@ -30,10 +30,10 @@ const documentation = `
   <p>
     In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
     </br>
-    The following steps will show you how to setup the badge URL using the Riot.im Matrix client.
+    The following steps will show you how to setup the badge URL using the Element Matrix client.
     </br>
     <ul>
-      <li>Select the desired room inside the Riot.im client</li>
+      <li>Select the desired room inside the Element client</li>
       <li>Click on the room settings button (gear icon) located near the top right of the client</li>
       <li>Scroll to the very bottom of the settings page and look under the <code>Addresses</code> section</li>
       <li>You should see one or more <code>room addresses (or aliases)</code>, which can be easily identified with their starting hash (<code>#</code>) character (ex: <code>#twim:matrix.org</code>)</li>
@@ -106,7 +106,7 @@ export default class Matrix extends BaseJsonService {
       schema: matrixRegisterSchema,
       options: {
         method: 'POST',
-        qs: guest
+        searchParams: guest
           ? {
               kind: 'guest',
             }
@@ -131,7 +131,7 @@ export default class Matrix extends BaseJsonService {
       )}`,
       schema: matrixAliasLookupSchema,
       options: {
-        qs: {
+        searchParams: {
           access_token: accessToken,
         },
       },
@@ -170,7 +170,7 @@ export default class Matrix extends BaseJsonService {
       )}/state`,
       schema: matrixStateSchema,
       options: {
-        qs: {
+        searchParams: {
           access_token: accessToken,
         },
       },

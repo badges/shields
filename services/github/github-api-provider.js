@@ -1,8 +1,11 @@
 import Joi from 'joi'
 import log from '../../core/server/log.js'
 import { TokenPool } from '../../core/token-pooling/token-pool.js'
-import { userAgent } from '../../core/base-service/legacy-request-handler.js'
+import { getUserAgent } from '../../core/base-service/got-config.js'
 import { nonNegativeInteger } from '../validators.js'
+import { ImproperlyConfigured } from '../index.js'
+
+const userAgent = getUserAgent()
 
 const headerSchema = Joi.object({
   'x-ratelimit-limit': nonNegativeInteger,
@@ -51,18 +54,6 @@ class GithubApiProvider {
       this.standardTokens = new TokenPool({ batchSize: 25 })
       this.searchTokens = new TokenPool({ batchSize: 5 })
       this.graphqlTokens = new TokenPool({ batchSize: 25 })
-    }
-  }
-
-  serializeDebugInfo({ sanitize = true } = {}) {
-    if (this.withPooling) {
-      return {
-        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
-        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
-        graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
-      }
-    } else {
-      return {}
     }
   }
 
@@ -151,10 +142,7 @@ class GithubApiProvider {
     }
   }
 
-  // Act like request(), but tweak headers and query to avoid hitting a rate
-  // limit. Inject `request` so we can pass in `cachingRequest` from
-  // `request-handler.js`.
-  request(request, url, options = {}, callback) {
+  async fetch(requestFetcher, url, options = {}) {
     const { baseUrl } = this
 
     let token
@@ -163,8 +151,10 @@ class GithubApiProvider {
       try {
         token = this.tokenForUrl(url)
       } catch (e) {
-        callback(e)
-        return
+        log.error(e)
+        throw new ImproperlyConfigured({
+          prettyMessage: 'Unable to select next Github token from pool',
+        })
       }
       tokenString = token.id
     } else {
@@ -174,41 +164,22 @@ class GithubApiProvider {
     const mergedOptions = {
       ...options,
       ...{
-        url,
-        baseUrl,
         headers: {
           'User-Agent': userAgent,
-          Accept: 'application/vnd.github.v3+json',
           Authorization: `token ${tokenString}`,
           ...options.headers,
         },
       },
     }
-
-    request(mergedOptions, (err, res, buffer) => {
-      if (err === null) {
-        if (this.withPooling) {
-          if (res.statusCode === 401) {
-            this.invalidateToken(token)
-          } else if (res.statusCode < 500) {
-            this.updateToken({ token, url, res })
-          }
-        }
+    const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
+    if (this.withPooling) {
+      if (response.res.statusCode === 401) {
+        this.invalidateToken(token)
+      } else if (response.res.statusCode < 500) {
+        this.updateToken({ token, url, res: response.res })
       }
-      callback(err, res, buffer)
-    })
-  }
-
-  requestAsPromise(request, url, options) {
-    return new Promise((resolve, reject) => {
-      this.request(request, url, options, (err, res, buffer) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve({ res, buffer })
-        }
-      })
-    })
+    }
+    return response
   }
 }
 

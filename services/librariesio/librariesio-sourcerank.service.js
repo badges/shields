@@ -1,10 +1,9 @@
 import { colorScale } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
-import { fetchProject } from './librariesio-common.js'
+import LibrariesIoBase from './librariesio-base.js'
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])
 
-export default class LibrariesIoSourcerank extends BaseJsonService {
+export default class LibrariesIoSourcerank extends LibrariesIoBase {
   static category = 'rating'
 
   static route = {
@@ -46,7 +45,7 @@ export default class LibrariesIoSourcerank extends BaseJsonService {
   }
 
   async handle({ platform, scope, packageName }) {
-    const { rank } = await fetchProject(this, {
+    const { rank } = await this.fetchProject({
       platform,
       scope,
       packageName,

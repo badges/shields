@@ -74,7 +74,7 @@ class AuthHelper {
   }
 
   static _isInsecureSslRequest({ options = {} }) {
-    const { strictSSL = true } = options
+    const strictSSL = options?.https?.rejectUnauthorized ?? true
     return strictSSL !== true
   }
 
@@ -107,8 +107,10 @@ class AuthHelper {
   }
 
   get _basicAuth() {
-    const { _user: user, _pass: pass } = this
-    return this.isConfigured ? { user, pass } : undefined
+    const { _user: username, _pass: password } = this
+    return this.isConfigured
+      ? { username: username || '', password: password || '' }
+      : undefined
   }
 
   /*
@@ -131,7 +133,7 @@ class AuthHelper {
     const { options, ...rest } = requestParams
     return {
       options: {
-        auth,
+        ...auth,
         ...options,
       },
       ...rest,
@@ -181,11 +183,13 @@ class AuthHelper {
   }
 
   static _mergeQueryParams(requestParams, query) {
-    const { options: { qs: existingQuery, ...restOptions } = {}, ...rest } =
-      requestParams
+    const {
+      options: { searchParams: existingQuery, ...restOptions } = {},
+      ...rest
+    } = requestParams
     return {
       options: {
-        qs: {
+        searchParams: {
           ...existingQuery,
           ...query,
         },

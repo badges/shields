@@ -17,6 +17,15 @@ t.create('Tech Debt')
     message: isPercentage,
   })
 
+t.create('Tech Debt (branch)')
+  .get(
+    '/tech_debt/org.sonarsource.sonarqube%3Asonarqube/master.json?server=https://sonarcloud.io'
+  )
+  .expectBadge({
+    label: 'tech debt',
+    message: isPercentage,
+  })
+
 t.create('Tech Debt (legacy API supported)')
   .get(
     '/tech_debt/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'

@@ -1,25 +1,20 @@
-import Joi from 'joi'
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
 
-const isRequireStatus = Joi.string().regex(
-  /^(up to date|outdated|insecure|unknown)$/
-)
+export const t = new ServiceTester({
+  id: 'requires',
+  title: 'Requires.io',
+})
 
-t.create('requirements (valid, without branch)')
-  .get('/github/celery/celery.json')
+t.create('no longer available (previously Bitbucket without branch)')
+  .get('/bitbucket/code-orange/django-ispstack.json')
   .expectBadge({
     label: 'requirements',
-    message: isRequireStatus,
+    message: 'no longer available',
   })
 
-t.create('requirements (valid, with branch)')
-  .get('/github/celery/celery/master.json')
+t.create('no longer available (previously GitHub with branch)')
+  .get('/github/Hongbo-Miao/hongbomiao.com/main.json')
   .expectBadge({
     label: 'requirements',
-    message: isRequireStatus,
+    message: 'no longer available',
   })
-
-t.create('requirements (not found)')
-  .get('/github/PyvesB/EmptyRepo.json')
-  .expectBadge({ label: 'requirements', message: 'not found' })

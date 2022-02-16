@@ -25,11 +25,11 @@ class MyGetVersionService extends Version {
       title: 'MyGet tenant',
       pattern: ':tenant.myget/:feed/v/:packageName',
       namedParams: {
-        tenant: 'cefsharp',
-        feed: 'cefsharp',
-        packageName: 'cef.sdk',
+        tenant: 'tizen',
+        feed: 'dotnet',
+        packageName: 'Tizen.NET',
       },
-      staticPreview: this.render({ version: '91.1.1' }),
+      staticPreview: this.render({ version: '9.0.0.16564' }),
     },
   ]
 }
@@ -48,7 +48,7 @@ class MyGetDownloadService extends Downloads {
       namedParams: {
         tenant: 'cefsharp',
         feed: 'cefsharp',
-        packageName: 'CefSharp',
+        packageName: 'CefSharp.Common',
       },
       staticPreview: this.render({ downloads: 9748 }),
     },

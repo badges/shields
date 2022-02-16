@@ -1,6 +1,5 @@
-import { promisify } from 'util'
 import semver from 'semver'
-import { regularUpdate } from '../../core/legacy/regular-update.js'
+import { getCachedResource } from '../../core/base-service/resource-cache.js'
 
 // TODO: Incorporate this schema.
 // const schema = Joi.object()
@@ -19,11 +18,9 @@ import { regularUpdate } from '../../core/legacy/regular-update.js'
 //   })
 //   .required()
 
-function getOfferedVersions() {
-  return promisify(regularUpdate)({
+async function getOfferedVersions() {
+  return getCachedResource({
     url: 'https://api.wordpress.org/core/version-check/1.7/',
-    intervalMillis: 24 * 3600 * 1000,
-    json: true,
     scraper: json => json.offers.map(v => v.version),
   })
 }

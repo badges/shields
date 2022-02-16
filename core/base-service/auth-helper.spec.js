@@ -104,14 +104,14 @@ describe('AuthHelper', function () {
           { userKey: 'myci_user', passKey: 'myci_pass' },
           { myci_user: 'admin', myci_pass: 'abc123' }
         ),
-      ]).expect({ user: 'admin', pass: 'abc123' })
+      ]).expect({ username: 'admin', password: 'abc123' })
       given({ userKey: 'myci_user' }, { myci_user: 'admin' }).expect({
-        user: 'admin',
-        pass: undefined,
+        username: 'admin',
+        password: '',
       })
       given({ passKey: 'myci_pass' }, { myci_pass: 'abc123' }).expect({
-        user: undefined,
-        pass: 'abc123',
+        username: '',
+        password: 'abc123',
       })
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
         undefined
@@ -120,8 +120,8 @@ describe('AuthHelper', function () {
         { passKey: 'myci_pass', defaultToEmptyStringForUser: true },
         { myci_pass: 'abc123' }
       ).expect({
-        user: '',
-        pass: 'abc123',
+        username: '',
+        password: 'abc123',
       })
     })
   })
@@ -131,15 +131,18 @@ describe('AuthHelper', function () {
       forCases([
         given({ url: 'http://example.test' }),
         given({ url: 'http://example.test', options: {} }),
-        given({ url: 'http://example.test', options: { strictSSL: true } }),
         given({
           url: 'http://example.test',
-          options: { strictSSL: undefined },
+          options: { https: { rejectUnauthorized: true } },
+        }),
+        given({
+          url: 'http://example.test',
+          options: { https: { rejectUnauthorized: undefined } },
         }),
       ]).expect(false)
       given({
         url: 'http://example.test',
-        options: { strictSSL: false },
+        options: { https: { rejectUnauthorized: false } },
       }).expect(true)
     })
   })
@@ -163,7 +166,9 @@ describe('AuthHelper', function () {
       })
       it('throws for insecure requests', function () {
         expect(() =>
-          authHelper.enforceStrictSsl({ options: { strictSSL: false } })
+          authHelper.enforceStrictSsl({
+            options: { https: { rejectUnauthorized: false } },
+          })
         ).to.throw(InvalidParameter)
       })
     })
@@ -185,7 +190,9 @@ describe('AuthHelper', function () {
       })
       it('does not throw for insecure requests', function () {
         expect(() =>
-          authHelper.enforceStrictSsl({ options: { strictSSL: false } })
+          authHelper.enforceStrictSsl({
+            options: { https: { rejectUnauthorized: false } },
+          })
         ).not.to.throw()
       })
     })
@@ -220,7 +227,7 @@ describe('AuthHelper', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test/api',
-            options: { strictSSL: false },
+            options: { https: { rejectUnauthorized: false } },
           }).expect(false)
         })
       })
@@ -258,7 +265,7 @@ describe('AuthHelper', function () {
         test(shouldAuthenticateRequest, () => {
           given({
             url: 'https://myci.test',
-            options: { strictSSL: false },
+            options: { https: { rejectUnauthorized: false } },
           }).expect(true)
         })
       })
@@ -323,7 +330,8 @@ describe('AuthHelper', function () {
         }).expect({
           url: 'https://myci.test/api',
           options: {
-            auth: { user: 'admin', pass: 'abc123' },
+            username: 'admin',
+            password: 'abc123',
           },
         })
         given({
@@ -335,7 +343,8 @@ describe('AuthHelper', function () {
           url: 'https://myci.test/api',
           options: {
             headers: { Accept: 'application/json' },
-            auth: { user: 'admin', pass: 'abc123' },
+            username: 'admin',
+            password: 'abc123',
           },
         })
       })
@@ -366,7 +375,7 @@ describe('AuthHelper', function () {
       expect(() =>
         withBasicAuth({
           url: 'https://myci.test/api',
-          options: { strictSSL: false },
+          options: { https: { rejectUnauthorized: false } },
         })
       ).to.throw(InvalidParameter)
     })

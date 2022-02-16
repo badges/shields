@@ -52,18 +52,19 @@ const legacySchema = Joi.array()
 export default class SonarBase extends BaseJsonService {
   static auth = { userKey: 'sonarqube_token', serviceKey: 'sonar' }
 
-  async fetch({ sonarVersion, server, component, metricName }) {
+  async fetch({ sonarVersion, server, component, metricName, branch }) {
     const useLegacyApi = isLegacyVersion({ sonarVersion })
 
-    let qs, url, schema
+    let searchParams, url, schema
     if (useLegacyApi) {
       schema = legacySchema
       url = `${server}/api/resources`
-      qs = {
+      searchParams = {
         resource: component,
         depth: 0,
         metrics: metricName,
         includeTrends: true,
+        branch,
       }
     } else {
       schema = modernSchema
@@ -71,9 +72,10 @@ export default class SonarBase extends BaseJsonService {
       // componentKey query param was renamed in version 6.6
       const componentKey =
         parseFloat(sonarVersion) >= 6.6 ? 'component' : 'componentKey'
-      qs = {
+      searchParams = {
         [componentKey]: component,
         metricKeys: metricName,
+        branch,
       }
     }
 
@@ -81,7 +83,7 @@ export default class SonarBase extends BaseJsonService {
       this.authHelper.withBasicAuth({
         schema,
         url,
-        options: { qs },
+        options: { searchParams },
         errorMessages: {
           404: 'component or metric not found, or legacy API not supported',
         },

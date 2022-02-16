@@ -27,7 +27,7 @@ export default class DroneBuild extends BaseJsonService {
       title: 'Drone (cloud)',
       pattern: ':user/:repo',
       namedParams: {
-        user: 'drone',
+        user: 'harness',
         repo: 'drone',
       },
       staticPreview: renderBuildStatusBadge({ status: 'success' }),
@@ -36,7 +36,7 @@ export default class DroneBuild extends BaseJsonService {
       title: 'Drone (cloud) with branch',
       pattern: ':user/:repo/:branch',
       namedParams: {
-        user: 'drone',
+        user: 'harness',
         repo: 'drone',
         branch: 'master',
       },
@@ -73,7 +73,7 @@ export default class DroneBuild extends BaseJsonService {
         schema,
         url: `${server}/api/repos/${user}/${repo}/builds/latest`,
         options: {
-          qs: { ref: branch ? `refs/heads/${branch}` : undefined },
+          searchParams: { ref: branch ? `refs/heads/${branch}` : undefined },
         },
         errorMessages: {
           401: 'repo not found or not authorized',

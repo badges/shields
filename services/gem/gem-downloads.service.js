@@ -1,7 +1,6 @@
 import semver from 'semver'
 import Joi from 'joi'
-import { downloadCount } from '../color-formatters.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { latest as latestVersion } from '../version.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
@@ -81,18 +80,8 @@ export default class GemDownloads extends BaseJsonService {
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ variant, version, downloads }) {
-    let label
-    if (version) {
-      label = `downloads@${version}`
-    } else if (variant === 'dtv') {
-      label = 'downloads@latest'
-    }
-
-    return {
-      label,
-      message: metric(downloads),
-      color: downloadCount(downloads),
-    }
+    version = !version && variant === 'dtv' ? 'latest' : version
+    return renderDownloadsBadge({ downloads, version })
   }
 
   async fetchDownloadCountForVersion({ gem, version }) {

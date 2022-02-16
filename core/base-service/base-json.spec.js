@@ -22,9 +22,9 @@ class DummyJsonService extends BaseJsonService {
 
 describe('BaseJsonService', function () {
   describe('Making requests', function () {
-    let sendAndCacheRequest
+    let requestFetcher
     beforeEach(function () {
-      sendAndCacheRequest = sinon.stub().returns(
+      requestFetcher = sinon.stub().returns(
         Promise.resolve({
           buffer: '{"some": "json"}',
           res: { statusCode: 200 },
@@ -32,13 +32,13 @@ describe('BaseJsonService', function () {
       )
     })
 
-    it('invokes _sendAndCacheRequest', async function () {
+    it('invokes _requestFetcher', async function () {
       await DummyJsonService.invoke(
-        { sendAndCacheRequest },
+        { requestFetcher },
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+      expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.json',
         {
           headers: { Accept: 'application/json' },
@@ -46,29 +46,29 @@ describe('BaseJsonService', function () {
       )
     })
 
-    it('forwards options to _sendAndCacheRequest', async function () {
+    it('forwards options to _requestFetcher', async function () {
       class WithOptions extends DummyJsonService {
         async handle() {
           const { value } = await this._requestJson({
             schema: dummySchema,
             url: 'http://example.com/foo.json',
-            options: { method: 'POST', qs: { queryParam: 123 } },
+            options: { method: 'POST', searchParams: { queryParam: 123 } },
           })
           return { message: value }
         }
       }
 
       await WithOptions.invoke(
-        { sendAndCacheRequest },
+        { requestFetcher },
         { handleInternalErrors: false }
       )
 
-      expect(sendAndCacheRequest).to.have.been.calledOnceWith(
+      expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.json',
         {
           headers: { Accept: 'application/json' },
           method: 'POST',
-          qs: { queryParam: 123 },
+          searchParams: { queryParam: 123 },
         }
       )
     })
@@ -76,13 +76,13 @@ describe('BaseJsonService', function () {
 
   describe('Making badges', function () {
     it('handles valid json responses', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '{"requiredString": "some-string"}',
         res: { statusCode: 200 },
       })
       expect(
         await DummyJsonService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
@@ -91,13 +91,13 @@ describe('BaseJsonService', function () {
     })
 
     it('handles json responses which do not match the schema', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: '{"unexpectedKey": "some-string"}',
         res: { statusCode: 200 },
       })
       expect(
         await DummyJsonService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({
@@ -108,13 +108,13 @@ describe('BaseJsonService', function () {
     })
 
     it('handles unparseable json responses', async function () {
-      const sendAndCacheRequest = async () => ({
+      const requestFetcher = async () => ({
         buffer: 'not json',
         res: { statusCode: 200 },
       })
       expect(
         await DummyJsonService.invoke(
-          { sendAndCacheRequest },
+          { requestFetcher },
           { handleInternalErrors: false }
         )
       ).to.deep.equal({

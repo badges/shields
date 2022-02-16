@@ -1,5 +1,4 @@
-import { metric } from '../text-formatters.js'
-import { downloadCount } from '../color-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { redirector } from '../index.js'
 import { BaseAmoService, keywords } from './amo-base.js'
 
@@ -25,13 +24,12 @@ class AmoWeeklyDownloads extends BaseAmoService {
     },
   ]
 
+  static _cacheLength = 21600
+
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
-    return {
-      message: `${metric(downloads)}/week`,
-      color: downloadCount(downloads),
-    }
+    return renderDownloadsBadge({ downloads, interval: 'week' })
   }
 
   async handle({ addonId }) {

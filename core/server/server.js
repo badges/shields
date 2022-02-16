@@ -6,18 +6,18 @@ import path from 'path'
 import url, { fileURLToPath } from 'url'
 import { bootstrap } from 'global-agent'
 import cloudflareMiddleware from 'cloudflare-middleware'
-import bytes from 'bytes'
 import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
+import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
 import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
-import { clearRegularUpdateCache } from '../legacy/regular-update.js'
+import { clearResourceCache } from '../base-service/resource-cache.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
-import { nonNegativeInteger } from '../../services/validators.js'
+import { fileSize, nonNegativeInteger } from '../../services/validators.js'
 import log from './log.js'
 import PrometheusMetrics from './prometheus-metrics.js'
 import InfluxMetrics from './influx-metrics.js'
@@ -125,6 +125,7 @@ const publicConfigSchema = Joi.object({
         intervalSeconds: Joi.number().integer().min(1).required(),
       },
     },
+    gitlab: defaultService,
     jira: defaultService,
     jenkins: Joi.object({
       authorizedOrigins: origins,
@@ -133,6 +134,7 @@ const publicConfigSchema = Joi.object({
     }).default({ authorizedOrigins: [] }),
     nexus: defaultService,
     npm: defaultService,
+    obs: defaultService,
     sonar: defaultService,
     teamcity: defaultService,
     weblate: defaultService,
@@ -140,7 +142,8 @@ const publicConfigSchema = Joi.object({
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
-  fetchLimit: Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i),
+  fetchLimit: fileSize,
+  userAgentBase: Joi.string().required(),
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
   documentRoot: Joi.string().default(
@@ -161,18 +164,21 @@ const privateConfigSchema = Joi.object({
   gh_client_id: Joi.string(),
   gh_client_secret: Joi.string(),
   gh_token: Joi.string(),
+  gitlab_token: Joi.string(),
   jenkins_user: Joi.string(),
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),
   jira_pass: Joi.string(),
   bitbucket_server_username: Joi.string(),
   bitbucket_server_password: Joi.string(),
+  librariesio_tokens: Joi.arrayFromString().items(Joi.string()),
   nexus_user: Joi.string(),
   nexus_pass: Joi.string(),
   npm_token: Joi.string(),
+  obs_user: Joi.string(),
+  obs_pass: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   sentry_dsn: Joi.string(),
-  shields_secret: Joi.string(),
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),
@@ -234,6 +240,10 @@ class Server {
 
     this.githubConstellation = new GithubConstellation({
       service: publicConfig.services.github,
+      private: privateConfig,
+    })
+
+    this.librariesioConstellation = new LibrariesIoConstellation({
       private: privateConfig,
     })
 
@@ -409,14 +419,20 @@ class Server {
   async registerServices() {
     const { config, camp, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
-
+    const { apiProvider: librariesIoApiProvider } =
+      this.librariesioConstellation
     ;(await loadServiceClasses()).forEach(serviceClass =>
       serviceClass.register(
-        { camp, handleRequest, githubApiProvider, metricInstance },
+        {
+          camp,
+          handleRequest,
+          githubApiProvider,
+          librariesIoApiProvider,
+          metricInstance,
+        },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
-          fetchLimitBytes: bytes(config.public.fetchLimit),
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,
@@ -490,6 +506,12 @@ class Server {
     const { apiProvider: githubApiProvider } = this.githubConstellation
     setRoutes(allowedOrigin, githubApiProvider, camp)
 
+    // https://github.com/badges/shields/issues/3273
+    camp.handle((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      next()
+    })
+
     this.registerErrorHandlers()
     this.registerRedirects()
     await this.registerServices()
@@ -515,7 +537,7 @@ class Server {
   static resetGlobalState() {
     // This state should be migrated to instance state. When possible, do not add new
     // global state.
-    clearRegularUpdateCache()
+    clearResourceCache()
   }
 
   reset() {

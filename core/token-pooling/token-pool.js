@@ -80,6 +80,10 @@ class Token {
     return this.usesRemaining <= 0 && !this.hasReset
   }
 
+  get decrementedUsesRemaining() {
+    return this._usesRemaining - 1
+  }
+
   /**
    * Update the uses remaining and next reset time for a token.
    *
@@ -327,29 +331,6 @@ class TokenPool {
 
     this.fifoQueue.forEach(visit)
     this.priorityQueue.forEach(visit)
-  }
-
-  allValidTokenIds() {
-    const result = []
-    this.forEach(({ id }) => result.push(id))
-    return result
-  }
-
-  serializeDebugInfo({ sanitize = true } = {}) {
-    const maybeSanitize = sanitize ? id => sanitizeToken(id) : id => id
-
-    const priorityQueue = []
-    this.priorityQueue.forEach(t =>
-      priorityQueue.push(t.getDebugInfo({ sanitize }))
-    )
-
-    return {
-      utcEpochSeconds: getUtcEpochSeconds(),
-      allValidTokenIds: this.allValidTokenIds().map(maybeSanitize),
-      fifoQueue: this.fifoQueue.map(t => t.getDebugInfo({ sanitize })),
-      priorityQueue,
-      sanitized: sanitize,
-    }
   }
 }
 

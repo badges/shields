@@ -86,7 +86,7 @@ export default class JiraSprint extends BaseJsonService {
         url: `${baseUrl}/rest/api/2/search`,
         schema,
         options: {
-          qs: {
+          searchParams: {
             jql: `sprint=${sprintId} AND type IN (Bug,Improvement,Story,"Technical task")`,
             fields: 'resolution',
             maxResults: 500,

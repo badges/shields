@@ -270,18 +270,24 @@ export default function QueryStringBuilder({
     }, {} as Record<BadgeOptionName, string>)
   )
 
-  function handleServiceQueryParamChange({
-    target: { name, type: targetType, checked, value },
-  }: ChangeEvent<HTMLInputElement>): void {
-    const outValue = targetType === 'checkbox' ? checked : value
-    setQueryParams({ ...queryParams, [name]: outValue })
-  }
+  const handleServiceQueryParamChange = React.useCallback(
+    function ({
+      target: { name, type: targetType, checked, value },
+    }: ChangeEvent<HTMLInputElement>): void {
+      const outValue = targetType === 'checkbox' ? checked : value
+      setQueryParams({ ...queryParams, [name]: outValue })
+    },
+    [setQueryParams, queryParams]
+  )
 
-  function handleBadgeOptionChange({
-    target: { name, value },
-  }: ChangeEvent<HTMLInputElement>): void {
-    setBadgeOptions({ ...badgeOptions, [name]: value })
-  }
+  const handleBadgeOptionChange = React.useCallback(
+    function ({
+      target: { name, value },
+    }: ChangeEvent<HTMLInputElement>): void {
+      setBadgeOptions({ ...badgeOptions, [name]: value })
+    },
+    [setBadgeOptions, badgeOptions]
+  )
 
   useEffect(() => {
     if (onChange) {
