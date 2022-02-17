@@ -8,18 +8,7 @@ import {
   customServerDocumentationFragment,
 } from './packagist-base.js'
 
-const packageSchema = Joi.array()
-  .items(
-    Joi.object({
-      version: Joi.string(),
-      license: Joi.array(),
-    }).required()
-  )
-  .required()
-
-const schema = Joi.object({
-  packages: Joi.object().pattern(/^/, packageSchema).required(),
-}).required()
+const messageLicenseNotFound = 'license not found'
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
@@ -70,16 +59,24 @@ export default class PackagistLicense extends BasePackagistService {
       includeDefaultBranch: true,
     })
     if (!license) {
-      throw new NotFound({ prettyMessage: 'license not found' })
+      throw new NotFound({ prettyMessage: messageLicenseNotFound })
     }
 
     return { license }
   }
 
   async handle({ user, repo }, { server }) {
-    const versions = this.fetch({ user, repo, schema, server })
-    const license = this.getLicense({ versions, user, repo })
-
-    return renderLicenseBadge({ license })
+    try {
+      const versions = this.fetchRelease({ user, repo, server })
+      const license = this.getLicense({ versions, user, repo })
+      return renderLicenseBadge({ license })
+    } catch (e) {
+      if (e instanceof NotFound && e.prettyMessage === messageLicenseNotFound) {
+        const versions = this.fetchDev({ user, repo, server })
+        const license = this.getLicense({ versions, user, repo })
+        return renderLicenseBadge({ license })
+      }
+      throw e // re-throw
+    }
   }
 }

@@ -6,6 +6,8 @@ import {
   customServerDocumentationFragment,
 } from './packagist-base.js'
 
+const messagePhpVersionNotFound = 'version requirement not found'
+
 const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
@@ -88,18 +90,26 @@ export default class PackagistPhpVersion extends BasePackagistService {
     })
 
     if (!packageVersion.require || !packageVersion.require.php) {
-      throw new NotFound({ prettyMessage: 'version requirement not found' })
+      throw new NotFound({ prettyMessage: messagePhpVersionNotFound })
     }
     return { phpVersion: packageVersion.require.php }
   }
 
   async handle({ user, repo, version = '' }, { server }) {
-    const versions = this.fetch({
-      user,
-      repo,
-      server,
-    })
-    const { phpVersion } = this.getPhpVersion(versions, version)
-    return this.constructor.render({ php: phpVersion })
+    try {
+      const versions = this.fetchRelease({ user, repo, server })
+      const { phpVersion } = this.getPhpVersion(versions, version)
+      return this.constructor.render({ php: phpVersion })
+    } catch (e) {
+      if (
+        e instanceof NotFound &&
+        e.prettyMessage === messagePhpVersionNotFound
+      ) {
+        const versions = this.fetchDev({ user, repo, server })
+        const { phpVersion } = this.getPhpVersion(versions, version)
+        return this.constructor.render({ php: phpVersion })
+      }
+      throw e // re-throw
+    }
   }
 }
