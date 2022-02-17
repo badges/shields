@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { isVPlusDottedVersionNClausesWithOptionalSuffix } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
+import { messageNoReleasedVersionFound } from './packagist-base.js'
 export const t = new ServiceTester({
   id: 'packagist',
   title: 'Packagist Version',
@@ -23,7 +24,7 @@ t.create('version (valid)').get('/v/symfony/symfony.json').expectBadge({
 
 t.create('version (no releases)').get('/v/wsg/hello.json').expectBadge({
   label: 'packagist',
-  message: 'no released version found',
+  message: messageNoReleasedVersionFound,
   color: 'red',
 })
 

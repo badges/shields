@@ -1,6 +1,8 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
-import PackagistPhpVersion from './packagist-php-version.service.js'
+import PackagistPhpVersion, {
+  messagePhpVersionNotFound,
+} from './packagist-php-version.service.js'
 
 describe('PackagistPhpVersion', function () {
   const versions = [
@@ -53,7 +55,7 @@ describe('PackagistPhpVersion', function () {
       ])
     )
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'version requirement not found')
+      .with.property('prettyMessage', messagePhpVersionNotFound)
   })
 
   it('should throw NotFound when PHP version not found on package when using specified release', async function () {
@@ -76,7 +78,7 @@ describe('PackagistPhpVersion', function () {
       )
     )
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'version requirement not found')
+      .with.property('prettyMessage', messagePhpVersionNotFound)
   })
 
   it('should return PHP version for the default release', function () {
@@ -96,7 +98,7 @@ describe('PackagistPhpVersion', function () {
       PackagistPhpVersion.prototype.getPhpVersion([{ version: '1.0.x-dev' }])
     )
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'version requirement not found')
+      .with.property('prettyMessage', messagePhpVersionNotFound)
 
     expect(() =>
       PackagistPhpVersion.prototype.getPhpVersion([
@@ -104,7 +106,7 @@ describe('PackagistPhpVersion', function () {
       ])
     )
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'version requirement not found')
+      .with.property('prettyMessage', messagePhpVersionNotFound)
   })
 
   it('should return PHP version for the default branch', function () {

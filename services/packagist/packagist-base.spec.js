@@ -2,7 +2,10 @@ import { strict as assert } from 'assert'
 import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
-import { BasePackagistService } from './packagist-base.js'
+import BasePackagistService, {
+  messageInvalidVersion,
+  messageNoReleasedVersionFound,
+} from './packagist-base.js'
 
 describe('BasePackagistService', function () {
   describe('expandPackageVersions', function () {
@@ -118,10 +121,10 @@ describe('BasePackagistService', function () {
         .that.eql(['GPLv3'])
     })
 
-    it('should throw NotFound("invalid version") if the specified version is not found', function () {
+    it(`should throw NotFound('${messageInvalidVersion}') if the specified version is not found`, function () {
       expect(() => BasePackagistService.findSpecifiedVersion(versions, '4.0.0'))
         .to.throw(NotFound)
-        .with.property('prettyMessage', 'invalid version')
+        .with.property('prettyMessage', messageInvalidVersion)
     })
   })
 
@@ -201,10 +204,10 @@ describe('BasePackagistService', function () {
         .that.equals('3.0.0-alpha1')
     })
 
-    it('should throw NotFound("no released version found") if versions array is empty', function () {
+    it(`should throw NotFound('${messageNoReleasedVersionFound}') if versions array is empty`, function () {
       expect(() => BasePackagistService.findLatestVersion([], true))
         .to.throw(NotFound)
-        .with.property('prettyMessage', 'no released version found')
+        .with.property('prettyMessage', messageNoReleasedVersionFound)
     })
 
     it('should find the latest unstable tagged version if no stable release is found', function () {
@@ -246,7 +249,7 @@ describe('BasePackagistService', function () {
         .that.equals('3.0.0-rc1')
     })
 
-    it('should throw NotFound("no released version found") if no release version is found', function () {
+    it(`should throw NotFound('${messageNoReleasedVersionFound}') if no release version is found`, function () {
       const versions = [
         {
           name: 'foo/bar',
@@ -275,7 +278,7 @@ describe('BasePackagistService', function () {
         BasePackagistService.findLatestVersion(versions)
       })
         .to.throw(NotFound)
-        .with.property('prettyMessage', 'no released version found')
+        .with.property('prettyMessage', messageNoReleasedVersionFound)
     })
   })
 })

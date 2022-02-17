@@ -113,3 +113,5 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 }
+
+export { messagePhpVersionNotFound }

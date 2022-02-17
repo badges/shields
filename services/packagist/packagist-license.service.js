@@ -80,3 +80,5 @@ export default class PackagistLicense extends BasePackagistService {
     }
   }
 }
+
+export { messageLicenseNotFound }

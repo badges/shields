@@ -2,6 +2,9 @@ import Joi from 'joi'
 import { BaseJsonService, NotFound } from '../index.js'
 import { isStable, latest } from '../php-version.js'
 
+const messageNoReleasedVersionFound = 'no released version found'
+const messageInvalidVersion = 'invalid version'
+
 const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
@@ -242,7 +245,7 @@ class BasePackagistService extends BaseJsonService {
         )
       : versionsToSearch.filter(({ version }) => !version.startsWith('dev-'))
     if (versionsToSearch.length < 1) {
-      throw new NotFound({ prettyMessage: 'no released version found' })
+      throw new NotFound({ prettyMessage: messageNoReleasedVersionFound })
     }
 
     // Find the release version string
@@ -255,7 +258,7 @@ class BasePackagistService extends BaseJsonService {
     }
 
     if (release === undefined) {
-      throw new NotFound({ prettyMessage: 'no released version found' })
+      throw new NotFound({ prettyMessage: messageNoReleasedVersionFound })
     }
     return versions.filter(version => version.version === release)[0]
   }
@@ -273,7 +276,7 @@ class BasePackagistService extends BaseJsonService {
   static findSpecifiedVersion(versions, version) {
     const index = versions.findIndex(v => v.version === version)
     if (index === -1) {
-      throw new NotFound({ prettyMessage: 'invalid version' })
+      throw new NotFound({ prettyMessage: messageInvalidVersion })
     }
     return versions[index]
   }
@@ -293,10 +296,14 @@ const cacheDocumentationFragment = `
   </p>
   `
 
+export default BasePackagistService
+
 export {
   composerMetadatApiSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
+  messageInvalidVersion,
+  messageNoReleasedVersionFound,
 }

@@ -1,6 +1,8 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
-import PackagistLicense from './packagist-license.service.js'
+import PackagistLicense, {
+  messageLicenseNotFound,
+} from './packagist-license.service.js'
 import { BasePackagistService } from './packagist-base.js'
 
 describe('PackagistLicense', function () {
@@ -99,6 +101,6 @@ describe('PackagistLicense', function () {
 
     expect(() => PackagistLicense.prototype.getLicense({ versions }))
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'license not found')
+      .with.property('prettyMessage', messageLicenseNotFound)
   })
 })
