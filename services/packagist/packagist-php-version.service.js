@@ -117,16 +117,12 @@ export default class PackagistPhpVersion extends BasePackagistService {
   }
 
   async handle({ user, repo, version = '' }, { server }) {
-    const allData = await this.fetch({
+    const versions = await this.fetchVersions({
       user,
       repo,
       schema: allVersionsSchema,
       server,
     })
-    const versions = BasePackagistService.expandPackageVersions(
-      allData,
-      this.getPackageName(user, repo)
-    )
     const { phpVersion } = this.getPhpVersion({
       versions,
       user,

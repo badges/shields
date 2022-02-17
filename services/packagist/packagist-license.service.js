@@ -76,11 +76,7 @@ export default class PackagistLicense extends BasePackagistService {
   }
 
   async handle({ user, repo }, { server }) {
-    const json = await this.fetch({ user, repo, schema, server })
-    const versions = BasePackagistService.expandPackageVersions(
-      json,
-      this.getPackageName(user, repo)
-    )
+    const versions = await this.fetchVersions({ user, repo, schema, server })
     const license = this.getLicense({ versions, user, repo })
 
     return renderLicenseBadge({ license })

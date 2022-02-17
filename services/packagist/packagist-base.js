@@ -18,7 +18,36 @@ const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
   /**
-   * Default fetch method.
+   * Fetch all version metadata of a package.
+   *
+   * This method utilize composer metadata API which
+   * "... is the preferred way to access the data as it is always up to date,
+   * and dumped to static files so it is very efficient on our end." (comment from official documentation).
+   * For more information please refer to https://packagist.org/apidoc#get-package-data.
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {string} attrs.user package user
+   * @param {string} attrs.repo package repository
+   * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
+   * @param {string} attrs.server URL for the packagist registry server (Optional)
+   *
+   * @returns {object[]} An array of package version objects
+   */
+  async fetchVersions({
+    user,
+    repo,
+    schema,
+    server = 'https://packagist.org',
+  }) {
+    const json = await this.fetchRelease({ user, repo, schema, server })
+    return this.constructor.expandPackageVersions(
+      json,
+      this.getPackageName(user, repo)
+    )
+  }
+
+  /**
+   * Fetch tagged releases method.
    *
    * This method utilize composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
@@ -32,7 +61,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
-  async fetch({ user, repo, schema, server = 'https://packagist.org' }) {
+  async fetchRelease({ user, repo, schema, server = 'https://packagist.org' }) {
     const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}.json`
 
     return this._requestJson({

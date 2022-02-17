@@ -81,16 +81,12 @@ class PackagistVersion extends BasePackagistService {
     { include_prereleases: includePrereleases, server }
   ) {
     includePrereleases = includePrereleases !== undefined
-    const json = await this.fetch({
+    const versions = await this.fetchVersions({
       user,
       repo,
       schema: includePrereleases ? schema : allVersionsSchema,
       server,
     })
-    const versions = BasePackagistService.expandPackageVersions(
-      json,
-      this.getPackageName(user, repo)
-    )
     const { version } = this.findLatestRelease(versions, includePrereleases)
     return this.constructor.render({ version })
   }
