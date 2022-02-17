@@ -200,7 +200,7 @@ class BasePackagistService extends BaseJsonService {
     { version = '', includePrereleases = false } = {}
   ) {
     return version === ''
-      ? this.findLatestRelease(versions, includePrereleases)
+      ? this.findLatestVersion(versions, includePrereleases)
       : this.findSpecifiedVersion(versions, version)
   }
 
@@ -213,7 +213,7 @@ class BasePackagistService extends BaseJsonService {
    * @returns {object} The object of the latest version.
    * @throws {NotFound} Thrown if there is no item from the version array.
    */
-  static findLatestRelease(versions, includePrereleases = false) {
+  static findLatestVersion(versions, includePrereleases = false) {
     // Find the latest version string, if not found, throw NotFound.
     const versionStrings = versions
       .filter(
@@ -226,9 +226,14 @@ class BasePackagistService extends BaseJsonService {
       throw new NotFound({ prettyMessage: 'no released version found' })
     }
 
+    // Find the release version string
     let release = latest(versionStrings)
     if (!includePrereleases) {
       release = latest(versionStrings.filter(isStable)) || release
+    }
+
+    if (release === undefined) {
+      throw new NotFound({ prettyMessage: 'no released version found' })
     }
     return versions.filter(version => version.version === release)[0]
   }
