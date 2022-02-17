@@ -191,6 +191,24 @@ class BasePackagistService extends BaseJsonService {
     }
     return versions.filter(version => version.version === release)[0]
   }
+
+  /**
+   * Find the specified package version from thegiven API response.
+   *
+   * @param {Array} versions An array of package versions.
+   * @param {string} version The version specifier.
+   *
+   * @returns {object} The package version object.
+   *
+   * @throws {NotFound} If the specified version is not found.
+   */
+  static findSpecifiedVersion(versions, version) {
+    const index = versions.findIndex(v => v.version === version)
+    if (index === -1) {
+      throw new NotFound({ prettyMessage: 'invalid version' })
+    }
+    return versions[index]
+  }
 }
 
 const customServerDocumentationFragment = `

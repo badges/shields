@@ -67,24 +67,6 @@ export default class PackagistPhpVersion extends BasePackagistService {
   }
 
   /**
-   * Find the specified package version from thegiven API response.
-   *
-   * @param {Array} versions An array of package versions.
-   * @param {string} version The version specifier.
-   *
-   * @returns {object} The package version object.
-   *
-   * @throws {NotFound} If the specified version is not found.
-   */
-  findSpecifiedVersion(versions, version) {
-    const index = versions.findIndex(v => v.version === version)
-    if (index === -1) {
-      throw new NotFound({ prettyMessage: 'invalid version' })
-    }
-    return versions[index]
-  }
-
-  /**
    * Get the PHP version requirement of the latest release or
    * the specified package version.
    *
@@ -106,7 +88,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
     if (version === '') {
       packageVersion = this.constructor.findLatestRelease(versions)
     } else {
-      packageVersion = this.findSpecifiedVersion(versions, version)
+      packageVersion = this.constructor.findSpecifiedVersion(versions, version)
     }
 
     if (!packageVersion.require || !packageVersion.require.php) {
