@@ -55,14 +55,17 @@ export default class PackagistLicense extends BasePackagistService {
     label: 'license',
   }
 
-  transform({ json, user, repo }) {
-    const packageName = this.getPackageName(user, repo)
-
-    const versions = BasePackagistService.expandPackageVersions(
-      json,
-      packageName
-    )
-
+  /**
+   * Get the license from the latest release package version.
+   *
+   * @param {object} attrs An object of attributes from the request.
+   * @param {object[]} attrs.versions An array of package version objects.
+   *
+   * @returns {object} An object with a "license" attribute string of the latest release version.
+   *
+   * @throws {NotFound} If a release version is not found, or the license is not found.
+   */
+  getLicense({ versions }) {
     const version = this.findLatestRelease(versions)
     const license = version.license
     if (!license) {
@@ -74,8 +77,11 @@ export default class PackagistLicense extends BasePackagistService {
 
   async handle({ user, repo }, { server }) {
     const json = await this.fetch({ user, repo, schema, server })
-
-    const { license } = this.transform({ json, user, repo })
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      this.getPackageName(user, repo)
+    )
+    const license = this.getLicense({ versions, user, repo })
 
     return renderLicenseBadge({ license })
   }

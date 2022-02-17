@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
 import PackagistLicense from './packagist-license.service.js'
+import { BasePackagistService } from './packagist-base.js'
 
 describe('PackagistLicense', function () {
   it('should return the license of the most recent release', function () {
@@ -18,14 +19,12 @@ describe('PackagistLicense', function () {
         ],
       },
     }
-
-    expect(
-      PackagistLicense.prototype.transform({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      'frodo/the-one-package'
     )
+
+    expect(PackagistLicense.prototype.getLicense({ versions }))
       .to.have.property('license')
       .that.equals('MIT-latest')
   })
@@ -45,14 +44,12 @@ describe('PackagistLicense', function () {
         ],
       },
     }
-
-    expect(
-      PackagistLicense.prototype.transform({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      'frodo/the-one-package'
     )
+
+    expect(PackagistLicense.prototype.getLicense({ versions }))
       .to.have.property('license')
       .that.equals('MIT')
   })
@@ -72,14 +69,12 @@ describe('PackagistLicense', function () {
         ],
       },
     }
-
-    expect(
-      PackagistLicense.prototype.transform({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      'frodo/the-one-package'
     )
+
+    expect(PackagistLicense.prototype.getLicense({ versions }))
       .to.have.property('license')
       .that.equals('MIT-latest')
   })
@@ -97,14 +92,12 @@ describe('PackagistLicense', function () {
         ],
       },
     }
-
-    expect(() =>
-      PackagistLicense.prototype.transform({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      'frodo/the-one-package'
     )
+
+    expect(() => PackagistLicense.prototype.getLicense({ versions }))
       .to.throw(NotFound)
       .with.property('prettyMessage', 'license not found')
   })
