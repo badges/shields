@@ -83,22 +83,16 @@ export default class PackagistPhpVersion extends BasePackagistService {
    * - the version is found but has no php version specified.
    */
   getPhpVersion({ versions, version = '' }) {
-    let packageVersion
-    if (version === '') {
-      packageVersion = this.constructor.findLatestRelease(versions)
-    } else {
-      packageVersion = this.constructor.findSpecifiedVersion(versions, version)
-    }
+    const packageVersion = this.constructor.findVersion(versions, { version })
 
     if (!packageVersion.require || !packageVersion.require.php) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
-
     return { phpVersion: packageVersion.require.php }
   }
 
   async handle({ user, repo, version = '' }, { server }) {
-    const versions = await this.fetchVersions({
+    const versions = this.fetchVersions({
       user,
       repo,
       server,

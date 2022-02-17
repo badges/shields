@@ -70,15 +70,10 @@ class PackagistVersion extends BasePackagistService {
     { include_prereleases: includePrereleases, server }
   ) {
     includePrereleases = includePrereleases !== undefined
-    const versions = this.fetchVersions({
-      user,
-      repo,
-      server,
+    const versions = this.fetchVersions({ user, repo, server })
+    const { version } = this.constructor.findVersion(versions, {
+      includePrereleases,
     })
-    const { version } = this.constructor.findLatestRelease(
-      versions,
-      includePrereleases
-    )
     return this.constructor.render({ version })
   }
 }

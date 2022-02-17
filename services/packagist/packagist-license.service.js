@@ -66,8 +66,7 @@ export default class PackagistLicense extends BasePackagistService {
    * @throws {NotFound} If a release version is not found, or the license is not found.
    */
   getLicense({ versions }) {
-    const version = this.constructor.findLatestRelease(versions)
-    const license = version.license
+    const { license } = this.constructor.findVersion(versions)
     if (!license) {
       throw new NotFound({ prettyMessage: 'license not found' })
     }
@@ -76,7 +75,7 @@ export default class PackagistLicense extends BasePackagistService {
   }
 
   async handle({ user, repo }, { server }) {
-    const versions = await this.fetchVersions({ user, repo, schema, server })
+    const versions = this.fetchVersions({ user, repo, schema, server })
     const license = this.getLicense({ versions, user, repo })
 
     return renderLicenseBadge({ license })

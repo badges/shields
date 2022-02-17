@@ -180,6 +180,31 @@ class BasePackagistService extends BaseJsonService {
   }
 
   /**
+   * Find the package version object of either the latest
+   * tagged version or the specified version.
+   *
+   * @param {object[]} versions An (expanded) array of package version objects.
+   * @param {object} options A key-value object for options.
+   * @param {string} [options.version] A specific version string to look for
+   *   (Optional). Default ''.
+   * @param {boolean} [options.includePrereleases] If pre-release tags are
+   *   included in the search (Optional). Default: false.
+   *
+   * @returns {object} A package version object.
+   *
+   * @throws {NotFound} If a release version is not found, or if the specified
+   *   version is not found.
+   */
+  static findVersion(
+    versions,
+    { version = '', includePrereleases = false } = {}
+  ) {
+    return version === ''
+      ? this.findLatestRelease(versions, includePrereleases)
+      : this.findSpecifiedVersion(versions, version)
+  }
+
+  /**
    * Find the object representation of the latest release.
    *
    * @param {object[]} versions An array of object representing a version.
