@@ -9,16 +9,6 @@ import {
   customServerDocumentationFragment,
 } from './packagist-base.js'
 
-const packageSchema = Joi.array().items(
-  Joi.object({
-    version: Joi.string().required(),
-  })
-)
-
-const schema = Joi.object({
-  packages: Joi.object().pattern(/^/, packageSchema).required(),
-}).required()
-
 const queryParamSchema = Joi.object({
   server: optionalUrl,
   include_prereleases: Joi.equal(''),
@@ -81,10 +71,10 @@ class PackagistVersion extends BasePackagistService {
     { include_prereleases: includePrereleases, server }
   ) {
     includePrereleases = includePrereleases !== undefined
-    const versions = await this.fetchVersions({
+    const versions = this.fetchVersions({
       user,
       repo,
-      schema: includePrereleases ? schema : allVersionsSchema,
+      schema: allVersionsSchema,
       server,
     })
     const { version } = this.constructor.findLatestRelease(
