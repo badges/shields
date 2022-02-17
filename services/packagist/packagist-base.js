@@ -31,33 +31,26 @@ class BasePackagistService extends BaseJsonService {
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    *
-   * @returns {object[]} An array of package version objects
+   * @returns {object[]} An array of package version metadata objects
    */
-  async fetchVersions({
+  async fetch({
     user,
     repo,
     schema = composerMetadatApiSchema,
     server = 'https://packagist.org',
   }) {
-    const packageName = `${user.toLowerCase()}/${repo.toLowerCase()}`
-
     // call both the release endpoint and dev endpoint for metadata
     const responses = await Promise.all([
       this.fetchDev({ user, repo, schema, server }),
       this.fetchRelease({ user, repo, schema, server }),
     ])
 
-    // 1. extract the package version arrays from both the release and dev endpoint
-    //    response; then
-    // 2. expand both array from minified format; then
-    // 3. use Array.flatMap to concat the results into a single package version array.
-    return responses.flatMap(response =>
-      this.constructor.expandPackageVersions(response, packageName)
-    )
+    // flatten the metadata arrays created by both methods.
+    return responses.flat()
   }
 
   /**
-   * Fetch tagged releases method.
+   * Fetch metadata of tagged releases.
    *
    * This method utilize composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
@@ -69,7 +62,8 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.repo package repository
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
-   * @returns {object} Parsed response
+   *
+   * @returns {object[]} An array of package version metadata objects
    */
   async fetchRelease({
     user,
@@ -77,16 +71,17 @@ class BasePackagistService extends BaseJsonService {
     schema = composerMetadatApiSchema,
     server = 'https://packagist.org',
   }) {
-    const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}.json`
-
-    return this._requestJson({
+    const packageName = `${user.toLowerCase()}/${repo.toLowerCase()}`
+    const url = `${server}/p2/${packageName}.json`
+    const json = await this._requestJson({
       schema,
       url,
     })
+    return this.constructor.expandPackageVersions(json, packageName)
   }
 
   /**
-   * Fetch dev releases method.
+   * Fetch metadata of HEAD of the development branches.
    *
    * This method utilize composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
@@ -98,7 +93,8 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.repo package repository
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
-   * @returns {object} Parsed response
+   *
+   * @returns {object[]} An array of package version metadata objects
    */
   async fetchDev({
     user,
@@ -106,12 +102,13 @@ class BasePackagistService extends BaseJsonService {
     schema = composerMetadatApiSchema,
     server = 'https://packagist.org',
   }) {
-    const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}~dev.json`
-
-    return this._requestJson({
+    const packageName = `${user.toLowerCase()}/${repo.toLowerCase()}`
+    const url = `${server}/p2/${packageName}~dev.json`
+    const json = await this._requestJson({
       schema,
       url,
     })
+    return this.constructor.expandPackageVersions(json, packageName)
   }
 
   /**
@@ -127,7 +124,8 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.repo package repository
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
-   * @returns {object} Parsed response
+   *
+   * @returns {object[]} An array of package version metadata objects
    */
   async fetchByJsonAPI({
     user,
@@ -150,7 +148,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {object} json The response of Packagist v2 API.
    * @param {string} packageName The package name.
    *
-   * @returns {object[]} An array of version metadata object.
+   * @returns {object[]} An array of package version metadata objects.
    *
    * @see https://github.com/composer/metadata-minifier/blob/c549d23829536f0d0e984aaabbf02af91f443207/src/MetadataMinifier.php#L16-L46
    */
@@ -192,7 +190,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {boolean} [options.includeDefaultBranch] If default branch
    *   version are included in the search (Optional). Default: false.
    *
-   * @returns {object} A package version object.
+   * @returns {object} A package version metadata object.
    *
    * @throws {NotFound} If a release version is not found, or if the specified
    *   version is not found.
@@ -221,7 +219,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {boolean} options.includePrereleases Includes pre-release semver for the search.
    * @param {boolean} options.includeDefaultBranch Includes pre-release semver for the search.
    *
-   * @returns {object} The object of the latest version.
+   * @returns {object} A package version metadata object.
    * @throws {NotFound} Thrown if there is no item from the version array.
    */
   static findLatestVersion(
@@ -268,7 +266,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {Array} versions An array of package versions.
    * @param {string} version The version specifier.
    *
-   * @returns {object} The package version object.
+   * @returns {object} A package version metadata object.
    *
    * @throws {NotFound} If the specified version is not found.
    */

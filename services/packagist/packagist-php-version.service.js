@@ -94,7 +94,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
   }
 
   async handle({ user, repo, version = '' }, { server }) {
-    const versions = this.fetchVersions({
+    const versions = this.fetch({
       user,
       repo,
       server,
