@@ -23,15 +23,15 @@ describe('PackagistPhpVersion', function () {
     },
   }
   it('should throw NotFound when package version is missing', function () {
-    expect(() => {
-      PackagistPhpVersion.prototype.getPhpVersion({
-        versions: BasePackagistService.expandPackageVersions(
+    expect(() =>
+      PackagistPhpVersion.prototype.getPhpVersion(
+        BasePackagistService.expandPackageVersions(
           json,
           'frodo/the-one-package'
         ),
-        version: '4.0.0',
-      })
-    })
+        '4.0.0'
+      )
+    )
       .to.throw(NotFound)
       .with.property('prettyMessage', 'invalid version')
   })
@@ -54,14 +54,14 @@ describe('PackagistPhpVersion', function () {
         ],
       },
     }
-    expect(() => {
-      PackagistPhpVersion.prototype.getPhpVersion({
-        versions: BasePackagistService.expandPackageVersions(
+    expect(() =>
+      PackagistPhpVersion.prototype.getPhpVersion(
+        BasePackagistService.expandPackageVersions(
           specJson,
           'frodo/the-one-package'
-        ),
-      })
-    })
+        )
+      )
+    )
       .to.throw(NotFound)
       .with.property('prettyMessage', 'version requirement not found')
   })
@@ -85,27 +85,27 @@ describe('PackagistPhpVersion', function () {
         ],
       },
     }
-    expect(() => {
-      PackagistPhpVersion.prototype.getPhpVersion({
-        versions: BasePackagistService.expandPackageVersions(
+    expect(() =>
+      PackagistPhpVersion.prototype.getPhpVersion(
+        BasePackagistService.expandPackageVersions(
           specJson,
           'frodo/the-one-package'
         ),
-        version: '1.0.0',
-      })
-    })
+        '1.0.0'
+      )
+    )
       .to.throw(NotFound)
       .with.property('prettyMessage', 'version requirement not found')
   })
 
   it('should return PHP version for the default release', async function () {
     expect(
-      PackagistPhpVersion.prototype.getPhpVersion({
-        versions: BasePackagistService.expandPackageVersions(
+      PackagistPhpVersion.prototype.getPhpVersion(
+        BasePackagistService.expandPackageVersions(
           json,
           'frodo/the-one-package'
-        ),
-      })
+        )
+      )
     )
       .to.have.property('phpVersion')
       .that.equals('^7.4 || 8')
@@ -113,13 +113,13 @@ describe('PackagistPhpVersion', function () {
 
   it('should return PHP version for the specified release', async function () {
     expect(
-      PackagistPhpVersion.prototype.getPhpVersion({
-        versions: BasePackagistService.expandPackageVersions(
+      PackagistPhpVersion.prototype.getPhpVersion(
+        BasePackagistService.expandPackageVersions(
           json,
           'frodo/the-one-package'
         ),
-        version: '2.0.0',
-      })
+        '2.0.0'
+      )
     )
       .to.have.property('phpVersion')
       .that.equals('^7.2')

@@ -69,9 +69,8 @@ export default class PackagistPhpVersion extends BasePackagistService {
    * Get the PHP version requirement of the latest release or
    * the specified package version.
    *
-   * @param {object} attrs An object with all the query details.
-   * @param {object[]} attrs.versions An array of package version objects.
-   * @param {string} [attrs.version] The version specifier, if intented to
+   * @param {object[]} versions An array of package version objects.
+   * @param {string} [version] The version specifier, if intented to
    * search specific version for the php requirement (Optional).
    *
    * @returns {object} An object with the key "phpVersion" specifying
@@ -82,7 +81,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
    * - the specified version is not found; or
    * - the version is found but has no php version specified.
    */
-  getPhpVersion({ versions, version = '' }) {
+  getPhpVersion(versions, version = '') {
     const packageVersion = this.constructor.findVersion(versions, {
       version,
       includeDefaultBranch: true,
@@ -100,13 +99,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
       repo,
       server,
     })
-    const { phpVersion } = this.getPhpVersion({
-      versions,
-      user,
-      repo,
-      version,
-      server,
-    })
+    const { phpVersion } = this.getPhpVersion(versions, version)
     return this.constructor.render({ php: phpVersion })
   }
 }
