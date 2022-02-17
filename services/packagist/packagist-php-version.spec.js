@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
+import { BasePackagistService } from './packagist-base.js'
 import PackagistPhpVersion from './packagist-php-version.service.js'
 
 describe('PackagistPhpVersion', function () {
@@ -21,13 +22,13 @@ describe('PackagistPhpVersion', function () {
       ],
     },
   }
-
   it('should throw NotFound when package version is missing', function () {
     expect(() => {
       PackagistPhpVersion.prototype.getPhpVersion({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
+        versions: BasePackagistService.expandPackageVersions(
+          json,
+          'frodo/the-one-package'
+        ),
         version: '4.0.0',
       })
     })
@@ -55,9 +56,10 @@ describe('PackagistPhpVersion', function () {
     }
     expect(() => {
       PackagistPhpVersion.prototype.getPhpVersion({
-        json: specJson,
-        user: 'frodo',
-        repo: 'the-one-package',
+        versions: BasePackagistService.expandPackageVersions(
+          specJson,
+          'frodo/the-one-package'
+        ),
       })
     })
       .to.throw(NotFound)
@@ -85,9 +87,10 @@ describe('PackagistPhpVersion', function () {
     }
     expect(() => {
       PackagistPhpVersion.prototype.getPhpVersion({
-        json: specJson,
-        user: 'frodo',
-        repo: 'the-one-package',
+        versions: BasePackagistService.expandPackageVersions(
+          specJson,
+          'frodo/the-one-package'
+        ),
         version: '1.0.0',
       })
     })
@@ -98,9 +101,10 @@ describe('PackagistPhpVersion', function () {
   it('should return PHP version for the default release', async function () {
     expect(
       PackagistPhpVersion.prototype.getPhpVersion({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
+        versions: BasePackagistService.expandPackageVersions(
+          json,
+          'frodo/the-one-package'
+        ),
       })
     )
       .to.have.property('phpVersion')
@@ -110,9 +114,10 @@ describe('PackagistPhpVersion', function () {
   it('should return PHP version for the specified release', async function () {
     expect(
       PackagistPhpVersion.prototype.getPhpVersion({
-        json,
-        user: 'frodo',
-        repo: 'the-one-package',
+        versions: BasePackagistService.expandPackageVersions(
+          json,
+          'frodo/the-one-package'
+        ),
         version: '2.0.0',
       })
     )

@@ -89,9 +89,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
    * the specified package version.
    *
    * @param {object} attrs An object with all the query details.
-   * @param {object} attrs.json The packagist composer (v2) API response.
-   * @param {string} attrs.user The vendor name in the package name.
-   * @param {string} attrs.repo The project name in the package name.
+   * @param {object[]} attrs.versions An array of package version objects.
    * @param {string} [attrs.version] The version specifier, if intented to
    * search specific version for the php requirement (Optional).
    *
@@ -103,13 +101,8 @@ export default class PackagistPhpVersion extends BasePackagistService {
    * - the specified version is not found; or
    * - the version is found but has no php version specified.
    */
-  getPhpVersion({ json, user, repo, version = '' }) {
+  getPhpVersion({ versions, version = '' }) {
     let packageVersion
-    const versions = BasePackagistService.expandPackageVersions(
-      json,
-      this.getPackageName(user, repo)
-    )
-
     if (version === '') {
       packageVersion = this.findLatestRelease(versions)
     } else {
@@ -130,8 +123,12 @@ export default class PackagistPhpVersion extends BasePackagistService {
       schema: allVersionsSchema,
       server,
     })
+    const versions = BasePackagistService.expandPackageVersions(
+      allData,
+      this.getPackageName(user, repo)
+    )
     const { phpVersion } = this.getPhpVersion({
-      json: allData,
+      versions,
       user,
       repo,
       version,
