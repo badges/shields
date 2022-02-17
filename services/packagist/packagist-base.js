@@ -242,9 +242,7 @@ class BasePackagistService extends BaseJsonService {
             !metadata.version.startsWith('dev-') ||
             metadata['default-branch'] === true
         )
-      : (versionsToSearch = versionsToSearch.filter(
-          ({ version }) => !version.startsWith('dev-')
-        ))
+      : versionsToSearch.filter(({ version }) => !version.startsWith('dev-'))
     if (versionsToSearch.length < 1) {
       throw new NotFound({ prettyMessage: 'no released version found' })
     }
