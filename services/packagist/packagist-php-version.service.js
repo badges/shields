@@ -66,37 +66,44 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  findVersionIndex(json, version) {
-    return json.findIndex(v => v.version === version)
-  }
-
-  async findSpecifiedVersion(json, user, repo, version, server) {
-    let release
-
-    if ((release = json[this.findVersionIndex(json, version)])) {
-      return release
-    } else {
-      try {
-        const allData = await this.fetchDev({
-          user,
-          repo,
-          schema: allVersionsSchema,
-          server,
-        })
-
-        const versions = BasePackagistService.expandPackageVersions(
-          allData,
-          this.getPackageName(user, repo)
-        )
-
-        return versions[this.findVersionIndex(versions, version)]
-      } catch (e) {
-        return release
-      }
+  /**
+   * Find the specified package version from thegiven API response.
+   *
+   * @param {Array} versions An array of package versions.
+   * @param {string} version The version specifier.
+   *
+   * @returns {object} The package version object.
+   *
+   * @throws {NotFound} If the specified version is not found.
+   */
+  findSpecifiedVersion(versions, version) {
+    const index = versions.findIndex(v => v.version === version)
+    if (index === -1) {
+      throw new NotFound({ prettyMessage: 'invalid version' })
     }
+    return versions[index]
   }
 
-  async getPhpVersion({ json, user, repo, version = '', server }) {
+  /**
+   * Get the PHP version requirement of the latest release or
+   * the specified package version.
+   *
+   * @param {object} attrs An object with all the query details.
+   * @param {object} attrs.json The packagist composer (v2) API response.
+   * @param {string} attrs.user The vendor name in the package name.
+   * @param {string} attrs.repo The project name in the package name.
+   * @param {string} [attrs.version] The version specifier, if intented to
+   * search specific version for the php requirement (Optional).
+   *
+   * @returns {object} An object with the key "phpVersion" specifying
+   * the version requirement.
+   *
+   * @throws {NotFound} Either if:
+   * - a release version is not found; or
+   * - the specified version is not found; or
+   * - the version is found but has no php version specified.
+   */
+  getPhpVersion({ json, user, repo, version = '' }) {
     let packageVersion
     const versions = BasePackagistService.expandPackageVersions(
       json,
@@ -106,21 +113,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
     if (version === '') {
       packageVersion = this.findLatestRelease(versions)
     } else {
-      try {
-        packageVersion = await this.findSpecifiedVersion(
-          versions,
-          user,
-          repo,
-          version,
-          server
-        )
-      } catch (e) {
-        packageVersion = null
-      }
-    }
-
-    if (!packageVersion) {
-      throw new NotFound({ prettyMessage: 'invalid version' })
+      packageVersion = this.findSpecifiedVersion(versions, version)
     }
 
     if (!packageVersion.require || !packageVersion.require.php) {
@@ -137,7 +130,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
       schema: allVersionsSchema,
       server,
     })
-    const { phpVersion } = await this.getPhpVersion({
+    const { phpVersion } = this.getPhpVersion({
       json: allData,
       user,
       repo,
