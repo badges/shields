@@ -1,13 +1,11 @@
-import Joi from 'joi'
-import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
+import yaml from 'js-yaml'
+import { NotFound, InvalidResponse } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { parseReference, compareReferences } from './conan-version-helpers.js'
+import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
+import { fetchRepoContent } from '../github/github-common-fetch.js'
+import { compareVersions } from './conan-version-helpers.js'
 
-const schema = Joi.object({
-  results: Joi.array().items(Joi.string()),
-}).required()
-
-export default class ConanVersion extends BaseJsonService {
+export default class ConanVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
 
   static route = { base: 'conan/v', pattern: ':packageName' }
@@ -28,37 +26,29 @@ export default class ConanVersion extends BaseJsonService {
   }
 
   async handle({ packageName }) {
-    const { results: rawResults } = await this._requestJson({
-      schema,
-      url: `https://center.conan.io/v1/conans/search?q=${encodeURIComponent(
-        packageName
-      )}`,
+    const configContent = await fetchRepoContent(this, {
+      user: 'conan-io',
+      repo: 'conan-center-index',
+      branch: 'master',
+      filename: `recipes/${packageName}/config.yml`,
     })
 
-    if (!rawResults) {
-      throw new InvalidResponse()
-    }
-    const results = rawResults
-      .map(raw => {
-        const ref = parseReference(raw)
-        if (!ref) {
-          throw new InvalidResponse({
-            underlyingError: new Error(`Unable to parse reference: '${raw}'`),
-          })
-        }
-        if (ref.name === packageName) {
-          return ref
-        }
-        return undefined
+    let versions
+    try {
+      const config = yaml.load(configContent)
+      versions = Object.keys(config.versions)
+    } catch (err) {
+      throw new InvalidResponse({
+        prettyMessage: 'invalid config.yml',
+        underlyingError: err,
       })
-      .filter(Boolean)
-      .sort(compareReferences)
+    }
+    versions.sort(compareVersions)
 
-    if (results.length === 0) {
-      throw new NotFound()
+    if (versions.length === 0) {
+      throw new NotFound({ prettyMessage: 'no versions found' })
     }
 
-    const ref = results[results.length - 1]
-    return this.constructor.render({ version: ref.version })
+    return this.constructor.render({ version: versions[versions.length - 1] })
   }
 }

@@ -1,10 +1,3 @@
-const REFERENCE_REGEX = /^(?<name>[^@/]+)\/(?<version>[^@/]+)@.*$/
-export function parseReference(ref) {
-  const matches = REFERENCE_REGEX.exec(ref)
-  if (matches) {
-    return { name: matches.groups.name, version: matches.groups.version }
-  }
-}
 function versionToList(version) {
   return version
     .split('+', 1)[0]
@@ -13,7 +6,7 @@ function versionToList(version) {
 }
 // Sorting logic adapted from:
 // https://github.com/conan-io/conan/blob/0e22f9e84bb2953ef48de8e32decc5a1a3613fb1/conans/model/version.py#L131
-export function compareReferences({ version: v1 }, { version: v2 }) {
+export function compareVersions(v1, v2) {
   const list1 = versionToList(v1)
   const list2 = versionToList(v2)
   let equal = true
