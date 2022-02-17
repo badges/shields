@@ -87,7 +87,10 @@ class PackagistVersion extends BasePackagistService {
       schema: includePrereleases ? schema : allVersionsSchema,
       server,
     })
-    const { version } = this.findLatestRelease(versions, includePrereleases)
+    const { version } = this.constructor.findLatestRelease(
+      versions,
+      includePrereleases
+    )
     return this.constructor.render({ version })
   }
 }

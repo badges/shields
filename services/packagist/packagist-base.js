@@ -172,7 +172,7 @@ class BasePackagistService extends BaseJsonService {
    * @returns {object} The object of the latest version.
    * @throws {NotFound} Thrown if there is no item from the version array.
    */
-  findLatestRelease(versions, includePrereleases = false) {
+  static findLatestRelease(versions, includePrereleases = false) {
     // Find the latest version string, if not found, throw NotFound.
     const versionStrings = versions
       .filter(

@@ -104,7 +104,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
   getPhpVersion({ versions, version = '' }) {
     let packageVersion
     if (version === '') {
-      packageVersion = this.findLatestRelease(versions)
+      packageVersion = this.constructor.findLatestRelease(versions)
     } else {
       packageVersion = this.findSpecifiedVersion(versions, version)
     }
