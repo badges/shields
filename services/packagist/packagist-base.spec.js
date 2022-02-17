@@ -129,6 +129,27 @@ describe('BasePackagistService', function () {
     const versions = [
       {
         name: 'foo/bar',
+        version: 'dev-main',
+        version_normalized: 'dev-main',
+        type: 'library',
+        scripts: {
+          foo: 'bar',
+        },
+        'default-branch': true,
+        license: ['GPLv3'],
+      },
+      {
+        name: 'foo/bar',
+        version: 'dev-2.x',
+        version_normalized: 'dev-2.x',
+        type: 'library',
+        scripts: {
+          foo: 'bar',
+        },
+        license: ['GPLv2'],
+      },
+      {
+        name: 'foo/bar',
         version: '3.0.0-alpha1',
         version_normalized: '3.0.0.0-alpha1',
         type: 'library',
@@ -171,7 +192,11 @@ describe('BasePackagistService', function () {
     })
 
     it('should find the latest unstable version if "includePrereleases" flag is true', function () {
-      expect(BasePackagistService.findLatestVersion(versions, true))
+      expect(
+        BasePackagistService.findLatestVersion(versions, {
+          includePrereleases: true,
+        })
+      )
         .to.have.property('version')
         .that.equals('3.0.0-alpha1')
     })
@@ -219,6 +244,38 @@ describe('BasePackagistService', function () {
       expect(BasePackagistService.findLatestVersion(versions))
         .to.have.property('version')
         .that.equals('3.0.0-rc1')
+    })
+
+    it('should throw NotFound("no released version found") if no release version is found', function () {
+      const versions = [
+        {
+          name: 'foo/bar',
+          version: 'dev-main',
+          version_normalized: 'dev-main',
+          'default-branch': true,
+          type: 'library',
+          scripts: {
+            foo: 'bar',
+          },
+          license: ['GPLv3'],
+        },
+        {
+          name: 'foo/bar',
+          version: 'dev-2.x',
+          version_normalized: 'dev-main',
+          type: 'library',
+          scripts: {
+            foo: 'bar',
+          },
+          license: ['GPLv2'],
+        },
+      ]
+
+      expect(() => {
+        BasePackagistService.findLatestVersion(versions)
+      })
+        .to.throw(NotFound)
+        .with.property('prettyMessage', 'no released version found')
     })
   })
 })

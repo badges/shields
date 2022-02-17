@@ -73,6 +73,7 @@ class PackagistVersion extends BasePackagistService {
     const versions = this.fetchVersions({ user, repo, server })
     const { version } = this.constructor.findVersion(versions, {
       includePrereleases,
+      includeDefaultBranch: false,
     })
     return this.constructor.render({ version })
   }

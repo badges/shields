@@ -189,6 +189,8 @@ class BasePackagistService extends BaseJsonService {
    *   (Optional). Default ''.
    * @param {boolean} [options.includePrereleases] If pre-release tags are
    *   included in the search (Optional). Default: false.
+   * @param {boolean} [options.includeDefaultBranch] If default branch
+   *   version are included in the search (Optional). Default: false.
    *
    * @returns {object} A package version object.
    *
@@ -197,10 +199,17 @@ class BasePackagistService extends BaseJsonService {
    */
   static findVersion(
     versions,
-    { version = '', includePrereleases = false } = {}
+    {
+      version = '',
+      includePrereleases = false,
+      includeDefaultBranch = false,
+    } = {}
   ) {
     return version === ''
-      ? this.findLatestVersion(versions, includePrereleases)
+      ? this.findLatestVersion(versions, {
+          includePrereleases,
+          includeDefaultBranch,
+        })
       : this.findSpecifiedVersion(versions, version)
   }
 
@@ -208,27 +217,44 @@ class BasePackagistService extends BaseJsonService {
    * Find the object representation of the latest release.
    *
    * @param {object[]} versions An array of object representing a version.
-   * @param {boolean} includePrereleases Includes pre-release semver for the search.
+   * @param {object} options Options for searching the latest version.
+   * @param {boolean} options.includePrereleases Includes pre-release semver for the search.
+   * @param {boolean} options.includeDefaultBranch Includes pre-release semver for the search.
    *
    * @returns {object} The object of the latest version.
    * @throws {NotFound} Thrown if there is no item from the version array.
    */
-  static findLatestVersion(versions, includePrereleases = false) {
+  static findLatestVersion(
+    versions,
+    { includePrereleases = false, includeDefaultBranch = false } = {}
+  ) {
     // Find the latest version string, if not found, throw NotFound.
-    const versionStrings = versions
-      .filter(
-        version =>
-          typeof version.version === 'string' ||
-          version.version instanceof String
-      )
-      .map(version => version.version)
-    if (versionStrings.length < 1) {
+    let versionsToSearch = versions.filter(
+      version =>
+        typeof version.version === 'string' || version.version instanceof String
+    )
+
+    // filter all branches, or
+    // leave default branch here when specified
+    versionsToSearch = includeDefaultBranch
+      ? versionsToSearch.filter(
+          metadata =>
+            !metadata.version.startsWith('dev-') ||
+            metadata['default-branch'] === true
+        )
+      : (versionsToSearch = versionsToSearch.filter(
+          ({ version }) => !version.startsWith('dev-')
+        ))
+    if (versionsToSearch.length < 1) {
       throw new NotFound({ prettyMessage: 'no released version found' })
     }
 
     // Find the release version string
+    const versionStrings = versionsToSearch.map(({ version }) => version)
     let release = latest(versionStrings)
     if (!includePrereleases) {
+      // if specified to not include prerelease, will still fallback to
+      // pre-release versions when no stable release is found.
       release = latest(versionStrings.filter(isStable)) || release
     }
 
