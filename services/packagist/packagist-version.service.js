@@ -3,7 +3,6 @@ import { renderVersionBadge } from '../version.js'
 import { optionalUrl } from '../validators.js'
 import { redirector } from '../index.js'
 import {
-  allVersionsSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
@@ -74,7 +73,6 @@ class PackagistVersion extends BasePackagistService {
     const versions = this.fetchVersions({
       user,
       repo,
-      schema: allVersionsSchema,
       server,
     })
     const { version } = this.constructor.findLatestRelease(

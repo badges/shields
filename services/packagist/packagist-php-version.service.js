@@ -2,7 +2,6 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { NotFound } from '../index.js'
 import {
-  allVersionsSchema,
   BasePackagistService,
   customServerDocumentationFragment,
 } from './packagist-base.js'
@@ -102,7 +101,6 @@ export default class PackagistPhpVersion extends BasePackagistService {
     const versions = await this.fetchVersions({
       user,
       repo,
-      schema: allVersionsSchema,
       server,
     })
     const { phpVersion } = this.getPhpVersion({

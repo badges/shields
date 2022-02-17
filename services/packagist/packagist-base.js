@@ -11,7 +11,7 @@ const packageSchema = Joi.array().items(
   })
 )
 
-const allVersionsSchema = Joi.object({
+const composerMetadatApiSchema = Joi.object({
   packages: Joi.object().pattern(/^/, packageSchema).required(),
 }).required()
 const keywords = ['PHP']
@@ -36,13 +36,23 @@ class BasePackagistService extends BaseJsonService {
   async fetchVersions({
     user,
     repo,
-    schema,
+    schema = composerMetadatApiSchema,
     server = 'https://packagist.org',
   }) {
-    const json = await this.fetchRelease({ user, repo, schema, server })
-    return this.constructor.expandPackageVersions(
-      json,
-      this.getPackageName(user, repo)
+    const packageName = `${user.toLowerCase()}/${repo.toLowerCase()}`
+
+    // call both the release endpoint and dev endpoint for metadata
+    const responses = await Promise.all([
+      this.fetchDev({ user, repo, schema, server }),
+      this.fetchRelease({ user, repo, schema, server }),
+    ])
+
+    // 1. extract the package version arrays from both the release and dev endpoint
+    //    response; then
+    // 2. expand both array from minified format; then
+    // 3. use Array.flatMap to concat the results into a single package version array.
+    return responses.flatMap(response =>
+      this.constructor.expandPackageVersions(response, packageName)
     )
   }
 
@@ -61,7 +71,12 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
-  async fetchRelease({ user, repo, schema, server = 'https://packagist.org' }) {
+  async fetchRelease({
+    user,
+    repo,
+    schema = composerMetadatApiSchema,
+    server = 'https://packagist.org',
+  }) {
     const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}.json`
 
     return this._requestJson({
@@ -85,7 +100,12 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
-  async fetchDev({ user, repo, schema, server = 'https://packagist.org' }) {
+  async fetchDev({
+    user,
+    repo,
+    schema = composerMetadatApiSchema,
+    server = 'https://packagist.org',
+  }) {
     const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}~dev.json`
 
     return this._requestJson({
@@ -121,10 +141,6 @@ class BasePackagistService extends BaseJsonService {
       schema,
       url,
     })
-  }
-
-  getPackageName(user, repo) {
-    return `${user.toLowerCase()}/${repo.toLowerCase()}`
   }
 
   /**
@@ -226,7 +242,7 @@ const cacheDocumentationFragment = `
   `
 
 export {
-  allVersionsSchema,
+  composerMetadatApiSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
