@@ -10,14 +10,14 @@ const isDroneBuildStatus = Joi.alternatives().try(
 )
 
 t.create('cloud-hosted build status on default branch')
-  .get('/drone/drone.json')
+  .get('/harness/drone.json')
   .expectBadge({
     label: 'build',
     message: isDroneBuildStatus,
   })
 
 t.create('cloud-hosted build status on named branch')
-  .get('/drone/drone/master.json')
+  .get('/harness/drone/master.json')
   .expectBadge({
     label: 'build',
     message: isDroneBuildStatus,

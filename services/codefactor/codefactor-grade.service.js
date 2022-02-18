@@ -18,9 +18,9 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
       title: 'CodeFactor Grade',
       namedParams: {
         vcsType: 'github',
-        user: 'pallets',
-        repo: 'flask',
-        branch: 'master',
+        user: 'microsoft',
+        repo: 'powertoys',
+        branch: 'main',
       },
       staticPreview: this.render({ grade: 'B+' }),
     },

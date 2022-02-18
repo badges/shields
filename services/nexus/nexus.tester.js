@@ -42,7 +42,9 @@ t.create('Nexus 2 - search snapshot version of an nonexistent artifact')
   })
 
 t.create('Nexus 2 - repository version')
-  .get('/public/asm/asm.json?server=http://repo.e-iceblue.com/nexus')
+  .get(
+    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus'
+  )
   .expectBadge({
     label: 'nexus',
     message: isVersion,
@@ -310,11 +312,11 @@ t.create('Nexus 3 - repository version with query')
 t.create('Nexus 3 - search release version without snapshots')
   .get(
     // Limit the version from above, so that any later artifacts don't break this test.
-    `/r/org.pentaho.adaptive/daemon.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
-      ':maven.baseVersion=<8.1.0.1'
+    `/r/org.pentaho.adaptive/pdi-engines.json?server=https://nexus.pentaho.org&nexusVersion=3&queryOpt=${encodeURIComponent(
+      ':maven.baseVersion=<8.0.0.1'
     )}`
   )
   .expectBadge({
     label: 'nexus',
-    message: 'v8.1.0.0-365',
+    message: 'v8.0.0.0-28',
   })
