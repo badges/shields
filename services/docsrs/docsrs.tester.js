@@ -10,6 +10,10 @@ t.create('Failing docs')
   .get('/tensorflow/0.16.1.json')
   .expectBadge({ label: 'docs@0.16.1', message: 'failing' })
 
+t.create('Multiple builds, latest passing')
+  .get('/bevy_tweening/0.3.1.json')
+  .expectBadge({ label: 'docs@0.3.1', message: 'passing' })
+
 t.create('Getting latest version works')
   .get('/rand/latest.json')
   .expectBadge({
