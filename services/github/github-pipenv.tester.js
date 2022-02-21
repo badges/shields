@@ -82,10 +82,8 @@ t.create('Locked version of unknown dependency')
   })
 
 t.create('Locked version of VCS dependency')
-  .get(
-    '/locked/dependency-version/DemocracyClub/aggregator-api/dc-base-theme.json'
-  )
+  .get('/locked/dependency-version/GSS-Cogs/databaker-docker/databaker.json')
   .expectBadge({
-    label: 'dc-base-theme',
+    label: 'databaker',
     message: isShortSha,
   })
