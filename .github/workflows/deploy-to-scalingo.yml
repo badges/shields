@@ -1,0 +1,23 @@
+name: Deploy to scalingo
+
+on:
+  workflow_dispatch:
+    inputs:
+      commitSHA:
+        description: Commit SHA to deploy
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch everything so scalingo doesn't complain
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SCALINGO_SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SCALINGO_KNOWN_HOSTS }}
+      - run: git push --force git@ssh.osc-fr1.scalingo.com:hiptest-badges.git ${{ github.event.inputs.commitSHA }}:refs/heads/master
