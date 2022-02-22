@@ -10,10 +10,10 @@ const schema = Joi.object({
 }).required()
 
 export default class TasBuildStatus extends BaseJsonService {
-  static category = 'build'
+  static category = 'test-results'
 
   static route = {
-    base: 'tas/build',
+    base: 'tas/tests',
     pattern: ':provider/:org/:repo',
   }
 
@@ -29,7 +29,7 @@ export default class TasBuildStatus extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'TAS' }
+  static defaultBadgeData = { label: 'tests' }
 
   static render({ testExecuted, duration, status }) {
     const message = `${testExecuted} tests | Executed in ${duration}`
