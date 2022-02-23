@@ -1,3 +1,6 @@
+import yaml from 'js-yaml'
+import { NotFound, InvalidResponse } from '../index.js'
+
 function versionToList(version) {
   return version
     .split('+', 1)[0]
@@ -46,4 +49,23 @@ export function compareVersions(v1, v2) {
   if (list2.length > list1.length) {
     return -1
   }
+}
+
+export function parseLatestVersionFromConfig(configYaml) {
+  let versions
+  try {
+    const config = yaml.load(configYaml)
+    versions = Object.keys(config.versions)
+  } catch (err) {
+    throw new InvalidResponse({
+      prettyMessage: 'invalid config.yml',
+      underlyingError: err,
+    })
+  }
+  versions.sort(compareVersions)
+
+  if (versions.length === 0) {
+    throw new NotFound({ prettyMessage: 'no versions found' })
+  }
+  return versions[versions.length - 1]
 }
