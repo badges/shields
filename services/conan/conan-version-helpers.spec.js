@@ -19,7 +19,9 @@ describe('parseLatestVersionFromConfig', function () {
     expect(() => parseLatestVersionFromConfig('[')).to.throw(InvalidResponse)
   })
   it('treats no results array as invalid', function () {
-    expect(() => parseLatestVersionFromConfig(' ')).to.throw(InvalidResponse)
+    expect(() =>
+      parseLatestVersionFromConfig('somethingElse: whatever')
+    ).to.throw(InvalidResponse)
   })
   it('treats empty results array as not found', function () {
     expect(() => parseLatestVersionFromConfig('versions: []')).to.throw(
