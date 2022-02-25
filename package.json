@@ -21,7 +21,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@fontsource/lato": "^4.5.1",
+    "@fontsource/lato": "^4.5.2",
     "@fontsource/lekton": "^4.5.2",
     "@sentry/node": "^6.17.9",
     "@shields_io/camp": "^18.1.1",
