@@ -12,16 +12,12 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
     {
       title: 'Conan Center',
       namedParams: { packageName: 'boost' },
-      staticPreview: this.render({ version: '1.78.0' }),
+      staticPreview: renderVersionBadge({ version: '1.78.0' }),
       keywords: ['c++'],
     },
   ]
 
   static defaultBadgeData = { label: 'conan' }
-
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
 
   async handle({ packageName }) {
     const configContent = await fetchRepoContent(this, {
@@ -33,6 +29,6 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
 
     const version = parseLatestVersionFromConfig(configContent)
 
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version })
   }
 }

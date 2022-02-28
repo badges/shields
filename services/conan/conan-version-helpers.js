@@ -17,5 +17,5 @@ export function parseLatestVersionFromConfig(configYaml) {
   if (version == null) {
     throw new NotFound({ prettyMessage: 'no versions found' })
   }
-  return versions[versions.length - 1]
+  return version
 }

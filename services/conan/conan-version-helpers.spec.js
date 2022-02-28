@@ -7,9 +7,11 @@ describe('parseLatestVersionFromConfig', function () {
     expect(
       parseLatestVersionFromConfig(`
       versions:
-        1.69.0:
+        1.68.0:
           folder: all
         1.70.0:
+          folder: all
+        1.69.0:
           folder: all
       `)
     ).to.equal('1.70.0')
