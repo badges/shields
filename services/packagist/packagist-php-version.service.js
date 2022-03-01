@@ -4,9 +4,8 @@ import { NotFound } from '../index.js'
 import {
   BasePackagistService,
   customServerDocumentationFragment,
+  messagePhpVersionNotFound,
 } from './packagist-base.js'
-
-const messagePhpVersionNotFound = 'version requirement not found'
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
@@ -113,5 +112,3 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 }
-
-export { messagePhpVersionNotFound }

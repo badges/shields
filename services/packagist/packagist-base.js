@@ -2,8 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService, NotFound } from '../index.js'
 import { isStable, latest } from '../php-version.js'
 
-const messageNoReleasedVersionFound = 'no released version found'
 const messageInvalidVersion = 'invalid version'
+const messageLicenseNotFound = 'license not found'
+const messageNoReleasedVersionFound = 'no released version found'
+const messagePhpVersionNotFound = 'version requirement not found'
 
 const packageSchema = Joi.array().items(
   Joi.object({
@@ -273,5 +275,7 @@ export {
   customServerDocumentationFragment,
   cacheDocumentationFragment,
   messageInvalidVersion,
+  messageLicenseNotFound,
   messageNoReleasedVersionFound,
+  messagePhpVersionNotFound,
 }

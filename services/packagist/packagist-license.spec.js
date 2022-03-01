@@ -1,9 +1,10 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
-import PackagistLicense, {
+import PackagistLicense from './packagist-license.service.js'
+import {
+  BasePackagistService,
   messageLicenseNotFound,
-} from './packagist-license.service.js'
-import { BasePackagistService } from './packagist-base.js'
+} from './packagist-base.js'
 
 describe('PackagistLicense', function () {
   it('should return the license of the most recent release', function () {

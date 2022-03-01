@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import { NotFound } from '../index.js'
-import PackagistPhpVersion, {
-  messagePhpVersionNotFound,
-} from './packagist-php-version.service.js'
+import PackagistPhpVersion from './packagist-php-version.service.js'
+import { messagePhpVersionNotFound } from './packagist-base.js'
 
 describe('PackagistPhpVersion', function () {
   const versions = [

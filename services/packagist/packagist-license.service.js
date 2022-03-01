@@ -6,9 +6,8 @@ import {
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
+  messageLicenseNotFound,
 } from './packagist-base.js'
-
-const messageLicenseNotFound = 'license not found'
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
@@ -80,5 +79,3 @@ export default class PackagistLicense extends BasePackagistService {
     }
   }
 }
-
-export { messageLicenseNotFound }
