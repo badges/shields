@@ -10,6 +10,7 @@ const messagePhpVersionNotFound = 'version requirement not found'
 const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
+    license: Joi.array(),
     require: Joi.object({
       php: Joi.string(),
     }),
@@ -36,7 +37,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    *
-   * @returns {object[]} An array of package version metadata objects
+   * @returns {Promise<object[]>} Promise of an array of package version metadata objects
    */
   async fetchRelease({
     user,
@@ -67,7 +68,7 @@ class BasePackagistService extends BaseJsonService {
    * @param {Joi} attrs.schema Joi schema to validate the response transformed to JSON
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    *
-   * @returns {object[]} An array of package version metadata objects
+   * @returns {Promise<object[]>} Promise of an array of package version metadata objects
    */
   async fetchDev({
     user,

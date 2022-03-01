@@ -96,7 +96,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
 
   async handle({ user, repo, version = '' }, { server }) {
     try {
-      const versions = this.fetchRelease({ user, repo, server })
+      const versions = await this.fetchRelease({ user, repo, server })
       const { phpVersion } = this.getPhpVersion(versions, version)
       return this.constructor.render({ php: phpVersion })
     } catch (e) {
@@ -104,7 +104,7 @@ export default class PackagistPhpVersion extends BasePackagistService {
         e instanceof NotFound &&
         e.prettyMessage === messagePhpVersionNotFound
       ) {
-        const versions = this.fetchDev({ user, repo, server })
+        const versions = await this.fetchDev({ user, repo, server })
         const { phpVersion } = this.getPhpVersion(versions, version)
         return this.constructor.render({ php: phpVersion })
       }

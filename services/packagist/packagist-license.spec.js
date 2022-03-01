@@ -13,11 +13,11 @@ describe('PackagistLicense', function () {
         'frodo/the-one-package': [
           {
             version: '1.2.4',
-            license: 'MIT-latest',
+            license: ['MIT-latest'],
           },
           {
             version: '1.2.3',
-            license: 'MIT',
+            license: ['MIT'],
           },
         ],
       },
@@ -29,7 +29,7 @@ describe('PackagistLicense', function () {
 
     expect(PackagistLicense.prototype.getLicense({ versions }))
       .to.have.property('license')
-      .that.equals('MIT-latest')
+      .that.eqls(['MIT-latest'])
   })
 
   it('should return the license of the most recent stable release', function () {
@@ -38,11 +38,11 @@ describe('PackagistLicense', function () {
         'frodo/the-one-package': [
           {
             version: '1.2.4-RC1', // Pre-release
-            license: 'MIT-latest',
+            license: ['MIT-latest'],
           },
           {
             version: '1.2.3', // Stable release
-            license: 'MIT',
+            license: ['MIT'],
           },
         ],
       },
@@ -63,11 +63,11 @@ describe('PackagistLicense', function () {
         'frodo/the-one-package': [
           {
             version: '1.2.4-RC2',
-            license: 'MIT-latest',
+            license: ['MIT-latest'],
           },
           {
             version: '1.2.4-RC1',
-            license: 'MIT',
+            license: ['MIT'],
           },
         ],
       },
@@ -79,7 +79,7 @@ describe('PackagistLicense', function () {
 
     expect(PackagistLicense.prototype.getLicense({ versions }))
       .to.have.property('license')
-      .that.equals('MIT-latest')
+      .that.eqls(['MIT-latest'])
   })
 
   it('should throw NotFound when license key not in response', function () {

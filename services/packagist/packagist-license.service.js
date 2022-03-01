@@ -49,31 +49,27 @@ export default class PackagistLicense extends BasePackagistService {
    * @param {object} attrs An object of attributes from the request.
    * @param {object[]} attrs.versions An array of package version objects.
    *
-   * @returns {object} An object with a "license" attribute string of the latest release version.
+   * @returns {string[]} An array of "license" attribute string of the latest release version.
    *
    * @throws {NotFound} If a release version is not found, or the license is not found.
    */
-  getLicense({ versions }) {
-    const { license } = this.constructor.findVersion(versions, {
+  getLicenses({ versions }) {
+    const { license: licenses } = this.constructor.findVersion(versions, {
       includeDefaultBranch: true,
     })
-    if (!license) {
-      throw new NotFound({ prettyMessage: messageLicenseNotFound })
-    }
-
-    return { license }
+    return { licenses }
   }
 
   async handle({ user, repo }, { server }) {
     try {
-      const versions = this.fetchRelease({ user, repo, server })
-      const license = this.getLicense({ versions, user, repo })
-      return renderLicenseBadge({ license })
+      const versions = await this.fetchRelease({ user, repo, server })
+      const { licenses } = this.getLicenses({ versions, user, repo })
+      return renderLicenseBadge({ licenses })
     } catch (e) {
       if (e instanceof NotFound && e.prettyMessage === messageLicenseNotFound) {
-        const versions = this.fetchDev({ user, repo, server })
-        const license = this.getLicense({ versions, user, repo })
-        return renderLicenseBadge({ license })
+        const versions = await this.fetchDev({ user, repo, server })
+        const { licenses } = this.getLicenses({ versions, user, repo })
+        return renderLicenseBadge({ licenses })
       }
       throw e // re-throw
     }
