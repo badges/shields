@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-03-01
+
+- remove suspended [github] tokens from the pool [#7654](https://github.com/badges/shields/issues/7654)
+- generate links without trailing : if port not set [#7655](https://github.com/badges/shields/issues/7655)
+- note in SECURITY.md that svg-to-image-proxy is deprecated [#7653](https://github.com/badges/shields/issues/7653)
+- tests(snyk): fix github manifest target [#7629](https://github.com/badges/shields/issues/7629)
+- fix: github pipenv service test [#7627](https://github.com/badges/shields/issues/7627)
+- Use the latest build status when checking docs.rs [#7613](https://github.com/badges/shields/issues/7613)
+- tests(securityheaders): increase timeout [#7628](https://github.com/badges/shields/issues/7628)
+- Remove no download handling and add API warning to [Wordpress] badges [#7606](https://github.com/badges/shields/issues/7606)
+- set a higher default cacheLength on rating/star category [#7587](https://github.com/badges/shields/issues/7587)
+- Update [amo] to use v4 API, set custom `cacheLength`s [#7586](https://github.com/badges/shields/issues/7586)
+- fix(amo): include trailing slash in API call [#7585](https://github.com/badges/shields/issues/7585)
+- fix docker image user agent [#7582](https://github.com/badges/shields/issues/7582)
+- Delete deprecated Codetally and continuousphp services [#7572](https://github.com/badges/shields/issues/7572)
+- Deprecate [Requires] service [#7571](https://github.com/badges/shields/issues/7571)
+- [AUR] Fix RPC URL [#7570](https://github.com/badges/shields/issues/7570)
+- Dependency updates
+
 ## server-2022-02-01
 
 - [Depfu] Add support for Gitlab [#7475](https://github.com/badges/shields/issues/7475)
