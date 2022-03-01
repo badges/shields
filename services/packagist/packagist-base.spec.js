@@ -132,27 +132,6 @@ describe('BasePackagistService', function () {
     const versions = [
       {
         name: 'foo/bar',
-        version: 'dev-main',
-        version_normalized: 'dev-main',
-        type: 'library',
-        scripts: {
-          foo: 'bar',
-        },
-        'default-branch': true,
-        license: ['GPLv3'],
-      },
-      {
-        name: 'foo/bar',
-        version: 'dev-2.x',
-        version_normalized: 'dev-2.x',
-        type: 'library',
-        scripts: {
-          foo: 'bar',
-        },
-        license: ['GPLv2'],
-      },
-      {
-        name: 'foo/bar',
         version: '3.0.0-alpha1',
         version_normalized: '3.0.0.0-alpha1',
         type: 'library',
@@ -248,35 +227,51 @@ describe('BasePackagistService', function () {
         .to.have.property('version')
         .that.equals('3.0.0-rc1')
     })
+  })
 
-    it(`should throw NotFound('${messageNoReleasedVersionFound}') if no release version is found`, function () {
+  describe('findSuitableBranchVersion', function () {
+    it('should return the default branch if it is not named as sematic version', function () {
       const versions = [
         {
           name: 'foo/bar',
-          version: 'dev-main',
-          version_normalized: 'dev-main',
+          version: 'dev-master',
+          version_normalized: 'dev-master',
           'default-branch': true,
-          type: 'library',
-          scripts: {
-            foo: 'bar',
-          },
-          license: ['GPLv3'],
         },
         {
           name: 'foo/bar',
-          version: 'dev-2.x',
-          version_normalized: 'dev-main',
-          type: 'library',
-          scripts: {
-            foo: 'bar',
-          },
-          license: ['GPLv2'],
+          version: '3.x-dev',
+          version_normalized: '3.x-dev',
         },
       ]
 
-      expect(() => {
-        BasePackagistService.findLatestVersion(versions)
-      })
+      expect(BasePackagistService.findDefaultBranchVersion(versions))
+        .to.have.property('version')
+        .that.equals('dev-master')
+    })
+
+    it('should return the 3.x-dev if the default branch is 2.x-dev', function () {
+      const versions = [
+        {
+          name: 'foo/bar',
+          version: '2.x-dev',
+          version_normalized: '2.x-dev',
+          'default-branch': true,
+        },
+        {
+          name: 'foo/bar',
+          version: '3.x-dev',
+          version_normalized: '3.x-dev',
+        },
+      ]
+
+      expect(BasePackagistService.findDefaultBranchVersion(versions))
+        .to.have.property('version')
+        .that.equals('3.x-dev')
+    })
+
+    it(`should throw NotFound('${messageNoReleasedVersionFound}') if versions array is empty`, function () {
+      expect(() => BasePackagistService.findDefaultBranchVersion([], true))
         .to.throw(NotFound)
         .with.property('prettyMessage', messageNoReleasedVersionFound)
     })

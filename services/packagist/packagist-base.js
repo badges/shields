@@ -160,8 +160,6 @@ class BasePackagistService extends BaseJsonService {
    *   (Optional). Default ''.
    * @param {boolean} [options.includePrereleases] If pre-release tags are
    *   included in the search (Optional). Default: false.
-   * @param {boolean} [options.includeDefaultBranch] If default branch
-   *   version are included in the search (Optional). Default: false.
    *
    * @returns {object} A package version metadata object.
    *
@@ -170,17 +168,10 @@ class BasePackagistService extends BaseJsonService {
    */
   static findVersion(
     versions,
-    {
-      version = '',
-      includePrereleases = false,
-      includeDefaultBranch = false,
-    } = {}
+    { version = '', includePrereleases = false } = {}
   ) {
     return version === ''
-      ? this.findLatestVersion(versions, {
-          includePrereleases,
-          includeDefaultBranch,
-        })
+      ? this.findLatestVersion(versions, { includePrereleases })
       : this.findSpecifiedVersion(versions, version)
   }
 
@@ -190,36 +181,19 @@ class BasePackagistService extends BaseJsonService {
    * @param {object[]} versions An array of object representing a version.
    * @param {object} options Options for searching the latest version.
    * @param {boolean} options.includePrereleases Includes pre-release semver for the search.
-   * @param {boolean} options.includeDefaultBranch Includes pre-release semver for the search.
    *
    * @returns {object} A package version metadata object.
    * @throws {NotFound} Thrown if there is no item from the version array.
    */
-  static findLatestVersion(
-    versions,
-    { includePrereleases = false, includeDefaultBranch = false } = {}
-  ) {
-    // Find the latest version string, if not found, throw NotFound.
-    let versionsToSearch = versions.filter(
-      version =>
-        typeof version.version === 'string' || version.version instanceof String
-    )
+  static findLatestVersion(versions, { includePrereleases = false } = {}) {
+    // Map the version strings.
+    const versionStrings = versions
+      .filter(
+        ({ version }) =>
+          typeof version === 'string' || version instanceof String
+      )
+      .map(({ version }) => version)
 
-    // filter all branches, or
-    // leave default branch here when specified
-    versionsToSearch = includeDefaultBranch
-      ? versionsToSearch.filter(
-          metadata =>
-            !metadata.version.startsWith('dev-') ||
-            metadata['default-branch'] === true
-        )
-      : versionsToSearch.filter(({ version }) => !version.startsWith('dev-'))
-    if (versionsToSearch.length < 1) {
-      throw new NotFound({ prettyMessage: messageNoReleasedVersionFound })
-    }
-
-    // Find the release version string
-    const versionStrings = versionsToSearch.map(({ version }) => version)
     let release = latest(versionStrings)
     if (!includePrereleases) {
       // if specified to not include prerelease, will still fallback to
@@ -231,6 +205,57 @@ class BasePackagistService extends BaseJsonService {
       throw new NotFound({ prettyMessage: messageNoReleasedVersionFound })
     }
     return versions.filter(version => version.version === release)[0]
+  }
+
+  /**
+   * Find the object representation of the suitable branch. Mimicing the logic
+   * used by Packagist website to select default display information.
+   *
+   * The logic goes like this:
+   *
+   * - If the default branch exists and it is not in sematic version format, then
+   *   return the default branch metadata.
+   * - Return the most advanced sematic version branch.
+   *
+   * Example,
+   * - If default branch is master (dev-master), then metadata of dev-master version.
+   * - If default branch is 2.x (2.x-dev) but there is a 3.x branch (3.x-dev), then
+   *   metadata of 3.x-dev version.
+   *
+   * @param {object[]} versions An array of object representing versions from branches.
+   *   Expect to be the versions array from Composer v2 API "~dev.json" endpoint.
+   *
+   * @returns {object} A package version metadata object.
+   * @throws {NotFound} Thrown if the versions array is empty.
+   * @see fetchDev
+   */
+  static findDefaultBranchVersion(versions) {
+    if (versions.length < 1) {
+      throw new NotFound({ prettyMessage: messageNoReleasedVersionFound })
+    }
+
+    // If the default branch exists and does not have semver format, return it.
+    const defaultBranch = versions.find(
+      ({ 'default-branch': defaultBranch }) => defaultBranch === true
+    )
+    if (
+      defaultBranch !== undefined &&
+      defaultBranch.version !== undefined &&
+      !defaultBranch.version.match(/^(v|)\d+/g)
+    ) {
+      return defaultBranch
+    }
+
+    // Find the latest sematic version.
+    const versionStrings = versions
+      .filter(
+        ({ version }) =>
+          typeof version === 'string' || version instanceof String
+      )
+      .map(({ version }) => version)
+    const latestVersion = latest(versionStrings)
+
+    return versions.find(({ version }) => version === latestVersion)
   }
 
   /**
