@@ -8,11 +8,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - remove suspended [github] tokens from the pool [#7654](https://github.com/badges/shields/issues/7654)
 - generate links without trailing : if port not set [#7655](https://github.com/badges/shields/issues/7655)
-- note in SECURITY.md that svg-to-image-proxy is deprecated [#7653](https://github.com/badges/shields/issues/7653)
-- tests(snyk): fix github manifest target [#7629](https://github.com/badges/shields/issues/7629)
-- fix: github pipenv service test [#7627](https://github.com/badges/shields/issues/7627)
 - Use the latest build status when checking docs.rs [#7613](https://github.com/badges/shields/issues/7613)
-- tests(securityheaders): increase timeout [#7628](https://github.com/badges/shields/issues/7628)
 - Remove no download handling and add API warning to [Wordpress] badges [#7606](https://github.com/badges/shields/issues/7606)
 - set a higher default cacheLength on rating/star category [#7587](https://github.com/badges/shields/issues/7587)
 - Update [amo] to use v4 API, set custom `cacheLength`s [#7586](https://github.com/badges/shields/issues/7586)
