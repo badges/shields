@@ -6,16 +6,18 @@ import BaseGalaxyToolshedService from './galaxy-toolshed-base.js'
 
 const queryParamSchema = Joi.object({
   display: Joi.string()
-    .valid('default', 'reponame', 'toolid', 'toolname')
+    .valid('default', 'repositoryName', 'toolId', 'toolName')
     .default('default'),
   requirement: Joi.string().default('all'),
 }).required()
 
+const defaultRequirementName = 'defaultRequirementName'
+
 export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
   static category = 'version'
   static route = {
-    base: 'galaxy-toolshed',
-    pattern: ':variant(v|vr)/:reponame/:owner/:toolid',
+    base: 'galaxy-toolshed/v',
+    pattern: ':repositoryName/:owner/:toolId/:requirementName?',
     queryParamSchema,
   }
 
@@ -23,29 +25,28 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     {
       title: 'Galaxy Toolshed - Repository',
       namedParams: {
-        variant: 'v',
-        reponame: 'sra_tools',
+        repositoryName: 'sra_tools',
         owner: 'iuc',
-        toolid: 'fastq_dump',
+        toolId: 'fastq_dump',
       },
       staticPreview: this.render({
         display: 'default',
-        label: 'toolshed',
+        label: `${super.defaultBadgeData.label}`,
         version: '1.2.5',
       }),
     },
     {
       title: 'Galaxy Toolshed - Requirement',
       namedParams: {
-        variant: 'vr',
-        reponame: 'sra_tools',
+        repositoryName: 'sra_tools',
         owner: 'iuc',
-        toolid: 'fastq_dump',
+        toolId: 'fastq_dump',
+        requirementName: 'perl',
       },
-      queryParams: { display: 'reponame', requirement: 'perl' },
+      queryParams: { display: 'repositoryName' },
       staticPreview: this.render({
-        display: 'reponame',
-        label: 'toolshed|sra_tools',
+        display: 'repositoryName',
+        label: `${super.defaultBadgeData.label}|sra_tools`,
         version: '[perl - 5.18.1]',
       }),
     },
@@ -62,17 +63,20 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     }
   }
 
-  async fetch({ reponame, owner }) {
+  async fetch({ repositoryName, owner }) {
     const changesetRevisions =
-      await this.fetchOrderedInstallableRevisionsSchema({ reponame, owner })
+      await this.fetchOrderedInstallableRevisionsSchema({
+        repositoryName,
+        owner,
+      })
     return this.fetchRepositoryRevisionInstallInfoSchema({
-      reponame,
+      repositoryName,
       owner,
       changesetRevision: changesetRevisions.shift(),
     })
   }
 
-  static transform(response, variant, reponame, toolid, display, requirement) {
+  static transform(response, repositoryName, toolId, requirementName, display) {
     // Parse response
     const metadata = response
       .filter(function (x) {
@@ -81,7 +85,7 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
       .shift()
     const tool = metadata.valid_tools
       .filter(function (tool) {
-        return tool.id === toolid
+        return tool.id === toolId
       })
       .shift()
 
@@ -91,14 +95,14 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
 
     // Version
     let version = tool.version
-    if (variant === 'vr') {
+    if (requirementName !== defaultRequirementName) {
       version = metadata.valid_tools.reduce(function (
         previousValue,
         currentValue
       ) {
         return currentValue.requirements.reduce(function (prev, curr) {
           const req = `[${curr.name} - ${curr.version}]`
-          if (requirement === 'all' || requirement === curr.name) {
+          if (requirementName === 'all' || requirementName === curr.name) {
             return [...prev, req]
           }
           return [...prev]
@@ -114,13 +118,13 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     // Label
     let label = ''
     switch (display) {
-      case 'reponame':
-        label = reponame
+      case 'repositoryName':
+        label = repositoryName
         break
-      case 'toolid':
-        label = toolid
+      case 'toolId':
+        label = toolId
         break
-      case 'toolname':
+      case 'toolName':
         label = tool.name
         break
       default:
@@ -129,15 +133,17 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     return { label, version }
   }
 
-  async handle({ variant, reponame, owner, toolid }, { display, requirement }) {
-    const response = await this.fetch({ reponame, owner })
+  async handle(
+    { repositoryName, owner, toolId, requirementName = defaultRequirementName },
+    { display }
+  ) {
+    const response = await this.fetch({ repositoryName, owner })
     const data = this.constructor.transform(
       response,
-      variant,
-      reponame,
-      toolid,
-      display,
-      requirement
+      repositoryName,
+      toolId,
+      requirementName,
+      display
     )
     return this.constructor.render({
       display,
