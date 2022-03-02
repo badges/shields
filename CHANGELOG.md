@@ -6,6 +6,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2022-03-01
 
+- Add [Conan] version service (#7460)
 - remove suspended [github] tokens from the pool [#7654](https://github.com/badges/shields/issues/7654)
 - generate links without trailing : if port not set [#7655](https://github.com/badges/shields/issues/7655)
 - Use the latest build status when checking docs.rs [#7613](https://github.com/badges/shields/issues/7613)
