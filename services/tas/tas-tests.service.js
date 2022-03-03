@@ -4,6 +4,7 @@ import {
   testResultQueryParamSchema,
   renderTestResultBadge,
 } from '../test-results.js'
+import { nonNegativeInteger } from '../../services/validators.js'
 
 const commonAttrs = {
   namedParams: {
@@ -21,10 +22,10 @@ const commonAttrs = {
 
 const schema = Joi.object({
   badge: Joi.object({
-    passed: Joi.number().required(),
-    failed: Joi.number().required(),
-    skipped: Joi.number().required(),
-    total_tests: Joi.number().required(),
+    passed: nonNegativeInteger,
+    failed: nonNegativeInteger,
+    skipped: nonNegativeInteger,
+    total_tests: nonNegativeInteger,
     status: Joi.string().required(),
   }).required(),
 }).required()
