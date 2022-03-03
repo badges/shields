@@ -147,6 +147,7 @@ class BaseService {
       version: 300,
       debug: 60,
       downloads: 900,
+      rating: 900,
       social: 900,
     }
     return cacheLengths[this.category]
