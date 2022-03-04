@@ -9,8 +9,8 @@ import { nonNegativeInteger } from '../../services/validators.js'
 const commonAttrs = {
   namedParams: {
     provider: 'github',
-    org: 'test-at-scale',
-    repo: 'badge-demo',
+    org: 'tasdemo',
+    repo: 'axios',
   },
   queryParams: {
     passed_label: 'passed',
