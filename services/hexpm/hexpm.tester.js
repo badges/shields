@@ -38,12 +38,10 @@ t.create('downloads (not found)')
   .get('/dt/this-package-does-not-exist.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
 
-t.create('version')
-  .get('/v/cowboy.json')
-  .expectBadge({
-    label: 'hex',
-    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-  })
+t.create('version').get('/v/cowboy.json').expectBadge({
+  label: 'hex',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+})
 
 t.create('version (no stable version)')
   .get('/v/prima_opentelemetry_ex.json')
