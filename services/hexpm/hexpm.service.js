@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { addv, maybePluralize } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
+import { maybePluralize } from '../text-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import { BaseJsonService } from '../index.js'
 
 const hexSchema = Joi.object({
@@ -14,7 +14,8 @@ const hexSchema = Joi.object({
   meta: Joi.object({
     licenses: Joi.array().required(),
   }).required(),
-  latest_stable_version: Joi.string().required(),
+  latest_stable_version: Joi.string(),
+  latest_version: Joi.string().required(),
 }).required()
 
 class BaseHexPmService extends BaseJsonService {
@@ -84,12 +85,14 @@ class HexPmVersion extends BaseHexPmService {
   ]
 
   static render({ version }) {
-    return { message: addv(version), color: versionColor(version) }
+    return renderVersionBadge({ version })
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ version: json.latest_stable_version })
+    return this.constructor.render({
+      version: json.latest_stable_version || json.latest_version,
+    })
   }
 }
 
