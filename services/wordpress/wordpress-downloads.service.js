@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { NotFound } from '../index.js'
-import BaseWordpress from './wordpress-base.js'
+import { documentation, BaseWordpress } from './wordpress-base.js'
 
 const dateSchema = Joi.object()
   .pattern(Joi.date().iso(), Joi.number().integer())
@@ -58,6 +57,7 @@ function DownloadsForExtensionType(extensionType) {
         title: `WordPress ${capt} Downloads`,
         namedParams: { interval: 'dm', slug: exampleSlug },
         staticPreview: this.render({ interval: 'dm', downloads: 200000 }),
+        documentation,
       },
     ]
 
@@ -91,17 +91,9 @@ function DownloadsForExtensionType(extensionType) {
             },
           },
         })
-        const size = Object.keys(json).length
         downloads = Object.values(json).reduce(
           (a, b) => parseInt(a) + parseInt(b)
         )
-        // This check is for non-existent and brand-new plugins both having new stats.
-        // Non-Existent plugins results are the same as a brandspanking new plugin with no downloads.
-        if (downloads <= 0 && size <= 1) {
-          throw new NotFound({
-            prettyMessage: `${extensionType} not found or too new`,
-          })
-        }
       }
 
       return this.constructor.render({ interval, downloads })
@@ -127,6 +119,7 @@ function InstallsForExtensionType(extensionType) {
         title: `WordPress ${capt} Active Installs`,
         namedParams: { slug: exampleSlug },
         staticPreview: renderDownloadsBadge({ downloads: 300000 }),
+        documentation,
       },
     ]
 
