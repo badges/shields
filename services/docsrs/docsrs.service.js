@@ -52,9 +52,7 @@ export default class DocsRs extends BaseJsonService {
   }
 
   async handle({ crate, version = 'latest' }) {
-    const { build_status: buildStatus } = (
-      await this.fetch({ crate, version })
-    ).pop()
+    const [{ build_status: buildStatus }] = await this.fetch({ crate, version })
     return this.constructor.render({ version, buildStatus })
   }
 }
