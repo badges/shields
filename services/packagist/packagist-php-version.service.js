@@ -66,11 +66,58 @@ export default class PackagistPhpVersion extends BasePackagistService {
     }
   }
 
-  transform({ json, user, repo, version = '' }) {
-    const packageVersion =
-      version === ''
-        ? this.getDefaultBranch(json, user, repo)
-        : json.packages[this.getPackageName(user, repo)][version]
+  findVersionIndex(json, version) {
+    return json.findIndex(v => v.version === version)
+  }
+
+  async findSpecifiedVersion(json, user, repo, version, server) {
+    let release
+
+    if ((release = json[this.findVersionIndex(json, version)])) {
+      return release
+    } else {
+      try {
+        const allData = await this.fetchDev({
+          user,
+          repo,
+          schema: allVersionsSchema,
+          server,
+        })
+
+        const versions = BasePackagistService.expandPackageVersions(
+          allData,
+          this.getPackageName(user, repo)
+        )
+
+        return versions[this.findVersionIndex(versions, version)]
+      } catch (e) {
+        return release
+      }
+    }
+  }
+
+  async getPhpVersion({ json, user, repo, version = '', server }) {
+    let packageVersion
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      this.getPackageName(user, repo)
+    )
+
+    if (version === '') {
+      packageVersion = this.findLatestRelease(versions)
+    } else {
+      try {
+        packageVersion = await this.findSpecifiedVersion(
+          versions,
+          user,
+          repo,
+          version,
+          server
+        )
+      } catch (e) {
+        packageVersion = null
+      }
+    }
 
     if (!packageVersion) {
       throw new NotFound({ prettyMessage: 'invalid version' })
@@ -90,11 +137,12 @@ export default class PackagistPhpVersion extends BasePackagistService {
       schema: allVersionsSchema,
       server,
     })
-    const { phpVersion } = this.transform({
+    const { phpVersion } = await this.getPhpVersion({
       json: allData,
       user,
       repo,
       version,
+      server,
     })
     return this.constructor.render({ php: phpVersion })
   }
