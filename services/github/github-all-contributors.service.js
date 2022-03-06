@@ -17,7 +17,7 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
 
   static examples = [
     {
-      title: 'Github All Contributors',
+      title: 'GitHub contributors (via allcontributors.org)',
       namedParams: {
         repo: 'all-contributors',
         user: 'all-contributors',
