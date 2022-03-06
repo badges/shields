@@ -2,7 +2,17 @@ import Joi from 'joi'
 import { renderContributorBadge } from '../contributor-count.js'
 import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
 import { fetchJsonFromRepo } from './github-common-fetch.js'
-import { documentation } from './github-helpers.js'
+import { documentation as commonDocumentation } from './github-helpers.js'
+
+const documentation = `
+<p>
+  The All Contributors service allows you to recognize all your project
+  contributors, including those that don't push code. See
+  <a href="https://allcontributors.org">https://allcontributors.org</a>
+  for more information.
+</p>
+${commonDocumentation}
+`
 
 const schema = Joi.object({
   contributors: Joi.array().required(),
