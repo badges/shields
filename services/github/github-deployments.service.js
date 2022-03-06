@@ -58,7 +58,7 @@ export default class GithubDeployments extends GithubAuthV4Service {
         environment: 'shields-staging',
       },
       staticPreview: this.render({
-        state: 'success',
+        state: 'SUCCESS',
       }),
       documentation,
     },
