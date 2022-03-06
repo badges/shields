@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { BaseJsonService, InvalidResponse } from '../index.js'
 import { renderVersionBadge } from '../version.js'
+import { pep440VersionColor } from '../color-formatters.js'
 
 const schema = Joi.object({
   releases: Joi.object()
@@ -46,7 +47,7 @@ export default class PiWheelsVersion extends BaseJsonService {
   static defaultBadgeData = { label: 'piwheels' }
 
   static render({ version }) {
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, versionFormatter: pep440VersionColor })
   }
 
   async fetch({ wheel }) {
