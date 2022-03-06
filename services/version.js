@@ -152,11 +152,16 @@ function rangeStart(v) {
   return range.set[0][0].semver.version
 }
 
-function renderVersionBadge({ version, tag, defaultLabel }) {
+function renderVersionBadge({
+  version,
+  tag,
+  defaultLabel,
+  versionFormatter = versionColor,
+}) {
   return {
     label: tag ? `${defaultLabel}@${tag}` : undefined,
     message: addv(version),
-    color: versionColor(version),
+    color: versionFormatter(version),
   }
 }
 

@@ -1,3 +1,4 @@
+import { pep440VersionColor } from '../color-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import { isLockfile, getDependencyVersion } from '../pipenv-helpers.js'
 import { addv } from '../text-formatters.js'
@@ -80,6 +81,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
       version,
       tag: branch,
       defaultLabel: 'python',
+      versionFormatter: pep440VersionColor,
     })
   }
 
@@ -147,7 +149,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
     return {
       label: dependency,
       message: version ? addv(version) : ref,
-      color: 'blue',
+      color: version ? pep440VersionColor(version) : 'blue',
     }
   }
 
