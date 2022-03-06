@@ -81,6 +81,8 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
     },
   ]
 
+  static _cacheLength = 900
+
   async handle({ platform, scope, packageName, version = 'latest' }) {
     const url = `/${encodeURIComponent(platform)}/${
       scope ? encodeURIComponent(`${scope}/`) : ''
@@ -115,6 +117,8 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
       staticPreview: renderDependenciesBadge({ outdatedCount: 325 }),
     },
   ]
+
+  static _cacheLength = 900
 
   async handle({ user, repo }) {
     const url = `/github/${encodeURIComponent(user)}/${encodeURIComponent(
