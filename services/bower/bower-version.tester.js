@@ -33,7 +33,3 @@ t.create('Pre Version for Invalid Package')
   .timeout(10000)
   .get('/v/it-is-a-invalid-package-should-error.json?include_prereleases')
   .expectBadge({ label: 'bower', message: 'package not found' })
-
-t.create('Version (legacy redirect: vpre)')
-  .get('/vpre/bootstrap.svg')
-  .expectRedirect('/bower/v/bootstrap.svg?include_prereleases')
