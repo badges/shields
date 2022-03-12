@@ -7,7 +7,6 @@ const isLetterGrade = Joi.equal('A', 'B', 'C', 'D', 'E', 'F').required()
 
 const repoSchema = Joi.object({
   data: Joi.array()
-    .max(1)
     .items(
       Joi.object({
         id: Joi.string().required(),
@@ -29,17 +28,15 @@ const repoSchema = Joi.object({
 }).required()
 
 async function fetchRepo(serviceInstance, { user, repo }) {
-  const {
-    data: [repoInfo],
-  } = await serviceInstance._requestJson({
+  const { data: repoInfos } = await serviceInstance._requestJson({
     schema: repoSchema,
     url: 'https://api.codeclimate.com/v1/repos',
     options: { searchParams: { github_slug: `${user}/${repo}` } },
   })
-  if (repoInfo === undefined) {
+  if (repoInfos.length === 0) {
     throw new NotFound({ prettyMessage: 'repo not found' })
   }
-  return repoInfo
+  return repoInfos
 }
 
 export { keywords, isLetterGrade, fetchRepo }
