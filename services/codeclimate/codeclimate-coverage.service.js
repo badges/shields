@@ -53,15 +53,19 @@ export default class CodeclimateCoverage extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
+    const repoInfos = await fetchRepo(this, { user, repo })
+    const repoInfosWithTestReport = repoInfos.filter(
+      repoInfo => repoInfo.relationships.latest_default_branch_test_report.data
+    )
+    if (repoInfosWithTestReport.length === 0) {
+      throw new NotFound({ prettyMessage: 'test report not found' })
+    }
     const {
       id: repoId,
       relationships: {
         latest_default_branch_test_report: { data: testReportInfo },
       },
-    } = await fetchRepo(this, { user, repo })
-    if (testReportInfo === null) {
-      throw new NotFound({ prettyMessage: 'test report not found' })
-    }
+    } = repoInfosWithTestReport[0]
     const { data } = await this._requestJson({
       schema,
       url: `https://api.codeclimate.com/v1/repos/${repoId}/test_reports/${testReportInfo.id}`,

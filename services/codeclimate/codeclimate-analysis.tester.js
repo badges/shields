@@ -32,6 +32,47 @@ t.create('maintainability letter')
     message: Joi.equal('A', 'B', 'C', 'D', 'E', 'F'),
   })
 
+t.create('issues when outer user repos query returns multiple items')
+  .get('/issues/angular/angular.json')
+  .intercept(nock =>
+    nock('https://api.codeclimate.com', { allowUnmocked: true })
+      .get('/v1/repos?github_slug=angular%2Fangular')
+      .reply(200, {
+        data: [
+          {
+            id: '54fd4e6b6956804a10003df4',
+            relationships: {
+              latest_default_branch_snapshot: {
+                data: null,
+              },
+              latest_default_branch_test_report: {
+                data: null,
+              },
+            },
+          },
+          {
+            id: '54fd4e6b6956804a10003df3',
+            relationships: {
+              latest_default_branch_snapshot: {
+                data: {
+                  id: '620e2b491b6a72000100ca1d',
+                  type: 'snapshots',
+                },
+              },
+              latest_default_branch_test_report: {
+                data: null,
+              },
+            },
+          },
+        ],
+      })
+  )
+  .networkOn() // Combined with allowUnmocked: true, this allows the inner snapshots query to go through.
+  .expectBadge({
+    label: 'issues',
+    message: Joi.number().integer().positive(),
+  })
+
 t.create('maintainability letter for non-existent repo')
   .get('/maintainability/unknown/unknown.json')
   .expectBadge({
