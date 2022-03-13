@@ -49,7 +49,7 @@ export default class Wercker extends BaseJsonService {
       documentation: werckerCIDocumentation,
     },
     {
-      title: `Wercker CI Run`,
+      title: `Wercker CI Run (branch)`,
       pattern: 'ci/:applicationId/:branch',
       namedParams: {
         applicationId: '559e33c8e982fc615500b357',
@@ -68,7 +68,7 @@ export default class Wercker extends BaseJsonService {
       staticPreview: this.render({ result: 'passed' }),
     },
     {
-      title: `Wercker Build branch`,
+      title: `Wercker Build (branch)`,
       pattern: 'build/:userName/:applicationName/:branch',
       namedParams: {
         userName: 'wercker',
