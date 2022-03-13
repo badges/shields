@@ -205,7 +205,7 @@ class SteamFileSize extends SteamFileService {
   }
 
   static render({ fileSize }) {
-    return { message: prettyBytes(fileSize), color: 'brightgreen' }
+    return { message: prettyBytes(fileSize), color: 'informational' }
   }
 
   async onRequest({ response }) {
