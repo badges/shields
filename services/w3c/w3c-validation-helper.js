@@ -99,7 +99,8 @@ const documentation = `
     </ul>
   </p>
   <p>
-    This badge relies on the https://validator.nu/ service to perform the validation. Please refer to https://about.validator.nu/ for the full documentation and Terms of service.
+    This badge relies on the <a target="_blank" href="https://validator.nu/">https://validator.nu/</a> service to perform the validation.
+    Please refer to <a target="_blank" href="https://about.validator.nu/">https://about.validator.nu/</a> for the full documentation and Terms of service.
     The following are required from the consumer for the badge to function.
 
     <ul class="note">
