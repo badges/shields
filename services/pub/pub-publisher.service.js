@@ -16,10 +16,10 @@ class PubPublisher extends BaseJsonService {
   static examples = [
     {
       title: 'Pub Publisher',
-      namedParams: { packageName: 'example' },
+      namedParams: { packageName: 'dart.dev' },
       staticPreview: {
         label: 'publisher',
-        message: 'my.publisher.io',
+        message: 'dart.dev',
         color: 'blue',
       },
       keywords: ['dart', 'dartlang'],
