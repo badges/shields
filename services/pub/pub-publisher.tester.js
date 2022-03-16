@@ -15,7 +15,7 @@ t.create('package not verified publisher')
   .expectBadge({
     label: 'publisher',
     message: 'unverified',
-    color: 'red',
+    color: 'lightgrey',
   })
 
 t.create('package not found')

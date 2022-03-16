@@ -5,7 +5,7 @@ const schema = Joi.object({
   publisherId: Joi.string().allow(null).required(),
 }).required()
 
-class PubPublisher extends BaseJsonService {
+export class PubPublisher extends BaseJsonService {
   static category = 'other'
 
   static route = {
@@ -28,6 +28,14 @@ class PubPublisher extends BaseJsonService {
 
   static defaultBadgeData = { label: 'publisher' }
 
+  static render({ publisher }) {
+    return {
+      label: 'publisher',
+      message: publisher == null ? 'unverified' : publisher,
+      color: publisher == null ? 'lightgrey' : 'blue',
+    }
+  }
+
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
@@ -38,12 +46,6 @@ class PubPublisher extends BaseJsonService {
   async handle({ packageName }) {
     const data = await this.fetch({ packageName })
     const publisher = data.publisherId
-    return {
-      label: 'publisher',
-      message: publisher == null ? 'unverified' : publisher,
-      color: publisher == null ? 'red' : 'blue',
-    }
+    return this.constructor.render({ publisher })
   }
 }
-
-export { PubPublisher }
