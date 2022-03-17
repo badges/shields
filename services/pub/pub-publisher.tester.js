@@ -1,17 +1,13 @@
-import { ServiceTester } from '../tester.js'
-export const t = new ServiceTester({
-  id: 'PubPublisher',
-  title: 'Pub Publisher',
-  pathPrefix: '/pub',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
-t.create('package publisher').get('/publisher/path.json').expectBadge({
+t.create('package publisher').get('/path.json').expectBadge({
   label: 'publisher',
   message: 'dart.dev',
 })
 
 t.create('package not verified publisher')
-  .get('/publisher/utf.json')
+  .get('/utf.json')
   .expectBadge({
     label: 'publisher',
     message: 'unverified',
@@ -19,7 +15,7 @@ t.create('package not verified publisher')
   })
 
 t.create('package not found')
-  .get('/publisher/does-not-exist.json')
+  .get('/does-not-exist.json')
   .expectBadge({
     label: 'publisher',
     message: 'not found',
