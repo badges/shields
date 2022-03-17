@@ -6,17 +6,13 @@ t.create('package publisher').get('/path.json').expectBadge({
   message: 'dart.dev',
 })
 
-t.create('package not verified publisher')
-  .get('/utf.json')
-  .expectBadge({
-    label: 'publisher',
-    message: 'unverified',
-    color: 'lightgrey',
-  })
+t.create('package not verified publisher').get('/utf.json').expectBadge({
+  label: 'publisher',
+  message: 'unverified',
+  color: 'lightgrey',
+})
 
-t.create('package not found')
-  .get('/does-not-exist.json')
-  .expectBadge({
-    label: 'publisher',
-    message: 'not found',
-  })
+t.create('package not found').get('/does-not-exist.json').expectBadge({
+  label: 'publisher',
+  message: 'not found',
+})
