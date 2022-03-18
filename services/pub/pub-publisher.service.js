@@ -16,12 +16,8 @@ export class PubPublisher extends BaseJsonService {
   static examples = [
     {
       title: 'Pub Publisher',
-      namedParams: { packageName: 'dart.dev' },
-      staticPreview: {
-        label: 'publisher',
-        message: 'dart.dev',
-        color: 'blue',
-      },
+      namedParams: { packageName: 'path' },
+      staticPreview: this.render({ publisher: 'dart.dev' }),
       keywords: ['dart', 'dartlang'],
     },
   ]
