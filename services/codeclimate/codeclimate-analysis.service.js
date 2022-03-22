@@ -138,15 +138,19 @@ export default class CodeclimateAnalysis extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
+    const repoInfos = await fetchRepo(this, { user, repo })
+    const repoInfosWithSnapshot = repoInfos.filter(
+      repoInfo => repoInfo.relationships.latest_default_branch_snapshot.data
+    )
+    if (repoInfosWithSnapshot.length === 0) {
+      throw new NotFound({ prettyMessage: 'snapshot not found' })
+    }
     const {
       id: repoId,
       relationships: {
         latest_default_branch_snapshot: { data: snapshotInfo },
       },
-    } = await fetchRepo(this, { user, repo })
-    if (snapshotInfo === null) {
-      throw new NotFound({ prettyMessage: 'snapshot not found' })
-    }
+    } = repoInfosWithSnapshot[0]
     const { data } = await this._requestJson({
       schema,
       url: `https://api.codeclimate.com/v1/repos/${repoId}/snapshots/${snapshotInfo.id}`,
