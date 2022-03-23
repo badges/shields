@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { BaseJsonService, InvalidResponse } from '../index.js'
 import { renderVersionBadge } from '../version.js'
+import { pep440VersionColor } from '../color-formatters.js'
 
 const schema = Joi.object({
   releases: Joi.object()
@@ -9,6 +10,7 @@ const schema = Joi.object({
       Joi.object({
         prerelease: Joi.boolean().required(),
         yanked: Joi.boolean().required(),
+        files: Joi.object().required(),
       })
     )
     .required(),
@@ -46,7 +48,7 @@ export default class PiWheelsVersion extends BaseJsonService {
   static defaultBadgeData = { label: 'piwheels' }
 
   static render({ version }) {
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, versionFormatter: pep440VersionColor })
   }
 
   async fetch({ wheel }) {
@@ -65,10 +67,12 @@ export default class PiWheelsVersion extends BaseJsonService {
             version: key,
             prerelease: releases[key].prerelease,
             yanked: releases[key].yanked,
+            hasFiles: Object.keys(releases[key].files).length > 0,
           }),
         []
       )
       .filter(release => !release.yanked) // exclude any yanked releases
+      .filter(release => release.hasFiles) // exclude any releases with no wheels
 
     if (allReleases.length === 0) {
       throw new InvalidResponse({ prettyMessage: 'no versions found' })

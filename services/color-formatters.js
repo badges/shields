@@ -3,6 +3,7 @@
  * including colours based off download count, version number, etc.
  */
 import moment from 'moment'
+import pep440 from '@renovate/pep440'
 
 function version(version) {
   if (typeof version !== 'string' && typeof version !== 'number') {
@@ -18,6 +19,17 @@ function version(version) {
   } else {
     return 'blue'
   }
+}
+
+function pep440VersionColor(version) {
+  if (!pep440.valid(version)) {
+    return 'lightgrey'
+  }
+  const parsedVersion = pep440.explain(version)
+  if (parsedVersion.is_prerelease || parsedVersion.public.startsWith('0.')) {
+    return 'orange'
+  }
+  return 'blue'
 }
 
 function floorCount(value, yellow, yellowgreen, green) {
@@ -106,6 +118,7 @@ function age(date) {
 
 export {
   version,
+  pep440VersionColor,
   downloadCount,
   coveragePercentage,
   floorCount,

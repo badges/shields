@@ -32,6 +32,8 @@ export default class LibrariesIoDependents extends LibrariesIoBase {
     },
   ]
 
+  static _cacheLength = 900
+
   static defaultBadgeData = {
     label: 'dependents',
   }

@@ -1,3 +1,4 @@
+import { pep440VersionColor } from '../color-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import PypiBase from './pypi-base.js'
 
@@ -19,7 +20,7 @@ export default class PypiVersion extends PypiBase {
   static defaultBadgeData = { label: 'pypi' }
 
   static render({ version }) {
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, versionFormatter: pep440VersionColor })
   }
 
   async handle({ egg }) {
