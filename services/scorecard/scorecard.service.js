@@ -6,7 +6,7 @@ const schema = Joi.object({
 }).required()
 
 export default class ScorecardScore extends BaseJsonService {
-  static category = 'version'
+  static category = 'analysis'
 
   static route = { base: 'scorecard', pattern: ':host/:orgName/:repoName' }
 
