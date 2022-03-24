@@ -235,7 +235,7 @@ jobs:
           command: npm run build
 
   package:
-    machine: true
+    machine: 'ubuntu-2004:202111-02'
 
     <<: *package_steps
 
