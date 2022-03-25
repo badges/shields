@@ -28,6 +28,10 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
     },
   ]
 
+  static defaultBadgeData = {
+    label: 'downloads',
+  }
+
   static render({ downloads }) {
     return renderDownloadsBadge({ downloads })
   }

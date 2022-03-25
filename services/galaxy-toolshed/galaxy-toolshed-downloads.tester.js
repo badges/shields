@@ -7,20 +7,20 @@ export const t = new ServiceTester({
 })
 
 t.create('downloads - raw').get('/downloads/sra_tools/iuc.json').expectBadge({
-  label: 'galaxy-toolshed',
+  label: 'downloads',
   message: isMetric,
 })
 
 t.create('downloads - repositoryName not found')
   .get('/downloads/sra_tool/iuc.json')
   .expectBadge({
-    label: 'galaxy-toolshed',
+    label: 'downloads',
     message: 'not found',
   })
 
 t.create('downloads - owner not found')
   .get('/downloads/sra_tools/iu.json')
   .expectBadge({
-    label: 'galaxy-toolshed',
+    label: 'downloads',
     message: 'not found',
   })
