@@ -156,7 +156,7 @@
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "5.1.24",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
+    "@typescript-eslint/parser": "^5.16.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-preset-gatsby": "^2.9.0",
     "c8": "^7.11.0",
