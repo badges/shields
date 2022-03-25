@@ -4,29 +4,6 @@ import { BaseJsonService } from '../index.js'
 const orderedInstallableRevisionsSchema = Joi.array()
   .items(Joi.string())
   .required()
-const repositoryRevisionInstallInfoSchema = Joi.array().items(
-  Joi.object({}),
-  Joi.object({
-    valid_tools: Joi.array()
-      .items(
-        Joi.object({
-          requirements: Joi.array()
-            .items(
-              Joi.object({
-                name: Joi.string().required(),
-                version: Joi.string().required(),
-              }).required()
-            )
-            .required(),
-          id: Joi.string().required(),
-          name: Joi.string().required(),
-          version: Joi.string().required(),
-        }).required()
-      )
-      .required(),
-  }).required(),
-  Joi.object({})
-)
 
 export default class BaseGalaxyToolshedService extends BaseJsonService {
   static defaultBadgeData = { label: 'galaxy-toolshed' }
@@ -40,12 +17,13 @@ export default class BaseGalaxyToolshedService extends BaseJsonService {
   }
 
   async fetchRepositoryRevisionInstallInfoSchema({
+    schema,
     repositoryName,
     owner,
     changesetRevision,
   }) {
     return this._requestJson({
-      schema: repositoryRevisionInstallInfoSchema,
+      schema,
       url: `${this.constructor.baseUrl}/api/repositories/get_repository_revision_install_info?name=${repositoryName}&owner=${owner}&changeset_revision=${changesetRevision}`,
     })
   }

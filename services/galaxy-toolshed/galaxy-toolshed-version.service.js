@@ -4,6 +4,30 @@ import { version as versionColor } from '../color-formatters.js'
 import { NotFound } from '../index.js'
 import BaseGalaxyToolshedService from './galaxy-toolshed-base.js'
 
+const repositoryRevisionInstallInfoSchema = Joi.array().items(
+  Joi.object({}),
+  Joi.object({
+    valid_tools: Joi.array()
+      .items(
+        Joi.object({
+          requirements: Joi.array()
+            .items(
+              Joi.object({
+                name: Joi.string().required(),
+                version: Joi.string().required(),
+              }).required()
+            )
+            .required(),
+          id: Joi.string().required(),
+          name: Joi.string().required(),
+          version: Joi.string().required(),
+        }).required()
+      )
+      .required(),
+  }).required(),
+  Joi.object({})
+)
+
 const queryParamSchema = Joi.object({
   display: Joi.string()
     .valid('default', 'repositoryName', 'toolId', 'toolName')
@@ -70,6 +94,7 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
         owner,
       })
     return this.fetchRepositoryRevisionInstallInfoSchema({
+      schema: repositoryRevisionInstallInfoSchema,
       repositoryName,
       owner,
       changesetRevision: changesetRevisions.shift(),
