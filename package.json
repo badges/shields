@@ -141,7 +141,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.17.8",
     "@babel/polyfill": "^7.12.1",
     "@babel/register": "7.17.7",
     "@istanbuljs/schema": "^0.1.3",
