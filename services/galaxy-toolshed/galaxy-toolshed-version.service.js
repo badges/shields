@@ -7,6 +7,7 @@ import BaseGalaxyToolshedService from './galaxy-toolshed-base.js'
 const repositoryRevisionInstallInfoSchema = Joi.array().items(
   Joi.object({}),
   Joi.object({
+    changeset_revision: Joi.string().required(),
     valid_tools: Joi.array()
       .items(
         Joi.object({
@@ -28,21 +29,11 @@ const repositoryRevisionInstallInfoSchema = Joi.array().items(
   Joi.object({})
 )
 
-const queryParamSchema = Joi.object({
-  display: Joi.string()
-    .valid('default', 'repositoryName', 'toolId', 'toolName')
-    .default('default'),
-  requirement: Joi.string().default('all'),
-}).required()
-
-const defaultRequirementName = 'defaultRequirementName'
-
 export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
   static category = 'version'
   static route = {
     base: 'galaxy-toolshed/v',
-    pattern: ':repositoryName/:owner/:toolId/:requirementName?',
-    queryParamSchema,
+    pattern: ':repositoryName/:owner/:toolId?/:requirementName?',
   }
 
   static examples = [
@@ -51,11 +42,21 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
       namedParams: {
         repositoryName: 'sra_tools',
         owner: 'iuc',
+      },
+      staticPreview: this.render({
+        label: 'sra_tools',
+        version: '1.2.5',
+      }),
+    },
+    {
+      title: 'Galaxy Toolshed - Tool',
+      namedParams: {
+        repositoryName: 'sra_tools',
+        owner: 'iuc',
         toolId: 'fastq_dump',
       },
       staticPreview: this.render({
-        display: 'default',
-        label: `${super.defaultBadgeData.label}`,
+        label: 'fastq_dump',
         version: '1.2.5',
       }),
     },
@@ -70,18 +71,15 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
       queryParams: { display: 'repositoryName' },
       staticPreview: this.render({
         display: 'repositoryName',
-        label: `${super.defaultBadgeData.label}|sra_tools`,
-        version: '[perl - 5.18.1]',
+        label: `perl`,
+        version: '5.18.1',
       }),
     },
   ]
 
-  static render({ display, label, version }) {
+  static render({ label, version }) {
     return {
-      label:
-        display === 'default'
-          ? super.defaultBadgeData.label
-          : `${super.defaultBadgeData.label}|${label}`,
+      label,
       message: versionText(version),
       color: versionColor(version),
     }
@@ -101,13 +99,18 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     })
   }
 
-  static transform(response, repositoryName, toolId, requirementName, display) {
-    // Parse response
+  static transform({ response, repositoryName, toolId, requirementName }) {
     const metadata = response
       .filter(function (x) {
         return Object.keys(x).length > 0
       })
       .shift()
+
+    // Repository version
+    if (toolId === null && requirementName === null) {
+      return { label: repositoryName, version: metadata.changeset_revision }
+    }
+    // Tool version
     const tool = metadata.valid_tools
       .filter(function (tool) {
         return tool.id === toolId
@@ -117,61 +120,42 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
     if (typeof tool === 'undefined') {
       throw new NotFound({ prettyMessage: 'tool not found' })
     }
-
-    // Version
-    let version = tool.version
-    if (requirementName !== defaultRequirementName) {
-      version = metadata.valid_tools.reduce(function (
-        previousValue,
-        currentValue
-      ) {
-        return currentValue.requirements.reduce(function (prev, curr) {
-          const req = `[${curr.name} - ${curr.version}]`
-          if (requirementName === 'all' || requirementName === curr.name) {
-            return [...prev, req]
-          }
-          return [...prev]
-        }, [])
-      },
-      [])
-      if (typeof version === 'undefined' || !version.length) {
-        throw new NotFound({ prettyMessage: 'requirement not found' })
-      }
-      version = version.join(', ')
+    if (requirementName === null) {
+      return { label: tool.name, version: tool.version }
     }
-
-    // Label
-    let label = ''
-    switch (display) {
-      case 'repositoryName':
-        label = repositoryName
-        break
-      case 'toolId':
-        label = toolId
-        break
-      case 'toolName':
-        label = tool.name
-        break
-      default:
-        break
+    // Requirement version
+    const versions = metadata.valid_tools.reduce(function (
+      previousValue,
+      currentValue
+    ) {
+      return currentValue.requirements.reduce(function (prev, curr) {
+        if (requirementName === curr.name) {
+          return [...prev, curr.version]
+        }
+        return [...prev]
+      }, [])
+    },
+    [])
+    if (typeof versions === 'undefined' || !versions.length) {
+      throw new NotFound({ prettyMessage: 'requirement not found' })
     }
-    return { label, version }
+    return { label: requirementName, version: versions.shift() }
   }
 
-  async handle(
-    { repositoryName, owner, toolId, requirementName = defaultRequirementName },
-    { display }
-  ) {
+  async handle({
+    repositoryName,
+    owner,
+    toolId = null,
+    requirementName = null,
+  }) {
     const response = await this.fetch({ repositoryName, owner })
-    const data = this.constructor.transform(
+    const data = this.constructor.transform({
       response,
       repositoryName,
       toolId,
       requirementName,
-      display
-    )
+    })
     return this.constructor.render({
-      display,
       label: data.label,
       version: data.version,
     })
