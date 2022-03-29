@@ -56,7 +56,7 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
         toolId: 'fastq_dump',
       },
       staticPreview: this.render({
-        label: 'fastq_dump',
+        label: 'Extract reads',
         version: '1.2.5',
       }),
     },
