@@ -11,7 +11,7 @@ const ossfScorecardColorScale = colorScale(
   ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen']
 )
 
-export default class OSSFScorecardScore extends BaseJsonService {
+export default class OSSFScorecard extends BaseJsonService {
   static category = 'analysis'
 
   static route = { base: 'ossf-scorecard', pattern: ':host/:orgName/:repoName' }
