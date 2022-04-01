@@ -4,6 +4,35 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-04-01
+
+- two fixes for [packagist] schemas [#7782](https://github.com/badges/shields/issues/7782)
+- allow requireCloudflare setting to work when hosted on fly.io [#7781](https://github.com/badges/shields/issues/7781)
+- fix [pypi] badges when package has null license [#7761](https://github.com/badges/shields/issues/7761)
+- Use new CircleCI "convenience" images [#7726](https://github.com/badges/shields/issues/7726)
+- cache [pub] publisher badge for an hour [#7762](https://github.com/badges/shields/issues/7762)
+- Add a [pub] publisher badge [#7715](https://github.com/badges/shields/issues/7715)
+- Update number of badges served each month [#7723](https://github.com/badges/shields/issues/7723)
+- Switch Steam file size badge to informational color [#7722](https://github.com/badges/shields/issues/7722)
+- Make W3C and Youtube documentation links clickable [#7721](https://github.com/badges/shields/issues/7721)
+- Improve Wercker examples [#7720](https://github.com/badges/shields/issues/7720)
+- Improve Cirrus CI examples [#7719](https://github.com/badges/shields/issues/7719)
+- Support [CodeClimate] responses with multiple data items [#7716](https://github.com/badges/shields/issues/7716)
+- Delete [TeamCityCoverage] and [BowerVersion] redirectors [#7718](https://github.com/badges/shields/issues/7718)
+- Deprecate [Shippable] service [#7717](https://github.com/badges/shields/issues/7717)
+- fix: restore version comparison updates from #4173 [#4254](https://github.com/badges/shields/issues/4254)
+- [piwheels], filter out versions with no files [#7696](https://github.com/badges/shields/issues/7696)
+- set a longer cacheLength on [librariesio] badges [#7692](https://github.com/badges/shields/issues/7692)
+- improve python version formatting [#7682](https://github.com/badges/shields/issues/7682)
+- Clarify GitHub All Contributors badge [#7690](https://github.com/badges/shields/issues/7690)
+- Fix GitHub Deployments example color [#7691](https://github.com/badges/shields/issues/7691)
+- Support [HexPM] packages with no stable release [#7685](https://github.com/badges/shields/issues/7685)
+- Fix [SnykVulnerability] test [#7686](https://github.com/badges/shields/issues/7686)
+- Support for Test at Scale Badge, run [TAS] [#7612](https://github.com/badges/shields/issues/7612)
+- [packagist] api v2 support [#7681](https://github.com/badges/shields/issues/7681)
+- Add [piwheels] version badge [#7656](https://github.com/badges/shields/issues/7656)
+- Dependency updates
+
 ## server-2022-03-01
 
 - Add [Conan] version service (#7460)
