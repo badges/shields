@@ -6,6 +6,12 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2022-04-03
 
+- Breaking change: This release updates ioredis from v4 to v5.
+  If you are using redis for GitHub token pooling, redis connection strings of the form
+  `redis://junkusername:authpassword@example.com:1234` will need to be updated to
+  `redis://:authpassword@example.com:1234`. See the
+  [ioredis upgrade guide](https://github.com/luin/ioredis/wiki/Upgrading-from-v4-to-v5)
+  for further details.
 - fix installation issue on npm >= 8.5.5 [#7809](https://github.com/badges/shields/issues/7809)
 - two fixes for [packagist] schemas [#7782](https://github.com/badges/shields/issues/7782)
 - allow requireCloudflare setting to work when hosted on fly.io [#7781](https://github.com/badges/shields/issues/7781)
