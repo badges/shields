@@ -192,7 +192,7 @@
     "form-data": "^4.0.0",
     "gatsby": "4.6.2",
     "gatsby-plugin-catch-links": "^4.11.0",
-    "gatsby-plugin-page-creator": "^4.7.0",
+    "gatsby-plugin-page-creator": "^4.11.1",
     "gatsby-plugin-react-helmet": "^5.10.0",
     "gatsby-plugin-remove-trailing-slashes": "^4.9.0",
     "gatsby-plugin-styled-components": "^5.11.0",
