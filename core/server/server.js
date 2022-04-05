@@ -319,6 +319,8 @@ class Server {
         // On Fly we can use the Fly-Client-IP header
         // https://fly.io/docs/reference/runtime-environment/#request-headers
         req.ip = req.headers['fly-client-ip']
+          ? req.headers['fly-client-ip']
+          : req.socket.remoteAddress
       } else {
         req.ip = req.socket.remoteAddress
       }
