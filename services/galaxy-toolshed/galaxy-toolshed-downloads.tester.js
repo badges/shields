@@ -8,7 +8,7 @@ t.create('downloads - raw').get('/sra_tools/iuc.json').expectBadge({
   message: isMetric,
 })
 
-t.create('downloads - repositoryName not found')
+t.create('downloads - repository not found')
   .get('/sra_tool/iuc.json')
   .expectBadge({
     label: 'downloads',

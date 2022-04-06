@@ -15,14 +15,14 @@ export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService
   static category = 'activity'
   static route = {
     base: 'galaxy-toolshed/release-date',
-    pattern: ':repositoryName/:owner',
+    pattern: ':repository/:owner',
   }
 
   static examples = [
     {
       title: 'Galaxy Toolshed - Release date',
       namedParams: {
-        repositoryName: 'sra_tools',
+        repository: 'sra_tools',
         owner: 'iuc',
       },
       staticPreview: this.render({
@@ -39,7 +39,7 @@ export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService
     return { message: formatDate(releaseDate), color: ageColor(releaseDate) }
   }
 
-  async fetch({ repositoryName, owner }) {}
+  async fetch({ repository, owner }) {}
 
   static transform({ response }) {
     const data = this.filterRepositoryRevisionInstallInfo({
@@ -48,9 +48,9 @@ export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService
     return data.create_time
   }
 
-  async handle({ repositoryName, owner }) {
+  async handle({ repository, owner }) {
     const response = await this.fetchLastOrderedInstallableRevisionsSchema({
-      repositoryName,
+      repository,
       owner,
       schema: repositoryRevisionInstallInfoSchema,
     })

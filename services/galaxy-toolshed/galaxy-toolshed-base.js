@@ -9,37 +9,37 @@ export default class BaseGalaxyToolshedService extends BaseJsonService {
   static defaultBadgeData = { label: 'galaxy-toolshed' }
   static baseUrl = 'https://toolshed.g2.bx.psu.edu'
 
-  async fetchOrderedInstallableRevisionsSchema({ repositoryName, owner }) {
+  async fetchOrderedInstallableRevisionsSchema({ repository, owner }) {
     return this._requestJson({
       schema: orderedInstallableRevisionsSchema,
-      url: `${this.constructor.baseUrl}/api/repositories/get_ordered_installable_revisions?name=${repositoryName}&owner=${owner}`,
+      url: `${this.constructor.baseUrl}/api/repositories/get_ordered_installable_revisions?name=${repository}&owner=${owner}`,
     })
   }
 
   async fetchRepositoryRevisionInstallInfoSchema({
-    repositoryName,
+    repository,
     owner,
     schema,
     changesetRevision,
   }) {
     return this._requestJson({
       schema,
-      url: `${this.constructor.baseUrl}/api/repositories/get_repository_revision_install_info?name=${repositoryName}&owner=${owner}&changeset_revision=${changesetRevision}`,
+      url: `${this.constructor.baseUrl}/api/repositories/get_repository_revision_install_info?name=${repository}&owner=${owner}&changeset_revision=${changesetRevision}`,
     })
   }
 
   async fetchLastOrderedInstallableRevisionsSchema({
-    repositoryName,
+    repository,
     owner,
     schema,
   }) {
     const changesetRevisions =
       await this.fetchOrderedInstallableRevisionsSchema({
-        repositoryName,
+        repository,
         owner,
       })
     return this.fetchRepositoryRevisionInstallInfoSchema({
-      repositoryName,
+      repository,
       owner,
       schema,
       changesetRevision: changesetRevisions.shift(),

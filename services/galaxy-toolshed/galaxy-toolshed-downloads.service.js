@@ -14,14 +14,14 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
   static category = 'downloads'
   static route = {
     base: 'galaxy-toolshed/downloads',
-    pattern: ':repositoryName/:owner',
+    pattern: ':repository/:owner',
   }
 
   static examples = [
     {
       title: 'Galaxy Toolshed - Downloads',
       namedParams: {
-        repositoryName: 'sra_tools',
+        repository: 'sra_tools',
         owner: 'iuc',
       },
       staticPreview: this.render({ downloads: 10000 }),
@@ -43,9 +43,9 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
     return data.times_downloaded
   }
 
-  async handle({ repositoryName, owner }) {
+  async handle({ repository, owner }) {
     const response = await this.fetchLastOrderedInstallableRevisionsSchema({
-      repositoryName,
+      repository,
       owner,
       schema: repositoryRevisionInstallInfoSchema,
     })
