@@ -37,12 +37,10 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
   }
 
   static transform(response) {
-    const metadata = response
-      .filter(function (x) {
-        return Object.keys(x).length > 0
-      })
-      .shift()
-    return metadata.times_downloaded
+    const data = this.filterRepositoryRevisionInstallInfo({
+      response,
+    })
+    return data.times_downloaded
   }
 
   async handle({ repositoryName, owner }) {

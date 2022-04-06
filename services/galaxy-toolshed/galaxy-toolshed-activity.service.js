@@ -42,12 +42,10 @@ export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService
   async fetch({ repositoryName, owner }) {}
 
   static transform({ response }) {
-    const metadata = response
-      .filter(function (x) {
-        return Object.keys(x).length > 0
-      })
-      .shift()
-    return metadata.create_time
+    const data = this.filterRepositoryRevisionInstallInfo({
+      response,
+    })
+    return data.create_time
   }
 
   async handle({ repositoryName, owner }) {

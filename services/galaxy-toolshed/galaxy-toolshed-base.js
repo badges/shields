@@ -45,4 +45,12 @@ export default class BaseGalaxyToolshedService extends BaseJsonService {
       changesetRevision: changesetRevisions.shift(),
     })
   }
+
+  static filterRepositoryRevisionInstallInfo({ response }) {
+    return response
+      .filter(function (x) {
+        return Object.keys(x).length > 0
+      })
+      .shift()
+  }
 }

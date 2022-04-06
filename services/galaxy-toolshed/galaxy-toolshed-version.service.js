@@ -86,18 +86,16 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
   }
 
   static transform({ response, repositoryName, toolId, requirementName }) {
-    const metadata = response
-      .filter(function (x) {
-        return Object.keys(x).length > 0
-      })
-      .shift()
+    const data = this.filterRepositoryRevisionInstallInfo({
+      response,
+    })
 
     // Repository version
     if (toolId === null && requirementName === null) {
-      return { label: repositoryName, version: metadata.changeset_revision }
+      return { label: repositoryName, version: data.changeset_revision }
     }
     // Tool version
-    const tool = metadata.valid_tools
+    const tool = data.valid_tools
       .filter(function (tool) {
         return tool.id === toolId
       })
@@ -110,7 +108,7 @@ export default class GalaxyToolshedVersion extends BaseGalaxyToolshedService {
       return { label: tool.name, version: tool.version }
     }
     // Requirement version
-    const versions = metadata.valid_tools.reduce(function (
+    const versions = data.valid_tools.reduce(function (
       previousValue,
       currentValue
     ) {
