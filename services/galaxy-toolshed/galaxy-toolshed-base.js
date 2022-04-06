@@ -17,14 +17,32 @@ export default class BaseGalaxyToolshedService extends BaseJsonService {
   }
 
   async fetchRepositoryRevisionInstallInfoSchema({
-    schema,
     repositoryName,
     owner,
+    schema,
     changesetRevision,
   }) {
     return this._requestJson({
       schema,
       url: `${this.constructor.baseUrl}/api/repositories/get_repository_revision_install_info?name=${repositoryName}&owner=${owner}&changeset_revision=${changesetRevision}`,
+    })
+  }
+
+  async fetchLastOrderedInstallableRevisionsSchema({
+    repositoryName,
+    owner,
+    schema,
+  }) {
+    const changesetRevisions =
+      await this.fetchOrderedInstallableRevisionsSchema({
+        repositoryName,
+        owner,
+      })
+    return this.fetchRepositoryRevisionInstallInfoSchema({
+      repositoryName,
+      owner,
+      schema,
+      changesetRevision: changesetRevisions.shift(),
     })
   }
 }

@@ -36,20 +36,6 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
     return renderDownloadsBadge({ downloads })
   }
 
-  async fetch({ repositoryName, owner }) {
-    const changesetRevisions =
-      await this.fetchOrderedInstallableRevisionsSchema({
-        repositoryName,
-        owner,
-      })
-    return this.fetchRepositoryRevisionInstallInfoSchema({
-      schema: repositoryRevisionInstallInfoSchema,
-      repositoryName,
-      owner,
-      changesetRevision: changesetRevisions.shift(),
-    })
-  }
-
   static transform(response) {
     const metadata = response
       .filter(function (x) {
@@ -60,7 +46,11 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
   }
 
   async handle({ repositoryName, owner }) {
-    const response = await this.fetch({ repositoryName, owner })
+    const response = await this.fetchLastOrderedInstallableRevisionsSchema({
+      repositoryName,
+      owner,
+      schema: repositoryRevisionInstallInfoSchema,
+    })
     const downloads = this.constructor.transform(response)
     return this.constructor.render({ downloads })
   }
