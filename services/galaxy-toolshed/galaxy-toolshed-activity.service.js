@@ -11,32 +11,32 @@ const repositoryRevisionInstallInfoSchema = Joi.array().items(
   Joi.object({})
 )
 
-export default class GalaxyToolshedActivity extends BaseGalaxyToolshedService {
+export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService {
   static category = 'activity'
   static route = {
-    base: 'galaxy-toolshed/create-date',
+    base: 'galaxy-toolshed/release-date',
     pattern: ':repositoryName/:owner',
   }
 
   static examples = [
     {
-      title: 'Galaxy Toolshed - Create Time',
+      title: 'Galaxy Toolshed - Release date',
       namedParams: {
         repositoryName: 'sra_tools',
         owner: 'iuc',
       },
       staticPreview: this.render({
-        createDate: new Date(0).setUTCSeconds(1538288239),
+        releaseDate: new Date(0).setUTCSeconds(1538288239),
       }),
     },
   ]
 
   static defaultBadgeData = {
-    label: 'create date',
+    label: 'release date',
   }
 
-  static render({ createDate }) {
-    return { message: formatDate(createDate), color: ageColor(createDate) }
+  static render({ releaseDate }) {
+    return { message: formatDate(releaseDate), color: ageColor(releaseDate) }
   }
 
   async fetch({ repositoryName, owner }) {
@@ -53,7 +53,7 @@ export default class GalaxyToolshedActivity extends BaseGalaxyToolshedService {
     })
   }
 
-  static transform(response) {
+  static transform({ response }) {
     const metadata = response
       .filter(function (x) {
         return Object.keys(x).length > 0
@@ -64,7 +64,7 @@ export default class GalaxyToolshedActivity extends BaseGalaxyToolshedService {
 
   async handle({ repositoryName, owner }) {
     const response = await this.fetch({ repositoryName, owner })
-    const createDate = this.constructor.transform(response)
-    return this.constructor.render({ createDate })
+    const releaseDate = this.constructor.transform({ response })
+    return this.constructor.render({ releaseDate })
   }
 }
