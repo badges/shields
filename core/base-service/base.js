@@ -454,22 +454,22 @@ class BaseService {
     setHeadersForCacheLength(res, cacheLengthSeconds)
   }
 
-  static register(
-    { app, githubApiProvider, librariesIoApiProvider, metricInstance },
+  static makeExpressHandler(
+    { githubApiProvider, librariesIoApiProvider, metricInstance },
     serviceConfig
   ) {
-    const ServiceClass = this // eslint-disable-line @typescript-eslint/no-this-alias
-    const { regex, captureNames } = prepareRoute(ServiceClass.route)
-
+    const metricHelper = MetricHelper.create({
+      metricInstance,
+      ServiceClass: this,
+    })
+    const { captureNames } = prepareRoute(this.route)
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
 
-    const metricHelper = MetricHelper.create({ metricInstance, ServiceClass })
-
-    app.get(regex, async function (req, res) {
+    return async (req, res) => {
       const metricHandle = metricHelper.startRequest()
 
-      const namedParams = namedParamsForReq(captureNames, req, ServiceClass)
-      const serviceData = await ServiceClass.invoke(
+      const namedParams = namedParamsForReq(captureNames, req, this)
+      const serviceData = await this.invoke(
         {
           requestFetcher: fetch,
           githubApiProvider,
@@ -484,11 +484,11 @@ class BaseService {
       const badgeData = coalesceBadge(
         req.query,
         serviceData,
-        ServiceClass.defaultBadgeData,
-        ServiceClass
+        this.defaultBadgeData,
+        this
       )
 
-      ServiceClass._applyCacheHeaders({
+      this._applyCacheHeaders({
         cacheHeaderConfig,
         req,
         res,
@@ -512,7 +512,12 @@ class BaseService {
       res.end()
 
       metricHandle.noteResponseSent()
-    })
+    }
+  }
+
+  static register({ app, ...serviceContext }, serviceConfig) {
+    const { regex } = prepareRoute(this.route)
+    app.get(regex, this.makeExpressHandler(serviceContext, serviceConfig))
   }
 }
 

@@ -73,9 +73,7 @@ describe('The server', function () {
     it('should redirect colorscheme PNG badges as configured', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.png`,
-        {
-          followRedirect: false,
-        }
+        { followRedirect: false }
       )
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
@@ -207,12 +205,6 @@ describe('The server', function () {
         .to.satisfy(isSvg)
         .and.to.include('410')
         .and.to.include('jpg no longer available')
-    })
-
-    it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
-      expect(statusCode).to.equal(200)
-      expect(headers['access-control-allow-origin']).to.equal('*')
     })
   })
 
