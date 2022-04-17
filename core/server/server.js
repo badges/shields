@@ -556,7 +556,7 @@ class Server {
    */
   async stop() {
     if (this.server) {
-      await new Promise(resolve => this.server.close(resolve))
+      await new Promise(resolve => this.server.close(() => resolve()))
       this.server = undefined
     }
     this.app = undefined
