@@ -1,12 +1,12 @@
 import { expect } from 'chai'
-import Camp from '@shields_io/camp'
+import express from 'express'
 import portfinder from 'portfinder'
 import config from 'config'
 import got from '../core/got-test-client.js'
 import { setRoutes } from './suggest.js'
 import GithubApiProvider from './github/github-api-provider.js'
 
-describe('Badge suggestions for', function () {
+describe('Badge suggestions', function () {
   const githubApiBaseUrl = process.env.GITHUB_URL || 'https://api.github.com'
 
   let token, apiProvider
@@ -28,21 +28,29 @@ describe('Badge suggestions for', function () {
     baseUrl = `http://127.0.0.1:${port}`
   })
 
-  let camp
-  before(async function () {
-    camp = Camp.start({ port, hostname: '::' })
-    await new Promise(resolve => camp.on('listening', () => resolve()))
+  let app
+  before(function () {
+    app = express()
   })
+
+  let server
+  before(async function () {
+    await new Promise(resolve => {
+      server = app.listen({ host: '::', port }, () => resolve())
+    })
+  })
+
   after(async function () {
-    if (camp) {
-      await new Promise(resolve => camp.close(resolve))
-      camp = undefined
+    if (server) {
+      await new Promise(resolve => server.close(resolve))
+      server = undefined
     }
+    app = undefined
   })
 
   const origin = 'https://example.test'
   before(function () {
-    setRoutes([origin], apiProvider, camp)
+    setRoutes([origin], apiProvider, app)
   })
   describe('GitHub', function () {
     context('with an existing project', function () {
