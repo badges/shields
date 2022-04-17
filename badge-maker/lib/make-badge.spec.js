@@ -97,22 +97,6 @@ describe('The badge generator', function () {
   })
 
   describe('JSON', function () {
-    it('should produce the expected JSON', function () {
-      const json = makeBadge({
-        label: 'cactus',
-        message: 'grown',
-        format: 'json',
-        links: ['https://example.com/', 'https://other.example.com/'],
-      })
-      expect(JSON.parse(json)).to.deep.equal({
-        name: 'cactus',
-        label: 'cactus',
-        value: 'grown',
-        message: 'grown',
-        link: ['https://example.com/', 'https://other.example.com/'],
-      })
-    })
-
     it('should replace undefined svg badge style with "flat"', function () {
       const jsonBadgeWithUnknownStyle = makeBadge({
         label: 'name',
