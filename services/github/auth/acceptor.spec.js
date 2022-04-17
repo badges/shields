@@ -27,7 +27,7 @@ describe('Github token acceptor', function () {
   beforeEach(async function () {
     app = express()
     await new Promise(resolve => {
-      server = app.listen({ hostname: '::', port }, () => resolve())
+      server = app.listen({ host: '::', port }, () => resolve())
     })
   })
   afterEach(async function () {

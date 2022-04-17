@@ -148,7 +148,7 @@ async function findSuggestions(githubApiProvider, url) {
 //    - preview: object (optional)
 //      - style: string
 function setRoutes(allowedOrigin, githubApiProvider, app) {
-  app.post('suggest/v1', express.json(), (req, res) => {
+  app.get('/[$]suggest/v1', (req, res) => {
     // The typical dev and production setups are cross-origin. However, in
     // Heroku deploys and some self-hosted deploys these requests may come from
     // the same host. Chrome does not send an Origin header on same-origin
@@ -182,7 +182,7 @@ function setRoutes(allowedOrigin, githubApiProvider, app) {
 
     let url
     try {
-      url = new URL(req.body.url)
+      url = new URL(req.query.url)
     } catch (e) {
       res.json({ err: `${e}` })
       res.end()

@@ -141,7 +141,9 @@ const publicConfigSchema = Joi.object({
     weblate: defaultService,
     trace: Joi.boolean().required(),
   }).required(),
-  cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
+  cacheHeaders: Joi.object({
+    defaultCacheLengthSeconds: nonNegativeInteger,
+  }).required(),
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: fileSize,
   userAgentBase: Joi.string().required(),

@@ -1,9 +1,13 @@
 import Joi from 'joi'
 import chai from 'chai'
+import express from 'express'
+import isSvg from 'is-svg'
 import sinon from 'sinon'
+import portfinder from 'portfinder'
 import prometheus from 'prom-client'
 import chaiAsPromised from 'chai-as-promised'
 import PrometheusMetrics from '../server/prometheus-metrics.js'
+import got from '../got-test-client.js'
 import trace from './trace.js'
 import {
   NotFound,
@@ -15,6 +19,7 @@ import {
 import BaseService from './base.js'
 import { MetricHelper, MetricNames } from './metric-helper.js'
 import '../register-chai-plugins.spec.js'
+
 const { expect } = chai
 chai.use(chaiAsPromised)
 
@@ -59,9 +64,12 @@ class DummyServiceWithServiceResponseSizeMetricEnabled extends DummyService {
 
 describe('BaseService', function () {
   const defaultConfig = {
+    handleInternalErrors: false,
+    cacheHeaders: { defaultCacheLengthSeconds: 120 },
     public: {
       handleInternalErrors: false,
       services: {},
+      cacheHeaders: { defaultCacheLengthSeconds: 120 },
     },
     private: {},
   }
@@ -321,63 +329,36 @@ describe('BaseService', function () {
     })
   })
 
-  describe.skip('ScoutCamp integration', function () {
-    // TODO Strangly, without the useless escape the regexes do not match in Node 12.
-    // eslint-disable-next-line no-useless-escape
-    const expectedRouteRegex = /^\/foo(?:\/([^\/#\?]+?))(|\.svg|\.json)$/
-
-    let mockCamp
-    let mockHandleRequest
-
-    beforeEach(function () {
-      mockCamp = {
-        route: sinon.spy(),
-      }
-      mockHandleRequest = sinon.spy()
-      DummyService.register(
-        { camp: mockCamp, handleRequest: mockHandleRequest },
-        defaultConfig
-      )
+  describe('Express integration', function () {
+    let port, baseUrl
+    beforeEach(async function () {
+      port = await portfinder.getPortPromise()
+      baseUrl = `http://127.0.0.1:${port}`
     })
 
-    it('registers the service', function () {
-      expect(mockCamp.route).to.have.been.calledOnce
-      expect(mockCamp.route).to.have.been.calledWith(expectedRouteRegex)
+    let app, server
+    beforeEach(async function () {
+      app = express()
+      DummyService.register({ app }, defaultConfig)
+      await new Promise(resolve => {
+        server = app.listen({ host: '::', port }, () => resolve())
+      })
+    })
+
+    afterEach(async function () {
+      if (server) {
+        await new Promise(resolve => server.close(resolve))
+        server = undefined
+      }
+      app = undefined
     })
 
     it('handles the request', async function () {
-      expect(mockHandleRequest).to.have.been.calledOnce
+      const { body } = await got(`${baseUrl}/foo/bar.svg?queryParamA=%3F`)
 
-      const { queryParams: serviceQueryParams, handler: requestHandler } =
-        mockHandleRequest.getCall(0).args[1]
-      expect(serviceQueryParams).to.deep.equal([
-        'queryParamA',
-        'legacyQueryParamA',
-      ])
-
-      const mockSendBadge = sinon.spy()
-      const mockRequest = {
-        asPromise: sinon.spy(),
-      }
-      const queryParams = { queryParamA: '?' }
-      const match = '/foo/bar.svg'.match(expectedRouteRegex)
-      await requestHandler(queryParams, match, mockSendBadge, mockRequest)
-
-      const expectedFormat = 'svg'
-      expect(mockSendBadge).to.have.been.calledOnce
-      expect(mockSendBadge).to.have.been.calledWith(expectedFormat, {
-        label: 'cat',
-        message: 'Hello namedParamA: bar with queryParamA: ?',
-        color: 'lightgrey',
-        style: 'flat',
-        namedLogo: undefined,
-        logo: undefined,
-        logoWidth: undefined,
-        logoPosition: undefined,
-        links: [],
-        labelColor: undefined,
-        cacheLengthSeconds: undefined,
-      })
+      expect(body)
+        .to.satisfy(isSvg)
+        .and.to.include('cat: Hello namedParamA: bar with queryParamA: ?')
     })
   })
 

@@ -1,4 +1,4 @@
-import Camp from '@shields_io/camp'
+import express from 'express'
 import { expect } from 'chai'
 import nock from 'nock'
 import portfinder from 'portfinder'
@@ -67,28 +67,36 @@ describe('Badge suggestions', function () {
     })
   })
 
-  describe.skip('Scoutcamp integration', function () {
+  describe('Express integration', function () {
     let port, baseUrl
-    before(async function () {
+    beforeEach(async function () {
       port = await portfinder.getPortPromise()
       baseUrl = `http://127.0.0.1:${port}`
     })
 
-    let camp
-    before(async function () {
-      camp = Camp.start({ port, hostname: '::' })
-      await new Promise(resolve => camp.on('listening', () => resolve()))
-    })
-    after(async function () {
-      if (camp) {
-        await new Promise(resolve => camp.close(resolve))
-        camp = undefined
-      }
+    let app
+    beforeEach(function () {
+      app = express()
     })
 
     const origin = 'https://example.test'
-    before(function () {
-      setRoutes([origin], apiProvider, camp)
+    beforeEach(function () {
+      setRoutes([origin], apiProvider, app)
+    })
+
+    let server
+    beforeEach(async function () {
+      await new Promise(resolve => {
+        server = app.listen({ host: '::', port }, () => resolve())
+      })
+    })
+
+    afterEach(async function () {
+      if (server) {
+        await new Promise(resolve => server.close(resolve))
+        server = undefined
+      }
+      app = undefined
     })
 
     context('without an origin header', function () {
@@ -110,9 +118,7 @@ describe('Badge suggestions', function () {
           `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/atom/atom'
           )}`,
-          {
-            responseType: 'json',
-          }
+          { responseType: 'json' }
         )
         expect(statusCode).to.equal(200)
         expect(body).to.deep.equal({

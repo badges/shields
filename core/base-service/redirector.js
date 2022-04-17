@@ -91,7 +91,7 @@ export default function redirector(attrs) {
         const targetPath = encodeURI(transformPath(namedParams))
         trace.logTrace('validate', emojic.dart, 'Target', targetPath)
 
-        let urlSuffix = url.parse(req.url).search
+        let urlSuffix = url.parse(req.url).search ?? ''
 
         if (transformQueryParams) {
           const specifiedParams = queryString.parse(urlSuffix)

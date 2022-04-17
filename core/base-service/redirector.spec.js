@@ -1,4 +1,4 @@
-import Camp from '@shields_io/camp'
+import express from 'express'
 import portfinder from 'portfinder'
 import { expect } from 'chai'
 import got from '../got-test-client.js'
@@ -63,23 +63,16 @@ describe('Redirector', function () {
     expect(redirector({ ...attrs, examples }).examples).to.equal(examples)
   })
 
-  describe.skip('ScoutCamp integration', function () {
+  describe('Express integration', function () {
     let port, baseUrl
     beforeEach(async function () {
       port = await portfinder.getPortPromise()
       baseUrl = `http://127.0.0.1:${port}`
     })
 
-    let camp
-    beforeEach(async function () {
-      camp = Camp.start({ port, hostname: '::' })
-      await new Promise(resolve => camp.on('listening', () => resolve()))
-    })
-    afterEach(async function () {
-      if (camp) {
-        await new Promise(resolve => camp.close(resolve))
-        camp = undefined
-      }
+    let app
+    beforeEach(function () {
+      app = express()
     })
 
     const transformPath = ({ namedParamA }) => `/new/service/${namedParamA}`
@@ -92,9 +85,24 @@ describe('Redirector', function () {
         dateAdded,
       })
       ServiceClass.register(
-        { camp },
+        { app },
         { rasterUrl: 'http://raster.example.test' }
       )
+    })
+
+    let server
+    beforeEach(async function () {
+      await new Promise(resolve => {
+        server = app.listen({ host: '::', port }, () => resolve())
+      })
+    })
+
+    afterEach(async function () {
+      if (server) {
+        await new Promise(resolve => server.close(resolve))
+        server = undefined
+      }
+      app = undefined
     })
 
     it('should redirect as configured', async function () {
@@ -166,7 +174,7 @@ describe('Redirector', function () {
           transformQueryParams,
           dateAdded,
         })
-        ServiceClass.register({ camp }, {})
+        ServiceClass.register({ app }, {})
       })
 
       it('should forward the transformed query params', async function () {
@@ -224,7 +232,7 @@ describe('Redirector', function () {
           overrideTransformedQueryParams: true,
           dateAdded,
         })
-        ServiceClass.register({ camp }, {})
+        ServiceClass.register({ app }, {})
         const { statusCode, headers } = await got(
           `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
           {
