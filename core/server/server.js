@@ -347,7 +347,7 @@ class Server {
       res.status(404)
       res.setHeader('Content-Type', 'application/json')
       res.json(
-        transformBadgeData({
+        makeJsonBadge({
           label: '404',
           message: 'badge not found',
           color: 'red',
