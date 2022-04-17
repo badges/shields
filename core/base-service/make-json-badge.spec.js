@@ -1,12 +1,12 @@
-import { transformBadgeData } from './transform-badge-data.js'
+import { expect } from 'chai'
+import { makeJsonBadge } from './make-json-badge.js'
 
-describe('transformBadgeData()', () => {
+describe('makeJsonBadge()', function () {
   it('should produce the expected JSON', function () {
     expect(
-      transformBadgeData({
+      makeJsonBadge({
         label: 'cactus',
         message: 'grown',
-        format: 'json',
         links: ['https://example.com/', 'https://other.example.com/'],
       })
     ).to.deep.equal({
@@ -15,6 +15,9 @@ describe('transformBadgeData()', () => {
       value: 'grown',
       message: 'grown',
       link: ['https://example.com/', 'https://other.example.com/'],
+      color: undefined,
+      labelColor: undefined,
+      logoWidth: undefined,
     })
   })
 })

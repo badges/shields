@@ -26,7 +26,7 @@ import {
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
-import { transformBadgeData } from './transform-badge-data.js'
+import { makeJsonBadge } from './make-json-badge.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -504,7 +504,7 @@ class BaseService {
         res.send(makeBadge(badgeData))
       } else if (format === 'json') {
         res.setHeader('Content-Type', 'application/json')
-        res.json(transformBadgeData(badgeData))
+        res.json(makeJsonBadge(badgeData))
       } else {
         throw Error(`Unrecognized format: ${format}`)
       }
