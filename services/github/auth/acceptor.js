@@ -1,5 +1,5 @@
-import express from 'express'
 import queryString from 'query-string'
+import multer from 'multer'
 import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
@@ -23,36 +23,33 @@ function setRoutes({ app, authHelper, onTokenAccepted }) {
     res.end()
   })
 
-  app.use('/github-auth/done', express.json())
-  app.post('/github-auth/done', async (req, res) => {
-    const { code } = req.body
+  app.post('/github-auth/done', multer().none(), async (req, res) => {
+    const code = (req.body ?? {}).code
 
-    if (typeof code !== 'string') {
+    if (!code) {
       log.log(`GitHub OAuth data: ${JSON.stringify(req.body)}`)
       res.send('GitHub OAuth authentication failed to provide a code.')
       res.end()
       return
     }
 
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-      form: {
-        // TODO The `_user` and `_pass` properties bypass security checks in
-        // AuthHelper (e.g: enforceStrictSsl and shouldAuthenticateRequest).
-        // Do not use them elsewhere. It would be better to clean
-        // this up so it's not setting a bad example.
-        client_id: authHelper._user,
-        client_secret: authHelper._pass,
-        code,
-      },
-    }
-
     let resp
     try {
-      resp = await fetch('https://github.com/login/oauth/access_token', options)
+      resp = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+        form: {
+          // TODO The `_user` and `_pass` properties bypass security checks in
+          // AuthHelper (e.g: enforceStrictSsl and shouldAuthenticateRequest).
+          // Do not use them elsewhere. It would be better to clean
+          // this up so it's not setting a bad example.
+          client_id: authHelper._user,
+          client_secret: authHelper._pass,
+          code,
+        },
+      })
     } catch (e) {
       res.send('The connection to GitHub failed.')
       res.end()

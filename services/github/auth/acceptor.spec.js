@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Camp from '@shields_io/camp'
+import express from 'express'
 import FormData from 'form-data'
 import sinon from 'sinon'
 import portfinder from 'portfinder'
@@ -23,30 +23,35 @@ describe('Github token acceptor', function () {
     baseUrl = `http://127.0.0.1:${port}`
   })
 
-  let camp
+  let app, server
   beforeEach(async function () {
-    camp = Camp.start({ port, hostname: '::' })
-    await new Promise(resolve => camp.on('listening', () => resolve()))
+    app = express()
+    await new Promise(resolve => {
+      server = app.listen({ hostname: '::', port }, () => resolve())
+    })
   })
   afterEach(async function () {
-    if (camp) {
-      await new Promise(resolve => camp.close(resolve))
-      camp = undefined
+    if (server) {
+      await new Promise(resolve => server.close(resolve))
+      server = undefined
     }
+    app = undefined
   })
 
   let onTokenAccepted
   beforeEach(function () {
     onTokenAccepted = sinon.stub()
     setRoutes({
-      server: camp,
+      app,
       authHelper: oauthHelper,
       onTokenAccepted,
     })
   })
 
   it('should start the OAuth process', async function () {
-    const res = await got(`${baseUrl}/github-auth`, { followRedirect: false })
+    const res = await got.post(`${baseUrl}/github-auth`, {
+      followRedirect: false,
+    })
 
     expect(res.statusCode).to.equal(302)
 
@@ -61,8 +66,8 @@ describe('Github token acceptor', function () {
   describe('Finishing the OAuth process', function () {
     context('no code is provided', function () {
       it('should return an error', async function () {
-        const res = await got(`${baseUrl}/github-auth/done`)
-        expect(res.body).to.equal(
+        const { body } = await got.post(`${baseUrl}/github-auth/done`)
+        expect(body).to.equal(
           'GitHub OAuth authentication failed to provide a code.'
         )
       })

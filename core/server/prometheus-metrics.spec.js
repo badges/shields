@@ -1,30 +1,33 @@
 import { expect } from 'chai'
-import Camp from '@shields_io/camp'
+import express from 'express'
 import portfinder from 'portfinder'
 import got from '../got-test-client.js'
 import Metrics from './prometheus-metrics.js'
 
 describe('Prometheus metrics route', function () {
-  let port, baseUrl, camp, metrics
+  let port, baseUrl, app, server, metrics
   beforeEach(async function () {
     port = await portfinder.getPortPromise()
     baseUrl = `http://127.0.0.1:${port}`
-    camp = Camp.start({ port, hostname: '::' })
-    await new Promise(resolve => camp.on('listening', () => resolve()))
+    app = express()
+    await new Promise(resolve => {
+      server = app.listen({ host: '::', port }, () => resolve())
+    })
   })
   afterEach(async function () {
     if (metrics) {
       metrics.stop()
     }
-    if (camp) {
-      await new Promise(resolve => camp.close(resolve))
-      camp = undefined
+    app = undefined
+    if (server) {
+      await new Promise(resolve => server.close(resolve))
+      server = undefined
     }
   })
 
   it('returns default metrics', async function () {
     metrics = new Metrics()
-    metrics.registerMetricsEndpoint(camp)
+    metrics.registerMetricsEndpoint(app)
 
     const { statusCode, body } = await got(`${baseUrl}/metrics`)
 

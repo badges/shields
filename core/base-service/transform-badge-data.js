@@ -1,4 +1,4 @@
-import { normalizeColor } from 'badge-maker/lib/color'
+import { normalizeColor } from 'badge-maker/lib/color.js'
 
 export function transformBadgeData(badgeData) {
   const { label, message, logoWidth, color, labelColor, links } = badgeData

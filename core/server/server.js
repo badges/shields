@@ -13,7 +13,7 @@ import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
 import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
-import suggest from '../../services/suggest.js'
+import { setRoutes as setSuggestRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { transformBadgeData } from '../base-service/transform-badge-data.js'
 import { clearResourceCache } from '../base-service/resource-cache.js'
@@ -338,6 +338,10 @@ class Server {
         res.end()
       })
     }
+  }
+
+  registerNotFoundHandlers() {
+    const { app } = this
 
     app.get(/\.json$/, (req, res) => {
       res.status(404)
@@ -393,12 +397,29 @@ class Server {
     }
 
     if (redirectUrl) {
-      app.get(/^\/$/, (req, res) => {
+      app.get('/', (req, res) => {
         res.status(302)
         res.setHeader('Location', redirectUrl)
         res.end()
       })
     }
+
+    /*
+    This is here for legacy reasons. The badge server and frontend used to live
+    on two different servers. When we merged them there was a conflict so we did
+    this to avoid moving the endpoint docs to another URL.
+    
+    Never ever do this again.
+    */
+    app.use('/endpoint', (req, res, next) => {
+      if (Object.keys(req.query).length === 0) {
+        res.status(301)
+        res.setHeader('Location', '/endpoint/')
+        res.end()
+      } else {
+        next()
+      }
+    })
   }
 
   /**
@@ -448,8 +469,11 @@ class Server {
    * Bootstrap Scoutcamp,
    * Register handlers,
    * Start listening for requests on this.baseUrl()
+   *
+   * @param {Function} registerExtras Optional function to register additional
+   * routes, used for testing.
    */
-  async start() {
+  async start(registerExtras) {
     const {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
@@ -462,7 +486,6 @@ class Server {
     log.log(`Server is starting up: ${this.baseUrl}`)
 
     const app = (this.app = express())
-    app.use(express.static(this.config.public.documentRoot, { maxAge: 300 }))
 
     if (requireCloudflare) {
       this.requireCloudflare()
@@ -480,7 +503,7 @@ class Server {
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    suggest.setRoutes(allowedOrigin, githubApiProvider, app)
+    setSuggestRoutes(allowedOrigin, githubApiProvider, app)
 
     // https://github.com/badges/shields/issues/3273
     app.use((req, res, next) => {
@@ -488,46 +511,30 @@ class Server {
       next()
     })
 
-    /*
-    This is here for legacy reasons. The badge server and frontend used to live
-    on two different servers. When we merged them there was a conflict so we did
-    this to avoid moving the endpoint docs to another URL.
-    
-    Never ever do this again.
-    */
-    app.use('/endpoint', (req, res, next) => {
-      if (Object.keys(req.query).length === 0) {
-        res.status(301)
-        res.setHeader('Location', '/endpoint/')
-        res.end()
-      } else {
-        next()
-      }
-    })
-
     this.registerRedirects()
-    await this.registerServices()
+    app.use(
+      express.static(this.config.public.documentRoot, {
+        // Manually set headers, since the `maxAge` parameter sets
+        // 'Cache-Control: public'.
+        cacheControl: false,
+        setHeaders: res =>
+          res.setHeader('Cache-Control', 'max-age=300, s-maxage=300'),
+      })
+    )
     this.registerErrorHandlers()
-
-    // camp.timeout = this.config.public.requestTimeoutSeconds * 1000
-    // if (this.config.public.requestTimeoutSeconds > 0) {
-    //   camp.on('timeout', socket => {
-    //     const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
-    //     socket.write('HTTP/1.1 408 Request Timeout\r\n')
-    //     socket.write('Content-Type: text/html; charset=UTF-8\r\n')
-    //     socket.write('Content-Encoding: UTF-8\r\n')
-    //     socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\r\n`)
-    //     socket.write('Connection: close\r\n\r\n')
-    //     socket.write('Request Timeout')
-    //     socket.end()
-    //   })
-    // }
+    await this.registerServices()
+    if (registerExtras) {
+      registerExtras(app)
+    }
+    this.registerNotFoundHandlers()
 
     if (secure) {
       this.server = https.createServer({ hostname, cert, key }, app)
     } else {
       this.server = http.createServer({ hostname }, app)
     }
+
+    this.server.setTimeout(this.config.public.requestTimeoutSeconds * 1000)
 
     await new Promise(resolve =>
       this.server.listen({ host: hostname, port }, () => resolve())
@@ -548,11 +555,6 @@ class Server {
    * Stop the HTTP server and clean up helpers
    */
   async stop() {
-    if (this.camp) {
-      await new Promise(resolve => this.camp.close(resolve))
-      this.camp = undefined
-    }
-
     if (this.server) {
       await new Promise(resolve => this.server.close(resolve))
       this.server = undefined

@@ -26,7 +26,7 @@ import {
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
-import { transformBadgeData } from './transform-badge-data'
+import { transformBadgeData } from './transform-badge-data.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -460,8 +460,6 @@ class BaseService {
   ) {
     const ServiceClass = this // eslint-disable-line @typescript-eslint/no-this-alias
     const { regex, captureNames } = prepareRoute(ServiceClass.route)
-    // TODO: This queryParams object is not the right object.
-    const queryParams = getQueryParamNames(ServiceClass.route)
 
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
 
@@ -480,11 +478,11 @@ class BaseService {
         },
         serviceConfig,
         namedParams,
-        queryParams
+        req.query
       )
 
       const badgeData = coalesceBadge(
-        queryParams,
+        req.query,
         serviceData,
         ServiceClass.defaultBadgeData,
         ServiceClass

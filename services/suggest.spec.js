@@ -67,7 +67,7 @@ describe('Badge suggestions', function () {
     })
   })
 
-  describe('Scoutcamp integration', function () {
+  describe.skip('Scoutcamp integration', function () {
     let port, baseUrl
     before(async function () {
       port = await portfinder.getPortPromise()

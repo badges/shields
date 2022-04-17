@@ -98,7 +98,7 @@ describe('The server', function () {
         `${baseUrl}:fruit-apple-green.svg`
       )
       expect(statusCode).to.equal(200)
-      expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
+      expect(headers['content-type']).to.equal('image/svg+xml; charset=utf-8')
       expect(headers['content-length']).to.equal('1130')
     })
 
@@ -112,7 +112,9 @@ describe('The server', function () {
         `${baseUrl}:fruit-apple-green.json`
       )
       expect(statusCode).to.equal(200)
-      expect(headers['content-type']).to.equal('application/json')
+      expect(headers['content-type']).to.equal(
+        'application/json; charset=utf-8'
+      )
       expect(headers['access-control-allow-origin']).to.equal('*')
       expect(headers['content-length']).to.equal('92')
       expect(() => JSON.parse(body)).not.to.throw()
@@ -200,8 +202,7 @@ describe('The server', function () {
       const { statusCode, body } = await got(`${baseUrl}npm/v/express.jpg`, {
         throwHttpErrors: false,
       })
-      // TODO It would be nice if this were 404 or 410.
-      expect(statusCode).to.equal(200)
+      expect(statusCode).to.equal(410)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('410')
@@ -245,22 +246,12 @@ describe('The server', function () {
 
       // configure server to time out requests that take >2 seconds
       server = await createTestServer({ public: { requestTimeoutSeconds: 2 } })
-      await server.start()
+      await server.start(app => {
+        // /fast returns a 200 OK after a 1 second delay
+        app.get('/fast', (req, res) => setTimeout(() => res.end(), 1000))
 
-      // /fast returns a 200 OK after a 1 second delay
-      server.camp.route(/^\/fast$/, (data, match, end, ask) => {
-        setTimeout(() => {
-          ask.res.statusCode = 200
-          ask.res.end()
-        }, 1000)
-      })
-
-      // /slow returns a 200 OK after a 3 second delay
-      server.camp.route(/^\/slow$/, (data, match, end, ask) => {
-        setTimeout(() => {
-          ask.res.statusCode = 200
-          ask.res.end()
-        }, 3000)
+        // /slow returns a 200 OK after a 3 second delay
+        app.get('/slow', (req, res) => setTimeout(() => res.end(), 3000))
       })
     })
 
@@ -273,11 +264,9 @@ describe('The server', function () {
 
     it('should time out slow requests', async function () {
       this.timeout(10000)
-      const { statusCode, body } = await got(`${server.baseUrl}slow`, {
-        throwHttpErrors: false,
-      })
-      expect(statusCode).to.be.equal(408)
-      expect(body).to.equal('Request Timeout')
+      await expect(got(`${server.baseUrl}slow`)).to.be.rejectedWith(
+        'socket hang up'
+      )
     })
 
     it('should not time out fast requests', async function () {
