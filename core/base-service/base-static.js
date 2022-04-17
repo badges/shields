@@ -4,7 +4,6 @@ import {
   serverHasBeenUpSinceResourceCached,
   setCacheHeadersForStaticResource,
 } from './cache-headers.js'
-import { makeSend } from './legacy-result-sender.js'
 import { MetricHelper } from './metric-helper.js'
 import coalesceBadge from './coalesce-badge.js'
 import { prepareRoute, namedParamsForMatch } from './route.js'
@@ -50,7 +49,7 @@ export default class BaseStaticService extends BaseService {
       setCacheHeadersForStaticResource(ask.res)
 
       const svg = makeBadge(badgeData)
-      makeSend(format, ask.res, end)(svg)
+      // makeSend(format, ask.res, end)(svg)
 
       metricHandle.noteResponseSent()
     })
