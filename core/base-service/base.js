@@ -6,8 +6,13 @@
 import emojic from 'emojic'
 import Joi from 'joi'
 import log from '../server/log.js'
+import makeBadge from '../../badge-maker/lib/make-badge.js'
 import { AuthHelper } from './auth-helper.js'
 import { MetricHelper, MetricNames } from './metric-helper.js'
+import {
+  coalesceCacheLength,
+  setHeadersForCacheLength,
+} from './cache-headers.js'
 import { assertValidCategory } from './categories.js'
 import checkErrorResponse from './check-error-response.js'
 import coalesceBadge from './coalesce-badge.js'
@@ -21,11 +26,12 @@ import {
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
+import { transformBadgeData } from './transform-badge-data'
 import {
   makeFullUrl,
   assertValidRoute,
   prepareRoute,
-  namedParamsForMatch,
+  namedParamsForReq,
   getQueryParamNames,
 } from './route.js'
 import { assertValidServiceDefinition } from './service-definitions.js'
@@ -423,60 +429,92 @@ class BaseService {
     return serviceData
   }
 
+  // `defaultCacheLengthSeconds` can be overridden by
+  // `serviceDefaultCacheLengthSeconds` (either by category or on a badge-
+  // by-badge basis). Then in turn that can be overridden by
+  // `serviceOverrideCacheLengthSeconds` (which we expect to be used only in
+  // the dynamic badge) but only if `serviceOverrideCacheLengthSeconds` is
+  // longer than `serviceDefaultCacheLengthSeconds` and then the `cacheSeconds`
+  // query param can also override both of those but again only if `cacheSeconds`
+  // is longer.
+  //
+  // Ref: https://github.com/badges/shields/pull/2755
+  static _applyCacheHeaders({
+    cacheHeaderConfig,
+    req,
+    res,
+    serviceOverrideCacheLengthSeconds,
+  }) {
+    const cacheLengthSeconds = coalesceCacheLength({
+      cacheHeaderConfig,
+      serviceDefaultCacheLengthSeconds: this._cacheLength,
+      serviceOverrideCacheLengthSeconds,
+      queryParams: req.query,
+    })
+    setHeadersForCacheLength(res, cacheLengthSeconds)
+  }
+
   static register(
-    {
-      camp,
-      handleRequest,
-      githubApiProvider,
-      librariesIoApiProvider,
-      metricInstance,
-    },
+    { app, githubApiProvider, librariesIoApiProvider, metricInstance },
     serviceConfig
   ) {
+    const ServiceClass = this // eslint-disable-line @typescript-eslint/no-this-alias
+    const { regex, captureNames } = prepareRoute(ServiceClass.route)
+    // TODO: This queryParams object is not the right object.
+    const queryParams = getQueryParamNames(ServiceClass.route)
+
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
-    const { regex, captureNames } = prepareRoute(this.route)
-    const queryParams = getQueryParamNames(this.route)
 
-    const metricHelper = MetricHelper.create({
-      metricInstance,
-      ServiceClass: this,
-    })
+    const metricHelper = MetricHelper.create({ metricInstance, ServiceClass })
 
-    camp.route(
-      regex,
-      handleRequest(cacheHeaderConfig, {
-        queryParams,
-        handler: async (queryParams, match, sendBadge) => {
-          const metricHandle = metricHelper.startRequest()
+    app.get(regex, async function (req, res) {
+      const metricHandle = metricHelper.startRequest()
 
-          const namedParams = namedParamsForMatch(captureNames, match, this)
-          const serviceData = await this.invoke(
-            {
-              requestFetcher: fetch,
-              githubApiProvider,
-              librariesIoApiProvider,
-              metricHelper,
-            },
-            serviceConfig,
-            namedParams,
-            queryParams
-          )
-
-          const badgeData = coalesceBadge(
-            queryParams,
-            serviceData,
-            this.defaultBadgeData,
-            this
-          )
-          // The final capture group is the extension.
-          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
-          sendBadge(format, badgeData)
-
-          metricHandle.noteResponseSent()
+      const namedParams = namedParamsForReq(captureNames, req, ServiceClass)
+      const serviceData = await ServiceClass.invoke(
+        {
+          requestFetcher: fetch,
+          githubApiProvider,
+          librariesIoApiProvider,
+          metricHelper,
         },
-        cacheLength: this._cacheLength,
+        serviceConfig,
+        namedParams,
+        queryParams
+      )
+
+      const badgeData = coalesceBadge(
+        queryParams,
+        serviceData,
+        ServiceClass.defaultBadgeData,
+        ServiceClass
+      )
+
+      ServiceClass._applyCacheHeaders({
+        cacheHeaderConfig,
+        req,
+        res,
+        serviceOverrideCacheLengthSeconds: badgeData.cacheLengthSeconds,
       })
-    )
+
+      // The final capture group is the extension.
+      const formatParamIndex = captureNames.length
+      const format = (req.params[formatParamIndex] || '.svg').replace(/^\./, '')
+
+      if (format === 'svg') {
+        res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+        res.send(makeBadge(badgeData))
+      } else if (format === 'json') {
+        res.setHeader('Content-Type', 'application/json')
+        res.json(transformBadgeData(badgeData))
+      } else {
+        throw Error(`Unrecognized format: ${format}`)
+      }
+
+      res.end()
+
+      metricHandle.noteResponseSent()
+    })
   }
 }
 

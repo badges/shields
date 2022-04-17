@@ -10,7 +10,7 @@ import coalesceBadge from './coalesce-badge.js'
 import { prepareRoute, namedParamsForMatch } from './route.js'
 
 export default class BaseStaticService extends BaseService {
-  static register({ camp, metricInstance }, serviceConfig) {
+  static noRegister({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
 
     const metricHelper = MetricHelper.create({

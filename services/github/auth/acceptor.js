@@ -1,12 +1,13 @@
+import express from 'express'
 import queryString from 'query-string'
 import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
-function setRoutes({ server, authHelper, onTokenAccepted }) {
+function setRoutes({ app, authHelper, onTokenAccepted }) {
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
 
-  server.route(/^\/github-auth$/, (data, match, end, ask) => {
-    ask.res.statusCode = 302 // Found.
+  app.post('/github-auth', (req, res) => {
+    res.status(302) // Found.
     const query = queryString.stringify({
       // TODO The `_user` property bypasses security checks in AuthHelper.
       // (e.g: enforceStrictSsl and shouldAuthenticateRequest).
@@ -15,17 +16,22 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
     })
-    ask.res.setHeader(
+    res.setHeader(
       'Location',
       `https://github.com/login/oauth/authorize?${query}`
     )
-    end('')
+    res.end()
   })
 
-  server.route(/^\/github-auth\/done$/, async (data, match, end, ask) => {
-    if (!data.code) {
-      log.log(`GitHub OAuth data: ${JSON.stringify(data)}`)
-      return end('GitHub OAuth authentication failed to provide a code.')
+  app.use('/github-auth/done', express.json())
+  app.post('/github-auth/done', async (req, res) => {
+    const { code } = req.body
+
+    if (typeof code !== 'string') {
+      log.log(`GitHub OAuth data: ${JSON.stringify(req.body)}`)
+      res.send('GitHub OAuth authentication failed to provide a code.')
+      res.end()
+      return
     }
 
     const options = {
@@ -40,7 +46,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         // this up so it's not setting a bad example.
         client_id: authHelper._user,
         client_secret: authHelper._pass,
-        code: data.code,
+        code,
       },
     }
 
@@ -48,23 +54,29 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
     try {
       resp = await fetch('https://github.com/login/oauth/access_token', options)
     } catch (e) {
-      return end('The connection to GitHub failed.')
+      res.send('The connection to GitHub failed.')
+      res.end()
+      return
     }
 
     let content
     try {
       content = queryString.parse(resp.buffer)
     } catch (e) {
-      return end('The GitHub OAuth token could not be parsed.')
+      res.send('The GitHub OAuth token could not be parsed.')
+      res.end()
+      return
     }
 
     const { access_token: token } = content
     if (!token) {
-      return end('The GitHub OAuth process did not return a user token.')
+      res.send('The GitHub OAuth process did not return a user token.')
+      res.end()
+      return
     }
 
-    ask.res.setHeader('Content-Type', 'text/html')
-    end(
+    res.setHeader('Content-Type', 'text/html')
+    res.send(
       '<p>Shields.io has received your app-specific GitHub user token. ' +
         'You can revoke it by going to ' +
         '<a href="https://github.com/settings/applications">GitHub</a>.</p>' +
@@ -75,6 +87,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         'everyone!</p>' +
         '<p><a href="/">Back to the website</a></p>'
     )
+    res.end()
 
     onTokenAccepted(token)
   })

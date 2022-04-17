@@ -50,7 +50,7 @@ class GithubConstellation {
     }
   }
 
-  async initialize(server) {
+  async initialize(app) {
     if (!this.apiProvider.withPooling) {
       return
     }
@@ -74,7 +74,7 @@ class GithubConstellation {
 
     if (this.oauthHelper.isConfigured) {
       setAcceptorRoutes({
-        server,
+        app,
         authHelper: this.oauthHelper,
         onTokenAccepted: tokenString => this.onTokenAdded(tokenString),
       })

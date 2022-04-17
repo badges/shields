@@ -1,6 +1,6 @@
 'use strict'
 
-const { normalizeColor, toSvgColor } = require('./color')
+const { toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
 
@@ -9,7 +9,6 @@ note: makeBadge() is fairly thinly wrapped so if we are making changes here
 it is likely this will impact on the package's public interface in index.js
 */
 module.exports = function makeBadge({
-  format,
   style = 'flat',
   label,
   message,
@@ -23,22 +22,6 @@ module.exports = function makeBadge({
   // String coercion and whitespace removal.
   label = `${label}`.trim()
   message = `${message}`.trim()
-
-  // This ought to be the responsibility of the server, not `makeBadge`.
-  if (format === 'json') {
-    return JSON.stringify({
-      label,
-      message,
-      logoWidth,
-      // Only call normalizeColor for the JSON case: this is handled
-      // internally by toSvgColor in the SVG case.
-      color: normalizeColor(color),
-      labelColor: normalizeColor(labelColor),
-      link: links,
-      name: label,
-      value: message,
-    })
-  }
 
   const render = badgeRenderers[style]
   if (!render) {

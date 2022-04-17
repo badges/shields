@@ -37,12 +37,13 @@ export default class PrometheusMetrics {
     })
   }
 
-  async registerMetricsEndpoint(server) {
+  async registerMetricsEndpoint(app) {
     const { register } = this
 
-    server.route(/^\/metrics$/, async (data, match, end, ask) => {
-      ask.res.setHeader('Content-Type', register.contentType)
-      ask.res.end(await register.metrics())
+    app.get('/metrics', async (req, res) => {
+      res.setHeader('Content-Type', register.contentType)
+      res.send(await register.metrics())
+      res.end()
     })
   }
 

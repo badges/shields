@@ -9,7 +9,7 @@ import {
 } from './cache-headers.js'
 import { isValidCategory } from './categories.js'
 import { MetricHelper } from './metric-helper.js'
-import { isValidRoute, prepareRoute, namedParamsForMatch } from './route.js'
+import { isValidRoute, prepareRoute, namedParamsForReq } from './route.js'
 import trace from './trace.js'
 
 const attrSchema = Joi.object({
@@ -54,7 +54,9 @@ export default function redirector(attrs) {
     static route = route
     static examples = examples
 
-    static register({ camp, metricInstance }, { rasterUrl }) {
+    static register({ app, metricInstance }, { rasterUrl }) {
+      const ServiceClass = this // eslint-disable-line @typescript-eslint/no-this-alias
+
       const { regex, captureNames } = prepareRoute({
         ...this.route,
         withPng: Boolean(rasterUrl),
@@ -65,17 +67,17 @@ export default function redirector(attrs) {
         ServiceClass: this,
       })
 
-      camp.route(regex, async (queryParams, match, end, ask) => {
-        if (serverHasBeenUpSinceResourceCached(ask.req)) {
+      app.get(regex, async function (req, res) {
+        if (serverHasBeenUpSinceResourceCached(req)) {
           // Send Not Modified.
-          ask.res.statusCode = 304
-          ask.res.end()
+          res.status(304)
+          res.end()
           return
         }
 
         const metricHandle = metricHelper.startRequest()
 
-        const namedParams = namedParamsForMatch(captureNames, match, this)
+        const namedParams = namedParamsForReq(captureNames, req, ServiceClass)
         trace.logTrace(
           'inbound',
           emojic.arrowHeadingUp,
@@ -83,12 +85,12 @@ export default function redirector(attrs) {
           route.base
         )
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
-        trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+        trace.logTrace('inbound', emojic.crayon, 'Query params', req.query)
 
         const targetPath = encodeURI(transformPath(namedParams))
         trace.logTrace('validate', emojic.dart, 'Target', targetPath)
 
-        let urlSuffix = ask.uri.search || ''
+        let urlSuffix = new URL(req.url).search
 
         if (transformQueryParams) {
           const specifiedParams = queryString.parse(urlSuffix)
@@ -101,20 +103,25 @@ export default function redirector(attrs) {
         }
 
         // The final capture group is the extension.
-        const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
+        const formatParamIndex = captureNames.length
+        const format = (req.params[formatParamIndex] || '.svg').replace(
+          /^\./,
+          ''
+        )
+
         const redirectUrl = `${
           format === 'png' ? rasterUrl : ''
         }${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
-        ask.res.statusCode = 301
-        ask.res.setHeader('Location', redirectUrl)
+        res.status(301)
+        res.setHeader('Location', redirectUrl)
 
         // To avoid caching mistakes for a long time, and to make this simpler
         // to reason about, use the same cache semantics as the static badge.
-        setCacheHeadersForStaticResource(ask.res)
+        setCacheHeadersForStaticResource(res)
 
-        ask.res.end()
+        res.end()
 
         metricHandle.noteResponseSent()
       })

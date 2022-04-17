@@ -2,19 +2,20 @@
  * @module
  */
 
+import http from 'http'
+import https from 'https'
 import path from 'path'
 import url, { fileURLToPath } from 'url'
+import express from 'express'
 import { bootstrap } from 'global-agent'
 import cloudflareMiddleware from 'cloudflare-middleware'
-import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
 import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
-import { setRoutes } from '../../services/suggest.js'
+import suggest from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
-import { makeSend } from '../base-service/legacy-result-sender.js'
-import { handleRequest } from '../base-service/legacy-request-handler.js'
+import { transformBadgeData } from '../base-service/transform-badge-data.js'
 import { clearResourceCache } from '../base-service/resource-cache.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
 import { fileSize, nonNegativeInteger } from '../../services/validators.js'
@@ -197,23 +198,11 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_password: Joi.string().required(),
 })
 
-function addHandlerAtIndex(camp, index, handlerFn) {
-  camp.stack.splice(index, 0, handlerFn)
-}
-
-function isOnHeroku() {
-  return !!process.env.DYNO
-}
-
-function isOnFly() {
-  return !!process.env.FLY_APP_NAME
-}
-
 /**
- * The Server is based on the web framework Scoutcamp. It creates
- * an http server, sets up helpers for token persistence and monitoring.
- * Then it loads all the services, injecting dependencies as it
- * asks each one to register its route with Scoutcamp.
+ * The Server is based on Express. It creates an http server and sets up helpers
+ * for token persistence and monitoring. Then it loads all the services,
+ * injecting dependencies, as it asks each one to register its route with
+ * Express.
  */
 class Server {
   /**
@@ -306,45 +295,24 @@ class Server {
 
   // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
   requireCloudflare() {
-    // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
-    // by Express but not Scoutcamp.
-    addHandlerAtIndex(this.camp, 0, function (req, res, next) {
-      if (isOnHeroku()) {
-        // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
-        // the router ensures that the last item in the `X-Forwarded-For` header
-        // is the real origin.
-        // https://stackoverflow.com/a/18517550/893113
-        req.ip = req.headers['x-forwarded-for'].split(', ').pop()
-      } else if (isOnFly()) {
-        // On Fly we can use the Fly-Client-IP header
-        // https://fly.io/docs/reference/runtime-environment/#request-headers
-        req.ip = req.headers['fly-client-ip']
-          ? req.headers['fly-client-ip']
-          : req.socket.remoteAddress
-      } else {
-        req.ip = req.socket.remoteAddress
-      }
-      next()
-    })
-    addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
+    this.app.use(cloudflareMiddleware())
   }
 
   /**
    * Set up Scoutcamp routes for 404/not found responses
    */
   registerErrorHandlers() {
-    const { camp, config } = this
+    const { app, config } = this
     const {
       public: { rasterUrl },
     } = config
 
-    camp.route(/\.(gif|jpg)$/, (query, match, end, request) => {
-      const [, format] = match
-      makeSend(
-        'svg',
-        request.res,
-        end
-      )(
+    app.get(/\.(gif|jpg)$/, (req, res) => {
+      res.status(410)
+      res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+
+      const format = req.params[0]
+      res.send(
         makeBadge({
           label: '410',
           message: `${format} no longer available`,
@@ -352,41 +320,49 @@ class Server {
           format: 'svg',
         })
       )
+
+      res.end()
     })
 
     if (!rasterUrl) {
-      camp.route(/\.png$/, (query, match, end, request) => {
-        makeSend(
-          'svg',
-          request.res,
-          end
-        )(
+      app.get(/\.png$/, (req, res) => {
+        res.status(404)
+        res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+        res.send(
           makeBadge({
             label: '404',
             message: 'raster badges not available',
             color: 'lightgray',
-            format: 'svg',
           })
         )
+        res.end()
       })
     }
 
-    camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
-      const [, extension] = match
-      const format = (extension || '.svg').replace(/^\./, '')
+    app.get(/\.json$/, (req, res) => {
+      res.status(404)
+      res.setHeader('Content-Type', 'application/json')
+      res.json(
+        transformBadgeData({
+          label: '404',
+          message: 'badge not found',
+          color: 'red',
+        })
+      )
+      res.end()
+    })
 
-      makeSend(
-        format,
-        request.res,
-        end
-      )(
+    app.get(/(?:\.svg|)$/, (req, res) => {
+      res.status(404)
+      res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+      res.send(
         makeBadge({
           label: '404',
           message: 'badge not found',
           color: 'red',
-          format,
         })
       )
+      res.end()
     })
   }
 
@@ -398,32 +374,29 @@ class Server {
    * to {@link https://shields.io/} )
    */
   registerRedirects() {
-    const { config, camp } = this
+    const { config, app } = this
     const {
       public: { rasterUrl, redirectUrl },
     } = config
 
     if (rasterUrl) {
       // Redirect to the raster server for raster versions of modern badges.
-      camp.route(/\.png$/, (queryParams, match, end, ask) => {
-        ask.res.statusCode = 301
-        ask.res.setHeader(
-          'Location',
-          rasterRedirectUrl({ rasterUrl }, ask.req.url)
-        )
+      app.get(/\.png$/, (req, res) => {
+        res.status(301)
+        res.setHeader('Location', rasterRedirectUrl({ rasterUrl }, req.url))
 
         const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+        res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
-        ask.res.end()
+        res.end()
       })
     }
 
     if (redirectUrl) {
-      camp.route(/^\/$/, (data, match, end, ask) => {
-        ask.res.statusCode = 302
-        ask.res.setHeader('Location', redirectUrl)
-        ask.res.end()
+      app.get(/^\/$/, (req, res) => {
+        res.status(302)
+        res.setHeader('Location', redirectUrl)
+        res.end()
       })
     }
   }
@@ -433,19 +406,13 @@ class Server {
    * load each service and register a Scoutcamp route for each service.
    */
   async registerServices() {
-    const { config, camp, metricInstance } = this
+    const { app, config, metricInstance } = this
     const { apiProvider: githubApiProvider } = this.githubConstellation
     const { apiProvider: librariesIoApiProvider } =
       this.librariesioConstellation
     ;(await loadServiceClasses()).forEach(serviceClass =>
       serviceClass.register(
-        {
-          camp,
-          handleRequest,
-          githubApiProvider,
-          librariesIoApiProvider,
-          metricInstance,
-        },
+        { app, githubApiProvider, librariesIoApiProvider, metricInstance },
         {
           handleInternalErrors: config.public.handleInternalErrors,
           cacheHeaders: config.public.cacheHeaders,
@@ -494,25 +461,18 @@ class Server {
 
     log.log(`Server is starting up: ${this.baseUrl}`)
 
-    const camp = (this.camp = Camp.create({
-      documentRoot: this.config.public.documentRoot,
-      port,
-      hostname,
-      secure,
-      staticMaxAge: 300,
-      cert,
-      key,
-    }))
+    const app = (this.app = express())
+    app.use(express.static(this.config.public.documentRoot, { maxAge: 300 }))
 
     if (requireCloudflare) {
       this.requireCloudflare()
     }
 
     const { githubConstellation, metricInstance } = this
-    await githubConstellation.initialize(camp)
+    await githubConstellation.initialize(app)
     if (metricInstance) {
       if (this.config.public.metrics.prometheus.endpointEnabled) {
-        metricInstance.registerMetricsEndpoint(camp)
+        metricInstance.registerMetricsEndpoint(app)
       }
       if (this.influxMetrics) {
         this.influxMetrics.startPushingMetrics()
@@ -520,39 +480,63 @@ class Server {
     }
 
     const { apiProvider: githubApiProvider } = this.githubConstellation
-    setRoutes(allowedOrigin, githubApiProvider, camp)
+    suggest.setRoutes(allowedOrigin, githubApiProvider, app)
 
     // https://github.com/badges/shields/issues/3273
-    camp.handle((req, res, next) => {
+    app.use((req, res, next) => {
       res.setHeader('Access-Control-Allow-Origin', '*')
       next()
     })
 
-    this.registerErrorHandlers()
+    /*
+    This is here for legacy reasons. The badge server and frontend used to live
+    on two different servers. When we merged them there was a conflict so we did
+    this to avoid moving the endpoint docs to another URL.
+    
+    Never ever do this again.
+    */
+    app.use('/endpoint', (req, res, next) => {
+      if (Object.keys(req.query).length === 0) {
+        res.status(301)
+        res.setHeader('Location', '/endpoint/')
+        res.end()
+      } else {
+        next()
+      }
+    })
+
     this.registerRedirects()
     await this.registerServices()
+    this.registerErrorHandlers()
 
-    camp.timeout = this.config.public.requestTimeoutSeconds * 1000
-    if (this.config.public.requestTimeoutSeconds > 0) {
-      camp.on('timeout', socket => {
-        const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
-        socket.write('HTTP/1.1 408 Request Timeout\r\n')
-        socket.write('Content-Type: text/html; charset=UTF-8\r\n')
-        socket.write('Content-Encoding: UTF-8\r\n')
-        socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\r\n`)
-        socket.write('Connection: close\r\n\r\n')
-        socket.write('Request Timeout')
-        socket.end()
-      })
+    // camp.timeout = this.config.public.requestTimeoutSeconds * 1000
+    // if (this.config.public.requestTimeoutSeconds > 0) {
+    //   camp.on('timeout', socket => {
+    //     const maxAge = this.config.public.requestTimeoutMaxAgeSeconds
+    //     socket.write('HTTP/1.1 408 Request Timeout\r\n')
+    //     socket.write('Content-Type: text/html; charset=UTF-8\r\n')
+    //     socket.write('Content-Encoding: UTF-8\r\n')
+    //     socket.write(`Cache-Control: max-age=${maxAge}, s-maxage=${maxAge}\r\n`)
+    //     socket.write('Connection: close\r\n\r\n')
+    //     socket.write('Request Timeout')
+    //     socket.end()
+    //   })
+    // }
+
+    if (secure) {
+      this.server = https.createServer({ hostname, cert, key }, app)
+    } else {
+      this.server = http.createServer({ hostname }, app)
     }
-    camp.listenAsConfigured()
 
-    await new Promise(resolve => camp.on('listening', () => resolve()))
+    await new Promise(resolve =>
+      this.server.listen({ host: hostname, port }, () => resolve())
+    )
   }
 
   static resetGlobalState() {
-    // This state should be migrated to instance state. When possible, do not add new
-    // global state.
+    // TODO: This state should be migrated to instance state. When possible, do
+    // not add new global state.
     clearResourceCache()
   }
 
@@ -568,6 +552,12 @@ class Server {
       await new Promise(resolve => this.camp.close(resolve))
       this.camp = undefined
     }
+
+    if (this.server) {
+      await new Promise(resolve => this.server.close(resolve))
+      this.server = undefined
+    }
+    this.app = undefined
 
     if (this.cleanupMonitor) {
       this.cleanupMonitor()

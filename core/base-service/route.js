@@ -63,6 +63,24 @@ function namedParamsForMatch(captureNames = [], match, ServiceClass) {
   return result
 }
 
+function namedParamsForReq(captureNames = [], req, ServiceClass) {
+  // In addition to the parameters declared by the service, we have one match
+  // for the format.
+  const numCaptures = Object.keys(req.params).length - 1
+  if (captureNames.length !== numCaptures) {
+    throw new Error(
+      `Service ${ServiceClass.name} declares incorrect number of named params ` +
+        `(expected ${numCaptures}, got ${captureNames.length})`
+    )
+  }
+
+  const result = {}
+  captureNames.forEach((name, index) => {
+    result[name] = req.params[index]
+  })
+  return result
+}
+
 function getQueryParamNames({ queryParamSchema }) {
   if (queryParamSchema) {
     const { keys, renames = [] } = queryParamSchema.describe()
@@ -78,5 +96,6 @@ export {
   assertValidRoute,
   prepareRoute,
   namedParamsForMatch,
+  namedParamsForReq,
   getQueryParamNames,
 }
