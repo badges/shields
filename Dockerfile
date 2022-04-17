@@ -23,6 +23,8 @@ FROM node:16-alpine
 
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version
+LABEL version=$version
+LABEL fly.version=$version
 
 # Run the server using production configs.
 ENV NODE_ENV production
