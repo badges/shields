@@ -3,7 +3,7 @@ import { BaseJsonService } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 
 const schema = Joi.object({
-  score: Joi.required(),
+  score: Joi.number().min(0).required(),
 }).required()
 
 const ossfScorecardColorScale = colorScale(
@@ -43,16 +43,12 @@ export default class OSSFScorecard extends BaseJsonService {
       url: `https://api.securityscorecards.dev/projects/${host}/${orgName}/${repoName}`,
       errorMessages: {
         404: 'invalid repo path',
-        500: 'upstream service error',
       },
     })
   }
 
   async handle({ host, orgName, repoName }) {
-    console.log('fetching...')
     const { score } = await this.fetch({ host, orgName, repoName })
-    console.log('here')
-    console.log(score)
 
     return this.constructor.render({ score })
   }

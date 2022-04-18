@@ -15,3 +15,11 @@ t.create('score valid')
       'brightgreen'
     ),
   })
+
+t.create('score ivalid')
+  .get('/github.com/invalid-user/invalid-repo.json')
+  .expectBadge({
+    label: 'score',
+    message: 'invalid repo path',
+    color: 'red',
+  })
