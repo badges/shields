@@ -44,41 +44,29 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
   return { regex, captureNames }
 }
 
-function namedParamsForMatch(captureNames = [], match, ServiceClass) {
-  // Assume the last match is the format, and drop match[0], which is the
-  // entire match.
-  const captures = match.slice(1, -1)
-
-  if (captureNames.length !== captures.length) {
-    throw new Error(
-      `Service ${ServiceClass.name} declares incorrect number of named params ` +
-        `(expected ${captures.length}, got ${captureNames.length})`
-    )
-  }
-
-  const result = {}
-  captureNames.forEach((name, index) => {
-    result[name] = captures[index]
-  })
-  return result
-}
-
-function namedParamsForReq(captureNames = [], req, ServiceClass) {
+function paramsForReq(captureNames = [], req, ServiceClass) {
   // In addition to the parameters declared by the service, we have one match
   // for the format.
-  const numCaptures = Object.keys(req.params).length - 1
-  if (captureNames.length !== numCaptures) {
+  const expectedNamedParamCount = Object.keys(req.params).length - 1
+  if (captureNames.length !== expectedNamedParamCount) {
     throw new Error(
       `Service ${ServiceClass.name} declares incorrect number of named params ` +
-        `(expected ${numCaptures}, got ${captureNames.length})`
+        `(expected ${expectedNamedParamCount}, got ${captureNames.length})`
     )
   }
 
-  const result = {}
+  const namedParams = {}
   captureNames.forEach((name, index) => {
-    result[name] = req.params[index]
+    namedParams[name] = req.params[index]
   })
-  return result
+
+  // The final capture group is the extension.
+  const format = (req.params[expectedNamedParamCount] || '.svg').replace(
+    /^\./,
+    ''
+  )
+
+  return { namedParams, format }
 }
 
 function getQueryParamNames({ queryParamSchema }) {
@@ -95,7 +83,6 @@ export {
   isValidRoute,
   assertValidRoute,
   prepareRoute,
-  namedParamsForMatch,
-  namedParamsForReq,
+  paramsForReq,
   getQueryParamNames,
 }

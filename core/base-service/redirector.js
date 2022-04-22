@@ -10,7 +10,7 @@ import {
 } from './cache-headers.js'
 import { isValidCategory } from './categories.js'
 import { MetricHelper } from './metric-helper.js'
-import { isValidRoute, prepareRoute, namedParamsForReq } from './route.js'
+import { isValidRoute, prepareRoute, paramsForReq } from './route.js'
 import trace from './trace.js'
 
 const attrSchema = Joi.object({
@@ -78,7 +78,11 @@ export default function redirector(attrs) {
 
         const metricHandle = metricHelper.startRequest()
 
-        const namedParams = namedParamsForReq(captureNames, req, ServiceClass)
+        const { namedParams, format } = paramsForReq(
+          captureNames,
+          req,
+          ServiceClass
+        )
         trace.logTrace(
           'inbound',
           emojic.arrowHeadingUp,
@@ -103,16 +107,8 @@ export default function redirector(attrs) {
           urlSuffix = `?${outQueryString}`
         }
 
-        // The final capture group is the extension.
-        const formatParamIndex = captureNames.length
-        const format = (req.params[formatParamIndex] || '.svg').replace(
-          /^\./,
-          ''
-        )
-
-        const redirectUrl = `${
-          format === 'png' ? rasterUrl : ''
-        }${targetPath}.${format}${urlSuffix}`
+        const baseUrl = format === 'png' ? rasterUrl : ''
+        const redirectUrl = `${baseUrl}${targetPath}.${format}${urlSuffix}`
         trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
 
         res.status(301)

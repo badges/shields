@@ -1,13 +1,11 @@
 import Joi from 'joi'
 import chai from 'chai'
-import express from 'express'
 import isSvg from 'is-svg'
 import sinon from 'sinon'
-import portfinder from 'portfinder'
 import prometheus from 'prom-client'
 import chaiAsPromised from 'chai-as-promised'
 import PrometheusMetrics from '../server/prometheus-metrics.js'
-import got from '../got-test-client.js'
+import { ExpressTestHarness } from '../express-test-harness.js'
 import trace from './trace.js'
 import {
   NotFound,
@@ -330,31 +328,19 @@ describe('BaseService', function () {
   })
 
   describe('Express integration', function () {
-    let port, baseUrl
+    let harness
     beforeEach(async function () {
-      port = await portfinder.getPortPromise()
-      baseUrl = `http://127.0.0.1:${port}`
-    })
-
-    let app, server
-    beforeEach(async function () {
-      app = express()
-      DummyService.register({ app }, defaultConfig)
-      await new Promise(resolve => {
-        server = app.listen({ host: '::', port }, () => resolve())
-      })
+      harness = new ExpressTestHarness()
+      DummyService.register({ app: harness.app }, defaultConfig)
+      await harness.start()
     })
 
     afterEach(async function () {
-      if (server) {
-        await new Promise(resolve => server.close(resolve))
-        server = undefined
-      }
-      app = undefined
+      await harness.stop()
     })
 
     it('handles the request', async function () {
-      const { body } = await got(`${baseUrl}/foo/bar.svg?queryParamA=%3F`)
+      const { body } = await harness.get('/foo/bar.svg?queryParamA=%3F')
 
       expect(body)
         .to.satisfy(isSvg)
@@ -555,9 +541,7 @@ describe('BaseService', function () {
             },
             private: {},
           },
-          {
-            namedParamA: 'bar.bar.bar',
-          }
+          { namedParamA: 'bar.bar.bar' }
         )
       ).to.deep.equal({
         color: 'lightgray',

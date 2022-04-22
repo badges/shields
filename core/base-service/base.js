@@ -30,8 +30,8 @@ import { makeJsonBadge } from './make-json-badge.js'
 import {
   makeFullUrl,
   assertValidRoute,
+  paramsForReq,
   prepareRoute,
-  namedParamsForReq,
   getQueryParamNames,
 } from './route.js'
 import { assertValidServiceDefinition } from './service-definitions.js'
@@ -468,7 +468,7 @@ class BaseService {
     return async (req, res) => {
       const metricHandle = metricHelper.startRequest()
 
-      const namedParams = namedParamsForReq(captureNames, req, this)
+      const { namedParams, format } = paramsForReq(captureNames, req, this)
       const serviceData = await this.invoke(
         {
           requestFetcher: fetch,
@@ -494,10 +494,6 @@ class BaseService {
         res,
         serviceOverrideCacheLengthSeconds: badgeData.cacheLengthSeconds,
       })
-
-      // The final capture group is the extension.
-      const formatParamIndex = captureNames.length
-      const format = (req.params[formatParamIndex] || '.svg').replace(/^\./, '')
 
       if (format === 'svg') {
         res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')

@@ -1,7 +1,5 @@
-import express from 'express'
-import portfinder from 'portfinder'
 import { expect } from 'chai'
-import got from '../got-test-client.js'
+import { ExpressTestHarness } from '../express-test-harness.js'
 import redirector from './redirector.js'
 
 describe('Redirector', function () {
@@ -64,20 +62,11 @@ describe('Redirector', function () {
   })
 
   describe('Express integration', function () {
-    let port, baseUrl
-    beforeEach(async function () {
-      port = await portfinder.getPortPromise()
-      baseUrl = `http://127.0.0.1:${port}`
-    })
-
-    let app
-    beforeEach(function () {
-      app = express()
-    })
-
     const transformPath = ({ namedParamA }) => `/new/service/${namedParamA}`
 
-    beforeEach(function () {
+    let harness
+    beforeEach(async function () {
+      harness = new ExpressTestHarness()
       const ServiceClass = redirector({
         category,
         route,
@@ -85,32 +74,20 @@ describe('Redirector', function () {
         dateAdded,
       })
       ServiceClass.register(
-        { app },
+        { app: harness.app },
         { rasterUrl: 'http://raster.example.test' }
       )
-    })
-
-    let server
-    beforeEach(async function () {
-      await new Promise(resolve => {
-        server = app.listen({ host: '::', port }, () => resolve())
-      })
+      await harness.start()
     })
 
     afterEach(async function () {
-      if (server) {
-        await new Promise(resolve => server.close(resolve))
-        server = undefined
-      }
-      app = undefined
+      await harness.stop()
     })
 
     it('should redirect as configured', async function () {
-      const { statusCode, headers } = await got(
-        `${baseUrl}/very/old/service/hello-world.svg`,
-        {
-          followRedirect: false,
-        }
+      const { statusCode, headers } = await harness.get(
+        '/very/old/service/hello-world.svg',
+        { followRedirect: false }
       )
 
       expect(statusCode).to.equal(301)
@@ -118,11 +95,9 @@ describe('Redirector', function () {
     })
 
     it('should redirect raster extensions to the canonical path as configured', async function () {
-      const { statusCode, headers } = await got(
-        `${baseUrl}/very/old/service/hello-world.png`,
-        {
-          followRedirect: false,
-        }
+      const { statusCode, headers } = await harness.get(
+        '/very/old/service/hello-world.png',
+        { followRedirect: false }
       )
 
       expect(statusCode).to.equal(301)
@@ -132,11 +107,9 @@ describe('Redirector', function () {
     })
 
     it('should forward the query params', async function () {
-      const { statusCode, headers } = await got(
-        `${baseUrl}/very/old/service/hello-world.svg?color=123&style=flat-square`,
-        {
-          followRedirect: false,
-        }
+      const { statusCode, headers } = await harness.get(
+        '/very/old/service/hello-world.svg?color=123&style=flat-square',
+        { followRedirect: false }
       )
 
       expect(statusCode).to.equal(301)
@@ -146,11 +119,9 @@ describe('Redirector', function () {
     })
 
     it('should correctly encode the redirect URL', async function () {
-      const { statusCode, headers } = await got(
-        `${baseUrl}/very/old/service/hello%0Dworld.svg?foobar=a%0Db`,
-        {
-          followRedirect: false,
-        }
+      const { statusCode, headers } = await harness.get(
+        '/very/old/service/hello%0Dworld.svg?foobar=a%0Db',
+        { followRedirect: false }
       )
 
       expect(statusCode).to.equal(301)
@@ -174,15 +145,13 @@ describe('Redirector', function () {
           transformQueryParams,
           dateAdded,
         })
-        ServiceClass.register({ app }, {})
+        ServiceClass.register({ app: harness.app }, {})
       })
 
       it('should forward the transformed query params', async function () {
-        const { statusCode, headers } = await got(
-          `${baseUrl}/another/old/service/token/abc123/hello-world.svg`,
-          {
-            followRedirect: false,
-          }
+        const { statusCode, headers } = await harness.get(
+          '/another/old/service/token/abc123/hello-world.svg',
+          { followRedirect: false }
         )
 
         expect(statusCode).to.equal(301)
@@ -192,11 +161,9 @@ describe('Redirector', function () {
       })
 
       it('should forward the specified and transformed query params', async function () {
-        const { statusCode, headers } = await got(
-          `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square`,
-          {
-            followRedirect: false,
-          }
+        const { statusCode, headers } = await harness.get(
+          '/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square',
+          { followRedirect: false }
         )
 
         expect(statusCode).to.equal(301)
@@ -206,11 +173,9 @@ describe('Redirector', function () {
       })
 
       it('should use transformed query params on param conflicts by default', async function () {
-        const { statusCode, headers } = await got(
-          `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
-          {
-            followRedirect: false,
-          }
+        const { statusCode, headers } = await harness.get(
+          '/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456',
+          { followRedirect: false }
         )
 
         expect(statusCode).to.equal(301)
@@ -232,12 +197,10 @@ describe('Redirector', function () {
           overrideTransformedQueryParams: true,
           dateAdded,
         })
-        ServiceClass.register({ app }, {})
-        const { statusCode, headers } = await got(
-          `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
-          {
-            followRedirect: false,
-          }
+        ServiceClass.register({ app: harness.app }, {})
+        const { statusCode, headers } = await harness.get(
+          '/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456',
+          { followRedirect: false }
         )
 
         expect(statusCode).to.equal(301)
