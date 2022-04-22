@@ -169,7 +169,7 @@
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.1.0",
     "cypress": "^9.5.4",
-    "danger": "^11.0.2",
+    "danger": "^11.0.4",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
     "eslint": "^7.32.0",
