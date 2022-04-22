@@ -5,7 +5,6 @@
 // This endpoint is called from frontend/components/suggestion-and-search.js.
 
 import { URL } from 'url'
-import express from 'express'
 import { fetch } from '../core/base-service/got.js'
 
 function twitterPage(url) {

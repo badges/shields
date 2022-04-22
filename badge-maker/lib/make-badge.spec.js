@@ -1,6 +1,5 @@
 'use strict'
 
-const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
 const isSvg = require('is-svg')
