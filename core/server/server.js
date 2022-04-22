@@ -513,6 +513,7 @@ class Server {
       next()
     })
 
+    this.registerErrorHandlers()
     this.registerRedirects()
     app.use(
       express.static(this.config.public.documentRoot, {
@@ -523,7 +524,6 @@ class Server {
           res.setHeader('Cache-Control', 'max-age=300, s-maxage=300'),
       })
     )
-    this.registerErrorHandlers()
     await this.registerServices()
     if (registerExtras) {
       registerExtras(app)
