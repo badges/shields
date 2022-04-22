@@ -301,7 +301,7 @@ class Server {
   }
 
   /**
-   * Set up Scoutcamp routes for 404/not found responses
+   * Set up Express routes for 404/not found responses.
    */
   registerErrorHandlers() {
     const { app, config } = this
@@ -426,7 +426,7 @@ class Server {
 
   /**
    * Iterate all the service classes defined in /services,
-   * load each service and register a Scoutcamp route for each service.
+   * load each service and register an Express route for each service.
    */
   async registerServices() {
     const { app, config, metricInstance } = this
@@ -468,7 +468,7 @@ class Server {
 
   /**
    * Start the HTTP server:
-   * Bootstrap Scoutcamp,
+   * Bootstrap Express,
    * Register handlers,
    * Start listening for requests on this.baseUrl()
    *
@@ -517,8 +517,8 @@ class Server {
     this.registerRedirects()
     app.use(
       express.static(this.config.public.documentRoot, {
-        // Manually set headers, since the `maxAge` parameter sets
-        // 'Cache-Control: public'.
+        // Since express's `maxAge` parameter sets `Cache-Control: public`, set
+        // the headers manually insetad.
         cacheControl: false,
         setHeaders: res =>
           res.setHeader('Cache-Control', 'max-age=300, s-maxage=300'),

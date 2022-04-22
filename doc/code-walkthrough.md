@@ -80,29 +80,22 @@ test this kind of logic through unit tests (e.g. of `render()` and
     reporting, loads config, and creates an instance of the server.
 
 2.  The Server, which is defined in
-    [`core/server/server.js`][core/server/server], is based on the web
-    framework [Scoutcamp][]. It creates an http server, sets up helpers for
-    token persistence and monitoring. Then it loads all the services,
-    injecting dependencies as it asks each one to register its route
-    with Scoutcamp.
+    [`core/server/server.js`][core/server/server], is based on [Express][].
+    It creates an http server, sets up helpers for token persistence and
+    monitoring. Then it loads all the services, injecting dependencies as it
+    asks each one to register its route with the Express app.
 
 3.  The service registration continues in `BaseService.register`. From its
     `route` property, it derives a regular expression to match the route
-    path, and invokes `camp.route` with this value.
+    path, and invokes `app.get` with this value.
 
-4.  At this point the situation gets gnarly and hard to follow. For the
-    purpose of initialization, suffice it to say that `camp.route` invokes a
-    callback with the four parameters `( queryParams, match, end, ask )` which
-    is created in a legacy helper function in
-    [`legacy-request-handler.js`][legacy-request-handler]. This callback
-    delegates to a callback in `BaseService.register` with four different
-    parameters `( queryParams, match, sendBadge )`, which
-    then runs `BaseService.invoke`. `BaseService.invoke` instantiates the
-    service and runs `BaseService#handle`.
+4.  TODO: Explain what happens here (i.e. now that we've migrated from Scoutcamp
+    to Express). `BaseService.invoke` instantiates the service and runs
+    `BaseService#handle`.
 
 [entrypoint]: https://github.com/badges/shields/blob/master/server.js
 [core/server/server]: https://github.com/badges/shields/blob/master/core/server/server.js
-[scoutcamp]: https://github.com/espadrine/sc
+[express]: https://expressjs.com/
 [legacy-request-handler]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js
 
 ## Downstream caching
@@ -119,24 +112,15 @@ test this kind of logic through unit tests (e.g. of `render()` and
 
 ## How the server makes a badge
 
-1.  An HTTPS request arrives. Scoutcamp inspects the URL path and matches it
-    against the regexes for all the registered routes until it finds one that
-    matches. (See *Initialization* above for an explanation of how routes are
+1.  An HTTPS request arrives. Express inspects the URL path and matches it
+    against all the registered routes until it finds one that matches. (See
+    *Initialization* above for an explanation of how routes are
     registered.)
-2.  Scoutcamp invokes a callback with the four parameters:
-    `( queryParams, match, end, ask )`. This callback is defined in
-    [`legacy-request-handler`][legacy-request-handler]. A timeout is set to
-    handle unresponsive service code and the next callback is invoked: the
-    legacy handler function.
-3.  The legacy handler function receives
-    `( queryParams, match, sendBadge )`. Its job is to extract data
-    from the regex `match` and `queryParams`, and then invoke `sendBadge`
-    with the result.
-4.  The implementation of this function is in `BaseService.register`. It
-    works by running `BaseService.invoke`, which instantiates the service,
-    injects more dependencies, and invokes `BaseService.handle` which is
-    implemented by the service subclass.
-5.  The job of `handle()`, which should be implemented by each service
+2.  Invoke the request handler function, defined in `BaseService.register`,
+    which handles the request. It runs `BaseService.invoke`, which instantiates
+    the service, injects more dependencies, and invokes `BaseService.handle`
+    which is implemented by the service subclass.
+3.  The job of `handle()`, which should be implemented by each service
     subclass, is to return an object which partially describes a badge or
     throw one of the handled error classes. "Partially rendered" most
     commonly means a non-empty message and an optional color. In the case
@@ -146,7 +130,7 @@ test this kind of logic through unit tests (e.g. of `render()` and
     Throwing any other error is a programmer error which will be
     [reported][error reporting] and described to the user as a **shields
     internal error**.
-6.  A typical `handle()` function delegates to one or more helpers to
+4.  A typical `handle()` function delegates to one or more helpers to
     handle stages of the request:
     1.  **fetch**: load the needed data from the upstream service and
         validate it
@@ -154,13 +138,13 @@ test this kind of logic through unit tests (e.g. of `render()` and
         into a few properties which will be displayed on the badge
     3.  **render**: given a few properties, return a message, optional
         color, and optional label.
-7.  When an error is thrown, BaseService steps in and converts the error
+5.  When an error is thrown, BaseService steps in and converts the error
     object to renderable properties: `{ isError, message, color }`.
-8.  The service invokes [`coalesceBadge`][coalescebadge] whose job is to
+6.  The service invokes [`coalesceBadge`][coalescebadge] whose job is to
     coalesce query string overrides with values from the service and the
     service’s defaults to produce an object that fully describes the badge to
     be rendered.
-9.  `sendBadge` is invoked with that object. It does some housekeeping on the
+7.  `sendBadge` is invoked with that object. It does some housekeeping on the
     timeout. Then it renders the badge to svg or raster and pushes out the
     result over the HTTPS connection.
 

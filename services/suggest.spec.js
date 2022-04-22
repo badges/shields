@@ -1,8 +1,6 @@
-import express from 'express'
 import { expect } from 'chai'
 import nock from 'nock'
-import portfinder from 'portfinder'
-import got from '../core/got-test-client.js'
+import { ExpressTestHarness } from '../core/express-test-harness.js'
 import { setRoutes, githubLicense } from './suggest.js'
 import GithubApiProvider from './github/github-api-provider.js'
 
@@ -68,35 +66,19 @@ describe('Badge suggestions', function () {
   })
 
   describe('Express integration', function () {
-    let port, baseUrl
+    let harness
     beforeEach(async function () {
-      port = await portfinder.getPortPromise()
-      baseUrl = `http://127.0.0.1:${port}`
-    })
-
-    let app
-    beforeEach(function () {
-      app = express()
+      harness = new ExpressTestHarness()
+      await harness.start()
     })
 
     const origin = 'https://example.test'
     beforeEach(function () {
-      setRoutes([origin], apiProvider, app)
-    })
-
-    let server
-    beforeEach(async function () {
-      await new Promise(resolve => {
-        server = app.listen({ host: '::', port }, () => resolve())
-      })
+      setRoutes([origin], apiProvider, harness.app)
     })
 
     afterEach(async function () {
-      if (server) {
-        await new Promise(resolve => server.close(resolve))
-        server = undefined
-      }
-      app = undefined
+      await harness.stop()
     })
 
     context('without an origin header', function () {
@@ -114,8 +96,8 @@ describe('Badge suggestions', function () {
             },
           })
 
-        const { statusCode, body } = await got(
-          `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+        const { statusCode, body } = await harness.get(
+          `/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/atom/atom'
           )}`,
           { responseType: 'json' }
