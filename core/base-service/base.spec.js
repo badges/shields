@@ -339,12 +339,34 @@ describe('BaseService', function () {
       await harness.stop()
     })
 
-    it('handles the request', async function () {
-      const { body } = await harness.get('/foo/bar.svg?queryParamA=%3F')
+    it('fulfills the request for an SVG badge', async function () {
+      const { headers, body } = await harness.get(
+        '/foo/bar.svg?queryParamA=%3F'
+      )
+
+      expect(headers).to.include({
+        'content-type': 'image/svg+xml; charset=utf-8',
+      })
 
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('cat: Hello namedParamA: bar with queryParamA: ?')
+    })
+
+    it('fulfills the request for a JSON badge', async function () {
+      const { headers, body } = await harness.get(
+        '/foo/bar.json?queryParamA=%3F',
+        { responseType: 'json' }
+      )
+
+      expect(headers).to.include({
+        'content-type': 'application/json; charset=utf-8',
+      })
+
+      expect(body).to.include({
+        label: 'cat',
+        message: 'Hello namedParamA: bar with queryParamA: ?',
+      })
     })
   })
 

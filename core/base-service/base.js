@@ -496,10 +496,9 @@ class BaseService {
       })
 
       if (format === 'svg') {
-        res.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+        res.setHeader('Content-Type', 'image/svg+xml')
         res.send(makeBadge(badgeData))
       } else if (format === 'json') {
-        res.setHeader('Content-Type', 'application/json')
         res.json(makeJsonBadge(badgeData))
       } else {
         throw Error(`Unrecognized format: ${format}`)
