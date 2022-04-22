@@ -56,8 +56,6 @@ export default function redirector(attrs) {
     static examples = examples
 
     static register({ app, metricInstance }, { rasterUrl }) {
-      const ServiceClass = this // eslint-disable-line @typescript-eslint/no-this-alias
-
       const { regex, captureNames } = prepareRoute({
         ...this.route,
         withPng: Boolean(rasterUrl),
@@ -68,7 +66,7 @@ export default function redirector(attrs) {
         ServiceClass: this,
       })
 
-      app.get(regex, async function (req, res) {
+      app.get(regex, async (req, res) => {
         if (serverHasBeenUpSinceResourceCached(req)) {
           // Send Not Modified.
           res.status(304)
@@ -78,11 +76,7 @@ export default function redirector(attrs) {
 
         const metricHandle = metricHelper.startRequest()
 
-        const { namedParams, format } = paramsForReq(
-          captureNames,
-          req,
-          ServiceClass
-        )
+        const { namedParams, format } = paramsForReq(captureNames, req, this)
         trace.logTrace(
           'inbound',
           emojic.arrowHeadingUp,
