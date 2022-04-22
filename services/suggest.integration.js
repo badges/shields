@@ -1,8 +1,6 @@
 import { expect } from 'chai'
-import express from 'express'
-import portfinder from 'portfinder'
 import config from 'config'
-import got from '../core/got-test-client.js'
+import { ExpressTestHarness } from '../core/express-test-harness.js'
 import { setRoutes } from './suggest.js'
 import GithubApiProvider from './github/github-api-provider.js'
 
@@ -22,46 +20,27 @@ describe('Badge suggestions', function () {
     })
   })
 
-  let port, baseUrl
-  before(async function () {
-    port = await portfinder.getPortPromise()
-    baseUrl = `http://127.0.0.1:${port}`
-  })
+  const origin = 'https://example.test'
 
-  let app
-  before(function () {
-    app = express()
-  })
-
-  let server
+  let harness
   before(async function () {
-    await new Promise(resolve => {
-      server = app.listen({ host: '::', port }, () => resolve())
-    })
+    harness = new ExpressTestHarness()
+    setRoutes([origin], apiProvider, harness.app)
+    await harness.start()
   })
 
   after(async function () {
-    if (server) {
-      await new Promise(resolve => server.close(resolve))
-      server = undefined
-    }
-    app = undefined
+    await harness.stop()
   })
 
-  const origin = 'https://example.test'
-  before(function () {
-    setRoutes([origin], apiProvider, app)
-  })
   describe('GitHub', function () {
     context('with an existing project', function () {
       it('returns the expected suggestions', async function () {
-        const { statusCode, body } = await got(
-          `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+        const { statusCode, body } = await harness.get(
+          `/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/atom/atom'
           )}`,
-          {
-            responseType: 'json',
-          }
+          { responseType: 'json' }
         )
         expect(statusCode).to.equal(200)
         expect(body).to.deep.equal({
@@ -125,13 +104,11 @@ describe('Badge suggestions', function () {
       it('returns the expected suggestions', async function () {
         this.timeout(5000)
 
-        const { statusCode, body } = await got(
-          `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+        const { statusCode, body } = await harness.get(
+          `/$suggest/v1?url=${encodeURIComponent(
             'https://github.com/badges/not-a-real-project'
           )}`,
-          {
-            responseType: 'json',
-          }
+          { responseType: 'json' }
         )
         expect(statusCode).to.equal(200)
         expect(body).to.deep.equal({
@@ -195,13 +172,11 @@ describe('Badge suggestions', function () {
   describe('GitLab', function () {
     context('with an existing project', function () {
       it('returns the expected suggestions', async function () {
-        const { statusCode, body } = await got(
-          `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+        const { statusCode, body } = await harness.get(
+          `/$suggest/v1?url=${encodeURIComponent(
             'https://gitlab.com/gitlab-org/gitlab'
           )}`,
-          {
-            responseType: 'json',
-          }
+          { responseType: 'json' }
         )
         expect(statusCode).to.equal(200)
         expect(body).to.deep.equal({
@@ -236,8 +211,8 @@ describe('Badge suggestions', function () {
 
     context('with an nonexisting project', function () {
       it('returns the expected suggestions', async function () {
-        const { statusCode, body } = await got(
-          `${baseUrl}/$suggest/v1?url=${encodeURIComponent(
+        const { statusCode, body } = await harness.get(
+          `/$suggest/v1?url=${encodeURIComponent(
             'https://gitlab.com/gitlab-org/not-gitlab'
           )}`,
           {

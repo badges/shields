@@ -1,35 +1,24 @@
 import { expect } from 'chai'
-import express from 'express'
-import portfinder from 'portfinder'
-import got from '../got-test-client.js'
+import { ExpressTestHarness } from '../express-test-harness.js'
 import Metrics from './prometheus-metrics.js'
 
 describe('Prometheus metrics route', function () {
-  let port, baseUrl, app, server, metrics
+  let harness, metrics
   beforeEach(async function () {
-    port = await portfinder.getPortPromise()
-    baseUrl = `http://127.0.0.1:${port}`
-    app = express()
-    await new Promise(resolve => {
-      server = app.listen({ host: '::', port }, () => resolve())
-    })
+    harness = new ExpressTestHarness()
+
+    metrics = new Metrics()
+    metrics.registerMetricsEndpoint(harness.app)
+
+    await harness.start()
   })
+
   afterEach(async function () {
-    if (metrics) {
-      metrics.stop()
-    }
-    app = undefined
-    if (server) {
-      await new Promise(resolve => server.close(resolve))
-      server = undefined
-    }
+    await harness.stop()
   })
 
   it('returns default metrics', async function () {
-    metrics = new Metrics()
-    metrics.registerMetricsEndpoint(app)
-
-    const { statusCode, body } = await got(`${baseUrl}/metrics`)
+    const { statusCode, body } = await harness.get('/metrics')
 
     expect(statusCode).to.be.equal(200)
     expect(body).to.contain('nodejs_version_info')

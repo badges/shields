@@ -27,9 +27,7 @@ describe('The badge generator', function () {
         format: 'svg',
       })
     })
-  })
 
-  describe('JSON', function () {
     it('should replace undefined svg badge style with "flat"', function () {
       const jsonBadgeWithUnknownStyle = makeBadge({
         label: 'name',
