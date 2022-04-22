@@ -297,7 +297,8 @@ class Server {
 
   // See https://www.viget.com/articles/heroku-cloudflare-the-right-way/
   requireCloudflare() {
-    this.app.use(cloudflareMiddleware())
+    const { app } = this
+    app.use(cloudflareMiddleware())
   }
 
   /**
