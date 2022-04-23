@@ -307,7 +307,9 @@ export default class GithubIssues extends GithubAuthV4Service {
 
     return {
       label: `${labelPrefix}${labelText}${labelSuffix}`,
-      message: `${metric(issueCount)} ${messageSuffix}`,
+      message: `${metric(issueCount)}${
+        messageSuffix ? ' ' : ''
+      }${messageSuffix}`,
       color: issueCount > 0 ? 'yellow' : 'brightgreen',
     }
   }
