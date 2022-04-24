@@ -69,7 +69,7 @@ export default class SwaggerValidatorService extends BaseJsonService {
     } else if (valMessages.length === 1) {
       const { message, level } = valMessages[0]
       if (level === 'error' && message === `Can't read from file ${specUrl}`) {
-        throw new NotFound({ prettyMessage: 'spec not found or unreadable ' })
+        throw new NotFound({ prettyMessage: 'spec not found or unreadable' })
       }
     }
     if (valMessages.every(msg => msg.level === 'warning')) {
