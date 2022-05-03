@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-05-03
+
+- fix [pub] service tests [#7921](https://github.com/badges/shields/issues/7921)
+- move all public production config into yaml [#7885](https://github.com/badges/shields/issues/7885)
+- [OSSFScorecard] Create scorecard badge service [#7687](https://github.com/badges/shields/issues/7687)
+- Stringify [githublanguagecount] message [#7881](https://github.com/badges/shields/issues/7881)
+- Stringify and trim whitespace from a few services [#7880](https://github.com/badges/shields/issues/7880)
+- Reclassify test for versionColorForWordpressVersion as an integration test [#7879](https://github.com/badges/shields/issues/7879)
+- Remove obsolete monitor.html [#7878](https://github.com/badges/shields/issues/7878)
+- add labels to Dockerfile [#7862](https://github.com/badges/shields/issues/7862)
+- fix: various sonar service tests [#7836](https://github.com/badges/shields/issues/7836)
+- fix: bitrise example & service test [#7837](https://github.com/badges/shields/issues/7837)
+- add dependency review action [#7816](https://github.com/badges/shields/issues/7816)
+- handle missing 'fly-client-ip' [#7814](https://github.com/badges/shields/issues/7814)
+- note ioredis breaking change in changelog [#7813](https://github.com/badges/shields/issues/7813)
+- Dependency updates
+
 ## server-2022-04-03
 
 - Breaking change: This release updates ioredis from v4 to v5.
