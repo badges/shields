@@ -1,15 +1,13 @@
-import Joi from 'joi'
+import { isIntegerPercentage } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-t.create('pub popularity (valid)')
-  .get('/analysis_options.json')
-  .expectBadge({
-    label: 'popularity',
-    message: Joi.string().regex(/^\d+%$/),
-    color: 'brightgreen',
-  })
+t.create('pub popularity (valid)').get('/analysis_options.json').expectBadge({
+  label: 'popularity',
+  message: isIntegerPercentage,
+  color: 'blue',
+})
 
 t.create('pub popularity (not found)')
   .get('/analysisoptions.json')

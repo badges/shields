@@ -22,22 +22,17 @@ export default class PubPopularity extends BaseJsonService {
       keywords,
       documentation,
       namedParams: { packageName: 'analysis_options' },
-      staticPreview: {
-        label: 'popularity',
-        message: '100%',
-        color: 'brightgreen',
-      },
+      staticPreview: this.render({ popularityScore: 0.9 }),
     },
   ]
 
   static defaultBadgeData = { label: 'popularity' }
 
-  static render({ popularityScore, packageName }) {
+  static render({ popularityScore }) {
     return {
       label: 'popularity',
       message: `${Math.round(popularityScore * 100)}%`,
-      color: 'brightgreen',
-      link: `https://pub.dev/packages/${packageName}`,
+      color: 'blue',
     }
   }
 
@@ -51,6 +46,6 @@ export default class PubPopularity extends BaseJsonService {
   async handle({ packageName }) {
     const score = await this.fetch({ packageName })
     const popularityScore = score.popularityScore
-    return this.constructor.render({ popularityScore, packageName })
+    return this.constructor.render({ popularityScore })
   }
 }
