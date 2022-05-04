@@ -23,22 +23,17 @@ export default class PubPoints extends BaseJsonService {
       keywords,
       documentation,
       namedParams: { packageName: 'analysis_options' },
-      staticPreview: {
-        label: 'points',
-        message: '130/130',
-        color: 'brightgreen',
-      },
+      staticPreview: this.render({ grantedPoints: 120, maxPoints: 130 }),
     },
   ]
 
   static defaultBadgeData = { label: 'points' }
 
-  static render({ grantedPoints, maxPoints, packageName }) {
+  static render({ grantedPoints, maxPoints }) {
     return {
       label: 'points',
       message: `${grantedPoints}/${maxPoints}`,
-      color: 'brightgreen',
-      link: `https://pub.dev/packages/${packageName}`,
+      color: 'blue',
     }
   }
 
@@ -53,6 +48,6 @@ export default class PubPoints extends BaseJsonService {
     const score = await this.fetch({ packageName })
     const grantedPoints = score.grantedPoints
     const maxPoints = score.maxPoints
-    return this.constructor.render({ grantedPoints, maxPoints, packageName })
+    return this.constructor.render({ grantedPoints, maxPoints })
   }
 }
