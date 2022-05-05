@@ -5,6 +5,10 @@ on:
     # At 01:00 on the first day of every month
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
