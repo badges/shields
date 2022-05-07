@@ -1,13 +1,15 @@
 import Joi from 'joi'
+import { floorCount } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
 
 const documentation = `<p>A measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>`
 
 const keywords = ['dart', 'flutter']
 
 const schema = Joi.object({
-  grantedPoints: Joi.number().min(0).max(130).required(),
-  maxPoints: Joi.number().min(130).max(130).required(),
+  grantedPoints: nonNegativeInteger,
+  maxPoints: nonNegativeInteger,
 }).required()
 
 const title = 'Pub Points'
@@ -33,7 +35,7 @@ export default class PubPoints extends BaseJsonService {
     return {
       label: 'points',
       message: `${grantedPoints}/${maxPoints}`,
-      color: 'blue',
+      color: floorCount((grantedPoints / maxPoints) * 100, 40, 60, 80),
     }
   }
 
