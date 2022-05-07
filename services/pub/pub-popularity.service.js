@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { floorCount } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
 
 const documentation = `<p>A measure of how many developers use a package, providing insight into what other developers are using.</p>`
@@ -29,10 +30,11 @@ export default class PubPopularity extends BaseJsonService {
   static defaultBadgeData = { label: 'popularity' }
 
   static render({ popularityScore }) {
+    const roundedScore = Math.round(popularityScore * 100)
     return {
       label: 'popularity',
-      message: `${Math.round(popularityScore * 100)}%`,
-      color: 'blue',
+      message: `${roundedScore}%`,
+      color: floorCount(roundedScore, 40, 60, 80),
     }
   }
 

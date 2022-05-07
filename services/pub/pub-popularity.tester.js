@@ -6,7 +6,6 @@ export const t = await createServiceTester()
 t.create('pub popularity (valid)').get('/analysis_options.json').expectBadge({
   label: 'popularity',
   message: isIntegerPercentage,
-  color: 'blue',
 })
 
 t.create('pub popularity (not found)')
