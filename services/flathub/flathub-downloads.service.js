@@ -3,7 +3,7 @@ import { BaseJsonService } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 
 const schema = Joi.object({
-  downloads_total: Joi.number().integer().required(),
+  installs_total: Joi.number().integer().required(),
 }).required()
 
 export default class FlathubDownloads extends BaseJsonService {
@@ -28,6 +28,6 @@ export default class FlathubDownloads extends BaseJsonService {
         packageName
       )}`,
     })
-    return renderDownloadsBadge({ downloads: data.downloads_total })
+    return renderDownloadsBadge({ downloads: data.installs_total })
   }
 }
