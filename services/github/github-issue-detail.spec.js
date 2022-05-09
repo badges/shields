@@ -90,6 +90,14 @@ describe('GithubIssueDetail', function () {
       message: formatDate('2019-04-02T20:09:31Z'),
       color: age('2019-04-02T20:09:31Z'),
     })
+    given({
+      property: 'milestone',
+      value: 'MS 1',
+    }).expect({
+      label: 'milestone',
+      message: 'MS 1',
+      color: 'informational',
+    })
   })
 
   test(GithubIssueDetail.prototype.transform, () => {
@@ -177,6 +185,18 @@ describe('GithubIssueDetail', function () {
     }).expect({
       value: '2019-04-02T20:09:31Z',
       isPR: false,
+    })
+    given({
+      property: 'milestone',
+      json: { milestone: { title: 'MS 1' } },
+    }).expect({
+      value: 'MS 1',
+    })
+    given({
+      property: 'milestone',
+      json: { milestone: null },
+    }).expect({
+      value: '---',
     })
   })
 
