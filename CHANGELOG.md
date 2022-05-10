@@ -4,6 +4,15 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-05-03
+
+- [OSSFScorecard] Create scorecard badge service [#7687](https://github.com/badges/shields/issues/7687)
+- Stringify [githublanguagecount] message [#7881](https://github.com/badges/shields/issues/7881)
+- Stringify and trim whitespace from a few services [#7880](https://github.com/badges/shields/issues/7880)
+- add labels to Dockerfile [#7862](https://github.com/badges/shields/issues/7862)
+- handle missing 'fly-client-ip' [#7814](https://github.com/badges/shields/issues/7814)
+- Dependency updates
+
 ## server-2022-04-03
 
 - Breaking change: This release updates ioredis from v4 to v5.

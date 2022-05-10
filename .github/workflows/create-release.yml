@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  contents: write
+
 jobs:
   create-release:
     if: |
@@ -20,7 +23,7 @@ jobs:
         run: echo "::set-output name=date::$(date --rfc-3339=date)"
 
       - name: Checkout branch "master"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
 
@@ -31,16 +34,16 @@ jobs:
           tag: server-${{ steps.date.outputs.date }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push snapshot release to DockerHub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true

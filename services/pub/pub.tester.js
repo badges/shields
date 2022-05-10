@@ -18,7 +18,7 @@ t.create('package pre-release version')
     message: isVPlusTripleDottedVersion,
   })
 
-t.create('package not found').get('/v/does-not-exist.json').expectBadge({
+t.create('package not found').get('/v/doesnotexist.json').expectBadge({
   label: 'pub',
   message: 'not found',
 })
