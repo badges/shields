@@ -41,7 +41,7 @@
     "glob": "^8.0.1",
     "global-agent": "^3.0.0",
     "got": "^12.0.4",
-    "graphql": "^15.6.1",
+    "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "ioredis": "5.0.4",
     "joi": "17.6.0",
