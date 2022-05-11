@@ -146,9 +146,9 @@ jobs:
 
     <<: *main_steps
 
-  main@node-17:
+  main@node-18:
     docker:
-      - image: cimg/node:17.9
+      - image: cimg/node:18.1
 
     <<: *main_steps
 
@@ -159,9 +159,9 @@ jobs:
 
     <<: *integration_steps
 
-  integration@node-17:
+  integration@node-18:
     docker:
-      - image: cimg/node:17.9
+      - image: cimg/node:18.1
       - image: redis
 
     <<: *integration_steps
@@ -236,9 +236,9 @@ jobs:
 
     <<: *services_steps
 
-  services@node-17:
+  services@node-18:
     docker:
-      - image: cimg/node:17.9
+      - image: cimg/node:18.1
 
     <<: *services_steps
 
@@ -295,11 +295,11 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - main@node-17:
+      - main@node-18:
           filters:
             branches:
               ignore: gh-pages
-      - integration@node-17:
+      - integration@node-18:
           filters:
             branches:
               ignore: gh-pages
@@ -317,7 +317,7 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - services@node-17:
+      - services@node-18:
           filters:
             branches:
               ignore:
