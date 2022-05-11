@@ -136,6 +136,15 @@ package_steps: &package_steps
         name: Run package tests on Node 16
         command: scripts/run_package_tests.sh
 
+    - run:
+        environment:
+          mocha_reporter: mocha-junit-reporter
+          MOCHA_FILE: junit/badge-maker/v18/results.xml
+          NODE_VERSION: v18
+          CYPRESS_INSTALL_BINARY: 0
+        name: Run package tests on Node 18
+        command: scripts/run_package_tests.sh
+
     - store_test_results:
         path: junit
 
