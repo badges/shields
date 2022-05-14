@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 // eslint-disable-next-line
 // @ts-ignore
-// import favicon from '../images/favicon.png'
 import appletouchicon from '../images/apple-touch-icon.png'
 import manifest from '../images/site.webmanifest'
 import icon32x32 from '../images/favicon-32x32.png'
@@ -26,7 +25,6 @@ export default function Meta(): JSX.Element {
       <meta charSet="utf-8" />
       <meta content="width=device-width,initial-scale=1" name="viewport" />
       <meta content={description} name="description" />
-      <link href={favicon} rel="icon" type="image/png" />
       <link rel="icon" type="image/png" sizes="32x32" href={icon32x32} />
       <link rel="icon" type="image/png" sizes="16x16" href={icon16x16} />
       <link rel="apple-touch-icon" sizes="180x180" href={appletouchicon} />
