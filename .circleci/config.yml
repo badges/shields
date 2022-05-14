@@ -257,7 +257,7 @@ jobs:
 
   e2e:
     docker:
-      - image: cypress/base:16.13.0
+      - image: cypress/base:16.14.0
         environment:
           NPM_CONFIG_ENGINE_STRICT: 'true'
           NPM_CONFIG_STRICT_PEER_DEPS: 'true'
