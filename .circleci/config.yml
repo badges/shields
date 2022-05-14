@@ -152,7 +152,7 @@ jobs:
 
   main@node-17:
     docker:
-      - image: cimg/node:17.7
+      - image: cimg/node:17.9
 
     <<: *main_steps
 
@@ -168,7 +168,7 @@ jobs:
 
   integration@node-17:
     docker:
-      - image: cimg/node:17.7
+      - image: cimg/node:17.9
       - image: redis
 
     <<: *integration_steps
@@ -251,7 +251,7 @@ jobs:
 
   services@node-17:
     docker:
-      - image: cimg/node:17.7
+      - image: cimg/node:17.9
 
     <<: *services_steps
 
