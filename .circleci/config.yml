@@ -143,7 +143,7 @@ package_steps: &package_steps
 jobs:
   main:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:16.15
         environment:
           NPM_CONFIG_ENGINE_STRICT: 'true'
           NPM_CONFIG_STRICT_PEER_DEPS: 'true'
@@ -158,7 +158,7 @@ jobs:
 
   integration:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:16.15
         environment:
           NPM_CONFIG_ENGINE_STRICT: 'true'
           NPM_CONFIG_STRICT_PEER_DEPS: 'true'
@@ -175,7 +175,7 @@ jobs:
 
   danger:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:16.15
     steps:
       - checkout
 
@@ -195,7 +195,7 @@ jobs:
 
   frontend:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:16.15
         environment:
           NPM_CONFIG_ENGINE_STRICT: 'true'
           NPM_CONFIG_STRICT_PEER_DEPS: 'true'
@@ -242,7 +242,7 @@ jobs:
 
   services:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:16.15
         environment:
           NPM_CONFIG_ENGINE_STRICT: 'true'
           NPM_CONFIG_STRICT_PEER_DEPS: 'true'
