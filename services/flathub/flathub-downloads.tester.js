@@ -5,10 +5,10 @@ export const t = await createServiceTester()
 t.create('Flathub Downloads (valid)')
   .get('/org.mozilla.firefox.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'installs',
     message: isMetric,
   })
 
 t.create('Flathub Downloads  (not found)')
   .get('/not.a.package.json')
-  .expectBadge({ label: 'downloads', message: 'not found' })
+  .expectBadge({ label: 'installs', message: 'not found' })
