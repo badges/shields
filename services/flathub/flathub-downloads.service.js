@@ -19,7 +19,7 @@ export default class FlathubDownloads extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'downloads' }
+  static defaultBadgeData = { label: 'installs' }
 
   async handle({ packageName }) {
     const data = await this._requestJson({
