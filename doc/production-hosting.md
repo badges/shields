@@ -16,9 +16,8 @@ Production hosting is managed by the Shields ops team:
 
 | Component                     | Subcomponent                    | People with access                                              |
 | ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| shields-production-us         | Account owner                   | @calebcartwright, @paulmelnikow                                 |
-| shields-production-us         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
-| shields-production-us         | Access management               | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
+| shields-io-production         | Full access                     | @calebcartwright, @chris48s, @paulmelnikow                      |
+| shields-io-production         | Access management               | @calebcartwright, @chris48s, @paulmelnikow                      |
 | Compose.io Redis              | Account owner                   | @paulmelnikow                                                   |
 | Compose.io Redis              | Account access                  | @paulmelnikow                                                   |
 | Compose.io Redis              | Database connection credentials | @calebcartwright, @chris48s, @paulmelnikow, @pyvesb             |
@@ -95,13 +94,10 @@ The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is
 hosted on Heroku. It's managed in the
 [squint](https://github.com/badges/squint/) repo.
 
-### Heroku Deployment
+### Fly.io Deployment
 
-Both the badge server and frontend are served from Heroku.
-
-After merging a commit to master, heroku should create a staging deploy. Check this has deployed correctly in the `shields-staging` pipeline and review https://shields-staging.herokuapp.com/
-
-If we're happy with it, "promote to production". This will deploy what's on staging to the `shields-production-eu` and `shields-production-us` pieplines.
+Both the badge server and frontend are served from Fly.io. Deployments are
+triggered using GitHub actions in a private repo.
 
 ## DNS
 
@@ -109,19 +105,15 @@ DNS is registered with [DNSimple][].
 
 [dnsimple]: https://dnsimple.com/
 
-## Logs
-
-Logs can be retrieved [from heroku](https://devcenter.heroku.com/articles/logging#log-retrieval).
-
 ## Error reporting
 
 [Error reporting][sentry] is one of the most useful tools we have for monitoring
 the server. It's generously donated by [Sentry][sentry home]. We bundle
-[`raven`][raven] into the application, and the Sentry DSN is configured via
-`local-shields-io-production.yml` (see [documentation][sentry configuration]).
+[`@sentry/node`][sentry-node] into the application, and the Sentry DSN is configured
+via `local-shields-io-production.yml` (see [documentation][sentry configuration]).
 
 [sentry]: https://sentry.io/shields/
-[raven]: https://www.npmjs.com/package/raven
+[sentry-node]: https://www.npmjs.com/package/@sentry/node
 [sentry home]: https://sentry.io/shields/
 [sentry configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry
 
