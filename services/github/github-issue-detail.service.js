@@ -147,14 +147,17 @@ const milestoneMap = {
       title: Joi.string().required(),
     }).allow(null),
   }).required(),
-  transform: ({ json }) => (json.milestone ? json.milestone.title : '---'),
-  render: ({ value }) => {
-    return {
-      label: 'milestone',
-      message: value,
-      color: 'informational',
+  transform: ({ json }) => {
+    if (!json.milestone) {
+      throw new InvalidResponse({ prettyMessage: 'no milestone' })
     }
+    return json.milestone.title
   },
+  render: ({ value }) => ({
+    label: 'milestone',
+    message: value,
+    color: 'informational',
+  }),
 }
 
 const propertyMap = {

@@ -192,12 +192,6 @@ describe('GithubIssueDetail', function () {
     }).expect({
       value: 'MS 1',
     })
-    given({
-      property: 'milestone',
-      json: { milestone: null },
-    }).expect({
-      value: '---',
-    })
   })
 
   context('transform()', function () {
@@ -211,6 +205,21 @@ describe('GithubIssueDetail', function () {
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidResponse)
         expect(e.prettyMessage).to.equal('no labels found')
+      }
+    })
+  })
+
+  context('transform()', function () {
+    it('throws InvalidResponse error when issue has no milestone', function () {
+      try {
+        GithubIssueDetail.prototype.transform({
+          property: 'milestone',
+          json: { milestone: null },
+        })
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidResponse)
+        expect(e.prettyMessage).to.equal('no milestone')
       }
     })
   })

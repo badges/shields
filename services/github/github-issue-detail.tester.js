@@ -76,5 +76,5 @@ t.create('github issue milestone (without milestone)')
   .get('/pulls/detail/milestone/badges/shields/979.json')
   .expectBadge({
     label: 'milestone',
-    message: '---',
+    message: 'no milestone',
   })
