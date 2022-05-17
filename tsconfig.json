@@ -10,6 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "react",
-    "typeRoots": ["node_modules/@types", "frontend/types"]
+    "typeRoots": ["node_modules/@types", "frontend/types"],
+    "skipLibCheck": true
   }
 }
