@@ -7,7 +7,6 @@ main_steps: &main_steps
     - run:
         name: Install dependencies
         command: |
-          npm install --dry-run
           npm ci
         environment:
           # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
@@ -50,7 +49,6 @@ integration_steps: &integration_steps
     - run:
         name: Install dependencies
         command: |
-          npm install --dry-run
           npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
@@ -73,7 +71,6 @@ services_steps: &services_steps
     - run:
         name: Install dependencies
         command: |
-          npm install --dry-run
           npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
@@ -116,6 +113,7 @@ package_steps: &package_steps
           MOCHA_FILE: junit/badge-maker/v12/results.xml
           NODE_VERSION: v12
           CYPRESS_INSTALL_BINARY: 0
+          NPM_CONFIG_ENGINE_STRICT: 'false'
         name: Run package tests on Node 12
         command: scripts/run_package_tests.sh
 
@@ -125,6 +123,7 @@ package_steps: &package_steps
           MOCHA_FILE: junit/badge-maker/v14/results.xml
           NODE_VERSION: v14
           CYPRESS_INSTALL_BINARY: 0
+          NPM_CONFIG_ENGINE_STRICT: 'false'
         name: Run package tests on Node 14
         command: scripts/run_package_tests.sh
 
@@ -144,9 +143,6 @@ jobs:
   main:
     docker:
       - image: cimg/node:16.15
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
 
     <<: *main_steps
 
@@ -159,9 +155,6 @@ jobs:
   integration:
     docker:
       - image: cimg/node:16.15
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
       - image: redis
 
     <<: *integration_steps
@@ -196,16 +189,13 @@ jobs:
   frontend:
     docker:
       - image: cimg/node:16.15
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+
     steps:
       - checkout
 
       - run:
           name: Install dependencies
           command: |
-            npm install --dry-run
             npm ci
           environment:
             CYPRESS_INSTALL_BINARY: 0
@@ -243,9 +233,6 @@ jobs:
   services:
     docker:
       - image: cimg/node:16.15
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
 
     <<: *services_steps
 
@@ -258,9 +245,7 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:16.14.0
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+
     steps:
       - checkout
 
@@ -272,7 +257,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm install --dry-run
             npm ci
 
       - run:
