@@ -119,7 +119,7 @@ machine.
 
 If you want to host PNG badges, you can also self-host a [raster server][]
 which points to your badge server. It's a docker container. We host it on
-Heroku but should be possible to host on a wide variety of platforms.
+Fly.io but should be possible to host on a wide variety of platforms.
 
 - In your raster instance, set `BASE_URL` to your Shields instance, e.g.
   `https://shields.example.co`.
