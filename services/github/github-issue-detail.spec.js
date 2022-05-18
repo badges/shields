@@ -191,6 +191,7 @@ describe('GithubIssueDetail', function () {
       json: { milestone: { title: 'MS 1' } },
     }).expect({
       value: 'MS 1',
+      isPR: false,
     })
   })
 
