@@ -176,7 +176,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
   static route = {
     base: 'github',
     pattern:
-      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
+      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
   }
 
   static examples = [
