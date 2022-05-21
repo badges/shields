@@ -140,6 +140,26 @@ const ageUpdateMap = {
   }),
 }
 
+const milestoneMap = {
+  schema: Joi.object({
+    ...commonSchemaFields,
+    milestone: Joi.object({
+      title: Joi.string().required(),
+    }).allow(null),
+  }).required(),
+  transform: ({ json }) => {
+    if (!json.milestone) {
+      throw new InvalidResponse({ prettyMessage: 'no milestone' })
+    }
+    return json.milestone.title
+  },
+  render: ({ value }) => ({
+    label: 'milestone',
+    message: value,
+    color: 'informational',
+  }),
+}
+
 const propertyMap = {
   state: stateMap,
   title: titleMap,
@@ -148,6 +168,7 @@ const propertyMap = {
   comments: commentsMap,
   age: ageUpdateMap,
   'last-update': ageUpdateMap,
+  milestone: milestoneMap,
 }
 
 export default class GithubIssueDetail extends GithubAuthV3Service {
@@ -155,7 +176,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
   static route = {
     base: 'github',
     pattern:
-      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update)/:user/:repo/:number([0-9]+)',
+      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
   }
 
   static examples = [
@@ -182,6 +203,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
         'comments',
         'age',
         'last update',
+        'milestone',
       ],
       documentation,
     },
