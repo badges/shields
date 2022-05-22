@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/base-xml.js</title>
+    <title>JSDoc: Module: services/build-status</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,88 +17,385 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/base-xml.js</h1>
+    <h1 class="page-title">Module: services/build-status</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
+        
+    
+</header>
 
-// See available emoji at http://emoji.muan.co/
-import emojic from 'emojic'
-import { XMLParser, XMLValidator } from 'fast-xml-parser'
-import BaseService from './base.js'
-import trace from './trace.js'
-import { InvalidResponse } from './errors.js'
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * Services which query a XML endpoint should extend BaseXmlService
- *
- * @abstract
- */
-class BaseXmlService extends BaseService {
-  /**
-   * Request data from an upstream API serving XML,
-   * parse it and validate against a schema
-   *
-   * @param {object} attrs Refer to individual attrs
-   * @param {Joi} attrs.schema Joi schema to validate the response against
-   * @param {string} attrs.url URL to request
-   * @param {object} [attrs.options={}] Options to pass to got. See
-   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
-   *    and custom error messages e.g: `{ 404: 'package not found' }`.
-   *    This can be used to extend or override the
-   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
-   * @param {object} [attrs.parserOptions={}] Options to pass to fast-xml-parser. See
-   *    [documentation](https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json)
-   * @returns {object} Parsed response
-   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
-   * @see https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json
-   */
-  async _requestXml({
-    schema,
-    url,
-    options = {},
-    errorMessages = {},
-    parserOptions = {},
-  }) {
-    const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    const mergedOptions = {
-      ...{ headers: { Accept: 'application/xml, text/xml' } },
-      ...options,
-    }
-    const { buffer } = await this._request({
-      url,
-      options: mergedOptions,
-      errorMessages,
-    })
-    const validateResult = XMLValidator.validate(buffer)
-    if (validateResult !== true) {
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable xml response',
-        underlyingError: validateResult.err,
-      })
-    }
-    const parser = new XMLParser(parserOptions)
-    const xml = parser.parse(buffer)
-    logTrace(emojic.dart, 'Response XML (before validation)', xml, {
-      deep: true,
-    })
-    return this.constructor._validate(xml, schema)
-  }
-}
+        
+    
+    </div>
 
-export default BaseXmlService
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~isBuildStatus"><span class="type-signature">(inner, constant) </span>isBuildStatus<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Joi schema for validating Build Status.
+Checks if the build status is present in the list of allowed build status.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_build-status.js.html">services/build-status.js</a>, <a href="services_build-status.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~renderBuildStatusBadge"><span class="type-signature">(inner) </span>renderBuildStatusBadge<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Handles rendering concerns of badges that display build status.
+Determines the message and color of the badge according to the build status.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attributes</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If provided then badge label is set to this value</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Build status</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_build-status.js.html">services/build-status.js</a>, <a href="services_build-status.js.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Badge with label, message and color properties</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
