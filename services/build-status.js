@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 import Joi from 'joi'
 
 const greenStatuses = [
@@ -50,8 +54,23 @@ const allStatuses = greenStatuses
   .concat(redStatuses)
   .concat(otherStatuses)
 
+/**
+ * Joi schema for validating Build Status.
+ * Checks if the build status is present in the list of allowed build status.
+ *
+ * @type {object}
+ */
 const isBuildStatus = Joi.equal(...allStatuses)
 
+/**
+ * Handles rendering concerns of badges that display build status.
+ * Determines the message and color of the badge according to the build status.
+ *
+ * @param {object} attrs Refer to individual attributes
+ * @param {string} [attrs.label] If provided then badge label is set to this value
+ * @param {string} attrs.status Build status
+ * @returns {object} Badge with label, message and color properties
+ */
 function renderBuildStatusBadge({ label, status }) {
   let message
   let color
