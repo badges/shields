@@ -1,4 +1,6 @@
 /**
+ * Common functions and schemas for tasks related to build status.
+ *
  * @module
  */
 
