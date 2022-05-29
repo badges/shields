@@ -40,7 +40,7 @@ If you are submitting a pull request for a custom logo, please:
     - Install SVGO
       - With npm: `npm install -g svgo`
       - With Homebrew: `brew install svgo`
-    - Run the following command `svgo --precision=3 icon.svg icon.min.svg`
+    - Run the following command `svgo --precision=3 icon.svg -o icon.min.svg`
     - Check if there is a loss of quality in the output, if so increase the precision.
   - The [SVGOMG Online Tool][svgomg]
     - Click "Open SVG" and select an SVG file.
