@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/graphql.js</title>
+    <title>JSDoc: Source: services/contributor-count.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/graphql.js</h1>
+    <h1 class="page-title">Source: services/contributor-count.js</h1>
 
     
 
@@ -27,56 +27,48 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
+ * Common functions and utilities for tasks related to contributor count.
+ *
  * @module
  */
 
+import { metric } from './text-formatters.js'
+
 /**
- * Utility function to merge two graphql queries together
- * This is basically copied from
- * [graphql-query-merge](https://www.npmjs.com/package/graphql-query-merge)
- * but can't use that due to incorrect packaging.
+ * Determines the color used for a badge based on the contributor count.
+ * The color varies from red to bright green as the contributor count increases.
  *
- * @param {...object} queries queries to merge
- * @returns {object} merged query
+ * @param {number} contributorCount Contributor count
+ * @returns {string} Badge color
  */
-function mergeQueries(...queries) {
-  const merged = {
-    kind: 'Document',
-    definitions: [
-      {
-        directives: [],
-        operation: 'query',
-        variableDefinitions: [],
-        kind: 'OperationDefinition',
-        selectionSet: { kind: 'SelectionSet', selections: [] },
-      },
-    ],
+function contributorColor(contributorCount) {
+  if (contributorCount > 2) {
+    return 'brightgreen'
+  } else if (contributorCount === 2) {
+    return 'yellow'
+  } else {
+    return 'red'
   }
-
-  queries.forEach(query => {
-    const parsedQuery = query
-    parsedQuery.definitions.forEach(definition => {
-      merged.definitions[0].directives = [
-        ...merged.definitions[0].directives,
-        ...definition.directives,
-      ]
-
-      merged.definitions[0].variableDefinitions = [
-        ...merged.definitions[0].variableDefinitions,
-        ...definition.variableDefinitions,
-      ]
-
-      merged.definitions[0].selectionSet.selections = [
-        ...merged.definitions[0].selectionSet.selections,
-        ...definition.selectionSet.selections,
-      ]
-    })
-  })
-
-  return merged
 }
 
-export { mergeQueries }
+/**
+ * Handles rendering concerns of badges that display contributor count.
+ * Determines the message and color of the badge according to the contributor count.
+ *
+ * @param {object} attrs Refer to individual attributes
+ * @param {string} [attrs.label] If provided then badge label is set to this value
+ * @param {number} attrs.contributorCount Contributor count
+ * @returns {object} Badge with label, message and color properties
+ */
+function renderContributorBadge({ label, contributorCount }) {
+  return {
+    label,
+    message: metric(contributorCount),
+    color: contributorColor(contributorCount),
+  }
+}
+
+export { contributorColor, renderContributorBadge }
 </code></pre>
         </article>
     </section>
