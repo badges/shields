@@ -4,6 +4,31 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-06-01
+
+- Docstrings for contributor-count and deprecation-helpers services [#8003](https://github.com/badges/shields/issues/8003)
+- docs: update SVGO usage instruction [#8001](https://github.com/badges/shields/issues/8001)
+- Add docstrings for color formatter service [#8000](https://github.com/badges/shields/issues/8000)
+- Update GitLab logo (2022) [#7984](https://github.com/badges/shields/issues/7984)
+- add docstrings for build-status service [#7999](https://github.com/badges/shields/issues/7999)
+- [GitHub] Added milestone property to GitHub issue details service [#7864](https://github.com/badges/shields/issues/7864)
+- simplify NPM strict checks [#7973](https://github.com/badges/shields/issues/7973)
+- update docs on production hosting [#7976](https://github.com/badges/shields/issues/7976)
+- Update node images [#7972](https://github.com/badges/shields/issues/7972)
+- [Flathub] Relabel new download badge [#7958](https://github.com/badges/shields/issues/7958)
+- [Spack] Package Manager: Update Endpoint [#7957](https://github.com/badges/shields/issues/7957)
+- Update Chocolatey API endpoint URL [#7952](https://github.com/badges/shields/issues/7952)
+- [Flathub]Add downloads badge [#7724](https://github.com/badges/shields/issues/7724)
+- replace the outdated Telegram logo with the newest [#7831](https://github.com/badges/shields/issues/7831)
+- chore: Included githubactions in the dependabot config [#7932](https://github.com/badges/shields/issues/7932)
+- Change lukesampson/scoop to ScoopInstaller/Scoop [#7933](https://github.com/badges/shields/issues/7933)
+- add [PUB] points badge [#7918](https://github.com/badges/shields/issues/7918)
+- add [PUB] popularity badge [#7920](https://github.com/badges/shields/issues/7920)
+- update actions checkout step version [#7927](https://github.com/badges/shields/issues/7927)
+- add [PUB] likes badge [#7916](https://github.com/badges/shields/issues/7916)
+- chore: Set permissions for GitHub actions [#7928](https://github.com/badges/shields/issues/7928)
+- Dependency updates
+
 ## server-2022-05-03
 
 - [OSSFScorecard] Create scorecard badge service [#7687](https://github.com/badges/shields/issues/7687)
