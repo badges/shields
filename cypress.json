@@ -1,9 +1,0 @@
-{
-  "baseUrl": "http://localhost:3000",
-  "fixturesFolder": false,
-  "pluginsFile": false,
-  "supportFile": false,
-  "env": {
-    "backend_url": "http://localhost:8080"
-  }
-}
