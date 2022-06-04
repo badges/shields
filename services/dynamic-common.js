@@ -41,7 +41,7 @@ const compoundValueSchema = Joi.alternatives().try(
 )
 
 /**
- * Transforms and validates the data against compoundValueSchema.
+ * Look up the value in the data object by key and validate the value against compoundValueSchema.
  *
  * @param {object} attrs Refer to individual attributes
  * @param {object} attrs.data Object containing the data for validation
