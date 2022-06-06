@@ -31,7 +31,7 @@ export default class JitPackVersion extends BaseJsonService {
   static defaultBadgeData = { label: 'jitpack' }
 
   async fetch({ vcs, user, repo }) {
-    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latest`
+    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latestOk`
 
     return this._requestJson({
       schema,

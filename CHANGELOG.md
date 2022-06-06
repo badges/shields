@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-06-01
+
+- Update GitLab logo (2022) [#7984](https://github.com/badges/shields/issues/7984)
+- [GitHub] Added milestone property to GitHub issue details service [#7864](https://github.com/badges/shields/issues/7864)
+- [Spack] Package Manager: Update Endpoint [#7957](https://github.com/badges/shields/issues/7957)
+- Update Chocolatey API endpoint URL [#7952](https://github.com/badges/shields/issues/7952)
+- [Flathub]Add downloads badge [#7724](https://github.com/badges/shields/issues/7724)
+- replace the outdated Telegram logo with the newest [#7831](https://github.com/badges/shields/issues/7831)
+- add [PUB] points badge [#7918](https://github.com/badges/shields/issues/7918)
+- add [PUB] popularity badge [#7920](https://github.com/badges/shields/issues/7920)
+- add [PUB] likes badge [#7916](https://github.com/badges/shields/issues/7916)
+- Dependency updates
+
 ## server-2022-05-03
 
 - [OSSFScorecard] Create scorecard badge service [#7687](https://github.com/badges/shields/issues/7687)
