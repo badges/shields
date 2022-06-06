@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
 import { renderLicenseBadge } from '../licenses.js'
 import GitLabBase from './gitlab-base.js'
 
@@ -6,6 +7,10 @@ const schema = Joi.object({
   license: Joi.object({
     name: Joi.string().required(),
   }).allow(null),
+}).required()
+
+const queryParamSchema = Joi.object({
+  gitlab_url: optionalUrl,
 }).required()
 
 const documentation = `
@@ -26,6 +31,7 @@ export default class GitlabLicense extends GitLabBase {
   static route = {
     base: 'gitlab/v/license',
     pattern: ':project+',
+    queryParamSchema,
   }
 
   static examples = [
@@ -34,7 +40,17 @@ export default class GitlabLicense extends GitLabBase {
       ...commonProps,
       staticPreview: {
         label: 'license',
-        message: 'MIT',
+        message: 'MIT License',
+        color: 'green',
+      },
+    },
+    {
+      title: 'GitLab (custom server)',
+      ...commonProps,
+      queryParams: { gitlab_url: 'https://jihulab.com' },
+      staticPreview: {
+        label: 'license',
+        message: 'MIT License',
         color: 'green',
       },
     },
