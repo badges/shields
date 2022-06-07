@@ -31,7 +31,7 @@ export default class OSSFScorecard extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'OpenSSF Scorecard' }
+  static defaultBadgeData = { label: 'openssf scorecard' }
 
   static render({ score }) {
     return {
