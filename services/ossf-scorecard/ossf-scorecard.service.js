@@ -21,7 +21,7 @@ export default class OSSFScorecard extends BaseJsonService {
 
   static examples = [
     {
-      title: 'OSSF-Scorecard Score',
+      title: 'OpenSSF Scorecard Score',
       namedParams: {
         host: 'github.com',
         orgName: 'rohankh532',
