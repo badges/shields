@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
 import { colorScale } from '../color-formatters.js'
+import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   score: Joi.number().min(0).required(),
@@ -14,7 +14,10 @@ const ossfScorecardColorScale = colorScale(
 export default class OSSFScorecard extends BaseJsonService {
   static category = 'analysis'
 
-  static route = { base: 'ossf-scorecard', pattern: ':host/:orgName/:repoName' }
+  static route = {
+    base: 'ossf-scorecard',
+    pattern: ':host/:orgName/:repoName',
+  }
 
   static examples = [
     {
@@ -28,7 +31,7 @@ export default class OSSFScorecard extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'score' }
+  static defaultBadgeData = { label: 'OpenSSF Scorecard' }
 
   static render({ score }) {
     return {
