@@ -31,7 +31,7 @@ export default class SpackVersion extends BaseJsonService {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
-      url: `https://spack.github.io/packages/data/packages/${packageName}.json`,
+      url: `https://packages.spack.io/data/packages/${packageName}.json`,
       errorMessages: {
         404: 'package not found',
       },
