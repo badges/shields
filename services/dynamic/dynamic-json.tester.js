@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { expect } from 'chai'
 import { createServiceTester } from '../tester.js'
+import { isRelativeFormattedDate } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('No URL specified')
@@ -193,4 +194,110 @@ t.create('JSON contains a string')
     label: 'custom badge',
     message: 'resource must contain an object or array',
     color: 'lightgrey',
+  })
+
+t.create('formatter addv')
+  .get(
+    '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version&formatter=addv'
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'v0.0.0',
+    color: 'blue',
+  })
+
+t.create('formatter omitv')
+  .get('.json?url=https://json-test/api.json&query=$.version&formatter=omitv')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ version: 'v0.0.0' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '0.0.0',
+    color: 'blue',
+  })
+
+t.create('formatter metric')
+  .get('.json?url=https://json-test/api.json&query=$.count&formatter=metric')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ count: 123456789 })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '123M',
+    color: 'blue',
+  })
+
+t.create('formatter starRating')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.rating&formatter=starRating'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ rating: 4.5 })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '★★★★½',
+    color: 'blue',
+  })
+
+t.create('formatter ordinalNumber')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.rank&formatter=ordinalNumber'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ rank: 9 })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '9ᵗʰ',
+    color: 'blue',
+  })
+
+t.create('formatter currencyFromCode')
+  .get('.json?url=https://json-test/api.json&query=$.date&formatter=formatDate')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ date: '2019-01-01' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'january 2019',
+    color: 'blue',
+  })
+
+t.create('formatter formatRelativeDate')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.timestamp&formatter=formatRelativeDate'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ timestamp: 1655158963 })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: isRelativeFormattedDate,
+    color: 'blue',
   })

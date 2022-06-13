@@ -9,7 +9,6 @@ import toArray from '../core/base-service/to-array.js'
 import validate from '../core/base-service/validate.js'
 import {
   starRating,
-  currencyFromCode,
   ordinalNumber,
   metric,
   omitv,
@@ -57,7 +56,6 @@ const compoundValueSchema = Joi.alternatives().try(
  */
 const formatters = {
   starRating,
-  currencyFromCode,
   ordinalNumber,
   metric,
   omitv,
