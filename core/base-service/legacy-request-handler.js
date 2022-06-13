@@ -18,6 +18,7 @@ const globalQueryParams = new Set([
   'colorB',
   'color',
   'labelColor',
+  'formatter',
 ])
 
 function flattenQueryParams(queryParams) {

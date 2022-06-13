@@ -151,5 +151,28 @@ describe('Badge URL generation functions', function () {
         `&url=${encodeURIComponent(dataUrl)}`,
       ].join('')
     )
+    const formatter = 'metric'
+    given({
+      baseUrl: 'http://img.example.com',
+      datatype: 'json',
+      label: 'foo',
+      dataUrl,
+      query,
+      suffix,
+      color,
+      formatter,
+      style: 'plastic',
+    }).expect(
+      [
+        'http://img.example.com/badge/dynamic/json',
+        '?color=blue',
+        '&formatter=metric',
+        '&label=foo',
+        `&query=${encodeURIComponent(query)}`,
+        '&style=plastic',
+        `&suffix=${encodeURIComponent(suffix)}`,
+        `&url=${encodeURIComponent(dataUrl)}`,
+      ].join('')
+    )
   })
 })

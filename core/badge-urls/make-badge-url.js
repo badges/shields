@@ -118,6 +118,7 @@ function dynamicBadgeUrl({
   suffix,
   color,
   style,
+  formatter,
   format = '',
 }) {
   const outExt = format.length ? `.${format}` : ''
@@ -137,6 +138,9 @@ function dynamicBadgeUrl({
   }
   if (suffix) {
     queryParams.suffix = suffix
+  }
+  if (formatter) {
+    queryParams.formatter = formatter
   }
 
   const outQueryString = queryString.stringify(queryParams)

@@ -92,6 +92,7 @@ export function dynamicBadgeUrl({
   suffix,
   color,
   style,
+  formatter,
   format,
 }: {
   baseUrl?: string
@@ -103,6 +104,7 @@ export function dynamicBadgeUrl({
   suffix: string
   color?: string
   style?: string
+  formatter?: string
   format?: string
 }): string
 

@@ -7,6 +7,16 @@
 import Joi from 'joi'
 import toArray from '../core/base-service/to-array.js'
 import validate from '../core/base-service/validate.js'
+import {
+  starRating,
+  currencyFromCode,
+  ordinalNumber,
+  metric,
+  omitv,
+  addv,
+  formatDate,
+  formatRelativeDate,
+} from './text-formatters.js'
 import { InvalidResponse } from './index.js'
 
 /**
@@ -39,6 +49,22 @@ const compoundValueSchema = Joi.alternatives().try(
   Joi.array().items(individualValueSchema).required(),
   Joi.array().length(0)
 )
+
+/**
+ * Map of formatter names and their corresponding functions.
+ *
+ * @type {object}
+ */
+const formatters = {
+  starRating,
+  currencyFromCode,
+  ordinalNumber,
+  metric,
+  omitv,
+  addv,
+  formatDate,
+  formatRelativeDate,
+}
 
 /**
  * Look up the value in the data object by key and validate the value against compoundValueSchema.
@@ -74,6 +100,7 @@ function transformAndValidate({ data, key }) {
  * @param {any} attrs.value Value or array of value to be used for the badge message
  * @param {string} [attrs.prefix] If provided then the badge message will use this value as a prefix
  * @param {string} [attrs.suffix] If provided then the badge message will use this value as a suffix
+ * @param {string} [attrs.formatter] If provided then the badge message will use this value as a formatter
  * @returns {object} Badge with label, message and color properties
  */
 function renderDynamicBadge({
@@ -82,9 +109,13 @@ function renderDynamicBadge({
   value,
   prefix = '',
   suffix = '',
+  formatter = '',
 }) {
-  const renderedValue =
+  let renderedValue =
     value === undefined ? 'not specified' : toArray(value).join(', ')
+  if (formatter in formatters) {
+    renderedValue = formatters[formatter](renderedValue)
+  }
   return {
     label: tag ? `${defaultLabel}@${tag}` : defaultLabel,
     message: `${prefix}${renderedValue}${suffix}`,

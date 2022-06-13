@@ -10,6 +10,7 @@ type StateKey =
   | 'color'
   | 'prefix'
   | 'suffix'
+  | 'formatter'
 type State = Record<StateKey, string>
 
 interface InputDef {
@@ -24,6 +25,7 @@ const inputs = [
   { name: 'color' },
   { name: 'prefix' },
   { name: 'suffix' },
+  { name: 'formatter' },
 ] as InputDef[]
 
 export default function DynamicBadgeMaker({
@@ -39,6 +41,7 @@ export default function DynamicBadgeMaker({
     color: '',
     prefix: '',
     suffix: '',
+    formatter: '',
   })
 
   const isValid =
@@ -60,7 +63,16 @@ export default function DynamicBadgeMaker({
     function onSubmit(e: React.FormEvent): void {
       e.preventDefault()
 
-      const { datatype, label, dataUrl, query, color, prefix, suffix } = values
+      const {
+        datatype,
+        label,
+        dataUrl,
+        query,
+        color,
+        prefix,
+        suffix,
+        formatter,
+      } = values
       window.open(
         dynamicBadgeUrl({
           baseUrl,
@@ -71,6 +83,7 @@ export default function DynamicBadgeMaker({
           color,
           prefix,
           suffix,
+          formatter,
         }),
         '_blank'
       )

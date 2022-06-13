@@ -261,7 +261,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
           >
             $.DATA.SUBDATA
           </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;&amp;formatter=&lt;FORMATTER&gt;
         </StyledCode>
       </p>
       <p>
@@ -276,7 +276,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
           >
             &#x2F;&#x2F;data/subdata
           </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;&amp;formatter=&lt;FORMATTER&gt;
         </StyledCode>
       </p>
       <p>
@@ -291,7 +291,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
           >
             $.DATA.SUBDATA
           </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
+          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;&amp;formatter=&lt;FORMATTER&gt;
         </StyledCode>
       </p>
 
