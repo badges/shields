@@ -32,7 +32,10 @@ class GreasyForkRatingCount extends BaseGreasyForkRating {
   async handle({ scriptId }) {
     const data = await this.fetch({ scriptId })
     return this.constructor.render({
-      downloads: data.good_ratings + data.ok_ratings + data.bad_ratings,
+      ratingCount:
+        parseInt(data.good_ratings) +
+        parseInt(data.ok_ratings) +
+        parseInt(data.bad_ratings),
     })
   }
 }
