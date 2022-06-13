@@ -197,8 +197,13 @@ t.create('JSON contains a string')
   })
 
 t.create('formatter addv')
-  .get(
-    '.json?uri=https://github.com/badges/shields/raw/master/package.json&query=$.version&formatter=addv'
+  .get('.json?url=https://json-test/api.json&query=$.version&formatter=addv')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ version: '0.0.0' })
+      })
   )
   .expectBadge({
     label: 'custom badge',
@@ -270,7 +275,7 @@ t.create('formatter ordinalNumber')
     color: 'blue',
   })
 
-t.create('formatter currencyFromCode')
+t.create('formatter formatDate')
   .get('.json?url=https://json-test/api.json&query=$.date&formatter=formatDate')
   .intercept(nock =>
     nock('https://json-test')

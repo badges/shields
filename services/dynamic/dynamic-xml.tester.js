@@ -1,5 +1,6 @@
 import queryString from 'query-string'
 import { createServiceTester } from '../tester.js'
+import { isRelativeFormattedDate } from '../test-validators.js'
 import { exampleXml } from './dynamic-response-fixtures.js'
 export const t = await createServiceTester()
 
@@ -213,5 +214,194 @@ t.create('query with type conversion to number')
   .expectBadge({
     label: 'custom badge',
     message: '44.95',
+    color: 'blue',
+  })
+
+t.create('formatter addv')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/version/text()',
+      formatter: 'addv',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <version>1.0.0</version>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'v1.0.0',
+    color: 'blue',
+  })
+
+t.create('formatter omitv')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/version/text()',
+      formatter: 'omitv',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <version>v1.0.0</version>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '1.0.0',
+    color: 'blue',
+  })
+
+t.create('formatter metric')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/count/text()',
+      formatter: 'metric',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <count>123456789</count>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '123M',
+    color: 'blue',
+  })
+
+t.create('formatter starRating')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/rating/text()',
+      formatter: 'starRating',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <rating>4.5</rating>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '★★★★½',
+    color: 'blue',
+  })
+
+t.create('formatter ordinalNumber')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/rank/text()',
+      formatter: 'ordinalNumber',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <rank>9</rank>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '9ᵗʰ',
+    color: 'blue',
+  })
+
+t.create('formatter formatDate')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/date/text()',
+      formatter: 'formatDate',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <date>2019-01-01</date>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'january 2019',
+    color: 'blue',
+  })
+
+t.create('formatter formatRelativeDate')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: '//project[1]/timestamp/text()',
+      formatter: 'formatRelativeDate',
+    })}`
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/example.xml')
+      .reply(
+        200,
+        `<?xml version="1.0"?>
+        <catalog>
+          <project id="prj1">
+            <timestamp>1655158963</timestamp>
+          </project>
+        </catalog>`
+      )
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: isRelativeFormattedDate,
     color: 'blue',
   })
