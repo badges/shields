@@ -11,4 +11,4 @@ t.create('Version')
 
 t.create('Version (not found)')
   .get('/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'openuserjs', message: 'not found' })
+  .expectBadge({ label: 'openuserjs', message: 'invalid' })
