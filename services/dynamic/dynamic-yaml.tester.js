@@ -1,3 +1,4 @@
+import { isRelativeFormattedDate } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -110,4 +111,89 @@ t.create('YAML contains a string')
     label: 'custom badge',
     message: 'resource must contain an object or array',
     color: 'lightgrey',
+  })
+
+t.create('formatter addv')
+  .get('.json?url=https://example.test/yaml&query=$.version&formatter=addv')
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'version: "0.8.0"')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'v0.8.0',
+    color: 'blue',
+  })
+
+t.create('formatter omitv')
+  .get('.json?url=https://example.test/yaml&query=$.version&formatter=omitv')
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'version: "v0.8.0"')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '0.8.0',
+    color: 'blue',
+  })
+
+t.create('formatter metric')
+  .get('.json?url=https://example.test/yaml&query=$.count&formatter=metric')
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'count: 123456789')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '123M',
+    color: 'blue',
+  })
+
+t.create('formatter starRating')
+  .get(
+    '.json?url=https://example.test/yaml&query=$.rating&formatter=starRating'
+  )
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'rating: 4.5')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '★★★★½',
+    color: 'blue',
+  })
+
+t.create('formatter ordinalNumber')
+  .get(
+    '.json?url=https://example.test/yaml&query=$.rank&formatter=ordinalNumber'
+  )
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'rank: 9')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '9ᵗʰ',
+    color: 'blue',
+  })
+
+t.create('formatter formatDate')
+  .get('.json?url=https://example.test/yaml&query=$.date&formatter=formatDate')
+  .intercept(nock =>
+    nock('https://example.test').get('/yaml').reply(200, 'date: "2019-01-01"')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'january 2019',
+    color: 'blue',
+  })
+
+t.create('formatter formatRelativeDate')
+  .get(
+    '.json?url=https://example.test/yaml&query=$.timestamp&formatter=formatRelativeDate'
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/yaml')
+      .reply(200, 'timestamp: "1655158963"')
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: isRelativeFormattedDate,
+    color: 'blue',
   })
