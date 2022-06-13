@@ -1,16 +1,24 @@
 import { ServiceTester } from '../tester.js'
-import { isMetricOverTimePeriod } from '../test-validators.js'
+import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 
 export const t = new ServiceTester({
-  id: 'GreasyForkDownloads',
-  title: 'GreasyForkDownloads',
+  id: 'GreasyForkInstalls',
+  title: 'GreasyFork Installs',
   pathPrefix: '/greasyfork',
 })
 
-t.create('Daily Downloads')
+t.create('Daily Installs')
   .get('/dd/407466.json')
-  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
+  .expectBadge({ label: 'installs', message: isMetricOverTimePeriod })
 
-t.create('Daily Downloads (not found)')
+t.create('Daily Installs (not found)')
   .get('/dd/000000.json')
-  .expectBadge({ label: 'downloads', message: 'not found' })
+  .expectBadge({ label: 'installs', message: 'not found' })
+
+t.create('Total Installs')
+  .get('/dt/407466.json')
+  .expectBadge({ label: 'installs', message: isMetric })
+
+t.create('Total Installs (not found)')
+  .get('/dt/000000.json')
+  .expectBadge({ label: 'installs', message: 'not found' })

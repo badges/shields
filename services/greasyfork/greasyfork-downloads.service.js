@@ -1,8 +1,13 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
-class GreasyForkDailyDownloads extends BaseGreasyForkService {
+class BaseGreasyForkInstalls extends BaseGreasyForkService {
   static category = 'downloads'
+
+  static defaultBadgeData = { label: 'installs' }
+}
+
+class GreasyForkDailyInstalls extends BaseGreasyForkInstalls {
   static route = { base: 'greasyfork/dd', pattern: ':scriptId' }
 
   static examples = [
@@ -14,8 +19,6 @@ class GreasyForkDailyDownloads extends BaseGreasyForkService {
   ]
 
   static _cacheLength = 21600
-
-  static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
     return renderDownloadsBadge({ downloads, interval: 'day' })
@@ -29,4 +32,27 @@ class GreasyForkDailyDownloads extends BaseGreasyForkService {
   }
 }
 
-export { GreasyForkDailyDownloads }
+class GreasyForkTotalInstalls extends BaseGreasyForkInstalls {
+  static route = { base: 'greasyfork/dt', pattern: ':scriptId' }
+
+  static examples = [
+    {
+      title: 'Greasy Fork',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ downloads: 17 }),
+    },
+  ]
+
+  static _cacheLength = 21600
+
+  static render({ users: downloads }) {
+    return renderDownloadsBadge({ downloads })
+  }
+
+  async handle({ scriptId }) {
+    const data = await this.fetch({ scriptId })
+    return this.constructor.render({ users: data.total_installs })
+  }
+}
+
+export { GreasyForkDailyInstalls, GreasyForkTotalInstalls }
