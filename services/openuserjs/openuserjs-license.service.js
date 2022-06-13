@@ -1,7 +1,7 @@
 import { renderLicenseBadge } from '../licenses.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
-export default class OpenUserJSVersion extends BaseOpenUserJSService {
+export default class OpenUserJSLicense extends BaseOpenUserJSService {
   static category = 'license'
   static route = { base: 'openuserjs/l', pattern: ':author/:scriptName' }
 
