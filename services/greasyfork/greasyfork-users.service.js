@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseGreasyForkService, keywords } from './greasyfork-base.js'
+import BaseGreasyForkService from './greasyfork-base.js'
 
 export default class GreasyForkUsers extends BaseGreasyForkService {
   static category = 'downloads'
@@ -10,7 +10,6 @@ export default class GreasyForkUsers extends BaseGreasyForkService {
       title: 'Greasy Fork',
       namedParams: { scriptId: '407466' },
       staticPreview: this.render({ users: 3420 }),
-      keywords,
     },
   ]
 

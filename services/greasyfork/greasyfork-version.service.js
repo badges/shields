@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { BaseGreasyForkService, keywords } from './greasyfork-base.js'
+import BaseGreasyForkService from './greasyfork-base.js'
 
 export default class GreasyForkVersion extends BaseGreasyForkService {
   static category = 'version'
@@ -10,7 +10,6 @@ export default class GreasyForkVersion extends BaseGreasyForkService {
       title: 'Greasy Fork',
       namedParams: { scriptId: '407466' },
       staticPreview: renderVersionBadge({ version: '3.9.3' }),
-      keywords,
     },
   ]
 

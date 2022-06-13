@@ -2,8 +2,6 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
-const keywords = ['greasyfork']
-
 const schema = Joi.object({
   daily_installs: nonNegativeInteger,
   total_installs: nonNegativeInteger,
@@ -13,7 +11,7 @@ const schema = Joi.object({
   version: Joi.string().required(),
 }).required()
 
-class BaseGreasyForkService extends BaseJsonService {
+export default class BaseGreasyForkService extends BaseJsonService {
   static defaultBadgeData = { label: 'greasy fork' }
 
   async fetch({ scriptId }) {
@@ -23,5 +21,3 @@ class BaseGreasyForkService extends BaseJsonService {
     })
   }
 }
-
-export { BaseGreasyForkService, keywords }
