@@ -32,12 +32,101 @@ class GreasyForkRatingCount extends BaseGreasyForkRating {
   async handle({ scriptId }) {
     const data = await this.fetch({ scriptId })
     return this.constructor.render({
-      ratingCount:
-        parseInt(data.good_ratings) +
-        parseInt(data.ok_ratings) +
-        parseInt(data.bad_ratings),
+      ratingCount: data.good_ratings + data.ok_ratings + data.bad_ratings,
     })
   }
 }
 
-export { GreasyForkRatingCount }
+class GreasyForkGoodRatingCount extends BaseGreasyForkRating {
+  static route = {
+    base: 'greasyfork/good-rating-count',
+    pattern: ':scriptId',
+  }
+
+  static examples = [
+    {
+      title: 'Greasy Fork',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ ratingCount: 17 }),
+    },
+  ]
+
+  static render({ ratingCount }) {
+    return {
+      message: `${metric(ratingCount)} good`,
+      color: 'green',
+    }
+  }
+
+  async handle({ scriptId }) {
+    const data = await this.fetch({ scriptId })
+    return this.constructor.render({
+      ratingCount: data.good_ratings,
+    })
+  }
+}
+
+class GreasyForkOkRatingCount extends BaseGreasyForkRating {
+  static route = {
+    base: 'greasyfork/ok-rating-count',
+    pattern: ':scriptId',
+  }
+
+  static examples = [
+    {
+      title: 'Greasy Fork',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ ratingCount: 2 }),
+    },
+  ]
+
+  static render({ ratingCount }) {
+    return {
+      message: `${metric(ratingCount)} ok`,
+      color: 'yellow',
+    }
+  }
+
+  async handle({ scriptId }) {
+    const data = await this.fetch({ scriptId })
+    return this.constructor.render({
+      ratingCount: data.ok_ratings,
+    })
+  }
+}
+
+class GreasyForkBadRatingCount extends BaseGreasyForkRating {
+  static route = {
+    base: 'greasyfork/bad-rating-count',
+    pattern: ':scriptId',
+  }
+
+  static examples = [
+    {
+      title: 'Greasy Fork',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ ratingCount: 3 }),
+    },
+  ]
+
+  static render({ ratingCount }) {
+    return {
+      message: `${metric(ratingCount)} bad`,
+      color: 'red',
+    }
+  }
+
+  async handle({ scriptId }) {
+    const data = await this.fetch({ scriptId })
+    return this.constructor.render({
+      ratingCount: data.bad_ratings,
+    })
+  }
+}
+
+export {
+  GreasyForkRatingCount,
+  GreasyForkGoodRatingCount,
+  GreasyForkOkRatingCount,
+  GreasyForkBadRatingCount,
+}
