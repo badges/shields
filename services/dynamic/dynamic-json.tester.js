@@ -241,6 +241,21 @@ t.create('formatter metric')
     color: 'blue',
   })
 
+t.create('formatter metric invalid value')
+  .get('.json?url=https://json-test/api.json&query=$.count&formatter=metric')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ count: 'notanumber' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'notanumber',
+    color: 'blue',
+  })
+
 t.create('formatter starRating')
   .get(
     '.json?url=https://json-test/api.json&query=$.rating&formatter=starRating'
@@ -255,6 +270,23 @@ t.create('formatter starRating')
   .expectBadge({
     label: 'custom badge',
     message: '★★★★½',
+    color: 'blue',
+  })
+
+t.create('formatter starRating invalid value')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.rating&formatter=starRating'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ rating: 'notanumber' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '☆☆☆☆☆',
     color: 'blue',
   })
 
@@ -275,6 +307,23 @@ t.create('formatter ordinalNumber')
     color: 'blue',
   })
 
+t.create('formatter ordinalNumber invalid value')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.rank&formatter=ordinalNumber'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ rank: 'notanumber' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'notanumberᵗʰ',
+    color: 'blue',
+  })
+
 t.create('formatter formatDate')
   .get('.json?url=https://json-test/api.json&query=$.date&formatter=formatDate')
   .intercept(nock =>
@@ -287,6 +336,21 @@ t.create('formatter formatDate')
   .expectBadge({
     label: 'custom badge',
     message: 'january 2019',
+    color: 'blue',
+  })
+
+t.create('formatter formatDate invalid value')
+  .get('.json?url=https://json-test/api.json&query=$.date&formatter=formatDate')
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ date: 'notadate' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid date',
     color: 'blue',
   })
 
@@ -304,5 +368,22 @@ t.create('formatter formatRelativeDate')
   .expectBadge({
     label: 'custom badge',
     message: isRelativeFormattedDate,
+    color: 'blue',
+  })
+
+t.create('formatter formatRelativeDate invalid value')
+  .get(
+    '.json?url=https://json-test/api.json&query=$.timestamp&formatter=formatRelativeDate'
+  )
+  .intercept(nock =>
+    nock('https://json-test')
+      .get('/api.json')
+      .reply(200, function (uri, requestBody) {
+        return JSON.stringify({ timestamp: 'notanumber' })
+      })
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid date',
     color: 'blue',
   })
