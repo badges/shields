@@ -18,21 +18,21 @@ t.create('Good Rating Count')
   .get('/good-rating-count/407466.json')
   .expectBadge({
     label: 'rating',
-    message: Joi.string().regex(/^\d+?\stotal$/),
+    message: Joi.string().regex(/^\d+?\sgood$/),
   })
 
 t.create('Ok Rating Count')
   .get('/ok-rating-count/407466.json')
   .expectBadge({
     label: 'rating',
-    message: Joi.string().regex(/^\d+?\stotal$/),
+    message: Joi.string().regex(/^\d+?\sok$/),
   })
 
 t.create('Bad Rating Count')
   .get('/bad-rating-count/407466.json')
   .expectBadge({
     label: 'rating',
-    message: Joi.string().regex(/^\d+?\stotal$/),
+    message: Joi.string().regex(/^\d+?\sbad$/),
   })
 
 t.create('Rating Count (not found)')
