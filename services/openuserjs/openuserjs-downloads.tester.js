@@ -7,10 +7,10 @@ export const t = new ServiceTester({
   pathPrefix: '/openuserjs',
 })
 
-t.create('Daily Downloads')
+t.create('Downloads')
   .get('/d/NatoBoram/YouTube_Comment_Blacklist.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
-t.create('Daily Downloads (not found)')
+t.create('Downloads (not found)')
   .get('/d/NotAUser/NotAScript.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
