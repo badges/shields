@@ -3,7 +3,7 @@ import { isMetric } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'OpenUserJSIssues',
-  title: 'OpenUserJSIssues',
+  title: 'OpenUserJS Issues',
   pathPrefix: '/openuserjs',
 })
 
@@ -13,4 +13,4 @@ t.create('Issues')
 
 t.create('Issues (not found)')
   .get('/issues/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'issues', message: 'not found' })
+  .expectBadge({ label: 'issues', message: 'invalid' })

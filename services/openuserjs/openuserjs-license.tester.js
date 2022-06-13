@@ -1,13 +1,18 @@
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
+
+export const t = new ServiceTester({
+  id: 'OpenUserJSLicense',
+  title: 'OpenUserJS License',
+  pathPrefix: '/openuserjs',
+})
 
 t.create('License (valid)')
-  .get('/NatoBoram/YouTube_Comment_Blacklist.json')
+  .get('/l/NatoBoram/YouTube_Comment_Blacklist.json')
   .expectBadge({
     label: 'license',
     message: 'GPL-3.0-or-later',
   })
 
 t.create('License (not found)')
-  .get('/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'license', message: 'not found' })
+  .get('/l/NotAUser/NotAScript.json')
+  .expectBadge({ label: 'license', message: 'invalid' })

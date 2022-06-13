@@ -3,7 +3,7 @@ import { isMetric } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'OpenUserJSDownloads',
-  title: 'OpenUserJSDownloads',
+  title: 'OpenUserJS Downloads',
   pathPrefix: '/openuserjs',
 })
 
