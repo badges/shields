@@ -21,5 +21,5 @@ t.create('Licenses (multiple)')
   })
 
 t.create('License (not found)')
-  .get('/l/NotAUser/NotAScript.json')
+  .get('/l/NotAUser/NotAScript3.json')
   .expectBadge({ label: 'license', message: 'user or project not found' })
