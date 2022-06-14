@@ -12,19 +12,15 @@ export default class OpenUserJSDownloads extends BaseOpenUserJSService {
         author: 'NatoBoram',
         scriptName: 'YouTube_Comment_Blacklist',
       },
-      staticPreview: this.render({ downloads: 47 }),
+      staticPreview: renderDownloadsBadge({ downloads: 47 }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  static render({ downloads }) {
-    return renderDownloadsBadge({ downloads })
-  }
-
   async handle({ author, scriptName }) {
     const data = await this.fetch({ author, scriptName })
-    return this.constructor.render({
+    return renderDownloadsBadge({
       downloads: data.OpenUserJS.installs[0].value,
     })
   }
