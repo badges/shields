@@ -1,3 +1,4 @@
+import { InvalidResponse } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
@@ -18,6 +19,11 @@ export default class OpenUserJSVersion extends BaseOpenUserJSService {
 
   async handle({ author, scriptName }) {
     const data = await this.fetch({ author, scriptName })
+    if (!('version' in data.UserScript)) {
+      throw new InvalidResponse({
+        prettyMessage: 'version not found',
+      })
+    }
     return renderVersionBadge({
       version: data.UserScript.version[0].value,
     })

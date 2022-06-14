@@ -9,6 +9,10 @@ t.create('Version')
     message: isVPlusDottedVersionAtLeastOne,
   })
 
-t.create('Version (not found)')
+t.create('Version (invalid parameters)')
   .get('/v/NotAUser/NotAScript.json')
   .expectBadge({ label: 'openuserjs', message: 'invalid' })
+
+t.create('Version (no version found)')
+  .get('/v/myclone/Buienradar_skip_position_popup.json')
+  .expectBadge({ label: 'openuserjs', message: 'version not found' })
