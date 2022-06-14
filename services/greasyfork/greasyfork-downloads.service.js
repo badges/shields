@@ -45,7 +45,7 @@ class GreasyForkTotalInstalls extends BaseGreasyForkInstalls {
 
   static _cacheLength = 21600
 
-  static render({ users: downloads }) {
+  static render({ downloads }) {
     return renderDownloadsBadge({ downloads })
   }
 
