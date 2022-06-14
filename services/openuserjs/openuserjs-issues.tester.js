@@ -8,4 +8,4 @@ t.create('Issues')
 
 t.create('Issues (not found)')
   .get('/issues/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'issues', message: 'invalid' })
+  .expectBadge({ label: 'issues', message: 'user or project not found' })

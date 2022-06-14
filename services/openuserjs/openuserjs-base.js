@@ -40,6 +40,10 @@ export default class BaseOpenUserJSService extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://openuserjs.org/meta/${author}/${scriptName}.meta.json`,
+      errorMessages: {
+        404: 'user or project not found',
+        429: 'rate limited by remote server',
+      },
     })
   }
 }

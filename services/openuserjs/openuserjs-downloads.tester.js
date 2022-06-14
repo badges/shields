@@ -8,4 +8,4 @@ t.create('Downloads')
 
 t.create('Downloads (not found)')
   .get('/dt/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'downloads', message: 'not found' })
+  .expectBadge({ label: 'downloads', message: 'user or project not found' })

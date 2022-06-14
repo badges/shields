@@ -11,7 +11,7 @@ t.create('Version')
 
 t.create('Version (invalid parameters)')
   .get('/v/NotAUser/NotAScript.json')
-  .expectBadge({ label: 'openuserjs', message: 'invalid' })
+  .expectBadge({ label: 'openuserjs', message: 'user or project not found' })
 
 t.create('Version (no version found)')
   .get('/v/myclone/Buienradar_skip_position_popup.json')
