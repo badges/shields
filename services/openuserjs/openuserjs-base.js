@@ -4,20 +4,16 @@ import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   UserScript: Joi.object({
-    version: Joi.array()
-      .items(
-        Joi.object({
-          value: Joi.string().required(),
-        })
-      )
-      .required(),
-    license: Joi.array()
-      .items(
-        Joi.object({
-          value: Joi.string().required(),
-        })
-      )
-      .required(),
+    version: Joi.array().items(
+      Joi.object({
+        value: Joi.string().required(),
+      })
+    ),
+    license: Joi.array().items(
+      Joi.object({
+        value: Joi.string().required(),
+      })
+    ),
   }).required(),
   OpenUserJS: Joi.object({
     installs: Joi.array()
