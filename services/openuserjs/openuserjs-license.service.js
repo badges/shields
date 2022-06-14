@@ -20,7 +20,7 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
   static defaultBadgeData = { label: 'license' }
 
   transform(data) {
-    if (!('license' in data)) {
+    if (!('license' in data.UserScript)) {
       throw new InvalidResponse({
         prettyMessage: 'license not found',
       })

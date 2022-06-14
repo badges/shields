@@ -25,7 +25,7 @@ export default class OpenUserJSVersion extends BaseOpenUserJSService {
       })
     }
     return renderVersionBadge({
-      version: data.UserScript.version[0].value,
+      version: data.UserScript.version.at(-1).value,
     })
   }
 }
