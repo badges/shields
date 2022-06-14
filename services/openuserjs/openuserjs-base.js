@@ -36,10 +36,10 @@ const schema = Joi.object({
 export default class BaseOpenUserJSService extends BaseJsonService {
   static defaultBadgeData = { label: 'openuserjs' }
 
-  async fetch({ author, scriptName }) {
+  async fetch({ username, scriptname }) {
     return this._requestJson({
       schema,
-      url: `https://openuserjs.org/meta/${author}/${scriptName}.meta.json`,
+      url: `https://openuserjs.org/meta/${username}/${scriptname}.meta.json`,
       errorMessages: {
         404: 'user or project not found',
         429: 'rate limited by remote server',

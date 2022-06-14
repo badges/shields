@@ -3,14 +3,14 @@ import BaseOpenUserJSService from './openuserjs-base.js'
 
 export default class OpenUserJSDownloads extends BaseOpenUserJSService {
   static category = 'downloads'
-  static route = { base: 'openuserjs', pattern: 'dt/:author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'dt/:username/:scriptname' }
 
   static examples = [
     {
       title: 'OpenUserJS',
       namedParams: {
-        author: 'NatoBoram',
-        scriptName: 'YouTube_Comment_Blacklist',
+        username: 'NatoBoram',
+        scriptname: 'YouTube_Comment_Blacklist',
       },
       staticPreview: renderDownloadsBadge({ downloads: 47 }),
     },
@@ -18,8 +18,8 @@ export default class OpenUserJSDownloads extends BaseOpenUserJSService {
 
   static defaultBadgeData = { label: 'downloads' }
 
-  async handle({ author, scriptName }) {
-    const data = await this.fetch({ author, scriptName })
+  async handle({ username, scriptname }) {
+    const data = await this.fetch({ username, scriptname })
     return renderDownloadsBadge({
       downloads: data.OpenUserJS.installs[0].value,
     })

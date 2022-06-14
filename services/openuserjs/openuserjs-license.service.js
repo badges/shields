@@ -4,14 +4,14 @@ import BaseOpenUserJSService from './openuserjs-base.js'
 
 export default class OpenUserJSLicense extends BaseOpenUserJSService {
   static category = 'license'
-  static route = { base: 'openuserjs', pattern: 'l/:author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'l/:username/:scriptname' }
 
   static examples = [
     {
       title: 'OpenUserJS',
       namedParams: {
-        author: 'NatoBoram',
-        scriptName: 'YouTube_Comment_Blacklist',
+        username: 'NatoBoram',
+        scriptname: 'YouTube_Comment_Blacklist',
       },
       staticPreview: renderLicenseBadge({ licenses: ['GPL-3.0-or-later'] }),
     },
@@ -31,8 +31,8 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
     return { licenses: licenses.reverse() }
   }
 
-  async handle({ author, scriptName }) {
-    const data = await this.fetch({ author, scriptName })
+  async handle({ username, scriptname }) {
+    const data = await this.fetch({ username, scriptname })
     const { licenses } = this.transform(data)
     return renderLicenseBadge({ licenses })
   }

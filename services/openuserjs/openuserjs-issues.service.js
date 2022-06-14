@@ -3,14 +3,14 @@ import BaseOpenUserJSService from './openuserjs-base.js'
 
 export default class OpenUserJSIssues extends BaseOpenUserJSService {
   static category = 'issue-tracking'
-  static route = { base: 'openuserjs', pattern: 'issues/:author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'issues/:username/:scriptname' }
 
   static examples = [
     {
       title: 'OpenUserJS',
       namedParams: {
-        author: 'NatoBoram',
-        scriptName: 'YouTube_Comment_Blacklist',
+        username: 'NatoBoram',
+        scriptname: 'YouTube_Comment_Blacklist',
       },
       staticPreview: this.render({ issues: 0 }),
     },
@@ -25,8 +25,8 @@ export default class OpenUserJSIssues extends BaseOpenUserJSService {
     }
   }
 
-  async handle({ author, scriptName }) {
-    const data = await this.fetch({ author, scriptName })
+  async handle({ username, scriptname }) {
+    const data = await this.fetch({ username, scriptname })
     return this.constructor.render({
       issues: data.OpenUserJS.issues[0].value,
     })
