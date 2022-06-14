@@ -3,7 +3,7 @@ import BaseGreasyForkService from './greasyfork-base.js'
 
 export default class GreasyForkVersion extends BaseGreasyForkService {
   static category = 'version'
-  static route = { base: 'greasyfork/v', pattern: ':scriptId' }
+  static route = { base: 'greasyfork', pattern: 'v/:scriptId' }
 
   static examples = [
     {

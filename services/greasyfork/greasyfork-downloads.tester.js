@@ -1,11 +1,6 @@
-import { ServiceTester } from '../tester.js'
+import { createServiceTester } from '../tester.js'
 import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
-
-export const t = new ServiceTester({
-  id: 'GreasyForkInstalls',
-  title: 'GreasyFork Installs',
-  pathPrefix: '/greasyfork',
-})
+export const t = await createServiceTester()
 
 t.create('Daily Installs')
   .get('/dd/407466.json')

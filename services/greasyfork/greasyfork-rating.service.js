@@ -9,10 +9,7 @@ class BaseGreasyForkRating extends BaseGreasyForkService {
 }
 
 class GreasyForkRatingCount extends BaseGreasyForkRating {
-  static route = {
-    base: 'greasyfork/rating-count',
-    pattern: ':scriptId',
-  }
+  static route = { base: 'greasyfork', pattern: 'rating-count/:scriptId' }
 
   static examples = [
     {
@@ -38,10 +35,7 @@ class GreasyForkRatingCount extends BaseGreasyForkRating {
 }
 
 class GreasyForkGoodRatingCount extends BaseGreasyForkRating {
-  static route = {
-    base: 'greasyfork/good-rating-count',
-    pattern: ':scriptId',
-  }
+  static route = { base: 'greasyfork', pattern: 'good-rating-count/:scriptId' }
 
   static examples = [
     {
@@ -67,10 +61,7 @@ class GreasyForkGoodRatingCount extends BaseGreasyForkRating {
 }
 
 class GreasyForkOkRatingCount extends BaseGreasyForkRating {
-  static route = {
-    base: 'greasyfork/ok-rating-count',
-    pattern: ':scriptId',
-  }
+  static route = { base: 'greasyfork', pattern: 'ok-rating-count/:scriptId' }
 
   static examples = [
     {
@@ -96,10 +87,7 @@ class GreasyForkOkRatingCount extends BaseGreasyForkRating {
 }
 
 class GreasyForkBadRatingCount extends BaseGreasyForkRating {
-  static route = {
-    base: 'greasyfork/bad-rating-count',
-    pattern: ':scriptId',
-  }
+  static route = { base: 'greasyfork', pattern: 'bad-rating-count/:scriptId' }
 
   static examples = [
     {

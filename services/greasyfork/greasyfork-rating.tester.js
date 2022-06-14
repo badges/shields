@@ -1,11 +1,6 @@
 import Joi from 'joi'
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'GreasyForkRating',
-  title: 'Greasy Fork Rating',
-  pathPrefix: '/greasyfork',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Rating Count')
   .get('/rating-count/407466.json')

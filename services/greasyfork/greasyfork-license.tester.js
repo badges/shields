@@ -1,10 +1,5 @@
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'GreasyForkLicense',
-  title: 'Greasy Fork License',
-  pathPrefix: '/greasyfork',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('License (valid)').get('/l/407466.json').expectBadge({
   label: 'license',

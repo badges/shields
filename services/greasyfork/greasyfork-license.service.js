@@ -2,41 +2,33 @@ import { renderLicenseBadge } from '../licenses.js'
 import { InvalidResponse } from '../index.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
-class GreasyForkLicense extends BaseGreasyForkService {
+export default class GreasyForkLicense extends BaseGreasyForkService {
   static category = 'license'
-
-  static route = {
-    base: 'greasyfork/l',
-    pattern: ':scriptId',
-  }
+  static route = { base: 'greasyfork', pattern: 'l/:scriptId' }
 
   static examples = [
     {
       title: 'Greasy Fork',
       namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ licenses: ['MIT'] }),
+      staticPreview: renderLicenseBadge({ licenses: ['MIT'] }),
     },
   ]
 
   static defaultBadgeData = { label: 'license' }
 
-  static render({ licenses }) {
-    return renderLicenseBadge({ licenses })
-  }
-
-  async handle({ scriptId }) {
-    const data = await this.fetch({ scriptId })
+  transform({ data }) {
     if (data.license === null) {
       throw new InvalidResponse({
         prettyMessage: 'version not found',
       })
     }
     // remove suffix " License" from data.license
-    const license = data.license.replace(/ License$/, '')
-    return this.constructor.render({
-      licenses: [license],
-    })
+    return { license: data.license.replace(/ License$/, '') }
+  }
+
+  async handle({ scriptId }) {
+    const data = await this.fetch({ scriptId })
+    const { license } = this.transform({ data })
+    return renderLicenseBadge({ licenses: [license] })
   }
 }
-
-export { GreasyForkLicense }
