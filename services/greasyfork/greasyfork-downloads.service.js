@@ -51,7 +51,7 @@ class GreasyForkTotalInstalls extends BaseGreasyForkInstalls {
 
   async handle({ scriptId }) {
     const data = await this.fetch({ scriptId })
-    return this.constructor.render({ users: data.total_installs })
+    return this.constructor.render({ downloads: data.total_installs })
   }
 }
 
