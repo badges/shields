@@ -1,9 +1,9 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
-class OpenUserJSDownloads extends BaseOpenUserJSService {
+export default class OpenUserJSDownloads extends BaseOpenUserJSService {
   static category = 'downloads'
-  static route = { base: 'openuserjs/d', pattern: ':author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'dt/:author/:scriptName' }
 
   static examples = [
     {
@@ -31,5 +31,3 @@ class OpenUserJSDownloads extends BaseOpenUserJSService {
     })
   }
 }
-
-export { OpenUserJSDownloads }

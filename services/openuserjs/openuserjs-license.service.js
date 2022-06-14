@@ -3,7 +3,7 @@ import BaseOpenUserJSService from './openuserjs-base.js'
 
 export default class OpenUserJSLicense extends BaseOpenUserJSService {
   static category = 'license'
-  static route = { base: 'openuserjs/l', pattern: ':author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'l/:author/:scriptName' }
 
   static examples = [
     {

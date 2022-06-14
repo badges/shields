@@ -1,9 +1,9 @@
 import { metric } from '../text-formatters.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
-class OpenUserJSIssues extends BaseOpenUserJSService {
+export default class OpenUserJSIssues extends BaseOpenUserJSService {
   static category = 'issue-tracking'
-  static route = { base: 'openuserjs/issues', pattern: ':author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'issues/:author/:scriptName' }
 
   static examples = [
     {
@@ -15,8 +15,6 @@ class OpenUserJSIssues extends BaseOpenUserJSService {
       staticPreview: this.render({ issues: 0 }),
     },
   ]
-
-  static _cacheLength = 21600
 
   static defaultBadgeData = { label: 'issues' }
 
@@ -34,5 +32,3 @@ class OpenUserJSIssues extends BaseOpenUserJSService {
     })
   }
 }
-
-export { OpenUserJSIssues }

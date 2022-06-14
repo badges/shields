@@ -1,11 +1,6 @@
 import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'OpenUserJSVersion',
-  title: 'OpenUserJS Version',
-  pathPrefix: '/openuserjs',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Version')
   .get('/v/NatoBoram/YouTube_Comment_Blacklist.json')

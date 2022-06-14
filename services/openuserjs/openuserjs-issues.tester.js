@@ -1,11 +1,6 @@
-import { ServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
-
-export const t = new ServiceTester({
-  id: 'OpenUserJSIssues',
-  title: 'OpenUserJS Issues',
-  pathPrefix: '/openuserjs',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('Issues')
   .get('/issues/MAX30/TopAndDownButtonsEverywhere.json')

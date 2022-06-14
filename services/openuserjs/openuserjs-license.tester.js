@@ -1,10 +1,5 @@
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'OpenUserJSLicense',
-  title: 'OpenUserJS License',
-  pathPrefix: '/openuserjs',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('License (valid)')
   .get('/l/NatoBoram/YouTube_Comment_Blacklist.json')

@@ -3,7 +3,7 @@ import BaseOpenUserJSService from './openuserjs-base.js'
 
 export default class OpenUserJSVersion extends BaseOpenUserJSService {
   static category = 'version'
-  static route = { base: 'openuserjs/v', pattern: ':author/:scriptName' }
+  static route = { base: 'openuserjs', pattern: 'v/:author/:scriptName' }
 
   static examples = [
     {
