@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Version')
-  .get('/v/NatoBoram/YouTube_Comment_Blacklist.json')
+  .get('/v/DenverCoder1/Unedit_and_Undelete_for_Reddit.json')
   .expectBadge({
     label: 'openuserjs',
     message: isVPlusDottedVersionAtLeastOne,
@@ -14,5 +14,5 @@ t.create('Version (invalid parameters)')
   .expectBadge({ label: 'openuserjs', message: 'user or project not found' })
 
 t.create('Version (no version found)')
-  .get('/v/myclone/Buienradar_skip_position_popup.json')
+  .get('/v/DenverCoder1/Example_no_version.json')
   .expectBadge({ label: 'openuserjs', message: 'version not found' })

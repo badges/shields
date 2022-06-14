@@ -1,16 +1,11 @@
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'OpenUserJSLicense',
-  title: 'OpenUserJS License',
-  pathPrefix: '/openuserjs',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('License (valid)')
-  .get('/l/NatoBoram/YouTube_Comment_Blacklist.json')
+  .get('/l/DenverCoder1/Unedit_and_Undelete_for_Reddit.json')
   .expectBadge({
     label: 'license',
-    message: 'GPL-3.0-or-later',
+    message: 'MIT',
   })
 
 t.create('Licenses (multiple)')
