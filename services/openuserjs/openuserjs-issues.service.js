@@ -28,7 +28,7 @@ export default class OpenUserJSIssues extends BaseOpenUserJSService {
   async handle({ username, scriptname }) {
     const data = await this.fetch({ username, scriptname })
     return this.constructor.render({
-      issues: data.OpenUserJS.issues[0].value,
+      issues: data.OpenUserJS.issues.at(-1).value,
     })
   }
 }

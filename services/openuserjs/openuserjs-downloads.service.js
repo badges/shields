@@ -21,7 +21,7 @@ export default class OpenUserJSDownloads extends BaseOpenUserJSService {
   async handle({ username, scriptname }) {
     const data = await this.fetch({ username, scriptname })
     return renderDownloadsBadge({
-      downloads: data.OpenUserJS.installs[0].value,
+      downloads: data.OpenUserJS.installs.at(-1).value,
     })
   }
 }
