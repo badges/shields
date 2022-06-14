@@ -31,8 +31,10 @@ class GreasyForkLicense extends BaseGreasyForkService {
         prettyMessage: 'version not found',
       })
     }
+    // remove suffix " License" from data.license
+    const license = data.license.replace(/ License$/, '')
     return this.constructor.render({
-      licenses: [data.license],
+      licenses: [license],
     })
   }
 }

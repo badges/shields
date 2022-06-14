@@ -8,7 +8,7 @@ export const t = new ServiceTester({
 
 t.create('License (valid)').get('/l/407466.json').expectBadge({
   label: 'license',
-  message: 'MIT License',
+  message: 'MIT',
 })
 
 t.create('License (not found)')
