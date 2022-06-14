@@ -16,8 +16,6 @@ export default class OpenUserJSDownloads extends BaseOpenUserJSService {
     },
   ]
 
-  static _cacheLength = 21600
-
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {
