@@ -1,3 +1,4 @@
+import { InvalidResponse } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
@@ -19,6 +20,11 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
   static defaultBadgeData = { label: 'license' }
 
   transform(data) {
+    if (!('license' in data)) {
+      throw new InvalidResponse({
+        prettyMessage: 'license not found',
+      })
+    }
     const licenses = data.UserScript.license.map(
       license => license.value.split('; ')[0]
     )
