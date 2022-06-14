@@ -39,7 +39,7 @@ class GreasyForkTotalInstalls extends BaseGreasyForkInstalls {
     {
       title: 'Greasy Fork',
       namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ downloads: 17 }),
+      staticPreview: this.render({ downloads: 3420 }),
     },
   ]
 
