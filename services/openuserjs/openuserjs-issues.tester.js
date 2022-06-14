@@ -7,5 +7,5 @@ t.create('Issues')
   .expectBadge({ label: 'issues', message: isMetric })
 
 t.create('Issues (not found)')
-  .get('/issues/NotAUser/NotAScript2.json')
+  .get('/issues/DenverCoder1/NotAScript2.json')
   .expectBadge({ label: 'issues', message: 'user or project not found' })

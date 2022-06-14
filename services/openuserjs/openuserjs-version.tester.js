@@ -10,7 +10,7 @@ t.create('Version')
   })
 
 t.create('Version (invalid parameters)')
-  .get('/v/NotAUser/NotAScript4.json')
+  .get('/v/DenverCoder1/NotAScript4.json')
   .expectBadge({ label: 'openuserjs', message: 'user or project not found' })
 
 t.create('Version (no version found)')
