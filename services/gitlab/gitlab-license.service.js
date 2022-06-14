@@ -21,7 +21,7 @@ const documentation = `
 
 const customDocumentation = `
 <p>
-  Note that only network-accessible jihulab.com and other self-hosted GitLab instances are supported.
+  Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
   You may use your GitLab Project Id (e.g. 13953) or your Project Path (e.g. gitlab-cn/gitlab ) in <a href="https://jihulab.com">https://jihulab.com</a>
 </p>
 `
