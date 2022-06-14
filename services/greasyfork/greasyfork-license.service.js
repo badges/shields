@@ -14,7 +14,7 @@ class GreasyForkLicense extends BaseGreasyForkService {
     {
       title: 'Greasy Fork',
       namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ licenses: ['MIT License'] }),
+      staticPreview: this.render({ licenses: ['MIT'] }),
     },
   ]
 
