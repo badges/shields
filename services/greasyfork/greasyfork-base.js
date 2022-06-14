@@ -9,6 +9,7 @@ const schema = Joi.object({
   ok_ratings: nonNegativeInteger,
   bad_ratings: nonNegativeInteger,
   version: Joi.string().required(),
+  license: Joi.string().allow(null).required(),
 }).required()
 
 export default class BaseGreasyForkService extends BaseJsonService {
