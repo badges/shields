@@ -18,10 +18,14 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
 
   static defaultBadgeData = { label: 'license' }
 
+  transform(data) {
+    const licenses = data.UserScript.license.map(license => license.value)
+    return { licenses: licenses.reverse() }
+  }
+
   async handle({ author, scriptName }) {
     const data = await this.fetch({ author, scriptName })
-    return renderLicenseBadge({
-      licenses: [data.UserScript.license[0].value],
-    })
+    const { licenses } = this.transform(data)
+    return renderLicenseBadge({ licenses })
   }
 }
