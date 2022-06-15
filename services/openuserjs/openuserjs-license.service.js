@@ -1,4 +1,3 @@
-import { InvalidResponse } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import BaseOpenUserJSService from './openuserjs-base.js'
 
@@ -21,9 +20,9 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
 
   transform(data) {
     if (!('license' in data.UserScript)) {
-      throw new InvalidResponse({
-        prettyMessage: 'license not found',
-      })
+      // By the TOS, the script will be under an MIT License by default if not specified
+      // @see https://github.com/badges/shields/pull/8081#discussion_r898437399
+      return { licenses: ['MIT'] }
     }
     const licenses = data.UserScript.license.map(
       license => license.value.split('; ')[0]
