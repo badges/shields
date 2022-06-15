@@ -22,3 +22,21 @@ t.create('Contributors (repo not found)')
     label: 'contributors',
     message: 'project not found',
   })
+
+t.create('Mocking error response type')
+  .get('/group/project.json')
+  .intercept(nock =>
+    nock('https://gitlab.com')
+      .get(
+        '/api/v4/projects/group%2Fproject/repository/contributors?page=1&per_page=1'
+      )
+      .reply(200, {
+        contributors: {
+          info: 'not array list',
+        },
+      })
+  )
+  .expectBadge({
+    label: 'contributors',
+    message: 'invalid response data',
+  })

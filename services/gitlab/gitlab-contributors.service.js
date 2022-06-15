@@ -1,7 +1,11 @@
 import Joi from 'joi'
+import parseLinkHeader from 'parse-link-header'
 import { optionalUrl } from '../validators.js'
 import { renderContributorBadge } from '../contributor-count.js'
 import GitLabBase from './gitlab-base.js'
+
+// check response type
+const schema = Joi.array().items(Joi.object())
 
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
@@ -56,7 +60,7 @@ export default class GitlabContributors extends GitLabBase {
 
   async handle({ project }, { gitlab_url: baseUrl = 'https://gitlab.com' }) {
     // https://docs.gitlab.com/ee/api/repositories.html#contributors
-    const { res } = await this._request({
+    const { res, buffer } = await this._request({
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
         project
       )}/repository/contributors`,
@@ -65,9 +69,18 @@ export default class GitlabContributors extends GitLabBase {
         404: 'project not found',
       },
     })
-    // The total number of contributors is in the `x-total` field in the headers.
-    // https://docs.gitlab.com/ee/api/index.html#other-pagination-headers
-    const contributorCount = res.headers['x-total']
+    const parsed = parseLinkHeader(res.headers.link)
+    let contributorCount
+    if (parsed === null) {
+      const json = this._parseJson(buffer)
+      this.constructor._validate(json, schema)
+      // The total number of contributors is in the `x-total` field in the headers.
+      // https://docs.gitlab.com/ee/api/index.html#other-pagination-headers
+      contributorCount = res.headers['x-total']
+    } else {
+      contributorCount = +parsed.last.page
+    }
+
     return this.constructor.render({ contributorCount })
   }
 }
