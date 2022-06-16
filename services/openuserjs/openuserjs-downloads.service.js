@@ -16,7 +16,7 @@ export default class OpenUserJSDownloads extends BaseOpenUserJSService {
     },
   ]
 
-  static defaultBadgeData = { label: 'downloads' }
+  static defaultBadgeData = { label: 'installs' }
 
   async handle({ username, scriptname }) {
     const data = await this.fetch({ username, scriptname })

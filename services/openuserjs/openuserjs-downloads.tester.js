@@ -2,10 +2,10 @@ import { isMetric } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Downloads')
+t.create('Installs')
   .get('/dt/author/YouTube_Comment_Blacklist.json')
-  .expectBadge({ label: 'downloads', message: isMetric })
+  .expectBadge({ label: 'installs', message: isMetric })
 
-t.create('Downloads (not found)')
+t.create('Installs (not found)')
   .get('/dt/author/NotAScript1.json')
-  .expectBadge({ label: 'downloads', message: 'user or project not found' })
+  .expectBadge({ label: 'installs', message: 'user or project not found' })
