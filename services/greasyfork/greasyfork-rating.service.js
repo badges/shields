@@ -2,7 +2,7 @@ import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
-export default class BaseGreasyForkRatingCount extends BaseGreasyForkService {
+export default class GreasyForkRatingCount extends BaseGreasyForkService {
   static category = 'rating'
   static route = {
     base: 'greasyfork',
