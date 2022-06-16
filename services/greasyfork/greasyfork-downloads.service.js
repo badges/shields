@@ -10,7 +10,7 @@ export default class GreasyForkInstalls extends BaseGreasyForkService {
       title: 'Greasy Fork',
       pattern: 'dd/:scriptId',
       namedParams: { scriptId: '407466' },
-      staticPreview: renderDownloadsBadge({ downloads: 17 }),
+      staticPreview: renderDownloadsBadge({ downloads: 17, interval: 'day' }),
     },
     {
       title: 'Greasy Fork',
