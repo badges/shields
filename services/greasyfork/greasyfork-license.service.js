@@ -19,7 +19,7 @@ export default class GreasyForkLicense extends BaseGreasyForkService {
   transform({ data }) {
     if (data.license === null) {
       throw new InvalidResponse({
-        prettyMessage: 'version not found',
+        prettyMessage: 'license not found',
       })
     }
     // remove suffix " License" from data.license
