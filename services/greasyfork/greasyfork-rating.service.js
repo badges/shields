@@ -2,119 +2,72 @@ import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
-class BaseGreasyForkRating extends BaseGreasyForkService {
+export default class BaseGreasyForkRatingCount extends BaseGreasyForkService {
   static category = 'rating'
-
-  static defaultBadgeData = { label: 'rating' }
-}
-
-class GreasyForkRatingCount extends BaseGreasyForkRating {
-  static route = { base: 'greasyfork', pattern: 'rating-count/:scriptId' }
+  static route = {
+    base: 'greasyfork',
+    pattern:
+      ':variant(good-rating-count|ok-rating-count|bad-rating-count|rating-count)/:scriptId',
+  }
 
   static examples = [
     {
       title: 'Greasy Fork',
+      pattern: 'rating-count/:scriptId',
       namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ ratingCount: 22 }),
+      staticPreview: this.render({ variant: 'total', ratingCount: 22 }),
+    },
+    {
+      title: 'Greasy Fork',
+      pattern: 'good-rating-count/:scriptId',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ variant: 'good', ratingCount: 17 }),
+    },
+    {
+      title: 'Greasy Fork',
+      pattern: 'ok-rating-count/:scriptId',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ variant: 'ok', ratingCount: 2 }),
+    },
+    {
+      title: 'Greasy Fork',
+      pattern: 'bad-rating-count/:scriptId',
+      namedParams: { scriptId: '407466' },
+      staticPreview: this.render({ variant: 'bad', ratingCount: 3 }),
     },
   ]
 
-  static render({ ratingCount }) {
-    return {
-      message: `${metric(ratingCount)} total`,
-      color: floorCountColor(ratingCount, 5, 50, 500),
-    }
+  static defaultBadgeData = { label: 'rating' }
+
+  static render({ variant, ratingCount }) {
+    let color = floorCountColor(ratingCount, 5, 50, 500)
+    color = variant === 'good' ? 'green' : color
+    color = variant === 'ok' ? 'yellow' : color
+    color = variant === 'bad' ? 'red' : color
+    return { message: `${metric(ratingCount)} ${variant}`, color }
   }
 
-  async handle({ scriptId }) {
+  async handle({ variant, scriptId }) {
     const data = await this.fetch({ scriptId })
+    if (variant === 'good-rating-count') {
+      return this.constructor.render({
+        variant: 'good',
+        ratingCount: data.good_ratings,
+      })
+    } else if (variant === 'ok-rating-count') {
+      return this.constructor.render({
+        variant: 'ok',
+        ratingCount: data.ok_ratings,
+      })
+    } else if (variant === 'bad-rating-count') {
+      return this.constructor.render({
+        variant: 'bad',
+        ratingCount: data.bad_ratings,
+      })
+    }
     return this.constructor.render({
+      variant: 'total',
       ratingCount: data.good_ratings + data.ok_ratings + data.bad_ratings,
     })
   }
-}
-
-class GreasyForkGoodRatingCount extends BaseGreasyForkRating {
-  static route = { base: 'greasyfork', pattern: 'good-rating-count/:scriptId' }
-
-  static examples = [
-    {
-      title: 'Greasy Fork',
-      namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ ratingCount: 17 }),
-    },
-  ]
-
-  static render({ ratingCount }) {
-    return {
-      message: `${metric(ratingCount)} good`,
-      color: 'green',
-    }
-  }
-
-  async handle({ scriptId }) {
-    const data = await this.fetch({ scriptId })
-    return this.constructor.render({
-      ratingCount: data.good_ratings,
-    })
-  }
-}
-
-class GreasyForkOkRatingCount extends BaseGreasyForkRating {
-  static route = { base: 'greasyfork', pattern: 'ok-rating-count/:scriptId' }
-
-  static examples = [
-    {
-      title: 'Greasy Fork',
-      namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ ratingCount: 2 }),
-    },
-  ]
-
-  static render({ ratingCount }) {
-    return {
-      message: `${metric(ratingCount)} ok`,
-      color: 'yellow',
-    }
-  }
-
-  async handle({ scriptId }) {
-    const data = await this.fetch({ scriptId })
-    return this.constructor.render({
-      ratingCount: data.ok_ratings,
-    })
-  }
-}
-
-class GreasyForkBadRatingCount extends BaseGreasyForkRating {
-  static route = { base: 'greasyfork', pattern: 'bad-rating-count/:scriptId' }
-
-  static examples = [
-    {
-      title: 'Greasy Fork',
-      namedParams: { scriptId: '407466' },
-      staticPreview: this.render({ ratingCount: 3 }),
-    },
-  ]
-
-  static render({ ratingCount }) {
-    return {
-      message: `${metric(ratingCount)} bad`,
-      color: 'red',
-    }
-  }
-
-  async handle({ scriptId }) {
-    const data = await this.fetch({ scriptId })
-    return this.constructor.render({
-      ratingCount: data.bad_ratings,
-    })
-  }
-}
-
-export {
-  GreasyForkRatingCount,
-  GreasyForkGoodRatingCount,
-  GreasyForkOkRatingCount,
-  GreasyForkBadRatingCount,
 }
