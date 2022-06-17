@@ -9,32 +9,11 @@ t.create('Contributors')
     message: isMetric,
   })
 
-t.create('1 contributor')
-  .get('/guoxudong.io/shields-test/licenced-test.json')
-  .expectBadge({
-    label: 'contributors',
-    message: '1',
-  })
-
 t.create('Contributors (repo not found)')
   .get('/guoxudong.io/shields-test/do-not-exist.json')
   .expectBadge({
     label: 'contributors',
     message: 'project not found',
-  })
-
-t.create('Mocking 5k contributors')
-  .get('/group/project.json')
-  .intercept(nock =>
-    nock('https://gitlab.com')
-      .get(
-        '/api/v4/projects/group%2Fproject/repository/contributors?page=1&per_page=1'
-      )
-      .reply(200, {}, { 'x-total': 4999 })
-  )
-  .expectBadge({
-    label: 'contributors',
-    message: '5k',
   })
 
 t.create('Mocking the missing x-total header')
