@@ -17,7 +17,7 @@ const documentation = `
 
 const customDocumentation = `
 <p>
-  Note that only network-accessible jihulab.com and other self-hosted GitLab instances are supported.
+  Note that only network-accessible jihulab.com and other self-managed GitLab instances are supported.
   You may use your GitLab Project Id (e.g. 13953) or your Project Path (e.g. gitlab-cn/gitlab ) in <a href="https://jihulab.com">https://jihulab.com</a>
 </p>
 `
@@ -40,7 +40,7 @@ export default class GitlabContributors extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab (custom server) contributors',
+      title: 'GitLab (self-managed) contributors',
       queryParams: { gitlab_url: 'https://jihulab.com' },
       namedParams: {
         project: 'gitlab-cn/gitlab',
