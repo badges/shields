@@ -65,7 +65,7 @@ export default class GitLabRelease extends GitLabBase {
       staticPreview: renderVersionBadge({ version: 'v5.0.0-beta.1' }),
     },
     {
-      title: 'GitLab Release (custom instance)',
+      title: 'GitLab Release (self-managed)',
       namedParams: {
         project: 'GNOME/librsvg',
       },

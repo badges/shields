@@ -49,7 +49,7 @@ export default class GitlabLicense extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab (custom server)',
+      title: 'GitLab (self-managed)',
       namedParams: {
         project: 'gitlab-cn/gitlab',
       },
