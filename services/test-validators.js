@@ -79,6 +79,8 @@ const isMetricWithPattern = nestedRegexp => {
 
 const isMetricOpenIssues = isMetricWithPattern(/ open/)
 
+const isMetricClosedIssues = isMetricWithPattern(/ closed/)
+
 const isMetricOverMetric = isMetricWithPattern(
   /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/
 )
@@ -167,6 +169,7 @@ export {
   isMetricAllowNegative,
   isMetricWithPattern,
   isMetricOpenIssues,
+  isMetricClosedIssues,
   isMetricOverMetric,
   isMetricOverTimePeriod,
   isZeroOverTimePeriod,
