@@ -6,28 +6,7 @@ t.create('Rating Count')
   .get('/rating-count/407466.json')
   .expectBadge({
     label: 'rating',
-    message: Joi.string().regex(/^\d+?\stotal$/),
-  })
-
-t.create('Good Rating Count')
-  .get('/good-rating-count/407466.json')
-  .expectBadge({
-    label: 'rating',
-    message: Joi.string().regex(/^\d+?\sgood$/),
-  })
-
-t.create('Ok Rating Count')
-  .get('/ok-rating-count/407466.json')
-  .expectBadge({
-    label: 'rating',
-    message: Joi.string().regex(/^\d+?\sok$/),
-  })
-
-t.create('Bad Rating Count')
-  .get('/bad-rating-count/407466.json')
-  .expectBadge({
-    label: 'rating',
-    message: Joi.string().regex(/^\d+?\sbad$/),
+    message: Joi.string().regex(/^\d+ good, \d+ ok, \d+ bad$/),
   })
 
 t.create('Rating Count (not found)')
