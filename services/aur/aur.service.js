@@ -108,7 +108,7 @@ class AurVotes extends BaseAurService {
 
 class AurVersion extends BaseAurService {
   static category = 'version'
-
+  static _cacheLength = 3600
   static route = { base: 'aur/version', pattern: ':packageName' }
 
   static examples = [
