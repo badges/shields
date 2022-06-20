@@ -62,7 +62,7 @@ export default class GitlabTag extends GitLabBase {
       staticPreview: this.render({ version: 'v5.0.0-beta.1', sort: 'semver' }),
     },
     {
-      title: 'GitLab tag (custom instance)',
+      title: 'GitLab tag (self-managed)',
       namedParams: {
         project: 'GNOME/librsvg',
       },

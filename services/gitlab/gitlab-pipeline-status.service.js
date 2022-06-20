@@ -54,7 +54,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
       documentation,
     },
     {
-      title: 'Gitlab pipeline status (self-hosted)',
+      title: 'Gitlab pipeline status (self-managed)',
       namedParams: { project: 'GNOME/pango' },
       queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
       staticPreview: this.render({ status: 'passed' }),
