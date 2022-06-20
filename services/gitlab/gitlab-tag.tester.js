@@ -7,7 +7,7 @@ t.create('Tag (latest by date)')
   .expectBadge({ label: 'tag', message: 'v2.0.0', color: 'blue' })
 
 t.create('Tag (nested groups)')
-  .get('/megabyte-labs/docker/ci-pipeline/ansible-lint.json')
+  .get('/megabyte-labs/docker/ci-pipeline/ansible.json')
   .expectBadge({ label: 'tag', message: isSemver, color: 'blue' })
 
 t.create('Tag (project id latest by date)')

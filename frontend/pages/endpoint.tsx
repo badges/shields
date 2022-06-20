@@ -134,7 +134,7 @@ export default function EndpointPage(): JSX.Element {
         </p>
         <p>
           The endpoint badge is a better alternative than redirecting to the
-          static badge enpoint or generating SVG on your server:
+          static badge endpoint or generating SVG on your server:
         </p>
         <ol>
           <li>
@@ -142,7 +142,7 @@ export default function EndpointPage(): JSX.Element {
               Content and presentation are separate.
             </a>{' '}
             The service provider authors the badge, and Shields takes input from
-            the user to format it. As a service provider you author the badge
+            the user to format it. As a service provider, you author the badge
             but don't have to concern yourself with styling. You don't even have
             to pass the formatting options through to Shields.
           </li>
@@ -152,12 +152,12 @@ export default function EndpointPage(): JSX.Element {
           </li>
           <li>
             A JSON response is easy to implement; easier than an HTTP redirect.
-            It is trivial in almost any framework, and is more compatible with
+            It is trivial in almost any framework and is more compatible with
             hosting environments such as{' '}
             <a href="https://runkit.com/docs/endpoint">RunKit endpoints</a>.
           </li>
           <li>
-            As a service provider you can rely on the Shields CDN. There's no
+            As a service provider, you can rely on the Shields CDN. There's no
             need to study the HTTP headers. Adjusting cache behavior is as
             simple as setting a property in the JSON response.
           </li>
@@ -197,7 +197,7 @@ export default function EndpointPage(): JSX.Element {
         <dd>
           Default: <code>false</code>. <code>true</code> to treat this as an
           error badge. This prevents the user from overriding the color. In the
-          future it may affect cache behavior.
+          future, it may affect cache behavior.
         </dd>
         <dt>namedLogo</dt>
         <dd>

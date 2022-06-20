@@ -1,5 +1,7 @@
-import Joi from 'joi'
-import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import {
+  isVPlusDottedVersionAtLeastOne,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'BowerVersion',
@@ -7,21 +9,17 @@ export const t = new ServiceTester({
   pathPrefix: '/bower',
 })
 
-const isBowerPrereleaseVersion = Joi.string().regex(
-  /^v\d+(\.\d+)?(\.\d+)?(-?[.\w\d])+?$/
-)
-
-t.create('version').timeout(10000).get('/v/bootstrap.json').expectBadge({
+t.create('version').timeout(10000).get('/v/angular.json').expectBadge({
   label: 'bower',
   message: isVPlusDottedVersionAtLeastOne,
 })
 
-t.create('pre version') // e.g. bower|v0.2.5-alpha-rc-pre
+t.create('pre version')
   .timeout(10000)
-  .get('/v/bootstrap.json?include_prereleases')
+  .get('/v/angular.json?include_prereleases')
   .expectBadge({
     label: 'bower',
-    message: isBowerPrereleaseVersion,
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
 t.create('Version for Invalid Package')
