@@ -153,12 +153,7 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
     }
 
     if (type) {
-      const objectTypes = {
-        file: 'blob',
-        dir: 'tree',
-        submodule: 'commit',
-      }
-      const objectType = type in objectTypes ? objectTypes[type] : type
+      const objectType = type === 'dir' ? 'tree' : 'blob'
       files = files.filter(file => file.type === objectType)
     }
 
