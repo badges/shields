@@ -28,8 +28,8 @@ const schema = Joi.object({
       object: Joi.object({
         entries: Joi.array().items(
           Joi.object({
-            type: Joi.string(),
-            extension: Joi.string().allow(''),
+            type: Joi.string().required(),
+            extension: Joi.string().allow('').required(),
           })
         ),
       })
@@ -178,8 +178,8 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
         prettyMessage: 'directory not found',
       })
     }
-    const entries = json.data.repository.object.entries
-    const { count } = this.constructor.transform(entries, { type, extension })
+    const content = json.data.repository.object.entries
+    const { count } = this.constructor.transform(content, { type, extension })
     return this.constructor.render({ count })
   }
 }
