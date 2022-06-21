@@ -153,7 +153,12 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
     }
 
     if (type) {
-      const objectType = type === 'dir' ? 'tree' : 'blob'
+      const objectTypes = {
+        file: 'blob',
+        dir: 'tree',
+        submodule: 'commit',
+      }
+      const objectType = type in objectTypes ? objectTypes[type] : type
       files = files.filter(file => file.type === objectType)
     }
 
@@ -170,7 +175,7 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
     const json = await this.fetch({ user, repo, path })
     if (json.data.repository.object === null) {
       throw new InvalidParameter({
-        prettyMessage: 'repo or directory not found',
+        prettyMessage: 'directory not found',
       })
     }
     const entries = json.data.repository.object.entries
