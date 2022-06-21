@@ -7,9 +7,9 @@ describe('GithubDirectoryFileCount', function () {
   const contents = [
     { extension: '', type: 'tree' },
     { extension: '', type: 'tree' },
-    { extension: 'js', type: 'blob' },
-    { extension: 'js', type: 'blob' },
-    { extension: 'txt', type: 'blob' },
+    { extension: '.js', type: 'blob' },
+    { extension: '.js', type: 'blob' },
+    { extension: '.txt', type: 'blob' },
     { extension: '', type: 'commit' },
   ]
 
