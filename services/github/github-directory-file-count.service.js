@@ -1,11 +1,11 @@
-import path from 'path'
 import Joi from 'joi'
+import gql from 'graphql-tag'
 import { metric } from '../text-formatters.js'
 import { InvalidParameter } from '../index.js'
-import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
 import {
   documentation as commonDocumentation,
-  errorMessagesFor,
+  transformErrors,
 } from './github-helpers.js'
 
 const documentation = `${commonDocumentation}
@@ -22,28 +22,29 @@ const documentation = `${commonDocumentation}
 </p>
 `
 
-const schema = Joi.alternatives(
-  /*
-   alternative empty object schema to provide a custom error message
-   in the event a file path is provided by the user instead of a directory
-  */
-  Joi.object({}).required(),
-  Joi.array()
-    .items(
-      Joi.object({
-        path: Joi.string().required(),
-        type: Joi.string().required(),
+const schema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      object: Joi.object({
+        entries: Joi.array().items(
+          Joi.object({
+            type: Joi.string().required(),
+            extension: Joi.string().allow('').required(),
+          })
+        ),
       })
-    )
-    .required()
-)
+        .allow(null)
+        .required(),
+    }).required(),
+  }).required(),
+}).required()
 
 const queryParamSchema = Joi.object({
   type: Joi.any().valid('dir', 'file'),
   extension: Joi.string(),
 })
 
-export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Service {
+export default class GithubDirectoryFileCount extends GithubAuthV4Service {
   static category = 'size'
 
   static route = {
@@ -103,7 +104,7 @@ export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Ser
       title: 'GitHub repo file count (file extension)',
       pattern: ':user/:repo/:path',
       namedParams: { user: 'badges', repo: 'shields', path: 'services' },
-      queryParams: { extension: 'js' },
+      queryParams: { type: 'file', extension: 'js' },
       staticPreview: this.render({ count: 1 }),
       documentation,
     },
@@ -118,10 +119,25 @@ export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Ser
   }
 
   async fetch({ user, repo, path = '' }) {
-    return this._requestJson({
-      url: `/repos/${user}/${repo}/contents/${path}`,
+    const expression = `HEAD:${path}`
+    return this._requestGraphql({
+      query: gql`
+        query RepoFiles($user: String!, $repo: String!, $expression: String!) {
+          repository(owner: $user, name: $repo) {
+            object(expression: $expression) {
+              ... on Tree {
+                entries {
+                  type
+                  extension
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { user, repo, expression },
       schema,
-      errorMessages: errorMessagesFor('repo or directory not found'),
+      transformErrors,
     })
   }
 
@@ -137,11 +153,12 @@ export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Ser
     }
 
     if (type) {
-      files = files.filter(file => file.type === type)
+      const objectType = type === 'dir' ? 'tree' : 'blob'
+      files = files.filter(file => file.type === objectType)
     }
 
     if (extension) {
-      files = files.filter(file => path.extname(file.path) === `.${extension}`)
+      files = files.filter(file => file.extension === `.${extension}`)
     }
 
     return {
@@ -150,7 +167,13 @@ export default class GithubDirectoryFileCount extends ConditionalGithubAuthV3Ser
   }
 
   async handle({ user, repo, path }, { type, extension }) {
-    const content = await this.fetch({ user, repo, path })
+    const json = await this.fetch({ user, repo, path })
+    if (json.data.repository.object === null) {
+      throw new InvalidParameter({
+        prettyMessage: 'directory not found',
+      })
+    }
+    const content = json.data.repository.object.entries
     const { count } = this.constructor.transform(content, { type, extension })
     return this.constructor.render({ count })
   }

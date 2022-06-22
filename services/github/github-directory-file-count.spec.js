@@ -5,12 +5,12 @@ import GithubDirectoryFileCount from './github-directory-file-count.service.js'
 
 describe('GithubDirectoryFileCount', function () {
   const contents = [
-    { path: 'a', type: 'dir' },
-    { path: 'b', type: 'dir' },
-    { path: 'c.js', type: 'file' },
-    { path: 'd.js', type: 'file' },
-    { path: 'e.txt', type: 'file' },
-    { path: 'f', type: 'submodule' },
+    { extension: '', type: 'tree' },
+    { extension: '', type: 'tree' },
+    { extension: '.js', type: 'blob' },
+    { extension: '.js', type: 'blob' },
+    { extension: '.txt', type: 'blob' },
+    { extension: '', type: 'commit' },
   ]
 
   test(GithubDirectoryFileCount.transform, () => {
