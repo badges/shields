@@ -108,9 +108,7 @@ class AurVotes extends BaseAurService {
 
 class AurVersion extends BaseAurService {
   static category = 'version'
-
   static route = { base: 'aur/version', pattern: ':packageName' }
-
   static examples = [
     {
       title: 'AUR version',
@@ -118,6 +116,8 @@ class AurVersion extends BaseAurService {
       staticPreview: this.render({ version: '1.34.0-2', outOfDate: null }),
     },
   ]
+
+  static _cacheLength = 3600
 
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'
