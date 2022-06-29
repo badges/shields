@@ -36,7 +36,7 @@ t.create('Release (release display name)')
   .get('/gitlab-org/gitlab.json?display_name=release')
   .expectBadge({ label: 'release', message: isGitLabDisplayVersion })
 
-t.create('Release (custom instance')
+t.create('Release (custom instance)')
   .get('/GNOME/librsvg.json?gitlab_url=https://gitlab.gnome.org')
   .expectBadge({ label: 'release', message: isSemver, color: 'blue' })
 
