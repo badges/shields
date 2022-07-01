@@ -95,7 +95,7 @@ const licenseTypes = {
 }
 
 /**
- * Mapping of license to its corresponding color and priority.
+ * Mapping of licenses to their corresponding color and priority.
  *
  * @type {object}
  */
