@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
 import { NotFound, BaseJsonService } from '../index.js'
 
 const orderedInstallableRevisionsSchema = Joi.array()
@@ -8,7 +9,7 @@ const orderedInstallableRevisionsSchema = Joi.array()
 const repositoryRevisionInstallInfoSchema = Joi.array()
   .ordered(
     Joi.object({
-      times_downloaded: Joi.number().required(),
+      times_downloaded: nonNegativeInteger,
     }).required()
   )
   .items(Joi.any())
