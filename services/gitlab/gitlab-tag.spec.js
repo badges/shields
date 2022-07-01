@@ -26,7 +26,7 @@ describe('GitLabTag', function () {
         .get('/api/v4/projects/foo%2Fbar/repository/tags?order_by=updated')
         // This ensures that the expected credentials are actually being sent with the HTTP request.
         // Without this the request wouldn't match and the test would fail.
-        .basicAuth({ user: '', pass: fakeToken })
+        .matchHeader('Authorization', `Bearer ${fakeToken}`)
         .reply(200, [{ name: '1.9' }])
 
       expect(

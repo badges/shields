@@ -8,7 +8,7 @@ export default class GitLabBase extends BaseJsonService {
 
   async fetch({ url, options, schema, errorMessages }) {
     return this._requestJson(
-      this.authHelper.withBasicAuth({
+      this.authHelper.withBearerAuthHeader({
         schema,
         url,
         options,
