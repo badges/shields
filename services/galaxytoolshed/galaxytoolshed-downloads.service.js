@@ -1,14 +1,5 @@
-import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import BaseGalaxyToolshedService from './galaxytoolshed-base.js'
-
-const repositoryRevisionInstallInfoSchema = Joi.array().items(
-  Joi.object({
-    times_downloaded: Joi.number().required(),
-  }).required(),
-  Joi.object({}),
-  Joi.object({})
-)
 
 export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
   static category = 'downloads'
@@ -36,7 +27,6 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
     const response = await this.fetchLastOrderedInstallableRevisionsSchema({
       repository,
       owner,
-      schema: repositoryRevisionInstallInfoSchema,
     })
     const { times_downloaded: downloads } = response[0]
     return renderDownloadsBadge({ downloads })
