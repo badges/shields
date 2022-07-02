@@ -25,7 +25,7 @@ const customDocumentation = `
 export default class GitlabContributors extends GitLabBase {
   static category = 'activity'
   static route = {
-    base: 'gitlab/v/contributor',
+    base: 'gitlab/contributors',
     pattern: ':project+',
     queryParamSchema,
   }
