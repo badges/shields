@@ -1,3 +1,9 @@
+/**
+ * Common functions and utilities for tasks related to license badges.
+ *
+ * @module
+ */
+
 import toArray from '../core/base-service/to-array.js'
 
 const licenseTypes = {
@@ -88,6 +94,11 @@ const licenseTypes = {
   },
 }
 
+/**
+ * Mapping of licenses to their corresponding color and priority.
+ *
+ * @type {object}
+ */
 const licenseToColorMap = {}
 Object.keys(licenseTypes).forEach(licenseType => {
   const { spdxLicenseIds, aliases, color, priority } = licenseTypes[licenseType]
@@ -99,6 +110,12 @@ Object.keys(licenseTypes).forEach(licenseType => {
   })
 })
 
+/**
+ * Maps the license to its corresponding color and priority and sorts the list of mapped licenses by priority.
+ *
+ * @param {string | string[]} licenses License or list of licenses
+ * @returns {string} Color corresponding to the license or the list of licenses
+ */
 function licenseToColor(licenses) {
   if (!Array.isArray(licenses)) {
     licenses = [licenses]
@@ -113,6 +130,17 @@ function licenseToColor(licenses) {
   return color
 }
 
+/**
+ * Handles rendering concerns of license badges.
+ * Determines the message of the badge by joining the licenses in a comma-separated format.
+ * Sets the badge color to the provided value, if not provided then the color is used from licenseToColorMap.
+ *
+ * @param {object} attrs Refer to individual attributes
+ * @param {string} [attrs.license] License to render, required if badge contains only one license
+ * @param {string[]} [attrs.licenses] List of licenses to render, required if badge contains multiple licenses
+ * @param {string} [attrs.color] If provided then the badge will use this color value
+ * @returns {object} Badge with message and color properties
+ */
 function renderLicenseBadge({ license, licenses, color }) {
   if (licenses === undefined) {
     licenses = toArray(license)
