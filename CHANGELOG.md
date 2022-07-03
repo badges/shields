@@ -4,6 +4,72 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-07-03
+
+- Add [galaxytoolshed] services [#8114](https://github.com/badges/shields/issues/8114)
+- fix [gitlab] auth [#8145](https://github.com/badges/shields/issues/8145) [#8162](https://github.com/badges/shields/issues/8162)
+- increase cache length on AUR version badge, run [AUR] [#8110](https://github.com/badges/shields/issues/8110)
+- Use GraphQL to fix GitHub file count badges [github] [#8112](https://github.com/badges/shields/issues/8112)
+- feat: add [gitlab] contributors service [#8084](https://github.com/badges/shields/issues/8084)
+- [greasyfork] Add Greasy Fork service badges [#8080](https://github.com/badges/shields/issues/8080)
+- Add [gitlablicense] services [#8024](https://github.com/badges/shields/issues/8024)
+- [Spack] Package Manager: Update Domain [#8046](https://github.com/badges/shields/issues/8046)
+- switch [jitpack] to use latestOk endpoint [#8041](https://github.com/badges/shields/issues/8041)
+- Dependency updates
+
+## server-2022-06-01
+
+- Update GitLab logo (2022) [#7984](https://github.com/badges/shields/issues/7984)
+- [GitHub] Added milestone property to GitHub issue details service [#7864](https://github.com/badges/shields/issues/7864)
+- [Spack] Package Manager: Update Endpoint [#7957](https://github.com/badges/shields/issues/7957)
+- Update Chocolatey API endpoint URL [#7952](https://github.com/badges/shields/issues/7952)
+- [Flathub]Add downloads badge [#7724](https://github.com/badges/shields/issues/7724)
+- replace the outdated Telegram logo with the newest [#7831](https://github.com/badges/shields/issues/7831)
+- add [PUB] points badge [#7918](https://github.com/badges/shields/issues/7918)
+- add [PUB] popularity badge [#7920](https://github.com/badges/shields/issues/7920)
+- add [PUB] likes badge [#7916](https://github.com/badges/shields/issues/7916)
+- Dependency updates
+
+## server-2022-05-03
+
+- [OSSFScorecard] Create scorecard badge service [#7687](https://github.com/badges/shields/issues/7687)
+- Stringify [githublanguagecount] message [#7881](https://github.com/badges/shields/issues/7881)
+- Stringify and trim whitespace from a few services [#7880](https://github.com/badges/shields/issues/7880)
+- add labels to Dockerfile [#7862](https://github.com/badges/shields/issues/7862)
+- handle missing 'fly-client-ip' [#7814](https://github.com/badges/shields/issues/7814)
+- Dependency updates
+
+## server-2022-04-03
+
+- Breaking change: This release updates ioredis from v4 to v5.
+  If you are using redis for GitHub token pooling, redis connection strings of the form
+  `redis://junkusername:authpassword@example.com:1234` will need to be updated to
+  `redis://:authpassword@example.com:1234`. See the
+  [ioredis upgrade guide](https://github.com/luin/ioredis/wiki/Upgrading-from-v4-to-v5)
+  for further details.
+- fix installation issue on npm >= 8.5.5 [#7809](https://github.com/badges/shields/issues/7809)
+- two fixes for [packagist] schemas [#7782](https://github.com/badges/shields/issues/7782)
+- allow requireCloudflare setting to work when hosted on fly.io [#7781](https://github.com/badges/shields/issues/7781)
+- fix [pypi] badges when package has null license [#7761](https://github.com/badges/shields/issues/7761)
+- Add a [pub] publisher badge [#7715](https://github.com/badges/shields/issues/7715)
+- Switch Steam file size badge to informational color [#7722](https://github.com/badges/shields/issues/7722)
+- Make W3C and Youtube documentation links clickable [#7721](https://github.com/badges/shields/issues/7721)
+- Improve Wercker examples [#7720](https://github.com/badges/shields/issues/7720)
+- Improve Cirrus CI examples [#7719](https://github.com/badges/shields/issues/7719)
+- Support [CodeClimate] responses with multiple data items [#7716](https://github.com/badges/shields/issues/7716)
+- Delete [TeamCityCoverage] and [BowerVersion] redirectors [#7718](https://github.com/badges/shields/issues/7718)
+- Deprecate [Shippable] service [#7717](https://github.com/badges/shields/issues/7717)
+- fix: restore version comparison updates from #4173 [#4254](https://github.com/badges/shields/issues/4254)
+- [piwheels], filter out versions with no files [#7696](https://github.com/badges/shields/issues/7696)
+- set a longer cacheLength on [librariesio] badges [#7692](https://github.com/badges/shields/issues/7692)
+- improve python version formatting [#7682](https://github.com/badges/shields/issues/7682)
+- Clarify GitHub All Contributors badge [#7690](https://github.com/badges/shields/issues/7690)
+- Support [HexPM] packages with no stable release [#7685](https://github.com/badges/shields/issues/7685)
+- Add Test at Scale Badge [#7612](https://github.com/badges/shields/issues/7612)
+- [packagist] api v2 support [#7681](https://github.com/badges/shields/issues/7681)
+- Add [piwheels] version badge [#7656](https://github.com/badges/shields/issues/7656)
+- Dependency updates
+
 ## server-2022-03-01
 
 - Add [Conan] version service (#7460)

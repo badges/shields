@@ -3,7 +3,6 @@ import { renderVersionBadge } from '../version.js'
 import { optionalUrl } from '../validators.js'
 import { redirector } from '../index.js'
 import {
-  allVersionsSchema,
   keywords,
   BasePackagistService,
   customServerDocumentationFragment,
@@ -84,7 +83,7 @@ class PackagistVersion extends BasePackagistService {
     const json = await this.fetch({
       user,
       repo,
-      schema: includePrereleases ? schema : allVersionsSchema,
+      schema,
       server,
     })
     const versions = json.packages[this.getPackageName(user, repo)]

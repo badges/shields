@@ -6,13 +6,20 @@ public:
       enabled: true
       url: https://metrics.shields.io/telegraf
       instanceIdFrom: env-var
-      instanceIdEnvVarName: HEROKU_DYNO_ID
+      instanceIdEnvVarName: FLY_ALLOC_ID
       envLabel: shields-production
 
   ssl:
-    isSecure: true
+    isSecure: false
 
   cors:
     allowedOrigin: ['http://shields.io', 'https://shields.io']
 
+  services:
+    gitlab:
+      authorizedOrigins: 'https://gitlab.com'
+
   rasterUrl: 'https://raster.shields.io'
+  userAgentBase: 'Shields.io'
+  requireCloudflare: true
+  requestTimeoutSeconds: 20

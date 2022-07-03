@@ -106,6 +106,12 @@ describe('PyPI helpers', function () {
     forCases([
       given({
         info: {
+          license: null,
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+      }),
+      given({
+        info: {
           license: '',
           classifiers: ['License :: OSI Approved :: MIT License'],
         },

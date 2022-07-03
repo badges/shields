@@ -17,9 +17,7 @@ const isViolationsLongFormMetric = Joi.alternatives(
 
 t.create('Violations')
   .timeout(10000)
-  .get(
-    '/violations/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
-  )
+  .get('/violations/brave_brave-core.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'violations',
     message: isMetric,
@@ -27,9 +25,7 @@ t.create('Violations')
 
 t.create('Violations (branch)')
   .timeout(10000)
-  .get(
-    '/violations/org.sonarsource.sonarqube%3Asonarqube/master.json?server=https://sonarcloud.io'
-  )
+  .get('/violations/brave_brave-core/master.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'violations',
     message: isMetric,
@@ -67,7 +63,7 @@ t.create('Violations (legacy API supported)')
 t.create('Violations Long Format')
   .timeout(10000)
   .get(
-    '/violations/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io&format=long'
+    '/violations/brave_brave-core.json?server=https://sonarcloud.io&format=long'
   )
   .expectBadge({
     label: 'violations',
@@ -126,9 +122,7 @@ t.create('Violations Long Format (legacy API supported)')
 
 t.create('Blocker Violations')
   .timeout(10000)
-  .get(
-    '/blocker_violations/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
-  )
+  .get('/blocker_violations/brave_brave-core.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'blocker violations',
     message: isMetric,
@@ -166,7 +160,7 @@ t.create('Blocker Violations (legacy API supported)')
 t.create('Critical Violations')
   .timeout(10000)
   .get(
-    '/critical_violations/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
+    '/critical_violations/brave_brave-core.json?server=https://sonarcloud.io'
   )
   .expectBadge({
     label: 'critical violations',

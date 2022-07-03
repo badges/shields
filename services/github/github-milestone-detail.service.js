@@ -75,7 +75,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
     }
 
     return {
-      label: `${milestone.title} ${label}`,
+      label: `${milestone.title}${label ? ' ' : ''}${label}`,
       message: metric(milestoneMetric),
       color,
     }

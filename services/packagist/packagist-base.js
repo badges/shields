@@ -5,9 +5,12 @@ import { isStable, latest } from '../php-version.js'
 const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
-    require: Joi.object({
-      php: Joi.string(),
-    }),
+    require: Joi.alternatives(
+      Joi.object({
+        php: Joi.string(),
+      }).required(),
+      Joi.string().valid('__unset')
+    ),
   })
 )
 

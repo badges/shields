@@ -22,6 +22,8 @@ export class PubPublisher extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 3600
+
   static defaultBadgeData = { label: 'publisher' }
 
   static render({ publisher }) {
