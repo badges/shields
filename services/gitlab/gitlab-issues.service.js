@@ -214,11 +214,24 @@ export default class GitlabIssues extends GitLabBase {
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-  static render({ issues }) {
+  static render({ variant, raw, labels, issueCount }) {
+    const state = variant
+    const isMultiLabel = labels && labels.includes(',')
+    const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
+
+    let labelPrefix = ''
+    let messageSuffix = ''
+    if (raw !== undefined) {
+      labelPrefix = `${state} `
+    } else {
+      messageSuffix = state
+    }
     return {
-      label: issues.renderLabel,
-      message: issues.renderMsg,
-      color: issues.renderColor,
+      label: `${labelPrefix}${labelText}issues`,
+      message: `${metric(issueCount)}${
+        messageSuffix ? ' ' : ''
+      }${messageSuffix}`,
+      color: issueCount > 0 ? 'yellow' : 'brightgreen',
     }
   }
 
@@ -236,19 +249,8 @@ export default class GitlabIssues extends GitLabBase {
     })
   }
 
-  static transform({ variant, raw, statistics, labels }) {
+  static transform({ variant, statistics }) {
     const state = variant
-    const isMultiLabel = labels && labels.includes(',')
-    const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
-
-    let labelPrefix = ''
-    let messageSuffix = ''
-    if (raw !== undefined) {
-      labelPrefix = `${state} `
-    } else {
-      messageSuffix = state
-    }
-
     let issueCount
     switch (state) {
       case 'open':
@@ -261,17 +263,8 @@ export default class GitlabIssues extends GitLabBase {
         issueCount = statistics.counts.all
         break
     }
-    const renderLabel = `${labelPrefix}${labelText}issues`
-    const renderMsg = `${metric(issueCount)}${
-      messageSuffix ? ' ' : ''
-    }${messageSuffix}`
-    const renderColor = issueCount > 0 ? 'yellow' : 'brightgreen'
 
-    return {
-      renderLabel,
-      renderMsg,
-      renderColor,
-    }
+    return issueCount
   }
 
   async handle(
@@ -284,8 +277,10 @@ export default class GitlabIssues extends GitLabBase {
       labels,
     })
     return this.constructor.render({
-      issues: this.constructor.transform({ variant, raw, statistics, labels }),
+      variant,
+      raw,
+      labels,
+      issueCount: this.constructor.transform({ variant, statistics }),
     })
-    // return this.constructor.render({ variant, raw, statistics, labels })
   }
 }
