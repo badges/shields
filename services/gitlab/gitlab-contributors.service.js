@@ -25,7 +25,7 @@ const customDocumentation = `
 export default class GitlabContributors extends GitLabBase {
   static category = 'activity'
   static route = {
-    base: 'gitlab/v/contributor',
+    base: 'gitlab/contributors',
     pattern: ':project+',
     queryParamSchema,
   }
@@ -58,15 +58,17 @@ export default class GitlabContributors extends GitLabBase {
 
   async handle({ project }, { gitlab_url: baseUrl = 'https://gitlab.com' }) {
     // https://docs.gitlab.com/ee/api/repositories.html#contributors
-    const { res } = await this._request({
-      url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
-      )}/repository/contributors`,
-      options: { searchParams: { page: '1', per_page: '1' } },
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
+    const { res } = await this._request(
+      this.authHelper.withBearerAuthHeader({
+        url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
+          project
+        )}/repository/contributors`,
+        options: { searchParams: { page: '1', per_page: '1' } },
+        errorMessages: {
+          404: 'project not found',
+        },
+      })
+    )
     const data = this.constructor._validate(res.headers, schema)
     // The total number of contributors is in the `x-total` field in the headers.
     // https://docs.gitlab.com/ee/api/index.html#other-pagination-headers
