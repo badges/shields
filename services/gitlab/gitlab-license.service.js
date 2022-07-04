@@ -30,7 +30,7 @@ export default class GitlabLicense extends GitLabBase {
   static category = 'license'
 
   static route = {
-    base: 'gitlab/v/license',
+    base: 'gitlab/license',
     pattern: ':project+',
     queryParamSchema,
   }
@@ -49,7 +49,7 @@ export default class GitlabLicense extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab (custom server)',
+      title: 'GitLab (self-managed)',
       namedParams: {
         project: 'gitlab-cn/gitlab',
       },
