@@ -9,7 +9,7 @@ import {
 export const t = await createServiceTester()
 
 t.create('Issues (project not found)')
-  .get('/opened/guoxudong.io/shields-test/do-not-exist.json')
+  .get('/open/guoxudong.io/shields-test/do-not-exist.json')
   .expectBadge({
     label: 'issues',
     message: 'project not found',
@@ -19,21 +19,21 @@ t.create('Issues (project not found)')
  *  Opened issue number case
  */
 t.create('Opened issues')
-  .get('/opened/guoxudong.io/shields-test/issue-test.json')
+  .get('/open/guoxudong.io/shields-test/issue-test.json')
   .expectBadge({
     label: 'issues',
     message: isMetricOpenIssues,
   })
 
 t.create('Open issues raw')
-  .get('/opened-raw/guoxudong.io/shields-test/issue-test.json')
+  .get('/open-raw/guoxudong.io/shields-test/issue-test.json')
   .expectBadge({
     label: 'open issues',
     message: isMetric,
   })
 
 t.create('Open issues by label is > zero')
-  .get('/opened/guoxudong.io/shields-test/issue-test.json?labels=discussion')
+  .get('/open/guoxudong.io/shields-test/issue-test.json?labels=discussion')
   .expectBadge({
     label: 'discussion issues',
     message: isMetricOpenIssues,
@@ -41,7 +41,7 @@ t.create('Open issues by label is > zero')
 
 t.create('Open issues by  multi-word label is > zero')
   .get(
-    '/opened/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
+    '/open/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
   )
   .expectBadge({
     label: 'discussion,enhancement issues',
@@ -49,16 +49,14 @@ t.create('Open issues by  multi-word label is > zero')
   })
 
 t.create('Open issues by label (raw)')
-  .get(
-    '/opened-raw/guoxudong.io/shields-test/issue-test.json?labels=discussion'
-  )
+  .get('/open-raw/guoxudong.io/shields-test/issue-test.json?labels=discussion')
   .expectBadge({
     label: 'open discussion issues',
     message: isMetric,
   })
 
 t.create('Opened issues by Scoped labels')
-  .get('/opened/gitlab-org%2Fgitlab.json?labels=test,failure::new')
+  .get('/open/gitlab-org%2Fgitlab.json?labels=test,failure::new')
   .expectBadge({
     label: 'test,failure::new issues',
     message: isMetricOpenIssues,

@@ -1,14 +1,14 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({
   statistics: Joi.object({
     counts: Joi.object({
-      all: Joi.number().required(),
-      closed: Joi.number().required(),
-      opened: Joi.number().required(),
+      all: nonNegativeInteger,
+      closed: nonNegativeInteger,
+      opened: nonNegativeInteger,
     }).required(),
   }).allow(null),
 }).required()
@@ -20,20 +20,14 @@ const queryParamSchema = Joi.object({
 
 const documentation = `
 <p>
-  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab )
-</p>
-`
-
-const customDocumentation = `
-<p>
+  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab ).
   Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
-  You may use your GitLab Project Id (e.g. 13953) or your Project Path (e.g. gitlab-cn/gitlab ) in <a href="https://jihulab.com">https://jihulab.com</a>
 </p>
 `
 
 const labelDocumentation = `
 <p>
-  Support Multi-label and <a href="https://docs.gitlab.com/ee/user/project/labels.html#scoped-labels">Scoped labels</a>, Multi-lable please use <code>,</code> to separate.
+  If you want to use multiple labels then please use commas (<code>,</code>) to separate them, e.g. <code>foo,bar</code>.
 </p>
 `
 
@@ -41,18 +35,19 @@ export default class GitlabIssues extends GitLabBase {
   static category = 'issue-tracking'
 
   static route = {
-    base: 'gitlab/v/issues',
-    pattern: ':variant(all|opened|closed):raw(-raw)?/:project+',
+    base: 'gitlab/issues',
+    pattern: ':variant(all|open|closed):raw(-raw)?/:project+',
     queryParamSchema,
   }
 
   static examples = [
     {
-      title: 'GitLab issue',
-      pattern: 'opened/:project+',
+      title: 'GitLab issues',
+      pattern: 'open/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'issues',
         message: '44k open',
@@ -61,11 +56,12 @@ export default class GitlabIssues extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab issue',
-      pattern: 'opened-raw/:project+',
+      title: 'GitLab issues',
+      pattern: 'open-raw/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'open issues',
         message: '44k',
@@ -75,12 +71,13 @@ export default class GitlabIssues extends GitLabBase {
     },
     {
       title: 'GitLab issues by-label',
-      pattern: 'opened/:project+',
+      pattern: 'open/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
       queryParams: {
         labels: 'test,failure::new',
+        gitlab_url: 'https://gitlab.com',
       },
       staticPreview: {
         label: 'test,failure::new issues',
@@ -91,12 +88,13 @@ export default class GitlabIssues extends GitLabBase {
     },
     {
       title: 'GitLab issues by-label',
-      pattern: 'opened-raw/:project+',
+      pattern: 'open-raw/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
       queryParams: {
         labels: 'test,failure::new',
+        gitlab_url: 'https://gitlab.com',
       },
       staticPreview: {
         label: 'open test,failure::new issues',
@@ -106,11 +104,12 @@ export default class GitlabIssues extends GitLabBase {
       documentation: documentation + labelDocumentation,
     },
     {
-      title: 'GitLab closed issue',
+      title: 'GitLab closed issues',
       pattern: 'closed/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'issues',
         message: '72k closed',
@@ -119,11 +118,12 @@ export default class GitlabIssues extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab closed issue',
+      title: 'GitLab closed issues',
       pattern: 'closed-raw/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'closed issues',
         message: '72k ',
@@ -139,6 +139,7 @@ export default class GitlabIssues extends GitLabBase {
       },
       queryParams: {
         labels: 'test,failure::new',
+        gitlab_url: 'https://gitlab.com',
       },
       staticPreview: {
         label: 'test,failure::new issues',
@@ -155,6 +156,7 @@ export default class GitlabIssues extends GitLabBase {
       },
       queryParams: {
         labels: 'test,failure::new',
+        gitlab_url: 'https://gitlab.com',
       },
       staticPreview: {
         label: 'closed test,failure::new issues',
@@ -164,11 +166,12 @@ export default class GitlabIssues extends GitLabBase {
       documentation: documentation + labelDocumentation,
     },
     {
-      title: 'GitLab all issue',
+      title: 'GitLab all issues',
       pattern: 'all/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'issues',
         message: '115k all',
@@ -177,11 +180,12 @@ export default class GitlabIssues extends GitLabBase {
       documentation,
     },
     {
-      title: 'GitLab all issue',
+      title: 'GitLab all issues',
       pattern: 'all-raw/:project+',
       namedParams: {
         project: 'gitlab-org/gitlab',
       },
+      queryParams: { gitlab_url: 'https://gitlab.com' },
       staticPreview: {
         label: 'all issues',
         message: '115k',
@@ -197,6 +201,7 @@ export default class GitlabIssues extends GitLabBase {
       },
       queryParams: {
         labels: 'test,failure::new',
+        gitlab_url: 'https://gitlab.com',
       },
       staticPreview: {
         label: 'all test,failure::new issues',
@@ -205,185 +210,34 @@ export default class GitlabIssues extends GitLabBase {
       },
       documentation: documentation + labelDocumentation,
     },
-
-    {
-      title: 'GitLab (self-managed) issue',
-      pattern: 'opened/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '358 open',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) issue',
-      pattern: 'opened-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'open issues',
-        message: '358',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) issues by-label',
-      pattern: 'opened/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: {
-        gitlab_url: 'https://jihulab.com',
-        labels: 'backend,feature::enhancement',
-      },
-      staticPreview: {
-        label: 'backend,feature::enhancement issues',
-        message: '27 open',
-        color: 'yellow',
-      },
-      documentation: customDocumentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) issues by-label',
-      pattern: 'opened-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: {
-        gitlab_url: 'https://jihulab.com',
-        labels: 'backend,feature::enhancement',
-      },
-      staticPreview: {
-        label: 'open backend,feature::enhancement issues',
-        message: '27',
-        color: 'yellow',
-      },
-      documentation: customDocumentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) closed issue',
-      pattern: 'closed/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '611 closed',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) closed issue',
-      pattern: 'closed-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'closed issues',
-        message: '611',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) closed issues by-label',
-      pattern: 'closed/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: {
-        gitlab_url: 'https://jihulab.com',
-        labels: 'backend,feature::enhancement',
-      },
-      staticPreview: {
-        label: 'backend,feature::enhancement issues',
-        message: '57 closed',
-        color: 'yellow',
-      },
-      documentation: customDocumentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) closed issues by-label',
-      pattern: 'closed-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: {
-        gitlab_url: 'https://jihulab.com',
-        labels: 'backend,feature::enhancement',
-      },
-      staticPreview: {
-        label: 'closed backend,feature::enhancement issues',
-        message: '57',
-        color: 'yellow',
-      },
-      documentation: customDocumentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) all issue',
-      pattern: 'all/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '969 all',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) all issue',
-      pattern: 'all-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'all issues',
-        message: '969',
-        color: 'yellow',
-      },
-      documentation: customDocumentation,
-    },
-    {
-      title: 'GitLab (self-managed) all issues by-label',
-      pattern: 'all-raw/:project+',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: {
-        gitlab_url: 'https://jihulab.com',
-        labels: 'backend,feature::enhancement',
-      },
-      staticPreview: {
-        label: 'all backend,feature::enhancement issues',
-        message: '84',
-        color: 'yellow',
-      },
-      documentation: customDocumentation + labelDocumentation,
-    },
   ]
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-  static render({ variant, raw, statistics, labels }) {
-    let state = variant
-    if (state === 'opened') {
-      state = 'open'
+  static render({ issues }) {
+    return {
+      label: issues.renderLabel,
+      message: issues.renderMsg,
+      color: issues.renderColor,
     }
+  }
+
+  async fetch({ project, baseUrl, labels }) {
+    // https://docs.gitlab.com/ee/api/issues_statistics.html#get-project-issues-statistics
+    return super.fetch({
+      schema,
+      url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
+        project
+      )}/issues_statistics`,
+      options: labels ? { searchParams: { labels } } : undefined,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+  }
+
+  static transform({ variant, raw, statistics, labels }) {
+    const state = variant
     const isMultiLabel = labels && labels.includes(',')
     const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
 
@@ -408,28 +262,16 @@ export default class GitlabIssues extends GitLabBase {
         break
     }
     const renderLabel = `${labelPrefix}${labelText}issues`
+    const renderMsg = `${metric(issueCount)}${
+      messageSuffix ? ' ' : ''
+    }${messageSuffix}`
+    const renderColor = issueCount > 0 ? 'yellow' : 'brightgreen'
 
     return {
-      label: renderLabel,
-      message: `${metric(issueCount)}${
-        messageSuffix ? ' ' : ''
-      }${messageSuffix}`,
-      color: issueCount > 0 ? 'yellow' : 'brightgreen',
+      renderLabel,
+      renderMsg,
+      renderColor,
     }
-  }
-
-  async fetch({ project, baseUrl, labels }) {
-    // https://docs.gitlab.com/ee/api/issues_statistics.html#get-project-issues-statistics
-    return super.fetch({
-      schema,
-      url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
-      )}/issues_statistics`,
-      options: labels ? { searchParams: { labels } } : undefined,
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
   }
 
   async handle(
@@ -441,6 +283,9 @@ export default class GitlabIssues extends GitLabBase {
       baseUrl,
       labels,
     })
-    return this.constructor.render({ variant, raw, statistics, labels })
+    return this.constructor.render({
+      issues: this.constructor.transform({ variant, raw, statistics, labels }),
+    })
+    // return this.constructor.render({ variant, raw, statistics, labels })
   }
 }
