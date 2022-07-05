@@ -4,6 +4,7 @@ import { NotFound } from '../index.js'
 import NpmBase from './npm-base.js'
 
 const keywords = ['node']
+const defaultLabel = 'npm'
 
 // Joi.string should be a semver.
 const schema = Joi.object()
@@ -21,21 +22,25 @@ export default class NpmVersion extends NpmBase {
       title: 'npm',
       pattern: ':packageName',
       namedParams: { packageName: 'npm' },
-      staticPreview: this.render({ version: '6.3.0' }),
+      staticPreview: renderVersionBadge({ version: '6.3.0' }),
       keywords,
     },
     {
       title: 'npm (scoped)',
       pattern: ':scope/:packageName',
       namedParams: { scope: '@cycle', packageName: 'core' },
-      staticPreview: this.render({ version: '7.0.0' }),
+      staticPreview: renderVersionBadge({ version: '7.0.0' }),
       keywords,
     },
     {
       title: 'npm (tag)',
       pattern: ':packageName/:tag',
       namedParams: { packageName: 'npm', tag: 'next-8' },
-      staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
+      staticPreview: renderVersionBadge({
+        tag: 'latest',
+        version: '6.3.0',
+        defaultLabel,
+      }),
       keywords,
     },
     {
@@ -43,20 +48,28 @@ export default class NpmVersion extends NpmBase {
       pattern: ':packageName/:tag',
       namedParams: { packageName: 'npm', tag: 'next-8' },
       queryParams: { registry_uri: 'https://registry.npmjs.com' },
-      staticPreview: this.render({ tag: 'latest', version: '7.0.0' }),
+      staticPreview: renderVersionBadge({
+        tag: 'latest',
+        version: '7.0.0',
+        defaultLabel,
+      }),
       keywords,
     },
     {
       title: 'npm (scoped with tag)',
       pattern: ':scope/:packageName/:tag',
       namedParams: { scope: '@cycle', packageName: 'core', tag: 'canary' },
-      staticPreview: this.render({ tag: 'latest', version: '6.3.0' }),
+      staticPreview: renderVersionBadge({
+        tag: 'latest',
+        version: '6.3.0',
+        defaultLabel,
+      }),
       keywords,
     },
   ]
 
   static defaultBadgeData = {
-    label: 'npm',
+    label: defaultLabel,
   }
 
   static render({ tag, version }) {
