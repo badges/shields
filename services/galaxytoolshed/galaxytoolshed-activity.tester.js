@@ -3,21 +3,21 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-t.create('Release Date')
+t.create('Created Date')
   .get('/sra_tools/iuc.json')
-  .expectBadge({ label: 'release date', message: isFormattedDate })
+  .expectBadge({ label: 'created date', message: isFormattedDate })
 
-t.create('Release Date - repository not found')
+t.create('Created Date - repository not found')
   .get('/sra_tool/iuc.json')
-  .expectBadge({ label: 'release date', message: 'not found' })
+  .expectBadge({ label: 'created date', message: 'not found' })
 
-t.create('Release Date - owner not found')
+t.create('Created Date - owner not found')
   .get('/sra_tools/iu.json')
-  .expectBadge({ label: 'release date', message: 'not found' })
+  .expectBadge({ label: 'created date', message: 'not found' })
 
-t.create('Release Date - changesetRevision not found')
+t.create('Created Date - changesetRevision not found')
   .get('/bioqc/badilla.json')
   .expectBadge({
-    label: 'release date',
+    label: 'created date',
     message: 'changesetRevision not found',
   })

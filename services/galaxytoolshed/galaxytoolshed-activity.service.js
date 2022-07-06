@@ -2,16 +2,16 @@ import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import BaseGalaxyToolshedService from './galaxytoolshed-base.js'
 
-export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService {
+export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService {
   static category = 'activity'
   static route = {
-    base: 'galaxytoolshed/release-date',
+    base: 'galaxytoolshed/created-date',
     pattern: ':repository/:owner',
   }
 
   static examples = [
     {
-      title: 'Galaxy Toolshed (create time)',
+      title: 'Galaxy Toolshed (created time)',
       namedParams: {
         repository: 'sra_tools',
         owner: 'iuc',
@@ -23,7 +23,7 @@ export default class GalaxyToolshedReleaseDate extends BaseGalaxyToolshedService
   ]
 
   static defaultBadgeData = {
-    label: 'release date',
+    label: 'created date',
   }
 
   static render({ date }) {
