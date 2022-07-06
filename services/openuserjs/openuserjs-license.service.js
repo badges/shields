@@ -20,7 +20,7 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
 
   static defaultBadgeData = { label: 'license' }
 
-  transform(data) {
+  static transform(data) {
     if (!('license' in data.UserScript)) {
       // By the TOS, the script will be under an MIT License by default if not specified
       // @see https://github.com/badges/shields/pull/8081#discussion_r898437399
