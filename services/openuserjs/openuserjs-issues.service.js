@@ -21,7 +21,7 @@ export default class OpenUserJSIssues extends BaseOpenUserJSService {
   static render({ issues }) {
     return {
       message: metric(issues),
-      color: issues ? 'yellow' : 'brightgreen',
+      color: 'informational',
     }
   }
 
