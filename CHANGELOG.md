@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-07-03
+
+- Add [galaxytoolshed] services [#8114](https://github.com/badges/shields/issues/8114)
+- fix [gitlab] auth [#8145](https://github.com/badges/shields/issues/8145) [#8162](https://github.com/badges/shields/issues/8162)
+- increase cache length on AUR version badge, run [AUR] [#8110](https://github.com/badges/shields/issues/8110)
+- Use GraphQL to fix GitHub file count badges [github] [#8112](https://github.com/badges/shields/issues/8112)
+- feat: add [gitlab] contributors service [#8084](https://github.com/badges/shields/issues/8084)
+- [greasyfork] Add Greasy Fork service badges [#8080](https://github.com/badges/shields/issues/8080)
+- Add [gitlablicense] services [#8024](https://github.com/badges/shields/issues/8024)
+- [Spack] Package Manager: Update Domain [#8046](https://github.com/badges/shields/issues/8046)
+- switch [jitpack] to use latestOk endpoint [#8041](https://github.com/badges/shields/issues/8041)
+- Dependency updates
+
 ## server-2022-06-01
 
 - Update GitLab logo (2022) [#7984](https://github.com/badges/shields/issues/7984)

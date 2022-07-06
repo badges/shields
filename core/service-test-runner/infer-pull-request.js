@@ -59,7 +59,9 @@ function _inferPullRequestFromTravisEnv(env) {
 }
 
 function _inferPullRequestFromCircleEnv(env) {
-  return parseGithubPullRequestUrl(env.CI_PULL_REQUEST)
+  return parseGithubPullRequestUrl(
+    env.CI_PULL_REQUEST || env.CIRCLE_PULL_REQUEST
+  )
 }
 
 /**
