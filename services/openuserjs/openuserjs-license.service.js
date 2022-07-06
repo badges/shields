@@ -13,6 +13,8 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
         scriptname: 'YouTube_Comment_Blacklist',
       },
       staticPreview: renderLicenseBadge({ licenses: ['GPL-3.0-or-later'] }),
+      documentation:
+        'By the terms of service, scripts will be under an MIT License by default if not specified in the script metadata.',
     },
   ]
 
