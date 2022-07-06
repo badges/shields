@@ -1,6 +1,9 @@
 import { licenseToColor } from '../licenses.js'
 import { createServiceTester } from '../tester.js'
+import { noToken } from '../test-helpers.js'
+import _noGitLabToken from './gitlab-license.service.js'
 export const t = await createServiceTester()
+const noGitLabToken = noToken(_noGitLabToken)
 
 const publicDomainLicenseColor = licenseToColor('MIT License')
 const unknownLicenseColor = licenseToColor()
@@ -54,4 +57,13 @@ t.create('Mocking License')
     label: 'license',
     message: 'Apache License 2.0',
     color: unknownLicenseColor,
+  })
+
+t.create('License (private repo)')
+  .skipWhen(noGitLabToken)
+  .get('/shields-ops-group/test.json')
+  .expectBadge({
+    label: 'license',
+    message: 'MIT License',
+    color: `${publicDomainLicenseColor}`,
   })

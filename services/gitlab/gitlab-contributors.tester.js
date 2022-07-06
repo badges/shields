@@ -1,6 +1,9 @@
 import { createServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
+import { noToken } from '../test-helpers.js'
+import _noGitLabToken from './gitlab-contributors.service.js'
 export const t = await createServiceTester()
+const noGitLabToken = noToken(_noGitLabToken)
 
 t.create('Contributors')
   .get('/guoxudong.io/shields-test/licenced-test.json')
@@ -28,4 +31,12 @@ t.create('Mocking the missing x-total header')
   .expectBadge({
     label: 'contributors',
     message: 'invalid response data',
+  })
+
+t.create('Contributors (private repo)')
+  .skipWhen(noGitLabToken)
+  .get('/shields-ops-group/test.json')
+  .expectBadge({
+    label: 'contributors',
+    message: isMetric,
   })
