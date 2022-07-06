@@ -34,7 +34,7 @@ export default class OpenUserJSLicense extends BaseOpenUserJSService {
 
   async handle({ username, scriptname }) {
     const data = await this.fetch({ username, scriptname })
-    const { licenses } = this.transform(data)
+    const { licenses } = this.constructor.transform(data)
     return renderLicenseBadge({ licenses })
   }
 }
