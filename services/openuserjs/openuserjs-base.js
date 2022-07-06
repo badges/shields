@@ -7,12 +7,12 @@ const schema = Joi.object({
     version: Joi.array().items(
       Joi.object({
         value: Joi.string().required(),
-      })
+      }).required()
     ),
     license: Joi.array().items(
       Joi.object({
         value: Joi.string().required(),
-      })
+      }).required()
     ),
   }).required(),
   OpenUserJS: Joi.object({
@@ -20,14 +20,14 @@ const schema = Joi.object({
       .items(
         Joi.object({
           value: nonNegativeInteger,
-        })
+        }).required()
       )
       .required(),
     issues: Joi.array()
       .items(
         Joi.object({
           value: nonNegativeInteger,
-        })
+        }).required()
       )
       .required(),
   }).required(),
