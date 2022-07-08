@@ -1,3 +1,4 @@
+import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
@@ -16,11 +17,15 @@ export default class GreasyForkRatingCount extends BaseGreasyForkService {
   static defaultBadgeData = { label: 'rating' }
 
   static render({ good, ok, bad }) {
-    const installs = [good, ok, bad]
-    const colors = ['green', 'yellow', 'red']
+    let color = 'lightgrey'
+    const total = good + bad + ok
+    if (total > 0) {
+      const score = (good * 3 + ok * 2 + bad * 1) / total - 1
+      color = floorCountColor(score, 1, 1.5, 2)
+    }
     return {
       message: `${metric(good)} good, ${metric(ok)} ok, ${metric(bad)} bad`,
-      color: colors[installs.indexOf(Math.max(...installs))],
+      color,
     }
   }
 
