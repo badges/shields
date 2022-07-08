@@ -51,7 +51,7 @@
     "lodash.countby": "^4.6.0",
     "lodash.groupby": "^4.6.0",
     "lodash.times": "^4.3.2",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "node-env-flag": "^0.1.0",
     "parse-link-header": "^2.0.0",
     "path-to-regexp": "^6.2.1",
