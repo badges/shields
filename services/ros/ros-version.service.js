@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import yaml from 'js-yaml'
 import { renderVersionBadge } from '../version.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
-import { NotFound } from '../index.js'
-import { parseReleaseVersionFromDistro } from './ros-version-helpers.js'
+import { NotFound, InvalidResponse } from '../index.js'
 
 const tagsSchema = Joi.object({
   data: Joi.object({
@@ -31,6 +31,15 @@ const contentSchema = Joi.object({
   }).required(),
 }).required()
 
+const distroSchema = Joi.object({
+  repositories: Joi.object().required(),
+})
+const packageSchema = Joi.object({
+  release: Joi.object({
+    version: Joi.string().required(),
+  }).required(),
+})
+
 export default class RosVersion extends GithubAuthV4Service {
   static category = 'version'
 
@@ -42,10 +51,12 @@ export default class RosVersion extends GithubAuthV4Service {
       namedParams: { distro: 'humble', packageName: 'vision_msgs' },
       staticPreview: {
         ...renderVersionBadge({ version: '4.0.0' }),
-        label: 'humble',
+        label: 'ros|humble',
       },
     },
   ]
+
+  static defaultBadgeData = { label: 'ros' }
 
   async handle({ distro, packageName }) {
     const tagsJson = await this._requestGraphql({
@@ -74,6 +85,8 @@ export default class RosVersion extends GithubAuthV4Service {
     const tags = tagsJson.data.repository.refs.edges
       .map(edge => edge.node.name)
       .filter(tag => /^\d+-\d+-\d+$/.test(tag))
+      .sort()
+      .reverse()
 
     const ref = tags[0] ? `refs/tags/${distro}/${tags[0]}` : 'refs/heads/master'
     const prettyRef = tags[0] ? `${distro}/${tags[0]}` : 'master'
@@ -101,11 +114,41 @@ export default class RosVersion extends GithubAuthV4Service {
         prettyMessage: `distribution.yaml not found: ${distro}@${prettyRef}`,
       })
     }
-    const version = parseReleaseVersionFromDistro(
+    const version = this.constructor._parseReleaseVersionFromDistro(
       contentJson.data.repository.object.text,
       packageName
     )
 
-    return { ...renderVersionBadge({ version }), label: distro }
+    return { ...renderVersionBadge({ version }), label: `ros|${distro}` }
+  }
+
+  static _parseReleaseVersionFromDistro(distroYaml, packageName) {
+    let distro
+    try {
+      distro = yaml.load(distroYaml)
+    } catch (err) {
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable distribution.yml',
+        underlyingError: err,
+      })
+    }
+
+    const validatedDistro = this._validate(distro, distroSchema, {
+      prettyErrorMessage: 'invalid distribution.yml',
+    })
+    if (!validatedDistro.repositories[packageName]) {
+      throw new NotFound({ prettyMessage: `package not found: ${packageName}` })
+    }
+
+    const packageInfo = this._validate(
+      validatedDistro.repositories[packageName],
+      packageSchema,
+      {
+        prettyErrorMessage: `invalid section for ${packageName} in distribution.yml`,
+      }
+    )
+
+    // Strip off "release inc" suffix
+    return packageInfo.release.version.replace(/-\d+$/, '')
   }
 }

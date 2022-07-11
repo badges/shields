@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import { parseReleaseVersionFromDistro } from './ros-version-helpers.js'
+import RosVersion from './ros-version.service.js'
 
 describe('parseReleaseVersionFromDistro', function () {
   it('returns correct version', function () {
     expect(
-      parseReleaseVersionFromDistro(
+      RosVersion._parseReleaseVersionFromDistro(
         `
 %YAML 1.1
 # ROS distribution file
