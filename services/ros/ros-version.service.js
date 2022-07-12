@@ -51,7 +51,7 @@ export default class RosVersion extends GithubAuthV4Service {
       namedParams: { distro: 'humble', packageName: 'vision_msgs' },
       staticPreview: {
         ...renderVersionBadge({ version: '4.0.0' }),
-        label: 'ros|humble',
+        label: 'ros | humble',
       },
     },
   ]
@@ -119,7 +119,7 @@ export default class RosVersion extends GithubAuthV4Service {
       packageName
     )
 
-    return { ...renderVersionBadge({ version }), label: `ros|${distro}` }
+    return { ...renderVersionBadge({ version }), label: `ros | ${distro}` }
   }
 
   static _parseReleaseVersionFromDistro(distroYaml, packageName) {
