@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import Joi from 'joi'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
@@ -51,7 +51,7 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
   static defaultBadgeData = { label: 'release date' }
 
   static render({ date }) {
-    const releaseDate = moment(date)
+    const releaseDate = dayjs(date)
     return {
       message: formatDate(releaseDate),
       color: age(releaseDate),
