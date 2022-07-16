@@ -2,10 +2,10 @@ import { isMetricOverTimePeriod } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Monthly Questions for StackOverflow Momentjs')
-  .get('/stackoverflow/qm/momentjs.json')
+t.create('Monthly Questions for StackOverflow dayjs')
+  .get('/stackoverflow/qm/dayjs.json')
   .expectBadge({
-    label: 'stackoverflow momentjs questions',
+    label: 'stackoverflow dayjs questions',
     message: isMetricOverTimePeriod,
   })
 
