@@ -71,6 +71,20 @@ class GithubRelease extends GithubAuthV3Service {
       documentation,
     },
     {
+      title: 'GitHub release (latest SemVer filter by prefix)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: {
+        sort: 'semver',
+        display_name: 'tag',
+        prefix: '4.16',
+      },
+      staticPreview: this.render({
+        version: 'v4.16.4',
+        sort: 'semver',
+      }),
+      documentation,
+    },
+    {
       title: 'GitHub release (release name instead of tag name)',
       namedParams: { user: 'gooddata', repo: 'gooddata-java' },
       queryParams: {

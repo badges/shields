@@ -60,6 +60,16 @@ class GithubTag extends GithubAuthV4Service {
       }),
       documentation,
     },
+    {
+      title: 'GitHub tag (latest SemVer filter by prefix)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { sort: 'semver', prefix: '4.16' },
+      staticPreview: this.render({
+        version: 'v4.16.4',
+        sort: 'semver',
+      }),
+      documentation,
+    },
   ]
 
   static defaultBadgeData = {
@@ -73,8 +83,8 @@ class GithubTag extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, repo, sort }) {
-    const limit = sort === 'semver' ? 100 : 1
+  async fetch({ user, repo, sort, prefix }) {
+    const limit = sort === 'semver' || prefix ? 100 : 1
     return this._requestGraphql({
       query: gql`
         query ($user: String!, $repo: String!, $limit: Int!) {
@@ -99,7 +109,13 @@ class GithubTag extends GithubAuthV4Service {
     })
   }
 
-  static getLatestTag({ tags, sort, includePrereleases }) {
+  static getLatestTag({ tags, sort, includePrereleases, prefix }) {
+    if (prefix) {
+      const tagsWithPrefix = tags.filter(tag => tag.startsWith(prefix))
+      if (tagsWithPrefix.length > 0) {
+        tags = tagsWithPrefix
+      }
+    }
     if (sort === 'semver') {
       return latest(tags, { pre: includePrereleases })
     }
@@ -109,8 +125,9 @@ class GithubTag extends GithubAuthV4Service {
   async handle({ user, repo }, queryParams) {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
+    const prefix = queryParams.prefix
 
-    const json = await this.fetch({ user, repo, sort })
+    const json = await this.fetch({ user, repo, sort, prefix })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0) {
       throw new NotFound({ prettyMessage: 'no tags found' })
@@ -120,6 +137,7 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
+        prefix,
       }),
       sort,
     })

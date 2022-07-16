@@ -46,7 +46,16 @@ async function fetchReleases(serviceInstance, { user, repo }) {
   return releases
 }
 
-function getLatestRelease({ releases, sort, includePrereleases }) {
+function getLatestRelease({ releases, sort, includePrereleases, prefix }) {
+  if (prefix) {
+    const releasesWithPrefix = releases.filter(release =>
+      release.tag_name.startsWith(prefix)
+    )
+    if (releasesWithPrefix.length > 0) {
+      releases = releasesWithPrefix
+    }
+  }
+
   if (sort === 'semver') {
     const latestTagName = latest(
       releases.map(release => release.tag_name),
@@ -68,6 +77,7 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
   sort: Joi.string().valid('date', 'semver').default('date'),
+  prefix: Joi.any(),
 }).required()
 
 // Fetch the latest release as defined by query params
@@ -78,8 +88,9 @@ async function fetchLatestRelease(
 ) {
   const sort = queryParams.sort
   const includePrereleases = queryParams.include_prereleases !== undefined
+  const prefix = queryParams.prefix
 
-  if (!includePrereleases && sort === 'date') {
+  if (!includePrereleases && sort === 'date' && !prefix) {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -91,7 +102,12 @@ async function fetchLatestRelease(
   if (releases.length === 0) {
     throw new NotFound({ prettyMessage: 'no releases' })
   }
-  const latestRelease = getLatestRelease({ releases, sort, includePrereleases })
+  const latestRelease = getLatestRelease({
+    releases,
+    sort,
+    includePrereleases,
+    prefix,
+  })
   return latestRelease
 }
 
