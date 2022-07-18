@@ -5,7 +5,7 @@
  * @module
  */
 
-import dayjs from 'dayjs'
+import moment from 'moment'
 import pep440 from '@renovate/pep440'
 
 /**
@@ -182,7 +182,7 @@ function colorScale(steps, colors, reversed) {
  */
 function age(date) {
   const colorByAge = colorScale([7, 30, 180, 365, 730], undefined, true)
-  const daysElapsed = dayjs().diff(dayjs(date), 'days')
+  const daysElapsed = moment().diff(moment(date), 'days')
   return colorByAge(daysElapsed)
 }
 

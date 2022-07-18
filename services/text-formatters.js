@@ -2,11 +2,8 @@
  * Commonly-used functions for formatting text in badge labels. Includes
  * ordinal numbers, currency codes, star ratings, versions, etc.
  */
-import dayjs from 'dayjs'
-import calendar from 'dayjs/plugin/calendar.js'
-import relativeTime from 'dayjs/plugin/relativeTime.js'
-dayjs.extend(calendar)
-dayjs.extend(relativeTime)
+import moment from 'moment'
+moment().format()
 
 function starRating(rating, max = 5) {
   const flooredRating = Math.floor(rating)
@@ -112,7 +109,7 @@ function maybePluralize(singular, countable, plural) {
 }
 
 function formatDate(d) {
-  const date = dayjs(d)
+  const date = moment(d)
   const dateString = date.calendar(null, {
     lastDay: '[yesterday]',
     sameDay: '[today]',
@@ -120,12 +117,12 @@ function formatDate(d) {
     sameElse: 'MMMM YYYY',
   })
   // Trim current year from date string
-  return dateString.replace(` ${dayjs().year()}`, '').toLowerCase()
+  return dateString.replace(` ${moment().year()}`, '').toLowerCase()
 }
 
 function formatRelativeDate(timestamp) {
-  return dayjs()
-    .to(dayjs.unix(parseInt(timestamp, 10)))
+  return moment()
+    .to(moment.unix(parseInt(timestamp, 10)))
     .toLowerCase()
 }
 

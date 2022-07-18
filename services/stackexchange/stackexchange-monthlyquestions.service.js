@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import moment from 'moment'
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
@@ -19,10 +19,10 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
   static examples = [
     {
       title: 'Stack Exchange monthly questions',
-      namedParams: { stackexchangesite: 'stackoverflow', query: 'dayjs' },
+      namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
       staticPreview: this.render({
         stackexchangesite: 'stackoverflow',
-        query: 'dayjs',
+        query: 'momentjs',
         numValue: 2000,
       }),
       keywords: ['stackexchange', 'stackoverflow'],
@@ -41,12 +41,12 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
   }
 
   async handle({ stackexchangesite, query }) {
-    const today = dayjs().toDate()
-    const prevMonthStart = dayjs(today)
+    const today = moment().toDate()
+    const prevMonthStart = moment(today)
       .subtract(1, 'months')
       .startOf('month')
       .unix()
-    const prevMonthEnd = dayjs(today)
+    const prevMonthEnd = moment(today)
       .subtract(1, 'months')
       .endOf('month')
       .unix()
