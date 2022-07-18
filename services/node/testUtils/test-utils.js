@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const dateFormat = 'YYYY-MM-DD'
 
@@ -67,7 +67,7 @@ const mockVersionsSha = () => nock => {
 }
 
 const mockReleaseSchedule = () => nock => {
-  const currentDate = moment()
+  const currentDate = dayjs()
   const schedule = {
     'v0.10': {
       start: '2013-03-11',
