@@ -19,6 +19,10 @@ describe('GreasyForkRatingCount', function () {
       message: '20 good, 10 ok, 0 bad',
       color: 'green',
     })
+    given({ good: 30, ok: 0, bad: 0 }).expect({
+      message: '30 good, 0 ok, 0 bad',
+      color: 'brightgreen',
+    })
     given({ good: 0, ok: 0, bad: 0 }).expect({
       message: '0 good, 0 ok, 0 bad',
       color: 'lightgrey',
