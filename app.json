@@ -37,10 +37,14 @@
       "required": false
     },
     "METRICS_INFLUX_ENABLED": {
-      "value": "0"
+      "description": "Disable influx metrics",
+      "value": "0",
+      "required": false
     },
     "REQUIRE_CLOUDFLARE": {
-      "value": "0"
+      "description": "Allow direct traffic",
+      "value": "0",
+      "required": false
     }
   },
   "formation": {
