@@ -149,6 +149,8 @@ jobs:
   main@node-17:
     docker:
       - image: cimg/node:17.9
+    environment:
+      NPM_CONFIG_ENGINE_STRICT: 'false'
 
     <<: *main_steps
 
@@ -163,6 +165,8 @@ jobs:
     docker:
       - image: cimg/node:17.9
       - image: redis
+    environment:
+      NPM_CONFIG_ENGINE_STRICT: 'false'
 
     <<: *integration_steps
 
@@ -239,6 +243,8 @@ jobs:
   services@node-17:
     docker:
       - image: cimg/node:17.9
+    environment:
+      NPM_CONFIG_ENGINE_STRICT: 'false'
 
     <<: *services_steps
 
