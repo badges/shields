@@ -35,6 +35,12 @@
     "WEBLATE_API_KEY": {
       "description": "Configure the API key to be used for the Weblate service.",
       "required": false
+    },
+    "METRICS_INFLUX_ENABLED": {
+      "value": "0"
+    },
+    "REQUIRE_CLOUDFLARE": {
+      "value": "0"
     }
   },
   "formation": {
