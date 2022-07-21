@@ -38,10 +38,6 @@ t.create('Release (repo not found)')
   .get('/v/release/badges/helmets.json')
   .expectBadge({ label: 'release', message: 'no releases or repo not found' })
 
-t.create('Release (filter by prefix)')
-  .get('/v/release/expressjs/express.json?prefix=4.16')
-  .expectBadge({ label: 'release', message: 'v4.16.4' })
-
 // redirects
 t.create('Release (legacy route: release)')
   .get('/release/photonstorm/phaser.svg')

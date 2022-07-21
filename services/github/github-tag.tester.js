@@ -28,10 +28,6 @@ t.create('Tag (repo not found)')
   .get('/v/tag/badges/helmets.json')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
-t.create('Tag (filter by prefix')
-  .get('/v/tag/expressjs/express.json?prefix=4.16')
-  .expectBadge({ label: 'tag', message: 'v4.16.4' })
-
 // redirects
 t.create('Tag (legacy route: tag)')
   .get('/tag/photonstorm/phaser.svg')
