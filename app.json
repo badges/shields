@@ -35,6 +35,16 @@
     "WEBLATE_API_KEY": {
       "description": "Configure the API key to be used for the Weblate service.",
       "required": false
+    },
+    "METRICS_INFLUX_ENABLED": {
+      "description": "Disable influx metrics",
+      "value": "false",
+      "required": false
+    },
+    "REQUIRE_CLOUDFLARE": {
+      "description": "Allow direct traffic",
+      "value": "false",
+      "required": false
     }
   },
   "formation": {
