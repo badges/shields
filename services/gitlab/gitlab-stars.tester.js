@@ -12,6 +12,15 @@ t.create('Stars')
     link: ['https://gitlab.com/gitlab-org/gitlab'],
   })
 
+t.create('Stars (self-managed)')
+  .get('/gitlab-cn/gitlab.json?gitlab_url=https://jihulab.com')
+  .expectBadge({
+    label: 'stars',
+    message: isMetric,
+    color: 'blue',
+    link: ['https://jihulab.com/gitlab-org/gitlab'],
+  })
+
 t.create('Stars (project not found)')
   .get('/user1/gitlab-does-not-have-this-repo.json')
   .expectBadge({
