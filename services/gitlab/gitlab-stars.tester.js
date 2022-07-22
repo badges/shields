@@ -18,7 +18,7 @@ t.create('Stars (self-managed)')
     label: 'stars',
     message: isMetric,
     color: 'blue',
-    link: ['https://jihulab.com/gitlab-org/gitlab'],
+    link: ['https://jihulab.com/gitlab-cn/gitlab'],
   })
 
 t.create('Stars (project not found)')
