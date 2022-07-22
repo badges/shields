@@ -12,6 +12,15 @@ t.create('Forks')
     link: ['https://gitlab.com/gitlab-org/gitlab/-/forks/new'],
   })
 
+t.create('Forks (self-managed)')
+  .get('/gitlab-cn/gitlab.json?gitlab_url=https://jihulab.com')
+  .expectBadge({
+    label: 'forks',
+    message: isMetric,
+    color: 'blue',
+    link: ['https://jihulab.com/gitlab-cn/gitlab/-/forks/new'],
+  })
+
 t.create('Forks (project not found)')
   .get('/user1/gitlab-does-not-have-this-repo.json')
   .expectBadge({
