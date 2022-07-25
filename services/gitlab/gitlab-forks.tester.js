@@ -9,7 +9,10 @@ t.create('Forks')
     label: 'forks',
     message: isMetric,
     color: 'blue',
-    link: ['https://gitlab.com/gitlab-org/gitlab/-/forks/new'],
+    link: [
+      'https://gitlab.com/gitlab-org/gitlab/-/forks/new',
+      'https://gitlab.com/gitlab-org/gitlab',
+    ],
   })
 
 t.create('Forks (self-managed)')
@@ -18,7 +21,10 @@ t.create('Forks (self-managed)')
     label: 'forks',
     message: isMetric,
     color: 'blue',
-    link: ['https://jihulab.com/gitlab-cn/gitlab/-/forks/new'],
+    link: [
+      'https://jihulab.com/gitlab-cn/gitlab/-/forks/new',
+      'https://jihulab.com/gitlab-cn/gitlab',
+    ],
   })
 
 t.create('Forks (project not found)')
