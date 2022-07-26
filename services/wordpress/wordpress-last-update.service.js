@@ -1,14 +1,16 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import { InvalidResponse } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import { documentation, BaseWordpress } from './wordpress-base.js'
+dayjs.extend(customParseFormat)
 
 const extensionData = {
   plugin: {
     capt: 'Plugin',
     exampleSlug: 'bbpress',
-    lastUpdateFormat: 'YYYY-MM-DD hh:mma GMT',
+    lastUpdateFormat: 'YYYY-MM-DD hh:mma [GMT]',
   },
   theme: {
     capt: 'Theme',
@@ -50,7 +52,7 @@ function LastUpdateForType(extensionType) {
     }
 
     transform(lastUpdate) {
-      const date = moment(lastUpdate, lastUpdateFormat)
+      const date = dayjs(lastUpdate, lastUpdateFormat)
 
       if (date.isValid()) {
         return date.format('YYYY-MM-DD')
