@@ -9,18 +9,16 @@ const schema = Joi.object({
     license: Joi.string().allow('').allow(null),
     classifiers: Joi.array().items(Joi.string()).required(),
   }).required(),
-  releases: Joi.object()
-    .pattern(
-      Joi.string(),
-      Joi.array()
-        .items(
-          Joi.object({
-            packagetype: Joi.string().required(),
-          })
-        )
-        .required()
-    )
-    .required(),
+  releases: Joi.object().pattern(
+    Joi.string(),
+    Joi.array()
+      .items(
+        Joi.object({
+          packagetype: Joi.string().required(),
+        })
+      )
+      .required()
+  ),
 }).required()
 
 export default class PypiBase extends BaseJsonService {
