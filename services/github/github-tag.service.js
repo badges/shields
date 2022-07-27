@@ -63,10 +63,9 @@ class GithubTag extends GithubAuthV4Service {
     {
       title: 'GitHub tag (latest SemVer filter by prefix)',
       namedParams: { user: 'ros', repo: 'rosdistro' },
-      queryParams: { sort: 'semver', prefix: 'humble/' },
+      queryParams: { prefix: 'galactic' },
       staticPreview: this.render({
         version: '2022-07-15',
-        sort: 'semver',
       }),
       documentation,
     },
@@ -121,13 +120,7 @@ class GithubTag extends GithubAuthV4Service {
     })
   }
 
-  static getLatestTag({ tags, sort, includePrereleases, prefix }) {
-    if (prefix) {
-      const tagsWithPrefix = tags.filter(tag => tag.startsWith(prefix))
-      if (tagsWithPrefix.length > 0) {
-        tags = tagsWithPrefix
-      }
-    }
+  static getLatestTag({ tags, sort, includePrereleases }) {
     if (sort === 'semver') {
       return latest(tags, { pre: includePrereleases })
     }
@@ -149,7 +142,6 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
-        prefix,
       }),
       sort,
     })

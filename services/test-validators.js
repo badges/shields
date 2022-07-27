@@ -155,7 +155,7 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
-const isKababYearMonthDay = Joi.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+const isKebabYearMonthDay = Joi.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 
 export {
   isSemver,
@@ -189,5 +189,5 @@ export {
   isCustomCompactTestTotals,
   makeTestTotalsValidator,
   makeCompactTestTotalsValidator,
-  isKababYearMonthDay,
+  isKebabYearMonthDay,
 }

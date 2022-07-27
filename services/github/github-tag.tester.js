@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { isSemver, isKababYearMonthDay } from '../test-validators.js'
+import { isSemver, isKebabYearMonthDay } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
@@ -29,8 +29,8 @@ t.create('Tag (repo not found)')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
 t.create('Tag (filter by prefix')
-  .get('/v/tag/ros/rosdistro.json?prefix=galactic/')
-  .expectBadge({ label: 'tag', message: isKababYearMonthDay })
+  .get('/v/tag/ros/rosdistro.json?prefix=galactic')
+  .expectBadge({ label: 'tag', message: isKebabYearMonthDay })
 
 // redirects
 t.create('Tag (legacy route: tag)')
