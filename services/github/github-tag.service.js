@@ -62,10 +62,10 @@ class GithubTag extends GithubAuthV4Service {
     },
     {
       title: 'GitHub tag (latest SemVer filter by prefix)',
-      namedParams: { user: 'expressjs', repo: 'express' },
-      queryParams: { sort: 'semver', prefix: '4.16' },
+      namedParams: { user: 'ros', repo: 'rosdistro' },
+      queryParams: { sort: 'semver', prefix: 'humble/' },
       staticPreview: this.render({
-        version: 'v4.16.4',
+        version: '2022-07-15',
         sort: 'semver',
       }),
       documentation,
@@ -84,13 +84,25 @@ class GithubTag extends GithubAuthV4Service {
   }
 
   async fetch({ user, repo, sort, prefix }) {
-    const limit = sort === 'semver' || prefix ? 100 : 1
+    const limit = sort === 'semver' ? 100 : 1
+
+    let refPrefix = 'refs/tags/'
+    if (prefix) {
+      if (!prefix.endsWith('/')) prefix += '/'
+      refPrefix += prefix
+    }
+
     return this._requestGraphql({
       query: gql`
-        query ($user: String!, $repo: String!, $limit: Int!) {
+        query (
+          $user: String!
+          $repo: String!
+          $limit: Int!
+          $refPrefix: String!
+        ) {
           repository(owner: $user, name: $repo) {
             refs(
-              refPrefix: "refs/tags/"
+              refPrefix: $refPrefix
               first: $limit
               orderBy: { field: TAG_COMMIT_DATE, direction: DESC }
             ) {
@@ -103,7 +115,7 @@ class GithubTag extends GithubAuthV4Service {
           }
         }
       `,
-      variables: { user, repo, limit },
+      variables: { user, repo, limit, refPrefix },
       schema,
       transformErrors,
     })

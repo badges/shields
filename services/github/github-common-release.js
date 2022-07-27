@@ -46,16 +46,7 @@ async function fetchReleases(serviceInstance, { user, repo }) {
   return releases
 }
 
-function getLatestRelease({ releases, sort, includePrereleases, prefix }) {
-  if (prefix) {
-    const releasesWithPrefix = releases.filter(release =>
-      release.tag_name.startsWith(prefix)
-    )
-    if (releasesWithPrefix.length > 0) {
-      releases = releasesWithPrefix
-    }
-  }
-
+function getLatestRelease({ releases, sort, includePrereleases }) {
   if (sort === 'semver') {
     const latestTagName = latest(
       releases.map(release => release.tag_name),
@@ -88,9 +79,8 @@ async function fetchLatestRelease(
 ) {
   const sort = queryParams.sort
   const includePrereleases = queryParams.include_prereleases !== undefined
-  const prefix = queryParams.prefix
 
-  if (!includePrereleases && sort === 'date' && !prefix) {
+  if (!includePrereleases && sort === 'date') {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -102,12 +92,7 @@ async function fetchLatestRelease(
   if (releases.length === 0) {
     throw new NotFound({ prettyMessage: 'no releases' })
   }
-  const latestRelease = getLatestRelease({
-    releases,
-    sort,
-    includePrereleases,
-    prefix,
-  })
+  const latestRelease = getLatestRelease({ releases, sort, includePrereleases })
   return latestRelease
 }
 

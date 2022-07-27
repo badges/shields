@@ -5,7 +5,6 @@ describe('GithubTag', function () {
   test(GithubTag.getLatestTag, () => {
     const tagFixture = [
       'cheese', // any old string
-      'example/v1.1', // prefix release
       'v1.2', // semver release
       'v1.3-beta3', // semver pre-release
     ]
@@ -42,19 +41,6 @@ describe('GithubTag', function () {
       sort: 'date',
       includePrereleases: false,
     }).expect('1.2.0-beta')
-
-    given({
-      tags: tagFixture,
-      sort: 'date',
-      prefix: 'example',
-      includePrereleases: false,
-    }).expect('example/v1.1')
-    given({
-      tags: tagFixture,
-      sort: 'semver',
-      prefix: 'example',
-      includePrereleases: false,
-    }).expect('example/v1.1')
   })
 
   test(GithubTag.render, () => {
