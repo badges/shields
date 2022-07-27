@@ -88,16 +88,12 @@ function getLicenses(packageData) {
 }
 
 function getPackageFormats(packageData) {
-  const {
-    info: { version },
-    releases,
-  } = packageData
-  const releasesForVersion = releases[version]
+  const { urls } = packageData
   return {
-    hasWheel: releasesForVersion.some(({ packagetype }) =>
+    hasWheel: urls.some(({ packagetype }) =>
       ['wheel', 'bdist_wheel'].includes(packagetype)
     ),
-    hasEgg: releasesForVersion.some(({ packagetype }) =>
+    hasEgg: urls.some(({ packagetype }) =>
       ['egg', 'bdist_egg'].includes(packagetype)
     ),
   }
