@@ -61,11 +61,11 @@ class GithubTag extends GithubAuthV4Service {
       documentation,
     },
     {
-      title: 'GitHub tag (latest SemVer filter by prefix)',
+      title: 'GitHub tag (latest filter by prefix)',
       namedParams: { user: 'ros', repo: 'rosdistro' },
       queryParams: { prefix: 'galactic' },
       staticPreview: this.render({
-        version: '2022-07-15',
+        version: '2022-06-24',
       }),
       documentation,
     },
