@@ -11,7 +11,7 @@ t.create('Forks')
     color: 'blue',
     link: [
       'https://gitlab.com/gitlab-org/gitlab/-/forks/new',
-      'https://gitlab.com/gitlab-org/gitlab',
+      'https://gitlab.com/gitlab-org/gitlab/-/forks',
     ],
   })
 
@@ -23,7 +23,7 @@ t.create('Forks (self-managed)')
     color: 'blue',
     link: [
       'https://jihulab.com/gitlab-cn/gitlab/-/forks/new',
-      'https://jihulab.com/gitlab-cn/gitlab',
+      'https://jihulab.com/gitlab-cn/gitlab/-/forks',
     ],
   })
 

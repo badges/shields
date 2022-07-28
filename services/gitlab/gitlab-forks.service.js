@@ -49,7 +49,10 @@ export default class GitlabForks extends GitLabBase {
     return {
       message: metric(forkCount),
       color: 'blue',
-      link: [`${baseUrl}/${project}/-/forks/new`, `${baseUrl}/${project}`],
+      link: [
+        `${baseUrl}/${project}/-/forks/new`,
+        `${baseUrl}/${project}/-/forks`,
+      ],
     }
   }
 
