@@ -9,6 +9,7 @@ const orderedInstallableRevisionsSchema = Joi.array()
 const repositoryRevisionInstallInfoSchema = Joi.array()
   .ordered(
     Joi.object({
+      create_time: Joi.date().required(),
       times_downloaded: nonNegativeInteger,
     }).required()
   )

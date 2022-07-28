@@ -31,7 +31,7 @@ export default class CondaVersion extends BaseCondaService {
 
   static render({ variant, channel, version }) {
     return {
-      label: variant === 'vn' ? channel : `conda|${channel}`,
+      label: variant === 'vn' ? channel : `conda | ${channel}`,
       message: versionText(version),
       color: versionColor(version),
     }
