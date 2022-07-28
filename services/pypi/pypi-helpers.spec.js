@@ -164,34 +164,17 @@ describe('PyPI helpers', function () {
 
   test(getPackageFormats, () => {
     given({
-      info: { version: '2.19.1' },
-      releases: {
-        '1.0.4': [{ packagetype: 'sdist' }],
-        '2.19.1': [{ packagetype: 'bdist_wheel' }, { packagetype: 'sdist' }],
-      },
+      urls: [{ packagetype: 'bdist_wheel' }, { packagetype: 'sdist' }],
     }).expect({ hasWheel: true, hasEgg: false })
     given({
-      info: { version: '1.0.4' },
-      releases: {
-        '1.0.4': [{ packagetype: 'sdist' }],
-        '2.19.1': [{ packagetype: 'bdist_wheel' }, { packagetype: 'sdist' }],
-      },
+      urls: [{ packagetype: 'sdist' }],
     }).expect({ hasWheel: false, hasEgg: false })
     given({
-      info: { version: '0.8.2' },
-      releases: {
-        0.8: [{ packagetype: 'sdist' }],
-        '0.8.1': [
-          { packagetype: 'bdist_egg' },
-          { packagetype: 'bdist_egg' },
-          { packagetype: 'sdist' },
-        ],
-        '0.8.2': [
-          { packagetype: 'bdist_egg' },
-          { packagetype: 'bdist_egg' },
-          { packagetype: 'sdist' },
-        ],
-      },
+      urls: [
+        { packagetype: 'bdist_egg' },
+        { packagetype: 'bdist_egg' },
+        { packagetype: 'sdist' },
+      ],
     }).expect({ hasWheel: false, hasEgg: true })
   })
 })
