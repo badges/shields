@@ -60,7 +60,7 @@ export default class GithubSize extends GithubAuthV3Service {
     }
   }
 
-  async fetch({ user, repo, path, branch = 'master' }) {
+  async fetch({ user, repo, path, branch }) {
     return this._requestJson({
       url: `/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
       schema,
@@ -69,7 +69,10 @@ export default class GithubSize extends GithubAuthV3Service {
   }
 
   async handle({ user, repo, path }, queryParams) {
-    const branch = queryParams.branch
+    let branch = queryParams.branch
+    if (!branch) {
+      branch = 'master'
+    }
     const body = await this.fetch({ user, repo, path, branch })
     if (Array.isArray(body)) {
       throw new NotFound({ prettyMessage: 'not a regular file' })
