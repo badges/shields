@@ -62,8 +62,17 @@ class GithubTag extends GithubAuthV4Service {
     },
     {
       title: 'GitHub tag (latest filter by prefix)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: { prefix: '4.16' },
+      staticPreview: this.render({
+        version: 'v4.16.4',
+      }),
+      documentation,
+    },
+    {
+      title: 'GitHub tag (latest filter by subpackage)',
       namedParams: { user: 'ros', repo: 'rosdistro' },
-      queryParams: { prefix: 'galactic' },
+      queryParams: { subpackage: 'galactic' },
       staticPreview: this.render({
         version: '2022-06-24',
       }),
@@ -82,13 +91,13 @@ class GithubTag extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, repo, sort, prefix }) {
-    const limit = sort === 'semver' ? 100 : 1
+  async fetch({ user, repo, sort, prefix, subpackage }) {
+    const limit = sort === 'semver' || prefix ? 100 : 1
 
     let refPrefix = 'refs/tags/'
-    if (prefix) {
-      if (!prefix.endsWith('/')) prefix += '/'
-      refPrefix += prefix
+    if (subpackage) {
+      if (!subpackage.endsWith('/')) subpackage += '/'
+      refPrefix += subpackage
     }
 
     return this._requestGraphql({
@@ -120,7 +129,13 @@ class GithubTag extends GithubAuthV4Service {
     })
   }
 
-  static getLatestTag({ tags, sort, includePrereleases }) {
+  static getLatestTag({ tags, sort, includePrereleases, prefix }) {
+    if (prefix) {
+      const tagsWithPrefix = tags.filter(tag => tag.startsWith(prefix))
+      if (tagsWithPrefix.length > 0) {
+        tags = tagsWithPrefix
+      }
+    }
     if (sort === 'semver') {
       return latest(tags, { pre: includePrereleases })
     }
@@ -131,8 +146,9 @@ class GithubTag extends GithubAuthV4Service {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
     const prefix = queryParams.prefix
+    const subpackage = queryParams.subpackage
 
-    const json = await this.fetch({ user, repo, sort, prefix })
+    const json = await this.fetch({ user, repo, sort, prefix, subpackage })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0) {
       throw new NotFound({ prettyMessage: 'no tags found' })
@@ -142,6 +158,7 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
+        prefix,
       }),
       sort,
     })

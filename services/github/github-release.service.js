@@ -85,6 +85,17 @@ class GithubRelease extends GithubAuthV3Service {
       }),
       documentation,
     },
+    {
+      title: 'GitHub release (latest filter by prefix)',
+      namedParams: { user: 'expressjs', repo: 'express' },
+      queryParams: {
+        prefix: '4.16',
+      },
+      staticPreview: this.render({
+        version: 'v4.16.4',
+      }),
+      documentation,
+    },
   ]
 
   static defaultBadgeData = { label: 'release', namedLogo: 'github' }

@@ -29,7 +29,7 @@ t.create('Tag (repo not found)')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
 t.create('Tag (filter by prefix')
-  .get('/v/tag/ros/rosdistro.json?prefix=galactic')
+  .get('/v/tag/ros/rosdistro.json?subpackage=galactic')
   .expectBadge({ label: 'tag', message: isKebabYearMonthDay })
 
 // redirects

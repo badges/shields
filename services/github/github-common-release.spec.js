@@ -6,6 +6,7 @@ describe('GithubRelease', function () {
     const releaseFixture = [
       { tag_name: 'cheese', prerelease: false }, // any old string
       { tag_name: 'v1.2', prerelease: false }, // semver release
+      { tag_name: 'example/v1.1', prerelease: false }, // prefix release
       { tag_name: 'v1.3-beta3', prerelease: true }, // semver pre-release
     ]
     given({
@@ -28,6 +29,18 @@ describe('GithubRelease', function () {
       sort: 'date',
       includePrereleases: false,
     }).expect({ tag_name: 'cheese', prerelease: false })
+    given({
+      releases: releaseFixture,
+      sort: 'date',
+      prefix: 'example',
+      includePrereleases: true,
+    }).expect({ tag_name: 'example/v1.1', prerelease: false })
+    given({
+      releases: releaseFixture,
+      sort: 'semver',
+      prefix: 'example',
+      includePrereleases: false,
+    }).expect({ tag_name: 'example/v1.1', prerelease: false })
 
     // if there are only pre-releases to choose from
     // return a pre-release anyway in preference to nothing
