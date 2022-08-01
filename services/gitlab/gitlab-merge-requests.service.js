@@ -3,7 +3,8 @@ import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import GitLabBase from './gitlab-base.js'
 
-// check schema for the response of the GitLab API
+// The total number of MR is in the `x-total` field in the headers.
+// https://docs.gitlab.com/ee/api/index.html#other-pagination-headers
 const schema = Joi.object({
   'x-total': Joi.number().integer(),
   'x-page': nonNegativeInteger,
@@ -290,20 +291,11 @@ export default class GitlabMergeRequests extends GitLabBase {
     return {
       label: `${labelPrefix}${labelText}merge requests`,
       message,
-      color: mergeRequestCount > 0 ? 'brightgreen' : 'yellow',
+      color: mergeRequestCount > 0 ? 'brightgreen' : 'blue',
     }
   }
 
   async fetch({ project, baseUrl, variant, labels }) {
-    let state = variant
-    if (state === 'open') {
-      state = 'opened'
-    }
-    const labelsParam = labels
-      ? {
-          labels,
-        }
-      : {}
     // https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
     const { res } = await this._request(
       this.authHelper.withBearerAuthHeader({
@@ -312,10 +304,10 @@ export default class GitlabMergeRequests extends GitLabBase {
         )}/merge_requests`,
         options: {
           searchParams: {
-            state,
+            state: variant === 'open' ? 'opened' : variant,
             page: '1',
             per_page: '1',
-            ...labelsParam,
+            labels,
           },
         },
         errorMessages: {
@@ -323,32 +315,31 @@ export default class GitlabMergeRequests extends GitLabBase {
         },
       })
     )
-    const data = this.constructor._validate(res.headers, schema)
-    let mergeRequestCount
+    return this.constructor._validate(res.headers, schema)
+  }
+
+  static transform(data) {
     if (data['x-total'] !== undefined) {
-      mergeRequestCount = data['x-total']
+      return data['x-total']
     } else {
       // https://docs.gitlab.com/ee/api/index.html#pagination-response-headers
       // For performance reasons, if a query returns more than 10,000 records, GitLab doesn’t return `x-total` header.
       // Displayed on the page as "more than 10k".
-      mergeRequestCount = 10001
+      return 10001
     }
-
-    // The total number of MR is in the `x-total` field in the headers.
-    // https://docs.gitlab.com/ee/api/index.html#other-pagination-headers
-    return { mergeRequestCount }
   }
 
   async handle(
     { variant, raw, project },
     { gitlab_url: baseUrl = 'https://gitlab.com', labels }
   ) {
-    const { mergeRequestCount } = await this.fetch({
+    const data = await this.fetch({
       project,
       baseUrl,
       variant,
       labels,
     })
+    const mergeRequestCount = this.constructor.transform(data)
     return this.constructor.render({
       variant,
       raw,

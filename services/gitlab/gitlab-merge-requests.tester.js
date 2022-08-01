@@ -1,6 +1,10 @@
 import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
-import { isMetric, isMetricOpenIssues } from '../test-validators.js'
+import {
+  isMetric,
+  isMetricOpenIssues,
+  isMetricClosedIssues,
+} from '../test-validators.js'
 
 export const t = await createServiceTester()
 
@@ -55,9 +59,7 @@ t.create('Opened merge requests by Scoped labels')
   .get('/open/gitlab-org%2Fgitlab.json?labels=test,failure::new')
   .expectBadge({
     label: 'test,failure::new merge requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) open$/
-    ),
+    message: Joi.alternatives(isMetricOpenIssues, Joi.equal('0 open')),
   })
 
 /**
@@ -67,9 +69,7 @@ t.create('Closed merge requests')
   .get('/closed/guoxudong.io/shields-test/issue-test.json')
   .expectBadge({
     label: 'merge requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/
-    ),
+    message: isMetricClosedIssues,
   })
 
 t.create('Closed merge requests raw')
@@ -83,18 +83,14 @@ t.create('Closed merge requests by label is > zero')
   .get('/closed/guoxudong.io/shields-test/issue-test.json?labels=bug')
   .expectBadge({
     label: 'bug merge requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/
-    ),
+    message: Joi.alternatives(isMetricClosedIssues, Joi.equal('0 closed')),
   })
 
 t.create('Closed merge requests by  multi-word label is > zero')
   .get('/closed/guoxudong.io/shields-test/issue-test.json?labels=bug,critical')
   .expectBadge({
     label: 'bug,critical merge requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/
-    ),
+    message: Joi.alternatives(isMetricClosedIssues, Joi.equal('0 closed')),
   })
 
 t.create('Closed merge requests by label (raw)')
