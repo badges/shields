@@ -7,6 +7,6 @@ export default redirector({
     pattern: ':packageName*',
   },
   transformPath: ({ packageName }) =>
-    `/pypi/frameworkversions/Django/${packageName}`,
+    `/pypi/frameworkversions/django/${packageName}`,
   dateAdded: new Date('2022-07-28'),
 })
