@@ -61,18 +61,23 @@ export default class GithubSize extends GithubAuthV3Service {
   }
 
   async fetch({ user, repo, path, branch }) {
-    return this._requestJson({
-      url: `/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
-      schema,
-      errorMessages: errorMessagesFor('repo, branch or file not found'),
-    })
+    if (branch) {
+      return this._requestJson({
+        url: `/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
+        schema,
+        errorMessages: errorMessagesFor('repo, branch or file not found'),
+      })
+    } else {
+      return this._requestJson({
+        url: `/repos/${user}/${repo}/contents/${path}`,
+        schema,
+        errorMessages: errorMessagesFor('repo or file not found'),
+      })
+    }
   }
 
   async handle({ user, repo, path }, queryParams) {
-    let branch = queryParams.branch
-    if (!branch) {
-      branch = 'master'
-    }
+    const branch = queryParams.branch
     const body = await this.fetch({ user, repo, path, branch })
     if (Array.isArray(body)) {
       throw new NotFound({ prettyMessage: 'not a regular file' })

@@ -8,7 +8,7 @@ t.create('File size')
 
 t.create('File size 404')
   .get('/webcaetano/craft/build/does-not-exist.min.js.json')
-  .expectBadge({ label: 'size', message: 'repo, branch or file not found' })
+  .expectBadge({ label: 'size', message: 'repo or file not found' })
 
 t.create('File size for nonexisting branch')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json?branch=notARealBranch')
