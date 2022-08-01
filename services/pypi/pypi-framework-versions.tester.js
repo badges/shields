@@ -86,21 +86,21 @@ t.create('supported wagtail versions (invalid)')
   })
 
 t.create('supported django cms versions (valid, package version in request)')
-  .get('/djangocms/djangocms-ads/1.1.0.json')
+  .get('/django-cms/djangocms-ads/1.1.0.json')
   .expectBadge({
     label: 'django cms versions',
     message: '3.7 | 3.8 | 3.9 | 3.10',
   })
 
 t.create('supported django cms versions (valid, no package version specified)')
-  .get('/djangocms/djangocms-ads.json')
+  .get('/django-cms/djangocms-ads.json')
   .expectBadge({
     label: 'django cms versions',
     message: isPipeSeparatedFrameworkVersions,
   })
 
 t.create('supported django cms versions (invalid)')
-  .get('/djangocms/not-a-package.json')
+  .get('/django-cms/not-a-package.json')
   .expectBadge({
     label: 'versions',
     message: 'package or version not found',
@@ -125,18 +125,18 @@ t.create('supported odoo versions (invalid)')
   })
 
 t.create('supported aws cdk versions (valid, package version in request)')
-  .get('/awscdk/aws-cdk.aws-glue-alpha/2.34.0a0.json')
+  .get('/aws-cdk/aws-cdk.aws-glue-alpha/2.34.0a0.json')
   .expectBadge({ label: 'aws cdk versions', message: '2' })
 
 t.create('supported aws cdk versions (valid, no package version specified)')
-  .get('/awscdk/aws-cdk.aws-glue-alpha.json')
+  .get('/aws-cdk/aws-cdk.aws-glue-alpha.json')
   .expectBadge({
     label: 'aws cdk versions',
     message: isPipeSeparatedFrameworkVersions,
   })
 
 t.create('supported aws cdk versions (invalid)')
-  .get('/awscdk/not-a-package.json')
+  .get('/aws-cdk/not-a-package.json')
   .expectBadge({
     label: 'versions',
     message: 'package or version not found',

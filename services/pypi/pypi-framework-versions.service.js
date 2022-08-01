@@ -1,22 +1,8 @@
 import PypiBase from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
-const documentation = `
-<p>
-  This service currently support the following Frameworks: <br/>
-  <strong>AWS CDK</strong>,
-  <strong>Django</strong>,
-  <strong>Django CMS</strong>,
-  <strong>JupyterLab</strong>,
-  <strong>Odoo</strong>,
-  <strong>Plone</strong>,
-  <strong>Wagtail</strong>,
-  <strong>Zope</strong>.
-</p>
-`
-
 const frameworkNameMap = {
-  awscdk: {
+  'aws-cdk': {
     name: 'AWS CDK',
     classifier: 'AWS CDK',
   },
@@ -24,7 +10,7 @@ const frameworkNameMap = {
     name: 'Django',
     classifier: 'Django',
   },
-  djangocms: {
+  'django-cms': {
     name: 'Django CMS',
     classifier: 'Django CMS',
   },
@@ -50,13 +36,20 @@ const frameworkNameMap = {
   },
 }
 
+const documentation = `
+<p>
+  This service currently support the following Frameworks: <br/>
+  ${Object.values(frameworkNameMap).map(obj => `<strong>${obj.name}</strong>`)}
+</p>
+`
 export default class PypiFrameworkVersion extends PypiBase {
   static category = 'platform-support'
 
   static route = {
     base: 'pypi/frameworkversions',
-    pattern:
-      ':frameworkName(awscdk|django|djangocms|jupyterlab|odoo|plone|wagtail|zope)/:packageName*',
+    pattern: `:frameworkName(${Object.keys(frameworkNameMap).join(
+      '|'
+    )})/:packageName*`,
   }
 
   static examples = [
