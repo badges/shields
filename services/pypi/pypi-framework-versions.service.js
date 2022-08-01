@@ -54,7 +54,7 @@ export default class PypiFrameworkVersion extends PypiBase {
 
   static examples = [
     {
-      title: 'PyPI - Framework Version',
+      title: 'PyPI - Versions from Framework Classifiers',
       namedParams: {
         frameworkName: 'Plone',
         packageName: 'plone.volto',
