@@ -22,7 +22,10 @@ t.create('supported django versions (valid, no package version specified)')
 
 t.create('supported django versions (no versions specified)')
   .get('/django/django/1.11.json')
-  .expectBadge({ label: 'django versions', message: 'missing' })
+  .expectBadge({
+    label: 'versions',
+    message: 'Django versions are missing for django/1.11',
+  })
 
 t.create('supported django versions (invalid)')
   .get('/django/not-a-package.json')

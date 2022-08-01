@@ -1,3 +1,4 @@
+import { InvalidResponse } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
@@ -73,18 +74,10 @@ export default class PypiFrameworkVersion extends PypiBase {
   static render({ name, versions }) {
     name = name ? name.toLowerCase() : ''
     const label = `${name} versions`
-    if (versions.length > 0) {
-      return {
-        label,
-        message: sortPypiVersions(versions).join(' | '),
-        color: 'blue',
-      }
-    } else {
-      return {
-        label,
-        message: 'missing',
-        color: 'red',
-      }
+    return {
+      label,
+      message: sortPypiVersions(versions).join(' | '),
+      color: 'blue',
     }
   }
 
@@ -98,6 +91,12 @@ export default class PypiFrameworkVersion extends PypiBase {
     const regex = new RegExp(`^Framework :: ${classifier} :: ([\\d.]+)$`)
     const packageData = await this.fetch({ egg: packageName })
     const versions = parseClassifiers(packageData, regex)
+
+    if (versions.length === 0) {
+      throw new InvalidResponse({
+        prettyMessage: `${name} versions are missing for ${packageName}`,
+      })
+    }
 
     return this.constructor.render({ name, versions })
   }
