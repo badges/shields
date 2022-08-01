@@ -67,7 +67,7 @@ export default class PypiFrameworkVersion extends PypiBase {
         packageName: 'plone.volto',
       },
       staticPreview: this.render({
-        frameworkName: 'Plone',
+        name: 'Plone',
         versions: ['5.2', '6.0'],
       }),
       keywords: ['python'],
