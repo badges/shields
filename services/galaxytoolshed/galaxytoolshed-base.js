@@ -20,15 +20,15 @@ const repositoryRevisionInstallInfoSchema = Joi.array()
             requirements: Joi.array()
               .ordered(
                 Joi.object({
-                  name: Joi.string().required(),
+                  name: Joi.string(),
                   version: semver,
-                }).required()
+                })
               )
               .items(Joi.any()),
-            id: Joi.string().required(),
-            name: Joi.string().required(),
+            id: Joi.string(),
+            name: Joi.string(),
             version: semver,
-          }).required()
+          })
         )
         .items(Joi.any()),
     }).required()
