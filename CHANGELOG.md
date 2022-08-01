@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-08-01
+
+- feat: add [GitlabForks] server [#8208](https://github.com/badges/shields/issues/8208)
+- Update PyPI api according to https://warehouse.pypa.io/api-reference/json.html [#8251](https://github.com/badges/shields/issues/8251)
+- Add [galaxytoolshed] Activity [#8164](https://github.com/badges/shields/issues/8164)
+- Fix wording in code-walkthrough.md [#8240](https://github.com/badges/shields/issues/8240)
+- Fix typo in service-tests.md [#8239](https://github.com/badges/shields/issues/8239)
+- [greasyfork] Add Greasy Fork rating badges [#8087](https://github.com/badges/shields/issues/8087)
+- Fix heroku review apps (sort of) [#8213](https://github.com/badges/shields/issues/8213)
+- Fix missing `dayjs` -> `moment` [#8204](https://github.com/badges/shields/issues/8204)
+- refactor(deps): Replace moment with dayjs [#8192](https://github.com/badges/shields/issues/8192)
+- add spaces round pipe in [conda] badge [#8189](https://github.com/badges/shields/issues/8189)
+- Add [ROS] version service [#8169](https://github.com/badges/shields/issues/8169)
+- feat: add [gitlabissues] service [#8108](https://github.com/badges/shields/issues/8108)
+- add docs on nouns in route [#8141](https://github.com/badges/shields/issues/8141)
+- Dependency updates
+
 ## server-2022-07-03
 
 - Add [galaxytoolshed] services [#8114](https://github.com/badges/shields/issues/8114)
