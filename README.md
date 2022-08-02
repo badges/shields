@@ -22,6 +22,8 @@
     <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
         <img src="https://img.shields.io/lgtm/alerts/g/badges/shields"
             alt="Total alerts"/></a>
+    <a href="https://api.securityscorecards.dev/projects/github.com/badges/shields">
+        <img src="https://api.securityscorecards.dev/projects/github.com/badges/shields/badge" /></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
