@@ -34,10 +34,11 @@ const contentSchema = Joi.object({
 const distroSchema = Joi.object({
   repositories: Joi.object().required(),
 })
-const packageSchema = Joi.object({
+const repoSchema = Joi.object({
   release: Joi.object({
-    version: Joi.string().required(),
-  }).required(),
+    version: Joi.string().optional(),
+    packages: Joi.array().items(Joi.string()).optional(),
+  }).optional(),
 })
 
 export default class RosVersion extends GithubAuthV4Service {
@@ -136,19 +137,32 @@ export default class RosVersion extends GithubAuthV4Service {
     const validatedDistro = this._validate(distro, distroSchema, {
       prettyErrorMessage: 'invalid distribution.yml',
     })
-    if (!validatedDistro.repositories[packageName]) {
-      throw new NotFound({ prettyMessage: `package not found: ${packageName}` })
+
+    for (const [repoName, repo] of Object.entries(
+      validatedDistro.repositories
+    )) {
+      const validatedRepo = this._validate(repo, repoSchema, {
+        prettyErrorMessage: `invalid section for ${repoName} in distribution.yml`,
+      })
+      if (!validatedRepo?.release) {
+        continue
+      }
+      // "If no package is specified, one package with the name of the repository is assumed."
+      // https://www.ros.org/reps/rep-0141.html
+      for (const pkg of validatedRepo.release.packages ?? [repoName]) {
+        if (pkg !== packageName) {
+          continue
+        }
+        if (!validatedRepo.release.version) {
+          throw new NotFound({
+            prettyMessage: `unknown release version for: ${packageName}`,
+          })
+        }
+        // Strip off "release inc" suffix
+        return repo.release.version.replace(/-\d+$/, '')
+      }
     }
 
-    const packageInfo = this._validate(
-      validatedDistro.repositories[packageName],
-      packageSchema,
-      {
-        prettyErrorMessage: `invalid section for ${packageName} in distribution.yml`,
-      }
-    )
-
-    // Strip off "release inc" suffix
-    return packageInfo.release.version.replace(/-\d+$/, '')
+    throw new NotFound({ prettyMessage: `package not found: ${packageName}` })
   }
 }
