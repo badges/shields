@@ -3,10 +3,10 @@ on:
   push:
     # Only the default branch is supported.
     branches:
-    - master
+      - master
   schedule:
     # Weekly on Saturdays.
-    - cron:  '30 1 * * 6'
+    - cron: '30 1 * * 6'
 
 permissions: read-all
 
@@ -18,28 +18,28 @@ jobs:
       security-events: write
       id-token: write
     steps:
-      - name: "Checkout code"
+      - name: 'Checkout code'
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-      - name: "Run analysis"
+      - name: 'Run analysis'
         uses: ossf/scorecard-action@3155d134e59d8f47261b1ae9d143034c69572227 # v2.0.0-beta.1
         with:
           results_file: results.sarif
           results_format: sarif
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           # Publish the results for public repositories to enable scorecard badges. For more details, see
-          # https://github.com/ossf/scorecard-action#publishing-results. 
-          # For private repositories, `publish_results` will automatically be set to `false`, regardless 
+          # https://github.com/ossf/scorecard-action#publishing-results.
+          # For private repositories, `publish_results` will automatically be set to `false`, regardless
           # of the value entered here.
           publish_results: true
       # https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts
       # Optional.
-      - name: "Upload artifact"
+      - name: 'Upload artifact'
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # v2
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 5
-      - name: "Upload SARIF results"
+      - name: 'Upload SARIF results'
         uses: github/codeql-action/upload-sarif@f5d822707ee6e8fb81b04a5c0040b736da22e587 # v1
         with:
           sarif_file: results.sarif
