@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-08-01
+
+- [pypi] Add Framework Version Badges support [#8261](https://github.com/badges/shields/issues/8261)
+- feat: add [GitlabForks] server [#8208](https://github.com/badges/shields/issues/8208)
+- Update PyPI api according to https://warehouse.pypa.io/api-reference/json.html [#8251](https://github.com/badges/shields/issues/8251)
+- Add [galaxytoolshed] Activity [#8164](https://github.com/badges/shields/issues/8164)
+- [greasyfork] Add Greasy Fork rating badges [#8087](https://github.com/badges/shields/issues/8087)
+- refactor(deps): Replace moment with dayjs [#8192](https://github.com/badges/shields/issues/8192)
+- add spaces round pipe in [conda] badge [#8189](https://github.com/badges/shields/issues/8189)
+- Add [ROS] version service [#8169](https://github.com/badges/shields/issues/8169)
+- feat: add [gitlabissues] service [#8108](https://github.com/badges/shields/issues/8108)
+- Dependency updates
+
 ## server-2022-07-03
 
 - Add [galaxytoolshed] services [#8114](https://github.com/badges/shields/issues/8114)
