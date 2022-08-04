@@ -131,9 +131,9 @@ class GithubTag extends GithubAuthV4Service {
 
   static getLatestTag({ tags, sort, includePrereleases, prefix }) {
     if (prefix) {
-      const tagsWithPrefix = tags.filter(tag => tag.startsWith(prefix))
-      if (tagsWithPrefix.length > 0) {
-        tags = tagsWithPrefix
+      tags = tags.filter(tag => tag.startsWith(prefix))
+      if (tags.length === 0) {
+        throw new NotFound({ prettyMessage: 'no tags found' })
       }
     }
     if (sort === 'semver') {
