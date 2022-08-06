@@ -10,7 +10,7 @@ const schema = Joi.object({
 
 export default class GithubGistLastCommit extends GithubAuthV3Service {
   static category = 'activity'
-  static route = { base: 'github/gists', pattern: ':gistId' }
+  static route = { base: 'github-gist/last-commit', pattern: ':gistId' }
   static examples = [
     {
       title: 'GitHub Gist last commit',
@@ -41,7 +41,7 @@ export default class GithubGistLastCommit extends GithubAuthV3Service {
   }
 
   async handle({ gistId }) {
-    const body = await this.fetch({ gistId })
-    return this.constructor.render({ commitDate: body.updated_at })
+    const { updated_at: commitDate } = await this.fetch({ gistId })
+    return this.constructor.render({ commitDate })
   }
 }
