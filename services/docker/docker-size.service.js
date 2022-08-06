@@ -87,11 +87,27 @@ export default class DockerSize extends BaseJsonService {
   }
 
   transform({ tag, sort, data, arch }) {
+    let sizeFromSpecifiedArchitecture
+
     if (!tag && sort === 'date') {
       if (data.count === 0) {
         throw new NotFound({ prettyMessage: 'repository not found' })
       } else {
-        return { size: data.results[0].full_size }
+        const latestEntry = data.results[0]
+
+        // Checking if any of the returned images has an architecture matching the arch parameter supplied by the user.
+        // If yes, return the size of the image with this arch.
+        // If not, return value of the `full_size` in the latestEntry from the response.
+        // For details see: https://github.com/badges/shields/issues/8238
+        Object.values(latestEntry.images).forEach(img => {
+          if (img.architecture === arch) {
+            sizeFromSpecifiedArchitecture = img.size
+          }
+        })
+
+        return {
+          size: sizeFromSpecifiedArchitecture || latestEntry.full_size,
+        }
       }
     } else if (!tag && sort === 'semver') {
       const [matches, versions, images] = data.reduce(
@@ -106,19 +122,17 @@ export default class DockerSize extends BaseJsonService {
 
       const version = latest(versions)
 
-      let sizeFromArch
-
       Object.keys(images).forEach(ver => {
         if (ver === version) {
           Object.values(images[ver]).forEach(img => {
             if (img.architecture === arch) {
-              sizeFromArch = img.size
+              sizeFromSpecifiedArchitecture = img.size
             }
           })
         }
       })
 
-      return { size: sizeFromArch || matches[version] }
+      return { size: sizeFromSpecifiedArchitecture || matches[version] }
     } else {
       return { size: data.full_size }
     }
