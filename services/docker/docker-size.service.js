@@ -12,6 +12,7 @@ import {
 const buildSchema = Joi.object({
   name: Joi.string().required(),
   full_size: nonNegativeInteger.required(),
+  images: Joi.any().required(),
 }).required()
 
 const pagedSchema = Joi.object({
@@ -20,12 +21,14 @@ const pagedSchema = Joi.object({
     Joi.object({
       name: Joi.string().required(),
       full_size: nonNegativeInteger.required(),
+      images: Joi.any().required(),
     })
   ),
 }).required()
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
+  arch: Joi.string(),
 }).required()
 
 export default class DockerSize extends BaseJsonService {
@@ -47,6 +50,14 @@ export default class DockerSize extends BaseJsonService {
       staticPreview: this.render({ size: 136000000 }),
     },
     {
+      title:
+        'Docker Image Size with architecture (latest by date/latest semver)',
+      pattern: ':user/:repo',
+      namedParams: { user: 'library', repo: 'mysql' },
+      queryParams: { sort: 'date', arch: 'amd64' },
+      staticPreview: this.render({ size: 146000000 }),
+    },
+    {
       title: 'Docker Image Size (tag)',
       pattern: ':user/:repo/:tag',
       namedParams: { user: 'fedora', repo: 'apache', tag: 'latest' },
@@ -62,7 +73,7 @@ export default class DockerSize extends BaseJsonService {
 
   async fetch({ user, repo, tag, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson({
+    const imageData = this._requestJson({
       schema: tag ? buildSchema : pagedSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
@@ -71,9 +82,11 @@ export default class DockerSize extends BaseJsonService {
       }${page}`,
       errorMessages: { 404: 'repository or tag not found' },
     })
+
+    return imageData
   }
 
-  transform({ tag, sort, data }) {
+  transform({ tag, sort, data, arch }) {
     if (!tag && sort === 'date') {
       if (data.count === 0) {
         throw new NotFound({ prettyMessage: 'repository not found' })
@@ -81,22 +94,37 @@ export default class DockerSize extends BaseJsonService {
         return { size: data.results[0].full_size }
       }
     } else if (!tag && sort === 'semver') {
-      const [matches, versions] = data.reduce(
-        ([m, v], d) => {
+      const [matches, versions, images] = data.reduce(
+        ([m, v, i], d) => {
           m[d.name] = d.full_size
           v.push(d.name)
-          return [m, v]
+          i[d.name] = d.images
+          return [m, v, i]
         },
-        [{}, []]
+        [{}, [], {}]
       )
+
       const version = latest(versions)
-      return { size: matches[version] }
+
+      let sizeFromArch
+
+      Object.keys(images).forEach(ver => {
+        if (ver === version) {
+          Object.values(images[ver]).forEach(img => {
+            if (img.architecture === arch) {
+              sizeFromArch = img.size
+            }
+          })
+        }
+      })
+
+      return { size: sizeFromArch || matches[version] }
     } else {
       return { size: data.full_size }
     }
   }
 
-  async handle({ user, repo, tag }, { sort }) {
+  async handle({ user, repo, tag }, { sort, arch }) {
     let data
 
     if (!tag && sort === 'date') {
@@ -111,7 +139,7 @@ export default class DockerSize extends BaseJsonService {
       data = await this.fetch({ user, repo, tag })
     }
 
-    const { size } = await this.transform({ tag, sort, data })
+    const { size } = await this.transform({ tag, sort, data, arch })
     return this.constructor.render({ size })
   }
 }
