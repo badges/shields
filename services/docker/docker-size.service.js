@@ -95,10 +95,11 @@ export default class DockerSize extends BaseJsonService {
       } else {
         const latestEntry = data.results[0]
 
-        // Checking if any of the returned images has an architecture matching the arch parameter supplied by the user.
+        // If no tag is specified, and sorting is by date, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
         // If yes, return the size of the image with this arch.
-        // If not, return value of the `full_size` in the latestEntry from the response.
+        // If not, return the value of the `full_size` in the latestEntry from the response.
         // For details see: https://github.com/badges/shields/issues/8238
+
         Object.values(latestEntry.images).forEach(img => {
           if (img.architecture === arch) {
             sizeFromSpecifiedArchitecture = img.size
@@ -110,6 +111,11 @@ export default class DockerSize extends BaseJsonService {
         }
       }
     } else if (!tag && sort === 'semver') {
+      // If no tag is specified, and sorting is by semver, first filter out the entry containing the latest semver from the response with Docker images.
+      // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
+      // If yes, return the size of the image with this arch.
+      // If not, return the value of the `full_size` from the entry matching the latest semver.
+
       const [matches, versions, images] = data.reduce(
         ([m, v, i], d) => {
           m[d.name] = d.full_size
@@ -134,7 +140,19 @@ export default class DockerSize extends BaseJsonService {
 
       return { size: sizeFromSpecifiedArchitecture || matches[version] }
     } else {
-      return { size: data.full_size }
+      // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
+      // If yes, return the size of the image with this arch.
+      // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
+
+      Object.values(data.images).forEach(img => {
+        if (img.architecture === arch) {
+          sizeFromSpecifiedArchitecture = img.size
+        }
+      })
+
+      return {
+        size: sizeFromSpecifiedArchitecture || data.full_size,
+      }
     }
   }
 
