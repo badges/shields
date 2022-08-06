@@ -73,7 +73,7 @@ export default class DockerSize extends BaseJsonService {
 
   async fetch({ user, repo, tag, page }) {
     page = page ? `&page=${page}` : ''
-    const imageData = this._requestJson({
+    return this._requestJson({
       schema: tag ? buildSchema : pagedSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
@@ -82,8 +82,6 @@ export default class DockerSize extends BaseJsonService {
       }${page}`,
       errorMessages: { 404: 'repository or tag not found' },
     })
-
-    return imageData
   }
 
   transform({ tag, sort, data, arch }) {
