@@ -28,8 +28,8 @@ t.create('Tag (repo not found)')
   .get('/v/tag/badges/helmets.json')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
-t.create('Tag (filter by subpackage)')
-  .get('/v/tag/ros/rosdistro.json?subpackage=galactic')
+t.create('Tag (filter by prefix + trim prefix at slash)')
+  .get('/v/tag/ros/rosdistro.json?subpackage=galactic/&trimPrefixAtSlash')
   .expectBadge({ label: 'tag', message: Joi.date().required() })
 
 // redirects

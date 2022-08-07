@@ -62,17 +62,8 @@ class GithubTag extends GithubAuthV4Service {
     },
     {
       title: 'GitHub tag (latest filter by prefix)',
-      namedParams: { user: 'expressjs', repo: 'express' },
-      queryParams: { prefix: '4.16' },
-      staticPreview: this.render({
-        version: 'v4.16.4',
-      }),
-      documentation,
-    },
-    {
-      title: 'GitHub tag (latest filter by subpackage)',
       namedParams: { user: 'ros', repo: 'rosdistro' },
-      queryParams: { subpackage: 'galactic' },
+      queryParams: { prefix: 'galactic/', trimPrefixAtSlash: null },
       staticPreview: this.render({
         version: '2022-06-24',
       }),
@@ -91,13 +82,11 @@ class GithubTag extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, repo, sort, prefix, subpackage }) {
-    const limit = sort === 'semver' || prefix ? 100 : 1
-
+  async fetch({ user, repo, prefix, increaselimit }) {
+    const limit = increaselimit ? 100 : 1
     let refPrefix = 'refs/tags/'
-    if (subpackage) {
-      if (!subpackage.endsWith('/')) subpackage += '/'
-      refPrefix += subpackage
+    if (prefix) {
+      refPrefix = `${refPrefix}${prefix}/`
     }
 
     return this._requestGraphql({
@@ -146,9 +135,23 @@ class GithubTag extends GithubAuthV4Service {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
     const prefix = queryParams.prefix
-    const subpackage = queryParams.subpackage
+    const trimPrefixAtSlash = queryParams.trimPrefixAtSlash !== undefined
 
-    const json = await this.fetch({ user, repo, sort, prefix, subpackage })
+    let filterPrefix = prefix ? prefix.toString() : ''
+    let graphQLPrefix = ''
+    if (trimPrefixAtSlash && filterPrefix.includes('/')) {
+      const lastIndex = filterPrefix.lastIndexOf('/')
+      graphQLPrefix = filterPrefix.slice(0, lastIndex)
+      filterPrefix = filterPrefix.slice(lastIndex + 1)
+    }
+
+    const increaselimit = sort === 'semver' || filterPrefix.length > 0
+    const json = await this.fetch({
+      user,
+      repo,
+      prefix: graphQLPrefix,
+      increaselimit,
+    })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0) {
       throw new NotFound({ prettyMessage: 'no tags found' })
@@ -158,7 +161,7 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
-        prefix,
+        prefix: filterPrefix,
       }),
       sort,
     })

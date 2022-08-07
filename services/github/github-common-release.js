@@ -75,7 +75,7 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
   sort: Joi.string().valid('date', 'semver').default('date'),
   prefix: Joi.alternatives().try(Joi.string(), Joi.number()),
-  subpackage: Joi.alternatives().try(Joi.string(), Joi.number()),
+  trimPrefixAtSlash: Joi.equal(''),
 }).required()
 
 // Fetch the latest release as defined by query params
