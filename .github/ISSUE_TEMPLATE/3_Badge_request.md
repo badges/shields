@@ -21,7 +21,7 @@ A clear and concise description of the new badge.
 Where can we get the data from?
 
 - Is there a public API?
-- Does the API requires an API key?
+- Does the API require an API key?
 - Link to the API documentation.
 -->
 
