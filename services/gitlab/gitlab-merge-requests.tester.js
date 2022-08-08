@@ -163,3 +163,10 @@ t.create('locked merge requests')
       /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) locked$/
     ),
   })
+
+t.create('Opened merge requests (self-managed)')
+  .get('/open/gitlab-cn/gitlab.json?gitlab_url=https://jihulab.com')
+  .expectBadge({
+    label: 'merge requests',
+    message: isMetricOpenIssues,
+  })
