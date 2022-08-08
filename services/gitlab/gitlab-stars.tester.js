@@ -9,7 +9,10 @@ t.create('Stars')
     label: 'stars',
     message: isMetric,
     color: 'blue',
-    link: ['https://gitlab.com/gitlab-org/gitlab'],
+    link: [
+      'https://gitlab.com/gitlab-org/gitlab',
+      'https://gitlab.com/gitlab-org/gitlab/-/starrers',
+    ],
   })
 
 t.create('Stars (self-managed)')
@@ -18,7 +21,10 @@ t.create('Stars (self-managed)')
     label: 'stars',
     message: isMetric,
     color: 'blue',
-    link: ['https://jihulab.com/gitlab-cn/gitlab'],
+    link: [
+      'https://jihulab.com/gitlab-cn/gitlab',
+      'https://jihulab.com/gitlab-cn/gitlab/-/starrers',
+    ],
   })
 
 t.create('Stars (project not found)')

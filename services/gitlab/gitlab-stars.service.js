@@ -49,7 +49,7 @@ export default class GitlabStars extends GitLabBase {
     return {
       message: metric(starCount),
       color: 'blue',
-      link: [`${baseUrl}/${project}`],
+      link: [`${baseUrl}/${project}`, `${baseUrl}/${project}/-/starrers`],
     }
   }
 
