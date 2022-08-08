@@ -51,14 +51,17 @@ test(reStructuredText, () => {
     '.. image:: https://img.shields.io/badge'
   )
   given('https://img.shields.io/badge', undefined, 'Example').expect(
-    '.. image:: https://img.shields.io/badge   :alt: Example'
+    '.. image:: https://img.shields.io/badge' +
+    '   :alt: Example'
   )
   given(
     'https://img.shields.io/badge',
     'https://example.com/example',
     'Example'
   ).expect(
-    '.. image:: https://img.shields.io/badge   :alt: Example   :target: https://example.com/example'
+    '.. image:: https://img.shields.io/badge' +
+    '   :alt: Example' +
+    '   :target: https://example.com/example'
   )
 })
 
