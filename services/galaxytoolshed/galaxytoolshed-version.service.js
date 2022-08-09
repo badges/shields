@@ -17,7 +17,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
         repository: 'sra_tools',
         owner: 'iuc',
       },
-      staticPreview: renderVersionBadge({ version: '1.2.5' }),
+      staticPreview: renderVersionBadge({ version: '83c7d564b128' }),
     },
     {
       title: 'Galaxy Toolshed (tool)',
