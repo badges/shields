@@ -12,7 +12,11 @@ import {
 const buildSchema = Joi.object({
   name: Joi.string().required(),
   full_size: nonNegativeInteger.required(),
-  images: Joi.any().required(),
+  images: Joi.array().items(
+    Joi.object({
+      size: nonNegativeInteger.required(),
+    })
+  ),
 }).required()
 
 const pagedSchema = Joi.object({
@@ -84,73 +88,89 @@ export default class DockerSize extends BaseJsonService {
     })
   }
 
-  transform({ tag, sort, data, arch }) {
+  noTagWithDateSortTransform(data, arch) {
     let sizeFromSpecifiedArchitecture
 
-    if (!tag && sort === 'date') {
-      if (data.count === 0) {
-        throw new NotFound({ prettyMessage: 'repository not found' })
-      } else {
-        const latestEntry = data.results[0]
-
-        // If no tag is specified, and sorting is by date, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
-        // If yes, return the size of the image with this arch.
-        // If not, return the value of the `full_size` in the latestEntry from the response.
-        // For details see: https://github.com/badges/shields/issues/8238
-
-        Object.values(latestEntry.images).forEach(img => {
-          if (img.architecture === arch) {
-            sizeFromSpecifiedArchitecture = img.size
-          }
-        })
-
-        return {
-          size: sizeFromSpecifiedArchitecture || latestEntry.full_size,
-        }
-      }
-    } else if (!tag && sort === 'semver') {
-      // If no tag is specified, and sorting is by semver, first filter out the entry containing the latest semver from the response with Docker images.
-      // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
-      // If yes, return the size of the image with this arch.
-      // If not, return the value of the `full_size` from the entry matching the latest semver.
-
-      const [matches, versions, images] = data.reduce(
-        ([m, v, i], d) => {
-          m[d.name] = d.full_size
-          v.push(d.name)
-          i[d.name] = d.images
-          return [m, v, i]
-        },
-        [{}, [], {}]
-      )
-
-      const version = latest(versions)
-
-      Object.keys(images).forEach(ver => {
-        if (ver === version) {
-          Object.values(images[ver]).forEach(img => {
-            if (img.architecture === arch) {
-              sizeFromSpecifiedArchitecture = img.size
-            }
-          })
-        }
-      })
-
-      return { size: sizeFromSpecifiedArchitecture || matches[version] }
+    if (data.count === 0) {
+      throw new NotFound({ prettyMessage: 'repository not found' })
     } else {
-      // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
-      // If yes, return the size of the image with this arch.
-      // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
+      const latestEntry = data.results[0]
 
-      Object.values(data.images).forEach(img => {
+      // If no tag is specified, and sorting is by date, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
+      // If yes, return the size of the image with this arch.
+      // If not, return the value of the `full_size` in the latestEntry from the response.
+      // For details see: https://github.com/badges/shields/issues/8238
+
+      Object.values(latestEntry.images).forEach(img => {
         if (img.architecture === arch) {
           sizeFromSpecifiedArchitecture = img.size
         }
       })
 
       return {
-        size: sizeFromSpecifiedArchitecture || data.full_size,
+        size: sizeFromSpecifiedArchitecture || latestEntry.full_size,
       }
+    }
+  }
+
+  noTagWithSemverSortTransform(data, arch) {
+    // If no tag is specified, and sorting is by semver, first filter out the entry containing the latest semver from the response with Docker images.
+    // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
+    // If yes, return the size of the image with this arch.
+    // If not, return the value of the `full_size` from the entry matching the latest semver.
+
+    let sizeFromSpecifiedArchitecture
+
+    const [matches, versions, images] = data.reduce(
+      ([m, v, i], d) => {
+        m[d.name] = d.full_size
+        v.push(d.name)
+        i[d.name] = d.images
+        return [m, v, i]
+      },
+      [{}, [], {}]
+    )
+
+    const version = latest(versions)
+
+    Object.keys(images).forEach(ver => {
+      if (ver === version) {
+        Object.values(images[ver]).forEach(img => {
+          if (img.architecture === arch) {
+            sizeFromSpecifiedArchitecture = img.size
+          }
+        })
+      }
+    })
+
+    return { size: sizeFromSpecifiedArchitecture || matches[version] }
+  }
+
+  yesTagTransform(data, arch) {
+    // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
+    // If yes, return the size of the image with this arch.
+    // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
+
+    let sizeFromSpecifiedArchitecture
+
+    Object.values(data.images).forEach(img => {
+      if (img.architecture === arch) {
+        sizeFromSpecifiedArchitecture = img.size
+      }
+    })
+
+    return {
+      size: sizeFromSpecifiedArchitecture || data.full_size,
+    }
+  }
+
+  transform({ tag, sort, data, arch }) {
+    if (!tag && sort === 'date') {
+      return this.noTagWithDateSortTransform(data, arch)
+    } else if (!tag && sort === 'semver') {
+      return this.noTagWithSemverSortTransform(data, arch)
+    } else {
+      return this.yesTagTransform(data, arch)
     }
   }
 
