@@ -36,6 +36,27 @@ const queryParamSchema = Joi.object({
   arch: Joi.string().valid(...validDockerArchitectures),
 }).required()
 
+// If user provided the arch parameter,
+// check if any of the returned images has an architecture matching the arch parameter provided.
+// If yes, return the size of the image with this arch.
+// If not, return the value of the `full_size` in the latestEntry from the response.
+// For details see: https://github.com/badges/shields/issues/8238
+function getImageForArch(images, arch) {
+  console.log('images', images)
+
+  return Object.values(images).forEach(img => {
+    // console.log('img', img)
+    console.log('arch', arch)
+
+    if (img.architecture === arch) {
+      console.log('size', img.size)
+      return img.size
+    }
+
+    throw new NotFound({ prettyMessage: 'architecture not found' })
+  })
+}
+
 export default class DockerSize extends BaseJsonService {
   static category = 'size'
   static route = { ...buildDockerUrl('image-size', true), queryParamSchema }
@@ -90,26 +111,17 @@ export default class DockerSize extends BaseJsonService {
   }
 
   noTagWithDateSortTransform(data, arch) {
-    let sizeFromSpecifiedArchitecture
-
     if (data.count === 0) {
       throw new NotFound({ prettyMessage: 'repository not found' })
     } else {
       const latestEntry = data.results[0]
 
-      // If no tag is specified, and sorting is by date, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
-      // If yes, return the size of the image with this arch.
-      // If not, return the value of the `full_size` in the latestEntry from the response.
-      // For details see: https://github.com/badges/shields/issues/8238
+      // console.log(latestEntry)
 
-      Object.values(latestEntry.images).forEach(img => {
-        if (img.architecture === arch) {
-          sizeFromSpecifiedArchitecture = img.size
-        }
-      })
-
-      return {
-        size: sizeFromSpecifiedArchitecture || latestEntry.full_size,
+      if (arch) {
+        return { size: getImageForArch(latestEntry.images, arch) }
+      } else {
+        return { size: latestEntry.full_size }
       }
     }
   }
@@ -119,8 +131,6 @@ export default class DockerSize extends BaseJsonService {
     // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
     // If not, return the value of the `full_size` from the entry matching the latest semver.
-
-    let sizeFromSpecifiedArchitecture
 
     const [matches, versions, images] = data.reduce(
       ([m, v, i], d) => {
@@ -134,17 +144,15 @@ export default class DockerSize extends BaseJsonService {
 
     const version = latest(versions)
 
-    Object.keys(images).forEach(ver => {
-      if (ver === version) {
-        Object.values(images[ver]).forEach(img => {
-          if (img.architecture === arch) {
-            sizeFromSpecifiedArchitecture = img.size
-          }
-        })
-      }
-    })
-
-    return { size: sizeFromSpecifiedArchitecture || matches[version] }
+    if (arch) {
+      Object.keys(images).forEach(ver => {
+        if (ver === version) {
+          return { size: getImageForArch(images[ver], arch) }
+        }
+      })
+    } else {
+      return { size: matches[version] }
+    }
   }
 
   yesTagTransform(data, arch) {
@@ -152,16 +160,10 @@ export default class DockerSize extends BaseJsonService {
     // If yes, return the size of the image with this arch.
     // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
 
-    let sizeFromSpecifiedArchitecture
-
-    Object.values(data.images).forEach(img => {
-      if (img.architecture === arch) {
-        sizeFromSpecifiedArchitecture = img.size
-      }
-    })
-
-    return {
-      size: sizeFromSpecifiedArchitecture || data.full_size,
+    if (arch) {
+      return { size: getImageForArch(data.images, arch) }
+    } else {
+      return { size: data.full_size }
     }
   }
 
