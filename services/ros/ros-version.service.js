@@ -43,7 +43,7 @@ const repoSchema = Joi.object({
 const documentation = `
 <p>
   To use this badge, specify the ROS <a href="http://docs.ros.org">distribution</a>
-  (e.g. <code>galactic</code> or <code>humble</code>) and the package repository name
+  (e.g. <code>noetic</code> or <code>humble</code>) and the package repository name
   (in the case of single-package repos, this may be the same as the package name).
   This badge determines which versions are part of an official ROS distribution by
   fetching from the <a href="https://github.com/ros/rosdistro">rosdistro</a> YAML files,
