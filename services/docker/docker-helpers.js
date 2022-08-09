@@ -2,6 +2,22 @@
 import { NotFound } from '../index.js'
 const dockerBlue = '066da5'
 
+// Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
+const validDockerArchitectures = [
+  'amd64',
+  'arm',
+  'arm64',
+  's390x',
+  '386',
+  'ppc64',
+  'ppc64le',
+  'wasm',
+  'mips',
+  'mipsle',
+  'mips64',
+  'mips64le',
+]
+
 function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {
     return {
@@ -56,6 +72,7 @@ function getDigestSemVerMatches({ data, digest }) {
 
 export {
   dockerBlue,
+  validDockerArchitectures,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
