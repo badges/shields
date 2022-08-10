@@ -16,6 +16,7 @@ const buildSchema = Joi.object({
   images: Joi.array().items(
     Joi.object({
       size: nonNegativeInteger.required(),
+      architecture: Joi.string().required(),
     })
   ),
 }).required()
@@ -26,14 +27,22 @@ const pagedSchema = Joi.object({
     Joi.object({
       name: Joi.string().required(),
       full_size: nonNegativeInteger.required(),
-      images: Joi.any().required(),
+      images: Joi.array().items(
+        Joi.object({
+          size: nonNegativeInteger.required(),
+          architecture: Joi.string().required(),
+        })
+      ),
     })
   ),
 }).required()
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.string().valid(...validDockerArchitectures),
+  arch: Joi.alternatives([
+    Joi.string().valid(...validDockerArchitectures),
+    Joi.number().valid(...validDockerArchitectures),
+  ]),
 }).required()
 
 // If user provided the arch parameter,
@@ -42,19 +51,62 @@ const queryParamSchema = Joi.object({
 // If not, return the value of the `full_size` in the latestEntry from the response.
 // For details see: https://github.com/badges/shields/issues/8238
 function getImageForArch(images, arch) {
-  console.log('images', images)
+  // console.log('images', images)
+  // let imageWithArchFound = false
+  // let sizeToReturn
 
-  return Object.values(images).forEach(img => {
-    // console.log('img', img)
-    console.log('arch', arch)
+  // return Object.values(images).forEach(img => {
+  //   console.log('arch', arch)
+  //   console.log('img.architecture', img.architecture)
+  //   console.log('img.architecture=== arch', img.architecture === arch)
 
-    if (img.architecture === arch) {
-      console.log('size', img.size)
-      return img.size
-    }
+  //   if (img.architecture === arch) {
+  //     console.log('size', img.size)
+  //     imageWithArchFound = true
+  //     return img.size
+  //   }
+  // })
 
+  const found = Object.values(images).find(img => img.architecture === arch)
+
+  if (!found) {
     throw new NotFound({ prettyMessage: 'architecture not found' })
-  })
+  }
+  return found.size
+  // console.log(found)
+
+  // Object.values(images).find(img => {
+  //   // console.log('arch', arch)
+  //   // console.log('img.architecture', img.architecture)
+  //   console.log('img.architecture=== arch', img.architecture === arch)
+
+  //   if (img.architecture === arch) {
+  //     console.log('size', img.size)
+  //     imageWithArchFound = true
+  //     sizeToReturn = img.size
+  //     return true
+  //   }
+
+  //   return false
+  //   // sizeToReturn = imageWithArchFound ? img.size : 0
+  //   // console.log('####sizeToReturn', sizeToReturn)
+  //   // return sizeToReturn
+  // })
+
+  // if (!imageWithArchFound) {
+  //   throw new NotFound({ prettyMessage: 'architecture not found' })
+  // }
+
+  // console.log('sizeToReturn', sizeToReturn)
+  // return sizeToReturn
+
+  // throw new NotFound({ prettyMessage: 'architecture not found' })
+
+  // if (!imageWithArchFound) {
+  //   throw new NotFound({ prettyMessage: 'architecture not found' })
+  // }
+
+  // return 0
 }
 
 export default class DockerSize extends BaseJsonService {
@@ -94,6 +146,7 @@ export default class DockerSize extends BaseJsonService {
   static defaultBadgeData = { label: 'image size', color: 'blue' }
 
   static render({ size }) {
+    // console.log('@@@@@@@@@@@@render, size: ', size)
     return { message: prettyBytes(size) }
   }
 
@@ -144,12 +197,20 @@ export default class DockerSize extends BaseJsonService {
 
     const version = latest(versions)
 
+    let noChyba
+
     if (arch) {
       Object.keys(images).forEach(ver => {
         if (ver === version) {
-          return { size: getImageForArch(images[ver], arch) }
+          console.log(
+            '11111111111111111getImageForArch(images[ver], arch)',
+            getImageForArch(images[ver], arch)
+          )
+          noChyba = getImageForArch(images[ver], arch)
+          return { size: noChyba }
         }
       })
+      return { size: noChyba }
     } else {
       return { size: matches[version] }
     }
@@ -159,7 +220,7 @@ export default class DockerSize extends BaseJsonService {
     // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
     // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
-
+    // console.log('yesTagTransform data', data)
     if (arch) {
       return { size: getImageForArch(data.images, arch) }
     } else {
@@ -168,11 +229,25 @@ export default class DockerSize extends BaseJsonService {
   }
 
   transform({ tag, sort, data, arch }) {
+    console.log('????????')
+
+    console.log('tag', tag)
+    console.log('sort', sort)
+    // console.log('data', data)
+    console.log('arch', arch)
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!')
+
     if (!tag && sort === 'date') {
       return this.noTagWithDateSortTransform(data, arch)
     } else if (!tag && sort === 'semver') {
+      console.log(
+        'aloha **************',
+        this.noTagWithSemverSortTransform(data, arch)
+      )
+
       return this.noTagWithSemverSortTransform(data, arch)
     } else {
+      // console.log('aloha **************', this.yesTagTransform(data, arch))
       return this.yesTagTransform(data, arch)
     }
   }
@@ -192,7 +267,13 @@ export default class DockerSize extends BaseJsonService {
       data = await this.fetch({ user, repo, tag })
     }
 
+    console.log(
+      '(((((((((((((((((((((9await this.transform({ tag, sort, data, arch }',
+      await this.transform({ tag, sort, data, arch })
+    )
+
     const { size } = await this.transform({ tag, sort, data, arch })
+    // console.log('SIZE, , size $$$$$$$$$$$$$$$$$$$$$$$$$$$$$:', size)
     return this.constructor.render({ size })
   }
 }

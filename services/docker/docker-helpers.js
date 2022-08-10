@@ -16,6 +16,7 @@ const validDockerArchitectures = [
   'mipsle',
   'mips64',
   'mips64le',
+  386,
 ]
 
 function buildDockerUrl(badgeName, includeTagRoute) {
