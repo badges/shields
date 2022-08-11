@@ -9,6 +9,13 @@ t.create('docker image size (valid, library)')
     message: isFileSize,
   })
 
+t.create('docker image size (valid, library, arch parameter )')
+  .get('/_/mysql.json?arch=amd64')
+  .expectBadge({
+    label: 'image size',
+    message: isFileSize,
+  })
+
 t.create('docker image size (valid, library with tag)')
   .get('/_/alpine/latest.json')
   .expectBadge({
@@ -41,5 +48,5 @@ t.create('docker image size (invalid, unknown repository)')
   .get('/_/not-a-real-repo.json')
   .expectBadge({
     label: 'image size',
-    message: 'repository not found',
+    message: 'repository or tag not found',
   })
