@@ -3,7 +3,7 @@ import { NotFound } from '../index.js'
 const dockerBlue = '066da5'
 
 // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
-const validDockerArchitectures = [
+const validArchitectures = [
   'amd64',
   'arm',
   'arm64',
@@ -16,6 +16,7 @@ const validDockerArchitectures = [
   'mipsle',
   'mips64',
   'mips64le',
+  'riscv64',
   386,
 ]
 
@@ -73,7 +74,7 @@ function getDigestSemVerMatches({ data, digest }) {
 
 export {
   dockerBlue,
-  validDockerArchitectures,
+  validArchitectures,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,

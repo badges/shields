@@ -7,7 +7,7 @@ import {
   getDockerHubUser,
   getMultiPageData,
   getDigestSemVerMatches,
-  validDockerArchitectures,
+  validArchitectures,
 } from './docker-helpers.js'
 
 const buildSchema = Joi.object({
@@ -28,7 +28,7 @@ const buildSchema = Joi.object({
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
   arch: Joi.string()
-    .valid(...validDockerArchitectures)
+    .valid(...validArchitectures)
     .default('amd64'),
 }).required()
 

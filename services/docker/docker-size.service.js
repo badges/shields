@@ -7,7 +7,7 @@ import {
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
-  validDockerArchitectures,
+  validArchitectures,
 } from './docker-helpers.js'
 
 const buildSchema = Joi.object({
@@ -40,8 +40,8 @@ const pagedSchema = Joi.object({
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
   arch: Joi.alternatives([
-    Joi.string().valid(...validDockerArchitectures),
-    Joi.number().valid(...validDockerArchitectures),
+    Joi.string().valid(...validArchitectures),
+    Joi.number().valid(...validArchitectures),
   ]),
 }).required()
 
