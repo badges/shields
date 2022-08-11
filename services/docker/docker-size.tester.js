@@ -50,3 +50,17 @@ t.create('docker image size (invalid, unknown repository)')
     label: 'image size',
     message: 'repository or tag not found',
   })
+
+t.create('docker image size (invalid, wrong sorting method)')
+  .get('/jrottenberg/ffmpeg/3.2-alpine.json?sort=daterrr')
+  .expectBadge({
+    label: 'image size',
+    message: 'invalid query parameter: sort',
+  })
+
+t.create('docker image size (invalid, nonexisting arch)')
+  .get('/jrottenberg/ffmpeg/3.2-alpine.json?arch=nonexistingArch')
+  .expectBadge({
+    label: 'image size',
+    message: 'invalid query parameter: arch',
+  })
