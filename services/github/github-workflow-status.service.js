@@ -80,7 +80,7 @@ export default class GithubWorkflowStatus extends BaseSvgScrapingService {
   async fetch({ user, repo, workflow, branch, event }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://github.com/${user}/${repo}/workflows/${encodeURIComponent(
+      url: `https://github.com/${user}/${repo}/actions/workflows/${encodeURIComponent(
         workflow
       )}/badge.svg`,
       options: { searchParams: { branch, event } },
