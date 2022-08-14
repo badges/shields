@@ -153,15 +153,6 @@ Then copy the contents of the `build/` folder to your static hosting / CDN.
 
 There are also a couple settings you should configure on the server.
 
-If you want to use server suggestions, you should also set `ALLOWED_ORIGIN`:
-
-```sh
-ALLOWED_ORIGIN=http://my-custom-shields.s3.amazonaws.com,https://my-custom-shields.s3.amazonaws.com
-```
-
-This should be a comma-separated list of allowed origin headers. They should
-not have paths or trailing slashes.
-
 To help out users, you can make the Shields server redirect the server root.
 Set the `REDIRECT_URI` environment variable:
 
