@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@fontsource/lato": "^4.5.9",
-    "@fontsource/lekton": "^4.5.9",
+    "@fontsource/lekton": "^4.5.10",
     "@renovate/pep440": "^1.0.0",
     "@sentry/node": "^7.10.0",
     "@shields_io/camp": "^18.1.1",
