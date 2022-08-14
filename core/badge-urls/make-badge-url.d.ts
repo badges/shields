@@ -14,24 +14,6 @@ export function badgeUrlFromPath({
   longCache?: boolean
 }): string
 
-export function badgeUrlFromPattern({
-  baseUrl,
-  pattern,
-  namedParams,
-  queryParams,
-  style,
-  format,
-  longCache,
-}: {
-  baseUrl?: string
-  pattern: string
-  namedParams: { [k: string]: string }
-  queryParams: { [k: string]: string | number | boolean }
-  style?: string
-  format?: string
-  longCache?: boolean
-}): string
-
 export function encodeField(s: string): string
 
 export function staticBadgeUrl({

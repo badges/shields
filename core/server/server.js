@@ -11,7 +11,6 @@ import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
 import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
-import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
@@ -486,7 +485,6 @@ class Server {
     const {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
-      cors: { allowedOrigin },
       requireCloudflare,
     } = this.config.public
 
@@ -518,9 +516,6 @@ class Server {
         this.influxMetrics.startPushingMetrics()
       }
     }
-
-    const { apiProvider: githubApiProvider } = this.githubConstellation
-    setRoutes(allowedOrigin, githubApiProvider, camp)
 
     // https://github.com/badges/shields/issues/3273
     camp.handle((req, res, next) => {

@@ -64,13 +64,4 @@ export function getDefinitionsForCategory(
   return byCategory[category] || []
 }
 
-export interface Suggestion {
-  title: string
-  link: string
-  example: ExampleSignature
-  preview: {
-    style?: string
-  }
-}
-
-export type RenderableExample = Example | Suggestion
+export type RenderableExample = Example
