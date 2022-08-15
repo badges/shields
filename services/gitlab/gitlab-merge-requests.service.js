@@ -292,6 +292,7 @@ export default class GitlabMergeRequests extends GitLabBase {
     return {
       label: `${labelPrefix}${labelText}merge requests`,
       message,
+      color: 'blue',
     }
   }
 
