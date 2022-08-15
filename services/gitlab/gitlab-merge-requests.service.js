@@ -19,7 +19,7 @@ const documentation = `
 <p>
   You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab ).
   Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
-  This badge message will be capped at 10k because the <a href="https://docs.gitlab.com/ee/user/gitlab_com/index.html#pagination-response-headers">GitLab API caps the count at 10k</a>.
+  <a href="https://docs.gitlab.com/ee/user/gitlab_com/index.html#pagination-response-headers">GitLab's API </a> only reports up to 10k Merge Requests, so badges for projects that have more than 10k will not have an exact count.
 </p>
 `
 
