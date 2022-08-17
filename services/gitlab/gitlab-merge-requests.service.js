@@ -49,7 +49,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'merge requests',
         message: '1.4k open',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -63,7 +63,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'open merge requests',
         message: '1.4k',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -80,7 +80,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'test,failure::new merge requests',
         message: '3 open',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -97,7 +97,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'open test,failure::new merge requests',
         message: '3',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -111,7 +111,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'merge requests',
         message: 'more than 10k closed',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -125,7 +125,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'closed merge requests',
         message: 'more than 10k',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -142,7 +142,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'test,failure::new merge requests',
         message: '32 closed',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -159,7 +159,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'closed test,failure::new merge requests',
         message: '32',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -173,7 +173,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'merge requests',
         message: 'more than 10k all',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -187,7 +187,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'all merge requests',
         message: 'more than 10k',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -204,7 +204,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'all test,failure::new merge requests',
         message: '12',
-        color: 'yellow',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -218,7 +218,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'merge requests',
         message: '0 locked',
-        color: 'yellow',
+        color: 'blue',
       },
       documentation,
     },
@@ -235,7 +235,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'test,failure::new merge requests',
         message: '0 locked',
-        color: 'yellow',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
@@ -249,7 +249,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'merge requests',
         message: 'more than 10k merged',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation,
     },
@@ -266,7 +266,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       staticPreview: {
         label: 'test,failure::new merge requests',
         message: '68 merged',
-        color: 'brightgreen',
+        color: 'blue',
       },
       documentation: documentation + labelDocumentation,
     },
