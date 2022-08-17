@@ -1,9 +1,8 @@
 import Joi from 'joi'
-import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService } from '../index.js'
 
-const schema = Joi.object({ activity_total: nonNegativeInteger })
+const schema = Joi.object({ activity_total: Joi.number().required() })
 
 export default class Bountysource extends BaseJsonService {
   static category = 'funding'
