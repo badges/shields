@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import semver from 'semver'
 import { getCachedResource } from '../../core/base-service/resource-cache.js'
 
@@ -23,7 +23,7 @@ async function getVersion(version) {
 }
 
 function ltsVersionsScraper(versions) {
-  const currentDate = moment().format(dateFormat)
+  const currentDate = dayjs().format(dateFormat)
   return Object.keys(versions).filter(function (version) {
     const data = versions[version]
     return data.lts && data.lts < currentDate && data.end > currentDate

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
@@ -15,15 +15,15 @@ const intervalMap = {
   },
   dw: {
     // 6 days, since date range is inclusive,
-    startDate: endDate => moment(endDate).subtract(6, 'days'),
+    startDate: endDate => dayjs(endDate).subtract(6, 'days'),
     interval: 'week',
   },
   dm: {
-    startDate: endDate => moment(endDate).subtract(30, 'days'),
+    startDate: endDate => dayjs(endDate).subtract(30, 'days'),
     interval: 'month',
   },
   dt: {
-    startDate: () => moment(0),
+    startDate: () => dayjs(0),
   },
 }
 
@@ -78,7 +78,7 @@ export default class Sourceforge extends BaseJsonService {
       folder ? `${folder}/` : ''
     }stats/json`
     // get yesterday since today is incomplete
-    const endDate = moment().subtract(24, 'hours')
+    const endDate = dayjs().subtract(24, 'hours')
     const startDate = intervalMap[interval].startDate(endDate)
     const options = {
       searchParams: {

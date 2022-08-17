@@ -33,10 +33,10 @@ export function reStructuredText(
 ): string {
   let result = `.. image:: ${badgeUrl}`
   if (title) {
-    result += `   :alt: ${title}`
+    result += `\n   :alt: ${title}`
   }
   if (link) {
-    result += `   :target: ${link}`
+    result += `\n   :target: ${link}`
   }
   return result
 }
