@@ -7,8 +7,8 @@ import coalesce from './coalesce.js'
 
 describe('coalesce', function () {
   test(coalesce, function () {
-    given().expect('cheese')
-    given(null, []).expect('cheese')
+    given().expect(undefined)
+    given(null, []).expect([])
     given(null, [], {}).expect([])
     given(null, undefined, 0, {}).expect(0)
 
