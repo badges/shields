@@ -10,6 +10,8 @@ const schema = Joi.object({
 export default class JitPackVersion extends BaseJsonService {
   static category = 'version'
 
+  // Changed endpoint to allow any groupId, custom domains included
+  // See: https://github.com/badges/shields/issues/8312
   static route = {
     base: 'jitpack/version',
     pattern: ':groupId/:artifactId',
