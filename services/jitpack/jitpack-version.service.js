@@ -12,7 +12,7 @@ export default class JitPackVersion extends BaseJsonService {
 
   static route = {
     base: 'jitpack/version',
-    pattern: ':groupId/:artifactId'
+    pattern: ':groupId/:artifactId',
   }
 
   static examples = [
