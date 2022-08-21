@@ -5,10 +5,20 @@ export default [
     category: 'version',
     route: {
       base: 'jitpack/v',
-      pattern: ':groupId/:artifactId',
+      pattern: ':user/:repo',
     },
-    transformPath: ({ groupId, artifactId }) =>
-      `/jitpack/v/github/${groupId}/${artifactId}`,
+    transformPath: ({ user, repo }) =>
+      `/jitpack/version/com.github.${user}/${repo}`,
     dateAdded: new Date('2019-03-31'),
+  }),
+  redirector({
+    category: 'version',
+    route: {
+      base: 'jitpack/v',
+      pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
+    },
+    transformPath: ({ vcs, user, repo }) =>
+      `/jitpack/version/com.${vcs}.${user}/${repo}`,
+    dateAdded: new Date('2022-08-21'),
   }),
 ]
