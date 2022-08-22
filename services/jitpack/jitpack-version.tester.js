@@ -6,9 +6,9 @@ export const t = await createServiceTester()
 const isAnyV = Joi.string().regex(/^v.+$/)
 
 t.create('version (groupId)')
-  .get('/github/erayerdin/kappdirs.json')
+  .get('/com.github.erayerdin/kappdirs.json')
   .expectBadge({ label: 'jitpack', message: isAnyV })
 
 t.create('unknown package')
-  .get('/github/some-bogus-user/project.json')
+  .get('/com.github.some-bogus-user/project.json')
   .expectBadge({ label: 'jitpack', message: 'project not found or private' })
