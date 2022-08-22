@@ -3,7 +3,7 @@ import { redirector } from '../index.js'
 export default [
   redirector({
     category: 'version',
-    name: 'github as default vcs',
+    name: 'JitpackVersionGitHubRedirect',
     route: {
       base: 'jitpack/v',
       pattern: ':user/:repo',
@@ -14,7 +14,7 @@ export default [
   }),
   redirector({
     category: 'version',
-    name: 'vcs',
+    name: 'JitpackVersionVcsRedirect',
     route: {
       base: 'jitpack/v',
       pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
