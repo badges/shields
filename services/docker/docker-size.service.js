@@ -50,7 +50,7 @@ const queryParamSchema = Joi.object({
 // If yes, return the size of the image with this arch.
 // If not, return the value of the `full_size` in the latestEntry from the response.
 // For details see: https://github.com/badges/shields/issues/8238
-function getImageForArch(images, arch) {
+function getImageSizeForArch(images, arch) {
   const imgWithArch = Object.values(images).find(
     img => img.architecture === arch
   )
@@ -121,7 +121,7 @@ export default class DockerSize extends BaseJsonService {
       const latestEntry = data.results[0]
 
       if (arch) {
-        return { size: getImageForArch(latestEntry.images, arch) }
+        return { size: getImageSizeForArch(latestEntry.images, arch) }
       } else {
         return { size: latestEntry.full_size }
       }
@@ -151,11 +151,16 @@ export default class DockerSize extends BaseJsonService {
     if (arch) {
       Object.keys(images).forEach(ver => {
         if (ver === version) {
-          sizeOfImgWithArch = getImageForArch(images[ver], arch)
+          sizeOfImgWithArch = getImageSizeForArch(images[ver], arch)
           return { size: sizeOfImgWithArch }
         }
       })
-      return { size: sizeOfImgWithArch }
+
+      if (sizeOfImgWithArch) {
+        return { size: sizeOfImgWithArch }
+      } else {
+        throw new NotFound({ prettyMessage: 'architecture not found' })
+      }
     } else {
       return { size: matches[version] }
     }
@@ -167,7 +172,7 @@ export default class DockerSize extends BaseJsonService {
     // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
     // console.log('yesTagTransform data', data)
     if (arch) {
-      return { size: getImageForArch(data.images, arch) }
+      return { size: getImageSizeForArch(data.images, arch) }
     } else {
       return { size: data.full_size }
     }
