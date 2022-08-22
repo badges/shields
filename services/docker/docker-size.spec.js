@@ -3,23 +3,17 @@ import DockerSize from './docker-size.service.js'
 import { sizeDataNoTagSemVerSort } from './docker-fixtures.js'
 
 describe('DockerSize', function () {
-  test(DockerSize.prototype.noTagWithDateSortTransform, () => {
+  test(DockerSize.prototype.getSizeFromImageByLatestDate, () => {
     given(
       {
         count: 0,
-        results: [
-          {
-            full_size: 219939484,
-            name: 'next',
-            images: [{ architecture: 'amd64', size: 219939484 }],
-          },
-        ],
+        results: [],
       },
       'amd64'
     ).expectError('Not Found: repository not found')
     given(
       {
-        count: 152,
+        count: 1,
         results: [
           {
             full_size: 300000000,
@@ -33,7 +27,7 @@ describe('DockerSize', function () {
       size: 219939484,
     })
     given({
-      count: 152,
+      count: 1,
       results: [
         {
           full_size: 300000000,
@@ -49,7 +43,7 @@ describe('DockerSize', function () {
     })
     given(
       {
-        count: 152,
+        count: 1,
         results: [
           {
             full_size: 300000000,
@@ -65,7 +59,7 @@ describe('DockerSize', function () {
     ).expectError('Not Found: architecture not found')
   })
 
-  test(DockerSize.prototype.yesTagTransform, () => {
+  test(DockerSize.prototype.getSizeFromTag, () => {
     given(
       {
         full_size: 300000000,
@@ -93,7 +87,7 @@ describe('DockerSize', function () {
     ).expectError('Not Found: architecture not found')
   })
 
-  test(DockerSize.prototype.noTagWithSemverSortTransform, () => {
+  test(DockerSize.prototype.getSizeFromImageByLatestSemver, () => {
     given(sizeDataNoTagSemVerSort, 'amd64').expect({
       size: 220000000,
     })

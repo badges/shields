@@ -114,7 +114,7 @@ export default class DockerSize extends BaseJsonService {
     })
   }
 
-  noTagWithDateSortTransform(data, arch) {
+  getSizeFromImageByLatestDate(data, arch) {
     if (data.count === 0) {
       throw new NotFound({ prettyMessage: 'repository not found' })
     } else {
@@ -128,7 +128,7 @@ export default class DockerSize extends BaseJsonService {
     }
   }
 
-  noTagWithSemverSortTransform(data, arch) {
+  getSizeFromImageByLatestSemver(data, arch) {
     // If no tag is specified, and sorting is by semver, first filter out the entry containing the latest semver from the response with Docker images.
     // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
@@ -166,11 +166,10 @@ export default class DockerSize extends BaseJsonService {
     }
   }
 
-  yesTagTransform(data, arch) {
+  getSizeFromTag(data, arch) {
     // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
     // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
-    // console.log('yesTagTransform data', data)
     if (arch) {
       return { size: getImageSizeForArch(data.images, arch) }
     } else {
@@ -180,11 +179,11 @@ export default class DockerSize extends BaseJsonService {
 
   transform({ tag, sort, data, arch }) {
     if (!tag && sort === 'date') {
-      return this.noTagWithDateSortTransform(data, arch)
+      return this.getSizeFromImageByLatestDate(data, arch)
     } else if (!tag && sort === 'semver') {
-      return this.noTagWithSemverSortTransform(data, arch)
+      return this.getSizeFromImageByLatestSemver(data, arch)
     } else {
-      return this.yesTagTransform(data, arch)
+      return this.getSizeFromTag(data, arch)
     }
   }
 
