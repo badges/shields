@@ -6,9 +6,7 @@ const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
     require: Joi.alternatives(
-      Joi.object({
-        php: Joi.string(),
-      }).required(),
+      Joi.object().pattern(Joi.string(), Joi.string()).required(),
       Joi.string().valid('__unset')
     ),
   })
@@ -23,7 +21,7 @@ class BasePackagistService extends BaseJsonService {
   /**
    * Default fetch method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
@@ -47,7 +45,7 @@ class BasePackagistService extends BaseJsonService {
   /**
    * Fetch dev releases method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
