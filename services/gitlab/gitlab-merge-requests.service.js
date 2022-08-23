@@ -22,11 +22,15 @@ const more = `
 </p>
 `
 
-const labelDocumentation = `
+const labelText = `
 <p>
   If you want to use multiple labels then please use commas (<code>,</code>) to separate them, e.g. <code>foo,bar</code>.
 </p>
 `
+
+const defaultDocumentation = documentation + more
+
+const labelDocumentation = documentation + labelText + more
 
 export default class GitlabMergeRequests extends GitLabBase {
   static category = 'issue-tracking'
@@ -50,7 +54,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '1.4k open',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merge requests',
@@ -64,7 +68,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '1.4k',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merge requests by-label',
@@ -81,7 +85,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '3 open',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab merge requests by-label',
@@ -98,7 +102,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '3',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab closed merge requests',
@@ -112,7 +116,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k closed',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab closed merge requests',
@@ -126,7 +130,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab closed merge requests by-label',
@@ -143,7 +147,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '32 closed',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab closed merge requests by-label',
@@ -160,7 +164,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '32',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab all merge requests',
@@ -174,7 +178,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k all',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab all merge requests',
@@ -188,7 +192,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab all merge requests by-label',
@@ -205,7 +209,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '12',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab locked merge requests',
@@ -219,7 +223,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '0 locked',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab locked merge requests by-label',
@@ -236,7 +240,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '0 locked',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab merged merge requests',
@@ -250,7 +254,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k merged',
         color: 'blue',
       },
-      documentation: documentation + more,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merged merge requests by-label',
@@ -267,7 +271,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '68 merged',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation + more,
+      documentation: labelDocumentation,
     },
   ]
 
