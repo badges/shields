@@ -1,47 +1,5 @@
 version: 2
 
-main_steps: &main_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install dependencies
-        command: |
-          npm ci
-        environment:
-          # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
-          # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
-          CYPRESS_INSTALL_BINARY: 0
-
-    - run:
-        name: Linter
-        when: always
-        command: npm run lint
-
-    - run:
-        name: Core tests
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/core/results.xml
-        command: npm run test:core
-
-    - run:
-        name: Entrypoint tests
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/entrypoint/results.xml
-        command: npm run test:entrypoint
-
-    - store_test_results:
-        path: junit
-
-    - run:
-        name: 'Prettier check (quick fix: `npm run prettier`)'
-        when: always
-        command: npm run prettier:check
-
 integration_steps: &integration_steps
   steps:
     - checkout
@@ -140,20 +98,6 @@ package_steps: &package_steps
         path: junit
 
 jobs:
-  main:
-    docker:
-      - image: cimg/node:16.15
-
-    <<: *main_steps
-
-  main@node-17:
-    docker:
-      - image: cimg/node:17.9
-    environment:
-      NPM_CONFIG_ENGINE_STRICT: 'false'
-
-    <<: *main_steps
-
   integration:
     docker:
       - image: cimg/node:16.15
@@ -297,14 +241,6 @@ workflows:
 
   on-commit:
     jobs:
-      - main:
-          filters:
-            branches:
-              ignore: gh-pages
-      - main@node-17:
-          filters:
-            branches:
-              ignore: gh-pages
       - integration@node-17:
           filters:
             branches:
@@ -346,12 +282,6 @@ workflows:
   #         filters:
   #           branches:
   #             ignore: gh-pages
-  #     - main:
-  #         requires:
-  #           - npm-install
-  #     - main@node-latest:
-  #         requires:
-  #           - npm-install
   #     - frontend:
   #         requires:
   #           - npm-install
