@@ -143,7 +143,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
 
-    if (!packageVersion.require || !packageVersion.require.php) {
+    if (!packageVersion.require) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
@@ -161,6 +161,12 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         dependencyIdentifier = `${depVendLowercase}/${depRepoLowercase}`
       }
     } else {
+      throw new NotFound({
+        prettyMessage: 'dependency vendor or repo not specified',
+      })
+    }
+
+    if (!packageVersion.require[dependencyIdentifier]) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
