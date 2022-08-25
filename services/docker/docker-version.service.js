@@ -3,11 +3,11 @@ import { nonNegativeInteger } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 import {
+  archSchema,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
   getDigestSemVerMatches,
-  validArchitectures,
 } from './docker-helpers.js'
 
 const buildSchema = Joi.object({
@@ -27,9 +27,7 @@ const buildSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.string()
-    .valid(...validArchitectures)
-    .default('amd64'),
+  arch: archSchema.default('amd64'),
 }).required()
 
 export default class DockerVersion extends BaseJsonService {

@@ -1,24 +1,27 @@
+import Joi from 'joi'
 // see https://github.com/badges/shields/pull/1690
 import { NotFound } from '../index.js'
 const dockerBlue = '066da5'
 
 // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
-const validArchitectures = [
-  'amd64',
-  'arm',
-  'arm64',
-  's390x',
-  '386',
-  'ppc64',
-  'ppc64le',
-  'wasm',
-  'mips',
-  'mipsle',
-  'mips64',
-  'mips64le',
-  'riscv64',
-  386,
-]
+const archSchema = Joi.alternatives(
+  Joi.string().valid(
+    'amd64',
+    'arm',
+    'arm64',
+    's390x',
+    '386',
+    'ppc64',
+    'ppc64le',
+    'wasm',
+    'mips',
+    'mipsle',
+    'mips64',
+    'mips64le',
+    'riscv64'
+  ),
+  Joi.number().valid(386).cast('string')
+)
 
 function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {
@@ -73,8 +76,8 @@ function getDigestSemVerMatches({ data, digest }) {
 }
 
 export {
+  archSchema,
   dockerBlue,
-  validArchitectures,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,

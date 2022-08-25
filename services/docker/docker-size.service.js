@@ -4,10 +4,10 @@ import { nonNegativeInteger } from '../validators.js'
 import { latest } from '../version.js'
 import { BaseJsonService, NotFound } from '../index.js'
 import {
+  archSchema,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
-  validArchitectures,
 } from './docker-helpers.js'
 
 const buildSchema = Joi.object({
@@ -39,10 +39,7 @@ const pagedSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.alternatives([
-    Joi.string().valid(...validArchitectures),
-    Joi.number().valid(...validArchitectures),
-  ]),
+  arch: archSchema,
 }).required()
 
 // If user provided the arch parameter,
