@@ -45,7 +45,7 @@ const queryParamSchema = Joi.object({
 // If user provided the arch parameter,
 // check if any of the returned images has an architecture matching the arch parameter provided.
 // If yes, return the size of the image with this arch.
-// If not, return the value of the `full_size` in the latestEntry from the response.
+// If not, throw the `NotFound` error.
 // For details see: https://github.com/badges/shields/issues/8238
 function getImageSizeForArch(images, arch) {
   const imgWithArch = Object.values(images).find(
@@ -127,9 +127,10 @@ export default class DockerSize extends BaseJsonService {
 
   getSizeFromImageByLatestSemver(data, arch) {
     // If no tag is specified, and sorting is by semver, first filter out the entry containing the latest semver from the response with Docker images.
-    // Then check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
+    // If no architecture is supplied by the user, return `full_size` from this entry.
+    // If the architecture is supplied by the user, check if any of the returned images for this entry has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
-    // If not, return the value of the `full_size` from the entry matching the latest semver.
+    // If not, throw the `NotFound` error.
 
     const [matches, versions, images] = data.reduce(
       ([m, v, i], d) => {
@@ -164,9 +165,11 @@ export default class DockerSize extends BaseJsonService {
   }
 
   getSizeFromTag(data, arch) {
-    // If the tag is specified, check if any of the returned images has an architecture matching the arch parameter supplied by the user.
+    // If the tag is specified, and the architecture is supplied by the user,
+    // check if any of the returned images has an architecture matching the arch parameter supplied by the user.
     // If yes, return the size of the image with this arch.
-    // If not, return the value of the `full_size` from the response (the image with the `latest` tag).
+    // If no, throw the `NotFound` error.
+    // If no architecture is supplied by the user, return the value of the `full_size` from the response (the image with the `latest` tag).
     if (arch) {
       return { size: getImageSizeForArch(data.images, arch) }
     } else {
