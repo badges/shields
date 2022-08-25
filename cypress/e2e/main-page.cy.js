@@ -1,3 +1,7 @@
+import { registerCommand } from 'cypress-wait-for-stable-dom'
+
+registerCommand()
+
 describe('Main page', function () {
   const backendUrl = Cypress.env('backend_url')
   const SEARCH_INPUT = 'input[placeholder="search / project URL"]'
@@ -9,8 +13,13 @@ describe('Main page', function () {
       .should('have.attr', 'src', previewUrl)
   }
 
+  function visitAndWait(page) {
+    cy.visit(page)
+    cy.waitForStableDOM({ pollInterval: 1000, timeout: 10000 })
+  }
+
   it('Search for badges', function () {
-    cy.visit('/')
+    visitAndWait('/')
 
     cy.get(SEARCH_INPUT).type('pypi')
 
@@ -18,7 +27,7 @@ describe('Main page', function () {
   })
 
   it('Shows badge from category', function () {
-    cy.visit('/category/chat')
+    visitAndWait('/category/chat')
 
     expectBadgeExample(
       'Discourse status',
@@ -29,7 +38,7 @@ describe('Main page', function () {
 
   it('Suggest badges', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
-    cy.visit('/')
+    visitAndWait('/')
 
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
@@ -39,7 +48,7 @@ describe('Main page', function () {
 
   it('Customization form is filled with suggested badge details', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
-    cy.visit('/')
+    visitAndWait('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
 
@@ -51,7 +60,7 @@ describe('Main page', function () {
 
   it('Customizate suggested badge', function () {
     const badgeUrl = `${backendUrl}/github/issues/badges/shields`
-    cy.visit('/')
+    visitAndWait('/')
     cy.get(SEARCH_INPUT).type('https://github.com/badges/shields')
     cy.contains('Suggest badges').click()
     cy.contains(badgeUrl).click()
@@ -62,7 +71,7 @@ describe('Main page', function () {
   })
 
   it('Do not duplicate example parameters', function () {
-    cy.visit('/category/funding')
+    visitAndWait('/category/funding')
 
     cy.contains('GitHub Sponsors').click()
     cy.get('[name="style"]').should($style => {
