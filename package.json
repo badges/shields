@@ -57,7 +57,7 @@
     "path-to-regexp": "^6.2.1",
     "pretty-bytes": "^6.0.0",
     "priorityqueuejs": "^2.0.0",
-    "prom-client": "^14.0.1",
+    "prom-client": "^14.1.0",
     "qs": "^6.11.0",
     "query-string": "^7.1.1",
     "semver": "~7.3.7",
