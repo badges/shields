@@ -163,8 +163,37 @@ class BasePackagistService extends BaseJsonService {
     }
     return versions.filter(version => version.version === release)[0]
   }
-}
 
+  findVersionIndex(json, version) {
+    return json.findIndex(v => v.version === version)
+  }
+
+  async findSpecifiedVersion(json, user, repo, version, server) {
+    let release
+
+    if ((release = json[this.findVersionIndex(json, version)])) {
+      return release
+    } else {
+      try {
+        const allData = await this.fetchDev({
+          user,
+          repo,
+          schema: allVersionsSchema,
+          server,
+        })
+
+        const versions = this.expandPackageVersions(
+          allData,
+          this.getPackageName(user, repo)
+        )
+
+        return versions[this.findVersionIndex(versions, version)]
+      } catch (e) {
+        return release
+      }
+    }
+  }
+}
 const customServerDocumentationFragment = `
     <p>
         Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.
