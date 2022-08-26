@@ -29,8 +29,18 @@ t.create('Tag (repo not found)')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
 t.create('Tag (filter by prefix + trim prefix at slash)')
-  .get('/v/tag/ros/rosdistro.json?subpackage=galactic/&trimPrefixAtSlash')
-  .expectBadge({ label: 'tag', message: Joi.date().required() })
+  .get('/v/tag/ros/rosdistro.json?prefix=galactic/&trimPrefixAtSlash')
+  .expectBadge({
+    label: 'tag',
+    message: Joi.alternatives()
+      .try(
+        Joi.date().required(),
+        Joi.string()
+          .pattern(/^20.*$/)
+          .required()
+      )
+      .match('all'),
+  })
 
 // redirects
 t.create('Tag (legacy route: tag)')
