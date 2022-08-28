@@ -193,10 +193,6 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - package:
-          filters:
-            branches:
-              ignore: gh-pages
       - services:
           filters:
             branches:
