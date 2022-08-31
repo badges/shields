@@ -9,14 +9,14 @@ const resourceSchema = Joi.object({
       reviews: Joi.object({
         count: Joi.number().required(),
         stars: Joi.number().required(),
-      }),
+      }).required(),
       updates: Joi.object({
         latest: Joi.object({
           version: Joi.string().required(),
-        }),
-      }),
-    }),
-  }),
+        }).required(),
+      }).required(),
+    }).required(),
+  }).required(),
 }).required()
 
 const documentation = `
