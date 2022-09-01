@@ -34,7 +34,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         dependencyVendor: 'twig',
         dependencyRepo: 'twig',
       },
-      staticPreview: this.render({ dependencyVersion: '2.13|^3.0.4' }),
+      staticPreview: this.render({
+        dependencyNameForLabel: 'twig/twig',
+        dependencyVersion: '2.13|^3.0.4',
+      }),
     },
     {
       title: 'Packagist Dependency Version Support (specify version)',
@@ -48,7 +51,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         dependencyVendor: 'twig',
         dependencyRepo: 'twig',
       },
-      staticPreview: this.render({ dependencyVersion: '1.12' }),
+      staticPreview: this.render({
+        dependencyNameForLabel: 'twig/twig',
+        dependencyVersion: '1.12',
+      }),
     },
     {
       title: 'Packagist Dependency Version Support (custom server)',
@@ -62,7 +68,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         dependencyRepo: 'twig',
         server: 'https://packagist.org',
       },
-      staticPreview: this.render({ dependencyVersion: '2.13|^3.0.4' }),
+      staticPreview: this.render({
+        dependencyNameForLabel: 'twig/twig',
+        dependencyVersion: '2.13|^3.0.4',
+      }),
       documentation: customServerDocumentationFragment,
     },
   ]
@@ -72,9 +81,20 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     color: 'blue',
   }
 
-  static render({ dependencyVersion }) {
+  static render({ dependencyNameForLabel, dependencyVersion }) {
     return {
+      label: dependencyNameForLabel,
       message: dependencyVersion,
+    }
+  }
+
+  determineDependencyNameForLabel({ dependencyVendor, dependencyRepo }) {
+    if (dependencyVendor && dependencyRepo) {
+      return `${dependencyVendor}/${dependencyRepo}`
+    } else if (dependencyVendor && !dependencyRepo) {
+      return dependencyVendor
+    } else if (!dependencyVendor && dependencyRepo) {
+      return dependencyRepo
     }
   }
 
@@ -164,6 +184,14 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       dependencyRepo,
     })
 
-    return this.constructor.render({ dependencyVersion })
+    const dependencyNameForLabel = this.determineDependencyNameForLabel({
+      dependencyVendor,
+      dependencyRepo,
+    })
+
+    return this.constructor.render({
+      dependencyNameForLabel,
+      dependencyVersion,
+    })
   }
 }
