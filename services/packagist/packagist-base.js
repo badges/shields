@@ -164,10 +164,12 @@ class BasePackagistService extends BaseJsonService {
     return versions.filter(version => version.version === release)[0]
   }
 
+  // moved from packagist-php-version.service.js so that it can be reused in packagist-dependency-version.service.js
   findVersionIndex(json, version) {
     return json.findIndex(v => v.version === version)
   }
 
+  // moved from packagist-php-version.service.js so that it can be reused in packagist-dependency-version.service.js
   async findSpecifiedVersion(json, user, repo, version, server) {
     let release
 

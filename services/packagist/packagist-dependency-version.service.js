@@ -143,9 +143,9 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     const depRepoLowercase = dependencyRepo?.toLowerCase()
 
     if (dependencyRepo || dependencyVendor) {
-      if (!!dependencyRepo & !dependencyVendor) {
+      if (dependencyRepo & !dependencyVendor) {
         dependencyIdentifier = depRepoLowercase
-      } else if (!dependencyRepo & !!dependencyVendor) {
+      } else if (!dependencyRepo & dependencyVendor) {
         dependencyIdentifier = depVendLowercase
       } else {
         dependencyIdentifier = `${depVendLowercase}/${depRepoLowercase}`
