@@ -184,7 +184,7 @@ class BasePackagistService extends BaseJsonService {
           server,
         })
 
-        const versions = this.expandPackageVersions(
+        const versions = BasePackagistService.expandPackageVersions(
           allData,
           this.getPackageName(user, repo)
         )
