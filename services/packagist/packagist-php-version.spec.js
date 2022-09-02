@@ -1,5 +1,8 @@
-import { expect } from 'chai'
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import PackagistPhpVersion from './packagist-php-version.service.js'
+const { expect } = chai
+chai.use(chaiAsPromised)
 
 describe('PackagistPhpVersion', function () {
   const json = {
