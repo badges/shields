@@ -140,13 +140,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     let dependencyIdentifier
 
     if (dependencyRepo || dependencyVendor) {
-      if (!!dependencyRepo & !dependencyVendor) {
-        dependencyIdentifier = dependencyRepo
-      } else if (!dependencyRepo & !!dependencyVendor) {
-        dependencyIdentifier = dependencyVendor
-      } else {
-        dependencyIdentifier = `${dependencyVendor}/${dependencyRepo}`
-      }
+      dependencyIdentifier = this.determineDependencyNameForLabel({
+        dependencyVendor,
+        dependencyRepo,
+      })
     } else {
       throw new NotFound({
         prettyMessage: 'dependency vendor or repo not specified',
