@@ -5,7 +5,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  auto-close:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
