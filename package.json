@@ -24,7 +24,7 @@
     "@fontsource/lato": "^4.5.9",
     "@fontsource/lekton": "^4.5.10",
     "@renovate/pep440": "^1.0.0",
-    "@sentry/node": "^7.11.1",
+    "@sentry/node": "^7.12.1",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.2",
