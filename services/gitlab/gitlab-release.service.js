@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound } from '../index.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
@@ -21,11 +22,6 @@ const queryParamSchema = Joi.object({
     .default('created_at'),
 }).required()
 
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
-</p>
-`
 const commonProps = {
   namedParams: {
     project: 'shields-ops-group/tag-test',
@@ -102,9 +98,7 @@ export default class GitLabRelease extends GitLabBase {
     return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
-      errorMessages: {
-        404: 'project not found',
-      },
+      errorMessages: errorMessagesFor('project not found'),
       options: {
         searchParams: { order_by: orderBy },
       },

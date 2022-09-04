@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 // The total number of MR is in the `x-total` field in the headers.
@@ -15,19 +16,21 @@ const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
 
-const documentation = `
+const more = `
 <p>
-  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab ).
-  Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
   <a href="https://docs.gitlab.com/ee/user/gitlab_com/index.html#pagination-response-headers">GitLab's API </a> only reports up to 10k Merge Requests, so badges for projects that have more than 10k will not have an exact count.
 </p>
 `
 
-const labelDocumentation = `
+const labelText = `
 <p>
   If you want to use multiple labels then please use commas (<code>,</code>) to separate them, e.g. <code>foo,bar</code>.
 </p>
 `
+
+const defaultDocumentation = documentation + more
+
+const labelDocumentation = documentation + labelText + more
 
 export default class GitlabMergeRequests extends GitLabBase {
   static category = 'issue-tracking'
@@ -51,7 +54,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '1.4k open',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merge requests',
@@ -65,7 +68,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '1.4k',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merge requests by-label',
@@ -82,7 +85,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '3 open',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab merge requests by-label',
@@ -99,7 +102,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '3',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab closed merge requests',
@@ -113,7 +116,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k closed',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab closed merge requests',
@@ -127,7 +130,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab closed merge requests by-label',
@@ -144,7 +147,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '32 closed',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab closed merge requests by-label',
@@ -161,7 +164,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '32',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab all merge requests',
@@ -175,7 +178,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k all',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab all merge requests',
@@ -189,7 +192,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab all merge requests by-label',
@@ -206,7 +209,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '12',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab locked merge requests',
@@ -220,7 +223,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '0 locked',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab locked merge requests by-label',
@@ -237,7 +240,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '0 locked',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
     {
       title: 'GitLab merged merge requests',
@@ -251,7 +254,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: 'more than 10k merged',
         color: 'blue',
       },
-      documentation,
+      documentation: defaultDocumentation,
     },
     {
       title: 'GitLab merged merge requests by-label',
@@ -268,7 +271,7 @@ export default class GitlabMergeRequests extends GitLabBase {
         message: '68 merged',
         color: 'blue',
       },
-      documentation: documentation + labelDocumentation,
+      documentation: labelDocumentation,
     },
   ]
 
@@ -311,9 +314,7 @@ export default class GitlabMergeRequests extends GitLabBase {
             labels,
           },
         },
-        errorMessages: {
-          404: 'project not found',
-        },
+        errorMessages: errorMessagesFor('project not found'),
       })
     )
     return this.constructor._validate(res.headers, schema)
