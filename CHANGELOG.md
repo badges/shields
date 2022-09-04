@@ -6,19 +6,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2022-09-04
 
-- get the tests passing on windows [#8350](https://github.com/badges/shields/issues/8350)
+- fix frontend compile for users running on Windows [#8350](https://github.com/badges/shields/issues/8350)
 - [DockerSize] Docker image size multi arch [#8290](https://github.com/badges/shields/issues/8290)
-- migrate 'main' tests to GH actions [#8332](https://github.com/badges/shields/issues/8332)
 - upgrade gatsby [#8334](https://github.com/badges/shields/issues/8334)
 - Custom domains for [JitPack] artifacts [#8333](https://github.com/badges/shields/issues/8333)
 - fix [dockerstars] service [#8316](https://github.com/badges/shields/issues/8316)
-- Fix: Broken Badge generation for decimal activity values [#8315](https://github.com/badges/shields/issues/8315)
+- [BountySource] Fix: Broken Badge generation for decimal activity values [#8315](https://github.com/badges/shields/issues/8315)
 - feat: add [gitlabmergerequests] service [#8166](https://github.com/badges/shields/issues/8166)
-- Fix variable naming for [ROS] version service [#8292](https://github.com/badges/shields/issues/8292)
+- Fix terminology for [ROS] version service [#8292](https://github.com/badges/shields/issues/8292)
 - feat: add [GitlabStars] service [#8209](https://github.com/badges/shields/issues/8209)
 - Fix invalid `rst` format when `alt` or `target` is present [#8275](https://github.com/badges/shields/issues/8275)
 - [GithubGistLastCommit] GitHub gist last commit [#8272](https://github.com/badges/shields/issues/8272)
-- chore: fix typo in badge request template [#8254](https://github.com/badges/shields/issues/8254)
 - [GitHub] GitHub file size for a specific branch [#8262](https://github.com/badges/shields/issues/8262)
 - Dependency updates
 
