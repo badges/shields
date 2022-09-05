@@ -47,56 +47,6 @@ services_steps: &services_steps
     - store_test_results:
         path: junit
 
-package_steps: &package_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install node and npm
-        command: |
-          set +e
-          export NVM_DIR="/opt/circleci/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install v14
-          nvm use v14
-          npm install -g npm
-
-    # Run the package tests on each currently supported node version. See:
-    # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
-    # https://nodejs.org/en/about/releases/
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v12/results.xml
-          NODE_VERSION: v12
-          CYPRESS_INSTALL_BINARY: 0
-          NPM_CONFIG_ENGINE_STRICT: 'false'
-        name: Run package tests on Node 12
-        command: scripts/run_package_tests.sh
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v14/results.xml
-          NODE_VERSION: v14
-          CYPRESS_INSTALL_BINARY: 0
-          NPM_CONFIG_ENGINE_STRICT: 'false'
-        name: Run package tests on Node 14
-        command: scripts/run_package_tests.sh
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v16/results.xml
-          NODE_VERSION: v16
-          CYPRESS_INSTALL_BINARY: 0
-        name: Run package tests on Node 16
-        command: scripts/run_package_tests.sh
-
-    - store_test_results:
-        path: junit
-
 jobs:
   integration:
     docker:
@@ -172,12 +122,6 @@ jobs:
           when: always
           command: npm run build
 
-  package:
-    machine:
-      image: 'ubuntu-2004:202111-02'
-
-    <<: *package_steps
-
   services:
     docker:
       - image: cimg/node:16.15
@@ -246,10 +190,6 @@ workflows:
             branches:
               ignore: gh-pages
       - frontend:
-          filters:
-            branches:
-              ignore: gh-pages
-      - package:
           filters:
             branches:
               ignore: gh-pages
