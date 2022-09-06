@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/base-service/errors</title>
+    <title>JSDoc: Module: services/package-json-helpers</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/base-service/errors</h1>
+    <h1 class="page-title">Module: services/package-json-helpers</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Standard exceptions for handling error cases</p></div>
+            <div class="description"><p>Common functions and utilities for tasks related to package.json</p></div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line1">line 1</a>
+        <a href="services_package-json-helpers.js.html">services/package-json-helpers.js</a>, <a href="services_package-json-helpers.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -126,31 +126,6 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-NotFound.html">NotFound</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></dt>
-            <dd></dd>
-        </dl>
-    
 
     
 
@@ -159,18 +134,18 @@
     
 
     
-
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Members</h3>
 
         
-                
-<h4 class="name" id="~RuntimeErrorProps">RuntimeErrorProps</h4>
+            
+<h4 class="name" id="~isDependencyMap"><span class="type-signature">(inner, constant) </span>isDependencyMap<span class="type-signature"> :Joi</span></h4>
 
 
 
+
+<div class="description">
+    <p>Joi schema for validating dependency map.</p>
+</div>
 
 
 
@@ -178,113 +153,12 @@
     <ul>
         <li>
             
-<span class="param-type">object</span>
+<span class="param-type">Joi</span>
 
 
         </li>
     </ul>
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>underlyingError</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Error</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Exception we are wrapping (Optional)</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Response from an upstream API to provide
-context for the error (Optional)</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>prettyMessage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>User-facing error message to override the
-value of <code>defaultPrettyMessage()</code>. This is the text that will appear on the
-badge when we catch and render the exception (Optional)</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -318,7 +192,7 @@ badge when we catch and render the exception (Optional)</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line201">line 201</a>
+        <a href="services_package-json-helpers.js.html">services/package-json-helpers.js</a>, <a href="services_package-json-helpers.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -334,7 +208,471 @@ badge when we catch and render the exception (Optional)</p></td>
 
 
 
+        
             
+<h4 class="name" id="~isPackageJsonWithDependencies"><span class="type-signature">(inner, constant) </span>isPackageJsonWithDependencies<span class="type-signature"> :Joi</span></h4>
+
+
+
+
+<div class="description">
+    <p>Joi schema for validating package json object.
+Checks if the object has all the dependency types and the dependency types are valid.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Joi</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_package-json-helpers.js.html">services/package-json-helpers.js</a>, <a href="services_package-json-helpers.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~getDependencyVersion"><span class="type-signature">(inner) </span>getDependencyVersion<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Determines the dependency version based on the dependency type.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attributes</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Wanted dependency type, defaults to prod</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wantedDependency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of the wanted dependency</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dependencies</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map of dependencies</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>devDependencies</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map of dev dependencies</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>peerDependencies</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map of peer dependencies</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>optionalDependencies</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map of optional dependencies</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_package-json-helpers.js.html">services/package-json-helpers.js</a>, <a href="services_package-json-helpers.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+<ul>
+        <li>
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <ul>
+<li>Error message if unknown dependency type provided</li>
+</ul>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">string</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+</li>
+    
+        <li>
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <ul>
+<li>Error if wanted dependency is not present</li>
+</ul>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">InvalidParameter</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+</li>
+    </ul>
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Object containing semver range of the wanted dependency (eg. ~2.1.6 or &gt;=3.0.0 or &lt;4.0.0)</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
     
 
     
