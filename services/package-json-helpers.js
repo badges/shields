@@ -10,7 +10,7 @@ import { InvalidParameter } from './index.js'
 /**
  * Joi schema for validating dependency map.
  *
- * @type {object}
+ * @type {Joi}
  */
 const isDependencyMap = Joi.object()
   .pattern(
@@ -24,7 +24,7 @@ const isDependencyMap = Joi.object()
  * Joi schema for validating package json object.
  * Checks if the object has all the dependency types and the dependency types are valid.
  *
- * @type {object}
+ * @type {Joi}
  */
 const isPackageJsonWithDependencies = Joi.object({
   dependencies: isDependencyMap,
@@ -45,7 +45,7 @@ const isPackageJsonWithDependencies = Joi.object({
  * @param {object} attrs.optionalDependencies - Map of optional dependencies
  * @throws {string} - Error message if unknown dependency type provided
  * @throws {InvalidParameter} - Error if wanted dependency is not present
- * @returns {object} Object containing wanted dependency version
+ * @returns {object} Object containing semver range of the wanted dependency (eg. ~2.1.6 or >=3.0.0 or <4.0.0)
  */
 function getDependencyVersion({
   kind = 'prod',
