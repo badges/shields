@@ -163,38 +163,6 @@ class BasePackagistService extends BaseJsonService {
     }
     return versions.filter(version => version.version === release)[0]
   }
-
-  // moved from packagist-php-version.service.js so that it can be reused in packagist-dependency-version.service.js
-  findVersionIndex(json, version) {
-    return json.findIndex(v => v.version === version)
-  }
-
-  // moved from packagist-php-version.service.js so that it can be reused in packagist-dependency-version.service.js
-  async findSpecifiedVersion(json, user, repo, version, server) {
-    let release
-
-    if ((release = json[this.findVersionIndex(json, version)])) {
-      return release
-    } else {
-      try {
-        const allData = await this.fetchDev({
-          user,
-          repo,
-          schema: allVersionsSchema,
-          server,
-        })
-
-        const versions = BasePackagistService.expandPackageVersions(
-          allData,
-          this.getPackageName(user, repo)
-        )
-
-        return versions[this.findVersionIndex(versions, version)]
-      } catch (e) {
-        return release
-      }
-    }
-  }
 }
 const customServerDocumentationFragment = `
     <p>

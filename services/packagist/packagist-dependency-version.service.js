@@ -8,9 +8,8 @@ import {
 } from './packagist-base.js'
 
 const queryParamSchema = Joi.object({
-  dependencyVendor: Joi.string(),
-  dependencyRepo: Joi.string(),
   server: optionalUrl,
+  version: Joi.string(),
 }).required()
 
 export default class PackagistDependencyVersion extends BasePackagistService {
@@ -18,60 +17,67 @@ export default class PackagistDependencyVersion extends BasePackagistService {
 
   static route = {
     base: 'packagist/dependency-v',
-    pattern: ':user/:repo/:version?',
+    pattern: ':user/:repo/:dependency+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Packagist Dependency Version Support',
-      pattern: ':user/:repo',
+      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
-      },
-      queryParams: {
-        dependencyVendor: 'twig',
-        dependencyRepo: 'twig',
+        dependency: 'twig/twig',
       },
       staticPreview: this.render({
-        dependencyNameForLabel: 'twig/twig',
         dependencyVersion: '2.13|^3.0.4',
       }),
     },
     {
       title: 'Packagist Dependency Version Support (specify version)',
-      pattern: ':user/:repo/:version',
+      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
-        version: 'v2.8.0',
+        dependency: 'twig/twig',
       },
       queryParams: {
-        dependencyVendor: 'twig',
-        dependencyRepo: 'twig',
+        version: 'v2.8.0',
       },
       staticPreview: this.render({
-        dependencyNameForLabel: 'twig/twig',
         dependencyVersion: '1.12',
       }),
     },
     {
       title: 'Packagist Dependency Version Support (custom server)',
-      pattern: ':user/:repo',
+      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
+        dependency: 'twig/twig',
       },
       queryParams: {
-        dependencyVendor: 'twig',
-        dependencyRepo: 'twig',
         server: 'https://packagist.org',
       },
       staticPreview: this.render({
-        dependencyNameForLabel: 'twig/twig',
         dependencyVersion: '2.13|^3.0.4',
       }),
+      documentation: customServerDocumentationFragment,
+    },
+    {
+      title: 'Packagist PHP Version Support (custom server)',
+      pattern: ':user/:repo/:dependency+',
+      namedParams: {
+        user: 'symfony',
+        repo: 'symfony',
+        dependency: 'php',
+      },
+      queryParams: {
+        server: 'https://packagist.org',
+        version: 'v2.8.0',
+      },
+      staticPreview: this.render({ dependencyVersion: '^7.1.3' }),
       documentation: customServerDocumentationFragment,
     },
   ]
@@ -187,5 +193,35 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       dependencyNameForLabel,
       dependencyVersion,
     })
+  }
+
+  findVersionIndex(json, version) {
+    return json.findIndex(v => v.version === version)
+  }
+
+  async findSpecifiedVersion(json, user, repo, version, server) {
+    let release
+
+    if ((release = json[this.findVersionIndex(json, version)])) {
+      return release
+    } else {
+      try {
+        const allData = await this.fetchDev({
+          user,
+          repo,
+          schema: allVersionsSchema,
+          server,
+        })
+
+        const versions = BasePackagistService.expandPackageVersions(
+          allData,
+          this.getPackageName(user, repo)
+        )
+
+        return versions[this.findVersionIndex(versions, version)]
+      } catch (e) {
+        return release
+      }
+    }
   }
 }

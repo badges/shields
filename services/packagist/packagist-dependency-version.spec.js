@@ -4,7 +4,6 @@ import PackagistDependencyVersion from './packagist-dependency-version.service.j
 const { expect } = chai
 chai.use(chaiAsPromised)
 
-// majority of tests below are copied from packagist-php-version.spec, since PackagistDependencyVersion should work very similarly to PackagistDependencyVersion (just with the option to specify the second dependency, instead of the hardoded 'php')
 describe('PackagistDependencyVersion', function () {
   const fullPackagistJson = {
     packages: {
