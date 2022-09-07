@@ -74,7 +74,7 @@ describe('PackagistDependencyVersion', function () {
     ).to.be.rejectedWith('version requirement not found')
   })
 
-  it('should throw NotFound if neither dependencyVendor nor dependencyRepo was specified', async function () {
+  it('should throw NotFound if dependency was not specified', async function () {
     await expect(
       PackagistDependencyVersion.prototype.getDependencyVersion({
         json: fullPackagistJson,
@@ -90,8 +90,7 @@ describe('PackagistDependencyVersion', function () {
         json: fullPackagistJson,
         user: 'frodo',
         repo: 'the-one-package',
-        dependencyVendor: 'twig',
-        dependencyRepo: 'twig',
+        dependency: 'twig/twig',
       })
     )
       .to.have.property('dependencyVersion')
@@ -105,8 +104,7 @@ describe('PackagistDependencyVersion', function () {
         user: 'frodo',
         repo: 'the-one-package',
         version: '2.0.0',
-        dependencyVendor: 'twig',
-        dependencyRepo: 'twig',
+        dependency: 'twig/twig',
       })
     )
       .to.have.property('dependencyVersion')

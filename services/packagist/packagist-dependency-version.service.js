@@ -24,19 +24,18 @@ export default class PackagistDependencyVersion extends BasePackagistService {
   static examples = [
     {
       title: 'Packagist Dependency Version Support',
-      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
         dependency: 'twig/twig',
       },
       staticPreview: this.render({
+        dependency: 'twig/twig',
         dependencyVersion: '2.13|^3.0.4',
       }),
     },
     {
       title: 'Packagist Dependency Version Support (specify version)',
-      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -46,12 +45,12 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         version: 'v2.8.0',
       },
       staticPreview: this.render({
+        dependency: 'twig/twig',
         dependencyVersion: '1.12',
       }),
     },
     {
       title: 'Packagist Dependency Version Support (custom server)',
-      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -61,13 +60,13 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         server: 'https://packagist.org',
       },
       staticPreview: this.render({
+        dependency: 'twig/twig',
         dependencyVersion: '2.13|^3.0.4',
       }),
       documentation: customServerDocumentationFragment,
     },
     {
       title: 'Packagist PHP Version Support (custom server)',
-      pattern: ':user/:repo/:dependency+',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -77,7 +76,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
         server: 'https://packagist.org',
         version: 'v2.8.0',
       },
-      staticPreview: this.render({ dependencyVersion: '^7.1.3' }),
+      staticPreview: this.render({
+        dependency: 'php',
+        dependencyVersion: '^7.1.3',
+      }),
       documentation: customServerDocumentationFragment,
     },
   ]
@@ -87,20 +89,10 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     color: 'blue',
   }
 
-  static render({ dependencyNameForLabel, dependencyVersion }) {
+  static render({ dependency, dependencyVersion }) {
     return {
-      label: dependencyNameForLabel,
+      label: dependency,
       message: dependencyVersion,
-    }
-  }
-
-  determineDependencyNameForLabel({ dependencyVendor, dependencyRepo }) {
-    if (dependencyVendor && dependencyRepo) {
-      return `${dependencyVendor}/${dependencyRepo}`
-    } else if (dependencyVendor && !dependencyRepo) {
-      return dependencyVendor
-    } else if (!dependencyVendor && dependencyRepo) {
-      return dependencyRepo
     }
   }
 
@@ -108,10 +100,9 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     json,
     user,
     repo,
+    dependency,
     version = '',
     server,
-    dependencyVendor,
-    dependencyRepo,
   }) {
     let packageVersion
     const versions = BasePackagistService.expandPackageVersions(
@@ -135,6 +126,12 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       }
     }
 
+    if (!dependency) {
+      throw new NotFound({
+        prettyMessage: 'dependency vendor or repo not specified',
+      })
+    }
+
     if (!packageVersion) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
@@ -143,30 +140,14 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
-    let dependencyIdentifier
-
-    if (dependencyRepo || dependencyVendor) {
-      dependencyIdentifier = this.determineDependencyNameForLabel({
-        dependencyVendor,
-        dependencyRepo,
-      })
-    } else {
-      throw new NotFound({
-        prettyMessage: 'dependency vendor or repo not specified',
-      })
-    }
-
-    if (!packageVersion.require[dependencyIdentifier]) {
+    if (!packageVersion.require[dependency]) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
-    return { dependencyVersion: packageVersion.require[dependencyIdentifier] }
+    return { dependencyVersion: packageVersion.require[dependency] }
   }
 
-  async handle(
-    { user, repo, version = '' },
-    { dependencyVendor, dependencyRepo, server }
-  ) {
+  async handle({ user, repo, dependency }, { server, version = '' }) {
     const allData = await this.fetch({
       user,
       repo,
@@ -178,19 +159,13 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       json: allData,
       user,
       repo,
+      dependency,
       version,
       server,
-      dependencyVendor,
-      dependencyRepo,
-    })
-
-    const dependencyNameForLabel = this.determineDependencyNameForLabel({
-      dependencyVendor,
-      dependencyRepo,
     })
 
     return this.constructor.render({
-      dependencyNameForLabel,
+      dependency,
       dependencyVersion,
     })
   }
