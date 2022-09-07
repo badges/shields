@@ -1,7 +1,7 @@
 import { test, given } from 'sazerac'
 import { getDependencyVersion } from './package-json-helpers.js'
 
-describe('Contributor count helpers', function () {
+describe('Package json helpers', function () {
   test(getDependencyVersion, () => {
     given({
       wantedDependency: 'left-pad',

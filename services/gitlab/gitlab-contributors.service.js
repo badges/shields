@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { renderContributorBadge } from '../contributor-count.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({ 'x-total': nonNegativeInteger }).required()
@@ -8,19 +9,6 @@ const schema = Joi.object({ 'x-total': nonNegativeInteger }).required()
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
-
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab )
-</p>
-`
-
-const customDocumentation = `
-<p>
-  Note that only network-accessible jihulab.com and other self-managed GitLab instances are supported.
-  You may use your GitLab Project Id (e.g. 13953) or your Project Path (e.g. gitlab-cn/gitlab ) in <a href="https://jihulab.com">https://jihulab.com</a>
-</p>
-`
 
 export default class GitlabContributors extends GitLabBase {
   static category = 'activity'
@@ -46,7 +34,7 @@ export default class GitlabContributors extends GitLabBase {
         project: 'gitlab-cn/gitlab',
       },
       staticPreview: this.render({ contributorCount: 415 }),
-      documentation: customDocumentation,
+      documentation,
     },
   ]
 
@@ -64,9 +52,7 @@ export default class GitlabContributors extends GitLabBase {
           project
         )}/repository/contributors`,
         options: { searchParams: { page: '1', per_page: '1' } },
-        errorMessages: {
-          404: 'project not found',
-        },
+        errorMessages: errorMessagesFor('project not found'),
       })
     )
     const data = this.constructor._validate(res.headers, schema)

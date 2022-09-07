@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
