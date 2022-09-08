@@ -22,7 +22,7 @@ const errorMessages = {
  * Joi schema for validating individual value.
  * Checks if the individual value is of type string or number.
  *
- * @type {object}
+ * @type {Joi}
  */
 const individualValueSchema = Joi.alternatives()
   .try(Joi.string(), Joi.number())
@@ -32,7 +32,7 @@ const individualValueSchema = Joi.alternatives()
  * Joi schema for validating compound value.
  * Checks if the compound value is of type individualValueSchema, array of individualValueSchema or empty array.
  *
- * @type {object}
+ * @type {Joi}
  */
 const compoundValueSchema = Joi.alternatives().try(
   individualValueSchema,
