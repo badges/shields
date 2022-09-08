@@ -140,11 +140,13 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
-    if (!packageVersion.require[dependency]) {
+    const depLowerCase = dependency.toLowerCase()
+
+    if (!packageVersion.require[depLowerCase]) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
 
-    return { dependencyVersion: packageVersion.require[dependency] }
+    return { dependencyVersion: packageVersion.require[depLowerCase] }
   }
 
   async handle({ user, repo, dependency }, { server, version = '' }) {
