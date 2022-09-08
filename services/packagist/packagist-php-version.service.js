@@ -13,10 +13,9 @@ export default redirector({
     pattern: ':user/:repo/:version?',
     queryParamSchema,
   },
-  transformPath: ({ user, repo, version }) =>
-    `/packagist/dependency-v/${user}/${repo}/php${
-      version ? `/${version}` : ''
-    }`,
+  transformPath: ({ user, repo }) =>
+    `/packagist/dependency-v/${user}/${repo}/php`,
   transformQueryParams: ({ version, server }) => ({ version, server }),
+  overrideTransformedQueryParams: true,
   dateAdded: new Date('2022-09-07'),
 })
