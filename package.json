@@ -41,7 +41,7 @@
     "fast-xml-parser": "^4.0.9",
     "glob": "^8.0.3",
     "global-agent": "^3.0.0",
-    "got": "^12.3.1",
+    "got": "^12.4.1",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.6",
     "ioredis": "5.2.3",
