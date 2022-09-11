@@ -74,7 +74,8 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
     if (preferredThreshold) {
       if (!validThresholds.includes(preferredThreshold)) {
         throw new InvalidParameter({
-          prettyMessage: `threshold must be "branches", "lines", or "functions"`,
+          prettyMessage:
+            'threshold must be "branches", "lines", or "functions"',
         })
       }
       if (!config[preferredThreshold]) {

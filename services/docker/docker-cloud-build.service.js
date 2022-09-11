@@ -34,7 +34,7 @@ export default class DockerCloudBuild extends BaseJsonService {
 
     if (data.objects.length === 0) {
       throw new NotFound({
-        prettyMessage: `automated builds not set up`,
+        prettyMessage: 'automated builds not set up',
       })
     }
     return this.constructor.render({ state: data.objects[0].state })
