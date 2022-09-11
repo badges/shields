@@ -10,7 +10,7 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/commits-difference',
-    pattern: ':user/:repo/:branchA/:branchB',
+    pattern: ':user/:repo/:branchesToCompare+',
   }
 
   static examples = [
@@ -19,11 +19,10 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
       namedParams: {
         user: 'microsoft',
         repo: 'vscode',
-        branchA: '1.58.0',
-        branchB: '1.59.0',
+        branchesToCompare: '1.60.0...82f2db7',
       },
       staticPreview: this.render({
-        commitCount: 1227,
+        commitCount: 9227,
       }),
       documentation,
     },
@@ -38,12 +37,12 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     }
   }
 
-  async handle({ user, repo, branchA, branchB }) {
+  async handle({ user, repo, branchesToCompare }) {
     const notFoundMessage =
       'could not establish commit difference between branches/tags/commits'
     const { total_commits: commitCount } = await this._requestJson({
       schema,
-      url: `/repos/${user}/${repo}/compare/${branchA}...${branchB}`,
+      url: `/repos/${user}/${repo}/compare/${branchesToCompare}`,
       errorMessages: errorMessagesFor(notFoundMessage),
     })
 
