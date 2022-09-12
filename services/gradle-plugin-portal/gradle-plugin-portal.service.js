@@ -26,7 +26,7 @@ export default redirector({
       documentation,
     },
   ],
-  transformPath: () => `/maven-metadata/v`,
+  transformPath: () => '/maven-metadata/v',
   transformQueryParams: ({ pluginId }) => {
     const groupPath = pluginId.replace(/\./g, '/')
     const artifactId = `${pluginId}.gradle.plugin`

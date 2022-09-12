@@ -40,7 +40,7 @@ class GithubAuthV4Service extends BaseGraphqlService {
   }
 
   async _requestGraphql(attrs) {
-    const url = `/graphql`
+    const url = '/graphql'
 
     /*
     The Github v4 API requires us to query the rateLimit object to return

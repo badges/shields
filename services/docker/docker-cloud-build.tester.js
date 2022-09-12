@@ -3,11 +3,27 @@ import { createServiceTester } from '../tester.js'
 import { dockerBlue } from './docker-helpers.js'
 export const t = await createServiceTester()
 
-t.create('docker cloud build status (valid, user)')
-  .get('/jrottenberg/ffmpeg.json')
+t.create('docker cloud build status (valid user)')
+  .get('/pavics/magpie.json')
   .expectBadge({
     label: 'docker build',
     message: isBuildStatus,
+  })
+
+t.create('docker cloud build status (invalid, nonexisting user)')
+  .get('/pavicsssss/magpie.json')
+  .expectBadge({
+    label: 'docker build',
+    message: 'automated builds not set up',
+  })
+
+t.create(
+  "docker cloud build status (valid user, but the 'objects' array from the response is empty)"
+)
+  .get('/pavics/weaver.json')
+  .expectBadge({
+    label: 'docker build',
+    message: 'automated builds not set up',
   })
 
 t.create('docker cloud build status (not found)')

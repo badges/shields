@@ -85,7 +85,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/milestones/${number}`,
       schema,
-      errorMessages: errorMessagesFor(`repo or milestone not found`),
+      errorMessages: errorMessagesFor('repo or milestone not found'),
     })
   }
 

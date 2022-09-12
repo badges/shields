@@ -5,11 +5,27 @@ export const t = await createServiceTester()
 
 const isAutomatedBuildStatus = Joi.string().valid('automated', 'manual')
 
-t.create('docker cloud automated build (valid, user)')
-  .get('/jrottenberg/ffmpeg.json')
+t.create('docker cloud automated build (valid user)')
+  .get('/pavics/magpie.json')
   .expectBadge({
     label: 'docker build',
     message: isAutomatedBuildStatus,
+  })
+
+t.create('docker cloud automated build status (invalid, nonexisting user)')
+  .get('/pavicsssss/magpie.json')
+  .expectBadge({
+    label: 'docker build',
+    message: 'manual',
+  })
+
+t.create(
+  "docker cloud build status (valid user, but the 'objects' array from the response is empty)"
+)
+  .get('/pavics/weaver.json')
+  .expectBadge({
+    label: 'docker build',
+    message: 'manual',
   })
 
 t.create('docker cloud automated build (not found)')
