@@ -12,5 +12,6 @@ export default class NodeCurrentVersion extends NodeVersionBase {
 
   static colorResolver = versionColorForRangeCurrent
 
-  static documentation = `This badge indicates whether the package supports the <b>latest</b> release of node`
+  static documentation =
+    'This badge indicates whether the package supports the <b>latest</b> release of node'
 }

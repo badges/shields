@@ -14,7 +14,7 @@ t.create('types (from files)')
   .get('/form-data-entries.json')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
-      .get(`/form-data-entries/latest`)
+      .get('/form-data-entries/latest')
       .reply(200, {
         maintainers: [],
         files: ['index.js', 'index.d.ts'],

@@ -8,7 +8,7 @@ export default [
       base: 'twitter/url',
       pattern: ':protocol(https|http)/:hostAndPath+',
     },
-    transformPath: () => `/twitter/url`,
+    transformPath: () => '/twitter/url',
     transformQueryParams: ({ protocol, hostAndPath }) => ({
       url: `${protocol}://${hostAndPath}`,
     }),

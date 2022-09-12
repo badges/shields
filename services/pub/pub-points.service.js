@@ -3,7 +3,8 @@ import { floorCount } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
-const documentation = `<p>A measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>`
+const documentation =
+  '<p>A measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>'
 
 const keywords = ['dart', 'flutter']
 
