@@ -23,7 +23,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
 
   static examples = [
     {
-      title: 'Packagist Dependency Version Support',
+      title: 'Packagist Dependency Version',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -35,7 +35,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       }),
     },
     {
-      title: 'Packagist Dependency Version Support (specify version)',
+      title: 'Packagist Dependency Version (specify version)',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -50,7 +50,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       }),
     },
     {
-      title: 'Packagist Dependency Version Support (custom server)',
+      title: 'Packagist Dependency Version (custom server)',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
@@ -66,21 +66,16 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       documentation: customServerDocumentationFragment,
     },
     {
-      title: 'Packagist PHP Version Support (custom server)',
+      title: 'Packagist PHP Version',
       namedParams: {
         user: 'symfony',
         repo: 'symfony',
         dependency: 'php',
       },
-      queryParams: {
-        server: 'https://packagist.org',
-        version: 'v2.8.0',
-      },
       staticPreview: this.render({
         dependency: 'php',
         dependencyVersion: '^7.1.3',
       }),
-      documentation: customServerDocumentationFragment,
     },
   ]
 
@@ -126,12 +121,6 @@ export default class PackagistDependencyVersion extends BasePackagistService {
       }
     }
 
-    if (!dependency) {
-      throw new NotFound({
-        prettyMessage: 'dependency vendor or repo not specified',
-      })
-    }
-
     if (!packageVersion) {
       throw new NotFound({ prettyMessage: 'invalid version' })
     }
@@ -139,6 +128,13 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     if (!packageVersion.require) {
       throw new NotFound({ prettyMessage: 'version requirement not found' })
     }
+
+    // All dependencies' names in the 'require' section from the response should be lowercase,
+    // so that we can compare lowercase name of the dependency given via url by the user.
+    Object.keys(packageVersion.require).forEach(dependency => {
+      packageVersion.require[dependency.toLowerCase()] =
+        packageVersion.require[dependency]
+    })
 
     const depLowerCase = dependency.toLowerCase()
 
