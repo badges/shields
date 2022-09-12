@@ -32,56 +32,7 @@ describe('PackagistDependencyVersion', function () {
         repo: 'the-one-package',
         version: 'v4.0.0',
       })
-    ).to.be.rejectedWith('dependency vendor or repo not specified')
-  })
-
-  it('should throw NotFound when dependency not specified (when using default release)', async function () {
-    await expect(
-      PackagistDependencyVersion.prototype.getDependencyVersion({
-        json: fullPackagistJson,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
-    ).to.be.rejectedWith('dependency vendor or repo not specified')
-  })
-
-  it('should throw NotFound when dependency not specified (when using specified release)', async function () {
-    const fullPackagistJson = {
-      packages: {
-        'frodo/the-one-package': [
-          {
-            version: 'v3.0.0',
-            require: { php: '^7.4 || 8' },
-          },
-          {
-            version: 'v2.0.0',
-            require: { php: '^7.2' },
-          },
-          {
-            version: 'v1.0.0',
-            require: '__unset',
-          },
-        ],
-      },
-    }
-    await expect(
-      PackagistDependencyVersion.prototype.getDependencyVersion({
-        json: fullPackagistJson,
-        user: 'frodo',
-        repo: 'the-one-package',
-        version: 'v1.0.0',
-      })
-    ).to.be.rejectedWith('dependency vendor or repo not specified')
-  })
-
-  it('should throw NotFound if dependency was not specified', async function () {
-    await expect(
-      PackagistDependencyVersion.prototype.getDependencyVersion({
-        json: fullPackagistJson,
-        user: 'frodo',
-        repo: 'the-one-package',
-      })
-    ).to.be.rejectedWith('dependency vendor or repo not specified')
+    ).to.be.rejectedWith('invalid version')
   })
 
   it('should return dependency version for the default release', async function () {
