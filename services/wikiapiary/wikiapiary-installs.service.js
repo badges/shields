@@ -75,7 +75,7 @@ export default class WikiapiaryInstalls extends BaseJsonService {
   async fetch({ variant, name }) {
     return this._requestJson({
       schema,
-      url: `https://wikiapiary.com/w/api.php`,
+      url: 'https://wikiapiary.com/w/api.php',
       options: {
         searchParams: {
           action: 'ask',

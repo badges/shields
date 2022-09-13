@@ -160,7 +160,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       `repo:${user}/${repo}`,
       'is:pr',
       `created:${year}-10-01..${year}-10-31`,
-      `-label:invalid`,
+      '-label:invalid',
     ]
       .filter(Boolean)
       .join(' ')

@@ -70,7 +70,7 @@ export default class GithubMilestone extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/milestones?state=${variant}`,
       schema,
-      errorMessages: errorMessagesFor(`repo not found`),
+      errorMessages: errorMessagesFor('repo not found'),
     })
   }
 

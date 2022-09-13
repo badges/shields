@@ -27,7 +27,7 @@ function pullRequestClassGenerator(raw) {
     static category = 'issue-tracking'
     static route = {
       base: `bitbucket/${routePrefix}`,
-      pattern: `:user/:repo`,
+      pattern: ':user/:repo',
       queryParamSchema,
     }
 
