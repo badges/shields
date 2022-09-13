@@ -6,11 +6,17 @@ import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({ total_commits: nonNegativeInteger }).required()
 
+const queryParamSchema = Joi.object({
+  branchA: Joi.string().required(),
+  branchB: Joi.string().required(),
+}).required()
+
 export default class GithubCommitsDifference extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/commits-difference',
-    pattern: ':user/:repo/:branchesToCompare+',
+    pattern: ':user/:repo',
+    queryParamSchema,
   }
 
   static examples = [
@@ -19,7 +25,10 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
       namedParams: {
         user: 'microsoft',
         repo: 'vscode',
-        branchesToCompare: '1.60.0...82f2db7',
+      },
+      queryParams: {
+        branchA: '1.60.0',
+        branchB: '82f2db7',
       },
       staticPreview: this.render({
         commitCount: 9227,
@@ -37,12 +46,12 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     }
   }
 
-  async handle({ user, repo, branchesToCompare }) {
+  async handle({ user, repo }, { branchA, branchB }) {
     const notFoundMessage =
       'could not establish commit difference between branches/tags/commits'
     const { total_commits: commitCount } = await this._requestJson({
       schema,
-      url: `/repos/${user}/${repo}/compare/${branchesToCompare}`,
+      url: `/repos/${user}/${repo}/compare/${branchA}...${branchB}`,
       errorMessages: errorMessagesFor(notFoundMessage),
     })
 
