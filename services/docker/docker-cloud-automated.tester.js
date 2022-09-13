@@ -16,16 +16,16 @@ t.create('docker cloud automated build status (invalid, nonexisting user)')
   .get('/pavicsssss/magpie.json')
   .expectBadge({
     label: 'docker build',
-    message: `manual`,
+    message: 'manual',
   })
 
 t.create(
-  `docker cloud build status (valid user, but the 'objects' array from the response is empty)`
+  "docker cloud build status (valid user, but the 'objects' array from the response is empty)"
 )
   .get('/pavics/weaver.json')
   .expectBadge({
     label: 'docker build',
-    message: `manual`,
+    message: 'manual',
   })
 
 t.create('docker cloud automated build (not found)')

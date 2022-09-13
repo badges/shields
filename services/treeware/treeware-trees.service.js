@@ -33,7 +33,7 @@ export default class TreewareTrees extends BaseJsonService {
   }
 
   async fetch({ reference }) {
-    const url = `https://public.offset.earth/users/treeware/trees`
+    const url = 'https://public.offset.earth/users/treeware/trees'
     return this._requestJson({
       url,
       schema: apiSchema,
