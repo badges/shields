@@ -13,6 +13,13 @@ describe('PackagistDependencyVersion', function () {
           require: { php: '^7.4 || 8', 'twig/twig': '~1.28|~2.0' },
         },
         {
+          version: 'v2.5.0',
+          require: '__unset',
+        },
+        {
+          version: 'v2.4.0',
+        },
+        {
           version: 'v2.0.0',
           require: { php: '^7.2', 'twig/twig': '~1.20|~1.30' },
         },
@@ -24,7 +31,7 @@ describe('PackagistDependencyVersion', function () {
     },
   }
 
-  it('should throw NotFound when package version is missing', async function () {
+  it('should throw NotFound when package version is missing in the response', async function () {
     await expect(
       PackagistDependencyVersion.prototype.getDependencyVersion({
         json: fullPackagistJson,
@@ -33,6 +40,28 @@ describe('PackagistDependencyVersion', function () {
         version: 'v4.0.0',
       })
     ).to.be.rejectedWith('invalid version')
+  })
+
+  it('should throw NotFound when `require` section is missing in the response', async function () {
+    await expect(
+      PackagistDependencyVersion.prototype.getDependencyVersion({
+        json: fullPackagistJson,
+        user: 'frodo',
+        repo: 'the-one-package',
+        version: 'v2.5.0',
+      })
+    ).to.be.rejectedWith('version requirement not found')
+  })
+
+  it('should throw NotFound when `require` section in the response has the value of __unset (thank you, Packagist API :p)', async function () {
+    await expect(
+      PackagistDependencyVersion.prototype.getDependencyVersion({
+        json: fullPackagistJson,
+        user: 'frodo',
+        repo: 'the-one-package',
+        version: 'v2.4.0',
+      })
+    ).to.be.rejectedWith('version requirement not found')
   })
 
   it('should return dependency version for the default release', async function () {
