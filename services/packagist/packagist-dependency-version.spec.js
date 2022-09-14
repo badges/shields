@@ -48,7 +48,7 @@ describe('PackagistDependencyVersion', function () {
         json: fullPackagistJson,
         user: 'frodo',
         repo: 'the-one-package',
-        version: 'v2.5.0',
+        version: 'v2.4.0',
       })
     ).to.be.rejectedWith('version requirement not found')
   })
