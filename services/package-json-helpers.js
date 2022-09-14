@@ -45,7 +45,7 @@ const isPackageJsonWithDependencies = Joi.object({
  * @param {object} attrs.optionalDependencies - Map of optional dependencies
  * @throws {string} - Error message if unknown dependency type provided
  * @throws {InvalidParameter} - Error if wanted dependency is not present
- * @returns {object} Object containing semver range of the wanted dependency (eg. ~2.1.6 or >=3.0.0 or <4.0.0)
+ * @returns {string} Semver range of the wanted dependency (eg. ~2.1.6 or >=3.0.0 or <4.0.0)
  */
 function getDependencyVersion({
   kind = 'prod',
@@ -72,7 +72,7 @@ function getDependencyVersion({
     })
   }
 
-  return { range }
+  return range
 }
 
 export { isDependencyMap, isPackageJsonWithDependencies, getDependencyVersion }

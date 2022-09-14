@@ -175,7 +175,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     })
 
     const wantedDependency = scope ? `${scope}/${packageName}` : packageName
-    const { range } = getDependencyVersion({
+    const range = getDependencyVersion({
       kind,
       wantedDependency,
       dependencies,
