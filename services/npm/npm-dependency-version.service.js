@@ -127,7 +127,7 @@ export default class NpmDependencyVersion extends NpmBase {
         registryUrl,
       })
 
-    const { range } = getDependencyVersion({
+    const range = getDependencyVersion({
       kind,
       wantedDependency,
       dependencies,
