@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { BaseSvgScrapingService, NotFound } from '../index.js'
+import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
 import { documentation, errorMessagesFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
@@ -38,7 +38,7 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 </p>
 `
 
-export default class GitlabCoverage extends BaseSvgScrapingService {
+class GitlabCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
 
   static route = {
@@ -128,3 +128,17 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     })
   }
 }
+
+const GitlabCoverageRedirector = redirector({
+  category: 'coverage',
+  name: 'GitlabCoverageRedirector',
+  route: {
+    base: 'gitlab/coverage',
+    pattern: ':user/:repo/:branch',
+  },
+  transformPath: ({ user, repo }) => `/gitlab/coverage/${user}/${repo}`,
+  transformQueryParams: ({ branch }) => ({ branch }),
+  dateAdded: new Date('2022-09-15'),
+})
+
+export { GitlabCoverage, GitlabCoverageRedirector }
