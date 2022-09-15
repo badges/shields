@@ -13,6 +13,7 @@ const schema = Joi.object({
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   job_name: Joi.string(),
+  branch: Joi.string(),
 }).required()
 
 const moreDocs = `
@@ -42,45 +43,39 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
 
   static route = {
     base: 'gitlab/coverage',
-    pattern: ':user/:repo/:branch',
+    pattern: ':project+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Gitlab code coverage',
-      namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab-runner',
-        branch: 'master',
-      },
+      namedParams: { project: 'gitlab-org/gitlab-runner' },
+      queryParams: { branch: 'master' },
       staticPreview: this.render({ coverage: 67 }),
       documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (specific job)',
-      namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab-runner',
-        branch: 'master',
-      },
-      queryParams: { job_name: 'test coverage report' },
+      namedParams: { project: 'gitlab-org/gitlab-runner' },
+      queryParams: { job_name: 'test coverage report', branch: 'master' },
       staticPreview: this.render({ coverage: 96 }),
       documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (self-managed)',
-      namedParams: { user: 'GNOME', repo: 'at-spi2-core', branch: 'master' },
-      queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+      namedParams: { project: 'GNOME/at-spi2-core' },
+      queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
       staticPreview: this.render({ coverage: 93 }),
       documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (self-managed, specific job)',
-      namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+      namedParams: { project: 'GNOME/libhandy' },
       queryParams: {
         gitlab_url: 'https://gitlab.gnome.org',
         job_name: 'unit-test',
+        branch: 'master',
       },
       staticPreview: this.render({ coverage: 93 }),
       documentation: documentation + moreDocs,
@@ -96,11 +91,13 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     }
   }
 
-  async fetch({ user, repo, branch, baseUrl = 'https://gitlab.com', jobName }) {
+  async fetch({ project, baseUrl = 'https://gitlab.com', jobName, branch }) {
     // Since the URL doesn't return a usable value when an invalid job name is specified,
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
-    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${jobName}`
+    const url = `${baseUrl}/${decodeURIComponent(
+      project
+    )}/badges/${branch}/coverage.svg${jobName}`
     const errorMessages = errorMessagesFor('project not found')
     return this._requestSvg({
       schema,
@@ -117,12 +114,11 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
   }
 
   async handle(
-    { user, repo, branch },
-    { gitlab_url: baseUrl, job_name: jobName }
+    { project },
+    { gitlab_url: baseUrl, job_name: jobName, branch }
   ) {
     const { message: coverage } = await this.fetch({
-      user,
-      repo,
+      project,
       branch,
       baseUrl,
       jobName,
