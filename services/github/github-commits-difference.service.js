@@ -7,8 +7,8 @@ import { documentation, errorMessagesFor } from './github-helpers.js'
 const schema = Joi.object({ total_commits: nonNegativeInteger }).required()
 
 const queryParamSchema = Joi.object({
-  branchA: Joi.string().required(),
-  branchB: Joi.string().required(),
+  base: Joi.string().required(),
+  head: Joi.string().required(),
 }).required()
 
 export default class GithubCommitsDifference extends GithubAuthV3Service {
@@ -27,8 +27,8 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
         repo: 'vscode',
       },
       queryParams: {
-        branchA: '1.60.0',
-        branchB: '82f2db7',
+        base: '1.60.0',
+        head: '82f2db7',
       },
       staticPreview: this.render({
         commitCount: 9227,
@@ -46,12 +46,11 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     }
   }
 
-  async handle({ user, repo }, { branchA, branchB }) {
-    const notFoundMessage =
-      'could not establish commit difference between branches/tags/commits'
+  async handle({ user, repo }, { base, head }) {
+    const notFoundMessage = 'could not establish commit difference between refs'
     const { total_commits: commitCount } = await this._requestJson({
       schema,
-      url: `/repos/${user}/${repo}/compare/${branchA}...${branchB}`,
+      url: `/repos/${user}/${repo}/compare/${base}...${head}`,
       errorMessages: errorMessagesFor(notFoundMessage),
     })
 
