@@ -1,0 +1,20 @@
+name: Main
+on:
+  pull_request:
+
+jobs:
+  test-services-17:
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 17
+        env:
+          NPM_CONFIG_ENGINE_STRICT: 'false'
+
+      - name: Service tests
+        uses: ./.github/actions/service-tests

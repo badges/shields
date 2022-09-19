@@ -22,31 +22,6 @@ integration_steps: &integration_steps
     - store_test_results:
         path: junit
 
-services_steps: &services_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install dependencies
-        command: |
-          npm ci
-        environment:
-          CYPRESS_INSTALL_BINARY: 0
-
-    - run:
-        name: Identify services tagged in the PR title
-        command: npm run test:services:pr:prepare
-
-    - run:
-        name: Run tests for tagged services
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/services/results.xml
-        command: RETRY_COUNT=3 npm run test:services:pr:run
-
-    - store_test_results:
-        path: junit
-
 jobs:
   integration:
     docker:
@@ -122,20 +97,6 @@ jobs:
           when: always
           command: npm run build
 
-  services:
-    docker:
-      - image: cimg/node:16.15
-
-    <<: *services_steps
-
-  services@node-17:
-    docker:
-      - image: cimg/node:17.9
-    environment:
-      NPM_CONFIG_ENGINE_STRICT: 'false'
-
-    <<: *services_steps
-
   e2e:
     docker:
       - image: cypress/base:16.14.0
@@ -193,18 +154,6 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-      - services:
-          filters:
-            branches:
-              ignore:
-                - master
-                - gh-pages
-      - services@node-17:
-          filters:
-            branches:
-              ignore:
-                - master
-                - gh-pages
       - danger:
           filters:
             branches:
@@ -225,18 +174,6 @@ workflows:
   #     - frontend:
   #         requires:
   #           - npm-install
-  #     - services:
-  #         requires:
-  #           - npm-install
-  #         filters:
-  #           branches:
-  #             ignore: master
-  #     - services@node-latest:
-  #         requires:
-  #           - npm-install
-  #         filters:
-  #           branches:
-  #             ignore: master
   #     - danger:
   #         requires:
   #           - npm-install

@@ -1,0 +1,22 @@
+name: 'Service tests'
+description: 'Run tests for selected services'
+runs:
+  using: 'composite'
+  steps:
+    - name: Derive list of service tests to run
+      if: always()
+      run: npm run test:services:pr:prepare ${{ github.event.pull_request.title }}
+      shell: bash
+
+    - name: Run service tests
+      if: always()
+      run: npm run test:services:pr:run -- --reporter json --reporter-option 'output=reports/service-tests.json'
+      shell: bash
+      env:
+        RETRY_COUNT: 3
+
+    - name: Write Markdown Summary
+      if: always()
+      run: |
+        node scripts/mocha2md.js Services reports/service-tests.json >> $GITHUB_STEP_SUMMARY
+      shell: bash
