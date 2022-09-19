@@ -4,8 +4,15 @@ runs:
   using: 'composite'
   steps:
     - name: Derive list of service tests to run
+      # Note: In this step we are using an intermediate env var instead of
+      # passing github.event.pull_request.title as an argument
+      # to prevent a shell injection attack. Further reading:
+      # https://securitylab.github.com/research/github-actions-untrusted-input/#exploitability-and-impact
+      # https://securitylab.github.com/research/github-actions-untrusted-input/#remediation
       if: always()
-      run: npm run test:services:pr:prepare '${{ github.event.pull_request.title }}'
+      env:
+        TITLE: ${{ github.event.pull_request.title }}
+      run: npm run test:services:pr:prepare "$TITLE"
       shell: bash
 
     - name: Run service tests
