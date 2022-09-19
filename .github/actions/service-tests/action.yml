@@ -16,7 +16,6 @@ runs:
         RETRY_COUNT: 3
 
     - name: Write Markdown Summary
-      if: always()
       run: |
         node scripts/mocha2md.js Services reports/service-tests.json >> $GITHUB_STEP_SUMMARY
       shell: bash
