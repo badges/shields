@@ -1,4 +1,4 @@
-name: Main
+name: Services
 on:
   pull_request:
 
