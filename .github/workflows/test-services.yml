@@ -16,5 +16,3 @@ jobs:
 
       - name: Service tests
         uses: ./.github/actions/service-tests
-        with:
-          pr-title: ${{ github.event.pull_request.title }}

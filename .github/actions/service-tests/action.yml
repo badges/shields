@@ -1,15 +1,11 @@
 name: 'Service tests'
 description: 'Run tests for selected services'
-inputs:
-  pr-title:
-    description: 'Pull Request Title'
-    required: true
 runs:
   using: 'composite'
   steps:
     - name: Derive list of service tests to run
       if: always()
-      run: npm run test:services:pr:prepare ${{ inputs.pr-title }}
+      run: npm run test:services:pr:prepare ${{ github.event.pull_request.title }}
       shell: bash
 
     - name: Run service tests
