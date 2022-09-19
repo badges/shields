@@ -19,9 +19,9 @@ runs:
       if: always()
       run: |
         if test -f 'reports/service-tests.json'; then
-          echo '# Services:' >> $GITHUB_STEP_SUMMARY
+          echo '# Services' >> $GITHUB_STEP_SUMMARY
           sed -e 's/^/- /' pull-request-services.log >> $GITHUB_STEP_SUMMARY
-          node scripts/mocha2md.js Services reports/service-tests.json >> $GITHUB_STEP_SUMMARY
+          node scripts/mocha2md.js Report reports/service-tests.json >> $GITHUB_STEP_SUMMARY
         else
           echo "hello"
           echo 'No services found. Nothing to do.' >> $GITHUB_STEP_SUMMARY
