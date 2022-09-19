@@ -5,7 +5,7 @@ runs:
   steps:
     - name: Derive list of service tests to run
       if: always()
-      run: npm run test:services:pr:prepare ${{ github.event.pull_request.title }}
+      run: npm run test:services:pr:prepare '${{ github.event.pull_request.title }}'
       shell: bash
 
     - name: Run service tests
