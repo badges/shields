@@ -9,4 +9,4 @@ t.create('Version').get('/IndieGala-Helper.json').expectBadge({
 
 t.create('Version (not found)')
   .get('/not-a-real-plugin.json')
-  .expectBadge({ label: 'mozilla add-on', message: 'not found' })
+  .expectBadge({ label: 'mozilla add-on', message: 'derp' })

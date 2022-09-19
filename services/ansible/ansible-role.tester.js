@@ -8,7 +8,7 @@ export const t = new ServiceTester({
 
 t.create('role name (valid)')
   .get('/14542.json')
-  .expectBadge({ label: 'role', message: 'openwisp.openwisp2' })
+  .expectBadge({ label: 'role', message: 'derp' })
 
 t.create('role name (not found)')
   .get('/000.json')
