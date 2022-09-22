@@ -42,7 +42,7 @@ class GitlabCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
 
   static route = {
-    base: 'gitlab/coverage',
+    base: 'gitlab/pipeline-coverage',
     pattern: ':project+',
     queryParamSchema,
   }
@@ -51,6 +51,13 @@ class GitlabCoverage extends BaseSvgScrapingService {
     {
       title: 'Gitlab code coverage',
       namedParams: { project: 'gitlab-org/gitlab-runner' },
+      queryParams: { branch: 'master' },
+      staticPreview: this.render({ coverage: 67 }),
+      documentation: documentation + moreDocs,
+    },
+    {
+      title: 'Gitlab code coverage (with subgroup in the name of the project',
+      namedParams: { project: 'megabyte-labs/go/cli/bodega' },
       queryParams: { branch: 'master' },
       staticPreview: this.render({ coverage: 67 }),
       documentation: documentation + moreDocs,
@@ -136,7 +143,8 @@ const GitlabCoverageRedirector = redirector({
     base: 'gitlab/coverage',
     pattern: ':user/:repo/:branch',
   },
-  transformPath: ({ user, repo }) => `/gitlab/coverage/${user}/${repo}`,
+  transformPath: ({ user, repo }) =>
+    `/gitlab/pipeline-coverage/${user}/${repo}`,
   transformQueryParams: ({ branch }) => ({ branch }),
   dateAdded: new Date('2022-09-15'),
 })
