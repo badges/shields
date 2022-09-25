@@ -56,7 +56,8 @@ class GitlabCoverage extends BaseSvgScrapingService {
       documentation: documentation + moreDocs,
     },
     {
-      title: 'Gitlab code coverage (with subgroup in the name of the project',
+      title:
+        'Gitlab code coverage (with a subgroup in the name of the project)',
       namedParams: { project: 'megabyte-labs/go/cli/bodega' },
       queryParams: { branch: 'master' },
       staticPreview: this.render({ coverage: 67 }),
@@ -146,7 +147,7 @@ const GitlabCoverageRedirector = redirector({
   transformPath: ({ user, repo }) =>
     `/gitlab/pipeline-coverage/${user}/${repo}`,
   transformQueryParams: ({ branch }) => ({ branch }),
-  dateAdded: new Date('2022-09-15'),
+  dateAdded: new Date('2022-09-25'),
 })
 
 export { GitlabCoverage, GitlabCoverageRedirector }
