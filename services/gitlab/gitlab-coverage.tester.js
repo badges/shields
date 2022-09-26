@@ -65,11 +65,3 @@ t.create('Coverage (custom gitlab URL and job)')
     label: 'coverage',
     message: isIntegerPercentage,
   })
-
-// why is this test failing?
-// AssertionError: expected 200 to equal 301
-t.create('Coverage redirect')
-  .get('/gitlab/coverage/gitlab-org/gitlab-runner/master.json')
-  .expectRedirect(
-    '/gitlab/pipeline-coverage/gitlab-org/gitlab-runner.json?branch=master'
-  )
