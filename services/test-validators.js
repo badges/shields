@@ -43,7 +43,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(
-  /^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/
+  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/
 )
 
 // Regex for validate php-version.versionReduction()
@@ -78,6 +78,8 @@ const isMetricWithPattern = nestedRegexp => {
 }
 
 const isMetricOpenIssues = isMetricWithPattern(/ open/)
+
+const isMetricClosedIssues = isMetricWithPattern(/ closed/)
 
 const isMetricOverMetric = isMetricWithPattern(
   /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/
@@ -167,6 +169,7 @@ export {
   isMetricAllowNegative,
   isMetricWithPattern,
   isMetricOpenIssues,
+  isMetricClosedIssues,
   isMetricOverMetric,
   isMetricOverTimePeriod,
   isZeroOverTimePeriod,

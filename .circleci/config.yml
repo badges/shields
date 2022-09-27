@@ -1,48 +1,5 @@
 version: 2
 
-main_steps: &main_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install dependencies
-        command: |
-          npm install --dry-run
-          npm ci
-        environment:
-          # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
-          # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
-          CYPRESS_INSTALL_BINARY: 0
-
-    - run:
-        name: Linter
-        when: always
-        command: npm run lint
-
-    - run:
-        name: Core tests
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/core/results.xml
-        command: npm run test:core
-
-    - run:
-        name: Entrypoint tests
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/entrypoint/results.xml
-        command: npm run test:entrypoint
-
-    - store_test_results:
-        path: junit
-
-    - run:
-        name: 'Prettier check (quick fix: `npm run prettier`)'
-        when: always
-        command: npm run prettier:check
-
 integration_steps: &integration_steps
   steps:
     - checkout
@@ -50,7 +7,6 @@ integration_steps: &integration_steps
     - run:
         name: Install dependencies
         command: |
-          npm install --dry-run
           npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
@@ -73,7 +29,6 @@ services_steps: &services_steps
     - run:
         name: Install dependencies
         command: |
-          npm install --dry-run
           npm ci
         environment:
           CYPRESS_INSTALL_BINARY: 0
@@ -92,90 +47,26 @@ services_steps: &services_steps
     - store_test_results:
         path: junit
 
-package_steps: &package_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install node and npm
-        command: |
-          set +e
-          export NVM_DIR="/opt/circleci/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install v14
-          nvm use v14
-          npm install -g npm
-
-    # Run the package tests on each currently supported node version. See:
-    # https://github.com/badges/shields/blob/master/badge-maker/README.md#node-version-support
-    # https://nodejs.org/en/about/releases/
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v12/results.xml
-          NODE_VERSION: v12
-          CYPRESS_INSTALL_BINARY: 0
-        name: Run package tests on Node 12
-        command: scripts/run_package_tests.sh
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v14/results.xml
-          NODE_VERSION: v14
-          CYPRESS_INSTALL_BINARY: 0
-        name: Run package tests on Node 14
-        command: scripts/run_package_tests.sh
-
-    - run:
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/badge-maker/v16/results.xml
-          NODE_VERSION: v16
-          CYPRESS_INSTALL_BINARY: 0
-        name: Run package tests on Node 16
-        command: scripts/run_package_tests.sh
-
-    - store_test_results:
-        path: junit
-
 jobs:
-  main:
-    docker:
-      - image: circleci/node:16
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
-
-    <<: *main_steps
-
-  main@node-17:
-    docker:
-      - image: circleci/node:17
-
-    <<: *main_steps
-
   integration:
     docker:
-      - image: circleci/node:16
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+      - image: cimg/node:16.15
       - image: redis
 
     <<: *integration_steps
 
   integration@node-17:
     docker:
-      - image: circleci/node:17
+      - image: cimg/node:17.9
       - image: redis
+    environment:
+      NPM_CONFIG_ENGINE_STRICT: 'false'
 
     <<: *integration_steps
 
   danger:
     docker:
-      - image: circleci/node:16
+      - image: cimg/node:16.15
     steps:
       - checkout
 
@@ -195,17 +86,14 @@ jobs:
 
   frontend:
     docker:
-      - image: circleci/node:16
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+      - image: cimg/node:16.15
+
     steps:
       - checkout
 
       - run:
           name: Install dependencies
           command: |
-            npm install --dry-run
             npm ci
           environment:
             CYPRESS_INSTALL_BINARY: 0
@@ -234,32 +122,24 @@ jobs:
           when: always
           command: npm run build
 
-  package:
-    machine: true
-
-    <<: *package_steps
-
   services:
     docker:
-      - image: circleci/node:16
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+      - image: cimg/node:16.15
 
     <<: *services_steps
 
   services@node-17:
     docker:
-      - image: circleci/node:17
+      - image: cimg/node:17.9
+    environment:
+      NPM_CONFIG_ENGINE_STRICT: 'false'
 
     <<: *services_steps
 
   e2e:
     docker:
-      - image: cypress/base:16.13.0
-        environment:
-          NPM_CONFIG_ENGINE_STRICT: 'true'
-          NPM_CONFIG_STRICT_PEER_DEPS: 'true'
+      - image: cypress/base:16.14.0
+
     steps:
       - checkout
 
@@ -271,7 +151,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm install --dry-run
             npm ci
 
       - run:
@@ -306,23 +185,11 @@ workflows:
 
   on-commit:
     jobs:
-      - main:
-          filters:
-            branches:
-              ignore: gh-pages
-      - main@node-17:
-          filters:
-            branches:
-              ignore: gh-pages
       - integration@node-17:
           filters:
             branches:
               ignore: gh-pages
       - frontend:
-          filters:
-            branches:
-              ignore: gh-pages
-      - package:
           filters:
             branches:
               ignore: gh-pages
@@ -355,12 +222,6 @@ workflows:
   #         filters:
   #           branches:
   #             ignore: gh-pages
-  #     - main:
-  #         requires:
-  #           - npm-install
-  #     - main@node-latest:
-  #         requires:
-  #           - npm-install
   #     - frontend:
   #         requires:
   #           - npm-install

@@ -17,7 +17,7 @@ export default class SpackVersion extends BaseJsonService {
     {
       title: 'Spack',
       namedParams: { packageName: 'adios2' },
-      staticPreview: this.render({ version: '2.3.1' }),
+      staticPreview: this.render({ version: '2.8.0' }),
       keywords: ['hpc'],
     },
   ]
@@ -29,10 +29,9 @@ export default class SpackVersion extends BaseJsonService {
   }
 
   async fetch({ packageName }) {
-    const firstLetter = packageName[0]
     return this._requestJson({
       schema,
-      url: `https://packages.spack.io/api/${firstLetter}/${packageName}.json`,
+      url: `https://packages.spack.io/data/packages/${packageName}.json`,
       errorMessages: {
         404: 'package not found',
       },

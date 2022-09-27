@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { optionalUrl } from '../validators.js'
 import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -14,7 +15,7 @@ const queryParamSchema = Joi.object({
   branch: Joi.string(),
 }).required()
 
-const documentation = `
+const moreDocs = `
 <p>
   Important: You must use the Project Path, not the Project Id. Additionally, if your project is publicly visible, but the badge is like this:
   <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
@@ -51,14 +52,14 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
       namedParams: { project: 'gitlab-org/gitlab' },
       queryParams: { branch: 'master' },
       staticPreview: this.render({ status: 'passed' }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
-      title: 'Gitlab pipeline status (self-hosted)',
+      title: 'Gitlab pipeline status (self-managed)',
       namedParams: { project: 'GNOME/pango' },
       queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
       staticPreview: this.render({ status: 'passed' }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
   ]
 
@@ -72,10 +73,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
       url: `${baseUrl}/${decodeURIComponent(
         project
       )}/badges/${branch}/pipeline.svg`,
-      errorMessages: {
-        401: 'repo not found',
-        404: 'repo not found',
-      },
+      errorMessages: errorMessagesFor('project not found'),
     })
   }
 

@@ -8,7 +8,7 @@ export default class GitLabBase extends BaseJsonService {
 
   async fetch({ url, options, schema, errorMessages }) {
     return this._requestJson(
-      this.authHelper.withBasicAuth({
+      this.authHelper.withBearerAuthHeader({
         schema,
         url,
         options,
@@ -18,10 +18,12 @@ export default class GitLabBase extends BaseJsonService {
   }
 
   async fetchPage({ page, requestParams, schema }) {
-    const { res, buffer } = await this._request({
-      ...requestParams,
-      ...{ options: { searchParams: { page } } },
-    })
+    const { res, buffer } = await this._request(
+      this.authHelper.withBearerAuthHeader({
+        ...requestParams,
+        ...{ options: { searchParams: { page } } },
+      })
+    )
 
     const json = this._parseJson(buffer)
     const data = this.constructor._validate(json, schema)
@@ -35,7 +37,7 @@ export default class GitLabBase extends BaseJsonService {
     errorMessages,
     firstPageOnly = false,
   }) {
-    const requestParams = this.authHelper.withBasicAuth({
+    const requestParams = {
       url,
       options: {
         headers: { Accept: 'application/json' },
@@ -43,7 +45,7 @@ export default class GitLabBase extends BaseJsonService {
         ...options,
       },
       errorMessages,
-    })
+    }
 
     const {
       res: { headers },

@@ -10,7 +10,7 @@ export const t = await createServiceTester()
 
 t.create('Tech Debt')
   .get(
-    '/tech_debt/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
+    '/tech_debt/brave_brave-core.json?server=https://sonarcloud.io&sonarVersion=9.0'
   )
   .expectBadge({
     label: 'tech debt',
@@ -18,9 +18,7 @@ t.create('Tech Debt')
   })
 
 t.create('Tech Debt (branch)')
-  .get(
-    '/tech_debt/org.sonarsource.sonarqube%3Asonarqube/master.json?server=https://sonarcloud.io'
-  )
+  .get('/tech_debt/brave_brave-core/master.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'tech debt',
     message: isPercentage,

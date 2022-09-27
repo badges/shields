@@ -1,3 +1,4 @@
+import { metric } from '../text-formatters.js'
 import { BaseGithubLanguage } from './github-languages-base.js'
 import { documentation } from './github-helpers.js'
 
@@ -20,7 +21,7 @@ export default class GithubLanguageCount extends BaseGithubLanguage {
 
   static render({ count }) {
     return {
-      message: count,
+      message: metric(count),
       color: 'blue',
     }
   }

@@ -3,12 +3,16 @@ on:
   push:
     branches:
       - master
+
+permissions:
+  contents: write
+
 jobs:
-  build-and-deploy:
+  deploy-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v3
         with:
           persist-credentials: false
 
@@ -18,9 +22,8 @@ jobs:
           npm run build-docs
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: api-docs
-          CLEAN: true
+          branch: gh-pages
+          folder: api-docs
+          clean: true

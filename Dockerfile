@@ -9,7 +9,7 @@ COPY package.json package-lock.json /usr/src/app/
 COPY badge-maker /usr/src/app/badge-maker/
 
 RUN apk add python3 make g++
-RUN npm install -g "npm@>=7"
+RUN npm install -g "npm@>=8"
 # We need dev deps to build the front end. We don't need Cypress, though.
 RUN NODE_ENV=development CYPRESS_INSTALL_BINARY=0 npm ci
 
@@ -23,6 +23,8 @@ FROM node:16-alpine
 
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version
+LABEL version=$version
+LABEL fly.version=$version
 
 # Run the server using production configs.
 ENV NODE_ENV production

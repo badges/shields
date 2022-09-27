@@ -15,7 +15,7 @@ t.create('version')
   .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {
@@ -45,7 +45,7 @@ t.create('pre-release version')
   .get('/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {

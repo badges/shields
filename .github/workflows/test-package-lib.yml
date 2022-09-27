@@ -1,0 +1,32 @@
+name: Package Library
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+
+jobs:
+  test-package-lib:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - node: '14'
+            engine-strict: 'false'
+          - node: '16'
+            engine-strict: 'true'
+          - node: '18'
+            engine-strict: 'false'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+        env:
+          NPM_CONFIG_ENGINE_STRICT: ${{ matrix.engine-strict }}
+
+      - name: Package tests
+        uses: ./.github/actions/package-tests

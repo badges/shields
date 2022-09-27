@@ -6,7 +6,7 @@
   our own functions to parse and sort django versions
 */
 
-function parseDjangoVersionString(str) {
+function parsePypiVersionString(str) {
   if (typeof str !== 'string') {
     return false
   }
@@ -20,18 +20,12 @@ function parseDjangoVersionString(str) {
 }
 
 // Sort an array of django versions low to high.
-function sortDjangoVersions(versions) {
+function sortPypiVersions(versions) {
   return versions.sort((a, b) => {
-    if (
-      parseDjangoVersionString(a).major === parseDjangoVersionString(b).major
-    ) {
-      return (
-        parseDjangoVersionString(a).minor - parseDjangoVersionString(b).minor
-      )
+    if (parsePypiVersionString(a).major === parsePypiVersionString(b).major) {
+      return parsePypiVersionString(a).minor - parsePypiVersionString(b).minor
     } else {
-      return (
-        parseDjangoVersionString(a).major - parseDjangoVersionString(b).major
-      )
+      return parsePypiVersionString(a).major - parsePypiVersionString(b).major
     }
   })
 }
@@ -88,16 +82,12 @@ function getLicenses(packageData) {
 }
 
 function getPackageFormats(packageData) {
-  const {
-    info: { version },
-    releases,
-  } = packageData
-  const releasesForVersion = releases[version]
+  const { urls } = packageData
   return {
-    hasWheel: releasesForVersion.some(({ packagetype }) =>
+    hasWheel: urls.some(({ packagetype }) =>
       ['wheel', 'bdist_wheel'].includes(packagetype)
     ),
-    hasEgg: releasesForVersion.some(({ packagetype }) =>
+    hasEgg: urls.some(({ packagetype }) =>
       ['egg', 'bdist_egg'].includes(packagetype)
     ),
   }
@@ -105,8 +95,8 @@ function getPackageFormats(packageData) {
 
 export {
   parseClassifiers,
-  parseDjangoVersionString,
-  sortDjangoVersions,
+  parsePypiVersionString,
+  sortPypiVersions,
   getLicenses,
   getPackageFormats,
 }

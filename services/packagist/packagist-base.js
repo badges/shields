@@ -5,9 +5,10 @@ import { isStable, latest } from '../php-version.js'
 const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
-    require: Joi.object({
-      php: Joi.string(),
-    }),
+    require: Joi.alternatives(
+      Joi.object().pattern(Joi.string(), Joi.string()).required(),
+      Joi.string().valid('__unset')
+    ),
   })
 )
 
@@ -20,7 +21,7 @@ class BasePackagistService extends BaseJsonService {
   /**
    * Default fetch method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
@@ -44,7 +45,7 @@ class BasePackagistService extends BaseJsonService {
   /**
    * Fetch dev releases method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
@@ -163,7 +164,6 @@ class BasePackagistService extends BaseJsonService {
     return versions.filter(version => version.version === release)[0]
   }
 }
-
 const customServerDocumentationFragment = `
     <p>
         Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.

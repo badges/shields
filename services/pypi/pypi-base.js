@@ -5,19 +5,15 @@ const schema = Joi.object({
   info: Joi.object({
     version: Joi.string().required(),
     // https://github.com/badges/shields/issues/2022
-    license: Joi.string().allow(''),
+    // https://github.com/badges/shields/issues/7728
+    license: Joi.string().allow('').allow(null),
     classifiers: Joi.array().items(Joi.string()).required(),
   }).required(),
-  releases: Joi.object()
-    .pattern(
-      Joi.string(),
-      Joi.array()
-        .items(
-          Joi.object({
-            packagetype: Joi.string().required(),
-          })
-        )
-        .required()
+  urls: Joi.array()
+    .items(
+      Joi.object({
+        packagetype: Joi.string().required(),
+      })
     )
     .required(),
 }).required()

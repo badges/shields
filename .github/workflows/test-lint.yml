@@ -1,0 +1,26 @@
+name: Lint
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+
+jobs:
+  test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 16
+
+      - name: ESLint
+        if: always()
+        run: npm run lint
+
+      - name: 'Prettier check (quick fix: `npm run prettier`)'
+        if: always()
+        run: npm run prettier:check

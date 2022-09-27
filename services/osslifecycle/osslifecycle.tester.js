@@ -46,7 +46,7 @@ t.create('oss metadata in unexpected format')
     nock =>
       nock('https://raw.githubusercontent.com')
         .get('/some-user/some-project/HEAD/OSSMETADATA')
-        .reply(200, `wrongkey=active`),
+        .reply(200, 'wrongkey=active'),
     {
       'Content-Type': 'text/plain;charset=UTF-8',
     }

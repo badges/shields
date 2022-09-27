@@ -62,7 +62,7 @@ t.create('installs')
   .get('/visual-studio-marketplace/i/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, mockResponse)
   )
   .expectBadge({
@@ -75,7 +75,7 @@ t.create('zero installs')
   .get('/visual-studio-marketplace/i/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {
@@ -105,7 +105,7 @@ t.create('downloads')
   .get('/visual-studio-marketplace/d/swellaby.rust-pack.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, mockResponse)
   )
   .expectBadge({

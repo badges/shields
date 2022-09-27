@@ -3,6 +3,7 @@ import { nonNegativeInteger } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 import {
+  archSchema,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
@@ -26,23 +27,7 @@ const buildSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.string()
-    // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
-    .valid(
-      'amd64',
-      'arm',
-      'arm64',
-      's390x',
-      '386',
-      'ppc64',
-      'ppc64le',
-      'wasm',
-      'mips',
-      'mipsle',
-      'mips64',
-      'mips64le'
-    )
-    .default('amd64'),
+  arch: archSchema.default('amd64'),
 }).required()
 
 export default class DockerVersion extends BaseJsonService {

@@ -5,12 +5,12 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  auto-close:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install action dependencies
         run: cd .github/actions/close-bot && npm ci

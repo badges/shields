@@ -18,7 +18,7 @@ export default class WeblateEntities extends WeblateBase {
 
   static examples = [
     {
-      title: `Weblate entities`,
+      title: 'Weblate entities',
       namedParams: { type: 'projects' },
       queryParams: { server: 'https://hosted.weblate.org' },
       staticPreview: this.render({ type: 'projects', count: 533 }),

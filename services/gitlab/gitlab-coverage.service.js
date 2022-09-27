@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
 import { BaseSvgScrapingService, NotFound } from '../index.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
   message: Joi.string()
@@ -14,7 +15,7 @@ const queryParamSchema = Joi.object({
   job_name: Joi.string(),
 }).required()
 
-const documentation = `
+const moreDocs = `
 <p>
   Important: If your project is publicly visible, but the badge is like this:
   <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="coverage not set up"/>
@@ -54,7 +55,7 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
         branch: 'master',
       },
       staticPreview: this.render({ coverage: 67 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (specific job)',
@@ -65,24 +66,24 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
       },
       queryParams: { job_name: 'test coverage report' },
       staticPreview: this.render({ coverage: 96 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
-      title: 'Gitlab code coverage (self-hosted)',
+      title: 'Gitlab code coverage (self-managed)',
       namedParams: { user: 'GNOME', repo: 'at-spi2-core', branch: 'master' },
       queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
       staticPreview: this.render({ coverage: 93 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
-      title: 'Gitlab code coverage (self-hosted, specific job)',
+      title: 'Gitlab code coverage (self-managed, specific job)',
       namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
       queryParams: {
         gitlab_url: 'https://gitlab.gnome.org',
         job_name: 'unit-test',
       },
       staticPreview: this.render({ coverage: 93 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
   ]
 
@@ -100,10 +101,7 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
     const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${jobName}`
-    const errorMessages = {
-      401: 'repo not found',
-      404: 'repo not found',
-    }
+    const errorMessages = errorMessagesFor('project not found')
     return this._requestSvg({
       schema,
       url,
