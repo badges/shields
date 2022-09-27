@@ -38,11 +38,10 @@ export default class GitlabLanguageCount extends GitLabBase {
     },
   ]
 
-  static defaultBadgeData = { label: 'languages', namedLogo: 'gitlab' }
+  static defaultBadgeData = { label: 'languages' }
 
   static render({ languagesCount }) {
     return {
-      label: 'languages',
       message: metric(languagesCount),
       color: 'blue',
     }
