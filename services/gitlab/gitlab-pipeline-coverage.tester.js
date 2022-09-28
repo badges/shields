@@ -3,14 +3,14 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Coverage (branch)')
-  .get('/gitlab-org/gitlab-runner.json?branch=master')
+  .get('/gitlab-org/gitlab-runner.json?branch=12-0-stable')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
 t.create('Coverage (existent branch but coverage not set up)')
-  .get('/gitlab-org/gitlab-git-http-server.json')
+  .get('/gitlab-org/gitlab-git-http-server.json?branch=master')
   .expectBadge({
     label: 'coverage',
     message: 'not set up',
