@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
 import { documentation, errorMessagesFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
@@ -137,17 +137,4 @@ class GitlabCoverage extends BaseSvgScrapingService {
   }
 }
 
-const GitlabCoverageRedirector = redirector({
-  category: 'coverage',
-  name: 'GitlabCoverageRedirector',
-  route: {
-    base: 'gitlab/coverage',
-    pattern: ':user/:repo/:branch',
-  },
-  transformPath: ({ user, repo }) =>
-    `/gitlab/pipeline-coverage/${user}/${repo}`,
-  transformQueryParams: ({ branch }) => ({ branch }),
-  dateAdded: new Date('2022-09-25'),
-})
-
-export { GitlabCoverage, GitlabCoverageRedirector }
+export { GitlabCoverage }
