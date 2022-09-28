@@ -56,14 +56,6 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
       documentation: documentation + moreDocs,
     },
     {
-      title:
-        'Gitlab code coverage (with a subgroup in the name of the project)',
-      namedParams: { project: 'megabyte-labs/go/cli/bodega' },
-      queryParams: { branch: 'master' },
-      staticPreview: this.render({ coverage: 67 }),
-      documentation: documentation + moreDocs,
-    },
-    {
       title: 'Gitlab code coverage (specific job)',
       namedParams: { project: 'gitlab-org/gitlab-runner' },
       queryParams: { job_name: 'test coverage report', branch: 'master' },
