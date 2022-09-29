@@ -13,7 +13,7 @@ t.create('check runs - no tests')
   .get('/badges/shields/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json')
   .expectBadge({
     label: 'checks',
-    message: 'no tests',
+    message: 'no check runs',
   })
 
 t.create('check runs - nonexistent ref')

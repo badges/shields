@@ -10,16 +10,20 @@ const schema = Joi.object({
   check_runs: Joi.array()
     .items(
       Joi.object({
-        status: Joi.equal('completed', 'in_progress', 'queued').required(),
+        status: Joi.equal(
+          'completed', 
+          'in_progress', 
+          'queued'
+        ).required(),
         conclusion: Joi.equal(
           'action_required',
           'cancelled',
           'failure',
           'neutral',
           'skipped',
-          'stale',
           'success',
-          'timed_out'
+          'timed_out',
+          null
         ).required(),
       })
     )
@@ -75,7 +79,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     },
   ]
 
-  static defaultBadgeData = { label: 'checks' }
+  static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 
   static transform({ total_count, check_runs }) {
     return {
@@ -85,45 +89,47 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     }
   }
 
-  static mapState(stateCounts) {
-    const orangeStates = ['action_required', 'stale']
+  static mapState({ total, statusCounts, conclusionCounts }) {
+    let state
+    if (total === 0) {
+      state = 'no check runs'
+    } else if (statusCounts.queued) {
+      state = 'queued'
+    } else if (statusCounts.in_progress) {
+      state = 'pending'
+    } else if (statusCounts.completed) {
+      // all check runs are completed, now evaluate conclusions
+      const orangeStates = ['action_required', 'stale']
+      const redStates = ['cancelled', 'failure', 'timed_out']
 
-    const redStates = ['cancelled', 'failure', 'timed_out']
-
-    // ignore 'neutral' and 'skipped' states
-    let state = 'success'
-    for (const stateValue of Object.keys(stateCounts)) {
-      if (redStates.includes(stateValue)) {
-        state = 'failure'
-        break
-      } else if (orangeStates.includes(stateValue)) {
-        state = 'partially succeeded'
+      // assume "passing (green)"
+      state = 'passing'
+      for (const stateValue of Object.keys(conclusionCounts)) {
+        if (orangeStates.includes(stateValue)) {
+          // orange state renders "passing (orange)"
+          state = 'partially succeeded'
+        } else if (redStates.includes(stateValue)) {
+          // red state renders "failing (red)"
+          state = 'failing'
+          break
+        }
       }
+    } else {
+      state = 'unknown status'
     }
     return state
   }
 
   async handle({ user, repo, ref }) {
+
+    // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
       errorMessages: errorMessagesFor('ref or repo not found'),
       schema,
     })
 
-    const { total, statusCounts, conclusionCounts } =
-      this.constructor.transform(json)
-
-    let state
-    if (total === 0) {
-      state = 'no tests'
-    } else if (statusCounts.queued) {
-      state = 'queued'
-    } else if (statusCounts.in_progress) {
-      state = 'processing'
-    } else {
-      // all completed
-      state = this.constructor.mapState(conclusionCounts)
-    }
+    const state = this.constructor.mapState(this.constructor.transform(json))
 
     return renderBuildStatusBadge({ status: state })
   }
