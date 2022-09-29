@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import countBy from 'lodash.countby';
-import { nonNegativeInteger } from '../validators.js';
-import { renderBuildStatusBadge } from '../build-status.js';
-import { GithubAuthV3Service } from './github-auth-service.js';
-import { documentation, errorMessagesFor } from './github-helpers.js';
+import Joi from 'joi'
+import countBy from 'lodash.countby'
+import { nonNegativeInteger } from '../validators.js'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
   total_count: nonNegativeInteger,
@@ -24,14 +24,14 @@ const schema = Joi.object({
       })
     )
     .default([]),
-}).required();
+}).required()
 
 export default class GithubCheckRuns extends GithubAuthV3Service {
-  static category = 'build';
+  static category = 'build'
   static route = {
     base: 'github/checks-runs',
     pattern: ':user/:repo/:ref+',
-  };
+  }
 
   static examples = [
     {
@@ -73,47 +73,47 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
       keywords: ['status'],
       documentation,
     },
-  ];
+  ]
 
-  static defaultBadgeData = { label: 'checks', namedLogo: 'github' };
+  static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 
   static transform({ total_count, check_runs }) {
     return {
       total: total_count,
       statusCounts: countBy(check_runs, 'status'),
       conclusionCounts: countBy(check_runs, 'conclusion'),
-    };
+    }
   }
 
   static mapState({ total, statusCounts, conclusionCounts }) {
-    let state;
+    let state
     if (total === 0) {
-      state = 'no check runs';
+      state = 'no check runs'
     } else if (statusCounts.queued) {
-      state = 'queued';
+      state = 'queued'
     } else if (statusCounts.in_progress) {
-      state = 'pending';
+      state = 'pending'
     } else if (statusCounts.completed) {
       // all check runs are completed, now evaluate conclusions
-      const orangeStates = ['action_required', 'stale'];
-      const redStates = ['cancelled', 'failure', 'timed_out'];
+      const orangeStates = ['action_required', 'stale']
+      const redStates = ['cancelled', 'failure', 'timed_out']
 
-      // assume 'passing (green)'
-      state = 'passing';
+      // assume "passing (green)"
+      state = 'passing'
       for (const stateValue of Object.keys(conclusionCounts)) {
         if (orangeStates.includes(stateValue)) {
-          // orange state renders 'passing (orange)'
-          state = 'partially succeeded';
+          // orange state renders "passing (orange)"
+          state = 'partially succeeded'
         } else if (redStates.includes(stateValue)) {
-          // red state renders 'failing (red)'
-          state = 'failing';
-          break;
+          // red state renders "failing (red)"
+          state = 'failing'
+          break
         }
       }
     } else {
-      state = 'unknown status';
+      state = 'unknown status'
     }
-    return state;
+    return state
   }
 
   async handle({ user, repo, ref }) {
@@ -122,10 +122,10 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
       errorMessages: errorMessagesFor('ref or repo not found'),
       schema,
-    });
+    })
 
-    const state = this.constructor.mapState(this.constructor.transform(json));
+    const state = this.constructor.mapState(this.constructor.transform(json))
 
-    return renderBuildStatusBadge({ status: state });
+    return renderBuildStatusBadge({ status: state })
   }
 }
