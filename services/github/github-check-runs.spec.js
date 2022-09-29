@@ -1,7 +1,7 @@
 import { test, given } from 'sazerac'
 import GithubCheckRuns from './github-check-runs.service.js'
 
-describe('GithubCheckRuns', () => {
+describe('GithubCheckRuns', function () {
   test(GithubCheckRuns.mapState, () => {
     given({
       total: 0,
