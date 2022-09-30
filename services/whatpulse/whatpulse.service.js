@@ -2,8 +2,8 @@ import Joi from 'joi'
 import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
-  Keys: Joi.string().required(),
-  Clicks: Joi.string().required(),
+  Keys: Joi.alternatives(Joi.string(), Joi.number()),
+  Clicks: Joi.alternatives(Joi.string(), Joi.number()),
   UptimeShort: Joi.string().required(),
   Download: Joi.string().required(),
   Upload: Joi.string().required(),
@@ -22,11 +22,16 @@ const queryParamSchema = Joi.object({
 
 export default class WhatPulse extends BaseJsonService {
   static category = 'activity'
-  static route = { base: 'whatpulse', pattern: ':user', queryParamSchema }
+  static route = {
+    base: 'whatpulse',
+    pattern: ':userOrTeam/:id',
+    queryParamSchema,
+  }
+
   static examples = [
     {
       title: 'WhatPulse user stats - Keys',
-      namedParams: { user: 'jerone' },
+      namedParams: { userOrTeam: 'user', id: 'jerone' },
       queryParams: { category: 'keys' },
       staticPreview: this.render({
         category: 'Keys',
@@ -34,12 +39,30 @@ export default class WhatPulse extends BaseJsonService {
       }),
     },
     {
-      title: 'WhatPulse user stats - Rank in Clicks',
-      namedParams: { user: 'jerone' },
-      queryParams: { category: 'Rank/Clicks' },
+      title: 'WhatPulse user stats - Ranks in Upload',
+      namedParams: { userOrTeam: 'user', id: 'jerone' },
+      queryParams: { category: 'Ranks/Upload' },
       staticPreview: this.render({
-        category: 'Rank/Clicks',
+        category: 'Ranks/Upload',
         categoryValue: '5444',
+      }),
+    },
+    {
+      title: 'WhatPulse team stats - UptimeShort',
+      namedParams: { userOrTeam: 'team', id: '1295' },
+      queryParams: { category: 'UptimeShort' },
+      staticPreview: this.render({
+        category: 'UptimeShort',
+        categoryValue: '21344764434',
+      }),
+    },
+    {
+      title: 'WhatPulse team stats - Ranks in Download',
+      namedParams: { userOrTeam: 'team', id: 'dutch power cows' },
+      queryParams: { category: 'Ranks/Download' },
+      staticPreview: this.render({
+        category: 'Ranks/Download',
+        categoryValue: '1',
       }),
     },
   ]
@@ -54,10 +77,10 @@ export default class WhatPulse extends BaseJsonService {
     }
   }
 
-  async fetch({ user }) {
+  async fetch({ userOrTeam, id }) {
     return await this._requestJson({
       schema,
-      url: `https://api.whatpulse.org/user.php?user=${user}&format=json`,
+      url: `https://api.whatpulse.org/${userOrTeam}.php?${userOrTeam}=${id}&format=json`,
     })
   }
 
@@ -85,7 +108,6 @@ export default class WhatPulse extends BaseJsonService {
     } else {
       const rankTypeStart = category.indexOf('/')
       const categoryLowercase = category.toLowerCase().slice(rankTypeStart + 1)
-
       categoryName = jsonLowercase.ranks[categoryLowercase]
     }
 
@@ -96,8 +118,8 @@ export default class WhatPulse extends BaseJsonService {
     }
   }
 
-  async handle({ user }, { category }) {
-    const json = await this.fetch({ user, category })
+  async handle({ userOrTeam, id }, { category }) {
+    const json = await this.fetch({ userOrTeam, id, category })
     const categoryValue = this.transform({ json, category })
 
     return this.constructor.render({ category, categoryValue })
