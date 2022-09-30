@@ -92,27 +92,26 @@ export default class WhatPulse extends BaseJsonService {
   }
 
   transform({ json, category }) {
-    let categoryName
+    let categoryValue
 
     // To enable comparisons with the categories from the url that were written in varied cases, we need to lowercase the keys in the object from the WhatPulse's API.
     const jsonLowercase = this.toLowerKeys(json)
-    const lowercaseRanks = this.toLowerKeys(json.Ranks)
-    jsonLowercase.ranks = lowercaseRanks
+    jsonLowercase.ranks = this.toLowerKeys(json.Ranks)
 
     // When the user wants to show Ranks/Keys | Ranks/Clicks | Ranks/Download | Ranks/Upload | Ranks/Uptime,
     // the slash will be present and we need to extract the word after the slash.
-    // When there is no slash, we can directly use te lowercase version of the single present word to compare it against the lowercased response from the WhatPulse's API.
+    // When there is no slash, we can directly use the lowercase version of the single present word to compare it against the lowercased response from the WhatPulse's API.
 
     if (!category.includes('/')) {
-      categoryName = jsonLowercase[category.toLowerCase()]
+      categoryValue = jsonLowercase[category.toLowerCase()]
     } else {
       const rankTypeStart = category.indexOf('/')
       const categoryLowercase = category.toLowerCase().slice(rankTypeStart + 1)
-      categoryName = jsonLowercase.ranks[categoryLowercase]
+      categoryValue = jsonLowercase.ranks[categoryLowercase]
     }
 
-    if (categoryName) {
-      return categoryName
+    if (categoryValue) {
+      return categoryValue
     } else {
       throw new NotFound({ prettyMessage: 'invalid category' })
     }
