@@ -4,6 +4,7 @@ import { BaseJsonService, NotFound } from '../index.js'
 const schema = Joi.object({
   Keys: Joi.string().required(),
   Clicks: Joi.string().required(),
+  UptimeShort: Joi.string().required(),
   Download: Joi.string().required(),
   Upload: Joi.string().required(),
   Ranks: Joi.object({
@@ -16,7 +17,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  stat_name: Joi.string().required(),
+  category: Joi.string().required(),
 }).required()
 
 export default class WhatPulse extends BaseJsonService {
@@ -26,26 +27,29 @@ export default class WhatPulse extends BaseJsonService {
     {
       title: 'WhatPulse user stats - Keys',
       namedParams: { user: 'jerone' },
-      queryParams: { stat_name: 'keys' },
-      staticPreview: this.render({ statName: 'Keys', statValue: '26448513' }),
+      queryParams: { category: 'keys' },
+      staticPreview: this.render({
+        category: 'Keys',
+        categoryValue: '26448513',
+      }),
     },
     {
       title: 'WhatPulse user stats - Rank in Clicks',
       namedParams: { user: 'jerone' },
-      queryParams: { stat_name: 'Rank/Clicks' },
+      queryParams: { category: 'Rank/Clicks' },
       staticPreview: this.render({
-        statName: 'Rank/Clicks',
-        statValue: '5444',
+        category: 'Rank/Clicks',
+        categoryValue: '5444',
       }),
     },
   ]
 
   static defaultBadgeData = { label: 'WhatPulse' }
 
-  static render({ statName, statValue }) {
+  static render({ category, categoryValue }) {
     return {
-      label: `WhatPulse ${statName}`,
-      message: statValue,
+      label: `WhatPulse ${category}`,
+      message: categoryValue,
       color: '#374856',
     }
   }
@@ -57,34 +61,45 @@ export default class WhatPulse extends BaseJsonService {
     })
   }
 
-  transform({ json, statName }) {
-    let stat
+  toLowerKeys(obj) {
+    return Object.keys(obj).reduce((accumulator, key) => {
+      accumulator[key.toLowerCase()] = obj[key]
+      return accumulator
+    }, {})
+  }
 
-    if (!statName.includes('/')) {
-      const statNameCapitalized =
-        statName.charAt(0).toUpperCase() + statName.toLowerCase().slice(1)
+  transform({ json, category }) {
+    let categoryName
 
-      stat = json[statNameCapitalized]
+    // To enable comparisons with the categories from the url that were written in varied cases, we need to lowercase the keys in the object from the WhatPulse's API.
+    const jsonLowercase = this.toLowerKeys(json)
+    const lowercaseRanks = this.toLowerKeys(json.Ranks)
+    jsonLowercase.ranks = lowercaseRanks
+
+    // When the user wants to show Ranks/Keys | Ranks/Clicks | Ranks/Download | Ranks/Upload | Ranks/Uptime,
+    // the slash will be present and we need to extract the word after the slash.
+    // When there is no slash, we can directly use te lowercase version of the single present word to compare it against the lowercased response from the WhatPulse's API.
+
+    if (!category.includes('/')) {
+      categoryName = jsonLowercase[category.toLowerCase()]
     } else {
-      const rankTypeStart = statName.indexOf('/')
-      const statNameCapitalized =
-        statName.charAt(rankTypeStart + 1).toUpperCase() +
-        statName.toLowerCase().slice(rankTypeStart + 2)
+      const rankTypeStart = category.indexOf('/')
+      const categoryLowercase = category.toLowerCase().slice(rankTypeStart + 1)
 
-      stat = json.Ranks[statNameCapitalized]
+      categoryName = jsonLowercase.ranks[categoryLowercase]
     }
 
-    if (stat) {
-      return stat
+    if (categoryName) {
+      return categoryName
     } else {
-      throw new NotFound({ prettyMessage: 'invalid stat_name' })
+      throw new NotFound({ prettyMessage: 'invalid category' })
     }
   }
 
-  async handle({ user }, { stat_name: statName }) {
-    const json = await this.fetch({ user, statName })
-    const statValue = this.transform({ json, statName })
+  async handle({ user }, { category }) {
+    const json = await this.fetch({ user, category })
+    const categoryValue = this.transform({ json, category })
 
-    return this.constructor.render({ statName, statValue })
+    return this.constructor.render({ category, categoryValue })
   }
 }
