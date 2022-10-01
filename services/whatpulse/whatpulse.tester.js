@@ -21,10 +21,10 @@ t.create('WhatPulse team as team name, category from Ranks')
 
 t.create('WhatPulse invalid category name')
   .get('/user/179734.json?category=nonExistentCategory')
-  .expectBadge({ label: 'WhatPulse', message: Joi.string() })
+  .expectBadge({ label: 'WhatPulse', message: 'invalid category' })
 
 t.create(
   'WhatPulse incorrect user name - invalid response from WhatPulse (does not contain all of the Joi-required fields)'
 )
-  .get('/user/179734.json?category=nonExistentCategory')
-  .expectBadge({ label: 'WhatPulse', message: Joi.string() })
+  .get('/user/1797344444444444444.json?category=download')
+  .expectBadge({ label: 'WhatPulse', message: 'invalid response data' })
