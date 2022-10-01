@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-10-01
+
+- [GitLabCoverage] subgroup bug [#8401](https://github.com/badges/shields/issues/8401)
+- implement ruby gems-specific version sort/color functions [#8434](https://github.com/badges/shields/issues/8434)
+- Add `rc` to pre-release identifiers [#8435](https://github.com/badges/shields/issues/8435)
+- [GitHub] Number of commits between branches/tags/commits [#8394](https://github.com/badges/shields/issues/8394)
+- [Packagist] dependency version [#8371](https://github.com/badges/shields/issues/8371)
+- return string instead of object from getDependencyVersion function [#8396](https://github.com/badges/shields/issues/8396)
+- conform to standard js quote rules [#8395](https://github.com/badges/shields/issues/8395)
+- fix Docker build status invalid response data bug [#8392](https://github.com/badges/shields/issues/8392)
+- use Joi type for Joi schemas [#8380](https://github.com/badges/shields/issues/8380)
+- Docstrings for package json helpers [#8373](https://github.com/badges/shields/issues/8373)
+- migrate package tests to GHA [#8351](https://github.com/badges/shields/issues/8351)
+- improve workflow job names [#8376](https://github.com/badges/shields/issues/8376)
+- feat: add [gitlab]-helper for encapsulate docs and err [#8295](https://github.com/badges/shields/issues/8295)
+- Dependency updates
+
 ## server-2022-09-04
 
 - fix frontend compile for users running on Windows [#8350](https://github.com/badges/shields/issues/8350)
