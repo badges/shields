@@ -1,26 +1,30 @@
-// import Joi from 'joi'
-// import { createServiceTester } from '../tester.js'
-// export const t = await createServiceTester()
+import Joi from 'joi'
+import { createServiceTester } from '../tester.js'
+import { isOrdinalNumber } from '../test-validators.js'
+export const t = await createServiceTester()
 
-// t.create('WhatPulse user keys')
-//   .get('/tokio/0.3.0.json')
-//   .expectBadge({ label: 'docs@0.3.0', message: 'passing' })
+t.create('WhatPulse user as user id, category not from Ranks')
+  .get('/user/179734.json?category=DOWNLOAD')
+  .expectBadge({ label: 'WhatPulse DOWNLOAD', message: Joi.string() })
 
-// tests to write:
-// user as user id, category not from Ranks
-// http://localhost:8080/whatpulse/user/179734?category=DOWNLOAD
+t.create('WhatPulse user as user name, category from Ranks')
+  .get('/user/jerone.json?category=rankS/UplOad')
+  .expectBadge({ label: 'WhatPulse rankS/UplOad', message: isOrdinalNumber })
 
-// user as user name, category from Ranks
-// http://localhost:8080/whatpulse/user/jerone?category=rankS/UplOad
+t.create('WhatPulse team as team id, category not from Ranks')
+  .get('/team/1295.json?category=clicks')
+  .expectBadge({ label: 'WhatPulse clicks', message: Joi.string() })
 
-// team as team id, category not from Ranks
-// http://localhost:8080/whatpulse/team/1295?category=clicks
+t.create('WhatPulse team as team name, category from Ranks')
+  .get('/team/dutch%20power%20cows.json?category=RANKS/clickS')
+  .expectBadge({ label: 'WhatPulse RANKS/clickS', message: isOrdinalNumber })
 
-// team as team name, category from Ranks
-// http://localhost:8080/whatpulse/team/dutch%20power%20cows?category=RANKS/clickS
+t.create('WhatPulse invalid category name')
+  .get('/user/179734.json?category=nonExistentCategory')
+  .expectBadge({ label: 'WhatPulse', message: Joi.string() })
 
-// invalid category name
-// http://localhost:8080/whatpulse/user/179734?category=DOWNLOADessss
-
-// incorrect user name (the response from the WhatPulse's API does not contain the Joi-required fields)
-// http://localhost:8080/whatpulse/user/jeroneeeeee?category=DOWNLOAD
+t.create(
+  'WhatPulse incorrect user name - invalid response from WhatPulse (does not contain all of the Joi-required fields)'
+)
+  .get('/user/179734.json?category=nonExistentCategory')
+  .expectBadge({ label: 'WhatPulse', message: Joi.string() })

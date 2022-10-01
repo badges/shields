@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, NotFound } from '../index.js'
+import { ordinalNumber } from '../text-formatters.js'
 
 const schema = Joi.object({
   Keys: Joi.alternatives(Joi.string(), Joi.number()),
@@ -44,7 +45,7 @@ export default class WhatPulse extends BaseJsonService {
       queryParams: { category: 'Ranks/Upload' },
       staticPreview: this.render({
         category: 'Ranks/Upload',
-        categoryValue: '5444',
+        categoryValue: '5444ᵗʰ',
       }),
     },
     {
@@ -62,7 +63,7 @@ export default class WhatPulse extends BaseJsonService {
       queryParams: { category: 'Ranks/Download' },
       staticPreview: this.render({
         category: 'Ranks/Download',
-        categoryValue: '1',
+        categoryValue: '1ˢᵗ',
       }),
     },
   ]
@@ -99,15 +100,16 @@ export default class WhatPulse extends BaseJsonService {
     jsonLowercase.ranks = this.toLowerKeys(json.Ranks)
 
     // When the user wants to show Ranks/Keys | Ranks/Clicks | Ranks/Download | Ranks/Upload | Ranks/Uptime,
-    // the slash will be present and we need to extract the word after the slash.
-    // When there is no slash, we can directly use the lowercase version of the single present word to compare it against the lowercased response from the WhatPulse's API.
-
+    // we need to extract the word after the slash. Additionally, we need to use ordinal numbers.
+    // When there is no slash, we can directly use the lowercase version of the param,
+    // to compare it against the lowercased response from the WhatPulse's API.
     if (!category.includes('/')) {
       categoryValue = jsonLowercase[category.toLowerCase()]
     } else {
       const rankTypeStart = category.indexOf('/')
       const categoryLowercase = category.toLowerCase().slice(rankTypeStart + 1)
-      categoryValue = jsonLowercase.ranks[categoryLowercase]
+      const rank = jsonLowercase.ranks[categoryLowercase]
+      categoryValue = ordinalNumber(rank)
     }
 
     if (categoryValue) {
