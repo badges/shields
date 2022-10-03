@@ -3,6 +3,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { NotFound } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
+import { documentation as commonDocumentation } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -15,6 +16,10 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const documentation = `${commonDocumentation}
+<p>This badge shows the number of stargazers for a gist. Gist id is accepted as input and 'gist not found' is returned if the gist is not found for the given gist id.
+</p>`
+
 export default class GithubGistStars extends GithubAuthV4Service {
   static category = 'social'
 
@@ -22,6 +27,19 @@ export default class GithubGistStars extends GithubAuthV4Service {
     base: 'github/stars/gists',
     pattern: ':gist',
   }
+
+  static examples = [
+    {
+      title: 'Github Gist stars',
+      namedParams: { gist: '47a4d00457a92aa426dbd48a18776322' },
+      staticPreview: {
+        label: this.defaultBadgeData.label,
+        message: metric(29),
+        style: 'social',
+      },
+      documentation,
+    },
+  ]
 
   static defaultBadgeData = {
     label: 'Stars',
