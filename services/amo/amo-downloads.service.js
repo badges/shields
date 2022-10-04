@@ -10,6 +10,8 @@ const documentation = `
 </p>
 `
 
+// foobar
+
 class AmoWeeklyDownloads extends BaseAmoService {
   static category = 'downloads'
   static route = { base: 'amo/dw', pattern: ':addonId' }
