@@ -58,7 +58,7 @@ export default class WhatPulse extends BaseJsonService {
 
   static render({ metric, metricValue }) {
     return {
-      label: `${metric}`,
+      label: metric,
       message: metricValue,
       color: 'informational',
     }
@@ -81,7 +81,7 @@ export default class WhatPulse extends BaseJsonService {
   transform({ json, metric }, { rank }) {
     let metricValue
 
-    // To enable comparisons with the categories from the url that were written in varied cases, we need to lowercase the keys in the object from the WhatPulse's API.
+    // We want to compare with lowercase keys from the WhatPulse's API.
     const jsonLowercase = this.toLowerKeys(json)
     jsonLowercase.ranks = this.toLowerKeys(json.Ranks)
 
@@ -94,7 +94,7 @@ export default class WhatPulse extends BaseJsonService {
         metricValue = jsonLowercase.uptimeshort
       }
 
-      // Achieved rank with the given metric.
+      // Rank achieved by the user/team with the given metric.
     } else {
       const rankFromResp = jsonLowercase.ranks[metric]
       metricValue = ordinalNumber(rankFromResp)
