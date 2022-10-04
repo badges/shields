@@ -9,8 +9,12 @@ const schema = Joi.object({
   data: Joi.object({
     viewer: Joi.object({
       gist: Joi.object({
-        stargazerCount: Joi.number(),
-        url: Joi.string(),
+        stargazerCount: Joi.number().required(),
+        url: Joi.string().required(),
+        owner: Joi.object({
+          login: Joi.string().required(),
+        }).required(),
+        name: Joi.string().required(),
       }).allow(null),
     }).required(),
   }).required(),
@@ -25,13 +29,13 @@ export default class GithubGistStars extends GithubAuthV4Service {
 
   static route = {
     base: 'github/stars/gists',
-    pattern: ':gist',
+    pattern: ':gistId',
   }
 
   static examples = [
     {
       title: 'Github Gist stars',
-      namedParams: { gist: '47a4d00457a92aa426dbd48a18776322' },
+      namedParams: { gistId: '47a4d00457a92aa426dbd48a18776322' },
       staticPreview: {
         label: this.defaultBadgeData.label,
         message: metric(29),
@@ -47,24 +51,28 @@ export default class GithubGistStars extends GithubAuthV4Service {
     namedLogo: 'github',
   }
 
-  static render({ stargazerCount, url }) {
-    return { message: metric(stargazerCount), link: [url] }
+  static render({ stargazerCount, url, stargazers }) {
+    return { message: metric(stargazerCount), link: [url, stargazers] }
   }
 
-  async fetch({ gist }) {
+  async fetch({ gistId }) {
     const data = await this._requestGraphql({
       query: gql`
-        query ($gist: String!) {
+        query ($gistId: String!) {
           viewer {
-            gist(name: $gist) {
+            gist(name: $gistId) {
               stargazerCount
               url
+              name
+              owner {
+                login
+              }
             }
           }
         }
       `,
       variables: {
-        gist,
+        gistId,
       },
       schema,
     })
@@ -82,16 +90,24 @@ export default class GithubGistStars extends GithubAuthV4Service {
       throw new NotFound({ prettyMessage: 'gist not found' })
     }
 
-    const { stargazerCount, url } = gist
+    const {
+      stargazerCount,
+      url,
+      name,
+      owner: { login },
+    } = gist
 
-    return { stargazerCount, url }
+    const stargazers = `https://gist.github.com/${login}/${name}/stargazers`
+
+    return { stargazerCount, url, stargazers }
   }
 
-  async handle({ gist }) {
-    const data = await this.fetch({ gist })
-    const { stargazerCount, url } = await this.constructor.transform({
-      data,
-    })
-    return this.constructor.render({ stargazerCount, url })
+  async handle({ gistId }) {
+    const data = await this.fetch({ gistId })
+    const { stargazerCount, url, stargazers } =
+      await this.constructor.transform({
+        data,
+      })
+    return this.constructor.render({ stargazerCount, url, stargazers })
   }
 }

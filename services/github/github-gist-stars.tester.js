@@ -9,7 +9,10 @@ t.create('Gist Total Stars')
     label: 'Stars',
     message: isMetric,
     color: 'blue',
-    link: ['https://gist.github.com/47a4d00457a92aa426dbd48a18776322'],
+    link: [
+      'https://gist.github.com/47a4d00457a92aa426dbd48a18776322',
+      'https://gist.github.com/maratori/47a4d00457a92aa426dbd48a18776322/stargazers',
+    ],
   })
 
 t.create('Gist Total Stars (Not Found)')
