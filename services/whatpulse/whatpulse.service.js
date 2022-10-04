@@ -32,7 +32,7 @@ export default class WhatPulse extends BaseJsonService {
 
   static examples = [
     {
-      title: 'WhatPulse user stats',
+      title: 'WhatPulse user metric',
       namedParams: { metric: 'keys', userType: 'user', id: '179734' },
       staticPreview: this.render({
         metric: 'keys',
@@ -40,7 +40,7 @@ export default class WhatPulse extends BaseJsonService {
       }),
     },
     {
-      title: 'WhatPulse team stats - rank',
+      title: 'WhatPulse team metric - rank',
       namedParams: {
         metric: 'upload',
         userType: 'team',
