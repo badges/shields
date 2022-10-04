@@ -3,16 +3,16 @@ import { createServiceTester } from '../tester.js'
 import { isOrdinalNumber } from '../test-validators.js'
 export const t = await createServiceTester()
 
-t.create('WhatPulse user as user id, category not from Ranks')
+t.create('WhatPulse user as user id, metric not from Ranks')
   .get('/uptime/user/179734.json')
   .expectBadge({ label: 'uptime', message: Joi.string() })
 
-t.create('WhatPulse team as team name, category from Ranks')
+t.create('WhatPulse team as team name, metric from Ranks')
   .get('/keys/team/dutch power cows.json?rank')
   .expectBadge({ label: 'keys', message: isOrdinalNumber })
 
 t.create(
-  'WhatPulse invalid category name (not one of the options from the dropdown for the WhatPulse`s badge modal)'
+  'WhatPulse invalid metric name (not one of the options from the modal`s dropdown)'
 )
   .get('/UpTIMe/user/jerone.json')
   .expectBadge({ label: '404', message: 'badge not found' })
