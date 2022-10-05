@@ -35,7 +35,7 @@ export default class CIIBestPracticesService extends BaseJsonService {
     pattern: ':metric(level|percentage|summary)/:projectId',
   }
 
-  static exampless = [
+  static examples = [
     {
       title: 'CII Best Practices Level',
       pattern: 'level/:projectId',
