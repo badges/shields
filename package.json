@@ -170,7 +170,7 @@
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.4.0",
     "cypress": "^10.9.0",
-    "cypress-wait-for-stable-dom": "^0.0.3",
+    "cypress-wait-for-stable-dom": "^0.0.4",
     "danger": "^11.1.2",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
