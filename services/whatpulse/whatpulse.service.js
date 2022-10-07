@@ -43,7 +43,7 @@ export default class WhatPulse extends BaseJsonService {
       namedParams: { metric: 'keys', userType: 'user', id: '179734' },
       staticPreview: this.render({
         metric: 'keys',
-        metricValue: '26448513',
+        metricValue: '21G',
       }),
     },
     {
