@@ -101,7 +101,7 @@ const isPercentage = Joi.alternatives().try(
 )
 
 const isFileSize = withRegex(
-  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
+  /^[0-9]*[.]?[0-9]+\s?(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
 )
 
 const isFormattedDate = Joi.alternatives().try(
@@ -160,6 +160,10 @@ const isOrdinalNumberDaily = Joi.string().regex(
   /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
 )
 
+const isHumanized = Joi.string().regex(
+  /\d* (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
+)
+
 export {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -194,4 +198,5 @@ export {
   makeCompactTestTotalsValidator,
   isOrdinalNumber,
   isOrdinalNumberDaily,
+  isHumanized,
 }

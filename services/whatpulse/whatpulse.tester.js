@@ -1,13 +1,33 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
-import { isOrdinalNumber } from '../test-validators.js'
+import {
+  isFileSize,
+  isHumanized,
+  isMetric,
+  isOrdinalNumber,
+} from '../test-validators.js'
 export const t = await createServiceTester()
 
-t.create('WhatPulse user as user id, metric not from Ranks')
+t.create('WhatPulse user as user id, uptime')
   .get('/uptime/user/179734.json')
-  .expectBadge({ label: 'uptime', message: Joi.string() })
+  .expectBadge({ label: 'uptime', message: isHumanized })
 
-t.create('WhatPulse team as team name, metric from Ranks')
+t.create('WhatPulse user as user name, keys')
+  .get('/keys/user/jerone.json')
+  .expectBadge({ label: 'keys', message: isMetric })
+
+t.create('WhatPulse team as team id, clicks')
+  .get('/clicks/team/1295.json')
+  .expectBadge({ label: 'clicks', message: isMetric })
+
+t.create('WhatPulse team as team id, download')
+  .get('/download/team/1295.json')
+  .expectBadge({ label: 'download', message: isFileSize })
+
+t.create('WhatPulse team as team id, upload')
+  .get('/upload/team/1295.json')
+  .expectBadge({ label: 'upload', message: isFileSize })
+
+t.create('WhatPulse team as team name, keys - from Ranks')
   .get('/keys/team/dutch power cows.json?rank')
   .expectBadge({ label: 'keys', message: isOrdinalNumber })
 
@@ -19,4 +39,4 @@ t.create(
 
 t.create('WhatPulse incorrect user name')
   .get('/uptime/user/NonExistentUsername.json')
-  .expectBadge({ label: 'WhatPulse', message: 'invalid response data' })
+  .expectBadge({ label: 'whatpulse', message: 'invalid response data' })
