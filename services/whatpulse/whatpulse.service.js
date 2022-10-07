@@ -1,11 +1,18 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound } from '../index.js'
-import { ordinalNumber } from '../text-formatters.js'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar.js'
+import duration from 'dayjs/plugin/duration.js'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
+import { BaseJsonService } from '../index.js'
+import { metric as formatMetric, ordinalNumber } from '../text-formatters.js'
+dayjs.extend(calendar)
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
 
 const schema = Joi.object({
   Keys: Joi.alternatives(Joi.string(), Joi.number()).required(),
   Clicks: Joi.alternatives(Joi.string(), Joi.number()).required(),
-  UptimeShort: Joi.string().required(),
+  UptimeSeconds: Joi.alternatives(Joi.string(), Joi.number()).required(),
   Download: Joi.string().required(),
   Upload: Joi.string().required(),
   Ranks: Joi.object({
@@ -54,7 +61,7 @@ export default class WhatPulse extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'WhatPulse' }
+  static defaultBadgeData = { label: 'whatpulse' }
 
   static render({ metric, metricValue }) {
     return {
@@ -79,32 +86,32 @@ export default class WhatPulse extends BaseJsonService {
   }
 
   transform({ json, metric }, { rank }) {
-    let metricValue
-
     // We want to compare with lowercase keys from the WhatPulse's API.
     const jsonLowercase = this.toLowerKeys(json)
     jsonLowercase.ranks = this.toLowerKeys(json.Ranks)
 
     // Just metric, no rank.
     if (rank === undefined) {
-      metricValue = jsonLowercase[metric]
-
       // For uptime, we take the value from the `UptimeShort` field from the WhatPulse's API response.
       if (metric === 'uptime') {
-        metricValue = jsonLowercase.uptimeshort
+        return dayjs.duration(jsonLowercase.uptimeseconds, 'seconds').humanize()
       }
 
-      // Rank achieved by the user/team with the given metric.
-    } else {
-      const rankFromResp = jsonLowercase.ranks[metric]
-      metricValue = ordinalNumber(rankFromResp)
+      let metricValue
+
+      metricValue = jsonLowercase[metric]
+
+      if (metric === 'keys' || metric === 'clicks') {
+        metricValue = formatMetric(metricValue)
+      }
+
+      return metricValue
     }
 
-    if (metricValue) {
-      return metricValue
-    } else {
-      throw new NotFound({ prettyMessage: 'invalid metric' })
-    }
+    // Rank achieved by the user/team with the given metric.
+    const rankFromResp = jsonLowercase.ranks[metric]
+
+    return ordinalNumber(rankFromResp)
   }
 
   async handle({ metric, userType, id }, { rank }) {
