@@ -4,9 +4,10 @@ import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
 
 /**
  * Validates that the schema response is what we're expecting.
- * The username pattern should match the freeCodeCamp repository.
+ * The username pattern should match the requirements in the freeCodeCamp
+ * repository.
  *
- * @see https://github.com/freeCodeCamp/freeCodeCamp/blob/main/utils/validate.js#L14
+ * @see https://github.com/freeCodeCamp/freeCodeCamp/blob/main/utils/validate.js
  */
 const schema = Joi.object({
   entities: Joi.object({
