@@ -101,7 +101,7 @@ const isPercentage = Joi.alternatives().try(
 )
 
 const isFileSize = withRegex(
-  /^[0-9]*[.]?[0-9]+\s?(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
+  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
 )
 
 const isFormattedDate = Joi.alternatives().try(

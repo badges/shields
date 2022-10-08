@@ -92,7 +92,6 @@ export default class WhatPulse extends BaseJsonService {
 
     // Just metric, no rank.
     if (rank === undefined) {
-      // For uptime, we take the value from the `UptimeShort` field from the WhatPulse's API response.
       if (metric === 'uptime') {
         return dayjs.duration(jsonLowercase.uptimeseconds, 'seconds').humanize()
       }
@@ -103,6 +102,10 @@ export default class WhatPulse extends BaseJsonService {
 
       if (metric === 'keys' || metric === 'clicks') {
         metricValue = formatMetric(metricValue)
+      }
+
+      if (metric === 'upload' || metric === 'download') {
+        metricValue = metricValue.replace(/([A-Za-z]+)/, ' $1')
       }
 
       return metricValue
