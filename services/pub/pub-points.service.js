@@ -26,7 +26,7 @@ export default class PubPoints extends BaseJsonService {
       keywords,
       documentation,
       namedParams: { packageName: 'analysis_options' },
-      staticPreview: this.render({ grantedPoints: 120, maxPoints: 130 }),
+      staticPreview: this.render({ grantedPoints: 120, maxPoints: 140 }),
     },
   ]
 
