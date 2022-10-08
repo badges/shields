@@ -5,9 +5,9 @@ import { staticBadgeUrl } from '../../core/badge-urls/make-badge-url'
 import { advertisedStyles, shieldsLogos } from '../lib/supported-features'
 // ts-expect-error: because reasons?
 import StaticBadgeMaker from './static-badge-maker'
-import DynamicBadgeMaker from './dynamic-badge-maker'
 import { H2, H3, Badge, VerticalSpace } from './common'
 import { Snippet, StyledCode } from './snippet'
+import DynamicBadgeDisplay from './dynamic-badge'
 
 const LogoName = styled.span`
   white-space: nowrap;
@@ -247,53 +247,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
 
       <H3 id="dynamic-badge">Dynamic</H3>
 
-      <DynamicBadgeMaker baseUrl={baseUrl} />
-
-      <p>
-        <StyledCode>
-          {baseUrl}
-          /badge/dynamic/json?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
-          <a
-            href="https://jsonpath.com"
-            rel="noopener noreferrer"
-            target="_blank"
-            title="JSONPath syntax"
-          >
-            $.DATA.SUBDATA
-          </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-        </StyledCode>
-      </p>
-      <p>
-        <StyledCode>
-          {baseUrl}
-          /badge/dynamic/xml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
-          <a
-            href="http://xpather.com"
-            rel="noopener noreferrer"
-            target="_blank"
-            title="XPath syntax"
-          >
-            &#x2F;&#x2F;data/subdata
-          </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-        </StyledCode>
-      </p>
-      <p>
-        <StyledCode>
-          {baseUrl}
-          /badge/dynamic/yaml?url=&lt;URL&gt;&amp;label=&lt;LABEL&gt;&amp;query=&lt;
-          <a
-            href="https://jsonpath.com"
-            rel="noopener noreferrer"
-            target="_blank"
-            title="YAML (JSONPath) syntax"
-          >
-            $.DATA.SUBDATA
-          </a>
-          &gt;&amp;color=&lt;COLOR&gt;&amp;prefix=&lt;PREFIX&gt;&amp;suffix=&lt;SUFFIX&gt;
-        </StyledCode>
-      </p>
+      <DynamicBadgeDisplay baseUrl={baseUrl} />
 
       <VerticalSpace />
 
