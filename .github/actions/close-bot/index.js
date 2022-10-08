@@ -27,7 +27,7 @@ async function run() {
           state: 'closed',
         })
 
-        core.debug(`Done.`)
+        core.debug('Done.')
       }
     }
   } catch (error) {

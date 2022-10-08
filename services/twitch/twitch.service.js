@@ -51,7 +51,7 @@ export default class TwitchStatus extends TwitchBase {
     // which we consider not worth it.
     const streams = this._requestJson({
       schema: helixSchema,
-      url: `https://api.twitch.tv/helix/streams`,
+      url: 'https://api.twitch.tv/helix/streams',
       options: {
         searchParams: { user_login: user },
       },

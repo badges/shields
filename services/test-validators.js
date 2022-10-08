@@ -43,7 +43,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(
-  /^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/
+  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/
 )
 
 // Regex for validate php-version.versionReduction()

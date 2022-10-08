@@ -2,7 +2,7 @@ name: 'Dependency Review'
 on: [pull_request]
 
 jobs:
-  dependency-review:
+  enforce-dependency-review:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repository'

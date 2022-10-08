@@ -144,6 +144,8 @@ rules:
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
+  quotes:
+    ['error', 'single', { 'avoidEscape': true, 'allowTemplateLiterals': false }]
 
   # Account for destructuring responses from upstream services,
   # many of which do not follow camelcase

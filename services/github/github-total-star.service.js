@@ -108,7 +108,7 @@ const query = gql`
 
 const affiliationsAllowedValues = [
   'OWNER',
-  `COLLABORATOR`,
+  'COLLABORATOR',
   'ORGANIZATION_MEMBER',
 ]
 /**

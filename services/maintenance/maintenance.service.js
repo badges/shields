@@ -34,7 +34,7 @@ export default class Maintenance extends BaseService {
     }
 
     return {
-      message: `${isStale ? `stale` : 'no!'} (as of ${targetYear})`,
+      message: `${isStale ? 'stale' : 'no!'} (as of ${targetYear})`,
       color: isStale ? undefined : 'red',
     }
   }
