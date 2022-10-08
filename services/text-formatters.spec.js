@@ -153,5 +153,11 @@ describe('Text formatters', function () {
         .describe('when given the beginning of october')
         .expect('a month ago')
     })
+
+    test(formatRelativeDate, () => {
+      given(9999999999999)
+        .describe('when given invalid date')
+        .expect('invalid date')
+    })
   })
 })
