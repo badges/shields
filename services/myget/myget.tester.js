@@ -27,7 +27,7 @@ t.create('total downloads (valid)')
   })
 
 t.create('total downloads (tenant)')
-  .get('/cefsharp.myget/cefsharp/dt/CefSharp.Common.json')
+  .get('/vs-devcore.myget/vs-devcore/dt/MicroBuild.json')
   .expectBadge({
     label: 'downloads',
     message: isMetric,
