@@ -45,6 +45,16 @@ t.create('Test status on project that does not exist')
 
 t.create('Test status on private project')
   .get('/github/tasdemo/nexe-private.json')
+  .intercept(nock =>
+    nock('https://api.tas.lambdatest.com')
+      .get('/repo/badge')
+      .query({
+        git_provider: 'github',
+        org: 'tasdemo',
+        repo: 'nexe-private',
+      })
+      .reply(401)
+  )
   .expectBadge({
     label: 'tests',
     message: 'private project not supported',
