@@ -156,6 +156,47 @@ There is documentation about [hosting your own server][self-hosting].
 
 [self-hosting]: https://github.com/badges/shields/blob/master/doc/self-hosting.md
 
+## Github Actions
+
+You can use [shields.io](https://shields.io) as a service inside a Github workflow. This can be useful for private repositories, organizations that do not wish to rely on the availability of our hosted service, or in conjunction with custom scripts to act as a render service for custom badges.
+
+```yaml
+name: Shields.io
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    services:
+      shields:
+        image: shieldsio/shields:next
+        ports:
+          - 80:80
+        options: >-
+          --health-cmd "wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create badge
+        run: curl http://localhost/badge/hello-world-green > hello-world.svg
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: bot/hello-world-badge
+          title: "[Bot] Update to hello-world.svg"
+          add-paths: hello-world.svg
+          labels: automated pr
+```
+
 ## Related projects
 
 [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
