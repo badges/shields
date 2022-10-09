@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { NotFound } from '../index.js'
-import { GithubAuthV4Service } from './github-auth-service.js'
-import { documentation as commonDocumentation } from './github-helpers.js'
+import { metric } from '../../text-formatters.js'
+import { NotFound } from '../../index.js'
+import { GithubAuthV4Service } from '../github-auth-service.js'
+import { documentation as commonDocumentation } from '../github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -28,7 +28,7 @@ export default class GithubGistStars extends GithubAuthV4Service {
   static category = 'social'
 
   static route = {
-    base: 'github/stars/gists',
+    base: 'github/gist/stars',
     pattern: ':gistId',
   }
 
