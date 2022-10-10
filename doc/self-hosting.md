@@ -215,3 +215,49 @@ Metrics are available at `/metrics` resource.
 Shields.io uses Cloudflare as a downstream CDN. If your installation does the same,
 you can configure your server to only accept requests coming from Cloudflare's IPs.
 Set `public.requireCloudflare: true`.
+
+## Github Actions
+
+As an alternative to self hosting you can use the [shields.io](https://shields.io) Docker image as a service.
+
+> Note that some badges like the workflow badges still use scraping rather than the Github API and won't work for private repositories
+
+```yaml
+name: Shields.io
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  generate_badges:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    services:
+      shields:
+        image: shieldsio/shields:next
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ports:
+          - 80:80
+        options: >-
+          --health-cmd "wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create badge
+        run: curl http://localhost/github/commit-activity/w/badges/shields > commit-activity.svg
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: bot/commit-activity-badge
+          title: "[Bot] Generated commit-activity.svg"
+          add-paths: commit-activity.svg
+          labels: automated pr
+```
