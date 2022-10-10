@@ -1,0 +1,35 @@
+name: Integration
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+
+jobs:
+  test-integration:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 16
+
+      - name: Integration Tests
+        uses: ./.github/actions/integration-tests
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
