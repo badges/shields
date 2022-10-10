@@ -124,9 +124,11 @@ function formatDate(d) {
 }
 
 function formatRelativeDate(timestamp) {
-  return dayjs()
-    .to(dayjs.unix(parseInt(timestamp, 10)))
-    .toLowerCase()
+  const parsedDate = dayjs.unix(parseInt(timestamp, 10))
+  if (!parsedDate.isValid()) {
+    return 'invalid date'
+  }
+  return dayjs().to(parsedDate).toLowerCase()
 }
 
 export {
