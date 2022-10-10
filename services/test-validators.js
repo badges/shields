@@ -161,7 +161,7 @@ const isOrdinalNumberDaily = Joi.string().regex(
 )
 
 const isHumanized = Joi.string().regex(
-  /\d* (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
+  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
 )
 
 export {
