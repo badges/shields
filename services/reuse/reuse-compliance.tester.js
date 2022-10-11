@@ -62,7 +62,10 @@ t.create('valid repo -- unregistered')
     color: COLOR_MAP.unregistered,
   })
 
-t.create('invalid repo').get('/github.com/repo/invalid-repo.json').expectBadge({
-  label: 'reuse',
-  message: 'Not a Git repository',
-})
+t.create('invalid repo')
+  .timeout(15000)
+  .get('/github.com/repo/invalid-repo.json')
+  .expectBadge({
+    label: 'reuse',
+    message: 'Not a Git repository',
+  })
