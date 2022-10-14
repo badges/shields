@@ -208,7 +208,7 @@
     "lint-staged": "^13.0.3",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
-    "minimist": "^1.2.6",
+    "minimist": "^1.2.7",
     "mocha": "^9.2.2",
     "mocha-env-reporter": "^4.0.0",
     "mocha-junit-reporter": "^2.1.0",
