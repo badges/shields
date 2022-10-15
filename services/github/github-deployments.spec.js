@@ -22,6 +22,12 @@ describe('GithubDeployments', function () {
       color: undefined,
     })
     given({
+      state: 'WAITING',
+    }).expect({
+      message: 'waiting',
+      color: undefined,
+    })
+    given({
       state: 'NO_STATUS',
     }).expect({
       message: 'no status yet',
