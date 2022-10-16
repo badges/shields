@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'dependabot/**'
 
 jobs:
   test-package-lib:

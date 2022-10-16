@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'dependabot/**'
 
 # Smoke test (render a badge with the CLI) with only the package
 # dependencies installed.
