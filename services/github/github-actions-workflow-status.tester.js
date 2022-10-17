@@ -8,35 +8,44 @@ const isWorkflowStatus = Joi.alternatives()
   .required()
 
 t.create('nonexistent repo')
-  .get('/badges/shields-fakeness/fake.yml.json')
+  .get('/badges/shields-fakeness/fake.yml.json?branch=main')
   .expectBadge({
     label: 'build',
-    message: 'repo, branch, or workflow not found',
+    message: 'repo or workflow not found',
   })
 
 t.create('nonexistent workflow')
-  .get('/actions/toolkit/not-a-real-workflow.yml.json')
+  .get('/actions/toolkit/not-a-real-workflow.yml.json?branch=main')
   .expectBadge({
     label: 'build',
-    message: 'repo, branch, or workflow not found',
+    message: 'repo or workflow not found',
+  })
+
+t.create('nonexistent branch')
+  .get('/actions/toolkit/unit-tests.yml.json?branch=not-a-real-branch')
+  .expectBadge({
+    label: 'build',
+    message: 'branch or event not found',
+  })
+
+t.create('nonexistent event')
+  .get(
+    '/actions/toolkit/unit-tests.yml.json?branch=main&event=not-a-real-event'
+  )
+  .expectBadge({
+    label: 'build',
+    message: 'branch or event not found',
   })
 
 t.create('valid workflow')
-  .get('/actions/toolkit/unit-tests.yml.json')
+  .get('/actions/toolkit/unit-tests.yml.json?branch=main')
   .expectBadge({
     label: 'build',
     message: isWorkflowStatus,
   })
 
-t.create('valid workflow (branch)')
-  .get('/actions/toolkit/unit-tests.yml.json?branch=master.json')
-  .expectBadge({
-    label: 'build',
-    message: isWorkflowStatus,
-  })
-
-t.create('valid workflow (event)')
-  .get('/actions/toolkit/unit-tests.yml.json?event=push')
+t.create('valid workflow (with event)')
+  .get('/actions/toolkit/unit-tests.yml.json?branch=main&event=push')
   .expectBadge({
     label: 'build',
     message: isWorkflowStatus,

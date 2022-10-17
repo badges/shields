@@ -1,22 +1,31 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
-import { documentation } from './github-helpers.js'
+import { NotFound } from '../index.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
+import { documentation, errorMessagesFor } from './github-helpers.js'
 
 const schema = Joi.object({
-  message: Joi.alternatives()
-    .try(isBuildStatus, Joi.equal('no status'))
-    .required(),
+  workflow_runs: Joi.array()
+    .items(
+      Joi.object({
+        conclusion: Joi.alternatives()
+          .try(isBuildStatus, Joi.equal('no status'))
+          .required(),
+      })
+    )
+    .required()
+    .min(0)
+    .max(1),
 }).required()
 
 const queryParamSchema = Joi.object({
   event: Joi.string(),
-  branch: Joi.string(),
+  branch: Joi.string().required(),
 }).required()
 
 const keywords = ['action', 'actions']
 
-export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService {
+export default class GithubActionsWorkflowStatus extends GithubAuthV3Service {
   static category = 'build'
 
   static route = {
@@ -33,6 +42,9 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
         repo: 'toolkit',
         workflow: 'unit-tests.yml',
       },
+      queryParams: {
+        branch: 'main',
+      },
       staticPreview: renderBuildStatusBadge({
         status: 'passing',
       }),
@@ -40,7 +52,7 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
       keywords,
     },
     {
-      title: 'GitHub Workflow Status (branch and event)',
+      title: 'GitHub Workflow Status (with event)',
       namedParams: {
         user: 'actions',
         repo: 'toolkit',
@@ -63,23 +75,27 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
   }
 
   async fetch({ user, repo, workflow, branch, event }) {
-    const { message: status } = await this._requestSvg({
+    return await this._requestJson({
       schema,
-      url: `https://github.com/${user}/${repo}/actions/workflows/${encodeURIComponent(
-        workflow
-      )}/badge.svg`,
-      options: { searchParams: { branch, event } },
-      valueMatcher: />([^<>]+)<\/tspan><\/text><\/g><path/,
-      errorMessages: {
-        404: 'repo, branch, or workflow not found',
+      url: `/repos/${user}/${repo}/actions/workflows/${workflow}/runs`,
+      options: {
+        searchParams: {
+          branch,
+          event,
+          page: '1',
+          per_page: '1',
+          exclude_pull_requests: 'true',
+        },
       },
+      errorMessages: errorMessagesFor('repo or workflow not found'),
     })
-
-    return { status }
   }
 
   async handle({ user, repo, workflow }, { branch, event }) {
-    const { status } = await this.fetch({ user, repo, workflow, branch, event })
-    return renderBuildStatusBadge({ status })
+    const data = await this.fetch({ user, repo, workflow, branch, event })
+    if (data.workflow_runs.length === 0) {
+      throw new NotFound({ prettyMessage: 'branch or event not found' })
+    }
+    return renderBuildStatusBadge({ status: data.workflow_runs[0].conclusion })
   }
 }
