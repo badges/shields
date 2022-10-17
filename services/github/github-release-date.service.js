@@ -8,21 +8,28 @@ import { documentation, errorMessagesFor } from './github-helpers.js'
 const schema = Joi.alternatives(
   Joi.object({
     created_at: Joi.date().required(),
+    published_at: Joi.date().required(),
   }).required(),
   Joi.array()
     .items(
       Joi.object({
         created_at: Joi.date().required(),
+        published_at: Joi.date().required(),
       }).required()
     )
     .min(1)
 )
+
+const queryParamSchema = Joi.object({
+  published_at: Joi.equal(''),
+}).required()
 
 export default class GithubReleaseDate extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github',
     pattern: ':variant(release-date|release-date-pre)/:user/:repo',
+    queryParamSchema,
   }
 
   static examples = [
@@ -44,6 +51,16 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
         repo: 'Cockatrice',
       },
       staticPreview: this.render({ date: '2017-04-13T07:50:27.000Z' }),
+      documentation,
+    },
+    {
+      title: 'GitHub Release Date - Published_At',
+      pattern: 'release-date/:user/:repo?published_at',
+      namedParams: {
+        user: 'SubtitleEdit',
+        repo: 'subtitleedit',
+      },
+      staticPreview: this.render({ date: '2022-10-17T07:50:27.000Z' }),
       documentation,
     },
   ]
@@ -70,11 +87,20 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
     })
   }
 
-  async handle({ variant, user, repo }) {
+  async handle({ variant, user, repo }, queryParams) {
     const body = await this.fetch({ variant, user, repo })
     if (Array.isArray(body)) {
+      if (typeof queryParams.published_at !== 'undefined') {
+        return this.constructor.render({ date: body[0].published_at })
+      }
+
       return this.constructor.render({ date: body[0].created_at })
     }
+
+    if (typeof queryParams.published_at !== 'undefined') {
+      return this.constructor.render({ date: body.published_at })
+    }
+
     return this.constructor.render({ date: body.created_at })
   }
 }

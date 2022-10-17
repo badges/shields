@@ -9,6 +9,13 @@ t.create('Release Date. e.g release date|today')
     message: isFormattedDate,
   })
 
+t.create('Release Date - by `published_at` field')
+  .get('/release-date/microsoft/vscode.json?published_at')
+  .expectBadge({
+    label: 'release date',
+    message: isFormattedDate,
+  })
+
 t.create(
   'Release Date - Should return `no releases or repo not found` for invalid repo'
 )
