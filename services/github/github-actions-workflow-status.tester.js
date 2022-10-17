@@ -7,6 +7,13 @@ const isWorkflowStatus = Joi.alternatives()
   .try(isBuildStatus, Joi.equal('no status'))
   .required()
 
+t.create('missing branch param')
+  .get('/actions/toolkit/unit-tests.yml.json')
+  .expectBadge({
+    label: 'build',
+    message: 'invalid query parameter: branch',
+  })
+
 t.create('nonexistent repo')
   .get('/badges/shields-fakeness/fake.yml.json?branch=main')
   .expectBadge({
