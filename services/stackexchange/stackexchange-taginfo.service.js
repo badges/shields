@@ -1,6 +1,8 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import renderQuestionsBadge from './stackexchange-helpers.js'
+import {
+  renderQuestionsBadge,
+  StackExchangeBase,
+} from './stackexchange-base.js'
 
 const tagSchema = Joi.object({
   items: Joi.array()
@@ -13,9 +15,7 @@ const tagSchema = Joi.object({
     .required(),
 }).required()
 
-export default class StackExchangeQuestions extends BaseJsonService {
-  static category = 'chat'
-
+export default class StackExchangeQuestions extends StackExchangeBase {
   static route = {
     base: 'stackexchange',
     pattern: ':stackexchangesite/t/:query',
@@ -33,10 +33,6 @@ export default class StackExchangeQuestions extends BaseJsonService {
       keywords: ['stackexchange', 'stackoverflow'],
     },
   ]
-
-  static defaultBadgeData = {
-    label: 'stackoverflow',
-  }
 
   static render(props) {
     return renderQuestionsBadge({
