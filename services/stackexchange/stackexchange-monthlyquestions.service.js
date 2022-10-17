@@ -47,7 +47,7 @@ export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
       .endOf('month')
       .unix()
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: tagSchema,
       options: {
         decompress: true,

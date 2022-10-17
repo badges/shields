@@ -44,7 +44,7 @@ export default class StackExchangeQuestions extends StackExchangeBase {
   async handle({ stackexchangesite, query }) {
     const path = `tags/${query}/info`
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: tagSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,

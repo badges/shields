@@ -244,6 +244,17 @@ Create an account, sign in and obtain a uuid and token from your
 to give your self-hosted Shields installation access to a
 private SonarQube instance or private project on a public instance.
 
+### StackApps
+
+- `STACKAPPS_API_KEY`: (yml: `private.stackapps_api_key`)
+
+Anonymous requests to the stackexchange API are limited to 300 calls per day.
+To increase your quota to 10,000 calls per day, create an account at
+[StackApps](https://stackapps.com/) and
+[register an OAuth app](https://stackapps.com/apps/oauth/register). Having registered
+an OAuth app, you'll be granted a key which can be used to increase your request quota.
+It is not necessary to performa full OAuth Flow to gain an access token.
+
 ### TeamCity
 
 - `TEAMCITY_ORIGINS` (yml: `public.services.teamcity.authorizedOrigins`)

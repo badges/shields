@@ -45,7 +45,7 @@ export default class StackExchangeReputation extends StackExchangeBase {
   async handle({ stackexchangesite, query }) {
     const path = `users/${query}`
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: reputationSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,

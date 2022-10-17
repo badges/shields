@@ -19,7 +19,19 @@ export function renderQuestionsBadge({
 export class StackExchangeBase extends BaseJsonService {
   static category = 'chat'
 
+  static auth = {
+    passKey: 'stackapps_api_key',
+    authorizedOrigins: ['https://api.stackexchange.com'],
+    isRequired: false,
+  }
+
   static defaultBadgeData = {
     label: 'stackoverflow',
+  }
+
+  async fetch(params) {
+    return this._requestJson(
+      this.authHelper.withQueryStringAuth({ passKey: 'key' }, params)
+    )
   }
 }
