@@ -55,11 +55,12 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
     },
     {
       title: 'GitHub Release Date - Published_At',
-      pattern: 'release-date/:user/:repo?published_at',
+      pattern: 'release-date/:user/:repo',
       namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
+        user: 'microsoft',
+        repo: 'vscode',
       },
+      queryParams: { published_at: null },
       staticPreview: this.render({ date: '2022-10-17T07:50:27.000Z' }),
       documentation,
     },
