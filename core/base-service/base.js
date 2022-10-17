@@ -222,7 +222,13 @@ class BaseService {
     let logUrl = url
     const logOptions = Object.assign({}, options)
     if ('searchParams' in options) {
-      const params = new URLSearchParams(options.searchParams)
+      const params = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(options.searchParams).filter(
+            ([k, v]) => v !== undefined
+          )
+        )
+      )
       logUrl = `${url}?${params.toString()}`
       delete logOptions.searchParams
     }
