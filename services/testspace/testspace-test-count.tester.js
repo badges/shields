@@ -41,3 +41,10 @@ t.create('Errored')
     label: 'errored tests',
     message: isMetricAllowZero,
   })
+
+t.create('Untested')
+  .get('/untested/swellaby/swellaby:testspace-sample/main.json')
+  .expectBadge({
+    label: 'untested tests',
+    message: isMetricAllowZero,
+  })
