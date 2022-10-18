@@ -9,11 +9,25 @@ t.create('Release Date. e.g release date|today')
     message: isFormattedDate,
   })
 
-t.create('Release Date - by `published_at` field')
-  .get('/release-date/microsoft/vscode.json?published_at')
+t.create('Release Date - display_date by `created_at` (default)')
+  .get('/release-date/microsoft/vscode.json?display_date=created_at')
   .expectBadge({
     label: 'release date',
     message: isFormattedDate,
+  })
+
+t.create('Release Date - display_date by `published_at`')
+  .get('/release-date/microsoft/vscode.json?display_date=published_at')
+  .expectBadge({
+    label: 'release date',
+    message: isFormattedDate,
+  })
+
+t.create('Release Date - display_date by `published_at`, incorrect query param')
+  .get('/release-date/microsoft/vscode.json?display_date=published_attttttttt')
+  .expectBadge({
+    label: 'release date',
+    message: 'invalid query parameter: display_date',
   })
 
 t.create(

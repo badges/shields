@@ -21,7 +21,9 @@ const schema = Joi.alternatives(
 )
 
 const queryParamSchema = Joi.object({
-  published_at: Joi.equal(''),
+  display_date: Joi.string()
+    .valid('created_at', 'published_at')
+    .default('created_at'),
 }).required()
 
 export default class GithubReleaseDate extends GithubAuthV3Service {
@@ -60,7 +62,7 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
         user: 'microsoft',
         repo: 'vscode',
       },
-      queryParams: { published_at: null },
+      queryParams: { display_date: 'published_at' },
       staticPreview: this.render({ date: '2022-10-17T07:50:27.000Z' }),
       documentation,
     },
@@ -91,14 +93,14 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
   async handle({ variant, user, repo }, queryParams) {
     const body = await this.fetch({ variant, user, repo })
     if (Array.isArray(body)) {
-      if (typeof queryParams.published_at !== 'undefined') {
+      if (queryParams.display_date === 'published_at') {
         return this.constructor.render({ date: body[0].published_at })
       }
 
       return this.constructor.render({ date: body[0].created_at })
     }
 
-    if (typeof queryParams.published_at !== 'undefined') {
+    if (queryParams.display_date === 'published_at') {
       return this.constructor.render({ date: body.published_at })
     }
 
