@@ -24,7 +24,9 @@ const schema = Joi.array()
   .required()
 
 const queryParamSchema = Joi.object({
-  by_committer: Joi.equal(''),
+  display_timestamp: Joi.string()
+    .valid('author', 'committer')
+    .default('author'),
 }).required()
 
 export default class GithubLastCommit extends GithubAuthV3Service {
@@ -64,7 +66,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
         user: 'google',
         repo: 'skia',
       },
-      queryParams: { by_committer: null },
+      queryParams: { display_timestamp: 'committer' },
       staticPreview: this.render({ commitDate: '2022-10-15T20:01:41Z' }),
       ...commonExampleAttrs,
     },
@@ -91,12 +93,8 @@ export default class GithubLastCommit extends GithubAuthV3Service {
   async handle({ user, repo, branch }, queryParams) {
     const body = await this.fetch({ user, repo, branch })
 
-    if (typeof queryParams.by_committer !== 'undefined') {
-      return this.constructor.render({
-        commitDate: body[0].commit.committer.date,
-      })
-    }
-
-    return this.constructor.render({ commitDate: body[0].commit.author.date })
+    return this.constructor.render({
+      commitDate: body[0].commit[queryParams.display_timestamp].date,
+    })
   }
 }
