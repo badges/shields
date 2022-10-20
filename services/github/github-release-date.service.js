@@ -93,17 +93,10 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
   async handle({ variant, user, repo }, queryParams) {
     const body = await this.fetch({ variant, user, repo })
     if (Array.isArray(body)) {
-      if (queryParams.display_date === 'published_at') {
-        return this.constructor.render({ date: body[0].published_at })
-      }
-
-      return this.constructor.render({ date: body[0].created_at })
+      return this.constructor.render({
+        date: body[0][queryParams.display_date],
+      })
     }
-
-    if (queryParams.display_date === 'published_at') {
-      return this.constructor.render({ date: body.published_at })
-    }
-
-    return this.constructor.render({ date: body.created_at })
+    return this.constructor.render({ date: body[queryParams.display_date] })
   }
 }
