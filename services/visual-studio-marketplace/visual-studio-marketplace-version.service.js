@@ -1,5 +1,10 @@
+import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
+
+const queryParamSchema = Joi.object({
+  include_prereleases: Joi.equal(''),
+}).required()
 
 export default class VisualStudioMarketplaceVersion extends VisualStudioMarketplaceBase {
   static category = 'version'
@@ -7,6 +12,7 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
   static route = {
     base: '',
     pattern: '(visual-studio-marketplace|vscode-marketplace)/v/:extensionId',
+    queryParamSchema,
   }
 
   static examples = [
@@ -15,6 +21,14 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
       pattern: 'visual-studio-marketplace/v/:extensionId',
       namedParams: { extensionId: 'swellaby.rust-pack' },
       staticPreview: this.render({ version: '0.2.7' }),
+      keywords: this.keywords,
+    },
+    {
+      title: 'Visual Studio Marketplace Version (including pre-releases)',
+      pattern: 'visual-studio-marketplace/v/:extensionId',
+      namedParams: { extensionId: 'swellaby.rust-pack' },
+      queryParams: { include_prereleases: null },
+      staticPreview: this.render({ version: '0.2.9-dev' }),
       keywords: this.keywords,
     },
   ]
@@ -27,15 +41,22 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
     return renderVersionBadge({ version })
   }
 
-  transform({ json }) {
+  transform({ json }, includePrereleases) {
     const { extension } = this.transformExtension({ json })
-    const version = extension.versions[0].version
+    const preRelease = 'Microsoft.VisualStudio.Code.PreRelease'
+    const version = includePrereleases
+      ? extension.versions[0].version
+      : extension.versions.find(
+          obj => !obj.properties.find(({ key }) => key === preRelease)
+        )
+
     return { version }
   }
 
-  async handle({ extensionId }) {
+  async handle({ extensionId }, queryParams) {
     const json = await this.fetch({ extensionId })
-    const { version } = this.transform({ json })
+    const includePrereleases = queryParams.include_prereleases !== undefined
+    const { version } = this.transform({ json, includePrereleases })
 
     return this.constructor.render({ version })
   }
