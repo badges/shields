@@ -5,14 +5,14 @@ export const t = await createServiceTester()
 const isMarketplaceVersion = withRegex(/^v(\d+\.\d+\.\d+)(\.\d+)?$/)
 
 t.create('rating')
-  .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/v/lextudio.restructuredtext.json')
   .expectBadge({
     label: 'version',
     message: isMarketplaceVersion,
   })
 
 t.create('version')
-  .get('/visual-studio-marketplace/v/ritwickdey.LiveServer.json')
+  .get('/visual-studio-marketplace/v/lextudio.restructuredtext.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')

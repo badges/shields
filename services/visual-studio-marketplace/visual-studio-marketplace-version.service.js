@@ -56,7 +56,7 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
   async handle({ extensionId }, queryParams) {
     const json = await this.fetch({ extensionId })
     const includePrereleases = queryParams.include_prereleases !== undefined
-    const { version } = this.transform({ json, includePrereleases })
+    const { version } = this.transform({ json }, includePrereleases)
 
     return this.constructor.render({ version })
   }
