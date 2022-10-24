@@ -43,12 +43,22 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
 
   transform({ json }, includePrereleases) {
     const { extension } = this.transformExtension({ json })
-    const preRelease = 'Microsoft.VisualStudio.Code.PreRelease'
-    const version = includePrereleases
-      ? extension.versions[0].version
-      : extension.versions.find(
-          obj => !obj.properties.find(({ key }) => key === preRelease)
-        ).version
+    const preReleaseKey = 'Microsoft.VisualStudio.Code.PreRelease'
+    let version
+
+    if (!includePrereleases) {
+      version = extension.versions.find(
+        obj =>
+          !obj.properties.find(
+            ({ key, value }) => key === preReleaseKey && value === 'true'
+          )
+      ).version
+    }
+
+    // this condition acts as the 'else' clause AND as a fallback, in case all versions are pre-release
+    if (!version) {
+      version = extension.versions[0].version
+    }
 
     return { version }
   }
