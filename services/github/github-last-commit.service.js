@@ -22,6 +22,7 @@ const schema = Joi.array()
     }).required()
   )
   .required()
+  .min(1)
 
 const queryParamSchema = Joi.object({
   display_timestamp: Joi.string()
