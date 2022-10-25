@@ -52,10 +52,11 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
           !obj.properties.find(
             ({ key, value }) => key === preReleaseKey && value === 'true'
           )
-      ).version
+      )?.version
     }
 
-    // this condition acts as the 'else' clause AND as a fallback, in case all versions are pre-release
+    // this condition acts as the 'else' clause AND as a fallback,
+    // in case all versions are pre-release
     if (!version) {
       version = extension.versions[0].version
     }
