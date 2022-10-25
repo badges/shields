@@ -60,7 +60,9 @@ t.create('version')
     color: 'blue',
   })
 
-t.create('version - response has pre-release only')
+t.create(
+  'version - includePrereleases flag is false and response has pre-release only'
+)
   .get('/visual-studio-marketplace/v/lextudio.restructuredtext.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
@@ -123,6 +125,72 @@ t.create('version - response has pre-release only')
   .expectBadge({
     label: 'version',
     message: 'v1.3.8',
+    color: 'blue',
+  })
+
+t.create('version - prerelease key has false value')
+  .get('/visual-studio-marketplace/v/lextudio.restructuredtext.json')
+  .intercept(nock =>
+    nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
+      .post('/extensionquery/')
+      .reply(200, {
+        results: [
+          {
+            extensions: [
+              {
+                statistics: [],
+                versions: [
+                  {
+                    version: '1.3.8',
+                    properties: [
+                      {
+                        key: 'Microsoft.VisualStudio.Services.Branding.Theme',
+                        value: 'light',
+                      },
+                      {
+                        key: 'Microsoft.VisualStudio.Code.PreRelease',
+                        value: 'true',
+                      },
+                    ],
+                  },
+                  {
+                    version: '1.3.7',
+                    properties: [
+                      {
+                        key: 'Microsoft.VisualStudio.Services.Branding.Theme',
+                        value: 'light',
+                      },
+                      {
+                        key: 'Microsoft.VisualStudio.Code.PreRelease',
+                        value: 'true',
+                      },
+                    ],
+                  },
+                  {
+                    version: '1.3.6',
+                    properties: [
+                      {
+                        key: 'Microsoft.VisualStudio.Services.Branding.Theme',
+                        value: 'light',
+                      },
+                      {
+                        key: 'Microsoft.VisualStudio.Code.PreRelease',
+                        value: 'false',
+                      },
+                    ],
+                  },
+                ],
+                releaseDate: '2019-04-13T07:50:27.000Z',
+                lastUpdated: '2019-04-13T07:50:27.000Z',
+              },
+            ],
+          },
+        ],
+      })
+  )
+  .expectBadge({
+    label: 'version',
+    message: 'v1.3.6',
     color: 'blue',
   })
 
