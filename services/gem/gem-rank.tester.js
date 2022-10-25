@@ -1,11 +1,6 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isOrdinalNumber, isOrdinalNumberDaily } from '../test-validators.js'
 export const t = await createServiceTester()
-
-const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]+(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
-const isOrdinalNumberDaily = Joi.string().regex(
-  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
-)
 
 t.create('total rank (valid)').get('/rt/rspec-puppet-facts.json').expectBadge({
   label: 'rank',
