@@ -8,7 +8,7 @@ const schema = Joi.object()
       Joi.object({
         level: Joi.string().required(),
         message: Joi.string().required(),
-      }).required()
+      })
     ),
   })
   .required()

@@ -35,7 +35,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
   static examples = [
     {
       title: 'PowerShell Gallery',
-      namedParams: { packageName: 'DNS.1.1.1.1' },
+      namedParams: { packageName: 'PackageManagement' },
       staticPreview: this.render({
         platforms: ['windows', 'macos', 'linux'],
       }),
