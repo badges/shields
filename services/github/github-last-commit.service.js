@@ -15,14 +15,29 @@ const schema = Joi.array()
         author: Joi.object({
           date: Joi.string().required(),
         }).required(),
+        committer: Joi.object({
+          date: Joi.string().required(),
+        }).required(),
       }).required(),
     }).required()
   )
   .required()
+  .min(1)
+
+const queryParamSchema = Joi.object({
+  display_timestamp: Joi.string()
+    .valid('author', 'committer')
+    .default('author'),
+}).required()
 
 export default class GithubLastCommit extends GithubAuthV3Service {
   static category = 'activity'
-  static route = { base: 'github/last-commit', pattern: ':user/:repo/:branch*' }
+  static route = {
+    base: 'github/last-commit',
+    pattern: ':user/:repo/:branch*',
+    queryParamSchema,
+  }
+
   static examples = [
     {
       title: 'GitHub last commit',
@@ -45,6 +60,17 @@ export default class GithubLastCommit extends GithubAuthV3Service {
       staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
       ...commonExampleAttrs,
     },
+    {
+      title: 'GitHub last commit (by committer)',
+      pattern: ':user/:repo',
+      namedParams: {
+        user: 'google',
+        repo: 'skia',
+      },
+      queryParams: { display_timestamp: 'committer' },
+      staticPreview: this.render({ commitDate: '2022-10-15T20:01:41Z' }),
+      ...commonExampleAttrs,
+    },
   ]
 
   static defaultBadgeData = { label: 'last commit' }
@@ -65,8 +91,11 @@ export default class GithubLastCommit extends GithubAuthV3Service {
     })
   }
 
-  async handle({ user, repo, branch }) {
+  async handle({ user, repo, branch }, queryParams) {
     const body = await this.fetch({ user, repo, branch })
-    return this.constructor.render({ commitDate: body[0].commit.author.date })
+
+    return this.constructor.render({
+      commitDate: body[0].commit[queryParams.display_timestamp].date,
+    })
   }
 }
