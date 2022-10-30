@@ -8,7 +8,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('unknown build definition')
-  .get(`/swellaby/opensource/99999999.json`)
+  .get('/swellaby/opensource/99999999.json')
   .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('404 latest build error response')
@@ -51,7 +51,7 @@ t.create('no test result summary response')
   })
 
 t.create('no build response')
-  .get(`/swellaby/opensource/174.json`)
+  .get('/swellaby/opensource/174.json')
   .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('no tests in test result summary response')

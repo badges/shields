@@ -43,7 +43,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(
-  /^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/
+  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/
 )
 
 // Regex for validate php-version.versionReduction()
@@ -155,6 +155,15 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
+const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
+const isOrdinalNumberDaily = Joi.string().regex(
+  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
+)
+
+const isHumanized = Joi.string().regex(
+  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
+)
+
 export {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -187,4 +196,7 @@ export {
   isCustomCompactTestTotals,
   makeTestTotalsValidator,
   makeCompactTestTotalsValidator,
+  isOrdinalNumber,
+  isOrdinalNumberDaily,
+  isHumanized,
 }

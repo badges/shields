@@ -4,6 +4,40 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-10-08
+
+- deprecate [criterion] service [#8501](https://github.com/badges/shields/issues/8501)
+- fix formatRelativeDate error handling; run [date] [#8497](https://github.com/badges/shields/issues/8497)
+- allow/validate bitbucket_username / bitbucket_password in private config schema [#8472](https://github.com/badges/shields/issues/8472)
+- fix [pub] points badge test and example [#8498](https://github.com/badges/shields/issues/8498)
+- feat: add [GitlabLanguageCount] service [#8377](https://github.com/badges/shields/issues/8377)
+- [GitHubGistStars] add GitHub Gist Stars [#8471](https://github.com/badges/shields/issues/8471)
+- fix display/search of CII badge examples [#8473](https://github.com/badges/shields/issues/8473)
+- feat: add 2022 support to GitHub Hacktoberfest [#8468](https://github.com/badges/shields/issues/8468)
+- fix [GitLabCoverage] subgroup bug [#8401](https://github.com/badges/shields/issues/8401)
+- implement ruby gems-specific version sort/color functions [#8434](https://github.com/badges/shields/issues/8434)
+- Add `rc` to pre-release identifiers [#8435](https://github.com/badges/shields/issues/8435)
+- add [GitHub] Number of commits between branches/tags/commits [#8394](https://github.com/badges/shields/issues/8394)
+- add [Packagist] dependency version [#8371](https://github.com/badges/shields/issues/8371)
+- fix Docker build status invalid response data bug [#8392](https://github.com/badges/shields/issues/8392)
+- Dependency updates
+
+## server-2022-09-04
+
+- fix frontend compile for users running on Windows [#8350](https://github.com/badges/shields/issues/8350)
+- [DockerSize] Docker image size multi arch [#8290](https://github.com/badges/shields/issues/8290)
+- upgrade gatsby [#8334](https://github.com/badges/shields/issues/8334)
+- Custom domains for [JitPack] artifacts [#8333](https://github.com/badges/shields/issues/8333)
+- fix [dockerstars] service [#8316](https://github.com/badges/shields/issues/8316)
+- [BountySource] Fix: Broken Badge generation for decimal activity values [#8315](https://github.com/badges/shields/issues/8315)
+- feat: add [gitlabmergerequests] service [#8166](https://github.com/badges/shields/issues/8166)
+- Fix terminology for [ROS] version service [#8292](https://github.com/badges/shields/issues/8292)
+- feat: add [GitlabStars] service [#8209](https://github.com/badges/shields/issues/8209)
+- Fix invalid `rst` format when `alt` or `target` is present [#8275](https://github.com/badges/shields/issues/8275)
+- [GithubGistLastCommit] GitHub gist last commit [#8272](https://github.com/badges/shields/issues/8272)
+- [GitHub] GitHub file size for a specific branch [#8262](https://github.com/badges/shields/issues/8262)
+- Dependency updates
+
 ## server-2022-08-01
 
 - [pypi] Add Framework Version Badges support [#8261](https://github.com/badges/shields/issues/8261)

@@ -59,10 +59,3 @@ t.create('alerts: total alerts for a project with a github mapped host')
     label: 'lgtm alerts',
     message: Joi.string().regex(/^[0-9kM.]+$/),
   })
-
-t.create('alerts: total alerts for a project with a bitbucket mapped host')
-  .get('/bitbucket/atlassian/confluence-business-blueprints.json')
-  .expectBadge({
-    label: 'lgtm alerts',
-    message: Joi.string().regex(/^[0-9kM.]+$/),
-  })

@@ -7,7 +7,7 @@ import { documentation, transformErrors } from './github-helpers.js'
 const greenStates = ['SUCCESS']
 const redStates = ['ERROR', 'FAILURE']
 const blueStates = ['INACTIVE']
-const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING', 'NO_STATUS']
+const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING', 'NO_STATUS', 'WAITING']
 
 const stateToMessageMappings = {
   IN_PROGRESS: 'in progress',
