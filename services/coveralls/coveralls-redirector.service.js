@@ -6,7 +6,7 @@ export default [
     category: 'coverage',
     route: {
       base: 'coveralls',
-      pattern: ':user((?!github|bitbucket).*)/:repo/:branch*',
+      pattern: ':user((?!github|bitbucket|gitlab).*)/:repo/:branch*',
     },
     transformPath: ({ user, repo, branch }) =>
       `/coverallsCoverage/github/${user}/${repo}${
