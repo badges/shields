@@ -5,10 +5,10 @@ export const t = new ServiceTester({
   pathPrefix: '/ansible/collection',
 })
 
-t.create('role name (valid)')
+t.create('collection name (valid)')
   .get('/278.json')
-  .expectBadge({ label: 'role', message: 'community.general' })
+  .expectBadge({ label: 'collection', message: 'community.general' })
 
-t.create('role name (not found)')
+t.create('collection name (not found)')
   .get('/000.json')
-  .expectBadge({ label: 'role', message: 'not found' })
+  .expectBadge({ label: 'collection', message: 'not found' })
