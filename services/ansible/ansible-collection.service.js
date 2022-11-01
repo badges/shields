@@ -8,17 +8,7 @@ const ansibleCollectionSchema = Joi.object({
   }),
 }).required()
 
-class AnsibleGalaxyCollection extends BaseJsonService {
-  async fetch({ collectionId }) {
-    const url = `https://galaxy.ansible.com/api/v2/collections/${collectionId}/`
-    return this._requestJson({
-      url,
-      schema: ansibleCollectionSchema,
-    })
-  }
-}
-
-class AnsibleGalaxyCollectionName extends AnsibleGalaxyCollection {
+class AnsibleGalaxyCollectionName extends BaseJsonService {
   static category = 'other'
   static route = { base: 'ansible/collection', pattern: ':collectionId' }
 
@@ -36,6 +26,14 @@ class AnsibleGalaxyCollectionName extends AnsibleGalaxyCollection {
 
   static render({ name }) {
     return { message: name, color: 'blue' }
+  }
+
+  async fetch({ collectionId }) {
+    const url = `https://galaxy.ansible.com/api/v2/collections/${collectionId}/`
+    return this._requestJson({
+      url,
+      schema: ansibleCollectionSchema,
+    })
   }
 
   async handle({ collectionId }) {
