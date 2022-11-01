@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-11-01
+
+- fix [githubpullrequestcheckstate] service tests [#8548](https://github.com/badges/shields/issues/8548)
+- require array to have at least 1 item in [githublastcommit] [#8563](https://github.com/badges/shields/issues/8563)
+- [VisualStudioMarketplace] Add support to prerelease extensions version (Issue #8207) [#8561](https://github.com/badges/shields/issues/8561)
+- feat: add [GitlabLastCommit] service [#8508](https://github.com/badges/shields/issues/8508)
+- fix [swagger] service tests (allow 0 items in array) [#8564](https://github.com/badges/shields/issues/8564)
+- fix codecov badge for non-default branch [#8565](https://github.com/badges/shields/issues/8565)
+- fixes for integration test rate limit issues [#8538](https://github.com/badges/shields/issues/8538)
+- remove failing [lgtm] test case [#8547](https://github.com/badges/shields/issues/8547)
+- Add [GitHubLastCommit] by committer badge [#8537](https://github.com/badges/shields/issues/8537)
+- [GitHubReleaseDate] - published_at field [#8543](https://github.com/badges/shields/issues/8543)
+- Fix [Testspace] with new "untested" value in case_counts array [#8544](https://github.com/badges/shields/issues/8544)
+- fix: Support WAITING status for GitHub deployments [#8521](https://github.com/badges/shields/issues/8521)
+- update [bitbucket] private repo test [#8520](https://github.com/badges/shields/issues/8520)
+- update [powershellgallery] platform example [#8518](https://github.com/badges/shields/issues/8518)
+- fix [myget] downloads (tenant) test [#8513](https://github.com/badges/shields/issues/8513)
+- [Whatpulse] badge for a user and for a team [#8466](https://github.com/badges/shields/issues/8466)
+- increase timeout for [reuse] not found test [#8519](https://github.com/badges/shields/issues/8519)
+- update [JenkinsPluginInstalls] test example [#8511](https://github.com/badges/shields/issues/8511)
+- migrate integration tests to GH actions [#8423](https://github.com/badges/shields/issues/8423)
+- deprecate [pkgreview] service [#8499](https://github.com/badges/shields/issues/8499)
+- Dependency updates
+
 ## server-2022-10-08
 
 - deprecate [criterion] service [#8501](https://github.com/badges/shields/issues/8501)
