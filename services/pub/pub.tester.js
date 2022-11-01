@@ -18,9 +18,9 @@ t.create('package pre-release version')
     message: isVPlusTripleDottedVersion,
   })
 
-t.create('package not found').get('/v/doesnotexist.json').expectBadge({
+t.create('invalid package name').get('/v/doesnotexist.json').expectBadge({
   label: 'pub',
-  message: 'not found',
+  message: 'invalid package name',
 })
 
 t.create('package version (legacy redirect: vpre)')

@@ -41,6 +41,9 @@ class PubVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://pub.dartlang.org/packages/${packageName}.json`,
+      errorMessages: {
+        404: 'invalid package name',
+      },
     })
   }
 

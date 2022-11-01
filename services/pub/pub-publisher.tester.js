@@ -12,7 +12,7 @@ t.create('package not verified publisher').get('/utf.json').expectBadge({
   color: 'lightgrey',
 })
 
-t.create('package not found').get('/doesnotexist.json').expectBadge({
+t.create('invalid package name').get('/doesnotexist.json').expectBadge({
   label: 'publisher',
-  message: 'not found',
+  message: 'invalid package name',
 })

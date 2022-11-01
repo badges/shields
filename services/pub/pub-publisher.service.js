@@ -38,6 +38,9 @@ export class PubPublisher extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://pub.dev/api/packages/${packageName}/publisher`,
+      errorMessages: {
+        404: 'invalid package name',
+      },
     })
   }
 
