@@ -2,7 +2,8 @@ import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
 import { BaseJsonService } from '../index.js'
 
-const documentation = `<p>A measure of how many developers use a package, providing insight into what other developers are using.</p>`
+const documentation =
+  '<p>A measure of how many developers use a package, providing insight into what other developers are using.</p>'
 
 const keywords = ['dart', 'flutter']
 

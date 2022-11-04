@@ -16,7 +16,7 @@ class BaseVaadinDirectoryService extends BaseJsonService {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
-      url: `https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier`,
+      url: 'https://vaadin.com/vaadincom/directory-service/components/search/findByUrlIdentifier',
       options: {
         searchParams: {
           projection: 'summary',

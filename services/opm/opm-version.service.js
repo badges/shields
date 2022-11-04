@@ -26,7 +26,7 @@ export default class OpmVersion extends BaseService {
 
   async fetch({ user, moduleName }) {
     const { res } = await this._request({
-      url: `https://opm.openresty.org/api/pkg/fetch`,
+      url: 'https://opm.openresty.org/api/pkg/fetch',
       options: {
         method: 'HEAD',
         searchParams: {

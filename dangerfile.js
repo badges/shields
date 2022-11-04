@@ -114,7 +114,7 @@ if (allFiles.length > 100) {
       if (diff.includes('authHelper') && !secretsDocs.modified) {
         warn(
           [
-            `:books: Remember to ensure any changes to \`config.private\` `,
+            ':books: Remember to ensure any changes to `config.private` ',
             `in \`${file}\` are reflected in the [server secrets documentation]`,
             '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
           ].join('')

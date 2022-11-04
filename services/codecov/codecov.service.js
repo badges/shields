@@ -107,7 +107,7 @@ export default class Codecov extends BaseSvgScrapingService {
   async legacyFetch({ vcsName, user, repo, branch, token }) {
     // Codecov Docs: https://docs.codecov.io/reference#section-get-a-single-repository
     const url = `https://codecov.io/api/${vcsName}/${user}/${repo}${
-      branch ? `/branches/${branch}` : ''
+      branch ? `/branch/${branch}` : ''
     }`
     const { buffer } = await this._request({
       url,

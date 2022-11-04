@@ -1,27 +1,5 @@
 version: 2
 
-integration_steps: &integration_steps
-  steps:
-    - checkout
-
-    - run:
-        name: Install dependencies
-        command: |
-          npm ci
-        environment:
-          CYPRESS_INSTALL_BINARY: 0
-
-    - run:
-        name: Integration tests
-        when: always
-        environment:
-          mocha_reporter: mocha-junit-reporter
-          MOCHA_FILE: junit/integration/results.xml
-        command: npm run test:integration
-
-    - store_test_results:
-        path: junit
-
 services_steps: &services_steps
   steps:
     - checkout
@@ -48,22 +26,6 @@ services_steps: &services_steps
         path: junit
 
 jobs:
-  integration:
-    docker:
-      - image: cimg/node:16.15
-      - image: redis
-
-    <<: *integration_steps
-
-  integration@node-17:
-    docker:
-      - image: cimg/node:17.9
-      - image: redis
-    environment:
-      NPM_CONFIG_ENGINE_STRICT: 'false'
-
-    <<: *integration_steps
-
   danger:
     docker:
       - image: cimg/node:16.15
@@ -185,10 +147,6 @@ workflows:
 
   on-commit:
     jobs:
-      - integration@node-17:
-          filters:
-            branches:
-              ignore: gh-pages
       - frontend:
           filters:
             branches:

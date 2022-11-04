@@ -23,7 +23,7 @@ const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
 /**
  * Joi schema for validating endpoint.
  *
- * @type {object}
+ * @type {Joi}
  */
 const endpointSchema = Joi.object({
   schemaVersion: 1,
