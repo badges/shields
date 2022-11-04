@@ -45,7 +45,7 @@
     "got": "^12.5.2",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.6",
-    "ioredis": "5.2.3",
+    "ioredis": "5.2.4",
     "joi": "17.6.4",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^4.1.0",
