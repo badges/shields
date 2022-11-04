@@ -1,0 +1,20 @@
+name: 'Integration tests'
+description: 'Run integration tests'
+inputs:
+  github-token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Integration Tests
+      if: always()
+      run: npm run test:integration -- --reporter json --reporter-option 'output=reports/integration-tests.json'
+      env:
+        GH_TOKEN: '${{ inputs.github-token }}'
+      shell: bash
+
+    - name: Write Markdown Summary
+      if: always()
+      run: node scripts/mocha2md.js Integration reports/integration-tests.json >> $GITHUB_STEP_SUMMARY
+      shell: bash

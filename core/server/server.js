@@ -169,6 +169,8 @@ const privateConfigSchema = Joi.object({
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),
   jira_pass: Joi.string(),
+  bitbucket_username: Joi.string(),
+  bitbucket_password: Joi.string(),
   bitbucket_server_username: Joi.string(),
   bitbucket_server_password: Joi.string(),
   librariesio_tokens: Joi.arrayFromString().items(Joi.string()),

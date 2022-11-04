@@ -134,7 +134,7 @@ Prettier before a commit by default.
 When adding or changing a service [please write tests][service-tests], and ensure the [title of your Pull Requests follows the required conventions](#running-service-tests-in-pull-requests) to ensure your tests are executed.
 When changing other code, please add unit tests.
 
-To run the integration tests, you must have redis installed and in your PATH.
+To run the integration tests, you must have Redis installed and in your PATH.
 Use `brew install redis`, `yum install redis`, etc. The test runner will
 start the server automatically.
 

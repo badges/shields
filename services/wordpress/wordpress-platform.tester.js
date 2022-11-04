@@ -190,6 +190,22 @@ t.create('Plugin Required PHP Version')
 
 t.create('Plugin Required PHP Version (Not Set)')
   .get('/plugin/required-php/akismet.json')
+  .intercept(nock =>
+    nock('https://api.wordpress.org')
+      .get('/plugins/info/1.2/')
+      .query(mockedQuerySelector)
+      .reply(200, {
+        version: '1.2',
+        rating: 80,
+        num_ratings: 100,
+        downloaded: 100,
+        active_installs: 100,
+        requires: false,
+        tested: '4.0.0',
+        last_updated: '2020-01-01 7:21am GMT',
+        requires_php: false,
+      })
+  )
   .expectBadge({
     label: 'php',
     message: 'not set for this plugin',
