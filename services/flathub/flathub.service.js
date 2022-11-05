@@ -1,10 +1,15 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
-const schema = Joi.object({
-  currentReleaseVersion: Joi.string().required(),
-}).required()
+const schema = Joi.alternatives()
+  .try(
+    Joi.object({
+      currentReleaseVersion: Joi.string().required(),
+    }).required(),
+    Joi.valid(null).required()
+  )
+  .required()
 
 export default class Flathub extends BaseJsonService {
   static category = 'version'
@@ -26,6 +31,13 @@ export default class Flathub extends BaseJsonService {
       schema,
       url: `https://flathub.org/api/v1/apps/${encodeURIComponent(packageName)}`,
     })
+
+    // the upstream API indicates "not found"
+    // by returning a 200 OK with a null body
+    if (data === null) {
+      throw new NotFound()
+    }
+
     return renderVersionBadge({ version: data.currentReleaseVersion })
   }
 }
