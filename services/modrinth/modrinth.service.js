@@ -28,7 +28,7 @@ export default class Modrinth extends BaseJsonService {
   async fetch({ modId }) {
     return this._requestJson({
       schema,
-      url: `https://api.modrinth.com/api/v1/mod/${modId}`,
+      url: `https://api.modrinth.com/v2/project/${modId}`,
     })
   }
 
