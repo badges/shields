@@ -25,6 +25,11 @@ public:
 
   rasterUrl: 'RASTER_URL'
 
+  cors:
+    allowedOrigin:
+      __name: 'ALLOWED_ORIGIN'
+      __format: 'json'
+
   services:
     bitbucketServer:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'

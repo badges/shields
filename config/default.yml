@@ -13,6 +13,9 @@ public:
   ssl:
     isSecure: false
 
+  cors:
+    allowedOrigin: []
+
   services:
     github:
       baseUri: 'https://api.github.com/'

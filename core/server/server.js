@@ -111,6 +111,12 @@ const publicConfigSchema = Joi.object({
   },
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
+  cors: {
+    // This doesn't actually do anything
+    // TODO: maybe remove in future?
+    // https://github.com/badges/shields/pull/8311#discussion_r945337530
+    allowedOrigin: Joi.array().items(optionalUrl).required(),
+  },
   services: Joi.object({
     bitbucketServer: defaultService,
     drone: defaultService,

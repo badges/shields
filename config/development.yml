@@ -2,4 +2,7 @@ public:
   bind:
     address: 'localhost'
 
+  cors:
+    allowedOrigin: ['http://localhost:3000']
+
   handleInternalErrors: false
