@@ -7,7 +7,7 @@ const schema = Joi.object({
   downloads: nonNegativeInteger,
 }).required()
 
-export default class Modrinth extends BaseJsonService {
+export default class ModrinthDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {

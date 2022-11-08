@@ -7,7 +7,7 @@ const schema = Joi.object({
   followers: nonNegativeInteger,
 }).required()
 
-export default class Modrinth extends BaseJsonService {
+export default class ModrinthFollowers extends BaseJsonService {
   static category = 'social'
 
   static route = {
