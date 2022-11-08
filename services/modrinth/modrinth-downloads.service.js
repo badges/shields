@@ -12,28 +12,28 @@ export default class ModrinthDownloads extends BaseJsonService {
 
   static route = {
     base: 'modrinth/dt',
-    pattern: ':modId',
+    pattern: ':projectId',
   }
 
   static examples = [
     {
       title: 'Modrinth Downloads',
-      namedParams: { modId: 'AANobbMI' },
+      namedParams: { projectId: 'AANobbMI' },
       staticPreview: renderDownloadsBadge({ downloads: 120000 }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  async fetch({ modId }) {
+  async fetch({ projectId }) {
     return this._requestJson({
       schema,
-      url: `https://api.modrinth.com/api/v1/mod/${modId}`,
+      url: `https://api.modrinth.com/v2/project/${projectId}`,
     })
   }
 
-  async handle({ modId }) {
-    const { downloads } = await this.fetch({ modId })
+  async handle({ projectId }) {
+    const { downloads } = await this.fetch({ projectId })
     return renderDownloadsBadge({ downloads })
   }
 }
