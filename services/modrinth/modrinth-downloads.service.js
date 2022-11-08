@@ -17,7 +17,7 @@ export default class Modrinth extends BaseJsonService {
 
   static examples = [
     {
-      title: 'Modrinth',
+      title: 'Modrinth Downloads',
       namedParams: { modId: 'AANobbMI' },
       staticPreview: renderDownloadsBadge({ downloads: 120000 }),
     },
