@@ -7,7 +7,7 @@ const schema = Joi.object({
   downloads: nonNegativeInteger,
 }).required()
 
-export default class Modrinth extends BaseJsonService {
+export default class ModrinthDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
@@ -17,7 +17,7 @@ export default class Modrinth extends BaseJsonService {
 
   static examples = [
     {
-      title: 'Modrinth',
+      title: 'Modrinth Downloads',
       namedParams: { projectId: 'AANobbMI' },
       staticPreview: renderDownloadsBadge({ downloads: 120000 }),
     },
