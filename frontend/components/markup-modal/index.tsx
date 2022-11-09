@@ -11,12 +11,10 @@ const ContentContainer = styled(BaseFont)`
 
 export function MarkupModal({
   example,
-  isBadgeSuggestion,
   baseUrl,
   onRequestClose,
 }: {
   example: RenderableExample | undefined
-  isBadgeSuggestion: boolean
   baseUrl: string
   onRequestClose: () => void
 }): JSX.Element {
@@ -29,11 +27,7 @@ export function MarkupModal({
     >
       {example !== undefined && (
         <ContentContainer>
-          <MarkupModalContent
-            baseUrl={baseUrl}
-            example={example}
-            isBadgeSuggestion={isBadgeSuggestion}
-          />
+          <MarkupModalContent baseUrl={baseUrl} example={example} />
         </ContentContainer>
       )}
     </Modal>
