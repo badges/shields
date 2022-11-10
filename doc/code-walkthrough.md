@@ -20,8 +20,6 @@ The Shields codebase is divided into several parts:
     1.  `*.js` in the root of [`services`][services]
 7.  The services themselves (about 80% of the code)
     1.  `*.js` in the folders of [`services`][services]
-8.  The badge suggestion endpoint (Note: it's tested as if it’s a service.)
-    1.  [`lib/suggest.js`][suggest]
 
 [frontend]: https://github.com/badges/shields/tree/master/frontend
 [badge-maker]: https://github.com/badges/shields/tree/master/badge-maker
@@ -29,7 +27,6 @@ The Shields codebase is divided into several parts:
 [server]: https://github.com/badges/shields/tree/master/core/server
 [token-pooling]: https://github.com/badges/shields/tree/master/core/token-pooling
 [services]: https://github.com/badges/shields/tree/master/services
-[suggest]: https://github.com/badges/shields/tree/master/lib/suggest.js
 
 The tests are also divided into several parts:
 
