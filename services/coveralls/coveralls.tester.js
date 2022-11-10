@@ -18,6 +18,14 @@ t.create('bitbucket coverage')
   .get('/bitbucket/pyKLIP/pyklip.json')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
+t.create('bitbucket branch coverage')
+  .get('/bitbucket/pyKLIP/pyklip.json?branch=master')
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+
 t.create('gitlab coverage')
+  .get('/gitlab/selcouth/wsrouter.json')
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+
+t.create('gitlab branch coverage')
   .get('/gitlab/selcouth/wsrouter.json?branch=master')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
