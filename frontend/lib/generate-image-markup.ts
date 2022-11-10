@@ -2,41 +2,20 @@ export function bareLink(badgeUrl: string, link?: string, title = ''): string {
   return badgeUrl
 }
 
-export function html(badgeUrl: string, link?: string, title?: string): string {
+export function html(badgeUrl: string, title?: string): string {
   // To be more robust, this should escape the title.
   const alt = title ? ` alt="${title}"` : ''
-  const img = `<img${alt} src="${badgeUrl}">`
-  if (link) {
-    return `<a href="${link}">${img}</a>`
-  } else {
-    return img
-  }
+  return `<img${alt} src="${badgeUrl}">`
 }
 
-export function markdown(
-  badgeUrl: string,
-  link?: string,
-  title?: string
-): string {
-  const withoutLink = `![${title || ''}](${badgeUrl})`
-  if (link) {
-    return `[${withoutLink}](${link})`
-  } else {
-    return withoutLink
-  }
+export function markdown(badgeUrl: string, title?: string): string {
+  return `![${title || ''}](${badgeUrl})`
 }
 
-export function reStructuredText(
-  badgeUrl: string,
-  link?: string,
-  title?: string
-): string {
+export function reStructuredText(badgeUrl: string, title?: string): string {
   let result = `.. image:: ${badgeUrl}`
   if (title) {
     result += `\n   :alt: ${title}`
-  }
-  if (link) {
-    result += `\n   :target: ${link}`
   }
   return result
 }
@@ -91,13 +70,9 @@ export function renderAsciiDocAttributes(
   }
 }
 
-export function asciiDoc(
-  badgeUrl: string,
-  link?: string,
-  title?: string
-): string {
+export function asciiDoc(badgeUrl: string, title?: string): string {
   const positional = title ? [title] : []
-  const named = link ? { link } : ({} as { [k: string]: string })
+  const named = {} as { [k: string]: string }
   const attrs = renderAsciiDocAttributes(positional, named)
   return `image:${badgeUrl}${attrs}`
 }
@@ -106,12 +81,10 @@ export type MarkupFormat = 'markdown' | 'rst' | 'asciidoc' | 'link' | 'html'
 
 export function generateMarkup({
   badgeUrl,
-  link,
   title,
   markupFormat,
 }: {
   badgeUrl: string
-  link?: string
   title?: string
   markupFormat: MarkupFormat
 }): string {
@@ -122,5 +95,5 @@ export function generateMarkup({
     link: bareLink,
     html,
   }[markupFormat]
-  return generatorFn(badgeUrl, link, title)
+  return generatorFn(badgeUrl, title)
 }
