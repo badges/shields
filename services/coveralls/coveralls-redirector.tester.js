@@ -14,8 +14,10 @@ t.create('Coveralls VCS type missing + specified branch')
   .get('/jekyll/jekyll/master.svg')
   .expectRedirect('/coverallsCoverage/github/jekyll/jekyll.svg?branch=master')
 
-t.create('Redirect from before branch was a query param')
+t.create(
+  'Redirect from before branch was a query param - with specified branch'
+)
   .get('/bitbucket/pyKLIP/pyklip/master.svg')
   .expectRedirect(
-    '/coverallsCoverage/bitbucket/pyKLIP/pyklip?branch=master.svg'
+    '/coverallsCoverage/bitbucket/pyKLIP/pyklip.svg?branch=master'
   )
