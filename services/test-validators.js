@@ -164,6 +164,16 @@ const isHumanized = Joi.string().regex(
   /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
 )
 
+// $1,530,602.24 // true
+// 1,530,602.24 // true
+// $1,666.24$ // false
+// ,1,666,88, // false
+// 1.6.66,6 // false
+// .1555. // false
+const isCurrency = withRegex(
+  /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/
+)
+
 export {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -199,4 +209,5 @@ export {
   isOrdinalNumber,
   isOrdinalNumberDaily,
   isHumanized,
+  isCurrency,
 }
