@@ -7,6 +7,9 @@ const schema = Joi.object({
     .items(
       Joi.object({
         version: Joi.string().required(),
+        info_json: Joi.object({
+          factorio_version: Joi.string().required(),
+        }).required(),
       })
     )
     .min(1)
@@ -25,10 +28,10 @@ class BaseFactorioModPortalService extends BaseJsonService {
   }
 }
 
-class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
+class FactorioModPortalLatestModVersion extends BaseFactorioModPortalService {
   static category = 'version'
 
-  static route = { base: 'factorio-mod-portal/v', pattern: ':modName' }
+  static route = { base: 'factorio-mod-portal/mod/v', pattern: ':modName' }
   static examples = [
     {
       title: 'Factorio Mod Portal',
@@ -50,4 +53,29 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   }
 }
 
-export { FactorioModPortalLatestVersion }
+class FactorioModPortalGameVersion extends BaseFactorioModPortalService {
+  static category = 'version'
+
+  static route = { base: 'factorio-mod-portal/game/v', pattern: ':modName' }
+  static examples = [
+    {
+      title: 'Factorio Mod Portal',
+      namedParams: { modName: 'rso-mod' },
+      staticPreview: this.render({ version: '1.1' }),
+    },
+  ]
+
+  static defaultBadgeData = { label: 'factorio version' }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  async handle({ modName }) {
+    const { releases } = await this.fetch({ modName })
+    const version = releases[releases.length - 1].info_json.factorio_version
+    return this.constructor.render({ version })
+  }
+}
+
+export { FactorioModPortalLatestModVersion, FactorioModPortalGameVersion }
