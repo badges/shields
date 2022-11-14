@@ -1,6 +1,7 @@
 import {
   isComposerVersion,
   isFormattedDate,
+  isMetric,
   withRegex,
 } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
@@ -35,3 +36,11 @@ t.create('Last Updated (rso-mod, valid)')
 t.create('Last Updated (mod not found)')
   .get('/r/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'last updated', message: 'mod not found' })
+
+t.create('Downloads (rso-mod, valid)')
+  .get('/dt/rso-mod.json')
+  .expectBadge({ label: 'downloads', message: isMetric })
+
+t.create('Downloads (mod not found)')
+  .get('/dt/mod-that-doesnt-exist.json')
+  .expectBadge({ label: 'downloads', message: 'mod not found' })

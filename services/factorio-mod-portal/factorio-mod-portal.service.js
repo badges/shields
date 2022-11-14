@@ -2,9 +2,11 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { renderVersionBadge } from '../version.js'
 
 const schema = Joi.object({
+  downloads_count: Joi.number().required(),
   releases: Joi.array()
     .items(
       Joi.object({
@@ -21,7 +23,7 @@ const schema = Joi.object({
 
 class BaseFactorioModPortalService extends BaseJsonService {
   async fetch({ modName }) {
-    const { releases } = await this._requestJson({
+    const { releases, downloads_count } = await this._requestJson({
       schema,
       url: `https://mods.factorio.com/api/mods/${modName}`,
       errorMessages: {
@@ -30,6 +32,7 @@ class BaseFactorioModPortalService extends BaseJsonService {
     })
 
     return {
+      downloads_count,
       first_release: releases[0],
       latest_release: releases[releases.length - 1],
     }
@@ -139,8 +142,39 @@ class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
   }
 }
 
+class FactorioModPortalDownloads extends BaseFactorioModPortalService {
+  static category = 'downloads'
+
+  static route = {
+    base: 'factorio-mod-portal/dt',
+    pattern: ':modName',
+  }
+
+  static examples = [
+    {
+      title: 'Factorio Mod Portal mod',
+      namedParams: { modName: 'rso-mod' },
+      staticPreview: this.render({
+        downloads_count: 1694763,
+      }),
+    },
+  ]
+
+  static defaultBadgeData = { label: 'downloads' }
+
+  static render({ downloads_count }) {
+    return renderDownloadsBadge({ downloads: downloads_count })
+  }
+
+  async handle({ modName }) {
+    const { downloads_count } = await this.fetch({ modName })
+    return this.constructor.render({ downloads_count })
+  }
+}
+
 export {
   FactorioModPortalLatestVersion,
   FactorioModPortalLastUpdated,
   FactorioModPortalFactorioVersions,
+  FactorioModPortalDownloads,
 }
