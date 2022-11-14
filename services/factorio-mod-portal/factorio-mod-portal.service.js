@@ -51,7 +51,7 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   static category = 'version'
 
   static route = {
-    base: 'factorio-mod-portal/latest-version',
+    base: 'factorio-mod-portal/v',
     pattern: ':modName',
   }
 

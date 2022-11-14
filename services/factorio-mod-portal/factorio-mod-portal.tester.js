@@ -14,11 +14,11 @@ export const t = new ServiceTester({
 const multipleVersions = withRegex(/^([+]?\d*\.\d+)(-)([+]?\d*\.\d+)$/)
 
 t.create('Latest Version (rso-mod, valid)')
-  .get('/latest-version/rso-mod.json')
+  .get('/v/rso-mod.json')
   .expectBadge({ label: 'latest version', message: isComposerVersion })
 
 t.create('Latest Version (mod not found)')
-  .get('/latest-version/mod-that-doesnt-exist.json')
+  .get('/v/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'latest version', message: 'mod not found' })
 
 t.create('Factorio Version (rso-mod, valid)')
