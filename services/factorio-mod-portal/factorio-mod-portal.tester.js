@@ -1,4 +1,8 @@
-import { isComposerVersion, withRegex } from '../test-validators.js'
+import {
+  isComposerVersion,
+  isFormattedDate,
+  withRegex,
+} from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 
 export const t = new ServiceTester({
@@ -23,3 +27,11 @@ t.create('Factorio Versions (rso-mod, valid)')
 t.create('Factorio Versions (mod not found)')
   .get('/fv/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'factorio version', message: 'mod not found' })
+
+t.create('Last Updated (rso-mod, valid)')
+  .get('/r/rso-mod.json')
+  .expectBadge({ label: 'last updated', message: isFormattedDate })
+
+t.create('Last Updated (mod not found)')
+  .get('/r/mod-that-doesnt-exist.json')
+  .expectBadge({ label: 'last updated', message: 'mod not found' })

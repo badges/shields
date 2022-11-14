@@ -1,5 +1,7 @@
 import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
+import { age } from '../color-formatters.js'
+import { formatDate } from '../text-formatters.js'
 import { renderVersionBadge } from '../version.js'
 
 const schema = Joi.object({
@@ -7,6 +9,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         version: Joi.string().required(),
+        released_at: Joi.string().required(),
         info_json: Joi.object({
           factorio_version: Joi.string().required(),
         }).required(),
@@ -103,4 +106,41 @@ class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
   }
 }
 
-export { FactorioModPortalLatestVersion, FactorioModPortalFactorioVersions }
+class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
+  static category = 'activity'
+
+  static route = {
+    base: 'factorio-mod-portal/r',
+    pattern: ':modName',
+  }
+
+  static examples = [
+    {
+      title: 'Factorio Mod Portal mod',
+      namedParams: { modName: 'rso-mod' },
+      staticPreview: this.render({
+        last_updated: new Date(),
+      }),
+    },
+  ]
+
+  static defaultBadgeData = { label: 'last updated' }
+
+  static render({ last_updated }) {
+    return {
+      message: formatDate(last_updated),
+      color: age(last_updated),
+    }
+  }
+
+  async handle({ modName }) {
+    const { latest_release } = await this.fetch({ modName })
+    return this.constructor.render({ last_updated: latest_release.released_at })
+  }
+}
+
+export {
+  FactorioModPortalLatestVersion,
+  FactorioModPortalLastUpdated,
+  FactorioModPortalFactorioVersions,
+}
