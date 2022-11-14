@@ -2,11 +2,12 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import { renderVersionBadge } from '../version.js'
 
 const schema = Joi.object({
-  downloads_count: Joi.number().required(),
+  downloads_count: nonNegativeInteger,
   releases: Joi.array()
     .items(
       Joi.object({
