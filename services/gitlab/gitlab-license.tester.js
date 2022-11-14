@@ -34,7 +34,7 @@ t.create('License for unknown repo')
   .get('/user1/gitlab-does-not-have-this-repo.json')
   .expectBadge({
     label: 'license',
-    message: 'repo not found',
+    message: 'project not found',
     color: 'red',
   })
 

@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
+  deploy-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

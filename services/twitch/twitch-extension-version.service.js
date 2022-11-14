@@ -34,7 +34,7 @@ export default class TwitchExtensionVersion extends TwitchBase {
   async fetch({ extensionId }) {
     const data = this._requestJson({
       schema: helixSchema,
-      url: `https://api.twitch.tv/helix/extensions/released`,
+      url: 'https://api.twitch.tv/helix/extensions/released',
       options: {
         searchParams: { extension_id: extensionId },
       },

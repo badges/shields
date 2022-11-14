@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { renderLicenseBadge } from '../licenses.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({
@@ -12,19 +13,6 @@ const schema = Joi.object({
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
-
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab )
-</p>
-`
-
-const customDocumentation = `
-<p>
-  Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
-  You may use your GitLab Project Id (e.g. 13953) or your Project Path (e.g. gitlab-cn/gitlab ) in <a href="https://jihulab.com">https://jihulab.com</a>
-</p>
-`
 
 export default class GitlabLicense extends GitLabBase {
   static category = 'license'
@@ -59,7 +47,7 @@ export default class GitlabLicense extends GitLabBase {
         message: 'MIT License',
         color: 'green',
       },
-      documentation: customDocumentation,
+      documentation,
     },
   ]
 
@@ -79,9 +67,7 @@ export default class GitlabLicense extends GitLabBase {
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}`,
       options: { searchParams: { license: '1' } },
-      errorMessages: {
-        404: 'repo not found',
-      },
+      errorMessages: errorMessagesFor('project not found'),
     })
   }
 

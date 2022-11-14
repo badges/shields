@@ -63,7 +63,7 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
           tagged: query,
         },
       },
-      url: `https://api.stackexchange.com/2.2/questions`,
+      url: 'https://api.stackexchange.com/2.2/questions',
     })
 
     const numValue = parsedData.total

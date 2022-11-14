@@ -62,7 +62,7 @@ t.create('total installs')
   .get('/total/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, mockResponse)
   )
   .expectBadge({
@@ -75,7 +75,7 @@ t.create('services installs')
   .get('/services/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, mockResponse)
   )
   .expectBadge({
@@ -88,7 +88,7 @@ t.create('onprem installs')
   .get('/onprem/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, mockResponse)
   )
   .expectBadge({
@@ -101,7 +101,7 @@ t.create('zero installs')
   .get('/total/swellaby.cobertura-transform.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {

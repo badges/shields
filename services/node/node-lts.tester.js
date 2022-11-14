@@ -30,7 +30,7 @@ t.create('engines satisfies all lts node versions')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `10 - 12`, color: `brightgreen` })
+  .expectBadge({ label: 'node-lts', message: '10 - 12', color: 'brightgreen' })
 
 t.create('engines does not satisfy all lts node versions')
   .get('/passport.json')
@@ -42,7 +42,7 @@ t.create('engines does not satisfy all lts node versions')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `8`, color: `orange` })
+  .expectBadge({ label: 'node-lts', message: '8', color: 'orange' })
 
 t.create('engines satisfies some lts node versions')
   .get('/passport.json')
@@ -54,7 +54,7 @@ t.create('engines satisfies some lts node versions')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `10`, color: `yellow` })
+  .expectBadge({ label: 'node-lts', message: '10', color: 'yellow' })
 
 t.create('gets the node version of @stdlib/stdlib')
   .get('/@stdlib/stdlib.json')
@@ -74,7 +74,7 @@ t.create('engines satisfies all lts node versions - scoped')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `10 - 12`, color: `brightgreen` })
+  .expectBadge({ label: 'node-lts', message: '10 - 12', color: 'brightgreen' })
 
 t.create('engines does not satisfy all lts node versions - scoped')
   .get('/@stdlib/stdlib.json')
@@ -87,7 +87,7 @@ t.create('engines does not satisfy all lts node versions - scoped')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `8`, color: `orange` })
+  .expectBadge({ label: 'node-lts', message: '8', color: 'orange' })
 
 t.create('engines satisfies some lts node versions - scoped')
   .get('/@stdlib/stdlib.json')
@@ -100,7 +100,7 @@ t.create('engines satisfies some lts node versions - scoped')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts', message: `10`, color: `yellow` })
+  .expectBadge({ label: 'node-lts', message: '10', color: 'yellow' })
 
 t.create("gets the tagged release's node version version of ionic")
   .get('/ionic/testing.json')
@@ -122,8 +122,8 @@ t.create('engines satisfies all lts node versions - tagged')
   .intercept(mockVersionsSha())
   .expectBadge({
     label: 'node-lts@testing',
-    message: `10 - 12`,
-    color: `brightgreen`,
+    message: '10 - 12',
+    color: 'brightgreen',
   })
 
 t.create('engines does not satisfy all lts node versions - tagged')
@@ -137,7 +137,7 @@ t.create('engines does not satisfy all lts node versions - tagged')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts@testing', message: `8`, color: `orange` })
+  .expectBadge({ label: 'node-lts@testing', message: '8', color: 'orange' })
 
 t.create('engines satisfies some lts node versions - tagged')
   .get('/ionic/testing.json')
@@ -150,7 +150,7 @@ t.create('engines satisfies some lts node versions - tagged')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts@testing', message: `10`, color: `yellow` })
+  .expectBadge({ label: 'node-lts@testing', message: '10', color: 'yellow' })
 
 t.create("gets the tagged release's node version of @cycle/core")
   .get('/@cycle/core/canary.json')
@@ -173,8 +173,8 @@ t.create('engines satisfies all lts node versions - scoped and tagged')
   .intercept(mockVersionsSha())
   .expectBadge({
     label: 'node-lts@canary',
-    message: `10 - 12`,
-    color: `brightgreen`,
+    message: '10 - 12',
+    color: 'brightgreen',
   })
 
 t.create('engines does not satisfy all lts node versions - scoped and tagged')
@@ -189,7 +189,7 @@ t.create('engines does not satisfy all lts node versions - scoped and tagged')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts@canary', message: `8`, color: `orange` })
+  .expectBadge({ label: 'node-lts@canary', message: '8', color: 'orange' })
 
 t.create('engines satisfies some lts node versions - scoped and tagged')
   .get('/@cycle/core/canary.json')
@@ -203,7 +203,7 @@ t.create('engines satisfies some lts node versions - scoped and tagged')
     })
   )
   .intercept(mockVersionsSha())
-  .expectBadge({ label: 'node-lts@canary', message: `10`, color: `yellow` })
+  .expectBadge({ label: 'node-lts@canary', message: '10', color: 'yellow' })
 
 t.create('gets the node version of passport from a custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')

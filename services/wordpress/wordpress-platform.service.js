@@ -67,7 +67,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
   static category = 'platform-support'
 
   static route = {
-    base: `wordpress/plugin/tested`,
+    base: 'wordpress/plugin/tested',
     pattern: ':slug',
   }
 

@@ -18,8 +18,6 @@ export default function Customizer({
   exampleNamedParams,
   exampleQueryParams,
   initialStyle,
-  isPrefilled,
-  link = '',
 }: {
   baseUrl: string
   title: string
@@ -27,8 +25,6 @@ export default function Customizer({
   exampleNamedParams: { [k: string]: string }
   exampleQueryParams: { [k: string]: string }
   initialStyle?: string
-  isPrefilled: boolean
-  link?: string
 }): JSX.Element {
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/35572
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28884#issuecomment-471341041
@@ -75,7 +71,6 @@ export default function Customizer({
       const builtBadgeUrl = generateBuiltBadgeUrl()
       const markup = generateMarkup({
         badgeUrl: builtBadgeUrl,
-        link,
         title,
         markupFormat,
       })
@@ -93,7 +88,7 @@ export default function Customizer({
         indicatorRef.current.trigger()
       }
     },
-    [generateBuiltBadgeUrl, link, title, setMessage, setMarkup]
+    [generateBuiltBadgeUrl, title, setMessage, setMarkup]
   )
 
   function renderMarkupAndLivePreview(): JSX.Element {
@@ -147,7 +142,6 @@ export default function Customizer({
     <form action="">
       <PathBuilder
         exampleParams={exampleNamedParams}
-        isPrefilled={isPrefilled}
         onChange={handlePathChange}
         pattern={pattern}
       />

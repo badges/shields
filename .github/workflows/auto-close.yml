@@ -1,11 +1,13 @@
 name: Auto close
-on: pull_request_target
+on:
+  pull_request_target:
+    types: [opened]
 
 permissions:
   pull-requests: write
 
 jobs:
-  build:
+  auto-close:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:

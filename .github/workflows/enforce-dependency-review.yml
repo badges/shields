@@ -1,8 +1,10 @@
 name: 'Dependency Review'
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
-  dependency-review:
+  enforce-dependency-review:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repository'

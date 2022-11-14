@@ -26,7 +26,7 @@ export default class SpigetDownloadSize extends BaseSpigetService {
   static render({ size, unit, type }) {
     if (type === 'external') {
       return {
-        message: `resource hosted externally`,
+        message: 'resource hosted externally',
         color: 'lightgrey',
       }
     }
