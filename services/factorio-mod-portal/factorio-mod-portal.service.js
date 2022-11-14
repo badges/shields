@@ -21,6 +21,8 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+// Factorio Mod portal API
+// @see https://wiki.factorio.com/Mod_portal_API
 class BaseFactorioModPortalService extends BaseJsonService {
   async fetch({ modName }) {
     const { releases, downloads_count } = await this._requestJson({
@@ -39,11 +41,12 @@ class BaseFactorioModPortalService extends BaseJsonService {
   }
 }
 
+// Badge for mod's latest updated version
 class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   static category = 'version'
 
   static route = {
-    base: 'factorio-mod-portal/lv',
+    base: 'factorio-mod-portal/latest-version',
     pattern: ':modName',
   }
 
@@ -67,11 +70,12 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   }
 }
 
+// Badge for mod's compatible Factorio versions
 class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
   static category = 'version'
 
   static route = {
-    base: 'factorio-mod-portal/fv',
+    base: 'factorio-mod-portal/factorio-version',
     pattern: ':modName',
   }
 
@@ -109,11 +113,12 @@ class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
   }
 }
 
+// Badge for mod's last updated date
 class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
   static category = 'activity'
 
   static route = {
-    base: 'factorio-mod-portal/r',
+    base: 'factorio-mod-portal/last-updated',
     pattern: ':modName',
   }
 
@@ -142,17 +147,18 @@ class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
   }
 }
 
+// Badge for mod's total download count
 class FactorioModPortalDownloads extends BaseFactorioModPortalService {
   static category = 'downloads'
 
   static route = {
-    base: 'factorio-mod-portal/dt',
+    base: 'factorio-mod-portal/downloads',
     pattern: ':modName',
   }
 
   static examples = [
     {
-      title: 'Factorio Mod Portal mod',
+      title: 'Factorio Mod Portal mod downloads',
       namedParams: { modName: 'rso-mod' },
       staticPreview: this.render({
         downloads_count: 1694763,
