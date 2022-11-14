@@ -78,7 +78,7 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
 // Badge for mod's latest compatible Factorio version
 // Query 'range' to display range of compatible versions
 class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
-  static category = 'version'
+  static category = 'platform-support'
 
   static route = {
     base: 'factorio-mod-portal/factorio-version',
