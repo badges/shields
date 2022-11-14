@@ -1,5 +1,5 @@
 import {
-  isComposerVersion,
+  isVPlusDottedVersionNClauses,
   isFormattedDate,
   isMetric,
   withRegex,
@@ -13,9 +13,10 @@ export const t = new ServiceTester({
 
 const multipleVersions = withRegex(/^([+]?\d*\.\d+)(-)([+]?\d*\.\d+)$/)
 
-t.create('Latest Version (rso-mod, valid)')
-  .get('/v/rso-mod.json')
-  .expectBadge({ label: 'latest version', message: isComposerVersion })
+t.create('Latest Version (rso-mod, valid)').get('/v/rso-mod.json').expectBadge({
+  label: 'latest version',
+  message: isVPlusDottedVersionNClauses,
+})
 
 t.create('Latest Version (mod not found)')
   .get('/v/mod-that-doesnt-exist.json')
@@ -23,7 +24,10 @@ t.create('Latest Version (mod not found)')
 
 t.create('Factorio Version (rso-mod, valid)')
   .get('/factorio-version/rso-mod.json')
-  .expectBadge({ label: 'factorio version', message: isComposerVersion })
+  .expectBadge({
+    label: 'factorio version',
+    message: isVPlusDottedVersionNClauses,
+  })
 
 t.create('Factorio Version range (rso-mod, valid)')
   .get('/factorio-version/rso-mod.json?range')
