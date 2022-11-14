@@ -102,7 +102,7 @@ class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
     return { message: version, color: 'blue' }
   }
 
-  combine({ earliest, latest }) {
+  transform({ earliest, latest }) {
     let versions = ''
     if (earliest === latest) {
       versions = earliest
@@ -116,7 +116,7 @@ class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
     const { first_release, latest_release } = await this.fetch({ modName })
     const range = queryParams.range !== undefined
     const version = range
-      ? this.combine({
+      ? this.transform({
           earliest: first_release.info_json.factorio_version,
           latest: latest_release.info_json.factorio_version,
         })
