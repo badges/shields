@@ -22,10 +22,6 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-const queryParamSchema = Joi.object({
-  range: Joi.equal(''),
-}).required()
-
 // Factorio Mod portal API
 // @see https://wiki.factorio.com/Mod_portal_API
 class BaseFactorioModPortalService extends BaseJsonService {
@@ -40,7 +36,6 @@ class BaseFactorioModPortalService extends BaseJsonService {
 
     return {
       downloads_count,
-      first_release: releases[0],
       latest_release: releases[releases.length - 1],
     }
   }
@@ -76,52 +71,31 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
 }
 
 // Badge for mod's latest compatible Factorio version
-// Query 'range' to display range of compatible versions
-class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
+class FactorioModPortalFactorioVersion extends BaseFactorioModPortalService {
   static category = 'platform-support'
 
   static route = {
     base: 'factorio-mod-portal/factorio-version',
     pattern: ':modName',
-    queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Factorio Mod Portal factorio versions',
       namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({ version: '0.14-1.1' }),
-      queryParams: {
-        range: 'range',
-      },
+      staticPreview: this.render({ version: '1.1' }),
     },
   ]
 
   static defaultBadgeData = { label: 'factorio version' }
 
   static render({ version }) {
-    return { message: version, color: 'blue' }
+    return renderVersionBadge({ version })
   }
 
-  transform({ earliest, latest }) {
-    let versions = ''
-    if (earliest === latest) {
-      versions = earliest
-    } else {
-      versions = `${earliest}-${latest}`
-    }
-    return versions
-  }
-
-  async handle({ modName }, queryParams) {
-    const { first_release, latest_release } = await this.fetch({ modName })
-    const range = queryParams.range !== undefined
-    const version = range
-      ? this.transform({
-          earliest: first_release.info_json.factorio_version,
-          latest: latest_release.info_json.factorio_version,
-        })
-      : latest_release.info_json.factorio_version
+  async handle({ modName }) {
+    const { latest_release } = await this.fetch({ modName })
+    const version = latest_release.info_json.factorio_version
     return this.constructor.render({ version })
   }
 }
@@ -194,6 +168,6 @@ class FactorioModPortalDownloads extends BaseFactorioModPortalService {
 export {
   FactorioModPortalLatestVersion,
   FactorioModPortalLastUpdated,
-  FactorioModPortalFactorioVersions,
+  FactorioModPortalFactorioVersion,
   FactorioModPortalDownloads,
 }

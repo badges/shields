@@ -2,7 +2,6 @@ import {
   isVPlusDottedVersionNClauses,
   isFormattedDate,
   isMetric,
-  withRegex,
 } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 
@@ -10,8 +9,6 @@ export const t = new ServiceTester({
   id: 'factorio-mod-portal',
   title: 'Factorio Mod Portal',
 })
-
-const multipleVersions = withRegex(/^([+]?\d*\.\d+)(-)([+]?\d*\.\d+)$/)
 
 t.create('Latest Version (rso-mod, valid)').get('/v/rso-mod.json').expectBadge({
   label: 'latest version',
@@ -28,10 +25,6 @@ t.create('Factorio Version (rso-mod, valid)')
     label: 'factorio version',
     message: isVPlusDottedVersionNClauses,
   })
-
-t.create('Factorio Version range (rso-mod, valid)')
-  .get('/factorio-version/rso-mod.json?range')
-  .expectBadge({ label: 'factorio version', message: multipleVersions })
 
 t.create('Factorio Version (mod not found)')
   .get('/factorio-version/mod-that-doesnt-exist.json')
