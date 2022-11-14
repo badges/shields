@@ -21,11 +21,15 @@ t.create('Latest Version (mod not found)')
   .get('/latest-version/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'latest version', message: 'mod not found' })
 
-t.create('Factorio Versions (rso-mod, valid)')
+t.create('Factorio Version (rso-mod, valid)')
   .get('/factorio-version/rso-mod.json')
+  .expectBadge({ label: 'factorio version', message: isComposerVersion })
+
+t.create('Factorio Version range (rso-mod, valid)')
+  .get('/factorio-version/rso-mod.json?range')
   .expectBadge({ label: 'factorio version', message: multipleVersions })
 
-t.create('Factorio Versions (mod not found)')
+t.create('Factorio Version (mod not found)')
   .get('/factorio-version/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'factorio version', message: 'mod not found' })
 

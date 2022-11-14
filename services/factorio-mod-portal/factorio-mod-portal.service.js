@@ -21,6 +21,10 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  range: Joi.equal(''),
+}).required()
+
 // Factorio Mod portal API
 // @see https://wiki.factorio.com/Mod_portal_API
 class BaseFactorioModPortalService extends BaseJsonService {
@@ -70,27 +74,32 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   }
 }
 
-// Badge for mod's compatible Factorio versions
+// Badge for mod's latest compatible Factorio version
+// Query 'range' to display range of compatible versions
 class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
   static category = 'version'
 
   static route = {
     base: 'factorio-mod-portal/factorio-version',
     pattern: ':modName',
+    queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Factorio Mod Portal factorio versions',
       namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({ versions: '0.14-1.1' }),
+      staticPreview: this.render({ version: '0.14-1.1' }),
+      queryParams: {
+        range: 'range',
+      },
     },
   ]
 
   static defaultBadgeData = { label: 'factorio version' }
 
-  static render({ versions }) {
-    return { message: versions, color: 'blue' }
+  static render({ version }) {
+    return { message: version, color: 'blue' }
   }
 
   combine({ earliest, latest }) {
@@ -100,16 +109,19 @@ class FactorioModPortalFactorioVersions extends BaseFactorioModPortalService {
     } else {
       versions = `${earliest}-${latest}`
     }
-    return { versions }
+    return versions
   }
 
-  async handle({ modName }) {
+  async handle({ modName }, queryParams) {
     const { first_release, latest_release } = await this.fetch({ modName })
-    const { versions } = this.combine({
-      earliest: first_release.info_json.factorio_version,
-      latest: latest_release.info_json.factorio_version,
-    })
-    return this.constructor.render({ versions })
+    const range = queryParams.range !== undefined
+    const version = range
+      ? this.combine({
+          earliest: first_release.info_json.factorio_version,
+          latest: latest_release.info_json.factorio_version,
+        })
+      : latest_release.info_json.factorio_version
+    return this.constructor.render({ version })
   }
 }
 
