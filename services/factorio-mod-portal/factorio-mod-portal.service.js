@@ -165,7 +165,7 @@ class FactorioModPortalDownloads extends BaseFactorioModPortalService {
   static category = 'downloads'
 
   static route = {
-    base: 'factorio-mod-portal/downloads',
+    base: 'factorio-mod-portal/dt',
     pattern: ':modName',
   }
 

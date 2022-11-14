@@ -42,9 +42,9 @@ t.create('Last Updated (mod not found)')
   .expectBadge({ label: 'last updated', message: 'mod not found' })
 
 t.create('Downloads (rso-mod, valid)')
-  .get('/downloads/rso-mod.json')
+  .get('/dt/rso-mod.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
 t.create('Downloads (mod not found)')
-  .get('/downloads/mod-that-doesnt-exist.json')
+  .get('/dt/mod-that-doesnt-exist.json')
   .expectBadge({ label: 'downloads', message: 'mod not found' })
