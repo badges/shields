@@ -1,5 +1,5 @@
 import { test, given } from 'sazerac'
-import PriceUsdService from './coincap-priceusd.service'
+import PriceUsdService from './coincap-priceusd.service.js'
 
 describe('PriceUsdFormat', function () {
   test(PriceUsdService.priceFormat, () => {
