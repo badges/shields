@@ -4,7 +4,9 @@ import BaseCoincapService from './coincap-base.js'
 
 const schema = Joi.object({
   data: Joi.object({
-    changePercent24Hr: Joi.string().required(),
+    changePercent24Hr: Joi.string()
+      .pattern(/[0-9]*\.[0-9]+/i)
+      .required(),
     name: Joi.string().required(),
   }).required(),
 }).required()

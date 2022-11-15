@@ -3,7 +3,9 @@ import BaseCoincapService from './coincap-base.js'
 
 const schema = Joi.object({
   data: Joi.object({
-    priceUsd: Joi.string().required(),
+    priceUsd: Joi.string()
+      .pattern(/[0-9]*\.[0-9]+/i)
+      .required(),
     name: Joi.string().required(),
   }).required(),
 }).required()
@@ -32,7 +34,7 @@ export default class CoincapPriceUsd extends BaseCoincapService {
     return {
       label: asset.name,
       message: this.priceFormat(asset.priceUsd),
-      color: 'green',
+      color: 'blue',
     }
   }
 

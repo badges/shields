@@ -3,7 +3,9 @@ import BaseCoincapService from './coincap-base.js'
 
 const schema = Joi.object({
   data: Joi.object({
-    rank: Joi.string().required(),
+    rank: Joi.string()
+      .pattern(/^[0-9]+$/)
+      .required(),
     name: Joi.string().required(),
   }).required(),
 }).required()
@@ -24,7 +26,7 @@ export default class CoincapRank extends BaseCoincapService {
     return {
       label: asset.name,
       message: asset.rank,
-      color: 'green',
+      color: 'blue',
     }
   }
 

@@ -3,7 +3,10 @@ import { BaseJsonService } from '../index.js'
 export default class BaseCoincapService extends BaseJsonService {
   static category = 'other'
 
-  static defaultBadgeData = { label: 'bitcoin' }
+  static defaultBadgeData = { label: 'Bitcoin' }
+
+  // Doc this API. From https://docs.coincap.io/
+  // example: https://api.coincap.io/v2/assets/bitcoin
 
   async fetch({ assetId, schema }) {
     return this._requestJson({
