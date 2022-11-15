@@ -1,8 +1,8 @@
 import { test, given } from 'sazerac'
-import PriceUsdService from './coincap-priceusd.service.js'
+import CoincapPriceUsd from './coincap-priceusd.service.js'
 
-describe('PriceUsdFormat', function () {
-  test(PriceUsdService.priceFormat, () => {
+describe('PriceUsd Format', function () {
+  test(CoincapPriceUsd.priceFormat, () => {
     given('3').expect('$3.00')
     given('33').expect('$33.00')
     given('332').expect('$332.00')
