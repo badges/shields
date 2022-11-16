@@ -10,7 +10,7 @@ t.create('request for existing asset')
       .reply(200, { data: { rank: '1', name: 'Bitcoin' } })
   )
   .expectBadge({
-    label: 'Bitcoin',
+    label: 'bitcoin',
     message: '1',
     color: 'blue',
   })
@@ -18,7 +18,7 @@ t.create('request for existing asset')
 t.create('rank')
   .get('/bitcoin.json')
   .expectBadge({
-    label: 'Bitcoin',
+    label: 'bitcoin',
     message: Joi.string()
       .pattern(/^[0-9]+$/)
       .min(1)

@@ -24,7 +24,7 @@ export default class CoincapRank extends BaseCoincapService {
 
   static render({ asset }) {
     return {
-      label: asset.name,
+      label: `${asset.name}`.toLowerCase(),
       message: asset.rank,
       color: 'blue',
     }

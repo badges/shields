@@ -31,7 +31,7 @@ export default class CoincapChangePercent24HrUsd extends BaseCoincapService {
 
   static render({ asset }) {
     return {
-      label: asset.name,
+      label: `${asset.name}`.toLowerCase(),
       message: this.percentFormat(asset.changePercent24Hr),
       color: floorCount(asset.changePercent24Hr),
     }

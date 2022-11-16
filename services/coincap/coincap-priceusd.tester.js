@@ -12,13 +12,13 @@ t.create('request for existing asset')
       })
   )
   .expectBadge({
-    label: 'Bitcoin',
+    label: 'bitcoin',
     message: '$16,417.72',
     color: 'blue',
   })
 
 t.create('price usd').get('/bitcoin.json').expectBadge({
-  label: 'Bitcoin',
+  label: 'bitcoin',
   message: isCurrency,
   color: 'blue',
 })

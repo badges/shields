@@ -32,7 +32,7 @@ export default class CoincapPriceUsd extends BaseCoincapService {
 
   static render({ asset }) {
     return {
-      label: asset.name,
+      label: `${asset.name}`.toLowerCase(),
       message: this.priceFormat(asset.priceUsd),
       color: 'blue',
     }

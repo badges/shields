@@ -12,7 +12,7 @@ t.create('request for existing asset with positive')
       })
   )
   .expectBadge({
-    label: 'Bitcoin',
+    label: 'bitcoin',
     message: '1.00%',
     color: 'brightgreen',
   })
@@ -27,13 +27,13 @@ t.create('request for existing asset with negative')
       })
   )
   .expectBadge({
-    label: 'Bitcoin',
+    label: 'bitcoin',
     message: '-1.00%',
     color: 'red',
   })
 
 t.create('change percent 24hr').get('/bitcoin.json').expectBadge({
-  label: 'Bitcoin',
+  label: 'bitcoin',
   message: isPercentage,
 })
 
