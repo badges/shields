@@ -19,10 +19,7 @@ t.create('rank')
   .get('/bitcoin.json')
   .expectBadge({
     label: 'bitcoin',
-    message: Joi.string()
-      .pattern(/^[0-9]+$/)
-      .min(1)
-      .required(),
+    message: Joi.number().integer().min(1).required(),
     color: 'blue',
   })
 
