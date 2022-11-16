@@ -94,10 +94,14 @@ const isZeroOverTimePeriod = withRegex(
 )
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
+const isIntegerPercentageNegative = withRegex(/^-?[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
+const isDecimalPercentageNegative = withRegex(/^-?[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
-  isDecimalPercentage
+  isDecimalPercentage,
+  isIntegerPercentageNegative,
+  isDecimalPercentageNegative
 )
 
 const isFileSize = withRegex(

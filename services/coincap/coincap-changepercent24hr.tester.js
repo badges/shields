@@ -38,6 +38,6 @@ t.create('change percent 24hr').get('/bitcoin.json').expectBadge({
 })
 
 t.create('asset not found').get('/not-a-valid-asset.json').expectBadge({
-  label: 'Bitcoin',
+  label: 'coincap',
   message: 'asset not found',
 })

@@ -11,7 +11,7 @@ const schema = Joi.object({
 }).required()
 
 export default class CoincapPriceUsd extends BaseCoincapService {
-  static route = { base: 'coincap/priceUsd', pattern: ':assetId' }
+  static route = { base: 'coincap/price-usd', pattern: ':assetId' }
 
   static examples = [
     {

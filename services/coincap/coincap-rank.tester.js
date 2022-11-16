@@ -27,6 +27,6 @@ t.create('rank')
   })
 
 t.create('asset not found').get('/not-a-valid-asset.json').expectBadge({
-  label: 'Bitcoin',
+  label: 'coincap',
   message: 'asset not found',
 })
