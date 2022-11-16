@@ -10,8 +10,8 @@ const projectSchema = Joi.object({
 const versionSchema = Joi.array()
   .items(
     Joi.object({
-      version_number: Joi.string(),
-    })
+      version_number: Joi.string().required(),
+    }).required()
   )
   .required()
 
