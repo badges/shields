@@ -5,7 +5,7 @@ export default class ModrinthVersion extends BaseModrinthService {
   static category = 'version'
 
   static route = {
-    base: 'modrinth/version',
+    base: 'modrinth/v',
     pattern: ':projectId',
   }
 
