@@ -1,13 +1,7 @@
-import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { nonNegativeInteger } from '../validators.js'
+import { BaseModrinthService, documentation } from './modrinth-base.js'
 
-const schema = Joi.object({
-  downloads: nonNegativeInteger,
-}).required()
-
-export default class ModrinthDownloads extends BaseJsonService {
+export default class ModrinthDownloads extends BaseModrinthService {
   static category = 'downloads'
 
   static route = {
@@ -20,20 +14,14 @@ export default class ModrinthDownloads extends BaseJsonService {
       title: 'Modrinth Downloads',
       namedParams: { projectId: 'AANobbMI' },
       staticPreview: renderDownloadsBadge({ downloads: 120000 }),
+      documentation,
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  async fetch({ projectId }) {
-    return this._requestJson({
-      schema,
-      url: `https://api.modrinth.com/v2/project/${projectId}`,
-    })
-  }
-
   async handle({ projectId }) {
-    const { downloads } = await this.fetch({ projectId })
+    const { downloads } = await this.fetchProject({ projectId })
     return renderDownloadsBadge({ downloads })
   }
 }
