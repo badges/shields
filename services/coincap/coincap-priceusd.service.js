@@ -18,7 +18,7 @@ export default class CoincapPriceUsd extends BaseCoincapService {
       title: 'Coincap (Price USD)',
       namedParams: { assetId: 'bitcoin' },
       staticPreview: this.render({
-        asset: { priceUsd: '19116.0479117336250772' },
+        asset: { name: 'bitcoin', priceUsd: '19116.0479117336250772' },
       }),
       keywords: ['bitcoin', 'crypto', 'cryptocurrency'],
     },

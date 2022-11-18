@@ -17,7 +17,7 @@ export default class CoincapRank extends BaseCoincapService {
     {
       title: 'Coincap (Rank)',
       namedParams: { assetId: 'bitcoin' },
-      staticPreview: this.render({ asset: { rank: '1' } }),
+      staticPreview: this.render({ asset: { name: 'bitcoin', rank: '1' } }),
       keywords: ['bitcoin', 'crypto', 'cryptocurrency'],
     },
   ]

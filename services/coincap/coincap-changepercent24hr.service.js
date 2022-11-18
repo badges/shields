@@ -19,7 +19,7 @@ export default class CoincapChangePercent24HrUsd extends BaseCoincapService {
       title: 'Coincap (Change Percent 24Hr)',
       namedParams: { assetId: 'bitcoin' },
       staticPreview: this.render({
-        asset: { changePercent24Hr: '2.0670573674501840"' },
+        asset: { name: 'bitcoin', changePercent24Hr: '2.0670573674501840"' },
       }),
       keywords: ['bitcoin', 'crypto', 'cryptocurrency'],
     },
