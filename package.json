@@ -211,7 +211,7 @@
     "minimist": "^1.2.7",
     "mocha": "^10.1.0",
     "mocha-env-reporter": "^4.0.0",
-    "mocha-junit-reporter": "^2.1.1",
+    "mocha-junit-reporter": "^2.2.0",
     "mocha-yaml-loader": "^1.0.3",
     "nock": "13.2.9",
     "node-mocks-http": "^1.11.0",
