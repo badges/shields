@@ -1,13 +1,7 @@
-import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
-import { nonNegativeInteger } from '../validators.js'
+import { BaseModrinthService, documentation } from './modrinth-base.js'
 
-const schema = Joi.object({
-  followers: nonNegativeInteger,
-}).required()
-
-export default class ModrinthFollowers extends BaseJsonService {
+export default class ModrinthFollowers extends BaseModrinthService {
   static category = 'social'
 
   static route = {
@@ -23,6 +17,7 @@ export default class ModrinthFollowers extends BaseJsonService {
         label: 'Followers',
         style: 'social',
       }),
+      documentation,
     },
   ]
 
@@ -35,15 +30,8 @@ export default class ModrinthFollowers extends BaseJsonService {
     }
   }
 
-  async fetch({ projectId }) {
-    return this._requestJson({
-      schema,
-      url: `https://api.modrinth.com/v2/project/${projectId}`,
-    })
-  }
-
   async handle({ projectId }) {
-    const { followers } = await this.fetch({ projectId })
+    const { followers } = await this.fetchProject({ projectId })
     return this.constructor.render({ followers })
   }
 }
