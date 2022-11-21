@@ -9,7 +9,7 @@ t.create('Stars - Polymart Plugin (id 323)')
     message: isStarRating,
   })
 
-t.create('Stars - Invalid Resource (id 1)').get('/stars/1.json').expectBadge({
+t.create('Stars - Invalid Resource (id 0)').get('/stars/0.json').expectBadge({
   label: 'rating',
   message: 'not found',
 })
@@ -21,7 +21,7 @@ t.create('Rating - Polymart Plugin (id 323)')
     message: withRegex(/^(\d*\.\d+)(\/5 \()(\d+)(\))$/),
   })
 
-t.create('Rating - Invalid Resource (id 1)').get('/rating/1.json').expectBadge({
+t.create('Rating - Invalid Resource (id 0)').get('/rating/0.json').expectBadge({
   label: 'rating',
   message: 'not found',
 })
