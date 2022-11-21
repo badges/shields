@@ -9,7 +9,7 @@ t.create('Polymart Plugin (id 323)')
     message: withRegex(/^(?!not found$)/),
   })
 
-t.create('Invalid Resource (id 1)').get('/1.json').expectBadge({
+t.create('Invalid Resource (id 0)').get('/0.json').expectBadge({
   label: 'version',
   message: 'not found',
 })
