@@ -38,5 +38,10 @@ describe('TestspaceTestCount', function () {
       message: '0',
       color: 'informational',
     })
+    given({ metric: 'untested', value: 0 }).expect({
+      label: 'untested tests',
+      message: '0',
+      color: 'informational',
+    })
   })
 })

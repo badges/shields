@@ -3,7 +3,8 @@ import { BaseJsonService } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
-const documentation = `<p>A measure of how many developers have liked a package. This provides a raw measure of the overall sentiment of a package from peer developers.</p>`
+const documentation =
+  '<p>A measure of how many developers have liked a package. This provides a raw measure of the overall sentiment of a package from peer developers.</p>'
 
 const keywords = ['dart', 'flutter']
 

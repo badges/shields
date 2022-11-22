@@ -1,0 +1,26 @@
+name: 'Package tests'
+description: 'Run package tests and check types'
+runs:
+  using: 'composite'
+  steps:
+    - name: Tests
+      if: always()
+      run: npm run test:package -- --reporter json --reporter-option 'output=reports/package-tests.json'
+      shell: bash
+
+    - name: Type Checks
+      if: always()
+      run: |
+        set -o pipefail
+        npm run check-types:package 2>&1 | tee reports/package-types.txt
+      shell: bash
+
+    - name: Write Markdown Summary
+      if: always()
+      run: |
+        node scripts/mocha2md.js 'Package Tests' reports/package-tests.json >> $GITHUB_STEP_SUMMARY
+        echo '# Package Types' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        cat reports/package-types.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+      shell: bash

@@ -43,7 +43,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(
-  /^\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|\|)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*$/
+  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/
 )
 
 // Regex for validate php-version.versionReduction()
@@ -94,10 +94,14 @@ const isZeroOverTimePeriod = withRegex(
 )
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
+const isIntegerPercentageNegative = withRegex(/^-?[1-9][0-9]?%|^100%|^0%$/)
 const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
+const isDecimalPercentageNegative = withRegex(/^-?[0-9]+\.[0-9]*%$/)
 const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
-  isDecimalPercentage
+  isDecimalPercentage,
+  isIntegerPercentageNegative,
+  isDecimalPercentageNegative
 )
 
 const isFileSize = withRegex(
@@ -155,6 +159,25 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
   skipped: '🤷',
 })
 
+const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
+const isOrdinalNumberDaily = Joi.string().regex(
+  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
+)
+
+const isHumanized = Joi.string().regex(
+  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
+)
+
+// $1,530,602.24 // true
+// 1,530,602.24 // true
+// $1,666.24$ // false
+// ,1,666,88, // false
+// 1.6.66,6 // false
+// .1555. // false
+const isCurrency = withRegex(
+  /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/
+)
+
 export {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -187,4 +210,8 @@ export {
   isCustomCompactTestTotals,
   makeTestTotalsValidator,
   makeCompactTestTotalsValidator,
+  isOrdinalNumber,
+  isOrdinalNumberDaily,
+  isHumanized,
+  isCurrency,
 }

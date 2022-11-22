@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
 import { BaseSvgScrapingService, NotFound } from '../index.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
   message: Joi.string()
@@ -12,9 +13,10 @@ const schema = Joi.object({
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   job_name: Joi.string(),
+  branch: Joi.string(),
 }).required()
 
-const documentation = `
+const moreDocs = `
 <p>
   Important: If your project is publicly visible, but the badge is like this:
   <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="coverage not set up"/>
@@ -36,53 +38,47 @@ Also make sure you have set up code covrage parsing as described <a href="https:
 </p>
 `
 
-export default class GitlabCoverage extends BaseSvgScrapingService {
+export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
 
   static route = {
-    base: 'gitlab/coverage',
-    pattern: ':user/:repo/:branch',
+    base: 'gitlab/pipeline-coverage',
+    pattern: ':project+',
     queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Gitlab code coverage',
-      namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab-runner',
-        branch: 'master',
-      },
+      namedParams: { project: 'gitlab-org/gitlab-runner' },
+      queryParams: { branch: 'master' },
       staticPreview: this.render({ coverage: 67 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (specific job)',
-      namedParams: {
-        user: 'gitlab-org',
-        repo: 'gitlab-runner',
-        branch: 'master',
-      },
-      queryParams: { job_name: 'test coverage report' },
+      namedParams: { project: 'gitlab-org/gitlab-runner' },
+      queryParams: { job_name: 'test coverage report', branch: 'master' },
       staticPreview: this.render({ coverage: 96 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (self-managed)',
-      namedParams: { user: 'GNOME', repo: 'at-spi2-core', branch: 'master' },
-      queryParams: { gitlab_url: 'https://gitlab.gnome.org' },
+      namedParams: { project: 'GNOME/at-spi2-core' },
+      queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
       staticPreview: this.render({ coverage: 93 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
     {
       title: 'Gitlab code coverage (self-managed, specific job)',
-      namedParams: { user: 'GNOME', repo: 'libhandy', branch: 'master' },
+      namedParams: { project: 'GNOME/libhandy' },
       queryParams: {
         gitlab_url: 'https://gitlab.gnome.org',
         job_name: 'unit-test',
+        branch: 'master',
       },
       staticPreview: this.render({ coverage: 93 }),
-      documentation,
+      documentation: documentation + moreDocs,
     },
   ]
 
@@ -95,15 +91,14 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
     }
   }
 
-  async fetch({ user, repo, branch, baseUrl = 'https://gitlab.com', jobName }) {
+  async fetch({ project, baseUrl = 'https://gitlab.com', jobName, branch }) {
     // Since the URL doesn't return a usable value when an invalid job name is specified,
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
-    const url = `${baseUrl}/${user}/${repo}/badges/${branch}/coverage.svg${jobName}`
-    const errorMessages = {
-      401: 'repo not found',
-      404: 'repo not found',
-    }
+    const url = `${baseUrl}/${decodeURIComponent(
+      project
+    )}/badges/${branch}/coverage.svg${jobName}`
+    const errorMessages = errorMessagesFor('project not found')
     return this._requestSvg({
       schema,
       url,
@@ -119,12 +114,11 @@ export default class GitlabCoverage extends BaseSvgScrapingService {
   }
 
   async handle(
-    { user, repo, branch },
-    { gitlab_url: baseUrl, job_name: jobName }
+    { project },
+    { gitlab_url: baseUrl, job_name: jobName, branch }
   ) {
     const { message: coverage } = await this.fetch({
-      user,
-      repo,
+      project,
       branch,
       baseUrl,
       jobName,

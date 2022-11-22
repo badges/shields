@@ -88,6 +88,7 @@ describe('Color formatters', function () {
       given('6.0-SNAPSHOT'),
       given('1.0.1-dev'),
       given('2.1.6-prerelease'),
+      given('2.1.6-RC1'),
     ]).expect('orange')
 
     expect(() => version(null)).to.throw(

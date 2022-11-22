@@ -28,6 +28,12 @@ export default class DockerCloudAutomatedBuild extends BaseJsonService {
 
   async handle({ user, repo }) {
     const data = await fetchBuild(this, { user, repo })
+
+    if (data.objects.length === 0) {
+      return this.constructor.render({
+        buildSettings: [],
+      })
+    }
     return this.constructor.render({
       buildSettings: data.objects[0].build_settings,
     })
