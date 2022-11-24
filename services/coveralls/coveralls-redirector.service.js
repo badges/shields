@@ -25,7 +25,7 @@ export default [
     dateAdded: new Date('2021-02-23'),
   }),
   redirector({
-    name: 'CoverallsPreGitlabRedirect',
+    name: 'CoverallsPreGitlabRedirectWithBranch',
     category: 'coverage',
     route: {
       base: 'coveralls',
@@ -35,5 +35,16 @@ export default [
       `/coverallsCoverage/${vcsType}/${user}/${repo}`,
     transformQueryParams: ({ branch }) => ({ branch }),
     dateAdded: new Date('2022-11-10'),
+  }),
+  redirector({
+    name: 'CoverallsPreGitlabRedirectWithoutBranch',
+    category: 'coverage',
+    route: {
+      base: 'coveralls',
+      pattern: ':vcsType(github|bitbucket)/:user/:repo',
+    },
+    transformPath: ({ vcsType, user, repo }) =>
+      `/coverallsCoverage/${vcsType}/${user}/${repo}`,
+    dateAdded: new Date('2022-11-20'),
   }),
 ]
