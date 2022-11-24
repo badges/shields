@@ -4,6 +4,21 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-11-01
+
+- [Ansible] Add collection badge [#8578](https://github.com/badges/shields/issues/8578)
+- [VisualStudioMarketplace] Add support to prerelease extensions version (Issue #8207) [#8561](https://github.com/badges/shields/issues/8561)
+- feat: add [GitlabLastCommit] service [#8508](https://github.com/badges/shields/issues/8508)
+- fix [swagger] service tests (allow 0 items in array) [#8564](https://github.com/badges/shields/issues/8564)
+- fix codecov badge for non-default branch [#8565](https://github.com/badges/shields/issues/8565)
+- Add [GitHubLastCommit] by committer badge [#8537](https://github.com/badges/shields/issues/8537)
+- [GitHubReleaseDate] - published_at field [#8543](https://github.com/badges/shields/issues/8543)
+- Fix [Testspace] with new "untested" value in case_counts array [#8544](https://github.com/badges/shields/issues/8544)
+- fix: Support WAITING status for GitHub deployments [#8521](https://github.com/badges/shields/issues/8521)
+- [Whatpulse] badge for a user and for a team [#8466](https://github.com/badges/shields/issues/8466)
+- deprecate [pkgreview] service [#8499](https://github.com/badges/shields/issues/8499)
+- Dependency updates
+
 ## server-2022-10-08
 
 - deprecate [criterion] service [#8501](https://github.com/badges/shields/issues/8501)
