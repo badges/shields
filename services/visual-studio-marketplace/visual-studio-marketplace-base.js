@@ -21,12 +21,14 @@ const extensionQuerySchema = Joi.object({
                 .items(
                   Joi.object({
                     version: Joi.string().required(),
-                    properties: Joi.array().items(
-                      Joi.object({
-                        key: Joi.string().required(),
-                        value: Joi.any().required(),
-                      })
-                    ),
+                    properties: Joi.array()
+                      .items(
+                        Joi.object({
+                          key: Joi.string().required(),
+                          value: Joi.any().required(),
+                        })
+                      )
+                      .default([]),
                   })
                 )
                 .min(1)
