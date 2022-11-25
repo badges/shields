@@ -219,7 +219,7 @@
     "npm-run-all": "^4.1.5",
     "open-cli": "^7.1.0",
     "portfinder": "^1.0.32",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-error-overlay": "^6.0.11",
