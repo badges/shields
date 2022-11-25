@@ -210,7 +210,9 @@ export default function EndpointPage(): JSX.Element {
         <dt>logoColor</dt>
         <dd>
           Default: none. Same meaning as the query string. Can be overridden by
-          the query string. Only works for named logos.
+          the query string. Only works for named logos and Shields logos. If you
+          override the color of a multicolor Shield logo, the named logo will be
+          used and colored.
         </dd>
         <dt>logoWidth</dt>
         <dd>
