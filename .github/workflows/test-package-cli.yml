@@ -1,9 +1,11 @@
 name: Package CLI
 on:
   pull_request:
+    types: [opened, edited, reopened, synchronize]
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'dependabot/**'
 
 # Smoke test (render a badge with the CLI) with only the package
 # dependencies installed.
