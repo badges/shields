@@ -6,18 +6,22 @@ const schema = Joi.object({
   covered_percent: Joi.number().min(0).max(100).required(),
 }).required()
 
+const queryParamSchema = Joi.object({
+  branch: Joi.string(),
+}).required()
+
 export default class Coveralls extends BaseJsonService {
   static category = 'coverage'
   static route = {
-    base: 'coveralls',
-    pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch*',
+    base: 'coverallsCoverage',
+    pattern: ':vcsType(github|bitbucket|gitlab)/:user/:repo+',
+    queryParamSchema,
   }
 
   static examples = [
     {
       title: 'Coveralls',
       namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
-      pattern: ':vcsType(github|bitbucket)/:user/:repo',
       staticPreview: this.render({ coverage: 86 }),
     },
     {
@@ -26,9 +30,8 @@ export default class Coveralls extends BaseJsonService {
         vcsType: 'bitbucket',
         user: 'pyKLIP',
         repo: 'pyklip',
-        branch: 'master',
       },
-      pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch',
+      queryParams: { branch: 'master' },
       staticPreview: this.render({ coverage: 96 }),
     },
   ]
@@ -69,7 +72,7 @@ export default class Coveralls extends BaseJsonService {
     })
   }
 
-  async handle({ vcsType, user, repo, branch }) {
+  async handle({ vcsType, user, repo }, { branch }) {
     const json = await this.fetch({ vcsType, user, repo, branch })
     return this.constructor.render({ coverage: json.covered_percent })
   }
