@@ -126,6 +126,7 @@ const publicConfigSchema = Joi.object({
         enabled: Joi.boolean().required(),
         intervalSeconds: Joi.number().integer().min(1).required(),
       },
+      restApiVersion: Joi.date().raw().required(),
     },
     gitlab: defaultService,
     jira: defaultService,

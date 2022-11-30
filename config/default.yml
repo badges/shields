@@ -22,6 +22,7 @@ public:
       debug:
         enabled: false
         intervalSeconds: 200
+      restApiVersion: '2022-11-28'
     obs:
       authorizedOrigins: 'https://api.opensuse.org'
     weblate:

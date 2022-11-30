@@ -37,6 +37,7 @@ class GithubConstellation {
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
+      restApiVersion: config.service.restApiVersion,
     })
 
     this.oauthHelper = this.constructor._createOauthHelper(config)
