@@ -244,7 +244,7 @@ Create an account, sign in and obtain a uuid and token from your
 to give your self-hosted Shields installation access to a
 private SonarQube instance or private project on a public instance.
 
-### StackApps
+### StackApps (for StackExchange and StackOverflow)
 
 - `STACKAPPS_API_KEY`: (yml: `private.stackapps_api_key`)
 
