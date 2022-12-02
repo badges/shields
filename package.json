@@ -150,7 +150,7 @@
     "@types/chai": "^4.3.4",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.groupby": "^4.6.7",
-    "@types/mocha": "^10.0.0",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^16.7.10",
     "@types/react-helmet": "^6.1.5",
     "@types/react-modal": "^3.13.1",
