@@ -18,7 +18,7 @@ public:
 
   services:
     github:
-      baseUri: 'https://api.github.com/'
+      baseUri: 'https://api.github.com'
       debug:
         enabled: false
         intervalSeconds: 200

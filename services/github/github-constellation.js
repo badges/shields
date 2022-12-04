@@ -33,8 +33,7 @@ class GithubConstellation {
     }
 
     this.apiProvider = new GithubApiProvider({
-      // TODO: why is this not config.service.baseUri ?
-      baseUrl: process.env.GITHUB_URL || 'https://api.github.com',
+      baseUrl: config.service.baseUri,
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
