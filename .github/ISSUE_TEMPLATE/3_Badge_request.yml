@@ -39,6 +39,7 @@ body:
         Please consider and cover details like:
         - Is there a public API?
         - Does the API require authentication or an API key?
+          If so, please review our documentation on [Badges Requiring Authentication](https://github.com/badges/shields/blob/master/doc/authentication.md)
         - Link to the API documentation.
     validations:
       required: true
