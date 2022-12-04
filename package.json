@@ -152,7 +152,7 @@
     "@types/lodash.groupby": "^4.6.7",
     "@types/mocha": "^10.0.0",
     "@types/node": "^16.7.10",
-    "@types/react-helmet": "^6.1.5",
+    "@types/react-helmet": "^6.1.6",
     "@types/react-modal": "^3.13.1",
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "5.1.26",
