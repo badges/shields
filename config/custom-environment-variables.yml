@@ -98,6 +98,7 @@ private:
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'
   sonarqube_token: 'SONARQUBE_TOKEN'
+  stackapps_api_key: 'STACKAPPS_API_KEY'
   teamcity_user: 'TEAMCITY_USER'
   teamcity_pass: 'TEAMCITY_PASS'
   twitch_client_id: 'TWITCH_CLIENT_ID'
