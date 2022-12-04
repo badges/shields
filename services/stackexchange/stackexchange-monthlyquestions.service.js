@@ -1,16 +1,16 @@
 import dayjs from 'dayjs'
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
-import renderQuestionsBadge from './stackexchange-helpers.js'
+import {
+  renderQuestionsBadge,
+  StackExchangeBase,
+} from './stackexchange-base.js'
 
 const tagSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-export default class StackExchangeMonthlyQuestions extends BaseJsonService {
-  static category = 'chat'
-
+export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
   static route = {
     base: 'stackexchange',
     pattern: ':stackexchangesite/qm/:query',
@@ -28,10 +28,6 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
       keywords: ['stackexchange', 'stackoverflow'],
     },
   ]
-
-  static defaultBadgeData = {
-    label: 'stackoverflow',
-  }
 
   static render(props) {
     return renderQuestionsBadge({
@@ -51,7 +47,7 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
       .endOf('month')
       .unix()
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: tagSchema,
       options: {
         decompress: true,
