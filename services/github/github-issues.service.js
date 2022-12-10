@@ -28,6 +28,7 @@ const pullRequestCountSchema = Joi.object({
 const isPRVariant = {
   'issues-pr': true,
   'issues-pr-closed': true,
+  'issues-pr-merged': true,
 }
 
 const isClosedVariant = {
@@ -35,12 +36,16 @@ const isClosedVariant = {
   'issues-pr-closed': true,
 }
 
+const isMergedVariant = {
+  'issues-pr-merged': true,
+}
+
 export default class GithubIssues extends GithubAuthV4Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github',
     pattern:
-      ':variant(issues|issues-closed|issues-pr|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
+      ':variant(issues|issues-closed|issues-pr|issues-pr-merged|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
   }
 
   static examples = [
@@ -221,6 +226,36 @@ export default class GithubIssues extends GithubAuthV4Service {
       documentation,
     },
     {
+      title: 'GitHub merged pull requests',
+      pattern: 'issues-pr-merged/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'pull requests',
+        message: '6k merged',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub merged pull requests',
+      pattern: 'issues-pr-merged-raw/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'merged pull requests',
+        message: '6k',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
       title: 'GitHub pull requests by-label',
       pattern: 'issues-pr/:user/:repo/:label',
       namedParams: {
@@ -284,12 +319,52 @@ export default class GithubIssues extends GithubAuthV4Service {
       keywords: ['pullrequest', 'pr'],
       documentation,
     },
+    {
+      title: 'GitHub merged pull requests by-label',
+      pattern: 'issues-pr-merged/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge pull requests',
+        message: '800 merged',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub merged pull requests by-label',
+      pattern: 'issues-pr-merged-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'merged service-badge pull requests',
+        message: '800',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
   ]
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-  static render({ isPR, isClosed, issueCount, raw, label }) {
-    const state = isClosed ? 'closed' : 'open'
+  static render({ isPR, isClosed, isMerged, issueCount, raw, label }) {
+    let state
+
+    if (isMerged) {
+      state = 'merged'
+    } else if (isClosed) {
+      state = 'closed'
+    } else {
+      state = 'open'
+    }
 
     let labelPrefix = ''
     let messageSuffix = ''
@@ -314,7 +389,7 @@ export default class GithubIssues extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ isPR, isClosed, user, repo, label }) {
+  async fetch({ isPR, isClosed, isMerged, user, repo, label }) {
     const commonVariables = {
       user,
       repo,
@@ -344,7 +419,11 @@ export default class GithubIssues extends GithubAuthV4Service {
         `,
         variables: {
           ...commonVariables,
-          states: isClosed ? ['MERGED', 'CLOSED'] : ['OPEN'],
+          states: isMerged
+            ? ['MERGED']
+            : isClosed
+            ? ['MERGED', 'CLOSED']
+            : ['OPEN'],
         },
         schema: pullRequestCountSchema,
         transformErrors,
@@ -386,9 +465,12 @@ export default class GithubIssues extends GithubAuthV4Service {
   async handle({ variant, raw, user, repo, label }) {
     const isPR = isPRVariant[variant]
     const isClosed = isClosedVariant[variant]
+    const isMerged = isMergedVariant[variant]
+
     const { issueCount } = await this.fetch({
       isPR,
       isClosed,
+      isMerged,
       user,
       repo,
       label,
@@ -396,6 +478,7 @@ export default class GithubIssues extends GithubAuthV4Service {
     return this.constructor.render({
       isPR,
       isClosed,
+      isMerged,
       issueCount,
       raw,
       label,
