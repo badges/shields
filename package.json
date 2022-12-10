@@ -35,7 +35,7 @@
     "cloudflare-middleware": "^1.0.4",
     "config": "^3.3.8",
     "cross-env": "^7.0.3",
-    "dayjs": "^1.11.6",
+    "dayjs": "^1.11.7",
     "decamelize": "^3.2.0",
     "emojic": "^1.1.17",
     "escape-string-regexp": "^4.0.0",
