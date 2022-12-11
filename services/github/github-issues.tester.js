@@ -42,6 +42,22 @@ t.create('GitHub merged pull requests by label (raw)')
     message: isMetric,
   })
 
+t.create('GitHub closed unmerged pull requests')
+  .get('/issues-pr-closed-unmerged/badges/shields.json')
+  .expectBadge({
+    label: 'pull requests',
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed unmerged$/
+    ),
+  })
+
+t.create('GitHub closed unmerged pull requests raw')
+  .get('/issues-pr-closed-unmerged-raw/badges/shields.json')
+  .expectBadge({
+    label: 'closed unmerged pull requests',
+    message: isMetric,
+  })
+
 t.create('GitHub pull requests')
   .get('/issues-pr/badges/shields.json')
   .expectBadge({

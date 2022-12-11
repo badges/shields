@@ -29,15 +29,21 @@ const isPRVariant = {
   'issues-pr': true,
   'issues-pr-closed': true,
   'issues-pr-merged': true,
+  'issues-pr-closed-unmerged': true,
 }
 
 const isClosedVariant = {
   'issues-closed': true,
   'issues-pr-closed': true,
+  'issues-pr-closed-unmerged': true,
 }
 
 const isMergedVariant = {
   'issues-pr-merged': true,
+}
+
+const isUnmergedVariant = {
+  'issues-pr-closed-unmerged': true,
 }
 
 export default class GithubIssues extends GithubAuthV4Service {
@@ -45,7 +51,7 @@ export default class GithubIssues extends GithubAuthV4Service {
   static route = {
     base: 'github',
     pattern:
-      ':variant(issues|issues-closed|issues-pr|issues-pr-merged|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
+      ':variant(issues|issues-closed|issues-pr|issues-pr-merged|issues-pr-closed-unmerged|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
   }
 
   static examples = [
@@ -256,6 +262,36 @@ export default class GithubIssues extends GithubAuthV4Service {
       documentation,
     },
     {
+      title: 'GitHub closed unmerged pull requests',
+      pattern: 'issues-pr-closed-unmerged/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'pull requests',
+        message: '2k closed unmerged',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed unmerged pull requests',
+      pattern: 'issues-pr-closed-unmerged-raw/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'closed unmerged pull requests',
+        message: '2k',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
       title: 'GitHub pull requests by-label',
       pattern: 'issues-pr/:user/:repo/:label',
       namedParams: {
@@ -351,15 +387,57 @@ export default class GithubIssues extends GithubAuthV4Service {
       keywords: ['pullrequest', 'pr'],
       documentation,
     },
+    {
+      title: 'GitHub closed unmerged pull requests by-label',
+      pattern: 'issues-pr-closed-unmerged/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge pull requests',
+        message: '800 unmerged',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed unmerged pull requests by-label',
+      pattern: 'issues-pr-closed-unmerged-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'closed unmerged service-badge pull requests',
+        message: '800',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
   ]
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-  static render({ isPR, isClosed, isMerged, issueCount, raw, label }) {
+  static render({
+    isPR,
+    isClosed,
+    isMerged,
+    isUnmerged,
+    issueCount,
+    raw,
+    label,
+  }) {
     let state
 
     if (isMerged) {
       state = 'merged'
+    } else if (isUnmerged) {
+      state = 'closed unmerged'
     } else if (isClosed) {
       state = 'closed'
     } else {
@@ -389,13 +467,25 @@ export default class GithubIssues extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ isPR, isClosed, isMerged, user, repo, label }) {
+  async fetch({ isPR, isClosed, isMerged, isUnmerged, user, repo, label }) {
     const commonVariables = {
       user,
       repo,
       labels: label ? [label] : undefined,
     }
     if (isPR) {
+      let determinedStates
+
+      if (isMerged) {
+        determinedStates = ['MERGED']
+      } else if (isUnmerged) {
+        determinedStates = ['CLOSED']
+      } else if (isClosed) {
+        determinedStates = ['MERGED', 'CLOSED']
+      } else {
+        determinedStates = ['OPEN']
+      }
+
       const {
         data: {
           repository: {
@@ -419,11 +509,7 @@ export default class GithubIssues extends GithubAuthV4Service {
         `,
         variables: {
           ...commonVariables,
-          states: isMerged
-            ? ['MERGED']
-            : isClosed
-            ? ['MERGED', 'CLOSED']
-            : ['OPEN'],
+          states: determinedStates,
         },
         schema: pullRequestCountSchema,
         transformErrors,
@@ -466,11 +552,13 @@ export default class GithubIssues extends GithubAuthV4Service {
     const isPR = isPRVariant[variant]
     const isClosed = isClosedVariant[variant]
     const isMerged = isMergedVariant[variant]
+    const isUnmerged = isUnmergedVariant[variant]
 
     const { issueCount } = await this.fetch({
       isPR,
       isClosed,
       isMerged,
+      isUnmerged,
       user,
       repo,
       label,
@@ -479,6 +567,7 @@ export default class GithubIssues extends GithubAuthV4Service {
       isPR,
       isClosed,
       isMerged,
+      isUnmerged,
       issueCount,
       raw,
       label,
