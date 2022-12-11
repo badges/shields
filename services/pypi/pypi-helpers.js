@@ -50,7 +50,7 @@ function getLicenses(packageData) {
   const {
     info: { license },
   } = packageData
-  if (license) {
+  if (license && license.length < 40) {
     return [license]
   } else {
     const parenthesizedAcronymRegex = /\(([^)]+)\)/
