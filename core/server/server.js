@@ -11,7 +11,6 @@ import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
 import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
-import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
@@ -113,6 +112,9 @@ const publicConfigSchema = Joi.object({
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
   cors: {
+    // This doesn't actually do anything
+    // TODO: maybe remove in future?
+    // https://github.com/badges/shields/pull/8311#discussion_r945337530
     allowedOrigin: Joi.array().items(optionalUrl).required(),
   },
   services: Joi.object({
@@ -169,6 +171,8 @@ const privateConfigSchema = Joi.object({
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),
   jira_pass: Joi.string(),
+  bitbucket_username: Joi.string(),
+  bitbucket_password: Joi.string(),
   bitbucket_server_username: Joi.string(),
   bitbucket_server_password: Joi.string(),
   librariesio_tokens: Joi.arrayFromString().items(Joi.string()),
@@ -182,6 +186,7 @@ const privateConfigSchema = Joi.object({
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),
+  stackapps_api_key: Joi.string(),
   teamcity_user: Joi.string(),
   teamcity_pass: Joi.string(),
   twitch_client_id: Joi.string(),
@@ -486,7 +491,6 @@ class Server {
     const {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
-      cors: { allowedOrigin },
       requireCloudflare,
     } = this.config.public
 
@@ -518,9 +522,6 @@ class Server {
         this.influxMetrics.startPushingMetrics()
       }
     }
-
-    const { apiProvider: githubApiProvider } = this.githubConstellation
-    setRoutes(allowedOrigin, githubApiProvider, camp)
 
     // https://github.com/badges/shields/issues/3273
     camp.handle((req, res, next) => {

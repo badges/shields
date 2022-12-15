@@ -1,9 +1,11 @@
 name: Main
 on:
   pull_request:
+    types: [opened, edited, reopened, synchronize]
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'dependabot/**'
 
 jobs:
   test-main:

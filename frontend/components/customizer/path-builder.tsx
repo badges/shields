@@ -112,7 +112,6 @@ export default function PathBuilder({
   pattern,
   exampleParams,
   onChange,
-  isPrefilled,
 }: {
   pattern: string
   exampleParams: { [k: string]: string }
@@ -123,22 +122,19 @@ export default function PathBuilder({
     path: string
     isComplete: boolean
   }) => void
-  isPrefilled: boolean
 }): JSX.Element {
   const [tokens] = useState(() => parse(pattern))
   const [namedParams, setNamedParams] = useState(() =>
-    isPrefilled
-      ? exampleParams
-      : // `pathToRegexp.parse()` returns a mixed array of strings for literals
-        // and  objects for parameters. Filter out the literals and work with the
-        // objects.
-        tokens
-          .filter(t => typeof t !== 'string')
-          .map(t => t as Key)
-          .reduce((accum, { name }) => {
-            accum[name] = ''
-            return accum
-          }, {} as { [k: string]: string })
+    // `pathToRegexp.parse()` returns a mixed array of strings for literals
+    // and  objects for parameters. Filter out the literals and work with the
+    // objects.
+    tokens
+      .filter(t => typeof t !== 'string')
+      .map(t => t as Key)
+      .reduce((accum, { name }) => {
+        accum[name] = ''
+        return accum
+      }, {} as { [k: string]: string })
   )
 
   useEffect(() => {
@@ -195,11 +191,11 @@ export default function PathBuilder({
           onChange={handleTokenChange}
           value={value}
         >
-          <option disabled={isPrefilled} key="empty" value="">
+          <option key="empty" value="">
             {' '}
           </option>
           {options.map(option => (
-            <option disabled={isPrefilled} key={option} value={option}>
+            <option key={option} value={option}>
               {option}
             </option>
           ))}
@@ -208,7 +204,6 @@ export default function PathBuilder({
     } else {
       return (
         <NamedParamInput
-          disabled={isPrefilled}
           name={name}
           onChange={handleTokenChange}
           type="text"
@@ -239,11 +234,9 @@ export default function PathBuilder({
             {optional ? <BuilderLabel>(optional)</BuilderLabel> : null}
           </NamedParamLabelContainer>
           {renderNamedParamInput(token)}
-          {!isPrefilled && (
-            <NamedParamCaption>
-              {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
-            </NamedParamCaption>
-          )}
+          <NamedParamCaption>
+            {namedParamIndex === 0 ? `e.g. ${exampleValue}` : exampleValue}
+          </NamedParamCaption>
         </PathBuilderColumn>
       </React.Fragment>
     )

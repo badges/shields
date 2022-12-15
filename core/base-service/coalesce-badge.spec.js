@@ -153,10 +153,18 @@ describe('coalesceBadge', function () {
       ).and.not.to.be.empty
     })
 
-    it('applies the named logo with color', function () {
+    it('applies the named monochrome logo with color', function () {
+      expect(
+        coalesceBadge({}, { namedLogo: 'dependabot', logoColor: 'blue' }, {})
+          .logo
+      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+        .to.be.empty
+    })
+
+    it('applies the named multicolored logo with color', function () {
       expect(
         coalesceBadge({}, { namedLogo: 'npm', logoColor: 'blue' }, {}).logo
-      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.to.be
+      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.to.be
         .empty
     })
 
@@ -166,15 +174,25 @@ describe('coalesceBadge', function () {
       ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
     })
 
-    it('overrides the logo with a color', function () {
+    it('overrides the monochrome logo with a color', function () {
+      expect(
+        coalesceBadge(
+          { logo: 'dependabot', logoColor: 'blue' },
+          { namedLogo: 'appveyor' },
+          {}
+        ).logo
+      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+        .be.empty
+    })
+
+    it('overrides multicolored logo with a color', function () {
       expect(
         coalesceBadge(
           { logo: 'npm', logoColor: 'blue' },
           { namedLogo: 'appveyor' },
           {}
         ).logo
-      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.be
-        .empty
+      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.be.empty
     })
 
     it("when the logo is overridden, it ignores the service's logo color, position, and width", function () {
@@ -192,15 +210,25 @@ describe('coalesceBadge', function () {
       ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
     })
 
-    it("overrides the service logo's color", function () {
+    it("overrides the service monochome logo's color", function () {
+      expect(
+        coalesceBadge(
+          { logoColor: 'blue' },
+          { namedLogo: 'dependabot', logoColor: 'red' },
+          {}
+        ).logo
+      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+        .be.empty
+    })
+
+    it("overrides the service multicolored logo's color", function () {
       expect(
         coalesceBadge(
           { logoColor: 'blue' },
           { namedLogo: 'npm', logoColor: 'red' },
           {}
         ).logo
-      ).to.equal(getShieldsIcon({ name: 'npm', color: 'blue' })).and.not.be
-        .empty
+      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.be.empty
     })
 
     // https://github.com/badges/shields/issues/2998
