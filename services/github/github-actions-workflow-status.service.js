@@ -8,8 +8,23 @@ const schema = Joi.object({
   workflow_runs: Joi.array()
     .items(
       Joi.object({
+        status: Joi.equal(
+          'completed',
+          'action_required',
+          'cancelled',
+          'failure',
+          'neutral',
+          'skipped',
+          'stale',
+          'success',
+          'timed_out',
+          'in_progress',
+          'queued',
+          'requested',
+          'waiting'
+        ).required(),
         conclusion: Joi.alternatives()
-          .try(isBuildStatus, Joi.equal('no status'))
+          .try(isBuildStatus, Joi.equal('no status'), null)
           .required(),
       })
     )
@@ -96,6 +111,9 @@ export default class GithubActionsWorkflowStatus extends GithubAuthV3Service {
     if (data.workflow_runs.length === 0) {
       throw new NotFound({ prettyMessage: 'branch or event not found' })
     }
-    return renderBuildStatusBadge({ status: data.workflow_runs[0].conclusion })
+    const status = data.workflow_runs[0].conclusion
+      ? data.workflow_runs[0].conclusion
+      : data.workflow_runs[0].status.replace('_', ' ')
+    return renderBuildStatusBadge({ status })
   }
 }

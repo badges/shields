@@ -57,3 +57,29 @@ t.create('valid workflow (with event)')
     label: 'build',
     message: isWorkflowStatus,
   })
+
+t.create('workflow in progress')
+  .get('/actions/toolkit/unit-tests.yml.json?branch=main')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/actions/toolkit/actions/workflows/unit-tests.yml/runs')
+      .query({
+        branch: 'main',
+        page: '1',
+        per_page: '1',
+        exclude_pull_requests: 'true',
+      })
+      .reply(200, {
+        workflow_runs: [
+          {
+            status: 'in_progress',
+            conclusion: null,
+          },
+        ],
+      })
+  )
+  .expectBadge({
+    label: 'build',
+    message: 'in progress',
+    color: 'lightgrey',
+  })
