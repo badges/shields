@@ -169,7 +169,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.6.0",
-    "cypress": "^12.0.2",
+    "cypress": "^12.1.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.2.0",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
