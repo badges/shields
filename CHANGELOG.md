@@ -4,6 +4,22 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2022-12-01
+
+- fix: support logoColor to shield icons. [#8263](https://github.com/badges/shields/issues/8263)
+- handle missing properties array in [VisualStudioMarketplaceVersion] [#8603](https://github.com/badges/shields/issues/8603)
+- deprecate [wercker] service [#8642](https://github.com/badges/shields/issues/8642)
+- Add [Coincap] Cryptocurrency badges [#8623](https://github.com/badges/shields/issues/8623)
+- Add [modrinth] version [#8604](https://github.com/badges/shields/issues/8604)
+- [factorio-mod-portal] services [#8625](https://github.com/badges/shields/issues/8625)
+- [Coveralls] for GitLab [#8584](https://github.com/badges/shields/issues/8584), [#8644](https://github.com/badges/shields/issues/8644)
+- Remove 'suggest badges' feature [#8311](https://github.com/badges/shields/issues/8311)
+- Add [modrinth] followers [#8601](https://github.com/badges/shields/issues/8601)
+- Update the [modrinth] API to v2 [#8600](https://github.com/badges/shields/issues/8600)
+- tidy up [GitHubGist] routes [#8510](https://github.com/badges/shields/issues/8510)
+- fix [flathub] version error handling [#8500](https://github.com/badges/shields/issues/8500)
+- Dependency updates
+
 ## server-2022-11-01
 
 - [Ansible] Add collection badge [#8578](https://github.com/badges/shields/issues/8578)
