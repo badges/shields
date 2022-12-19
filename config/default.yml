@@ -1,7 +1,6 @@
 public:
   bind:
     address: '::'
-
   metrics:
     prometheus:
       enabled: false
@@ -12,10 +11,8 @@ public:
       intervalSeconds: 15
   ssl:
     isSecure: false
-
   cors:
     allowedOrigin: []
-
   services:
     github:
       baseUri: 'https://api.github.com'
@@ -28,18 +25,12 @@ public:
     weblate:
       authorizedOrigins: 'https://hosted.weblate.org'
     trace: false
-
   cacheHeaders:
     defaultCacheLengthSeconds: 120
-
   handleInternalErrors: true
-
   fetchLimit: '10MB'
   userAgentBase: 'shields (self-hosted)'
-
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
-
   requireCloudflare: false
-
 private: {}
