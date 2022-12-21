@@ -11,7 +11,7 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   event: Joi.string(),
-  branch: Joi.string(),
+  branch: Joi.alternatives().try(Joi.string(), Joi.number().cast('string')),
 }).required()
 
 const keywords = ['action', 'actions']

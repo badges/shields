@@ -35,6 +35,15 @@ t.create('nonexistent event')
     message: 'no status',
   })
 
+t.create('numeric branch name')
+  .get('/actions/toolkit/unit-tests.yml.json?branch=9999')
+  .expectBadge({
+    label: 'build',
+    // the key thing we're testing here is that this doesn't fail with
+    // "invalid query parameter: branch"
+    message: 'no status',
+  })
+
 t.create('valid workflow')
   .get('/actions/toolkit/unit-tests.yml.json')
   .expectBadge({
