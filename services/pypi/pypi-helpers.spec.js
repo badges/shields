@@ -118,6 +118,13 @@ describe('PyPI helpers', function () {
       }),
       given({
         info: {
+          license:
+            'this text is really really really really really really long',
+          classifiers: ['License :: OSI Approved :: MIT License'],
+        },
+      }),
+      given({
+        info: {
           license: '',
           classifiers: [
             'License :: OSI Approved :: MIT License',
