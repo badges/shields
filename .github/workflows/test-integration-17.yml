@@ -1,13 +1,17 @@
 name: Integration@node 17
 on:
   pull_request:
+    types: [opened, edited, reopened, synchronize]
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'dependabot/**'
 
 jobs:
   test-integration-17:
     runs-on: ubuntu-latest
+    env:
+      PAT_EXISTS: ${{ secrets.GH_PAT != '' }}
 
     services:
       redis:
@@ -31,7 +35,14 @@ jobs:
         env:
           NPM_CONFIG_ENGINE_STRICT: 'false'
 
-      - name: Integration Tests
+      - name: Integration Tests (with PAT)
+        if: ${{ env.PAT_EXISTS == 'true' }}
+        uses: ./.github/actions/integration-tests
+        with:
+          github-token: '${{ secrets.GH_PAT }}'
+
+      - name: Integration Tests (with workflow token)
+        if: ${{ env.PAT_EXISTS == 'false' }}
         uses: ./.github/actions/integration-tests
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'

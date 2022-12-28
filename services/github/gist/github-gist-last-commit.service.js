@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
-import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { formatDate } from '../../text-formatters.js'
+import { age as ageColor } from '../../color-formatters.js'
+import { GithubAuthV3Service } from '../github-auth-service.js'
+import { documentation, errorMessagesFor } from '../github-helpers.js'
 
 const schema = Joi.object({
   updated_at: Joi.string().required(),
@@ -10,7 +10,7 @@ const schema = Joi.object({
 
 export default class GithubGistLastCommit extends GithubAuthV3Service {
   static category = 'activity'
-  static route = { base: 'github-gist/last-commit', pattern: ':gistId' }
+  static route = { base: 'github/gist/last-commit', pattern: ':gistId' }
   static examples = [
     {
       title: 'GitHub Gist last commit',
