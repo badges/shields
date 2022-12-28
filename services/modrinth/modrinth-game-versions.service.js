@@ -20,17 +20,10 @@ export default class ModrinthGameVersions extends BaseModrinthService {
   static defaultBadgeData = { label: 'game versions' }
 
   static render({ versions }) {
-    if (versions.length) {
-      return {
+    return {
         message: versions.join(' | '),
         color: 'blue',
       }
-    } else {
-      return {
-        message: 'missing',
-        color: 'red',
-      }
-    }
   }
 
   async handle({ projectId }) {
