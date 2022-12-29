@@ -221,7 +221,7 @@ class BaseService {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
-    if ('searchParams' in options) {
+    if ('searchParams' in options && options.searchParams != null) {
       const params = new URLSearchParams(
         Object.fromEntries(
           Object.entries(options.searchParams).filter(
