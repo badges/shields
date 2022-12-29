@@ -21,9 +21,9 @@ export default class ModrinthGameVersions extends BaseModrinthService {
 
   static render({ versions }) {
     return {
-        message: versions.join(' | '),
-        color: 'blue',
-      }
+      message: versions.join(' | '),
+      color: 'blue',
+    }
   }
 
   async handle({ projectId }) {
