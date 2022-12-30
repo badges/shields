@@ -13,7 +13,7 @@ const schema = Joi.object({
     .pattern(
       /./,
       Joi.object({
-        versions: Joi.object().pattern(/./, Joi.object()).required(),
+        versions: Joi.object().pattern(/./, Joi.object()).min(1).required(),
       }).required()
     )
     .required(),
