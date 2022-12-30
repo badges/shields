@@ -5,7 +5,6 @@ import { BaseJsonService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
   repositoryUrl: optionalUrl.required(),
-  sort: Joi.string().valid('defined', 'semver').default('defined'),
 }).required()
 
 const schema = Joi.object({
@@ -39,17 +38,6 @@ export default class VpmVersion extends BaseJsonService {
       },
       staticPreview: renderVersionBadge({ version: '1.1.6' }),
     },
-    {
-      title: 'VPM Package Version (latest semver)',
-      namedParams: {
-        packageId: 'com.vrchat.udonsharp',
-      },
-      queryParams: {
-        repositoryUrl: 'https://packages.vrchat.com/curated?download',
-        sort: 'semver',
-      },
-      staticPreview: renderVersionBadge({ version: '1.1.6' }),
-    },
   ]
 
   static defaultBadgeData = {
@@ -63,18 +51,13 @@ export default class VpmVersion extends BaseJsonService {
     })
   }
 
-  async handle({ packageId }, { repositoryUrl, sort }) {
+  async handle({ packageId }, { repositoryUrl }) {
     const data = await this.fetch({ repositoryUrl })
     const pkg = data.packages[packageId]
     if (pkg === undefined)
       throw new NotFound({ prettyMessage: 'package not found' })
     const versions = Object.keys(pkg.versions)
-    let version
-    if (sort === 'defined') {
-      version = versions.reverse()[0]
-    } else if (sort === 'semver') {
-      version = latest(versions)
-    }
+    const version = latest(versions)
 
     return renderVersionBadge({ version })
   }
