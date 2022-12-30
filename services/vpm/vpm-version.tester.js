@@ -15,8 +15,10 @@ t.create('gets the latest version')
       .reply(200, {
         packages: {
           'com.vrchat.udonsharp': {
-            '2.0.0': {},
-            '1.9.0': {},
+            versions: {
+              '2.0.0': {},
+              '1.9.0': {},
+            },
           },
         },
       })
