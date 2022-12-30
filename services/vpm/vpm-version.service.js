@@ -4,7 +4,7 @@ import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
-  repositoryUrl: optionalUrl.required(),
+  repository_url: optionalUrl.required(),
 }).required()
 
 const schema = Joi.object({
@@ -34,7 +34,7 @@ export default class VpmVersion extends BaseJsonService {
         packageId: 'com.vrchat.udonsharp',
       },
       queryParams: {
-        repositoryUrl: 'https://packages.vrchat.com/curated?download',
+        repository_url: 'https://packages.vrchat.com/curated?download',
       },
       staticPreview: renderVersionBadge({ version: '1.1.6' }),
     },
@@ -51,7 +51,7 @@ export default class VpmVersion extends BaseJsonService {
     })
   }
 
-  async handle({ packageId }, { repositoryUrl }) {
+  async handle({ packageId }, { repository_url: repositoryUrl }) {
     const data = await this.fetch({ repositoryUrl })
     const pkg = data.packages[packageId]
     if (pkg === undefined)
