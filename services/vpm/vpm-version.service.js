@@ -5,6 +5,7 @@ import { BaseJsonService, NotFound } from '../index.js'
 
 const queryParamSchema = Joi.object({
   repository_url: optionalUrl.required(),
+  include_prereleases: Joi.equal(''),
 }).required()
 
 const schema = Joi.object({
@@ -51,13 +52,16 @@ export default class VpmVersion extends BaseJsonService {
     })
   }
 
-  async handle({ packageId }, { repository_url: repositoryUrl }) {
+  async handle(
+    { packageId },
+    { repository_url: repositoryUrl, include_prereleases: prereleases }
+  ) {
     const data = await this.fetch({ repositoryUrl })
     const pkg = data.packages[packageId]
     if (pkg === undefined)
       throw new NotFound({ prettyMessage: 'package not found' })
     const versions = Object.keys(pkg.versions)
-    const version = latest(versions)
+    const version = latest(versions, { pre: prereleases !== undefined })
 
     return renderVersionBadge({ version })
   }
