@@ -39,6 +39,17 @@ export default class VpmVersion extends BaseJsonService {
       },
       staticPreview: renderVersionBadge({ version: '1.1.6' }),
     },
+    {
+      title: 'VPM Package Version (including prereleases)',
+      namedParams: {
+        packageId: 'com.vrchat.udonsharp',
+      },
+      queryParams: {
+        repository_url: 'https://packages.vrchat.com/curated?download',
+        include_prereleases: null,
+      },
+      staticPreview: renderVersionBadge({ version: '1.1.6' }),
+    },
   ]
 
   static defaultBadgeData = {
