@@ -50,7 +50,17 @@ function getLicenses(packageData) {
   const {
     info: { license },
   } = packageData
-  if (license) {
+
+  /*
+  The .license field may either contain
+  - a short license description (e.g: 'MIT' or 'GPL-3.0') or
+  - the full text of a license
+  but there is nothing in the response that tells us explicitly.
+  We have to make an assumption based on the length.
+  See https://github.com/badges/shields/issues/8689 and
+  https://github.com/badges/shields/pull/8690 for more info.
+  */
+  if (license && license.length < 40) {
     return [license]
   } else {
     const parenthesizedAcronymRegex = /\(([^)]+)\)/
