@@ -26,7 +26,6 @@ services_steps: &services_steps
         path: junit
 
 jobs:
-
   services:
     docker:
       - image: cimg/node:16.15
