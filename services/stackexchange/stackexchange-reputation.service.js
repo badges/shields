@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { StackExchangeBase } from './stackexchange-base.js'
 
 const reputationSchema = Joi.object({
   items: Joi.array()
@@ -14,9 +14,7 @@ const reputationSchema = Joi.object({
     .required(),
 }).required()
 
-export default class StackExchangeReputation extends BaseJsonService {
-  static category = 'chat'
-
+export default class StackExchangeReputation extends StackExchangeBase {
   static route = {
     base: 'stackexchange',
     pattern: ':stackexchangesite/r/:query',
@@ -34,10 +32,6 @@ export default class StackExchangeReputation extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'stackoverflow',
-  }
-
   static render({ stackexchangesite, numValue }) {
     const label = `${stackexchangesite} reputation`
 
@@ -51,7 +45,7 @@ export default class StackExchangeReputation extends BaseJsonService {
   async handle({ stackexchangesite, query }) {
     const path = `users/${query}`
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: reputationSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,

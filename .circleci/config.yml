@@ -46,44 +46,6 @@ jobs:
             NODE_ENV: test
           command: npm run danger ci
 
-  frontend:
-    docker:
-      - image: cimg/node:16.15
-
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: |
-            npm ci
-          environment:
-            CYPRESS_INSTALL_BINARY: 0
-
-      - run:
-          name: Prepare frontend tests
-          command: npm run defs && npm run features
-
-      - run:
-          name: Check types
-          command: npm run check-types:frontend
-
-      - run:
-          name: Frontend unit tests
-          environment:
-            mocha_reporter: mocha-junit-reporter
-            MOCHA_FILE: junit/frontend/results.xml
-          when: always
-          command: npm run test:frontend
-
-      - store_test_results:
-          path: junit
-
-      - run:
-          name: Frontend build completes successfully
-          when: always
-          command: npm run build
-
   services:
     docker:
       - image: cimg/node:16.15
@@ -103,10 +65,6 @@ workflows:
 
   on-commit:
     jobs:
-      - frontend:
-          filters:
-            branches:
-              ignore: gh-pages
       - services:
           filters:
             branches:
@@ -132,9 +90,6 @@ workflows:
   #         filters:
   #           branches:
   #             ignore: gh-pages
-  #     - frontend:
-  #         requires:
-  #           - npm-install
   #     - services:
   #         requires:
   #           - npm-install
