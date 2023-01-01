@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-01-01
+
+- migrate frontend tests to GHA [#8541](https://github.com/badges/shields/issues/8541)
+- Send `X-GitHub-Api-Version` when calling [GitHub] v3 API [#8669](https://github.com/badges/shields/issues/8669)
+- add [VpmVersion] badge [#8755](https://github.com/badges/shields/issues/8755)
+- Add [modrinth] game versions [#8673](https://github.com/badges/shields/issues/8673)
+- don't try to call .entries on null or undefined [#8757](https://github.com/badges/shields/issues/8757)
+- fix debug logging of undefined query params [#8540](https://github.com/badges/shields/issues/8540)
+- run close-bot on node 16 [#8740](https://github.com/badges/shields/issues/8740)
+- allow all numeric branch names in [githubactionsworkflowstatus] [#8734](https://github.com/badges/shields/issues/8734)
+- switch [GithubActionsWorkflowStatus] to SVG scraper [#8738](https://github.com/badges/shields/issues/8738)
+- handle workflow runs that do not have a conclusion [#8717](https://github.com/badges/shields/issues/8717)
+- add a clarifying comment to [pypi] getLicenses [#8718](https://github.com/badges/shields/issues/8718)
+- switch from github workflows to github actions workflows; test [githubactionsworkflowstatus githubworkflowstatus] [#8475](https://github.com/badges/shields/issues/8475)
+- fall back to classifiers if license text is really long [#8690](https://github.com/badges/shields/issues/8690)
+- docs/issue template improvements for badge requests [#8668](https://github.com/badges/shields/issues/8668)
+- allow passing key to [stackexchange] [#8539](https://github.com/badges/shields/issues/8539)
+- Dependency updates
+
 ## server-2022-12-01
 
 - fix: support logoColor to shield icons. [#8263](https://github.com/badges/shields/issues/8263)
