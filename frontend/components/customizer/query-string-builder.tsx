@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import styled from 'styled-components'
 import humanizeString from 'humanize-string'
-import { stringify as stringifyQueryString } from 'query-string'
+import qs from 'query-string'
 import { advertisedStyles } from '../../lib/supported-features'
 import { noAutocorrect, StyledInput } from '../common'
 import {
@@ -94,7 +94,7 @@ function getQueryString({
     }
   })
 
-  const queryString = stringifyQueryString(outQuery)
+  const queryString = qs.stringify(outQuery)
 
   return { queryString, isComplete }
 }
