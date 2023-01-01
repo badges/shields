@@ -4,6 +4,21 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-01-01
+
+- Breaking change: Routes for GitHub workflows badge have changed. See https://github.com/badges/shields/issues/8671 for more details
+- Behaviour change: In this release we fixed a long standing bug. GitHub badges were previously not reading the base URL from the `config.service.baseUri`.
+  This release fixes that bug, bringing the code into line with the documented behaviour. This should not cause a behaviour change for most users,
+  but users who had previously set a value in `config.service.baseUri` which was previously ignored could see this now have an effect.
+  Users who configure their instance using env vars rather than yaml should see no change.
+- Send `X-GitHub-Api-Version` when calling [GitHub] v3 API [#8669](https://github.com/badges/shields/issues/8669)
+- add [VpmVersion] badge [#8755](https://github.com/badges/shields/issues/8755)
+- Add [modrinth] game versions [#8673](https://github.com/badges/shields/issues/8673)
+- fix debug logging of undefined query params [#8540](https://github.com/badges/shields/issues/8540), [#8757](https://github.com/badges/shields/issues/8757)
+- fall back to classifiers if [pypi] license text is really long [#8690](https://github.com/badges/shields/issues/8690)
+- allow passing key to [stackexchange] [#8539](https://github.com/badges/shields/issues/8539)
+- Dependency updates
+
 ## server-2022-12-01
 
 - fix: support logoColor to shield icons. [#8263](https://github.com/badges/shields/issues/8263)
