@@ -107,9 +107,6 @@ export default function SponsorsPage(): JSX.Element {
             <a href="https://github.com/">GitHub</a>
           </li>
           <li>
-            <a href="https://lgtm.com/">LGTM</a>
-          </li>
-          <li>
             <a href="https://uptimerobot.com/">Uptime Robot</a>
           </li>
         </ul>
