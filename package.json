@@ -171,7 +171,7 @@
     "concurrently": "^7.6.0",
     "cypress": "^12.2.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
-    "danger": "^11.2.0",
+    "danger": "^11.2.1",
     "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
     "eslint": "^7.32.0",
