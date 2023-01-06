@@ -15,8 +15,8 @@ import { omitv } from './text-formatters.js'
  * Return a negative value if v1 < v2,
  * zero if v1 = v2, a positive value otherwise.
  *
- * @param {number} v1 - First version for comparison
- * @param {number} v2 - Second version for comparison
+ * @param {string} v1 - First version for comparison
+ * @param {string} v2 - Second version for comparison
  * @returns {number} Comparison result (-1, 0 or 1)
  */
 function asciiVersionCompare(v1, v2) {
