@@ -37,7 +37,7 @@ const isLockfile = Joi.object({
  * Determines the dependency version based on the dependency type.
  *
  * @param {object} attrs - Refer to individual attributes
- * @param {string} attrs.kind - Wanted dependency type, defaults to 'default'
+ * @param {string} attrs.kind - Wanted dependency type ('dev' or 'default'), defaults to 'default'
  * @param {string} attrs.wantedDependency - Name of the wanted dependency
  * @param {object} attrs.lockfileData - Object containing lock file data
  * @throws {Error} - Error if unknown dependency type provided
