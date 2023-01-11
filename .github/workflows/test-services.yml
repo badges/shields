@@ -4,7 +4,7 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 permissions:
-  gist: read
+  contents: read
 
 jobs:
   test-services:
