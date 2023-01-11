@@ -1,5 +1,9 @@
 name: 'Service tests'
 description: 'Run tests for selected services'
+inputs:
+  github-token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -21,6 +25,7 @@ runs:
       shell: bash
       env:
         RETRY_COUNT: 3
+        GH_TOKEN: '${{ inputs.github-token }}'
 
     - name: Write Markdown Summary
       if: always()

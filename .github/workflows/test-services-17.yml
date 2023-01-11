@@ -19,3 +19,5 @@ jobs:
 
       - name: Service tests
         uses: ./.github/actions/service-tests
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
