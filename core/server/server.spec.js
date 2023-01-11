@@ -60,12 +60,14 @@ describe('The server', function () {
     })
 
     it('should serve badges with custom maxAge', async function () {
-      const { headers } = await got(`${baseUrl}npm/l/express`)
-      expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
+      const { headers } = await got(`${baseUrl}badge/foo-bar-blue`)
+      expect(headers['cache-control']).to.equal('max-age=86400, s-maxage=86400')
     })
 
     it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      const { statusCode, headers } = await got(
+        `${baseUrl}badge/foo-bar-blue.svg`
+      )
       expect(statusCode).to.equal(200)
       expect(headers['access-control-allow-origin']).to.equal('*')
     })
@@ -84,12 +86,15 @@ describe('The server', function () {
     })
 
     it('should redirect modern PNG badges as configured', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.png`, {
-        followRedirect: false,
-      })
+      const { statusCode, headers } = await got(
+        `${baseUrl}badge/foo-bar-blue.png`,
+        {
+          followRedirect: false,
+        }
+      )
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        'http://raster.example.test/npm/v/express.png'
+        'http://raster.example.test/badge/foo-bar-blue.png'
       )
     })
 
@@ -197,21 +202,18 @@ describe('The server', function () {
     })
 
     it('should return the 410 badge for obsolete formats', async function () {
-      const { statusCode, body } = await got(`${baseUrl}npm/v/express.jpg`, {
-        throwHttpErrors: false,
-      })
+      const { statusCode, body } = await got(
+        `${baseUrl}badge/foo-bar-blue.jpg`,
+        {
+          throwHttpErrors: false,
+        }
+      )
       // TODO It would be nice if this were 404 or 410.
       expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('410')
         .and.to.include('jpg no longer available')
-    })
-
-    it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
-      expect(statusCode).to.equal(200)
-      expect(headers['access-control-allow-origin']).to.equal('*')
     })
   })
 

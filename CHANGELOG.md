@@ -4,6 +4,70 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-01-01
+
+- Breaking change: Routes for GitHub workflows badge have changed. See https://github.com/badges/shields/issues/8671 for more details
+- Behaviour change: In this release we fixed a long standing bug. GitHub badges were previously not reading the base URL from the `config.service.baseUri`.
+  This release fixes that bug, bringing the code into line with the documented behaviour. This should not cause a behaviour change for most users,
+  but users who had previously set a value in `config.service.baseUri` which was previously ignored could see this now have an effect.
+  Users who configure their instance using env vars rather than yaml should see no change.
+- Send `X-GitHub-Api-Version` when calling [GitHub] v3 API [#8669](https://github.com/badges/shields/issues/8669)
+- add [VpmVersion] badge [#8755](https://github.com/badges/shields/issues/8755)
+- Add [modrinth] game versions [#8673](https://github.com/badges/shields/issues/8673)
+- fix debug logging of undefined query params [#8540](https://github.com/badges/shields/issues/8540), [#8757](https://github.com/badges/shields/issues/8757)
+- fall back to classifiers if [pypi] license text is really long [#8690](https://github.com/badges/shields/issues/8690)
+- allow passing key to [stackexchange] [#8539](https://github.com/badges/shields/issues/8539)
+- Dependency updates
+
+## server-2022-12-01
+
+- fix: support logoColor to shield icons. [#8263](https://github.com/badges/shields/issues/8263)
+- handle missing properties array in [VisualStudioMarketplaceVersion] [#8603](https://github.com/badges/shields/issues/8603)
+- deprecate [wercker] service [#8642](https://github.com/badges/shields/issues/8642)
+- Add [Coincap] Cryptocurrency badges [#8623](https://github.com/badges/shields/issues/8623)
+- Add [modrinth] version [#8604](https://github.com/badges/shields/issues/8604)
+- [factorio-mod-portal] services [#8625](https://github.com/badges/shields/issues/8625)
+- [Coveralls] for GitLab [#8584](https://github.com/badges/shields/issues/8584), [#8644](https://github.com/badges/shields/issues/8644)
+- Remove 'suggest badges' feature [#8311](https://github.com/badges/shields/issues/8311)
+- Add [modrinth] followers [#8601](https://github.com/badges/shields/issues/8601)
+- Update the [modrinth] API to v2 [#8600](https://github.com/badges/shields/issues/8600)
+- tidy up [GitHubGist] routes [#8510](https://github.com/badges/shields/issues/8510)
+- fix [flathub] version error handling [#8500](https://github.com/badges/shields/issues/8500)
+- Dependency updates
+
+## server-2022-11-01
+
+- [Ansible] Add collection badge [#8578](https://github.com/badges/shields/issues/8578)
+- [VisualStudioMarketplace] Add support to prerelease extensions version (Issue #8207) [#8561](https://github.com/badges/shields/issues/8561)
+- feat: add [GitlabLastCommit] service [#8508](https://github.com/badges/shields/issues/8508)
+- fix [swagger] service tests (allow 0 items in array) [#8564](https://github.com/badges/shields/issues/8564)
+- fix codecov badge for non-default branch [#8565](https://github.com/badges/shields/issues/8565)
+- Add [GitHubLastCommit] by committer badge [#8537](https://github.com/badges/shields/issues/8537)
+- [GitHubReleaseDate] - published_at field [#8543](https://github.com/badges/shields/issues/8543)
+- Fix [Testspace] with new "untested" value in case_counts array [#8544](https://github.com/badges/shields/issues/8544)
+- fix: Support WAITING status for GitHub deployments [#8521](https://github.com/badges/shields/issues/8521)
+- [Whatpulse] badge for a user and for a team [#8466](https://github.com/badges/shields/issues/8466)
+- deprecate [pkgreview] service [#8499](https://github.com/badges/shields/issues/8499)
+- Dependency updates
+
+## server-2022-10-08
+
+- deprecate [criterion] service [#8501](https://github.com/badges/shields/issues/8501)
+- fix formatRelativeDate error handling; run [date] [#8497](https://github.com/badges/shields/issues/8497)
+- allow/validate bitbucket_username / bitbucket_password in private config schema [#8472](https://github.com/badges/shields/issues/8472)
+- fix [pub] points badge test and example [#8498](https://github.com/badges/shields/issues/8498)
+- feat: add [GitlabLanguageCount] service [#8377](https://github.com/badges/shields/issues/8377)
+- [GitHubGistStars] add GitHub Gist Stars [#8471](https://github.com/badges/shields/issues/8471)
+- fix display/search of CII badge examples [#8473](https://github.com/badges/shields/issues/8473)
+- feat: add 2022 support to GitHub Hacktoberfest [#8468](https://github.com/badges/shields/issues/8468)
+- fix [GitLabCoverage] subgroup bug [#8401](https://github.com/badges/shields/issues/8401)
+- implement ruby gems-specific version sort/color functions [#8434](https://github.com/badges/shields/issues/8434)
+- Add `rc` to pre-release identifiers [#8435](https://github.com/badges/shields/issues/8435)
+- add [GitHub] Number of commits between branches/tags/commits [#8394](https://github.com/badges/shields/issues/8394)
+- add [Packagist] dependency version [#8371](https://github.com/badges/shields/issues/8371)
+- fix Docker build status invalid response data bug [#8392](https://github.com/badges/shields/issues/8392)
+- Dependency updates
+
 ## server-2022-09-04
 
 - fix frontend compile for users running on Windows [#8350](https://github.com/badges/shields/issues/8350)

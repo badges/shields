@@ -1,21 +1,11 @@
-import Joi from 'joi'
-import { createServiceTester } from '../tester.js'
-import {
-  IMPROVED_STATUS,
-  REGRESSED_STATUS,
-  NO_CHANGE_STATUS,
-  NOT_FOUND_STATUS,
-} from './constants.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
 
-const isStatus = Joi.string()
-  .allow(IMPROVED_STATUS, REGRESSED_STATUS, NOT_FOUND_STATUS, NO_CHANGE_STATUS)
-  .required()
+export const t = new ServiceTester({
+  id: 'criterion',
+  title: 'Criterion',
+  pathPrefix: '/criterion',
+})
 
-t.create('Criterion (valid repo)')
+t.create('Criterion')
   .get('/chmoder/credit_card.json')
-  .expectBadge({ label: 'criterion', message: isStatus })
-
-t.create('Criterion (not found)')
-  .get('/chmoder/not-a-repo.json')
-  .expectBadge({ label: 'criterion', message: NOT_FOUND_STATUS })
+  .expectBadge({ label: 'criterion', message: 'no longer available' })
