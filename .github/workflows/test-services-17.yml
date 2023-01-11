@@ -1,6 +1,7 @@
 name: Services@node 17
 on:
   pull_request:
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   test-services-17:
