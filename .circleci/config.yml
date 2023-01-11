@@ -26,26 +26,6 @@ services_steps: &services_steps
         path: junit
 
 jobs:
-  danger:
-    docker:
-      - image: cimg/node:16.15
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: npm ci
-          environment:
-            CYPRESS_INSTALL_BINARY: 0
-
-      - run:
-          name: Danger
-          when: always
-          environment:
-            # https://github.com/gatsbyjs/gatsby/pull/11555
-            NODE_ENV: test
-          command: npm run danger ci
-
   services:
     docker:
       - image: cimg/node:16.15
@@ -77,13 +57,6 @@ workflows:
               ignore:
                 - master
                 - gh-pages
-      - danger:
-          filters:
-            branches:
-              ignore:
-                - master
-                - gh-pages
-                - /dependabot\/.*/
   # on-commit-with-cache:
   #   jobs:
   #     - npm-install:
@@ -102,9 +75,3 @@ workflows:
   #         filters:
   #           branches:
   #             ignore: master
-  #     - danger:
-  #         requires:
-  #           - npm-install
-  #         filters:
-  #           branches:
-  #             ignore: /dependabot\/.*/
