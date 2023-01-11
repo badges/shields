@@ -3,6 +3,9 @@ on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
 
+permissions:
+  gist: read
+
 jobs:
   test-services:
     runs-on: ubuntu-latest
