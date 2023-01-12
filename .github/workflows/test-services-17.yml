@@ -17,7 +17,14 @@ jobs:
         env:
           NPM_CONFIG_ENGINE_STRICT: 'false'
 
-      - name: Service tests
+      - name: Service tests (with PAT)
+        if: ${{ env.PAT_EXISTS == 'true' }}
+        uses: ./.github/actions/service-tests
+        with:
+          github-token: '${{ secrets.GH_PAT }}'
+
+      - name: Service tests (with workflow token)
+        if: ${{ env.PAT_EXISTS == 'false' }}
         uses: ./.github/actions/service-tests
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'

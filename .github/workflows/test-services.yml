@@ -3,9 +3,6 @@ on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
 
-permissions:
-  contents: read
-
 jobs:
   test-services:
     runs-on: ubuntu-latest
@@ -18,7 +15,14 @@ jobs:
         with:
           node-version: 16
 
-      - name: Service tests
+      - name: Service tests (with PAT)
+        if: ${{ env.PAT_EXISTS == 'true' }}
+        uses: ./.github/actions/service-tests
+        with:
+          github-token: '${{ secrets.GH_PAT }}'
+
+      - name: Service tests (with workflow token)
+        if: ${{ env.PAT_EXISTS == 'false' }}
         uses: ./.github/actions/service-tests
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
