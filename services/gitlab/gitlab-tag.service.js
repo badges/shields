@@ -4,6 +4,7 @@ import { optionalUrl } from '../validators.js'
 import { latest } from '../version.js'
 import { addv } from '../text-formatters.js'
 import { NotFound } from '../index.js'
+import { documentation, errorMessagesFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
@@ -18,11 +19,6 @@ const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
 }).required()
 
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
-</p>
-`
 const commonProps = {
   namedParams: {
     project: 'shields-ops-group/tag-test',
@@ -96,9 +92,7 @@ export default class GitlabTag extends GitLabBase {
         project
       )}/repository/tags`,
       options: { searchParams: { order_by: 'updated' } },
-      errorMessages: {
-        404: 'repo not found',
-      },
+      errorMessages: errorMessagesFor('project not found'),
     })
   }
 

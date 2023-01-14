@@ -31,7 +31,7 @@ export default class WeblateUserStatistic extends WeblateBase {
 
   static examples = [
     {
-      title: `Weblate user statistic`,
+      title: 'Weblate user statistic',
       namedParams: { statistic: 'translations', user: 'nijel' },
       queryParams: { server: 'https://hosted.weblate.org' },
       staticPreview: this.render({ statistic: 'translations', count: 30585 }),

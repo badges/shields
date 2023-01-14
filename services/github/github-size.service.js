@@ -5,6 +5,10 @@ import { NotFound } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, errorMessagesFor } from './github-helpers.js'
 
+const queryParamSchema = Joi.object({
+  branch: Joi.string(),
+}).required()
+
 const schema = Joi.alternatives(
   Joi.object({
     size: nonNegativeInteger,
@@ -18,6 +22,7 @@ export default class GithubSize extends GithubAuthV3Service {
   static route = {
     base: 'github/size',
     pattern: ':user/:repo/:path*',
+    queryParamSchema,
   }
 
   static examples = [
@@ -32,6 +37,20 @@ export default class GithubSize extends GithubAuthV3Service {
       keywords: ['repo'],
       documentation,
     },
+    {
+      title: 'GitHub file size in bytes on a specified ref (branch/commit/tag)',
+      namedParams: {
+        user: 'webcaetano',
+        repo: 'craft',
+        path: 'build/phaser-craft.min.js',
+      },
+      staticPreview: this.render({ size: 9170 }),
+      keywords: ['repo'],
+      documentation,
+      queryParams: {
+        branch: 'master',
+      },
+    },
   ]
 
   static render({ size }) {
@@ -41,16 +60,25 @@ export default class GithubSize extends GithubAuthV3Service {
     }
   }
 
-  async fetch({ user, repo, path }) {
-    return this._requestJson({
-      url: `/repos/${user}/${repo}/contents/${path}`,
-      schema,
-      errorMessages: errorMessagesFor('repo or file not found'),
-    })
+  async fetch({ user, repo, path, branch }) {
+    if (branch) {
+      return this._requestJson({
+        url: `/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
+        schema,
+        errorMessages: errorMessagesFor('repo, branch or file not found'),
+      })
+    } else {
+      return this._requestJson({
+        url: `/repos/${user}/${repo}/contents/${path}`,
+        schema,
+        errorMessages: errorMessagesFor('repo or file not found'),
+      })
+    }
   }
 
-  async handle({ user, repo, path }) {
-    const body = await this.fetch({ user, repo, path })
+  async handle({ user, repo, path }, queryParams) {
+    const branch = queryParams.branch
+    const body = await this.fetch({ user, repo, path, branch })
     if (Array.isArray(body)) {
       throw new NotFound({ prettyMessage: 'not a regular file' })
     }

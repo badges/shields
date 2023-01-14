@@ -13,6 +13,13 @@ const serviceDir = path.join(
   'services'
 )
 
+function toUnixPath(path) {
+  // glob does not allow \ as a path separator
+  // see https://github.com/isaacs/node-glob/blob/main/changelog.md#80
+  // so we need to convert to use / for use with glob
+  return path.replace(/\\/g, '/')
+}
+
 class InvalidService extends Error {
   constructor(message) {
     super(message)
@@ -20,9 +27,13 @@ class InvalidService extends Error {
   }
 }
 
+function getServicePaths(pattern) {
+  return glob.sync(toUnixPath(path.join(serviceDir, '**', pattern)))
+}
+
 async function loadServiceClasses(servicePaths) {
   if (!servicePaths) {
-    servicePaths = glob.sync(path.join(serviceDir, '**', '*.service.js'))
+    servicePaths = getServicePaths('*.service.js')
   }
 
   const serviceClasses = []
@@ -42,8 +53,8 @@ async function loadServiceClasses(servicePaths) {
       if (serviceClass && serviceClass.prototype instanceof BaseService) {
         // Decorate each service class with the directory that contains it.
         serviceClass.serviceFamily = servicePath
-          .replace(serviceDir, '')
-          .split(path.sep)[1]
+          .replace(toUnixPath(serviceDir), '')
+          .split('/')[1]
         serviceClass.validateDefinition()
         return serviceClasses.push(serviceClass)
       }
@@ -93,15 +104,16 @@ async function collectDefinitions() {
 
 async function loadTesters() {
   return Promise.all(
-    glob
-      .sync(path.join(serviceDir, '**', '*.tester.js'))
-      .map(async path => await import(`file://${path}`))
+    getServicePaths('*.tester.js').map(
+      async path => await import(`file://${path}`)
+    )
   )
 }
 
 export {
   InvalidService,
   loadServiceClasses,
+  getServicePaths,
   checkNames,
   collectDefinitions,
   loadTesters,

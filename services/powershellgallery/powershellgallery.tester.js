@@ -47,7 +47,7 @@ t.create('version (legacy redirect: vpre)')
   .get('/vpre/ACMESharp.svg')
   .expectRedirect('/powershellgallery/v/ACMESharp.svg?include_prereleases')
 
-t.create('platform (valid').get('/p/DNS.1.1.1.1.json').expectBadge({
+t.create('platform (valid)').get('/p/PackageManagement.json').expectBadge({
   label: 'platform',
   message: isPlatform,
 })

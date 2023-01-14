@@ -72,7 +72,7 @@ class DiscourseStatus extends DiscourseBase {
   static route = this.buildRoute('status')
   static examples = [
     {
-      title: `Discourse status`,
+      title: 'Discourse status',
       namedParams: {},
       queryParams: {
         server: 'https://meta.discourse.org',

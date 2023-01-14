@@ -33,10 +33,11 @@ class GithubConstellation {
     }
 
     this.apiProvider = new GithubApiProvider({
-      baseUrl: process.env.GITHUB_URL || 'https://api.github.com',
+      baseUrl: config.service.baseUri,
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
+      restApiVersion: config.service.restApiVersion,
     })
 
     this.oauthHelper = this.constructor._createOauthHelper(config)

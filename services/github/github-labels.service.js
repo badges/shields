@@ -35,7 +35,7 @@ export default class GithubLabels extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/labels/${name}`,
       schema,
-      errorMessages: errorMessagesFor(`repo or label not found`),
+      errorMessages: errorMessagesFor('repo or label not found'),
     })
   }
 

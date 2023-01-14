@@ -1,7 +1,6 @@
 import { test, given } from 'sazerac'
 import {
   badgeUrlFromPath,
-  badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
   queryStringStaticBadgeUrl,
@@ -13,18 +12,6 @@ describe('Badge URL generation functions', function () {
     given({
       baseUrl: 'http://example.com',
       path: '/npm/v/gh-badges',
-      style: 'flat-square',
-      longCache: true,
-    }).expect(
-      'http://example.com/npm/v/gh-badges?cacheSeconds=2592000&style=flat-square'
-    )
-  })
-
-  test(badgeUrlFromPattern, () => {
-    given({
-      baseUrl: 'http://example.com',
-      pattern: '/npm/v/:packageName',
-      namedParams: { packageName: 'gh-badges' },
       style: 'flat-square',
       longCache: true,
     }).expect(

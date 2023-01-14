@@ -1,7 +1,6 @@
 // Avoid "Attempted import error: 'URL' is not exported from 'url'" in frontend.
 import url from 'url'
 import queryString from 'query-string'
-import { compile } from 'path-to-regexp'
 
 function badgeUrlFromPath({
   baseUrl = '',
@@ -21,33 +20,6 @@ function badgeUrlFromPath({
   const suffix = outQueryString ? `?${outQueryString}` : ''
 
   return `${baseUrl}${path}${outExt}${suffix}`
-}
-
-function badgeUrlFromPattern({
-  baseUrl = '',
-  pattern,
-  namedParams,
-  queryParams,
-  style,
-  format = '',
-  longCache = false,
-}) {
-  const toPath = compile(pattern, {
-    strict: true,
-    sensitive: true,
-    encode: encodeURIComponent,
-  })
-
-  const path = toPath(namedParams)
-
-  return badgeUrlFromPath({
-    baseUrl,
-    path,
-    queryParams,
-    style,
-    format,
-    longCache,
-  })
 }
 
 function encodeField(s) {
@@ -154,7 +126,6 @@ function rasterRedirectUrl({ rasterUrl }, badgeUrl) {
 
 export {
   badgeUrlFromPath,
-  badgeUrlFromPattern,
   encodeField,
   staticBadgeUrl,
   queryStringStaticBadgeUrl,

@@ -99,7 +99,7 @@ export default class MozillaObservatory extends BaseJsonService {
   async fetch({ host, publish }) {
     return this._requestJson({
       schema,
-      url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
+      url: 'https://http-observatory.security.mozilla.org/api/v1/analyze',
       options: {
         method: 'POST',
         searchParams: { host },

@@ -13,7 +13,7 @@ t.create('should show color')
     nock.enableNetConnect()
 
     return nock('https://api.npms.io', { allowUnmocked: true })
-      .get(`/v2/package/mock-for-package-score`)
+      .get('/v2/package/mock-for-package-score')
       .reply(200, {
         score: {
           final: 0.89,

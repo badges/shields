@@ -22,6 +22,18 @@ Any custom logo can be passed in a URL parameter by base64 encoding it. e.g:
 
 ![](https://img.shields.io/badge/play-station-blue.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIj48cGF0aCBkPSJNMTI5IDExMWMtNTUgNC05MyA2Ni05MyA3OEwwIDM5OGMtMiA3MCAzNiA5MiA2OSA5MWgxYzc5IDAgODctNTcgMTMwLTEyOGgyMDFjNDMgNzEgNTAgMTI4IDEyOSAxMjhoMWMzMyAxIDcxLTIxIDY5LTkxbC0zNi0yMDljMC0xMi00MC03OC05OC03OGgtMTBjLTYzIDAtOTIgMzUtOTIgNDJIMjM2YzAtNy0yOS00Mi05Mi00MmgtMTV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+) - https://img.shields.io/badge/play-station-blue.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIj48cGF0aCBkPSJNMTI5IDExMWMtNTUgNC05MyA2Ni05MyA3OEwwIDM5OGMtMiA3MCAzNiA5MiA2OSA5MWgxYzc5IDAgODctNTcgMTMwLTEyOGgyMDFjNDMgNzEgNTAgMTI4IDEyOSAxMjhoMWMzMyAxIDcxLTIxIDY5LTkxbC0zNi0yMDljMC0xMi00MC03OC05OC03OGgtMTBjLTYzIDAtOTIgMzUtOTIgNDJIMjM2YzAtNy0yOS00Mi05Mi00MmgtMTV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+
 
+### logoColor parameter
+
+The `logoColor` param can be used to set the color of the logo. Hex, rgb, rgba, hsl, hsla and css named colors can all be used. For SimpleIcons named logos (which are monochrome), the color will be applied to the SimpleIcons logo.
+
+- ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript
+- ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5
+
+In the case where Shields hosts a custom multi-colored logo, if the `logoColor` param is passed, the corresponding SimpleIcons logo will be substituted and colored.
+
+- ![](https://img.shields.io/badge/logo-gitlab-blue?logo=gitlab) - https://img.shields.io/badge/logo-gitlab-blue?logo=gitlab
+- ![](https://img.shields.io/badge/logo-gitlab-blue?logo=gitlab&logoColor=white) - https://img.shields.io/badge/logo-gitlab-blue?logo=gitlab&logoColor=white
+
 ## Contributing Logos
 
 Our preferred way to consume icons is via the SimpleIcons logo. As a first port of call, we encourage you to contribute logos to [the SimpleIcons project][simple-icons github]. Please review their [guidance](https://github.com/simple-icons/simple-icons/blob/develop/CONTRIBUTING.md) before contributing.

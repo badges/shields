@@ -1,10 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  Example,
-  Suggestion,
-  RenderableExample,
-} from '../../lib/service-definitions'
+import { Example, RenderableExample } from '../../lib/service-definitions'
 import { H3 } from '../common'
 import Customizer from '../customizer/customizer'
 
@@ -16,20 +12,12 @@ const Documentation = styled.div`
 
 export function MarkupModalContent({
   example,
-  isBadgeSuggestion,
   baseUrl,
 }: {
   example: RenderableExample
-  isBadgeSuggestion: boolean
   baseUrl: string
 }): JSX.Element {
-  let documentation: { __html: string } | undefined
-  let link: string | undefined
-  if (isBadgeSuggestion) {
-    ;({ link } = example as Suggestion)
-  } else {
-    ;({ documentation } = example as Example)
-  }
+  const { documentation } = example as Example
 
   const {
     title,
@@ -48,8 +36,6 @@ export function MarkupModalContent({
         exampleNamedParams={namedParams}
         exampleQueryParams={queryParams}
         initialStyle={initialStyle}
-        isPrefilled={isBadgeSuggestion}
-        link={link}
         pattern={pattern}
         title={title}
       />
