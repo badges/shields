@@ -27,11 +27,13 @@ class InvalidService extends Error {
   }
 }
 
+function getServicePaths(pattern) {
+  return glob.sync(toUnixPath(path.join(serviceDir, '**', pattern)))
+}
+
 async function loadServiceClasses(servicePaths) {
   if (!servicePaths) {
-    servicePaths = glob.sync(
-      toUnixPath(path.join(serviceDir, '**', '*.service.js'))
-    )
+    servicePaths = getServicePaths('*.service.js')
   }
 
   const serviceClasses = []
@@ -102,15 +104,16 @@ async function collectDefinitions() {
 
 async function loadTesters() {
   return Promise.all(
-    glob
-      .sync(path.join(serviceDir, '**', '*.tester.js'))
-      .map(async path => await import(`file://${path}`))
+    getServicePaths('*.tester.js').map(
+      async path => await import(`file://${path}`)
+    )
   )
 }
 
 export {
   InvalidService,
   loadServiceClasses,
+  getServicePaths,
   checkNames,
   collectDefinitions,
   loadTesters,
