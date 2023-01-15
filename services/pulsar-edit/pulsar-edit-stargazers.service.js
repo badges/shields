@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
+import { pulsarPurple } from './pulsar-helper.js'
 
 const schema = Joi.object({
   stargazers_count: nonNegativeInteger,
@@ -26,7 +27,7 @@ export default class PulsarEditStargazers extends BaseJsonService {
     return {
       label: 'stargazers',
       message: metric(stargazerCount),
-      color: '#662d91',
+      color: pulsarPurple,
     }
   }
 

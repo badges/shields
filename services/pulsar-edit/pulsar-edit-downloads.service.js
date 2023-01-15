@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
+import { pulsarPurple } from './pulsar-helper.js'
 
 const schema = Joi.object({
   downloads: nonNegativeInteger,
@@ -26,7 +27,7 @@ export default class PulsarEditDownloads extends BaseJsonService {
     return {
       label: 'downloads',
       message: metric(downloadCount),
-      color: '#662d91',
+      color: pulsarPurple,
     }
   }
 
