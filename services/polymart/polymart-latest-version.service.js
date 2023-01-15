@@ -1,3 +1,4 @@
+import { NotFound } from '../../core/base-service/errors.js'
 import { BasePolymartService, documentation } from './polymart-base.js'
 
 export default class PolymartLatestVersion extends BasePolymartService {
@@ -34,6 +35,9 @@ export default class PolymartLatestVersion extends BasePolymartService {
 
   async handle({ resourceId }) {
     const { response } = await this.fetch({ resourceId })
+    if (!response.resource) {
+      throw new NotFound()
+    }
     return this.constructor.render({
       version: response.resource.updates.latest.version,
     })

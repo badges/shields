@@ -19,6 +19,18 @@ const resourceSchema = Joi.object({
   }).required(),
 }).required()
 
+const notFoundResourceSchema = Joi.object({
+  response: Joi.object({
+    success: Joi.boolean().required(),
+    errors: Joi.object().required(),
+  }).required(),
+})
+
+const resourceFoundOrNotSchema = Joi.alternatives(
+  resourceSchema,
+  notFoundResourceSchema
+)
+
 const documentation = `
 <p>You can find your resource ID in the url for your resource page.</p>
 <p>Example: <code>https://polymart.org/resource/polymart-plugin.323</code> - Here the Resource ID is 323.</p>`
@@ -26,7 +38,7 @@ const documentation = `
 class BasePolymartService extends BaseJsonService {
   async fetch({
     resourceId,
-    schema = resourceSchema,
+    schema = resourceFoundOrNotSchema,
     url = `https://api.polymart.org/v1/getResourceInfo/?resource_id=${resourceId}`,
   }) {
     return this._requestJson({

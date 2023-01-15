@@ -1,5 +1,6 @@
 import { starRating, metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
+import { NotFound } from '../../core/base-service/errors.js'
 import { BasePolymartService, documentation } from './polymart-base.js'
 
 export default class PolymartRatings extends BasePolymartService {
@@ -52,6 +53,9 @@ export default class PolymartRatings extends BasePolymartService {
 
   async handle({ format, resourceId }) {
     const { response } = await this.fetch({ resourceId })
+    if (!response.resource) {
+      throw new NotFound()
+    }
     return this.constructor.render({
       format,
       total: response.resource.reviews.count,
