@@ -1,6 +1,7 @@
 import { ServiceTester } from '../../tester.js'
+
 export const t = new ServiceTester({
-  id: 'GithubGistLastCommitRedirect',
+  id: 'GistLastCommitRedirect',
   title: 'Github Gist Last Commit Redirect',
   pathPrefix: '/github-gist',
 })
