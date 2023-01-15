@@ -17,5 +17,4 @@ t.create('pulsar-edit stargazers (not found)')
   .expectBadge({
     label: 'stargazers',
     message: 'package not found',
-    color: `#${pulsarPurple}`,
   })

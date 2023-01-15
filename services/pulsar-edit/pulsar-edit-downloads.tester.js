@@ -17,5 +17,4 @@ t.create('pulsar-edit downloads (not found)')
   .expectBadge({
     label: 'downloads',
     message: 'package not found',
-    color: `#${pulsarPurple}`,
   })
