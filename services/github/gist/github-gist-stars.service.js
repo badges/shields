@@ -24,7 +24,7 @@ const documentation = `${commonDocumentation}
 <p>This badge shows the number of stargazers for a gist. Gist id is accepted as input and 'gist not found' is returned if the gist is not found for the given gist id.
 </p>`
 
-export default class GithubGistStars extends GithubAuthV4Service {
+export default class GistStars extends GithubAuthV4Service {
   static category = 'social'
 
   static route = {
