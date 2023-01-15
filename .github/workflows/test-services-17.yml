@@ -6,6 +6,9 @@ on:
 jobs:
   test-services-17:
     runs-on: ubuntu-latest
+    env:
+      PAT_EXISTS: ${{ secrets.GH_PAT != '' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
