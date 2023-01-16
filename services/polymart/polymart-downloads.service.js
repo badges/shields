@@ -22,8 +22,7 @@ export default class PolymartDownloads extends BasePolymartService {
   ]
 
   static defaultBadgeData = {
-    label: 'downloads',
-    color: 'green',
+    label: 'downloads'
   }
 
   async handle({ resourceId }) {
