@@ -1,6 +1,7 @@
 import { NotFound } from '../../core/base-service/errors.js'
 import { BasePolymartService, documentation } from './polymart-base.js'
 
+const ignoredVersionPatterns = /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}/
 export default class PolymartLatestVersion extends BasePolymartService {
   static category = 'version'
 
@@ -26,9 +27,36 @@ export default class PolymartLatestVersion extends BasePolymartService {
     label: 'polymart',
   }
 
-  static render({ version }) {
+  static addv(version) {
+    version = `${version}`
+    if (version.startsWith('v') || ignoredVersionPatterns.test(version)) {
+      return version
+    } else {
+      return `v${version}`
+    }
+  }
+
+  static version(version) {
+    if (typeof version !== 'string' && typeof version !== 'number') {
+      throw new Error(`Can't generate a version color for ${version}`)
+    }
+    version = `${version}`
+    let first = version[0]
+    if (first === 'v') {
+      first = version[1]
+    }
+    if (first === '0' || /alpha|beta|snapshot|dev|pre/i.test(version)) {
+      return 'orange'
+    } else {
+      return 'blue'
+    }
+  }
+
+  static render({ version, tag, defaultLabel }) {
     return {
-      message: `${version}`,
+      label: tag ? `${defaultLabel}@${tag}` : undefined,
+      message: this.addv(version),
+      color: this.versionColor(version),
     }
   }
 
