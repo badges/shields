@@ -24,7 +24,6 @@ export default class PolymartLatestVersion extends BasePolymartService {
 
   static defaultBadgeData = {
     label: 'version',
-    color: 'blue',
   }
 
   static render({ version }) {
