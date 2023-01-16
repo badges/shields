@@ -36,7 +36,7 @@ export default class PolymartLatestVersion extends BasePolymartService {
     }
   }
 
-  static version(version) {
+  static versionColor(version) {
     if (typeof version !== 'string' && typeof version !== 'number') {
       throw new Error(`Can't generate a version color for ${version}`)
     }
