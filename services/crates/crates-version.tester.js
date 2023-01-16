@@ -9,3 +9,5 @@ t.create('version')
 t.create('version (not found)')
   .get('/not-a-real-package.json')
   .expectBadge({ label: 'crates.io', message: 'not found' })
+
+// comment
