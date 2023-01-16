@@ -22,7 +22,7 @@ export default class PolymartDownloads extends BasePolymartService {
   ]
 
   static defaultBadgeData = {
-    label: 'downloads'
+    label: 'downloads',
   }
 
   async handle({ resourceId }) {
