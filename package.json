@@ -172,7 +172,6 @@
     "cypress": "^12.3.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.2.1",
-    "danger-plugin-no-test-shortcuts": "^2.0.0",
     "deepmerge": "^4.2.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.6.0",
