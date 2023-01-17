@@ -8,7 +8,7 @@ const schema = Joi.object({
   updated_at: Joi.string().required(),
 }).required()
 
-export default class GithubGistLastCommit extends GithubAuthV3Service {
+export default class GistLastCommit extends GithubAuthV3Service {
   static category = 'activity'
   static route = { base: 'github/gist/last-commit', pattern: ':gistId' }
   static examples = [
