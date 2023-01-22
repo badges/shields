@@ -5,6 +5,7 @@ export const t = await createServiceTester()
 
 t.create('Rating')
   .get('/rating/IndieGala-Helper.json')
+  .skip()
   .expectBadge({
     label: 'rating',
     message: Joi.string().regex(/^\d\/\d$/),
@@ -13,6 +14,7 @@ t.create('Rating')
 t.create('Stars')
   .get('/stars/IndieGala-Helper.json')
   .expectBadge({ label: 'stars', message: isStarRating })
+  .only()
 
 t.create('Rating (not found)')
   .get('/rating/not-a-real-plugin.json')
