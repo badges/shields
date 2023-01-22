@@ -33,7 +33,7 @@
     "chalk": "^5.2.0",
     "check-node-version": "^4.2.1",
     "cloudflare-middleware": "^1.0.4",
-    "config": "^3.3.8",
+    "config": "^3.3.9",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.7",
     "decamelize": "^3.2.0",
