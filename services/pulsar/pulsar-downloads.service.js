@@ -8,14 +8,14 @@ const schema = Joi.object({
   downloads: nonNegativeInteger,
 })
 
-export default class PulsarEditDownloads extends BaseJsonService {
+export default class PulsarDownloads extends BaseJsonService {
   static category = 'downloads'
 
-  static route = { base: 'pulsar-edit/downloads', pattern: ':packageName' }
+  static route = { base: 'pulsar/downloads', pattern: ':packageName' }
 
   static examples = [
     {
-      title: 'Pulsar-Edit Downloads',
+      title: 'Pulsar Downloads',
       namedParams: { packageName: 'hey-pane' },
       staticPreview: this.render({ downloadCount: 1000 }),
     },

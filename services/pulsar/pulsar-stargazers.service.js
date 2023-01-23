@@ -8,14 +8,14 @@ const schema = Joi.object({
   stargazers_count: nonNegativeInteger,
 })
 
-export default class PulsarEditStargazers extends BaseJsonService {
+export default class PulsarStargazers extends BaseJsonService {
   static category = 'rating'
 
-  static route = { base: 'pulsar-edit/stargazers', pattern: ':packageName' }
+  static route = { base: 'pulsar/stargazers', pattern: ':packageName' }
 
   static examples = [
     {
-      title: 'Pulsar-Edit Stargazers',
+      title: 'Pulsar Stargazers',
       namedParams: { packageName: 'hey-pane' },
       staticPreview: this.render({ stargazerCount: 1000 }),
     },

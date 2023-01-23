@@ -4,17 +4,17 @@ import { pulsarPurple } from './pulsar-helper.js'
 
 export const t = await createServiceTester()
 
-t.create('pulsar-edit downloads (valid)')
+t.create('pulsar stargazers (valid)')
   .get('/hey-pane.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'stargazers',
     message: isMetric,
     color: `#${pulsarPurple}`,
   })
 
-t.create('pulsar-edit downloads (not found)')
+t.create('pulsar stargazers (not found)')
   .get('/test-package.json')
   .expectBadge({
-    label: 'downloads',
+    label: 'stargazers',
     message: 'package not found',
   })
