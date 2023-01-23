@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { BaseService, BaseJsonService, NotFound } from '../index.js'
+import { BaseService, BaseJsonService } from '../index.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
@@ -51,8 +50,19 @@ class TwitterUrl extends BaseService {
   }
 }
 
-const schema = Joi.any()
+/*
+This badge is unusual.
 
+We don't usually host badges that don't show any dynamic information.
+Also when an upstream API is removed, we usually deprecate/remove badges
+according to the process in
+https://github.com/badges/shields/blob/master/doc/deprecating-badges.md
+
+In the case of twitter, we decided to provide a static fallback instead
+due to how widely used the badge was. See
+https://github.com/badges/shields/issues/8837
+for related discussion.
+*/
 class TwitterFollow extends BaseJsonService {
   static category = 'social'
 
@@ -65,14 +75,14 @@ class TwitterFollow extends BaseJsonService {
     {
       title: 'Twitter Follow',
       namedParams: {
-        user: 'espadrine',
+        user: 'shields_io',
       },
       queryParams: { label: 'Follow' },
       // hard code the static preview
       // because link[] is not allowed in examples
       staticPreview: {
-        label: 'Follow',
-        message: '393',
+        label: 'Follow @shields_io',
+        message: '',
         style: 'social',
       },
     },
@@ -82,10 +92,10 @@ class TwitterFollow extends BaseJsonService {
     namedLogo: 'twitter',
   }
 
-  static render({ user, followers }) {
+  static render({ user }) {
     return {
       label: `follow @${user}`,
-      message: metric(followers),
+      message: '',
       style: 'social',
       link: [
         `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
@@ -96,20 +106,8 @@ class TwitterFollow extends BaseJsonService {
     }
   }
 
-  async fetch({ user }) {
-    return this._requestJson({
-      schema,
-      url: 'http://cdn.syndication.twimg.com/widgets/followbutton/info.json',
-      options: { searchParams: { screen_names: user } },
-    })
-  }
-
   async handle({ user }) {
-    const data = await this.fetch({ user })
-    if (!Array.isArray(data) || data.length === 0) {
-      throw new NotFound({ prettyMessage: 'invalid user' })
-    }
-    return this.constructor.render({ user, followers: data[0].followers_count })
+    return this.constructor.render({ user })
   }
 }
 
