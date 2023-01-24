@@ -10,10 +10,7 @@ t.create('Followers')
   .expectBadge({
     label: 'follow @shields_io',
     message: '',
-    link: [
-      'https://twitter.com/intent/follow?screen_name=shields_io',
-      'https://twitter.com/shields_io/followers',
-    ],
+    link: ['https://twitter.com/intent/follow?screen_name=shields_io'],
   })
 
 t.create('URL')
