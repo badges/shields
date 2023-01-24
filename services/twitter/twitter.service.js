@@ -101,7 +101,6 @@ class TwitterFollow extends BaseJsonService {
         `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
           user
         )}`,
-        `https://twitter.com/${encodeURIComponent(user)}/followers`,
       ],
     }
   }
