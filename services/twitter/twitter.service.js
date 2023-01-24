@@ -32,6 +32,8 @@ class TwitterUrl extends BaseService {
     },
   ]
 
+  static _cacheLength = 86400
+
   static defaultBadgeData = {
     namedLogo: 'twitter',
   }
@@ -87,6 +89,8 @@ class TwitterFollow extends BaseJsonService {
       },
     },
   ]
+
+  static _cacheLength = 86400
 
   static defaultBadgeData = {
     namedLogo: 'twitter',
