@@ -24,7 +24,7 @@
     "@fontsource/lato": "^4.5.10",
     "@fontsource/lekton": "^4.5.11",
     "@renovate/pep440": "^1.0.0",
-    "@renovatebot/ruby-semver": "^1.1.8",
+    "@renovatebot/ruby-semver": "^2.1.4",
     "@sentry/node": "^7.31.1",
     "@shields_io/camp": "^18.1.1",
     "badge-maker": "file:badge-maker",
