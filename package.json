@@ -234,7 +234,7 @@
     "sinon": "^15.0.1",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.10",
-    "start-server-and-test": "1.15.2",
+    "start-server-and-test": "1.15.3",
     "styled-components": "^5.3.6",
     "ts-mocha": "^10.0.0",
     "tsd": "^0.25.0",
