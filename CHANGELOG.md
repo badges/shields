@@ -4,6 +4,15 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-02-01
+
+- replace [twitter] badge with static fallback [#8842](https://github.com/badges/shields/issues/8842)
+- Add various [Polymart] badges [#8811](https://github.com/badges/shields/issues/8811)
+- update [githubpipenv] tests/examples [#8797](https://github.com/badges/shields/issues/8797)
+- deprecate [apm] service [#8773](https://github.com/badges/shields/issues/8773)
+- deprecate lgtm [#8771](https://github.com/badges/shields/issues/8771)
+- Dependency updates
+
 ## server-2023-01-01
 
 - Breaking change: Routes for GitHub workflows badge have changed. See https://github.com/badges/shields/issues/8671 for more details
