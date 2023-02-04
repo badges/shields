@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { NotFound } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseStatsChessDotComService } from './chesscom-base.js'
+import { BaseChessComStatsService } from './chesscom-base.js'
 
 const rapidSchema = Joi.object({
   chess_rapid: Joi.object({
@@ -27,7 +27,7 @@ const blitzSchema = Joi.object({
   }).required(),
 }).required()
 
-export default class RatingChessDotCom extends BaseStatsChessDotComService {
+export default class ChessComRating extends BaseChessComStatsService {
   static route = { base: 'chesscom/rating', pattern: ':gametype/:username' }
 
   static examples = [
@@ -70,7 +70,9 @@ export default class RatingChessDotCom extends BaseStatsChessDotComService {
       })
       return this.constructor.render({ stats })
     } else {
-      throw new NotFound({ prettyMessage: 'game type not found' })
+      throw new NotFound({
+        prettyMessage: 'invalid game type, try rapid or bullet or blitz',
+      })
     }
   }
 }

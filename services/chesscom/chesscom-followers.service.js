@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BasePlayerChessDotComService } from './chesscom-base.js'
+import { BaseChessComPlayerService } from './chesscom-base.js'
 
 const schema = Joi.object({
   followers: nonNegativeInteger,
 }).required()
 
-export default class FollowersChessDotCom extends BasePlayerChessDotComService {
+export default class ChessComFollowers extends BaseChessComPlayerService {
   static route = { base: 'chesscom/followers', pattern: ':username' }
   static examples = [
     {

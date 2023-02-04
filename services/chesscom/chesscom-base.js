@@ -1,6 +1,6 @@
 import { BaseJsonService } from '../index.js'
 
-class BaseStatsChessDotComService extends BaseJsonService {
+class BaseChessComStatsService extends BaseJsonService {
   static category = 'rating'
 
   static defaultBadgeData = { label: 'rating' }
@@ -19,13 +19,10 @@ class BaseStatsChessDotComService extends BaseJsonService {
   }
 }
 
-class BasePlayerChessDotComService extends BaseJsonService {
+class BaseChessComPlayerService extends BaseJsonService {
   static category = 'social'
 
   static defaultBadgeData = { label: 'followers' }
-
-  // Doc this API. From https://www.chess.com/news/view/published-data-api
-  // example: https://api.chess.com/pub/player/hikaru/stats
 
   async fetch({ username, schema }) {
     return this._requestJson({
@@ -38,4 +35,4 @@ class BasePlayerChessDotComService extends BaseJsonService {
   }
 }
 
-export { BaseStatsChessDotComService, BasePlayerChessDotComService }
+export { BaseChessComStatsService, BaseChessComPlayerService }
