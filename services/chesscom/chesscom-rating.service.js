@@ -35,7 +35,7 @@ export default class ChessComRating extends BaseChessComStatsService {
       title: 'Chess.com rating',
       namedParams: {
         gametype: 'rapid',
-        username: 'alexandresanlim',
+        username: 'hikaru',
       },
       staticPreview: this.render({ stats: { last: { rating: 400 } } }),
       keywords: ['game', 'board game'],
