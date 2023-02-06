@@ -24,6 +24,7 @@ plugins:
   - chai-friendly
   - jsdoc
   - mocha
+  - icedfrisby
   - no-extension-in-require
   - sort-class-members
   - import
@@ -113,8 +114,15 @@ overrides:
       mocha: true
     rules:
       mocha/no-exclusive-tests: 'error'
+      mocha/no-skipped-tests: 'error'
       mocha/no-mocha-arrows: 'error'
       mocha/prefer-arrow-callback: 'error'
+
+  - files:
+      - 'services/**/*.tester.js'
+    rules:
+      icedfrisby/no-exclusive-tests: 'error'
+      icedfrisby/no-skipped-tests: 'error'
 
 rules:
   # Disable some rules from eslint:recommended.
