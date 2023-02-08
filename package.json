@@ -26,7 +26,7 @@
     "@renovate/pep440": "^1.0.0",
     "@renovatebot/ruby-semver": "^2.1.8",
     "@sentry/node": "^7.36.0",
-    "@shields_io/camp": "^18.1.1",
+    "@shields_io/camp": "^18.1.2",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.2",
     "camelcase": "^7.0.1",
