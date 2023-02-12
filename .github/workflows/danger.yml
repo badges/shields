@@ -11,7 +11,7 @@ permissions:
 jobs:
   danger:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]' && github.actor != 'repo-ranger[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
