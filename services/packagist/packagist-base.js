@@ -164,14 +164,12 @@ class BasePackagistService extends BaseJsonService {
     return versions.filter(version => version.version === release)[0]
   }
 }
-const customServerDocumentationFragment = `
-    <p>
+const customServerDocumentationFragment = `<p>
         Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.
     </p>
     `
 
-const cacheDocumentationFragment = `
-  <p>
+const cacheDocumentationFragment = `<p>
       Displayed data may be slightly outdated.
       Due to performance reasons, data fetched from packagist JSON API is cached for twelve hours on packagist infrastructure.
       For more information please refer to <a target="_blank" href="https://packagist.org/apidoc#get-package-data">official packagist documentation</a>.

@@ -18,7 +18,7 @@ const documentation = `
 </p>
 <img
   src="https://user-images.githubusercontent.com/7288322/46567027-27c83400-c987-11e8-9850-ab67d987202f.png"
-  alt="Right-Click and 'Copy Page URL'">
+  alt="Right-Click and 'Copy Page URL'" />
 `
 
 const steamCollectionSchema = Joi.object({
