@@ -41,6 +41,7 @@ class GithubApiProvider {
     onTokenInvalidated = tokenString => {},
     globalToken,
     reserveFraction = 0.25,
+    restApiVersion,
   }) {
     Object.assign(this, {
       baseUrl,
@@ -55,6 +56,7 @@ class GithubApiProvider {
       this.searchTokens = new TokenPool({ batchSize: 5 })
       this.graphqlTokens = new TokenPool({ batchSize: 25 })
     }
+    this.restApiVersion = restApiVersion
   }
 
   addToken(tokenString) {
@@ -175,6 +177,7 @@ class GithubApiProvider {
         headers: {
           'User-Agent': userAgent,
           Authorization: `token ${tokenString}`,
+          'X-GitHub-Api-Version': this.restApiVersion,
           ...options.headers,
         },
       },

@@ -22,6 +22,10 @@ if (data.stats.passes > 0) {
 if (data.stats.failures > 0) {
   process.stdout.write(`✖ ${data.stats.failures} failed\n\n`)
 }
+if (data.stats.pending > 0) {
+  process.stdout.write(`● ${data.stats.pending} pending\n\n`)
+  process.exit(2)
+}
 
 if (data.stats.failures > 0) {
   for (const test of data.tests) {

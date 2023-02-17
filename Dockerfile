@@ -34,4 +34,4 @@ COPY --from=Builder /usr/src/app /usr/src/app
 
 CMD node server
 
-EXPOSE 80
+EXPOSE 80 443

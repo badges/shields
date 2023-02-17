@@ -31,11 +31,11 @@ const documentation = `
   is a set of tools to analyze your website
   and inform you if you are utilizing the many available methods to secure it.
 </p>
-</p>
+<p>
   By default the scan result is hidden from the public result list.
   You can activate the publication of the scan result
   by setting the <code>publish</code> parameter.
-<p>
+</p>
 <p>
   The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
   If you need to force invalidating the cache,

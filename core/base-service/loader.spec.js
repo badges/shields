@@ -2,7 +2,11 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { loadServiceClasses, InvalidService } from './loader.js'
+import {
+  loadServiceClasses,
+  getServicePaths,
+  InvalidService,
+} from './loader.js'
 chai.use(chaiAsPromised)
 
 const { expect } = chai
@@ -63,5 +67,17 @@ describe('loadServiceClasses function', function () {
         path.join(fixturesDir, 'valid-class.fixture.js'),
       ])
     ).to.eventually.have.length(5)
+  })
+})
+
+describe('getServicePaths', function () {
+  // these tests just make sure we discover a
+  // plausibly large number of .service and .tester files
+  it('finds a non-zero number of services in the project', function () {
+    expect(getServicePaths('*.service.js')).to.have.length.above(400)
+  })
+
+  it('finds a non-zero number of testers in the project', function () {
+    expect(getServicePaths('*.tester.js')).to.have.length.above(400)
   })
 })
