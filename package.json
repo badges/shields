@@ -54,8 +54,10 @@
     "lodash.groupby": "^4.6.0",
     "lodash.times": "^4.3.2",
     "node-env-flag": "^0.1.0",
+    "node-pg-migrate": "^6.2.2",
     "parse-link-header": "^2.0.0",
     "path-to-regexp": "^6.2.1",
+    "pg": "^8.9.0",
     "pretty-bytes": "^6.1.0",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^14.1.1",
@@ -117,7 +119,8 @@
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
-    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME"
+    "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME",
+    "migrate": "node scripts/write-migrations-config.js > migrations-config.json && node-pg-migrate --config-file=migrations-config.json"
   },
   "lint-staged": {
     "**/*.@(js|ts|tsx)": [
