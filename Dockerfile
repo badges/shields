@@ -30,7 +30,7 @@ LABEL fly.version=$version
 ENV NODE_ENV production
 
 WORKDIR /usr/src/app
-COPY --from=Builder /usr/src/app /usr/src/app
+COPY --from=Builder --chown=0:0 /usr/src/app /usr/src/app
 
 CMD node server
 
