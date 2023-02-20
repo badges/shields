@@ -16,10 +16,13 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 16
+
       - name: Build
-        run: |
-          npm ci
-          npm run build-docs
+        run: npm run build-docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
