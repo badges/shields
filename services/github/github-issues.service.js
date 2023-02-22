@@ -1,110 +1,404 @@
+import gql from 'graphql-tag'
 import Joi from 'joi'
-import { isMetric, isMetricOpenIssues } from '../test-validators.js'
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { metric } from '../text-formatters.js'
+import { nonNegativeInteger } from '../validators.js'
+import { GithubAuthV4Service } from './github-auth-service.js'
+import { documentation, transformErrors } from './github-helpers.js'
 
-t.create('GitHub closed pull requests')
-  .get('/issues-pr-closed/badges/shields.json')
-  .expectBadge({
-    label: 'pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/
-    ),
-  })
+const issueCountSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      issues: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
-t.create('GitHub closed pull requests raw')
-  .get('/issues-pr-closed-raw/badges/shields.json')
-  .expectBadge({
-    label: 'closed pull requests',
-    message: isMetric,
-  })
+const pullRequestCountSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      pullRequests: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
-t.create('GitHub pull requests')
-  .get('/issues-pr/badges/shields.json')
-  .expectBadge({
-    label: 'pull requests',
-    message: isMetricOpenIssues,
-  })
+const isPRVariant = {
+  'issues-pr': true,
+  'issues-pr-closed': true,
+}
 
-t.create('GitHub pull requests raw')
-  .get('/issues-pr-raw/badges/shields.json')
-  .expectBadge({
-    label: 'open pull requests',
-    message: isMetric,
-  })
+const isClosedVariant = {
+  'issues-closed': true,
+  'issues-pr-closed': true,
+}
 
-t.create('GitHub closed issues')
-  .get('/issues-closed/badges/shields.json')
-  .expectBadge({
-    label: 'issues',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/
-    ),
-  })
+export default class GithubIssues extends GithubAuthV4Service {
+  static category = 'issue-tracking'
+  static route = {
+    base: 'github',
+    pattern:
+      ':variant(issues|issues-closed|issues-pr|issues-pr-closed):raw(-raw)?/:user/:repo/:label*',
+  }
 
-t.create('GitHub closed issues raw')
-  .get('/issues-closed-raw/badges/shields.json')
-  .expectBadge({
-    label: 'closed issues',
-    message: isMetric,
-  })
+  static examples = [
+    {
+      title: 'GitHub issues',
+      pattern: 'issues/:user/:repo',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+      },
+      staticPreview: {
+        label: 'issues',
+        message: '167 open',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub issues',
+      pattern: 'issues-raw/:user/:repo',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+      },
+      staticPreview: {
+        label: 'open issues',
+        message: '167',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub issues by-label',
+      pattern: 'issues/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge issues',
+        message: '110 open',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub issues by-label',
+      pattern: 'issues-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'open service-badge issues',
+        message: '110',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub closed issues',
+      pattern: 'issues-closed/:user/:repo',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+      },
+      staticPreview: {
+        label: 'issues',
+        message: '899 closed',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub closed issues',
+      pattern: 'issues-closed-raw/:user/:repo',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+      },
+      staticPreview: {
+        label: 'closed issues',
+        message: '899',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub closed issues by-label',
+      pattern: 'issues-closed/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge issues',
+        message: '452 closed',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub closed issues by-label',
+      pattern: 'issues-closed-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'closed service-badge issues',
+        message: '452',
+        color: 'yellow',
+      },
+      documentation,
+    },
+    {
+      title: 'GitHub pull requests',
+      pattern: 'issues-pr/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'pull requests',
+        message: '136 open',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub pull requests',
+      pattern: 'issues-pr-raw/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'open pull requests',
+        message: '136',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests',
+      pattern: 'issues-pr-closed/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'pull requests',
+        message: '7k closed',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests',
+      pattern: 'issues-pr-closed-raw/:user/:repo',
+      namedParams: {
+        user: 'cdnjs',
+        repo: 'cdnjs',
+      },
+      staticPreview: {
+        label: 'closed pull requests',
+        message: '7k',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub pull requests by-label',
+      pattern: 'issues-pr/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge pull requests',
+        message: '8 open',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub pull requests by-label',
+      pattern: 'issues-pr-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'open service-badge pull requests',
+        message: '8',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests by-label',
+      pattern: 'issues-pr-closed/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'service-badge pull requests',
+        message: '835 closed',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+    {
+      title: 'GitHub closed pull requests by-label',
+      pattern: 'issues-pr-closed-raw/:user/:repo/:label',
+      namedParams: {
+        user: 'badges',
+        repo: 'shields',
+        label: 'service-badge',
+      },
+      staticPreview: {
+        label: 'closed service-badge pull requests',
+        message: '835',
+        color: 'yellow',
+      },
+      keywords: ['pullrequest', 'pr'],
+      documentation,
+    },
+  ]
 
-t.create('GitHub open issues').get('/issues/badges/shields.json').expectBadge({
-  label: 'issues',
-  message: isMetricOpenIssues,
-})
+  static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-t.create('GitHub open issues raw')
-  .get('/issues-raw/badges/shields.json')
-  .expectBadge({ label: 'open issues', message: isMetric })
+  static render({ isPR, isClosed, issueCount, raw, label }) {
+    const state = isClosed ? 'closed' : 'open'
 
-t.create('GitHub open issues by label is > zero')
-  .get('/issues/badges/shields/service-badge.json')
-  .expectBadge({
-    label: 'service-badge issues',
-    message: isMetricOpenIssues,
-  })
+    let labelPrefix = ''
+    let messageSuffix = ''
+    if (raw) {
+      labelPrefix = `${state} `
+    } else {
+      messageSuffix = state
+    }
 
-t.create('GitHub open issues by multi-word label is > zero')
-  .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
-  .expectBadge({
-    label: '"App - Cockatrice" issues',
-    message: isMetricOpenIssues,
-  })
+    const isGhLabelMultiWord = label && label.includes(' ')
+    const labelText = label
+      ? `${isGhLabelMultiWord ? `"${label}"` : label} `
+      : ''
+    const labelSuffix = isPR ? 'pull requests' : 'issues'
 
-t.create('GitHub open issues by label (raw)')
-  .get('/issues-raw/badges/shields/service-badge.json')
-  .expectBadge({
-    label: 'open service-badge issues',
-    message: isMetric,
-  })
+    return {
+      label: `${labelPrefix}${labelText}${labelSuffix}`,
+      message: `${metric(issueCount)}${
+        messageSuffix ? ' ' : ''
+      }${messageSuffix}`,
+      color: issueCount > 0 ? 'yellow' : 'brightgreen',
+    }
+  }
 
-// https://github.com/badges/shields/issues/1870
-t.create('GitHub open issues by label including slash character (raw)')
-  .get('/issues-raw/calebcartwright/shields-service-test-target/@foo/bar.json')
-  .expectBadge({
-    label: 'open @foo/bar issues',
-    // Not always > 0.
-    message: Joi.alternatives(isMetric, Joi.equal('0')),
-  })
+  async fetch({ isPR, isClosed, user, repo, label }) {
+    const commonVariables = {
+      user,
+      repo,
+      labels: label ? [label] : undefined,
+    }
+    if (isPR) {
+      const {
+        data: {
+          repository: {
+            pullRequests: { totalCount },
+          },
+        },
+      } = await this._requestGraphql({
+        query: gql`
+          query (
+            $user: String!
+            $repo: String!
+            $states: [PullRequestState!]
+            $labels: [String!]
+          ) {
+            repository(owner: $user, name: $repo) {
+              pullRequests(states: $states, labels: $labels) {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          ...commonVariables,
+          states: isClosed ? ['MERGED', 'CLOSED'] : ['OPEN'],
+        },
+        schema: pullRequestCountSchema,
+        transformErrors,
+      })
+      return { issueCount: totalCount }
+    } else {
+      const {
+        data: {
+          repository: {
+            issues: { totalCount },
+          },
+        },
+      } = await this._requestGraphql({
+        query: gql`
+          query (
+            $user: String!
+            $repo: String!
+            $states: [IssueState!]
+            $labels: [String!]
+          ) {
+            repository(owner: $user, name: $repo) {
+              issues(states: $states, labels: $labels) {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          ...commonVariables,
+          states: isClosed ? ['CLOSED'] : ['OPEN'],
+        },
+        schema: issueCountSchema,
+        transformErrors,
+      })
+      return { issueCount: totalCount }
+    }
+  }
 
-t.create('GitHub open issues (repo not found)')
-  .get('/issues-raw/badges/helmets.json')
-  .expectBadge({
-    label: 'issues',
-    message: 'repo not found',
-  })
-
-t.create('GitHub open pull requests by label')
-  .get('/issues-pr/badges/shields/service-badge.json')
-  .expectBadge({
-    label: 'service-badge pull requests',
-    message: isMetricOpenIssues,
-  })
-
-t.create('GitHub open pull requests by label (raw)')
-  .get('/issues-pr-raw/badges/shields/service-badge.json')
-  .expectBadge({
-    label: 'open service-badge pull requests',
-    message: isMetric,
-  })
+  async handle({ variant, raw, user, repo, label }) {
+    const isPR = isPRVariant[variant]
+    const isClosed = isClosedVariant[variant]
+    const { issueCount } = await this.fetch({
+      isPR,
+      isClosed,
+      user,
+      repo,
+      label,
+    })
+    return this.constructor.render({
+      isPR,
+      isClosed,
+      issueCount,
+      raw,
+      label,
+    })
+  }
+}

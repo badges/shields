@@ -19,45 +19,6 @@ t.create('GitHub closed pull requests raw')
     message: isMetric,
   })
 
-t.create('GitHub merged pull requests')
-  .get('/issues-pr-merged/badges/shields.json')
-  .expectBadge({
-    label: 'pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) merged$/
-    ),
-  })
-
-t.create('GitHub merged pull requests raw')
-  .get('/issues-pr-merged-raw/badges/shields.json')
-  .expectBadge({
-    label: 'merged pull requests',
-    message: isMetric,
-  })
-
-t.create('GitHub merged pull requests by label (raw)')
-  .get('/issues-pr-merged-raw/badges/shields/service-badge.json')
-  .expectBadge({
-    label: 'merged service-badge pull requests',
-    message: isMetric,
-  })
-
-t.create('GitHub closed unmerged pull requests')
-  .get('/issues-pr-closed-unmerged/badges/shields.json')
-  .expectBadge({
-    label: 'pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed unmerged$/
-    ),
-  })
-
-t.create('GitHub closed unmerged pull requests raw')
-  .get('/issues-pr-closed-unmerged-raw/badges/shields.json')
-  .expectBadge({
-    label: 'closed unmerged pull requests',
-    message: isMetric,
-  })
-
 t.create('GitHub pull requests')
   .get('/issues-pr/badges/shields.json')
   .expectBadge({
