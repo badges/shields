@@ -80,8 +80,7 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
         variant: 'prs',
       },
       queryParams: {
-        query:
-          'is:closed review:approved label:npm-package label:bug author:app/sentry-io',
+        query: 'is:closed label:npm-package label:bug',
         withRawSuffix: null,
       },
       staticPreview: {
@@ -100,10 +99,13 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
 
     let labelPrefix = ''
     let messageSuffix = ''
-    if (withRawSuffix) {
+
+    if (withRawSuffix !== undefined) {
+      labelPrefix = ''
       messageSuffix = state
     } else {
       labelPrefix = state
+      messageSuffix = ''
     }
 
     const extractedText = extractCategoryFromQuery('label', query)
@@ -140,6 +142,8 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
       isClosed,
     }
 
+    // todo: what about authors and reviews?
+
     if (isPR) {
       const {
         data: {
@@ -154,16 +158,9 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
             $repo: String!
             $states: [PullRequestState!]
             $labels: [String!]
-            $authors: [String!]
-            $reviews: [String!]
           ) {
             repository(owner: $user, name: $repo) {
-              pullRequests(
-                states: $states
-                labels: $labels
-                authors: $authors
-                reviews: $reviews
-              ) {
+              pullRequests(states: $states, labels: $labels) {
                 totalCount
               }
             }
