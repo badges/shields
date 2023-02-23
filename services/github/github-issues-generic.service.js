@@ -41,7 +41,7 @@ function extractCategoryFromQuery(category, query) {
 
   return query
     .split(' ')
-    .filter(word => word.contains(`${category}:`))
+    .filter(word => word.includes(`${category}:`))
     .map(label => label.replace(`${category}:`, ''))
 }
 
@@ -56,31 +56,37 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
   static examples = [
     {
       title: 'GitHub issues',
-      pattern: 'issues-generic/:user/:repo/issues',
+      pattern: 'issues-generic/:user/:repo/:variant',
       namedParams: {
         user: 'badges',
         repo: 'shields',
+        variant: 'issues',
       },
-      queryParams: { query: 'is:open is:issue' },
+      queryParams: {
+        query: 'is:open label:npm-package label:bug',
+      },
       staticPreview: {
         label: 'open issues',
         message: '167',
-        color: 'yellow',
       },
       documentation,
     },
     {
       title: 'GitHub closed pull requests',
-      pattern: 'issues-generic/:user/:repo/prs',
+      pattern: 'issues-generic/:user/:repo/:variant',
       namedParams: {
         user: 'badges',
         repo: 'shields',
+        variant: 'prs',
       },
-      queryParams: { query: 'is:closed is:pr', withRawSuffix: null },
+      queryParams: {
+        query:
+          'is:closed review:approved label:npm-package label:bug author:app/sentry-io',
+        withRawSuffix: null,
+      },
       staticPreview: {
         label: 'pull requests',
         message: '7k closed',
-        color: 'yellow',
       },
       keywords: ['pullrequest', 'pr'],
       documentation,
@@ -97,20 +103,24 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
     if (withRawSuffix) {
       messageSuffix = state
     } else {
-      labelPrefix = `${state} `
+      labelPrefix = state
     }
 
-    const labelText = `"${extractCategoryFromQuery('label', query)}"`
+    const extractedText = extractCategoryFromQuery('label', query)
 
-    console.log(labelText)
+    const labelText =
+      extractedText.length > 0
+        ? `"${extractCategoryFromQuery('label', query)}"`
+        : ''
+
     const labelSuffix = isPR ? 'pull requests' : 'issues'
 
     return {
-      label: `${labelPrefix}${labelText}${labelSuffix}`,
+      label: `${labelPrefix} ${labelText} ${labelSuffix}`,
       message: `${metric(issueCount)}${
         messageSuffix ? ' ' : ''
       }${messageSuffix}`,
-      color: issueCount > 0 ? 'yellow' : 'brightgreen',
+      color: 'informational',
     }
   }
 
@@ -124,11 +134,12 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
     const commonVariables = {
       user,
       repo,
-      labels: labels ? [labels] : undefined,
-      authors: authors ? [authors] : undefined,
-      reviews: reviews ? [reviews] : undefined,
+      labels: labels || undefined,
+      authors: authors || undefined,
+      reviews: reviews || undefined,
       isClosed,
     }
+
     if (isPR) {
       const {
         data: {
@@ -180,16 +191,9 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
             $repo: String!
             $states: [IssueState!]
             $labels: [String!]
-            $authors: [String!]
-            $reviews: [String!]
           ) {
             repository(owner: $user, name: $repo) {
-              issues(
-                states: $states
-                labels: $labels
-                authors: $authors
-                reviews: $reviews
-              ) {
+              issues(states: $states, labels: $labels) {
                 totalCount
               }
             }
@@ -206,10 +210,10 @@ export default class GithubIssuesGeneric extends GithubAuthV4Service {
     }
   }
 
-  async handle({ user, repo, variant, query, withRawSuffix }) {
+  async handle({ user, repo, variant }, { query, withRawSuffix }) {
     const isPR = isPRVariant[variant]
-    const isClosed = query ? query.includes('is:closed') : null
-    console.log('isClosed', isClosed)
+    const isClosed = query?.includes('is:closed')
+
     const { issueCount } = await this.fetch({
       isPR,
       user,
