@@ -84,7 +84,6 @@ describe('Redis token persistence', function () {
         const toRemove = expected.pop()
 
         await persistence.initialize()
-
         await persistence.noteTokenRemoved(toRemove)
 
         const savedTokens = await redis.smembers(key)
