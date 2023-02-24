@@ -207,7 +207,7 @@
     "icedfrisby-nock": "^2.1.0",
     "is-svg": "^4.3.2",
     "js-yaml-loader": "^1.2.2",
-    "jsdoc": "^4.0.1",
+    "jsdoc": "^4.0.2",
     "lint-staged": "^13.1.2",
     "lodash.debounce": "^4.0.8",
     "lodash.difference": "^4.5.0",
