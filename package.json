@@ -159,7 +159,7 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "5.1.26",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.46.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-preset-gatsby": "^2.22.0",
