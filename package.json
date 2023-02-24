@@ -172,7 +172,7 @@
     "child-process-promise": "^2.2.1",
     "clipboard-copy": "^4.0.1",
     "concurrently": "^7.6.0",
-    "cypress": "^12.5.1",
+    "cypress": "^12.6.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.2.3",
     "deepmerge": "^4.3.0",
