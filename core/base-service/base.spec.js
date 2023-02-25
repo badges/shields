@@ -440,14 +440,21 @@ describe('BaseService', function () {
       )
 
       const url = 'some-url'
-      const options = { headers: { Cookie: 'some-cookie' } }
+      const options = {
+        headers: { Cookie: 'some-cookie' },
+        searchParams: { param1: 'foobar', param2: undefined },
+      }
       await serviceInstance._request({ url, options })
 
       expect(trace.logTrace).to.be.calledWithMatch(
         'fetch',
         sinon.match.string,
         'Request',
-        `${url}\n${JSON.stringify(options, null, 2)}`
+        `${url}?param1=foobar\n${JSON.stringify(
+          { headers: options.headers },
+          null,
+          2
+        )}`
       )
       expect(trace.logTrace).to.be.calledWithMatch(
         'fetch',

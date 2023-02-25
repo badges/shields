@@ -18,7 +18,6 @@ const documentation = `
     badge can be added to the project readme to encourage potential
     contributors to review the suggested issues and to celebrate the
     contributions that have already been made.
-
     The badge displays three pieces of information:
     <ul>
       <li>
@@ -33,7 +32,6 @@ const documentation = `
       </li>
       <li>The number of days left of October.</li>
     </ul>
-
   </p>
 
   ${githubDocumentation}

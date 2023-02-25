@@ -27,7 +27,6 @@ export default function Search({
       <form action="javascript:void 0" autoComplete="off">
         <BlockInput
           autoComplete="off"
-          autoFocus
           onChange={onQueryChanged}
           placeholder="search"
         />
