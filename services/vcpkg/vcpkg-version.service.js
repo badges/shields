@@ -4,9 +4,20 @@ import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
 import { renderVersionBadge } from '../version.js'
 import { NotFound } from '../index.js'
 
-const vcpkgManifestSchema = Joi.object({
-  version: Joi.string().required(),
-}).required()
+const vcpkgManifestSchema = Joi.alternatives().try(
+  Joi.object({
+    version: Joi.string().required(),
+  }).required(),
+  Joi.object({
+    'version-date': Joi.string().required(),
+  }).required(),
+  Joi.object({
+    'version-semver': Joi.string().required(),
+  }).required(),
+  Joi.object({
+    'version-string': Joi.string().required(),
+  }).required()
+)
 
 export default class VcpkgVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
@@ -29,14 +40,23 @@ export default class VcpkgVersion extends ConditionalGithubAuthV3Service {
 
   async handle({ portName }) {
     try {
-      const { version } = await fetchJsonFromRepo(this, {
+      const payload = await fetchJsonFromRepo(this, {
         schema: vcpkgManifestSchema,
         user: 'microsoft',
         repo: 'vcpkg',
         branch: 'master',
         filename: `ports/${portName}/vcpkg.json`,
       })
-      return this.constructor.render({ version })
+      if (payload['version-date']) {
+        return this.constructor.render({ version: payload['version-date'] })
+      }
+      if (payload['version-semver']) {
+        return this.constructor.render({ version: payload['version-semver'] })
+      }
+      if (payload['version-string']) {
+        return this.constructor.render({ version: payload['version-string'] })
+      }
+      return this.constructor.render({ version: payload.version })
     } catch (error) {
       if (error instanceof NotFound) {
         throw new NotFound({
