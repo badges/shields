@@ -134,7 +134,7 @@ Prettier before a commit by default.
 When adding or changing a service [please write tests][service-tests], and ensure the [title of your Pull Requests follows the required conventions](#running-service-tests-in-pull-requests) to ensure your tests are executed.
 When changing other code, please add unit tests.
 
-The integration tests are not run by default. For most contributions it is OK to skip these unless you're working directly on the code for storing the GitHub token pool in posgres/redis.
+The integration tests are not run by default. For most contributions it is OK to skip these unless you're working directly on the code for storing the GitHub token pool in postgres/redis.
 
 To run the integration tests:
 
