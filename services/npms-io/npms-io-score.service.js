@@ -23,7 +23,7 @@ export default class NpmsIOScore extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final|maintenance|popularity|quality)-score/:scope(@.+)?/:packageName',
+      'score/:type(final|maintenance|popularity|quality)/:scope(@.+)?/:packageName',
   }
 
   static examples = [
