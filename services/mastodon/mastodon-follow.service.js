@@ -14,7 +14,7 @@ const queryParamSchema = Joi.object({
 
 const documentation = `
 <p>To find your user id, you can use <a link target="_blank" href="https://prouser123.me/misc/mastodon-userid-lookup.html">this tool</a>.</p><br>
-<p>Alternatively you can make a request to <code><br>https://your.mastodon.server/.well-known/webfinger?resource=acct:{user}@{domain}</br></code></p>
+<p>Alternatively you can make a request to <code>https://your.mastodon.server/.well-known/webfinger?resource=acct:{user}@{domain}</code></p>
 <p>Failing that, you can also visit your profile page, where your user ID will be in the header in a tag like this: <code>&lt;link href='https://your.mastodon.server/api/salmon/{your-user-id}' rel='salmon'></code></p>
 `
 

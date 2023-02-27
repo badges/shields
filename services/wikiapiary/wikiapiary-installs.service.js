@@ -13,7 +13,6 @@ const documentation = `
       <li><code>ParserFunctions</code></li>
       <li><code>parserFunctions</code></li>
     </ul>
-
     However, the following are invalid:
     <ul>
       <li><code>parserfunctions</code></li>

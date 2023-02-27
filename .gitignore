@@ -117,3 +117,6 @@ service-definitions.yml
 
 # Flamebearer
 flamegraph.html
+
+# config file for node-pg-migrate
+migrations-config.json
