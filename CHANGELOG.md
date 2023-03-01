@@ -4,6 +4,21 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-03-01
+
+- remove migrate-token-pool.js [#8931](https://github.com/badges/shields/issues/8931)
+- fix: for crates.io versions, use max_stable_version if it exists [#8687](https://github.com/badges/shields/issues/8687)
+- fix TypeError: console.warning is not a function [#8930](https://github.com/badges/shields/issues/8930)
+- migrate token pooling to postgres [#8922](https://github.com/badges/shields/issues/8922)
+- don't autofocus search [#8927](https://github.com/badges/shields/issues/8927)
+- Add [Vcpkg] version service [#8923](https://github.com/badges/shields/issues/8923)
+- fix: Set uid/gid in docker image to 0 [#8908](https://github.com/badges/shields/issues/8908)
+- pin 'deploy docs' build to node 16 [#8925](https://github.com/badges/shields/issues/8925)
+- documentation html fixes [#8887](https://github.com/badges/shields/issues/8887)
+- bump scoutcamp to 18.1.2 [#8891](https://github.com/badges/shields/issues/8891)
+- expose port 443 in Dockerfile [#8889](https://github.com/badges/shields/issues/8889)
+- Dependency updates
+
 ## server-2023-02-01
 
 - replace [twitter] badge with static fallback [#8842](https://github.com/badges/shields/issues/8842)
