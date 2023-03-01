@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-03-01
+
+**Deprecation:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. As of this release, the `RedisTokenPersistence` backend is now deprecated and will be removed in a future release. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
+
+- fix: for crates.io versions, use max_stable_version if it exists [#8687](https://github.com/badges/shields/issues/8687)
+- don't autofocus search [#8927](https://github.com/badges/shields/issues/8927)
+- Add [Vcpkg] version service [#8923](https://github.com/badges/shields/issues/8923)
+- fix: Set uid/gid in docker image to 0 [#8908](https://github.com/badges/shields/issues/8908)
+- expose port 443 in Dockerfile [#8889](https://github.com/badges/shields/issues/8889)
+- Dependency updates
+
 ## server-2023-02-01
 
 - replace [twitter] badge with static fallback [#8842](https://github.com/badges/shields/issues/8842)
