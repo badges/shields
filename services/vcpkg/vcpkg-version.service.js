@@ -3,6 +3,7 @@ import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js
 import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
 import { renderVersionBadge } from '../version.js'
 import { NotFound } from '../index.js'
+import { parseVersionFromVcpkgManifest } from './vcpkg-version-helpers.js'
 
 // Handle the different version fields available in Vcpkg manifests
 // https://learn.microsoft.com/en-us/vcpkg/reference/vcpkg-json?source=recommendations#version
@@ -44,23 +45,15 @@ export default class VcpkgVersion extends ConditionalGithubAuthV3Service {
 
   async handle({ portName }) {
     try {
-      const payload = await fetchJsonFromRepo(this, {
+      const manifest = await fetchJsonFromRepo(this, {
         schema: vcpkgManifestSchema,
         user: 'microsoft',
         repo: 'vcpkg',
         branch: 'master',
         filename: `ports/${portName}/vcpkg.json`,
       })
-      if (payload['version-date']) {
-        return this.constructor.render({ version: payload['version-date'] })
-      }
-      if (payload['version-semver']) {
-        return this.constructor.render({ version: payload['version-semver'] })
-      }
-      if (payload['version-string']) {
-        return this.constructor.render({ version: payload['version-string'] })
-      }
-      return this.constructor.render({ version: payload.version })
+      const version = parseVersionFromVcpkgManifest(manifest)
+      return this.constructor.render({ version })
     } catch (error) {
       if (error instanceof NotFound) {
         throw new NotFound({
