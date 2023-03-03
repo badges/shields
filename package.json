@@ -232,7 +232,7 @@
     "react-select": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
     "redis-server": "^1.2.2",
-    "rimraf": "^4.1.2",
+    "rimraf": "^4.2.0",
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.8.1",
     "sinon": "^15.0.1",
