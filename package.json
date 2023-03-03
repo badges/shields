@@ -64,7 +64,7 @@
     "qs": "^6.11.0",
     "query-string": "^8.1.0",
     "semver": "~7.3.8",
-    "simple-icons": "8.5.0",
+    "simple-icons": "8.6.0",
     "webextension-store-meta": "^1.0.5",
     "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
