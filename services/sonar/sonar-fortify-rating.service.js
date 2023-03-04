@@ -31,8 +31,7 @@ export default class SonarFortifyRating extends SonarBase {
       },
       staticPreview: this.render({ rating: 4 }),
       keywords,
-      documentation: `
-      <p>
+      documentation: `<p>
         Note that the Fortify Security Rating badge will only work on Sonar instances that have the <a href='https://marketplace.microfocus.com/fortify/content/fortify-sonarqube-plugin'>Fortify SonarQube Plugin</a> installed.
         The badge is not available for projects analyzed on SonarCloud.io
       </p>
