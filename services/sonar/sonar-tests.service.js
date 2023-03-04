@@ -43,8 +43,7 @@ class SonarTestsSummary extends SonarBase {
         isCompact: false,
       }),
       keywords,
-      documentation: `
-        ${documentation}
+      documentation: `${documentation}
         ${testResultsDocumentation}
       `,
     },

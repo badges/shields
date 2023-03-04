@@ -50,7 +50,7 @@ export default class PypiFrameworkVersion extends PypiBase {
     base: 'pypi/frameworkversions',
     pattern: `:frameworkName(${Object.keys(frameworkNameMap).join(
       '|'
-    )})/:packageName*`,
+    )})/:packageName+`,
   }
 
   static examples = [

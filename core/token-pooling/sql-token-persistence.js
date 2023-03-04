@@ -20,7 +20,9 @@ export default class SqlTokenPersistence {
   }
 
   async stop() {
-    await this.pool.end()
+    if (this.pool) {
+      await this.pool.end()
+    }
   }
 
   async onTokenAdded(token) {

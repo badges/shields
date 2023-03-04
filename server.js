@@ -43,8 +43,11 @@ if (fs.existsSync('.env')) {
 }
 
 if (config.private.redis_url != null) {
-  console.warning(
+  console.warn(
     'RedisTokenPersistence is deprecated for token pooling and will be removed in a future release. Migrate to SqlTokenPersistence'
+  )
+  console.warn(
+    'See https://github.com/badges/shields/blob/master/CHANGELOG.md#server-2023-03-01 for more info'
   )
 }
 

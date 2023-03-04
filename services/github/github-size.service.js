@@ -21,7 +21,7 @@ export default class GithubSize extends GithubAuthV3Service {
 
   static route = {
     base: 'github/size',
-    pattern: ':user/:repo/:path*',
+    pattern: ':user/:repo/:path+',
     queryParamSchema,
   }
 

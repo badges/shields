@@ -27,8 +27,8 @@ export default class NodeVersionBase extends NPMBase {
       },
       {
         title: `${prefix} (scoped)`,
-        pattern: '@:scope/:packageName',
-        namedParams: { scope: 'stdlib', packageName: 'stdlib' },
+        pattern: ':scope/:packageName',
+        namedParams: { scope: '@stdlib', packageName: 'stdlib' },
         staticPreview: this.renderStaticPreview({
           nodeVersionRange: '>= 6.0.0',
         }),
@@ -48,8 +48,8 @@ export default class NodeVersionBase extends NPMBase {
       },
       {
         title: `${prefix} (scoped with tag)`,
-        pattern: '@:scope/:packageName/:tag',
-        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
+        pattern: ':scope/:packageName/:tag',
+        namedParams: { scope: '@stdlib', packageName: 'stdlib', tag: 'latest' },
         staticPreview: this.renderStaticPreview({
           nodeVersionRange: '>= 6.0.0',
           tag: 'latest',
@@ -59,8 +59,8 @@ export default class NodeVersionBase extends NPMBase {
       },
       {
         title: `${prefix} (scoped with tag, custom registry)`,
-        pattern: '@:scope/:packageName/:tag',
-        namedParams: { scope: 'stdlib', packageName: 'stdlib', tag: 'latest' },
+        pattern: ':scope/:packageName/:tag',
+        namedParams: { scope: '@stdlib', packageName: 'stdlib', tag: 'latest' },
         queryParams: { registry_uri: 'https://registry.npmjs.com' },
         staticPreview: this.renderStaticPreview({
           nodeVersionRange: '>= 6.0.0',
