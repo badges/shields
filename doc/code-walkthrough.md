@@ -45,14 +45,14 @@ The tests are also divided into several parts:
 7.  [The service tests themselves][service tests] live integration tests of the
     services, and some mocked tests
     1.  `*.tester.js` in subfolders of [`services`][services]
-8.  Integration tests of Redis-backed persistence code
-    1.  [`core/token-pooling/redis-token-persistence.integration.js`][redis-token-persistence.integration]
+8.  Integration tests of PostgreSQL-backed persistence code
+    1.  [`core/token-pooling/sql-token-persistence.integration.js`][sql-token-persistence.integration]
 9.  Integration tests of the GitHub authorization code
     1.  [`services/github/github-api-provider.integration.js`][github-api-provider.integration]
 
 [service-test-runner]: https://github.com/badges/shields/tree/master/core/service-test-runner
 [service tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
-[redis-token-persistence.integration]: https://github.com/badges/shields/blob/master/core/token-pooling/redis-token-persistence.integration.js
+[sql-token-persistence.integration]: https://github.com/badges/shields/blob/master/core/token-pooling/sql-token-persistence.integration.js
 [github-api-provider.integration]: https://github.com/badges/shields/blob/master/services/github/github-api-provider.integration.js
 
 Our goal is to reach 100% coverage of the code in the
