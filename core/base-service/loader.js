@@ -28,7 +28,7 @@ class InvalidService extends Error {
 }
 
 function getServicePaths(pattern) {
-  return globSync(toUnixPath(path.join(serviceDir, '**', pattern)))
+  return globSync(toUnixPath(path.join(serviceDir, '**', pattern))).sort()
 }
 
 async function loadServiceClasses(servicePaths) {
