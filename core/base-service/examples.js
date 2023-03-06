@@ -37,7 +37,12 @@ function validateExample(example, index, ServiceClass) {
 
   const { pattern, namedParams } = result
 
-  if (!pattern && !ServiceClass.route.pattern) {
+  if (
+    !pattern &&
+    !ServiceClass.route.pattern &&
+    // the 3 dynamic badges have a hard-coded base and empty pattern
+    ServiceClass.category !== 'dynamic'
+  ) {
     throw new Error(
       `Example for ${ServiceClass.name} at index ${index} does not declare a pattern`
     )
@@ -129,6 +134,7 @@ function transformExample(inExample, index, ServiceClass) {
     ServiceClass
   )
 
+  const category = categories.find(c => c.id === ServiceClass.category)
   return {
     title,
     example: {
@@ -146,9 +152,7 @@ function transformExample(inExample, index, ServiceClass) {
       style: style === 'flat' ? undefined : style,
       namedLogo,
     },
-    keywords: keywords.concat(
-      categories.find(c => c.id === ServiceClass.category).keywords
-    ),
+    keywords: category ? keywords.concat(category.keywords) : keywords,
     documentation: documentation ? { __html: documentation } : undefined,
   }
 }

@@ -15,6 +15,30 @@ export default class DynamicXml extends BaseService {
   static category = 'dynamic'
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('xml')
+  static examples = [
+    {
+      title: 'Dynamic XML Badge',
+      namedParams: {},
+      queryParams: {
+        url: 'https://httpbin.org/xml',
+        query: '//slideshow/slide[1]/title',
+        prefix: '[',
+        suffix: ']',
+      },
+      documentation: `<p>
+        The dynamic XML badge takes two required query params: <code>url</code> and <code>query</code>.
+        <ul>
+          <li><code>url</code> is the URL to a XML document</li>
+          <li><code>query</code> is a <a href="http://xpather.com/">XPath</a> expression that will be used to query the document</li>
+        </ul>
+        Also an optional <code>prefix</code> and <code>suffix</code> may be supplied.
+      </p>`,
+      staticPreview: {
+        message: 'Wake up to WonderWidgets!',
+      },
+    },
+  ]
+
   static defaultBadgeData = { label: 'custom badge' }
 
   transform({ pathExpression, buffer }) {
