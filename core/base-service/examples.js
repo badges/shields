@@ -37,12 +37,7 @@ function validateExample(example, index, ServiceClass) {
 
   const { pattern, namedParams } = result
 
-  if (
-    !pattern &&
-    !ServiceClass.route.pattern &&
-    // the 3 dynamic badges have a hard-coded base and empty pattern
-    ServiceClass.category !== 'dynamic'
-  ) {
+  if (!pattern && !ServiceClass.route.pattern) {
     throw new Error(
       `Example for ${ServiceClass.name} at index ${index} does not declare a pattern`
     )

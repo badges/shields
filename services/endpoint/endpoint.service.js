@@ -11,7 +11,7 @@ const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-const documentation = `<p>
+const description = `<p>
   Using the endpoint badge, you can provide content for a badge through
   a JSON endpoint. The content can be prerendered, or generated on the
   fly. To strike a balance between responsiveness and bandwidth
@@ -23,101 +23,103 @@ const documentation = `<p>
 <p>
   The endpoint badge takes a single required query param: <code>url</code>, which is the URL to your JSON endpoint
 </p>
-<p>
+<div>
   <h2>Example JSON Endpoint Response</h2>
-  <code>{ "schemaVersion": 1, "label": "hello", "message": "sweet world", "color": "orange" }</code>
+  <code>&#123; "schemaVersion": 1, "label": "hello", "message": "sweet world", "color": "orange" &#125;</code>
   <h2>Example Shields Response</h2>
   <img src="https://img.shields.io/badge/hello-sweet_world-orange" />
-</p>
-<p>
+</div>
+<div>
   <h2>Schema</h2>
   <table>
-    <tr>
-      <th>Property</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td><code>schemaVersion</code></td>
-      <td>Required. Always the number <code>1</code>.</td>
-    </tr>
-    <tr>
-      <td><code>label</code></td>
-      <td>
-        Required. The left text, or the empty string to omit the left side of
-        the badge. This can be overridden by the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>message</code></td>
-      <td>Required. Can't be empty. The right text.</td>
-    </tr>
-    <tr>
-      <td><code>color</code></td>
-      <td>
-        Default: <code>lightgrey</code>. The right color. Supports the eight
-        named colors above, as well as hex, rgb, rgba, hsl, hsla and css named
-        colors. This can be overridden by the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>labelColor</code></td>
-      <td>
-        Default: <code>grey</code>. The left color. This can be overridden by
-        the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>isError</code></td>
-      <td>
-        Default: <code>false</code>. <code>true</code> to treat this as an
-        error badge. This prevents the user from overriding the color. In the
-        future, it may affect cache behavior.
-      </td>
-    </tr>
-    <tr>
-      <td><code>namedLogo</code></td>
-      <td>
-        Default: none. One of the named logos supported by Shields or
-        <a href="https://simpleicons.org/">simple-icons</a>. Can be overridden
-        by the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>logoSvg</code></td>
-      <td>Default: none. An SVG string containing a custom logo.</td>
-    </tr>
-    <tr>
-      <td><code>logoColor</code></td>
-      <td>
-        Default: none. Same meaning as the query string. Can be overridden by
-        the query string. Only works for named logos and Shields logos. If you
-        override the color of a multicolor Shield logo, the corresponding
-        named logo will be used and colored.
-      </td>
-    </tr>
-    <tr>
-      <td><code>logoWidth</code></td>
-      <td>
-        Default: none. Same meaning as the query string. Can be overridden by
-        the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>logoPosition</code></td>
-      <td>
-        Default: none. Same meaning as the query string. Can be overridden by
-        the query string.
-      </td>
-    </tr>
-    <tr>
-      <td><code>style</code></td>
-      <td>
-        Default: <code>flat</code>. The default template to use. Can be
-        overridden by the query string.
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <th>Property</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>schemaVersion</code></td>
+        <td>Required. Always the number <code>1</code>.</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>
+          Required. The left text, or the empty string to omit the left side of
+          the badge. This can be overridden by the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>message</code></td>
+        <td>Required. Can't be empty. The right text.</td>
+      </tr>
+      <tr>
+        <td><code>color</code></td>
+        <td>
+          Default: <code>lightgrey</code>. The right color. Supports the eight
+          named colors above, as well as hex, rgb, rgba, hsl, hsla and css named
+          colors. This can be overridden by the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>labelColor</code></td>
+        <td>
+          Default: <code>grey</code>. The left color. This can be overridden by
+          the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>isError</code></td>
+        <td>
+          Default: <code>false</code>. <code>true</code> to treat this as an
+          error badge. This prevents the user from overriding the color. In the
+          future, it may affect cache behavior.
+        </td>
+      </tr>
+      <tr>
+        <td><code>namedLogo</code></td>
+        <td>
+          Default: none. One of the named logos supported by Shields or
+          <a href="https://simpleicons.org/">simple-icons</a>. Can be overridden
+          by the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>logoSvg</code></td>
+        <td>Default: none. An SVG string containing a custom logo.</td>
+      </tr>
+      <tr>
+        <td><code>logoColor</code></td>
+        <td>
+          Default: none. Same meaning as the query string. Can be overridden by
+          the query string. Only works for named logos and Shields logos. If you
+          override the color of a multicolor Shield logo, the corresponding
+          named logo will be used and colored.
+        </td>
+      </tr>
+      <tr>
+        <td><code>logoWidth</code></td>
+        <td>
+          Default: none. Same meaning as the query string. Can be overridden by
+          the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>logoPosition</code></td>
+        <td>
+          Default: none. Same meaning as the query string. Can be overridden by
+          the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>style</code></td>
+        <td>
+          Default: <code>flat</code>. The default template to use. Can be
+          overridden by the query string.
+        </td>
+      </tr>
+    </tbody>
   </table>
-</p>`
+</div>`
 
 export default class Endpoint extends BaseJsonService {
   static category = 'dynamic'
@@ -128,21 +130,24 @@ export default class Endpoint extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Endpoint Badge',
-      namedParams: {},
-      queryParams: {
-        url: 'https://shields.redsparr0w.com/2473/monday',
-      },
-      documentation,
-      staticPreview: {
-        label: 'hello',
-        message: 'sweet world',
-        color: 'orange',
+  static openApi = {
+    '/endpoint': {
+      get: {
+        summary: 'Endpoint Badge',
+        description,
+        parameters: [
+          {
+            name: 'url',
+            description: 'The URL to your JSON endpoint',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: 'https://shields.redsparr0w.com/2473/monday',
+          },
+        ],
       },
     },
-  ]
+  }
 
   static _cacheLength = 300
   static defaultBadgeData = { label: 'custom badge' }

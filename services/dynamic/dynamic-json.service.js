@@ -6,29 +6,53 @@ import jsonPath from './json-path.js'
 export default class DynamicJson extends jsonPath(BaseJsonService) {
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('json')
-  static examples = [
-    {
-      title: 'Dynamic JSON Badge',
-      namedParams: {},
-      queryParams: {
-        url: 'https://github.com/badges/shields/raw/master/package.json',
-        query: '$.name',
-        prefix: '[',
-        suffix: ']',
-      },
-      documentation: `<p>
-        The dynamic JSON badge takes two required query params: <code>url</code> and <code>query</code>.
-        <ul>
-          <li><code>url</code> is the URL to a JSON document</li>
-          <li><code>query</code> is a <a href="https://jsonpath.com/">JSONPath</a> expression that will be used to query the document</li>
-        </ul>
-        Also an optional <code>prefix</code> and <code>suffix</code> may be supplied.
-      </p>`,
-      staticPreview: {
-        message: 'shields.io',
+  static openApi = {
+    '/badge/dynamic/json': {
+      get: {
+        summary: 'Dynamic JSON Badge',
+        description: `<p>
+          The Dynamic JSON Badge allows you to extract an arbitrary value from any
+          JSON Document using a JSONPath selector and show it on a badge.
+        </p>`,
+        parameters: [
+          {
+            name: 'url',
+            description: 'The URL to a JSON document',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example:
+              'https://github.com/badges/shields/raw/master/package.json',
+          },
+          {
+            name: 'query',
+            description:
+              'A <a href="https://jsonpath.com/">JSONPath</a> expression that will be used to query the document',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: '$.name',
+          },
+          {
+            name: 'prefix',
+            description: 'Optional prefix to append to the value',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            example: '[',
+          },
+          {
+            name: 'suffix',
+            description: 'Optional suffix to append to the value',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            example: ']',
+          },
+        ],
       },
     },
-  ]
+  }
 
   async fetch({ schema, url, errorMessages }) {
     return this._requestJson({
