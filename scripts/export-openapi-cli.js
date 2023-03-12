@@ -6,6 +6,17 @@ import { collectDefinitions } from '../core/base-service/loader.js'
 const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
 const specsPath = path.join('frontend', 'categories')
 
+const globalParamRefs = [
+  { $ref: '#/components/parameters/style' },
+  { $ref: '#/components/parameters/logo' },
+  { $ref: '#/components/parameters/logoColor' },
+  { $ref: '#/components/parameters/label' },
+  { $ref: '#/components/parameters/labelColor' },
+  { $ref: '#/components/parameters/color' },
+  { $ref: '#/components/parameters/cacheSeconds' },
+  { $ref: '#/components/parameters/link' },
+]
+
 function getCodeSamples(altText) {
   return [
     {
@@ -118,74 +129,100 @@ function getVariants(pattern) {
   return patterns
 }
 
+function examples2openapi(examples) {
+  const paths = {}
+  for (const example of examples) {
+    const patterns = getVariants(example.example.pattern)
+
+    for (const pattern of patterns) {
+      const openApiPattern = pattern2openapi(pattern)
+      if (
+        openApiPattern.includes('*') ||
+        openApiPattern.includes('?') ||
+        openApiPattern.includes('+') ||
+        openApiPattern.includes('(')
+      ) {
+        throw new Error(`unexpected characters in pattern '${openApiPattern}'`)
+      }
+
+      /*
+      There's several things going on in this block:
+      1. Filter out any examples for params that don't appear
+         in this variant of the route
+      2. Make sure we add params to the array
+         in the same order they appear in the route
+      3. If there are any params we don't have an example value for,
+         make sure they still appear in the pathParams array with
+         exampleValue == undefined anyway
+      */
+      const pathParams = []
+      for (const param of openApiPattern
+        .split('/')
+        .filter(p => p.startsWith('{') && p.endsWith('}'))) {
+        const paramName = param.slice(1, -1)
+        const exampleValue = example.example.namedParams[paramName]
+        pathParams.push(param2openapi(pattern, paramName, exampleValue, 'path'))
+      }
+
+      const queryParams = example.example.queryParams || {}
+
+      const parameters = [
+        ...pathParams,
+        ...Object.entries(queryParams).map(([paramName, exampleValue]) =>
+          param2openapi(pattern, paramName, exampleValue, 'query')
+        ),
+        ...globalParamRefs,
+      ]
+      paths[openApiPattern] = {
+        get: {
+          summary: example.title,
+          description: example?.documentation?.__html
+            .replace(/<br>/g, '<br />') // react does not like <br>
+            .replace(/{/g, '&#123;')
+            .replace(/}/g, '&#125;')
+            .replace(/<style>(.|\n)*?<\/style>/, ''), // workaround for w3c-validation TODO: remove later
+          parameters,
+          'x-code-samples': getCodeSamples(example.title),
+        },
+      }
+    }
+  }
+  return paths
+}
+
+function addGlobalProperties(endpoints) {
+  const paths = {}
+  for (const key of Object.keys(endpoints)) {
+    paths[key] = endpoints[key]
+    paths[key].get.parameters = [
+      ...paths[key].get.parameters,
+      ...globalParamRefs,
+    ]
+    paths[key].get['x-code-samples'] = getCodeSamples(paths[key].get.summary)
+  }
+  return paths
+}
+
 function services2openapi(services) {
   const paths = {}
   for (const service of services) {
-    for (const example of service.examples) {
-      const patterns = getVariants(example.example.pattern)
-
-      for (const pattern of patterns) {
-        const openApiPattern = pattern2openapi(pattern)
-        if (
-          openApiPattern.includes('*') ||
-          openApiPattern.includes('?') ||
-          openApiPattern.includes('+') ||
-          openApiPattern.includes('(')
-        ) {
-          throw new Error(
-            `unexpected characters in pattern '${openApiPattern}'`
-          )
+    if (service.openApi) {
+      // if the service declares its own OpenAPI definition, use that...
+      for (const [key, value] of Object.entries(
+        addGlobalProperties(service.openApi)
+      )) {
+        if (key in paths) {
+          throw new Error(`Conflicting route: ${key}`)
         }
-
-        /*
-        There's several things going on in this block:
-        1. Filter out any examples for params that don't appear
-           in this variant of the route
-        2. Make sure we add params to the array
-           in the same order they appear in the route
-        3. If there are any params we don't have an example value for,
-           make sure they still appear in the pathParams array with
-           exampleValue == undefined anyway
-        */
-        const pathParams = []
-        for (const param of openApiPattern
-          .split('/')
-          .filter(p => p.startsWith('{') && p.endsWith('}'))) {
-          const paramName = param.slice(1, -1)
-          const exampleValue = example.example.namedParams[paramName]
-          pathParams.push(
-            param2openapi(pattern, paramName, exampleValue, 'path')
-          )
-        }
-
-        const queryParams = example.example.queryParams || {}
-
-        const parameters = [
-          ...pathParams,
-          ...Object.entries(queryParams).map(([paramName, exampleValue]) =>
-            param2openapi(pattern, paramName, exampleValue, 'query')
-          ),
-          { $ref: '#/components/parameters/style' },
-          { $ref: '#/components/parameters/logo' },
-          { $ref: '#/components/parameters/logoColor' },
-          { $ref: '#/components/parameters/label' },
-          { $ref: '#/components/parameters/labelColor' },
-          { $ref: '#/components/parameters/color' },
-          { $ref: '#/components/parameters/cacheSeconds' },
-          { $ref: '#/components/parameters/link' },
-        ]
-        paths[openApiPattern] = {
-          get: {
-            summary: example.title,
-            description: example?.documentation?.__html
-              .replace(/<br>/g, '<br />') // react does not like <br>
-              .replace(/{/g, '&#123;')
-              .replace(/}/g, '&#125;')
-              .replace(/<style>(.|\n)*?<\/style>/, ''), // workaround for w3c-validation TODO: remove later
-            parameters,
-            'x-code-samples': getCodeSamples(example.title),
-          },
-        }
+        paths[key] = value
+      }
+    } else {
+      // ...otherwise do our best to build one from examples[]
+      for (const [key, value] of Object.entries(
+        examples2openapi(service.examples)
+      )) {
+        // allow conflicting routes for legacy examples
+        paths[key] = value
       }
     }
   }

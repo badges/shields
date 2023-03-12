@@ -9,6 +9,13 @@ import { collectDefinitions } from '../core/base-service/loader.js'
     publicCategories.includes(s.category)
   )
 
+  // drop the openApi property for the "legacy" frontend
+  for (const service of definitions.services) {
+    if (service.openApi) {
+      service.openApi = undefined
+    }
+  }
+
   // Omit undefined
   // https://github.com/nodeca/js-yaml/issues/356#issuecomment-312430599
   const cleaned = JSON.parse(JSON.stringify(definitions))
