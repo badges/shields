@@ -20,30 +20,30 @@ export default class DynamicXml extends BaseService {
       get: {
         summary: 'Dynamic XML Badge',
         description: `<p>
-          The dynamic XML badge takes two required query params: <code>url</code> and <code>query</code>.
-          <ul>
-            <li><code>url</code> is the URL to a XML document</li>
-            <li><code>query</code> is a <a href="http://xpather.com/">XPath</a> expression that will be used to query the document</li>
-          </ul>
-          Also an optional <code>prefix</code> and <code>suffix</code> may be supplied.
+          The Dynamic XML Badge allows you to extract an arbitrary value from any
+          XML Document using an XPath selector and show it on a badge.
         </p>`,
         parameters: [
           {
             name: 'url',
+            description: 'The URL to a XML document',
             in: 'query',
-            required: false,
+            required: true,
             schema: { type: 'string' },
             example: 'https://httpbin.org/xml',
           },
           {
             name: 'query',
+            description:
+              'A <a href="http://xpather.com/">XPath</a> expression that will be used to query the document',
             in: 'query',
-            required: false,
+            required: true,
             schema: { type: 'string' },
             example: '//slideshow/slide[1]/title',
           },
           {
             name: 'prefix',
+            description: 'Optional prefix to append to the value',
             in: 'query',
             required: false,
             schema: { type: 'string' },
@@ -51,6 +51,7 @@ export default class DynamicXml extends BaseService {
           },
           {
             name: 'suffix',
+            description: 'Optional suffix to append to the value',
             in: 'query',
             required: false,
             schema: { type: 'string' },

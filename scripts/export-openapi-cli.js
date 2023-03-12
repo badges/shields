@@ -69,18 +69,14 @@ function getEnum(pattern, paramName) {
 function param2openapi(pattern, paramName, exampleValue, paramType) {
   const outParam = {}
   outParam.name = paramName
-  // TODO: outParam.description we don't store this yet
+  // We don't have description if we are building the OpenAPI spec from examples[]
   outParam.in = paramType
   if (paramType === 'path') {
     outParam.required = true
   } else {
-    /*
-    Occasionally we do have required query params,
-    but at the moment we can't pick this up.
-
-    TODO: Add something to the example format which allows
-    us to populate this based on the queryParamSchema.
-    */
+    /* Occasionally we do have required query params, but we can't
+    detect this if we are building the OpenAPI spec from examples[]
+    so just assume all query params are optional */
     outParam.required = false
   }
 
