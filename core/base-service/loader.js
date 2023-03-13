@@ -1,6 +1,6 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import glob from 'glob'
+import { globSync } from 'glob'
 import countBy from 'lodash.countby'
 import categories from '../../services/categories.js'
 import BaseService from './base.js'
@@ -28,7 +28,7 @@ class InvalidService extends Error {
 }
 
 function getServicePaths(pattern) {
-  return glob.sync(toUnixPath(path.join(serviceDir, '**', pattern)))
+  return globSync(toUnixPath(path.join(serviceDir, '**', pattern))).sort()
 }
 
 async function loadServiceClasses(servicePaths) {
@@ -53,8 +53,8 @@ async function loadServiceClasses(servicePaths) {
       if (serviceClass && serviceClass.prototype instanceof BaseService) {
         // Decorate each service class with the directory that contains it.
         serviceClass.serviceFamily = servicePath
-          .replace(toUnixPath(serviceDir), '')
-          .split('/')[1]
+          .replace(serviceDir, '')
+          .split(path.sep)[1]
         serviceClass.validateDefinition()
         return serviceClasses.push(serviceClass)
       }

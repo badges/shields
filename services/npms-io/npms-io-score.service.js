@@ -23,32 +23,36 @@ export default class NpmsIOScore extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final|maintenance|popularity|quality)-score/:scope(@.+)?/:packageName',
+      ':type(final-score|maintenance-score|popularity-score|quality-score)/:scope(@.+)?/:packageName',
   }
 
   static examples = [
     {
       title: 'npms.io (final)',
-      namedParams: { type: 'final', packageName: 'egg' },
+      namedParams: { type: 'final-score', packageName: 'egg' },
       staticPreview: this.render({ score: 0.9711 }),
       keywords,
     },
     {
       title: 'npms.io (popularity)',
       pattern: ':type/:scope/:packageName',
-      namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
+      namedParams: {
+        type: 'popularity-score',
+        scope: '@vue',
+        packageName: 'cli',
+      },
       staticPreview: this.render({ type: 'popularity', score: 0.89 }),
       keywords,
     },
     {
       title: 'npms.io (quality)',
-      namedParams: { type: 'quality', packageName: 'egg' },
+      namedParams: { type: 'quality-score', packageName: 'egg' },
       staticPreview: this.render({ type: 'quality', score: 0.98 }),
       keywords,
     },
     {
       title: 'npms.io (maintenance)',
-      namedParams: { type: 'maintenance', packageName: 'command' },
+      namedParams: { type: 'maintenance-score', packageName: 'command' },
       staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
       keywords,
     },
@@ -76,8 +80,10 @@ export default class NpmsIOScore extends BaseJsonService {
       errorMessages: { 404: 'package not found or too new' },
     })
 
-    const score = type === 'final' ? json.score.final : json.score.detail[type]
+    const scoreType = type.slice(0, -6)
+    const score =
+      scoreType === 'final' ? json.score.final : json.score.detail[scoreType]
 
-    return this.constructor.render({ type, score })
+    return this.constructor.render({ type: scoreType, score })
   }
 }
