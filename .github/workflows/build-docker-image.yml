@@ -22,6 +22,6 @@ jobs:
         with:
           context: .
           push: false
-          tags: shieldsio/shields:pr-validation
+          tags: ghcr.io/badges/shields:pr-validation
           build-args: |
             version=${{ env.SHORT_SHA }}
