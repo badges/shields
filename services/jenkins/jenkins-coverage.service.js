@@ -44,27 +44,22 @@ const formatMap = {
   },
   api: {
     schema: Joi.object({
-      results: Joi.object({
-        elements: Joi.array()
-          .items(
-            Joi.object({
-              name: Joi.string().required(),
-              ratio: Joi.number().min(0).max(100).required(),
-            })
-          )
-          .has(Joi.object({ name: 'Line' }))
-          .min(1)
+      projectStatistics: Joi.object({
+        line: Joi.string()
+          .pattern(/\d+\.\d+%/)
           .required(),
       }).required(),
     }).required(),
-    treeQueryParam: 'results[elements[name,ratio]]',
+    treeQueryParam: 'projectStatistics[line]',
     transform: json => {
-      const lineCoverage = json.results.elements.find(
-        element => element.name === 'Line'
+      const lineCoverageStr = json.projectStatistics.line
+      const lineCoverage = lineCoverageStr.substring(
+        0,
+        lineCoverageStr.length - 1
       )
-      return { coverage: lineCoverage.ratio }
+      return { coverage: Number.parseFloat(lineCoverage) }
     },
-    pluginSpecificPath: 'coverage/result',
+    pluginSpecificPath: 'coverage',
   },
 }
 
