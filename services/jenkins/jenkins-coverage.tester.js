@@ -38,7 +38,5 @@ t.create('code coverage API: job not found')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 t.create('code coverage API: job found')
-  .get(
-    '/api.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master/'
-  )
+  .get('/api.json?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master')
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
