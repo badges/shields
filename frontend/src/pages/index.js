@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import HomepageFeatures from '../components/HomepageFeatures'
+import HomepageFeatures from '../components/homepage-features'
 import styles from './index.module.css'
 
 function HomepageHeader() {
