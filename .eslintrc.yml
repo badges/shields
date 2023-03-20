@@ -202,6 +202,7 @@ rules:
   '@typescript-eslint/explicit-function-return-type': 'off'
   '@typescript-eslint/no-empty-function': 'off'
 
+  react/prop-types: 'off'
   react/jsx-sort-props: 'error'
   react-hooks/rules-of-hooks: 'error'
   react-hooks/exhaustive-deps: 'error'

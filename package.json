@@ -77,7 +77,7 @@
     "coverage:test:integration": "c8 npm run test:integration",
     "coverage:test:services": "c8 npm run test:services",
     "coverage:clean": "rimraf .nyc_output coverage",
-    "precoverage:test": "run-s --silent coverage:clean defs features",
+    "precoverage:test": "run-s --silent coverage:clean defs",
     "coverage:test": "run-s --silent --continue-on-error coverage:test:core coverage:test:package coverage:test:entrypoint coverage:test:frontend coverage:test:integration",
     "coverage:report:generate": "c8 report",
     "coverage:report:open": "open-cli coverage/lcov-report/index.html",
@@ -97,15 +97,14 @@
     "test:services:pr:prepare": "node core/service-test-runner/pull-request-services-cli.js > pull-request-services.log",
     "test:services:pr:run": "cross-env NODE_CONFIG_ENV=test mocha core/service-test-runner/cli.js --stdin < pull-request-services.log",
     "test:services:pr": "run-s --silent test:services:pr:prepare test:services:pr:run",
-    "pretest": "run-s --silent defs features",
+    "pretest": "run-s --silent defs",
     "test": "run-s --silent --continue-on-error lint test:frontend test:package test:core test:entrypoint check-types:package check-types:frontend prettier:check",
     "check-types:package": "tsd badge-maker",
     "check-types:frontend": "tsc --noEmit --project .",
     "depcheck": "check-node-version --node \">= 16.0\"",
     "prebuild": "run-s --silent depcheck",
-    "features": "node scripts/export-supported-features-cli.js > ./frontend/supported-features.json",
     "defs": "node scripts/export-service-definitions-cli.js > ./frontend/service-definitions.yml",
-    "build": "run-s defs features && cd frontend && gatsby build && mv public ..",
+    "build": "rimraf public && run-s defs && npm run docusaurus:build",
     "heroku-postbuild": "run-s --silent build",
     "start:server:prod": "node server",
     "now-start": "npm run start:server:prod",
@@ -114,13 +113,16 @@
     "debug:server": "cross-env NODE_CONFIG_ENV=development nodemon --inspect server.js 8080",
     "profile:server": "cross-env NODE_CONFIG_ENV=development node --prof server 8080",
     "benchmark:badge": "cross-env NODE_CONFIG_ENV=test node scripts/benchmark-performance.js --iterations 10100 | node scripts/capture-timings.js --warmup-iterations 100",
-    "prestart": "run-s --silent depcheck defs features",
-    "start": "concurrently --names server,frontend \"npm run start:server\" \"cd frontend && cross-env GATSBY_BASE_URL=http://localhost:8080 gatsby develop --port 3000\"",
+    "prestart": "run-s --silent depcheck defs",
+    "start": "concurrently --names server,frontend \"npm run start:server\" \"npm run docusaurus:start\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
     "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME",
-    "migrate": "node scripts/write-migrations-config.js > migrations-config.json && node-pg-migrate --config-file=migrations-config.json"
+    "migrate": "node scripts/write-migrations-config.js > migrations-config.json && node-pg-migrate --config-file=migrations-config.json",
+    "docusaurus:start": "docusaurus start frontend",
+    "docusaurus:build": "docusaurus build frontend --out-dir ../public",
+    "docusaurus:swizzle": "cd frontend && docusaurus swizzle"
   },
   "lint-staged": {
     "**/*.@(js|ts|tsx)": [
@@ -243,7 +245,14 @@
     "ts-mocha": "^10.0.0",
     "tsd": "^0.27.0",
     "typescript": "^5.0.2",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+
+    "@docusaurus/core": "^2.0.0",
+    "@easyops-cn/docusaurus-search-local": "^0.33.6",
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "docusaurus-preset-openapi": "0.6.4",
+    "prism-react-renderer": "^1.2.1"
   },
   "engines": {
     "node": "^16.13.0",
