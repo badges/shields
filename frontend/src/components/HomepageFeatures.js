@@ -54,6 +54,16 @@ const FeatureList = [
       </>
     ),
   },
+  {
+    title: 'Love Shields?',
+    description: (
+      <>
+        Please consider{' '}
+        <a href="https://opencollective.com/shields">donating</a> to sustain our
+        activities
+      </>
+    ),
+  },
 ]
 
 function Feature({ title, description }) {

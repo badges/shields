@@ -48,9 +48,6 @@ Shields.io is possible thanks to the people and companies who donate money, serv
         <a href="https://coveralls.io/">Coveralls</a>
     </li>
     <li>
-        <a href="https://circleci.com/">CircleCI</a>
-    </li>
-    <li>
         <a href="https://www.cloudflare.com/">Cloudflare</a>
     </li>
     <li>
@@ -58,9 +55,6 @@ Shields.io is possible thanks to the people and companies who donate money, serv
     </li>
     <li>
         <a href="https://github.com/">GitHub</a>
-    </li>
-    <li>
-        <a href="https://lgtm.com/">LGTM</a>
     </li>
     <li>
         <a href="https://uptimerobot.com/">Uptime Robot</a>

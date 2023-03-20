@@ -4,7 +4,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Shields.io",
-  tagline: "Concise, consistent, and legible badges in SVG and raster format",
+  tagline: "Concise, consistent, and legible badges",
   url: "https://shields.io",
   baseUrl: "/",
   onBrokenLinks: "throw",
@@ -31,13 +31,11 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.cjs"),
-          // Please change this to your repo.
           editUrl:
             "https://github.com/badges/shields/",
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
             "https://github.com/badges/shields/",
         },
@@ -79,6 +77,14 @@ const config = {
             title: "Community",
             items: [
               {
+                label: "GitHub",
+                href: "https://github.com/badges/shields",
+              },
+              {
+                label: "Open Collective",
+                href: "https://opencollective.com/shields",
+              },
+              {
                 label: "Discord",
                 href: "https://discord.gg/HjJCwm5",
               },
@@ -86,23 +92,27 @@ const config = {
                 label: "Twitter",
                 href: "https://twitter.com/shields_io",
               },
+              {
+                label: "Awesome Badges",
+                href: "https://github.com/badges/awesome-badges",
+              },
             ],
           },
           {
-            title: "More",
+            title: "Stats",
             items: [
               {
-                label: "Blog",
-                to: "/blog",
+                label: "Service Status",
+                href: "https://stats.uptimerobot.com/PjXogHB5p",
               },
               {
-                label: "GitHub",
-                href: "https://github.com/badges/shields",
+                label: "Metrics dashboard",
+                href: "https://metrics.shields.io/",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Shields.io, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Shields.io. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
