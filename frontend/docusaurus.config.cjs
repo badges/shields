@@ -64,7 +64,6 @@ const config = {
         },
         items: [
           { to: "/badges", label: "Badges", position: "left" },
-          { to: "/blog", label: "Blog", position: "left" },
           { to: "/community", label: "Community", position: "left" },
           {
             href: "https://github.com/badges/shields",
