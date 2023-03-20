@@ -15,8 +15,8 @@ const { fileMatch } = danger.git
 
 const documentation = fileMatch(
   '**/*.md',
-  'frontend/components/usage.tsx',
-  'frontend/pages/endpoint.tsx'
+  'frontend/docs/**',
+  'frontend/src/**'
 )
 const server = fileMatch('core/server/**.js', '!*.spec.js')
 const serverTests = fileMatch('core/server/**.spec.js')
