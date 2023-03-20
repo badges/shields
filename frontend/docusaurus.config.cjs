@@ -12,7 +12,6 @@ const config = {
   favicon: "img/favicon.ico",
   organizationName: "badges",
   projectName: "shields",
-  trailingSlash: false,
 
   themes: [
     [
