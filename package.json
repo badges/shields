@@ -103,7 +103,7 @@
     "check-types:frontend": "tsc --noEmit --project .",
     "depcheck": "check-node-version --node \">= 16.0\"",
     "prebuild": "run-s --silent depcheck",
-    "defs": "node scripts/export-service-definitions-cli.js > ./frontend/service-definitions.yml",
+    "defs": "echo 'TODO: https://github.com/badges/shields/pull/8966'",
     "build": "rimraf public && run-s defs && npm run docusaurus:build",
     "heroku-postbuild": "run-s --silent build",
     "start:server:prod": "node server",
