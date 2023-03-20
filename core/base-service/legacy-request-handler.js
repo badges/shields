@@ -65,7 +65,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
     */
     if (match[0] === '/endpoint' && Object.keys(queryParams).length === 0) {
       ask.res.statusCode = 301
-      ask.res.setHeader('Location', '/endpoint/')
+      ask.res.setHeader('Location', '/badges/endpoint-badge')
       ask.res.end()
       return
     }
