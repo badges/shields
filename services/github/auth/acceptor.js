@@ -3,6 +3,7 @@ import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
+  // TODO
   const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
