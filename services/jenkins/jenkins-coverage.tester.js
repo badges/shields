@@ -31,12 +31,26 @@ t.create('cobertura: job found')
   )
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
-t.create('code coverage API: job not found')
+t.create('code coverage API v1: job not found')
   .get(
-    '/api.json?jobUrl=https://jenkins.library.illinois.edu/job/does-not-exist'
+    '/apiv1.json?jobUrl=https://jenkins.library.illinois.edu/job/does-not-exist'
   )
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
-t.create('code coverage API: job found')
-  .get('/api.json?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master')
+// t.create('code coverage API v1: job found')
+//   .get(
+//     '/apiv1.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master/'
+//   )
+//   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+
+t.create('code coverage API v4+: job not found')
+  .get(
+    '/apiv4.json?jobUrl=https://jenkins.library.illinois.edu/job/does-not-exist'
+  )
+  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
+
+t.create('code coverage API v4+: job found')
+  .get(
+    '/apiv4.json?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master'
+  )
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
