@@ -46,11 +46,11 @@ const FeatureList = [
     description: (
       <>
         Host a shields instance behind your firewall with our{' '}
-        <a href="https://registry.hub.docker.com/r/shieldsio/shields/">
+        <a href="https://github.com/badges/shields/pkgs/container/shields">
           docker image
         </a>
         <br />
-        <code>docker pull shieldsio/shields</code>
+        <code>docker pull ghcr.io/badges/shields</code>
       </>
     ),
   },
