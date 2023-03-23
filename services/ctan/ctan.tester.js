@@ -14,8 +14,8 @@ t.create('license').get('/l/novel.json').expectBadge({
 t.create('license missing')
   .get('/l/novel.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/novel')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/novel')
       .reply(200, {
         version: {
           number: 'notRelevant',
@@ -30,8 +30,8 @@ t.create('license missing')
 t.create('single license')
   .get('/l/tex.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/tex')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/tex')
       .reply(200, {
         license: 'knuth',
         version: {
@@ -52,8 +52,8 @@ t.create('version').get('/v/novel.json').expectBadge({
 t.create('version')
   .get('/v/novel.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/novel')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/novel')
       .reply(200, {
         version: {
           number: 'v1.11',
