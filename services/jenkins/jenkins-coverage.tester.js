@@ -37,11 +37,22 @@ t.create('code coverage API v1: job not found')
   )
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
-// t.create('code coverage API v1: job found')
-//   .get(
-//     '/apiv1.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master/'
-//   )
-//   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+const coverageApiV1Response =
+  '{"_class":"io.jenkins.plugins.coverage.targets.CoverageResult","results":{"elements":[{"name":"Report","ratio":100.0},{"name":"Group","ratio":100.0},{"name":"Package","ratio":66.666664},{"name":"File","ratio":52.0},{"name":"Class","ratio":52.0},{"name":"Line","ratio":40.66363},{"name":"Conditional","ratio":29.91968}]}}'
+
+t.create('code coverage API v1: job found')
+  .get(
+    '/apiv1.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master'
+  )
+  .intercept(nock =>
+    nock(
+      'http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master/lastCompletedBuild'
+    )
+      .get('/coverage/result/api/json')
+      .query(true)
+      .reply(200, coverageApiV1Response)
+  )
+  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('code coverage API v4+: job not found')
   .get(
