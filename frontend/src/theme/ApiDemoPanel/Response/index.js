@@ -44,7 +44,10 @@ function Response() {
   return (
     <FloatingButton label="Clear" onClick={() => dispatch(clearResponse())}>
       {(response.startsWith('<svg ') && (
-        <img src={`data:image/svg+xml;utf8,${encodeURIComponent(response)}`} />
+        <img
+          id="badge-preview"
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(response)}`}
+        />
       )) || (
         <pre
           style={{
