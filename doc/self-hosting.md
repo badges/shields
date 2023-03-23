@@ -71,12 +71,12 @@ vercel
 
 ## Docker
 
-### DockerHub
+### GitHub Container Registry
 
-We publish images to DockerHub at https://registry.hub.docker.com/r/shieldsio/shields
+We publish images to GHCR at https://github.com/badges/shields/pkgs/container/shields
 
 The `next` tag is the latest build from `master`, or tagged releases are available
-https://registry.hub.docker.com/r/shieldsio/shields/tags
+https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
 
 ```console
 $ docker pull shieldsio/shields:next
