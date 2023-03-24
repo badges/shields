@@ -12,7 +12,7 @@ export default class HangarPlatformVersions extends BaseHangarService {
     {
       title: 'Hangar Platform Supported Versions',
       namedParams: { author: 'GeyserMC', slug: 'Geyser', platform: 'PAPER' },
-      staticPreview: this.render({ versions: '1.7.10-1.20' }),
+      staticPreview: this.render({ platformSupportedVersions: '1.7.10-1.20' }),
       documentation,
     },
   ]
