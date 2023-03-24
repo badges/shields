@@ -4,7 +4,7 @@ import { isFileSize } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('Download Size')
-  .get('/GeyserMC/Geyser/.json')
+  .get('/jmp/MiniMOTD/.json')
   .expectBadge({ label: 'size', message: isFileSize })
 
 t.create('Download Size (not found)')
