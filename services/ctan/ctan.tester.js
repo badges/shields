@@ -1,5 +1,12 @@
 import { ServiceTester } from '../tester.js'
-import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import { withRegex } from '../test-validators.js'
+
+// same as isVPlusDottedVersionAtLeastOne, but also accepts an optional
+// single lowercase alphabet letter suffix
+// e.g.: v1.81a
+const isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter = withRegex(
+  /^v\d+(\.\d+)?(\.\d+)?[a-z]?$/
+)
 
 export const t = new ServiceTester({
   id: 'ctan',
@@ -46,7 +53,7 @@ t.create('single license')
 
 t.create('version').get('/v/novel.json').expectBadge({
   label: 'ctan',
-  message: isVPlusDottedVersionAtLeastOne,
+  message: isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter,
 })
 
 t.create('version')
