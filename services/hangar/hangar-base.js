@@ -116,7 +116,6 @@ const documentation =
 
 class BaseHangarService extends BaseJsonService {
   async fetchVersions({ project }) {
-    console.log('fetching versions for', project)
     const bruh = {
       schema: paginatedVersionResultSchema,
       url: `${hangarBaseURL}/projects/${project}/versions?limit=1&offset=0`,
