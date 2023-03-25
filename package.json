@@ -195,7 +195,7 @@
     "eslint-plugin-sort-class-members": "^1.16.0",
     "fetch-ponyfill": "^7.1.0",
     "form-data": "^4.0.0",
-    "gatsby": "4.23.1",
+    "gatsby": "5.8.0",
     "gatsby-plugin-catch-links": "^4.25.0",
     "gatsby-plugin-page-creator": "^4.25.0",
     "gatsby-plugin-react-helmet": "^5.25.0",
