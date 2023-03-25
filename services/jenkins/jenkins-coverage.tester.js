@@ -37,8 +37,20 @@ t.create('code coverage API v1: job not found')
   )
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
-const coverageApiV1Response =
-  '{"_class":"io.jenkins.plugins.coverage.targets.CoverageResult","results":{"elements":[{"name":"Report","ratio":100.0},{"name":"Group","ratio":100.0},{"name":"Package","ratio":66.666664},{"name":"File","ratio":52.0},{"name":"Class","ratio":52.0},{"name":"Line","ratio":40.66363},{"name":"Conditional","ratio":29.91968}]}}'
+const coverageApiV1Response = {
+  _class: 'io.jenkins.plugins.coverage.targets.CoverageResult',
+  results: {
+    elements: [
+      { name: 'Report', ratio: 100.0 },
+      { name: 'Group', ratio: 100.0 },
+      { name: 'Package', ratio: 66.666664 },
+      { name: 'File', ratio: 52.0 },
+      { name: 'Class', ratio: 52.0 },
+      { name: 'Line', ratio: 40.66363 },
+      { name: 'Conditional', ratio: 29.91968 },
+    ],
+  },
+}
 
 t.create('code coverage API v1: job found')
   .get(
