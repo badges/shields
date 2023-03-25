@@ -220,7 +220,7 @@
     "node-mocks-http": "^1.12.2",
     "nodemon": "^2.0.21",
     "npm-run-all": "^4.1.5",
-    "open-cli": "^7.1.0",
+    "open-cli": "^7.2.0",
     "portfinder": "^1.0.32",
     "prettier": "2.8.7",
     "react": "^17.0.2",
