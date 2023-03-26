@@ -71,16 +71,28 @@ vercel
 
 ## Docker
 
-### GitHub Container Registry
+### Public Images
 
-We publish images to GHCR at https://github.com/badges/shields/pkgs/container/shields
+We publish images to:
 
-The `next` tag is the latest build from `master`, or tagged releases are available
-https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+- DockerHub at https://registry.hub.docker.com/r/shieldsio/shields and
+- GitHub Container Registry at https://github.com/badges/shields/pkgs/container/shields
 
-```console
+The `next` tag is the latest build from `master`, or tagged snapshot releases are available:
+
+- https://registry.hub.docker.com/r/shieldsio/shields/tags
+- https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+
+```sh
+# DockerHub
 $ docker pull shieldsio/shields:next
 $ docker run shieldsio/shields:next
+```
+
+```sh
+# GHCR
+$ docker pull ghcr.io/badges/shields:next
+$ docker pull ghcr.io/badges/shields:next
 ```
 
 ### Building Docker Image Locally
