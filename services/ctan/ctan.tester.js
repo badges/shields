@@ -8,6 +8,10 @@ const isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter = withRegex(
   /^v\d+(\.\d+)?(\.\d+)?[a-z]?$/
 )
 
+// a loose pattern matches an ISO 8601 date
+// e.g.: 2023-01-01
+const isIsoDate = withRegex(/^\d{4}-\d{2}-\d{2}$/)
+
 export const t = new ServiceTester({
   id: 'ctan',
   title: 'Comprehensive TEX Archive Network',
@@ -72,3 +76,9 @@ t.create('version')
     message: 'v1.11',
     color: 'blue',
   })
+
+t.create('date as version').get('/v/l3kernel.json').expectBadge({
+  label: 'ctan',
+  message: isIsoDate,
+  color: 'blue'
+})
