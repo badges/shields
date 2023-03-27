@@ -69,11 +69,11 @@ class CtanVersion extends BaseCtanService {
   async handle({ library }) {
     const json = await this.fetch({ library })
     const version = json.version.number
-    if (version.length > 0) {
+    if (version !== '') {
       return renderVersionBadge({ version })
     } else {
       const date = json.version.date
-      if (date.length > 0) {
+      if (date !== '') {
         return renderVersionBadge({
           version: date,
           versionFormatter: color => 'blue',
