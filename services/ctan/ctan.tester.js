@@ -80,5 +80,5 @@ t.create('version')
 t.create('date as version').get('/v/l3kernel.json').expectBadge({
   label: 'ctan',
   message: isIsoDate,
-  color: 'blue'
+  color: 'blue',
 })

@@ -7,7 +7,7 @@ const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),
   version: Joi.object({
     number: Joi.string().allow('').required(),
-    date: Joi.string().allow('')
+    date: Joi.string().allow(''),
   }).required(),
 }).required()
 
@@ -76,7 +76,7 @@ class CtanVersion extends BaseCtanService {
       if (date.length > 0) {
         return renderVersionBadge({
           version: date,
-          versionFormatter: (color) => 'blue'
+          versionFormatter: color => 'blue',
         })
       } else {
         return new InvalidResponse({
