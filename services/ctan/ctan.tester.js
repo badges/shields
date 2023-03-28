@@ -27,6 +27,7 @@ t.create('license missing')
       .reply(200, {
         version: {
           number: 'notRelevant',
+          date: 'notRelevant',
         },
       })
   )
@@ -44,6 +45,7 @@ t.create('single license')
         license: 'knuth',
         version: {
           number: 'notRelevant',
+          date: 'notRelevant',
         },
       })
   )
@@ -65,6 +67,7 @@ t.create('version')
       .reply(200, {
         version: {
           number: 'v1.11',
+          date: '',
         },
       })
   )

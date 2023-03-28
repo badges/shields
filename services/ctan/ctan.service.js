@@ -57,7 +57,7 @@ class CtanVersion extends BaseCtanService {
     {
       title: 'CTAN',
       namedParams: { library: 'tex' },
-      staticPreview: this.render({ version: '3.14159265' }),
+      staticPreview: this.render({ version: '3.14159265', date: '' }),
       keywords: ['tex'],
     },
   ]
