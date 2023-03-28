@@ -14,7 +14,7 @@ class BaseCtanService extends BaseJsonService {
   static defaultBadgeData = { label: 'ctan' }
 
   async fetch({ library }) {
-    const url = `http://www.ctan.org/json/pkg/${library}`
+    const url = `https://www.ctan.org/json/2.0/pkg/${library}`
     return this._requestJson({
       schema,
       url,

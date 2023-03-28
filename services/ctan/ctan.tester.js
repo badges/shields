@@ -1,5 +1,12 @@
 import { ServiceTester } from '../tester.js'
-import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import { withRegex } from '../test-validators.js'
+
+// same as isVPlusDottedVersionAtLeastOne, but also accepts an optional
+// single lowercase alphabet letter suffix
+// e.g.: v1.81a
+const isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter = withRegex(
+  /^v\d+(\.\d+)?(\.\d+)?[a-z]?$/
+)
 
 export const t = new ServiceTester({
   id: 'ctan',
@@ -14,8 +21,8 @@ t.create('license').get('/l/novel.json').expectBadge({
 t.create('license missing')
   .get('/l/novel.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/novel')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/novel')
       .reply(200, {
         version: {
           number: 'notRelevant',
@@ -30,8 +37,8 @@ t.create('license missing')
 t.create('single license')
   .get('/l/tex.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/tex')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/tex')
       .reply(200, {
         license: 'knuth',
         version: {
@@ -46,14 +53,14 @@ t.create('single license')
 
 t.create('version').get('/v/novel.json').expectBadge({
   label: 'ctan',
-  message: isVPlusDottedVersionAtLeastOne,
+  message: isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter,
 })
 
 t.create('version')
   .get('/v/novel.json')
   .intercept(nock =>
-    nock('http://www.ctan.org')
-      .get('/json/pkg/novel')
+    nock('https://www.ctan.org')
+      .get('/json/2.0/pkg/novel')
       .reply(200, {
         version: {
           number: 'v1.11',
