@@ -7,7 +7,7 @@ const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),
   version: Joi.object({
     number: Joi.string().allow('').required(),
-    date: Joi.string().allow(''),
+    date: Joi.string().allow('').required(),
   }).required(),
 }).required()
 
