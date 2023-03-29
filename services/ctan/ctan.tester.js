@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
 import { withRegex } from '../test-validators.js'
 
@@ -26,6 +27,7 @@ t.create('license missing')
       .reply(200, {
         version: {
           number: 'notRelevant',
+          date: 'notRelevant',
         },
       })
   )
@@ -43,6 +45,7 @@ t.create('single license')
         license: 'knuth',
         version: {
           number: 'notRelevant',
+          date: 'notRelevant',
         },
       })
   )
@@ -64,6 +67,7 @@ t.create('version')
       .reply(200, {
         version: {
           number: 'v1.11',
+          date: '',
         },
       })
   )
@@ -72,3 +76,9 @@ t.create('version')
     message: 'v1.11',
     color: 'blue',
   })
+
+t.create('date as version').get('/v/l3kernel.json').expectBadge({
+  label: 'ctan',
+  message: Joi.date().iso(),
+  color: 'blue',
+})
