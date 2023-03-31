@@ -241,7 +241,7 @@
     "start-server-and-test": "2.0.0",
     "styled-components": "^5.3.9",
     "ts-mocha": "^10.0.0",
-    "tsd": "^0.28.0",
+    "tsd": "^0.28.1",
     "typescript": "^5.0.2",
     "url": "^0.11.0"
   },
