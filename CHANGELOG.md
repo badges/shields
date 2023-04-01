@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-04-01
+
+- [CTAN] fallback to date if version is empty [#9036](https://github.com/badges/shields/issues/9036)
+- update docker hosting docs [#9018](https://github.com/badges/shields/issues/9018)
+- [JenkinsCoverage] Update Jenkins Code Coverage API for new plugin version [#9010](https://github.com/badges/shields/issues/9010)
+- Update to [CTAN] API version 2.0 [#9016](https://github.com/badges/shields/issues/9016)
+- Fix tests for [dynamic endpoint] services [#9015](https://github.com/badges/shields/issues/9015)
+- log into the right registry [#9009](https://github.com/badges/shields/issues/9009)
+- push images to both GHCR and DockerHub [#9008](https://github.com/badges/shields/issues/9008)
+- handle missing statistics array in [VisualStudioMarketplace] badges [#8985](https://github.com/badges/shields/issues/8985)
+- [Netlify] upgrade colors for SVG parsing [#8971](https://github.com/badges/shields/issues/8971)
+- adjust route for [npmsio] badges [#8967](https://github.com/badges/shields/issues/8967)
+- sort service path matches [#8968](https://github.com/badges/shields/issues/8968)
+- Fix [Vcpkg] version service for different version fields [#8945](https://github.com/badges/shields/issues/8945)
+- update docs following token pool changes [#8933](https://github.com/badges/shields/issues/8933)
+- only try to close pool if one exists [#8947](https://github.com/badges/shields/issues/8947)
+- misc minor fixes to [githubsize node pypi] [#8946](https://github.com/badges/shields/issues/8946)
+- Dependency updates
+
 ## server-2023-03-01
 
 **Deprecation:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. As of this release, the `RedisTokenPersistence` backend is now deprecated and will be removed in a future release. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
