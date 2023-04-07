@@ -192,7 +192,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-sort-class-members": "^1.16.0",
+    "eslint-plugin-sort-class-members": "^1.17.0",
     "fetch-ponyfill": "^7.1.0",
     "form-data": "^4.0.0",
     "gatsby": "4.23.1",
