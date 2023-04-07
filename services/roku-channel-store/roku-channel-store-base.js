@@ -15,8 +15,8 @@ export default class RokuChannelStoreBase extends BaseJsonService {
       schema,
       url,
       errorMessages: {
-        400: 'Channel not found or access denied',
-        404: 'Channel not found or access denied',
+        400: 'Channel not found',
+        404: 'Channel not found',
       },
     })
   }

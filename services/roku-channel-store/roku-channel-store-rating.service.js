@@ -35,7 +35,7 @@ class RokuChannelStoreRating extends BaseRokuChannelStoreRating {
     const channel = await this.fetch({ channelId })
     const rating = channel.rating
     if (rating == null) {
-      throw new NotFound({ prettyMessage: 'not found' })
+      throw new NotFound({ prettyMessage: 'Channel not found' })
     }
     return this.constructor.render({ rating })
   }
@@ -66,7 +66,7 @@ class RokuChannelStoreRatingCount extends BaseRokuChannelStoreRating {
     const channel = await this.fetch({ channelId })
     const starRatingCount = channel.starRatingCount
     if (starRatingCount == null) {
-      throw new NotFound({ prettyMessage: 'not found' })
+      throw new NotFound({ prettyMessage: 'Channel not found' })
     }
     return this.constructor.render({ starRatingCount })
   }
@@ -98,7 +98,7 @@ class RokuChannelStoreRatingStars extends BaseRokuChannelStoreRating {
     const channel = await this.fetch({ channelId })
     const rating = channel.starRating
     if (rating == null) {
-      throw new NotFound({ prettyMessage: 'not found' })
+      throw new NotFound({ prettyMessage: 'Channel not found' })
     }
     return this.constructor.render({ rating })
   }
