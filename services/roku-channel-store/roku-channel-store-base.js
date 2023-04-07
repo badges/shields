@@ -9,8 +9,6 @@ const schema = Joi.object({
 }).required()
 
 export default class RokuChannelStoreBase extends BaseJsonService {
-  static category = 'build'
-
   async fetch({ channelId }) {
     const url = `https://channelstore.roku.com/api/v6/channels/${channelId}`
     return this._requestJson({
