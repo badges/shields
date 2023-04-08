@@ -328,7 +328,8 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
             documentation={
               <span>
                 Insert one of the named logos from (<NamedLogos />) or
-                simple-icons. You can simply click the icon title on{' '}
+                simple-icons. All simple-icons are referenced using icon slugs.
+                You can click the icon title on{' '}
                 <a
                   href="https://simpleicons.org/"
                   rel="noopener noreferrer"
@@ -336,8 +337,7 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
                 >
                   simple-icons
                 </a>{' '}
-                to copy the slug. All simple-icons are referenced using icon
-                slugs which can be found in the{' '}
+                to copy the slug or they can be found in the{' '}
                 <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">
                   slugs.md file
                 </a>{' '}
