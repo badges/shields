@@ -280,7 +280,7 @@ function category2openapi(category, services) {
           in: 'query',
           required: false,
           description:
-            'Background color of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported). The legacy name "colorA" is also supported.',
+            'Background color of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
           schema: {
             type: 'string',
           },
@@ -291,7 +291,7 @@ function category2openapi(category, services) {
           in: 'query',
           required: false,
           description:
-            'Background color of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported). The legacy name "colorB" is also supported.',
+            'Background color of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
           schema: {
             type: 'string',
           },
@@ -302,7 +302,7 @@ function category2openapi(category, services) {
           in: 'query',
           required: false,
           description:
-            'HTTP cache lifetime (rules are applied to infer a default value on a per-badge basis, any values specified below the default will be ignored). The legacy name "maxAge" is also supported.',
+            'HTTP cache lifetime (rules are applied to infer a default value on a per-badge basis, any values specified below the default will be ignored).',
           schema: {
             type: 'string',
           },
