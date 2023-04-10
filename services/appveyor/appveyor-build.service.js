@@ -29,6 +29,6 @@ export default class AppVeyorBuild extends AppVeyorBase {
       // this project exists but no builds have been run on it yet
       return this.constructor.render({ status: 'no builds found' })
     }
-    return this.constructor.render({ status: data.build.status })
+    return this.constructor.render({ status: 'just testing' })
   }
 }
