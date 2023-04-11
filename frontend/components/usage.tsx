@@ -327,17 +327,18 @@ export default function Usage({ baseUrl }: { baseUrl: string }): JSX.Element {
           <QueryParam
             documentation={
               <span>
-                Insert one of the named logos from (<NamedLogos />) or{' '}
+                Insert one of the named logos from (<NamedLogos />) or
+                simple-icons. All simple-icons are referenced using icon slugs.
+                You can click the icon title on{' '}
                 <a
                   href="https://simpleicons.org/"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   simple-icons
-                </a>
-                . Simple-icons are referenced using icon slugs which can be
-                found on the simple-icons site or in the{' '}
-                <a href="https://github.com/simple-icons/simple-icons/blob/develop/slugs.md">
+                </a>{' '}
+                to copy the slug or they can be found in the{' '}
+                <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">
                   slugs.md file
                 </a>{' '}
                 in the simple-icons repository.
