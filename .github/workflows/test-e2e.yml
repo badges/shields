@@ -30,7 +30,7 @@ jobs:
           cypress: true
 
       - name: Frontend build
-        run: GATSBY_BASE_URL=http://localhost:8080 npm run build
+        run: BASE_URL=http://localhost:8080 npm run build
 
       - name: Run tests
         env:

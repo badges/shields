@@ -101,7 +101,7 @@
     "depcheck": "check-node-version --node \">= 16.0\"",
     "prebuild": "run-s --silent depcheck",
     "defs": "node scripts/export-openapi-cli.js",
-    "build": "rimraf public && cross-env BASE_URL=https://img.shields.io run-s defs docusaurus:build",
+    "build": "rimraf public && run-s defs docusaurus:build",
     "heroku-postbuild": "run-s --silent build",
     "start:server:prod": "node server",
     "now-start": "npm run start:server:prod",
