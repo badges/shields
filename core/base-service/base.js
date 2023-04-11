@@ -140,6 +140,15 @@ class BaseService {
    */
   static examples = []
 
+  /**
+   * Optional: an OpenAPI Paths Object describing this service's
+   * route or routes in OpenAPI format.
+   *
+   * @see https://swagger.io/specification/#paths-object
+   * @abstract
+   */
+  static openApi = undefined
+
   static get _cacheLength() {
     const cacheLengths = {
       build: 30,
@@ -183,7 +192,7 @@ class BaseService {
   }
 
   static getDefinition() {
-    const { category, name, isDeprecated } = this
+    const { category, name, isDeprecated, openApi } = this
     const { base, format, pattern } = this.route
     const queryParams = getQueryParamNames(this.route)
 
@@ -200,7 +209,7 @@ class BaseService {
       route = undefined
     }
 
-    const result = { category, name, isDeprecated, route, examples }
+    const result = { category, name, isDeprecated, route, examples, openApi }
 
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 

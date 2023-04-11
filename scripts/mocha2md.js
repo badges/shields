@@ -20,21 +20,28 @@ if (data.stats.passes > 0) {
   process.stdout.write(`✔ ${data.stats.passes} passed\n`)
 }
 if (data.stats.failures > 0) {
-  process.stdout.write(`✖ ${data.stats.failures} failed\n\n`)
+  process.stdout.write(`✖ ${data.stats.failures} failed\n`)
 }
 if (data.stats.pending > 0) {
-  process.stdout.write(`● ${data.stats.pending} pending\n\n`)
-  process.exit(2)
+  process.stdout.write(`● ${data.stats.pending} pending\n`)
 }
+process.stdout.write('\n')
 
 if (data.stats.failures > 0) {
-  for (const test of data.tests) {
+  process.stdout.write('## Failures\n\n')
+  for (const test of data.failures) {
     if (test.err && Object.keys(test.err).length > 0) {
-      process.stdout.write(`### ${test.title}\n\n`)
       process.stdout.write(`${test.fullTitle}\n\n`)
       process.stdout.write('```\n')
       process.stdout.write(`${test.err.stack}\n`)
       process.stdout.write('```\n\n')
     }
+  }
+}
+
+if (data.stats.pending > 0) {
+  process.stdout.write('## Pending\n\n')
+  for (const test of data.pending) {
+    process.stdout.write(`${test.fullTitle}\n\n`)
   }
 }

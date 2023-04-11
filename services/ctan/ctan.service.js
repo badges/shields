@@ -1,12 +1,13 @@
 import Joi from 'joi'
 import { renderLicenseBadge } from '../licenses.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),
   version: Joi.object({
-    number: Joi.string().required(),
+    number: Joi.string().allow('').required(),
+    date: Joi.string().allow('').required(),
   }).required(),
 }).required()
 
@@ -14,7 +15,7 @@ class BaseCtanService extends BaseJsonService {
   static defaultBadgeData = { label: 'ctan' }
 
   async fetch({ library }) {
-    const url = `http://www.ctan.org/json/pkg/${library}`
+    const url = `https://www.ctan.org/json/2.0/pkg/${library}`
     return this._requestJson({
       schema,
       url,
@@ -67,7 +68,22 @@ class CtanVersion extends BaseCtanService {
 
   async handle({ library }) {
     const json = await this.fetch({ library })
-    return renderVersionBadge({ version: json.version.number })
+    const version = json.version.number
+    if (version !== '') {
+      return renderVersionBadge({ version })
+    } else {
+      const date = json.version.date
+      if (date !== '') {
+        return renderVersionBadge({
+          version: date,
+          versionFormatter: color => 'blue',
+        })
+      } else {
+        return new InvalidResponse({
+          underlyingError: new Error('Both number and date are empty'),
+        })
+      }
+    }
   }
 }
 

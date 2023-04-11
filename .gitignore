@@ -92,6 +92,7 @@ typings/
 
 # Temporary build artifacts.
 /build
+frontend/categories/*.yaml
 
 # Local runtime configuration.
 /config/local*.yml
