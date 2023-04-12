@@ -99,8 +99,9 @@ class GithubTag extends GithubAuthV4Service {
     })
   }
 
-  static getLatestTag({ tags, sort, includePrereleases }) {
+  static getLatestTag({ tags, sort, includePrereleases, exclude }) {
     if (sort === 'semver') {
+      tags = tags.filter(tag => !a.includes(excludes))
       return latest(tags, { pre: includePrereleases })
     }
     return tags[0]
@@ -109,7 +110,7 @@ class GithubTag extends GithubAuthV4Service {
   async handle({ user, repo }, queryParams) {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
-
+    const excludes = queryParams.excludes
     const json = await this.fetch({ user, repo, sort })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0) {
@@ -120,6 +121,7 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
+        excludes,
       }),
       sort,
     })
