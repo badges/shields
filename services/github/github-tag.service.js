@@ -99,9 +99,9 @@ class GithubTag extends GithubAuthV4Service {
     })
   }
 
-  static getLatestTag({ tags, sort, includePrereleases, exclude }) {
+  static getLatestTag({ tags, sort, includePrereleases,
+    tags = tags.filter(tag => !tag.includes(exclude))
     if (sort === 'semver') {
-      tags = tags.filter(tag => !tag.includes(exclude))
       return latest(tags, { pre: includePrereleases })
     }
     return tags[0]
