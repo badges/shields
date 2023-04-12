@@ -9,11 +9,11 @@ export const t = new ServiceTester({
 })
 
 t.create('Tag')
-  .get('/v/tag/expressjs/express.json')
+  .get('/v/tag/expressjs/express.json?exclude=')
   .expectBadge({ label: 'tag', message: isSemver, color: 'blue' })
 
 t.create('Tag (inc pre-release)')
-  .get('/v/tag/expressjs/express.json?include_prereleases')
+  .get('/v/tag/expressjs/express.json?include_prereleases&exclude=')
   .expectBadge({
     label: 'tag',
     message: isSemver,
