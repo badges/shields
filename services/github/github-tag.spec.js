@@ -27,6 +27,13 @@ describe('GithubTag', function () {
       tags: tagFixture,
       sort: 'date',
       includePrereleases: false,
+    }).expect('v1.2')
+
+    given({
+      tags: tagFixture,
+      sort: 'date',
+      includePrereleases: false,
+      exclude: 'cheese'
     }).expect('cheese')
 
     // if there are only pre-releases to choose from
