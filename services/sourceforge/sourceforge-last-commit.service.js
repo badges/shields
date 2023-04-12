@@ -1,0 +1,63 @@
+import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { age as ageColor } from '../color-formatters.js'
+
+const schema = Joi.object({
+  timeline: Joi.array()
+    .items(
+      Joi.object({
+        published: Joi.number().required(),
+        verb: Joi.string().required(),
+      })
+    )
+    .required(),
+})
+
+export default class Sourceforge extends BaseJsonService {
+  static category = 'activity'
+
+  static route = {
+    base: 'sourceforge/last-commit',
+    pattern: ':project',
+  }
+
+  static examples = [
+    {
+      title: 'SourceForge last commit',
+      namedParams: {
+        project: 'guitarix',
+      },
+      staticPreview: this.render({
+        commitDate: 1653556285,
+      }),
+    },
+  ]
+
+  static defaultBadgeData = { label: 'last commit' }
+
+  static render({ commitDate }) {
+    return {
+      message: formatDate(new Date(commitDate)),
+      color: ageColor(new Date(commitDate)),
+    }
+  }
+
+  async fetch({ project }) {
+    return this._requestJson({
+      url: `https://sourceforge.net/rest/p/${project}/activity`,
+      schema,
+      errorMessages: {
+        404: 'project not found',
+      },
+    })
+  }
+
+  async handle({ project }) {
+    const body = await this.fetch({ project })
+    return this.constructor.render({
+      commitDate: body.timeline.find(objet => objet.verb !== 'posted')
+        .published,
+    })
+  }
+}
