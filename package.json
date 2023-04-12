@@ -113,7 +113,7 @@
     "prestart": "cross-env BASE_URL=http://localhost:8080 run-s --silent depcheck defs",
     "start": "concurrently --names server,frontend \"npm run start:server\" \"npm run docusaurus:start\"",
     "e2e": "start-server-and-test start http://localhost:3000 test:e2e",
-    "e2e-on-build": "cross-env CYPRESS_baseUrl=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
+    "e2e-on-build": "cross-env CYPRESS_BASE_URL=http://localhost:8080 start-server-and-test start:server:e2e-on-build http://localhost:8080 test:e2e",
     "badge": "cross-env NODE_CONFIG_ENV=test TRACE_SERVICES=true node scripts/badge-cli.js",
     "build-docs": "rimraf api-docs/ && jsdoc --pedantic -c ./jsdoc.json . && echo 'contributing.shields.io' > api-docs/CNAME",
     "migrate": "node scripts/write-migrations-config.js > migrations-config.json && node-pg-migrate --config-file=migrations-config.json",

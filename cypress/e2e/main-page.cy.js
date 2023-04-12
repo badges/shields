@@ -47,9 +47,8 @@ describe('Frontend', function () {
     cy.get('input[placeholder="user"]').type('badges')
     cy.get('input[placeholder="repo"]').type('shields')
 
-    cy.contains('Execute').click()
-
     cy.intercept('GET', `${backendUrl}/github/issues/badges/shields`).as('get')
+    cy.contains('Execute').click()
     cy.wait('@get').its('response.statusCode').should('eq', 200)
     cy.get('img[id="badge-preview"]')
   })
