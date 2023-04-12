@@ -110,7 +110,7 @@ class GithubTag extends GithubAuthV4Service {
   async handle({ user, repo }, queryParams) {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
-    const excludes = queryParams.excludes
+    const exclude = queryParams.exclude == undefined ? "" : queryParams.exclude
     const json = await this.fetch({ user, repo, sort })
     const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
     if (tags.length === 0) {
@@ -121,7 +121,7 @@ class GithubTag extends GithubAuthV4Service {
         tags,
         sort,
         includePrereleases,
-        excludes,
+        exclude,
       }),
       sort,
     })
