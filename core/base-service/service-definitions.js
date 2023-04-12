@@ -46,6 +46,28 @@ const serviceDefinition = Joi.object({
       })
     )
     .default([]),
+  openApi: Joi.object().pattern(
+    /./,
+    Joi.object({
+      get: Joi.object({
+        summary: Joi.string().required(),
+        description: Joi.string().required(),
+        parameters: Joi.array()
+          .items(
+            Joi.object({
+              name: Joi.string().required(),
+              description: Joi.string(),
+              in: Joi.string().valid('query', 'path').required(),
+              required: Joi.boolean().required(),
+              schema: Joi.object({ type: Joi.string().required() }).required(),
+              example: Joi.string(),
+            })
+          )
+          .min(1)
+          .required(),
+      }).required(),
+    }).required()
+  ),
 }).required()
 
 function assertValidServiceDefinition(example, message = undefined) {
