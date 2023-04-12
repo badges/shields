@@ -119,7 +119,8 @@
     "migrate": "node scripts/write-migrations-config.js > migrations-config.json && node-pg-migrate --config-file=migrations-config.json",
     "docusaurus:start": "docusaurus start frontend",
     "docusaurus:build": "docusaurus build frontend --out-dir ../public",
-    "docusaurus:swizzle": "cd frontend && docusaurus swizzle"
+    "docusaurus:swizzle": "cd frontend && docusaurus swizzle",
+    "docusaurus:clear": "docusaurus clear frontend"
   },
   "lint-staged": {
     "**/*.@(js|ts|tsx)": [
