@@ -39,7 +39,6 @@ describe('Text formatters', function () {
 
   test(metric, () => {
     /* eslint-disable no-loss-of-precision */
-    /* eslint-disable @typescript-eslint/no-loss-of-precision */
     given(0).expect('0')
     given(999).expect('999')
     given(1000).expect('1k')
