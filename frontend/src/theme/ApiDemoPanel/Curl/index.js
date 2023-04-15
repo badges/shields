@@ -102,13 +102,50 @@ const languageTheme = {
   ],
 }
 
+function getBaseUrl() {
+  /*
+  This is a special case for production.
+
+  We want to be able to build the front end with no value set for
+  `BASE_URL` so that staging, prod and self hosting users
+  can all use the same docker image.
+
+  When deployed to staging, we want the frontend on
+  https://staging.shields.io/ to generate badges with the base
+  https://staging.shields.io/
+  (and we want similar behaviour for users hosting their own instance)
+
+  When we promote to production we want https://shields.io/ and
+  https://www.shields.io/ to both generate badges with the base
+  https://img.shields.io/
+
+  For local dev, we can deal with setting the api and front-end
+  being on different ports using the BASE_URL env var
+  */
+  const { protocol, hostname, port } = window.location
+  if (['shields.io', 'www.shields.io'].includes(hostname)) {
+    return 'https://img.shields.io'
+  }
+  if (!port) {
+    return `${protocol}//${hostname}`
+  }
+  return `${protocol}//${hostname}:${port}`
+}
+
+function getServer() {
+  return {
+    url: getBaseUrl(),
+    variables: {},
+  }
+}
+
 function Curl({ postman, codeSamples }) {
   // TODO: match theme for vscode.
   const { siteConfig } = useDocusaurusContext()
   const [copyText, setCopyText] = useState('Copy')
   const contentType = useTypedSelector(state => state.contentType.value)
   const accept = useTypedSelector(state => state.accept.value)
-  const server = useTypedSelector(state => state.server.value)
+  const server = useTypedSelector(state => state.server.value) || getServer()
   const body = useTypedSelector(state => state.body)
   const pathParams = useTypedSelector(state => state.params.path)
   const queryParams = useTypedSelector(state => state.params.query)

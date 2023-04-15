@@ -1,4 +1,4 @@
-const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
+const baseUrl = process.env.BASE_URL
 const globalParamRefs = [
   { $ref: '#/components/parameters/style' },
   { $ref: '#/components/parameters/logo' },
@@ -228,7 +228,7 @@ function category2openapi(category, services) {
         name: 'CC0',
       },
     },
-    servers: [{ url: baseUrl }],
+    servers: baseUrl ? [{ url: baseUrl }] : undefined,
     components: {
       parameters: {
         style: {
