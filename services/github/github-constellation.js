@@ -1,5 +1,4 @@
 import { AuthHelper } from '../../core/base-service/auth-helper.js'
-import RedisTokenPersistence from '../../core/token-pooling/redis-token-persistence.js'
 import SqlTokenPersistence from '../../core/token-pooling/sql-token-persistence.js'
 import log from '../../core/server/log.js'
 import GithubApiProvider from './github-api-provider.js'
@@ -24,22 +23,12 @@ class GithubConstellation {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
 
-    const {
-      postgres_url: pgUrl,
-      redis_url: redisUrl,
-      gh_token: globalToken,
-    } = config.private
+    const { postgres_url: pgUrl, gh_token: globalToken } = config.private
     if (pgUrl) {
       log.log('Token persistence configured with dbUrl')
       this.persistence = new SqlTokenPersistence({
         url: pgUrl,
         table: 'github_user_tokens',
-      })
-    } else if (redisUrl) {
-      log.log('Token persistence configured with redisUrl')
-      this.persistence = new RedisTokenPersistence({
-        url: redisUrl,
-        key: 'githubUserTokens',
       })
     }
 
