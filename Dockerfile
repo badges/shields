@@ -14,6 +14,8 @@ RUN npm install -g "npm@>=8"
 RUN NODE_ENV=development CYPRESS_INSTALL_BINARY=0 npm ci
 
 COPY . /usr/src/app
+ARG base_url=https://img.shields.io
+ENV BASE_URL=base_url
 RUN npm run build
 RUN npm prune --production
 RUN npm cache clean --force
