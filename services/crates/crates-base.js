@@ -44,7 +44,7 @@ class BaseCratesService extends BaseJsonService {
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
-      : `https://crates.io/api/v1/crates/${crate}`
+      : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
     return this._requestJson({ schema, url })
   }
 }
