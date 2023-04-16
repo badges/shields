@@ -8,7 +8,7 @@ const schema = Joi.object({
 
 const documentation = `
 <p>
-  The Discord badge requires the <code>SERVER INVITE CODE</code> in order access the Discord JSON API.
+  The Discord badge requires the <code>SERVER INVITE CODE</code> in order access the Discord JSON API, this invite code should be set to never expire.
 </p>
 <p>
   The <code>SERVER INVITE CODE</code> can be located at the end of the invite url.
