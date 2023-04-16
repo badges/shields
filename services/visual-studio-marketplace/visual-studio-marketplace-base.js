@@ -16,7 +16,7 @@ const extensionQuerySchema = Joi.object({
                     value: Joi.number().required(),
                   })
                 )
-                .required(),
+                .default([]),
               versions: Joi.array()
                 .items(
                   Joi.object({

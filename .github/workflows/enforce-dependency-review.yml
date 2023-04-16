@@ -1,7 +1,7 @@
 name: 'Dependency Review'
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, reopened, synchronize]
 
 jobs:
   enforce-dependency-review:

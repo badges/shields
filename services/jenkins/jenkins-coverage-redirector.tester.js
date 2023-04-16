@@ -53,3 +53,11 @@ t.create('api prefix + job url in path')
       'https://jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master'
     )}`
   )
+
+t.create('old v1 api prefix to new prefix')
+  .get(
+    '/coverage/api.svg?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master'
+  )
+  .expectRedirect(
+    '/jenkins/coverage/apiv1.svg?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master'
+  )

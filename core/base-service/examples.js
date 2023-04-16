@@ -129,6 +129,7 @@ function transformExample(inExample, index, ServiceClass) {
     ServiceClass
   )
 
+  const category = categories.find(c => c.id === ServiceClass.category)
   return {
     title,
     example: {
@@ -146,9 +147,7 @@ function transformExample(inExample, index, ServiceClass) {
       style: style === 'flat' ? undefined : style,
       namedLogo,
     },
-    keywords: keywords.concat(
-      categories.find(c => c.id === ServiceClass.category).keywords
-    ),
+    keywords: category ? keywords.concat(category.keywords) : keywords,
     documentation: documentation ? { __html: documentation } : undefined,
   }
 }
