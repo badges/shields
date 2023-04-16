@@ -69,6 +69,8 @@ export default class Discord extends BaseJsonService {
 
   async handle({ inviteId }) {
     const data = await this.fetch({ inviteId })
-    return this.constructor.render({ boosts: data.guild.premium_subscription_count })
+    return this.constructor.render({
+      boosts: data.guild.premium_subscription_count,
+    })
   }
 }
