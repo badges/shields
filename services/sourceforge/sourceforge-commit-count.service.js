@@ -5,7 +5,7 @@ const schema = Joi.object({
   commit_count: Joi.number().required(),
 })
 
-export default class Sourceforge extends BaseJsonService {
+export default class SourceforgeCommitCount extends BaseJsonService {
   static category = 'activity'
 
   static route = {

@@ -11,7 +11,7 @@ const schema = Joi.object({
   }).required(),
 })
 
-export default class Sourceforge extends BaseJsonService {
+export default class SourceforgePlatform extends BaseJsonService {
   static category = 'platform-support'
 
   static route = {

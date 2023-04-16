@@ -27,7 +27,7 @@ const intervalMap = {
   },
 }
 
-export default class Sourceforge extends BaseJsonService {
+export default class SourceforgeDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
