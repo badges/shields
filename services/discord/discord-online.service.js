@@ -50,7 +50,7 @@ export default class Discord extends BaseJsonService {
   }
 
   async fetch({ inviteId }) {
-    const url = `https://discord.com/api/v9/invites/${inviteId}?with_counts=true&with_expiration=true`
+    const url = `https://discord.com/api/v9/invites/${inviteId}?with_counts=true`
     return this._requestJson(
       this.authHelper.withBearerAuthHeader(
         {
@@ -67,8 +67,6 @@ export default class Discord extends BaseJsonService {
 
   async handle({ inviteId }) {
     const data = await this.fetch({ inviteId })
-    return this.constructor.render({
-      online: data.approximate_presence_count,
-    })
+    return this.constructor.render({ online: data.approximate_presence_count })
   }
 }

@@ -3,6 +3,7 @@ import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
+  approximate_presence_count: nonNegativeInteger,
   approximate_member_count: nonNegativeInteger,
 }).required()
 
@@ -11,7 +12,7 @@ const documentation = `
   The Discord badge requires the <code>SERVER INVITE CODE</code> in order access the Discord JSON API.
 </p>
 <p>
-  The <code>SERVER INVITE CODE</code> can be located at the end of the invite url.
+  The <code>SERVER INVITE CODE</code> can be located at the end of the invite url, this invite code should be set to never expire.
 </p>
 `
 
@@ -19,7 +20,7 @@ export default class Discord extends BaseJsonService {
   static category = 'chat'
 
   static route = {
-    base: 'discord/members',
+    base: 'discord/online-count',
     pattern: ':inviteId',
   }
 
@@ -33,7 +34,7 @@ export default class Discord extends BaseJsonService {
     {
       title: 'Discord',
       namedParams: { inviteId: 'HjJCwm5' },
-      staticPreview: this.render({ members: 237 }),
+      staticPreview: this.render({ online: 97, members: 237 }),
       documentation,
     },
   ]
@@ -42,9 +43,9 @@ export default class Discord extends BaseJsonService {
 
   static defaultBadgeData = { label: 'chat' }
 
-  static render({ members }) {
+  static render({ online, members }) {
     return {
-      message: `${members} members`,
+      message: `${online}/${members} online`,
       color: 'brightgreen',
     }
   }
@@ -67,6 +68,9 @@ export default class Discord extends BaseJsonService {
 
   async handle({ inviteId }) {
     const data = await this.fetch({ inviteId })
-    return this.constructor.render({ members: data.approximate_member_count })
+    return this.constructor.render({
+      online: data.approximate_presence_count,
+      members: data.approximate_member_count,
+    })
   }
 }
