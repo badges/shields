@@ -57,7 +57,7 @@ export default class Discord extends BaseJsonService {
   }
 
   async fetch({ serverId }) {
-    const url = `https://discord.com/api/v6/guilds/${serverId}/widget.json`
+    const url = `https://discord.com/api/v9/guilds/${serverId}/widget.json`
     return this._requestJson(
       this.authHelper.withBearerAuthHeader(
         {
