@@ -1,7 +1,6 @@
 'use strict'
 
 const path = require('path')
-const isSvg = require('is-svg')
 const { spawn } = require('child-process-promise')
 const { expect, use } = require('chai')
 use(require('chai-string'))
@@ -20,6 +19,7 @@ describe('The CLI', function () {
   })
 
   it('should produce default badges', async function () {
+    const { default: isSvg } = await import('is-svg')
     const { stdout } = await runCli(['cactus', 'grown'])
     expect(stdout)
       .to.satisfy(isSvg)
@@ -28,11 +28,13 @@ describe('The CLI', function () {
   })
 
   it('should produce colorschemed badges', async function () {
+    const { default: isSvg } = await import('is-svg')
     const { stdout } = await runCli(['cactus', 'grown', ':green'])
     expect(stdout).to.satisfy(isSvg)
   })
 
   it('should produce right-color badges', async function () {
+    const { default: isSvg } = await import('is-svg')
     const { stdout } = await runCli(['cactus', 'grown', '#abcdef'])
     expect(stdout).to.satisfy(isSvg).and.to.include('#abcdef')
   })
