@@ -15,7 +15,7 @@ const documentation = `
 </p>
 `
 
-export default class Discord extends BaseJsonService {
+export default class DiscordMembers extends BaseJsonService {
   static category = 'chat'
 
   static route = {
