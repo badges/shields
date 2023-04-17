@@ -6,7 +6,7 @@ t.create('gets online members for Reactiflux')
   .get('/reactiflux.json')
   .expectBadge({
     label: 'chat',
-    message: Joi.string().regex(/^[0-9]+ online$/),
+    message: Joi.string().regex(/^[0-9]+\/[0-9]+ online$/),
     color: 'brightgreen',
   })
 
