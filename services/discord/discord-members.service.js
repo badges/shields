@@ -52,16 +52,13 @@ export default class DiscordMembers extends BaseJsonService {
   async fetch({ inviteId }) {
     const url = `https://discord.com/api/v9/invites/${inviteId}?with_counts=true`
     return this._requestJson(
-      this.authHelper.withBearerAuthHeader(
-        {
-          url,
-          schema,
-          errorMessages: {
-            404: 'invalid server invite',
-          },
+      {
+        url,
+        schema,
+        errorMessages: {
+          404: 'invalid server invite',
         },
-        'Bot'
-      )
+      },
     )
   }
 
