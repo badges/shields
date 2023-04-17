@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import BaseSourceForgeService from './sourceforge-base.js'
 
 const schema = Joi.object({
   categories: Joi.object({
@@ -9,9 +9,9 @@ const schema = Joi.object({
       })
       .required(),
   }).required(),
-})
+}).required()
 
-export default class SourceforgePlatform extends BaseJsonService {
+export default class SourceforgePlatform extends BaseSourceForgeService {
   static category = 'platform-support'
 
   static route = {
@@ -39,18 +39,8 @@ export default class SourceforgePlatform extends BaseJsonService {
     }
   }
 
-  async fetch({ project }) {
-    return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/`,
-      schema,
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
-  }
-
   async handle({ project }) {
-    const body = await this.fetch({ project })
+    const body = await this.fetch({ project, schema })
     return this.constructor.render({
       platforms: body.categories.os.map(obj => obj.fullname),
     })

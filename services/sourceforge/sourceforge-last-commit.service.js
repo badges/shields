@@ -4,15 +4,14 @@ import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 
 const schema = Joi.object({
-  timeline: Joi.array()
+  commits: Joi.array()
     .items(
       Joi.object({
-        published: Joi.number().required(),
-        verb: Joi.string().required(),
-      })
+        committed_date: Joi.string().required(),
+      }).required()
     )
     .required(),
-})
+}).required()
 
 export default class SourceforgeLastCommit extends BaseJsonService {
   static category = 'activity'
@@ -45,7 +44,7 @@ export default class SourceforgeLastCommit extends BaseJsonService {
 
   async fetch({ project }) {
     return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/activity`,
+      url: `https://sourceforge.net/rest/p/${project}/git/commits`,
       schema,
       errorMessages: {
         404: 'project not found',
@@ -56,8 +55,7 @@ export default class SourceforgeLastCommit extends BaseJsonService {
   async handle({ project }) {
     const body = await this.fetch({ project })
     return this.constructor.render({
-      commitDate: body.timeline.find(objet => objet.verb !== 'posted')
-        .published,
+      commitDate: body.commits[0].committed_date,
     })
   }
 }

@@ -1,12 +1,12 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
 import { renderContributorBadge } from '../contributor-count.js'
+import BaseSourceForgeService from './sourceforge-base.js'
 
 const schema = Joi.object({
   developers: Joi.array().required(),
 }).required()
 
-export default class SourceforgeContributors extends BaseJsonService {
+export default class SourceforgeContributors extends BaseSourceForgeService {
   static category = 'activity'
 
   static route = {
@@ -34,18 +34,8 @@ export default class SourceforgeContributors extends BaseJsonService {
     })
   }
 
-  async fetch({ project }) {
-    return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/`,
-      schema,
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
-  }
-
   async handle({ project }) {
-    const body = await this.fetch({ project })
+    const body = await this.fetch({ project, schema })
     return this.constructor.render({
       contributorCount: body.developers.length,
     })

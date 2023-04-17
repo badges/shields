@@ -1,9 +1,10 @@
 import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
+import { metric } from '../text-formatters.js'
 
 const schema = Joi.object({
   commit_count: Joi.number().required(),
-})
+}).required()
 
 export default class SourceforgeCommitCount extends BaseJsonService {
   static category = 'activity'
@@ -29,14 +30,14 @@ export default class SourceforgeCommitCount extends BaseJsonService {
 
   static render({ commitCount }) {
     return {
-      message: commitCount,
+      message: metric(commitCount),
       color: 'blue',
     }
   }
 
   async fetch({ project }) {
     return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/code`,
+      url: `https://sourceforge.net/rest/p/${project}/git`,
       schema,
       errorMessages: {
         404: 'project not found',

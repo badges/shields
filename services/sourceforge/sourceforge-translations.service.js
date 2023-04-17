@@ -1,13 +1,14 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { metric } from '../text-formatters.js'
+import BaseSourceForgeService from './sourceforge-base.js'
 
 const schema = Joi.object({
   categories: Joi.object({
     translation: Joi.array().required(),
   }).required(),
-})
+}).required()
 
-export default class SourceforgeTranslations extends BaseJsonService {
+export default class SourceforgeTranslations extends BaseSourceForgeService {
   static category = 'activity'
 
   static route = {
@@ -31,23 +32,13 @@ export default class SourceforgeTranslations extends BaseJsonService {
 
   static render({ translationCount }) {
     return {
-      message: translationCount,
+      message: metric(translationCount),
       color: 'blue',
     }
   }
 
-  async fetch({ project }) {
-    return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/`,
-      schema,
-      errorMessages: {
-        404: 'project not found',
-      },
-    })
-  }
-
   async handle({ project }) {
-    const body = await this.fetch({ project })
+    const body = await this.fetch({ project, schema })
     return this.constructor.render({
       translationCount: body.categories.translation.length,
     })
