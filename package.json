@@ -27,6 +27,7 @@
     "@renovatebot/ruby-semver": "^2.1.10",
     "@sentry/node": "^7.48.0",
     "@shields_io/camp": "^18.1.2",
+    "@xmldom/xmldom": "0.8.7",
     "badge-maker": "file:badge-maker",
     "bytes": "^3.1.2",
     "camelcase": "^7.0.1",
@@ -65,7 +66,6 @@
     "semver": "~7.4.0",
     "simple-icons": "8.10.0",
     "webextension-store-meta": "^1.0.5",
-    "xmldom": "~0.6.0",
     "xpath": "~0.0.32"
   },
   "scripts": {
