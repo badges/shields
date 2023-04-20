@@ -31,7 +31,7 @@ export default class SourceforgeDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
-    base: 'sourceforge/downloads',
+    base: 'sourceforge',
     pattern: ':interval(dt|dm|dw|dd)/:project/:folder*',
   }
 
