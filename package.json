@@ -62,7 +62,7 @@
     "prom-client": "^14.2.0",
     "qs": "^6.11.1",
     "query-string": "^8.1.0",
-    "semver": "~7.4.0",
+    "semver": "~7.5.0",
     "simple-icons": "8.10.0",
     "webextension-store-meta": "^1.0.5",
     "xmldom": "~0.6.0",
