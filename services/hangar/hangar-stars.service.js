@@ -13,8 +13,8 @@ export default class HangarStars extends BaseHangarService {
     {
       title: 'Hangar Stars',
       namedParams: {
-        author: 'GeyserMC',
-        slug: 'Geyser',
+        author: 'EssentialsX',
+        slug: 'Essentials',
       },
       staticPreview: this.render({
         stars: 1000,
