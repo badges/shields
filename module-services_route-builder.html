@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: services/color-formatters.js</title>
+    <title>JSDoc: Class: module:services/route-builder</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,216 +17,597 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: services/color-formatters.js</h1>
+    <h1 class="page-title">Class: module:services/route-builder</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Commonly-used functions for determining the colour to use for a badge,
- * including colours based off download count, version number, etc.
- *
- * @module
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>module:services/route-builder<span class="signature">(attrs)</span><span class="type-signature"></span></h2>
+        
+    
+</header>
 
-import dayjs from 'dayjs'
-import pep440 from '@renovate/pep440'
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * Determines the color used for a badge based on version.
- *
- * @param {string|number} version Version used for determining badge color
- * @returns {string} Badge color
- */
-function version(version) {
-  if (typeof version !== 'string' &amp;&amp; typeof version !== 'number') {
-    throw new Error(`Can't generate a version color for ${version}`)
-  }
-  version = `${version}`
-  let first = version[0]
-  if (first === 'v') {
-    first = version[1]
-  }
-  if (first === '0' || /alpha|beta|snapshot|dev|pre|rc/i.test(version)) {
-    return 'orange'
-  } else {
-    return 'blue'
-  }
-}
+    
 
-/**
- * Determines the color used for a badge based on PEP440 versioning.
- *
- * @param {string|number} version Version used for determining badge color
- * @returns {string} Badge color
- */
-function pep440VersionColor(version) {
-  if (!pep440.valid(version)) {
-    return 'lightgrey'
-  }
-  const parsedVersion = pep440.explain(version)
-  if (parsedVersion.is_prerelease || parsedVersion.public.startsWith('0.')) {
-    return 'orange'
-  }
-  return 'blue'
-}
+    
+    <h4 class="name" id="module:services/route-builder"><span class="type-signature"></span>new module:services/route-builder<span class="signature">(attrs)</span><span class="type-signature"></span></h4>
+    
 
-/**
- * Determines the color used for a badge by comparing the value and floor count values.
- * The color can vary from red to bright green depending on the range the value lies in.
- * Decreasing the value will shift the color towards red.
- * Increasing the value will shift the color towards bright green.
- *
- * @param {number} value Current value
- * @param {number} yellow Yellow color threshold, should be greater than 0
- * @param {number} yellowgreen Yellowgreen color threshold, should be greater than yellow
- * @param {number} green Green color threshold, should be greater than yellowgreen
- * @returns {string} Badge color
- */
-function floorCount(value, yellow, yellowgreen, green) {
-  if (value &lt;= 0) {
-    return 'red'
-  } else if (value &lt; yellow) {
-    return 'yellow'
-  } else if (value &lt; yellowgreen) {
-    return 'yellowgreen'
-  } else if (value &lt; green) {
-    return 'green'
-  } else {
-    return 'brightgreen'
-  }
-}
+    
 
-/**
- * Determines the color used for a badge by comparing the download count and floor values.
- * The color varies from red to bright green as the download count increases.
- *
- * @param {number} downloads Download count
- * @returns {string} Badge color
- */
-function downloadCount(downloads) {
-  return floorCount(downloads, 10, 100, 1000)
-}
 
-/**
- * Determines the color used for a badge by comparing percentage and floor values.
- * The color varies from red to bright green as the percentage increases.
- *
- * @param {number} percentage Percentage value
- * @returns {string} Badge color
- */
-function coveragePercentage(percentage) {
-  return floorCount(percentage, 80, 90, 100)
-}
 
-/**
- * Determines the color used for a badge by matching score with grade values.
- * The color varies from bright green to red as the score decreases.
- * The score can be one of the following grade value: ['A', 'B', 'C', 'D', 'E'].
- * The color defaults to red if the score does not matches with any of the grade values.
- *
- * @param {string} score Score value
- * @returns {string} Badge color
- */
-function letterScore(score) {
-  if (score === 'A') {
-    return 'brightgreen'
-  } else if (score === 'B') {
-    return 'green'
-  } else if (score === 'C') {
-    return 'yellowgreen'
-  } else if (score === 'D') {
-    return 'yellow'
-  } else if (score === 'E') {
-    return 'orange'
-  } else {
-    return 'red'
-  }
-}
+<div class="description">
+    <p>Creates a RouteBuilder object.</p>
+</div>
 
-/**
- * Creates a callback function that determines badge color from the colors array.
- * If the colors array is provided then for n steps, there should be n + 1 color.
- * If the colors array is not provided then it is chosen from the default colors array
- * according to the size of the steps array.
- *
- * @param {number[]} steps Steps array
- * @param {string[]} colors Colors array. If provided, should be of length steps.length + 1
- * @param {boolean} reversed If true then the colors array will be considered in reverse order
- * @returns {function(number): string} Function that finds the step index by comparing value
- * with steps array and returns color from colors array for the corresponding step index
- */
-function colorScale(steps, colors, reversed) {
-  if (steps === undefined) {
-    throw Error('When invoking colorScale, steps should be provided.')
-  }
 
-  const defaultColors = {
-    1: ['red', 'brightgreen'],
-    2: ['red', 'yellow', 'brightgreen'],
-    3: ['red', 'yellow', 'green', 'brightgreen'],
-    4: ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'],
-    5: ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'brightgreen'],
-  }
 
-  if (typeof colors === 'undefined') {
-    if (steps.length in defaultColors) {
-      colors = defaultColors[steps.length]
-    } else {
-      throw Error(`No default colors for ${steps.length} steps.`)
-    }
-  }
 
-  if (steps.length !== colors.length - 1) {
-    throw Error(
-      'When colors are provided, there should be n + 1 colors for n steps.'
-    )
-  }
 
-  if (reversed) {
-    colors = Array.from(colors).reverse()
-  }
 
-  return value => {
-    const stepIndex = steps.findIndex(step => value &lt; step)
 
-    // For the final step, stepIndex is -1, so in all cases this expression
-    // works swimmingly.
-    return colors.slice(stepIndex)[0]
-  }
-}
 
-/**
- * Determines the color used for a badge according to the age.
- * Age is calculated as days elapsed till current date.
- * The color varies from bright green to red as the age increases.
- *
- * @param {string} date Date string
- * @returns {string} Badge color
- */
-function age(date) {
-  const colorByAge = colorScale([7, 30, 180, 365, 730], undefined, true)
-  const daysElapsed = dayjs().diff(dayjs(date), 'days')
-  return colorByAge(daysElapsed)
-}
 
-export {
-  version,
-  pep440VersionColor,
-  downloadCount,
-  coveragePercentage,
-  floorCount,
-  letterScore,
-  colorScale,
-  age,
-}
-</code></pre>
-        </article>
-    </section>
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attributes</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>base</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Base URL, defaults to ''</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_route-builder.js.html">services/route-builder.js</a>, <a href="services_route-builder.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="format"><span class="type-signature"></span>format<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Get the format components separated by '/'</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_route-builder.js.html">services/route-builder.js</a>, <a href="services_route-builder.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="push"><span class="type-signature"></span>push<span class="signature">(format, capture)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Saves the format and capture values in the RouteBuilder instance.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>format</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Pattern based on path-to-regex, for example: (?:(.+)\.)?${serviceBaseUrl}</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>capture</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Value to capture</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_route-builder.js.html">services/route-builder.js</a>, <a href="services_route-builder.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>RouteBuilder instance for chaining</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toObject"><span class="type-signature"></span>toObject<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a new object based on RouteBuilder instance containing its base, format and capture properties.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_route-builder.js.html">services/route-builder.js</a>, <a href="services_route-builder.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Object containing base, format and capture properties of the RouteBuilder instance</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
