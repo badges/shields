@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-05-01
+
+- fix [sourceforge] downloads [#9102](https://github.com/badges/shields/issues/9102)
+- [SourceForge] Added badges for SourceForge [#9078](https://github.com/badges/shields/issues/9078)
+- add fly.io PR review apps [#9069](https://github.com/badges/shields/issues/9069)
+- remove redis token persistence backend [#9065](https://github.com/badges/shields/issues/9065)
+- remove pull_request:edited trigger from most workflows [#9072](https://github.com/badges/shields/issues/9072)
+- crates: Use `?include=` to reduce crates.io backend load [#9081](https://github.com/badges/shields/issues/9081)
+- Export OpenAPI definitions from service examples; affects [dynamic endpoint static] [#8966](https://github.com/badges/shields/issues/8966)
+- fix markdown summary if there are pending tests [#9068](https://github.com/badges/shields/issues/9068)
+- Update the hint of simple-icons [#9054](https://github.com/badges/shields/issues/9054)
+- Dependency updates
+
 ## server-2023-04-02
 
 - [JenkinsCoverage] Update Jenkins Code Coverage API for new plugin version [#9010](https://github.com/badges/shields/issues/9010)
