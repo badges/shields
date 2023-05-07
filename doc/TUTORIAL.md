@@ -44,7 +44,7 @@ In case you get the _"getaddrinfo ENOTFOUND localhost"_ error, visit [http://127
 
 ## (3) Open an Issue
 
-Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.md) and describe what you have in mind:
+Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.yml) and describe what you have in mind:
 
 - What is the badge for?
 - Which API do you want to use?
