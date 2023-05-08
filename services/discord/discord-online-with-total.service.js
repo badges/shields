@@ -39,7 +39,7 @@ export default class DiscordOnlineWithTotalt extends BaseJsonService {
     },
   ]
 
-  static _cacheLength = 30
+  static _cacheLength = 300
 
   static defaultBadgeData = { label: 'chat' }
 
