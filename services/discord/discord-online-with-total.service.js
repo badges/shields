@@ -16,7 +16,7 @@ const documentation = `
 </p>
 `
 
-export default class DiscordOnlineCount extends BaseJsonService {
+export default class DiscordOnlineWithTotalt extends BaseJsonService {
   static category = 'chat'
 
   static route = {
