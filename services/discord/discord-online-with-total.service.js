@@ -20,7 +20,7 @@ export default class DiscordOnlineCount extends BaseJsonService {
   static category = 'chat'
 
   static route = {
-    base: 'discord/online-count',
+    base: 'discord/online-with-total',
     pattern: ':inviteId',
   }
 
