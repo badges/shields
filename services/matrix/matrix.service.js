@@ -119,7 +119,6 @@ export default class Matrix extends BaseJsonService {
       errorMessages: {
         401: 'auth failed',
         403: 'guests not allowed',
-        429: 'rate limited by remote server',
       },
     })
   }
@@ -138,7 +137,6 @@ export default class Matrix extends BaseJsonService {
       errorMessages: {
         401: 'bad auth token',
         404: 'room not found',
-        429: 'rate limited by remote server',
       },
     })
   }

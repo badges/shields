@@ -38,7 +38,6 @@ export default class WeblateEntities extends WeblateBase {
       url: `${server}/api/${type}/`,
       errorMessages: {
         403: 'access denied by remote server',
-        429: 'rate limited by remote server',
       },
     })
   }
