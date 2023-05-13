@@ -45,12 +45,12 @@ export default class GithubSponsors extends GithubAuthV4Service {
         query ($user: String!) {
           repositoryOwner(login: $user) {
             ... on User {
-              sponsorshipsAsMaintainer {
+              sponsorshipsAsMaintainer(includePrivate: true) {
                 totalCount
               }
             }
             ... on Organization {
-              sponsorshipsAsMaintainer {
+              sponsorshipsAsMaintainer(includePrivate: true) {
                 totalCount
               }
             }
