@@ -3,11 +3,11 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-t.create('gets the port version of entt')
-  .get('/entt.json')
-  .expectBadge({ label: 'vcpkg', message: isSemver })
+t.create('gets nlohmann-json port version')
+  .get('/nlohmann-json.json')
+  .expectBadge({ label: 'vcpkg', color: 'blue', message: isSemver })
 
-t.create('returns not found for invalid port')
+t.create('gets not found error for invalid port')
   .get('/this-port-does-not-exist.json')
   .expectBadge({
     label: 'vcpkg',

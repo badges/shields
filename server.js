@@ -43,9 +43,10 @@ if (fs.existsSync('.env')) {
 }
 
 if (config.private.redis_url != null) {
-  console.warn(
-    'RedisTokenPersistence is deprecated for token pooling and will be removed in a future release. Migrate to SqlTokenPersistence'
+  console.error(
+    'RedisTokenPersistence has been removed. Migrate to SqlTokenPersistence'
   )
+  process.exit(1)
 }
 
 const legacySecretsPath = path.join(

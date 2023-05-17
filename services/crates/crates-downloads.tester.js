@@ -34,7 +34,7 @@ t.create('recent downloads (null)')
   .get('/dr/libc.json')
   .intercept(nock =>
     nock('https://crates.io')
-      .get('/api/v1/crates/libc')
+      .get('/api/v1/crates/libc?include=versions,downloads')
       .reply(200, {
         crate: {
           downloads: 42,

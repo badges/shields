@@ -1,4 +1,4 @@
 class BadBaseService {}
-class BadService extends BadBaseService {}
+class BadChildService extends BadBaseService {}
 
-export default BadService
+export default BadChildService
