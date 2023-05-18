@@ -40,7 +40,6 @@ export default class WeblateComponentLicense extends WeblateBase {
       errorMessages: {
         403: 'access denied by remote server',
         404: 'component not found',
-        429: 'rate limited by remote server',
       },
     })
   }
