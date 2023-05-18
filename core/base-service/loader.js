@@ -31,6 +31,18 @@ function getServicePaths(pattern) {
   return globSync(toUnixPath(path.join(serviceDir, '**', pattern))).sort()
 }
 
+function assertNamesUnique(names, { message }) {
+  const duplicates = {}
+  Object.entries(countBy(names))
+    .filter(([name, count]) => count > 1)
+    .forEach(([name, count]) => {
+      duplicates[name] = count
+    })
+  if (Object.keys(duplicates).length) {
+    throw new Error(`${message}: ${JSON.stringify(duplicates, undefined, 2)}`)
+  }
+}
+
 async function loadServiceClasses(servicePaths) {
   if (!servicePaths) {
     servicePaths = getServicePaths('*.service.js')
@@ -64,29 +76,14 @@ async function loadServiceClasses(servicePaths) {
     })
   }
 
-  return serviceClasses
-}
-
-function assertNamesUnique(names, { message }) {
-  const duplicates = {}
-  Object.entries(countBy(names))
-    .filter(([name, count]) => count > 1)
-    .forEach(([name, count]) => {
-      duplicates[name] = count
-    })
-  if (Object.keys(duplicates).length) {
-    throw new Error(`${message}: ${JSON.stringify(duplicates, undefined, 2)}`)
-  }
-}
-
-async function checkNames() {
-  const services = await loadServiceClasses()
   assertNamesUnique(
-    services.map(({ name }) => name),
+    serviceClasses.map(({ name }) => name),
     {
       message: 'Duplicate service names found',
     }
   )
+
+  return serviceClasses
 }
 
 async function collectDefinitions() {
@@ -114,7 +111,6 @@ export {
   InvalidService,
   loadServiceClasses,
   getServicePaths,
-  checkNames,
   collectDefinitions,
   loadTesters,
 }
