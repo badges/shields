@@ -230,7 +230,7 @@
     "react-pose": "^4.0.10",
     "react-select": "^4.3.1",
     "read-all-stdin-sync": "^1.0.5",
-    "rimraf": "^5.0.0",
+    "rimraf": "^5.0.1",
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.8.1",
     "sinon": "^15.0.4",
