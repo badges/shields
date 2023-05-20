@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: services/color-formatters</title>
+    <title>JSDoc: Module: services/text-formatters</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: services/color-formatters</h1>
+    <h1 class="page-title">Module: services/text-formatters</h1>
 
     
 
@@ -34,8 +34,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Commonly-used functions for determining the colour to use for a badge,
-including colours based off download count, version number, etc.</p></div>
+            <div class="description"><p>Commonly-used functions for formatting text in badge labels. Includes
+ordinal numbers, currency codes, star ratings, versions, etc.</p></div>
         
 
         
@@ -70,7 +70,7 @@ including colours based off download count, version number, etc.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line1">line 1</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -109,7 +109,7 @@ including colours based off download count, version number, etc.</p></div>
     
 
     
-    <h4 class="name" id="~age"><span class="type-signature">(inner) </span>age<span class="signature">(date)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~addv"><span class="type-signature">(inner) </span>addv<span class="signature">(version)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -117,9 +117,8 @@ including colours based off download count, version number, etc.</p></div>
 
 
 <div class="description">
-    <p>Determines the color used for a badge according to the age.
-Age is calculated as days elapsed till current date.
-The color varies from bright green to red as the age increases.</p>
+    <p>Add a starting v to the version unless it doesn't starts with a digit or is a date (yyyy-mm-dd)
+For example, addv(&quot;1.2.3&quot;) returns &quot;v1.2.3&quot;, but addv(&quot;hello&quot;) or addv(&quot;2021-10-31&quot;), returns &quot;hello&quot; and &quot;2021-10-31&quot; respectively.</p>
 </div>
 
 
@@ -155,7 +154,7 @@ The color varies from bright green to red as the age increases.</p>
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>version</code></td>
             
 
             <td class="type">
@@ -171,7 +170,7 @@ The color varies from bright green to red as the age increases.</p>
 
             
 
-            <td class="description last"><p>Date string</p></td>
+            <td class="description last"><p>Version string</p></td>
         </tr>
 
     
@@ -212,7 +211,7 @@ The color varies from bright green to red as the age increases.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line183">line 183</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -241,7 +240,7 @@ The color varies from bright green to red as the age increases.</p>
 
         
 <div class="param-desc">
-    <p>Badge color</p>
+    <p>Version string with the starting v</p>
 </div>
 
 
@@ -270,7 +269,7 @@ The color varies from bright green to red as the age increases.</p>
     
 
     
-    <h4 class="name" id="~colorScale"><span class="type-signature">(inner) </span>colorScale<span class="signature">(steps, colors, reversed)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id="~currencyFromCode"><span class="type-signature">(inner) </span>currencyFromCode<span class="signature">(code)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -278,10 +277,8 @@ The color varies from bright green to red as the age increases.</p>
 
 
 <div class="description">
-    <p>Creates a callback function that determines badge color from the colors array.
-If the colors array is provided then for n steps, there should be n + 1 color.
-If the colors array is not provided then it is chosen from the default colors array
-according to the size of the steps array.</p>
+    <p>Converts the ISO 4217 code to the corresponding currency symbol.
+If the the symbol for the code is not found, then the code itself is returned.</p>
 </div>
 
 
@@ -317,13 +314,13 @@ according to the size of the steps array.</p>
 
         <tr>
             
-                <td class="name"><code>steps</code></td>
+                <td class="name"><code>code</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type">string</span>
 
 
             
@@ -333,14 +330,505 @@ according to the size of the steps array.</p>
 
             
 
-            <td class="description last"><p>Steps array</p></td>
+            <td class="description last"><p>ISO 4217 code</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Currency symbol for the code</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~formatDate"><span class="type-signature">(inner) </span>formatDate<span class="signature">(d)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a formatted date string without the year based on the value of input date param d.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>d</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">number</span>
+|
+
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input date in dayjs compatible format, date object, datestring, Unix timestamp etc.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line173">line 173</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Formatted date string</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~formatRelativeDate"><span class="type-signature">(inner) </span>formatRelativeDate<span class="signature">(timestamp)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a relative date from the input timestamp.
+For example, day after tomorrow's timestamp will return 'in 2 days'.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Unix timestamp</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Relative date from the unix timestamp</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~maybePluralize"><span class="type-signature">(inner) </span>maybePluralize<span class="signature">(singular, countable, plural)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns a string that is either the singular or the plural form of a word,
+depending on the length of the countable parameter.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>singular</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Singular form of the word</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>colors</code></td>
+                <td class="name"><code>countable</code></td>
             
 
             <td class="type">
@@ -356,20 +844,20 @@ according to the size of the steps array.</p>
 
             
 
-            <td class="description last"><p>Colors array. If provided, should be of length steps.length + 1</p></td>
+            <td class="description last"><p>Array of values you want to count</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>reversed</code></td>
+                <td class="name"><code>plural</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
@@ -379,7 +867,7 @@ according to the size of the steps array.</p>
 
             
 
-            <td class="description last"><p>If true then the colors array will be considered in reverse order</p></td>
+            <td class="description last"><p>Plural form of the word</p></td>
         </tr>
 
     
@@ -420,7 +908,7 @@ according to the size of the steps array.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line135">line 135</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line157">line 157</a>
     </li></ul></dd>
     
 
@@ -449,8 +937,7 @@ according to the size of the steps array.</p>
 
         
 <div class="param-desc">
-    <p>Function that finds the step index by comparing value
-with steps array and returns color from colors array for the corresponding step index</p>
+    <p>Singular or plural form of the word</p>
 </div>
 
 
@@ -461,7 +948,7 @@ with steps array and returns color from colors array for the corresponding step 
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -479,7 +966,7 @@ with steps array and returns color from colors array for the corresponding step 
     
 
     
-    <h4 class="name" id="~coveragePercentage"><span class="type-signature">(inner) </span>coveragePercentage<span class="signature">(percentage)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~metric"><span class="type-signature">(inner) </span>metric<span class="signature">(n)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -487,8 +974,9 @@ with steps array and returns color from colors array for the corresponding step 
 
 
 <div class="description">
-    <p>Determines the color used for a badge by comparing percentage and floor values.
-The color varies from red to bright green as the percentage increases.</p>
+    <p>Given a number (positive or negative), returns a string with appropriate unit in the metric system, SI.
+Note: numbers beyond the peta- cannot be represented as integers in JS.
+For example, if you call metric(1000), it will return &quot;1k&quot;, which means one kilo or one thousand.</p>
 </div>
 
 
@@ -524,7 +1012,7 @@ The color varies from red to bright green as the percentage increases.</p>
 
         <tr>
             
-                <td class="name"><code>percentage</code></td>
+                <td class="name"><code>n</code></td>
             
 
             <td class="type">
@@ -540,7 +1028,7 @@ The color varies from red to bright green as the percentage increases.</p>
 
             
 
-            <td class="description last"><p>Percentage value</p></td>
+            <td class="description last"><p>Input number</p></td>
         </tr>
 
     
@@ -581,7 +1069,7 @@ The color varies from red to bright green as the percentage increases.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line94">line 94</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -610,7 +1098,7 @@ The color varies from red to bright green as the percentage increases.</p>
 
         
 <div class="param-desc">
-    <p>Badge color</p>
+    <p>String with appropriate unit in the metric system, SI</p>
 </div>
 
 
@@ -639,7 +1127,7 @@ The color varies from red to bright green as the percentage increases.</p>
     
 
     
-    <h4 class="name" id="~downloadCount"><span class="type-signature">(inner) </span>downloadCount<span class="signature">(downloads)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~omitv"><span class="type-signature">(inner) </span>omitv<span class="signature">(version)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -647,560 +1135,8 @@ The color varies from red to bright green as the percentage increases.</p>
 
 
 <div class="description">
-    <p>Determines the color used for a badge by comparing the download count and floor values.
-The color varies from red to bright green as the download count increases.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>downloads</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Download count</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line83">line 83</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Badge color</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~floorCount"><span class="type-signature">(inner) </span>floorCount<span class="signature">(value, yellow, yellowgreen, green)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Determines the color used for a badge by comparing the value and floor count values.
-The color can vary from red to bright green depending on the range the value lies in.
-Decreasing the value will shift the color towards red.
-Increasing the value will shift the color towards bright green.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current value</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>yellow</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Yellow color threshold, should be greater than 0</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>yellowgreen</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Yellowgreen color threshold, should be greater than yellow</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>green</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Green color threshold, should be greater than yellowgreen</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line62">line 62</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Badge color</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~letterScore"><span class="type-signature">(inner) </span>letterScore<span class="signature">(score)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Determines the color used for a badge by matching score with grade values.
-The color varies from bright green to red as the score decreases.
-The score can be one of the following grade value: ['A', 'B', 'C', 'D', 'E'].
-The color defaults to red if the score does not matches with any of the grade values.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>score</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Score value</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line107">line 107</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Badge color</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~pep440VersionColor"><span class="type-signature">(inner) </span>pep440VersionColor<span class="signature">(version)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Determines the color used for a badge based on PEP440 versioning.</p>
+    <p>Remove the starting v in a string if it exists.
+For example, omitv(&quot;v1.2.3&quot;) returns &quot;1.2.3&quot;, but omitv(&quot;hello&quot;) returns &quot;hello&quot;.</p>
 </div>
 
 
@@ -1243,9 +1179,6 @@ The color defaults to red if the score does not matches with any of the grade va
             
                 
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
             
@@ -1255,7 +1188,7 @@ The color defaults to red if the score does not matches with any of the grade va
 
             
 
-            <td class="description last"><p>Version used for determining badge color</p></td>
+            <td class="description last"><p>Version string</p></td>
         </tr>
 
     
@@ -1296,7 +1229,7 @@ The color defaults to red if the score does not matches with any of the grade va
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line39">line 39</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line123">line 123</a>
     </li></ul></dd>
     
 
@@ -1325,7 +1258,7 @@ The color defaults to red if the score does not matches with any of the grade va
 
         
 <div class="param-desc">
-    <p>Badge color</p>
+    <p>Version string without the starting v</p>
 </div>
 
 
@@ -1354,7 +1287,7 @@ The color defaults to red if the score does not matches with any of the grade va
     
 
     
-    <h4 class="name" id="~version"><span class="type-signature">(inner) </span>version<span class="signature">(version)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~ordinalNumber"><span class="type-signature">(inner) </span>ordinalNumber<span class="signature">(n)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -1362,7 +1295,8 @@ The color defaults to red if the score does not matches with any of the grade va
 
 
 <div class="description">
-    <p>Determines the color used for a badge based on version.</p>
+    <p>Calculates the ordinal number of the given number.
+For example, if the input is 1, the output is “1ˢᵗ”.</p>
 </div>
 
 
@@ -1398,15 +1332,12 @@ The color defaults to red if the score does not matches with any of the grade va
 
         <tr>
             
-                <td class="name"><code>version</code></td>
+                <td class="name"><code>n</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
 <span class="param-type">number</span>
 
 
@@ -1417,7 +1348,7 @@ The color defaults to red if the score does not matches with any of the grade va
 
             
 
-            <td class="description last"><p>Version used for determining badge color</p></td>
+            <td class="description last"><p>Input number</p></td>
         </tr>
 
     
@@ -1458,7 +1389,7 @@ The color defaults to red if the score does not matches with any of the grade va
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_color-formatters.js.html">services/color-formatters.js</a>, <a href="services_color-formatters.js.html#line17">line 17</a>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -1487,7 +1418,224 @@ The color defaults to red if the score does not matches with any of the grade va
 
         
 <div class="param-desc">
-    <p>Badge color</p>
+    <p>Ordinal number of the input number</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~starRating"><span class="type-signature">(inner) </span>starRating<span class="signature">(rating, max<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates a string of stars and empty stars based on the rating.
+The number of stars is determined by the integer part of the rating.
+An additional star or a three-quarter star or a half star or a quarter star is added based on the decimal part of the rating.
+The remaining stars are empty stars until the maximum number of stars is reached.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rating</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Current rating</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    5
+                
+                </td>
+            
+
+            <td class="description last"><p>Maximum rating</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_text-formatters.js.html">services/text-formatters.js</a>, <a href="services_text-formatters.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A string of stars and empty stars</p>
 </div>
 
 
