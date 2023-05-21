@@ -1,13 +1,8 @@
 import Joi from 'joi'
-import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation } from './github-helpers.js'
-
-const schema = Joi.object({
-  message: Joi.alternatives()
-    .try(isBuildStatus, Joi.equal('no status'))
-    .required(),
-}).required()
+import { fetchWorkflowRuns } from './github-common-fetch.js'
 
 const queryParamSchema = Joi.object({
   event: Joi.string(),
@@ -16,12 +11,12 @@ const queryParamSchema = Joi.object({
 
 const keywords = ['action', 'actions']
 
-export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService {
+export default class GithubActionsWorkflowStatus extends GithubAuthV3Service {
   static category = 'build'
 
   static route = {
     base: 'github/actions/workflow/status',
-    pattern: ':user/:repo/:workflow+',
+    pattern: ':user/:repo/:workflow*',
     queryParamSchema,
   }
 
@@ -75,26 +70,35 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
 
   static defaultBadgeData = {
     label: 'build',
+    namedLogo: 'github',
   }
 
-  async fetch({ user, repo, workflow, branch, event }) {
-    const { message: status } = await this._requestSvg({
-      schema,
-      url: `https://github.com/${user}/${repo}/actions/workflows/${encodeURIComponent(
-        workflow
-      )}/badge.svg`,
-      options: { searchParams: { branch, event } },
-      valueMatcher: />([^<>]+)<\/tspan><\/text><\/g><path/,
-      errorMessages: {
-        404: 'repo or workflow not found',
-      },
-    })
-
-    return { status }
+  /* Value of the status property can be one of: “queued”, “in_progress”, or “completed”.
+   * When it’s “completed,” it makes sense to check if it finished successfully.
+   * We need a value of the conclusion property.
+   * Can be one of the “success”, “failure”, “neutral”, “cancelled”, “skipped”, “timed_out”, or “action_required”.
+   * Source: https://tabris.com/observing-workflow-run-status-on-github/
+   */
+  static toStatus({ status, conclusion }) {
+    if (status === 'completed') {
+      return conclusion
+    } else {
+      return status
+    }
   }
 
   async handle({ user, repo, workflow }, { branch, event }) {
-    const { status } = await this.fetch({ user, repo, workflow, branch, event })
-    return renderBuildStatusBadge({ status })
+    const workflowRun = await fetchWorkflowRuns(this, {
+      user,
+      repo,
+      workflow,
+      branch,
+      event,
+    })
+    const status = this.constructor.toStatus(workflowRun)
+    return {
+      ...this.constructor.defaultBadgeData,
+      ...renderBuildStatusBadge({ status }),
+    }
   }
 }

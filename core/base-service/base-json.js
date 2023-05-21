@@ -34,10 +34,18 @@ class BaseJsonService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.validateArgs={}] Arguments to pass to `_validate`.
+   *    For example to override the default `prettyErrorMessage`.
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
-  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
+  async _requestJson({
+    schema,
+    url,
+    options = {},
+    errorMessages = {},
+    validateArgs = {},
+  }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -48,7 +56,7 @@ class BaseJsonService extends BaseService {
       errorMessages,
     })
     const json = this._parseJson(buffer)
-    return this.constructor._validate(json, schema)
+    return this.constructor._validate(json, schema, validateArgs)
   }
 }
 

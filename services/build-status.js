@@ -15,7 +15,14 @@ const greenStatuses = [
   'successful',
 ]
 
-const orangeStatuses = ['partially succeeded', 'unstable', 'timeout']
+const orangeStatuses = [
+  'partially succeeded',
+  'unstable',
+  'timeout',
+  'timed_out',
+  'action_required',
+  'action required',
+]
 
 const redStatuses = [
   'broken',
@@ -49,6 +56,9 @@ const otherStatuses = [
   'stopped',
   'testing',
   'waiting',
+  'in_progress',
+  'in progress',
+  'neutral',
 ]
 
 const allStatuses = greenStatuses
@@ -76,17 +86,18 @@ const isBuildStatus = Joi.equal(...allStatuses)
 function renderBuildStatusBadge({ label, status }) {
   let message
   let color
+  const readableStatus = status.replace('_', ' ')
   if (greenStatuses.includes(status)) {
     message = 'passing'
     color = 'brightgreen'
   } else if (orangeStatuses.includes(status)) {
-    message = status === 'partially succeeded' ? 'passing' : status
+    message = status === 'partially succeeded' ? 'passing' : readableStatus
     color = 'orange'
   } else if (redStatuses.includes(status)) {
-    message = status === 'failed' ? 'failing' : status
+    message = status === 'failed' ? 'failing' : readableStatus
     color = 'red'
   } else {
-    message = status
+    message = readableStatus
   }
   return {
     label,

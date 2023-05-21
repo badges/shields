@@ -64,3 +64,22 @@ t.create('valid workflow (with event)')
     label: 'build',
     message: isWorkflowStatus,
   })
+
+t.create('omitted workflow').get('/actions/toolkit.json').expectBadge({
+  label: 'build',
+  message: isWorkflowStatus,
+})
+
+t.create('omitted workflow (with branch)')
+  .get('/actions/toolkit.json?branch=main')
+  .expectBadge({
+    label: 'build',
+    message: isWorkflowStatus,
+  })
+
+t.create('omitted workflow (with event)')
+  .get('/actions/toolkit.json?event=push')
+  .expectBadge({
+    label: 'build',
+    message: isWorkflowStatus,
+  })

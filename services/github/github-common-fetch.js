@@ -16,6 +16,46 @@ async function fetchIssue(serviceInstance, { user, repo, number }) {
   })
 }
 
+const workflowRunSchema = Joi.object({
+  name: Joi.string().allow(null),
+  event: Joi.string().required(),
+  status: Joi.string().allow(null),
+  conclusion: Joi.string().allow(null),
+})
+
+const workflowSchema = Joi.object({
+  total_count: Joi.number().min(1).required(),
+  workflow_runs: Joi.array().min(1).items(workflowRunSchema).required(),
+}).required()
+
+async function fetchWorkflowRuns(
+  serviceInstance,
+  { user, repo, workflow, branch, event }
+) {
+  let url
+  let errorMsg
+  if (workflow) {
+    url = `/repos/${user}/${repo}/actions/workflows/${workflow}/runs`
+    errorMsg = 'repo or workflow not found'
+  } else {
+    url = `/repos/${user}/${repo}/actions/runs`
+    errorMsg = 'repo not found'
+  }
+
+  const { workflow_runs } = await serviceInstance._requestJson({
+    schema: workflowSchema,
+    url,
+    options: {
+      searchParams: { branch, event },
+    },
+    validateArgs: {
+      prettyErrorMessage: 'no status',
+    },
+    errorMessages: errorMessagesFor(errorMsg),
+  })
+  return workflow_runs[0]
+}
+
 const contentSchema = Joi.object({
   // https://github.com/hapijs/joi/issues/1430
   content: Joi.string().required(),
@@ -75,4 +115,4 @@ async function fetchJsonFromRepo(
   }
 }
 
-export { fetchIssue, fetchRepoContent, fetchJsonFromRepo }
+export { fetchIssue, fetchWorkflowRuns, fetchRepoContent, fetchJsonFromRepo }
