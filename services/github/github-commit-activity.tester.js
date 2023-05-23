@@ -2,6 +2,7 @@ import Joi from 'joi'
 import {
   isMetricOverTimePeriod,
   isZeroOverTimePeriod,
+  isMetric,
 } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
@@ -10,6 +11,11 @@ const isCommitActivity = Joi.alternatives().try(
   isMetricOverTimePeriod,
   isZeroOverTimePeriod
 )
+
+t.create('commit acticity (total)').get('/t/badges/shields.json').expectBadge({
+  label: 'commit activity',
+  message: isMetric
+})
 
 t.create('commit activity (1 year)').get('/y/eslint/eslint.json').expectBadge({
   label: 'commit activity',

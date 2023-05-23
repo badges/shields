@@ -22,14 +22,14 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
   static category = 'activity'
   static route = {
     base: 'github/commit-activity',
-    pattern: ':interval(y|m|4w|w)/:user/:repo/:branch*',
+    pattern: ':interval(t|y|m|4w|w)/:user/:repo/:branch*',
   }
 
   static examples = [
     {
       title: 'GitHub commit activity',
       // Override the pattern to omit the deprecated interval "4w".
-      pattern: ':interval(y|m|w)/:user/:repo',
+      pattern: ':interval(t|y|m|w)/:user/:repo',
       namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
       staticPreview: this.render({ interval: 'm', commitCount: 457 }),
       keywords: ['commits'],
@@ -38,7 +38,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     {
       title: 'GitHub commit activity (branch)',
       // Override the pattern to omit the deprecated interval "4w".
-      pattern: ':interval(y|m|w)/:user/:repo/:branch*',
+      pattern: ':interval(t|y|m|w)/:user/:repo/:branch*',
       namedParams: {
         interval: 'm',
         user: 'badges',
@@ -55,6 +55,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
 
   static render({ interval, commitCount }) {
     const intervalLabel = {
+      t: '',
       y: '/year',
       m: '/month',
       '4w': '/four weeks',
@@ -74,7 +75,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
           $user: String!
           $repo: String!
           $branch: String!
-          $since: GitTimestamp!
+          $since: GitTimestamp
         ) {
           repository(owner: $user, name: $repo) {
             object(expression: $branch) {
@@ -113,7 +114,9 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
   static getIntervalQueryStartDate({ interval }) {
     const now = new Date()
 
-    if (interval === 'y') {
+    if (interval === 't') {
+      return null;
+    } else if (interval === 'y') {
       now.setUTCFullYear(now.getUTCFullYear() - 1)
     } else if (interval === 'm' || interval === '4w') {
       now.setUTCDate(now.getUTCDate() - 30)
