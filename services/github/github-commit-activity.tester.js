@@ -14,7 +14,7 @@ const isCommitActivity = Joi.alternatives().try(
 
 t.create('commit acticity (total)').get('/t/badges/shields.json').expectBadge({
   label: 'commit activity',
-  message: isMetric
+  message: isMetric,
 })
 
 t.create('commit activity (1 year)').get('/y/eslint/eslint.json').expectBadge({

@@ -115,7 +115,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     const now = new Date()
 
     if (interval === 't') {
-      return null;
+      return null
     } else if (interval === 'y') {
       now.setUTCFullYear(now.getUTCFullYear() - 1)
     } else if (interval === 'm' || interval === '4w') {
