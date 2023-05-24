@@ -54,6 +54,9 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
   static defaultBadgeData = { label: 'commit activity', color: 'blue' }
 
   static render({ interval, commitCount }) {
+    // If total commits selected change label from commit activity to commits
+    const label = interval === 't' ? 'commits' : undefined
+
     const intervalLabel = {
       t: '',
       y: '/year',
@@ -63,6 +66,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     }[interval]
 
     return {
+      label,
       message: `${metric(commitCount)}${intervalLabel}`,
     }
   }
