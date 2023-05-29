@@ -184,7 +184,7 @@
     "eslint-plugin-cypress": "^2.13.3",
     "eslint-plugin-icedfrisby": "^0.1.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsdoc": "^44.2.4",
+    "eslint-plugin-jsdoc": "^44.2.7",
     "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-no-extension-in-require": "^0.2.0",
     "eslint-plugin-node": "^11.1.0",
