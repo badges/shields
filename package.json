@@ -21,7 +21,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@fontsource/lato": "^4.5.10",
+    "@fontsource/lato": "^5.0.1",
     "@fontsource/lekton": "^4.5.11",
     "@renovate/pep440": "^1.0.0",
     "@renovatebot/ruby-semver": "^2.1.11",
