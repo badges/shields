@@ -62,7 +62,9 @@ export const optionalDottedVersionNClausesWithOptionalSuffix =
   Joi.string().regex(/^\d+(\.\d+)*([-+].*)?$/)
 
 /**
- * TODO: Joi validator that accepts URLs with query strings and fragments, which for some purposes should be rejected.
+ * Joi validator that checks if a value is a URL
+ *
+ * TODO: This accepts URLs with query strings and fragments, which for some purposes should be rejected.
  *
  * @type {Joi}
  */
