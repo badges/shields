@@ -12,7 +12,7 @@ const isCommitActivity = Joi.alternatives().try(
   isZeroOverTimePeriod
 )
 
-t.create('commit acticity (total)').get('/t/badges/shields.json').expectBadge({
+t.create('commit activity (total)').get('/t/badges/shields.json').expectBadge({
   label: 'commits',
   message: isMetric,
 })
