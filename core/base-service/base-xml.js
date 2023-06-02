@@ -28,6 +28,12 @@ class BaseXmlService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.customExceptions={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
    * @param {object} [attrs.parserOptions={}] Options to pass to fast-xml-parser. See
    *    [documentation](https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json)
    * @returns {object} Parsed response
@@ -39,6 +45,7 @@ class BaseXmlService extends BaseService {
     url,
     options = {},
     errorMessages = {},
+    customExceptions = {},
     parserOptions = {},
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
@@ -50,6 +57,7 @@ class BaseXmlService extends BaseService {
       url,
       options: mergedOptions,
       errorMessages,
+      customExceptions,
     })
     const validateResult = XMLValidator.validate(buffer)
     if (validateResult !== true) {

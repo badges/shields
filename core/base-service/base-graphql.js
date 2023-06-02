@@ -44,6 +44,12 @@ class BaseGraphqlService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.customExceptions={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
    * @param {Function} [attrs.transformJson=data => data] Function which takes the raw json and transforms it before
    * further procesing. In case of multiple query in a single graphql call and few of them
    * throw error, partial data might be used ignoring the error.
@@ -62,6 +68,7 @@ class BaseGraphqlService extends BaseService {
     variables = {},
     options = {},
     httpErrorMessages = {},
+    customExceptions = {},
     transformJson = data => data,
     transformErrors = defaultTransformErrors,
   }) {
@@ -75,6 +82,7 @@ class BaseGraphqlService extends BaseService {
       url,
       options: mergedOptions,
       errorMessages: httpErrorMessages,
+      customExceptions,
     })
     const json = transformJson(this._parseJson(buffer))
     if (json.errors) {

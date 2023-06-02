@@ -34,10 +34,22 @@ class BaseJsonService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.customExceptions={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
-  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
+  async _requestJson({
+    schema,
+    url,
+    options = {},
+    errorMessages = {},
+    customExceptions = {},
+  }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -46,6 +58,7 @@ class BaseJsonService extends BaseService {
       url,
       options: mergedOptions,
       errorMessages,
+      customExceptions,
     })
     const json = this._parseJson(buffer)
     return this.constructor._validate(json, schema)
