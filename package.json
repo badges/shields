@@ -162,7 +162,7 @@
     "@typescript-eslint/parser": "^5.58.0",
     "babel-plugin-inline-react-svg": "^2.0.2",
     "babel-preset-gatsby": "^2.22.0",
-    "c8": "^7.13.0",
+    "c8": "^7.14.0",
     "caller": "^1.1.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
