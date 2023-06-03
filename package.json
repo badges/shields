@@ -43,7 +43,7 @@
     "fast-xml-parser": "^4.2.2",
     "glob": "^10.2.6",
     "global-agent": "^3.0.0",
-    "got": "^12.6.0",
+    "got": "^13.0.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.6",
     "joi": "17.9.2",
