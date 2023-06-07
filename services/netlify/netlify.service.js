@@ -55,6 +55,7 @@ export default class Netlify extends BaseSvgScrapingService {
     if (buffer.includes('#0F4A21')) return { message: 'passing' }
     if (buffer.includes('#800A20')) return { message: 'failing' }
     if (buffer.includes('#603408')) return { message: 'building' }
+    if (buffer.includes('#181A1C')) return { message: 'canceled' }
     return { message: 'unknown' }
   }
 
