@@ -146,7 +146,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@babel/polyfill": "^7.12.1",
-    "@babel/register": "7.21.0",
+    "@babel/register": "7.22.5",
     "@istanbuljs/schema": "^0.1.3",
     "@mapbox/react-click-to-select": "^2.2.1",
     "@types/chai": "^4.3.5",
