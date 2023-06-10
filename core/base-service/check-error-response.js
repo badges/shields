@@ -2,6 +2,7 @@ import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
 const defaultErrorMessages = {
   404: 'not found',
+  429: 'rate limited by upstream service',
 }
 
 export default function checkErrorResponse(errorMessages = {}) {

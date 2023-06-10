@@ -1,4 +1,4 @@
-import { DOMParser } from 'xmldom'
+import { DOMParser } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
 import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'

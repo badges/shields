@@ -1,7 +1,7 @@
 name: E2E
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, reopened, synchronize]
   push:
     branches-ignore:
       - 'gh-pages'

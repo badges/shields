@@ -45,6 +45,42 @@ describe('async error handler', function () {
     })
   })
 
+  context('when status is 429', function () {
+    const buffer = Buffer.from('some stuff')
+    const res = { statusCode: 429 }
+
+    it('throws InvalidResponse', async function () {
+      try {
+        await checkErrorResponse()({ res, buffer })
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidResponse)
+        expect(e.message).to.equal(
+          'Invalid Response: Got status code 429 (expected 200)'
+        )
+        expect(e.prettyMessage).to.equal('rate limited by upstream service')
+        expect(e.response).to.equal(res)
+        expect(e.buffer).to.equal(buffer)
+      }
+    })
+
+    it('displays the custom too many requests', async function () {
+      const notFoundMessage = "terribly sorry but that's one too many requests"
+      try {
+        await checkErrorResponse({ 429: notFoundMessage })({ res, buffer })
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(InvalidResponse)
+        expect(e.message).to.equal(
+          'Invalid Response: Got status code 429 (expected 200)'
+        )
+        expect(e.prettyMessage).to.equal(
+          "terribly sorry but that's one too many requests"
+        )
+      }
+    })
+  })
+
   context('when status is 4xx', function () {
     it('throws InvalidResponse', async function () {
       const res = { statusCode: 499 }

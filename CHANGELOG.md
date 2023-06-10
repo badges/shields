@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-06-01
+
+- feat: Add total commits to [GitHubCommitActivity] [#9196](https://github.com/badges/shields/issues/9196)
+- set a custom error on 429 [#9159](https://github.com/badges/shields/issues/9159)
+- deprecate [travis].org badges [#9171](https://github.com/badges/shields/issues/9171)
+- count private sponsors on [GithubSponsors] badge [#9170](https://github.com/badges/shields/issues/9170)
+- Dependency updates
+
+## server-2023-05-01
+
+** Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
+
+- fail to start server if there are duplicate service names [#9099](https://github.com/badges/shields/issues/9099)
+- [SourceForge] Added badges for SourceForge [#9078](https://github.com/badges/shields/issues/9078) [#9102](https://github.com/badges/shields/issues/9102)
+- crates: Use `?include=` to reduce crates.io backend load [#9081](https://github.com/badges/shields/issues/9081)
+- Dependency updates
+
 ## server-2023-04-02
 
 - [JenkinsCoverage] Update Jenkins Code Coverage API for new plugin version [#9010](https://github.com/badges/shields/issues/9010)

@@ -27,7 +27,7 @@ const intervalMap = {
   },
 }
 
-export default class Sourceforge extends BaseJsonService {
+export default class SourceforgeDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
@@ -37,7 +37,7 @@ export default class Sourceforge extends BaseJsonService {
 
   static examples = [
     {
-      title: 'SourceForge',
+      title: 'SourceForge Downloads',
       pattern: ':interval(dt|dm|dw|dd)/:project',
       namedParams: {
         interval: 'dm',
@@ -49,7 +49,7 @@ export default class Sourceforge extends BaseJsonService {
       }),
     },
     {
-      title: 'SourceForge',
+      title: 'SourceForge Downloads (folder)',
       pattern: ':interval(dt|dm|dw|dd)/:project/:folder',
       namedParams: {
         interval: 'dm',

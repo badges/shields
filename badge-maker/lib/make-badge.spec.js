@@ -3,7 +3,6 @@
 const { test, given, forCases } = require('sazerac')
 const { expect } = require('chai')
 const snapshot = require('snap-shot-it')
-const isSvg = require('is-svg')
 const prettier = require('prettier')
 const makeBadge = require('./make-badge')
 
@@ -80,7 +79,8 @@ describe('The badge generator', function () {
   })
 
   describe('SVG', function () {
-    it('should produce SVG', function () {
+    it('should produce SVG', async function () {
+      const { default: isSvg } = await import('is-svg')
       expect(makeBadge({ label: 'cactus', message: 'grown', format: 'svg' }))
         .to.satisfy(isSvg)
         .and.to.include('cactus')
@@ -113,7 +113,8 @@ describe('The badge generator', function () {
       })
     })
 
-    it('should replace undefined svg badge style with "flat"', function () {
+    it('should replace undefined svg badge style with "flat"', async function () {
+      const { default: isSvg } = await import('is-svg')
       const jsonBadgeWithUnknownStyle = makeBadge({
         label: 'name',
         message: 'Bob',

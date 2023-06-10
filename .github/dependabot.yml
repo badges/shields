@@ -8,6 +8,7 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
     ignore:
       # https://github.com/badges/shields/issues/7324
       # https://github.com/badges/shields/issues/7447
@@ -27,6 +28,7 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
 
   # close-bot package dependencies
   - package-ecosystem: npm
@@ -36,8 +38,12 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
+
+  # GH actions
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: weekly
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
