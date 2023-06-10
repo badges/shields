@@ -68,7 +68,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
   static render({ interval, commitCount, authorFilter }) {
     // If total commits selected change label from commit activity to commits
     const label = interval === 't' ? 'commits' : this.defaultBadgeData.label
-    const authorFilterLabel = authorFilter ? ` by ${authorFilter}` : ``
+    const authorFilterLabel = authorFilter ? ` by ${authorFilter}` : ''
 
     const intervalLabel = {
       t: '',
@@ -133,7 +133,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
           sha: branch,
           author: authorFilter,
           per_page: '1',
-          since: since,
+          since,
         },
       },
       errorMessages: errorMessagesFor('repo not found'),
