@@ -100,8 +100,8 @@ export default class CodeclimateAnalysis extends BaseJsonService {
         ':format(maintainability|maintainability-percentage)/:user/:repo',
       namedParams: {
         format: 'maintainability',
-        user: 'angular',
-        repo: 'angular',
+        user: 'tensorflow',
+        repo: 'models',
       },
       staticPreview: this.render({
         variant: 'maintainability',
@@ -122,7 +122,7 @@ export default class CodeclimateAnalysis extends BaseJsonService {
     {
       title: 'Code Climate technical debt',
       pattern: 'tech-debt/:user/:repo',
-      namedParams: { user: 'angular', repo: 'angular' },
+      namedParams: { user: 'tensorflow', repo: 'models' },
       staticPreview: this.render({
         variant: 'tech-debt',
         techDebtPercentage: 3.0,
