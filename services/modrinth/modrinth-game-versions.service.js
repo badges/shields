@@ -17,7 +17,10 @@ export default class ModrinthGameVersions extends BaseModrinthService {
     },
   ]
 
-  static defaultBadgeData = { label: 'game versions' }
+  static defaultBadgeData = {
+    label: 'game versions',
+    namedLogo: 'modrinth',
+  }
 
   static render({ versions }) {
     return {

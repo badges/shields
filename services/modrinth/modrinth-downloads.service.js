@@ -18,7 +18,10 @@ export default class ModrinthDownloads extends BaseModrinthService {
     },
   ]
 
-  static defaultBadgeData = { label: 'downloads' }
+  static defaultBadgeData = {
+    label: 'downloads',
+    namedLogo: 'modrinth',
+  }
 
   async handle({ projectId }) {
     const { downloads } = await this.fetchProject({ projectId })
