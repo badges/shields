@@ -27,7 +27,7 @@ class BaseYamlService extends BaseService {
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
-   * @param {object} [attrs.customExceptions={}] Key-value map of got network exception codes
+   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
    *    and an object of params to pass when we construct an Inaccessible exception object
    *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
    *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
@@ -42,7 +42,7 @@ class BaseYamlService extends BaseService {
     url,
     options = {},
     errorMessages = {},
-    customExceptions = {},
+    systemErrors = {},
     encoding = 'utf8',
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
@@ -59,7 +59,7 @@ class BaseYamlService extends BaseService {
       url,
       options: mergedOptions,
       errorMessages,
-      customExceptions,
+      systemErrors,
     })
     let parsed
     try {

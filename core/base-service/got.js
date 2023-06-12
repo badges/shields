@@ -7,12 +7,7 @@ import {
 
 const userAgent = getUserAgent()
 
-async function sendRequest(
-  gotWrapper,
-  url,
-  options = {},
-  customExceptions = {}
-) {
+async function sendRequest(gotWrapper, url, options = {}, systemErrors = {}) {
   const gotOptions = Object.assign({}, options)
   gotOptions.throwHttpErrors = false
   gotOptions.retry = { limit: 0 }
@@ -27,9 +22,9 @@ async function sendRequest(
         underlyingError: new Error('Maximum response size exceeded'),
       })
     }
-    if (err.code in customExceptions) {
+    if (err.code in systemErrors) {
       throw new Inaccessible({
-        ...customExceptions[err.code],
+        ...systemErrors[err.code],
         underlyingError: err,
       })
     }

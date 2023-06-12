@@ -226,12 +226,7 @@ class BaseService {
     this._metricHelper = metricHelper
   }
 
-  async _request({
-    url,
-    options = {},
-    errorMessages = {},
-    customExceptions = {},
-  }) {
+  async _request({ url, options = {}, errorMessages = {}, systemErrors = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
@@ -254,7 +249,7 @@ class BaseService {
     const { res, buffer } = await this._requestFetcher(
       url,
       options,
-      customExceptions
+      systemErrors
     )
     await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
