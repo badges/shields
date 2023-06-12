@@ -38,6 +38,8 @@ class YouTubeBase extends BaseJsonService {
     isRequired: true,
   }
 
+  static _cacheLength = 7200
+
   static defaultBadgeData = {
     label: 'youtube',
     color: 'red',
