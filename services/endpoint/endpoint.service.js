@@ -1,6 +1,6 @@
 import { URL } from 'url'
 import Joi from 'joi'
-import { errorMessages } from '../dynamic-common.js'
+import { httpErrors } from '../dynamic-common.js'
 import { optionalUrl } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
 import { BaseJsonService, InvalidParameter } from '../index.js'
@@ -203,7 +203,7 @@ export default class Endpoint extends BaseJsonService {
 
     const validated = await fetchEndpointData(this, {
       url,
-      errorMessages,
+      httpErrors,
       validationPrettyErrorMessage: 'invalid properties',
       includeKeys: true,
     })

@@ -81,7 +81,7 @@ class BaseGraphqlService extends BaseService {
     const { buffer } = await this._request({
       url,
       options: mergedOptions,
-      errorMessages: httpErrorMessages,
+      httpErrors: httpErrorMessages,
       systemErrors,
     })
     const json = transformJson(this._parseJson(buffer))

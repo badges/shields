@@ -49,7 +49,7 @@ export default class WeblateUserStatistic extends WeblateBase {
     return super.fetch({
       schema,
       url: `${server}/api/users/${user}/statistics/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'user not found',
       },

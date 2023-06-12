@@ -53,7 +53,7 @@ export default class HomebrewDownloads extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://formulae.brew.sh/api/formula/${formula}.json`,
-      errorMessages: { 404: 'formula not found' },
+      httpErrors: { 404: 'formula not found' },
     })
   }
 

@@ -46,7 +46,7 @@ export default class TwitchBase extends BaseJsonService {
               grant_type: 'client_credentials',
             },
           },
-          errorMessages: {
+          httpErrors: {
             401: 'invalid token',
             404: 'node not found',
           },

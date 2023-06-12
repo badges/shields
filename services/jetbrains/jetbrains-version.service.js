@@ -67,7 +67,7 @@ export default class JetbrainsVersion extends JetbrainsBase {
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
           pluginId
         )}/updates`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
       version = jetbrainsPluginData[0].version
     }

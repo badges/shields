@@ -116,7 +116,7 @@ export default class Matrix extends BaseJsonService {
           auth: { type: 'm.login.dummy' },
         }),
       },
-      errorMessages: {
+      httpErrors: {
         401: 'auth failed',
         403: 'guests not allowed',
       },
@@ -134,7 +134,7 @@ export default class Matrix extends BaseJsonService {
           access_token: accessToken,
         },
       },
-      errorMessages: {
+      httpErrors: {
         401: 'bad auth token',
         404: 'room not found',
       },
@@ -172,7 +172,7 @@ export default class Matrix extends BaseJsonService {
           access_token: accessToken,
         },
       },
-      errorMessages: {
+      httpErrors: {
         400: 'unknown request',
         401: 'bad auth token',
         403: 'room not world readable or is invalid',

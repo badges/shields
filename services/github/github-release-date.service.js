@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.alternatives(
   Joi.object({
@@ -86,7 +86,7 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
     return this._requestJson({
       url,
       schema,
-      errorMessages: errorMessagesFor('no releases or repo not found'),
+      httpErrors: httpErrorsFor('no releases or repo not found'),
     })
   }
 

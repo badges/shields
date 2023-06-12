@@ -3,7 +3,7 @@ import prettyBytes from 'pretty-bytes'
 import { nonNegativeInteger } from '../validators.js'
 import { NotFound } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   branch: Joi.string(),
@@ -65,13 +65,13 @@ export default class GithubSize extends GithubAuthV3Service {
       return this._requestJson({
         url: `/repos/${user}/${repo}/contents/${path}?ref=${branch}`,
         schema,
-        errorMessages: errorMessagesFor('repo, branch or file not found'),
+        httpErrors: httpErrorsFor('repo, branch or file not found'),
       })
     } else {
       return this._requestJson({
         url: `/repos/${user}/${repo}/contents/${path}`,
         schema,
-        errorMessages: errorMessagesFor('repo or file not found'),
+        httpErrors: httpErrorsFor('repo or file not found'),
       })
     }
   }

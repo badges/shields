@@ -107,7 +107,7 @@ export default class DockerSize extends BaseJsonService {
       )}/${repo}/tags${
         tag ? `/${tag}` : '?page_size=100&ordering=last_updated'
       }${page}`,
-      errorMessages: { 404: 'repository or tag not found' },
+      httpErrors: { 404: 'repository or tag not found' },
     })
   }
 

@@ -80,7 +80,7 @@ export default class TasBuildStatus extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.tas.lambdatest.com/repo/badge?git_provider=${provider}&org=${org}&repo=${repo}`,
-      errorMessages: {
+      httpErrors: {
         401: 'private project not supported',
         404: 'project not found',
       },

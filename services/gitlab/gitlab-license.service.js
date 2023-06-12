@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { renderLicenseBadge } from '../licenses.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({
@@ -67,7 +67,7 @@ export default class GitlabLicense extends GitLabBase {
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}`,
       options: { searchParams: { license: '1' } },
-      errorMessages: errorMessagesFor('project not found'),
+      httpErrors: httpErrorsFor('project not found'),
     })
   }
 

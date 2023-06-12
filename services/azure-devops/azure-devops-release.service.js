@@ -49,7 +49,7 @@ export default class AzureDevOpsRelease extends BaseSvgScrapingService {
     // Microsoft documentation: ?
     const props = await fetch(this, {
       url: `https://vsrm.dev.azure.com/${organization}/_apis/public/Release/badge/${projectId}/${definitionId}/${environmentId}`,
-      errorMessages: {
+      httpErrors: {
         400: 'project not found',
         404: 'user or environment not found',
         500: 'inaccessible or definition not found',

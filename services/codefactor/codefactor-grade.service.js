@@ -41,7 +41,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
       url: `https://codefactor.io/repository/${vcsType}/${user}/${repo}/badge/${
         branch || ''
       }`,
-      errorMessages: { 404: 'repo or branch not found' },
+      httpErrors: { 404: 'repo or branch not found' },
     })
     return this.constructor.render({ grade: message })
   }

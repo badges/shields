@@ -43,7 +43,7 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

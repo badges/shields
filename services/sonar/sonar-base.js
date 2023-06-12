@@ -84,7 +84,7 @@ export default class SonarBase extends BaseJsonService {
         schema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'component or metric not found, or legacy API not supported',
         },
       })

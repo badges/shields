@@ -61,7 +61,7 @@ export default class GitlabForks extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}`,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

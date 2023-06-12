@@ -65,7 +65,7 @@ export default class Tokei extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://tokei.rs/b1/${provider}/${user}/${repo}`,
-      errorMessages: {
+      httpErrors: {
         400: 'repo not found',
       },
     })

@@ -30,7 +30,7 @@ class BaseJsonService extends BaseService {
    * @param {string} attrs.url URL to request
    * @param {object} [attrs.options={}] Options to pass to got. See
    *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
+   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
@@ -47,7 +47,7 @@ class BaseJsonService extends BaseService {
     schema,
     url,
     options = {},
-    errorMessages = {},
+    httpErrors = {},
     systemErrors = {},
   }) {
     const mergedOptions = {
@@ -57,7 +57,7 @@ class BaseJsonService extends BaseService {
     const { buffer } = await this._request({
       url,
       options: mergedOptions,
-      errorMessages,
+      httpErrors,
       systemErrors,
     })
     const json = this._parseJson(buffer)

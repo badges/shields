@@ -111,7 +111,7 @@ export default class Localizely extends BaseJsonService {
         searchParams: { branch },
         headers: { 'X-Api-Token': apiToken },
       },
-      errorMessages: {
+      httpErrors: {
         403: 'not authorized for project',
       },
     })

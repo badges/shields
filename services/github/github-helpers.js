@@ -14,7 +14,7 @@ function issueStateColor(s) {
   return { open: '2cbe4e', closed: '6f42c1' }[s]
 }
 
-function errorMessagesFor(notFoundMessage = 'repo not found') {
+function httpErrorsFor(notFoundMessage = 'repo not found') {
   return {
     404: notFoundMessage,
     422: notFoundMessage,
@@ -35,6 +35,6 @@ export {
   documentation,
   issueStateColor,
   commentsColor,
-  errorMessagesFor,
+  httpErrorsFor,
   transformErrors,
 }

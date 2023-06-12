@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({ total_commits: nonNegativeInteger }).required()
 
@@ -51,7 +51,7 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     const { total_commits: commitCount } = await this._requestJson({
       schema,
       url: `/repos/${user}/${repo}/compare/${base}...${head}`,
-      errorMessages: errorMessagesFor(notFoundMessage),
+      httpErrors: httpErrorsFor(notFoundMessage),
     })
 
     return this.constructor.render({ commitCount })

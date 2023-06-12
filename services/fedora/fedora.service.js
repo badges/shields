@@ -30,7 +30,7 @@ export default class Fedora extends BaseJsonService {
       url: `https://apps.fedoraproject.org/mdapi/${encodeURIComponent(
         branch
       )}/pkg/${encodeURIComponent(packageName)}`,
-      errorMessages: {
+      httpErrors: {
         400: 'branch not found',
       },
     })

@@ -229,14 +229,14 @@ Description of the code:
 
    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
    - `_requestJson()` uses [got](https://github.com/sindresorhus/got) to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `got` docs for [supported options](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md).
-   - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
+   - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `httpErrors`.
    - A more complex call to `_requestJson()` might look like this:
      ```js
      return this._requestJson({
        schema: mySchema,
        url,
        options: { searchParams: { branch: 'master' } },
-       errorMessages: {
+       httpErrors: {
          401: 'private application not supported',
          404: 'application not found',
        },
