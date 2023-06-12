@@ -11,7 +11,6 @@
 // DANGER_GITHUB_API_TOKEN=your-github-api-token npm run danger -- pr https://github.com/badges/shields/pull/2665
 
 const { danger, fail, message, warn } = require('danger')
-const { default: noTestShortcuts } = require('danger-plugin-no-test-shortcuts')
 const { fileMatch } = danger.git
 
 const documentation = fileMatch(
@@ -114,7 +113,7 @@ if (allFiles.length > 100) {
       if (diff.includes('authHelper') && !secretsDocs.modified) {
         warn(
           [
-            `:books: Remember to ensure any changes to \`config.private\` `,
+            ':books: Remember to ensure any changes to `config.private` ',
             `in \`${file}\` are reflected in the [server secrets documentation]`,
             '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
           ].join('')
@@ -172,12 +171,4 @@ affectedServices.forEach(service => {
       ].join('')
     )
   }
-})
-
-// Prevent merging exclusive services tests.
-noTestShortcuts({
-  testFilePredicate: filePath => filePath.endsWith('.tester.js'),
-  patterns: {
-    only: ['only()'],
-  },
 })

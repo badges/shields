@@ -140,6 +140,15 @@ class BaseService {
    */
   static examples = []
 
+  /**
+   * Optional: an OpenAPI Paths Object describing this service's
+   * route or routes in OpenAPI format.
+   *
+   * @see https://swagger.io/specification/#paths-object
+   * @abstract
+   */
+  static openApi = undefined
+
   static get _cacheLength() {
     const cacheLengths = {
       build: 30,
@@ -147,6 +156,7 @@ class BaseService {
       version: 300,
       debug: 60,
       downloads: 900,
+      rating: 900,
       social: 900,
     }
     return cacheLengths[this.category]
@@ -182,7 +192,7 @@ class BaseService {
   }
 
   static getDefinition() {
-    const { category, name, isDeprecated } = this
+    const { category, name, isDeprecated, openApi } = this
     const { base, format, pattern } = this.route
     const queryParams = getQueryParamNames(this.route)
 
@@ -199,7 +209,7 @@ class BaseService {
       route = undefined
     }
 
-    const result = { category, name, isDeprecated, route, examples }
+    const result = { category, name, isDeprecated, route, examples, openApi }
 
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 
@@ -220,8 +230,14 @@ class BaseService {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
-    if ('searchParams' in options) {
-      const params = new URLSearchParams(options.searchParams)
+    if ('searchParams' in options && options.searchParams != null) {
+      const params = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(options.searchParams).filter(
+            ([k, v]) => v !== undefined
+          )
+        )
+      )
       logUrl = `${url}?${params.toString()}`
       delete logOptions.searchParams
     }

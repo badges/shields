@@ -25,6 +25,9 @@ export function getBaseUrl(): string {
     if (['shields.io', 'www.shields.io'].includes(hostname)) {
       return 'https://img.shields.io'
     }
+    if (!port) {
+      return `${protocol}//${hostname}`
+    }
     return `${protocol}//${hostname}:${port}`
   } catch (e) {
     // server-side rendering

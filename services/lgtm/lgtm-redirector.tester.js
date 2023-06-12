@@ -7,9 +7,9 @@ export const t = new ServiceTester({
 })
 
 t.create('alerts')
-  .get('/alerts/g/badges/shields.svg')
-  .expectRedirect('/lgtm/alerts/github/badges/shields.svg')
+  .get('/alerts/g/badges/shields.json')
+  .expectBadge({ label: 'lgtm alerts', message: 'no longer available' })
 
 t.create('grade')
-  .get('/grade/java/g/apache/cloudstack.svg')
-  .expectRedirect('/lgtm/grade/java/github/apache/cloudstack.svg')
+  .get('/grade/java/g/apache/cloudstack.json')
+  .expectBadge({ label: 'lgtm grade', message: 'no longer available' })

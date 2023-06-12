@@ -10,7 +10,7 @@ Please follow this guidance when reporting security issues affecting:
 - The [squint](https://github.com/badges/squint) raster proxy
 - The [badge-maker](https://www.npmjs.com/package/badge-maker) NPM package
 
-The [gh-badges](https://www.npmjs.com/package/gh-badges) NPM package is now deprecated and will no longer receive fixes for bugs or security issues.
+The [gh-badges](https://www.npmjs.com/package/gh-badges) and [svg-to-image-proxy](https://www.npmjs.com/package/svg-to-image-proxy) NPM packages are now deprecated and will no longer receive fixes for bugs or security issues.
 
 ## Reporting a Vulnerability
 

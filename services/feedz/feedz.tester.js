@@ -11,6 +11,8 @@ export const t = new ServiceTester({
 //  - Shields.TestPackage: 0.0.1, 0.1.0-pre, 1.0.0
 //  - Shields.TestPreOnly: 0.1.0-pre
 //  - Shields.MultiPage: 0.1.0-0.1.100 plus 1.0.0 but the response has multiple top-level `items`
+//  - Shields.MultiPageNoItems: 0.0.0-0.0.256 plus 1.0.0 but the response has multiple top-level
+//    `items` without `catalogEntries`
 // The source code of these packages is here: https://github.com/jakubfijalkowski/shields-test-packages
 
 // version
@@ -40,6 +42,14 @@ t.create('version (orange badge)')
 
 t.create('multi-page')
   .get('/feedz/v/shieldstests/public/Shields.MultiPage.json')
+  .expectBadge({
+    label: 'feedz',
+    message: 'v1.0.0',
+    color: 'blue',
+  })
+
+t.create('multi-page-no-items')
+  .get('/feedz/v/shieldstests/public/Shields.MultiPageNoItems.json')
   .expectBadge({
     label: 'feedz',
     message: 'v1.0.0',

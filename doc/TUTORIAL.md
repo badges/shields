@@ -25,7 +25,7 @@ and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=16 and NPM >=7 is required. If you don't already have them,
+Node >=16 and NPM >=8 is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
@@ -44,7 +44,7 @@ In case you get the _"getaddrinfo ENOTFOUND localhost"_ error, visit [http://127
 
 ## (3) Open an Issue
 
-Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.md) and describe what you have in mind:
+Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.yml) and describe what you have in mind:
 
 - What is the badge for?
 - Which API do you want to use?

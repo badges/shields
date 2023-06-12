@@ -41,6 +41,7 @@ class GithubApiProvider {
     onTokenInvalidated = tokenString => {},
     globalToken,
     reserveFraction = 0.25,
+    restApiVersion,
   }) {
     Object.assign(this, {
       baseUrl,
@@ -55,6 +56,7 @@ class GithubApiProvider {
       this.searchTokens = new TokenPool({ batchSize: 5 })
       this.graphqlTokens = new TokenPool({ batchSize: 25 })
     }
+    this.restApiVersion = restApiVersion
   }
 
   addToken(tokenString) {
@@ -77,8 +79,7 @@ class GithubApiProvider {
   }
 
   getV4RateLimitFromBody(body) {
-    const parsedBody = JSON.parse(body)
-    const b = Joi.attempt(parsedBody, bodySchema)
+    const b = Joi.attempt(body, bodySchema)
     return {
       rateLimit: b.data.rateLimit.limit,
       totalUsesRemaining: b.data.rateLimit.remaining,
@@ -90,8 +91,17 @@ class GithubApiProvider {
     let rateLimit, totalUsesRemaining, nextReset
     if (url.startsWith('/graphql')) {
       try {
+        const parsedBody = JSON.parse(res.body)
+
+        if ('message' in parsedBody && !('data' in parsedBody)) {
+          if (parsedBody.message === 'Sorry. Your account was suspended.') {
+            this.invalidateToken(token)
+            return
+          }
+        }
+
         ;({ rateLimit, totalUsesRemaining, nextReset } =
-          this.getV4RateLimitFromBody(res.body))
+          this.getV4RateLimitFromBody(parsedBody))
       } catch (e) {
         console.error(
           `Could not extract rate limit info from response body ${res.body}`
@@ -167,6 +177,7 @@ class GithubApiProvider {
         headers: {
           'User-Agent': userAgent,
           Authorization: `token ${tokenString}`,
+          'X-GitHub-Api-Version': this.restApiVersion,
           ...options.headers,
         },
       },

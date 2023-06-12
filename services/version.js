@@ -74,12 +74,12 @@ function latestMaybeSemVer(versions, pre) {
   try {
     // coerce to string then lowercase otherwise alpha > RC
     version = versions.sort((a, b) =>
-      semver.rcompare(
+      semver.compareBuild(
         `${a}`.toLowerCase(),
         `${b}`.toLowerCase(),
         /* loose */ true
       )
-    )[0]
+    )[versions.length - 1]
   } catch (e) {
     version = latestDottedVersion(versions)
   }
@@ -152,11 +152,16 @@ function rangeStart(v) {
   return range.set[0][0].semver.version
 }
 
-function renderVersionBadge({ version, tag, defaultLabel }) {
+function renderVersionBadge({
+  version,
+  tag,
+  defaultLabel,
+  versionFormatter = versionColor,
+}) {
   return {
     label: tag ? `${defaultLabel}@${tag}` : undefined,
     message: addv(version),
-    color: versionColor(version),
+    color: versionFormatter(version),
   }
 }
 

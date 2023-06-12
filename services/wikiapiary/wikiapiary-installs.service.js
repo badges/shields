@@ -13,7 +13,6 @@ const documentation = `
       <li><code>ParserFunctions</code></li>
       <li><code>parserFunctions</code></li>
     </ul>
-
     However, the following are invalid:
     <ul>
       <li><code>parserfunctions</code></li>
@@ -75,7 +74,7 @@ export default class WikiapiaryInstalls extends BaseJsonService {
   async fetch({ variant, name }) {
     return this._requestJson({
       schema,
-      url: `https://wikiapiary.com/w/api.php`,
+      url: 'https://wikiapiary.com/w/api.php',
       options: {
         searchParams: {
           action: 'ask',

@@ -67,7 +67,7 @@ t.create('Build status')
    - All badges on shields can be requested in a number of formats. As well as calling https://img.shields.io/wercker/build/wercker/go-wercker-api.svg to generate ![](https://img.shields.io/wercker/build/wercker/go-wercker-api.svg) we can also call https://img.shields.io/wercker/build/wercker/go-wercker-api.json to request the same content as JSON. When writing service tests, we request the badge in JSON format so it is easier to make assertions about the content.
    - We don't need to explicitly call `/wercker/build/wercker/go-wercker-api.json` here, only `/build/wercker/go-wercker-api.json`. When we create a tester object with `createServiceTester()` the URL base defined in our service class (in this case `/wercker`) is used as the base URL for any requests made by the tester object.
 3. `expectBadge()` is a helper function which accepts either a string literal, a [RegExp][] or a [Joi][] schema for the different fields.
-   Joi is a validation library that is build into IcedFrisby which you can use to
+   Joi is a validation library that is built into IcedFrisby which you can use to
    match based on a set of allowed strings, regexes, or specific values. You can
    refer to their [API reference][joi api].
 4. We expect `label` to be a string literal `"build"`.

@@ -29,9 +29,9 @@ const matrixStateSchema = Joi.array()
 const documentation = `
   <p>
     In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
-    </br>
+    <br>
     The following steps will show you how to setup the badge URL using the Element Matrix client.
-    </br>
+    <br>
     <ul>
       <li>Select the desired room inside the Element client</li>
       <li>Click on the room settings button (gear icon) located near the top right of the client</li>
@@ -41,11 +41,11 @@ const documentation = `
       <li>Remove the starting hash character (<code>#</code>)</li>
       <li>The final badge URL should look something like this <code>/matrix/twim:matrix.org.svg</code></li>
     </ul>
-    </br>
+    <br>
     Some Matrix homeservers don't hold a server name matching where they live (e.g. if the homeserver <code>example.com</code> that created the room alias <code>#mysuperroom:example.com</code> lives at <code>matrix.example.com</code>).
-    </br>
+    <br>
     If that is the case of the homeserver that created the room alias used for generating the badge, you will need to add the server's FQDN (fully qualified domain name) as a query parameter.
-    </br>
+    <br>
     The final badge URL should then look something like this <code>/matrix/mysuperroom:example.com.svg?server_fqdn=matrix.example.com</code>.
   </p>
   `
@@ -119,7 +119,6 @@ export default class Matrix extends BaseJsonService {
       errorMessages: {
         401: 'auth failed',
         403: 'guests not allowed',
-        429: 'rate limited by remote server',
       },
     })
   }
@@ -138,7 +137,6 @@ export default class Matrix extends BaseJsonService {
       errorMessages: {
         401: 'bad auth token',
         404: 'room not found',
-        429: 'rate limited by remote server',
       },
     })
   }

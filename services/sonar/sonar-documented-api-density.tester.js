@@ -12,9 +12,7 @@ export const t = await createServiceTester()
 // https://docs.sonarqube.org/7.0/MetricDefinitions.html
 // https://sonarcloud.io/api/measures/component?componentKey=org.sonarsource.sonarqube:sonarqube&metricKeys=public_documented_api_density
 t.create('Documented API Density (not found)')
-  .get(
-    '/org.sonarsource.sonarqube%3Asonarqube.json?server=https://sonarcloud.io'
-  )
+  .get('/brave_brave-core.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'public documented api density',
     message: 'metric not found',

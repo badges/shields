@@ -99,13 +99,13 @@ const documentation = `
     </ul>
   </p>
   <p>
-    This badge relies on the https://validator.nu/ service to perform the validation. Please refer to https://about.validator.nu/ for the full documentation and Terms of service.
+    This badge relies on the <a target="_blank" href="https://validator.nu/">https://validator.nu/</a> service to perform the validation.
+    Please refer to <a target="_blank" href="https://about.validator.nu/">https://about.validator.nu/</a> for the full documentation and Terms of service.
     The following are required from the consumer for the badge to function.
-
     <ul class="note">
       <li>
         Path:
-        <ul>  
+        <ul>
           <li>
             parser: The parser that is used for validation. This is a passthru value to the service
             <ul>
@@ -114,8 +114,8 @@ const documentation = `
               <li>xml <i>(XML; don’t load external entities)</i></li>
               <li>xmldtd <i>(XML; load external entities)</i></li>
             </ul>
-          </li>  
-        </ul>        
+          </li>
+        </ul>
       </li>
       <li>
         Query string:
@@ -139,7 +139,7 @@ const documentation = `
               <li>SVG 1.1, URL, XHTML, MathML 3.0</li>        
             </ul>
           </li>
-        </ul>      
+        </ul>
       </li>
     </ul>
   </p>

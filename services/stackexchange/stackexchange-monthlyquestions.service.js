@@ -1,16 +1,16 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
-import renderQuestionsBadge from './stackexchange-helpers.js'
+import {
+  renderQuestionsBadge,
+  StackExchangeBase,
+} from './stackexchange-base.js'
 
 const tagSchema = Joi.object({
   total: nonNegativeInteger,
 }).required()
 
-export default class StackExchangeMonthlyQuestions extends BaseJsonService {
-  static category = 'chat'
-
+export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
   static route = {
     base: 'stackexchange',
     pattern: ':stackexchangesite/qm/:query',
@@ -19,19 +19,15 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
   static examples = [
     {
       title: 'Stack Exchange monthly questions',
-      namedParams: { stackexchangesite: 'stackoverflow', query: 'momentjs' },
+      namedParams: { stackexchangesite: 'stackoverflow', query: 'dayjs' },
       staticPreview: this.render({
         stackexchangesite: 'stackoverflow',
-        query: 'momentjs',
+        query: 'dayjs',
         numValue: 2000,
       }),
       keywords: ['stackexchange', 'stackoverflow'],
     },
   ]
-
-  static defaultBadgeData = {
-    label: 'stackoverflow',
-  }
 
   static render(props) {
     return renderQuestionsBadge({
@@ -41,17 +37,17 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
   }
 
   async handle({ stackexchangesite, query }) {
-    const today = moment().toDate()
-    const prevMonthStart = moment(today)
+    const today = dayjs().toDate()
+    const prevMonthStart = dayjs(today)
       .subtract(1, 'months')
       .startOf('month')
       .unix()
-    const prevMonthEnd = moment(today)
+    const prevMonthEnd = dayjs(today)
       .subtract(1, 'months')
       .endOf('month')
       .unix()
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: tagSchema,
       options: {
         decompress: true,
@@ -63,7 +59,7 @@ export default class StackExchangeMonthlyQuestions extends BaseJsonService {
           tagged: query,
         },
       },
-      url: `https://api.stackexchange.com/2.2/questions`,
+      url: 'https://api.stackexchange.com/2.2/questions',
     })
 
     const numValue = parsedData.total

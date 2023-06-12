@@ -23,6 +23,8 @@ export default class AmoRating extends BaseAmoService {
     },
   ]
 
+  static _cacheLength = 7200
+
   static render({ format, rating }) {
     rating = Math.round(rating)
     return {

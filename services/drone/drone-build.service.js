@@ -27,7 +27,7 @@ export default class DroneBuild extends BaseJsonService {
       title: 'Drone (cloud)',
       pattern: ':user/:repo',
       namedParams: {
-        user: 'drone',
+        user: 'harness',
         repo: 'drone',
       },
       staticPreview: renderBuildStatusBadge({ status: 'success' }),
@@ -36,7 +36,7 @@ export default class DroneBuild extends BaseJsonService {
       title: 'Drone (cloud) with branch',
       pattern: ':user/:repo/:branch',
       namedParams: {
-        user: 'drone',
+        user: 'harness',
         repo: 'drone',
         branch: 'master',
       },

@@ -4,7 +4,7 @@ import { isMetricAllowNegative } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('valid repo').get('/pg.json').expectBadge({
-  label: 'pg',
+  label: 'U/pg karma',
   message: isMetricAllowNegative,
 })
 
@@ -16,7 +16,7 @@ t.create('valid repo -- negative karma')
       .reply(200, { karma: -1234 })
   )
   .expectBadge({
-    label: 'negative',
+    label: 'U/negative karma',
     message: isMetricAllowNegative,
   })
 

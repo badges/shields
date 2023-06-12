@@ -45,11 +45,11 @@ We are happy to document and collate any self-hosting patterns/approaches that o
 We try to make it as easy as possible for users to self-host a Shields server so we publish a few releases of the server. Please be sure to refer to the [self hosting guide][self hosting] for a detailed walk through on how to spin up a server.
 
 - The server uses [Calendar Versioning](https://calver.org/). Tags of the form `server-YYYY-MM-DD` are server releases (these are the tags that are relevant to self-hosting users, e.g. [server-2021-02-01](https://github.com/badges/shields/releases/tag/server-2021-02-01)).
-- As well as [tags on GitHub](https://github.com/badges/shields/tags), server releases are also pushed to [DockerHub](https://registry.hub.docker.com/r/shieldsio/shields/tags). See the self-hosting section on [Docker](https://github.com/badges/shields/blob/master/doc/self-hosting.md#Docker) for more details.
+- As well as [tags on GitHub](https://github.com/badges/shields/tags), server releases are also pushed to [DockerHub](https://registry.hub.docker.com/r/shieldsio/shields/tags) and [GitHub Container Registry](https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged). See the self-hosting section on [Docker](https://github.com/badges/shields/blob/master/doc/self-hosting.md#Docker) for more details.
 - We publish release notes for server releases in the [CHANGELOG](https://github.com/badges/shields/blob/master/CHANGELOG.md). There may occasionally be non-backwards compatible changes to be aware of.
 - We will normally put out one release per month. If there is a security patch or major bugfix affecting self-hosting users, we may put out an out-of-sequence release.
 - Releases are just a snapshot in time. We advise always tracking the latest release to ensure you are up-to-date with the latest bug fixes and security updates. There are no 'patch' releases - we don't backport fixes to old releases. Tagged versions just provide a convenient way to apply upgrades in a controlled way or roll back to an older version if necessary and communicate about versions.
-- You can stay on the bleeding edge by tracking the `master` branch for source installs or the `next` tag on DockerHub.
+- You can stay on the bleeding edge by tracking the `master` branch for source installs or the `next` tag on DockerHub/GHCR.
 
 [shields.io]: https://shields.io
 [npm package]: https://www.npmjs.com/package/badge-maker

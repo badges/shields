@@ -5,7 +5,7 @@ import { nonNegativeInteger } from '../validators.js'
 
 const documentation = `
 <p>By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service. These can be found here:
-<code>https://www.youtube.com/t/terms</code></p>`
+<a target="_blank" href="https://www.youtube.com/t/terms">https://www.youtube.com/t/terms</a></p>`
 
 const schema = Joi.object({
   pageInfo: Joi.object({
@@ -37,6 +37,8 @@ class YouTubeBase extends BaseJsonService {
     authorizedOrigins: ['https://www.googleapis.com'],
     isRequired: true,
   }
+
+  static _cacheLength = 7200
 
   static defaultBadgeData = {
     label: 'youtube',

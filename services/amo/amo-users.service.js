@@ -14,6 +14,8 @@ export default class AmoUsers extends BaseAmoService {
     },
   ]
 
+  static _cacheLength = 21600
+
   static defaultBadgeData = { label: 'users' }
 
   static render({ users: downloads }) {

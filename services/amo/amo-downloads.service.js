@@ -24,6 +24,8 @@ class AmoWeeklyDownloads extends BaseAmoService {
     },
   ]
 
+  static _cacheLength = 21600
+
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloads }) {

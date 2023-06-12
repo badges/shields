@@ -126,13 +126,34 @@ describe('Github API provider', function () {
     })
   })
 
-  context('an unauthorized response', function () {
-    it('should invoke the callback and update the token with the expected values', async function () {
+  context('unauthorized API responses', function () {
+    it('should invoke the callback and update the token with the expected values (unauthorized, v3)', async function () {
       const mockResponse = { res: { statusCode: 401, headers: {} } }
       const mockRequest = sinon.stub().resolves(mockResponse)
       await provider.fetch(mockRequest, '/foo', {})
       expect(mockStandardToken.invalidate).to.have.been.calledOnce
       expect(mockStandardToken.update).not.to.have.been.called
+    })
+
+    it('should invoke the callback and update the token with the expected values (unauthorized, v4)', async function () {
+      const mockResponse = { res: { statusCode: 401, body: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/graphql', {})
+      expect(mockGraphqlToken.invalidate).to.have.been.calledOnce
+      expect(mockGraphqlToken.update).not.to.have.been.called
+    })
+
+    it('should invoke the callback and update the token with the expected values (suspended, v4)', async function () {
+      const mockResponse = {
+        res: {
+          statusCode: 200,
+          body: '{ "message": "Sorry. Your account was suspended." }',
+        },
+      }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      await provider.fetch(mockRequest, '/graphql', {})
+      expect(mockGraphqlToken.invalidate).to.have.been.calledOnce
+      expect(mockGraphqlToken.update).not.to.have.been.called
     })
   })
 

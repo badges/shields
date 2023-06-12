@@ -81,8 +81,7 @@ export default class Nexus extends BaseJsonService {
       staticPreview: this.render({
         version: '3.9',
       }),
-      documentation: `
-    <p>
+      documentation: `<p>
       Specifying 'nexusVersion=3' when targeting Nexus 3 servers will speed up the badge rendering.
       Note that you can use this query parameter with any Nexus badge type (Releases, Snapshots, or Repository).
     </p>
@@ -132,8 +131,7 @@ export default class Nexus extends BaseJsonService {
       staticPreview: this.render({
         version: '7.0.1-SNAPSHOT',
       }),
-      documentation: `
-    <p>
+      documentation: `<p>
       Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository).
     </p>
     <p>
@@ -144,7 +142,7 @@ export default class Nexus extends BaseJsonService {
       <ul>
         <li><a href="https://nexus.pentaho.org/swagger-ui/#/search/search">All Nexus 3 badges</a></li>
         <li><a href="https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_resolve.html">Nexus 2 Releases and Snapshots badges</a></li>
-        <li><a href=https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
+        <li><a href="https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
       </ul>
     </p>
     `,

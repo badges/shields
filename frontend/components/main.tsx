@@ -14,7 +14,7 @@ import ServiceDefinitionSetHelper from '../lib/service-definitions/service-defin
 import { getBaseUrl } from '../constants'
 import Meta from './meta'
 import Header from './header'
-import SuggestionAndSearch from './suggestion-and-search'
+import Search from './search'
 import DonateBox from './donate'
 import { MarkupModal } from './markup-modal'
 import Usage from './usage'
@@ -49,8 +49,6 @@ export default function Main({
     [k: string]: ServiceDefinition[]
   }>()
   const [selectedExample, setSelectedExample] = useState<RenderableExample>()
-  const [selectedExampleIsSuggestion, setSelectedExampleIsSuggestion] =
-    useState(false)
   const searchTimeout = useRef(0)
   const baseUrl = getBaseUrl()
 
@@ -92,14 +90,6 @@ export default function Main({
     [setSearchIsInProgress, performSearch]
   )
 
-  const exampleClicked = React.useCallback(
-    function (example: RenderableExample, isSuggestion: boolean): void {
-      setSelectedExample(example)
-      setSelectedExampleIsSuggestion(isSuggestion)
-    },
-    [setSelectedExample, setSelectedExampleIsSuggestion]
-  )
-
   const dismissMarkupModal = React.useCallback(
     function (): void {
       setSelectedExample(undefined)
@@ -123,7 +113,6 @@ export default function Main({
       <div>
         <CategoryHeading category={category} />
         <BadgeExamples
-          areBadgeSuggestions={false}
           baseUrl={baseUrl}
           examples={flattened}
           onClick={setSelectedExample}
@@ -182,15 +171,10 @@ export default function Main({
       <MarkupModal
         baseUrl={baseUrl}
         example={selectedExample}
-        isBadgeSuggestion={selectedExampleIsSuggestion}
         onRequestClose={dismissMarkupModal}
       />
       <section>
-        <SuggestionAndSearch
-          baseUrl={baseUrl}
-          onBadgeClick={exampleClicked}
-          queryChanged={searchQueryChanged}
-        />
+        <Search queryChanged={searchQueryChanged} />
         <DonateBox />
       </section>
       {renderMain()}

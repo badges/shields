@@ -5,12 +5,16 @@ on:
     # At 01:00 on the first day of every month
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
-  build:
+  draft-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Draft Release
         uses: ./.github/actions/draft-release

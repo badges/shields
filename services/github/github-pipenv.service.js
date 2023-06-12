@@ -1,3 +1,4 @@
+import { pep440VersionColor } from '../color-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import { isLockfile, getDependencyVersion } from '../pipenv-helpers.js'
 import { addv } from '../text-formatters.js'
@@ -65,9 +66,9 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
       namedParams: {
         user: 'metabolize',
         repo: 'rq-dashboard-on-heroku',
-        branch: 'master',
+        branch: 'main',
       },
-      staticPreview: this.render({ version: '3.7', branch: 'master' }),
+      staticPreview: this.render({ version: '3.7', branch: 'main' }),
       documentation,
       keywords,
     },
@@ -80,6 +81,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
       version,
       tag: branch,
       defaultLabel: 'python',
+      versionFormatter: pep440VersionColor,
     })
   }
 
@@ -133,7 +135,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
         repo: 'rq-dashboard-on-heroku',
         kind: 'dev',
         packageName: 'black',
-        branch: 'master',
+        branch: 'main',
       },
       staticPreview: this.render({ dependency: 'black', version: '19.3b0' }),
       documentation,
@@ -147,7 +149,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
     return {
       label: dependency,
       message: version ? addv(version) : ref,
-      color: 'blue',
+      color: version ? pep440VersionColor(version) : 'blue',
     }
   }
 

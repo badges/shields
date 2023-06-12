@@ -53,8 +53,8 @@ export default class ScoopVersion extends ConditionalGithubAuthV3Service {
     if (!this.buckets) {
       this.buckets = await fetchJsonFromRepo(this, {
         schema: bucketsSchema,
-        user: 'lukesampson',
-        repo: 'scoop',
+        user: 'ScoopInstaller',
+        repo: 'Scoop',
         branch: 'master',
         filename: 'buckets.json',
       })

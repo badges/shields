@@ -71,16 +71,28 @@ vercel
 
 ## Docker
 
-### DockerHub
+### Public Images
 
-We publish images to DockerHub at https://registry.hub.docker.com/r/shieldsio/shields
+We publish images to:
 
-The `next` tag is the latest build from `master`, or tagged releases are available
-https://registry.hub.docker.com/r/shieldsio/shields/tags
+- DockerHub at https://registry.hub.docker.com/r/shieldsio/shields and
+- GitHub Container Registry at https://github.com/badges/shields/pkgs/container/shields
 
-```console
+The `next` tag is the latest build from `master`, or tagged snapshot releases are available:
+
+- https://registry.hub.docker.com/r/shieldsio/shields/tags
+- https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+
+```sh
+# DockerHub
 $ docker pull shieldsio/shields:next
 $ docker run shieldsio/shields:next
+```
+
+```sh
+# GHCR
+$ docker pull ghcr.io/badges/shields:next
+$ docker pull ghcr.io/badges/shields:next
 ```
 
 ### Building Docker Image Locally
@@ -119,7 +131,7 @@ machine.
 
 If you want to host PNG badges, you can also self-host a [raster server][]
 which points to your badge server. It's a docker container. We host it on
-Heroku but should be possible to host on a wide variety of platforms.
+Fly.io but should be possible to host on a wide variety of platforms.
 
 - In your raster instance, set `BASE_URL` to your Shields instance, e.g.
   `https://shields.example.co`.
@@ -152,15 +164,6 @@ GATSBY_BASE_URL=https://your-server.example.com npm run build
 Then copy the contents of the `build/` folder to your static hosting / CDN.
 
 There are also a couple settings you should configure on the server.
-
-If you want to use server suggestions, you should also set `ALLOWED_ORIGIN`:
-
-```sh
-ALLOWED_ORIGIN=http://my-custom-shields.s3.amazonaws.com,https://my-custom-shields.s3.amazonaws.com
-```
-
-This should be a comma-separated list of allowed origin headers. They should
-not have paths or trailing slashes.
 
 To help out users, you can make the Shields server redirect the server root.
 Set the `REDIRECT_URI` environment variable:

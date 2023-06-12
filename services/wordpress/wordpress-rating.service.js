@@ -1,6 +1,6 @@
 import { starRating, metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
-import BaseWordpress from './wordpress-base.js'
+import { documentation, BaseWordpress } from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -38,6 +38,7 @@ function RatingForExtensionType(extensionType) {
           rating: 80,
           numRatings: 100,
         }),
+        documentation,
       },
     ]
 
@@ -78,7 +79,7 @@ function StarsForExtensionType(extensionType) {
         staticPreview: this.render({
           rating: 80,
         }),
-        documentation: 'There is an alias <code>/r/:slug.svg</code> as well.',
+        documentation,
       },
     ]
 

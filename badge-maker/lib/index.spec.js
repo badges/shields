@@ -1,11 +1,11 @@
 'use strict'
 
 const { expect } = require('chai')
-const isSvg = require('is-svg')
 const { makeBadge, ValidationError } = require('.')
 
 describe('makeBadge function', function () {
-  it('should produce badge with valid input', function () {
+  it('should produce badge with valid input', async function () {
+    const { default: isSvg } = await import('is-svg')
     expect(
       makeBadge({
         label: 'build',

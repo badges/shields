@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
+import { metric } from '../text-formatters.js'
 
 // https://developer.opencollective.com/#/api/collectives?id=get-info
 const collectiveDetailsSchema = Joi.object().keys({
@@ -30,12 +31,11 @@ export default class OpencollectiveBase extends BaseJsonService {
   }
 
   static render(backersCount, label) {
-    const badge = {
-      message: backersCount,
+    return {
+      label,
+      message: metric(backersCount),
       color: backersCount > 0 ? 'brightgreen' : 'lightgrey',
     }
-    if (label) badge.label = label
-    return badge
   }
 
   async fetchCollectiveInfo(collective) {

@@ -47,7 +47,7 @@ t.create('Locked version of default dependency')
 
 t.create('Locked version of default dependency (branch)')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard/master.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard/main.json'
   )
   .expectBadge({
     label: 'rq-dashboard',
@@ -65,7 +65,7 @@ t.create('Locked version of dev dependency')
 
 t.create('Locked version of dev dependency (branch)')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black/master.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black/main.json'
   )
   .expectBadge({
     label: 'black',
@@ -82,10 +82,8 @@ t.create('Locked version of unknown dependency')
   })
 
 t.create('Locked version of VCS dependency')
-  .get(
-    '/locked/dependency-version/DemocracyClub/aggregator-api/dc-base-theme.json'
-  )
+  .get('/locked/dependency-version/GSS-Cogs/databaker-docker/databaker.json')
   .expectBadge({
-    label: 'dc-base-theme',
+    label: 'databaker',
     message: isShortSha,
   })

@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { floorCount as floorCountColor } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
 import { BaseJsonService } from '../index.js'
 
 const ownerSchema = Joi.array().required()
@@ -20,7 +21,7 @@ export default class GemOwner extends BaseJsonService {
 
   static render({ count }) {
     return {
-      message: count,
+      message: metric(count),
       color: floorCountColor(count, 10, 50, 100),
     }
   }

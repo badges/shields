@@ -1,5 +1,5 @@
 import { AuthHelper } from '../../core/base-service/auth-helper.js'
-import RedisTokenPersistence from '../../core/token-pooling/redis-token-persistence.js'
+import SqlTokenPersistence from '../../core/token-pooling/sql-token-persistence.js'
 import log from '../../core/server/log.js'
 import GithubApiProvider from './github-api-provider.js'
 import { setRoutes as setAcceptorRoutes } from './auth/acceptor.js'
@@ -23,20 +23,21 @@ class GithubConstellation {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
 
-    const { redis_url: redisUrl, gh_token: globalToken } = config.private
-    if (redisUrl) {
-      log.log('Token persistence configured with redisUrl')
-      this.persistence = new RedisTokenPersistence({
-        url: redisUrl,
-        key: 'githubUserTokens',
+    const { postgres_url: pgUrl, gh_token: globalToken } = config.private
+    if (pgUrl) {
+      log.log('Token persistence configured with dbUrl')
+      this.persistence = new SqlTokenPersistence({
+        url: pgUrl,
+        table: 'github_user_tokens',
       })
     }
 
     this.apiProvider = new GithubApiProvider({
-      baseUrl: process.env.GITHUB_URL || 'https://api.github.com',
+      baseUrl: config.service.baseUri,
       globalToken,
       withPooling: !globalToken,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
+      restApiVersion: config.service.restApiVersion,
     })
 
     this.oauthHelper = this.constructor._createOauthHelper(config)

@@ -43,7 +43,7 @@ export default class GithubMilestone extends GithubAuthV3Service {
   static render({ user, repo, variant, milestones }) {
     const milestoneLength = milestones.length
     let color
-    let label = ''
+    let qualifier = ''
 
     switch (variant) {
       case 'all':
@@ -51,16 +51,16 @@ export default class GithubMilestone extends GithubAuthV3Service {
         break
       case 'open':
         color = 'red'
-        label = 'active'
+        qualifier = 'active'
         break
       case 'closed':
         color = 'green'
-        label = 'completed'
+        qualifier = 'completed'
         break
     }
 
     return {
-      label: `${label} milestones`,
+      label: `${qualifier}${qualifier ? ' ' : ''}milestones`,
       message: metric(milestoneLength),
       color,
     }
@@ -70,7 +70,7 @@ export default class GithubMilestone extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/milestones?state=${variant}`,
       schema,
-      errorMessages: errorMessagesFor(`repo not found`),
+      errorMessages: errorMessagesFor('repo not found'),
     })
   }
 

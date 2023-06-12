@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { metric, maybePluralize } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
@@ -18,7 +18,6 @@ const documentation = `
     badge can be added to the project readme to encourage potential
     contributors to review the suggested issues and to celebrate the
     contributions that have already been made.
-
     The badge displays three pieces of information:
     <ul>
       <li>
@@ -33,7 +32,6 @@ const documentation = `
       </li>
       <li>The number of days left of October.</li>
     </ul>
-
   </p>
 
   ${githubDocumentation}
@@ -60,7 +58,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',
-    pattern: ':year(2019|2020|2021)/:user/:repo',
+    pattern: ':year(2019|2020|2021|2022)/:user/:repo',
     queryParamSchema,
   }
 
@@ -68,7 +66,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
     {
       title: 'GitHub Hacktoberfest combined status',
       namedParams: {
-        year: '2021',
+        year: '2022',
         user: 'snyk',
         repo: 'snyk',
       },
@@ -82,7 +80,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
     {
       title: 'GitHub Hacktoberfest combined status (suggestion label override)',
       namedParams: {
-        year: '2021',
+        year: '2022',
         user: 'tmrowco',
         repo: 'tmrowapp-contrib',
       },
@@ -90,7 +88,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
         suggestion_label: 'help wanted',
       },
       staticPreview: this.render({
-        year: '2021',
+        year: '2022',
         suggestedIssueCount: 12,
         contributionCount: 8,
         daysLeft: 15,
@@ -121,7 +119,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       // The global cutoff time is 11/1 noon UTC.
       // https://github.com/badges/shields/pull/4109#discussion_r330782093
       // We want to show "1 day left" on the last day so we add 1.
-      daysLeft = moment(`${year}-11-01 12:00:00 Z`).diff(moment(), 'days') + 1
+      daysLeft = dayjs(`${year}-11-01 12:00:00 Z`).diff(dayjs(), 'days') + 1
     }
     if (daysLeft < 0) {
       return {
@@ -160,7 +158,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       `repo:${user}/${repo}`,
       'is:pr',
       `created:${year}-10-01..${year}-10-31`,
-      `-label:invalid`,
+      '-label:invalid',
     ]
       .filter(Boolean)
       .join(' ')
@@ -205,10 +203,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   }
 
   static getCalendarPosition(year) {
-    const daysToStart = moment(`${year}-10-01 00:00:00 Z`).diff(
-      moment(),
-      'days'
-    )
+    const daysToStart = dayjs(`${year}-10-01 00:00:00 Z`).diff(dayjs(), 'days')
     const isBefore = daysToStart > 0
     return { daysToStart, isBefore }
   }

@@ -42,7 +42,7 @@ const formatMap = {
     },
     pluginSpecificPath: 'cobertura',
   },
-  api: {
+  apiv1: {
     schema: Joi.object({
       results: Joi.object({
         elements: Joi.array()
@@ -66,6 +66,25 @@ const formatMap = {
     },
     pluginSpecificPath: 'coverage/result',
   },
+  apiv4: {
+    schema: Joi.object({
+      projectStatistics: Joi.object({
+        line: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .required(),
+      }).required(),
+    }).required(),
+    treeQueryParam: 'projectStatistics[line]',
+    transform: json => {
+      const lineCoverageStr = json.projectStatistics.line
+      const lineCoverage = lineCoverageStr.substring(
+        0,
+        lineCoverageStr.length - 1
+      )
+      return { coverage: Number.parseFloat(lineCoverage) }
+    },
+    pluginSpecificPath: 'coverage',
+  },
 }
 
 const documentation = `
@@ -74,7 +93,7 @@ const documentation = `
   <ul>
     <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
     <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
-    <li>Any plugin which integrates with the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
+    <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
   </ul>
 </p>
 `
@@ -84,7 +103,7 @@ export default class JenkinsCoverage extends JenkinsBase {
 
   static route = {
     base: 'jenkins/coverage',
-    pattern: ':format(jacoco|cobertura|api)',
+    pattern: ':format(jacoco|cobertura|apiv1|apiv4)',
     queryParamSchema,
   }
 

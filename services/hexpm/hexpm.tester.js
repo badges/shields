@@ -1,8 +1,10 @@
 import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
-import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
-
-const isHexpmVersion = Joi.string().regex(/^v\d+.\d+.?\d?$/)
+import {
+  isMetric,
+  isMetricOverTimePeriod,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
 
 export const t = new ServiceTester({ id: 'hexpm', title: 'Hex.pm' })
 
@@ -22,6 +24,7 @@ t.create('downloads (zero for period)')
       .reply(200, {
         downloads: { all: 100 }, // there is no 'day' key here
         latest_stable_version: '1.0',
+        latest_version: '1.0',
         meta: { licenses: ['MIT'] },
       })
   )
@@ -35,9 +38,26 @@ t.create('downloads (not found)')
   .get('/dt/this-package-does-not-exist.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
 
-t.create('version')
-  .get('/v/cowboy.json')
-  .expectBadge({ label: 'hex', message: isHexpmVersion })
+t.create('version').get('/v/cowboy.json').expectBadge({
+  label: 'hex',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+})
+
+t.create('version (no stable version)')
+  .get('/v/prima_opentelemetry_ex.json')
+  .intercept(nock =>
+    nock('https://hex.pm/')
+      .get('/api/packages/prima_opentelemetry_ex')
+      .reply(200, {
+        downloads: { all: 100 },
+        latest_version: '1.0.0-rc.3',
+        meta: { licenses: ['MIT'] },
+      })
+  )
+  .expectBadge({
+    label: 'hex',
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+  })
 
 t.create('version (not found)')
   .get('/v/this-package-does-not-exist.json')
@@ -57,6 +77,7 @@ t.create('license (multiple licenses)')
       .reply(200, {
         downloads: { all: 100 },
         latest_stable_version: '1.0',
+        latest_version: '1.0',
         meta: { licenses: ['GPLv2', 'MIT'] },
       })
   )
@@ -74,6 +95,7 @@ t.create('license (no license)')
       .reply(200, {
         downloads: { all: 100 },
         latest_stable_version: '1.0',
+        latest_version: '1.0',
         meta: { licenses: [] },
       })
   )

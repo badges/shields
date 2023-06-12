@@ -4,7 +4,7 @@
 
 // See available emoji at http://emoji.muan.co/
 import emojic from 'emojic'
-import fastXmlParser from 'fast-xml-parser'
+import { XMLParser, XMLValidator } from 'fast-xml-parser'
 import BaseService from './base.js'
 import trace from './trace.js'
 import { InvalidResponse } from './errors.js'
@@ -51,14 +51,15 @@ class BaseXmlService extends BaseService {
       options: mergedOptions,
       errorMessages,
     })
-    const validateResult = fastXmlParser.validate(buffer)
+    const validateResult = XMLValidator.validate(buffer)
     if (validateResult !== true) {
       throw new InvalidResponse({
         prettyMessage: 'unparseable xml response',
         underlyingError: validateResult.err,
       })
     }
-    const xml = fastXmlParser.parse(buffer, parserOptions)
+    const parser = new XMLParser(parserOptions)
+    const xml = parser.parse(buffer)
     logTrace(emojic.dart, 'Response XML (before validation)', xml, {
       deep: true,
     })

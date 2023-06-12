@@ -52,7 +52,6 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
       errorMessages: {
         403: 'access denied by remote server',
         404: 'project not found',
-        429: 'rate limited by remote server',
       },
     })
   }

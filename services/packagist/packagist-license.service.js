@@ -8,12 +8,11 @@ import {
   customServerDocumentationFragment,
 } from './packagist-base.js'
 
-const packageSchema = Joi.object()
-  .pattern(
-    /^/,
+const packageSchema = Joi.array()
+  .items(
     Joi.object({
-      'default-branch': Joi.bool(),
-      license: Joi.array().required(),
+      version: Joi.string(),
+      license: Joi.array(),
     }).required()
   )
   .required()
@@ -57,17 +56,27 @@ export default class PackagistLicense extends BasePackagistService {
   }
 
   transform({ json, user, repo }) {
-    const branch = this.getDefaultBranch(json, user, repo)
-    if (!branch) {
-      throw new NotFound({ prettyMessage: 'default branch not found' })
+    const packageName = this.getPackageName(user, repo)
+
+    const versions = BasePackagistService.expandPackageVersions(
+      json,
+      packageName
+    )
+
+    const version = this.findLatestRelease(versions)
+    const license = version.license
+    if (!license) {
+      throw new NotFound({ prettyMessage: 'license not found' })
     }
-    const { license } = branch
+
     return { license }
   }
 
   async handle({ user, repo }, { server }) {
     const json = await this.fetch({ user, repo, schema, server })
+
     const { license } = this.transform({ json, user, repo })
+
     return renderLicenseBadge({ license })
   }
 }

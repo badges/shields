@@ -20,7 +20,7 @@ t.create('pr-raw (not found)')
 
 t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
-  .expectBadge({ label: 'pull requests', message: 'private repo' })
+  .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr (valid)').get('/pr/atlassian/python-bitbucket.json').expectBadge({
   label: 'pull requests',
@@ -33,7 +33,7 @@ t.create('pr (not found)')
 
 t.create('pr (private repo)')
   .get('/pr/chris48s/example-private-repo.json')
-  .expectBadge({ label: 'pull requests', message: 'private repo' })
+  .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr (server)')
   .get('/pr/project/repo.json?server=https://bitbucket.mydomain.net')

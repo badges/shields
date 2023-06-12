@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { InvalidResponse, redirector } from '../index.js'
+import { InvalidResponse } from '../index.js'
 import BaseBowerService from './bower-base.js'
 
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
 }).required()
 
-class BowerVersion extends BaseBowerService {
+export default class BowerVersion extends BaseBowerService {
   static category = 'version'
   static route = { base: 'bower/v', pattern: ':packageName', queryParamSchema }
 
@@ -47,18 +47,3 @@ class BowerVersion extends BaseBowerService {
     return renderVersionBadge({ version })
   }
 }
-
-const BowerVersionRedirect = redirector({
-  category: 'version',
-  route: {
-    base: 'bower/vpre',
-    pattern: ':packageName',
-  },
-  transformPath: ({ packageName }) => `/bower/v/${packageName}`,
-  transformQueryParams: params => ({
-    include_prereleases: null,
-  }),
-  dateAdded: new Date('2019-12-15'),
-})
-
-export { BowerVersion, BowerVersionRedirect }

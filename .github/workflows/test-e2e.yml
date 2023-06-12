@@ -1,0 +1,52 @@
+name: E2E
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
+
+jobs:
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Cypress binary
+        id: cache-cypress
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-cypress
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 16
+          cypress: true
+
+      - name: Frontend build
+        run: GATSBY_BASE_URL=http://localhost:8080 npm run build
+
+      - name: Run tests
+        env:
+          GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        run: npm run e2e-on-build
+
+      - name: Archive videos
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: videos
+          path: cypress/videos
+
+      - name: Archive screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: cypress/screenshots

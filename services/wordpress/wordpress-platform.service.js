@@ -1,7 +1,7 @@
 import { NotFound } from '../index.js'
 import { addv } from '../text-formatters.js'
 import { version as versionColor } from '../color-formatters.js'
-import BaseWordpress from './wordpress-base.js'
+import { documentation, BaseWordpress } from './wordpress-base.js'
 import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
 const extensionData = {
@@ -33,6 +33,7 @@ function WordpressRequiresVersion(extensionType) {
         title: `WordPress ${capt}: Required WP Version`,
         namedParams: { slug: exampleSlug },
         staticPreview: this.render({ wordpressVersion: '4.8' }),
+        documentation,
       },
     ]
 
@@ -66,7 +67,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
   static category = 'platform-support'
 
   static route = {
-    base: `wordpress/plugin/tested`,
+    base: 'wordpress/plugin/tested',
     pattern: ':slug',
   }
 
@@ -77,6 +78,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
       staticPreview: this.renderStaticPreview({
         testedVersion: '4.9.8',
       }),
+      documentation,
     },
   ]
 
@@ -128,6 +130,7 @@ function RequiresPHPVersionForType(extensionType) {
         title: `WordPress ${capt} Required PHP Version`,
         namedParams: { slug: exampleSlug },
         staticPreview: this.render({ version: '5.5' }),
+        documentation,
       },
     ]
 

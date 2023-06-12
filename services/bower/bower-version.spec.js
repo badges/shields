@@ -4,7 +4,7 @@ import nock from 'nock'
 import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
 import { InvalidResponse } from '../index.js'
 import LibrariesIoApiProvider from '../librariesio/librariesio-api-provider.js'
-import { BowerVersion } from './bower-version.service.js'
+import BowerVersion from './bower-version.service.js'
 
 describe('BowerVersion', function () {
   test(BowerVersion.transform, () => {

@@ -43,7 +43,7 @@ t.create('no trove classifiers')
           license: 'foo',
           classifiers: [],
         },
-        releases: {},
+        urls: [],
       })
   )
   .expectBadge({

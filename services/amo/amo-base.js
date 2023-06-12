@@ -21,7 +21,7 @@ class BaseAmoService extends BaseJsonService {
   async fetch({ addonId }) {
     return this._requestJson({
       schema,
-      url: `https://addons.mozilla.org/api/v3/addons/addon/${addonId}`,
+      url: `https://addons.mozilla.org/api/v4/addons/addon/${addonId}/`,
     })
   }
 }

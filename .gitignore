@@ -96,6 +96,7 @@ typings/
 badge-examples.json
 supported-features.json
 service-definitions.yml
+frontend/categories/*.yaml
 
 # Local runtime configuration.
 /config/local*.yml
@@ -117,3 +118,6 @@ service-definitions.yml
 
 # Flamebearer
 flamegraph.html
+
+# config file for node-pg-migrate
+migrations-config.json

@@ -42,7 +42,7 @@ class BaseAurService extends BaseJsonService {
     // https://wiki.archlinux.org/index.php/Aurweb_RPC_interface
     return this._requestJson({
       schema: aurSchema,
-      url: 'https://aur.archlinux.org/rpc.php',
+      url: 'https://aur.archlinux.org/rpc',
       options: { searchParams: { v: 5, type: 'info', arg: packageName } },
     })
   }
@@ -108,9 +108,7 @@ class AurVotes extends BaseAurService {
 
 class AurVersion extends BaseAurService {
   static category = 'version'
-
   static route = { base: 'aur/version', pattern: ':packageName' }
-
   static examples = [
     {
       title: 'AUR version',
@@ -118,6 +116,8 @@ class AurVersion extends BaseAurService {
       staticPreview: this.render({ version: '1.34.0-2', outOfDate: null }),
     },
   ]
+
+  static _cacheLength = 3600
 
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'

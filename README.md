@@ -19,9 +19,6 @@
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields"
             alt="coverage"></a>
-    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
-        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields"
-            alt="Total alerts"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
@@ -35,7 +32,7 @@ and legible badges in SVG and raster format, which can easily be included in
 GitHub readmes or any other web page. The service supports dozens of
 continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 770 million images and is used by some of the
+Every month it serves over 870 million images and is used by some of the
 world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
 and [Bootstrap][bootstrap] to name a few.
 

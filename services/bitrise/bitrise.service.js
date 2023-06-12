@@ -21,8 +21,8 @@ export default class Bitrise extends BaseJsonService {
   static examples = [
     {
       title: 'Bitrise',
-      namedParams: { appId: 'cde737473028420d', branch: 'master' },
-      queryParams: { token: 'GCIdEzacE4GW32jLVrZb7A' },
+      namedParams: { appId: '3ff11fe8457bd304', branch: 'master' },
+      queryParams: { token: 'lESRN9rEFFfDq92JtXs_jw' },
       staticPreview: this.render({ status: 'success' }),
     },
   ]

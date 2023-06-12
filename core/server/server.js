@@ -11,7 +11,6 @@ import originalJoi from 'joi'
 import makeBadge from '../../badge-maker/lib/make-badge.js'
 import GithubConstellation from '../../services/github/github-constellation.js'
 import LibrariesIoConstellation from '../../services/librariesio/librariesio-constellation.js'
-import { setRoutes } from '../../services/suggest.js'
 import { loadServiceClasses } from '../base-service/loader.js'
 import { makeSend } from '../base-service/legacy-result-sender.js'
 import { handleRequest } from '../base-service/legacy-request-handler.js'
@@ -113,6 +112,9 @@ const publicConfigSchema = Joi.object({
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
   cors: {
+    // This doesn't actually do anything
+    // TODO: maybe remove in future?
+    // https://github.com/badges/shields/pull/8311#discussion_r945337530
     allowedOrigin: Joi.array().items(optionalUrl).required(),
   },
   services: Joi.object({
@@ -124,6 +126,7 @@ const publicConfigSchema = Joi.object({
         enabled: Joi.boolean().required(),
         intervalSeconds: Joi.number().integer().min(1).required(),
       },
+      restApiVersion: Joi.date().raw().required(),
     },
     gitlab: defaultService,
     jira: defaultService,
@@ -170,6 +173,8 @@ const privateConfigSchema = Joi.object({
   jenkins_pass: Joi.string(),
   jira_user: Joi.string(),
   jira_pass: Joi.string(),
+  bitbucket_username: Joi.string(),
+  bitbucket_password: Joi.string(),
   bitbucket_server_username: Joi.string(),
   bitbucket_server_password: Joi.string(),
   librariesio_tokens: Joi.arrayFromString().items(Joi.string()),
@@ -179,10 +184,12 @@ const privateConfigSchema = Joi.object({
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
+  postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
   sentry_dsn: Joi.string(),
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
   sonarqube_token: Joi.string(),
+  stackapps_api_key: Joi.string(),
   teamcity_user: Joi.string(),
   teamcity_pass: Joi.string(),
   twitch_client_id: Joi.string(),
@@ -200,6 +207,14 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
 
 function addHandlerAtIndex(camp, index, handlerFn) {
   camp.stack.splice(index, 0, handlerFn)
+}
+
+function isOnHeroku() {
+  return !!process.env.DYNO
+}
+
+function isOnFly() {
+  return !!process.env.FLY_APP_NAME
 }
 
 /**
@@ -302,13 +317,21 @@ class Server {
     // Set `req.ip`, which is expected by `cloudflareMiddleware()`. This is set
     // by Express but not Scoutcamp.
     addHandlerAtIndex(this.camp, 0, function (req, res, next) {
-      // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
-      // the router ensures that the last item in the `X-Forwarded-For` header
-      // is the real origin.
-      // https://stackoverflow.com/a/18517550/893113
-      req.ip = process.env.DYNO
-        ? req.headers['x-forwarded-for'].split(', ').pop()
-        : req.socket.remoteAddress
+      if (isOnHeroku()) {
+        // On Heroku, `req.socket.remoteAddress` is the Heroku router. However,
+        // the router ensures that the last item in the `X-Forwarded-For` header
+        // is the real origin.
+        // https://stackoverflow.com/a/18517550/893113
+        req.ip = req.headers['x-forwarded-for'].split(', ').pop()
+      } else if (isOnFly()) {
+        // On Fly we can use the Fly-Client-IP header
+        // https://fly.io/docs/reference/runtime-environment/#request-headers
+        req.ip = req.headers['fly-client-ip']
+          ? req.headers['fly-client-ip']
+          : req.socket.remoteAddress
+      } else {
+        req.ip = req.socket.remoteAddress
+      }
       next()
     })
     addHandlerAtIndex(this.camp, 1, cloudflareMiddleware())
@@ -471,7 +494,6 @@ class Server {
     const {
       bind: { port, address: hostname },
       ssl: { isSecure: secure, cert, key },
-      cors: { allowedOrigin },
       requireCloudflare,
     } = this.config.public
 
@@ -503,9 +525,6 @@ class Server {
         this.influxMetrics.startPushingMetrics()
       }
     }
-
-    const { apiProvider: githubApiProvider } = this.githubConstellation
-    setRoutes(allowedOrigin, githubApiProvider, camp)
 
     // https://github.com/badges/shields/issues/3273
     camp.handle((req, res, next) => {

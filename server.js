@@ -42,6 +42,13 @@ if (fs.existsSync('.env')) {
   process.exit(1)
 }
 
+if (config.private.redis_url != null) {
+  console.error(
+    'RedisTokenPersistence has been removed. Migrate to SqlTokenPersistence'
+  )
+  process.exit(1)
+}
+
 const legacySecretsPath = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   'private',

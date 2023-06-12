@@ -108,7 +108,9 @@ class AuthHelper {
 
   get _basicAuth() {
     const { _user: username, _pass: password } = this
-    return this.isConfigured ? { username, password } : undefined
+    return this.isConfigured
+      ? { username: username || '', password: password || '' }
+      : undefined
   }
 
   /*

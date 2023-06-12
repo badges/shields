@@ -60,7 +60,7 @@ t.create('handles unauthorized private repository')
   .intercept(nock =>
     nock('https://codecov.io')
       .get('/github/codecov/private-example-python/graph/badge.svg')
-      .reply(200, `<g><text x="105.5" y="14">unknown</text></g>`, {
+      .reply(200, '<g><text x="105.5" y="14">unknown</text></g>', {
         'Content-Type': 'image/svg+xml',
       })
   )
@@ -110,7 +110,7 @@ t.create('gets coverage for private repository')
       .get(
         '/gh/codecov/private-example-python/graph/badge.svg?token=a1b2c3d4e5'
       )
-      .reply(200, `<g><text x="105.5" y="14">100%</text></g>`, {
+      .reply(200, '<g><text x="105.5" y="14">100%</text></g>', {
         'Content-Type': 'image/svg+xml',
       })
   )

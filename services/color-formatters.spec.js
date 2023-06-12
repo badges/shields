@@ -6,6 +6,7 @@ import {
   letterScore,
   age,
   version,
+  pep440VersionColor,
 } from './color-formatters.js'
 
 describe('Color formatters', function () {
@@ -87,6 +88,7 @@ describe('Color formatters', function () {
       given('6.0-SNAPSHOT'),
       given('1.0.1-dev'),
       given('2.1.6-prerelease'),
+      given('2.1.6-RC1'),
     ]).expect('orange')
 
     expect(() => version(null)).to.throw(
@@ -105,5 +107,46 @@ describe('Color formatters', function () {
       Error,
       "Can't generate a version color for [object Object]"
     )
+  })
+
+  test(pep440VersionColor, () => {
+    forCases([
+      given('1.0.1'),
+      given('v2.1.6'),
+      given('1.0.1+abcd'),
+      given('1.0'),
+      given('v1'),
+      given(9),
+      given(1.0),
+    ]).expect('blue')
+
+    forCases([
+      given('1.0.1-rc1'),
+      given('1.0.1rc1'),
+      given('1.0.0-Beta'),
+      given('1.0.0Beta'),
+      given('1.1.0-alpha'),
+      given('1.1.0alpha'),
+      given('1.0.1-dev'),
+      given('1.0.1dev'),
+      given('2.1.6-b1'),
+      given('2.1.6b1'),
+      given('0.1.0'),
+      given('v0.1.0'),
+      given('v2.1.6-b1'),
+      given('0.1.0+abcd'),
+      given('2.1.6-b1+abcd'),
+      given('0.0.0'),
+      given(0.1),
+      given('0.9'),
+    ]).expect('orange')
+
+    forCases([
+      given('6.0.0-SNAPSHOT'),
+      given('2.1.6-prerelease'),
+      given(true),
+      given(null),
+      given('cheese'),
+    ]).expect('lightgrey')
   })
 })

@@ -1,4 +1,4 @@
-import { DOMParser } from 'xmldom'
+import { DOMParser } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
 import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
@@ -15,6 +15,53 @@ export default class DynamicXml extends BaseService {
   static category = 'dynamic'
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('xml')
+  static openApi = {
+    '/badge/dynamic/xml': {
+      get: {
+        summary: 'Dynamic XML Badge',
+        description: `<p>
+          The Dynamic XML Badge allows you to extract an arbitrary value from any
+          XML Document using an XPath selector and show it on a badge.
+        </p>`,
+        parameters: [
+          {
+            name: 'url',
+            description: 'The URL to a XML document',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: 'https://httpbin.org/xml',
+          },
+          {
+            name: 'query',
+            description:
+              'A <a href="http://xpather.com/">XPath</a> expression that will be used to query the document',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: '//slideshow/slide[1]/title',
+          },
+          {
+            name: 'prefix',
+            description: 'Optional prefix to append to the value',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            example: '[',
+          },
+          {
+            name: 'suffix',
+            description: 'Optional suffix to append to the value',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            example: ']',
+          },
+        ],
+      },
+    },
+  }
+
   static defaultBadgeData = { label: 'custom badge' }
 
   transform({ pathExpression, buffer }) {

@@ -5,6 +5,7 @@ import { expect } from 'chai'
 import log from './log.js'
 import InfluxMetrics from './influx-metrics.js'
 import '../register-chai-plugins.spec.js'
+
 describe('Influx metrics', function () {
   const metricInstance = {
     metrics() {

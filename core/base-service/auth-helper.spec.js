@@ -107,10 +107,10 @@ describe('AuthHelper', function () {
       ]).expect({ username: 'admin', password: 'abc123' })
       given({ userKey: 'myci_user' }, { myci_user: 'admin' }).expect({
         username: 'admin',
-        password: undefined,
+        password: '',
       })
       given({ passKey: 'myci_pass' }, { myci_pass: 'abc123' }).expect({
-        username: undefined,
+        username: '',
         password: 'abc123',
       })
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
