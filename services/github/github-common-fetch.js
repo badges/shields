@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { InvalidResponse } from '../index.js'
-import { errorMessagesFor } from './github-helpers.js'
+import { httpErrorsFor } from './github-helpers.js'
 
 const issueSchema = Joi.object({
   head: Joi.object({
@@ -12,7 +12,7 @@ async function fetchIssue(serviceInstance, { user, repo, number }) {
   return serviceInstance._requestJson({
     schema: issueSchema,
     url: `/repos/${user}/${repo}/pulls/${number}`,
-    errorMessages: errorMessagesFor('pull request or repo not found'),
+    httpErrors: httpErrorsFor('pull request or repo not found'),
   })
 }
 
@@ -26,7 +26,7 @@ async function fetchRepoContent(
   serviceInstance,
   { user, repo, branch = 'HEAD', filename }
 ) {
-  const errorMessages = errorMessagesFor(
+  const httpErrors = httpErrorsFor(
     `repo not found, branch not found, or ${filename} missing`
   )
   if (serviceInstance.staticAuthConfigured) {
@@ -34,7 +34,7 @@ async function fetchRepoContent(
       schema: contentSchema,
       url: `/repos/${user}/${repo}/contents/${filename}`,
       options: { searchParams: { ref: branch } },
-      errorMessages,
+      httpErrors,
     })
 
     try {
@@ -45,7 +45,7 @@ async function fetchRepoContent(
   } else {
     const { buffer } = await serviceInstance._request({
       url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
-      errorMessages,
+      httpErrors,
     })
     return buffer
   }
@@ -68,7 +68,7 @@ async function fetchJsonFromRepo(
     return serviceInstance._requestJson({
       schema,
       url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
-      errorMessages: errorMessagesFor(
+      httpErrors: httpErrorsFor(
         `repo not found, branch not found, or ${filename} missing`
       ),
     })

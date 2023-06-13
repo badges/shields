@@ -109,7 +109,7 @@ export default class AzureDevOpsBuild extends BaseSvgScrapingService {
         stageName: stage,
         jobName: job,
       },
-      errorMessages: {
+      httpErrors: {
         404: 'user or project not found',
       },
     })

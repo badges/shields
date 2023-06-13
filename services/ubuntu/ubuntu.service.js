@@ -53,7 +53,7 @@ export default class Ubuntu extends BaseJsonService {
           ...seriesParam,
         },
       },
-      errorMessages: {
+      httpErrors: {
         400: 'series not found',
       },
     })

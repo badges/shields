@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   color: Joi.string().hex().required(),
@@ -35,7 +35,7 @@ export default class GithubLabels extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/labels/${name}`,
       schema,
-      errorMessages: errorMessagesFor('repo or label not found'),
+      httpErrors: httpErrorsFor('repo or label not found'),
     })
   }
 

@@ -57,7 +57,7 @@ class CircleCi extends BaseSvgScrapingService {
       // Note that the unusual 'circle-token' query param name is required.
       // https://circleci.com/docs/api/#get-authenticated
       options: { searchParams: { style: 'shield', 'circle-token': token } },
-      errorMessages: { 404: 'project not found' },
+      httpErrors: { 404: 'project not found' },
     })
     return this.constructor.render({ status: message })
   }

@@ -22,7 +22,7 @@ export default class BaseBowerService extends LibrariesIoBase {
     return this._requestJson({
       schema,
       url: `/bower/${packageName}`,
-      errorMessages: {
+      httpErrors: {
         404: 'package not found',
       },
     })

@@ -77,7 +77,7 @@ export default class NpmsIOScore extends BaseJsonService {
     const json = await this._requestJson({
       schema: responseSchema,
       url,
-      errorMessages: { 404: 'package not found or too new' },
+      httpErrors: { 404: 'package not found or too new' },
     })
 
     const scoreType = type.slice(0, -6)

@@ -49,7 +49,7 @@ export default class StackExchangeReputation extends StackExchangeBase {
       schema: reputationSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid parameters',
       },
     })

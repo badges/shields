@@ -53,7 +53,7 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
       )}`,
       options: { searchParams: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

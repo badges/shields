@@ -53,7 +53,7 @@ export default class RedditUserKarma extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.reddit.com/u/${user}/about.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'user not found',
       },
     })

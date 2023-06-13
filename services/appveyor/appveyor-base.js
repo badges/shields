@@ -29,7 +29,7 @@ export default class AppVeyorBase extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: { 404: 'project not found or access denied' },
+      httpErrors: { 404: 'project not found or access denied' },
     })
   }
 

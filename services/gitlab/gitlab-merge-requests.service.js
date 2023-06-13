@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 // The total number of MR is in the `x-total` field in the headers.
@@ -314,7 +314,7 @@ export default class GitlabMergeRequests extends GitLabBase {
             labels,
           },
         },
-        errorMessages: errorMessagesFor('project not found'),
+        httpErrors: httpErrorsFor('project not found'),
       })
     )
     return this.constructor._validate(res.headers, schema)

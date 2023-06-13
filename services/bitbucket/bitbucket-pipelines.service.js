@@ -63,7 +63,7 @@ class BitbucketPipelines extends BaseJsonService {
           'target.ref_name': branch,
         },
       },
-      errorMessages: { 403: 'private repo' },
+      httpErrors: { 403: 'private repo' },
     })
   }
 

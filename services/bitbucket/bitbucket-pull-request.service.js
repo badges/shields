@@ -12,7 +12,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-const errorMessages = {
+const httpErrors = {
   401: 'invalid credentials',
   403: 'private repo',
   404: 'not found',
@@ -87,7 +87,7 @@ function pullRequestClassGenerator(raw) {
           url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
           schema,
           options: { searchParams: { state: 'OPEN', limit: 0 } },
-          errorMessages,
+          httpErrors,
         })
       )
     }
@@ -106,7 +106,7 @@ function pullRequestClassGenerator(raw) {
               withAttributes: false,
             },
           },
-          errorMessages,
+          httpErrors,
         })
       )
     }

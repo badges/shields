@@ -5,19 +5,19 @@ const defaultErrorMessages = {
   429: 'rate limited by upstream service',
 }
 
-export default function checkErrorResponse(errorMessages = {}) {
+export default function checkErrorResponse(httpErrors = {}) {
   return async function ({ buffer, res }) {
     let error
-    errorMessages = { ...defaultErrorMessages, ...errorMessages }
+    httpErrors = { ...defaultErrorMessages, ...httpErrors }
     if (res.statusCode === 404) {
-      error = new NotFound({ prettyMessage: errorMessages[404] })
+      error = new NotFound({ prettyMessage: httpErrors[404] })
     } else if (res.statusCode !== 200) {
       const underlying = Error(
         `Got status code ${res.statusCode} (expected 200)`
       )
       const props = { underlyingError: underlying }
-      if (errorMessages[res.statusCode] !== undefined) {
-        props.prettyMessage = errorMessages[res.statusCode]
+      if (httpErrors[res.statusCode] !== undefined) {
+        props.prettyMessage = httpErrors[res.statusCode]
       }
       if (res.statusCode >= 500) {
         error = new Inaccessible(props)

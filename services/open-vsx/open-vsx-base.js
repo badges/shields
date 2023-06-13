@@ -34,7 +34,7 @@ export default class OpenVSXBase extends BaseJsonService {
       url: `https://open-vsx.org/api/${namespace}/${extension}/${
         version || ''
       }`,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid extension id',
         404: 'extension not found',
       },
