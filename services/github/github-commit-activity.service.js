@@ -41,7 +41,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
       // Override the pattern to omit the deprecated interval "4w".
       pattern: ':interval(t|y|m|w)/:user/:repo',
       namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
-      queryParams: { authorFilter: 'chris48s' },
+      queryParams: { authorFilter: 'nzakas' },
       staticPreview: this.render({ interval: 'm', commitCount: 457 }),
       keywords: ['commits'],
       documentation,
