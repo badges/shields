@@ -48,7 +48,7 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.reddit.com/r/${subreddit}/about.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'subreddit not found',
         403: 'subreddit is private',
       },

@@ -4,7 +4,7 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { NotFound } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchLatestRelease } from './github-common-release.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
@@ -233,7 +233,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
       const wantedRelease = await this._requestJson({
         schema: releaseSchema,
         url: `/repos/${user}/${repo}/releases/tags/${tag}`,
-        errorMessages: errorMessagesFor('repo or release not found'),
+        httpErrors: httpErrorsFor('repo or release not found'),
       })
       releases = [wantedRelease]
     } else {
@@ -241,7 +241,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
         options: { searchParams: { per_page: 500 } },
-        errorMessages: errorMessagesFor('repo not found'),
+        httpErrors: httpErrorsFor('repo not found'),
       })
       releases = allReleases
     }

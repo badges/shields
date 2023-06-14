@@ -138,7 +138,7 @@ export default class JenkinsCoverage extends JenkinsBase {
       url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
       schema,
       searchParams: buildTreeParamQueryString(treeQueryParam),
-      errorMessages: {
+      httpErrors: {
         404: 'job or coverage not found',
       },
     })

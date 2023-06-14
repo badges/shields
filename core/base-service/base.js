@@ -226,7 +226,7 @@ class BaseService {
     this._metricHelper = metricHelper
   }
 
-  async _request({ url, options = {}, errorMessages = {} }) {
+  async _request({ url, options = {}, httpErrors = {}, systemErrors = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
@@ -246,10 +246,14 @@ class BaseService {
       'Request',
       `${logUrl}\n${JSON.stringify(logOptions, null, 2)}`
     )
-    const { res, buffer } = await this._requestFetcher(url, options)
+    const { res, buffer } = await this._requestFetcher(
+      url,
+      options,
+      systemErrors
+    )
     await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse(errorMessages)({ buffer, res })
+    return checkErrorResponse(httpErrors)({ buffer, res })
   }
 
   static enabledMetrics = []
@@ -328,11 +332,15 @@ class BaseService {
       error instanceof Deprecated
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
-      return {
+      const serviceData = {
         isError: true,
         message: error.prettyMessage,
         color: 'lightgray',
       }
+      if (error.cacheSeconds !== undefined) {
+        serviceData.cacheSeconds = error.cacheSeconds
+      }
+      return serviceData
     } else if (this._handleInternalErrors) {
       if (
         !trace.logTrace(

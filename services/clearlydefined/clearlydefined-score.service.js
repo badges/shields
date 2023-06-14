@@ -53,7 +53,7 @@ export default class ClearlyDefinedService extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
-      errorMessages: {
+      httpErrors: {
         500: 'unknown type, provider, or upstream issue',
       },
     })

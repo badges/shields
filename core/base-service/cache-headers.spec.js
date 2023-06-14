@@ -74,12 +74,12 @@ describe('Cache header functions', function () {
         serviceDefaultCacheLengthSeconds: 900,
         serviceOverrideCacheLengthSeconds: 400,
         queryParams: {},
-      }).expect(900)
+      }).expect(400)
       given({
         cacheHeaderConfig,
         serviceOverrideCacheLengthSeconds: 400,
         queryParams: {},
-      }).expect(777)
+      }).expect(400)
       given({
         cacheHeaderConfig,
         serviceOverrideCacheLengthSeconds: 900,

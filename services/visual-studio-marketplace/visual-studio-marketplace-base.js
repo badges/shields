@@ -95,7 +95,7 @@ export default class VisualStudioMarketplaceBase extends BaseJsonService {
       schema: extensionQuerySchema,
       url,
       options,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid extension id',
       },
     })

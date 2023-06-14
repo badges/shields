@@ -66,7 +66,7 @@ export default class Coveralls extends BaseJsonService {
       schema,
       url,
       options,
-      errorMessages: {
+      httpErrors: {
         404: 'repository not found',
       },
     })

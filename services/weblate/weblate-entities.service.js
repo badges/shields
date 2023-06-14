@@ -36,7 +36,7 @@ export default class WeblateEntities extends WeblateBase {
     return super.fetch({
       schema,
       url: `${server}/api/${type}/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
       },
     })

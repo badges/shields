@@ -152,7 +152,7 @@ npm run test:services -- --only="wercker" --fgrep="Build status (with branch)"
 Having covered the typical and custom cases, we'll move on to errors. We should include a test for the 'not found' response and also tests for any other custom error handling. The Wercker integration defines a custom error condition for 401 as well as a custom 404 message:
 
 ```js
-errorMessages: {
+httpErrors: {
   401: 'private application not supported',
   404: 'application not found',
 }

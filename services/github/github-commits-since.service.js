@@ -6,7 +6,7 @@ import {
   fetchLatestRelease,
   queryParamSchema,
 } from './github-common-release.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
@@ -151,7 +151,7 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
     const { ahead_by: commitCount } = await this._requestJson({
       schema,
       url: `/repos/${user}/${repo}/compare/${version}...${branch || 'HEAD'}`,
-      errorMessages: errorMessagesFor(notFoundMessage),
+      httpErrors: httpErrorsFor(notFoundMessage),
     })
 
     return this.constructor.render({ version, commitCount })

@@ -9,11 +9,11 @@ const documentation = `
 </p>
 `
 
-function errorMessagesFor(notFoundMessage = 'project not found') {
+function httpErrorsFor(notFoundMessage = 'project not found') {
   return {
     401: notFoundMessage,
     404: notFoundMessage,
   }
 }
 
-export { documentation, errorMessagesFor }
+export { documentation, httpErrorsFor }

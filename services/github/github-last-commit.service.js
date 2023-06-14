@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 const commonExampleAttrs = {
   keywords: ['latest'],
   documentation,
@@ -87,7 +87,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
       url: `/repos/${user}/${repo}/commits`,
       options: { searchParams: { sha: branch } },
       schema,
-      errorMessages: errorMessagesFor(),
+      httpErrors: httpErrorsFor(),
     })
   }
 

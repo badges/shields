@@ -6,7 +6,7 @@ import { InvalidResponse } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   documentation,
-  errorMessagesFor,
+  httpErrorsFor,
   issueStateColor,
   commentsColor,
 } from './github-helpers.js'
@@ -222,7 +222,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/${issueKind}/${number}`,
       schema: propertyMap[property].schema,
-      errorMessages: errorMessagesFor('issue, pull request or repo not found'),
+      httpErrors: httpErrorsFor('issue, pull request or repo not found'),
     })
   }
 

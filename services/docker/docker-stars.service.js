@@ -41,7 +41,7 @@ export default class DockerStars extends BaseJsonService {
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
         user
       )}/${repo}/`,
-      errorMessages: { 404: 'repo not found' },
+      httpErrors: { 404: 'repo not found' },
     })
   }
 

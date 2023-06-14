@@ -59,7 +59,7 @@ export default class PypiDownloads extends BaseJsonService {
     return this._requestJson({
       url: `https://pypistats.org/api/packages/${packageName.toLowerCase()}/recent`,
       schema,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 

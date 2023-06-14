@@ -39,6 +39,7 @@ function coalesceCacheLength({
   assert(defaultCacheLengthSeconds !== undefined)
 
   const cacheLength = coalesce(
+    serviceOverrideCacheLengthSeconds,
     serviceDefaultCacheLengthSeconds,
     defaultCacheLengthSeconds
   )
@@ -46,7 +47,6 @@ function coalesceCacheLength({
   // Overrides can apply _more_ caching, but not less. Query param overriding
   // can request more overriding than service override, but not less.
   const candidateOverrides = [
-    serviceOverrideCacheLengthSeconds,
     overrideCacheLengthFromQueryParams(queryParams),
   ].filter(x => x !== undefined)
 

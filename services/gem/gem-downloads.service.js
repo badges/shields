@@ -88,7 +88,7 @@ export default class GemDownloads extends BaseJsonService {
     const json = await this._requestJson({
       url: `https://rubygems.org/api/v1/versions/${gem}.json`,
       schema: versionSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'gem not found',
       },
     })
@@ -117,7 +117,7 @@ export default class GemDownloads extends BaseJsonService {
       await this._requestJson({
         url: `https://rubygems.org/api/v1/gems/${gem}.json`,
         schema: gemSchema,
-        errorMessages: {
+        httpErrors: {
           404: 'gem not found',
         },
       })

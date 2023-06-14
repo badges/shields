@@ -14,7 +14,7 @@ import { InvalidResponse } from './index.js'
  *
  * @type {object}
  */
-const errorMessages = {
+const httpErrors = {
   404: 'resource not found',
 }
 
@@ -93,7 +93,7 @@ function renderDynamicBadge({
 }
 
 export {
-  errorMessages,
+  httpErrors,
   individualValueSchema,
   transformAndValidate,
   renderDynamicBadge,

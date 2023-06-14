@@ -43,7 +43,7 @@ export default class OpencollectiveBase extends BaseJsonService {
       schema: collectiveDetailsSchema,
       // https://developer.opencollective.com/#/api/collectives?id=get-info
       url: `https://opencollective.com/${collective}.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'collective not found',
       },
     })
@@ -66,7 +66,7 @@ export default class OpencollectiveBase extends BaseJsonService {
       url: `https://opencollective.com/${collective}/members/${
         userType || 'all'
       }.json${tierId ? `?TierId=${tierId}` : ''}`,
-      errorMessages: {
+      httpErrors: {
         404: 'collective not found',
       },
     })

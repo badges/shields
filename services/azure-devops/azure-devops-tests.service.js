@@ -145,7 +145,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
   }
 
   async fetchTestResults({ organization, project, definitionId, branch }) {
-    const errorMessages = {
+    const httpErrors = {
       404: 'build pipeline or test result summary not found',
     }
     const buildId = await this.getLatestCompletedBuildId(
@@ -153,7 +153,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      errorMessages
+      httpErrors
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
@@ -163,7 +163,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
         searchParams: { buildId },
       },
       schema: buildTestResultSummarySchema,
-      errorMessages,
+      httpErrors,
     })
   }
 

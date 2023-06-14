@@ -49,7 +49,7 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
     return super.fetch({
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'project not found',
       },

@@ -29,7 +29,7 @@ class BaseFactorioModPortalService extends BaseJsonService {
     const { releases, downloads_count } = await this._requestJson({
       schema,
       url: `https://mods.factorio.com/api/mods/${modName}`,
-      errorMessages: {
+      httpErrors: {
         404: 'mod not found',
       },
     })

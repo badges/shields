@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { formatDate } from '../../text-formatters.js'
 import { age as ageColor } from '../../color-formatters.js'
 import { GithubAuthV3Service } from '../github-auth-service.js'
-import { documentation, errorMessagesFor } from '../github-helpers.js'
+import { documentation, httpErrorsFor } from '../github-helpers.js'
 
 const schema = Joi.object({
   updated_at: Joi.string().required(),
@@ -36,7 +36,7 @@ export default class GistLastCommit extends GithubAuthV3Service {
     return this._requestJson({
       url: `/gists/${gistId}`,
       schema,
-      errorMessages: errorMessagesFor('gist not found'),
+      httpErrors: httpErrorsFor('gist not found'),
     })
   }
 
