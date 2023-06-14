@@ -136,7 +136,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
           since,
         },
       },
-      errorMessages: errorMessagesFor('repo not found'),
+      errorMessages: errorMessagesFor('repo or branch not found'),
     })
   }
 
@@ -152,11 +152,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     return repo.history.totalCount
   }
 
-  static transformAuthorFilter({ res, buffer }) {
-    if (buffer.message === 'Not Found') {
-      throw new InvalidResponse({ prettyMessage: 'invalid branch' })
-    }
-
+  static transformAuthorFilter({ res }) {
     const parsed = parseLinkHeader(res.headers.link)
 
     if (!parsed) {
