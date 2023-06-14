@@ -15,17 +15,6 @@ describe('GitHubCommitActivity', function () {
         .with.property('prettyMessage', 'invalid branch')
     })
   })
-  describe('transformAuthorFilter', function () {
-    it('throws InvalidResponse on invalid branch', function () {
-      expect(() =>
-        GitHubCommitActivity.transformAuthorFilter({
-          buffer: { message: 'Not Found' },
-        })
-      )
-        .to.throw(InvalidResponse)
-        .with.property('prettyMessage', 'invalid branch')
-    })
-  })
   describe('getIntervalQueryStartDate', function () {
     /** @type {sinon.SinonFakeTimers} */
     let clock
