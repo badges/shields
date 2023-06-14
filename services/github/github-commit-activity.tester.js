@@ -104,3 +104,10 @@ t.create('commit activity (repo not found)')
     label: 'commit activity',
     message: 'repo or branch not found',
   })
+
+t.create('commit activity (invalid branch)')
+  .get('/w/badges/shields/invalidBranchName.json?authorFilter=zaphod')
+  .expectBadge({
+    label: 'commit activity',
+    message: 'repo or branch not found',
+  })
