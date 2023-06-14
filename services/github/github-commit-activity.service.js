@@ -8,7 +8,7 @@ import { GithubAuthV4Service } from './github-auth-service.js'
 import {
   transformErrors,
   documentation,
-  errorMessagesFor,
+  httpErrorsFor,
 } from './github-helpers.js'
 
 const schema = Joi.object({
@@ -136,7 +136,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
           since,
         },
       },
-      errorMessages: errorMessagesFor('repo or branch not found'),
+      httpErrors: httpErrorsFor('repo or branch not found'),
     })
   }
 
