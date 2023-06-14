@@ -18,7 +18,7 @@ const schema = Joi.object({
         history: Joi.object({
           totalCount: nonNegativeInteger,
         }).required(),
-      }),
+      }).allow(null),
     }).required(),
   }).required(),
 }).required()
