@@ -67,7 +67,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
 
   static render({ interval, commitCount, authorFilter }) {
     // If total commits selected change label from commit activity to commits
-    const label = interval === 't' ? 'commits' : this.defaultBadgeData.label
+    const label = interval === 't' ? 'commits' : 'commit activity'
     const authorFilterLabel = authorFilter ? ` by ${authorFilter}` : ''
 
     const intervalLabel = {
