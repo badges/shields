@@ -102,5 +102,5 @@ t.create('commit activity (repo not found)')
   .get('/w/badges/helmets.json?authorFilter=zaphod')
   .expectBadge({
     label: 'commit activity',
-    message: 'repo not found',
+    message: 'repo or branch not found',
   })
