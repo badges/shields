@@ -56,7 +56,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
         repo: 'squint',
         branch: 'main',
       },
-      queryParams: { authorFilter: 'jnullj' },
+      queryParams: { authorFilter: 'calebcartwright' },
       staticPreview: this.render({ interval: 'm', commitCount: 5 }),
       keywords: ['commits'],
       documentation,
