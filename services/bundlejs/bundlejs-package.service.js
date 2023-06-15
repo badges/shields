@@ -107,7 +107,15 @@ export default class BundlejsPackage extends BaseJsonService {
     return this._requestJson({
       schema,
       url: 'https://deno.bundlejs.com',
-      options: { searchParams },
+      options: {
+        searchParams,
+        timeout: {
+          request: 3000,
+        },
+      },
+      systemErrors: {
+        ETIMEDOUT: { prettyMessage: 'bundling', cacheSeconds: 10 },
+      },
       errorMessages: {
         404: 'package or version not found',
       },
