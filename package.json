@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@fontsource/lato": "^5.0.2",
-    "@fontsource/lekton": "^5.0.2",
+    "@fontsource/lekton": "^5.0.3",
     "@renovate/pep440": "^1.0.0",
     "@renovatebot/ruby-semver": "^2.1.11",
     "@sentry/node": "^7.54.0",
