@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   subscribers_count: nonNegativeInteger,
@@ -55,7 +55,7 @@ export default class GithubWatchers extends GithubAuthV3Service {
     const { subscribers_count: watchers } = await this._requestJson({
       url: `/repos/${user}/${repo}`,
       schema,
-      errorMessages: errorMessagesFor(),
+      httpErrors: httpErrorsFor(),
     })
     return this.constructor.render({ user, repo, watchers })
   }

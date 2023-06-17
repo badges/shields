@@ -41,7 +41,7 @@ export default class OSSFScorecard extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.securityscorecards.dev/projects/${host}/${orgName}/${repoName}`,
-      errorMessages: {
+      httpErrors: {
         404: 'invalid repo path',
       },
     })

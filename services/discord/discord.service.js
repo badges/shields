@@ -63,7 +63,7 @@ export default class Discord extends BaseJsonService {
         {
           url,
           schema,
-          errorMessages: {
+          httpErrors: {
             404: 'invalid server',
             403: 'widget disabled',
           },

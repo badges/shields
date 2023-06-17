@@ -88,7 +88,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
   }
 
   async handle({ organization, project, definitionId, branch }) {
-    const errorMessages = {
+    const httpErrors = {
       404: 'build pipeline or coverage not found',
     }
     const buildId = await this.getLatestCompletedBuildId(
@@ -96,7 +96,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      errorMessages
+      httpErrors
     )
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage`
@@ -110,7 +110,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       url,
       options,
       schema: buildCodeCoverageSchema,
-      errorMessages,
+      httpErrors,
     })
 
     let covered = 0

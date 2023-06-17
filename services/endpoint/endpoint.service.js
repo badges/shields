@@ -1,6 +1,6 @@
 import { URL } from 'url'
 import Joi from 'joi'
-import { errorMessages } from '../dynamic-common.js'
+import { httpErrors } from '../dynamic-common.js'
 import { optionalUrl } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
 import { BaseJsonService, InvalidParameter } from '../index.js'
@@ -178,7 +178,10 @@ export default class Endpoint extends BaseJsonService {
       logoWidth,
       logoPosition,
       style,
-      cacheSeconds,
+      // don't allow the user to set cacheSeconds any shorter than this._cacheLength
+      cacheSeconds: Math.max(
+        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined)
+      ),
     }
   }
 
@@ -200,7 +203,7 @@ export default class Endpoint extends BaseJsonService {
 
     const validated = await fetchEndpointData(this, {
       url,
-      errorMessages,
+      httpErrors,
       validationPrettyErrorMessage: 'invalid properties',
       includeKeys: true,
     })

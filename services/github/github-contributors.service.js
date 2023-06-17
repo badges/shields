@@ -2,7 +2,7 @@ import Joi from 'joi'
 import parseLinkHeader from 'parse-link-header'
 import { renderContributorBadge } from '../contributor-count.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
@@ -39,7 +39,7 @@ export default class GithubContributors extends GithubAuthV3Service {
     const { res, buffer } = await this._request({
       url: `/repos/${user}/${repo}/contributors`,
       options: { searchParams: { page: '1', per_page: '1', anon: isAnon } },
-      errorMessages: errorMessagesFor('repo not found'),
+      httpErrors: httpErrorsFor('repo not found'),
     })
 
     const parsed = parseLinkHeader(res.headers.link)

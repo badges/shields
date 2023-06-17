@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound } from '../index.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
@@ -98,7 +98,7 @@ export default class GitLabRelease extends GitLabBase {
     return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
-      errorMessages: errorMessagesFor('project not found'),
+      httpErrors: httpErrorsFor('project not found'),
       options: {
         searchParams: { order_by: orderBy },
       },

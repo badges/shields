@@ -34,7 +34,7 @@ export default class OpmVersion extends BaseService {
           name: moduleName,
         },
       },
-      errorMessages: {
+      httpErrors: {
         404: 'module not found',
       },
     })

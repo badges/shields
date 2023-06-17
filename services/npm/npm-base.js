@@ -117,7 +117,7 @@ export default class NpmBase extends BaseJsonService {
       // We don't validate here because we need to pluck the desired subkey first.
       schema: Joi.any(),
       url,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
 
     let packageData

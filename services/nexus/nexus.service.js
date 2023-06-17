@@ -220,7 +220,7 @@ export default class Nexus extends BaseJsonService {
         schema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'artifact not found',
         },
       })
@@ -261,7 +261,7 @@ export default class Nexus extends BaseJsonService {
         schema: nexus3SearchApiSchema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'artifact not found',
         },
       })

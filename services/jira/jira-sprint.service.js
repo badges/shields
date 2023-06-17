@@ -92,7 +92,7 @@ export default class JiraSprint extends BaseJsonService {
             maxResults: 500,
           },
         },
-        errorMessages: {
+        httpErrors: {
           400: 'sprint not found',
           404: 'sprint not found',
         },

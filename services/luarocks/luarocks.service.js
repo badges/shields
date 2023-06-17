@@ -60,7 +60,7 @@ export default class Luarocks extends BaseJsonService {
         user
       )}/manifest.json`,
       schema,
-      errorMessages: {
+      httpErrors: {
         404: 'user not found',
       },
     })

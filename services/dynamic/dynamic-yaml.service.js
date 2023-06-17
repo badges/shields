@@ -54,11 +54,11 @@ export default class DynamicYaml extends jsonPath(BaseYamlService) {
     },
   }
 
-  async fetch({ schema, url, errorMessages }) {
+  async fetch({ schema, url, httpErrors }) {
     return this._requestYaml({
       schema,
       url,
-      errorMessages,
+      httpErrors,
     })
   }
 }

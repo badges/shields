@@ -37,7 +37,7 @@ export default class JitPackVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: { 401: 'project not found or private' },
+      httpErrors: { 401: 'project not found or private' },
     })
   }
 

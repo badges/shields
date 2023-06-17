@@ -53,7 +53,7 @@ export default class FDroid extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         403: 'app not found',
         404: 'app not found',
       },

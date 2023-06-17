@@ -69,7 +69,7 @@ export default class DockerVersion extends BaseJsonService {
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-      errorMessages: { 404: 'repository or tag not found' },
+      httpErrors: { 404: 'repository or tag not found' },
     })
   }
 

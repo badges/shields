@@ -37,7 +37,7 @@ export default class WeblateComponentLicense extends WeblateBase {
     return super.fetch({
       schema,
       url: `${server}/api/components/${project}/${component}/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'component not found',
       },
