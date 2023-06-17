@@ -78,7 +78,7 @@ const description = `<p>
       <tr>
         <td><code>namedLogo</code></td>
         <td>
-          Default: none. One of the named logos supported by Shields or
+          Default: none. One of the named logos supported by Shields or&nbsp;
           <a href="https://simpleicons.org/">simple-icons</a>. Can be overridden
           by the query string.
         </td>

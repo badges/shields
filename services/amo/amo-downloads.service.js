@@ -4,7 +4,7 @@ import { BaseAmoService, keywords } from './amo-base.js'
 
 const documentation = `
 <p>
-  Previously <code>amo/d</code> provided a &ldquo;total downloads&rdquo; badge. However,
+  Previously <code>amo/d</code> provided a &ldquo;total downloads&rdquo; badge. However,&nbsp;
   <a href="https://github.com/badges/shields/issues/3079">updates to the v3 API</a> only
   give us weekly downloads. The route <code>amo/d</code> redirects to <code>amo/dw</code>.
 </p>
