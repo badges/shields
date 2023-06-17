@@ -4,14 +4,13 @@ import { coveragePercentage } from '../color-formatters.js'
 import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const documentation = `
-  <p>
-    You must specify the read-only API token from the POEditor account to which the project belongs.
-  </p>
-  <p>
-    As per <a href="https://poeditor.com/docs/api">the POEditor API documentation</a>,
-    <q>all requests to the API must contain the parameter api_token. You can get a read-only key from your POEditor account.
-    You'll find it in <a href="https://poeditor.com/account/api">My Account > API Access</a>.</q>
-  </p>
+You must specify the read-only API token from the POEditor account to which the project belongs.
+
+As per [the POEditor API documentation](https://poeditor.com/docs/api)
+
+> All requests to the API must contain the parameter api_token.
+> You can get a read-only key from your POEditor account.
+> You'll find it in [My Account > API Access](https://poeditor.com/account/api).
 `
 
 const schema = Joi.object({

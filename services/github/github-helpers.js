@@ -2,12 +2,10 @@ import { colorScale } from '../color-formatters.js'
 import { InvalidResponse, NotFound } from '../index.js'
 
 const documentation = `
-<p>
-  If your GitHub badge errors, it might be because you hit GitHub's rate limits.
-  You can increase Shields.io's rate limit by
-  <a href="https://img.shields.io/github-auth">adding the Shields GitHub
-  application</a> using your GitHub account.
-</p>
+If your GitHub badge errors, it might be because you hit GitHub's rate limits.
+You can increase Shields.io's rate limit by
+[adding the Shields GitHub](https://img.shields.io/github-auth)
+using your GitHub account.
 `
 
 function issueStateColor(s) {
