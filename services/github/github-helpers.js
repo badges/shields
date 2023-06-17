@@ -4,7 +4,7 @@ import { InvalidResponse, NotFound } from '../index.js'
 const documentation = `
 If your GitHub badge errors, it might be because you hit GitHub's rate limits.
 You can increase Shields.io's rate limit by
-[adding the Shields GitHub](https://img.shields.io/github-auth)
+[adding the Shields GitHub application](https://img.shields.io/github-auth)
 using your GitHub account.
 `
 
