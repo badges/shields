@@ -92,10 +92,6 @@ typings/
 
 # Temporary build artifacts.
 /build
-.next
-badge-examples.json
-supported-features.json
-service-definitions.yml
 frontend/categories/*.yaml
 
 # Local runtime configuration.
@@ -103,11 +99,6 @@ frontend/categories/*.yaml
 
 # Template for the local runtime configuration.
 !/config/local*.template.yml
-
-# Gatsby
-/frontend/.cache
-/frontend/public
-/public
 
 # Cypress
 /cypress/videos/
@@ -121,3 +112,8 @@ flamegraph.html
 
 # config file for node-pg-migrate
 migrations-config.json
+
+# Frontend/Docusaurus
+frontend/.docusaurus
+frontend/.cache-loader
+/public

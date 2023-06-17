@@ -107,7 +107,7 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 When server source files change, the badge server should automatically restart
 itself (using [nodemon][]). When the frontend files change, the frontend dev
-server (`gatsby dev`) should also automatically reload. However the badge
+server (`docusaurus start`) should also automatically reload. However the badge
 definitions are built only before the server first starts. To regenerate those,
 either run `npm run defs` or manually restart the server.
 
