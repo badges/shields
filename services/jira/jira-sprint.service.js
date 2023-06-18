@@ -23,11 +23,9 @@ const schema = Joi.object({
 }).required()
 
 const documentation = `
-<p>
-  To get the <code>Sprint ID</code>, go to your Backlog view in your project,
-  right click on your sprint name and get the value of
-  <code>data-sprint-id</code>.
-</p>
+To get the \`Sprint ID\`, go to your Backlog view in your project,
+right click on your sprint name and get the value of
+\`data-sprint-id\`.
 `
 
 export default class JiraSprint extends BaseJsonService {
