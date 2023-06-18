@@ -10,33 +10,25 @@ import { documentation as githubDocumentation } from './github-helpers.js'
 const keywords = ['pipfile']
 
 const documentation = `
-<p>
-  <a href="https://github.com/pypa/pipenv">Pipenv</a> is a dependency
-  manager for Python which manages a
-  <a href="https://virtualenv.pypa.io/en/latest/">virtualenv</a> for
-  projects. It adds/removes packages from your <code>Pipfile</code> as
-  you install/uninstall packages and generates the ever-important
-  <code>Pipfile.lock</code>, which can be checked in to source control
-  in order to produce deterministic builds.
-</p>
+[Pipenv](https://github.com/pypa/pipenv) is a dependency
+manager for Python which manages a
+[virtualenv](https://virtualenv.pypa.io/en/latest/) for
+projects. It adds/removes packages from your \`Pipfile\` as
+you install/uninstall packages and generates the ever-important
+\`Pipfile.lock\`, which can be checked in to source control
+in order to produce deterministic builds.
 
-<p>
-  The GitHub Pipenv badges are intended for applications using Pipenv
-  which are hosted on GitHub.
-</p>
+The GitHub Pipenv badges are intended for applications using Pipenv
+which are hosted on GitHub.
 
-<p>
-  When <code>Pipfile.lock</code> is checked in, the <strong>GitHub Pipenv
-  locked dependency version</strong> badge displays the locked version of
-  a dependency listed in <code>[packages]</code> or
-  <code>[dev-packages]</code> (or any of their transitive dependencies).
-</p>
+When \`Pipfile.lock\` is checked in, the <strong>GitHub Pipenv
+locked dependency version</strong> badge displays the locked version of
+a dependency listed in \`[packages]\` or
+\`[dev-packages]\` (or any of their transitive dependencies).
 
-<p>
-  Usually a Python version is specified in the <code>Pipfile</code>, which
-  <code>pipenv lock</code> then places in <code>Pipfile.lock</code>. The
-  <strong>GitHub Pipenv Python version</strong> badge displays that version.
-</p>
+Usually a Python version is specified in the \`Pipfile\`, which
+\`pipenv lock\` then places in \`Pipfile.lock\`.
+The <strong>GitHub Pipenv Python version</strong> badge displays that version.
 
 ${githubDocumentation}
 `
