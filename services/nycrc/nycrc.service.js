@@ -23,11 +23,11 @@ const pkgJSONSchema = Joi.object({
   }).optional(),
 }).required()
 
-const documentation = `<p>
-  Create a code coverage badge, based on thresholds stored in a
-  <a href="https://github.com/istanbuljs/nyc#common-configuration-options">.nycrc config file</a>
-  on GitHub.
-</p>`
+const documentation = `
+Create a code coverage badge, based on thresholds stored in a
+[.nycrc config file](https://github.com/istanbuljs/nyc#common-configuration-options)
+on GitHub.
+`
 
 const validThresholds = ['branches', 'lines', 'functions']
 

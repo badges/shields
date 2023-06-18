@@ -7,10 +7,8 @@ const schema = Joi.object({
 }).required()
 
 const pingpongDocumentation = `
-<p>
-  To see more details about this badge and obtain your api key, visit
-  <a href="https://my.pingpong.one/integrations/badge-uptime/" target="_blank">https://my.pingpong.one/integrations/badge-uptime/</a>
-</p>
+To see more details about this badge and obtain your api key, visit
+[https://my.pingpong.one/integrations/badge-status/](https://my.pingpong.one/integrations/badge-status/)
 `
 
 export default class PingPongUptime extends BaseJsonService {
