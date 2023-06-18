@@ -27,7 +27,7 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
-      description="Description will go into a meta tag in <head />"
+      description="Concise, consistent, and legible badges"
       title={`${siteConfig.title}`}
     >
       <HomepageHeader />
