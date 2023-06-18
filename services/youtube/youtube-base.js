@@ -4,8 +4,8 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
 const documentation = `
-<p>By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service. These can be found here:
-<a target="_blank" href="https://www.youtube.com/t/terms">https://www.youtube.com/t/terms</a></p>`
+By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service.
+These can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)`
 
 const schema = Joi.object({
   pageInfo: Joi.object({
