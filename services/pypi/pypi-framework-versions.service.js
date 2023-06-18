@@ -40,7 +40,7 @@ const frameworkNameMap = {
 const documentation = `
 <p>
   This service currently support the following Frameworks: <br/>
-  ${Object.values(frameworkNameMap).map(obj => `<strong>${obj.name}</strong>`)}
+  ${Object.values(frameworkNameMap).map(obj => ` <strong>${obj.name}</strong>`)}
 </p>
 `
 export default class PypiFrameworkVersion extends PypiBase {
