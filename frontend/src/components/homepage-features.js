@@ -1,6 +1,9 @@
 import React from 'react'
 import clsx from 'clsx'
+import * as icons from 'simple-icons'
 import styles from './homepage-features.module.css'
+
+const iconsCount = Object.keys(icons).length
 
 const FeatureList = [
   {
@@ -25,7 +28,23 @@ const FeatureList = [
         <br />
         <img
           alt="any text you like"
-          src="https://img.shields.io/badge/any%20text-you%20like-blue"
+          src="https://img.shields.io/badge/any_text-you_like-blue"
+        />
+      </>
+    ),
+  },
+  {
+    title: `Include ${iconsCount} brand icons`,
+    description: (
+      <>
+        Create a badge with your favorite brand icon with{' '}
+        <a href="https://simpleicons.org" rel="noreferrer" target="_blank">
+          simple-icons
+        </a>
+        <br />
+        <img
+          alt="simple-icons included"
+          src="https://img.shields.io/badge/simple--icons-included-111?logo=simpleicons&color=eee"
         />
       </>
     ),
@@ -35,7 +54,13 @@ const FeatureList = [
     description: (
       <>
         Render badges in your own application using our{' '}
-        <a href="https://www.npmjs.com/package/badge-maker">NPM library</a>
+        <a
+          href="https://www.npmjs.com/package/badge-maker"
+          rel="noreferrer"
+          target="_blank"
+        >
+          NPM library
+        </a>
         <br />
         <code>npm install badge-maker</code>
       </>
@@ -46,7 +71,11 @@ const FeatureList = [
     description: (
       <>
         Host a shields instance behind your firewall with our{' '}
-        <a href="https://registry.hub.docker.com/r/shieldsio/shields/">
+        <a
+          href="https://registry.hub.docker.com/r/shieldsio/shields/"
+          rel="noreferrer"
+          target="_blank"
+        >
           docker image
         </a>
         <br />
@@ -59,8 +88,14 @@ const FeatureList = [
     description: (
       <>
         Please consider{' '}
-        <a href="https://opencollective.com/shields">donating</a> to sustain our
-        activities
+        <a
+          href="https://opencollective.com/shields"
+          rel="noreferrer"
+          target="_blank"
+        >
+          donating
+        </a>{' '}
+        to sustain our activities
       </>
     ),
   },
