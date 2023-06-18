@@ -19,6 +19,8 @@ jobs:
             engine-strict: 'true'
           - node: '18'
             engine-strict: 'false'
+          - node: '20'
+            engine-strict: 'false'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
