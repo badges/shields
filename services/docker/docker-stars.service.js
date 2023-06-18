@@ -46,7 +46,7 @@ export default class DockerStars extends BaseJsonService {
   }
 
   async handle({ user, repo }) {
-    const { star_count } = await this.fetch({ user, repo })
-    return this.constructor.render({ stars: star_count })
+    const resp = await this.fetch({ user, repo })
+    return this.constructor.render({ stars: resp.star_count })
   }
 }
