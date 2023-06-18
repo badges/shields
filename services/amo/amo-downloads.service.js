@@ -3,11 +3,9 @@ import { redirector } from '../index.js'
 import { BaseAmoService, keywords } from './amo-base.js'
 
 const documentation = `
-<p>
-  Previously <code>amo/d</code> provided a &ldquo;total downloads&rdquo; badge. However,
-  <a href="https://github.com/badges/shields/issues/3079">updates to the v3 API</a> only
-  give us weekly downloads. The route <code>amo/d</code> redirects to <code>amo/dw</code>.
-</p>
+Previously \`amo/d\` provided a &ldquo;total downloads&rdquo; badge. However,
+[updates to the v3 API](https://github.com/badges/shields/issues/3079)
+only give us weekly downloads. The route \`amo/d\` redirects to \`amo/dw\`.
 `
 
 class AmoWeeklyDownloads extends BaseAmoService {
