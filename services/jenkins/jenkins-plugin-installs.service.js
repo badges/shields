@@ -63,7 +63,7 @@ export default class JenkinsPluginInstalls extends BaseJsonService {
     return this._requestJson({
       url: `https://stats.jenkins.io/plugin-installation-trend/${plugin}.stats.json`,
       schema: version ? schemaInstallationsPerVersion : schemaInstallations,
-      errorMessages: {
+      httpErrors: {
         404: 'plugin not found',
       },
     })

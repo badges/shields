@@ -115,7 +115,7 @@ export default class CIIBestPracticesService extends BaseJsonService {
       await this._requestJson({
         schema,
         url: `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`,
-        errorMessages: {
+        httpErrors: {
           404: 'project not found',
         },
       })

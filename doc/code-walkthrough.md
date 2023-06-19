@@ -4,7 +4,7 @@
 
 The Shields codebase is divided into several parts:
 
-1.  The frontend (about 7% of the code)
+1.  The frontend
     1. [`frontend`][frontend]
 2.  The badge renderer (which is available as an npm package)
     1.  [`badge-maker`][badge-maker]
@@ -30,16 +30,16 @@ The Shields codebase is divided into several parts:
 
 The tests are also divided into several parts:
 
-1.  Unit and functional tests of the frontend
-    1.  `frontend/**/*.spec.js`
-2.  Unit and functional tests of the badge renderer
+1.  Unit and functional tests of the badge renderer
     1.  `badge-maker/**/*.spec.js`
-3.  Unit and functional tests of the core code
+2.  Unit and functional tests of the core code
     1.  `core/**/*.spec.js`
-4.  Unit and functional tests of the service helper functions
+3.  Unit and functional tests of the service helper functions
     1.  `services/*.spec.js`
-5.  Unit and functional tests of the service code (we have only a few of these)
+4.  Unit and functional tests of the service code (we have only a few of these)
     1.  `services/*/**/*.spec.js`
+5.  End-to-end tests for the frontend
+    1.  `cypress/e2e/*.cy.js`
 6.  The service tester and service test runner
     1.  [`core/service-test-runner`][service-test-runner]
 7.  [The service tests themselves][service tests] live integration tests of the

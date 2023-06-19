@@ -76,7 +76,6 @@ class LegacyService extends BaseJsonService {
 const expected = {
   openapi: '3.0.0',
   info: { version: '1.0.0', title: 'build', license: { name: 'CC0' } },
-  servers: [{ url: 'https://img.shields.io' }],
   components: {
     parameters: {
       style: {

@@ -64,7 +64,7 @@ export default class Gerrit extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `${baseUrl}/changes/${changeId}`,
-      errorMessages: {
+      httpErrors: {
         404: 'change not found',
       },
     })

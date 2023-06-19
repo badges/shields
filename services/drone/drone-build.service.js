@@ -75,7 +75,7 @@ export default class DroneBuild extends BaseJsonService {
         options: {
           searchParams: { ref: branch ? `refs/heads/${branch}` : undefined },
         },
-        errorMessages: {
+        httpErrors: {
           401: 'repo not found or not authorized',
         },
       })

@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array()
@@ -65,7 +65,7 @@ export default class GitlabLastCommit extends GitLabBase {
       )}/repository/commits`,
       options: { searchParams: { ref_name: ref } },
       schema,
-      errorMessages: errorMessagesFor('project not found'),
+      httpErrors: httpErrorsFor('project not found'),
     })
   }
 

@@ -1,7 +1,7 @@
 import { DOMParser } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
-import { renderDynamicBadge, errorMessages } from '../dynamic-common.js'
+import { renderDynamicBadge, httpErrors } from '../dynamic-common.js'
 import { BaseService, InvalidResponse, InvalidParameter } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 
@@ -113,7 +113,7 @@ export default class DynamicXml extends BaseService {
     const { buffer } = await this._request({
       url,
       options: { headers: { Accept: 'application/xml, text/xml' } },
-      errorMessages,
+      httpErrors,
     })
 
     const { values: value } = this.transform({

@@ -35,7 +35,6 @@ function allChangelogLinesAreVersionBump(changelogLines) {
 
 function isPointlessVersionBump(body) {
   const pointlessBumpLinks = [
-    'https://github.com/gatsbyjs/gatsby',
     'https://github.com/typescript-eslint/typescript-eslint',
   ]
 

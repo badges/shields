@@ -98,6 +98,11 @@ describe('The server', function () {
       )
     })
 
+    it('should not redirect for PNG requests in /img', async function () {
+      const { statusCode } = await got(`${baseUrl}img/frontend-image.png`)
+      expect(statusCode).to.equal(200)
+    })
+
     it('should produce SVG badges with expected headers', async function () {
       const { statusCode, headers } = await got(
         `${baseUrl}:fruit-apple-green.svg`

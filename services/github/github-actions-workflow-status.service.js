@@ -85,7 +85,7 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
       )}/badge.svg`,
       options: { searchParams: { branch, event } },
       valueMatcher: />([^<>]+)<\/tspan><\/text><\/g><path/,
-      errorMessages: {
+      httpErrors: {
         404: 'repo or workflow not found',
       },
     })

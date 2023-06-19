@@ -55,7 +55,7 @@ export default class PiWheelsVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.piwheels.org/project/${wheel}/json/`,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 

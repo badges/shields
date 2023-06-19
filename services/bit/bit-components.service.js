@@ -37,7 +37,7 @@ export default class BitComponents extends BaseJsonService {
     return this._requestJson({
       url,
       schema: collectionSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'collection not found',
       },
     })

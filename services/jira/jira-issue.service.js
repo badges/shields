@@ -75,7 +75,7 @@ export default class JiraIssue extends BaseJsonService {
       this.authHelper.withBasicAuth({
         schema,
         url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
-        errorMessages: { 404: 'issue not found' },
+        httpErrors: { 404: 'issue not found' },
       })
     )
 

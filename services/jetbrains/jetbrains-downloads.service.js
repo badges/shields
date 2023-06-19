@@ -56,7 +56,7 @@ export default class JetbrainsDownloads extends JetbrainsBase {
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
           pluginId
         )}`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
       downloads = jetbrainsPluginData.downloads
     }

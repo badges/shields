@@ -82,19 +82,19 @@ const anySchema = Joi.any()
  * @param {object} serviceInstance Instance of Endpoint class
  * @param {object} attrs Refer to individual attributes
  * @param {string} attrs.url Endpoint URL
- * @param {object} attrs.errorMessages Object containing error messages for different error codes
+ * @param {object} attrs.httpErrors Object containing error messages for different error codes
  * @param {string} attrs.validationPrettyErrorMessage If provided then the error message is set to this value
  * @param {boolean} attrs.includeKeys If true then includes error details in error message
  * @returns {object} Data fetched from endpoint
  */
 async function fetchEndpointData(
   serviceInstance,
-  { url, errorMessages, validationPrettyErrorMessage, includeKeys }
+  { url, httpErrors, validationPrettyErrorMessage, includeKeys }
 ) {
   const json = await serviceInstance._requestJson({
     schema: anySchema,
     url,
-    errorMessages,
+    httpErrors,
     options: { decompress: true },
   })
   return validateEndpointData(json, {
