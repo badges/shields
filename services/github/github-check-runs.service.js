@@ -6,8 +6,8 @@ import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
-  total_count: nonNegativeInteger,
-  check_runs: Joi.array()
+  totalCount: nonNegativeInteger,
+  checkRuns: Joi.array()
     .items(
       Joi.object({
         status: Joi.equal('completed', 'in_progress', 'queued').required(),
@@ -77,11 +77,11 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 
-  static transform({ total_count, check_runs }) {
+  static transform({ totalCount, checkRuns }) {
     return {
-      total: total_count,
-      statusCounts: countBy(check_runs, 'status'),
-      conclusionCounts: countBy(check_runs, 'conclusion'),
+      total: totalCount,
+      statusCounts: countBy(checkRuns, 'status'),
+      conclusionCounts: countBy(checkRuns, 'conclusion'),
     }
   }
 
