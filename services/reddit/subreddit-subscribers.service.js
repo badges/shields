@@ -30,6 +30,8 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 7200
+
   static defaultBadgeData = {
     label: 'reddit',
     namedLogo: 'reddit',

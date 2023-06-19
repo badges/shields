@@ -22,7 +22,10 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 💵 These organisations help keep shields running by donating on OpenCollective. Your organisation can support this project by <a href="https://opencollective.com/shields#sponsor">becoming a sponsor </a>. Your logo will show up here with a link to your website.
 
 <p>
-    <object data="https://opencollective.com/shields/sponsors.svg?avatarHeight=80&width=600" />
+    <object
+        data="https://opencollective.com/shields/sponsors.svg?avatarHeight=80&width=600"
+        class="opencollective-image"
+    ></object>
 </p>
 
 ## Backers
@@ -30,7 +33,10 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 💵 Thank you to all our backers who help keep shields running by donating on OpenCollective. You can support this project by <a href="https://opencollective.com/shields#backer">becoming a backer</a>.
 
 <p>
-    <object data="https://opencollective.com/shields/backers.svg?width=600" />
+    <object
+        data="https://opencollective.com/shields/backers.svg?width=600"
+        class="opencollective-image">
+    </object>
 </p>
 
 ## Contributors
@@ -38,7 +44,10 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 🙏 This project exists thanks to all the nice people who contribute their time to work on the project.
 
 <p>
-    <object data="https://opencollective.com/shields/contributors.svg?width=600" />
+    <object
+        data="https://opencollective.com/shields/contributors.svg?width=600"
+        class="opencollective-image"
+    ></object>
 </p>
 
 ✨ Shields is helped by these companies which provide a free plan for their product or service:

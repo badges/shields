@@ -17,11 +17,9 @@ jobs:
       matrix:
         include:
           - node: '14'
-            engine-strict: 'false'
           - node: '16'
-            engine-strict: 'false'
           - node: '18'
-            engine-strict: 'true'
+          - node: '20'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,9 +30,6 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install dependencies
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-          NPM_CONFIG_ENGINE_STRICT: ${{ matrix.engine-strict }}
         run: |
           cd badge-maker
           npm install
