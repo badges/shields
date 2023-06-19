@@ -35,7 +35,13 @@ const FeatureList = [
     description: (
       <>
         Render badges in your own application using our{' '}
-        <a href="https://www.npmjs.com/package/badge-maker">NPM library</a>
+        <a
+          href="https://www.npmjs.com/package/badge-maker"
+          rel="noreferrer"
+          target="_blank"
+        >
+          NPM library
+        </a>
         <br />
         <code>npm install badge-maker</code>
       </>
@@ -46,7 +52,11 @@ const FeatureList = [
     description: (
       <>
         Host a shields instance behind your firewall with our{' '}
-        <a href="https://registry.hub.docker.com/r/shieldsio/shields/">
+        <a
+          href="https://registry.hub.docker.com/r/shieldsio/shields/"
+          rel="noreferrer"
+          target="_blank"
+        >
           docker image
         </a>
         <br />
@@ -59,8 +69,14 @@ const FeatureList = [
     description: (
       <>
         Please consider{' '}
-        <a href="https://opencollective.com/shields">donating</a> to sustain our
-        activities
+        <a
+          href="https://opencollective.com/shields"
+          rel="noreferrer"
+          target="_blank"
+        >
+          donating
+        </a>{' '}
+        to sustain our activities
       </>
     ),
   },
