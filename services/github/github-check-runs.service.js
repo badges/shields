@@ -3,7 +3,7 @@ import countBy from 'lodash.countby'
 import { nonNegativeInteger } from '../validators.js'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   total_count: nonNegativeInteger,
@@ -120,7 +120,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
-      errorMessages: errorMessagesFor('ref or repo not found'),
+      httpErrors: httpErrorsFor('ref or repo not found'),
       schema,
     })
 
