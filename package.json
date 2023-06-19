@@ -65,6 +65,7 @@
     "semver": "~7.5.4",
     "simple-icons": "9.13.0",
     "smol-toml": "1.1.2",
+    "svg-path-commander": "^2.0.8",
     "webextension-store-meta": "^1.0.5",
     "xpath": "~0.0.33"
   },

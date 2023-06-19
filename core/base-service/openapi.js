@@ -9,6 +9,9 @@ const globalParamRefs = [
   { $ref: '#/components/parameters/style' },
   { $ref: '#/components/parameters/logo' },
   { $ref: '#/components/parameters/logoColor' },
+  { $ref: '#/components/parameters/logoSize' },
+  { $ref: '#/components/parameters/logoWidth' },
+  { $ref: '#/components/parameters/logoHeight' },
   { $ref: '#/components/parameters/label' },
   { $ref: '#/components/parameters/labelColor' },
   { $ref: '#/components/parameters/color' },
@@ -269,6 +272,37 @@ function category2openapi(category, services) {
             type: 'string',
           },
           example: 'violet',
+        },
+        logoSize: {
+          name: 'logoSize',
+          in: 'query',
+          required: false,
+          description:
+            "Make icons adaptively resize by setting `auto`. It's useful for some wider logos like `amd` and `amg`.",
+          schema: {
+            type: 'string',
+          },
+          example: 'auto',
+        },
+        logoWidth: {
+          name: 'logoWidth',
+          in: 'query',
+          required: false,
+          description: 'The width of the logo, default to `14`',
+          schema: {
+            type: 'string',
+          },
+          example: '20',
+        },
+        logoHeight: {
+          name: 'logoHeight',
+          in: 'query',
+          required: false,
+          description: 'The height of the logo, default to `14`',
+          schema: {
+            type: 'string',
+          },
+          example: '12',
         },
         label: {
           name: 'label',

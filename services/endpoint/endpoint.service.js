@@ -104,6 +104,28 @@ const description = `<p>
         </td>
       </tr>
       <tr>
+        <td><code>logoSize</code></td>
+        <td>
+          Default: none. Same meaning as the query string.
+          Make icons adaptively resize by setting <code>auto</code>.
+          It's useful for some wider logos like <code>amd</code> and <code>amg</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><code>logoWidth</code></td>
+        <td>
+          Default: 14. Same meaning as the query string. Can be overridden by
+          the query string.
+        </td>
+      </tr>
+      <tr>
+        <td><code>logoHeight</code></td>
+        <td>
+          Default: 14. Same meaning as the query string. Can be overridden by
+          the query string.
+        </td>
+      </tr>
+      <tr>
         <td><code>logoPosition</code></td>
         <td>
           Default: none. Same meaning as the query string. Can be overridden by

@@ -260,6 +260,20 @@ describe('coalesceBadge', function () {
     })
   })
 
+  describe('Logo size', function () {
+    it('overrides the logoSize', function () {
+      expect(coalesceBadge({ logoSize: 'auto' }, {}, {})).to.include({
+        logoSize: 'auto',
+      })
+    })
+
+    it('applies the logo size', function () {
+      expect(
+        coalesceBadge({}, { namedLogo: 'npm', logoSize: 'auto' }, {})
+      ).to.include({ logoSize: 'auto' })
+    })
+  })
+
   describe('Logo width', function () {
     it('overrides the logoWidth', function () {
       expect(coalesceBadge({ logoWidth: 20 }, {}, {})).to.include({
@@ -271,6 +285,20 @@ describe('coalesceBadge', function () {
       expect(
         coalesceBadge({}, { namedLogo: 'npm', logoWidth: 275 }, {}),
       ).to.include({ logoWidth: 275 })
+    })
+  })
+
+  describe('Logo height', function () {
+    it('overrides the logoHeight', function () {
+      expect(coalesceBadge({ logoHeight: 10 }, {}, {})).to.include({
+        logoHeight: 10,
+      })
+    })
+
+    it('applies the logo height', function () {
+      expect(
+        coalesceBadge({}, { namedLogo: 'npm', logoHeight: 10 }, {})
+      ).to.include({ logoHeight: 10 })
     })
   })
 
