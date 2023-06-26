@@ -19,6 +19,10 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
+    - name: Install NPM 9
+      run: npm install -g npm@^9.0.0
+      shell: bash
+
     - name: Install dependencies
       if: ${{ inputs.cypress == 'false' }}
       env:

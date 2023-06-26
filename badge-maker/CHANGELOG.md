@@ -2,7 +2,7 @@
 
 ## 4.0.0 [WIP]
 
-- Drop compatibility with Node < 14
+- Drop compatibility with Node < 16
 
 ## 3.3.1
 

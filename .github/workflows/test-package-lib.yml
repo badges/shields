@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '14'
-            engine-strict: 'false'
           - node: '16'
             engine-strict: 'true'
           - node: '18'
