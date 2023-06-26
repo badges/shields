@@ -1,5 +1,5 @@
 import chai from 'chai'
-import { category2openapi } from './openapi.js'
+import { category2openapi, pathParam, queryParam } from './openapi.js'
 import BaseJsonService from './base-json.js'
 const { expect } = chai
 
@@ -374,5 +374,85 @@ describe('category2openapi', function () {
         ])
       )
     ).to.deep.equal(expected)
+  })
+})
+
+describe('pathParam', function () {
+  it('generates a pathParam with defaults', function () {
+    expect(pathParam({ name: 'name', example: 'example' })).to.deep.equal({
+      name: 'name',
+      in: 'path',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+      example: 'example',
+      description: undefined,
+    })
+  })
+
+  it('generates a pathParam with custom args', function () {
+    expect(
+      pathParam({
+        name: 'name',
+        example: true,
+        schema: { type: 'boolean' },
+        description: 'long desc',
+      })
+    ).to.deep.equal({
+      name: 'name',
+      in: 'path',
+      required: true,
+      schema: {
+        type: 'boolean',
+      },
+      example: true,
+      description: 'long desc',
+    })
+  })
+})
+
+describe('queryParam', function () {
+  it('generates a queryParam with defaults', function () {
+    expect(queryParam({ name: 'name', example: 'example' })).to.deep.equal({
+      name: 'name',
+      in: 'query',
+      required: false,
+      schema: { type: 'string' },
+      example: 'example',
+      description: undefined,
+    })
+  })
+
+  it('generates queryParam with custom args', function () {
+    expect(
+      queryParam({
+        name: 'name',
+        example: 'example',
+        required: true,
+        description: 'long desc',
+      })
+    ).to.deep.equal({
+      name: 'name',
+      in: 'query',
+      required: true,
+      schema: { type: 'string' },
+      example: 'example',
+      description: 'long desc',
+    })
+  })
+
+  it('generates a queryParam with boolean/null example', function () {
+    expect(
+      queryParam({ name: 'name', example: null, schema: { type: 'boolean' } })
+    ).to.deep.equal({
+      name: 'name',
+      in: 'query',
+      required: false,
+      schema: { type: 'boolean' },
+      allowEmptyValue: true,
+      example: null,
+      description: undefined,
+    })
   })
 })

@@ -332,4 +332,34 @@ function category2openapi(category, services) {
   return spec
 }
 
-export { category2openapi }
+function pathParam({
+  name,
+  example,
+  schema = { type: 'string' },
+  description,
+}) {
+  return { name, in: 'path', required: true, schema, example, description }
+}
+
+function queryParam({
+  name,
+  example,
+  schema = { type: 'string' },
+  required = false,
+  description,
+}) {
+  if (example === null && schema.type === 'boolean') {
+    return {
+      name,
+      in: 'query',
+      required,
+      schema,
+      allowEmptyValue: true,
+      example,
+      description,
+    }
+  }
+  return { name, in: 'query', required, schema, example, description }
+}
+
+export { category2openapi, pathParam, queryParam }
