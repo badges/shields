@@ -48,7 +48,7 @@ const serviceDefinition = Joi.object({
     Joi.object({
       get: Joi.object({
         summary: Joi.string().required(),
-        description: Joi.string().required(),
+        description: Joi.string(),
         parameters: Joi.array()
           .items(
             Joi.object({
@@ -57,7 +57,8 @@ const serviceDefinition = Joi.object({
               in: Joi.string().valid('query', 'path').required(),
               required: Joi.boolean().required(),
               schema: Joi.object({ type: Joi.string().required() }).required(),
-              example: Joi.string(),
+              allowEmptyValue: Joi.boolean(),
+              example: Joi.string().allow(null),
             })
           )
           .min(1)
