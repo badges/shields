@@ -2,7 +2,12 @@ import { DOMParser } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
 import { renderDynamicBadge, httpErrors } from '../dynamic-common.js'
-import { BaseService, InvalidResponse, InvalidParameter } from '../index.js'
+import {
+  BaseService,
+  InvalidResponse,
+  InvalidParameter,
+  queryParam,
+} from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 
 // This service extends BaseService because it uses a different XML parser
@@ -24,39 +29,29 @@ export default class DynamicXml extends BaseService {
           XML Document using an XPath selector and show it on a badge.
         </p>`,
         parameters: [
-          {
+          queryParam({
             name: 'url',
             description: 'The URL to a XML document',
-            in: 'query',
             required: true,
-            schema: { type: 'string' },
             example: 'https://httpbin.org/xml',
-          },
-          {
+          }),
+          queryParam({
             name: 'query',
             description:
               'A <a href="http://xpather.com/">XPath</a> expression that will be used to query the document',
-            in: 'query',
             required: true,
-            schema: { type: 'string' },
             example: '//slideshow/slide[1]/title',
-          },
-          {
+          }),
+          queryParam({
             name: 'prefix',
             description: 'Optional prefix to append to the value',
-            in: 'query',
-            required: false,
-            schema: { type: 'string' },
             example: '[',
-          },
-          {
+          }),
+          queryParam({
             name: 'suffix',
             description: 'Optional suffix to append to the value',
-            in: 'query',
-            required: false,
-            schema: { type: 'string' },
             example: ']',
-          },
+          }),
         ],
       },
     },
