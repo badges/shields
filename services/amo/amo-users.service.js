@@ -1,18 +1,19 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseAmoService, keywords } from './amo-base.js'
+import { pathParam } from '../index.js'
+import { BaseAmoService } from './amo-base.js'
 
 export default class AmoUsers extends BaseAmoService {
   static category = 'downloads'
   static route = { base: 'amo/users', pattern: ':addonId' }
 
-  static examples = [
-    {
-      title: 'Mozilla Add-on',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: this.render({ users: 750 }),
-      keywords,
+  static openApi = {
+    '/amo/users/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Users',
+        parameters: [pathParam({ name: 'addonId', example: 'dustman' })],
+      },
     },
-  ]
+  }
 
   static _cacheLength = 21600
 

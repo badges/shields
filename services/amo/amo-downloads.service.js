@@ -1,6 +1,6 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { redirector } from '../index.js'
-import { BaseAmoService, keywords } from './amo-base.js'
+import { redirector, pathParam } from '../index.js'
+import { BaseAmoService } from './amo-base.js'
 
 const documentation = `
 Previously \`amo/d\` provided a &ldquo;total downloads&rdquo; badge. However,
@@ -12,15 +12,15 @@ class AmoWeeklyDownloads extends BaseAmoService {
   static category = 'downloads'
   static route = { base: 'amo/dw', pattern: ':addonId' }
 
-  static examples = [
-    {
-      title: 'Mozilla Add-on',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: this.render({ downloads: 120 }),
-      keywords,
-      documentation,
+  static openApi = {
+    '/amo/dw/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Downloads',
+        description: documentation,
+        parameters: [pathParam({ name: 'addonId', example: 'dustman' })],
+      },
     },
-  ]
+  }
 
   static _cacheLength = 21600
 
