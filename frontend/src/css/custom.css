@@ -31,6 +31,12 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   color-scheme: initial;
 }
 
+input[type="text"] {
+  border-color: var(--ifm-color-primary-lightest);
+  border-style: solid;
+  border-width: 1px;
+}
+
 /*
 TODO: remove these two styles when
 we can upgrade to docusaurus-theme-openapi@0.6.5
