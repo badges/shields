@@ -4,6 +4,35 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-07-01
+
+- add a bit of border to text boxes [#9324](https://github.com/badges/shields/issues/9324)
+- allow negative timestamps in relative [date] badge [#9321](https://github.com/badges/shields/issues/9321)
+- Adjust `deploy-review-app` script [#9317](https://github.com/badges/shields/issues/9317)
+- temp fix: wrap code examples tabs in narrow browser windows [#9302](https://github.com/badges/shields/issues/9302)
+- upgrade to graphql 16 [#9290](https://github.com/badges/shields/issues/9290)
+- chore(frontend): open homepage feature links in new tab [#9300](https://github.com/badges/shields/issues/9300)
+- adapt opencollective images to theme background [#9298](https://github.com/badges/shields/issues/9298)
+- run package tests on node 20 [#9293](https://github.com/badges/shields/issues/9293)
+- try running tests on node 18 [#9292](https://github.com/badges/shields/issues/9292)
+- Upgrade to ESLint 8; affects [docker factorio] [#9289](https://github.com/badges/shields/issues/9289)
+- remove obsolete travis .org examples [#9284](https://github.com/badges/shields/issues/9284)
+- increase max age on reddit badges [#9282](https://github.com/badges/shields/issues/9282)
+- set a sensible meta description [#9283](https://github.com/badges/shields/issues/9283)
+- fix a load of spacing issues in frontend content [#9281](https://github.com/badges/shields/issues/9281)
+- migrate frontend to docusaurus [#9014](https://github.com/badges/shields/issues/9014)
+- feat: Add author filter option for [GithubCommitActivity] [#9251](https://github.com/badges/shields/issues/9251)
+- Fix: [GithubCommitActivity] invalid branch error handling [#9258](https://github.com/badges/shields/issues/9258)
+- Implement a pattern for dealing with upstream APIs which are slow on the first hit; affects [endpoint] [#9233](https://github.com/badges/shields/issues/9233)
+- Delete old deprecated services [#9254](https://github.com/badges/shields/issues/9254)
+- Fix [CodeClimate] tests and examples [#9253](https://github.com/badges/shields/issues/9253)
+- embiggen youtube cache, again [#9250](https://github.com/badges/shields/issues/9250)
+- feat: add 'canceled' status to netlify deploy badge [#9240](https://github.com/badges/shields/issues/9240)
+- php-version.js: Fix typos [#9239](https://github.com/badges/shields/issues/9239)
+- increase default cache on youtube badges [#9238](https://github.com/badges/shields/issues/9238)
+- disable dependabot auto rebase [#9234](https://github.com/badges/shields/issues/9234)
+- Dependency updates
+
 ## server-2023-06-01
 
 - feat: Add total commits to [GitHubCommitActivity] [#9196](https://github.com/badges/shields/issues/9196)
