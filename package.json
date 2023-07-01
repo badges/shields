@@ -155,7 +155,7 @@
     "child-process-promise": "^2.2.1",
     "clsx": "^1.1.1",
     "concurrently": "^8.2.0",
-    "cypress": "^12.15.0",
+    "cypress": "^12.16.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.2.6",
     "deepmerge": "^4.3.1",
