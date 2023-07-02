@@ -24,18 +24,27 @@ export default class OpencollectiveByTier extends OpencollectiveBase {
     const {
       data: {
         account: {
-          members: { members },
+          members: { nodes: members },
         },
       },
     } = await this.fetchCollectiveInfo({
       collective,
       accountType: ['INDIVIDUAL', 'ORGANIZATION'],
     })
-    // FIXME: should use pagination to get all members
-    const filtered = members.filter(member => member.tier?.legacyId === tierId)
 
+    if (!members) {
+      return this.constructor.render(0, 'open collective')
+    }
+
+    // FIXME: should use pagination to get all members
+    const filtered = members.filter(
+      member => member?.tier?.legacyId.toString() === tierId
+    )
     const cnt = filtered.length
-    const tier = filtered[0]?.tier?.name
+    let tier = filtered[0]?.tier?.name
+    if (tier) {
+      if (!tier.endsWith('s')) tier += 's'
+    }
 
     return this.constructor.render(cnt, tier)
   }

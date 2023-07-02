@@ -11,6 +11,14 @@ const schema = Joi.object({
       slug: Joi.string().required(),
       members: Joi.object({
         totalCount: nonNegativeInteger,
+        nodes: Joi.array().items(
+          Joi.object({
+            tier: Joi.object({
+              legacyId: Joi.number(),
+              name: Joi.string(),
+            }).allow(null),
+          })
+        ),
       }).required(),
     }).required(),
   }).required(),
@@ -59,7 +67,7 @@ export default class OpencollectiveBase extends BaseGraphqlService {
         slug: collective,
         accountType,
       },
-      httpErrors: {
+      httpErrorMessages: {
         404: 'collective not found',
       },
       options: {
