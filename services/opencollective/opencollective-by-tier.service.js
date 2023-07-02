@@ -21,12 +21,22 @@ export default class OpencollectiveByTier extends OpencollectiveBase {
   }
 
   async handle({ collective, tierId }) {
-    const result = await this.fetchCollectiveBackersCount(collective, {
-      tierId,
+    const {
+      data: {
+        account: {
+          members: { members },
+        },
+      },
+    } = await this.fetchCollectiveInfo({
+      collective,
+      accountType: ['INDIVIDUAL', 'ORGANIZATION'],
     })
-    if (result.tier) {
-      if (!result.tier.endsWith('s')) result.tier += 's'
-    } else result.tier = 'new tier'
-    return this.constructor.render(result.backersCount, result.tier)
+    // FIXME: should use pagination to get all members
+    const filtered = members.filter(member => member.tier?.legacyId === tierId)
+
+    const cnt = filtered.length
+    const tier = filtered[0]?.tier?.name
+
+    return this.constructor.render(cnt, tier)
   }
 }
