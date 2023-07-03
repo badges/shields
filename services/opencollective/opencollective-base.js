@@ -73,15 +73,15 @@ export default class OpencollectiveBase extends BaseGraphqlService {
     })
   }
 
-  getCnt(data) {
+  getCount(data) {
     const {
       data: {
         account: {
-          members: { totalCount: cnt },
+          members: { totalCount },
         },
       },
     } = data
 
-    return cnt
+    return totalCount
   }
 }

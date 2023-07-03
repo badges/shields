@@ -21,7 +21,7 @@ export default class OpencollectiveBackers extends OpencollectiveBase {
       collective,
       accountType: ['INDIVIDUAL'],
     })
-    const backersCount = this.getCnt(data)
+    const backersCount = this.getCount(data)
 
     return this.constructor.render(backersCount)
   }

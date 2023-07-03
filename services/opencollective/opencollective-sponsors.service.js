@@ -21,7 +21,7 @@ export default class OpencollectiveSponsors extends OpencollectiveBase {
       collective,
       accountType: ['ORGANIZATION'],
     })
-    const backersCount = this.getCnt(data)
+    const backersCount = this.getCount(data)
     return this.constructor.render(backersCount)
   }
 }
