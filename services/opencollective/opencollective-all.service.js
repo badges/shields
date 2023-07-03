@@ -19,7 +19,7 @@ export default class OpencollectiveAll extends OpencollectiveBase {
   async handle({ collective }) {
     const data = await this.fetchCollectiveInfo({
       collective,
-      accountType: ['INDIVIDUAL', 'ORGANIZATION'],
+      accountType: [],
     })
     const backersCount = this.getCnt(data)
     return this.constructor.render(backersCount)
