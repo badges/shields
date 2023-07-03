@@ -31,7 +31,7 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   color-scheme: initial;
 }
 
-input[type="text"] {
+input[type="text"], :not(#fakeID#fakeId#fakeID) select {
   border-color: var(--ifm-color-primary-lightest);
   border-style: solid;
   border-width: 1px;
