@@ -26,6 +26,8 @@ export default class DockerStars extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 7200
+
   static defaultBadgeData = { label: 'docker stars' }
 
   static render({ stars }) {
