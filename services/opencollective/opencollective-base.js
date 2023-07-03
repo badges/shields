@@ -7,8 +7,8 @@ import { metric } from '../text-formatters.js'
 const schema = Joi.object({
   data: Joi.object({
     account: Joi.object({
-      name: Joi.string().required(),
-      slug: Joi.string().required(),
+      name: Joi.string(),
+      slug: Joi.string(),
       members: Joi.object({
         totalCount: nonNegativeInteger,
         nodes: Joi.array().items(
