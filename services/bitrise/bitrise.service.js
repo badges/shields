@@ -55,7 +55,7 @@ export default class Bitrise extends BaseJsonService {
       )}/status.json`,
       options: { searchParams: { token, branch } },
       schema,
-      errorMessages: {
+      httpErrors: {
         403: 'app not found or invalid token',
       },
     })

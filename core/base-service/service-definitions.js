@@ -1,8 +1,5 @@
 import Joi from 'joi'
 
-// This should be kept in sync with the schema in
-// `frontend/lib/service-definitions/index.ts`.
-
 const arrayOfStrings = Joi.array().items(Joi.string()).min(0).required()
 
 const objectOfKeyValues = Joi.object()
@@ -92,9 +89,4 @@ function assertValidServiceDefinitionExport(examples, message = undefined) {
   Joi.assert(examples, serviceDefinitionExport, message)
 }
 
-export {
-  serviceDefinition,
-  assertValidServiceDefinition,
-  serviceDefinitionExport,
-  assertValidServiceDefinitionExport,
-}
+export { assertValidServiceDefinition, assertValidServiceDefinitionExport }

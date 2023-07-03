@@ -2,7 +2,7 @@ import Joi from 'joi'
 import countBy from 'lodash.countby'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchIssue } from './github-common-fetch.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success').required(),
@@ -92,7 +92,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
     const json = await this._requestJson({
       schema,
       url: `/repos/${user}/${repo}/commits/${ref}/status`,
-      errorMessages: errorMessagesFor('commit not found'),
+      httpErrors: httpErrorsFor('commit not found'),
     })
     const { state, stateCounts } = this.constructor.transform(json)
 

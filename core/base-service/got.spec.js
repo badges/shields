@@ -45,6 +45,36 @@ describe('got wrapper', function () {
     )
   })
 
+  it('should throw a custom error if provided', async function () {
+    const sendRequest = _fetchFactory(1024)
+    return (
+      expect(
+        sendRequest(
+          'https://www.google.com/foo/bar',
+          { timeout: { request: 1 } },
+          {
+            ETIMEDOUT: {
+              prettyMessage: 'Oh no! A terrible thing has happened',
+              cacheSeconds: 10,
+            },
+          }
+        )
+      )
+        .to.be.rejectedWith(
+          Inaccessible,
+          "Inaccessible: Timeout awaiting 'request' for 1ms"
+        )
+        // eslint-disable-next-line promise/prefer-await-to-then
+        .then(error => {
+          expect(error).to.have.property(
+            'prettyMessage',
+            'Oh no! A terrible thing has happened'
+          )
+          expect(error).to.have.property('cacheSeconds', 10)
+        })
+    )
+  })
+
   it('should pass a custom user agent header', async function () {
     nock('https://www.google.com', {
       reqheaders: {

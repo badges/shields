@@ -19,13 +19,13 @@ export default class AzureDevOpsBase extends BaseJsonService {
     defaultToEmptyStringForUser: true,
   }
 
-  async fetch({ url, options, schema, errorMessages }) {
+  async fetch({ url, options, schema, httpErrors }) {
     return this._requestJson(
       this.authHelper.withBasicAuth({
         schema,
         url,
         options,
-        errorMessages,
+        httpErrors,
       })
     )
   }
@@ -35,7 +35,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
     project,
     definitionId,
     branch,
-    errorMessages
+    httpErrors
   ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`
@@ -56,7 +56,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
       url,
       options,
       schema: latestBuildSchema,
-      errorMessages,
+      httpErrors,
     })
 
     if (json.count !== 1) {

@@ -3,7 +3,7 @@ import { matcher } from 'matcher'
 import { nonNegativeInteger } from '../validators.js'
 import { latest } from '../version.js'
 import { NotFound } from '../index.js'
-import { errorMessagesFor } from './github-helpers.js'
+import { httpErrorsFor } from './github-helpers.js'
 
 const releaseInfoSchema = Joi.object({
   assets: Joi.array()
@@ -20,7 +20,7 @@ const releaseInfoSchema = Joi.object({
 // Fetch the 'latest' release as defined by the GitHub API
 async function fetchLatestGitHubRelease(serviceInstance, { user, repo }) {
   const commonAttrs = {
-    errorMessages: errorMessagesFor('no releases or repo not found'),
+    httpErrors: httpErrorsFor('no releases or repo not found'),
   }
   const releaseInfo = await serviceInstance._requestJson({
     schema: releaseInfoSchema,
@@ -37,7 +37,7 @@ const releaseInfoArraySchema = Joi.alternatives().try(
 
 async function fetchReleases(serviceInstance, { user, repo }) {
   const commonAttrs = {
-    errorMessages: errorMessagesFor('repo not found'),
+    httpErrors: httpErrorsFor('repo not found'),
   }
   const releases = await serviceInstance._requestJson({
     url: `/repos/${user}/${repo}/releases`,

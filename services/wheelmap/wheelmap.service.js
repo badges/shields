@@ -50,7 +50,7 @@ export default class Wheelmap extends BaseJsonService {
         {
           schema,
           url: `https://wheelmap.org/api/nodes/${nodeId}`,
-          errorMessages: {
+          httpErrors: {
             401: 'invalid token',
             404: 'node not found',
           },

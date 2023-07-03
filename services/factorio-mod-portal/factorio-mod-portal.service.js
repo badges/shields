@@ -29,7 +29,7 @@ class BaseFactorioModPortalService extends BaseJsonService {
     const { releases, downloads_count } = await this._requestJson({
       schema,
       url: `https://mods.factorio.com/api/mods/${modName}`,
-      errorMessages: {
+      httpErrors: {
         404: 'mod not found',
       },
     })
@@ -65,8 +65,8 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
   }
 
   async handle({ modName }) {
-    const { latest_release } = await this.fetch({ modName })
-    return this.constructor.render({ version: latest_release.version })
+    const resp = await this.fetch({ modName })
+    return this.constructor.render({ version: resp.latest_release.version })
   }
 }
 
@@ -94,8 +94,8 @@ class FactorioModPortalFactorioVersion extends BaseFactorioModPortalService {
   }
 
   async handle({ modName }) {
-    const { latest_release } = await this.fetch({ modName })
-    const version = latest_release.info_json.factorio_version
+    const resp = await this.fetch({ modName })
+    const version = resp.latest_release.info_json.factorio_version
     return this.constructor.render({ version })
   }
 }
@@ -114,23 +114,25 @@ class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
       title: 'Factorio Mod Portal mod',
       namedParams: { modName: 'rso-mod' },
       staticPreview: this.render({
-        last_updated: new Date(),
+        lastUpdated: new Date(),
       }),
     },
   ]
 
   static defaultBadgeData = { label: 'last updated' }
 
-  static render({ last_updated }) {
+  static render({ lastUpdated }) {
     return {
-      message: formatDate(last_updated),
-      color: age(last_updated),
+      message: formatDate(lastUpdated),
+      color: age(lastUpdated),
     }
   }
 
   async handle({ modName }) {
-    const { latest_release } = await this.fetch({ modName })
-    return this.constructor.render({ last_updated: latest_release.released_at })
+    const resp = await this.fetch({ modName })
+    return this.constructor.render({
+      lastUpdated: resp.latest_release.released_at,
+    })
   }
 }
 
@@ -148,20 +150,20 @@ class FactorioModPortalDownloads extends BaseFactorioModPortalService {
       title: 'Factorio Mod Portal mod downloads',
       namedParams: { modName: 'rso-mod' },
       staticPreview: this.render({
-        downloads_count: 1694763,
+        downloads: 1694763,
       }),
     },
   ]
 
   static defaultBadgeData = { label: 'downloads' }
 
-  static render({ downloads_count }) {
-    return renderDownloadsBadge({ downloads: downloads_count })
+  static render({ downloads }) {
+    return renderDownloadsBadge({ downloads })
   }
 
   async handle({ modName }) {
-    const { downloads_count } = await this.fetch({ modName })
-    return this.constructor.render({ downloads_count })
+    const resp = await this.fetch({ modName })
+    return this.constructor.render({ downloads: resp.downloads_count })
   }
 }
 

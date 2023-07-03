@@ -62,7 +62,7 @@ class SymfonyInsightBase extends BaseXmlService {
         options: {
           headers: { Accept: 'application/vnd.com.sensiolabs.insight+xml' },
         },
-        errorMessages: {
+        httpErrors: {
           401: 'not authorized to access project',
           404: 'project not found',
         },

@@ -4,25 +4,22 @@ import AzureDevOpsBase from './azure-devops-base.js'
 import { keywords } from './azure-devops-helpers.js'
 
 const documentation = `
-<p>
-  To obtain your own badge, you need to get 3 pieces of information:
-  <code>ORGANIZATION</code>, <code>PROJECT</code> and <code>DEFINITION_ID</code>.
-</p>
-<p>
-  First, you need to select your build definition and look at the url:
-</p>
+To obtain your own badge, you need to get 3 pieces of information:
+\`ORGANIZATION\`, \`PROJECT_ID\` and \`DEFINITION_ID\`.
+
+First, you need to select your build definition and look at the url:
+
 <img
   src="https://user-images.githubusercontent.com/3749820/47259976-e2d9ec80-d4b2-11e8-92cc-7c81089a7a2c.png"
   alt="ORGANIZATION is after the dev.azure.com part, PROJECT is right after that, DEFINITION_ID is at the end after the id= part." />
-<p>
-  Your badge will then have the form:
-  <code>https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID.svg</code>.
-</p>
-<p>
-  Optionally, you can specify a named branch:
-  <code>https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg</code>.
-</p>
+
+Your badge will then have the form:
+\`https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID.svg\`.
+
+Optionally, you can specify a named branch:
+\`https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg\`.
 `
+
 const buildCodeCoverageSchema = Joi.object({
   coverageData: Joi.array()
     .items(
@@ -88,7 +85,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
   }
 
   async handle({ organization, project, definitionId, branch }) {
-    const errorMessages = {
+    const httpErrors = {
       404: 'build pipeline or coverage not found',
     }
     const buildId = await this.getLatestCompletedBuildId(
@@ -96,7 +93,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      errorMessages
+      httpErrors
     )
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage`
@@ -110,7 +107,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       url,
       options,
       schema: buildCodeCoverageSchema,
-      errorMessages,
+      httpErrors,
     })
 
     let covered = 0

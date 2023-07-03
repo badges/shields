@@ -75,7 +75,7 @@ class FeedzVersionService extends BaseJsonService {
     return await this._requestJson({
       schema: packageSchema,
       url: `${registrationsBaseUrl}${packageName}/index.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'repository or package not found',
       },
     })
@@ -90,7 +90,7 @@ class FeedzVersionService extends BaseJsonService {
           this._requestJson({
             schema: singlePageSchema,
             url: i['@id'],
-            errorMessages: {
+            httpErrors: {
               404: 'repository or package not found',
             },
           })

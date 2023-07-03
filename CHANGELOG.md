@@ -4,6 +4,43 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-07-02
+
+By far the most significant change in this release is the long-awaited launch of the re-designed frontend:
+
+- migrate frontend to docusaurus [#9014](https://github.com/badges/shields/issues/9014)
+- fix a load of spacing issues in frontend content [#9281](https://github.com/badges/shields/issues/9281)
+- set a sensible meta description [#9283](https://github.com/badges/shields/issues/9283)
+- chore(frontend): open homepage feature links in new tab [#9300](https://github.com/badges/shields/issues/9300)
+- adapt opencollective images to theme background [#9298](https://github.com/badges/shields/issues/9298)
+- temp fix: wrap code examples tabs in narrow browser windows [#9302](https://github.com/badges/shields/issues/9302)
+- add a bit of border to text boxes [#9324](https://github.com/badges/shields/issues/9324)
+
+Other changes in this release:
+
+- cache [dockerpulls] badges for an hour [#9343](https://github.com/badges/shields/issues/9343)
+- Mention YouTube API services and link to Google Privacy Policy [#9339](https://github.com/badges/shields/issues/9339)
+- allow negative timestamps in relative [date] badge [#9321](https://github.com/badges/shields/issues/9321)
+- upgrade to graphql 16 [#9290](https://github.com/badges/shields/issues/9290)
+- remove obsolete travis .org examples [#9284](https://github.com/badges/shields/issues/9284)
+- increase max age on reddit badges [#9282](https://github.com/badges/shields/issues/9282)
+- feat: Add author filter option for [GithubCommitActivity] [#9251](https://github.com/badges/shields/issues/9251)
+- Fix: [GithubCommitActivity] invalid branch error handling [#9258](https://github.com/badges/shields/issues/9258)
+- Implement a pattern for dealing with upstream APIs which are slow on the first hit; affects [endpoint] [#9233](https://github.com/badges/shields/issues/9233)
+- Delete old deprecated services [#9254](https://github.com/badges/shields/issues/9254)
+- feat: add 'canceled' status to netlify deploy badge [#9240](https://github.com/badges/shields/issues/9240)
+- increase default cache on youtube badges [#9238](https://github.com/badges/shields/issues/9238)
+- embiggen youtube cache, again [#9250](https://github.com/badges/shields/issues/9250)
+- Dependency updates
+
+## server-2023-06-01
+
+- feat: Add total commits to [GitHubCommitActivity] [#9196](https://github.com/badges/shields/issues/9196)
+- set a custom error on 429 [#9159](https://github.com/badges/shields/issues/9159)
+- deprecate [travis].org badges [#9171](https://github.com/badges/shields/issues/9171)
+- count private sponsors on [GithubSponsors] badge [#9170](https://github.com/badges/shields/issues/9170)
+- Dependency updates
+
 ## server-2023-05-01
 
 ** Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)

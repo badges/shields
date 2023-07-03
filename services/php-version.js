@@ -114,7 +114,7 @@ function numberedVersionData(version) {
    * Try to convert to a list of numbers.
    *
    * @param {string} s - Version number string
-   * @returns {number} Version number interger
+   * @returns {number} Version number integer
    */
   function toNum(s) {
     let n = +s
@@ -133,7 +133,7 @@ function numberedVersionData(version) {
 }
 
 /**
- * Compares two versions and return an interger based on the result.
+ * Compares two versions and return an integer based on the result.
  * See https://getcomposer.org/doc/04-schema.md#version
  * and https://github.com/badges/shields/issues/319#issuecomment-74411045
  *
@@ -264,7 +264,7 @@ function versionReduction(versions, phpReleases) {
 }
 
 /**
- * Fetches the PHP release versions from cache if exists, else fetch from the souce url and save in cache.
+ * Fetches the PHP release versions from cache if exists, else fetch from the source url and save in cache.
  *
  * @async
  * @param {object} githubApiProvider - Github API provider

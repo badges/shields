@@ -30,7 +30,7 @@ export default class EcologiTrees extends BaseJsonService {
     return this._requestJson({
       url,
       schema: apiSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'username not found',
       },
     })

@@ -92,7 +92,7 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
     const json = await this._requestJson({
       url,
       schema,
-      errorMessages: { 404: 'package or version not found' },
+      httpErrors: { 404: 'package or version not found' },
     })
     const { deprecatedCount, outdatedCount } = transform(json)
     return renderDependenciesBadge({ deprecatedCount, outdatedCount })
@@ -127,7 +127,7 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
     const json = await this._requestJson({
       url,
       schema,
-      errorMessages: {
+      httpErrors: {
         404: 'repo not found',
       },
     })

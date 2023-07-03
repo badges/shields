@@ -51,7 +51,7 @@ export default class CodacyGrade extends BaseSvgScrapingService {
         projectId
       )}`,
       options: { searchParams: { branch } },
-      errorMessages: { 404: 'project or branch not found' },
+      httpErrors: { 404: 'project or branch not found' },
       valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
     })
     return this.constructor.render({ grade })

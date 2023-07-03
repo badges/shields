@@ -28,7 +28,7 @@ t.create('test coverage when outer user repos query returns multiple items')
       .reply(200, {
         data: [
           {
-            id: '558479d6e30ba034120008a8',
+            id: 'xxxxxxxxxxxx', // Fake repo id, which is expected to be ignored in favour of the one that does contain snapshot data.
             relationships: {
               latest_default_branch_snapshot: {
                 data: null,
@@ -39,14 +39,14 @@ t.create('test coverage when outer user repos query returns multiple items')
             },
           },
           {
-            id: '558479d6e30ba034120008a9',
+            id: '558479d6e30ba034120008a9', // Real repo id for codeclimate/codeclimate. The test retrieves live data using the real test report id below.
             relationships: {
               latest_default_branch_snapshot: {
                 data: null,
               },
               latest_default_branch_test_report: {
                 data: {
-                  id: '62110434a7160b00010b4b59',
+                  id: '6463c8a3e3bc340001004bce',
                   type: 'test_reports',
                 },
               },

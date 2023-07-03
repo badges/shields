@@ -65,7 +65,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
     */
     if (match[0] === '/endpoint' && Object.keys(queryParams).length === 0) {
       ask.res.statusCode = 301
-      ask.res.setHeader('Location', '/endpoint/')
+      ask.res.setHeader('Location', '/badges/endpoint-badge')
       ask.res.end()
       return
     }
@@ -73,11 +73,9 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
     // `defaultCacheLengthSeconds` can be overridden by
     // `serviceDefaultCacheLengthSeconds` (either by category or on a badge-
     // by-badge basis). Then in turn that can be overridden by
-    // `serviceOverrideCacheLengthSeconds` (which we expect to be used only in
-    // the dynamic badge) but only if `serviceOverrideCacheLengthSeconds` is
-    // longer than `serviceDefaultCacheLengthSeconds` and then the `cacheSeconds`
-    // query param can also override both of those but again only if `cacheSeconds`
-    // is longer.
+    // `serviceOverrideCacheLengthSeconds`.
+    // Then the `cacheSeconds` query param can also override both of those
+    // but only if `cacheSeconds` is longer.
     //
     // When the legacy services have been rewritten, all the code in here
     // will go away, which should achieve this goal in a simpler way.

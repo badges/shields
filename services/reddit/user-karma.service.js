@@ -31,6 +31,8 @@ export default class RedditUserKarma extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 7200
+
   static defaultBadgeData = {
     label: 'reddit karma',
     namedLogo: 'reddit',
@@ -53,7 +55,7 @@ export default class RedditUserKarma extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.reddit.com/u/${user}/about.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'user not found',
       },
     })

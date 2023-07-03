@@ -362,7 +362,7 @@ class Server {
     })
 
     if (!rasterUrl) {
-      camp.route(/\.png$/, (query, match, end, request) => {
+      camp.route(/^\/((?!img\/)).*\.png$/, (query, match, end, request) => {
         makeSend(
           'svg',
           request.res,
@@ -412,7 +412,7 @@ class Server {
 
     if (rasterUrl) {
       // Redirect to the raster server for raster versions of modern badges.
-      camp.route(/\.png$/, (queryParams, match, end, ask) => {
+      camp.route(/^\/((?!img\/)).*\.png$/, (queryParams, match, end, ask) => {
         ask.res.statusCode = 301
         ask.res.setHeader(
           'Location',

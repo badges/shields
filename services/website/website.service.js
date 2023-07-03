@@ -10,23 +10,18 @@ import { BaseService } from '../index.js'
 import trace from '../../core/base-service/trace.js'
 
 const documentation = `
-<p>
-  The badge is of the form
-  <code>https://img.shields.io/website/PROTOCOL/URLREST.svg</code>.
-</p>
-<p>
-  The whole URL is obtained by concatenating the <code>PROTOCOL</code>
-  (<code>http</code> or <code>https</code>, for example) with the
-  <code>URLREST</code> (separating them with <code>://</code>).
-</p>
-<p>
-  The existence of a specific path on the server can be checked by appending
-  a path after the domain name, e.g.
-  <code>https://img.shields.io/website/http/www.website.com/path/to/page.html.svg</code>.
-</p>
-<p>
-  The messages and colors for the up and down states can also be customized.
-</p>
+The badge is of the form
+\`https://img.shields.io/website/PROTOCOL/URLREST.svg\`.
+
+The whole URL is obtained by concatenating the \`PROTOCOL\`
+(\`http\` or \`https\`, for example) with the
+\`URLREST\` (separating them with \`://\`).
+
+The existence of a specific path on the server can be checked by appending
+a path after the domain name, e.g.
+\`https://img.shields.io/website/http/www.website.com/path/to/page.html.svg\`.
+
+The messages and colors for the up and down states can also be customized.
 `
 
 const urlQueryParamSchema = Joi.object({
