@@ -32,7 +32,7 @@ t.create('Release (No releases)')
 
 t.create('Prerelease (No releases)')
   .get('/v/release/badges/daily-tests.json?include_prereleases')
-  .expectBadge({ label: 'release', message: 'no releases' })
+  .expectBadge({ label: 'release', message: 'no releases found' })
 
 t.create('Release (repo not found)')
   .get('/v/release/badges/helmets.json')
