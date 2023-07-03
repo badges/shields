@@ -67,9 +67,6 @@ export default class OpencollectiveBase extends BaseGraphqlService {
         slug: collective,
         accountType,
       },
-      httpErrorMessages: {
-        404: 'collective not found',
-      },
       options: {
         headers: { 'content-type': 'application/json' },
       },
