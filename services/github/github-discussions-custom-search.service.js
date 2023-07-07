@@ -8,7 +8,7 @@ import { documentation, transformErrors } from './github-helpers.js'
 const discussionsSearchDocs = `
 For a full list of available filters and allowed values that can be used in the <code>query</code>,
 see GitHub's documentation on
-[Searching duscussions](https://docs.github.com/en/search-github/searching-on-github/searching-discussions).
+[Searching discussions](https://docs.github.com/en/search-github/searching-on-github/searching-discussions).
 ${documentation}
 `
 
