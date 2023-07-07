@@ -61,7 +61,7 @@ class GithubDiscussionsSearch extends BaseGithubDiscussionsSearch {
       title: 'GitHub discussions custom search',
       namedParams: {},
       queryParams: {
-        query: 'repo:badges/shields is:answered author:chris48s',
+        query: 'repo:badges/shields is:answered answered-by:chris48s',
       },
       staticPreview: {
         label: 'query',
@@ -93,7 +93,7 @@ class GithubRepoDiscussionsSearch extends BaseGithubDiscussionsSearch {
         repo: 'shields',
       },
       queryParams: {
-        query: 'is:answered author:chris48s',
+        query: 'is:answered answered-by:chris48s',
       },
       staticPreview: {
         label: 'query',
