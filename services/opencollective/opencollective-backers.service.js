@@ -17,12 +17,10 @@ export default class OpencollectiveBackers extends OpencollectiveBase {
   }
 
   async handle({ collective }) {
-    const data = await this.fetchCollectiveInfo({
+    const { backersCount } = await this.fetchCollectiveBackersCount(
       collective,
-      accountType: ['INDIVIDUAL'],
-    })
-    const backersCount = this.getCount(data)
-
+      { userType: 'users' }
+    )
     return this.constructor.render(backersCount)
   }
 }
