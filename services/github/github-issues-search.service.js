@@ -5,6 +5,14 @@ import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
+const issuesSearchDocs = `
+For a full list of available filters and allowed values that can be used in the <code>query</code>,
+see GitHub's documentation on
+[Searching issues and pull requests](https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests)
+
+${documentation}
+`
+
 const issueCountSchema = Joi.object({
   data: Joi.object({
     search: Joi.object({
@@ -61,7 +69,7 @@ class GithubIssuesSearch extends BaseGithubIssuesSearch {
         message: '10',
         color: 'blue',
       },
-      documentation,
+      documentation: issuesSearchDocs,
     },
   ]
 
@@ -93,7 +101,7 @@ class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
         message: '10',
         color: 'blue',
       },
-      documentation,
+      documentation: issuesSearchDocs,
     },
   ]
 
