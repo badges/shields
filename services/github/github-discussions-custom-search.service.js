@@ -5,18 +5,17 @@ import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
-const issuesSearchDocs = `
+const discussionsSearchDocs = `
 For a full list of available filters and allowed values that can be used in the <code>query</code>,
 see GitHub's documentation on
-[Searching issues and pull requests](https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests)
-
+[Searching discussions](https://docs.github.com/en/search-github/searching-on-github/searching-discussions).
 ${documentation}
 `
 
-const issueCountSchema = Joi.object({
+const discussionCountSchema = Joi.object({
   data: Joi.object({
     search: Joi.object({
-      issueCount: nonNegativeInteger,
+      discussionCount: nonNegativeInteger,
     }).required(),
   }).required(),
 }).required()
@@ -25,91 +24,91 @@ const queryParamSchema = Joi.object({
   query: Joi.string().required(),
 }).required()
 
-class BaseGithubIssuesSearch extends GithubAuthV4Service {
-  static category = 'issue-tracking'
+class BaseGithubDiscussionsSearch extends GithubAuthV4Service {
+  static category = 'other'
   static defaultBadgeData = { label: 'query', color: 'informational' }
 
-  static render({ issueCount }) {
-    return { message: metric(issueCount) }
+  static render({ discussionCount }) {
+    return { message: metric(discussionCount) }
   }
 
   async fetch({ query }) {
     const data = await this._requestGraphql({
       query: gql`
         query ($query: String!) {
-          search(query: $query, type: ISSUE) {
-            issueCount
+          search(query: $query, type: DISCUSSION) {
+            discussionCount
           }
         }
       `,
       variables: { query },
-      schema: issueCountSchema,
+      schema: discussionCountSchema,
       transformErrors,
     })
-    return data.data.search.issueCount
+    return data.data.search.discussionCount
   }
 }
 
-class GithubIssuesSearch extends BaseGithubIssuesSearch {
+class GithubDiscussionsSearch extends BaseGithubDiscussionsSearch {
   static route = {
     base: 'github',
-    pattern: 'issues-search',
+    pattern: 'discussions-search',
     queryParamSchema,
   }
 
   static examples = [
     {
-      title: 'GitHub issue custom search',
+      title: 'GitHub discussions custom search',
       namedParams: {},
       queryParams: {
-        query: 'repo:badges/shields is:closed label:bug author:app/sentry-io',
+        query: 'repo:badges/shields is:answered answered-by:chris48s',
       },
       staticPreview: {
         label: 'query',
-        message: '10',
+        message: '2',
         color: 'blue',
       },
-      documentation: issuesSearchDocs,
+      documentation: discussionsSearchDocs,
     },
   ]
 
   async handle(namedParams, { query }) {
-    const issueCount = await this.fetch({ query })
-    return this.constructor.render({ issueCount })
+    const discussionCount = await this.fetch({ query })
+    return this.constructor.render({ discussionCount })
   }
 }
 
-class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
+class GithubRepoDiscussionsSearch extends BaseGithubDiscussionsSearch {
   static route = {
     base: 'github',
-    pattern: 'issues-search/:user/:repo',
+    pattern: 'discussions-search/:user/:repo',
     queryParamSchema,
   }
 
   static examples = [
     {
-      title: 'GitHub issue custom search in repo',
+      title: 'GitHub discussions custom search in repo',
       namedParams: {
         user: 'badges',
         repo: 'shields',
       },
       queryParams: {
-        query: 'is:closed label:bug author:app/sentry-io',
+        query: 'is:answered answered-by:chris48s',
       },
       staticPreview: {
         label: 'query',
-        message: '10',
+        message: '2',
         color: 'blue',
       },
-      documentation: issuesSearchDocs,
+      documentation: discussionsSearchDocs,
     },
   ]
 
   async handle({ user, repo }, { query }) {
     query = `repo:${user}/${repo} ${query}`
-    const issueCount = await this.fetch({ query })
-    return this.constructor.render({ issueCount })
+    const discussionCount = await this.fetch({ query })
+    return this.constructor.render({ discussionCount })
   }
 }
 
-export { GithubIssuesSearch, GithubRepoIssuesSearch }
+export { GithubDiscussionsSearch, GithubRepoDiscussionsSearch }
