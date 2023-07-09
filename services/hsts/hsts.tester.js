@@ -29,7 +29,7 @@ t.create('gets the hsts status of github (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=github.com')
-      .reply(200, { status: 'preloaded' })
+      .reply(200, { status: 'preloaded' }),
   )
   .expectBadge({
     label,
@@ -42,7 +42,7 @@ t.create('gets the hsts status of httpforever (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=httpforever.com')
-      .reply(200, { status: 'unknown' })
+      .reply(200, { status: 'unknown' }),
   )
   .expectBadge({
     label,
@@ -55,7 +55,7 @@ t.create('gets the hsts status of a pending site (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=pending.mock')
-      .reply(200, { status: 'pending' })
+      .reply(200, { status: 'pending' }),
   )
   .expectBadge({
     label,
@@ -68,7 +68,7 @@ t.create('gets the status of an invalid uri (mock)')
   .intercept(nock =>
     nock('https://hstspreload.org')
       .get('/api/v2/status?domain=does-not-exist')
-      .reply(200, { status: 'unknown' })
+      .reply(200, { status: 'unknown' }),
   )
   .expectBadge({
     label,

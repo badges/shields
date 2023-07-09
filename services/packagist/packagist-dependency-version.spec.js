@@ -38,7 +38,7 @@ describe('PackagistDependencyVersion', function () {
         user: 'frodo',
         repo: 'the-one-package',
         version: 'v4.0.0',
-      })
+      }),
     ).to.be.rejectedWith('invalid version')
   })
 
@@ -49,7 +49,7 @@ describe('PackagistDependencyVersion', function () {
         user: 'frodo',
         repo: 'the-one-package',
         version: 'v2.4.0',
-      })
+      }),
     ).to.be.rejectedWith('version requirement not found')
   })
 
@@ -60,7 +60,7 @@ describe('PackagistDependencyVersion', function () {
         user: 'frodo',
         repo: 'the-one-package',
         version: 'v2.5.0',
-      })
+      }),
     ).to.be.rejectedWith('version requirement not found')
   })
 
@@ -71,7 +71,7 @@ describe('PackagistDependencyVersion', function () {
         user: 'frodo',
         repo: 'the-one-package',
         dependency: 'twig/twig',
-      })
+      }),
     )
       .to.have.property('dependencyVersion')
       .that.equals('~1.28|~2.0')
@@ -85,7 +85,7 @@ describe('PackagistDependencyVersion', function () {
         repo: 'the-one-package',
         version: 'v2.0.0',
         dependency: 'twig/twig',
-      })
+      }),
     )
       .to.have.property('dependencyVersion')
       .that.equals('~1.20|~1.30')

@@ -6,7 +6,7 @@ const schema = Joi.object()
     normalized_licenses: Joi.array()
       .items(
         // normalized_license may be [] if the package does not declare a license
-        Joi.string()
+        Joi.string(),
       )
       .required(),
 

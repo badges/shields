@@ -158,7 +158,7 @@ function examples2openapi(examples) {
       const parameters = [
         ...pathParams,
         ...Object.entries(queryParams).map(([paramName, exampleValue]) =>
-          param2openapi(pattern, paramName, exampleValue, 'query')
+          param2openapi(pattern, paramName, exampleValue, 'query'),
         ),
         ...globalParamRefs,
       ]
@@ -198,7 +198,7 @@ function services2openapi(services) {
     if (service.openApi) {
       // if the service declares its own OpenAPI definition, use that...
       for (const [key, value] of Object.entries(
-        addGlobalProperties(service.openApi)
+        addGlobalProperties(service.openApi),
       )) {
         if (key in paths) {
           throw new Error(`Conflicting route: ${key}`)
@@ -208,7 +208,7 @@ function services2openapi(services) {
     } else {
       // ...otherwise do our best to build one from examples[]
       for (const [key, value] of Object.entries(
-        examples2openapi(service.examples)
+        examples2openapi(service.examples),
       )) {
         // allow conflicting routes for legacy examples
         paths[key] = value

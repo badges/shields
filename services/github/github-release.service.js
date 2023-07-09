@@ -125,11 +125,11 @@ class GithubRelease extends GithubAuthV3Service {
     const latestRelease = await fetchLatestRelease(
       this,
       { user, repo },
-      queryParams
+      queryParams,
     )
     const { version, isPrerelease } = this.constructor.transform(
       latestRelease,
-      queryParams.display_name
+      queryParams.display_name,
     )
     return this.constructor.render({
       version,

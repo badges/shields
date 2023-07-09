@@ -290,7 +290,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       messageSuffix = state
     }
     const message = `${mergeRequestCount > 10000 ? 'more than ' : ''}${metric(
-      mergeRequestCount
+      mergeRequestCount,
     )}${messageSuffix ? ' ' : ''}${messageSuffix}`
     return {
       label: `${labelPrefix}${labelText}merge requests`,
@@ -304,7 +304,7 @@ export default class GitlabMergeRequests extends GitLabBase {
     const { res } = await this._request(
       this.authHelper.withBearerAuthHeader({
         url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-          project
+          project,
         )}/merge_requests`,
         options: {
           searchParams: {
@@ -315,7 +315,7 @@ export default class GitlabMergeRequests extends GitLabBase {
           },
         },
         httpErrors: httpErrorsFor('project not found'),
-      })
+      }),
     )
     return this.constructor._validate(res.headers, schema)
   }
@@ -333,7 +333,7 @@ export default class GitlabMergeRequests extends GitLabBase {
 
   async handle(
     { variant, raw, project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', labels }
+    { gitlab_url: baseUrl = 'https://gitlab.com', labels },
   ) {
     const data = await this.fetch({
       project,

@@ -31,7 +31,7 @@ export class StackExchangeBase extends BaseJsonService {
 
   async fetch(params) {
     return this._requestJson(
-      this.authHelper.withQueryStringAuth({ passKey: 'key' }, params)
+      this.authHelper.withQueryStringAuth({ passKey: 'key' }, params),
     )
   }
 }

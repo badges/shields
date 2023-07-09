@@ -104,7 +104,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       return {
         message: `${daysToStart} ${maybePluralize(
           'day',
-          daysToStart
+          daysToStart,
         )} till kickoff!`,
       }
     }
@@ -118,7 +118,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       return {
         message: `is over! (${metric(contributionCount)} ${maybePluralize(
           'PR',
-          contributionCount
+          contributionCount,
         )} opened)`,
       }
     }
@@ -127,13 +127,13 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
         suggestedIssueCount
           ? `${metric(suggestedIssueCount)} ${maybePluralize(
               'open issue',
-              suggestedIssueCount
+              suggestedIssueCount,
             )}`
           : '',
         contributionCount
           ? `${metric(contributionCount)} ${maybePluralize(
               'PR',
-              contributionCount
+              contributionCount,
             )}`
           : '',
         daysLeft > 0
@@ -203,7 +203,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
 
   async handle({ user, repo, year }, { suggestion_label: suggestionLabel }) {
     const { isBefore, daysToStart } = this.constructor.getCalendarPosition(
-      +year
+      +year,
     )
     if (isBefore) {
       return this.constructor.render({ hasStarted: false, daysToStart, year })

@@ -32,7 +32,7 @@ function _validate(format) {
   ]
   if ('style' in format && !styleValues.includes(format.style)) {
     throw new ValidationError(
-      `Field \`style\` must be one of (${styleValues.toString()})`
+      `Field \`style\` must be one of (${styleValues.toString()})`,
     )
   }
 }
@@ -46,7 +46,7 @@ function _clean(format) {
       cleaned[key] = format[key]
     } else {
       throw new ValidationError(
-        `Unexpected field '${key}'. Allowed values are (${expectedKeys.toString()})`
+        `Unexpected field '${key}'. Allowed values are (${expectedKeys.toString()})`,
       )
     }
   })

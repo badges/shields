@@ -65,7 +65,7 @@ t.create('issues when outer user repos query returns multiple items')
             },
           },
         ],
-      })
+      }),
   )
   .networkOn() // Combined with allowUnmocked: true, this allows the inner snapshots query to go through.
   .expectBadge({
@@ -94,7 +94,7 @@ t.create('malformed response for outer user repos query')
       .get('/v1/repos?github_slug=tensorflow%2Fmodels')
       .reply(200, {
         data: [{}], // No relationships in the list of data elements.
-      })
+      }),
   )
   .expectBadge({
     label: 'analysis',
@@ -106,7 +106,7 @@ t.create('malformed response for inner specific repo query')
   .intercept(nock =>
     nock('https://api.codeclimate.com', { allowUnmocked: true })
       .get(/\/v1\/repos\/[a-z0-9]+\/snapshots\/[a-z0-9]+/)
-      .reply(200, {})
+      .reply(200, {}),
   ) // No data.
   .networkOn() // Combined with allowUnmocked: true, this allows the outer user repos query to go through.
   .expectBadge({

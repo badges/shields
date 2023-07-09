@@ -19,7 +19,7 @@ async function traceBadge(badgeUrl) {
   const server = new Server(config.util.toObject())
   await server.start()
   const body = await got(
-    `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`
+    `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`,
   ).json()
   trace.logTrace('outbound', emojic.shield, 'Rendered badge', body)
   await server.stop()

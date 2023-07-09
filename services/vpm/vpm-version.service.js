@@ -14,7 +14,7 @@ const schema = Joi.object({
       /./,
       Joi.object({
         versions: Joi.object().pattern(/./, Joi.object()).min(1).required(),
-      }).required()
+      }).required(),
     )
     .required(),
 }).required()
@@ -65,7 +65,7 @@ export default class VpmVersion extends BaseJsonService {
 
   async handle(
     { packageId },
-    { repository_url: repositoryUrl, include_prereleases: prereleases }
+    { repository_url: repositoryUrl, include_prereleases: prereleases },
   ) {
     const data = await this.fetch({ repositoryUrl })
     const pkg = data.packages[packageId]

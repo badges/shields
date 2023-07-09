@@ -10,7 +10,7 @@ const serviceDir = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
   '..',
-  'services'
+  'services',
 )
 
 function toUnixPath(path) {
@@ -51,14 +51,14 @@ async function loadServiceClasses(servicePaths) {
   const serviceClasses = []
   for await (const servicePath of servicePaths) {
     const currentServiceClasses = Object.values(
-      await import(`file://${servicePath}`)
+      await import(`file://${servicePath}`),
     ).flatMap(element =>
-      typeof element === 'object' ? Object.values(element) : element
+      typeof element === 'object' ? Object.values(element) : element,
     )
 
     if (currentServiceClasses.length === 0) {
       throw new InvalidService(
-        `Expected ${servicePath} to export a service or a collection of services`
+        `Expected ${servicePath} to export a service or a collection of services`,
       )
     }
     currentServiceClasses.forEach(serviceClass => {
@@ -71,7 +71,7 @@ async function loadServiceClasses(servicePaths) {
         return serviceClasses.push(serviceClass)
       }
       throw new InvalidService(
-        `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`
+        `Expected ${servicePath} to export a service or a collection of services; one of them was ${serviceClass}`,
       )
     })
   }
@@ -80,7 +80,7 @@ async function loadServiceClasses(servicePaths) {
     serviceClasses.map(({ name }) => name),
     {
       message: 'Duplicate service names found',
-    }
+    },
   )
 
   return serviceClasses
@@ -102,8 +102,8 @@ async function collectDefinitions() {
 async function loadTesters() {
   return Promise.all(
     getServicePaths('*.tester.js').map(
-      async path => await import(`file://${path}`)
-    )
+      async path => await import(`file://${path}`),
+    ),
   )
 }
 

@@ -16,7 +16,7 @@ describe('CratesLicense', function () {
 
   it('throws InvalidResponse on error response', function () {
     expect(() =>
-      CratesLicense.transform({ errors: [{ detail: 'invalid semver' }] })
+      CratesLicense.transform({ errors: [{ detail: 'invalid semver' }] }),
     )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'invalid semver')
@@ -24,7 +24,7 @@ describe('CratesLicense', function () {
 
   it('throws InvalidResponse on null license with specific version', function () {
     expect(() =>
-      CratesLicense.transform({ version: { num: '1.2.3', license: null } })
+      CratesLicense.transform({ version: { num: '1.2.3', license: null } }),
     )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'invalid null license')

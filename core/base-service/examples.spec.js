@@ -16,7 +16,7 @@ describe('validateExample function', function () {
 
     validExamples.forEach(example => {
       expect(() =>
-        validateExample(example, 0, { route: {}, name: 'mockService' })
+        validateExample(example, 0, { route: {}, name: 'mockService' }),
       ).not.to.throw(Error)
     })
   })
@@ -66,7 +66,7 @@ describe('validateExample function', function () {
 
     invalidExamples.forEach(example => {
       expect(() =>
-        validateExample(example, 0, { route: {}, name: 'mockService' })
+        validateExample(example, 0, { route: {}, name: 'mockService' }),
       ).to.throw(Error)
     })
   })
@@ -93,7 +93,7 @@ test(transformExample, function () {
       keywords: ['hello'],
     },
     0,
-    ExampleService
+    ExampleService,
   ).expect({
     title: 'ExampleService',
     example: {
@@ -119,7 +119,7 @@ test(transformExample, function () {
       keywords: ['hello'],
     },
     0,
-    ExampleService
+    ExampleService,
   ).expect({
     title: 'ExampleService',
     example: {
@@ -146,7 +146,7 @@ test(transformExample, function () {
       keywords: ['hello'],
     },
     0,
-    ExampleService
+    ExampleService,
   ).expect({
     title: 'ExampleService',
     example: {

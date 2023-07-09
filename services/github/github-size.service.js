@@ -13,7 +13,7 @@ const schema = Joi.alternatives(
   Joi.object({
     size: nonNegativeInteger,
   }).required(),
-  Joi.array().required()
+  Joi.array().required(),
 )
 
 export default class GithubSize extends GithubAuthV3Service {

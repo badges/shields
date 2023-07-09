@@ -20,7 +20,7 @@ t.create('no status color')
             name: 'pending',
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'foo-123',
@@ -42,7 +42,7 @@ t.create('green status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'bar-345',
@@ -64,7 +64,7 @@ t.create('medium-gray status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'abc-123',
@@ -86,7 +86,7 @@ t.create('yellow status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'test-001',
@@ -108,7 +108,7 @@ t.create('brown status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'zzz-789',
@@ -130,7 +130,7 @@ t.create('warm-red status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'fire-321',
@@ -152,7 +152,7 @@ t.create('blue-gray status color')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'sky-775',

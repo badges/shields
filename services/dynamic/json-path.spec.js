@@ -13,7 +13,7 @@ describe('JSON Path service factory', function () {
 
       return expect(jsonPathServiceInstance.fetch({})).to.be.rejectedWith(
         Error,
-        'fetch() function not implemented for JsonPathService'
+        'fetch() function not implemented for JsonPathService',
       )
     })
   })

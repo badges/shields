@@ -125,7 +125,7 @@ describe('Cache header functions', function () {
 
       it('should set the expected Cache-Control header', function () {
         expect(res._headers['cache-control']).to.equal(
-          'no-cache, no-store, must-revalidate'
+          'no-cache, no-store, must-revalidate',
         )
       })
 
@@ -141,7 +141,7 @@ describe('Cache header functions', function () {
 
       it('should set the expected Cache-Control header', function () {
         expect(res._headers['cache-control']).to.equal(
-          'max-age=123, s-maxage=123'
+          'max-age=123, s-maxage=123',
         )
       })
 
@@ -156,7 +156,7 @@ describe('Cache header functions', function () {
     it('sets the expected fields', function () {
       const expectedFields = ['date', 'cache-control', 'expires']
       expectedFields.forEach(field =>
-        expect(res._headers[field]).to.equal(undefined)
+        expect(res._headers[field]).to.equal(undefined),
       )
 
       setCacheHeaders({
@@ -169,7 +169,7 @@ describe('Cache header functions', function () {
       expectedFields.forEach(field =>
         expect(res._headers[field])
           .to.be.a('string')
-          .and.have.lengthOf.at.least(1)
+          .and.have.lengthOf.at.least(1),
       )
     })
   })
@@ -181,7 +181,7 @@ describe('Cache header functions', function () {
 
     it('should set the expected Cache-Control header', function () {
       expect(res._headers['cache-control']).to.equal(
-        `max-age=${24 * 3600}, s-maxage=${24 * 3600}`
+        `max-age=${24 * 3600}, s-maxage=${24 * 3600}`,
       )
     })
 
@@ -190,7 +190,7 @@ describe('Cache header functions', function () {
       expect(new Date(lastModified)).to.be.withinTime(
         // Within the last 60 seconds.
         new Date(Date.now() - 60 * 1000),
-        new Date()
+        new Date(),
       )
     })
   })
@@ -221,7 +221,7 @@ describe('Cache header functions', function () {
           })
           expect(serverHasBeenUpSinceResourceCached(req)).to.equal(false)
         })
-      }
+      },
     )
     context(
       'when the If-Modified-Since header is after the process started',
@@ -233,7 +233,7 @@ describe('Cache header functions', function () {
           })
           expect(serverHasBeenUpSinceResourceCached(req)).to.equal(true)
         })
-      }
+      },
     )
   })
 })

@@ -41,7 +41,7 @@ t.create('Open issues by label is > zero')
 
 t.create('Open issues by  multi-word label is > zero')
   .get(
-    '/open/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
+    '/open/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement',
   )
   .expectBadge({
     label: 'discussion,enhancement issues',
@@ -108,7 +108,7 @@ t.create('All issues')
   .expectBadge({
     label: 'issues',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 
@@ -124,18 +124,18 @@ t.create('All issues by label is > zero')
   .expectBadge({
     label: 'discussion issues',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 
 t.create('All issues by  multi-word label is > zero')
   .get(
-    '/all/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
+    '/all/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement',
   )
   .expectBadge({
     label: 'discussion,enhancement issues',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 

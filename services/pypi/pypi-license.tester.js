@@ -25,7 +25,7 @@ t.create('license (from trove classifier)')
           classifiers: ['License :: OSI Approved :: MIT License'],
         },
         urls: [],
-      })
+      }),
   )
   .expectBadge({
     label: 'license',
@@ -47,7 +47,7 @@ t.create('license (as acronym from trove classifier)')
           ],
         },
         urls: [],
-      })
+      }),
   )
   .expectBadge({
     label: 'license',

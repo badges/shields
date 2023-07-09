@@ -183,11 +183,11 @@ function Curl({ postman, codeSamples }) {
           }
 
           setCodeText(snippet)
-        }
+        },
       )
     } else if (language && !!language.source) {
       setCodeText(
-        language.source.replace('$url', postmanRequest.url.toString())
+        language.source.replace('$url', postmanRequest.url.toString()),
       )
     } else {
       setCodeText('')
@@ -230,7 +230,7 @@ function Curl({ postman, codeSamples }) {
             className={clsx(
               language === lang ? styles.selected : undefined,
               language === lang ? 'api-code-tab--active' : undefined,
-              'api-code-tab'
+              'api-code-tab',
             )}
             key={lang.tabName || lang.label}
             onClick={() => setLanguage(lang)}

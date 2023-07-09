@@ -13,14 +13,14 @@ const bitcoinAddressSchema = Joi.object({
           bitcoin: Joi.array().items(
             Joi.object({
               address: Joi.string().required(),
-            }).required()
+            }).required(),
           ),
         })
           .required()
           .allow(null),
       })
         .required()
-        .allow(null)
+        .allow(null),
     )
     .min(0)
     .max(1),

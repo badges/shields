@@ -8,7 +8,7 @@ export const t = new ServiceTester({
 
 t.create('GitHub discussions search (valid query string)')
   .get(
-    '/discussions-search.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s'
+    '/discussions-search.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s',
   )
   .expectBadge({
     label: 'query',
@@ -24,7 +24,7 @@ t.create('GitHub discussions search (invalid query string)')
 
 t.create('GitHub Repo discussions search (valid query string)')
   .get(
-    '/discussions-search/badges/shields.json?query=is%3Aanswered%20author%3Achris48s'
+    '/discussions-search/badges/shields.json?query=is%3Aanswered%20author%3Achris48s',
   )
   .expectBadge({
     label: 'query',
@@ -40,7 +40,7 @@ t.create('GitHub Repo discussions search (invalid query string)')
 
 t.create('GitHub Repo discussions search (invalid repo)')
   .get(
-    '/discussions-search/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s'
+    '/discussions-search/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s',
   )
   .expectBadge({
     label: 'query',

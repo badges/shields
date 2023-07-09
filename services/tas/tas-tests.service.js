@@ -94,7 +94,7 @@ export default class TasBuildStatus extends BaseJsonService {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const { badge } = await this.fetch({ provider, org, repo })
     return this.constructor.render({

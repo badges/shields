@@ -16,7 +16,7 @@ export default class LibrariesIoBase extends BaseJsonService {
     const { requestFetcher, librariesIoApiProvider } = context
     this._requestFetcher = librariesIoApiProvider.fetch.bind(
       librariesIoApiProvider,
-      requestFetcher
+      requestFetcher,
     )
   }
 

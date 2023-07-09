@@ -13,7 +13,7 @@ function writeSpec(filename, spec) {
 
   fs.writeFileSync(
     filename,
-    yaml.dump(cleaned, { flowLevel: 5, forceQuotes: true })
+    yaml.dump(cleaned, { flowLevel: 5, forceQuotes: true }),
   )
 }
 
@@ -22,28 +22,28 @@ function writeSpec(filename, spec) {
 
   for (const category of definitions.categories) {
     const services = definitions.services.filter(
-      service => service.category === category.id && !service.isDeprecated
+      service => service.category === category.id && !service.isDeprecated,
     )
 
     writeSpec(
       path.join(specsPath, `${category.id}.yaml`),
-      category2openapi(category, services)
+      category2openapi(category, services),
     )
   }
 
   let coreServices = []
   coreServices = coreServices.concat(
     definitions.services.filter(
-      service => service.category === 'static' && !service.isDeprecated
-    )
+      service => service.category === 'static' && !service.isDeprecated,
+    ),
   )
   coreServices = coreServices.concat(
     definitions.services.filter(
-      service => service.category === 'dynamic' && !service.isDeprecated
-    )
+      service => service.category === 'dynamic' && !service.isDeprecated,
+    ),
   )
   writeSpec(
     path.join(specsPath, '1core.yaml'),
-    category2openapi({ name: 'Core' }, coreServices)
+    category2openapi({ name: 'Core' }, coreServices),
   )
 })()

@@ -10,7 +10,7 @@ const intelliJschema = Joi.object({
         .items(
           Joi.object({
             version: Joi.string().required(),
-          })
+          }),
         )
         .single()
         .required(),
@@ -23,7 +23,7 @@ const jetbrainsSchema = Joi.array()
   .items(
     Joi.object({
       version: Joi.string().required(),
-    }).required()
+    }).required(),
   )
   .required()
 
@@ -65,7 +65,7 @@ export default class JetbrainsVersion extends JetbrainsBase {
       const jetbrainsPluginData = await this._requestJson({
         schema: jetbrainsSchema,
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
-          pluginId
+          pluginId,
         )}/updates`,
         httpErrors: { 400: 'not found' },
       })

@@ -32,7 +32,7 @@ export default class NpmLicense extends NpmBase {
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
-      queryParams
+      queryParams,
     )
     const { license } = await this.fetchPackageData({
       scope,
@@ -40,7 +40,7 @@ export default class NpmLicense extends NpmBase {
       registryUrl,
     })
     const licenses = toArray(license).map(license =>
-      typeof license === 'string' ? license : license.type
+      typeof license === 'string' ? license : license.type,
     )
     return this.constructor.render({ licenses })
   }

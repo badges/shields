@@ -77,8 +77,8 @@ function latestMaybeSemVer(versions, pre) {
       semver.compareBuild(
         `${a}`.toLowerCase(),
         `${b}`.toLowerCase(),
-        /* loose */ true
-      )
+        /* loose */ true,
+      ),
     )[versions.length - 1]
   } catch (e) {
     version = latestDottedVersion(versions)
@@ -109,7 +109,7 @@ function latest(versions, { pre = false } = {}) {
   // fall back to a case-insensitive string comparison
   if (version == null) {
     origVersions = origVersions.sort((a, b) =>
-      a.toLowerCase().localeCompare(b.toLowerCase())
+      a.toLowerCase().localeCompare(b.toLowerCase()),
     )
     version = origVersions[origVersions.length - 1]
   }

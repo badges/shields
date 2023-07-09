@@ -37,7 +37,7 @@ const individualValueSchema = Joi.alternatives()
 const compoundValueSchema = Joi.alternatives().try(
   individualValueSchema,
   Joi.array().items(individualValueSchema).required(),
-  Joi.array().length(0)
+  Joi.array().length(0),
 )
 
 /**
@@ -58,7 +58,7 @@ function transformAndValidate({ data, key }) {
       traceSuccessMessage: 'Key value after validation',
     },
     data[key],
-    compoundValueSchema
+    compoundValueSchema,
   )
 }
 

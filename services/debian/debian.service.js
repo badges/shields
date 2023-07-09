@@ -8,8 +8,8 @@ const schema = Joi.array()
       /./,
       Joi.object()
         .pattern(/./, Joi.object().pattern(/./, Joi.object()))
-        .required()
-    ) // Optional, missing means not found
+        .required(),
+    ), // Optional, missing means not found
   )
   .max(1)
   .required()

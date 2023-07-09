@@ -16,7 +16,7 @@ const localStatuses = {
 
 const isBuildStatus = Joi.alternatives().try(
   gIsBuildStatus,
-  Joi.equal(...Object.keys(localStatuses))
+  Joi.equal(...Object.keys(localStatuses)),
 )
 
 function renderBuildStatusBadge({ repository, status }) {

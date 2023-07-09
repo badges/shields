@@ -78,7 +78,7 @@ export default class DroneBuild extends BaseJsonService {
         httpErrors: {
           401: 'repo not found or not authorized',
         },
-      })
+      }),
     )
     return renderBuildStatusBadge({ status: json.status })
   }

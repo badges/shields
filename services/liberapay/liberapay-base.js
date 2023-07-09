@@ -28,7 +28,7 @@ const schema = Joi.object({
 }).required()
 
 const isCurrencyOverTime = Joi.string().regex(
-  /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]+\.[0-9]*[1-9][0-9]*)[ A-Za-z]{4}\/week/
+  /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]+\.[0-9]*[1-9][0-9]*)[ A-Za-z]{4}\/week/,
 )
 
 function renderCurrencyBadge({ label, amount, currency }) {

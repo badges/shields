@@ -6,7 +6,7 @@ import { makeFullUrl } from './route.js'
 
 const optionalObjectOfKeyValues = Joi.object().pattern(
   /./,
-  Joi.string().allow(null)
+  Joi.string().allow(null),
 )
 
 const schema = Joi.object({
@@ -32,19 +32,19 @@ function validateExample(example, index, ServiceClass) {
   const result = Joi.attempt(
     example,
     schema,
-    `Example for ${ServiceClass.name} at index ${index}`
+    `Example for ${ServiceClass.name} at index ${index}`,
   )
 
   const { pattern, namedParams } = result
 
   if (!pattern && !ServiceClass.route.pattern) {
     throw new Error(
-      `Example for ${ServiceClass.name} at index ${index} does not declare a pattern`
+      `Example for ${ServiceClass.name} at index ${index} does not declare a pattern`,
     )
   }
   if (pattern === ServiceClass.route.pattern) {
     throw new Error(
-      `Example for ${ServiceClass.name} at index ${index} declares a redundant pattern which should be removed`
+      `Example for ${ServiceClass.name} at index ${index} declares a redundant pattern which should be removed`,
     )
   }
 
@@ -57,7 +57,7 @@ function validateExample(example, index, ServiceClass) {
     throw Error(
       `In example for ${
         ServiceClass.name
-      } at index ${index}, ${e.message.toLowerCase()}`
+      } at index ${index}, ${e.message.toLowerCase()}`,
     )
   }
   // Make sure there are no extra keys.
@@ -73,8 +73,8 @@ function validateExample(example, index, ServiceClass) {
       `In example for ${
         ServiceClass.name
       } at index ${index}, namedParams contains unknown keys: ${extraKeys.join(
-        ', '
-      )}`
+        ', ',
+      )}`,
     )
   }
 
@@ -86,22 +86,22 @@ function validateExample(example, index, ServiceClass) {
         `In example for ${
           ServiceClass.name
         } at index ${index}, keywords contains words that are less than two characters long: ${tinyKeywords.join(
-          ', '
-        )}`
+          ', ',
+        )}`,
       )
     }
     // Make sure none of the keywords are already included in the title.
     const title = (example.title || ServiceClass.name).toLowerCase()
     const redundantKeywords = example.keywords.filter(k =>
-      title.includes(k.toLowerCase())
+      title.includes(k.toLowerCase()),
     )
     if (redundantKeywords.length) {
       throw Error(
         `In example for ${
           ServiceClass.name
         } at index ${index}, keywords contains words that are already in the title: ${redundantKeywords.join(
-          ', '
-        )}`
+          ', ',
+        )}`,
       )
     }
   }
@@ -126,7 +126,7 @@ function transformExample(inExample, index, ServiceClass) {
     {},
     staticPreview,
     ServiceClass.defaultBadgeData,
-    ServiceClass
+    ServiceClass,
   )
 
   const category = categories.find(c => c.id === ServiceClass.category)
@@ -135,7 +135,7 @@ function transformExample(inExample, index, ServiceClass) {
     example: {
       pattern: makeFullUrl(
         ServiceClass.route.base,
-        pattern || ServiceClass.route.pattern
+        pattern || ServiceClass.route.pattern,
       ),
       namedParams,
       queryParams,

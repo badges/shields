@@ -17,7 +17,7 @@ function testColor(color = '', colorAttr = 'color') {
       message: 'Bob',
       [colorAttr]: color,
       format: 'json',
-    })
+    }),
   ).color
 }
 
@@ -67,7 +67,7 @@ describe('The badge generator', function () {
         given('bluish'),
         given('almostred'),
         given('brightmaroon'),
-        given('cactus')
+        given('cactus'),
       ).expect(undefined)
     })
   })
@@ -138,7 +138,7 @@ describe('The badge generator', function () {
           message: 'Bob',
           format: 'svg',
           style: 'unknown_style',
-        })
+        }),
       ).to.throw(Error, "Unknown badge style: 'unknown_style'")
     })
   })
@@ -428,7 +428,7 @@ describe('The badge generator', function () {
           message: 1999,
           format: 'svg',
           style: 'for-the-badge',
-        })
+        }),
       )
         .to.include('1998')
         .and.to.include('1999')
@@ -441,7 +441,7 @@ describe('The badge generator', function () {
           message: '1 string',
           format: 'svg',
           style: 'for-the-badge',
-        })
+        }),
       )
         .to.include('LABEL')
         .and.to.include('1 STRING')
@@ -546,7 +546,7 @@ describe('The badge generator', function () {
           message: 'some-value',
           format: 'svg',
           style: 'social',
-        })
+        }),
       )
         .to.include('Some-key')
         .and.to.include('some-value')
@@ -560,7 +560,7 @@ describe('The badge generator', function () {
           message: 'some-value',
           format: 'json',
           style: 'social',
-        })
+        }),
       )
         .to.include('""')
         .and.to.include('some-value')

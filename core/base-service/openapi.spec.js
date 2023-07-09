@@ -371,8 +371,8 @@ describe('category2openapi', function () {
         category2openapi({ name: 'build' }, [
           OpenApiService.getDefinition(),
           LegacyService.getDefinition(),
-        ])
-      )
+        ]),
+      ),
     ).to.deep.equal(expected)
   })
 })
