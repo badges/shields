@@ -49,7 +49,7 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   static route = { base: 'ansible/role', pattern: ':roleId' }
 
   static openApi = {
-    '/ansible/role/d/{roleId}': {
+    '/ansible/role/{roleId}': {
       get: {
         summary: 'Ansible Galaxy Role Name',
         parameters: [pathParam({ name: 'roleId', example: '3078' })],
