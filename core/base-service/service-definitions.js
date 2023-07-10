@@ -56,7 +56,10 @@ const serviceDefinition = Joi.object({
               description: Joi.string(),
               in: Joi.string().valid('query', 'path').required(),
               required: Joi.boolean().required(),
-              schema: Joi.object({ type: Joi.string().required() }).required(),
+              schema: Joi.object({
+                type: Joi.string().required(),
+                enum: Joi.array(),
+              }).required(),
               allowEmptyValue: Joi.boolean(),
               example: Joi.string().allow(null),
             })
