@@ -348,18 +348,11 @@ function queryParam({
   required = false,
   description,
 }) {
+  const param = { name, in: 'query', required, schema, example, description }
   if (example === null && schema.type === 'boolean') {
-    return {
-      name,
-      in: 'query',
-      required,
-      schema,
-      allowEmptyValue: true,
-      example,
-      description,
-    }
+    param.allowEmptyValue = true
   }
-  return { name, in: 'query', required, schema, example, description }
+  return param
 }
 
 export { category2openapi, pathParam, queryParam }
