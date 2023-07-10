@@ -31,16 +31,16 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   color-scheme: initial;
 }
 
+/*
+TODO: remove these three styles when
+we can upgrade to docusaurus-theme-openapi@0.6.5
+*/
+
 input[type="text"], :not(#fakeID#fakeId#fakeID) select {
   border-color: var(--ifm-color-primary-lightest);
   border-style: solid;
   border-width: 1px;
 }
-
-/*
-TODO: remove these two styles when
-we can upgrade to docusaurus-theme-openapi@0.6.5
-*/
 
 div.api-code-tab-group {
   justify-content: center;
