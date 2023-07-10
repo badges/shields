@@ -71,8 +71,8 @@ const serviceDefinition = Joi.object({
   ),
 }).required()
 
-function assertValidServiceDefinition(example, message = undefined) {
-  Joi.assert(example, serviceDefinition, message)
+function assertValidServiceDefinition(service, message = undefined) {
+  Joi.assert(service, serviceDefinition, message)
 }
 
 const serviceDefinitionExport = Joi.object({
