@@ -86,7 +86,7 @@ const labelMap = {
         Joi.object({
           name: Joi.string().required(),
           color: Joi.string().required(),
-        })
+        }),
       )
       .required(),
   }).required(),

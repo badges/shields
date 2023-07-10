@@ -24,10 +24,10 @@ const contentSchema = Joi.object({
 
 async function fetchRepoContent(
   serviceInstance,
-  { user, repo, branch = 'HEAD', filename }
+  { user, repo, branch = 'HEAD', filename },
 ) {
   const httpErrors = httpErrorsFor(
-    `repo not found, branch not found, or ${filename} missing`
+    `repo not found, branch not found, or ${filename} missing`,
   )
   if (serviceInstance.staticAuthConfigured) {
     const { content } = await serviceInstance._requestJson({
@@ -53,7 +53,7 @@ async function fetchRepoContent(
 
 async function fetchJsonFromRepo(
   serviceInstance,
-  { schema, user, repo, branch = 'HEAD', filename }
+  { schema, user, repo, branch = 'HEAD', filename },
 ) {
   if (serviceInstance.staticAuthConfigured) {
     const buffer = await fetchRepoContent(serviceInstance, {
@@ -69,7 +69,7 @@ async function fetchJsonFromRepo(
       schema,
       url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`,
       httpErrors: httpErrorsFor(
-        `repo not found, branch not found, or ${filename} missing`
+        `repo not found, branch not found, or ${filename} missing`,
       ),
     })
   }

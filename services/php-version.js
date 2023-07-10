@@ -279,11 +279,11 @@ async function getPhpReleases(githubApiProvider) {
           tags
             // only releases
             .filter(
-              tag => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null
+              tag => tag.ref.match(/^refs\/tags\/php-\d+\.\d+\.\d+$/) != null,
             )
             // get minor version of release
-            .map(tag => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1])
-        )
+            .map(tag => tag.ref.match(/^refs\/tags\/php-(\d+\.\d+)\.\d+$/)[1]),
+        ),
       ),
     requestFetcher: githubApiProvider.fetch.bind(githubApiProvider, fetch),
   })

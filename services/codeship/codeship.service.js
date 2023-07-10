@@ -6,7 +6,7 @@ const schema = Joi.object({
   message: Joi.alternatives()
     .try(
       isBuildStatus,
-      Joi.equal('project not found', 'branch not found', 'ignored', 'blocked')
+      Joi.equal('project not found', 'branch not found', 'ignored', 'blocked'),
     )
     .required(),
 }).required()

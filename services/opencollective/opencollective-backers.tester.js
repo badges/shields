@@ -68,7 +68,7 @@ t.create('renders correctly')
         { MemberId: 26404, type: 'USER', role: 'BACKER', tier: 'backer' },
         { MemberId: 27026, type: 'USER', role: 'BACKER', tier: 'backer' },
         { MemberId: 27132, type: 'USER', role: 'CONTRIBUTOR' },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'backers',

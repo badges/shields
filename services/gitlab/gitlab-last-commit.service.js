@@ -9,7 +9,7 @@ const schema = Joi.array()
   .items(
     Joi.object({
       committed_date: Joi.string().required(),
-    }).required()
+    }).required(),
   )
   .required()
   .min(1)
@@ -61,7 +61,7 @@ export default class GitlabLastCommit extends GitLabBase {
     // https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
     return super.fetch({
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
+        project,
       )}/repository/commits`,
       options: { searchParams: { ref_name: ref } },
       schema,
@@ -71,7 +71,7 @@ export default class GitlabLastCommit extends GitLabBase {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', ref }
+    { gitlab_url: baseUrl = 'https://gitlab.com', ref },
   ) {
     const data = await this.fetch({ project, baseUrl, ref })
     return this.constructor.render({ commitDate: data[0].committed_date })

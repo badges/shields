@@ -23,7 +23,7 @@ const attrSchema = Joi.object({
     .required()
     .error(
       () =>
-        '"transformPath" must be a function that transforms named params to a new path'
+        '"transformPath" must be a function that transforms named params to a new path',
     ),
   transformQueryParams: Joi.func().arity(1),
   dateAdded: Joi.date().required(),
@@ -80,7 +80,7 @@ export default function redirector(attrs) {
           'inbound',
           emojic.arrowHeadingUp,
           'Redirector',
-          route.base
+          route.base,
         )
         trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
         trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)

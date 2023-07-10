@@ -27,7 +27,7 @@ describe('Redirector', function () {
       redirector({
         ...attrs,
         name: 'ShinyRedirect',
-      }).name
+      }).name,
     ).to.equal('ShinyRedirect')
   })
 
@@ -41,7 +41,7 @@ describe('Redirector', function () {
 
   it('throws the expected error when dateAdded is missing', function () {
     expect(() =>
-      redirector({ route, category, transformPath }).validateDefinition()
+      redirector({ route, category, transformPath }).validateDefinition(),
     ).to.throw('"dateAdded" is required')
   })
 
@@ -93,7 +93,7 @@ describe('Redirector', function () {
       })
       ServiceClass.register(
         { camp },
-        { rasterUrl: 'http://raster.example.test' }
+        { rasterUrl: 'http://raster.example.test' },
       )
     })
 
@@ -102,7 +102,7 @@ describe('Redirector', function () {
         `${baseUrl}/very/old/service/hello-world.svg`,
         {
           followRedirect: false,
-        }
+        },
       )
 
       expect(statusCode).to.equal(301)
@@ -114,12 +114,12 @@ describe('Redirector', function () {
         `${baseUrl}/very/old/service/hello-world.png`,
         {
           followRedirect: false,
-        }
+        },
       )
 
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        'http://raster.example.test/new/service/hello-world.png'
+        'http://raster.example.test/new/service/hello-world.png',
       )
     })
 
@@ -128,12 +128,12 @@ describe('Redirector', function () {
         `${baseUrl}/very/old/service/hello-world.svg?color=123&style=flat-square`,
         {
           followRedirect: false,
-        }
+        },
       )
 
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        '/new/service/hello-world.svg?color=123&style=flat-square'
+        '/new/service/hello-world.svg?color=123&style=flat-square',
       )
     })
 
@@ -142,12 +142,12 @@ describe('Redirector', function () {
         `${baseUrl}/very/old/service/hello%0Dworld.svg?foobar=a%0Db`,
         {
           followRedirect: false,
-        }
+        },
       )
 
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        '/new/service/hello%0Dworld.svg?foobar=a%0Db'
+        '/new/service/hello%0Dworld.svg?foobar=a%0Db',
       )
     })
 
@@ -174,12 +174,12 @@ describe('Redirector', function () {
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg`,
           {
             followRedirect: false,
-          }
+          },
         )
 
         expect(statusCode).to.equal(301)
         expect(headers.location).to.equal(
-          '/new/service/hello-world.svg?token=abc123'
+          '/new/service/hello-world.svg?token=abc123',
         )
       })
 
@@ -188,12 +188,12 @@ describe('Redirector', function () {
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square`,
           {
             followRedirect: false,
-          }
+          },
         )
 
         expect(statusCode).to.equal(301)
         expect(headers.location).to.equal(
-          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
+          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123',
         )
       })
 
@@ -202,12 +202,12 @@ describe('Redirector', function () {
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
           {
             followRedirect: false,
-          }
+          },
         )
 
         expect(statusCode).to.equal(301)
         expect(headers.location).to.equal(
-          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123'
+          '/new/service/hello-world.svg?color=123&style=flat-square&token=abc123',
         )
       })
 
@@ -229,12 +229,12 @@ describe('Redirector', function () {
           `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
           {
             followRedirect: false,
-          }
+          },
         )
 
         expect(statusCode).to.equal(301)
         expect(headers.location).to.equal(
-          '/new/service/hello-world.svg?style=flat-square&token=def456'
+          '/new/service/hello-world.svg?style=flat-square&token=def456',
         )
       })
     })

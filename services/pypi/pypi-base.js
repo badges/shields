@@ -13,7 +13,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         packagetype: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()

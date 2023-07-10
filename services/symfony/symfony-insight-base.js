@@ -13,7 +13,7 @@ const schema = Joi.object({
         'running',
         'measured',
         'analyzed',
-        'finished'
+        'finished',
       )
         .allow('')
         .required(),
@@ -70,7 +70,7 @@ class SymfonyInsightBase extends BaseXmlService {
           attributeNamePrefix: '',
           ignoreAttributes: false,
         },
-      })
+      }),
     )
   }
 

@@ -7,9 +7,9 @@ const packageSchema = Joi.array().items(
     version: Joi.string().required(),
     require: Joi.alternatives(
       Joi.object().pattern(Joi.string(), Joi.string()).required(),
-      Joi.string().valid('__unset')
+      Joi.string().valid('__unset'),
     ),
-  })
+  }),
 )
 
 const allVersionsSchema = Joi.object({
@@ -150,7 +150,7 @@ class BasePackagistService extends BaseJsonService {
       .filter(
         version =>
           typeof version.version === 'string' ||
-          version.version instanceof String
+          version.version instanceof String,
       )
       .map(version => version.version)
     if (versionStrings.length < 1) {

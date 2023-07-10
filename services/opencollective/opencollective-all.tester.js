@@ -14,7 +14,7 @@ t.create('renders correctly')
       yearlyIncome: 157371,
       backersCount: 35,
       contributorsCount: 276,
-    })
+    }),
   )
   .expectBadge({
     label: 'backers and sponsors',
@@ -33,7 +33,7 @@ t.create('renders not found correctly')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/nonexistent-collective.json')
-      .reply(404, 'Not found')
+      .reply(404, 'Not found'),
   )
   .expectBadge({
     label: 'backers and sponsors',

@@ -8,7 +8,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         committed_date: Joi.string().required(),
-      }).required()
+      }).required(),
     )
     .required(),
 }).required()

@@ -9,5 +9,5 @@ export const t = new ServiceTester({
 t.create('twitter')
   .get('/https/shields.io.svg')
   .expectRedirect(
-    `/twitter/url.svg?url=${encodeURIComponent('https://shields.io')}`
+    `/twitter/url.svg?url=${encodeURIComponent('https://shields.io')}`,
   )

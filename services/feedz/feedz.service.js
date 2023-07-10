@@ -15,7 +15,7 @@ const singlePageSchema = Joi.object({
         catalogEntry: Joi.object({
           version: Joi.string().required(),
         }).required(),
-      })
+      }),
     )
     .default([]),
 }).required()
@@ -70,7 +70,7 @@ class FeedzVersionService extends BaseJsonService {
   async fetch({ baseUrl, packageName }) {
     const registrationsBaseUrl = await searchServiceUrl(
       baseUrl,
-      'RegistrationsBaseUrl'
+      'RegistrationsBaseUrl',
     )
     return await this._requestJson({
       schema: packageSchema,
@@ -93,8 +93,8 @@ class FeedzVersionService extends BaseJsonService {
             httpErrors: {
               404: 'repository or package not found',
             },
-          })
-        )
+          }),
+        ),
       )
       return { items }
     }
@@ -102,7 +102,7 @@ class FeedzVersionService extends BaseJsonService {
 
   transform({ json, includePrereleases }) {
     const versions = json.items.flatMap(tl =>
-      tl.items.map(i => stripBuildMetadata(i.catalogEntry.version))
+      tl.items.map(i => stripBuildMetadata(i.catalogEntry.version)),
     )
     if (versions.length >= 1) {
       return selectVersion(versions, includePrereleases)

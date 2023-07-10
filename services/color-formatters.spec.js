@@ -26,8 +26,8 @@ describe('Color formatters', function () {
 
     forCases(
       [-1, 0, 0.5, 1, 50, 80, 85, 90, 100, 101].map(v =>
-        given(v).expect(coveragePercentage(v))
-      )
+        given(v).expect(coveragePercentage(v)),
+      ),
     ).should("return '%s', for parity with coveragePercentage()")
   })
 
@@ -93,19 +93,19 @@ describe('Color formatters', function () {
 
     expect(() => version(null)).to.throw(
       Error,
-      "Can't generate a version color for null"
+      "Can't generate a version color for null",
     )
     expect(() => version(undefined)).to.throw(
       Error,
-      "Can't generate a version color for undefined"
+      "Can't generate a version color for undefined",
     )
     expect(() => version(true)).to.throw(
       Error,
-      "Can't generate a version color for true"
+      "Can't generate a version color for true",
     )
     expect(() => version({})).to.throw(
       Error,
-      "Can't generate a version color for [object Object]"
+      "Can't generate a version color for [object Object]",
     )
   })
 

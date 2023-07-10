@@ -9,7 +9,7 @@ const condaSchema = Joi.object({
     .items(
       Joi.object({
         ndownloads: nonNegativeInteger,
-      })
+      }),
     )
     .required(),
 }).required()

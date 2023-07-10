@@ -46,11 +46,11 @@ t.create('Release (legacy route: release)')
 t.create('(pre-)Release (legacy route: release/all)')
   .get('/release/photonstorm/phaser/all.svg')
   .expectRedirect(
-    '/github/v/release/photonstorm/phaser.svg?include_prereleases'
+    '/github/v/release/photonstorm/phaser.svg?include_prereleases',
   )
 
 t.create('(pre-)Release (legacy route: release-pre)')
   .get('/release-pre/photonstorm/phaser.svg')
   .expectRedirect(
-    '/github/v/release/photonstorm/phaser.svg?include_prereleases'
+    '/github/v/release/photonstorm/phaser.svg?include_prereleases',
   )

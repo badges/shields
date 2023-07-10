@@ -9,7 +9,7 @@ t.create('8368844 bytes to 8.37 megabytes')
       .get('/nock/nock/releases/latest')
       .reply(200, {
         size: 8368844,
-      })
+      }),
   )
   .expectBadge({
     label: 'size',
@@ -18,7 +18,7 @@ t.create('8368844 bytes to 8.37 megabytes')
 
 t.create('Valid Release')
   .get(
-    '/jct/test-fixed-android-react/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json'
+    '/jct/test-fixed-android-react/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json',
   )
   .expectBadge({
     label: 'size',

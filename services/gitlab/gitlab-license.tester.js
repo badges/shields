@@ -51,7 +51,7 @@ t.create('Mocking License')
           html_url: 'http://choosealicense.com/licenses/apache-2.0/',
           source_url: '',
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'license',

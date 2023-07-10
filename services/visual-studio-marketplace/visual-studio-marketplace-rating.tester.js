@@ -49,7 +49,7 @@ t.create('rating')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',
@@ -79,7 +79,7 @@ t.create('zero rating')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',
@@ -118,7 +118,7 @@ t.create('stars')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',

@@ -33,7 +33,7 @@ t.create('Nock - single version supported')
           count: 1,
           average: 1,
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'tested versions',
@@ -57,7 +57,7 @@ t.create('Nock - multiple versions supported')
           count: 1,
           average: 1,
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'tested versions',

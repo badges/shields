@@ -31,7 +31,7 @@ t.create('Release Date - display_date by `published_at`, incorrect query param')
   })
 
 t.create(
-  'Release Date - Should return `no releases or repo not found` for invalid repo'
+  'Release Date - Should return `no releases or repo not found` for invalid repo',
 )
   .get('/release-date/not-valid-name/not-valid-repo.json')
   .expectBadge({
@@ -47,7 +47,7 @@ t.create('(Pre-)Release Date. e.g release date|today')
   })
 
 t.create(
-  '(Pre-)Release Date - Should return `no releases or repo not found` for invalid repo'
+  '(Pre-)Release Date - Should return `no releases or repo not found` for invalid repo',
 )
   .get('/release-date-pre/not-valid-name/not-valid-repo.json')
   .expectBadge({

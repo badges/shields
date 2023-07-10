@@ -37,7 +37,7 @@ t.create('Deployments (status not yet available)')
         data: {
           repository: { deployments: { nodes: [{ latestStatus: null }] } },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'state',

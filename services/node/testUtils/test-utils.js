@@ -9,16 +9,16 @@ const templates = {
   packageJsonVersionsTemplate: fs.readFileSync(
     path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      'packageJsonVersionsTemplate.json'
+      'packageJsonVersionsTemplate.json',
     ),
-    'utf-8'
+    'utf-8',
   ),
   packageJsonTemplate: fs.readFileSync(
     path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      'packageJsonTemplate.json'
+      'packageJsonTemplate.json',
     ),
-    'utf-8'
+    'utf-8',
   ),
 }
 

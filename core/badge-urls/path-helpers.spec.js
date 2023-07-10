@@ -7,7 +7,7 @@ describe('Badge URL helper functions', function () {
     given('single trailing underscore_').expect('single trailing underscore ')
     given('__double leading underscores').expect('_double leading underscores')
     given('double trailing underscores__').expect(
-      'double trailing underscores_'
+      'double trailing underscores_',
     )
     given('treble___underscores').expect('treble_ underscores')
     given('fourfold____underscores').expect('fourfold__underscores')

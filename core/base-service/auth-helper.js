@@ -11,7 +11,7 @@ class AuthHelper {
       isRequired = false,
       defaultToEmptyStringForUser = false,
     },
-    config
+    config,
   ) {
     if (!userKey && !passKey) {
       throw Error('Expected userKey or passKey to be set')
@@ -142,7 +142,7 @@ class AuthHelper {
 
   withBasicAuth(requestParams) {
     return this._withAnyAuth(requestParams, requestParams =>
-      this.constructor._mergeAuth(requestParams, this._basicAuth)
+      this.constructor._mergeAuth(requestParams, this._basicAuth),
     )
   }
 
@@ -172,13 +172,13 @@ class AuthHelper {
 
   withBearerAuthHeader(
     requestParams,
-    bearerKey = 'Bearer' // lgtm [js/hardcoded-credentials]
+    bearerKey = 'Bearer', // lgtm [js/hardcoded-credentials]
   ) {
     return this._withAnyAuth(requestParams, requestParams =>
       this.constructor._mergeHeaders(
         requestParams,
-        this._bearerAuthHeader(bearerKey)
-      )
+        this._bearerAuthHeader(bearerKey),
+      ),
     )
   }
 
@@ -204,7 +204,7 @@ class AuthHelper {
       this.constructor._mergeQueryParams(requestParams, {
         ...(userKey ? { [userKey]: this._user } : undefined),
         ...(passKey ? { [passKey]: this._pass } : undefined),
-      })
+      }),
     )
   }
 }

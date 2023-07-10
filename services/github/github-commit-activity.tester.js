@@ -9,7 +9,7 @@ export const t = await createServiceTester()
 
 const isCommitActivity = Joi.alternatives().try(
   isMetricOverTimePeriod,
-  isZeroOverTimePeriod
+  isZeroOverTimePeriod,
 )
 
 const authorFilterUser = 'jnullj'

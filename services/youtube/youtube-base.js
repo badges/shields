@@ -25,9 +25,9 @@ const schema = Joi.object({
         Joi.object({
           viewCount: nonNegativeInteger,
           subscriberCount: nonNegativeInteger,
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
@@ -67,8 +67,8 @@ class YouTubeBase extends BaseJsonService {
           options: {
             searchParams: { id, part: 'statistics' },
           },
-        }
-      )
+        },
+      ),
     )
   }
 

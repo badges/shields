@@ -16,7 +16,7 @@ const keyFingerprintSchema = Joi.object({
         },
       })
         .required()
-        .allow(null)
+        .allow(null),
     )
     .min(0)
     .max(1),

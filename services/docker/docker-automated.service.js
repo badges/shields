@@ -38,7 +38,7 @@ export default class DockerAutomatedBuild extends BaseJsonService {
     return this._requestJson({
       schema: automatedBuildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
       httpErrors: { 404: 'repo not found' },
     })

@@ -68,7 +68,7 @@ export class BaseWordpress extends BaseJsonService {
           },
         },
       },
-      { encode: false }
+      { encode: false },
     )
 
     const json = await this._requestJson({

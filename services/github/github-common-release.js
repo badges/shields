@@ -32,7 +32,7 @@ async function fetchLatestGitHubRelease(serviceInstance, { user, repo }) {
 
 const releaseInfoArraySchema = Joi.alternatives().try(
   Joi.array().items(releaseInfoSchema),
-  Joi.array().length(0)
+  Joi.array().length(0),
 )
 
 async function fetchReleases(serviceInstance, { user, repo }) {
@@ -51,7 +51,7 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
   if (sort === 'semver') {
     const latestTagName = latest(
       releases.map(release => release.tag_name),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
     return releases.find(({ tag_name: tagName }) => tagName === latestTagName)
   }
@@ -89,15 +89,15 @@ function applyFilter({ releases, filter, displayName }) {
   if (displayName === 'tag') {
     const filteredTagNames = matcher(
       releases.map(release => release.tag_name),
-      filter
+      filter,
     )
     return releases.filter(release =>
-      filteredTagNames.includes(release.tag_name)
+      filteredTagNames.includes(release.tag_name),
     )
   }
   const filteredReleaseNames = matcher(
     releases.map(release => release.name),
-    filter
+    filter,
   )
   return releases.filter(release => filteredReleaseNames.includes(release.name))
 }
@@ -106,7 +106,7 @@ function applyFilter({ releases, filter, displayName }) {
 async function fetchLatestRelease(
   serviceInstance,
   { user, repo },
-  queryParams
+  queryParams,
 ) {
   const sort = queryParams.sort
   const includePrereleases = queryParams.include_prereleases !== undefined

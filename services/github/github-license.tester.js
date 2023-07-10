@@ -44,7 +44,7 @@ t.create('License with SPDX id not appearing in configuration')
           url: 'https://api.github.com/licenses/efl-1.0',
           featured: true,
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'license',

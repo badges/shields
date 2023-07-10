@@ -27,7 +27,7 @@ describe('Discord', function () {
     expect(
       await Discord.invoke(defaultContext, config, {
         serverId: '12345',
-      })
+      }),
     ).to.deep.equal({
       message: '125 online',
       color: 'brightgreen',

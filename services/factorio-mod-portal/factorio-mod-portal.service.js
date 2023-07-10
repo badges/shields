@@ -16,7 +16,7 @@ const schema = Joi.object({
         info_json: Joi.object({
           factorio_version: Joi.string().required(),
         }).required(),
-      })
+      }),
     )
     .min(1)
     .required(),

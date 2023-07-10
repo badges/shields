@@ -27,14 +27,16 @@ export default class InfluxMetrics {
       response = await got.post(request)
     } catch (error) {
       log.error(
-        new Error(`Cannot push metrics. Cause: ${error.name}: ${error.message}`)
+        new Error(
+          `Cannot push metrics. Cause: ${error.name}: ${error.message}`,
+        ),
       )
     }
     if (response && response.statusCode >= 300) {
       log.error(
         new Error(
-          `Cannot push metrics. ${request.url} responded with status code ${response.statusCode}`
-        )
+          `Cannot push metrics. ${request.url} responded with status code ${response.statusCode}`,
+        ),
       )
     }
   }
@@ -42,7 +44,7 @@ export default class InfluxMetrics {
   startPushingMetrics() {
     this._intervalId = setInterval(
       () => this.sendMetrics(),
-      this._config.intervalSeconds * 1000
+      this._config.intervalSeconds * 1000,
     )
   }
 

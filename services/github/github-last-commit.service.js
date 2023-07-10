@@ -19,7 +19,7 @@ const schema = Joi.array()
           date: Joi.string().required(),
         }).required(),
       }).required(),
-    }).required()
+    }).required(),
   )
   .required()
   .min(1)

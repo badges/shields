@@ -15,9 +15,9 @@ const schema = Joi.alternatives(
       Joi.object({
         created_at: Joi.date().required(),
         published_at: Joi.date().required(),
-      }).required()
+      }).required(),
     )
-    .min(1)
+    .min(1),
 )
 
 const queryParamSchema = Joi.object({

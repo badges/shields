@@ -103,7 +103,7 @@ class TwitterFollow extends BaseJsonService {
       style: 'social',
       link: [
         `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
-          user
+          user,
         )}`,
       ],
     }

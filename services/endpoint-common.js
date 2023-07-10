@@ -13,7 +13,7 @@ const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   {
     is: Joi.string().required(),
     then: Joi.string(),
-  }
+  },
 )
 
 const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
@@ -58,7 +58,7 @@ const endpointSchema = Joi.object({
  */
 function validateEndpointData(
   data,
-  { prettyErrorMessage = 'invalid response data', includeKeys = false } = {}
+  { prettyErrorMessage = 'invalid response data', includeKeys = false } = {},
 ) {
   return validate(
     {
@@ -70,7 +70,7 @@ function validateEndpointData(
       allowAndStripUnknownKeys: false,
     },
     data,
-    endpointSchema
+    endpointSchema,
   )
 }
 
@@ -89,7 +89,7 @@ const anySchema = Joi.any()
  */
 async function fetchEndpointData(
   serviceInstance,
-  { url, httpErrors, validationPrettyErrorMessage, includeKeys }
+  { url, httpErrors, validationPrettyErrorMessage, includeKeys },
 ) {
   const json = await serviceInstance._requestJson({
     schema: anySchema,

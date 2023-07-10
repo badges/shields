@@ -31,7 +31,7 @@ const tooMuchDataJson = { data: [{}, {}] }
 describe('Nuget Version service', function () {
   test(NugetVersionService.prototype.transform, () => {
     given({ json: versionJson(['1.0.0']), includePrereleases: false }).expect(
-      '1.0.0'
+      '1.0.0',
     )
     given({
       json: versionJson(['1.0.0', '1.0.1']),
@@ -56,22 +56,22 @@ describe('Nuget Version service', function () {
     }).expect('1.0.1-beta1')
 
     given({ json: versionJson([]), includePrereleases: false }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
     given({ json: versionJson([]), includePrereleases: true }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
     given({ json: noDataJson, includePrereleases: false }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
     given({ json: noDataJson, includePrereleases: true }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
     given({ json: tooMuchDataJson, includePrereleases: false }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
     given({ json: tooMuchDataJson, includePrereleases: true }).expectError(
-      'Not Found: package not found'
+      'Not Found: package not found',
     )
   })
 })
