@@ -1,6 +1,9 @@
 name: Build Docker Image
 on:
   pull_request:
+  push:
+    branches:
+      - 'gh-readonly-queue/**'
 
 jobs:
   build-docker-image:
