@@ -27,6 +27,12 @@ const schema = Joi.object({
 export default class OpencollectiveBase extends BaseGraphqlService {
   static category = 'funding'
 
+  static auth = {
+    passKey: 'opencollective_token',
+    authorizedOrigins: ['https://api.opencollective.com'],
+    isRequired: false,
+  }
+
   static buildRoute(base, withTierId) {
     return {
       base: `opencollective${base ? `/${base}` : ''}`,
@@ -43,34 +49,39 @@ export default class OpencollectiveBase extends BaseGraphqlService {
   }
 
   async fetchCollectiveInfo({ collective, accountType }) {
-    return this._requestGraphql({
-      schema,
-      url: 'https://api.opencollective.com/graphql/v2',
-      query: gql`
-        query account($slug: String, $accountType: [AccountType]) {
-          account(slug: $slug) {
-            name
-            slug
-            members(accountType: $accountType, role: BACKER) {
-              totalCount
-              nodes {
-                tier {
-                  legacyId
-                  name
+    return this._requestGraphql(
+      this.authHelper.withQueryStringAuth(
+        { passKey: 'personalToken' },
+        {
+          schema,
+          url: 'https://api.opencollective.com/graphql/v2',
+          query: gql`
+            query account($slug: String, $accountType: [AccountType]) {
+              account(slug: $slug) {
+                name
+                slug
+                members(accountType: $accountType, role: BACKER) {
+                  totalCount
+                  nodes {
+                    tier {
+                      legacyId
+                      name
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      `,
-      variables: {
-        slug: collective,
-        accountType,
-      },
-      options: {
-        headers: { 'content-type': 'application/json' },
-      },
-    })
+          `,
+          variables: {
+            slug: collective,
+            accountType,
+          },
+          options: {
+            headers: { 'content-type': 'application/json' },
+          },
+        },
+      ),
+    )
   }
 
   getCount(data) {
