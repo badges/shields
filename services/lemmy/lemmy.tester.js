@@ -59,30 +59,6 @@ t.create('invalid community').get('/ALIASDUMMY.dumb.json').expectBadge({
   color: 'red',
 })
 
-t.create('specify the instance fqdn')
-  .get('/community@DUMMY.dumb.json?server_fqdn=alternative.DUMMY.dumb')
-  .intercept(nock =>
-    nock('https://alternative.DUMMY.dumb/')
-      .get('/api/v3/community?name=community%40DUMMY.dumb')
-      .reply(
-        200,
-        JSON.stringify({
-          community_view: {
-            counts: {
-              subscribers: 42,
-              posts: 0,
-              comments: 0,
-            },
-          },
-        }),
-      ),
-  )
-  .expectBadge({
-    label: 'subscribe to community@DUMMY.dumb',
-    message: '42 subscribers',
-    color: 'brightgreen',
-  })
-
 t.create('test on real lemmy room for API compliance')
   .get('/asklemmy@lemmy.ml.json')
   .timeout(10000)

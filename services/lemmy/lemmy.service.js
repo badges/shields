@@ -57,21 +57,17 @@ export default class Lemmy extends BaseJsonService {
     }
   }
 
-  async fetch({ community, serverFQDN }) {
-    let host
-    if (serverFQDN === undefined) {
-      const splitAlias = community.split('@')
-      // The community will be in the format of `community@server`
-      if (splitAlias.length !== 2) {
-        throw new InvalidParameter({
-          prettyMessage: 'invalid community',
-        })
-      }
-
-      host = splitAlias[1]
-    } else {
-      host = serverFQDN
+  async fetch({ community }) {
+    const splitAlias = community.split('@')
+    // The community will be in the format of `community@server`
+    if (splitAlias.length !== 2) {
+      throw new InvalidParameter({
+        prettyMessage: 'invalid community',
+      })
     }
+
+    const host = splitAlias[1]
+
     const data = await this._requestJson({
       url: `https://${host}/api/v3/community`,
       schema: lemmyCommunitySchema,
@@ -87,8 +83,8 @@ export default class Lemmy extends BaseJsonService {
     return data.community_view.counts.subscribers
   }
 
-  async handle({ community }, { server_fqdn: serverFQDN }) {
-    const members = await this.fetch({ community, serverFQDN })
+  async handle({ community }) {
+    const members = await this.fetch({ community })
     return this.constructor.render({ community, members })
   }
 }
