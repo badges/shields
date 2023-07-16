@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isUbuntuVersion = Joi.string().regex(
-  /^v(\d+:)?\d+(\.\d+)*([\w\\.]*)?([-+~].*)?$/
+  /^v(\d+:)?\d+(\.\d+)*([\w\\.]*)?([-+~].*)?$/,
 )
 
 t.create('Ubuntu package (default distribution, valid)')
@@ -18,7 +18,7 @@ t.create('Ubuntu package (valid)')
   .intercept(nock =>
     nock('https://api.launchpad.net')
       .get(
-        '/1.0/ubuntu/+archive/primary?ws.op=getPublishedSources&exact_match=true&order_by_date=true&status=Published&source_name=ubuntu-wallpapers&distro_series=https%3A%2F%2Fapi.launchpad.net%2F1.0%2Fubuntu%2Fbionic'
+        '/1.0/ubuntu/+archive/primary?ws.op=getPublishedSources&exact_match=true&order_by_date=true&status=Published&source_name=ubuntu-wallpapers&distro_series=https%3A%2F%2Fapi.launchpad.net%2F1.0%2Fubuntu%2Fbionic',
       )
       .reply(200, {
         entries: [
@@ -27,7 +27,7 @@ t.create('Ubuntu package (valid)')
             source_package_version: '18.04.1-0ubuntu1',
           },
         ],
-      })
+      }),
   )
   .expectBadge({ label: 'ubuntu', message: 'v18.04.1-0ubuntu1' })
 

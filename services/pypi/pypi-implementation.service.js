@@ -30,7 +30,7 @@ export default class PypiImplementation extends PypiBase {
 
     let implementations = parseClassifiers(
       packageData,
-      /^Programming Language :: Python :: Implementation :: (\S+)$/
+      /^Programming Language :: Python :: Implementation :: (\S+)$/,
     )
     if (implementations.length === 0) {
       // Assume CPython.

@@ -12,7 +12,7 @@ t.create('score valid')
       'yellow',
       'yellowgreen',
       'green',
-      'brightgreen'
+      'brightgreen',
     ),
   })
 

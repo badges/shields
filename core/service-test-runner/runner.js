@@ -25,7 +25,7 @@ class Runner {
    */
   async prepare() {
     this.testers = (await loadTesters()).flatMap(testerModule =>
-      Object.values(testerModule)
+      Object.values(testerModule),
     )
     this.testers.forEach(tester => {
       tester.beforeEach = () => {

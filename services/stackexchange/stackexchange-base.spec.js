@@ -29,7 +29,7 @@ describe('StackExchangeBase', function () {
         .reply(200, { message: 'fake message' })
 
       expect(
-        await DummyStackExchangeService.invoke(defaultContext, config, {})
+        await DummyStackExchangeService.invoke(defaultContext, config, {}),
       ).to.deep.equal({ message: 'fake message' })
 
       scope.done()

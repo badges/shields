@@ -28,7 +28,7 @@ const schema = Joi.object({
         totalCount: optionalNonNegativeInteger,
         failCount: optionalNonNegativeInteger,
         skipCount: optionalNonNegativeInteger,
-      })
+      }),
     )
     .required(),
 }).required()
@@ -111,13 +111,13 @@ export default class JenkinsTests extends JenkinsBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const json = await this.fetch({
       url: buildUrl({ jobUrl }),
       schema,
       searchParams: buildTreeParamQueryString(
-        'actions[failCount,skipCount,totalCount]'
+        'actions[failCount,skipCount,totalCount]',
       ),
     })
     const { passed, failed, skipped, total } = this.transform({ json })

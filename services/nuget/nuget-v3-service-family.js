@@ -56,12 +56,12 @@ const schema = Joi.object({
           .items(
             Joi.object({
               version: Joi.string().required(),
-            })
+            }),
           )
           .default([]),
         totalDownloads: Joi.number().integer(),
         totaldownloads: Joi.number().integer(),
-      })
+      }),
     )
     .max(1)
     .default([]),
@@ -72,7 +72,7 @@ const schema = Joi.object({
  */
 async function fetch(
   serviceInstance,
-  { baseUrl, packageName, includePrereleases = false }
+  { baseUrl, packageName, includePrereleases = false },
 ) {
   return serviceInstance._requestJson({
     schema,
@@ -138,7 +138,7 @@ function createServiceFamily({
       if (json.data.length === 1 && json.data[0].versions.length > 0) {
         const { versions: packageVersions } = json.data[0]
         const versions = packageVersions.map(item =>
-          stripBuildMetadata(item.version)
+          stripBuildMetadata(item.version),
         )
         return selectVersion(versions, includePrereleases)
       } else {

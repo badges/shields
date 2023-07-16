@@ -47,7 +47,7 @@ t.create('downloads for latest release (sort by date)')
       ],
       tag_name: 'v3.15.1',
       prerelease: false,
-    })
+    }),
   )
   .expectBadge({ label: 'downloads@latest', message: '12' })
 
@@ -79,7 +79,7 @@ t.create('downloads for latest release (sort by SemVer)')
         tag_name: 'v3.15.1',
         prerelease: false,
       },
-    ])
+    ]),
   )
   .expectBadge({ label: 'downloads@latest', message: '20' })
 
@@ -111,7 +111,7 @@ t.create('downloads for latest release (sort by date including pre-releases)')
         tag_name: 'v3.15.1',
         prerelease: false,
       },
-    ])
+    ]),
   )
   .expectBadge({ label: 'downloads@latest', message: '4' })
 
@@ -143,7 +143,7 @@ t.create('downloads for latest release (sort by SemVer including pre-releases)')
         tag_name: 'v3.15.0',
         prerelease: false,
       },
-    ])
+    ]),
   )
   .expectBadge({ label: 'downloads@latest', message: '4' })
 
@@ -165,7 +165,7 @@ t.create('downloads for specific asset without slash')
   .expectBadge({
     label: 'downloads@v0.190.0',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/,
     ),
   })
 
@@ -174,7 +174,7 @@ t.create('downloads for specific asset from latest release')
   .expectBadge({
     label: 'downloads@latest',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/,
     ),
   })
 
@@ -183,7 +183,7 @@ t.create('downloads-pre for specific asset from latest release')
   .expectBadge({
     label: 'downloads@latest',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/,
     ),
   })
 
@@ -196,7 +196,7 @@ t.create('downloads for specific asset with slash')
   .expectBadge({
     label: 'downloads@stable/v2.2.8',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[dban-2\.2\.8_i586\.iso\]$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[dban-2\.2\.8_i586\.iso\]$/,
     ),
   })
 

@@ -18,7 +18,7 @@ t.create('Arch Linux package (valid)')
         pkgname: 'pacman',
         pkgver: '5.1.3',
         pkgrel: '1',
-      })
+      }),
   )
   .expectBadge({ label: 'arch linux', message: 'v5.1.3' })
 

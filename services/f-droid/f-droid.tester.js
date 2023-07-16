@@ -55,14 +55,14 @@ t.create('Package is not found with no packages available (empty array)"')
   .intercept(nock =>
     nock(base)
       .get(path)
-      .reply(200, `{"packageName":"${testPkg}","packages":[]}`)
+      .reply(200, `{"packageName":"${testPkg}","packages":[]}`),
   )
   .expectBadge({ label: 'f-droid', message: 'no packages found' })
 
 t.create('Package is not found with no packages available (missing array)"')
   .get(`/v/${testPkg}.json`)
   .intercept(nock =>
-    nock(base).get(path).reply(200, `{"packageName":"${testPkg}"}`)
+    nock(base).get(path).reply(200, `{"packageName":"${testPkg}"}`),
   )
   .expectBadge({ label: 'f-droid', message: 'no packages found' })
 

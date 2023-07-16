@@ -31,9 +31,9 @@ export default class ArchLinux extends BaseJsonService {
     const data = await this._requestJson({
       schema,
       url: `https://www.archlinux.org/packages/${encodeURIComponent(
-        repository
+        repository,
       )}/${encodeURIComponent(architecture)}/${encodeURIComponent(
-        packageName
+        packageName,
       )}/json/`,
     })
     return renderVersionBadge({ version: data.pkgver })

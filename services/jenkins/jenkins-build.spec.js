@@ -43,16 +43,16 @@ describe('JenkinsBuild', function () {
       color: 'yellow',
     })
     given({ status: 'passing' }).expect(
-      renderBuildStatusBadge({ status: 'passing' })
+      renderBuildStatusBadge({ status: 'passing' }),
     )
     given({ status: 'failing' }).expect(
-      renderBuildStatusBadge({ status: 'failing' })
+      renderBuildStatusBadge({ status: 'failing' }),
     )
     given({ status: 'building' }).expect(
-      renderBuildStatusBadge({ status: 'building' })
+      renderBuildStatusBadge({ status: 'building' }),
     )
     given({ status: 'not built' }).expect(
-      renderBuildStatusBadge({ status: 'not built' })
+      renderBuildStatusBadge({ status: 'not built' }),
     )
   })
 
@@ -91,8 +91,8 @@ describe('JenkinsBuild', function () {
           {
             jobUrl:
               'https://jenkins.ubuntu.com/server/job/curtin-vmtest-daily-x',
-          }
-        )
+          },
+        ),
       ).to.deep.equal({
         label: undefined,
         message: 'passing',

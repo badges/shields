@@ -15,8 +15,8 @@ const packageDataSchema = Joi.object({
     Joi.string(),
     deprecatedLicenseObjectSchema,
     Joi.array().items(
-      Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema)
-    )
+      Joi.alternatives(Joi.string(), deprecatedLicenseObjectSchema),
+    ),
   ),
   maintainers: Joi.array()
     // We don't need the keys here, just the length.
@@ -60,7 +60,7 @@ export default class NpmBase extends BaseJsonService {
 
   static unpackParams(
     { scope, packageName, tag },
-    { registry_uri: registryUrl = 'https://registry.npmjs.org' }
+    { registry_uri: registryUrl = 'https://registry.npmjs.org' },
   ) {
     return {
       scope,
@@ -88,7 +88,7 @@ export default class NpmBase extends BaseJsonService {
             Accept: '*/*',
           },
         },
-      })
+      }),
     )
   }
 

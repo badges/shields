@@ -28,21 +28,21 @@ describe('BaseXmlService', function () {
         Promise.resolve({
           buffer: '<requiredString>some-string</requiredString>',
           res: { statusCode: 200 },
-        })
+        }),
       )
     })
 
     it('invokes _requestFetcher', async function () {
       await DummyXmlService.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.xml',
         {
           headers: { Accept: 'application/xml, text/xml' },
-        }
+        },
       )
     })
 
@@ -62,7 +62,7 @@ describe('BaseXmlService', function () {
 
       await WithCustomOptions.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -71,7 +71,7 @@ describe('BaseXmlService', function () {
           headers: { Accept: 'application/xml, text/xml' },
           method: 'POST',
           searchParams: { queryParam: 123 },
-        }
+        },
       )
     })
   })
@@ -85,8 +85,8 @@ describe('BaseXmlService', function () {
       expect(
         await DummyXmlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: 'some-string',
       })
@@ -112,8 +112,8 @@ describe('BaseXmlService', function () {
       expect(
         await DummyXmlServiceWithParserOption.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: 'some-string with trailing whitespace   ',
       })
@@ -127,8 +127,8 @@ describe('BaseXmlService', function () {
       expect(
         await DummyXmlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',
@@ -144,8 +144,8 @@ describe('BaseXmlService', function () {
       expect(
         await DummyXmlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',

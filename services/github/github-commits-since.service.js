@@ -141,7 +141,7 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
           user,
           repo,
         },
-        queryParams
+        queryParams,
       ))
     }
 

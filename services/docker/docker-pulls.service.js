@@ -26,6 +26,8 @@ export default class DockerPulls extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 14400
+
   static defaultBadgeData = { label: 'docker pulls' }
 
   static render({ count: downloads }) {
@@ -36,7 +38,7 @@ export default class DockerPulls extends BaseJsonService {
     return this._requestJson({
       schema: pullsSchema,
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
       httpErrors: { 404: 'repo not found' },
     })

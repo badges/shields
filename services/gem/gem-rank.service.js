@@ -9,7 +9,7 @@ const totalSchema = Joi.array()
   .items(
     Joi.object({
       total_ranking: Joi.number().integer().min(0).allow(null),
-    })
+    }),
   )
   .min(1)
   .required()
@@ -17,7 +17,7 @@ const dailySchema = Joi.array()
   .items(
     Joi.object({
       daily_ranking: Joi.number().integer().min(0).allow(null),
-    })
+    }),
   )
   .min(1)
   .required()

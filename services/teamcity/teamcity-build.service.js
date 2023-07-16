@@ -77,7 +77,7 @@ export default class TeamCityBuild extends TeamCityBase {
 
   async handle(
     { verbosity, buildId },
-    { server = 'https://teamcity.jetbrains.com' }
+    { server = 'https://teamcity.jetbrains.com' },
   ) {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-BuildStatusIcon
     const buildLocator = `buildType:(id:${buildId})`

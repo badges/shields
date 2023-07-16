@@ -26,6 +26,8 @@ export default class DockerStars extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 14400
+
   static defaultBadgeData = { label: 'docker stars' }
 
   static render({ stars }) {
@@ -39,7 +41,7 @@ export default class DockerStars extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}/`,
       httpErrors: { 404: 'repo not found' },
     })

@@ -104,7 +104,7 @@ class GithubApiProvider {
           this.getV4RateLimitFromBody(parsedBody))
       } catch (e) {
         console.error(
-          `Could not extract rate limit info from response body ${res.body}`
+          `Could not extract rate limit info from response body ${res.body}`,
         )
         log.error(e)
         return
@@ -123,8 +123,8 @@ class GithubApiProvider {
           `Invalid GitHub rate limit headers ${JSON.stringify(
             logHeaders,
             undefined,
-            2
-          )}`
+            2,
+          )}`,
         )
         log.error(e)
         return

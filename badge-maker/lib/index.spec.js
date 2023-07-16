@@ -10,12 +10,12 @@ describe('makeBadge function', function () {
       makeBadge({
         label: 'build',
         message: 'passed',
-      })
+      }),
     ).to.satisfy(isSvg)
     expect(
       makeBadge({
         message: 'passed',
-      })
+      }),
     ).to.satisfy(isSvg)
     expect(
       makeBadge({
@@ -23,7 +23,7 @@ describe('makeBadge function', function () {
         message: 'passed',
         color: 'green',
         style: 'flat',
-      })
+      }),
     ).to.satisfy(isSvg)
   })
 
@@ -32,44 +32,44 @@ describe('makeBadge function', function () {
       console.log(x)
       expect(() => makeBadge(x)).to.throw(
         ValidationError,
-        'makeBadge takes an argument of type object'
+        'makeBadge takes an argument of type object',
       )
     })
     expect(() => makeBadge({})).to.throw(
       ValidationError,
-      'Field `message` is required'
+      'Field `message` is required',
     )
     expect(() => makeBadge({ label: 'build' })).to.throw(
       ValidationError,
-      'Field `message` is required'
+      'Field `message` is required',
     )
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', labelColor: 7 })
+      makeBadge({ label: 'build', message: 'passed', labelColor: 7 }),
     ).to.throw(ValidationError, 'Field `labelColor` must be of type string')
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', format: 'png' })
+      makeBadge({ label: 'build', message: 'passed', format: 'png' }),
     ).to.throw(ValidationError, "Unexpected field 'format'")
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', template: 'flat' })
+      makeBadge({ label: 'build', message: 'passed', template: 'flat' }),
     ).to.throw(ValidationError, "Unexpected field 'template'")
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', foo: 'bar' })
+      makeBadge({ label: 'build', message: 'passed', foo: 'bar' }),
     ).to.throw(ValidationError, "Unexpected field 'foo'")
     expect(() =>
       makeBadge({
         label: 'build',
         message: 'passed',
         style: 'something else',
-      })
+      }),
     ).to.throw(
       ValidationError,
-      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)',
     )
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', style: 'popout' })
+      makeBadge({ label: 'build', message: 'passed', style: 'popout' }),
     ).to.throw(
       ValidationError,
-      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)'
+      'Field `style` must be one of (plastic,flat,flat-square,for-the-badge,social)',
     )
   })
 })

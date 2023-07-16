@@ -66,7 +66,7 @@ describe('GitlabMergeRequests', function () {
     it('sends the auth information as configured', async function () {
       const scope = nock('https://gitlab.com/')
         .get(
-          '/api/v4/projects/foo%2Fbar/merge_requests?state=opened&page=1&per_page=1'
+          '/api/v4/projects/foo%2Fbar/merge_requests?state=opened&page=1&per_page=1',
         )
         // This ensures that the expected credentials are actually being sent with the HTTP request.
         // Without this the request wouldn't match and the test would fail.
@@ -78,8 +78,8 @@ describe('GitlabMergeRequests', function () {
           defaultContext,
           config,
           { project: 'foo/bar', variant: 'open' },
-          {}
-        )
+          {},
+        ),
       ).to.deep.equal({
         label: 'merge requests',
         message: '100 open',

@@ -40,7 +40,7 @@ async function getCachedResource({
   }
 
   const { buffer } = await checkErrorResponse({})(
-    await requestFetcher(url, options)
+    await requestFetcher(url, options),
   )
 
   let reqData

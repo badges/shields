@@ -22,7 +22,7 @@ t.create('engines satisfies current node version')
     mockPackageData({
       packageName: 'passport',
       engines: '>=0.4.0',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: '>=0.4.0', color: 'brightgreen' })
@@ -33,7 +33,7 @@ t.create('engines does not satisfy current node version')
     mockPackageData({
       packageName: 'passport',
       engines: '12',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: '12', color: 'yellow' })
@@ -54,7 +54,7 @@ t.create('engines satisfies current node version - scoped')
       scope: '@stdlib',
       tag: '',
       registry: '',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: '>=0.4.0', color: 'brightgreen' })
@@ -68,7 +68,7 @@ t.create('engines does not satisfy current node version - scoped')
       scope: '@stdlib',
       tag: '',
       registry: '',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node', message: '12', color: 'yellow' })
@@ -87,7 +87,7 @@ t.create('engines satisfies current node version - tagged')
       packageName: 'ionic',
       engines: '>=0.4.0',
       tag: 'testing',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({
@@ -103,7 +103,7 @@ t.create('engines does not satisfy current node version - tagged')
       packageName: 'ionic',
       engines: '12',
       tag: 'testing',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node@testing', message: '12', color: 'yellow' })
@@ -123,7 +123,7 @@ t.create('engines satisfies current node version - scoped and tagged')
       engines: '>=0.4.0',
       scope: '@cycle',
       tag: 'canary',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({
@@ -140,7 +140,7 @@ t.create('engines does not satisfy current node version - scoped and tagged')
       engines: '12',
       scope: '@cycle',
       tag: 'canary',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({ label: 'node@canary', message: '12', color: 'yellow' })

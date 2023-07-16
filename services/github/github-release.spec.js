@@ -9,14 +9,14 @@ describe('GithubRelease', function () {
     })
     given(
       { name: null, tag_name: '0.1.3', prerelease: true },
-      'release'
+      'release',
     ).expect({
       version: '0.1.3',
       isPrerelease: true,
     })
     given(
       { name: 'fun name', tag_name: '1.0.0', prerelease: false },
-      'release'
+      'release',
     ).expect({
       version: 'fun name',
       isPrerelease: false,

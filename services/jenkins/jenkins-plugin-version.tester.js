@@ -12,7 +12,7 @@ t.create('latest version')
   .intercept(nock =>
     nock('https://updates.jenkins-ci.org')
       .get('/current/update-center.actual.json')
-      .reply(200, { plugins: { blueocean: { version: '1.1.6' } } })
+      .reply(200, { plugins: { blueocean: { version: '1.1.6' } } }),
   )
   .expectBadge({
     label: 'plugin',
@@ -24,7 +24,7 @@ t.create('version 0')
   .intercept(nock =>
     nock('https://updates.jenkins-ci.org')
       .get('/current/update-center.actual.json')
-      .reply(200, { plugins: { blueocean: { version: '0' } } })
+      .reply(200, { plugins: { blueocean: { version: '0' } } }),
   )
   .expectBadge({
     label: 'plugin',
@@ -36,6 +36,6 @@ t.create('inexistent artifact')
   .intercept(nock =>
     nock('https://updates.jenkins-ci.org')
       .get('/current/update-center.actual.json')
-      .reply(200, { plugins: { blueocean: { version: '1.1.6' } } })
+      .reply(200, { plugins: { blueocean: { version: '1.1.6' } } }),
   )
   .expectBadge({ label: 'plugin', message: 'plugin not found' })

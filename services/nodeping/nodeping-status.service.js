@@ -56,7 +56,7 @@ export default class NodePingStatus extends BaseJsonService {
       down_message: downMessage,
       up_color: upColor,
       down_color: downColor,
-    }
+    },
   ) {
     const { isUp } = await this.fetch({ checkUuid })
     return renderWebsiteStatus({

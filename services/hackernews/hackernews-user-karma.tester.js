@@ -13,7 +13,7 @@ t.create('valid repo -- negative karma')
   .intercept(nock =>
     nock('https://hacker-news.firebaseio.com/v0/user')
       .get('/negative.json')
-      .reply(200, { karma: -1234 })
+      .reply(200, { karma: -1234 }),
   )
   .expectBadge({
     label: 'U/negative karma',

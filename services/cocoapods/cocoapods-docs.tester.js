@@ -12,7 +12,7 @@ t.create('doc percent (null)')
   .intercept(nock =>
     nock('https://metrics.cocoapods.org')
       .get('/api/v1/pods/AFNetworking')
-      .reply(200, '{"cocoadocs": {"doc_percent": null}}')
+      .reply(200, '{"cocoadocs": {"doc_percent": null}}'),
   )
   .expectBadge({ label: 'docs', message: '0%' })
 

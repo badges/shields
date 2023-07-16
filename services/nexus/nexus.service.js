@@ -20,7 +20,7 @@ const nexus2SearchApiSchema = Joi.object({
         // the entire history of each published version for the artifact.
         // Example artifact that includes such a historical version: https://oss.sonatype.org/service/local/lucene/search?g=com.google.guava&a=guava
         version: Joi.string(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -31,7 +31,7 @@ const nexus3SearchApiSchema = Joi.object({
       Joi.object({
         // This schema is relaxed similarly to nexux2SearchApiSchema
         version: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -223,7 +223,7 @@ export default class Nexus extends BaseJsonService {
         httpErrors: {
           404: 'artifact not found',
         },
-      })
+      }),
     )
 
     return { actualNexusVersion: '2', json }
@@ -264,7 +264,7 @@ export default class Nexus extends BaseJsonService {
         httpErrors: {
           404: 'artifact not found',
         },
-      })
+      }),
     )
 
     return { actualNexusVersion: '3', json }
@@ -319,7 +319,7 @@ export default class Nexus extends BaseJsonService {
 
   async handle(
     { repo, groupId, artifactId },
-    { server, queryOpt, nexusVersion }
+    { server, queryOpt, nexusVersion },
   ) {
     const { actualNexusVersion, json } = await this.fetch({
       repo,

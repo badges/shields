@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { matcher } from 'matcher'
 import { nonNegativeInteger } from '../validators.js'
 import { latest } from '../version.js'
 import { NotFound } from '../index.js'
@@ -31,7 +32,7 @@ async function fetchLatestGitHubRelease(serviceInstance, { user, repo }) {
 
 const releaseInfoArraySchema = Joi.alternatives().try(
   Joi.array().items(releaseInfoSchema),
-  Joi.array().length(0)
+  Joi.array().length(0),
 )
 
 async function fetchReleases(serviceInstance, { user, repo }) {
@@ -50,7 +51,7 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
   if (sort === 'semver') {
     const latestTagName = latest(
       releases.map(release => release.tag_name),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
     return releases.find(({ tag_name: tagName }) => tagName === latestTagName)
   }
@@ -68,18 +69,51 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
   sort: Joi.string().valid('date', 'semver').default('date'),
+  filter: Joi.string(),
 }).required()
+
+const filterDocs = `<div>
+  <p>
+  The <code>filter</code> param can be used to apply a filter to the
+  project's tag or release names before selecting the latest from the list.
+  Two constructs are available: <code>*</code> is a wildcard matching zero
+  or more characters, and if the pattern starts with a <code>!</code>,
+  the whole pattern is negated.
+  </p>
+</div>`
+
+function applyFilter({ releases, filter, displayName }) {
+  if (!filter) {
+    return releases
+  }
+  if (displayName === 'tag') {
+    const filteredTagNames = matcher(
+      releases.map(release => release.tag_name),
+      filter,
+    )
+    return releases.filter(release =>
+      filteredTagNames.includes(release.tag_name),
+    )
+  }
+  const filteredReleaseNames = matcher(
+    releases.map(release => release.name),
+    filter,
+  )
+  return releases.filter(release => filteredReleaseNames.includes(release.name))
+}
 
 // Fetch the latest release as defined by query params
 async function fetchLatestRelease(
   serviceInstance,
   { user, repo },
-  queryParams
+  queryParams,
 ) {
   const sort = queryParams.sort
   const includePrereleases = queryParams.include_prereleases !== undefined
+  const filter = queryParams.filter
+  const displayName = queryParams.display_name
 
-  if (!includePrereleases && sort === 'date') {
+  if (!includePrereleases && sort === 'date' && !filter) {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -87,13 +121,23 @@ async function fetchLatestRelease(
     return releaseInfo
   }
 
-  const releases = await fetchReleases(serviceInstance, { user, repo })
+  const releases = applyFilter({
+    releases: await fetchReleases(serviceInstance, { user, repo }),
+    filter,
+    displayName,
+  })
   if (releases.length === 0) {
-    throw new NotFound({ prettyMessage: 'no releases' })
+    const prettyMessage = filter
+      ? 'no matching releases found'
+      : 'no releases found'
+    throw new NotFound({ prettyMessage })
   }
   const latestRelease = getLatestRelease({ releases, sort, includePrereleases })
   return latestRelease
 }
 
-export { fetchLatestRelease, queryParamSchema }
-export const _getLatestRelease = getLatestRelease // currently only used for tests
+export { fetchLatestRelease, filterDocs, queryParamSchema }
+
+// currently only used for tests
+export const _getLatestRelease = getLatestRelease
+export const _applyFilter = applyFilter

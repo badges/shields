@@ -7,7 +7,7 @@ const schema = Joi.object({
   repository: Joi.object()
     .pattern(
       Joi.string(),
-      Joi.object().pattern(Joi.string(), Joi.array().strip())
+      Joi.object().pattern(Joi.string(), Joi.array().strip()),
     )
     .required(),
 }).required()
@@ -57,7 +57,7 @@ export default class Luarocks extends BaseJsonService {
   async fetch({ user, moduleName }) {
     const { repository } = await this._requestJson({
       url: `https://luarocks.org/manifests/${encodeURIComponent(
-        user
+        user,
       )}/manifest.json`,
       schema,
       httpErrors: {

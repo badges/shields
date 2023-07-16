@@ -50,15 +50,15 @@ export default class TwitchBase extends BaseJsonService {
             401: 'invalid token',
             404: 'node not found',
           },
-        }
-      )
+        },
+      ),
     )
 
     // replace the token when we are 80% near the expire time
     // 2147483647 is the max 32-bit value that is accepted by setTimeout(), it's about 24.9 days
     const replaceTokenMs = Math.min(
       tokenRes.expires_in * 1000 * 0.8,
-      2147483647
+      2147483647,
     )
     const timeout = setTimeout(() => {
       TwitchBase.__twitchToken = this._getNewToken()

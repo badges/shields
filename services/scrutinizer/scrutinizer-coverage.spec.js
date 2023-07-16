@@ -62,7 +62,7 @@ describe('ScrutinizerCoverage', function () {
               },
             },
           },
-        })
+        }),
       )
         .to.throw(InvalidResponse)
         .with.property('prettyMessage', 'metrics missing for branch')

@@ -18,7 +18,7 @@ const stellarAddressSchema = Joi.object({
         }).required(),
       })
         .required()
-        .allow(null)
+        .allow(null),
     )
     .min(0)
     .max(1),

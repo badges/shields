@@ -25,7 +25,7 @@ export default class FlathubDownloads extends BaseJsonService {
     const data = await this._requestJson({
       schema,
       url: `https://flathub.org/api/v2/stats/${encodeURIComponent(
-        packageName
+        packageName,
       )}`,
     })
     return renderDownloadsBadge({ downloads: data.installs_total })

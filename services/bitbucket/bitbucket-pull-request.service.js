@@ -69,7 +69,7 @@ function pullRequestClassGenerator(raw) {
           passKey: 'bitbucket_password',
           authorizedOrigins: ['https://bitbucket.org'],
         },
-        config
+        config,
       )
       this.bitbucketServerAuthHelper = new AuthHelper(
         {
@@ -77,7 +77,7 @@ function pullRequestClassGenerator(raw) {
           passKey: 'bitbucket_server_password',
           serviceKey: 'bitbucketServer',
         },
-        config
+        config,
       )
     }
 
@@ -88,7 +88,7 @@ function pullRequestClassGenerator(raw) {
           schema,
           options: { searchParams: { state: 'OPEN', limit: 0 } },
           httpErrors,
-        })
+        }),
       )
     }
 
@@ -107,7 +107,7 @@ function pullRequestClassGenerator(raw) {
             },
           },
           httpErrors,
-        })
+        }),
       )
     }
 

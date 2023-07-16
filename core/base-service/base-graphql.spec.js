@@ -35,14 +35,14 @@ describe('BaseGraphqlService', function () {
         Promise.resolve({
           buffer: '{"some": "json"}',
           res: { statusCode: 200 },
-        })
+        }),
       )
     })
 
     it('invokes _requestFetcher', async function () {
       await DummyGraphqlService.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -51,7 +51,7 @@ describe('BaseGraphqlService', function () {
           body: '{"query":"{\\n  requiredString\\n}","variables":{}}',
           headers: { Accept: 'application/json' },
           method: 'POST',
-        }
+        },
       )
     })
 
@@ -74,7 +74,7 @@ describe('BaseGraphqlService', function () {
 
       await WithOptions.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -84,7 +84,7 @@ describe('BaseGraphqlService', function () {
           headers: { Accept: 'application/json' },
           method: 'POST',
           searchParams: { queryParam: 123 },
-        }
+        },
       )
     })
   })
@@ -98,8 +98,8 @@ describe('BaseGraphqlService', function () {
       expect(
         await DummyGraphqlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: 'some-string',
       })
@@ -113,8 +113,8 @@ describe('BaseGraphqlService', function () {
       expect(
         await DummyGraphqlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',
@@ -130,8 +130,8 @@ describe('BaseGraphqlService', function () {
       expect(
         await DummyGraphqlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',
@@ -149,8 +149,8 @@ describe('BaseGraphqlService', function () {
       expect(
         await DummyGraphqlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',
@@ -188,8 +188,8 @@ describe('BaseGraphqlService', function () {
       expect(
         await WithErrorHandler.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',

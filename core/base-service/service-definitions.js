@@ -18,7 +18,7 @@ const serviceDefinition = Joi.object({
     Joi.object({
       format: Joi.string().required(),
       queryParams: arrayOfStrings,
-    })
+    }),
   ),
   examples: Joi.array()
     .items(
@@ -40,7 +40,7 @@ const serviceDefinition = Joi.object({
         documentation: Joi.object({
           __html: Joi.string().required(), // Valid HTML.
         }),
-      })
+      }),
     )
     .default([]),
   openApi: Joi.object().pattern(
@@ -58,12 +58,12 @@ const serviceDefinition = Joi.object({
               required: Joi.boolean().required(),
               schema: Joi.object({ type: Joi.string().required() }).required(),
               example: Joi.string(),
-            })
+            }),
           )
           .min(1)
           .required(),
       }).required(),
-    }).required()
+    }).required(),
   ),
 }).required()
 
@@ -79,7 +79,7 @@ const serviceDefinitionExport = Joi.object({
         id: Joi.string().required(),
         name: Joi.string().required(),
         keywords: arrayOfStrings,
-      })
+      }),
     )
     .required(),
   services: Joi.array().items(serviceDefinition).required(),

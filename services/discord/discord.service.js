@@ -68,8 +68,8 @@ export default class Discord extends BaseJsonService {
             403: 'widget disabled',
           },
         },
-        'Bot'
-      )
+        'Bot',
+      ),
     )
   }
 

@@ -36,7 +36,7 @@ export default function coalesceBadge(
   serviceData,
   // These two parameters were kept separate to make tests clearer.
   defaultBadgeData,
-  { category, _cacheLength: defaultCacheSeconds } = {}
+  { category, _cacheLength: defaultCacheSeconds } = {},
 ) {
   // The "overrideX" naming is based on services that provide badge
   // parameters themselves, which can be overridden by a query string
@@ -141,7 +141,7 @@ export default function coalesceBadge(
     } else {
       namedLogo = coalesce(
         serviceNamedLogo,
-        style === 'social' ? defaultNamedLogo : undefined
+        style === 'social' ? defaultNamedLogo : undefined,
       )
       namedLogoColor = coalesce(overrideLogoColor, serviceLogoColor)
     }
@@ -166,13 +166,13 @@ export default function coalesceBadge(
       isError ? undefined : overrideColor,
       serviceColor,
       defaultColor,
-      'lightgrey'
+      'lightgrey',
     ),
     labelColor: coalesce(
       // In case of an error, disregard user's color override.
       isError ? undefined : overrideLabelColor,
       serviceLabelColor,
-      defaultLabelColor
+      defaultLabelColor,
     ),
     style,
     namedLogo,

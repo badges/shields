@@ -21,13 +21,13 @@ const isVPlusDottedVersionNClauses = withRegex(/^v\d+(\.\d+)*$/)
 // and an optional text suffix
 // e.g: -beta, -preview1, -release-candidate, +beta, ~pre9-12 etc
 const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
-  /^v\d+(\.\d+)*([-+~].*)?$/
+  /^v\d+(\.\d+)*([-+~].*)?$/,
 )
 
 // same as above, but also accepts an optional 'epoch' prefix that can be
 // found e.g. in distro package versions, like 4:6.3.0-4
 const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
-  /^v(\d+:)?\d+(\.\d+)*([-+~].*)?$/
+  /^v(\d+:)?\d+(\.\d+)*([-+~].*)?$/,
 )
 
 // Simple regex for test Composer versions rule
@@ -43,7 +43,7 @@ const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
 // https://getcomposer.org/doc/04-schema.md#package-links
 // https://getcomposer.org/doc/04-schema.md#minimum-stability
 const isComposerVersion = withRegex(
-  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/
+  /^\*|(\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|<|<=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/,
 )
 
 // Regex for validate php-version.versionReduction()
@@ -52,11 +52,11 @@ const isComposerVersion = withRegex(
 // 5.4, 5.6, 7.2
 // 5.4 - 7.1, HHVM
 const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/
+  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/,
 )
 
 const isStarRating = withRegex(
-  /^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/
+  /^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/,
 )
 
 // Required to be > 0, because accepting zero masks many problems.
@@ -64,7 +64,7 @@ const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
 
 // Same as isMetric, but tests for negative numbers also.
 const isMetricAllowNegative = withRegex(
-  /^(0|-?[1-9][0-9]*[kMGTPEZY]?|-?[0-9]\.[0-9][kMGTPEZY])$/
+  /^(0|-?[1-9][0-9]*[kMGTPEZY]?|-?[0-9]\.[0-9][kMGTPEZY])$/,
 )
 
 /**
@@ -82,15 +82,15 @@ const isMetricOpenIssues = isMetricWithPattern(/ open/)
 const isMetricClosedIssues = isMetricWithPattern(/ closed/)
 
 const isMetricOverMetric = isMetricWithPattern(
-  /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/
+  /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/,
 )
 
 const isMetricOverTimePeriod = isMetricWithPattern(
-  /\/(year|month|four weeks|quarter|week|day)/
+  /\/(year|month|four weeks|quarter|week|day)/,
 )
 
 const isZeroOverTimePeriod = withRegex(
-  /^0\/(year|month|four weeks|quarter|week|day)$/
+  /^0\/(year|month|four weeks|quarter|week|day)$/,
 )
 
 const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
@@ -101,41 +101,41 @@ const isPercentage = Joi.alternatives().try(
   isIntegerPercentage,
   isDecimalPercentage,
   isIntegerPercentageNegative,
-  isDecimalPercentageNegative
+  isDecimalPercentageNegative,
 )
 
 const isFileSize = withRegex(
-  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/
+  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/,
 )
 
 const isFormattedDate = Joi.alternatives().try(
   Joi.equal('today', 'yesterday'),
   Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
   Joi.string().regex(
-    /^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/
-  )
+    /^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/,
+  ),
 )
 
 const isRelativeFormattedDate = Joi.alternatives().try(
   Joi.string().regex(
-    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/
-  )
+    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/,
+  ),
 )
 
 const isDependencyState = withRegex(
-  /^(\d+ out of date|\d+ deprecated|up to date)$/
+  /^(\d+ out of date|\d+ deprecated|up to date)$/,
 )
 
 const makeTestTotalsValidator = ({ passed, failed, skipped }) =>
   withRegex(
-    new RegExp(`^[0-9]+ ${passed}(, [0-9]+ ${failed})?(, [0-9]+ ${skipped})?$`)
+    new RegExp(`^[0-9]+ ${passed}(, [0-9]+ ${failed})?(, [0-9]+ ${skipped})?$`),
   )
 
 const makeCompactTestTotalsValidator = ({ passed, failed, skipped }) =>
   withRegex(
     new RegExp(
-      `^${passed} [0-9]+( \\| ${failed} [0-9]+)?( \\| ${skipped} [0-9]+)?$`
-    )
+      `^${passed} [0-9]+( \\| ${failed} [0-9]+)?( \\| ${skipped} [0-9]+)?$`,
+    ),
   )
 
 const isDefaultTestTotals = makeTestTotalsValidator({
@@ -161,11 +161,11 @@ const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
 
 const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
 const isOrdinalNumberDaily = Joi.string().regex(
-  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/
+  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/,
 )
 
 const isHumanized = Joi.string().regex(
-  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/
+  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/,
 )
 
 // $1,530,602.24 // true
@@ -175,7 +175,7 @@ const isHumanized = Joi.string().regex(
 // 1.6.66,6 // false
 // .1555. // false
 const isCurrency = withRegex(
-  /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/
+  /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/,
 )
 
 export {

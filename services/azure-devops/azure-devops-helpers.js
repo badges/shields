@@ -10,7 +10,7 @@ const schema = Joi.object({
       Joi.equal('unknown'),
       Joi.equal('set up now'),
       Joi.equal('never built'),
-      Joi.equal('never deployed')
+      Joi.equal('never deployed'),
     )
     .required(),
 }).required()

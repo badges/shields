@@ -275,7 +275,7 @@ badge.loadFont('/path/to/Verdana.ttf', err => {
     { text: ['build', 'passed'], colorscheme: 'green', template: 'flat' },
     (svg, err) => {
       // svg is a string containing your badge
-    }
+    },
   )
 })
 ```

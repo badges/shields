@@ -102,7 +102,7 @@ class SonarTestsSummary extends SonarBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const json = await this.fetch({
       sonarVersion,

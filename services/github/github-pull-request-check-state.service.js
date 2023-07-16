@@ -10,7 +10,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         state: Joi.equal('error', 'failure', 'pending', 'success').required(),
-      })
+      }),
     )
     .default([]),
 }).required()

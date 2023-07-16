@@ -51,7 +51,7 @@ t.create('gets mock POEditor progress')
         id: '1234',
         api_token: 'abc123def456',
       })
-      .reply(200, apiResponse)
+      .reply(200, apiResponse),
   )
   .expectBadge({
     label: 'French',
@@ -66,7 +66,7 @@ t.create('handles requests for missing languages')
         id: '1234',
         api_token: 'abc123def456',
       })
-      .reply(200, apiResponse)
+      .reply(200, apiResponse),
   )
   .expectBadge({
     label: 'other',
@@ -87,7 +87,7 @@ t.create('handles requests for wrong keys')
           code: '403',
           message: "You don't have permission to access this resource",
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'other',

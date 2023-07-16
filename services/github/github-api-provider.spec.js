@@ -81,7 +81,7 @@ describe('Github API provider', function () {
         remaining - Math.ceil(reserveFraction * rateLimit)
       expect(mockStandardToken.update).to.have.been.calledWith(
         expectedUsesRemaining,
-        nextReset
+        nextReset,
       )
       expect(mockStandardToken.invalidate).not.to.have.been.called
     })
@@ -120,7 +120,7 @@ describe('Github API provider', function () {
         remaining - Math.ceil(reserveFraction * rateLimit)
       expect(mockGraphqlToken.update).to.have.been.calledWith(
         expectedUsesRemaining,
-        nextReset
+        nextReset,
       )
       expect(mockGraphqlToken.invalidate).not.to.have.been.called
     })
@@ -164,7 +164,7 @@ describe('Github API provider', function () {
       const mockRequest = sinon.stub().rejects(requestError)
       return expect(provider.fetch(mockRequest, '/foo', {})).to.be.rejectedWith(
         Error,
-        'connection timeout'
+        'connection timeout',
       )
     })
   })

@@ -49,7 +49,7 @@ export default class PypiFrameworkVersion extends PypiBase {
   static route = {
     base: 'pypi/frameworkversions',
     pattern: `:frameworkName(${Object.keys(frameworkNameMap).join(
-      '|'
+      '|',
     )})/:packageName+`,
   }
 

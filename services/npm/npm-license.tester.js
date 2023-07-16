@@ -26,7 +26,7 @@ t.create('permissive license for scoped package')
   .expectBadge({ label: 'license', message: 'MIT', color: 'green' })
 
 t.create(
-  'permissive and copyleft licenses (SPDX license expression syntax version 2.0)'
+  'permissive and copyleft licenses (SPDX license expression syntax version 2.0)',
 )
   .get('/rho-cc-promise.json')
   .expectBadge({
@@ -43,7 +43,7 @@ t.create('license for package without a license property')
       .reply(200, {
         label: 'package-without-license',
         maintainers: [],
-      })
+      }),
   )
   .expectBadge({ label: 'license', message: 'missing', color: 'red' })
 
@@ -59,7 +59,7 @@ t.create('license for package with a license object')
           url: 'https://www.opensource.org/licenses/mit-license.php',
         },
         maintainers: [],
-      })
+      }),
   )
   .expectBadge({ label: 'license', message: 'MIT', color: 'green' })
 
@@ -72,7 +72,7 @@ t.create('license for package with a license array')
         label: 'package-license-object',
         license: ['MPL-2.0', 'MIT'],
         maintainers: [],
-      })
+      }),
   )
   .expectBadge({
     label: 'license',
@@ -99,7 +99,7 @@ t.create('when json is malformed for scoped package')
           latest: '1.2.3',
         },
         versions: null,
-      })
+      }),
   )
   .expectBadge({
     label: 'license',

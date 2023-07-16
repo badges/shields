@@ -5,7 +5,7 @@ const schema = Joi.array()
   .items(
     Joi.object({
       build_status: Joi.boolean().required(),
-    })
+    }),
   )
   .min(1)
   .required()

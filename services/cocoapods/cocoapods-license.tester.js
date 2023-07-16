@@ -13,7 +13,7 @@ t.create('missing license')
       .reply(200, {
         version: '1.0.7',
         platforms: { ios: '8.0' },
-      })
+      }),
   )
   .expectBadge({ label: 'license', message: 'not specified' })
 
