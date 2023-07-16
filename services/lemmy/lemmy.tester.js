@@ -22,7 +22,7 @@ t.create('get community subscribers')
   )
   .expectBadge({
     label: 'subscribe to community@DUMMY.dumb',
-    message: '42 subscribers',
+    message: '42',
     color: 'brightgreen',
   })
 
@@ -64,6 +64,6 @@ t.create('test on real lemmy room for API compliance')
   .timeout(10000)
   .expectBadge({
     label: 'subscribe to asklemmy@lemmy.ml',
-    message: Joi.string().regex(/^[0-9]+k subscribers$/),
+    message: Joi.string().regex(/^[0-9]+k$/),
     color: 'brightgreen',
   })
