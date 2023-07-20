@@ -45,16 +45,6 @@ jobs:
         id: run_tests
         env:
           TEST_BADGE_LINK: '${{ needs.extract-bug-badge-url.outputs.link }}'
-          GH_TOKEN: '${{ secrets.GH_PAT }}'
-          LIBRARIESIO_TOKENS: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
-          OBS_USER: '${{ secrets.SERVICETESTS_OBS_USER }}'
-          OBS_PASS: '${{ secrets.SERVICETESTS_OBS_PASS }}'
-          SL_INSIGHT_USER_UUID: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
-          SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
-          TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
-          TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
-          WHEELMAP_TOKEN: '${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}'
-          YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
         run: npm run badge $TEST_BADGE_LINK
 
       - name: Add Comment to Issue
