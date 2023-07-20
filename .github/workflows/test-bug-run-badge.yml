@@ -41,7 +41,7 @@ jobs:
           node-version: 16
           cypress: false
 
-      - name: Run tests
+      - name: Output debug info
         id: run_tests
         env:
           TEST_BADGE_LINK: '${{ needs.extract-bug-badge-url.outputs.link }}'
