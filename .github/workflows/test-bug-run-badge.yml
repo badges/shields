@@ -42,7 +42,6 @@ jobs:
           cypress: false
 
       - name: Output debug info
-        id: run_tests
         env:
           TEST_BADGE_LINK: '${{ needs.extract-bug-badge-url.outputs.link }}'
         run: npm run badge $TEST_BADGE_LINK
