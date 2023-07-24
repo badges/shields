@@ -31,11 +31,11 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.cjs'),
-          editUrl: 'https://github.com/badges/shields/',
+          editUrl: 'https://github.com/badges/shields/tree/master/frontend',
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/badges/shields/',
+          editUrl: 'https://github.com/badges/shields/tree/master/frontend',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -60,7 +60,13 @@ const config = {
         },
         items: [
           { to: '/badges', label: 'Badges', position: 'left' },
+          {
+            to: '/docs',
+            label: 'Documentation',
+            position: 'left',
+          },
           { to: '/community', label: 'Community', position: 'left' },
+          { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://github.com/badges/shields',
             label: 'GitHub',
