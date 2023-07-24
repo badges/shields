@@ -1,5 +1,7 @@
 # Logos
 
+For documentation on using logos, see https://shields.io/docs/logos
+
 ## Contributing Logos
 
 Our preferred way to consume icons is via the SimpleIcons logo. As a first port of call, we encourage you to contribute logos to [the SimpleIcons project][simple-icons github]. Please review their [guidance](https://github.com/simple-icons/simple-icons/blob/develop/CONTRIBUTING.md) before contributing.
