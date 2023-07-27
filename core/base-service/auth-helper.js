@@ -177,7 +177,7 @@ class AuthHelper {
 
   withApiKeyHeader(requestParams, header = 'x-api-key') {
     return this._withAnyAuth(requestParams, requestParams =>
-      this.constructor._mergeHeaders(requestParams, this._apiKeyHeader(header))
+      this.constructor._mergeHeaders(requestParams, this._apiKeyHeader(header)),
     )
   }
 

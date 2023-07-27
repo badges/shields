@@ -43,7 +43,7 @@ export default class BaseCurseForgeService extends BaseJsonService {
         errorMessages: {
           403: 'invalid API key',
         },
-      })
+      }),
     )
 
     const latestFiles = response.data.latestFiles
