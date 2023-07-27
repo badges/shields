@@ -5,7 +5,7 @@ export const t = await createServiceTester()
 const isMessage = Joi.alternatives()
   .try(
     Joi.string().regex(/^[ABCDEF][+-]? \([0-9]{1,3}\/100\)$/),
-    Joi.string().allow('pending')
+    Joi.string().allow('pending'),
   )
   .required()
 
@@ -30,7 +30,7 @@ t.create('grade without score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'A', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -43,7 +43,7 @@ t.create('grade A with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'A', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -56,7 +56,7 @@ t.create('grade A+ with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'A+', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A+', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -69,7 +69,7 @@ t.create('grade A- with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'A-', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'A-', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -82,7 +82,7 @@ t.create('grade B with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'B', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -95,7 +95,7 @@ t.create('grade B+ with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'B+', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B+', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -108,7 +108,7 @@ t.create('grade B- with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'B-', score: 115 })
+      .reply(200, { state: 'FINISHED', grade: 'B-', score: 115 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -121,7 +121,7 @@ t.create('grade C with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'C', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C', score: 80 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -134,7 +134,7 @@ t.create('grade C+ with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'C+', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C+', score: 80 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -147,7 +147,7 @@ t.create('grade C- with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'C-', score: 80 })
+      .reply(200, { state: 'FINISHED', grade: 'C-', score: 80 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -160,7 +160,7 @@ t.create('grade D with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'D', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -173,7 +173,7 @@ t.create('grade D+ with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'D+', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D+', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -186,7 +186,7 @@ t.create('grade D- with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'D-', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'D-', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -199,7 +199,7 @@ t.create('grade E with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'E', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -212,7 +212,7 @@ t.create('grade E+ with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'E+', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E+', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -225,7 +225,7 @@ t.create('grade E- with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'E-', score: 15 })
+      .reply(200, { state: 'FINISHED', grade: 'E-', score: 15 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -238,7 +238,7 @@ t.create('grade F with score (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FINISHED', grade: 'F', score: 0 })
+      .reply(200, { state: 'FINISHED', grade: 'F', score: 0 }),
   )
   .expectBadge({
     label: 'observatory',
@@ -251,7 +251,7 @@ t.create('aborted (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'ABORTED', grade: null, score: null })
+      .reply(200, { state: 'ABORTED', grade: null, score: null }),
   )
   .expectBadge({
     label: 'observatory',
@@ -264,7 +264,7 @@ t.create('failed (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'FAILED', grade: null, score: null })
+      .reply(200, { state: 'FAILED', grade: null, score: null }),
   )
   .expectBadge({
     label: 'observatory',
@@ -277,7 +277,7 @@ t.create('pending (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'PENDING', grade: null, score: null })
+      .reply(200, { state: 'PENDING', grade: null, score: null }),
   )
   .expectBadge({
     label: 'observatory',
@@ -290,7 +290,7 @@ t.create('starting (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'STARTING', grade: null, score: null })
+      .reply(200, { state: 'STARTING', grade: null, score: null }),
   )
   .expectBadge({
     label: 'observatory',
@@ -303,7 +303,7 @@ t.create('running (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'RUNNING', grade: null, score: null })
+      .reply(200, { state: 'RUNNING', grade: null, score: null }),
   )
   .expectBadge({
     label: 'observatory',
@@ -316,7 +316,7 @@ t.create('invalid response with grade and score but not finished (mock)')
   .intercept(nock =>
     nock('https://http-observatory.security.mozilla.org')
       .post('/api/v1/analyze?host=foo.bar')
-      .reply(200, { state: 'RUNNING', grade: 'A+', score: 135 })
+      .reply(200, { state: 'RUNNING', grade: 'A+', score: 135 }),
   )
   .expectBadge({
     label: 'observatory',

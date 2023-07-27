@@ -111,7 +111,7 @@ export default class AppVeyorTests extends AppVeyorBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const isCompact = compactMessage !== undefined
     const data = await this.fetch({ user, repo, branch })

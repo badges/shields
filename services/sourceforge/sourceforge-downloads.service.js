@@ -91,7 +91,7 @@ export default class SourceforgeDownloads extends BaseJsonService {
       schema,
       url,
       options,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

@@ -27,7 +27,7 @@ export default class ElmPackage extends BaseJsonService {
     const { version } = await this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         404: 'package not found',
       },
     })

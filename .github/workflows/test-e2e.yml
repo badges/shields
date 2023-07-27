@@ -29,13 +29,10 @@ jobs:
           node-version: 16
           cypress: true
 
-      - name: Frontend build
-        run: GATSBY_BASE_URL=http://localhost:8080 npm run build
-
       - name: Run tests
         env:
           GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        run: npm run e2e-on-build
+        run: npm run e2e
 
       - name: Archive videos
         if: always()

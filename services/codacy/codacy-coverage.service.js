@@ -49,11 +49,11 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
     const { message: coverageString } = await this._requestSvg({
       schema,
       url: `https://api.codacy.com/project/badge/coverage/${encodeURIComponent(
-        projectId
+        projectId,
       )}`,
       options: { searchParams: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

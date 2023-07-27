@@ -39,7 +39,7 @@ export default class SourceforgeCommitCount extends BaseJsonService {
     return this._requestJson({
       url: `https://sourceforge.net/rest/p/${project}/git`,
       schema,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

@@ -28,7 +28,7 @@ const notFoundResourceSchema = Joi.object({
 
 const resourceFoundOrNotSchema = Joi.alternatives(
   resourceSchema,
-  notFoundResourceSchema
+  notFoundResourceSchema,
 )
 
 const documentation = `

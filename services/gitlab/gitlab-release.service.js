@@ -2,14 +2,14 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound } from '../index.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
     tag_name: Joi.string().required(),
-  })
+  }),
 )
 
 const queryParamSchema = Joi.object({
@@ -98,7 +98,7 @@ export default class GitLabRelease extends GitLabBase {
     return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
-      errorMessages: errorMessagesFor('project not found'),
+      httpErrors: httpErrorsFor('project not found'),
       options: {
         searchParams: { order_by: orderBy },
       },
@@ -119,7 +119,7 @@ export default class GitLabRelease extends GitLabBase {
 
     return latest(
       releases.map(t => t[displayKey]),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
   }
 
@@ -131,7 +131,7 @@ export default class GitLabRelease extends GitLabBase {
       sort,
       display_name: displayName,
       date_order_by: orderBy,
-    }
+    },
   ) {
     const isSemver = sort === 'semver'
     const releases = await this.fetch({ project, baseUrl, isSemver, orderBy })

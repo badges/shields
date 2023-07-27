@@ -21,7 +21,7 @@ const vcpkgManifestSchema = Joi.alternatives()
     }).required(),
     Joi.object({
       'version-string': Joi.string().required(),
-    }).required()
+    }).required(),
   )
 
 export default class VcpkgVersion extends ConditionalGithubAuthV3Service {

@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
 import { BaseSvgScrapingService, NotFound } from '../index.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
   message: Joi.string()
@@ -96,13 +96,13 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
     const url = `${baseUrl}/${decodeURIComponent(
-      project
+      project,
     )}/badges/${branch}/coverage.svg${jobName}`
-    const errorMessages = errorMessagesFor('project not found')
+    const httpErrors = httpErrorsFor('project not found')
     return this._requestSvg({
       schema,
       url,
-      errorMessages,
+      httpErrors,
     })
   }
 
@@ -115,7 +115,7 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl, job_name: jobName, branch }
+    { gitlab_url: baseUrl, job_name: jobName, branch },
   ) {
     const { message: coverage } = await this.fetch({
       project,

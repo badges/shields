@@ -84,7 +84,7 @@ export default class Bundlephobia extends BaseJsonService {
       schema,
       url: 'https://bundlephobia.com/api/size',
       options,
-      errorMessages: {
+      httpErrors: {
         404: 'package or version not found',
       },
     })

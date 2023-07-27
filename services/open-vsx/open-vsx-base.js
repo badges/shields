@@ -31,10 +31,10 @@ export default class OpenVSXBase extends BaseJsonService {
   async fetch({ namespace, extension, version }) {
     return this._requestJson({
       schema: extensionQuerySchema,
-      url: `https://open-vsx.org/api/${namespace}/${extension}/${
-        version || ''
+      url: `https://open-vsx.org/api/${namespace}/${extension}${
+        version ? `/${version}` : ''
       }`,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid extension id',
         404: 'extension not found',
       },

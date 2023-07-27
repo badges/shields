@@ -42,7 +42,7 @@ t.create('recent downloads (null)')
           max_version: '0.2.71',
         },
         versions: [{ downloads: 42, license: 'MIT OR Apache-2.0' }],
-      })
+      }),
   )
   .expectBadge({ label: 'recent downloads', message: '0' })
 

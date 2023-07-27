@@ -13,20 +13,20 @@ describe('BowerVersion', function () {
         latest_release_number: '2.0.0-beta',
         latest_stable_release_number: '1.8.3',
       },
-      false
+      false,
     ).expect('1.8.3')
     given(
       {
         latest_release_number: '2.0.0-beta',
         latest_stable_release_number: '1.8.3',
       },
-      true
+      true,
     ).expect('2.0.0-beta')
   })
 
   it('throws `no releases` InvalidResponse if no stable version', function () {
     expect(() =>
-      BowerVersion.transform({ latest_release_number: 'panda' }, false)
+      BowerVersion.transform({ latest_release_number: 'panda' }, false),
     )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'no releases')
@@ -34,7 +34,7 @@ describe('BowerVersion', function () {
 
   it('throws `no releases` InvalidResponse if no prereleases', function () {
     expect(() =>
-      BowerVersion.transform({ latest_stable_release_number: 'penguin' }, true)
+      BowerVersion.transform({ latest_stable_release_number: 'penguin' }, true),
     )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'no releases')
@@ -78,8 +78,8 @@ describe('BowerVersion', function () {
           },
           {
             include_prereleases: '',
-          }
-        )
+          },
+        ),
       ).to.deep.equal({
         message: 'v2.0.0-beta',
         color: 'orange',

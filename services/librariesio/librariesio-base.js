@@ -16,7 +16,7 @@ export default class LibrariesIoBase extends BaseJsonService {
     const { requestFetcher, librariesIoApiProvider } = context
     this._requestFetcher = librariesIoApiProvider.fetch.bind(
       librariesIoApiProvider,
-      requestFetcher
+      requestFetcher,
     )
   }
 
@@ -26,7 +26,7 @@ export default class LibrariesIoBase extends BaseJsonService {
       url: `/${encodeURIComponent(platform)}/${
         scope ? encodeURIComponent(`${scope}/`) : ''
       }${encodeURIComponent(packageName)}`,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 }

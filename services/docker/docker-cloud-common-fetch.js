@@ -6,7 +6,7 @@ const cloudBuildSchema = Joi.object({
       Joi.object({
         state: Joi.string(),
         build_settings: Joi.array(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -16,7 +16,7 @@ async function fetchBuild(serviceInstance, { user, repo }) {
     schema: cloudBuildSchema,
     url: 'https://cloud.docker.com/api/build/v1/source',
     options: { searchParams: { image: `${user}/${repo}` } },
-    errorMessages: { 404: 'repo not found' },
+    httpErrors: { 404: 'repo not found' },
   })
 }
 

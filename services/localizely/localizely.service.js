@@ -39,7 +39,7 @@ const schema = Joi.object({
         strings: Joi.number().required(),
         reviewed: Joi.number().required(),
         reviewedProgress: Joi.number().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -111,7 +111,7 @@ export default class Localizely extends BaseJsonService {
         searchParams: { branch },
         headers: { 'X-Api-Token': apiToken },
       },
-      errorMessages: {
+      httpErrors: {
         403: 'not authorized for project',
       },
     })
@@ -136,7 +136,7 @@ export default class Localizely extends BaseJsonService {
     const json = await this.fetch({ projectId, branch, apiToken })
     const { langName, reviewedProgress } = this.constructor.transform(
       json,
-      languageCode
+      languageCode,
     )
 
     return this.constructor.render({ langName, reviewedProgress })

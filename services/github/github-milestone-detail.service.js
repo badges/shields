@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   open_issues: nonNegativeInteger,
@@ -69,7 +69,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
         milestoneMetric = `${Math.floor(
           (milestone.closed_issues /
             (milestone.open_issues + milestone.closed_issues)) *
-            100
+            100,
         )}%`
         color = 'blue'
     }
@@ -85,7 +85,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/milestones/${number}`,
       schema,
-      errorMessages: errorMessagesFor('repo or milestone not found'),
+      httpErrors: httpErrorsFor('repo or milestone not found'),
     })
   }
 

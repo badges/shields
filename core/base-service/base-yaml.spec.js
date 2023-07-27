@@ -44,14 +44,14 @@ describe('BaseYamlService', function () {
         Promise.resolve({
           buffer: expectedYaml,
           res: { statusCode: 200 },
-        })
+        }),
       )
     })
 
     it('invokes _requestFetcher', async function () {
       await DummyYamlService.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -61,7 +61,7 @@ describe('BaseYamlService', function () {
             Accept:
               'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
           },
-        }
+        },
       )
     })
 
@@ -79,7 +79,7 @@ describe('BaseYamlService', function () {
 
       await WithOptions.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -91,7 +91,7 @@ describe('BaseYamlService', function () {
           },
           method: 'POST',
           searchParams: { queryParam: 123 },
-        }
+        },
       )
     })
   })
@@ -105,8 +105,8 @@ describe('BaseYamlService', function () {
       expect(
         await DummyYamlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: 'some-string',
       })
@@ -120,8 +120,8 @@ describe('BaseYamlService', function () {
       expect(
         await DummyYamlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',
@@ -137,8 +137,8 @@ describe('BaseYamlService', function () {
       expect(
         await DummyYamlService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',

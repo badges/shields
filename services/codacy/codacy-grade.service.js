@@ -48,10 +48,10 @@ export default class CodacyGrade extends BaseSvgScrapingService {
     const { message: grade } = await this._requestSvg({
       schema,
       url: `https://api.codacy.com/project/badge/grade/${encodeURIComponent(
-        projectId
+        projectId,
       )}`,
       options: { searchParams: { branch } },
-      errorMessages: { 404: 'project or branch not found' },
+      httpErrors: { 404: 'project or branch not found' },
       valueMatcher: /visibility="hidden">([^<>]+)<\/text>/,
     })
     return this.constructor.render({ grade })

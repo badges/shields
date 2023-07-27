@@ -14,7 +14,7 @@ t.create('Commits since')
 
 t.create('Commits since (branch)')
   .get(
-    '/badges/shields/8b87fac3a1538ec20ff20983faf4b6f7e722ef87/historical.json'
+    '/badges/shields/8b87fac3a1538ec20ff20983faf4b6f7e722ef87/historical.json',
   )
   .expectBadge({
     label: isCommitsSince,
@@ -58,7 +58,7 @@ t.create('Commits since (version not found)')
 
 t.create('Commits since (branch not found)')
   .get(
-    '/badges/shields/a0663d8da53fb712472c02665e6ff7547ba945b7/not-a-branch.json'
+    '/badges/shields/a0663d8da53fb712472c02665e6ff7547ba945b7/not-a-branch.json',
   )
   .expectBadge({
     label: 'github',

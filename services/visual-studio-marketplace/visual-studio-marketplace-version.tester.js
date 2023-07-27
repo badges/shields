@@ -52,7 +52,7 @@ t.create('version')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'version',
@@ -61,7 +61,7 @@ t.create('version')
   })
 
 t.create(
-  'version - includePrereleases flag is false and response has pre-release only'
+  'version - includePrereleases flag is false and response has pre-release only',
 )
   .get('/visual-studio-marketplace/v/lextudio.restructuredtext.json')
   .intercept(nock =>
@@ -120,7 +120,7 @@ t.create(
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'version',
@@ -186,7 +186,7 @@ t.create('version - prerelease key has false value')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'version',
@@ -196,7 +196,7 @@ t.create('version - prerelease key has false value')
 
 t.create('pre-release version')
   .get(
-    '/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json?include_prereleases'
+    '/visual-studio-marketplace/v/swellaby.vscode-rust-test-adapter.json?include_prereleases',
   )
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
@@ -237,7 +237,7 @@ t.create('pre-release version')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'version',

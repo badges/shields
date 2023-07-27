@@ -7,7 +7,7 @@ const schema = Joi.alternatives()
     Joi.object({
       currentReleaseVersion: Joi.string().required(),
     }).required(),
-    Joi.valid(null).required()
+    Joi.valid(null).required(),
   )
   .required()
 

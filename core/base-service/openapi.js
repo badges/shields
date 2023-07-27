@@ -1,4 +1,4 @@
-const baseUrl = process.env.BASE_URL || 'https://img.shields.io'
+const baseUrl = process.env.BASE_URL
 const globalParamRefs = [
   { $ref: '#/components/parameters/style' },
   { $ref: '#/components/parameters/logo' },
@@ -158,7 +158,7 @@ function examples2openapi(examples) {
       const parameters = [
         ...pathParams,
         ...Object.entries(queryParams).map(([paramName, exampleValue]) =>
-          param2openapi(pattern, paramName, exampleValue, 'query')
+          param2openapi(pattern, paramName, exampleValue, 'query'),
         ),
         ...globalParamRefs,
       ]
@@ -198,7 +198,7 @@ function services2openapi(services) {
     if (service.openApi) {
       // if the service declares its own OpenAPI definition, use that...
       for (const [key, value] of Object.entries(
-        addGlobalProperties(service.openApi)
+        addGlobalProperties(service.openApi),
       )) {
         if (key in paths) {
           throw new Error(`Conflicting route: ${key}`)
@@ -208,7 +208,7 @@ function services2openapi(services) {
     } else {
       // ...otherwise do our best to build one from examples[]
       for (const [key, value] of Object.entries(
-        examples2openapi(service.examples)
+        examples2openapi(service.examples),
       )) {
         // allow conflicting routes for legacy examples
         paths[key] = value
@@ -228,7 +228,7 @@ function category2openapi(category, services) {
         name: 'CC0',
       },
     },
-    servers: [{ url: baseUrl }],
+    servers: baseUrl ? [{ url: baseUrl }] : undefined,
     components: {
       parameters: {
         style: {
@@ -247,7 +247,7 @@ function category2openapi(category, services) {
           in: 'query',
           required: false,
           description:
-            'One of the named logos (bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository.',
+            'One of the named logos (bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository. <a href="/docs/logos">Further info</a>.',
           schema: {
             type: 'string',
           },

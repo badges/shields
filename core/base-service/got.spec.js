@@ -21,7 +21,7 @@ describe('got wrapper', function () {
       .reply(200, 'x'.repeat(101))
     const sendRequest = _fetchFactory(100)
     return expect(
-      sendRequest('https://www.google.com/foo/bar')
+      sendRequest('https://www.google.com/foo/bar'),
     ).to.be.rejectedWith(InvalidResponse, 'Maximum response size exceeded')
   })
 
@@ -29,7 +29,7 @@ describe('got wrapper', function () {
     nock('https://www.google.com').get('/foo/bar').replyWithError('oh no')
     const sendRequest = _fetchFactory(1024)
     return expect(
-      sendRequest('https://www.google.com/foo/bar')
+      sendRequest('https://www.google.com/foo/bar'),
     ).to.be.rejectedWith(Inaccessible, 'oh no')
   })
 
@@ -38,10 +38,40 @@ describe('got wrapper', function () {
     nock.disableNetConnect()
     const sendRequest = _fetchFactory(1024)
     return expect(
-      sendRequest('https://www.google.com/foo/bar')
+      sendRequest('https://www.google.com/foo/bar'),
     ).to.be.rejectedWith(
       Inaccessible,
-      'Nock: Disallowed net connect for "www.google.com:443/foo/bar"'
+      'Nock: Disallowed net connect for "www.google.com:443/foo/bar"',
+    )
+  })
+
+  it('should throw a custom error if provided', async function () {
+    const sendRequest = _fetchFactory(1024)
+    return (
+      expect(
+        sendRequest(
+          'https://www.google.com/foo/bar',
+          { timeout: { request: 1 } },
+          {
+            ETIMEDOUT: {
+              prettyMessage: 'Oh no! A terrible thing has happened',
+              cacheSeconds: 10,
+            },
+          },
+        ),
+      )
+        .to.be.rejectedWith(
+          Inaccessible,
+          "Inaccessible: Timeout awaiting 'request' for 1ms",
+        )
+        // eslint-disable-next-line promise/prefer-await-to-then
+        .then(error => {
+          expect(error).to.have.property(
+            'prettyMessage',
+            'Oh no! A terrible thing has happened',
+          )
+          expect(error).to.have.property('cacheSeconds', 10)
+        })
     )
   })
 

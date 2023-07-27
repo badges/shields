@@ -34,7 +34,7 @@ t.create('github issue label')
     label: 'label',
     message: Joi.equal(
       'bug | developer-experience',
-      'developer-experience | bug'
+      'developer-experience | bug',
     ),
   })
 

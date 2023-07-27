@@ -50,8 +50,8 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
       version = extension.versions.find(
         obj =>
           !obj.properties.find(
-            ({ key, value }) => key === preReleaseKey && value === 'true'
-          )
+            ({ key, value }) => key === preReleaseKey && value === 'true',
+          ),
       )?.version
     }
 

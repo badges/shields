@@ -28,7 +28,7 @@ t.create('docker automated build - automated')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu')
-      .reply(200, { is_automated: true })
+      .reply(200, { is_automated: true }),
   )
   .expectBadge({
     label: 'docker build',
@@ -41,6 +41,6 @@ t.create('docker automated build - manual')
   .intercept(nock =>
     nock('https://registry.hub.docker.com/')
       .get('/v2/repositories/library/ubuntu')
-      .reply(200, { is_automated: false })
+      .reply(200, { is_automated: false }),
   )
   .expectBadge({ label: 'docker build', message: 'manual', color: 'yellow' })

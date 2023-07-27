@@ -24,7 +24,7 @@ describe('PackagistLicense', function () {
         json,
         user: 'frodo',
         repo: 'the-one-package',
-      })
+      }),
     )
       .to.have.property('license')
       .that.equals('MIT-latest')
@@ -51,7 +51,7 @@ describe('PackagistLicense', function () {
         json,
         user: 'frodo',
         repo: 'the-one-package',
-      })
+      }),
     )
       .to.have.property('license')
       .that.equals('MIT')
@@ -78,7 +78,7 @@ describe('PackagistLicense', function () {
         json,
         user: 'frodo',
         repo: 'the-one-package',
-      })
+      }),
     )
       .to.have.property('license')
       .that.equals('MIT-latest')
@@ -103,7 +103,7 @@ describe('PackagistLicense', function () {
         json,
         user: 'frodo',
         repo: 'the-one-package',
-      })
+      }),
     )
       .to.throw(NotFound)
       .with.property('prettyMessage', 'license not found')

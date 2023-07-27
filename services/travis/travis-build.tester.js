@@ -42,6 +42,6 @@ t.create('unknown repo')
 t.create('invalid svg response')
   .get('/com/foo/bar.json')
   .intercept(nock =>
-    nock('https://api.travis-ci.com').get('/foo/bar.svg').reply(200)
+    nock('https://api.travis-ci.com').get('/foo/bar.svg').reply(200),
   )
   .expectBadge({ label: 'build', message: 'unparseable svg response' })

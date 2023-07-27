@@ -44,7 +44,7 @@ export default class HackerNewsUserKarma extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://hacker-news.firebaseio.com/v0/user/${id}.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'user not found',
       },
     })

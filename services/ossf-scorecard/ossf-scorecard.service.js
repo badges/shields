@@ -8,7 +8,7 @@ const schema = Joi.object({
 
 const ossfScorecardColorScale = colorScale(
   [2, 5, 8, 10],
-  ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen']
+  ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'],
 )
 
 export default class OSSFScorecard extends BaseJsonService {
@@ -41,7 +41,7 @@ export default class OSSFScorecard extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.securityscorecards.dev/projects/${host}/${orgName}/${repoName}`,
-      errorMessages: {
+      httpErrors: {
         404: 'invalid repo path',
       },
     })

@@ -51,11 +51,11 @@ export default class Bitrise extends BaseJsonService {
   async fetch({ appId, branch, token }) {
     return this._requestJson({
       url: `https://app.bitrise.io/app/${encodeURIComponent(
-        appId
+        appId,
       )}/status.json`,
       options: { searchParams: { token, branch } },
       schema,
-      errorMessages: {
+      httpErrors: {
         403: 'app not found or invalid token',
       },
     })

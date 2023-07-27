@@ -11,7 +11,7 @@ const schema = Joi.object({
         build_status: Joi.object({
           status: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()

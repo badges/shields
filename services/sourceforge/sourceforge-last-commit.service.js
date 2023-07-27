@@ -8,7 +8,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         committed_date: Joi.string().required(),
-      }).required()
+      }).required(),
     )
     .required(),
 }).required()
@@ -46,7 +46,7 @@ export default class SourceforgeLastCommit extends BaseJsonService {
     return this._requestJson({
       url: `https://sourceforge.net/rest/p/${project}/git/commits`,
       schema,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

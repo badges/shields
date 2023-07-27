@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { optionalUrl } from '../validators.js'
 import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -71,9 +71,9 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
     return this._requestSvg({
       schema: badgeSchema,
       url: `${baseUrl}/${decodeURIComponent(
-        project
+        project,
       )}/badges/${branch}/pipeline.svg`,
-      errorMessages: errorMessagesFor('project not found'),
+      httpErrors: httpErrorsFor('project not found'),
     })
   }
 
@@ -87,7 +87,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' }
+    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' },
   ) {
     const data = await this.fetch({
       project,

@@ -155,7 +155,7 @@ function colorScale(steps, colors, reversed) {
 
   if (steps.length !== colors.length - 1) {
     throw Error(
-      'When colors are provided, there should be n + 1 colors for n steps.'
+      'When colors are provided, there should be n + 1 colors for n steps.',
     )
   }
 

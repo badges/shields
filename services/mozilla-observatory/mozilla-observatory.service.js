@@ -26,21 +26,17 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const documentation = `
-<p>
-  The <a href="https://observatory.mozilla.org">Mozilla HTTP Observatory</a>
-  is a set of tools to analyze your website
-  and inform you if you are utilizing the many available methods to secure it.
-</p>
-<p>
-  By default the scan result is hidden from the public result list.
-  You can activate the publication of the scan result
-  by setting the <code>publish</code> parameter.
-</p>
-<p>
-  The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
-  If you need to force invalidating the cache,
-  you can to do it manually through the <a href="https://observatory.mozilla.org">Mozilla Observatory Website</a>
-</p>
+The [Mozilla HTTP Observatory](https://observatory.mozilla.org)
+is a set of tools to analyze your website
+and inform you if you are utilizing the many available methods to secure it.
+
+By default the scan result is hidden from the public result list.
+You can activate the publication of the scan result
+by setting the \`publish\` parameter.
+
+The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
+If you need to force invalidating the cache,
+you can to do it manually through the [Mozilla Observatory Website](https://observatory.mozilla.org)
 `
 
 export default class MozillaObservatory extends BaseJsonService {

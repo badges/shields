@@ -54,11 +54,11 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
     },
   }
 
-  async fetch({ schema, url, errorMessages }) {
+  async fetch({ schema, url, httpErrors }) {
     return this._requestJson({
       schema,
       url,
-      errorMessages,
+      httpErrors,
     })
   }
 }

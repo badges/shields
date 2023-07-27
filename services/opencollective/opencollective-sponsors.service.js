@@ -19,7 +19,7 @@ export default class OpencollectiveSponsors extends OpencollectiveBase {
   async handle({ collective }) {
     const { backersCount } = await this.fetchCollectiveBackersCount(
       collective,
-      { userType: 'organizations' }
+      { userType: 'organizations' },
     )
     return this.constructor.render(backersCount)
   }

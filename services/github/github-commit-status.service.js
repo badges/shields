@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { NotFound, InvalidParameter } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   // https://stackoverflow.com/a/23969867/893113
@@ -55,7 +55,7 @@ export default class GithubCommitStatus extends GithubAuthV3Service {
     try {
       ;({ status } = await this._requestJson({
         url: `/repos/${user}/${repo}/compare/${branch}...${commit}`,
-        errorMessages: errorMessagesFor('commit or branch not found'),
+        httpErrors: httpErrorsFor('commit or branch not found'),
         schema,
       }))
     } catch (e) {

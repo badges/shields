@@ -15,7 +15,7 @@ const schema = Joi.array()
         .min(5)
         .max(5)
         .required(),
-    })
+    }),
   )
   .required()
 
@@ -30,12 +30,12 @@ export default class TestspaceBase extends BaseJsonService {
   async fetch({ org, project, space }) {
     // https://help.testspace.com/docs/reference/web-api#list-results
     const url = `https://${org}.testspace.com/api/projects/${encodeURIComponent(
-      project
+      project,
     )}/spaces/${space}/results`
     return this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         403: 'org not found or not authorized',
         404: 'org, project, or space not found',
       },

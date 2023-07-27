@@ -65,11 +65,11 @@ const publicConfigSchema = Joi.object({
   bind: {
     port: Joi.alternatives().try(
       Joi.number().port(),
-      Joi.string().pattern(/^\\\\\.\\pipe\\.+$/)
+      Joi.string().pattern(/^\\\\\.\\pipe\\.+$/),
     ),
     address: Joi.alternatives().try(
       Joi.string().ip().required(),
-      Joi.string().hostname().required()
+      Joi.string().hostname().required(),
     ),
   },
   metrics: {
@@ -154,8 +154,8 @@ const publicConfigSchema = Joi.object({
       path.dirname(fileURLToPath(import.meta.url)),
       '..',
       '..',
-      'public'
-    )
+      'public',
+    ),
   ),
   requireCloudflare: Joi.boolean().required(),
 }).required()
@@ -237,7 +237,7 @@ class Server {
     const publicConfig = Joi.attempt(config.public, publicConfigSchema)
     const privateConfig = this.validatePrivateConfig(
       config.private,
-      privateConfigSchema
+      privateConfigSchema,
     )
     // We want to require an username and a password for the influx metrics
     // only if the influx metrics are enabled. The private config schema
@@ -246,7 +246,7 @@ class Server {
     if (publicConfig.metrics.influx && publicConfig.metrics.influx.enabled) {
       this.validatePrivateConfig(
         config.private,
-        privateMetricsInfluxConfigSchema
+        privateMetricsInfluxConfigSchema,
       )
     }
     this.config = {
@@ -271,7 +271,7 @@ class Server {
           Object.assign({}, publicConfig.metrics.influx, {
             username: privateConfig.influx_username,
             password: privateConfig.influx_password,
-          })
+          }),
         )
       }
     }
@@ -284,8 +284,8 @@ class Server {
       const badPaths = e.details.map(({ path }) => path)
       throw Error(
         `Private configuration is invalid. Check these paths: ${badPaths.join(
-          ','
-        )}`
+          ',',
+        )}`,
       )
     }
   }
@@ -351,32 +351,35 @@ class Server {
       makeSend(
         'svg',
         request.res,
-        end
+        end,
       )(
         makeBadge({
           label: '410',
           message: `${format} no longer available`,
           color: 'lightgray',
           format: 'svg',
-        })
+        }),
       )
     })
 
     if (!rasterUrl) {
-      camp.route(/\.png$/, (query, match, end, request) => {
-        makeSend(
-          'svg',
-          request.res,
-          end
-        )(
-          makeBadge({
-            label: '404',
-            message: 'raster badges not available',
-            color: 'lightgray',
-            format: 'svg',
-          })
-        )
-      })
+      camp.route(
+        /^\/((?!img|assets\/)).*\.png$/,
+        (query, match, end, request) => {
+          makeSend(
+            'svg',
+            request.res,
+            end,
+          )(
+            makeBadge({
+              label: '404',
+              message: 'raster badges not available',
+              color: 'lightgray',
+              format: 'svg',
+            }),
+          )
+        },
+      )
     }
 
     camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
@@ -386,14 +389,14 @@ class Server {
       makeSend(
         format,
         request.res,
-        end
+        end,
       )(
         makeBadge({
           label: '404',
           message: 'badge not found',
           color: 'red',
           format,
-        })
+        }),
       )
     })
   }
@@ -413,18 +416,21 @@ class Server {
 
     if (rasterUrl) {
       // Redirect to the raster server for raster versions of modern badges.
-      camp.route(/\.png$/, (queryParams, match, end, ask) => {
-        ask.res.statusCode = 301
-        ask.res.setHeader(
-          'Location',
-          rasterRedirectUrl({ rasterUrl }, ask.req.url)
-        )
+      camp.route(
+        /^\/((?!img|assets\/)).*\.png$/,
+        (queryParams, match, end, ask) => {
+          ask.res.statusCode = 301
+          ask.res.setHeader(
+            'Location',
+            rasterRedirectUrl({ rasterUrl }, ask.req.url),
+          )
 
-        const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+          const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
+          ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
-        ask.res.end()
-      })
+          ask.res.end()
+        },
+      )
     }
 
     if (redirectUrl) {
@@ -460,8 +466,8 @@ class Server {
           rasterUrl: config.public.rasterUrl,
           private: config.private,
           public: config.public,
-        }
-      )
+        },
+      ),
     )
   }
 

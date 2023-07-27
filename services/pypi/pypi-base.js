@@ -13,7 +13,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         packagetype: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -30,7 +30,7 @@ export default class PypiBase extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://pypi.org/pypi/${egg}/json`,
-      errorMessages: { 404: 'package or version not found' },
+      httpErrors: { 404: 'package or version not found' },
     })
   }
 }

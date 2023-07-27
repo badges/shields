@@ -19,24 +19,6 @@ export class TravisComBuild extends BaseSvgScrapingService {
 
   static examples = [
     {
-      title: 'Travis (.org)',
-      pattern: ':user/:repo',
-      namedParams: { user: 'rust-lang', repo: 'rust' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
-      },
-    },
-    {
-      title: 'Travis (.org) branch',
-      pattern: ':user/:repo/:branch',
-      namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
-      },
-    },
-    {
       title: 'Travis (.com)',
       pattern: 'com/:user/:repo',
       namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },

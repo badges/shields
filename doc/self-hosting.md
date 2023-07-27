@@ -155,13 +155,13 @@ These are documented in [server-secrets.md](./server-secrets.md)
 If you want to host the frontend on a separate server, such as cloud storage
 or a CDN, you can do that.
 
-First, build the frontend, pointing `GATSBY_BASE_URL` to your server.
+First, build the frontend, pointing `BASE_URL` to your server.
 
 ```sh
-GATSBY_BASE_URL=https://your-server.example.com npm run build
+BASE_URL=https://your-server.example.com npm run build
 ```
 
-Then copy the contents of the `build/` folder to your static hosting / CDN.
+Then copy the contents of the `public/` folder to your static hosting / CDN.
 
 There are also a couple settings you should configure on the server.
 

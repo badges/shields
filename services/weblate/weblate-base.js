@@ -17,8 +17,8 @@ export default class WeblateBase extends BaseJsonService {
     return this._requestJson(
       this.authHelper.withBearerAuthHeader(
         requestParams,
-        'Token' // lgtm [js/hardcoded-credentials]
-      )
+        'Token', // lgtm [js/hardcoded-credentials]
+      ),
     )
   }
 }

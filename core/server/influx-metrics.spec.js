@@ -47,7 +47,7 @@ describe('Influx metrics', function () {
       const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
       expect(await influxMetrics.metrics()).to.be.contain(
-        'instance=test-hostname'
+        'instance=test-hostname',
       )
     })
 
@@ -69,7 +69,7 @@ describe('Influx metrics', function () {
       const influxMetrics = new InfluxMetrics(metricInstance, customConfig)
 
       expect(await influxMetrics.metrics()).to.be.contain(
-        'instance=test-hostname-alias'
+        'instance=test-hostname-alias',
       )
     })
   })
@@ -96,7 +96,7 @@ describe('Influx metrics', function () {
         .persist()
         .post(
           '/metrics',
-          'prometheus,application=shields,env=test-env,instance=instance2 counter1=11'
+          'prometheus,application=shields,env=test-env,instance=instance2 counter1=11',
         )
         .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
         .reply(200)
@@ -117,7 +117,7 @@ describe('Influx metrics', function () {
       await clock.tickAsync(10)
       expect(scope.isDone()).to.be.equal(
         true,
-        `pending mocks: ${scope.pendingMocks()}`
+        `pending mocks: ${scope.pendingMocks()}`,
       )
     })
   })
@@ -150,9 +150,9 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:443/metrics"'
-            )
-          )
+              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:443/metrics"',
+            ),
+          ),
       )
     })
 
@@ -167,9 +167,9 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. https://shields-metrics.io/metrics responded with status code 400'
-            )
-          )
+              'Cannot push metrics. https://shields-metrics.io/metrics responded with status code 400',
+            ),
+          ),
       )
     })
   })

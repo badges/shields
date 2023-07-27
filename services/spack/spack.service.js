@@ -32,7 +32,7 @@ export default class SpackVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://packages.spack.io/data/packages/${packageName}.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'package not found',
       },
     })

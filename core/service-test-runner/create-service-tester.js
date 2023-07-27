@@ -23,7 +23,7 @@ async function createServiceTester() {
   const ServiceClass = Object.values(await import(servicePath))[0]
   if (!(ServiceClass.prototype instanceof BaseService)) {
     throw Error(
-      `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`
+      `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`,
     )
   }
   return ServiceTester.forServiceClass(ServiceClass)

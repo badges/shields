@@ -15,7 +15,7 @@ class GithubConstellation {
         authorizedOrigins: ['https://api.github.com'],
         isRequired: true,
       },
-      config
+      config,
     )
   }
 

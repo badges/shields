@@ -11,7 +11,7 @@ import {
 const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
-  })
+  }),
 )
 
 const schema = Joi.object({
@@ -77,7 +77,7 @@ class PackagistVersion extends BasePackagistService {
 
   async handle(
     { user, repo },
-    { include_prereleases: includePrereleases, server }
+    { include_prereleases: includePrereleases, server },
   ) {
     includePrereleases = includePrereleases !== undefined
     const json = await this.fetch({
