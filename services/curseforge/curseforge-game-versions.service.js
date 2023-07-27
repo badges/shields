@@ -19,7 +19,7 @@ export default class CurseForgeGameVersions extends BaseCurseForgeService {
     },
   ]
 
-  static defaultBadgeData = { label: 'game versions', namedLogo: 'curseforge' }
+  static defaultBadgeData = { label: 'game versions' }
 
   static render({ versions }) {
     return {

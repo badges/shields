@@ -20,7 +20,7 @@ export default class CurseForgeDownloads extends BaseCurseForgeService {
     },
   ]
 
-  static defaultBadgeData = { label: 'downloads', namedLogo: 'curseforge' }
+  static defaultBadgeData = { label: 'downloads' }
 
   async handle({ projectId }) {
     const { downloads } = await this.fetchMod({ projectId })

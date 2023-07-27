@@ -14,4 +14,3 @@ private:
   weblate_api_key: '...'
   wheelmap_token: '...'
   youtube_api_key: '...'
-  curseforge_api_token: '...'

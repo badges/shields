@@ -22,7 +22,7 @@ export default class CurseForgeVersion extends BaseCurseForgeService {
     },
   ]
 
-  static defaultBadgeData = { label: 'version', namedLogo: 'curseforge' }
+  static defaultBadgeData = { label: 'version' }
 
   async handle({ projectId }) {
     const { version } = await this.fetchMod({ projectId })
