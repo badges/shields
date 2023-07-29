@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, pathParam } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleRoleSchema = Joi.object({
   download_count: nonNegativeInteger,
@@ -31,7 +31,7 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
     '/ansible/role/d/{roleId}': {
       get: {
         summary: 'Ansible Role',
-        parameters: [pathParam({ name: 'roleId', example: '3078' })],
+        parameters: pathParams({ name: 'roleId', example: '3078' }),
       },
     },
   }
@@ -52,7 +52,7 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
     '/ansible/role/{roleId}': {
       get: {
         summary: 'Ansible Galaxy Role Name',
-        parameters: [pathParam({ name: 'roleId', example: '3078' })],
+        parameters: pathParams({ name: 'roleId', example: '3078' }),
       },
     },
   }

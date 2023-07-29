@@ -1,5 +1,5 @@
 import { renderBuildStatusBadge } from '../build-status.js'
-import { NotFound, pathParam } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorJobBuild extends AppVeyorBase {
@@ -12,22 +12,22 @@ export default class AppVeyorJobBuild extends AppVeyorBase {
     '/appveyor/job/build/{user}/{repo}/{job}': {
       get: {
         summary: 'AppVeyor Job',
-        parameters: [
-          pathParam({ name: 'user', example: 'wpmgprostotema' }),
-          pathParam({ name: 'repo', example: 'voicetranscoder' }),
-          pathParam({ name: 'job', example: 'Linux' }),
-        ],
+        parameters: pathParams(
+          { name: 'user', example: 'wpmgprostotema' },
+          { name: 'repo', example: 'voicetranscoder' },
+          { name: 'job', example: 'Linux' }
+        ),
       },
     },
     '/appveyor/job/build/{user}/{repo}/{job}/{branch}': {
       get: {
         summary: 'AppVeyor Job (with branch)',
-        parameters: [
-          pathParam({ name: 'user', example: 'wpmgprostotema' }),
-          pathParam({ name: 'repo', example: 'voicetranscoder' }),
-          pathParam({ name: 'job', example: 'Windows' }),
-          pathParam({ name: 'branch', example: 'master' }),
-        ],
+        parameters: pathParams(
+          { name: 'user', example: 'wpmgprostotema' },
+          { name: 'repo', example: 'voicetranscoder' },
+          { name: 'job', example: 'Windows' },
+          { name: 'branch', example: 'master' }
+        ),
       },
     },
   }

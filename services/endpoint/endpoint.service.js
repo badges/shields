@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { httpErrors } from '../dynamic-common.js'
 import { optionalUrl } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
-import { BaseJsonService, InvalidParameter, queryParam } from '../index.js'
+import { BaseJsonService, InvalidParameter, queryParams } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -135,14 +135,12 @@ export default class Endpoint extends BaseJsonService {
       get: {
         summary: 'Endpoint Badge',
         description,
-        parameters: [
-          queryParam({
-            name: 'url',
-            description: 'The URL to your JSON endpoint',
-            required: true,
-            example: 'https://shields.redsparr0w.com/2473/monday',
-          }),
-        ],
+        parameters: queryParams({
+          name: 'url',
+          description: 'The URL to your JSON endpoint',
+          required: true,
+          example: 'https://shields.redsparr0w.com/2473/monday',
+        }),
       },
     },
   }

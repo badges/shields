@@ -6,7 +6,7 @@ import {
   BaseService,
   InvalidResponse,
   InvalidParameter,
-  queryParam,
+  queryParams,
 } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 
@@ -28,31 +28,31 @@ export default class DynamicXml extends BaseService {
           The Dynamic XML Badge allows you to extract an arbitrary value from any
           XML Document using an XPath selector and show it on a badge.
         </p>`,
-        parameters: [
-          queryParam({
+        parameters: queryParams(
+          {
             name: 'url',
             description: 'The URL to a XML document',
             required: true,
             example: 'https://httpbin.org/xml',
-          }),
-          queryParam({
+          },
+          {
             name: 'query',
             description:
               'A <a href="http://xpather.com/">XPath</a> expression that will be used to query the document',
             required: true,
             example: '//slideshow/slide[1]/title',
-          }),
-          queryParam({
+          },
+          {
             name: 'prefix',
             description: 'Optional prefix to append to the value',
             example: '[',
-          }),
-          queryParam({
+          },
+          {
             name: 'suffix',
             description: 'Optional suffix to append to the value',
             example: ']',
-          }),
-        ],
+          }
+        ),
       },
     },
   }

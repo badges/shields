@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
-import { BaseJsonService, InvalidResponse, pathParam } from '../index.js'
+import { BaseJsonService, InvalidResponse, pathParams } from '../index.js'
 
 const ansibleContentSchema = Joi.object({
   quality_score: Joi.number().allow(null).required(),
@@ -24,7 +24,7 @@ export default class AnsibleGalaxyContentQualityScore extends AnsibleGalaxyConte
     '/ansible/quality/{projectId}': {
       get: {
         summary: 'Ansible Quality Score',
-        parameters: [pathParam({ name: 'projectId', example: '432' })],
+        parameters: pathParams({ name: 'projectId', example: '432' }),
       },
     },
   }

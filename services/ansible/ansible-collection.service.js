@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService, pathParam } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleCollectionSchema = Joi.object({
   name: Joi.string().required(),
@@ -16,7 +16,7 @@ class AnsibleGalaxyCollectionName extends BaseJsonService {
     '/ansible/collection/{collectionId}': {
       get: {
         summary: 'Ansible Collection',
-        parameters: [pathParam({ name: 'collectionId', example: '278' })],
+        parameters: pathParams({ name: 'collectionId', example: '278' }),
       },
     },
   }

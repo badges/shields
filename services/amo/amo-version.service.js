@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { pathParam } from '../index.js'
+import { pathParams } from '../index.js'
 import { BaseAmoService } from './amo-base.js'
 
 export default class AmoVersion extends BaseAmoService {
@@ -10,7 +10,7 @@ export default class AmoVersion extends BaseAmoService {
     '/amo/v/{addonId}': {
       get: {
         summary: 'Mozilla Add-on',
-        parameters: [pathParam({ name: 'addonId', example: 'dustman' })],
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },
   }

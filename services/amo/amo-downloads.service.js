@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { redirector, pathParam } from '../index.js'
+import { redirector, pathParams } from '../index.js'
 import { BaseAmoService } from './amo-base.js'
 
 const description = `
@@ -17,7 +17,7 @@ class AmoWeeklyDownloads extends BaseAmoService {
       get: {
         summary: 'Mozilla Add-on Downloads',
         description,
-        parameters: [pathParam({ name: 'addonId', example: 'dustman' })],
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },
   }

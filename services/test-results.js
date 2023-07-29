@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { queryParam } from './index.js'
+import { queryParams } from './index.js'
 
 const testResultQueryParamSchema = Joi.object({
   compact_message: Joi.equal(''),
@@ -8,16 +8,16 @@ const testResultQueryParamSchema = Joi.object({
   skipped_label: Joi.string(),
 }).required()
 
-const testResultOpenApiQueryParams = [
-  queryParam({
+const testResultOpenApiQueryParams = queryParams(
+  {
     name: 'compact_message',
     example: null,
     schema: { type: 'boolean' },
-  }),
-  queryParam({ name: 'passed_label', example: 'good' }),
-  queryParam({ name: 'failed_label', example: 'bad' }),
-  queryParam({ name: 'skipped_label', example: 'n/a' }),
-]
+  },
+  { name: 'passed_label', example: 'good' },
+  { name: 'failed_label', example: 'bad' },
+  { name: 'skipped_label', example: 'n/a' }
+)
 
 function renderTestResultMessage({
   passed,

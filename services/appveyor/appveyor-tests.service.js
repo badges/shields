@@ -4,7 +4,7 @@ import {
   renderTestResultBadge,
   documentation as description,
 } from '../test-results.js'
-import { pathParam } from '../index.js'
+import { pathParams } from '../index.js'
 import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorTests extends AppVeyorBase {
@@ -20,8 +20,10 @@ export default class AppVeyorTests extends AppVeyorBase {
         summary: 'AppVeyor tests',
         description,
         parameters: [
-          pathParam({ name: 'user', example: 'NZSmartie' }),
-          pathParam({ name: 'repo', example: 'coap-net-iu0to' }),
+          ...pathParams(
+            { name: 'user', example: 'NZSmartie' },
+            { name: 'repo', example: 'coap-net-iu0to' }
+          ),
           ...testResultOpenApiQueryParams,
         ],
       },
@@ -31,9 +33,11 @@ export default class AppVeyorTests extends AppVeyorBase {
         summary: 'AppVeyor tests (with branch)',
         description,
         parameters: [
-          pathParam({ name: 'user', example: 'NZSmartie' }),
-          pathParam({ name: 'repo', example: 'coap-net-iu0to' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          ...pathParams(
+            { name: 'user', example: 'NZSmartie' },
+            { name: 'repo', example: 'coap-net-iu0to' },
+            { name: 'branch', example: 'master' }
+          ),
           ...testResultOpenApiQueryParams,
         ],
       },

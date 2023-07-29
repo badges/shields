@@ -1,5 +1,11 @@
 import chai from 'chai'
-import { category2openapi, pathParam, queryParam } from './openapi.js'
+import {
+  category2openapi,
+  pathParam,
+  pathParams,
+  queryParam,
+  queryParams,
+} from './openapi.js'
 import BaseJsonService from './base-json.js'
 const { expect } = chai
 
@@ -377,9 +383,10 @@ describe('category2openapi', function () {
   })
 })
 
-describe('pathParam', function () {
+describe('pathParam, pathParams', function () {
   it('generates a pathParam with defaults', function () {
-    expect(pathParam({ name: 'name', example: 'example' })).to.deep.equal({
+    const input = { name: 'name', example: 'example' }
+    const expected = {
       name: 'name',
       in: 'path',
       required: true,
@@ -388,18 +395,19 @@ describe('pathParam', function () {
       },
       example: 'example',
       description: undefined,
-    })
+    }
+    expect(pathParam(input)).to.deep.equal(expected)
+    expect(pathParams(input)[0]).to.deep.equal(expected)
   })
 
   it('generates a pathParam with custom args', function () {
-    expect(
-      pathParam({
-        name: 'name',
-        example: true,
-        schema: { type: 'boolean' },
-        description: 'long desc',
-      })
-    ).to.deep.equal({
+    const input = {
+      name: 'name',
+      example: true,
+      schema: { type: 'boolean' },
+      description: 'long desc',
+    }
+    const expected = {
       name: 'name',
       in: 'path',
       required: true,
@@ -408,44 +416,79 @@ describe('pathParam', function () {
       },
       example: true,
       description: 'long desc',
-    })
+    }
+    expect(pathParam(input)).to.deep.equal(expected)
+    expect(pathParams(input)[0]).to.deep.equal(expected)
+  })
+
+  it('generates multiple pathParams', function () {
+    expect(
+      pathParams(
+        { name: 'name1', example: 'example1' },
+        { name: 'name2', example: 'example2' }
+      )
+    ).to.deep.equal([
+      {
+        name: 'name1',
+        in: 'path',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+        example: 'example1',
+        description: undefined,
+      },
+      {
+        name: 'name2',
+        in: 'path',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+        example: 'example2',
+        description: undefined,
+      },
+    ])
   })
 })
 
-describe('queryParam', function () {
+describe('queryParam, queryParams', function () {
   it('generates a queryParam with defaults', function () {
-    expect(queryParam({ name: 'name', example: 'example' })).to.deep.equal({
+    const input = { name: 'name', example: 'example' }
+    const expected = {
       name: 'name',
       in: 'query',
       required: false,
       schema: { type: 'string' },
       example: 'example',
       description: undefined,
-    })
+    }
+    expect(queryParam(input)).to.deep.equal(expected)
+    expect(queryParams(input)[0]).to.deep.equal(expected)
   })
 
   it('generates queryParam with custom args', function () {
-    expect(
-      queryParam({
-        name: 'name',
-        example: 'example',
-        required: true,
-        description: 'long desc',
-      })
-    ).to.deep.equal({
+    const input = {
+      name: 'name',
+      example: 'example',
+      required: true,
+      description: 'long desc',
+    }
+    const expected = {
       name: 'name',
       in: 'query',
       required: true,
       schema: { type: 'string' },
       example: 'example',
       description: 'long desc',
-    })
+    }
+    expect(queryParam(input)).to.deep.equal(expected)
+    expect(queryParams(input)[0]).to.deep.equal(expected)
   })
 
   it('generates a queryParam with boolean/null example', function () {
-    expect(
-      queryParam({ name: 'name', example: null, schema: { type: 'boolean' } })
-    ).to.deep.equal({
+    const input = { name: 'name', example: null, schema: { type: 'boolean' } }
+    const expected = {
       name: 'name',
       in: 'query',
       required: false,
@@ -453,6 +496,34 @@ describe('queryParam', function () {
       allowEmptyValue: true,
       example: null,
       description: undefined,
-    })
+    }
+    expect(queryParam(input)).to.deep.equal(expected)
+    expect(queryParams(input)[0]).to.deep.equal(expected)
+  })
+
+  it('generates multiple queryParams', function () {
+    expect(
+      queryParams(
+        { name: 'name1', example: 'example1' },
+        { name: 'name2', example: 'example2' }
+      )
+    ).to.deep.equal([
+      {
+        name: 'name1',
+        in: 'query',
+        required: false,
+        schema: { type: 'string' },
+        example: 'example1',
+        description: undefined,
+      },
+      {
+        name: 'name2',
+        in: 'query',
+        required: false,
+        schema: { type: 'string' },
+        example: 'example2',
+        description: undefined,
+      },
+    ])
   })
 })

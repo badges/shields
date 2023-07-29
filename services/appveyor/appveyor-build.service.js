@@ -1,5 +1,5 @@
 import { renderBuildStatusBadge } from '../build-status.js'
-import { pathParam } from '../index.js'
+import { pathParams } from '../index.js'
 import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorBuild extends AppVeyorBase {
@@ -9,20 +9,20 @@ export default class AppVeyorBuild extends AppVeyorBase {
     '/appveyor/build/{user}/{repo}': {
       get: {
         summary: 'AppVeyor',
-        parameters: [
-          pathParam({ name: 'user', example: 'gruntjs' }),
-          pathParam({ name: 'repo', example: 'grunt' }),
-        ],
+        parameters: pathParams(
+          { name: 'user', example: 'gruntjs' },
+          { name: 'repo', example: 'grunt' }
+        ),
       },
     },
     '/appveyor/build/{user}/{repo}/{branch}': {
       get: {
         summary: 'AppVeyor (with branch)',
-        parameters: [
-          pathParam({ name: 'user', example: 'gruntjs' }),
-          pathParam({ name: 'repo', example: 'grunt' }),
-          pathParam({ name: 'branch', example: 'master' }),
-        ],
+        parameters: pathParams(
+          { name: 'user', example: 'gruntjs' },
+          { name: 'repo', example: 'grunt' },
+          { name: 'branch', example: 'master' }
+        ),
       },
     },
   }

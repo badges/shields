@@ -1,3 +1,9 @@
+/**
+ * Functions for publishing the shields.io URL schema as an OpenAPI Document
+ *
+ * @module
+ */
+
 const baseUrl = process.env.BASE_URL
 const globalParamRefs = [
   { $ref: '#/components/parameters/style' },
@@ -332,6 +338,13 @@ function category2openapi(category, services) {
   return spec
 }
 
+/**
+ * Helper function for assembling an OpenAPI path parameter object
+ *
+ * @param {module:core/base-service/openapi~PathParamInput} param Input param
+ * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @see https://swagger.io/specification/#parameter-object
+ */
 function pathParam({
   name,
   example,
@@ -341,6 +354,38 @@ function pathParam({
   return { name, in: 'path', required: true, schema, example, description }
 }
 
+/**
+ * Helper function for assembling an array of OpenAPI path parameter objects
+ * The code
+ * ```
+ * const params = pathParams(
+ *   { name: 'name1', example: 'example1' },
+ *   { name: 'name2', example: 'example2' },
+ * )
+ * ```
+ * is equivilent to
+ * ```
+ * const params = [
+ *   pathParam({ name: 'name1', example: 'example1' }),
+ *   pathParam({ name: 'name2', example: 'example2' }),
+ * ]
+ * ```
+ *
+ * @param {...module:core/base-service/openapi~PathParamInput} params Input params
+ * @returns {Array.<module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link module:core/base-service/openapi~pathParam}
+ */
+function pathParams(...params) {
+  return params.map(param => pathParam(param))
+}
+
+/**
+ * Helper function for assembling an OpenAPI query parameter object
+ *
+ * @param {module:core/base-service/openapi~QueryParamInput} param Input param
+ * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @see https://swagger.io/specification/#parameter-object
+ */
 function queryParam({
   name,
   example,
@@ -355,4 +400,70 @@ function queryParam({
   return param
 }
 
-export { category2openapi, pathParam, queryParam }
+/**
+ * Helper function for assembling an array of OpenAPI query parameter objects
+ * The code
+ * ```
+ * const params = queryParams(
+ *   { name: 'name1', example: 'example1' },
+ *   { name: 'name2', example: 'example2' },
+ * )
+ * ```
+ * is equivilent to
+ * ```
+ * const params = [
+ *   queryParam({ name: 'name1', example: 'example1' }),
+ *   queryParams({ name: 'name2', example: 'example2' }),
+ * ]
+ * ```
+ *
+ * @param {...module:core/base-service/openapi~QueryParamInput} params Input params
+ * @returns {Array.<module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link module:core/base-service/openapi~queryParam}
+ */
+function queryParams(...params) {
+  return params.map(param => queryParam(param))
+}
+
+/**
+ * @typedef {object} PathParamInput
+ * @property {string} name The name of the parameter. Parameter names are case sensitive
+ * @property {string} example Example of a valid value for this parameter
+ * @property {object} [schema={ type: 'string' }] Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type.
+ *    Normally this should be omitted as all path parameters are strings.
+ *    Use this when we also want to pass an enum of valid parameters
+ *    to be presented as a drop-down in the frontend. e.g:
+ *    `{'type': 'string', 'enum': ['github', 'bitbucket'}` (Optional)
+ * @property {string} description A brief description of the parameter (Optional)
+ */
+
+/**
+ * @typedef {object} QueryParamInput
+ * @property {string} name The name of the parameter. Parameter names are case sensitive
+ * @property {string|null} example Example of a valid value for this parameter
+ * @property {object} [schema={ type: 'string' }] Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type. This can normally be omitted.
+ *    Query params are usually strings. (Optional)
+ * @property {boolean} [required=false] Determines whether this parameter is mandatory (Optional)
+ * @property {string} description A brief description of the parameter (Optional)
+ */
+
+/**
+ * OpenAPI Parameter Object
+ *
+ * @typedef {object} OpenApiParam
+ * @property {string} name The name of the parameter
+ * @property {string|null} example Example of a valid value for this parameter
+ * @property {('path'|'query')} in The location of the parameter
+ * @property {object} schema Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type.
+ * @property {boolean} required Determines whether this parameter is mandatory
+ * @property {string} description A brief description of the parameter
+ * @property {boolean} allowEmptyValue If true, allows the ability to pass an empty value to this parameter
+ */
+
+export { category2openapi, pathParam, pathParams, queryParam, queryParams }
