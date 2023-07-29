@@ -38,7 +38,7 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
             name: 'suffix',
             description: 'Optional suffix to append to the value',
             example: ']',
-          }
+          },
         ),
       },
     },

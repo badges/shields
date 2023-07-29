@@ -16,7 +16,7 @@ const testResultOpenApiQueryParams = queryParams(
   },
   { name: 'passed_label', example: 'good' },
   { name: 'failed_label', example: 'bad' },
-  { name: 'skipped_label', example: 'n/a' }
+  { name: 'skipped_label', example: 'n/a' },
 )
 
 function renderTestResultMessage({

@@ -15,7 +15,7 @@ export default class AppVeyorJobBuild extends AppVeyorBase {
         parameters: pathParams(
           { name: 'user', example: 'wpmgprostotema' },
           { name: 'repo', example: 'voicetranscoder' },
-          { name: 'job', example: 'Linux' }
+          { name: 'job', example: 'Linux' },
         ),
       },
     },
@@ -26,7 +26,7 @@ export default class AppVeyorJobBuild extends AppVeyorBase {
           { name: 'user', example: 'wpmgprostotema' },
           { name: 'repo', example: 'voicetranscoder' },
           { name: 'job', example: 'Windows' },
-          { name: 'branch', example: 'master' }
+          { name: 'branch', example: 'master' },
         ),
       },
     },

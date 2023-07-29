@@ -11,7 +11,7 @@ export default class AppVeyorBuild extends AppVeyorBase {
         summary: 'AppVeyor Build',
         parameters: pathParams(
           { name: 'user', example: 'gruntjs' },
-          { name: 'repo', example: 'grunt' }
+          { name: 'repo', example: 'grunt' },
         ),
       },
     },
@@ -21,7 +21,7 @@ export default class AppVeyorBuild extends AppVeyorBase {
         parameters: pathParams(
           { name: 'user', example: 'gruntjs' },
           { name: 'repo', example: 'grunt' },
-          { name: 'branch', example: 'master' }
+          { name: 'branch', example: 'master' },
         ),
       },
     },

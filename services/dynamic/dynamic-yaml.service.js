@@ -38,7 +38,7 @@ export default class DynamicYaml extends jsonPath(BaseYamlService) {
             name: 'suffix',
             description: 'Optional suffix to append to the value',
             example: ']',
-          }
+          },
         ),
       },
     },

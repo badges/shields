@@ -51,7 +51,7 @@ export default class DynamicXml extends BaseService {
             name: 'suffix',
             description: 'Optional suffix to append to the value',
             example: ']',
-          }
+          },
         ),
       },
     },
