@@ -2,7 +2,7 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { redirector, pathParam } from '../index.js'
 import { BaseAmoService } from './amo-base.js'
 
-const documentation = `
+const description = `
 Previously \`amo/d\` provided a &ldquo;total downloads&rdquo; badge. However,
 [updates to the v3 API](https://github.com/badges/shields/issues/3079)
 only give us weekly downloads. The route \`amo/d\` redirects to \`amo/dw\`.
@@ -16,7 +16,7 @@ class AmoWeeklyDownloads extends BaseAmoService {
     '/amo/dw/{addonId}': {
       get: {
         summary: 'Mozilla Add-on Downloads',
-        description: documentation,
+        description,
         parameters: [pathParam({ name: 'addonId', example: 'dustman' })],
       },
     },
