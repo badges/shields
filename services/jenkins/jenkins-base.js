@@ -19,7 +19,7 @@ export default class JenkinsBase extends BaseJsonService {
         options: { searchParams },
         schema,
         httpErrors,
-      })
+      }),
     )
   }
 }

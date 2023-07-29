@@ -22,7 +22,7 @@ t.create('404 latest build error response')
         statusFilter: 'completed',
         'api-version': '5.0-preview.4',
       })
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'tests',
@@ -43,7 +43,7 @@ t.create('no test result summary response')
       .reply(200, { count: 1, value: [{ id: 1234 }] })
       .get('/test/ResultSummaryByBuild')
       .query({ buildId: 1234 })
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'tests',

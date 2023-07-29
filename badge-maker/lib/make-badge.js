@@ -58,6 +58,6 @@ module.exports = function makeBadge({
       logoPadding: logo && label.length ? 3 : 0,
       color: toSvgColor(color),
       labelColor: toSvgColor(labelColor),
-    })
+    }),
   )
 }

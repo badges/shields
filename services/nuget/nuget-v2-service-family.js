@@ -29,7 +29,7 @@ const jsonSchema = Joi.object({
           Version: versionSchema,
           NormalizedVersion: Joi.string(),
           DownloadCount: nonNegativeInteger,
-        })
+        }),
       )
       .max(1)
       .default([]),
@@ -55,7 +55,7 @@ const queryParamSchema = Joi.object({
 
 async function fetch(
   serviceInstance,
-  { odataFormat, baseUrl, packageName, includePrereleases = false }
+  { odataFormat, baseUrl, packageName, includePrereleases = false },
 ) {
   const url = `${baseUrl}/Packages()`
   const searchParams = {

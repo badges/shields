@@ -92,7 +92,7 @@ function DownloadsForExtensionType(extensionType) {
           },
         })
         downloads = Object.values(json).reduce(
-          (a, b) => parseInt(a) + parseInt(b)
+          (a, b) => parseInt(a) + parseInt(b),
         )
       }
 

@@ -38,7 +38,7 @@ t.create('Locked Python version (pipfile.lock has no python version)')
 
 t.create('Locked version of default dependency')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard.json',
   )
   .expectBadge({
     label: 'rq-dashboard',
@@ -47,7 +47,7 @@ t.create('Locked version of default dependency')
 
 t.create('Locked version of default dependency (branch)')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard/main.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/rq-dashboard/main.json',
   )
   .expectBadge({
     label: 'rq-dashboard',
@@ -56,7 +56,7 @@ t.create('Locked version of default dependency (branch)')
 
 t.create('Locked version of dev dependency')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black.json',
   )
   .expectBadge({
     label: 'black',
@@ -65,7 +65,7 @@ t.create('Locked version of dev dependency')
 
 t.create('Locked version of dev dependency (branch)')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black/main.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black/main.json',
   )
   .expectBadge({
     label: 'black',
@@ -74,7 +74,7 @@ t.create('Locked version of dev dependency (branch)')
 
 t.create('Locked version of unknown dependency')
   .get(
-    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/i-made-this-up.json'
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/i-made-this-up.json',
   )
   .expectBadge({
     label: 'dependency',

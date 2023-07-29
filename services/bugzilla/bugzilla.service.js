@@ -12,7 +12,7 @@ const schema = Joi.object({
       Joi.object({
         status: Joi.string().required(),
         resolution: Joi.string().allow('').required(),
-      }).required()
+      }).required(),
     )
     .min(1)
     .required(),

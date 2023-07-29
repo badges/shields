@@ -9,7 +9,7 @@ const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
     tag_name: Joi.string().required(),
-  })
+  }),
 )
 
 const queryParamSchema = Joi.object({
@@ -119,7 +119,7 @@ export default class GitLabRelease extends GitLabBase {
 
     return latest(
       releases.map(t => t[displayKey]),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
   }
 
@@ -131,7 +131,7 @@ export default class GitLabRelease extends GitLabBase {
       sort,
       display_name: displayName,
       date_order_by: orderBy,
-    }
+    },
   ) {
     const isSemver = sort === 'semver'
     const releases = await this.fetch({ project, baseUrl, isSemver, orderBy })

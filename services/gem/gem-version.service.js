@@ -13,7 +13,7 @@ const versionSchema = Joi.array()
   .items(
     Joi.object({
       number: Joi.string().required(),
-    })
+    }),
   )
   .min(1)
   .required()

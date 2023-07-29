@@ -24,7 +24,7 @@ t.create('Coverage (branch)')
 
 t.create('Coverage (legacy API supported)')
   .get(
-    '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -44,7 +44,7 @@ t.create('Coverage (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'coverage',

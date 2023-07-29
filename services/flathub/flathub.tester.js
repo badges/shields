@@ -15,7 +15,7 @@ t.create('Flathub (valid)')
       .reply(200, {
         flatpakAppId: 'org.mozilla.firefox',
         currentReleaseVersion: '78.0.1',
-      })
+      }),
   )
   .expectBadge({ label: 'flathub', message: 'v78.0.1' })
 

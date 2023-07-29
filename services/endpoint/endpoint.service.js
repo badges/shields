@@ -176,7 +176,7 @@ export default class Endpoint extends BaseJsonService {
       style,
       // don't allow the user to set cacheSeconds any shorter than this._cacheLength
       cacheSeconds: Math.max(
-        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined)
+        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined),
       ),
     }
   }

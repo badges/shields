@@ -14,7 +14,7 @@ const extensionQuerySchema = Joi.object({
                   Joi.object({
                     statisticName: Joi.string().required(),
                     value: Joi.number().required(),
-                  })
+                  }),
                 )
                 .default([]),
               versions: Joi.array()
@@ -26,19 +26,19 @@ const extensionQuerySchema = Joi.object({
                         Joi.object({
                           key: Joi.string().required(),
                           value: Joi.any().required(),
-                        })
+                        }),
                       )
                       .default([]),
-                  })
+                  }),
                 )
                 .min(1)
                 .required(),
               releaseDate: Joi.string().required(),
               lastUpdated: Joi.string().required(),
-            })
+            }),
           )
           .required(),
-      })
+      }),
     )
     .required(),
 }).required()

@@ -16,7 +16,7 @@ const isDependencyMap = Joi.object()
   .pattern(
     /./,
     // This accepts a semver range, a URL, and many other possible values.
-    Joi.string().min(1).required()
+    Joi.string().min(1).required(),
   )
   .default({})
 

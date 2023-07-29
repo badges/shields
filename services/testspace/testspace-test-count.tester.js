@@ -4,7 +4,7 @@ import { isMetric } from '../test-validators.js'
 export const t = await createServiceTester()
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
-  Joi.number().valid(0).required()
+  Joi.number().valid(0).required(),
 )
 
 t.create('Total')

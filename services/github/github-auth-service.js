@@ -60,7 +60,7 @@ class GithubAuthV4Service extends BaseGraphqlService {
             resetAt
           }
         }
-      `
+      `,
     )
 
     return super._requestGraphql({ ...attrs, ...{ url, query } })

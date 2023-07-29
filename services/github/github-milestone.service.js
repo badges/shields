@@ -7,7 +7,7 @@ const schema = Joi.array()
   .items(
     Joi.object({
       state: Joi.string().required(),
-    })
+    }),
   )
   .required()
 

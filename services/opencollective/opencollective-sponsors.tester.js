@@ -60,7 +60,7 @@ t.create('renders correctly')
           role: 'BACKER',
           tier: 'monthly backer',
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'sponsors',

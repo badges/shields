@@ -9,7 +9,7 @@ t.create('request for existing asset with positive')
       .get('/v2/assets/bitcoin')
       .reply(200, {
         data: { changePercent24Hr: '1.4767080598737783', name: 'Bitcoin' },
-      })
+      }),
   )
   .expectBadge({
     label: 'bitcoin',
@@ -24,7 +24,7 @@ t.create('request for existing asset with negative')
       .get('/v2/assets/bitcoin')
       .reply(200, {
         data: { changePercent24Hr: '-1.4767080598737783', name: 'Bitcoin' },
-      })
+      }),
   )
   .expectBadge({
     label: 'bitcoin',

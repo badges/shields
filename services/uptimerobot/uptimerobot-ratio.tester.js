@@ -33,7 +33,7 @@ t.create('Uptime Robot: Percentage (unspecified error)')
   .intercept(nock =>
     nock('https://api.uptimerobot.com')
       .post('/v2/getMonitors')
-      .reply(200, '{"stat": "fail"}')
+      .reply(200, '{"stat": "fail"}'),
   )
   .expectBadge({ label: 'uptime', message: 'service error' })
 
@@ -42,14 +42,16 @@ t.create('Uptime Robot: Percentage (service unavailable)')
   .intercept(nock =>
     nock('https://api.uptimerobot.com')
       .post('/v2/getMonitors')
-      .reply(503, '{"error": "oh noes!!"}')
+      .reply(503, '{"error": "oh noes!!"}'),
   )
   .expectBadge({ label: 'uptime', message: 'inaccessible' })
 
 t.create('Uptime Robot: Percentage (unexpected response, valid json)')
   .get('/m778918918-3e92c097147760ee39d02d36.json')
   .intercept(nock =>
-    nock('https://api.uptimerobot.com').post('/v2/getMonitors').reply(200, '[]')
+    nock('https://api.uptimerobot.com')
+      .post('/v2/getMonitors')
+      .reply(200, '[]'),
   )
   .expectBadge({ label: 'uptime', message: 'invalid response data' })
 
@@ -58,6 +60,6 @@ t.create('Uptime Robot: Percentage (unexpected response, invalid json)')
   .intercept(nock =>
     nock('https://api.uptimerobot.com')
       .post('/v2/getMonitors')
-      .reply(invalidJSON)
+      .reply(invalidJSON),
   )
   .expectBadge({ label: 'uptime', message: 'unparseable json response' })

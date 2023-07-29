@@ -150,7 +150,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      httpErrors
+      httpErrors,
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
@@ -171,7 +171,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const json = await this.fetchTestResults({
       organization,

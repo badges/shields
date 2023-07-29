@@ -20,7 +20,7 @@ t.create('docker cloud automated build status (invalid, nonexisting user)')
   })
 
 t.create(
-  "docker cloud build status (valid user, but the 'objects' array from the response is empty)"
+  "docker cloud build status (valid user, but the 'objects' array from the response is empty)",
 )
   .get('/pavics/weaver.json')
   .expectBadge({
@@ -34,10 +34,10 @@ t.create('docker cloud automated build (not found)')
     nock('https://cloud.docker.com/')
       .get(
         `/api/build/v1/source?image=${encodeURIComponent(
-          'badges/not-a-real-repo'
-        )}`
+          'badges/not-a-real-repo',
+        )}`,
       )
-      .reply(404, { detail: 'Object not found' })
+      .reply(404, { detail: 'Object not found' }),
   )
   .expectBadge({ label: 'docker build', message: 'repo not found' })
 
@@ -46,7 +46,7 @@ t.create('docker cloud automated build - automated')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)
-      .reply(200, { objects: [{ build_settings: ['test1'] }] })
+      .reply(200, { objects: [{ build_settings: ['test1'] }] }),
   )
   .expectBadge({
     label: 'docker build',
@@ -59,6 +59,6 @@ t.create('docker cloud automated build - manual')
   .intercept(nock =>
     nock('https://cloud.docker.com/')
       .get(`/api/build/v1/source?image=${encodeURIComponent('xenolf/lego')}`)
-      .reply(200, { objects: [{ build_settings: [] }] })
+      .reply(200, { objects: [{ build_settings: [] }] }),
   )
   .expectBadge({ label: 'docker build', message: 'manual', color: 'yellow' })

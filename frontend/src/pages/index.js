@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <Layout
       description="Concise, consistent, and legible badges"
-      title={`${siteConfig.title}`}
+      title={siteConfig.title}
     >
       <HomepageHeader />
       <main>

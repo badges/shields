@@ -22,7 +22,7 @@ export default class AppVeyorTests extends AppVeyorBase {
         parameters: [
           ...pathParams(
             { name: 'user', example: 'NZSmartie' },
-            { name: 'repo', example: 'coap-net-iu0to' }
+            { name: 'repo', example: 'coap-net-iu0to' },
           ),
           ...testResultOpenApiQueryParams,
         ],
@@ -36,7 +36,7 @@ export default class AppVeyorTests extends AppVeyorBase {
           ...pathParams(
             { name: 'user', example: 'NZSmartie' },
             { name: 'repo', example: 'coap-net-iu0to' },
-            { name: 'branch', example: 'master' }
+            { name: 'branch', example: 'master' },
           ),
           ...testResultOpenApiQueryParams,
         ],
@@ -77,7 +77,7 @@ export default class AppVeyorTests extends AppVeyorBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const isCompact = compactMessage !== undefined
     const data = await this.fetch({ user, repo, branch })

@@ -63,7 +63,7 @@ t.create('total installs')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')
-      .reply(200, mockResponse)
+      .reply(200, mockResponse),
   )
   .expectBadge({
     label: 'installs',
@@ -76,7 +76,7 @@ t.create('services installs')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')
-      .reply(200, mockResponse)
+      .reply(200, mockResponse),
   )
   .expectBadge({
     label: 'installs',
@@ -89,7 +89,7 @@ t.create('onprem installs')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')
-      .reply(200, mockResponse)
+      .reply(200, mockResponse),
   )
   .expectBadge({
     label: 'installs',
@@ -119,7 +119,7 @@ t.create('zero installs')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'installs',

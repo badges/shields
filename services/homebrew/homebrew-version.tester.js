@@ -12,7 +12,7 @@ t.create('homebrew (valid)')
   .intercept(nock =>
     nock('https://formulae.brew.sh')
       .get('/api/formula/cake.json')
-      .reply(200, { versions: { stable: '0.23.0', devel: null, head: null } })
+      .reply(200, { versions: { stable: '0.23.0', devel: null, head: null } }),
   )
   .expectBadge({ label: 'homebrew', message: 'v0.23.0' })
 

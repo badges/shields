@@ -2,7 +2,7 @@
 
 ## 4.0.0 [WIP]
 
-- Drop compatibility with Node < 14
+- Drop compatibility with Node < 16
 
 ## 3.3.1
 
@@ -275,7 +275,7 @@ badge.loadFont('/path/to/Verdana.ttf', err => {
     { text: ['build', 'passed'], colorscheme: 'green', template: 'flat' },
     (svg, err) => {
       // svg is a string containing your badge
-    }
+    },
   )
 })
 ```

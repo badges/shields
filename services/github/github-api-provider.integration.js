@@ -51,7 +51,7 @@ describe('Github API provider', function () {
       const { res } = await githubApiProvider.fetch(
         fetch,
         '/repos/rust-lang/rust',
-        {}
+        {},
       )
       expect(res.statusCode).to.equal(200)
       headers.push(res.headers)
@@ -69,7 +69,7 @@ describe('Github API provider', function () {
         const current = headers[i]
         const previous = headers[i - 1]
         expect(+current['x-ratelimit-remaining']).to.be.lessThan(
-          +previous['x-ratelimit-remaining']
+          +previous['x-ratelimit-remaining'],
         )
       }
     })

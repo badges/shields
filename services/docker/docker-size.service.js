@@ -17,7 +17,7 @@ const buildSchema = Joi.object({
     Joi.object({
       size: nonNegativeInteger.required(),
       architecture: Joi.string().required(),
-    })
+    }),
   ),
 }).required()
 
@@ -31,9 +31,9 @@ const pagedSchema = Joi.object({
         Joi.object({
           size: nonNegativeInteger.required(),
           architecture: Joi.string().required(),
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
@@ -49,7 +49,7 @@ const queryParamSchema = Joi.object({
 // For details see: https://github.com/badges/shields/issues/8238
 function getImageSizeForArch(images, arch) {
   const imgWithArch = Object.values(images).find(
-    img => img.architecture === arch
+    img => img.architecture === arch,
   )
 
   if (!imgWithArch) {
@@ -92,6 +92,8 @@ export default class DockerSize extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 600
+
   static defaultBadgeData = { label: 'image size', color: 'blue' }
 
   static render({ size }) {
@@ -103,7 +105,7 @@ export default class DockerSize extends BaseJsonService {
     return this._requestJson({
       schema: tag ? buildSchema : pagedSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}/tags${
         tag ? `/${tag}` : '?page_size=100&ordering=last_updated'
       }${page}`,
@@ -139,7 +141,7 @@ export default class DockerSize extends BaseJsonService {
         i[d.name] = d.images
         return [m, v, i]
       },
-      [{}, [], {}]
+      [{}, [], {}],
     )
 
     const version = latest(versions)

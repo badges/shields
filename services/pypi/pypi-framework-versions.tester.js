@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isPipeSeparatedFrameworkVersions = Joi.string().regex(
-  /^([1-9]+(\.[0-9]+)?(?: \| )?)+$/
+  /^([1-9]+(\.[0-9]+)?(?: \| )?)+$/,
 )
 
 t.create('supported django versions (valid, package version in request)')

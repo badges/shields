@@ -96,7 +96,7 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
     // it is recommended to not use the query param at all if not required
     jobName = jobName ? `?job=${jobName}` : ''
     const url = `${baseUrl}/${decodeURIComponent(
-      project
+      project,
     )}/badges/${branch}/coverage.svg${jobName}`
     const httpErrors = httpErrorsFor('project not found')
     return this._requestSvg({
@@ -115,7 +115,7 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl, job_name: jobName, branch }
+    { gitlab_url: baseUrl, job_name: jobName, branch },
   ) {
     const { message: coverage } = await this.fetch({
       project,

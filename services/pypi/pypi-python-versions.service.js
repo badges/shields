@@ -31,7 +31,7 @@ export default class PypiPythonVersions extends PypiBase {
       return {
         message: Array.from(versionSet)
           .sort((v1, v2) =>
-            semver.compare(semver.coerce(v1), semver.coerce(v2))
+            semver.compare(semver.coerce(v1), semver.coerce(v2)),
           )
           .join(' | '),
         color: 'blue',
@@ -49,15 +49,15 @@ export default class PypiPythonVersions extends PypiBase {
 
     const versions = parseClassifiers(
       packageData,
-      /^Programming Language :: Python :: ([\d.]+)$/
+      /^Programming Language :: Python :: ([\d.]+)$/,
     )
     // If no versions are found yet, check "X :: Only" as a fallback.
     if (versions.length === 0) {
       versions.push(
         ...parseClassifiers(
           packageData,
-          /^Programming Language :: Python :: (\d+) :: Only$/
-        )
+          /^Programming Language :: Python :: (\d+) :: Only$/,
+        ),
       )
     }
 
