@@ -8,7 +8,7 @@ export default class AppVeyorBuild extends AppVeyorBase {
   static openApi = {
     '/appveyor/build/{user}/{repo}': {
       get: {
-        summary: 'AppVeyor',
+        summary: 'AppVeyor Build',
         parameters: pathParams(
           { name: 'user', example: 'gruntjs' },
           { name: 'repo', example: 'grunt' }
@@ -17,7 +17,7 @@ export default class AppVeyorBuild extends AppVeyorBase {
     },
     '/appveyor/build/{user}/{repo}/{branch}': {
       get: {
-        summary: 'AppVeyor (with branch)',
+        summary: 'AppVeyor Build (with branch)',
         parameters: pathParams(
           { name: 'user', example: 'gruntjs' },
           { name: 'repo', example: 'grunt' },

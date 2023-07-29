@@ -9,7 +9,7 @@ export default class AmoVersion extends BaseAmoService {
   static openApi = {
     '/amo/v/{addonId}': {
       get: {
-        summary: 'Mozilla Add-on',
+        summary: 'Mozilla Add-on Version',
         parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },
