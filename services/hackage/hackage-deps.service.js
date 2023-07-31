@@ -11,7 +11,7 @@ export default class HackageDeps extends BaseService {
   static openApi = {
     '/hackage-deps/v/{packageName}': {
       get: {
-        summary: 'Hackage-Deps',
+        summary: 'Hackage Dependencies',
         parameters: pathParams({
           name: 'packageName',
           example: 'lens',

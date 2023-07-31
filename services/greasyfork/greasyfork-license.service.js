@@ -9,7 +9,7 @@ export default class GreasyForkLicense extends BaseGreasyForkService {
   static openApi = {
     '/greasyfork/l/{scriptId}': {
       get: {
-        summary: 'Greasy Fork',
+        summary: 'Greasy Fork License',
         parameters: pathParams({
           name: 'scriptId',
           example: '407466',

@@ -9,7 +9,7 @@ export default class GreasyForkVersion extends BaseGreasyForkService {
   static openApi = {
     '/greasyfork/v/{scriptId}': {
       get: {
-        summary: 'Greasy Fork',
+        summary: 'Greasy Fork Version',
         parameters: pathParams({
           name: 'scriptId',
           example: '407466',

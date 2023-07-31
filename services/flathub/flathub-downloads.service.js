@@ -12,7 +12,7 @@ export default class FlathubDownloads extends BaseJsonService {
   static openApi = {
     '/flathub/downloads/{packageName}': {
       get: {
-        summary: 'Flathub',
+        summary: 'Flathub Downloads',
         parameters: pathParams({
           name: 'packageName',
           example: 'org.mozilla.firefox',

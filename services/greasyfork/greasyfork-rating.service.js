@@ -10,7 +10,7 @@ export default class GreasyForkRatingCount extends BaseGreasyForkService {
   static openApi = {
     '/greasyfork/rating-count/{scriptId}': {
       get: {
-        summary: 'Greasy Fork',
+        summary: 'Greasy Fork Rating',
         parameters: pathParams({
           name: 'scriptId',
           example: '407466',

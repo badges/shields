@@ -12,7 +12,7 @@ export default class HackageVersion extends BaseService {
   static openApi = {
     '/hackage/v/{packageName}': {
       get: {
-        summary: 'Hackage',
+        summary: 'Hackage Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'lens',

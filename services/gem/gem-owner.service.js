@@ -11,7 +11,7 @@ export default class GemOwner extends BaseJsonService {
   static openApi = {
     '/gem/u/{user}': {
       get: {
-        summary: 'Gems',
+        summary: 'Gem Owner',
         parameters: pathParams({
           name: 'user',
           example: 'raphink',
