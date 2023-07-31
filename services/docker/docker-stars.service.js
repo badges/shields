@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import {
   dockerBlue,
   buildDockerUrl,
@@ -15,16 +15,23 @@ const schema = Joi.object({
 export default class DockerStars extends BaseJsonService {
   static category = 'rating'
   static route = buildDockerUrl('stars')
-  static examples = [
-    {
-      title: 'Docker Stars',
-      namedParams: {
-        user: '_',
-        repo: 'ubuntu',
+  static openApi = {
+    '/docker/stars/{user}/{repo}': {
+      get: {
+        summary: 'Docker Stars',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: '_',
+          },
+          {
+            name: 'repo',
+            example: 'ubuntu',
+          },
+        ),
       },
-      staticPreview: this.render({ stars: 9000 }),
     },
-  ]
+  }
 
   static _cacheLength = 14400
 
