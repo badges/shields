@@ -43,7 +43,7 @@ class GithubApiProvider {
   //   reserve it for the user.
   constructor({
     baseUrl,
-    authType,
+    authType = this.constructor.AUTH_TYPES.NO_AUTH,
     onTokenInvalidated = tokenString => {},
     globalToken,
     reserveFraction = 0.25,
