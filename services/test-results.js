@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { queryParams } from './index.js'
 
 const testResultQueryParamSchema = Joi.object({
   compact_message: Joi.equal(''),
@@ -6,6 +7,17 @@ const testResultQueryParamSchema = Joi.object({
   failed_label: Joi.string(),
   skipped_label: Joi.string(),
 }).required()
+
+const testResultOpenApiQueryParams = queryParams(
+  {
+    name: 'compact_message',
+    example: null,
+    schema: { type: 'boolean' },
+  },
+  { name: 'passed_label', example: 'good' },
+  { name: 'failed_label', example: 'bad' },
+  { name: 'skipped_label', example: 'n/a' },
+)
 
 function renderTestResultMessage({
   passed,
@@ -89,13 +101,13 @@ const documentation = `
 
 <p>
   For example, if you want to use a different terminology:
-  <br>
+  <br />
   <code>?passed_label=good&failed_label=bad&skipped_label=n%2Fa</code>
 </p>
 
 <p>
   Or symbols:
-  <br>
+  <br />
   <code>?compact_message&passed_label=💃&failed_label=🤦‍♀️&skipped_label=🤷</code>
 </p>
 
@@ -106,6 +118,7 @@ const documentation = `
 
 export {
   testResultQueryParamSchema,
+  testResultOpenApiQueryParams,
   renderTestResultMessage,
   renderTestResultBadge,
   documentation,

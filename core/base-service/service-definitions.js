@@ -48,7 +48,7 @@ const serviceDefinition = Joi.object({
     Joi.object({
       get: Joi.object({
         summary: Joi.string().required(),
-        description: Joi.string().required(),
+        description: Joi.string(),
         parameters: Joi.array()
           .items(
             Joi.object({
@@ -56,8 +56,12 @@ const serviceDefinition = Joi.object({
               description: Joi.string(),
               in: Joi.string().valid('query', 'path').required(),
               required: Joi.boolean().required(),
-              schema: Joi.object({ type: Joi.string().required() }).required(),
-              example: Joi.string(),
+              schema: Joi.object({
+                type: Joi.string().required(),
+                enum: Joi.array(),
+              }).required(),
+              allowEmptyValue: Joi.boolean(),
+              example: Joi.string().allow(null),
             }),
           )
           .min(1)
@@ -67,8 +71,8 @@ const serviceDefinition = Joi.object({
   ),
 }).required()
 
-function assertValidServiceDefinition(example, message = undefined) {
-  Joi.assert(example, serviceDefinition, message)
+function assertValidServiceDefinition(service, message = undefined) {
+  Joi.assert(service, serviceDefinition, message)
 }
 
 const serviceDefinitionExport = Joi.object({

@@ -1,5 +1,5 @@
 import { MetricNames } from '../../core/base-service/metric-helper.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, queryParams } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 import jsonPath from './json-path.js'
 
@@ -14,13 +14,11 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
           The Dynamic JSON Badge allows you to extract an arbitrary value from any
           JSON Document using a JSONPath selector and show it on a badge.
         </p>`,
-        parameters: [
+        parameters: queryParams(
           {
             name: 'url',
             description: 'The URL to a JSON document',
-            in: 'query',
             required: true,
-            schema: { type: 'string' },
             example:
               'https://github.com/badges/shields/raw/master/package.json',
           },
@@ -28,28 +26,20 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
             name: 'query',
             description:
               'A <a href="https://jsonpath.com/">JSONPath</a> expression that will be used to query the document',
-            in: 'query',
             required: true,
-            schema: { type: 'string' },
             example: '$.name',
           },
           {
             name: 'prefix',
             description: 'Optional prefix to append to the value',
-            in: 'query',
-            required: false,
-            schema: { type: 'string' },
             example: '[',
           },
           {
             name: 'suffix',
             description: 'Optional suffix to append to the value',
-            in: 'query',
-            required: false,
-            schema: { type: 'string' },
             example: ']',
           },
-        ],
+        ),
       },
     },
   }
