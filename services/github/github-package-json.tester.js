@@ -93,9 +93,9 @@ t.create('Prod dependency version (monorepo)')
   })
 
 t.create('Scoped dependency')
-  .get('/dependency-version/badges/shields/dev/@babel/core.json')
+  .get('/dependency-version/badges/shields/dev/@docusaurus/core.json')
   .expectBadge({
-    label: '@babel/core',
+    label: '@docusaurus/core',
     message: semverRange,
   })
 
