@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/base-service/openapi.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/base-service/openapi.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Functions for publishing the shields.io URL schema as an OpenAPI Document
+ *
+ * @module
+ */
+
+const baseUrl = process.env.BASE_URL
+const globalParamRefs = [
+  { $ref: '#/components/parameters/style' },
+  { $ref: '#/components/parameters/logo' },
+  { $ref: '#/components/parameters/logoColor' },
+  { $ref: '#/components/parameters/label' },
+  { $ref: '#/components/parameters/labelColor' },
+  { $ref: '#/components/parameters/color' },
+  { $ref: '#/components/parameters/cacheSeconds' },
+  { $ref: '#/components/parameters/link' },
+]
+
+function getCodeSamples(altText) {
+  return [
+    {
+      lang: 'URL',
+      label: 'URL',
+      source: '$url',
+    },
+    {
+      lang: 'Markdown',
+      label: 'Markdown',
+      source: `![${altText}]($url)`,
+    },
+    {
+      lang: 'reStructuredText',
+      label: 'rSt',
+      source: `.. image:: $url\n:   alt: ${altText}`,
+    },
+    {
+      lang: 'AsciiDoc',
+      label: 'AsciiDoc',
+      source: `image:$url[${altText}]`,
+    },
+    {
+      lang: 'HTML',
+      label: 'HTML',
+      source: `&lt;img alt="${altText}" src="$url">`,
+    },
+  ]
+}
+
+function pattern2openapi(pattern) {
+  return pattern
+    .replace(/:([A-Za-z0-9_\-.]+)(?=[/]?)/g, (matches, grp1) => `{${grp1}}`)
+    .replace(/\([^)]*\)/g, '')
+    .replace(/\+$/, '')
+}
+
+function getEnum(pattern, paramName) {
+  const re = new RegExp(`${paramName}\\(([A-Za-z0-9_\\-|]+)\\)`)
+  const match = pattern.match(re)
+  if (match === null) {
+    return undefined
+  }
+  if (!match[1].includes('|')) {
+    return undefined
+  }
+  return match[1].split('|')
+}
+
+function param2openapi(pattern, paramName, exampleValue, paramType) {
+  const outParam = {}
+  outParam.name = paramName
+  // We don't have description if we are building the OpenAPI spec from examples[]
+  outParam.in = paramType
+  if (paramType === 'path') {
+    outParam.required = true
+  } else {
+    /* Occasionally we do have required query params, but we can't
+    detect this if we are building the OpenAPI spec from examples[]
+    so just assume all query params are optional */
+    outParam.required = false
+  }
+
+  if (exampleValue === null &amp;&amp; paramType === 'query') {
+    outParam.schema = { type: 'boolean' }
+    outParam.allowEmptyValue = true
+  } else {
+    outParam.schema = { type: 'string' }
+  }
+
+  if (paramType === 'path') {
+    outParam.schema.enum = getEnum(pattern, paramName)
+  }
+
+  outParam.example = exampleValue
+  return outParam
+}
+
+function getVariants(pattern) {
+  /*
+  given a URL pattern (which may include '/one/or/:more?/:optional/:parameters*')
+  return an array of all possible permutations:
+  [
+    '/one/or/:more/:optional/:parameters',
+    '/one/or/:optional/:parameters',
+    '/one/or/:more/:optional',
+    '/one/or/:optional',
+  ]
+  */
+  const patterns = [pattern.split('/')]
+  while (patterns.flat().find(p => p.endsWith('?') || p.endsWith('*'))) {
+    for (let i = 0; i &lt; patterns.length; i++) {
+      const pattern = patterns[i]
+      for (let j = 0; j &lt; pattern.length; j++) {
+        const path = pattern[j]
+        if (path.endsWith('?') || path.endsWith('*')) {
+          pattern[j] = path.slice(0, -1)
+          patterns.push(patterns[i].filter(p => p !== pattern[j]))
+        }
+      }
+    }
+  }
+  for (let i = 0; i &lt; patterns.length; i++) {
+    patterns[i] = patterns[i].join('/')
+  }
+  return patterns
+}
+
+function examples2openapi(examples) {
+  const paths = {}
+  for (const example of examples) {
+    const patterns = getVariants(example.example.pattern)
+
+    for (const pattern of patterns) {
+      const openApiPattern = pattern2openapi(pattern)
+      if (
+        openApiPattern.includes('*') ||
+        openApiPattern.includes('?') ||
+        openApiPattern.includes('+') ||
+        openApiPattern.includes('(')
+      ) {
+        throw new Error(`unexpected characters in pattern '${openApiPattern}'`)
+      }
+
+      /*
+      There's several things going on in this block:
+      1. Filter out any examples for params that don't appear
+         in this variant of the route
+      2. Make sure we add params to the array
+         in the same order they appear in the route
+      3. If there are any params we don't have an example value for,
+         make sure they still appear in the pathParams array with
+         exampleValue == undefined anyway
+      */
+      const pathParams = []
+      for (const param of openApiPattern
+        .split('/')
+        .filter(p => p.startsWith('{') &amp;&amp; p.endsWith('}'))) {
+        const paramName = param.slice(1, -1)
+        const exampleValue = example.example.namedParams[paramName]
+        pathParams.push(param2openapi(pattern, paramName, exampleValue, 'path'))
+      }
+
+      const queryParams = example.example.queryParams || {}
+
+      const parameters = [
+        ...pathParams,
+        ...Object.entries(queryParams).map(([paramName, exampleValue]) =>
+          param2openapi(pattern, paramName, exampleValue, 'query'),
+        ),
+        ...globalParamRefs,
+      ]
+      paths[openApiPattern] = {
+        get: {
+          summary: example.title,
+          description: example?.documentation?.__html
+            .replace(/&lt;br>/g, '&lt;br />') // react does not like &lt;br>
+            .replace(/{/g, '&amp;#123;')
+            .replace(/}/g, '&amp;#125;')
+            .replace(/&lt;style>(.|\n)*?&lt;\/style>/, ''), // workaround for w3c-validation TODO: remove later
+          parameters,
+          'x-code-samples': getCodeSamples(example.title),
+        },
+      }
+    }
+  }
+  return paths
+}
+
+function addGlobalProperties(endpoints) {
+  const paths = {}
+  for (const key of Object.keys(endpoints)) {
+    paths[key] = endpoints[key]
+    paths[key].get.parameters = [
+      ...paths[key].get.parameters,
+      ...globalParamRefs,
+    ]
+    paths[key].get['x-code-samples'] = getCodeSamples(paths[key].get.summary)
+  }
+  return paths
+}
+
+function services2openapi(services) {
+  const paths = {}
+  for (const service of services) {
+    if (service.openApi) {
+      // if the service declares its own OpenAPI definition, use that...
+      for (const [key, value] of Object.entries(
+        addGlobalProperties(service.openApi),
+      )) {
+        if (key in paths) {
+          throw new Error(`Conflicting route: ${key}`)
+        }
+        paths[key] = value
+      }
+    } else {
+      // ...otherwise do our best to build one from examples[]
+      for (const [key, value] of Object.entries(
+        examples2openapi(service.examples),
+      )) {
+        // allow conflicting routes for legacy examples
+        paths[key] = value
+      }
+    }
+  }
+  return paths
+}
+
+function category2openapi(category, services) {
+  const spec = {
+    openapi: '3.0.0',
+    info: {
+      version: '1.0.0',
+      title: category.name,
+      license: {
+        name: 'CC0',
+      },
+    },
+    servers: baseUrl ? [{ url: baseUrl }] : undefined,
+    components: {
+      parameters: {
+        style: {
+          name: 'style',
+          in: 'query',
+          required: false,
+          description:
+            'One of: flat (default), flat-square, plastic, for-the-badge, social',
+          schema: {
+            type: 'string',
+          },
+          example: 'flat',
+        },
+        logo: {
+          name: 'logo',
+          in: 'query',
+          required: false,
+          description:
+            'One of the named logos (bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on &lt;a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons&lt;/a> to copy the slug or they can be found in the &lt;a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file&lt;/a> in the simple-icons repository. &lt;a href="/docs/logos">Further info&lt;/a>.',
+          schema: {
+            type: 'string',
+          },
+          example: 'appveyor',
+        },
+        logoColor: {
+          name: 'logoColor',
+          in: 'query',
+          required: false,
+          description:
+            'The color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported). Supported for named logos and Shields logos but not for custom logos. For multicolor Shields logos, the corresponding named logo will be used and colored.',
+          schema: {
+            type: 'string',
+          },
+          example: 'violet',
+        },
+        label: {
+          name: 'label',
+          in: 'query',
+          required: false,
+          description:
+            'Override the default left-hand-side text (&lt;a href="https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding">URL-Encoding&lt;/a> needed for spaces or special characters!)',
+          schema: {
+            type: 'string',
+          },
+          example: 'healthiness',
+        },
+        labelColor: {
+          name: 'labelColor',
+          in: 'query',
+          required: false,
+          description:
+            'Background color of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
+          schema: {
+            type: 'string',
+          },
+          example: 'abcdef',
+        },
+        color: {
+          name: 'color',
+          in: 'query',
+          required: false,
+          description:
+            'Background color of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
+          schema: {
+            type: 'string',
+          },
+          example: 'fedcba',
+        },
+        cacheSeconds: {
+          name: 'cacheSeconds',
+          in: 'query',
+          required: false,
+          description:
+            'HTTP cache lifetime (rules are applied to infer a default value on a per-badge basis, any values specified below the default will be ignored).',
+          schema: {
+            type: 'string',
+          },
+          example: '3600',
+        },
+        link: {
+          name: 'link',
+          in: 'query',
+          required: false,
+          description:
+            'Specify what clicking on the left/right of a badge should do. Note that this only works when integrating your badge in an `&lt;object>` HTML tag, but not an `&lt;img>` tag or a markup language.',
+          style: 'form',
+          explode: true,
+          schema: {
+            type: 'array',
+            maxItems: 2,
+            items: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+    paths: services2openapi(services),
+  }
+
+  return spec
+}
+
+/**
+ * Helper function for assembling an OpenAPI path parameter object
+ *
+ * @param {module:core/base-service/openapi~PathParamInput} param Input param
+ * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @see https://swagger.io/specification/#parameter-object
+ */
+function pathParam({
+  name,
+  example,
+  schema = { type: 'string' },
+  description,
+}) {
+  return { name, in: 'path', required: true, schema, example, description }
+}
+
+/**
+ * Helper function for assembling an array of OpenAPI path parameter objects
+ * The code
+ * ```
+ * const params = pathParams(
+ *   { name: 'name1', example: 'example1' },
+ *   { name: 'name2', example: 'example2' },
+ * )
+ * ```
+ * is equivilent to
+ * ```
+ * const params = [
+ *   pathParam({ name: 'name1', example: 'example1' }),
+ *   pathParam({ name: 'name2', example: 'example2' }),
+ * ]
+ * ```
+ *
+ * @param {...module:core/base-service/openapi~PathParamInput} params Input params
+ * @returns {Array.&lt;module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link module:core/base-service/openapi~pathParam}
+ */
+function pathParams(...params) {
+  return params.map(param => pathParam(param))
+}
+
+/**
+ * Helper function for assembling an OpenAPI query parameter object
+ *
+ * @param {module:core/base-service/openapi~QueryParamInput} param Input param
+ * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @see https://swagger.io/specification/#parameter-object
+ */
+function queryParam({
+  name,
+  example,
+  schema = { type: 'string' },
+  required = false,
+  description,
+}) {
+  const param = { name, in: 'query', required, schema, example, description }
+  if (example === null &amp;&amp; schema.type === 'boolean') {
+    param.allowEmptyValue = true
+  }
+  return param
+}
+
+/**
+ * Helper function for assembling an array of OpenAPI query parameter objects
+ * The code
+ * ```
+ * const params = queryParams(
+ *   { name: 'name1', example: 'example1' },
+ *   { name: 'name2', example: 'example2' },
+ * )
+ * ```
+ * is equivilent to
+ * ```
+ * const params = [
+ *   queryParam({ name: 'name1', example: 'example1' }),
+ *   queryParams({ name: 'name2', example: 'example2' }),
+ * ]
+ * ```
+ *
+ * @param {...module:core/base-service/openapi~QueryParamInput} params Input params
+ * @returns {Array.&lt;module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link module:core/base-service/openapi~queryParam}
+ */
+function queryParams(...params) {
+  return params.map(param => queryParam(param))
+}
+
+/**
+ * @typedef {object} PathParamInput
+ * @property {string} name The name of the parameter. Parameter names are case sensitive
+ * @property {string} example Example of a valid value for this parameter
+ * @property {object} [schema={ type: 'string' }] Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type.
+ *    Normally this should be omitted as all path parameters are strings.
+ *    Use this when we also want to pass an enum of valid parameters
+ *    to be presented as a drop-down in the frontend. e.g:
+ *    `{'type': 'string', 'enum': ['github', 'bitbucket'}` (Optional)
+ * @property {string} description A brief description of the parameter (Optional)
+ */
+
+/**
+ * @typedef {object} QueryParamInput
+ * @property {string} name The name of the parameter. Parameter names are case sensitive
+ * @property {string|null} example Example of a valid value for this parameter
+ * @property {object} [schema={ type: 'string' }] Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type. This can normally be omitted.
+ *    Query params are usually strings. (Optional)
+ * @property {boolean} [required=false] Determines whether this parameter is mandatory (Optional)
+ * @property {string} description A brief description of the parameter (Optional)
+ */
+
+/**
+ * OpenAPI Parameter Object
+ *
+ * @typedef {object} OpenApiParam
+ * @property {string} name The name of the parameter
+ * @property {string|null} example Example of a valid value for this parameter
+ * @property {('path'|'query')} in The location of the parameter
+ * @property {object} schema Parameter schema.
+ *    An [OpenAPI Schema object](https://swagger.io/specification/#schema-object)
+ *    specifying the parameter type.
+ * @property {boolean} required Determines whether this parameter is mandatory
+ * @property {string} description A brief description of the parameter
+ * @property {boolean} allowEmptyValue If true, allows the ability to pass an empty value to this parameter
+ */
+
+export { category2openapi, pathParam, pathParams, queryParam, queryParams }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_base-service_openapi.html">core/base-service/openapi</a></li><li><a href="module-core_base-service_resource-cache.html">core/base-service/resource-cache</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_build-status.html">services/build-status</a></li><li><a href="module-services_color-formatters.html">services/color-formatters</a></li><li><a href="module-services_contributor-count.html">services/contributor-count</a></li><li><a href="module-services_downloads.html">services/downloads</a></li><li><a href="module-services_dynamic-common.html">services/dynamic-common</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_endpoint-common.html">services/endpoint-common</a></li><li><a href="module-services_licenses.html">services/licenses</a></li><li><a href="module-services_package-json-helpers.html">services/package-json-helpers</a></li><li><a href="module-services_php-version.html">services/php-version</a></li><li><a href="module-services_pipenv-helpers.html">services/pipenv-helpers</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li><li><a href="module-services_text-formatters.html">services/text-formatters</a></li><li><a href="module-services_validators.html">services/validators</a></li></ul><h3>Classes</h3><ul><li><a href="module-badge-maker_lib_xml-ElementList.html">ElementList</a></li><li><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-adding-new-config-values.html">adding-new-config-values</a></li><li><a href="tutorial-authentication.html">authentication</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-static-badges.html">static-badges</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createNumRequestCounter">createNumRequestCounter</a></li><li><a href="global.html#isMetricWithPattern">isMetricWithPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jul 31 2023 11:24:14 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
