@@ -39,7 +39,7 @@ export default class JetbrainsVersion extends JetbrainsBase {
   static openApi = {
     '/jetbrains/plugin/v/{pluginId}': {
       get: {
-        summary: 'JetBrains Plugins',
+        summary: 'JetBrains Plugin Version',
         parameters: pathParams({
           name: 'pluginId',
           example: '9630',

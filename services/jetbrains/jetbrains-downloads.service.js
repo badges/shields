@@ -33,7 +33,7 @@ export default class JetbrainsDownloads extends JetbrainsBase {
   static openApi = {
     '/jetbrains/plugin/d/{pluginId}': {
       get: {
-        summary: 'JetBrains plugins',
+        summary: 'JetBrains plugin Downloads',
         parameters: pathParams({
           name: 'pluginId',
           example: '1347',
