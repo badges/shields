@@ -1,20 +1,20 @@
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import { renderCurrencyBadge, LiberapayBase } from './liberapay-base.js'
 
 export default class LiberapayReceives extends LiberapayBase {
   static route = this.buildRoute('receives')
 
-  static examples = [
-    {
-      title: 'Liberapay receiving',
-      namedParams: { entity: 'Changaco' },
-      staticPreview: renderCurrencyBadge({
-        label: 'receives',
-        amount: '98.32',
-        currency: 'EUR',
-      }),
+  static openApi = {
+    '/liberapay/receives/{entity}': {
+      get: {
+        summary: 'Liberapay receiving',
+        parameters: pathParams({
+          name: 'entity',
+          example: 'Changaco',
+        }),
+      },
     },
-  ]
+  }
 
   async handle({ entity }) {
     const data = await this.fetch({ entity })

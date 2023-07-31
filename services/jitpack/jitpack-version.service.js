@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -17,17 +17,23 @@ export default class JitPackVersion extends BaseJsonService {
     pattern: ':groupId/:artifactId',
   }
 
-  static examples = [
-    {
-      title: 'JitPack',
-      namedParams: {
-        groupId: 'com.github.jitpack',
-        artifactId: 'maven-simple',
+  static openApi = {
+    '/jitpack/version/{groupId}/{artifactId}': {
+      get: {
+        summary: 'JitPack',
+        parameters: pathParams(
+          {
+            name: 'groupId',
+            example: 'com.github.jitpack',
+          },
+          {
+            name: 'artifactId',
+            example: 'maven-simple',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: 'v1.1' }),
-      keywords: ['java', 'maven'],
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'jitpack' }
 

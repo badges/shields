@@ -1,17 +1,21 @@
 import { colorScale } from '../color-formatters.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import { LiberapayBase } from './liberapay-base.js'
 
 export default class LiberapayGoal extends LiberapayBase {
   static route = this.buildRoute('goal')
 
-  static examples = [
-    {
-      title: 'Liberapay goal progress',
-      namedParams: { entity: 'Changaco' },
-      staticPreview: this.render({ percentAchieved: 33 }),
+  static openApi = {
+    '/liberapay/goal/{entity}': {
+      get: {
+        summary: 'Liberapay goal progress',
+        parameters: pathParams({
+          name: 'entity',
+          example: 'Changaco',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ percentAchieved }) {
     return {

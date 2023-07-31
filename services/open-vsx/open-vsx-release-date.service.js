@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import OpenVSXBase from './open-vsx-base.js'
@@ -10,19 +11,23 @@ export default class OpenVSXReleaseDate extends OpenVSXBase {
     pattern: 'release-date/:namespace/:extension',
   }
 
-  static examples = [
-    {
-      title: 'Open VSX Release Date',
-      namedParams: {
-        namespace: 'redhat',
-        extension: 'java',
+  static openApi = {
+    '/open-vsx/release-date/{namespace}/{extension}': {
+      get: {
+        summary: 'Open VSX Release Date',
+        parameters: pathParams(
+          {
+            name: 'namespace',
+            example: 'redhat',
+          },
+          {
+            name: 'extension',
+            example: 'java',
+          },
+        ),
       },
-      staticPreview: this.render({
-        releaseDate: '2020-10-15T13:40:16.986723Z',
-      }),
-      keywords: this.keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'release date' }
 
