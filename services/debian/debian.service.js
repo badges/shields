@@ -31,7 +31,7 @@ export default class Debian extends BaseJsonService {
   static openApi = {
     '/debian/v/{packageName}/{distribution}': {
       get: {
-        summary: 'Debian package',
+        summary: 'Debian package (for distribution)',
         parameters: pathParams(
           {
             name: 'packageName',

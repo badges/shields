@@ -17,7 +17,7 @@ export default class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
   static openApi = {
     '/eclipse-marketplace/v/{name}': {
       get: {
-        summary: 'Eclipse Marketplace',
+        summary: 'Eclipse Marketplace Version',
         parameters: pathParams({
           name: 'name',
           example: 'notepad4e',

@@ -12,7 +12,7 @@ export default class DubLicense extends BaseJsonService {
   static openApi = {
     '/dub/l/{packageName}': {
       get: {
-        summary: 'DUB',
+        summary: 'DUB License',
         parameters: pathParams({
           name: 'packageName',
           example: 'vibe-d',

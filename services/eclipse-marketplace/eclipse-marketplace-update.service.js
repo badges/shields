@@ -19,7 +19,7 @@ export default class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
   static openApi = {
     '/eclipse-marketplace/last-update/{name}': {
       get: {
-        summary: 'Eclipse Marketplace',
+        summary: 'Eclipse Marketplace Last Update',
         parameters: pathParams({
           name: 'name',
           example: 'notepad4e',

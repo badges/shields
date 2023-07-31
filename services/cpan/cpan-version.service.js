@@ -9,7 +9,7 @@ export default class CpanVersion extends BaseCpanService {
   static openApi = {
     '/cpan/v/{packageName}': {
       get: {
-        summary: 'CPAN',
+        summary: 'CPAN Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'Config-Augeas',

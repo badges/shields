@@ -16,7 +16,7 @@ export default class EclipseMarketplaceLicense extends EclipseMarketplaceBase {
   static openApi = {
     '/eclipse-marketplace/l/{name}': {
       get: {
-        summary: 'Eclipse Marketplace',
+        summary: 'Eclipse Marketplace License',
         parameters: pathParams({
           name: 'name',
           example: 'notepad4e',

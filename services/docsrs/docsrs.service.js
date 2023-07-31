@@ -11,7 +11,7 @@ export default class DocsRs extends BaseJsonService {
   static openApi = {
     '/docsrs/{crate}/{version}': {
       get: {
-        summary: 'docs.rs',
+        summary: 'docs.rs (with version)',
         parameters: pathParams(
           {
             name: 'crate',

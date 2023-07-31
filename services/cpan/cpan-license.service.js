@@ -8,7 +8,7 @@ export default class CpanLicense extends BaseCpanService {
   static openApi = {
     '/cpan/l/{packageName}': {
       get: {
-        summary: 'CPAN',
+        summary: 'CPAN License',
         parameters: pathParams({
           name: 'packageName',
           example: 'Config-Augeas',

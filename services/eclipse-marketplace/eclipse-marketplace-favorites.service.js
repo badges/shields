@@ -17,7 +17,7 @@ export default class EclipseMarketplaceFavorites extends EclipseMarketplaceBase 
   static openApi = {
     '/eclipse-marketplace/favorites/{name}': {
       get: {
-        summary: 'Eclipse Marketplace',
+        summary: 'Eclipse Marketplace Favorites',
         parameters: pathParams({
           name: 'name',
           example: 'notepad4e',

@@ -10,7 +10,7 @@ export default class DubVersion extends BaseJsonService {
   static openApi = {
     '/dub/v/{packageName}': {
       get: {
-        summary: 'DUB',
+        summary: 'DUB Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'vibe-d',
