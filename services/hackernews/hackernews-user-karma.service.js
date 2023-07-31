@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import { anyInteger } from '../validators.js'
 
 const schema = Joi.object({
@@ -17,13 +17,17 @@ export default class HackerNewsUserKarma extends BaseJsonService {
     pattern: ':id',
   }
 
-  static examples = [
-    {
-      title: 'HackerNews User Karma',
-      namedParams: { id: 'pg' },
-      staticPreview: this.render({ id: 'pg', karma: 15536 }),
+  static openApi = {
+    '/hackernews/user-karma/{id}': {
+      get: {
+        summary: 'HackerNews User Karma',
+        parameters: pathParams({
+          name: 'id',
+          example: 'pg',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'Karma',
