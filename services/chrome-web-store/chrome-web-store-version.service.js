@@ -9,7 +9,7 @@ export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
   static openApi = {
     '/chrome-web-store/v/{storeId}': {
       get: {
-        summary: 'Chrome Web Store',
+        summary: 'Chrome Web Store Version',
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',

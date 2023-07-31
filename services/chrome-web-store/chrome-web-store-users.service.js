@@ -9,7 +9,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static openApi = {
     '/chrome-web-store/users/{storeId}': {
       get: {
-        summary: 'Chrome Web Store',
+        summary: 'Chrome Web Store Users',
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',

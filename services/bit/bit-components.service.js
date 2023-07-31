@@ -20,7 +20,7 @@ export default class BitComponents extends BaseJsonService {
   static openApi = {
     '/bit/collection/total-components/{owner}/{collection}': {
       get: {
-        summary: 'bit',
+        summary: 'Bit',
         parameters: pathParams(
           {
             name: 'owner',

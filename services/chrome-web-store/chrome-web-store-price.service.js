@@ -9,7 +9,7 @@ export default class ChromeWebStorePrice extends BaseChromeWebStoreService {
   static openApi = {
     '/chrome-web-store/price/{storeId}': {
       get: {
-        summary: 'Chrome Web Store',
+        summary: 'Chrome Web Store Price',
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',

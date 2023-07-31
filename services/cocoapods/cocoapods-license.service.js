@@ -8,7 +8,7 @@ export default class CocoapodsLicense extends BaseCocoaPodsService {
   static openApi = {
     '/cocoapods/l/{spec}': {
       get: {
-        summary: 'Cocoapods',
+        summary: 'Cocoapods License',
         parameters: pathParams({
           name: 'spec',
           example: 'AFNetworking',

@@ -16,7 +16,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
   static openApi = {
     '/codefactor/grade/{vcsType}/{user}/{repo}/{branch}': {
       get: {
-        summary: 'CodeFactor Grade',
+        summary: 'CodeFactor Grade (with branch)',
         parameters: pathParams(
           {
             name: 'vcsType',

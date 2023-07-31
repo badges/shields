@@ -9,7 +9,7 @@ export default class CocoapodsVersion extends BaseCocoaPodsService {
   static openApi = {
     '/cocoapods/v/{spec}': {
       get: {
-        summary: 'Cocoapods',
+        summary: 'Cocoapods Version',
         parameters: pathParams({
           name: 'spec',
           example: 'AFNetworking',

@@ -9,7 +9,7 @@ export default class ClojarsDownloads extends BaseClojarsService {
   static openApi = {
     '/clojars/dt/{clojar}': {
       get: {
-        summary: 'ClojarsDownloads',
+        summary: 'Clojars Downloads',
         parameters: pathParams({
           name: 'clojar',
           example: 'prismic',
