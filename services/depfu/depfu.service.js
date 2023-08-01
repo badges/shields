@@ -1,10 +1,5 @@
 import Joi from 'joi'
-import {
-  BaseJsonService,
-  InvalidParameter,
-  redirector,
-  pathParams,
-} from '../index.js'
+import { BaseJsonService, InvalidParameter, redirector } from '../index.js'
 
 const depfuSchema = Joi.object({
   text: Joi.string().required(),
@@ -18,23 +13,16 @@ class Depfu extends BaseJsonService {
     pattern: ':vcsType(github|gitlab)/:project+',
   }
 
-  static openApi = {
-    '/depfu/dependencies/{vcsType}/{project}': {
-      get: {
-        summary: 'Depfu',
-        parameters: pathParams(
-          {
-            name: 'vcsType',
-            example: 'github',
-          },
-          {
-            name: 'project',
-            example: 'depfu/example-ruby',
-          },
-        ),
-      },
+  static examples = [
+    {
+      title: 'Depfu',
+      namedParams: { vcsType: 'github', project: 'depfu/example-ruby' },
+      staticPreview: this.render({
+        text: 'recent',
+        colorscheme: 'brightgreen',
+      }),
     },
-  }
+  ]
 
   static defaultBadgeData = { label: 'dependencies' }
 
