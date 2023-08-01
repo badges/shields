@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseSvgScrapingService, pathParams } from '../index.js'
+import { BaseSvgScrapingService } from '../index.js'
 import { isValidGrade, gradeColor } from './codefactor-helpers.js'
 
 const schema = Joi.object({
@@ -13,50 +13,18 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
     pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch*',
   }
 
-  static openApi = {
-    '/codefactor/grade/{vcsType}/{user}/{repo}/{branch}': {
-      get: {
-        summary: 'CodeFactor Grade (with branch)',
-        parameters: pathParams(
-          {
-            name: 'vcsType',
-            example: 'github',
-          },
-          {
-            name: 'user',
-            example: 'microsoft',
-          },
-          {
-            name: 'repo',
-            example: 'powertoys',
-          },
-          {
-            name: 'branch',
-            example: 'main',
-          },
-        ),
+  static examples = [
+    {
+      title: 'CodeFactor Grade',
+      namedParams: {
+        vcsType: 'github',
+        user: 'microsoft',
+        repo: 'powertoys',
+        branch: 'main',
       },
+      staticPreview: this.render({ grade: 'B+' }),
     },
-    '/codefactor/grade/{vcsType}/{user}/{repo}': {
-      get: {
-        summary: 'CodeFactor Grade',
-        parameters: pathParams(
-          {
-            name: 'vcsType',
-            example: 'github',
-          },
-          {
-            name: 'user',
-            example: 'microsoft',
-          },
-          {
-            name: 'repo',
-            example: 'powertoys',
-          },
-        ),
-      },
-    },
-  }
+  ]
 
   static defaultBadgeData = { label: 'code quality' }
 
