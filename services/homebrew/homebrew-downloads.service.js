@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseJsonService, pathParams } from '../index.js'
+import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
 function getSchema({ formula }) {
@@ -38,23 +38,13 @@ export default class HomebrewDownloads extends BaseJsonService {
     pattern: 'installs/:interval(dm|dq|dy)/:formula',
   }
 
-  static openApi = {
-    '/homebrew/installs/{interval}/{formula}': {
-      get: {
-        summary: 'homebrew downloads',
-        parameters: pathParams(
-          {
-            name: 'interval',
-            example: 'dm',
-          },
-          {
-            name: 'formula',
-            example: 'cake',
-          },
-        ),
-      },
+  static examples = [
+    {
+      title: 'homebrew downloads',
+      namedParams: { interval: 'dm', formula: 'cake' },
+      staticPreview: renderDownloadsBadge({ interval: 'month', downloads: 93 }),
     },
-  }
+  ]
 
   static defaultBadgeData = { label: 'downloads' }
 
