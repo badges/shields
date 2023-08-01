@@ -4,6 +4,36 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-08-01
+
+- fixup
+- fix 'draft release' action part 2
+- fix 'draft release' action [#9432](https://github.com/badges/shields/issues/9432)
+- Convert `examples` arrays to `openApi` objects (part 1) [#9320](https://github.com/badges/shields/issues/9320)
+- add a blog post about GH Tag/Release filter param [#9424](https://github.com/badges/shields/issues/9424)
+- add some tests for [docsrs] [#9423](https://github.com/badges/shields/issues/9423)
+- Migrate from docs.rs' builds API to status API [#9422](https://github.com/badges/shields/issues/9422)
+- exclude assets dir from raster redirects [#9409](https://github.com/badges/shields/issues/9409)
+- move some docs to the website [#9347](https://github.com/badges/shields/issues/9347)
+- [OpenVSX] Fix OpenVSX API call for unversioned package URLs [#9408](https://github.com/badges/shields/issues/9408)
+- devops: automate bug report tests [#9386](https://github.com/badges/shields/issues/9386)
+- Add support for [Lemmy] [#9368](https://github.com/badges/shields/issues/9368)
+- upgrade to npm 9 [#9323](https://github.com/badges/shields/issues/9323)
+- run service/docker builds on merge queue builds [#8943](https://github.com/badges/shields/issues/8943)
+- Go back to default YouTube cache [#9372](https://github.com/badges/shields/issues/9372)
+- cache docker badges for longer (take 3) [#9369](https://github.com/badges/shields/issues/9369)
+- edit comment about styles to remove in future [#9363](https://github.com/badges/shields/issues/9363)
+- Revert "[OpenCollective] update opencollective to api v2 (#9346)" [#9362](https://github.com/badges/shields/issues/9362)
+- improve docs for github issues search badge [#9360](https://github.com/badges/shields/issues/9360)
+- [OpenCollective] update opencollective to api v2 [#9346](https://github.com/badges/shields/issues/9346)
+- Add [GitHubDiscussionsSearch] and GitHubRepoDiscussionsSearch service [#9340](https://github.com/badges/shields/issues/9340)
+- Allow user to filter github tags and releases [#9193](https://github.com/badges/shields/issues/9193)
+- don't URL encode slash in [githubactionsworkflow] badge [#9322](https://github.com/badges/shields/issues/9322)
+- add a bit of border to select boxes [#9348](https://github.com/badges/shields/issues/9348)
+- deprecate [snyk] badges [#9349](https://github.com/badges/shields/issues/9349)
+- increase max-age on [docker] badges, again [#9350](https://github.com/badges/shields/issues/9350)
+- Dependency updates
+
 ## server-2023-07-02
 
 By far the most significant change in this release is the long-awaited launch of the re-designed frontend:
