@@ -2,6 +2,9 @@
 
 set -euxo pipefail
 
+# mark workspace dir as 'safe'
+git config --system --add safe.directory '/github/workspace'
+
 # Find last server-YYYY-MM-DD tag
 git fetch --unshallow --tags
 LAST_TAG=$(git tag | grep server | tail -n 1)
