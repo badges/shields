@@ -19,9 +19,9 @@ const buildSchema = Joi.object({
         Joi.object({
           digest: Joi.string(),
           architecture: Joi.string().required(),
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
@@ -67,9 +67,9 @@ export default class DockerVersion extends BaseJsonService {
     return this._requestJson({
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-      errorMessages: { 404: 'repository or tag not found' },
+      httpErrors: { 404: 'repository or tag not found' },
     })
   }
 

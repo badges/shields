@@ -11,7 +11,7 @@ const intelliJschema = Joi.object({
         .items(
           Joi.object({
             '@_downloads': nonNegativeInteger,
-          })
+          }),
         )
         .single()
         .required(),
@@ -54,9 +54,9 @@ export default class JetbrainsDownloads extends JetbrainsBase {
       const jetbrainsPluginData = await this._requestJson({
         schema: jetbrainsSchema,
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
-          pluginId
+          pluginId,
         )}`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
       downloads = jetbrainsPluginData.downloads
     }

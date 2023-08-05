@@ -39,7 +39,7 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'success' }),
     given({ status: 'successful' }),
   ]).assert('should be brightgreen', b =>
-    expect(b).to.include({ color: 'brightgreen' })
+    expect(b).to.include({ color: 'brightgreen' }),
   )
 })
 
@@ -85,6 +85,6 @@ test(renderBuildStatusBadge, () => {
     given({ status: 'testing' }),
     given({ status: 'waiting' }),
   ]).assert('should have undefined color', b =>
-    expect(b).to.include({ color: undefined })
+    expect(b).to.include({ color: undefined }),
   )
 })

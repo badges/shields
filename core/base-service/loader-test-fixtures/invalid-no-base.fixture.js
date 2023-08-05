@@ -1,3 +1,3 @@
-class BadService {}
+class BadNoBaseService {}
 
-export default BadService
+export default BadNoBaseService

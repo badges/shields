@@ -18,7 +18,7 @@ const versionSchema = Joi.array()
       prerelease: Joi.boolean().required(),
       number: Joi.string().required(),
       downloads_count: nonNegativeInteger,
-    })
+    }),
   )
   .min(1)
   .required()
@@ -88,7 +88,7 @@ export default class GemDownloads extends BaseJsonService {
     const json = await this._requestJson({
       url: `https://rubygems.org/api/v1/versions/${gem}.json`,
       schema: versionSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'gem not found',
       },
     })
@@ -96,7 +96,9 @@ export default class GemDownloads extends BaseJsonService {
     let wantedVersion
     if (version === 'stable') {
       wantedVersion = latestVersion(
-        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
+        json
+          .filter(({ prerelease }) => !prerelease)
+          .map(({ number }) => number),
       )
     } else {
       wantedVersion = version
@@ -117,7 +119,7 @@ export default class GemDownloads extends BaseJsonService {
       await this._requestJson({
         url: `https://rubygems.org/api/v1/gems/${gem}.json`,
         schema: gemSchema,
-        errorMessages: {
+        httpErrors: {
           404: 'gem not found',
         },
       })

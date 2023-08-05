@@ -28,14 +28,14 @@ export default class SqlTokenPersistence {
   async onTokenAdded(token) {
     return await this.pool.query(
       `INSERT INTO ${this.table} (token) VALUES ($1::text) ON CONFLICT (token) DO NOTHING;`,
-      [token]
+      [token],
     )
   }
 
   async onTokenRemoved(token) {
     return await this.pool.query(
       `DELETE FROM ${this.table} WHERE token=$1::text;`,
-      [token]
+      [token],
     )
   }
 

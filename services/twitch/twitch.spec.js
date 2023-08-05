@@ -43,7 +43,7 @@ describe('TwitchStatus', function () {
       expect(
         await TwitchStatus.invoke(defaultContext, config, {
           status: 'andyonthewings',
-        })
+        }),
       ).to.deep.equal({
         message: 'offline',
         link: 'https://www.twitch.tv/undefined',

@@ -25,7 +25,7 @@ class BaseVisualStudioAppCenterService extends BaseJsonService {
           'X-API-Token': token,
         },
       },
-      errorMessages: {
+      httpErrors: {
         401: 'invalid token',
         403: 'project not found',
         404: 'project not found',

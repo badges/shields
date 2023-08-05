@@ -60,7 +60,7 @@ export default class NpmTypeDefinitions extends NpmBase {
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
-      queryParams
+      queryParams,
     )
     const json = await this.fetchPackageData({
       scope,

@@ -20,7 +20,7 @@ function deprecatedService(attrs) {
   const { route, name, label, category, examples, message } = Joi.attempt(
     attrs,
     attrSchema,
-    `Deprecated service for ${attrs.route.base}`
+    `Deprecated service for ${attrs.route.base}`,
   )
 
   return class DeprecatedService extends BaseService {

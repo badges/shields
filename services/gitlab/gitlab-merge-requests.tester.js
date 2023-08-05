@@ -41,7 +41,7 @@ t.create('Open merge requests by label is > zero')
 
 t.create('Open merge requests by  multi-word label is > zero')
   .get(
-    '/open/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
+    '/open/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement',
   )
   .expectBadge({
     label: 'discussion,enhancement merge requests',
@@ -95,7 +95,7 @@ t.create('Closed merge requests by  multi-word label is > zero')
 
 t.create('Closed merge requests by label (raw)')
   .get(
-    '/closed-raw/guoxudong.io/shields-test/issue-test.json?labels=enhancement'
+    '/closed-raw/guoxudong.io/shields-test/issue-test.json?labels=enhancement',
   )
   .expectBadge({
     label: 'closed enhancement merge requests',
@@ -110,7 +110,7 @@ t.create('All merge requests')
   .expectBadge({
     label: 'merge requests',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 
@@ -126,18 +126,18 @@ t.create('All merge requests by label is > zero')
   .expectBadge({
     label: 'discussion merge requests',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 
 t.create('All merge requests by  multi-word label is > zero')
   .get(
-    '/all/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement'
+    '/all/guoxudong.io/shields-test/issue-test.json?labels=discussion,enhancement',
   )
   .expectBadge({
     label: 'discussion,enhancement merge requests',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
     ),
   })
 
@@ -160,7 +160,7 @@ t.create('locked merge requests')
   .expectBadge({
     label: 'merge requests',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) locked$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) locked$/,
     ),
   })
 

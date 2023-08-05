@@ -38,7 +38,7 @@ t.create('100% completion')
             },
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'completion',
@@ -63,7 +63,7 @@ t.create('0% completion')
             },
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'completion',
@@ -80,7 +80,7 @@ t.create('no issues in sprint')
       .reply(200, {
         total: 0,
         issues: [],
-      })
+      }),
   )
   .expectBadge({
     label: 'completion',
@@ -110,7 +110,7 @@ t.create('issue with null resolution value')
             },
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'completion',

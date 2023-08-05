@@ -72,7 +72,7 @@ function getLicenses(packageData) {
     }
     let licenses = parseClassifiers(packageData, /^License :: (.+)$/, true)
       .map(classifier =>
-        classifier in spdxAliases ? spdxAliases[classifier] : classifier
+        classifier in spdxAliases ? spdxAliases[classifier] : classifier,
       )
       .map(classifier => classifier.split(' :: ').pop())
       .map(license => license.replace(' License', ''))
@@ -95,10 +95,10 @@ function getPackageFormats(packageData) {
   const { urls } = packageData
   return {
     hasWheel: urls.some(({ packagetype }) =>
-      ['wheel', 'bdist_wheel'].includes(packagetype)
+      ['wheel', 'bdist_wheel'].includes(packagetype),
     ),
     hasEgg: urls.some(({ packagetype }) =>
-      ['egg', 'bdist_egg'].includes(packagetype)
+      ['egg', 'bdist_egg'].includes(packagetype),
     ),
   }
 }

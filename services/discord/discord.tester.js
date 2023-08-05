@@ -22,7 +22,7 @@ t.create('widget disabled')
       .reply(403, {
         code: 50004,
         message: 'Widget Disabled',
-      })
+      }),
   )
   .expectBadge({ label: 'chat', message: 'widget disabled' })
 

@@ -24,6 +24,8 @@ export default class DockerAutomatedBuild extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 14400
+
   static defaultBadgeData = { label: 'docker build' }
 
   static render({ isAutomated }) {
@@ -38,9 +40,9 @@ export default class DockerAutomatedBuild extends BaseJsonService {
     return this._requestJson({
       schema: automatedBuildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
-      errorMessages: { 404: 'repo not found' },
+      httpErrors: { 404: 'repo not found' },
     })
   }
 

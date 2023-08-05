@@ -17,14 +17,14 @@ const schema = Joi.object({
             }).required(),
           }).required(),
         }),
-      })
+      }),
     )
     .required(),
 }).required()
 
 const scale = colorScale(
   [4, 5, 7, 9],
-  ['red', 'orange', 'yellow', 'green', 'brightgreen']
+  ['red', 'orange', 'yellow', 'green', 'brightgreen'],
 )
 
 class ScrutinizerQualityBase extends ScrutinizerBase {

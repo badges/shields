@@ -15,6 +15,7 @@ import {
   Deprecated,
   ImproperlyConfigured,
 } from './errors.js'
+import { pathParam, pathParams, queryParam, queryParams } from './openapi.js'
 
 export {
   BaseService,
@@ -32,4 +33,8 @@ export {
   InvalidParameter,
   ImproperlyConfigured,
   Deprecated,
+  pathParam,
+  pathParams,
+  queryParam,
+  queryParams,
 }

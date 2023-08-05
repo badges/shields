@@ -53,7 +53,7 @@ describe('AppveyorJobBuild', function () {
             ],
           },
         },
-      })
+      }),
     )
       .to.throw(NotFound)
       .with.property('prettyMessage', 'job not found')

@@ -15,7 +15,7 @@ export const t = new ServiceTester({
 })
 const isMetricAllowZero = Joi.alternatives(
   isMetric,
-  Joi.number().valid(0).required()
+  Joi.number().valid(0).required(),
 )
 
 // The service tests targeting the legacy SonarQube API are mocked
@@ -27,7 +27,7 @@ const isMetricAllowZero = Joi.alternatives(
 t.create('Tests')
   .timeout(10000)
   .get(
-    '/tests/swellaby:azure-pipelines-templates.json?server=https://sonarcloud.io'
+    '/tests/swellaby:azure-pipelines-templates.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'tests',
@@ -37,7 +37,7 @@ t.create('Tests')
 t.create('Tests (branch)')
   .timeout(10000)
   .get(
-    '/tests/swellaby:azure-pipelines-templates/master.json?server=https://sonarcloud.io'
+    '/tests/swellaby:azure-pipelines-templates/master.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'tests',
@@ -46,7 +46,7 @@ t.create('Tests (branch)')
 
 t.create('Tests (legacy API supported)')
   .get(
-    '/tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -74,7 +74,7 @@ t.create('Tests (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'tests',
@@ -122,7 +122,7 @@ t.create('Tests with compact message and custom labels')
 t.create('Total Test Count')
   .timeout(10000)
   .get(
-    '/total_tests/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+    '/total_tests/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'total tests',
@@ -132,7 +132,7 @@ t.create('Total Test Count')
 t.create('Total Test Count (branch)')
   .timeout(10000)
   .get(
-    '/total_tests/swellaby:azdo-shellcheck/master.json?server=https://sonarcloud.io'
+    '/total_tests/swellaby:azdo-shellcheck/master.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'total tests',
@@ -141,7 +141,7 @@ t.create('Total Test Count (branch)')
 
 t.create('Total Test Count (legacy API supported)')
   .get(
-    '/total_tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/total_tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -161,7 +161,7 @@ t.create('Total Test Count (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'total tests',
@@ -171,7 +171,7 @@ t.create('Total Test Count (legacy API supported)')
 t.create('Test Failures Count')
   .timeout(10000)
   .get(
-    '/test_failures/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+    '/test_failures/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'test failures',
@@ -180,7 +180,7 @@ t.create('Test Failures Count')
 
 t.create('Test Failures Count (legacy API supported)')
   .get(
-    '/test_failures/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/test_failures/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -200,7 +200,7 @@ t.create('Test Failures Count (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'test failures',
@@ -210,7 +210,7 @@ t.create('Test Failures Count (legacy API supported)')
 t.create('Test Errors Count')
   .timeout(10000)
   .get(
-    '/test_errors/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+    '/test_errors/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'test errors',
@@ -219,7 +219,7 @@ t.create('Test Errors Count')
 
 t.create('Test Errors Count (legacy API supported)')
   .get(
-    '/test_errors/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/test_errors/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -239,7 +239,7 @@ t.create('Test Errors Count (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'test errors',
@@ -249,7 +249,7 @@ t.create('Test Errors Count (legacy API supported)')
 t.create('Skipped Tests Count')
   .timeout(10000)
   .get(
-    '/skipped_tests/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+    '/skipped_tests/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'skipped tests',
@@ -258,7 +258,7 @@ t.create('Skipped Tests Count')
 
 t.create('Skipped Tests Count (legacy API supported)')
   .get(
-    '/skipped_tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/skipped_tests/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -278,7 +278,7 @@ t.create('Skipped Tests Count (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'skipped tests',
@@ -288,7 +288,7 @@ t.create('Skipped Tests Count (legacy API supported)')
 t.create('Test Success Rate')
   .timeout(10000)
   .get(
-    '/test_success_density/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io'
+    '/test_success_density/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'tests',
@@ -297,7 +297,7 @@ t.create('Test Success Rate')
 
 t.create('Test Success Rate (legacy API supported)')
   .get(
-    '/test_success_density/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2'
+    '/test_success_density/org.ow2.petals%3Apetals-se-ase.json?server=http://sonar.petalslink.com&sonarVersion=4.2',
   )
   .intercept(nock =>
     nock('http://sonar.petalslink.com/api')
@@ -317,7 +317,7 @@ t.create('Test Success Rate (legacy API supported)')
             },
           ],
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'tests',

@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { documentation, errorMessagesFor } from './gitlab-helper.js'
+import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 // The total number of MR is in the `x-total` field in the headers.
@@ -290,7 +290,7 @@ export default class GitlabMergeRequests extends GitLabBase {
       messageSuffix = state
     }
     const message = `${mergeRequestCount > 10000 ? 'more than ' : ''}${metric(
-      mergeRequestCount
+      mergeRequestCount,
     )}${messageSuffix ? ' ' : ''}${messageSuffix}`
     return {
       label: `${labelPrefix}${labelText}merge requests`,
@@ -304,7 +304,7 @@ export default class GitlabMergeRequests extends GitLabBase {
     const { res } = await this._request(
       this.authHelper.withBearerAuthHeader({
         url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-          project
+          project,
         )}/merge_requests`,
         options: {
           searchParams: {
@@ -314,8 +314,8 @@ export default class GitlabMergeRequests extends GitLabBase {
             labels,
           },
         },
-        errorMessages: errorMessagesFor('project not found'),
-      })
+        httpErrors: httpErrorsFor('project not found'),
+      }),
     )
     return this.constructor._validate(res.headers, schema)
   }
@@ -333,7 +333,7 @@ export default class GitlabMergeRequests extends GitLabBase {
 
   async handle(
     { variant, raw, project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', labels }
+    { gitlab_url: baseUrl = 'https://gitlab.com', labels },
   ) {
     const data = await this.fetch({
       project,

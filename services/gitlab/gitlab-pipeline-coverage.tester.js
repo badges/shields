@@ -32,7 +32,7 @@ t.create('Coverage (nonexistent repo)')
 
 t.create('Coverage (custom job)')
   .get(
-    '/gitlab-org/gitlab-runner.json?branch=12-0-stable&job_name=test coverage report'
+    '/gitlab-org/gitlab-runner.json?branch=12-0-stable&job_name=test coverage report',
   )
   .expectBadge({
     label: 'coverage',
@@ -41,7 +41,7 @@ t.create('Coverage (custom job)')
 
 t.create('Coverage (custom invalid job)')
   .get(
-    '/gitlab-org/gitlab-runner.json?branch=12-0-stable&job_name=i dont exist'
+    '/gitlab-org/gitlab-runner.json?branch=12-0-stable&job_name=i dont exist',
   )
   .expectBadge({
     label: 'coverage',
@@ -50,7 +50,7 @@ t.create('Coverage (custom invalid job)')
 
 t.create('Coverage (custom gitlab URL)')
   .get(
-    '/GNOME/at-spi2-core.json?gitlab_url=https://gitlab.gnome.org&branch=master'
+    '/GNOME/at-spi2-core.json?gitlab_url=https://gitlab.gnome.org&branch=master',
   )
   .expectBadge({
     label: 'coverage',
@@ -59,7 +59,7 @@ t.create('Coverage (custom gitlab URL)')
 
 t.create('Coverage (custom gitlab URL and job)')
   .get(
-    '/GNOME/libhandy.json?gitlab_url=https://gitlab.gnome.org&branch=master&job_name=unit-test'
+    '/GNOME/libhandy.json?gitlab_url=https://gitlab.gnome.org&branch=master&job_name=unit-test',
   )
   .expectBadge({
     label: 'coverage',

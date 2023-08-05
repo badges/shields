@@ -1,17 +1,11 @@
 import {
   testResultQueryParamSchema,
+  testResultOpenApiQueryParams,
   renderTestResultBadge,
-  documentation,
+  documentation as description,
 } from '../test-results.js'
+import { pathParams } from '../index.js'
 import AppVeyorBase from './appveyor-base.js'
-
-const commonPreviewProps = {
-  passed: 477,
-  failed: 2,
-  skipped: 0,
-  total: 479,
-  isCompact: false,
-}
 
 export default class AppVeyorTests extends AppVeyorBase {
   static category = 'test-results'
@@ -20,63 +14,35 @@ export default class AppVeyorTests extends AppVeyorBase {
     queryParamSchema: testResultQueryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'AppVeyor tests',
-      pattern: ':user/:repo',
-      namedParams: {
-        user: 'NZSmartie',
-        repo: 'coap-net-iu0to',
+  static openApi = {
+    '/appveyor/tests/{user}/{repo}': {
+      get: {
+        summary: 'AppVeyor tests',
+        description,
+        parameters: [
+          ...pathParams(
+            { name: 'user', example: 'NZSmartie' },
+            { name: 'repo', example: 'coap-net-iu0to' },
+          ),
+          ...testResultOpenApiQueryParams,
+        ],
       },
-      staticPreview: this.render(commonPreviewProps),
-      documentation,
     },
-    {
-      title: 'AppVeyor tests (branch)',
-      pattern: ':user/:repo/:branch',
-      namedParams: {
-        user: 'NZSmartie',
-        repo: 'coap-net-iu0to',
-        branch: 'master',
+    '/appveyor/tests/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'AppVeyor tests (with branch)',
+        description,
+        parameters: [
+          ...pathParams(
+            { name: 'user', example: 'NZSmartie' },
+            { name: 'repo', example: 'coap-net-iu0to' },
+            { name: 'branch', example: 'master' },
+          ),
+          ...testResultOpenApiQueryParams,
+        ],
       },
-      staticPreview: this.render(commonPreviewProps),
-      documentation,
     },
-    {
-      title: 'AppVeyor tests (compact)',
-      pattern: ':user/:repo',
-      namedParams: {
-        user: 'NZSmartie',
-        repo: 'coap-net-iu0to',
-      },
-      queryParams: { compact_message: null },
-      staticPreview: this.render({
-        ...commonPreviewProps,
-        isCompact: true,
-      }),
-      documentation,
-    },
-    {
-      title: 'AppVeyor tests with custom labels',
-      pattern: ':user/:repo',
-      namedParams: {
-        user: 'NZSmartie',
-        repo: 'coap-net-iu0to',
-      },
-      queryParams: {
-        passed_label: 'good',
-        failed_label: 'bad',
-        skipped_label: 'n/a',
-      },
-      staticPreview: this.render({
-        ...commonPreviewProps,
-        passedLabel: 'good',
-        failedLabel: 'bad',
-        skippedLabel: 'n/a',
-      }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'tests',
@@ -111,7 +77,7 @@ export default class AppVeyorTests extends AppVeyorBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const isCompact = compactMessage !== undefined
     const data = await this.fetch({ user, repo, branch })

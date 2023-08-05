@@ -22,7 +22,7 @@ const matrixStateSchema = Joi.array()
       type: Joi.string().required(),
       sender: Joi.string().required(),
       state_key: Joi.string().allow('').required(),
-    })
+    }),
   )
   .required()
 
@@ -116,10 +116,9 @@ export default class Matrix extends BaseJsonService {
           auth: { type: 'm.login.dummy' },
         }),
       },
-      errorMessages: {
+      httpErrors: {
         401: 'auth failed',
         403: 'guests not allowed',
-        429: 'rate limited by remote server',
       },
     })
   }
@@ -127,7 +126,7 @@ export default class Matrix extends BaseJsonService {
   async lookupRoomAlias({ host, roomAlias, accessToken }) {
     return this._requestJson({
       url: `https://${host}/_matrix/client/r0/directory/room/${encodeURIComponent(
-        `#${roomAlias}`
+        `#${roomAlias}`,
       )}`,
       schema: matrixAliasLookupSchema,
       options: {
@@ -135,10 +134,9 @@ export default class Matrix extends BaseJsonService {
           access_token: accessToken,
         },
       },
-      errorMessages: {
+      httpErrors: {
         401: 'bad auth token',
         404: 'room not found',
-        429: 'rate limited by remote server',
       },
     })
   }
@@ -166,7 +164,7 @@ export default class Matrix extends BaseJsonService {
     const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
     const data = await this._requestJson({
       url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
-        lookup.room_id
+        lookup.room_id,
       )}/state`,
       schema: matrixStateSchema,
       options: {
@@ -174,7 +172,7 @@ export default class Matrix extends BaseJsonService {
           access_token: accessToken,
         },
       },
-      errorMessages: {
+      httpErrors: {
         400: 'unknown request',
         401: 'bad auth token',
         403: 'room not world readable or is invalid',
@@ -185,7 +183,7 @@ export default class Matrix extends BaseJsonService {
           m =>
             m.type === 'm.room.member' &&
             m.sender === m.state_key &&
-            m.content.membership === 'join'
+            m.content.membership === 'join',
         ).length
       : 0
   }

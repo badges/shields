@@ -51,7 +51,7 @@ export default class PypiStatus extends PypiBase {
     // https://pypi.org/pypi?%3Aaction=list_classifiers
     const status = parseClassifiers(
       packageData,
-      /^Development Status :: (\d - \S+)$/
+      /^Development Status :: (\d - \S+)$/,
     )
       .sort()
       .map(classifier => classifier.split(' - ').pop())

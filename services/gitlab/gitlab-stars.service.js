@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import GitLabBase from './gitlab-base.js'
+import { documentation } from './gitlab-helper.js'
 
 const schema = Joi.object({
   star_count: nonNegativeInteger,
@@ -10,13 +11,6 @@ const schema = Joi.object({
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
-
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g. gitlab-org/gitlab ).
-  Note that only internet-accessible GitLab instances are supported, for example https://jihulab.com, https://gitlab.gnome.org, or https://gitlab.com/.
-</p>
-`
 
 export default class GitlabStars extends GitLabBase {
   static category = 'social'
@@ -58,7 +52,7 @@ export default class GitlabStars extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}`,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

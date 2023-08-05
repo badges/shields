@@ -1,9 +1,9 @@
 import { URL } from 'url'
 import Joi from 'joi'
-import { errorMessages } from '../dynamic-common.js'
+import { httpErrors } from '../dynamic-common.js'
 import { optionalUrl } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
-import { BaseJsonService, InvalidParameter } from '../index.js'
+import { BaseJsonService, InvalidParameter, queryParams } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -78,9 +78,9 @@ const description = `<p>
       <tr>
         <td><code>namedLogo</code></td>
         <td>
-          Default: none. One of the named logos supported by Shields or
-          <a href="https://simpleicons.org/">simple-icons</a>. Can be overridden
-          by the query string.
+          Default: none. One of the named logos supported by Shields
+          or <a href="https://simpleicons.org/">simple-icons</a>. Can be
+          overridden by the query string.
         </td>
       </tr>
       <tr>
@@ -135,16 +135,12 @@ export default class Endpoint extends BaseJsonService {
       get: {
         summary: 'Endpoint Badge',
         description,
-        parameters: [
-          {
-            name: 'url',
-            description: 'The URL to your JSON endpoint',
-            in: 'query',
-            required: true,
-            schema: { type: 'string' },
-            example: 'https://shields.redsparr0w.com/2473/monday',
-          },
-        ],
+        parameters: queryParams({
+          name: 'url',
+          description: 'The URL to your JSON endpoint',
+          required: true,
+          example: 'https://shields.redsparr0w.com/2473/monday',
+        }),
       },
     },
   }
@@ -178,7 +174,10 @@ export default class Endpoint extends BaseJsonService {
       logoWidth,
       logoPosition,
       style,
-      cacheSeconds,
+      // don't allow the user to set cacheSeconds any shorter than this._cacheLength
+      cacheSeconds: Math.max(
+        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined),
+      ),
     }
   }
 
@@ -200,7 +199,7 @@ export default class Endpoint extends BaseJsonService {
 
     const validated = await fetchEndpointData(this, {
       url,
-      errorMessages,
+      httpErrors,
       validationPrettyErrorMessage: 'invalid properties',
       includeKeys: true,
     })

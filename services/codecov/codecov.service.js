@@ -117,7 +117,7 @@ export default class Codecov extends BaseSvgScrapingService {
           Authorization: `token ${token}`,
         },
       },
-      errorMessages: {
+      httpErrors: {
         401: 'not authorized to access repository',
         404: 'repository not found',
       },
@@ -153,7 +153,7 @@ export default class Codecov extends BaseSvgScrapingService {
       options: {
         searchParams: { token, flag },
       },
-      errorMessages: token ? { 400: 'invalid token pattern' } : {},
+      httpErrors: token ? { 400: 'invalid token pattern' } : {},
     })
   }
 

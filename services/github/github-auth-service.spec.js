@@ -37,7 +37,7 @@ describe('GithubAuthV3Service', function () {
             'x-ratelimit-reset': 123456789,
           },
         },
-      })
+      }),
     )
     const githubApiProvider = new GithubApiProvider({
       baseUrl: 'https://github-api.example.com',
@@ -60,7 +60,7 @@ describe('GithubAuthV3Service', function () {
           Authorization: 'token undefined',
           'X-GitHub-Api-Version': '2022-11-28',
         },
-      }
+      },
     )
   })
 })

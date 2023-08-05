@@ -53,7 +53,7 @@ export default class FDroid extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         403: 'app not found',
         404: 'app not found',
       },
@@ -63,13 +63,13 @@ export default class FDroid extends BaseJsonService {
   transform({ json, suggested }) {
     const svc = suggested && json.suggestedVersionCode
     const packages = (json.packages || []).filter(
-      ({ versionCode }) => !svc || versionCode <= svc
+      ({ versionCode }) => !svc || versionCode <= svc,
     )
     if (packages.length === 0) {
       throw new NotFound({ prettyMessage: 'no packages found' })
     }
     const version = packages.reduce((a, b) =>
-      a.versionCode > b.versionCode ? a : b
+      a.versionCode > b.versionCode ? a : b,
     ).versionName
     return { version }
   }

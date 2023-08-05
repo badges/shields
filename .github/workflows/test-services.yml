@@ -2,6 +2,9 @@ name: Services
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - 'gh-readonly-queue/**'
 
 jobs:
   test-services:

@@ -14,7 +14,7 @@ const intelliJschema = Joi.object({
         .items(
           Joi.object({
             rating: Joi.string().required(),
-          })
+          }),
         )
         .single()
         .required(),
@@ -90,9 +90,9 @@ export default class JetbrainsRating extends JetbrainsBase {
       const jetbrainsPluginData = await this._requestJson({
         schema: jetbrainsSchema,
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
-          pluginId
+          pluginId,
         )}/rating`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
 
       let voteSum = 0

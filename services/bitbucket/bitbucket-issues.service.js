@@ -46,7 +46,7 @@ function issueClassGenerator(raw) {
         options: {
           searchParams: { limit: 0, q: '(state = "new" OR state = "open")' },
         },
-        errorMessages: { 403: 'private repo' },
+        httpErrors: { 403: 'private repo' },
       })
     }
 

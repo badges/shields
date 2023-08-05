@@ -152,7 +152,7 @@ npm run test:services -- --only="wercker" --fgrep="Build status (with branch)"
 Having covered the typical and custom cases, we'll move on to errors. We should include a test for the 'not found' response and also tests for any other custom error handling. The Wercker integration defines a custom error condition for 401 as well as a custom 404 message:
 
 ```js
-errorMessages: {
+httpErrors: {
   401: 'private application not supported',
   404: 'application not found',
 }
@@ -186,7 +186,7 @@ t.create('Build status (private application)')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
-      .reply(401)
+      .reply(401),
   )
   .expectBadge({ label: 'build', message: 'private application not supported' })
 ```
@@ -227,7 +227,7 @@ t.create('Build passed')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
-      .reply(200, [{ status: 'finished', result: 'passed' }])
+      .reply(200, [{ status: 'finished', result: 'passed' }]),
   )
   .expectBadge({
     label: 'build',
@@ -240,7 +240,7 @@ t.create('Build failed')
   .intercept(nock =>
     nock('https://app.wercker.com/api/v3/applications/')
       .get('/wercker/go-wercker-api/builds?limit=1')
-      .reply(200, [{ status: 'finished', result: 'failed' }])
+      .reply(200, [{ status: 'finished', result: 'failed' }]),
   )
   .expectBadge({ label: 'build', message: 'failed', color: 'red' })
 ```

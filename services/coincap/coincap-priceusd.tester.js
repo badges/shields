@@ -9,7 +9,7 @@ t.create('request for existing asset')
       .get('/v2/assets/bitcoin')
       .reply(200, {
         data: { priceUsd: '16417.7176754790740415', name: 'Bitcoin' },
-      })
+      }),
   )
   .expectBadge({
     label: 'bitcoin',

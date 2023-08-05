@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   state: isBuildStatus,
@@ -61,7 +61,7 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
   async handle({ user, repo, ref }) {
     const { state } = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/status`,
-      errorMessages: errorMessagesFor('ref or repo not found'),
+      httpErrors: httpErrorsFor('ref or repo not found'),
       schema,
     })
 

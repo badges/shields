@@ -25,7 +25,7 @@ and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=16 and NPM >=8 is required. If you don't already have them,
+Node >=16 and NPM 9.x is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
@@ -44,7 +44,7 @@ In case you get the _"getaddrinfo ENOTFOUND localhost"_ error, visit [http://127
 
 ## (3) Open an Issue
 
-Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.md) and describe what you have in mind:
+Before you want to implement your service, you may want to [open an issue](https://github.com/badges/shields/issues/new?template=3_Badge_request.yml) and describe what you have in mind:
 
 - What is the badge for?
 - Which API do you want to use?
@@ -229,14 +229,14 @@ Description of the code:
 
    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
    - `_requestJson()` uses [got](https://github.com/sindresorhus/got) to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `got` docs for [supported options](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md).
-   - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `errorMessages`.
+   - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `httpErrors`.
    - A more complex call to `_requestJson()` might look like this:
      ```js
      return this._requestJson({
        schema: mySchema,
        url,
        options: { searchParams: { branch: 'master' } },
-       errorMessages: {
+       httpErrors: {
          401: 'private application not supported',
          404: 'application not found',
        },

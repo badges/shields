@@ -12,7 +12,7 @@ export default class EclipseMarketplaceBase extends BaseXmlService {
     return this._requestXml({
       schema,
       url: `https://marketplace.eclipse.org/content/${name}/api/p`,
-      errorMessages: { 404: 'solution not found' },
+      httpErrors: { 404: 'solution not found' },
     })
   }
 }

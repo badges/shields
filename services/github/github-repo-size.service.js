@@ -2,7 +2,7 @@ import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -37,7 +37,7 @@ export default class GithubRepoSize extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}`,
       schema,
-      errorMessages: errorMessagesFor(),
+      httpErrors: httpErrorsFor(),
     })
   }
 

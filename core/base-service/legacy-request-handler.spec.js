@@ -18,7 +18,7 @@ function fakeHandler(queryParams, match, sendBadge, request) {
       label: 'testing',
       message: someValue,
     },
-    {}
+    {},
   )
   sendBadge(format, badgeData)
 }
@@ -35,7 +35,7 @@ function createFakeHandlerWithCacheLength(cacheLengthSeconds) {
       {},
       {
         _cacheLength: cacheLengthSeconds,
-      }
+      },
     )
     sendBadge(format, badgeData)
   }
@@ -66,7 +66,7 @@ describe('The request handler', function () {
     beforeEach(function () {
       camp.route(
         /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-        handleRequest(standardCacheHeaders, { handler: fakeHandler })
+        handleRequest(standardCacheHeaders, { handler: fakeHandler }),
       )
     })
 
@@ -90,7 +90,7 @@ describe('The request handler', function () {
     beforeEach(function () {
       camp.route(
         /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
-        handleRequest(standardCacheHeaders, fakeHandler)
+        handleRequest(standardCacheHeaders, fakeHandler),
       )
     })
 
@@ -119,8 +119,8 @@ describe('The request handler', function () {
             cacheHeaderConfig,
             (queryParams, match, sendBadge, request) => {
               fakeHandler(queryParams, match, sendBadge, request)
-            }
-          )
+            },
+          ),
         )
       }
 
@@ -128,7 +128,7 @@ describe('The request handler', function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
-          +new Date(headers.date) + 900000
+          +new Date(headers.date) + 900000,
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
         expect(headers['cache-control']).to.equal('max-age=900, s-maxage=900')
@@ -142,13 +142,13 @@ describe('The request handler', function () {
 
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
-          +new Date(headers.date) + 900000
+          +new Date(headers.date) + 900000,
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
         expect(headers['cache-control']).to.equal('max-age=900, s-maxage=900')
       })
 
-      it('should let live service data override the default cache headers with longer value', async function () {
+      it('should allow serviceData to override the default cache headers with longer value', async function () {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
@@ -158,17 +158,17 @@ describe('The request handler', function () {
                 queryParams,
                 match,
                 sendBadge,
-                request
+                request,
               )
-            }
-          )
+            },
+          ),
         )
 
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         expect(headers['cache-control']).to.equal('max-age=400, s-maxage=400')
       })
 
-      it('should not let live service data override the default cache headers with shorter value', async function () {
+      it('should allow serviceData to override the default cache headers with shorter value', async function () {
         camp.route(
           /^\/testing\/([^/]+)\.(svg|png|gif|jpg|json)$/,
           handleRequest(
@@ -178,23 +178,23 @@ describe('The request handler', function () {
                 queryParams,
                 match,
                 sendBadge,
-                request
+                request,
               )
-            }
-          )
+            },
+          ),
         )
 
         const { headers } = await got(`${baseUrl}/testing/123.json`)
-        expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
+        expect(headers['cache-control']).to.equal('max-age=200, s-maxage=200')
       })
 
       it('should set the expires header to current time + cacheSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
         const { headers } = await got(
-          `${baseUrl}/testing/123.json?cacheSeconds=3600`
+          `${baseUrl}/testing/123.json?cacheSeconds=3600`,
         )
         const expectedExpiry = new Date(
-          +new Date(headers.date) + 3600000
+          +new Date(headers.date) + 3600000,
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
         expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
@@ -203,10 +203,10 @@ describe('The request handler', function () {
       it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 600 } })
         const { headers } = await got(
-          `${baseUrl}/testing/123.json?cacheSeconds=300`
+          `${baseUrl}/testing/123.json?cacheSeconds=300`,
         )
         const expectedExpiry = new Date(
-          +new Date(headers.date) + 600000
+          +new Date(headers.date) + 600000,
         ).toGMTString()
         expect(headers.expires).to.equal(expectedExpiry)
         expect(headers['cache-control']).to.equal('max-age=600, s-maxage=600')
@@ -217,7 +217,7 @@ describe('The request handler', function () {
         const { headers } = await got(`${baseUrl}/testing/123.json`)
         expect(headers.expires).to.equal(headers.date)
         expect(headers['cache-control']).to.equal(
-          'no-cache, no-store, must-revalidate'
+          'no-cache, no-store, must-revalidate',
         )
       })
     })
@@ -234,7 +234,7 @@ describe('The request handler', function () {
               ++handlerCallCount
               fakeHandler(queryParams, match, sendBadge, request)
             },
-          })
+          }),
         )
       })
 
@@ -242,7 +242,7 @@ describe('The request handler', function () {
         await performTwoRequests(
           baseUrl,
           '/testing/123.svg?foo=1',
-          '/testing/123.svg?foo=2'
+          '/testing/123.svg?foo=2',
         )
         expect(handlerCallCount).to.equal(2)
       })

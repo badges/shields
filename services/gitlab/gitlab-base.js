@@ -6,14 +6,14 @@ export default class GitLabBase extends BaseJsonService {
     serviceKey: 'gitlab',
   }
 
-  async fetch({ url, options, schema, errorMessages }) {
+  async fetch({ url, options, schema, httpErrors }) {
     return this._requestJson(
       this.authHelper.withBearerAuthHeader({
         schema,
         url,
         options,
-        errorMessages,
-      })
+        httpErrors,
+      }),
     )
   }
 
@@ -22,7 +22,7 @@ export default class GitLabBase extends BaseJsonService {
       this.authHelper.withBearerAuthHeader({
         ...requestParams,
         ...{ options: { searchParams: { page } } },
-      })
+      }),
     )
 
     const json = this._parseJson(buffer)
@@ -34,7 +34,7 @@ export default class GitLabBase extends BaseJsonService {
     url,
     options,
     schema,
-    errorMessages,
+    httpErrors,
     firstPageOnly = false,
   }) {
     const requestParams = {
@@ -44,7 +44,7 @@ export default class GitLabBase extends BaseJsonService {
         searchParams: { per_page: 100 },
         ...options,
       },
-      errorMessages,
+      httpErrors,
     }
 
     const {
@@ -59,8 +59,8 @@ export default class GitLabBase extends BaseJsonService {
 
     const pageData = await Promise.all(
       [...Array(numberOfPages - 1).keys()].map((_, i) =>
-        this.fetchPage({ page: ++i + 1, requestParams, schema })
-      )
+        this.fetchPage({ page: ++i + 1, requestParams, schema }),
+      ),
     )
     return [...data].concat(...pageData)
   }

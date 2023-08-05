@@ -28,14 +28,13 @@ function allChangelogLinesAreVersionBump(changelogLines) {
     changelogLines.length > 0 &&
     changelogLines.length ===
       changelogLines.filter(line =>
-        line.includes('Version bump only for package')
+        line.includes('Version bump only for package'),
       ).length
   )
 }
 
 function isPointlessVersionBump(body) {
   const pointlessBumpLinks = [
-    'https://github.com/gatsbyjs/gatsby',
     'https://github.com/typescript-eslint/typescript-eslint',
   ]
 
@@ -53,14 +52,15 @@ function isPointlessVersionBump(body) {
     .filter(line => !line.startsWith('<h'))
     .filter(line => !line.startsWith('<p>All notable changes'))
     .filter(
-      line => !line.startsWith('See <a href="https://conventionalcommits.org">')
+      line =>
+        !line.startsWith('See <a href="https://conventionalcommits.org">'),
     )
     .filter(line => !line.startsWith('<!--'))
     .filter(
       line =>
         !line.startsWith(
-          '<p><a href="https://www.gatsbyjs.com/docs/reference/release-notes/'
-        )
+          '<p><a href="https://www.gatsbyjs.com/docs/reference/release-notes/',
+        ),
     )
   return allChangelogLinesAreVersionBump(changelogLines)
 }

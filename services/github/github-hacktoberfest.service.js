@@ -10,31 +10,24 @@ import {
 } from './github-helpers.js'
 
 const documentation = `
-  <p>
-    This badge is designed for projects hosted on GitHub which are
-    participating in
-    <a href="https://hacktoberfest.digitalocean.com">Hacktoberfest</a>,
-    an initiative to encourage participating in open-source projects. The
-    badge can be added to the project readme to encourage potential
-    contributors to review the suggested issues and to celebrate the
-    contributions that have already been made.
-    The badge displays three pieces of information:
-    <ul>
-      <li>
-        The number of suggested issues. By default this will count open
-        issues with the <strong>hacktoberfest</strong> label, however you
-        can pick a different label (e.g.
-        <code>?suggestion_label=good%20first%20issue</code>).
-      </li>
-      <li>
-        The number of pull requests opened in October. This excludes any
-        PR with the <strong>invalid</strong> label.
-      </li>
-      <li>The number of days left of October.</li>
-    </ul>
-  </p>
+This badge is designed for projects hosted on GitHub which are
+participating in
+[Hacktoberfest](https://hacktoberfest.digitalocean.com),
+an initiative to encourage participating in open-source projects. The
+badge can be added to the project readme to encourage potential
+contributors to review the suggested issues and to celebrate the
+contributions that have already been made.
+The badge displays three pieces of information:
 
-  ${githubDocumentation}
+- The number of suggested issues. By default this will count open
+  issues with the <strong>hacktoberfest</strong> label, however you
+  can pick a different label (e.g.
+  \`?suggestion_label=good%20first%20issue\`).
+- The number of pull requests opened in October. This excludes any
+  PR with the <strong>invalid</strong> label.
+- The number of days left of October.
+
+${githubDocumentation}
 `
 
 const schema = Joi.object({
@@ -111,7 +104,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       return {
         message: `${daysToStart} ${maybePluralize(
           'day',
-          daysToStart
+          daysToStart,
         )} till kickoff!`,
       }
     }
@@ -125,7 +118,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       return {
         message: `is over! (${metric(contributionCount)} ${maybePluralize(
           'PR',
-          contributionCount
+          contributionCount,
         )} opened)`,
       }
     }
@@ -134,13 +127,13 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
         suggestedIssueCount
           ? `${metric(suggestedIssueCount)} ${maybePluralize(
               'open issue',
-              suggestedIssueCount
+              suggestedIssueCount,
             )}`
           : '',
         contributionCount
           ? `${metric(contributionCount)} ${maybePluralize(
               'PR',
-              contributionCount
+              contributionCount,
             )}`
           : '',
         daysLeft > 0
@@ -210,7 +203,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
 
   async handle({ user, repo, year }, { suggestion_label: suggestionLabel }) {
     const { isBefore, daysToStart } = this.constructor.getCalendarPosition(
-      +year
+      +year,
     )
     if (isBefore) {
       return this.constructor.render({ hasStarted: false, daysToStart, year })

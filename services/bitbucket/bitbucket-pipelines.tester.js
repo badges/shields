@@ -47,7 +47,7 @@ t.create('build result (passing)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('SUCCESSFUL'))
+      .reply(200, bitbucketApiResponse('SUCCESSFUL')),
   )
   .expectBadge({ label: 'build', message: 'passing' })
 
@@ -56,7 +56,7 @@ t.create('build result (failing)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('FAILED'))
+      .reply(200, bitbucketApiResponse('FAILED')),
   )
   .expectBadge({ label: 'build', message: 'failing' })
 
@@ -65,7 +65,7 @@ t.create('build result (error)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('ERROR'))
+      .reply(200, bitbucketApiResponse('ERROR')),
   )
   .expectBadge({ label: 'build', message: 'error' })
 
@@ -74,7 +74,7 @@ t.create('build result (stopped)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('STOPPED'))
+      .reply(200, bitbucketApiResponse('STOPPED')),
   )
   .expectBadge({ label: 'build', message: 'stopped' })
 
@@ -83,7 +83,7 @@ t.create('build result (expired)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('EXPIRED'))
+      .reply(200, bitbucketApiResponse('EXPIRED')),
   )
   .expectBadge({ label: 'build', message: 'expired' })
 
@@ -92,12 +92,12 @@ t.create('build result (unexpected status)')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
-      .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED'))
+      .reply(200, bitbucketApiResponse('NEW_AND_UNEXPECTED')),
   )
   .expectBadge({ label: 'build', message: 'invalid response data' })
 
 t.create('build result no branch redirect')
   .get('/atlassian/adf-builder-javascript.svg')
   .expectRedirect(
-    '/bitbucket/pipelines/atlassian/adf-builder-javascript/master.svg'
+    '/bitbucket/pipelines/atlassian/adf-builder-javascript/master.svg',
   )

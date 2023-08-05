@@ -9,7 +9,7 @@ const reputationSchema = Joi.object({
     .items(
       Joi.object({
         reputation: Joi.number().min(0).required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -49,7 +49,7 @@ export default class StackExchangeReputation extends StackExchangeBase {
       schema: reputationSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid parameters',
       },
     })

@@ -28,7 +28,7 @@ t.create('Topics')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: '23k topics' })
 
@@ -37,7 +37,7 @@ t.create('Posts')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: '338k posts' })
 
@@ -46,7 +46,7 @@ t.create('Users')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: '31k users' })
 
@@ -55,7 +55,7 @@ t.create('Likes')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: '309k likes' })
 
@@ -64,7 +64,7 @@ t.create('Status')
   .intercept(nock =>
     nock('https://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: 'online' })
 
@@ -73,7 +73,7 @@ t.create('Status with http (not https)')
   .intercept(nock =>
     nock('http://meta.discourse.org')
       .get('/site/statistics.json')
-      .reply(200, data)
+      .reply(200, data),
   )
   .expectBadge({ label: 'discourse', message: 'online' })
 
@@ -82,7 +82,7 @@ t.create('Invalid Host')
   .intercept(nock =>
     nock('https://some.host')
       .get('/site/statistics.json')
-      .reply(404, '<h1>Not Found</h1>')
+      .reply(404, '<h1>Not Found</h1>'),
   )
   .expectBadge({ label: 'discourse', message: 'not found' })
 
@@ -91,7 +91,7 @@ t.create('Topics')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) topics$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) topics$/,
     ),
   })
 
@@ -100,7 +100,7 @@ t.create('Posts')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) posts$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) posts$/,
     ),
   })
 
@@ -109,7 +109,7 @@ t.create('Users')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) users$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) users$/,
     ),
   })
 
@@ -118,7 +118,7 @@ t.create('Likes')
   .expectBadge({
     label: 'discourse',
     message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) likes$/
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) likes$/,
     ),
   })
 

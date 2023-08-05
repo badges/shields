@@ -20,7 +20,7 @@ t.create('Giving (missing goal key)')
         npatrons: 0,
         giving: { amount: '3.71', currency: 'EUR' },
         receiving: null,
-      })
+      }),
   )
   .expectBadge({ label: 'gives', message: isCurrencyOverTime })
 
@@ -32,6 +32,6 @@ t.create('Giving (null)')
       giving: null,
       receiving: null,
       goal: null,
-    })
+    }),
   )
   .expectBadge({ label: 'liberapay', message: 'no public giving stats' })

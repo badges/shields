@@ -22,9 +22,9 @@ const modernSchema = Joi.object({
           metric: Joi.string().required(),
           value: Joi.alternatives(
             Joi.number().min(0),
-            Joi.allow('OK', 'ERROR')
+            Joi.allow('OK', 'ERROR'),
           ).required(),
-        })
+        }),
       )
       .min(0)
       .required(),
@@ -40,12 +40,12 @@ const legacySchema = Joi.array()
             key: Joi.string().required(),
             val: Joi.alternatives(
               Joi.number().min(0),
-              Joi.allow('OK', 'ERROR')
+              Joi.allow('OK', 'ERROR'),
             ).required(),
-          })
+          }),
         )
         .required(),
-    }).required()
+    }).required(),
   )
   .required()
 
@@ -84,10 +84,10 @@ export default class SonarBase extends BaseJsonService {
         schema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'component or metric not found, or legacy API not supported',
         },
-      })
+      }),
     )
   }
 
