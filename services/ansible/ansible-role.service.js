@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleRoleSchema = Joi.object({
   download_count: nonNegativeInteger,
@@ -27,13 +27,14 @@ class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
   static category = 'downloads'
   static route = { base: 'ansible/role/d', pattern: ':roleId' }
 
-  static examples = [
-    {
-      title: 'Ansible Role',
-      namedParams: { roleId: '3078' },
-      staticPreview: renderDownloadsBadge({ downloads: 76 }),
+  static openApi = {
+    '/ansible/role/d/{roleId}': {
+      get: {
+        summary: 'Ansible Role',
+        parameters: pathParams({ name: 'roleId', example: '3078' }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'role downloads' }
 
@@ -47,15 +48,14 @@ class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
   static category = 'other'
   static route = { base: 'ansible/role', pattern: ':roleId' }
 
-  static examples = [
-    {
-      title: 'Ansible Role',
-      namedParams: { roleId: '3078' },
-      staticPreview: this.render({
-        name: 'ansible-roles.sublimetext3_packagecontrol',
-      }),
+  static openApi = {
+    '/ansible/role/{roleId}': {
+      get: {
+        summary: 'Ansible Galaxy Role Name',
+        parameters: pathParams({ name: 'roleId', example: '3078' }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'role' }
 

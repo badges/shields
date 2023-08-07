@@ -247,7 +247,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
     }
 
     if (releases.length === 0) {
-      throw new NotFound({ prettyMessage: 'no releases' })
+      throw new NotFound({ prettyMessage: 'no releases found' })
     }
 
     const { downloads } = this.constructor.transform({
