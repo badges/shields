@@ -13,12 +13,12 @@ import { version as versionColor } from './color-formatters.js'
 
 /**
  * Compares two arrays of numbers lexicographically and returns an integer value.
- * For example, listCompare([1, 2, 3], [1, 2, 4]) would return -1 because
- * the third element of the first array is smaller than the third element of the second array.
  *
  * @param {number[]} a - The first array to compare
  * @param {number[]} b - The second array to compare
  * @returns {number} -1 if a is smaller than b, 1 if a is larger than b, 0 if a and b are equal
+ * @example
+ * listCompare([1, 2, 3], [1, 2, 4]) // returns -1 because the third element of the first array is smaller than the third element of the second array.
  */
 function listCompare(a, b) {
   const alen = a.length
@@ -35,12 +35,12 @@ function listCompare(a, b) {
 
 /**
  * Compares two strings representing version numbers lexicographically and returns an integer value.
- * For example, compareDottedVersion('1.2.3', '1.2.4') would return -1 because
- * the numeric part of the first version is smaller than the numeric part of the second version.
  *
  * @param {string} v1 - The first version to compare
  * @param {string} v2 - The second version to compare
  * @returns {number} -1 if v1 is smaller than v2, 1 if v1 is larger than v2, 0 if v1 and v2 are equal
+ * @example
+ * compareDottedVersion('1.2.3', '1.2.4') // returns -1 because numeric part of first version is smaller than the numeric part of second version.
  */
 function compareDottedVersion(v1, v2) {
   const parts1 = /([0-9.]+)(.*)$/.exec(v1)
@@ -68,11 +68,12 @@ function compareDottedVersion(v1, v2) {
 
 /**
  * Finds the largest version number lexicographically from an array of strings representing version numbers and returns it as a string.
- * For example, latestDottedVersion(['1.2.3', '1.2.4', '1.3', '2.0']) would return '2.0' because it is the largest version number in the array.
- * latestDottedVersion([]) would return undefined because the array is empty.
  *
  * @param {string[]} versions - The array of version numbers to compare
  * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latestDottedVersion(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because it is the largest version number in the array.
+ * latestDottedVersion([]) // returns undefined because the array is empty.
  */
 function latestDottedVersion(versions) {
   const len = versions.length
@@ -90,14 +91,15 @@ function latestDottedVersion(versions) {
 
 /**
  * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
- * For example, latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], false) would return '2.0' because it is the largest version number and pre-release versions are excluded.
- * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], true) would also return '2.0' because pre-release versions are included but none of them are present in the array.
- * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], false) would return '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
- * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], true) would return '2.0-beta' because pre-release versions are included and it is the largest version number.
  *
  * @param {string[]} versions - The array of version numbers to compare
  * @param {boolean} pre - Whether to include pre-release versions or not
  * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], false) // returns '2.0' because it is the largest version number and pre-release versions are excluded.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], true) // returns '2.0' because pre-release versions are included but none of them are present in the array.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], false) // returns '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], true) // returns '2.0-beta' because pre-release versions are included and it is the largest version number.
  */
 function latestMaybeSemVer(versions, pre) {
   let version = ''
@@ -123,15 +125,16 @@ function latestMaybeSemVer(versions, pre) {
 
 /**
  * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
- * For example, latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: false }) would return '2.0' because it is the largest version number and pre-release versions are excluded.
- * latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: true }) would also return '2.0' because pre-release versions are included but none of them are present in the array.
- * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: false }) would return '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
- * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: true }) would return '2.0-beta' because pre-release versions are included and it is the largest version number.
  *
  * @param {string[]} versions - The array of version numbers to compare
  * @param {object} [options] - An optional object that contains additional options
  * @param {boolean} [options.pre=false] - Whether to include pre-release versions or not, defaults to false
  * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: false }) // returns '2.0' because it is the largest version number and pre-release versions are excluded.
+ * latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: true }) // returns '2.0' because pre-release versions are included but none of them are present in the array.
+ * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: false }) // returns '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
+ * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: true }) // returns '2.0-beta' because pre-release versions are included and it is the largest version number.
  */
 function latest(versions, { pre = false } = {}) {
   let version = ''
@@ -164,13 +167,14 @@ function latest(versions, { pre = false } = {}) {
 
 /**
  * Slices the specified number of dotted parts from the given semver version.
- * For example, slice('2.4.7', 'minor') would return '2.4' because it slices the version string up to the minor component.
- * slice('2.4.7-alpha', 'patch') would return '2.4.7-alpha' because it slices the version string up to the patch component and preserves the prerelease component.
- * slice('2.4', 'patch') would return null because the version string is not valid according to semver rules.
  *
  * @param {string} v - The semver version to slice
  * @param {string} releaseType - The release type to slice up to. Can be one of "major", "minor", or "patch"
  * @returns {string|null} The sliced version as a string, or null if the version is not valid
+ * @example
+ * slice('2.4.7', 'minor') // returns '2.4' because it slices the version string up to the minor component.
+ * slice('2.4.7-alpha', 'patch') // returns '2.4.7-alpha' because it slices the version string up to the patch component and preserves the prerelease component.
+ * slice('2.4', 'patch') // returns null because the version string is not valid according to semver rules.
  */
 function slice(v, releaseType) {
   if (!semver.valid(v, /* loose */ true)) {
@@ -201,11 +205,19 @@ function slice(v, releaseType) {
 }
 
 /**
- * Returns the lowest possible version that satisfies a given semver range expression.
- * For example, rangeStart('^1.2.3') would return '1.2.3' because it is the version string of the first comparator in the first set of the range object, which is >=1.2.3 and <2.0.0.
+ * Returns the start of the range that matches a given version string.
  *
- * @param {string} v - The semver range to evaluate
- * @returns {string|null} The version string of the first comparator in the first set of the range object, or null if the range is not valid
+ * @param {string} v - A version string that follows the Semantic Versioning specification. The function will accept and coerce invalid versions into valid ones.
+ * @returns {string} The start of the range that matches the given version string, or null if no match is found.
+ * @throws {TypeError} If v is not a string or is an empty string.
+ * @example
+ * rangeStart('^1.2.3') // returns '1.2.3'
+ * rangeStart('>=2.0.0') // returns '2.0.0'
+ * rangeStart('1.x || >=2.5.0 || 5.0.0 - 7.2.3') // returns '1.0.0'
+ * rangeStart('1.2.x') // returns '1.2.0'
+ * rangeStart('1.2.*') // returns '1.2.0-0'
+ * rangeStart(null) // throws TypeError: Invalid Version: null
+ * rangeStart('') // throws TypeError: Invalid Version:
  */
 function rangeStart(v) {
   const range = new semver.Range(v, /* loose */ true)
