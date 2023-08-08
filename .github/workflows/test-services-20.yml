@@ -1,4 +1,4 @@
-name: Services@node 18
+name: Services@node 20
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
@@ -7,7 +7,7 @@ on:
       - 'gh-readonly-queue/**'
 
 jobs:
-  test-services-18:
+  test-services-20:
     runs-on: ubuntu-latest
 
     steps:
