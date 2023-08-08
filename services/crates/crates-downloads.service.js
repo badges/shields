@@ -68,7 +68,16 @@ export default class CratesDownloads extends BaseCratesService {
   transform({ variant, json }) {
     switch (variant) {
       case 'dv':
-        return json.crate ? json.versions[0].downloads : json.version.downloads
+        let lastVer = json.version
+        if (json.crate) {
+          const lastVerNum = json.crate.max_stable_version
+            ? json.crate.max_stable_version
+            : json.crate.max_version
+          lastVer =
+            json.versions.find(ver => ver.num === lastVerNum) ||
+            json.versions[0]
+        }
+        return lastVer.downloads
       case 'dr':
         return json.crate.recent_downloads || 0
       default:
