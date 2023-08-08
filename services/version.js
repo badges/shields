@@ -91,6 +91,7 @@ function latestDottedVersion(versions) {
 
 /**
  * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
+ * latestMaybeSemVer() is used for versions that match some kind of dotted version pattern.
  *
  * @param {string[]} versions - The array of version numbers to compare
  * @param {boolean} pre - Whether to include pre-release versions or not
@@ -125,6 +126,8 @@ function latestMaybeSemVer(versions, pre) {
 
 /**
  * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
+ * latest() is looser than latestMaybeSemVer() as it will attempt to make sense of anything, falling back to alphabetic sorting.
+ * We should ideally prefer latest() over latestMaybeSemVer() when adding version badges.
  *
  * @param {string[]} versions - The array of version numbers to compare
  * @param {object} [options] - An optional object that contains additional options
@@ -225,10 +228,7 @@ function rangeStart(v) {
 }
 
 /**
- * Creates a badge object that displays information about a version number.
- * For example, renderVersionBadge({version: '1.2.3', tag: 'alpha', defaultLabel: 'npm'}) would return {label: 'npm@alpha', message: 'v1.2.3', color: 'orange'} because
- * it uses the tag and the defaultLabel to create the label, the addv function to add a 'v' prefix to the version in message,
- * and the versionColor function to assign an orange color based on the version.
+ * Creates a badge object that displays information about a version number. It should usually be used to output a version badge.
  *
  * @param {object} options - An object that contains the options for the badge
  * @param {string} options.version - The version number to display on the badge
@@ -236,6 +236,10 @@ function rangeStart(v) {
  * @param {string} [options.defaultLabel] - The default label to display on the badge, such as "npm" or "github"
  * @param {Function} [options.versionFormatter=versionColor] - The function to use to format the color of the badge based on the version number
  * @returns {object} A badge object that has three properties: label, message, and color
+ * @example
+ * renderVersionBadge({version: '1.2.3', tag: 'alpha', defaultLabel: 'npm'}) // returns {label: 'npm@alpha', message: 'v1.2.3', color: 'orange'} because
+ * it uses the tag and the defaultLabel to create the label, the addv function to add a 'v' prefix to the version in message,
+ * and the versionColor function to assign an orange color based on the version.
  */
 function renderVersionBadge({
   version,
