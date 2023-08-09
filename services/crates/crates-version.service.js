@@ -19,9 +19,7 @@ export default class CratesVersion extends BaseCratesService {
     if (json.errors) {
       throw new InvalidResponse({ prettyMessage: json.errors[0].detail })
     }
-    return json.crate.max_stable_version
-      ? json.crate.max_stable_version
-      : json.crate.max_version
+    return BaseCratesService.defaultVersion(json.crate)
   }
 
   async handle({ crate }) {
