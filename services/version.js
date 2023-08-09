@@ -212,7 +212,7 @@ function slice(v, releaseType) {
  *
  * @param {string} v - A version string that follows the Semantic Versioning specification. The function will accept and coerce invalid versions into valid ones.
  * @returns {string} The start of the range that matches the given version string, or null if no match is found.
- * @throws {TypeError} If v is not a string or is an empty string.
+ * @throws {TypeError} If v is an invalid semver range
  * @example
  * rangeStart('^1.2.3') // returns '1.2.3'
  * rangeStart('>=2.0.0') // returns '2.0.0'
