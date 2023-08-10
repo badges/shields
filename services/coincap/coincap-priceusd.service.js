@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import BaseCoincapService from './coincap-base.js'
 
 const schema = Joi.object({
@@ -13,16 +14,17 @@ const schema = Joi.object({
 export default class CoincapPriceUsd extends BaseCoincapService {
   static route = { base: 'coincap/price-usd', pattern: ':assetId' }
 
-  static examples = [
-    {
-      title: 'Coincap (Price USD)',
-      namedParams: { assetId: 'bitcoin' },
-      staticPreview: this.render({
-        asset: { name: 'bitcoin', priceUsd: '19116.0479117336250772' },
-      }),
-      keywords: ['bitcoin', 'crypto', 'cryptocurrency'],
+  static openApi = {
+    '/coincap/price-usd/{assetId}': {
+      get: {
+        summary: 'Coincap (Price USD)',
+        parameters: pathParams({
+          name: 'assetId',
+          example: 'bitcoin',
+        }),
+      },
     },
-  ]
+  }
 
   static priceFormat(price) {
     return `$${parseFloat(price)
