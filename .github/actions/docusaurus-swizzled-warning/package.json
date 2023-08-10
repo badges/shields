@@ -5,13 +5,13 @@
     "main": "index.js",
     "private": true,
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "jNullj",
     "license": "CC0",
     "dependencies": {
-      "@actions/core": "^1.10.0",
-      "@actions/github": "^5.1.1"
+        "@actions/core": "^1.10.0",
+        "@actions/github": "^5.1.1",
+        "parse-diff": "^0.11.1"
     }
-  }
-  
+}

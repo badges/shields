@@ -2,6 +2,7 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
+const diffParse = require('parse-diff')
 const {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
@@ -40,6 +41,24 @@ async function run() {
       for (const file of files) {
         if (!['package.json', 'package-lock.json'].includes(file.filename)) {
           continue
+        }
+
+        if (file.patch === undefined) {
+          // patch is not rquired by api response and might not allways return the field
+          // patch can be extracted from pr diff
+          const url = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/pull/${pr.number}.diff`
+          const diff = await (await fetch(url)).text()
+          const diffFiles = diffParse(diff)
+          for (const df in diffFiles) {
+            if (df.to !== file.filename) {
+              continue
+            }
+            for (const chunk in df.chunks) {
+              for (const change in chunk.changes) {
+                file.patch += `${change}\n`
+              }
+            }
+          }
         }
 
         const patchLines = file.patch.split('\n')
