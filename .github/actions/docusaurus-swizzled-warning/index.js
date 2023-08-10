@@ -19,10 +19,12 @@ async function run() {
     const client = github.getOctokit(token)
     const packageName = 'docusaurus-preset-openapi'
     const overideComponents = ['Curl', 'Response']
-    const messageTemplate = `
-    | :large_orange_diamond:This PR contains changes to components of ${packageName} we've overridden |
-    ---------------------------------------------------------------------------------------------------
-    | We need to watch out for changes to the Curl and Response components |
+    const messageTemplate = `<table><thead><tr><th>
+      ⚠️ This PR contains changes to components of ${packageName} we've overridden
+    </th></tr></thead>
+    <tbody><tr><th>
+      We need to watch out for changes to the Curl and Response components
+    </th></tr>
     `
 
     if (
@@ -76,12 +78,12 @@ async function run() {
                   path.includes(componenet),
               ).length > 0,
           )
-          const versionReport = `| Old version | ${oldVersion} |
-          | New version | ${newVersion} |
+          const versionReport = `<tr><th> Old version </th><th> ${oldVersion} </th></tr>
+          <tr><th> New version </th><th> ${newVersion} </th></tr>
           `
-          const changedComponentsReport = `| Overide components changed | ${changedComponents.join(
+          const changedComponentsReport = `<tr><th> Overide components changed </th><th> ${changedComponents.join(
             ', ',
-          )} |
+          )} </th></tr></tbody></table>
           `
           const body = messageTemplate + versionReport + changedComponentsReport
           await client.rest.issues.createComment({
