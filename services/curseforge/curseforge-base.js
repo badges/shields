@@ -40,7 +40,7 @@ export default class BaseCurseForgeService extends BaseJsonService {
       this.authHelper.withApiKeyHeader({
         schema,
         url: `https://api.curseforge.com/v1/mods/${projectId}`,
-        errorMessages: {
+        httpErrors: {
           403: 'invalid API key',
         },
       }),
