@@ -1,20 +1,27 @@
+import { pathParams } from '../index.js'
 import BaseCondaService from './conda-base.js'
 
 export default class CondaPlatform extends BaseCondaService {
   static category = 'platform-support'
   static route = { base: 'conda', pattern: ':variant(p|pn)/:channel/:pkg' }
 
-  static examples = [
-    {
-      title: 'Conda',
-      namedParams: { channel: 'conda-forge', package: 'python' },
-      pattern: 'pn/:channel/:package',
-      staticPreview: this.render({
-        variant: 'pn',
-        platforms: ['linux-64', 'win-32', 'osx-64', 'win-64'],
-      }),
+  static openApi = {
+    '/conda/pn/{channel}/{package}': {
+      get: {
+        summary: 'Conda',
+        parameters: pathParams(
+          {
+            name: 'channel',
+            example: 'conda-forge',
+          },
+          {
+            name: 'package',
+            example: 'python',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static render({ variant, platforms }) {
     return {
