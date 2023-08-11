@@ -8,7 +8,11 @@ describe('Github API provider', function () {
 
   let mockStandardToken, mockSearchToken, mockGraphqlToken, provider
   beforeEach(function () {
-    provider = new GithubApiProvider({ baseUrl, reserveFraction })
+    provider = new GithubApiProvider({
+      baseUrl,
+      authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
+      reserveFraction,
+    })
 
     mockStandardToken = { update: sinon.spy(), invalidate: sinon.spy() }
     sinon.stub(provider.standardTokens, 'next').returns(mockStandardToken)

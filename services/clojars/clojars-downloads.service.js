@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import { BaseClojarsService } from './clojars-base.js'
 
@@ -5,12 +6,17 @@ export default class ClojarsDownloads extends BaseClojarsService {
   static category = 'downloads'
   static route = { base: 'clojars/dt', pattern: ':clojar+' }
 
-  static examples = [
-    {
-      namedParams: { clojar: 'prismic' },
-      staticPreview: renderDownloadsBadge({ downloads: 117 }),
+  static openApi = {
+    '/clojars/dt/{clojar}': {
+      get: {
+        summary: 'Clojars Downloads',
+        parameters: pathParams({
+          name: 'clojar',
+          example: 'prismic',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
