@@ -13,7 +13,7 @@ export default class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesS
   static openApi = {
     '/puppetforge/pdk-version/{user}/{moduleName}': {
       get: {
-        summary: 'Puppet Forge – PDK version',
+        summary: 'Puppet Forge - PDK version',
         parameters: pathParams(
           {
             name: 'user',

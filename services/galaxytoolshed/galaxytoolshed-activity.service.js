@@ -12,7 +12,7 @@ export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService
   static openApi = {
     '/galaxytoolshed/created-date/{repository}/{owner}': {
       get: {
-        summary: 'Galaxy Toolshed (created date)',
+        summary: 'Galaxy Toolshed - Created Date',
         parameters: pathParams(
           {
             name: 'repository',

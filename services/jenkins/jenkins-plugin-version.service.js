@@ -13,7 +13,7 @@ export default class JenkinsPluginVersion extends BaseService {
   static openApi = {
     '/jenkins/plugin/v/{plugin}': {
       get: {
-        summary: 'Jenkins Plugins',
+        summary: 'Jenkins Plugin Version',
         parameters: pathParams({
           name: 'plugin',
           example: 'blueocean',

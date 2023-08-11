@@ -9,7 +9,7 @@ export default class BowerLicense extends BaseBowerService {
   static openApi = {
     '/bower/l/{packageName}': {
       get: {
-        summary: 'Bower',
+        summary: 'Bower License',
         parameters: pathParams({
           name: 'packageName',
           example: 'bootstrap',
