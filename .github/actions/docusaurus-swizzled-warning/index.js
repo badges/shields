@@ -56,7 +56,7 @@ async function run() {
             }
             for (const chunk of df.chunks) {
               for (const change of chunk.changes) {
-                file.patch += `${change}\n`
+                file.patch += `${change.content}\n`
               }
             }
           }
