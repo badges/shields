@@ -30,7 +30,10 @@ function bitbucketNoResultResponse(stageName) {
         state: {
           type: 'pipeline_state_in_progress',
           name: 'IN_PROGRESS',
-          stage: { name: stageName, type: 'pipeline_state_in_progress_halted' }
+          stage: {
+            name: stageName,
+            type: 'pipeline_state_in_progress_halted'
+          }
         },
       },
     ],
