@@ -20,6 +20,7 @@ async function run() {
 
     const client = github.getOctokit(token)
     const packageName = 'docusaurus-theme-openapi'
+    const packageParentName = 'docusaurus-preset-openapi'
     const overideComponents = ['Curl', 'Response']
     const messageTemplate = `<table><thead><tr><th>
       ⚠️ This PR contains changes to components of ${packageName} we've overridden
@@ -60,8 +61,34 @@ async function run() {
           pkgLockNewJson.packages,
           `node_modules/${packageName}`,
         )
-        const oldVersion = pkgLockOldJson.packages[oldVesionModuleKey].version
-        const newVersion = pkgLockNewJson.packages[newVesionModuleKey].version
+        let oldVersion = pkgLockOldJson.packages[oldVesionModuleKey].version
+        let newVersion = pkgLockNewJson.packages[newVesionModuleKey].version
+
+        const oldVesionModuleKeyParent = findKeyEndingWith(
+          pkgLockOldJson.packages,
+          `node_modules/${packageParentName}`,
+        )
+        const newVesionModuleKeyParent = findKeyEndingWith(
+          pkgLockNewJson.packages,
+          `node_modules/${packageParentName}`,
+        )
+        const oldVersionParent =
+          pkgLockOldJson.packages[oldVesionModuleKeyParent].dependencies[
+            packageName
+          ].substring(1)
+        const newVersionParent =
+          pkgLockNewJson.packages[newVesionModuleKeyParent].dependencies[
+            packageName
+          ].substring(1)
+
+        // if parent dependency is higher version then existing
+        // npm install will retrive the newer version from the parent dependency
+        if (oldVersionParent > oldVersion) {
+          oldVersion = oldVersionParent
+        }
+        if (newVersionParent > newVersion) {
+          newVersion = newVersionParent
+        }
 
         if (newVersion !== oldVersion) {
           const pkgChangedFiles = await getChangedFilesBetweenTags(
