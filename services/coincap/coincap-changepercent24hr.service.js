@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { floorCount } from '../color-formatters.js'
 import BaseCoincapService from './coincap-base.js'
 
@@ -14,16 +15,17 @@ const schema = Joi.object({
 export default class CoincapChangePercent24HrUsd extends BaseCoincapService {
   static route = { base: 'coincap/change-percent-24hr', pattern: ':assetId' }
 
-  static examples = [
-    {
-      title: 'Coincap (Change Percent 24Hr)',
-      namedParams: { assetId: 'bitcoin' },
-      staticPreview: this.render({
-        asset: { name: 'bitcoin', changePercent24Hr: '2.0670573674501840"' },
-      }),
-      keywords: ['bitcoin', 'crypto', 'cryptocurrency'],
+  static openApi = {
+    '/coincap/change-percent-24hr/{assetId}': {
+      get: {
+        summary: 'Coincap (Change Percent 24Hr)',
+        parameters: pathParams({
+          name: 'assetId',
+          example: 'bitcoin',
+        }),
+      },
     },
-  ]
+  }
 
   static percentFormat(changePercent24Hr) {
     return `${parseInt(changePercent24Hr).toFixed(2)}%`

@@ -4,6 +4,22 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-08-01
+
+- Convert `examples` arrays to `openApi` objects (part 1) [#9320](https://github.com/badges/shields/issues/9320)
+- Migrate from docs.rs' builds API to status API [#9422](https://github.com/badges/shields/issues/9422)
+- [OpenVSX] Fix OpenVSX API call for unversioned package URLs [#9408](https://github.com/badges/shields/issues/9408)
+- Add support for [Lemmy] [#9368](https://github.com/badges/shields/issues/9368)
+- upgrade to npm 9 [#9323](https://github.com/badges/shields/issues/9323)
+- Go back to default YouTube cache [#9372](https://github.com/badges/shields/issues/9372)
+- Add [GitHubDiscussionsSearch] and GitHubRepoDiscussionsSearch service [#9340](https://github.com/badges/shields/issues/9340)
+- Allow user to filter github tags and releases [#9193](https://github.com/badges/shields/issues/9193)
+- don't URL encode slash in [githubactionsworkflow] badge [#9322](https://github.com/badges/shields/issues/9322)
+- add a bit of border to select boxes [#9348](https://github.com/badges/shields/issues/9348)
+- deprecate [snyk] badges [#9349](https://github.com/badges/shields/issues/9349)
+- increase max-age on [docker] badges, again [#9350](https://github.com/badges/shields/issues/9350) [#9369](https://github.com/badges/shields/issues/9369)
+- Dependency updates
+
 ## server-2023-07-02
 
 By far the most significant change in this release is the long-awaited launch of the re-designed frontend:

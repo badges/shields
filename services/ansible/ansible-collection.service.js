@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleCollectionSchema = Joi.object({
   name: Joi.string().required(),
@@ -12,15 +12,14 @@ class AnsibleGalaxyCollectionName extends BaseJsonService {
   static category = 'other'
   static route = { base: 'ansible/collection', pattern: ':collectionId' }
 
-  static examples = [
-    {
-      title: 'Ansible Collection',
-      namedParams: { collectionId: '278' },
-      staticPreview: this.render({
-        name: 'community.general',
-      }),
+  static openApi = {
+    '/ansible/collection/{collectionId}': {
+      get: {
+        summary: 'Ansible Collection',
+        parameters: pathParams({ name: 'collectionId', example: '278' }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'collection' }
 
