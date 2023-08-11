@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/version.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/version.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Utilities relating to generating badges relating to version numbers. Includes
+ * comparing versions to determine the latest, and determining the color to use
+ * for the badge based on whether the version is a stable release.
+ * For utilities specific to PHP version ranges, see php-version.js.
+ *
+ * @module
+ */
+
+import semver from 'semver'
+import { addv } from './text-formatters.js'
+import { version as versionColor } from './color-formatters.js'
+
+/**
+ * Compares two arrays of numbers lexicographically and returns an integer value.
+ *
+ * @param {number[]} a - The first array to compare
+ * @param {number[]} b - The second array to compare
+ * @returns {number} -1 if a is smaller than b, 1 if a is larger than b, 0 if a and b are equal
+ * @example
+ * listCompare([1, 2, 3], [1, 2, 4]) // returns -1 because the third element of the first array is smaller than the third element of the second array.
+ */
+function listCompare(a, b) {
+  const alen = a.length
+  const blen = b.length
+  for (let i = 0; i &lt; alen; i++) {
+    if (a[i] &lt; b[i]) {
+      return -1
+    } else if (a[i] > b[i]) {
+      return 1
+    }
+  }
+  return alen - blen
+}
+
+/**
+ * Compares two strings representing version numbers lexicographically and returns an integer value.
+ *
+ * @param {string} v1 - The first version to compare
+ * @param {string} v2 - The second version to compare
+ * @returns {number} -1 if v1 is smaller than v2, 1 if v1 is larger than v2, 0 if v1 and v2 are equal
+ * @example
+ * compareDottedVersion('1.2.3', '1.2.4') // returns -1 because numeric part of first version is smaller than the numeric part of second version.
+ */
+function compareDottedVersion(v1, v2) {
+  const parts1 = /([0-9.]+)(.*)$/.exec(v1)
+  const parts2 = /([0-9.]+)(.*)$/.exec(v2)
+  if (parts1 != null &amp;&amp; parts2 != null) {
+    const numbers1 = parts1[1]
+    const numbers2 = parts2[1]
+    const distinguisher1 = parts1[2]
+    const distinguisher2 = parts2[2]
+    const numlist1 = numbers1.split('.').map(e => +e)
+    const numlist2 = numbers2.split('.').map(e => +e)
+    const cmp = listCompare(numlist1, numlist2)
+    if (cmp !== 0) {
+      return cmp
+    } else {
+      return distinguisher1 &lt; distinguisher2
+        ? -1
+        : distinguisher1 > distinguisher2
+        ? 1
+        : 0
+    }
+  }
+  return v1 &lt; v2 ? -1 : v1 > v2 ? 1 : 0
+}
+
+/**
+ * Finds the largest version number lexicographically from an array of strings representing version numbers and returns it as a string.
+ *
+ * @param {string[]} versions - The array of version numbers to compare
+ * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latestDottedVersion(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because it is the largest version number in the array.
+ * latestDottedVersion([]) // returns undefined because the array is empty.
+ */
+function latestDottedVersion(versions) {
+  const len = versions.length
+  if (len === 0) {
+    return
+  }
+  let version = versions[0]
+  for (let i = 1; i &lt; len; i++) {
+    if (compareDottedVersion(version, versions[i]) &lt; 0) {
+      version = versions[i]
+    }
+  }
+  return version
+}
+
+/**
+ * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
+ * latestMaybeSemVer() is used for versions that match some kind of dotted version pattern.
+ *
+ * @param {string[]} versions - The array of version numbers to compare
+ * @param {boolean} pre - Whether to include pre-release versions or not
+ * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], false) // returns '2.0' because it is the largest version number and pre-release versions are excluded.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3', '2.0'], true) // returns '2.0' because pre-release versions are included but none of them are present in the array.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], false) // returns '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
+ * latestMaybeSemVer(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], true) // returns '2.0-beta' because pre-release versions are included and it is the largest version number.
+ */
+function latestMaybeSemVer(versions, pre) {
+  let version = ''
+
+  if (!pre) {
+    // remove pre-releases from array
+    versions = versions.filter(version => !/\d+-\w+/.test(version))
+  }
+  try {
+    // coerce to string then lowercase otherwise alpha > RC
+    version = versions.sort((a, b) =>
+      semver.compareBuild(
+        `${a}`.toLowerCase(),
+        `${b}`.toLowerCase(),
+        /* loose */ true,
+      ),
+    )[versions.length - 1]
+  } catch (e) {
+    version = latestDottedVersion(versions)
+  }
+  return version
+}
+
+/**
+ * Finds the largest version number lexicographically or semantically from an array of strings representing version numbers and returns it as a string.
+ * latest() is looser than latestMaybeSemVer() as it will attempt to make sense of anything, falling back to alphabetic sorting.
+ * We should ideally prefer latest() over latestMaybeSemVer() when adding version badges.
+ *
+ * @param {string[]} versions - The array of version numbers to compare
+ * @param {object} [options] - An optional object that contains additional options
+ * @param {boolean} [options.pre=false] - Whether to include pre-release versions or not, defaults to false
+ * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
+ * @example
+ * latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: false }) // returns '2.0' because it is the largest version number and pre-release versions are excluded.
+ * latest(['1.2.3', '1.2.4', '1.3', '2.0'], { pre: true }) // returns '2.0' because pre-release versions are included but none of them are present in the array.
+ * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: false }) // returns '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
+ * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta'], { pre: true }) // returns '2.0-beta' because pre-release versions are included and it is the largest version number.
+ */
+function latest(versions, { pre = false } = {}) {
+  let version = ''
+  let origVersions = versions
+
+  // return all results that are likely semver compatible versions
+  versions = origVersions.filter(version => /\d+\.\d+/.test(version))
+  // If no semver versions then look for single numbered versions
+  if (!versions.length) {
+    versions = origVersions.filter(version => /\d+/.test(version))
+  }
+
+  version = latestMaybeSemVer(versions, pre)
+
+  if (version == null &amp;&amp; !pre) {
+    version = latestMaybeSemVer(versions, true)
+  }
+
+  // if we've still got nothing,
+  // fall back to a case-insensitive string comparison
+  if (version == null) {
+    origVersions = origVersions.sort((a, b) =>
+      a.toLowerCase().localeCompare(b.toLowerCase()),
+    )
+    version = origVersions[origVersions.length - 1]
+  }
+
+  return version
+}
+
+/**
+ * Slices the specified number of dotted parts from the given semver version.
+ *
+ * @param {string} v - The semver version to slice
+ * @param {string} releaseType - The release type to slice up to. Can be one of "major", "minor", or "patch"
+ * @returns {string|null} The sliced version as a string, or null if the version is not valid
+ * @example
+ * slice('2.4.7', 'minor') // returns '2.4' because it slices the version string up to the minor component.
+ * slice('2.4.7-alpha', 'patch') // returns '2.4.7-alpha' because it slices the version string up to the patch component and preserves the prerelease component.
+ * slice('2.4', 'patch') // returns null because the version string is not valid according to semver rules.
+ */
+function slice(v, releaseType) {
+  if (!semver.valid(v, /* loose */ true)) {
+    return null
+  }
+
+  const major = semver.major(v, /* loose */ true)
+  const minor = semver.minor(v, /* loose */ true)
+  const patch = semver.patch(v, /* loose */ true)
+  const prerelease = semver.prerelease(v, /* loose */ true)
+
+  const dottedParts = {
+    major: [major],
+    minor: [major, minor],
+    patch: [major, minor, patch],
+  }[releaseType]
+
+  if (dottedParts === undefined) {
+    throw Error(`Unknown releaseType: ${releaseType}`)
+  }
+
+  const dotted = dottedParts.join('.')
+  if (prerelease) {
+    return `${dotted}-${prerelease.join('.')}`
+  } else {
+    return dotted
+  }
+}
+
+/**
+ * Returns the start of the range that matches a given version string.
+ *
+ * @param {string} v - A version string that follows the Semantic Versioning specification. The function will accept and coerce invalid versions into valid ones.
+ * @returns {string} The start of the range that matches the given version string, or null if no match is found.
+ * @throws {TypeError} If v is an invalid semver range
+ * @example
+ * rangeStart('^1.2.3') // returns '1.2.3'
+ * rangeStart('>=2.0.0') // returns '2.0.0'
+ * rangeStart('1.x || >=2.5.0 || 5.0.0 - 7.2.3') // returns '1.0.0'
+ * rangeStart('1.2.x') // returns '1.2.0'
+ * rangeStart('1.2.*') // returns '1.2.0-0'
+ * rangeStart(null) // throws TypeError: Invalid Version: null
+ * rangeStart('') // throws TypeError: Invalid Version:
+ */
+function rangeStart(v) {
+  const range = new semver.Range(v, /* loose */ true)
+  return range.set[0][0].semver.version
+}
+
+/**
+ * Creates a badge object that displays information about a version number. It should usually be used to output a version badge.
+ *
+ * @param {object} options - An object that contains the options for the badge
+ * @param {string} options.version - The version number to display on the badge
+ * @param {string} [options.tag] - The tag to display on the badge, such as "alpha" or "beta"
+ * @param {string} [options.defaultLabel] - The default label to display on the badge, such as "npm" or "github"
+ * @param {Function} [options.versionFormatter=versionColor] - The function to use to format the color of the badge based on the version number
+ * @returns {object} A badge object that has three properties: label, message, and color
+ * @example
+ * renderVersionBadge({version: '1.2.3', tag: 'alpha', defaultLabel: 'npm'}) // returns {label: 'npm@alpha', message: 'v1.2.3', color: 'orange'} because
+ * it uses the tag and the defaultLabel to create the label, the addv function to add a 'v' prefix to the version in message,
+ * and the versionColor function to assign an orange color based on the version.
+ */
+function renderVersionBadge({
+  version,
+  tag,
+  defaultLabel,
+  versionFormatter = versionColor,
+}) {
+  return {
+    label: tag ? `${defaultLabel}@${tag}` : undefined,
+    message: addv(version),
+    color: versionFormatter(version),
+  }
+}
+
+export { latest, listCompare, slice, rangeStart, renderVersionBadge }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_base-service_openapi.html">core/base-service/openapi</a></li><li><a href="module-core_base-service_resource-cache.html">core/base-service/resource-cache</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_build-status.html">services/build-status</a></li><li><a href="module-services_color-formatters.html">services/color-formatters</a></li><li><a href="module-services_contributor-count.html">services/contributor-count</a></li><li><a href="module-services_downloads.html">services/downloads</a></li><li><a href="module-services_dynamic-common.html">services/dynamic-common</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_endpoint-common.html">services/endpoint-common</a></li><li><a href="module-services_licenses.html">services/licenses</a></li><li><a href="module-services_package-json-helpers.html">services/package-json-helpers</a></li><li><a href="module-services_php-version.html">services/php-version</a></li><li><a href="module-services_pipenv-helpers.html">services/pipenv-helpers</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li><li><a href="module-services_text-formatters.html">services/text-formatters</a></li><li><a href="module-services_validators.html">services/validators</a></li><li><a href="module-services_version.html">services/version</a></li></ul><h3>Classes</h3><ul><li><a href="module-badge-maker_lib_xml-ElementList.html">ElementList</a></li><li><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-adding-new-config-values.html">adding-new-config-values</a></li><li><a href="tutorial-authentication.html">authentication</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-static-badges.html">static-badges</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createNumRequestCounter">createNumRequestCounter</a></li><li><a href="global.html#isMetricWithPattern">isMetricWithPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Aug 11 2023 15:19:54 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
