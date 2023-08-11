@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { getPackageFormats } from './pypi-helpers.js'
 
@@ -6,15 +7,17 @@ export default class PypiFormat extends PypiBase {
 
   static route = this.buildRoute('pypi/format')
 
-  static examples = [
-    {
-      title: 'PyPI - Format',
-      pattern: ':packageName',
-      namedParams: { packageName: 'Django' },
-      staticPreview: this.render({ hasWheel: true }),
-      keywords: ['python'],
+  static openApi = {
+    '/pypi/format/{packageName}': {
+      get: {
+        summary: 'PyPI - Format',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Django',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'format' }
 

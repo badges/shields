@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   message: nonNegativeInteger,
@@ -15,13 +15,17 @@ export default class RepologyRepositories extends BaseSvgScrapingService {
     pattern: ':projectName',
   }
 
-  static examples = [
-    {
-      title: 'Repology - Repositories',
-      namedParams: { projectName: 'starship' },
-      staticPreview: this.render({ repositoryCount: '18' }),
+  static openApi = {
+    '/repology/repositories/{projectName}': {
+      get: {
+        summary: 'Repology - Repositories',
+        parameters: pathParams({
+          name: 'projectName',
+          example: 'starship',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'repositories',

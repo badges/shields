@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { parseClassifiers } from './pypi-helpers.js'
 
@@ -6,15 +7,17 @@ export default class PypiImplementation extends PypiBase {
 
   static route = this.buildRoute('pypi/implementation')
 
-  static examples = [
-    {
-      title: 'PyPI - Implementation',
-      pattern: ':packageName',
-      namedParams: { packageName: 'Django' },
-      staticPreview: this.render({ implementations: ['cpython'] }),
-      keywords: ['python'],
+  static openApi = {
+    '/pypi/implementation/{packageName}': {
+      get: {
+        summary: 'PyPI - Implementation',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Django',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'implementation' }
 
