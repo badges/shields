@@ -72,6 +72,9 @@ class BitbucketPipelines extends BaseJsonService {
       value => value.state && value.state.name === 'COMPLETED',
     )
     if (values.length > 0) {
+      if !values[0].state.hasOwnProperty('result') { // DID THIS ------------------------------------------------------------------
+        return 'HALTED'
+      }
       return values[0].state.result.name
     }
     return 'never built'
