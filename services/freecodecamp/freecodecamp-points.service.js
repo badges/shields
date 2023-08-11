@@ -41,7 +41,7 @@ export default class FreeCodeCampPoints extends BaseJsonService {
         summary: 'freeCodeCamp points',
         parameters: pathParams({
           name: 'username',
-          example: 'sethi',
+          example: 'raisedadead',
         }),
       },
     },

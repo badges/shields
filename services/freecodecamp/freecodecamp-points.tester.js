@@ -3,7 +3,7 @@ import { isMetric } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('Total Points Valid')
-  .get('/sethi.json')
+  .get('/raisedadead.json')
   .expectBadge({ label: 'points', message: isMetric })
 
 t.create('Total Points Private')
