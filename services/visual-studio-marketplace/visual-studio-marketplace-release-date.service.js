@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
@@ -11,15 +12,17 @@ export default class VisualStudioMarketplaceReleaseDate extends VisualStudioMark
       '(visual-studio-marketplace|vscode-marketplace)/release-date/:extensionId',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio Marketplace Release Date',
-      pattern: 'visual-studio-marketplace/release-date/:extensionId',
-      namedParams: { extensionId: 'yasht.terminal-all-in-one' },
-      staticPreview: this.render({ releaseDate: '2019-04-13T07:50:27.000Z' }),
-      keywords: this.keywords,
+  static openApi = {
+    '/visual-studio-marketplace/release-date/{extensionId}': {
+      get: {
+        summary: 'Visual Studio Marketplace Release Date',
+        parameters: pathParams({
+          name: 'extensionId',
+          example: 'yasht.terminal-all-in-one',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'release date',

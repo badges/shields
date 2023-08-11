@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import UptimeRobotBase from './uptimerobot-base.js'
 
 export default class UptimeRobotStatus extends UptimeRobotBase {
@@ -6,15 +7,17 @@ export default class UptimeRobotStatus extends UptimeRobotBase {
     pattern: ':monitorSpecificKey',
   }
 
-  static examples = [
-    {
-      title: 'Uptime Robot status',
-      namedParams: {
-        monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+  static openApi = {
+    '/uptimerobot/status/{monitorSpecificKey}': {
+      get: {
+        summary: 'Uptime Robot status',
+        parameters: pathParams({
+          name: 'monitorSpecificKey',
+          example: 'm778918918-3e92c097147760ee39d02d36',
+        }),
       },
-      staticPreview: this.render({ status: 2 }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'status',
