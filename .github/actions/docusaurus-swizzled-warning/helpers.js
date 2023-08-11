@@ -60,4 +60,16 @@ async function getChangedFilesBetweenTags(
   return response.data.files.map(file => file.filename)
 }
 
-module.exports = { getAllFilesForPullRequest, getChangedFilesBetweenTags }
+function findKeyEndingWith(obj, ending) {
+  for (const key in obj) {
+    if (key.endsWith(ending)) {
+      return key
+    }
+  }
+}
+
+module.exports = {
+  getAllFilesForPullRequest,
+  getChangedFilesBetweenTags,
+  findKeyEndingWith,
+}
