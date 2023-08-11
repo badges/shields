@@ -12,7 +12,7 @@ export default class OpmVersion extends BaseService {
   static openApi = {
     '/opm/v/{user}/{moduleName}': {
       get: {
-        summary: 'OPM',
+        summary: 'OPM Version',
         parameters: pathParams(
           {
             name: 'user',

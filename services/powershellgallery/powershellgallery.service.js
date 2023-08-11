@@ -35,7 +35,7 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
   static openApi = {
     '/powershellgallery/p/{packageName}': {
       get: {
-        summary: 'PowerShell Gallery',
+        summary: 'PowerShell Gallery Platform Support',
         parameters: pathParams({
           name: 'packageName',
           example: 'PackageManagement',

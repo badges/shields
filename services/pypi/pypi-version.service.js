@@ -11,7 +11,7 @@ export default class PypiVersion extends PypiBase {
   static openApi = {
     '/pypi/v/{packageName}': {
       get: {
-        summary: 'PyPI',
+        summary: 'PyPI - Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'nine',
