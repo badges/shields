@@ -16,7 +16,7 @@ const bitbucketPipelinesSchema = Joi.object({
               'STOPPED',
               'EXPIRED',
             ),
-          }).required(),
+          }).optional(),
         }).required(),
       }),
     )
