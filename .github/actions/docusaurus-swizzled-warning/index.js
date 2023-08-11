@@ -2,7 +2,6 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const diffParse = require('parse-diff')
 const fetch = require('node-fetch')
 const {
   getAllFilesForPullRequest,
@@ -19,13 +18,15 @@ async function run() {
     }
 
     const client = github.getOctokit(token)
-    const packageName = 'docusaurus-preset-openapi'
+    const packageName = 'docusaurus-theme-openapi'
     const overideComponents = ['Curl', 'Response']
     const messageTemplate = `<table><thead><tr><th>
       ⚠️ This PR contains changes to components of ${packageName} we've overridden
     </th></tr></thead>
     <tbody><tr><th>
-      We need to watch out for changes to the Curl and Response components
+      We need to watch out for changes to the ${overideComponents.join(
+        ', ',
+      )}components
     </th></tr>
     `
 
@@ -40,49 +41,22 @@ async function run() {
       )
 
       for (const file of files) {
-        if (!['package.json', 'package-lock.json'].includes(file.filename)) {
+        if (file.filename !== 'package-lock.json') {
           continue
         }
 
-        if (file.patch === undefined) {
-          // patch is not rquired by api response and might not allways return the field
-          // patch can be extracted from pr diff
-          const url = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/pull/${pr.number}.diff`
-          const diff = await (await fetch(url)).text()
-          const diffFiles = diffParse(diff)
-          for (const df of diffFiles) {
-            if (df.to !== file.filename) {
-              continue
-            }
-            for (const chunk of df.chunks) {
-              for (const change of chunk.changes) {
-                file.patch += `${change.content}\n`
-              }
-            }
-          }
-        }
+        const pkgLockNewJson = await (await fetch(file.raw_url)).json()
+        const pkgLockOldJson = await (
+          await fetch(
+            `https://raw.githubusercontent.com/${github.context.repo.owner}/${github.context.repo.repo}/master/${file.filename}`,
+          )
+        ).json()
+        const oldVersion =
+          pkgLockOldJson.packages[`node_modules/${packageName}`].version
+        const newVersion =
+          pkgLockNewJson.packages[`node_modules/${packageName}`].version
 
-        const patchLines = file.patch.split('\n')
-        const versionRegex = /\d+\.\d+\.\d+/
-
-        let oldVersion
-        let newVersion
-
-        for (let i = 0; i < patchLines.length; i++) {
-          if (
-            ['+', '-'].includes(patchLines[i][0]) &&
-            patchLines[i].includes(packageName)
-          ) {
-            const match = patchLines[i].match(versionRegex)
-            if (patchLines[i][0] === '+') {
-              newVersion = match[0]
-            } else {
-              oldVersion = match[0]
-            }
-          }
-        }
-
-        if (newVersion) {
+        if (newVersion !== oldVersion) {
           const pkgChangedFiles = await getChangedFilesBetweenTags(
             client,
             'cloud-annotations',
@@ -112,10 +86,10 @@ async function run() {
             issue_number: pr.number,
             body,
           })
-        }
 
-        core.debug('Found changes and posted comment, done.')
-        return
+          core.debug('Found changes and posted comment, done.')
+          return
+        }
       }
       core.debug('No changes found, done.')
     }
