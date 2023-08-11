@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import toArray from '../../core/base-service/to-array.js'
 import BaseCondaService from './conda-base.js'
@@ -11,21 +12,23 @@ export default class CondaLicense extends BaseCondaService {
   static category = 'license'
   static route = { base: 'conda', pattern: 'l/:channel/:pkg' }
 
-  static examples = [
-    {
-      title: 'Conda - License',
-      pattern: 'l/:channel/:package',
-      namedParams: {
-        channel: 'conda-forge',
-        package: 'setuptools',
+  static openApi = {
+    '/conda/l/{channel}/{package}': {
+      get: {
+        summary: 'Conda - License',
+        parameters: pathParams(
+          {
+            name: 'channel',
+            example: 'conda-forge',
+          },
+          {
+            name: 'package',
+            example: 'setuptools',
+          },
+        ),
       },
-      staticPreview: this.render({
-        variant: 'l',
-        channel: 'conda-forge',
-        licenses: ['MIT'],
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 

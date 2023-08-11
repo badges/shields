@@ -1,5 +1,5 @@
 import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
 export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
@@ -10,16 +10,23 @@ export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesSer
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'Puppet Forge feedback score',
-      namedParams: {
-        user: 'camptocamp',
-        moduleName: 'openssl',
+  static openApi = {
+    '/puppetforge/f/{user}/{moduleName}': {
+      get: {
+        summary: 'Puppet Forge feedback score',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'camptocamp',
+          },
+          {
+            name: 'moduleName',
+            example: 'openssl',
+          },
+        ),
       },
-      staticPreview: this.render({ score: 61 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'score' }
 

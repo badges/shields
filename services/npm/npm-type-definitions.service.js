@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import NpmBase from './npm-base.js'
 
 // For this badge to correctly detect type definitions, either the relevant
@@ -8,17 +9,17 @@ export default class NpmTypeDefinitions extends NpmBase {
 
   static route = this.buildRoute('npm/types', { withTag: false })
 
-  static examples = [
-    {
-      title: 'npm type definitions',
-      pattern: ':packageName',
-      namedParams: { packageName: 'chalk' },
-      staticPreview: this.render({
-        supportedLanguages: ['TypeScript', 'Flow'],
-      }),
-      keywords: ['node', 'typescript', 'flow'],
+  static openApi = {
+    '/npm/types/{packageName}': {
+      get: {
+        summary: 'npm type definitions',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'chalk',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'types',

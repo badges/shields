@@ -1,4 +1,4 @@
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
 export default class PuppetforgeModuleEndorsement extends BasePuppetForgeModulesService {
@@ -9,16 +9,23 @@ export default class PuppetforgeModuleEndorsement extends BasePuppetForgeModules
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'Puppet Forge endorsement',
-      namedParams: {
-        user: 'camptocamp',
-        moduleName: 'openssl',
+  static openApi = {
+    '/puppetforge/e/{user}/{moduleName}': {
+      get: {
+        summary: 'Puppet Forge endorsement',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'camptocamp',
+          },
+          {
+            name: 'moduleName',
+            example: 'openssl',
+          },
+        ),
       },
-      staticPreview: this.render({ endorsement: 'approved' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'endorsement' }
 
