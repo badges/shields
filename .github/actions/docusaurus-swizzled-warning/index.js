@@ -50,12 +50,12 @@ async function run() {
           const url = `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/pull/${pr.number}.diff`
           const diff = await (await fetch(url)).text()
           const diffFiles = diffParse(diff)
-          for (const df in diffFiles) {
+          for (const df of diffFiles) {
             if (df.to !== file.filename) {
               continue
             }
-            for (const chunk in df.chunks) {
-              for (const change in chunk.changes) {
+            for (const chunk of df.chunks) {
+              for (const change of chunk.changes) {
                 file.patch += `${change}\n`
               }
             }
