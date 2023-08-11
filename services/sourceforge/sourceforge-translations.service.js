@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import BaseSourceForgeService from './sourceforge-base.js'
 
@@ -16,17 +17,17 @@ export default class SourceforgeTranslations extends BaseSourceForgeService {
     pattern: ':project',
   }
 
-  static examples = [
-    {
-      title: 'SourceForge Translations',
-      namedParams: {
-        project: 'guitarix',
+  static openApi = {
+    '/sourceforge/translations/{project}': {
+      get: {
+        summary: 'SourceForge Translations',
+        parameters: pathParams({
+          name: 'project',
+          example: 'guitarix',
+        }),
       },
-      staticPreview: this.render({
-        translationCount: 4,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'translations' }
 

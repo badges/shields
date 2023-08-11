@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import {
   renderQuestionsBadge,
@@ -16,18 +17,23 @@ export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
     pattern: ':stackexchangesite/qm/:query',
   }
 
-  static examples = [
-    {
-      title: 'Stack Exchange monthly questions',
-      namedParams: { stackexchangesite: 'stackoverflow', query: 'dayjs' },
-      staticPreview: this.render({
-        stackexchangesite: 'stackoverflow',
-        query: 'dayjs',
-        numValue: 2000,
-      }),
-      keywords: ['stackexchange', 'stackoverflow'],
+  static openApi = {
+    '/stackexchange/{stackexchangesite}/qm/{query}': {
+      get: {
+        summary: 'Stack Exchange monthly questions',
+        parameters: pathParams(
+          {
+            name: 'stackexchangesite',
+            example: 'stackoverflow',
+          },
+          {
+            name: 'query',
+            example: 'dayjs',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static render(props) {
     return renderQuestionsBadge({
