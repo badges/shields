@@ -13,7 +13,7 @@ export default class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
   static openApi = {
     '/vaadin-directory/v/{packageName}': {
       get: {
-        summary: 'Vaadin Directory',
+        summary: 'Vaadin Directory Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'vaadinvaadin-grid',

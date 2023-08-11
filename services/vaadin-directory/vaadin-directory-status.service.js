@@ -12,7 +12,7 @@ export default class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
   static openApi = {
     '/vaadin-directory/status/{packageName}': {
       get: {
-        summary: 'Vaadin Directory',
+        summary: 'Vaadin Directory Status',
         parameters: pathParams({
           name: 'packageName',
           example: 'vaadinvaadin-grid',

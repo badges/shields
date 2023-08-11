@@ -32,7 +32,7 @@ export default class VcpkgVersion extends ConditionalGithubAuthV3Service {
   static openApi = {
     '/vcpkg/v/{portName}': {
       get: {
-        summary: 'Vcpkg',
+        summary: 'Vcpkg Version',
         parameters: pathParams({
           name: 'portName',
           example: 'entt',

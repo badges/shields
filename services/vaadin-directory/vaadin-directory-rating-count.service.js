@@ -14,7 +14,7 @@ export default class VaadinDirectoryRatingCount extends BaseVaadinDirectoryServi
   static openApi = {
     '/vaadin-directory/rating-count/{packageName}': {
       get: {
-        summary: 'Vaadin Directory',
+        summary: 'Vaadin Directory Rating Count',
         parameters: pathParams({
           name: 'packageName',
           example: 'vaadinvaadin-grid',

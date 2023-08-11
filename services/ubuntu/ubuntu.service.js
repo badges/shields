@@ -23,7 +23,7 @@ export default class Ubuntu extends BaseJsonService {
   static openApi = {
     '/ubuntu/v/{packageName}/{series}': {
       get: {
-        summary: 'Ubuntu package',
+        summary: 'Ubuntu Package Version (for series)',
         parameters: pathParams(
           {
             name: 'packageName',
@@ -38,7 +38,7 @@ export default class Ubuntu extends BaseJsonService {
     },
     '/ubuntu/v/{packageName}': {
       get: {
-        summary: 'Ubuntu package',
+        summary: 'Ubuntu Package Version',
         parameters: pathParams({
           name: 'packageName',
           example: 'ubuntu-wallpapers',

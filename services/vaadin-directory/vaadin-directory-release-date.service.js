@@ -14,7 +14,7 @@ export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryServi
   static openApi = {
     '/vaadin-directory/release-date/{packageName}': {
       get: {
-        summary: 'Vaadin Directory',
+        summary: 'Vaadin Directory Release Date',
         parameters: pathParams({
           name: 'packageName',
           example: 'vaadinvaadin-grid',
