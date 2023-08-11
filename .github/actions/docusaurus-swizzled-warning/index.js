@@ -3,6 +3,7 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 const diffParse = require('parse-diff')
+const fetch = require('node-fetch')
 const {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
