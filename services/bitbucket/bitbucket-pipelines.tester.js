@@ -23,6 +23,20 @@ function bitbucketApiResponse(status) {
   })
 }
 
+function bitbucketNoResultResponse(stageName) {
+  return JSON.stringify({
+    values: [
+      {
+        state: {
+          type: 'pipeline_state_in_progress',
+          name: 'IN_PROGRESS',
+          stage: { name: stageName, type: 'pipeline_state_in_progress_halted' }
+        },
+      },
+    ],
+  })
+}
+
 t.create('master build result (not found)')
   .get('/atlassian/not-a-repo/master.json')
   .expectBadge({ label: 'build', message: 'not found' })
@@ -41,6 +55,15 @@ t.create('branch build result (not found)')
 t.create('branch build result (never built)')
   .get('/atlassian/adf-builder-javascript/some/new/branch.json')
   .expectBadge({ label: 'build', message: 'never built' })
+
+t.create('build result (stage only)')
+.get('/atlassian/adf-builder-javascript/master.json')
+  .intercept(nock =>
+    nock('https://api.bitbucket.org')
+      .get(/^\/2.0\/.*/)
+      .reply(200, bitbucketNoResultResponse('HALTED')),
+  )
+  .expectBadge({ label: 'build', message: 'HALTED' })
 
 t.create('build result (passing)')
   .get('/atlassian/adf-builder-javascript/master.json')

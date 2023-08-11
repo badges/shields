@@ -16,8 +16,12 @@ const bitbucketPipelinesSchema = Joi.object({
               'STOPPED',
               'EXPIRED',
             ),
-          }).optional(),
-        }).required(),
+          }),
+          stage: Joi.object({
+            name: Joi.string().required(),
+            type: Joi.string().optional(),
+          }),
+        }).required().or('result','stage'),
       }),
     )
     .required(),
@@ -69,13 +73,13 @@ class BitbucketPipelines extends BaseJsonService {
 
   static transform(data) {
     const values = data.values.filter(
-      value => value.state && value.state.name === 'COMPLETED',
+      value => value.state && (value.state.name === 'COMPLETED' || value.state.name === 'IN_PROGRESS'),
     )
     if (values.length > 0) {
-      if !values[0].state.hasOwnProperty('result') { // DID THIS ------------------------------------------------------------------
-        return 'HALTED'
+      if (values[0].state.hasOwnProperty('result')) {
+        return values[0].state.result.name
       }
-      return values[0].state.result.name
+      return values[0].state.stage.name
     }
     return 'never built'
   }
