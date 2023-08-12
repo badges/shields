@@ -23,7 +23,7 @@ const bitbucketPipelinesSchema = Joi.object({
           }),
         })
           .required()
-          .or('result','stage'),
+          .or('result', 'stage'),
       }),
     )
     .required(),
