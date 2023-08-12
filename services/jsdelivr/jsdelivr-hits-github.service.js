@@ -15,6 +15,7 @@ export default class JsDelivrHitsGitHub extends BaseJsDelivrService {
           {
             name: 'period',
             example: 'hm',
+            schema: { type: 'string', enum: this.getEnum('period') },
           },
           {
             name: 'user',

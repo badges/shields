@@ -26,6 +26,7 @@ class Depfu extends BaseJsonService {
           {
             name: 'vcsType',
             example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
           },
           {
             name: 'project',

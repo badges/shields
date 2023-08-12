@@ -7,10 +7,15 @@ export default class CondaDownloads extends BaseCondaService {
   static route = { base: 'conda', pattern: ':variant(d|dn)/:channel/:pkg' }
 
   static openApi = {
-    '/conda/dn/{channel}/{package}': {
+    '/conda/{variant}/{channel}/{package}': {
       get: {
         summary: 'Conda',
         parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'dn',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
           {
             name: 'channel',
             example: 'conda-forge',

@@ -26,6 +26,7 @@ export default class RedditUserKarma extends BaseJsonService {
           {
             name: 'variant',
             example: 'combined',
+            schema: { type: 'string', enum: this.getEnum('variant') },
           },
           {
             name: 'user',

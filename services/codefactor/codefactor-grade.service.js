@@ -21,6 +21,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
           {
             name: 'vcsType',
             example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
           },
           {
             name: 'user',
@@ -44,6 +45,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
           {
             name: 'vcsType',
             example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
           },
           {
             name: 'user',

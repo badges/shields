@@ -17,6 +17,7 @@ export default class TestspaceTestCount extends TestspaceBase {
           {
             name: 'metric',
             example: 'passed',
+            schema: { type: 'string', enum: this.getEnum('metric') },
           },
           {
             name: 'org',

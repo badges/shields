@@ -19,6 +19,7 @@ export default class VaadinDirectoryRating extends BaseVaadinDirectoryService {
           {
             name: 'format',
             example: 'rating',
+            schema: { type: 'string', enum: this.getEnum('format') },
           },
           {
             name: 'packageName',
