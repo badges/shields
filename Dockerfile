@@ -15,7 +15,7 @@ RUN NODE_ENV=development CYPRESS_INSTALL_BINARY=0 npm ci
 
 COPY . /usr/src/app
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 RUN npm cache clean --force
 
 # Use multi-stage build to reduce size
