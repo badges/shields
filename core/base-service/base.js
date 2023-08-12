@@ -21,6 +21,7 @@ import {
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
+import { getEnum } from './openapi.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -100,6 +101,26 @@ class BaseService {
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
+  }
+
+  /**
+   * Extract an array of allowed values from this service's route pattern
+   * for a given route parameter
+   *
+   * @param {string} param The name of a param in this service's route pattern
+   * @returns {string[]} Array of allowed values for this param
+   */
+  static getEnum(param) {
+    if (!('pattern' in this.route)) {
+      throw new Error('getEnum() requires route to have a .pattern property')
+    }
+    const enumeration = getEnum(this.route.pattern, param)
+    if (!Array.isArray(enumeration)) {
+      throw new Error(
+        `Could not extract enum for param ${param} from pattern ${this.route.pattern}`,
+      )
+    }
+    return enumeration
   }
 
   /**
