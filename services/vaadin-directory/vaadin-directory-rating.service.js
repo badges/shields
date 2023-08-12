@@ -14,7 +14,7 @@ export default class VaadinDirectoryRating extends BaseVaadinDirectoryService {
   static openApi = {
     '/vaadin-directory/{format}/{packageName}': {
       get: {
-        summary: 'Vaadin Directory',
+        summary: 'Vaadin Directory Rating',
         parameters: pathParams(
           {
             name: 'format',

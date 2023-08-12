@@ -8,7 +8,7 @@ export default class CondaPlatform extends BaseCondaService {
   static openApi = {
     '/conda/{variant}/{channel}/{package}': {
       get: {
-        summary: 'Conda',
+        summary: 'Conda Platform',
         parameters: pathParams(
           {
             name: 'variant',

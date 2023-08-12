@@ -9,7 +9,7 @@ export default class CondaDownloads extends BaseCondaService {
   static openApi = {
     '/conda/{variant}/{channel}/{package}': {
       get: {
-        summary: 'Conda',
+        summary: 'Conda Downloads',
         parameters: pathParams(
           {
             name: 'variant',
