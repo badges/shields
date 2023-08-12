@@ -17,7 +17,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 16
+          node-version: 18
 
       - name: ESLint
         if: always()

@@ -1,4 +1,4 @@
-name: Main@node 18
+name: Main@node 20
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -8,7 +8,7 @@ on:
       - 'dependabot/**'
 
 jobs:
-  test-main-18:
+  test-main-20:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,7 +17,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 18
+          node-version: 20
         env:
           NPM_CONFIG_ENGINE_STRICT: 'false'
 
