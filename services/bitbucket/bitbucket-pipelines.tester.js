@@ -32,8 +32,8 @@ function bitbucketNoResultResponse(stageName) {
           name: 'IN_PROGRESS',
           stage: {
             name: stageName,
-            type: 'pipeline_state_in_progress_halted'
-          }
+            type: 'pipeline_state_in_progress_halted',
+          },
         },
       },
     ],
@@ -60,7 +60,7 @@ t.create('branch build result (never built)')
   .expectBadge({ label: 'build', message: 'never built' })
 
 t.create('build result (stage only)')
-.get('/atlassian/adf-builder-javascript/master.json')
+  .get('/atlassian/adf-builder-javascript/master.json')
   .intercept(nock =>
     nock('https://api.bitbucket.org')
       .get(/^\/2.0\/.*/)
