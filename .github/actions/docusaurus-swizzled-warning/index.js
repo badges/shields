@@ -22,7 +22,7 @@ async function run() {
     const packageName = 'docusaurus-theme-openapi'
     const packageParentName = 'docusaurus-preset-openapi'
     const overideComponents = ['Curl', 'Response']
-    const messageTemplate = `<table><thead><tr><colspan="2">
+    const messageTemplate = `<table><thead><tr><th colspan="2">
       ⚠️ This PR contains changes to components of ${packageName} we've overridden
     </th></tr>
     <tr><th colspan="2">
