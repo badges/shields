@@ -44,7 +44,7 @@ async function run() {
       pr.number,
     )
 
-    const file = files.filter(f => f.filename !== 'package-lock.json')[0]
+    const file = files.filter(f => f.filename === 'package-lock.json')[0]
     if (file === undefined) {
       return
     }
