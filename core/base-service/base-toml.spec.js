@@ -25,13 +25,13 @@ const expectedToml = `
 requiredString = "some-string"
 `
 
-const unexpectedToml = `
-# example toml - unexpected val
+const invalidSchemaToml = `
+# example toml - legal toml syntax but invalid schema
 unexpectedKey = "some-string"
 `
 
-const invalidToml = `
-# example invalid toml
+const invalidTomlSyntax = `
+# example illegal toml syntax that can't be parsed
 missing= "space"
 colonsCantBeUsed: 42
 missing "assignment"
@@ -115,7 +115,7 @@ describe('BaseTomlService', function () {
 
     it('handles toml responses which do not match the schema', async function () {
       const requestFetcher = async () => ({
-        buffer: unexpectedToml,
+        buffer: invalidSchemaToml,
         res: { statusCode: 200 },
       })
       expect(
@@ -132,7 +132,7 @@ describe('BaseTomlService', function () {
 
     it('handles unparseable toml responses', async function () {
       const requestFetcher = async () => ({
-        buffer: invalidToml,
+        buffer: invalidTomlSyntax,
         res: { statusCode: 200 },
       })
       expect(
