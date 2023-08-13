@@ -68,8 +68,38 @@ function findKeyEndingWith(obj, ending) {
   }
 }
 
+/**
+ * Get large (>1MB) JSON file from git repo on at ref as a json object
+ *
+ * @param {object} client Hydrated octokit ready to use for GitHub Actions
+ * @param {string} owner Repo owner
+ * @param {string} repo Repo name
+ * @param {string} path Path of the file in repo relative to root directory
+ * @param {string} ref Git refrence (commit, branch, tag)
+ * @returns {string[]} Array listing all changed files betwen the base tag and the head tag
+ */
+async function getLargeJsonAtRef(client, owner, repo, path, ref) {
+  const fileSha = (
+    await client.rest.repos.getContent({
+      owner,
+      repo,
+      path,
+      ref,
+    })
+  ).data.sha
+  const fileBlob = (
+    await client.rest.git.getBlob({
+      owner,
+      repo,
+      file_sha: fileSha,
+    })
+  ).data.content
+  return JSON.parse(Buffer.from(fileBlob, 'base64').toString())
+}
+
 module.exports = {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
   findKeyEndingWith,
+  getLargeJsonAtRef,
 }

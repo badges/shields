@@ -6,6 +6,7 @@ const {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
   findKeyEndingWith,
+  getLargeJsonAtRef,
 } = require('./helpers')
 
 async function run() {
@@ -32,131 +33,111 @@ async function run() {
     `
 
     if (
-      ['dependabot[bot]', 'dependabot-preview[bot]'].includes(pr.user.login)
+      !['dependabot[bot]', 'dependabot-preview[bot]'].includes(pr.user.login)
     ) {
-      const files = await getAllFilesForPullRequest(
-        client,
-        github.context.repo.owner,
-        github.context.repo.repo,
-        pr.number,
-      )
-
-      for (const file of files) {
-        if (file.filename !== 'package-lock.json') {
-          continue
-        }
-
-        const pkgLockNewSha = (
-          await client.rest.repos.getContent({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            path: file.filename,
-            ref: file.contents_url.split('ref=')[1],
-          })
-        ).data.sha
-        const pkgLockNewBlob = (
-          await client.rest.git.getBlob({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            file_sha: pkgLockNewSha,
-          })
-        ).data.content
-        const pkgLockNewJson = JSON.parse(
-          Buffer.from(pkgLockNewBlob, 'base64').toString(),
-        )
-        const pkgLockOldSha = (
-          await client.rest.repos.getContent({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            path: file.filename,
-            ref: 'master',
-          })
-        ).data.sha
-        const pkgLockOldBlob = (
-          await client.rest.git.getBlob({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            file_sha: pkgLockOldSha,
-          })
-        ).data.content
-        const pkgLockOldJson = JSON.parse(
-          Buffer.from(pkgLockOldBlob, 'base64').toString(),
-        )
-
-        const oldVesionModuleKey = findKeyEndingWith(
-          pkgLockOldJson.packages,
-          `node_modules/${packageName}`,
-        )
-        const newVesionModuleKey = findKeyEndingWith(
-          pkgLockNewJson.packages,
-          `node_modules/${packageName}`,
-        )
-        let oldVersion = pkgLockOldJson.packages[oldVesionModuleKey].version
-        let newVersion = pkgLockNewJson.packages[newVesionModuleKey].version
-
-        const oldVesionModuleKeyParent = findKeyEndingWith(
-          pkgLockOldJson.packages,
-          `node_modules/${packageParentName}`,
-        )
-        const newVesionModuleKeyParent = findKeyEndingWith(
-          pkgLockNewJson.packages,
-          `node_modules/${packageParentName}`,
-        )
-        const oldVersionParent =
-          pkgLockOldJson.packages[oldVesionModuleKeyParent].dependencies[
-            packageName
-          ].substring(1)
-        const newVersionParent =
-          pkgLockNewJson.packages[newVesionModuleKeyParent].dependencies[
-            packageName
-          ].substring(1)
-
-        // if parent dependency is higher version then existing
-        // npm install will retrive the newer version from the parent dependency
-        if (oldVersionParent > oldVersion) {
-          oldVersion = oldVersionParent
-        }
-        if (newVersionParent > newVersion) {
-          newVersion = newVersionParent
-        }
-
-        if (newVersion !== oldVersion) {
-          const pkgChangedFiles = await getChangedFilesBetweenTags(
-            client,
-            'cloud-annotations',
-            'docusaurus-openapi',
-            `v${oldVersion}`,
-            `v${newVersion}`,
-          )
-          const changedComponents = overideComponents.filter(
-            componenet =>
-              pkgChangedFiles.filter(
-                path =>
-                  path.includes('docusaurus-theme-openapi/src/theme') &&
-                  path.includes(componenet),
-              ).length > 0,
-          )
-          const versionReport = `<tbody><tr><td> Old version </td><td> ${oldVersion} </td></tr>
-          <tr><td> New version </td><td> ${newVersion} </td></tr>
-          `
-          const changedComponentsReport = `<tr><td> Overide components changed </td><td> ${changedComponents.join(
-            ', ',
-          )} </td></tr></tbody></table>
-          `
-          const body = messageTemplate + versionReport + changedComponentsReport
-          await client.rest.issues.createComment({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            issue_number: pr.number,
-            body,
-          })
-
-          core.debug('Found changes and posted comment, done.')
-          return
-        }
-      }
-      core.debug('No changes found, done.')
+      return
     }
+    const files = await getAllFilesForPullRequest(
+      client,
+      github.context.repo.owner,
+      github.context.repo.repo,
+      pr.number,
+    )
+
+    const file = files.filter(f => f.filename !== 'package-lock.json')[0]
+    if (file === undefined) {
+      return
+    }
+
+    const prCommitRefForFile = file.contents_url.split('ref=')[1]
+    const pkgLockNewJson = await getLargeJsonAtRef(
+      client,
+      github.context.repo.owner,
+      github.context.repo.repo,
+      file.filename,
+      prCommitRefForFile,
+    )
+    const pkgLockOldJson = await getLargeJsonAtRef(
+      client,
+      github.context.repo.owner,
+      github.context.repo.repo,
+      file.filename,
+      'master',
+    )
+
+    const oldVesionModuleKey = findKeyEndingWith(
+      pkgLockOldJson.packages,
+      `node_modules/${packageName}`,
+    )
+    const newVesionModuleKey = findKeyEndingWith(
+      pkgLockNewJson.packages,
+      `node_modules/${packageName}`,
+    )
+    let oldVersion = pkgLockOldJson.packages[oldVesionModuleKey].version
+    let newVersion = pkgLockNewJson.packages[newVesionModuleKey].version
+
+    const oldVesionModuleKeyParent = findKeyEndingWith(
+      pkgLockOldJson.packages,
+      `node_modules/${packageParentName}`,
+    )
+    const newVesionModuleKeyParent = findKeyEndingWith(
+      pkgLockNewJson.packages,
+      `node_modules/${packageParentName}`,
+    )
+    const oldVersionParent =
+      pkgLockOldJson.packages[oldVesionModuleKeyParent].dependencies[
+        packageName
+      ].substring(1)
+    const newVersionParent =
+      pkgLockNewJson.packages[newVesionModuleKeyParent].dependencies[
+        packageName
+      ].substring(1)
+
+    // if parent dependency is higher version then existing
+    // npm install will retrive the newer version from the parent dependency
+    if (oldVersionParent > oldVersion) {
+      oldVersion = oldVersionParent
+    }
+    if (newVersionParent > newVersion) {
+      newVersion = newVersionParent
+    }
+
+    if (newVersion !== oldVersion) {
+      const pkgChangedFiles = await getChangedFilesBetweenTags(
+        client,
+        'cloud-annotations',
+        'docusaurus-openapi',
+        `v${oldVersion}`,
+        `v${newVersion}`,
+      )
+      const changedComponents = overideComponents.filter(
+        componenet =>
+          pkgChangedFiles.filter(
+            path =>
+              path.includes('docusaurus-theme-openapi/src/theme') &&
+              path.includes(componenet),
+          ).length > 0,
+      )
+      const versionReport = `<tbody><tr><td> Old version </td><td> ${oldVersion} </td></tr>
+      <tr><td> New version </td><td> ${newVersion} </td></tr>
+      `
+      const changedComponentsReport = `<tr><td> Overide components changed </td><td> ${changedComponents.join(
+        ', ',
+      )} </td></tr></tbody></table>
+      `
+      const body = messageTemplate + versionReport + changedComponentsReport
+      await client.rest.issues.createComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: pr.number,
+        body,
+      })
+
+      core.debug('Found changes and posted comment, done.')
+      return
+    }
+
+    core.debug('No changes found, done.')
   } catch (error) {
     core.setFailed(error.message)
   }
