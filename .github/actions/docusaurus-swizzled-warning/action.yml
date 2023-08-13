@@ -1,5 +1,5 @@
-name: 'Docusaurus swizzled component changes warning'
-description: 'Check for changes in Docusaurus components which are swizzled and prints out a warning'
+name: 'docusaurus-theme-openapi swizzled component changes warning'
+description: 'Check for changes in docusaurus-theme-openapi components which are swizzled and prints out a warning'
 branding:
   icon: 'alert-triangle'
   color: 'yellow'

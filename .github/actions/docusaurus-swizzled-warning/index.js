@@ -28,7 +28,7 @@ async function run() {
     <tbody><tr><th>
       We need to watch out for changes to the ${overideComponents.join(
         ', ',
-      )}components
+      )} components
     </th></tr>
     `
 
