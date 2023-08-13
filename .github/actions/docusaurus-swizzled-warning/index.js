@@ -22,14 +22,14 @@ async function run() {
     const packageName = 'docusaurus-theme-openapi'
     const packageParentName = 'docusaurus-preset-openapi'
     const overideComponents = ['Curl', 'Response']
-    const messageTemplate = `<table><thead><tr><th>
+    const messageTemplate = `<table><thead><tr><colspan="2">
       ⚠️ This PR contains changes to components of ${packageName} we've overridden
-    </th></tr></thead>
-    <tbody><tr><th>
+    </th></tr>
+    <tr><th colspan="2">
       We need to watch out for changes to the ${overideComponents.join(
         ', ',
       )} components
-    </th></tr>
+    </th></tr></thead>
     `
 
     if (
@@ -106,12 +106,12 @@ async function run() {
                   path.includes(componenet),
               ).length > 0,
           )
-          const versionReport = `<tr><th> Old version </th><th> ${oldVersion} </th></tr>
-          <tr><th> New version </th><th> ${newVersion} </th></tr>
+          const versionReport = `<tbody><tr><td> Old version </td><td> ${oldVersion} </td></tr>
+          <tr><td> New version </td><td> ${newVersion} </td></tr>
           `
-          const changedComponentsReport = `<tr><th> Overide components changed </th><th> ${changedComponents.join(
+          const changedComponentsReport = `<tr><td> Overide components changed </td><td> ${changedComponents.join(
             ', ',
-          )} </th></tr></tbody></table>
+          )} </td></tr></tbody></table>
           `
           const body = messageTemplate + versionReport + changedComponentsReport
           await client.rest.issues.createComment({
