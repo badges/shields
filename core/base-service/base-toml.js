@@ -48,7 +48,7 @@ class BaseTomlService extends BaseService {
       ...{
         headers: {
           Accept:
-            // the officeal header should be application/toml - see https://toml.io/en/v1.0.0#mime-type
+            // the official header should be application/toml - see https://toml.io/en/v1.0.0#mime-type
             // but as this is not registered here https://www.iana.org/assignments/media-types/media-types.xhtml
             // some apps use other mime-type like application/x-toml, text/plain etc....
             'text/x-toml, text/toml, application/x-toml, application/toml, text/plain',
