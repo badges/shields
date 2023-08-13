@@ -18,10 +18,7 @@ export default class ModrinthVersion extends BaseModrinthService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'version',
-    namedLogo: 'modrinth',
-  }
+  static defaultBadgeData = { label: 'version' }
 
   async handle({ projectId }) {
     const { 0: latest } = await this.fetchVersions({ projectId })
