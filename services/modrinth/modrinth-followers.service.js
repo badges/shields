@@ -21,10 +21,7 @@ export default class ModrinthFollowers extends BaseModrinthService {
     },
   ]
 
-  static defaultBadgeData = {
-    label: 'followers',
-    namedLogo: 'modrinth',
-  }
+  static defaultBadgeData = { label: 'followers' }
 
   static render({ followers }) {
     return {
