@@ -11,7 +11,6 @@
     "license": "CC0",
     "dependencies": {
         "@actions/core": "^1.10.0",
-        "@actions/github": "^5.1.1",
-        "node-fetch": "^2.6.12"
+        "@actions/github": "^5.1.1"
     }
 }

@@ -2,7 +2,6 @@
 
 const core = require('@actions/core')
 const github = require('@actions/github')
-const fetch = require('node-fetch')
 const {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
@@ -47,12 +46,43 @@ async function run() {
           continue
         }
 
-        const pkgLockNewJson = await (await fetch(file.raw_url)).json()
-        const pkgLockOldJson = await (
-          await fetch(
-            `https://raw.githubusercontent.com/${github.context.repo.owner}/${github.context.repo.repo}/master/${file.filename}`,
-          )
-        ).json()
+        const pkgLockNewSha = (
+          await client.rest.repos.getContent({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            path: file.filename,
+            ref: file.contents_url.split('ref=')[1],
+          })
+        ).data.sha
+        const pkgLockNewBlob = (
+          await client.rest.git.getBlob({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            file_sha: pkgLockNewSha,
+          })
+        ).data.content
+        const pkgLockNewJson = JSON.parse(
+          Buffer.from(pkgLockNewBlob, 'base64').toString(),
+        )
+        const pkgLockOldSha = (
+          await client.rest.repos.getContent({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            path: file.filename,
+            ref: 'master',
+          })
+        ).data.sha
+        const pkgLockOldBlob = (
+          await client.rest.git.getBlob({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            file_sha: pkgLockOldSha,
+          })
+        ).data.content
+        const pkgLockOldJson = JSON.parse(
+          Buffer.from(pkgLockOldBlob, 'base64').toString(),
+        )
+
         const oldVesionModuleKey = findKeyEndingWith(
           pkgLockOldJson.packages,
           `node_modules/${packageName}`,
