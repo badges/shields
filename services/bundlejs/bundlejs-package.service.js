@@ -116,7 +116,7 @@ export default class BundlejsPackage extends BaseJsonService {
       systemErrors: {
         ETIMEDOUT: { prettyMessage: 'bundling', cacheSeconds: 10 },
       },
-      errorMessages: {
+      httpErrors: {
         404: 'package or version not found',
       },
     })
