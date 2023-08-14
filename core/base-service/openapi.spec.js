@@ -98,7 +98,7 @@ const expected = {
         in: 'query',
         required: false,
         description:
-          'One of the named logos (bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository. <a href="/docs/logos">Further info</a>.',
+          'One of the named logos (bazel, bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository. <a href="/docs/logos">Further info</a>.',
         schema: { type: 'string' },
         example: 'appveyor',
       },
