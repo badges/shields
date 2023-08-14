@@ -162,6 +162,7 @@ const publicConfigSchema = Joi.object({
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
+  curseforge_api_key: Joi.string(),
   discord_bot_token: Joi.string(),
   drone_token: Joi.string(),
   gh_client_id: Joi.string(),
