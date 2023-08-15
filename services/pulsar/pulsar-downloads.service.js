@@ -11,7 +11,7 @@ const schema = Joi.object({
 export default class PulsarDownloads extends BaseJsonService {
   static category = 'downloads'
 
-  static route = { base: 'pulsar/downloads', pattern: ':packageName' }
+  static route = { base: 'pulsar/dt', pattern: ':packageName' }
 
   static examples = [
     {
@@ -35,7 +35,7 @@ export default class PulsarDownloads extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.pulsar-edit.dev/api/packages/${packageName}`,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 
