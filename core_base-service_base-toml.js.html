@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: json-format</title>
+    <title>JSDoc: Source: core/base-service/base-toml.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,39 +17,103 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: json-format</h1>
+    <h1 class="page-title">Source: core/base-service/base-toml.js</h1>
 
-    <section>
-
-<header>
     
 
-    <h2>json-format</h2>
-</header>
 
-<article>
-    <h1>JSON Format</h1>
-<p>Even though Shields is probably best known for its SVG badges, you can also retrieve
-a JSON payload by replacing the <code>.svg</code> extension with <code>.json</code>.</p>
-<p>For instance, hitting <a href="https://img.shields.io/badge/hello-world-brightgreen.json">this endpoint</a>
-will generate the following payload:</p>
-<pre class="prettyprint source"><code>{
-  &quot;name&quot;: &quot;hello&quot;,
-  &quot;label&quot;: &quot;hello&quot;,
-  &quot;value&quot;: &quot;world&quot;,
-  &quot;message&quot;: &quot;world&quot;,
-  &quot;color&quot;: &quot;brightgreen&quot;
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+
+import emojic from 'emojic'
+import { parse } from 'smol-toml'
+import BaseService from './base.js'
+import { InvalidResponse } from './errors.js'
+import trace from './trace.js'
+
+/**
+ * Services which query a TOML endpoint should extend BaseTomlService
+ *
+ * @abstract
+ */
+class BaseTomlService extends BaseService {
+  /**
+   * Request data from an upstream API serving TOML,
+   * parse it and validate against a schema
+   *
+   * @param {object} attrs Refer to individual attrs
+   * @param {Joi} attrs.schema Joi schema to validate the response against
+   * @param {string} attrs.url URL to request
+   * @param {object} [attrs.options={}] Options to pass to got. See
+   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
+   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
+   *    and custom error messages e.g: `{ 404: 'package not found' }`.
+   *    This can be used to extend or override the
+   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @returns {object} Parsed response
+   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
+   */
+  async _requestToml({
+    schema,
+    url,
+    options = {},
+    httpErrors = {},
+    systemErrors = {},
+  }) {
+    const logTrace = (...args) => trace.logTrace('fetch', ...args)
+    const mergedOptions = {
+      ...{
+        headers: {
+          Accept:
+            // the official header should be application/toml - see https://toml.io/en/v1.0.0#mime-type
+            // but as this is not registered here https://www.iana.org/assignments/media-types/media-types.xhtml
+            // some apps use other mime-type like application/x-toml, text/plain etc....
+            'text/x-toml, text/toml, application/x-toml, application/toml, text/plain',
+        },
+      },
+      ...options,
+    }
+    const { buffer } = await this._request({
+      url,
+      options: mergedOptions,
+      httpErrors,
+      systemErrors,
+    })
+    let parsed
+    try {
+      parsed = parse(buffer.toString())
+    } catch (err) {
+      logTrace(emojic.dart, 'Response TOML (unparseable)', buffer)
+      throw new InvalidResponse({
+        prettyMessage: 'unparseable toml response',
+        underlyingError: err,
+      })
+    }
+    logTrace(emojic.dart, 'Response TOML (before validation)', parsed, {
+      deep: true,
+    })
+    return this.constructor._validate(parsed, schema)
+  }
 }
-</code></pre>
-<p>Note that the values of the <code>name</code> and <code>value</code> fields are duplicates of the <code>label</code>
-and <code>message</code> ones, respectively. As of April 2019, <code>name</code> and <code>value</code> are deprecated
-and will be removed in a future release, please consider migrating your application
-to use <code>label</code> and <code>message</code> instead.</p>
-<p>Feel free to <a href="https://github.com/badges/shields/issues/new/choose">open an issue</a>
-if you have any queries regarding the JSON format.</p>
-</article>
 
-</section>
+export default BaseTomlService
+</code></pre>
+        </article>
+    </section>
+
+
+
 
 </div>
 
@@ -60,7 +124,7 @@ if you have any queries regarding the JSON format.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Aug 16 2023 20:23:45 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Aug 16 2023 20:23:44 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
