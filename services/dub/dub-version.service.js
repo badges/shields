@@ -1,19 +1,23 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.string().required()
 
 export default class DubVersion extends BaseJsonService {
   static category = 'version'
   static route = { base: 'dub/v', pattern: ':packageName' }
-  static examples = [
-    {
-      title: 'DUB',
-      namedParams: { packageName: 'vibe-d' },
-      staticPreview: renderVersionBadge({ version: 'v0.8.4' }),
+  static openApi = {
+    '/dub/v/{packageName}': {
+      get: {
+        summary: 'DUB Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'vibe-d',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'dub' }
 
