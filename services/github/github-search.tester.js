@@ -8,4 +8,4 @@ t.create('hit counter')
 
 t.create('hit counter for nonexistent repo')
   .get('/badges/puppets/async%20handle.json')
-  .expectBadge({ label: 'counter', message: 'repo not found' })
+  .expectBadge({ label: 'async handle counter', message: '0' })

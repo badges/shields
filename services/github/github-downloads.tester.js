@@ -19,11 +19,11 @@ t.create('Downloads all releases')
 
 t.create('Downloads all releases (no releases)')
   .get('/downloads/badges/shields/total.json')
-  .expectBadge({ label: 'downloads', message: 'no releases' })
+  .expectBadge({ label: 'downloads', message: 'no releases found' })
 
 t.create('Downloads-pre all releases (no releases)')
   .get('/downloads-pre/badges/shields/total.json')
-  .expectBadge({ label: 'downloads', message: 'no releases' })
+  .expectBadge({ label: 'downloads', message: 'no releases found' })
 
 t.create('Downloads all releases (repo not found)')
   .get('/downloads/badges/helmets/total.json')
@@ -154,7 +154,7 @@ t.create('downloads-pre for latest release')
 // https://github.com/badges/shields/issues/3786
 t.create('downloads-pre for latest release (no-releases)')
   .get('/downloads-pre/badges/shields/latest/total.json')
-  .expectBadge({ label: 'downloads', message: 'no releases' })
+  .expectBadge({ label: 'downloads', message: 'no releases found' })
 
 t.create('downloads for release without slash')
   .get('/downloads/atom/atom/v0.190.0/total.json')

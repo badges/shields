@@ -77,6 +77,7 @@ private:
   bitbucket_password: 'BITBUCKET_PASS'
   bitbucket_server_username: 'BITBUCKET_SERVER_USER'
   bitbucket_server_password: 'BITBUCKET_SERVER_PASS'
+  curseforge_api_key: 'CURSEFORGE_API_KEY'
   discord_bot_token: 'DISCORD_BOT_TOKEN'
   drone_token: 'DRONE_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'

@@ -41,6 +41,7 @@ describe('GithubAuthV3Service', function () {
     )
     const githubApiProvider = new GithubApiProvider({
       baseUrl: 'https://github-api.example.com',
+      authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
       restApiVersion: '2022-11-28',
     })
     const mockToken = { update: sinon.mock(), invalidate: sinon.mock() }

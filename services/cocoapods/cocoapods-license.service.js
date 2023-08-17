@@ -1,16 +1,21 @@
+import { pathParams } from '../index.js'
 import BaseCocoaPodsService from './cocoapods-base.js'
 
 export default class CocoapodsLicense extends BaseCocoaPodsService {
   static category = 'license'
   static route = { base: 'cocoapods/l', pattern: ':spec' }
 
-  static examples = [
-    {
-      title: 'Cocoapods',
-      namedParams: { spec: 'AFNetworking' },
-      staticPreview: this.render({ license: 'MIT' }),
+  static openApi = {
+    '/cocoapods/l/{spec}': {
+      get: {
+        summary: 'Cocoapods License',
+        parameters: pathParams({
+          name: 'spec',
+          example: 'AFNetworking',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 

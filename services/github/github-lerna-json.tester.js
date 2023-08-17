@@ -7,12 +7,10 @@ t.create('Lerna version').get('/facebook/jest.json').expectBadge({
   message: isSemver,
 })
 
-t.create('Lerna version (independent)')
-  .get('/jneander/jneander.json')
-  .expectBadge({
-    label: 'lerna',
-    message: 'independent',
-  })
+t.create('Lerna version (independent)').get('/imba/imba.json').expectBadge({
+  label: 'lerna',
+  message: 'independent',
+})
 
 t.create('Lerna version (branch)').get('/facebook/jest/main.json').expectBadge({
   label: 'lerna@main',
