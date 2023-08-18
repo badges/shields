@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   doc_status: Joi.boolean().required(),
@@ -8,14 +8,32 @@ const schema = Joi.object({
 export default class DocsRs extends BaseJsonService {
   static category = 'build'
   static route = { base: 'docsrs', pattern: ':crate/:version?' }
-  static examples = [
-    {
-      title: 'docs.rs',
-      namedParams: { crate: 'regex', version: 'latest' },
-      staticPreview: this.render({ version: 'latest', docStatus: true }),
-      keywords: ['rust'],
+  static openApi = {
+    '/docsrs/{crate}/{version}': {
+      get: {
+        summary: 'docs.rs (with version)',
+        parameters: pathParams(
+          {
+            name: 'crate',
+            example: 'regex',
+          },
+          {
+            name: 'version',
+            example: 'latest',
+          },
+        ),
+      },
     },
-  ]
+    '/docsrs/{crate}': {
+      get: {
+        summary: 'docs.rs',
+        parameters: pathParams({
+          name: 'crate',
+          example: 'regex',
+        }),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'docs' }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
@@ -15,13 +16,17 @@ const updateResponseSchema = Joi.object({
 export default class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
   static category = 'activity'
   static route = this.buildRoute('eclipse-marketplace/last-update')
-  static examples = [
-    {
-      title: 'Eclipse Marketplace',
-      namedParams: { name: 'notepad4e' },
-      staticPreview: this.render({ date: new Date().getTime() }),
+  static openApi = {
+    '/eclipse-marketplace/last-update/{name}': {
+      get: {
+        summary: 'Eclipse Marketplace Last Update',
+        parameters: pathParams({
+          name: 'name',
+          example: 'notepad4e',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'updated' }
 

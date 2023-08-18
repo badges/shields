@@ -1,17 +1,21 @@
+import { pathParams } from '../index.js'
 import BaseCpanService from './cpan.js'
 
 export default class CpanLicense extends BaseCpanService {
   static category = 'license'
   static route = { base: 'cpan/l', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'CPAN',
-      namedParams: { packageName: 'Config-Augeas' },
-      staticPreview: this.render({ license: 'lgpl_2_1' }),
-      keywords: ['perl'],
+  static openApi = {
+    '/cpan/l/{packageName}': {
+      get: {
+        summary: 'CPAN License',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Config-Augeas',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ license }) {
     return {
