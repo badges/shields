@@ -34,3 +34,13 @@ updates:
       interval: weekly
     open-pull-requests-limit: 99
     rebase-strategy: disabled
+
+    # docusaurus-swizzled-warning package dependencies
+  - package-ecosystem: npm
+    directory: '/.github/actions/docusaurus-swizzled-warning'
+    schedule:
+      interval: weekly
+      day: friday
+      time: '12:00'
+    open-pull-requests-limit: 99
+    rebase-strategy: disabled
