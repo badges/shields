@@ -101,6 +101,8 @@ async function run() {
     if (newVersionParent > newVersion) {
       newVersion = newVersionParent
     }
+    core.info(`oldVersion=${oldVersion}`)
+    core.info(`newVersion=${newVersion}`)
 
     if (newVersion !== oldVersion) {
       const pkgChangedFiles = await getChangedFilesBetweenTags(
