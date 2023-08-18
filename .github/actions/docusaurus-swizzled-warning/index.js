@@ -133,11 +133,11 @@ async function run() {
         body,
       })
 
-      core.debug('Found changes and posted comment, done.')
+      core.info('Found changes and posted comment, done.')
       return
     }
 
-    core.debug('No changes found, done.')
+    core.info('No changes found, done.')
   } catch (error) {
     core.setFailed(error.message)
   }
