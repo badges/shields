@@ -123,10 +123,10 @@ export default class BundlejsPackage extends BaseJsonService {
         },
       },
       systemErrors: {
-        ETIMEDOUT: { prettyMessage: 'bundling', cacheSeconds: 10 },
+        ETIMEDOUT: { prettyMessage: 'timeout', cacheSeconds: 10 },
       },
       httpErrors: {
-        404: 'package or version not found',
+        404: 'timeout',
       },
     })
   }

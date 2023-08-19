@@ -24,4 +24,4 @@ t.create('bundlejs/package (scoped version select exports)')
 
 t.create('bundlejs/package (not found)')
   .get('/@some-no-exist/some-no-exist.json')
-  .expectBadge({ label: 'bundlejs', message: 'package or version not found' })
+  .expectBadge({ label: 'bundlejs', message: 'timeout' })
