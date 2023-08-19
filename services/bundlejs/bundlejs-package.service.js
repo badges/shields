@@ -3,8 +3,12 @@ import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   size: Joi.object({
-    compressedSize: Joi.string(),
+    compressedSize: Joi.string().required(),
   }).required(),
+}).required()
+
+const queryParamSchema = Joi.object({
+  exports: Joi.string(),
 }).required()
 
 const keywords = ['node', 'bundlejs']
@@ -26,8 +30,9 @@ export default class BundlejsPackage extends BaseJsonService {
   static category = 'size'
 
   static route = {
-    base: 'bundlejs/package',
-    pattern: ':scope(@[^/]+)?/:packageName/:exports?',
+    base: 'bundlejs/size',
+    pattern: ':scope(@[^/]+)?/:packageName',
+    queryParamSchema,
   }
 
   static examples = [
@@ -64,9 +69,11 @@ export default class BundlejsPackage extends BaseJsonService {
     },
     {
       title: 'npm package minimized gzipped size (select exports)',
-      pattern: ':packageName/:exports',
+      pattern: ':packageName',
       namedParams: {
         packageName: 'value-enhancer',
+      },
+      queryParams: {
         exports: 'isVal,val',
       },
       staticPreview: this.render({ size: '823 B' }),
@@ -76,10 +83,12 @@ export default class BundlejsPackage extends BaseJsonService {
     {
       title:
         'npm package minimized gzipped size (scoped version select exports)',
-      pattern: ':scope/:packageName/:exports',
+      pattern: ':scope/:packageName',
       namedParams: {
         scope: '@ngneat',
         packageName: 'falso@6.4.0',
+      },
+      queryParams: {
         exports: 'randEmail,randFullName',
       },
       staticPreview: this.render({ size: '17.8 kB' }),
@@ -110,7 +119,7 @@ export default class BundlejsPackage extends BaseJsonService {
       options: {
         searchParams,
         timeout: {
-          request: 3000,
+          request: 3500,
         },
       },
       systemErrors: {
@@ -122,7 +131,7 @@ export default class BundlejsPackage extends BaseJsonService {
     })
   }
 
-  async handle({ scope, packageName, exports }) {
+  async handle({ scope, packageName }, { exports }) {
     const json = await this.fetch({ scope, packageName, exports })
     const size = json.size.compressedSize
     return this.constructor.render({ size })

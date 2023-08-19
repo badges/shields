@@ -15,11 +15,11 @@ t.create('bundlejs/package (scoped)')
   .expectBadge({ label: 'minified size (gzip)', message: isFileSize })
 
 t.create('bundlejs/package (select exports)')
-  .get('/value-enhancer/isVal,val.json')
+  .get('/value-enhancer.json?exports=isVal,val')
   .expectBadge({ label: 'minified size (gzip)', message: isFileSize })
 
 t.create('bundlejs/package (scoped version select exports)')
-  .get('/@ngneat/falso@6.4.0/randEmail,randFullName.json')
+  .get('/@ngneat/falso@6.4.0.json?exports=randEmail,randFullName')
   .expectBadge({ label: 'minified size (gzip)', message: isFileSize })
 
 t.create('bundlejs/package (not found)')
