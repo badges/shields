@@ -1,4 +1,4 @@
-FROM node:16-alpine AS Builder
+FROM node:18-alpine AS Builder
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
@@ -9,17 +9,17 @@ COPY package.json package-lock.json /usr/src/app/
 COPY badge-maker /usr/src/app/badge-maker/
 
 RUN apk add python3 make g++
-RUN npm install -g "npm@>=8"
+RUN npm install -g "npm@^9.0.0"
 # We need dev deps to build the front end. We don't need Cypress, though.
 RUN NODE_ENV=development CYPRESS_INSTALL_BINARY=0 npm ci
 
 COPY . /usr/src/app
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 RUN npm cache clean --force
 
 # Use multi-stage build to reduce size
-FROM node:16-alpine
+FROM node:18-alpine
 
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version

@@ -1,16 +1,20 @@
+import { pathParams } from '../index.js'
 import OpencollectiveBase from './opencollective-base.js'
 
 export default class OpencollectiveAll extends OpencollectiveBase {
   static route = this.buildRoute('all')
 
-  static examples = [
-    {
-      title: 'Open Collective backers and sponsors',
-      namedParams: { collective: 'shields' },
-      staticPreview: this.render(35),
-      keywords: ['opencollective'],
+  static openApi = {
+    '/opencollective/all/{collective}': {
+      get: {
+        summary: 'Open Collective backers and sponsors',
+        parameters: pathParams({
+          name: 'collective',
+          example: 'shields',
+        }),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 900
 

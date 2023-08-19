@@ -1,27 +1,26 @@
 import { starRating } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseAmoService, keywords } from './amo-base.js'
+import { pathParams } from '../index.js'
+import { BaseAmoService } from './amo-base.js'
 
 export default class AmoRating extends BaseAmoService {
   static category = 'rating'
   static route = { base: 'amo', pattern: ':format(stars|rating)/:addonId' }
 
-  static examples = [
-    {
-      title: 'Mozilla Add-on',
-      pattern: 'rating/:addonId',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: this.render({ format: 'rating', rating: 4 }),
-      keywords,
+  static openApi = {
+    '/amo/rating/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Rating',
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
+      },
     },
-    {
-      title: 'Mozilla Add-on',
-      pattern: 'stars/:addonId',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: this.render({ format: 'stars', rating: 4 }),
-      keywords,
+    '/amo/stars/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Stars',
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 7200
 

@@ -162,6 +162,7 @@ const publicConfigSchema = Joi.object({
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
+  curseforge_api_key: Joi.string(),
   discord_bot_token: Joi.string(),
   drone_token: Joi.string(),
   gh_client_id: Joi.string(),
@@ -363,20 +364,23 @@ class Server {
     })
 
     if (!rasterUrl) {
-      camp.route(/^\/((?!img\/)).*\.png$/, (query, match, end, request) => {
-        makeSend(
-          'svg',
-          request.res,
-          end,
-        )(
-          makeBadge({
-            label: '404',
-            message: 'raster badges not available',
-            color: 'lightgray',
-            format: 'svg',
-          }),
-        )
-      })
+      camp.route(
+        /^\/((?!img|assets\/)).*\.png$/,
+        (query, match, end, request) => {
+          makeSend(
+            'svg',
+            request.res,
+            end,
+          )(
+            makeBadge({
+              label: '404',
+              message: 'raster badges not available',
+              color: 'lightgray',
+              format: 'svg',
+            }),
+          )
+        },
+      )
     }
 
     camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
@@ -413,18 +417,21 @@ class Server {
 
     if (rasterUrl) {
       // Redirect to the raster server for raster versions of modern badges.
-      camp.route(/^\/((?!img\/)).*\.png$/, (queryParams, match, end, ask) => {
-        ask.res.statusCode = 301
-        ask.res.setHeader(
-          'Location',
-          rasterRedirectUrl({ rasterUrl }, ask.req.url),
-        )
+      camp.route(
+        /^\/((?!img|assets\/)).*\.png$/,
+        (queryParams, match, end, ask) => {
+          ask.res.statusCode = 301
+          ask.res.setHeader(
+            'Location',
+            rasterRedirectUrl({ rasterUrl }, ask.req.url),
+          )
 
-        const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
-        ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
+          const cacheDuration = (30 * 24 * 3600) | 0 // 30 days.
+          ask.res.setHeader('Cache-Control', `max-age=${cacheDuration}`)
 
-        ask.res.end()
-      })
+          ask.res.end()
+        },
+      )
     }
 
     if (redirectUrl) {

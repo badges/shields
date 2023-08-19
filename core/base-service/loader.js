@@ -83,6 +83,18 @@ async function loadServiceClasses(servicePaths) {
     },
   )
 
+  const routeSummaries = []
+  serviceClasses.forEach(function (serviceClass) {
+    if (serviceClass.openApi) {
+      for (const route of Object.values(serviceClass.openApi)) {
+        routeSummaries.push(route.get.summary)
+      }
+    }
+  })
+  assertNamesUnique(routeSummaries, {
+    message: 'Duplicate route summary found',
+  })
+
   return serviceClasses
 }
 

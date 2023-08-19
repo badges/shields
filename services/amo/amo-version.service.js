@@ -1,18 +1,19 @@
 import { renderVersionBadge } from '../version.js'
-import { BaseAmoService, keywords } from './amo-base.js'
+import { pathParams } from '../index.js'
+import { BaseAmoService } from './amo-base.js'
 
 export default class AmoVersion extends BaseAmoService {
   static category = 'version'
   static route = { base: 'amo/v', pattern: ':addonId' }
 
-  static examples = [
-    {
-      title: 'Mozilla Add-on',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: renderVersionBadge({ version: '2.1.0' }),
-      keywords,
+  static openApi = {
+    '/amo/v/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Version',
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
+      },
     },
-  ]
+  }
 
   async handle({ addonId }) {
     const data = await this.fetch({ addonId })

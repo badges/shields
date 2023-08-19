@@ -189,6 +189,22 @@ class BaseService {
     this.examples.forEach((example, index) =>
       validateExample(example, index, this),
     )
+
+    // ensure openApi spec matches route
+    if (this.openApi) {
+      const preparedRoute = prepareRoute(this.route)
+      for (const [key, value] of Object.entries(this.openApi)) {
+        let example = key
+        for (const param of value.get.parameters) {
+          example = example.replace(`{${param.name}}`, param.example)
+        }
+        if (!example.match(preparedRoute.regex)) {
+          throw new Error(
+            `Inconsistent Open Api spec and Route found for service ${this.name}`,
+          )
+        }
+      }
+    }
   }
 
   static getDefinition() {

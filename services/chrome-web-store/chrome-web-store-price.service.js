@@ -1,18 +1,22 @@
 import { currencyFromCode } from '../text-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 export default class ChromeWebStorePrice extends BaseChromeWebStoreService {
   static category = 'funding'
   static route = { base: 'chrome-web-store/price', pattern: ':storeId' }
 
-  static examples = [
-    {
-      title: 'Chrome Web Store',
-      namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
-      staticPreview: this.render({ priceCurrency: 'USD', price: 0 }),
+  static openApi = {
+    '/chrome-web-store/price/{storeId}': {
+      get: {
+        summary: 'Chrome Web Store Price',
+        parameters: pathParams({
+          name: 'storeId',
+          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'price' }
 

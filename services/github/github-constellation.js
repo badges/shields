@@ -23,19 +23,28 @@ class GithubConstellation {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
 
+    let authType = GithubApiProvider.AUTH_TYPES.NO_AUTH
+
     const { postgres_url: pgUrl, gh_token: globalToken } = config.private
     if (pgUrl) {
-      log.log('Token persistence configured with dbUrl')
+      log.log('Github Token persistence configured with pgUrl')
       this.persistence = new SqlTokenPersistence({
         url: pgUrl,
         table: 'github_user_tokens',
       })
+      authType = GithubApiProvider.AUTH_TYPES.TOKEN_POOL
     }
+
+    if (globalToken) {
+      authType = GithubApiProvider.AUTH_TYPES.GLOBAL_TOKEN
+    }
+
+    log.log(`Github using auth type: ${authType}`)
 
     this.apiProvider = new GithubApiProvider({
       baseUrl: config.service.baseUri,
       globalToken,
-      withPooling: !globalToken,
+      authType,
       onTokenInvalidated: tokenString => this.onTokenInvalidated(tokenString),
       restApiVersion: config.service.restApiVersion,
     })
@@ -52,7 +61,7 @@ class GithubConstellation {
   }
 
   async initialize(server) {
-    if (!this.apiProvider.withPooling) {
+    if (this.apiProvider.authType !== GithubApiProvider.AUTH_TYPES.TOKEN_POOL) {
       return
     }
 

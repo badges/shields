@@ -82,8 +82,10 @@ t.create('Locked version of unknown dependency')
   })
 
 t.create('Locked version of VCS dependency')
-  .get('/locked/dependency-version/GSS-Cogs/databaker-docker/databaker.json')
+  .get(
+    '/locked/dependency-version/thorn-oss/perception/dev/videoalignment.json',
+  )
   .expectBadge({
-    label: 'databaker',
+    label: 'videoalignment',
     message: isShortSha,
   })
