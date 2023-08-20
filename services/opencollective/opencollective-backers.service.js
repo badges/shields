@@ -16,15 +16,19 @@ export default class OpencollectiveBackers extends OpencollectiveBase {
     },
   }
 
+  static _cacheLength = 900
+
   static defaultBadgeData = {
     label: 'backers',
   }
 
   async handle({ collective }) {
-    const { backersCount } = await this.fetchCollectiveBackersCount(
+    const data = await this.fetchCollectiveInfo({
       collective,
-      { userType: 'users' },
-    )
+      accountType: ['INDIVIDUAL'],
+    })
+    const backersCount = this.getCount(data)
+
     return this.constructor.render(backersCount)
   }
 }

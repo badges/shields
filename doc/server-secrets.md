@@ -231,7 +231,7 @@ installation access to private npm packages
 
 [npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
-## Open Build Service
+### Open Build Service
 
 - `OBS_USER` (yml: `private.obs_user`)
 - `OBS_PASS` (yml: `private.obs_user`)
@@ -245,6 +245,14 @@ While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-us
 they can only be scoped to execute specific actions on a POST request. This
 means however, that an actual account is required to read the build status
 of a package.
+
+### OpenCollective
+
+- `OPENCOLLECTIVE_TOKEN` (yml: `opencollective_token`)
+
+OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
+An [API token](https://graphql-docs-v2.opencollective.com/access)
+can be provided to access a higher rate limit of 100 reqs/minute.
 
 ### SymfonyInsight (formerly Sensiolabs)
 

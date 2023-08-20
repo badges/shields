@@ -95,6 +95,7 @@ private:
   obs_user: 'OBS_USER'
   obs_pass: 'OBS_PASS'
   redis_url: 'REDIS_URL'
+  opencollective_token: 'OPENCOLLECTIVE_TOKEN'
   postgres_url: 'POSTGRES_URL'
   sentry_dsn: 'SENTRY_DSN'
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
