@@ -126,7 +126,7 @@ export default class BundlejsPackage extends BaseJsonService {
         ETIMEDOUT: { prettyMessage: 'timeout', cacheSeconds: 10 },
       },
       httpErrors: {
-        404: 'timeout',
+        404: 'package or version not found',
       },
     })
   }

@@ -23,5 +23,21 @@ t.create('bundlejs/package (scoped version select exports)')
   .expectBadge({ label: 'minified size (gzip)', message: isFileSize })
 
 t.create('bundlejs/package (not found)')
-  .get('/@some-no-exist/some-no-exist.json')
+  .get('/react@18.2.0.json')
+  .intercept(nock =>
+    nock('https://deno.bundlejs.com')
+      .get(/./)
+      .query({ q: 'react@18.2.0' })
+      .reply(404),
+  )
+  .expectBadge({ label: 'bundlejs', message: 'package or version not found' })
+
+t.create('bundlejs/package (timeout)')
+  .get('/react@18.2.0.json')
+  .intercept(nock =>
+    nock('https://deno.bundlejs.com')
+      .get(/./)
+      .query({ q: 'react@18.2.0' })
+      .replyWithError({ code: 'ETIMEDOUT' }),
+  )
   .expectBadge({ label: 'bundlejs', message: 'timeout' })
