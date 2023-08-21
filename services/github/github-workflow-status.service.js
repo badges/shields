@@ -8,7 +8,7 @@ export default class DeprecatedGithubWorkflowStatus extends BaseService {
     pattern: ':various+',
   }
 
-  static examples = []
+  static openApi = {}
 
   static defaultBadgeData = { label: 'build' }
 

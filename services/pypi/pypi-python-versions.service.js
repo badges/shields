@@ -1,4 +1,5 @@
 import semver from 'semver'
+import { pathParams } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { parseClassifiers } from './pypi-helpers.js'
 
@@ -7,14 +8,17 @@ export default class PypiPythonVersions extends PypiBase {
 
   static route = this.buildRoute('pypi/pyversions')
 
-  static examples = [
-    {
-      title: 'PyPI - Python Version',
-      pattern: ':packageName',
-      namedParams: { packageName: 'Django' },
-      staticPreview: this.render({ versions: ['3.5', '3.6', '3.7'] }),
+  static openApi = {
+    '/pypi/pyversions/{packageName}': {
+      get: {
+        summary: 'PyPI - Python Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Django',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'python' }
 

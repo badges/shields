@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   publisherId: Joi.string().allow(null).required(),
@@ -13,14 +13,17 @@ export class PubPublisher extends BaseJsonService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Pub Publisher',
-      namedParams: { packageName: 'path' },
-      staticPreview: this.render({ publisher: 'dart.dev' }),
-      keywords: ['dart', 'dartlang'],
+  static openApi = {
+    '/pub/publisher/{packageName}': {
+      get: {
+        summary: 'Pub Publisher',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'path',
+        }),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 3600
 

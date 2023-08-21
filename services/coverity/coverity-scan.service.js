@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const messageRegex = /passed|passed .* new defects|pending|failed/
 const schema = Joi.object({
@@ -10,17 +10,17 @@ export default class CoverityScan extends BaseJsonService {
   static category = 'analysis'
   static route = { base: 'coverity/scan', pattern: ':projectId' }
 
-  static examples = [
-    {
-      title: 'Coverity Scan',
-      namedParams: {
-        projectId: '3997',
+  static openApi = {
+    '/coverity/scan/{projectId}': {
+      get: {
+        summary: 'Coverity Scan',
+        parameters: pathParams({
+          name: 'projectId',
+          example: '3997',
+        }),
       },
-      staticPreview: this.render({
-        message: 'passed',
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverity' }
 
