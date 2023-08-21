@@ -18,7 +18,7 @@ export default class Fedora extends BaseJsonService {
   static openApi = {
     '/fedora/v/{packageName}/{branch}': {
       get: {
-        summary: 'Fedora package',
+        summary: 'Fedora package (with branch)',
         description,
         parameters: pathParams(
           {
