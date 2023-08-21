@@ -28,7 +28,7 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
   static openApi = {
     '/github/all-contributors/{user}/{repo}/{branch}': {
       get: {
-        summary: 'GitHub contributors (via allcontributors.org)',
+        summary: 'GitHub contributors from allcontributors.org (with branch)',
         description,
         parameters: pathParams(
           {
@@ -48,7 +48,7 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
     },
     '/github/all-contributors/{user}/{repo}': {
       get: {
-        summary: 'GitHub contributors (via allcontributors.org)',
+        summary: 'GitHub contributors from allcontributors.org',
         description,
         parameters: pathParams(
           {

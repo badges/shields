@@ -15,7 +15,7 @@ export default class GithubLicense extends GithubAuthV3Service {
   static openApi = {
     '/github/license/{user}/{repo}': {
       get: {
-        summary: 'GitHub',
+        summary: 'GitHub License',
         description: documentation,
         parameters: pathParams(
           {
