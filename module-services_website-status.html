@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Global</title>
+    <title>JSDoc: Module: services/website-status</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">Module: services/website-status</h1>
 
     
 
@@ -28,14 +28,13 @@
 
 <header>
     
-        <h2></h2>
-        
-    
 </header>
 
 <article>
     <div class="container-overview">
     
+        
+            <div class="description"><p>Commonly used functions and utilities for tasks related to website status.</p></div>
         
 
         
@@ -67,6 +66,11 @@
 
     
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_website-status.js.html">services/website-status.js</a>, <a href="services_website-status.js.html#line1">line 1</a>
+    </li></ul></dd>
     
 
     
@@ -94,6 +98,156 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~exampleQueryParams"><span class="type-signature">(inner, constant) </span>exampleQueryParams<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Example query param object.
+Contains up_message, down_message, up_color and down_color properties.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_website-status.js.html">services/website-status.js</a>, <a href="services_website-status.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~queryParamSchema"><span class="type-signature">(inner, constant) </span>queryParamSchema<span class="type-signature"> :Joi</span></h4>
+
+
+
+
+<div class="description">
+    <p>Joi schema for validating query params.
+Checks if the query params obect has valid up_message, down_message, up_color and down_color properties.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Joi</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_website-status.js.html">services/website-status.js</a>, <a href="services_website-status.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -104,12 +258,16 @@
     
 
     
-    <h4 class="name" id="createNumRequestCounter"><span class="type-signature"></span>createNumRequestCounter<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~renderWebsiteStatus"><span class="type-signature">(inner) </span>renderWebsiteStatus<span class="signature">(options)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Creates a badge object that displays information about website status.</p>
+</div>
 
 
 
@@ -144,7 +302,7 @@
 
         <tr>
             
-                <td class="name"><code>attrs</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -160,7 +318,7 @@
 
             
 
-            <td class="description last"><p>Refer to individual attrs</p>
+            <td class="description last"><p>The options for rendering the status</p>
                 <h6>Properties</h6>
                 
 
@@ -174,7 +332,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -186,30 +348,42 @@
 
         <tr>
             
-                <td class="name"><code>category</code></td>
+                <td class="name"><code>isUp</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>e.g: 'build'</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether the website or service is up or down</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>serviceFamily</code></td>
+                <td class="name"><code>upMessage</code></td>
             
 
             <td class="type">
@@ -222,17 +396,33 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>e.g: 'npm'</p></td>
+            
+                <td class="default">
+                
+                    'up'
+                
+                </td>
+            
+
+            <td class="description last"><p>The message to display when the website or service is up</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>downMessage</code></td>
             
 
             <td class="type">
@@ -245,10 +435,104 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>e.g: 'NpmVersion'</p></td>
+            
+                <td class="default">
+                
+                    'down'
+                
+                </td>
+            
+
+            <td class="description last"><p>The message to display when the website or service is down</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>upColor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'brightgreen'
+                
+                </td>
+            
+
+            <td class="description last"><p>The color to use when the website or service is up</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>downColor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'red'
+                
+                </td>
+            
+
+            <td class="description last"><p>The color to use when the website or service is down</p></td>
         </tr>
 
     
@@ -296,7 +580,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_server_prometheus-metrics.js.html">core/server/prometheus-metrics.js</a>, <a href="core_server_prometheus-metrics.js.html#line68">line 68</a>
+        <a href="services_website-status.js.html">services/website-status.js</a>, <a href="services_website-status.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -325,7 +609,7 @@
 
         
 <div class="param-desc">
-    <p><code>{ inc() {} }</code>.</p>
+    <p>An object with a message and a color property</p>
 </div>
 
 
@@ -347,318 +631,10 @@
 
 
 
-
-        
-            
-
+    <h5>Example</h5>
     
-
-    
-    <h4 class="name" id="isMetricWithPattern"><span class="type-signature"></span>isMetricWithPattern<span class="signature">(nestedRegexp)</span><span class="type-signature"> &rarr; {function}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>nestedRegexp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">RegExp</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Pattern that must appear after the metric.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_test-validators.js.html">services/test-validators.js</a>, <a href="services_test-validators.js.html#line74">line 74</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A function that returns a RegExp that matches a metric followed by another pattern.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="module:services/dynamic/json-path"><span class="type-signature"></span>module:services/dynamic/json-path<span class="signature">(superclass)</span><span class="type-signature"> &rarr; {function}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Dynamic service class factory which wraps <a href="module-core_base-service_base-BaseService.html">module:core/base-service/base~BaseService</a> with support of <a href="https://jsonpath.com/">JSONPath</a>.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>superclass</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>class to extend</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_dynamic_json-path.js.html">services/dynamic/json-path.js</a>, <a href="services_dynamic_json-path.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>wrapped class</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
+    <pre class="prettyprint"><code>renderWebsiteStatus({ isUp: true }) // returns { message: 'up', color: 'brightgreen' }
+renderWebsiteStatus({ isUp: false }) // returns { message: 'down', color: 'red' }</code></pre>
 
 
 

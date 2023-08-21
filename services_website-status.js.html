@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: production-hosting</title>
+    <title>JSDoc: Source: services/website-status.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,196 +17,84 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: production-hosting</h1>
+    <h1 class="page-title">Source: services/website-status.js</h1>
 
-    <section>
-
-<header>
     
 
-    <h2>production-hosting</h2>
-</header>
 
-<article>
-    <h1>Production hosting</h1>
-<p>Production hosting is managed by the Shields ops team:</p>
-<ul>
-<li><a href="https://github.com/calebcartwright">calebcartwright</a></li>
-<li><a href="https://github.com/chris48s">chris48s</a></li>
-<li><a href="https://github.com/paulmelnikow">paulmelnikow</a></li>
-<li><a href="https://github.com/PyvesB">PyvesB</a></li>
-</ul>
-<p><a href="https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Aoperations"><img src="https://img.shields.io/github/issues/badges/shields/operations.svg?label=open%20operations%20issues" alt="operations issues"></a></p>
-<p><a href="https://discordapp.com/channels/308323056592486420/480747695879749633">#ops chat room</a></p>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Subcomponent</th>
-<th>People with access</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>shields-io-production</td>
-<td>Full access</td>
-<td>@calebcartwright, @chris48s, @paulmelnikow</td>
-</tr>
-<tr>
-<td>shields-io-production</td>
-<td>Access management</td>
-<td>@calebcartwright, @chris48s, @paulmelnikow</td>
-</tr>
-<tr>
-<td>Raster server</td>
-<td>Full access as team members</td>
-<td>@paulmelnikow, @chris48s, @calebcartwright, @platan</td>
-</tr>
-<tr>
-<td>shields-server.com redirector</td>
-<td>Full access as team members</td>
-<td>@paulmelnikow, @chris48s, @calebcartwright, @platan</td>
-</tr>
-<tr>
-<td>Cloudflare (CDN)</td>
-<td>Account owner</td>
-<td>@espadrine</td>
-</tr>
-<tr>
-<td>Cloudflare (CDN)</td>
-<td>Access management</td>
-<td>@espadrine</td>
-</tr>
-<tr>
-<td>Cloudflare (CDN)</td>
-<td>Admin access</td>
-<td>@calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB</td>
-</tr>
-<tr>
-<td>Twitch</td>
-<td>OAuth app</td>
-<td>@PyvesB</td>
-</tr>
-<tr>
-<td>Discord</td>
-<td>OAuth app</td>
-<td>@PyvesB</td>
-</tr>
-<tr>
-<td>YouTube</td>
-<td>Account owner</td>
-<td>@PyvesB</td>
-</tr>
-<tr>
-<td>GitLab</td>
-<td>Account owner</td>
-<td>@calebcartwright</td>
-</tr>
-<tr>
-<td>GitLab</td>
-<td>Account access</td>
-<td>@calebcartwright, @chris48s, @paulmelnikow, @PyvesB</td>
-</tr>
-<tr>
-<td>OpenStreetMap (for Wheelmap)</td>
-<td>Account owner</td>
-<td>@paulmelnikow</td>
-</tr>
-<tr>
-<td>DNS</td>
-<td>Account owner</td>
-<td>@olivierlacan</td>
-</tr>
-<tr>
-<td>DNS</td>
-<td>Read-only account access</td>
-<td>@espadrine, @paulmelnikow, @chris48s</td>
-</tr>
-<tr>
-<td>Sentry</td>
-<td>Error reports</td>
-<td>@espadrine, @paulmelnikow</td>
-</tr>
-<tr>
-<td>Metrics server</td>
-<td>Owner</td>
-<td>@platan</td>
-</tr>
-<tr>
-<td>UptimeRobot</td>
-<td>Account owner</td>
-<td>@paulmelnikow</td>
-</tr>
-<tr>
-<td>More metrics</td>
-<td>Owner</td>
-<td>@RedSparr0w</td>
-</tr>
-</tbody>
-</table>
-<h2>Attached state</h2>
-<p>Shields has mercifully little persistent state:</p>
-<ol>
-<li>The GitHub tokens we collect are stored in a fly.io postgres database</li>
-<li>The server keeps the <a href="https://github.com/badges/shields/blob/master/core/base-service/resource-cache.js">resource cache</a> in memory. It is neither
-persisted nor inspectable.</li>
-</ol>
-<h2>Configuration</h2>
-<p>To bootstrap the configuration of non-secret settings, we set a single environment variable:</p>
-<pre class="prettyprint source"><code>NODE_CONFIG_ENV=shields-io-production
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Commonly used functions and utilities for tasks related to website status.
+ *
+ * @module
+ */
+
+import Joi from 'joi'
+
+/**
+ * Joi schema for validating query params.
+ * Checks if the query params obect has valid up_message, down_message, up_color and down_color properties.
+ *
+ * @type {Joi}
+ */
+const queryParamSchema = Joi.object({
+  up_message: Joi.string(),
+  down_message: Joi.string(),
+  up_color: Joi.alternatives(Joi.string(), Joi.number()),
+  down_color: Joi.alternatives(Joi.string(), Joi.number()),
+}).required()
+
+/**
+ * Example query param object.
+ * Contains up_message, down_message, up_color and down_color properties.
+ *
+ * @type {object}
+ */
+const exampleQueryParams = {
+  up_message: 'online',
+  up_color: 'blue',
+  down_message: 'offline',
+  down_color: 'lightgrey',
+}
+
+/**
+ * Creates a badge object that displays information about website status.
+ *
+ * @param {object} options - The options for rendering the status
+ * @param {boolean} options.isUp - Whether the website or service is up or down
+ * @param {string} [options.upMessage='up'] - The message to display when the website or service is up
+ * @param {string} [options.downMessage='down'] - The message to display when the website or service is down
+ * @param {string} [options.upColor='brightgreen'] - The color to use when the website or service is up
+ * @param {string} [options.downColor='red'] - The color to use when the website or service is down
+ * @returns {object} An object with a message and a color property
+ * @example
+ * renderWebsiteStatus({ isUp: true }) // returns { message: 'up', color: 'brightgreen' }
+ * renderWebsiteStatus({ isUp: false }) // returns { message: 'down', color: 'red' }
+ */
+function renderWebsiteStatus({
+  isUp,
+  upMessage = 'up',
+  downMessage = 'down',
+  upColor = 'brightgreen',
+  downColor = 'red',
+}) {
+  if (isUp) {
+    return { message: upMessage, color: upColor }
+  } else {
+    return { message: downMessage, color: downColor }
+  }
+}
+
+export { queryParamSchema, exampleQueryParams, renderWebsiteStatus }
 </code></pre>
-<p>With that variable set, the server (<a href="https://github.com/lorenwest/node-config/wiki/Configuration-Files">using <code>config</code></a>) reads these
-files:</p>
-<ul>
-<li><a href="../config/local-shields-io-production.template.yml"><code>local-shields-io-production.yml</code></a>.
-This file contains secrets which are checked in with a deploy commit.</li>
-<li><a href="../config/shields-io-production.yml"><code>shields-io-production.yml</code></a>. This file
-contains non-secrets which are checked in to the main repo.</li>
-<li><a href="../config/default.yml"><code>default.yml</code></a>. This file contains defaults.</li>
-</ul>
-<p>Secrets are supplied directly as environment vars.</p>
-<h2>Badge CDN</h2>
-<p>Sitting in front of the three servers is a Cloudflare Free account which
-provides several services:</p>
-<ul>
-<li>Global CDN, caching, and SSL gateway for <code>img.shields.io</code> and <code>shields.io</code></li>
-<li>Analytics through the Cloudflare dashboard</li>
-<li>DNS resolution for <code>shields.io</code> (and subdomains)</li>
-</ul>
-<p>Cloudflare is configured to respect the servers' cache headers.</p>
-<h2>Raster server</h2>
-<p>The raster server <code>raster.shields.io</code> (a.k.a. the rasterizing proxy) is
-hosted on Heroku. It's managed in the
-<a href="https://github.com/badges/squint/">squint</a> repo.</p>
-<h3>Fly.io Deployment</h3>
-<p>Both the badge server and frontend are served from Fly.io. Deployments are
-triggered using GitHub actions in a private repo.</p>
-<h2>DNS</h2>
-<p>DNS is registered with <a href="https://dnsimple.com/">DNSimple</a>.</p>
-<h2>Error reporting</h2>
-<p><a href="https://sentry.io/shields/">Error reporting</a> is one of the most useful tools we have for monitoring
-the server. It's generously donated by <a href="https://sentry.io/shields/">Sentry</a>. We bundle
-<a href="https://www.npmjs.com/package/@sentry/node"><code>@sentry/node</code></a> into the application, and the Sentry DSN is configured
-via <code>local-shields-io-production.yml</code> (see <a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry">documentation</a>).</p>
-<h2>URLs</h2>
-<p>The canonical and only recommended domain for badge URLs is <code>img.shields.io</code>. Currently it is possible to request badges on both <code>img.shields.io</code> and <code>shields.io</code> i.e: https://img.shields.io/badge/build-passing-brightgreen and https://shields.io/badge/build-passing-brightgreen will both work. However:</p>
-<ul>
-<li>We never show or generate the <code>img.</code>-less URL format on https://shields.io/</li>
-<li>We make no guarantees about the <code>img.</code>-less URL format. At some future point we may remove the ability to serve badges on <code>shields.io</code> (without <code>img.</code>) without any warning. <code>img.shields.io</code> should always be used for badge urls.</li>
-</ul>
-<h2>Monitoring</h2>
-<p>Overall server performance and requests by service are monitored using
-<a href="https://metrics.shields.io/">Prometheus and Grafana</a>.</p>
-<p>Request performance is monitored in two places:</p>
-<ul>
-<li><a href="https://stats.uptimerobot.com/PjXogHB5p">Status</a> (using <a href="https://uptimerobot.com/">UptimeRobot</a>)</li>
-<li><a href="https://metrics.shields.io/">Server metrics</a> using Prometheus and Grafana</li>
-<li><a href="https://shields.redsparr0w.com/1568/">@RedSparr0w's monitor</a> which posts <a href="http://shields.redsparr0w.com/discord_notification">notifications</a> to a private
-<a href="https://discordapp.com/channels/308323056592486420/470700909182320646">#monitor chat room</a></li>
-</ul>
-</article>
+        </article>
+    </section>
 
-</section>
+
+
 
 </div>
 
