@@ -22,7 +22,7 @@ export default class GithubMilestone extends GithubAuthV3Service {
   static openApi = {
     '/github/milestones/{variant}/{user}/{repo}': {
       get: {
-        summary: 'GitHub milestones',
+        summary: 'GitHub number of milestones',
         description: documentation,
         parameters: pathParams(
           {
