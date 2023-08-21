@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../../index.js'
 import { formatDate } from '../../text-formatters.js'
 import { age as ageColor } from '../../color-formatters.js'
 import { GithubAuthV3Service } from '../github-auth-service.js'
@@ -11,17 +12,18 @@ const schema = Joi.object({
 export default class GistLastCommit extends GithubAuthV3Service {
   static category = 'activity'
   static route = { base: 'github/gist/last-commit', pattern: ':gistId' }
-  static examples = [
-    {
-      title: 'GitHub Gist last commit',
-      namedParams: {
-        gistId: '8710649',
+  static openApi = {
+    '/github/gist/last-commit/{gistId}': {
+      get: {
+        summary: 'GitHub Gist last commit',
+        description: documentation,
+        parameters: pathParams({
+          name: 'gistId',
+          example: '8710649',
+        }),
       },
-      staticPreview: this.render({ commitDate: '2022-07-29T20:01:41Z' }),
-      keywords: ['latest'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last commit' }
 

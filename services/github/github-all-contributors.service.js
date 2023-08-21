@@ -1,10 +1,11 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderContributorBadge } from '../contributor-count.js'
 import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
 import { fetchJsonFromRepo } from './github-common-fetch.js'
 import { documentation as commonDocumentation } from './github-helpers.js'
 
-const documentation = `
+const description = `
 The All Contributors service allows you to recognize all your project
 contributors, including those that don't push code. See
 [https://allcontributors.org](https://allcontributors.org)
@@ -24,18 +25,44 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
     pattern: ':user/:repo/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'GitHub contributors (via allcontributors.org)',
-      namedParams: {
-        repo: 'all-contributors',
-        user: 'all-contributors',
-        branch: 'master',
+  static openApi = {
+    '/github/all-contributors/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub contributors (via allcontributors.org)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'all-contributors',
+          },
+          {
+            name: 'repo',
+            example: 'all-contributors',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
-      staticPreview: this.render({ contributorCount: 66 }),
-      documentation,
     },
-  ]
+    '/github/all-contributors/{user}/{repo}': {
+      get: {
+        summary: 'GitHub contributors (via allcontributors.org)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'all-contributors',
+          },
+          {
+            name: 'repo',
+            example: 'all-contributors',
+          },
+        ),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'all contributors' }
 
