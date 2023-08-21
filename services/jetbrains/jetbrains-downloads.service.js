@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import JetbrainsBase from './jetbrains-base.js'
@@ -29,15 +30,17 @@ export default class JetbrainsDownloads extends JetbrainsBase {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'JetBrains plugins',
-      namedParams: {
-        pluginId: '1347',
+  static openApi = {
+    '/jetbrains/plugin/d/{pluginId}': {
+      get: {
+        summary: 'JetBrains Plugin Downloads',
+        parameters: pathParams({
+          name: 'pluginId',
+          example: '1347',
+        }),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 10200000 }),
     },
-  ]
+  }
 
   async handle({ pluginId }) {
     let downloads

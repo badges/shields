@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import KeybaseProfile from './keybase-profile.js'
 
@@ -32,16 +33,17 @@ export default class KeybaseBTC extends KeybaseProfile {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'Keybase BTC',
-      namedParams: { username: 'skyplabs' },
-      staticPreview: this.render({
-        address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
-      }),
-      keywords: ['bitcoin'],
+  static openApi = {
+    '/keybase/btc/{username}': {
+      get: {
+        summary: 'Keybase BTC',
+        parameters: pathParams({
+          name: 'username',
+          example: 'skyplabs',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'btc',

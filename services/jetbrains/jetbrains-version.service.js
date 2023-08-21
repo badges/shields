@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import JetbrainsBase from './jetbrains-base.js'
 
@@ -35,15 +36,17 @@ export default class JetbrainsVersion extends JetbrainsBase {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'JetBrains Plugins',
-      namedParams: {
-        pluginId: '9630',
+  static openApi = {
+    '/jetbrains/plugin/v/{pluginId}': {
+      get: {
+        summary: 'JetBrains Plugin Version',
+        parameters: pathParams({
+          name: 'pluginId',
+          example: '9630',
+        }),
       },
-      staticPreview: this.render({ version: 'v1.7' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'jetbrains plugin' }
 

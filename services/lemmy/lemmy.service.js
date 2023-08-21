@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, InvalidParameter } from '../index.js'
+import { BaseJsonService, InvalidParameter, pathParams } from '../index.js'
 
 const lemmyCommunitySchema = Joi.object({
   community_view: Joi.object({
@@ -18,16 +18,17 @@ export default class Lemmy extends BaseJsonService {
     pattern: ':community',
   }
 
-  static examples = [
-    {
-      title: 'Lemmy',
-      namedParams: { community: 'asklemmy@lemmy.ml' },
-      staticPreview: this.render({
-        community: 'asklemmy@lemmy.ml',
-        members: 42,
-      }),
+  static openApi = {
+    '/lemmy/{community}': {
+      get: {
+        summary: 'Lemmy',
+        parameters: pathParams({
+          name: 'community',
+          example: 'asklemmy@lemmy.ml',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'community' }
 

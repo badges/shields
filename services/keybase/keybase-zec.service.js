@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import KeybaseProfile from './keybase-profile.js'
 
@@ -32,16 +33,17 @@ export default class KeybaseZEC extends KeybaseProfile {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'Keybase ZEC',
-      namedParams: { username: 'skyplabs' },
-      staticPreview: this.render({
-        address: 't1RJDxpBcsgqAotqhepkhLFMv2XpMfvnf1y',
-      }),
-      keywords: ['zcash'],
+  static openApi = {
+    '/keybase/zec/{username}': {
+      get: {
+        summary: 'Keybase ZEC',
+        parameters: pathParams({
+          name: 'username',
+          example: 'skyplabs',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'zec',
