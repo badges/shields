@@ -1,4 +1,5 @@
-import BaseCurseForgeService, { documentation } from './curseforge-base.js'
+import { pathParams } from '../index.js'
+import BaseCurseForgeService, { description } from './curseforge-base.js'
 
 export default class CurseForgeGameVersions extends BaseCurseForgeService {
   static category = 'platform-support'
@@ -8,16 +9,18 @@ export default class CurseForgeGameVersions extends BaseCurseForgeService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'CurseForge Game Versions',
-      namedParams: {
-        projectId: '238222',
+  static openApi = {
+    '/curseforge/game-versions/{projectId}': {
+      get: {
+        summary: 'CurseForge Game Versions',
+        description,
+        parameters: pathParams({
+          name: 'projectId',
+          example: '238222',
+        }),
       },
-      staticPreview: this.render({ versions: ['1.20.0', '1.19.4'] }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'game versions' }
 

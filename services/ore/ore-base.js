@@ -32,11 +32,9 @@ const resourceSchema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `
+const description = `
 <p>Your Plugin ID is the name of your plugin in lowercase, without any spaces or dashes.</p>
 <p>Example: <code>https://ore.spongepowered.org/Erigitic/Total-Economy</code> - Here the Plugin ID is <code>totaleconomy</code>.</p>`
-
-const keywords = ['sponge', 'spongemc', 'spongepowered']
 
 class BaseOreService extends BaseJsonService {
   async _refreshSessionToken() {
@@ -83,4 +81,4 @@ class BaseOreService extends BaseJsonService {
 
 BaseOreService.sessionToken = null
 
-export { keywords, documentation, BaseOreService }
+export { description, BaseOreService }
