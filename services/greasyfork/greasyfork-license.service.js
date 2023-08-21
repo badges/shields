@@ -1,18 +1,22 @@
 import { renderLicenseBadge } from '../licenses.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import BaseGreasyForkService from './greasyfork-base.js'
 
 export default class GreasyForkLicense extends BaseGreasyForkService {
   static category = 'license'
   static route = { base: 'greasyfork', pattern: 'l/:scriptId' }
 
-  static examples = [
-    {
-      title: 'Greasy Fork',
-      namedParams: { scriptId: '407466' },
-      staticPreview: renderLicenseBadge({ licenses: ['MIT'] }),
+  static openApi = {
+    '/greasyfork/l/{scriptId}': {
+      get: {
+        summary: 'Greasy Fork License',
+        parameters: pathParams({
+          name: 'scriptId',
+          example: '407466',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 
