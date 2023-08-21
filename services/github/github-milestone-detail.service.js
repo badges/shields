@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -18,23 +19,33 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
       ':variant(issues-closed|issues-open|issues-total|progress|progress-percent)/:user/:repo/:number([0-9]+)',
   }
 
-  static examples = [
-    {
-      title: 'GitHub milestone',
-      namedParams: {
-        variant: 'issues-open',
-        user: 'badges',
-        repo: 'shields',
-        number: '1',
+  static openApi = {
+    '/github/milestones/{variant}/{user}/{repo}/{number}': {
+      get: {
+        summary: 'GitHub milestone',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'issues-open',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'number',
+            example: '1',
+          },
+        ),
       },
-      staticPreview: {
-        label: 'milestone issues',
-        message: '17/22',
-        color: 'blue',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'milestones', color: 'informational' }
 
