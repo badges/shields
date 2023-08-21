@@ -4,6 +4,7 @@ private:
   # The possible values are documented in `doc/server-secrets.md`. Note that
   # you can also set these values through environment variables, which may be
   # preferable for self hosting.
+  curseforge_api_key: '...'
   gh_token: '...'
   gitlab_token: '...'
   obs_user: '...'

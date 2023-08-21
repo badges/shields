@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { pep440VersionColor } from '../color-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import PypiBase from './pypi-base.js'
@@ -7,15 +8,17 @@ export default class PypiVersion extends PypiBase {
 
   static route = this.buildRoute('pypi/v')
 
-  static examples = [
-    {
-      title: 'PyPI',
-      pattern: ':packageName',
-      namedParams: { packageName: 'nine' },
-      staticPreview: this.render({ version: '1.0.0' }),
-      keywords: ['python'],
+  static openApi = {
+    '/pypi/v/{packageName}': {
+      get: {
+        summary: 'PyPI - Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'nine',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'pypi' }
 

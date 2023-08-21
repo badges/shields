@@ -162,6 +162,7 @@ const publicConfigSchema = Joi.object({
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
+  curseforge_api_key: Joi.string(),
   discord_bot_token: Joi.string(),
   drone_token: Joi.string(),
   gh_client_id: Joi.string(),
@@ -183,6 +184,7 @@ const privateConfigSchema = Joi.object({
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
   redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
+  opencollective_token: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
   sentry_dsn: Joi.string(),
   sl_insight_userUuid: Joi.string(),
