@@ -70,7 +70,7 @@ This repo hosts:
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
-[custom badges]: http://localhost:3000/badges/static-badge
+[custom badges]: https://img.shields.io/badges/static-badge
 
 ### Quickstart
 
