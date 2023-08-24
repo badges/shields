@@ -1,3 +1,4 @@
+import log from '../server/log.js'
 import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
 const defaultErrorMessages = {
@@ -25,6 +26,13 @@ export default function checkErrorResponse(httpErrors = {}) {
         error = new InvalidResponse(props)
       }
     }
+
+    if (res.statusCode === 429) {
+      log.error(
+        new Error(`429 Too Many Requests calling ${res.requestUrl.origin}`),
+      )
+    }
+
     if (error) {
       error.response = res
       error.buffer = buffer
