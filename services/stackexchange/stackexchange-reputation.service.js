@@ -9,7 +9,7 @@ const reputationSchema = Joi.object({
     .items(
       Joi.object({
         reputation: Joi.number().min(0).required(),
-      })
+      }),
     )
     .required(),
 }).required()

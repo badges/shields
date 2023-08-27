@@ -35,7 +35,7 @@ t.create('level: gold project')
       .reply(200, {
         badge_level: 'gold',
         tiered_percentage: 300,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -50,7 +50,7 @@ t.create('level: silver project')
       .reply(200, {
         badge_level: 'silver',
         tiered_percentage: 297,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -65,7 +65,7 @@ t.create('level: passing project')
       .reply(200, {
         badge_level: 'passing',
         tiered_percentage: 107,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -80,7 +80,7 @@ t.create('level: in progress project')
       .reply(200, {
         badge_level: 'in_progress',
         tiered_percentage: 94,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -95,7 +95,7 @@ t.create('percentage: gold project')
       .reply(200, {
         badge_level: 'gold',
         tiered_percentage: 300,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -110,7 +110,7 @@ t.create('percentage: silver project')
       .reply(200, {
         badge_level: 'silver',
         tiered_percentage: 297,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -125,7 +125,7 @@ t.create('percentage: passing project')
       .reply(200, {
         badge_level: 'passing',
         tiered_percentage: 107,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -140,7 +140,7 @@ t.create('percentage: in progress project')
       .reply(200, {
         badge_level: 'in_progress',
         tiered_percentage: 94,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -155,7 +155,7 @@ t.create('summary: gold project')
       .reply(200, {
         badge_level: 'gold',
         tiered_percentage: 300,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -170,7 +170,7 @@ t.create('summary: silver project')
       .reply(200, {
         badge_level: 'silver',
         tiered_percentage: 297,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -185,7 +185,7 @@ t.create('summary: passing project')
       .reply(200, {
         badge_level: 'passing',
         tiered_percentage: 107,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',
@@ -200,7 +200,7 @@ t.create('summary: in progress project')
       .reply(200, {
         badge_level: 'in_progress',
         tiered_percentage: 94,
-      })
+      }),
   )
   .expectBadge({
     label: 'cii',

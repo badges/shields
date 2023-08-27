@@ -5,6 +5,7 @@ import { redirector } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   fetchLatestRelease,
+  filterDocs,
   queryParamSchema,
 } from './github-common-release.js'
 import { documentation } from './github-helpers.js'
@@ -85,6 +86,21 @@ class GithubRelease extends GithubAuthV3Service {
       }),
       documentation,
     },
+    {
+      title: 'GitHub release (with filter)',
+      namedParams: { user: 'RetroMusicPlayer', repo: 'RetroMusicPlayer' },
+      queryParams: {
+        sort: 'date',
+        display_name: 'release',
+        filter: '*Open Beta',
+      },
+      staticPreview: this.render({
+        version: 'Release v6.0.2 - Open Beta',
+        sort: 'date',
+        isPrerelease: false,
+      }),
+      documentation: documentation + filterDocs,
+    },
   ]
 
   static defaultBadgeData = { label: 'release', namedLogo: 'github' }
@@ -109,11 +125,11 @@ class GithubRelease extends GithubAuthV3Service {
     const latestRelease = await fetchLatestRelease(
       this,
       { user, repo },
-      queryParams
+      queryParams,
     )
     const { version, isPrerelease } = this.constructor.transform(
       latestRelease,
-      queryParams.display_name
+      queryParams.display_name,
     )
     return this.constructor.render({
       version,

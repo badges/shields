@@ -32,7 +32,7 @@ export default superclass =>
      */
     async fetch({ schema, url, httpErrors }) {
       throw new Error(
-        `fetch() function not implemented for ${this.constructor.name}`
+        `fetch() function not implemented for ${this.constructor.name}`,
       )
     }
 

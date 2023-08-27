@@ -17,7 +17,7 @@ const schema = Joi.object({
             name: Joi.string(),
           }).allow(null),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -94,7 +94,7 @@ export default class JiraSprint extends BaseJsonService {
           400: 'sprint not found',
           404: 'sprint not found',
         },
-      })
+      }),
     )
 
     const numTotalIssues = json.total

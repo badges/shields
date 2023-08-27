@@ -6,7 +6,7 @@ const cloudBuildSchema = Joi.object({
       Joi.object({
         state: Joi.string(),
         build_settings: Joi.array(),
-      })
+      }),
     )
     .required(),
 }).required()

@@ -52,7 +52,7 @@ export default class NodePingUptime extends BaseJsonService {
 
   async fetch({ checkUuid }) {
     const thirtyDaysAgo = new Date(
-      new Date().getTime() - 30 * 24 * 60 * 60 * 1000
+      new Date().getTime() - 30 * 24 * 60 * 60 * 1000,
     )
       .toISOString()
       .slice(0, 10)

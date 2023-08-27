@@ -16,7 +16,7 @@ const { fileMatch } = danger.git
 const documentation = fileMatch(
   '**/*.md',
   'frontend/docs/**',
-  'frontend/src/**'
+  'frontend/src/**',
 )
 const server = fileMatch('core/server/**.js', '!*.spec.js')
 const serverTests = fileMatch('core/server/**.spec.js')
@@ -33,7 +33,7 @@ message(
   [
     ':sparkles: Thanks for your contribution to Shields, ',
     `@${danger.github.pr.user.login}!`,
-  ].join('')
+  ].join(''),
 )
 
 const targetBranch = danger.github.pr.base.ref
@@ -48,7 +48,7 @@ if (documentation.edited) {
     [
       'Thanks for contributing to our documentation. ',
       'We :heart: our [documentarians](http://www.writethedocs.org/)!',
-    ].join('')
+    ].join(''),
   )
 }
 
@@ -63,7 +63,7 @@ if (server.modified && !serverTests.modified) {
     [
       'This PR modified the server but none of its tests. <br>',
       "That's okay so long as it's refactoring existing code.",
-    ].join('')
+    ].join(''),
   )
 }
 
@@ -74,7 +74,7 @@ if (legacyHelpers.created) {
     [
       'This PR modified helper functions in `lib/` but not accompanying tests. <br>',
       "That's okay so long as it's refactoring existing code.",
-    ].join('')
+    ].join(''),
   )
 }
 
@@ -85,7 +85,7 @@ if (logos.created) {
       'Please ensure your contribution follows our ',
       '[guidance](https://github.com/badges/shields/blob/master/doc/logos.md#contributing-logos) ',
       'for logo submissions.',
-    ].join('')
+    ].join(''),
   )
 }
 
@@ -94,7 +94,7 @@ if (capitals.created || underscores.created) {
     [
       'JavaScript source files should be named with `kebab-case` ',
       '(dash-separated lowercase).',
-    ].join('')
+    ].join(''),
   )
 }
 
@@ -116,7 +116,7 @@ if (allFiles.length > 100) {
             ':books: Remember to ensure any changes to `config.private` ',
             `in \`${file}\` are reflected in the [server secrets documentation]`,
             '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
-          ].join('')
+          ].join(''),
         )
       }
 
@@ -126,7 +126,7 @@ if (allFiles.length > 100) {
             `Found 'assert' statement added in \`${file}\`. <br>`,
             'Please ensure tests are written using Chai ',
             '[expect syntax](http://chaijs.com/guide/styles/#expect)',
-          ].join('')
+          ].join(''),
         )
       }
 
@@ -135,7 +135,7 @@ if (allFiles.length > 100) {
           [
             `Found import of '@hapi/joi' in \`${file}\`. <br>`,
             "Joi must be imported as 'joi'.",
-          ].join('')
+          ].join(''),
         )
       }
     })
@@ -168,7 +168,7 @@ affectedServices.forEach(service => {
       [
         `This PR modified service code for <kbd>${service}</kbd> but not its test code. <br>`,
         "That's okay so long as it's refactoring existing code.",
-      ].join('')
+      ].join(''),
     )
   }
 })

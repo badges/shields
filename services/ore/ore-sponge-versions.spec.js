@@ -32,7 +32,7 @@ describe('OreSpongeVersions', function () {
             ],
           },
         }),
-      ]
+      ],
     ).expect({ versions: ['1.23', '4.56'] })
   })
 

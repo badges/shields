@@ -20,7 +20,7 @@ const schema = Joi.object({
           .required(),
         subType: Joi.string().optional(),
         message: Joi.string().required(),
-      })
+      }),
     ),
 }).required()
 

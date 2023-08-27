@@ -69,7 +69,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
         milestoneMetric = `${Math.floor(
           (milestone.closed_issues /
             (milestone.open_issues + milestone.closed_issues)) *
-            100
+            100,
         )}%`
         color = 'blue'
     }

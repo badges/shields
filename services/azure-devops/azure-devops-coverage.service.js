@@ -30,11 +30,11 @@ const buildCodeCoverageSchema = Joi.object({
               label: Joi.string().required(),
               total: Joi.number().required(),
               covered: Joi.number().required(),
-            })
+            }),
           )
           .min(1)
           .required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -93,7 +93,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      httpErrors
+      httpErrors,
     )
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/test/code%20coverage/get%20build%20code%20coverage?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/test/codecoverage`

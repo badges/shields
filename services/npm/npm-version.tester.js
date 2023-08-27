@@ -22,7 +22,7 @@ t.create('gets the correct tagged package version of npm')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/-/package/npm/dist-tags')
-      .reply(200, { latest: '1.2.3', next: '4.5.6' })
+      .reply(200, { latest: '1.2.3', next: '4.5.6' }),
   )
   .get('/npm/next.json')
   .expectBadge({ label: 'npm@next', message: 'v4.5.6' })
@@ -39,7 +39,7 @@ t.create('gets the tagged package version with a "/" in the tag name')
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/-/package/npm/dist-tags')
-      .reply(200, { 'release/1.0': '1.0.3', latest: '2.0.1' })
+      .reply(200, { 'release/1.0': '1.0.3', latest: '2.0.1' }),
   )
   .get('/npm/release/1.0.json')
   .expectBadge({ label: 'npm@release/1.0', message: 'v1.0.3' })
@@ -49,7 +49,7 @@ t.create('gets the tagged package version of @cycle/core')
   .expectBadge({ label: 'npm@canary', message: isSemver })
 
 t.create(
-  'gets the tagged package version of @cycle/core from a custom registry'
+  'gets the tagged package version of @cycle/core from a custom registry',
 )
   .get('/@cycle/core/canary.json?registry_uri=https://registry.npmjs.com')
   .expectBadge({ label: 'npm@canary', message: isSemver })
@@ -62,7 +62,7 @@ t.create("Response doesn't include a 'latest' key")
   .intercept(nock =>
     nock('https://registry.npmjs.org')
       .get('/-/package/npm/dist-tags')
-      .reply(200, { next: 'v4.5.6' })
+      .reply(200, { next: 'v4.5.6' }),
   )
   .get('/npm.json')
   .expectBadge({

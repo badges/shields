@@ -32,7 +32,7 @@ t.create('Release (No releases)')
 
 t.create('Prerelease (No releases)')
   .get('/v/release/badges/daily-tests.json?include_prereleases')
-  .expectBadge({ label: 'release', message: 'no releases' })
+  .expectBadge({ label: 'release', message: 'no releases found' })
 
 t.create('Release (repo not found)')
   .get('/v/release/badges/helmets.json')
@@ -46,11 +46,11 @@ t.create('Release (legacy route: release)')
 t.create('(pre-)Release (legacy route: release/all)')
   .get('/release/photonstorm/phaser/all.svg')
   .expectRedirect(
-    '/github/v/release/photonstorm/phaser.svg?include_prereleases'
+    '/github/v/release/photonstorm/phaser.svg?include_prereleases',
   )
 
 t.create('(pre-)Release (legacy route: release-pre)')
   .get('/release-pre/photonstorm/phaser.svg')
   .expectRedirect(
-    '/github/v/release/photonstorm/phaser.svg?include_prereleases'
+    '/github/v/release/photonstorm/phaser.svg?include_prereleases',
   )

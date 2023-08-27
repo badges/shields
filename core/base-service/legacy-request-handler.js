@@ -104,7 +104,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       const badgeData = coalesceBadge(
         filteredQueryParams,
         { label: 'vendor', message: 'unresponsive' },
-        {}
+        {},
       )
       const svg = makeBadge(badgeData)
       const extension = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
@@ -126,7 +126,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         const svg = makeBadge(badgeData)
         setCacheHeadersOnResponse(ask.res, badgeData.cacheLengthSeconds)
         makeSend(format, ask.res, end)(svg)
-      }
+      },
     )
     // eslint-disable-next-line promise/prefer-await-to-then
     if (result && result.catch) {

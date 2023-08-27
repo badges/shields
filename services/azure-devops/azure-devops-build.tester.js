@@ -24,7 +24,7 @@ t.create('stage badge')
 
 t.create('job badge')
   .get(
-    '/totodem/Shields.io/5.json?stage=Successful%20Stage&job=Successful%20Job'
+    '/totodem/Shields.io/5.json?stage=Successful%20Stage&job=Successful%20Job',
   )
   .expectBadge({
     label: 'build',

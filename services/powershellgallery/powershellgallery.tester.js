@@ -6,7 +6,7 @@ import {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } from '../test-validators.js'
 const isPlatform = Joi.string().regex(
-  /^(windows|linux|macos)( \| (windows|linux|macos))*$/
+  /^(windows|linux|macos)( \| (windows|linux|macos))*$/,
 )
 
 export const t = new ServiceTester({

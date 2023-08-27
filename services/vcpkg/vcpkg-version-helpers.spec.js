@@ -7,7 +7,7 @@ describe('parseVersionFromVcpkgManifest', function () {
     expect(
       parseVersionFromVcpkgManifest({
         version: '2.12.1',
-      })
+      }),
     ).to.equal('2.12.1')
   })
 
@@ -15,7 +15,7 @@ describe('parseVersionFromVcpkgManifest', function () {
     expect(
       parseVersionFromVcpkgManifest({
         'version-date': '2022-12-04',
-      })
+      }),
     ).to.equal('2022-12-04')
   })
 
@@ -23,7 +23,7 @@ describe('parseVersionFromVcpkgManifest', function () {
     expect(
       parseVersionFromVcpkgManifest({
         'version-semver': '3.11.2',
-      })
+      }),
     ).to.equal('3.11.2')
   })
 
@@ -31,7 +31,7 @@ describe('parseVersionFromVcpkgManifest', function () {
     expect(
       parseVersionFromVcpkgManifest({
         'version-string': '22.01',
-      })
+      }),
     ).to.equal('22.01')
   })
 

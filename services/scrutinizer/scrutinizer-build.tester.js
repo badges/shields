@@ -42,7 +42,7 @@ t.create('build - unknown status')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'build',

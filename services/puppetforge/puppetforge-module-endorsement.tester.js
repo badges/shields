@@ -19,7 +19,7 @@ t.create('module endorsement (no ratings)')
         feedback_score: null,
         downloads: 0,
         current_release: { pdk: false, version: '1.0.0' },
-      })
+      }),
   )
   .expectBadge({
     label: 'endorsement',

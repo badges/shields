@@ -12,13 +12,13 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN || config.private.sentry_dsn,
   integrations: integrations => {
     const filtered = integrations.filter(
-      integration => !disabledIntegrations.includes(integration.name)
+      integration => !disabledIntegrations.includes(integration.name),
     )
     if (filtered.length !== integrations.length - disabledIntegrations.length) {
       throw Error(
         `An error occurred while filtering integrations. The following inetgrations were found: ${integrations.map(
-          ({ name }) => name
-        )}`
+          ({ name }) => name,
+        )}`,
       )
     }
     return filtered
@@ -37,14 +37,14 @@ console.dir(config.public, { depth: null })
 
 if (fs.existsSync('.env')) {
   console.error(
-    'Legacy .env file found. It should be deleted and replaced with environment variables or config/local.yml'
+    'Legacy .env file found. It should be deleted and replaced with environment variables or config/local.yml',
   )
   process.exit(1)
 }
 
 if (config.private.redis_url != null) {
   console.error(
-    'RedisTokenPersistence has been removed. Migrate to SqlTokenPersistence'
+    'RedisTokenPersistence has been removed. Migrate to SqlTokenPersistence',
   )
   process.exit(1)
 }
@@ -52,11 +52,11 @@ if (config.private.redis_url != null) {
 const legacySecretsPath = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   'private',
-  'secret.json'
+  'secret.json',
 )
 if (fs.existsSync(legacySecretsPath)) {
   console.error(
-    `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`
+    `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`,
   )
   process.exit(1)
 }

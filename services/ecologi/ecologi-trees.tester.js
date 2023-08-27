@@ -12,7 +12,7 @@ t.create('request for existing username')
   .intercept(nock =>
     nock('https://public.ecologi.com')
       .get('/users/ecologi/trees')
-      .reply(200, { total: 50 })
+      .reply(200, { total: 50 }),
   )
   .expectBadge({
     label: 'trees',

@@ -52,7 +52,7 @@ t.create('total downloads (unexpected first response)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(invalidJSON)
+      .reply(invalidJSON),
   )
   .expectBadge({
     label: 'downloads',
@@ -80,14 +80,14 @@ t.create('version (yellow badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonWithDash)
+      .reply(200, nuGetV3VersionJsonWithDash),
   )
   .expectBadge({
     label: 'mongodb',
@@ -100,14 +100,14 @@ t.create('version (orange badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonFirstCharZero)
+      .reply(200, nuGetV3VersionJsonFirstCharZero),
   )
   .expectBadge({
     label: 'mongodb',
@@ -120,14 +120,14 @@ t.create('version (blue badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonFirstCharNotZero)
+      .reply(200, nuGetV3VersionJsonFirstCharNotZero),
   )
   .expectBadge({
     label: 'mongodb',
@@ -153,14 +153,14 @@ t.create('version (pre) (yellow badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonWithDash)
+      .reply(200, nuGetV3VersionJsonWithDash),
   )
   .expectBadge({
     label: 'mongodb',
@@ -173,14 +173,14 @@ t.create('version (pre) (orange badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonFirstCharZero)
+      .reply(200, nuGetV3VersionJsonFirstCharZero),
   )
   .expectBadge({
     label: 'mongodb',
@@ -193,14 +193,14 @@ t.create('version (pre) (blue badge)')
   .intercept(nock =>
     nock('https://www.myget.org')
       .get('/F/mongodb/api/v3/index.json')
-      .reply(200, queryIndex)
+      .reply(200, queryIndex),
   )
   .intercept(nock =>
     nock('https://api-v2v3search-0.nuget.org')
       .get(
-        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2'
+        '/query?q=packageid%3Amongodb.driver.core&prerelease=true&semVerLevel=2',
       )
-      .reply(200, nuGetV3VersionJsonFirstCharNotZero)
+      .reply(200, nuGetV3VersionJsonFirstCharNotZero),
   )
   .expectBadge({
     label: 'mongodb',

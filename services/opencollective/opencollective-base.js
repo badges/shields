@@ -1,27 +1,37 @@
+import gql from 'graphql-tag'
 import Joi from 'joi'
+import { BaseGraphqlService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
 import { metric } from '../text-formatters.js'
 
-// https://developer.opencollective.com/#/api/collectives?id=get-info
-const collectiveDetailsSchema = Joi.object().keys({
-  slug: Joi.string().required(),
-  backersCount: nonNegativeInteger,
-})
+const schema = Joi.object({
+  data: Joi.object({
+    account: Joi.object({
+      name: Joi.string(),
+      slug: Joi.string(),
+      members: Joi.object({
+        totalCount: nonNegativeInteger,
+        nodes: Joi.array().items(
+          Joi.object({
+            tier: Joi.object({
+              legacyId: Joi.number(),
+              name: Joi.string(),
+            }).allow(null),
+          }),
+        ),
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
 
-// https://developer.opencollective.com/#/api/collectives?id=get-members
-function buildMembersArraySchema({ userType, tierRequired }) {
-  const keys = {
-    MemberId: Joi.number().required(),
-    type: userType || Joi.string().required(),
-    role: Joi.string().required(),
-  }
-  if (tierRequired) keys.tier = Joi.string().required()
-  return Joi.array().items(Joi.object().keys(keys))
-}
-
-export default class OpencollectiveBase extends BaseJsonService {
+export default class OpencollectiveBase extends BaseGraphqlService {
   static category = 'funding'
+
+  static auth = {
+    passKey: 'opencollective_token',
+    authorizedOrigins: ['https://api.opencollective.com'],
+    isRequired: false,
+  }
 
   static buildRoute(base, withTierId) {
     return {
@@ -38,45 +48,51 @@ export default class OpencollectiveBase extends BaseJsonService {
     }
   }
 
-  async fetchCollectiveInfo(collective) {
-    return this._requestJson({
-      schema: collectiveDetailsSchema,
-      // https://developer.opencollective.com/#/api/collectives?id=get-info
-      url: `https://opencollective.com/${collective}.json`,
-      httpErrors: {
-        404: 'collective not found',
-      },
-    })
+  async fetchCollectiveInfo({ collective, accountType }) {
+    return this._requestGraphql(
+      this.authHelper.withQueryStringAuth(
+        { passKey: 'personalToken' },
+        {
+          schema,
+          url: 'https://api.opencollective.com/graphql/v2',
+          query: gql`
+            query account($slug: String, $accountType: [AccountType]) {
+              account(slug: $slug) {
+                name
+                slug
+                members(accountType: $accountType, role: BACKER) {
+                  totalCount
+                  nodes {
+                    tier {
+                      legacyId
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          `,
+          variables: {
+            slug: collective,
+            accountType,
+          },
+          options: {
+            headers: { 'content-type': 'application/json' },
+          },
+        },
+      ),
+    )
   }
 
-  async fetchCollectiveBackersCount(collective, { userType, tierId }) {
-    const schema = buildMembersArraySchema({
-      userType:
-        userType === 'users'
-          ? 'USER'
-          : userType === 'organizations'
-          ? 'ORGANIZATION'
-          : undefined,
-      tierRequired: tierId,
-    })
-    const members = await this._requestJson({
-      schema,
-      // https://developer.opencollective.com/#/api/collectives?id=get-members
-      // https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier
-      url: `https://opencollective.com/${collective}/members/${
-        userType || 'all'
-      }.json${tierId ? `?TierId=${tierId}` : ''}`,
-      httpErrors: {
-        404: 'collective not found',
+  getCount(data) {
+    const {
+      data: {
+        account: {
+          members: { totalCount },
+        },
       },
-    })
+    } = data
 
-    const result = {
-      backersCount: members.filter(member => member.role === 'BACKER').length,
-    }
-    // Find the title of the tier
-    if (tierId && members.length > 0)
-      result.tier = members.map(member => member.tier)[0]
-    return result
+    return totalCount
   }
 }

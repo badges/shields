@@ -9,7 +9,7 @@ describe('GitHubCommitActivity', function () {
       expect(() =>
         GitHubCommitActivity.transform({
           data: { repository: { object: null } },
-        })
+        }),
       )
         .to.throw(InvalidResponse)
         .with.property('prettyMessage', 'invalid branch')
@@ -30,7 +30,7 @@ describe('GitHubCommitActivity', function () {
       expect(
         GitHubCommitActivity.getIntervalQueryStartDate({
           interval: 'y',
-        })
+        }),
       ).to.equal('2020-08-28T02:21:34.000Z')
     })
 
@@ -39,7 +39,7 @@ describe('GitHubCommitActivity', function () {
       expect(
         GitHubCommitActivity.getIntervalQueryStartDate({
           interval: 'm',
-        })
+        }),
       ).to.equal('2021-03-01T02:21:34.000Z')
     })
 
@@ -48,7 +48,7 @@ describe('GitHubCommitActivity', function () {
       expect(
         GitHubCommitActivity.getIntervalQueryStartDate({
           interval: '4w',
-        })
+        }),
       ).to.equal('2021-02-05T02:21:34.000Z')
     })
 
@@ -57,7 +57,7 @@ describe('GitHubCommitActivity', function () {
       expect(
         GitHubCommitActivity.getIntervalQueryStartDate({
           interval: 'w',
-        })
+        }),
       ).to.equal('2021-12-24T23:59:34.000Z')
     })
   })

@@ -14,7 +14,7 @@ t.create('valid project grade')
       'gold',
       'silver',
       'bronze',
-      'no medal'
+      'no medal',
     ).required(),
   })
 

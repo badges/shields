@@ -42,7 +42,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function () {
   it('401 not authorized grade', async function () {
     const scope = createMock().reply(401)
     expect(
-      await SymfonyInsightGrade.invoke(defaultContext, config, { projectUuid })
+      await SymfonyInsightGrade.invoke(defaultContext, config, { projectUuid }),
     ).to.deep.equal({
       message: 'not authorized to access project',
       color: 'lightgray',
@@ -70,7 +70,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function () {
           expect(
             await SymfonyInsightGrade.invoke(defaultContext, config, {
               projectUuid,
-            })
+            }),
           ).to.deep.equal(expectedGradeBadge)
           scope.done()
         })
@@ -82,7 +82,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function () {
           expect(
             await SymfonyInsightStars.invoke(defaultContext, config, {
               projectUuid,
-            })
+            }),
           ).to.deep.equal(expectedStarsBadge)
           scope.done()
         })
@@ -94,7 +94,7 @@ describe('SymfonyInsight[Grade|Stars|Violation]', function () {
           expect(
             await SymfonyInsightViolations.invoke(defaultContext, config, {
               projectUuid,
-            })
+            }),
           ).to.deep.equal(expectedViolationsBadge)
           scope.done()
         })

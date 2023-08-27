@@ -60,10 +60,17 @@ class GithubAuthV4Service extends BaseGraphqlService {
             resetAt
           }
         }
-      `
+      `,
     )
 
-    return super._requestGraphql({ ...attrs, ...{ url, query } })
+    return super._requestGraphql({
+      ...attrs,
+      ...{
+        url,
+        query,
+        httpErrorMessages: { 401: 'auth required for graphql api' },
+      },
+    })
   }
 }
 

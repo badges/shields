@@ -20,7 +20,7 @@ const modulesSchema = Joi.object({
     Joi.object({
       pdk: Joi.boolean().valid(false).required(),
       version: semver,
-    }).required()
+    }).required(),
   ),
 }).required()
 

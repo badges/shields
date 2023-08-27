@@ -15,5 +15,5 @@ if (latestDate === config.public.services.github.restApiVersion) {
 config.public.services.github.restApiVersion = latestDate
 await fs.writeFile(
   './config/default.yml',
-  yaml.dump(config, { forceQuotes: true })
+  yaml.dump(config, { forceQuotes: true }),
 )

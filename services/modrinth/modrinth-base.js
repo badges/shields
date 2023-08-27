@@ -12,7 +12,7 @@ const versionSchema = Joi.array()
     Joi.object({
       version_number: Joi.string().required(),
       game_versions: Joi.array().items(Joi.string()).min(1).required(),
-    }).required()
+    }).required(),
   )
   .required()
 

@@ -12,7 +12,7 @@ body:
         **fetch and display data from an upstream service**.
         If your suggestion is for a static badge
         (which shows the same information every time it is requested), it is
-        [already possible to make these](https://github.com/badges/shields/blob/master/doc/static-badges.md).
+        [already possible to make these](https://shields.io/docs/static-badges).
         We don't add specific routes for badges which only show static information.
 
   - type: textarea
@@ -25,7 +25,7 @@ body:
         - Which service is this badge for e.g: GitHub, Travis CI
         - What sort of information should this badge show?
           Provide an example in plain text e.g: "version | v1.01" or as a static badge
-          (static badge generator can be found at https://shields.io/#your-badge )
+          (static badge generator can be found at https://shields.io/badges/static-badge )
     validations:
       required: true
 

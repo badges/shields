@@ -26,7 +26,7 @@ const formatMap = {
             Joi.object({
               name: Joi.string().required(),
               ratio: Joi.number().min(0).max(100).required(),
-            })
+            }),
           )
           .has(Joi.object({ name: 'Lines' }))
           .min(1)
@@ -36,7 +36,7 @@ const formatMap = {
     treeQueryParam: 'results[elements[name,ratio]]',
     transform: json => {
       const lineCoverage = json.results.elements.find(
-        element => element.name === 'Lines'
+        element => element.name === 'Lines',
       )
       return { coverage: lineCoverage.ratio }
     },
@@ -50,7 +50,7 @@ const formatMap = {
             Joi.object({
               name: Joi.string().required(),
               ratio: Joi.number().min(0).max(100).required(),
-            })
+            }),
           )
           .has(Joi.object({ name: 'Line' }))
           .min(1)
@@ -60,7 +60,7 @@ const formatMap = {
     treeQueryParam: 'results[elements[name,ratio]]',
     transform: json => {
       const lineCoverage = json.results.elements.find(
-        element => element.name === 'Line'
+        element => element.name === 'Line',
       )
       return { coverage: lineCoverage.ratio }
     },
@@ -79,7 +79,7 @@ const formatMap = {
       const lineCoverageStr = json.projectStatistics.line
       const lineCoverage = lineCoverageStr.substring(
         0,
-        lineCoverageStr.length - 1
+        lineCoverageStr.length - 1,
       )
       return { coverage: Number.parseFloat(lineCoverage) }
     },

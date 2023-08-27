@@ -34,8 +34,8 @@ describe('GitLabRelease', function () {
           defaultContext,
           config,
           { project: 'foo/bar' },
-          {}
-        )
+          {},
+        ),
       ).to.deep.equal({
         label: undefined,
         message: 'v1.9',

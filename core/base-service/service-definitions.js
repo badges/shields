@@ -18,7 +18,7 @@ const serviceDefinition = Joi.object({
     Joi.object({
       format: Joi.string().required(),
       queryParams: arrayOfStrings,
-    })
+    }),
   ),
   examples: Joi.array()
     .items(
@@ -40,7 +40,7 @@ const serviceDefinition = Joi.object({
         documentation: Joi.object({
           __html: Joi.string().required(), // Valid HTML.
         }),
-      })
+      }),
     )
     .default([]),
   openApi: Joi.object().pattern(
@@ -48,7 +48,7 @@ const serviceDefinition = Joi.object({
     Joi.object({
       get: Joi.object({
         summary: Joi.string().required(),
-        description: Joi.string().required(),
+        description: Joi.string(),
         parameters: Joi.array()
           .items(
             Joi.object({
@@ -56,19 +56,23 @@ const serviceDefinition = Joi.object({
               description: Joi.string(),
               in: Joi.string().valid('query', 'path').required(),
               required: Joi.boolean().required(),
-              schema: Joi.object({ type: Joi.string().required() }).required(),
-              example: Joi.string(),
-            })
+              schema: Joi.object({
+                type: Joi.string().required(),
+                enum: Joi.array(),
+              }).required(),
+              allowEmptyValue: Joi.boolean(),
+              example: Joi.string().allow(null),
+            }),
           )
           .min(1)
           .required(),
       }).required(),
-    }).required()
+    }).required(),
   ),
 }).required()
 
-function assertValidServiceDefinition(example, message = undefined) {
-  Joi.assert(example, serviceDefinition, message)
+function assertValidServiceDefinition(service, message = undefined) {
+  Joi.assert(service, serviceDefinition, message)
 }
 
 const serviceDefinitionExport = Joi.object({
@@ -79,7 +83,7 @@ const serviceDefinitionExport = Joi.object({
         id: Joi.string().required(),
         name: Joi.string().required(),
         keywords: arrayOfStrings,
-      })
+      }),
     )
     .required(),
   services: Joi.array().items(serviceDefinition).required(),

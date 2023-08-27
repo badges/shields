@@ -25,7 +25,7 @@ const summaryColorScale = colorScale(
     'brightgreen',
     '#BBBBBB',
     '#E9C504',
-  ]
+  ],
 )
 
 export default class CIIBestPracticesService extends BaseJsonService {

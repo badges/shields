@@ -20,3 +20,11 @@ t.create('Getting latest version works')
     label: 'docs',
     message: Joi.allow('passing', 'failing'),
   })
+
+t.create('Crate not found')
+  .get('/not-a-crate/latest.json')
+  .expectBadge({ label: 'docs', message: 'not found' })
+
+t.create('Version not found')
+  .get('/tokio/not-a-version.json')
+  .expectBadge({ label: 'docs', message: 'not found' })

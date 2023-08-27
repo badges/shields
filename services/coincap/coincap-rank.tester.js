@@ -7,7 +7,7 @@ t.create('request for existing asset')
   .intercept(nock =>
     nock('https://api.coincap.io')
       .get('/v2/assets/bitcoin')
-      .reply(200, { data: { rank: '1', name: 'Bitcoin' } })
+      .reply(200, { data: { rank: '1', name: 'Bitcoin' } }),
   )
   .expectBadge({
     label: 'bitcoin',

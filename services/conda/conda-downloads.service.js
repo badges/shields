@@ -23,7 +23,7 @@ export default class CondaDownloads extends BaseCondaService {
     const json = await this.fetch({ channel, pkg })
     const downloads = json.files.reduce(
       (total, file) => total + file.ndownloads,
-      0
+      0,
     )
     return this.constructor.render({ variant, downloads })
   }

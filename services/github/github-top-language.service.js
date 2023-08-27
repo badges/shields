@@ -41,7 +41,7 @@ export default class GithubTopLanguage extends BaseGithubLanguage {
     const data = await this.fetch({ user, repo })
     const language = Object.keys(data).reduce(
       (a, b) => (data[a] > data[b] ? a : b),
-      'language'
+      'language',
     )
     return this.constructor.render({
       language,

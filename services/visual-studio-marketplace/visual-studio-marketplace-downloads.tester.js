@@ -63,7 +63,7 @@ t.create('installs')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')
-      .reply(200, mockResponse)
+      .reply(200, mockResponse),
   )
   .expectBadge({
     label: 'installs',
@@ -93,7 +93,7 @@ t.create('zero installs')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'installs',
@@ -122,7 +122,7 @@ t.create('missing statistics array')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'installs',
@@ -135,7 +135,7 @@ t.create('downloads')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
       .post('/extensionquery/')
-      .reply(200, mockResponse)
+      .reply(200, mockResponse),
   )
   .expectBadge({
     label: 'downloads',

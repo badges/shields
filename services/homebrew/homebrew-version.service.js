@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   versions: Joi.object({
@@ -13,13 +13,17 @@ export default class HomebrewVersion extends BaseJsonService {
 
   static route = { base: 'homebrew/v', pattern: ':formula' }
 
-  static examples = [
-    {
-      title: 'homebrew version',
-      namedParams: { formula: 'cake' },
-      staticPreview: renderVersionBadge({ version: 'v0.32.0' }),
+  static openApi = {
+    '/homebrew/v/{formula}': {
+      get: {
+        summary: 'homebrew version',
+        parameters: pathParams({
+          name: 'formula',
+          example: 'cake',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'homebrew' }
 

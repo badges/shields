@@ -30,8 +30,8 @@ describe('DroneBuild', function () {
             drone_token: token,
           },
         },
-        { user: 'atlassian', repo: 'python-bitbucket' }
-      )
+        { user: 'atlassian', repo: 'python-bitbucket' },
+      ),
     ).to.deep.equal({
       label: undefined,
       message: 'passing',

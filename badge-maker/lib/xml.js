@@ -66,7 +66,7 @@ class XmlElement {
         })
         .join(' ')
       return stripXmlWhitespace(
-        `<${this.name}${attrsStr}>${content}</${this.name}>`
+        `<${this.name}${attrsStr}>${content}</${this.name}>`,
       )
     }
     return stripXmlWhitespace(`<${this.name}${attrsStr}/>`)
@@ -88,7 +88,7 @@ class ElementList {
         typeof el.render === 'function'
           ? acc + el.render()
           : acc + escapeXml(el),
-      ''
+      '',
     )
   }
 }

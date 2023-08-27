@@ -10,7 +10,7 @@ t.create('valid project stars')
   .expectBadge({
     label: 'stars',
     message: withRegex(
-      /^(?=.{4}$)(\u2605{0,4}[\u00BC\u00BD\u00BE]?\u2606{0,4})$/
+      /^(?=.{4}$)(\u2605{0,4}[\u00BC\u00BD\u00BE]?\u2606{0,4})$/,
     ),
   })
 

@@ -8,12 +8,13 @@ describe('AuthHelper', function () {
     it('throws without userKey or passKey', function () {
       expect(() => new AuthHelper({}, {})).to.throw(
         Error,
-        'Expected userKey or passKey to be set'
+        'Expected userKey or passKey to be set',
       )
     })
     it('throws without serviceKey or authorizedOrigins', function () {
       expect(
-        () => new AuthHelper({ userKey: 'myci_user', passKey: 'myci_pass' }, {})
+        () =>
+          new AuthHelper({ userKey: 'myci_user', passKey: 'myci_pass' }, {}),
       ).to.throw(Error, 'Expected authorizedOrigins or serviceKey to be set')
     })
     it('throws when authorizedOrigins is not an array', function () {
@@ -25,8 +26,8 @@ describe('AuthHelper', function () {
               passKey: 'myci_pass',
               authorizedOrigins: true,
             },
-            { private: {} }
-          )
+            { private: {} },
+          ),
       ).to.throw(Error, 'Expected authorizedOrigins to be an array of origins')
     })
   })
@@ -35,7 +36,7 @@ describe('AuthHelper', function () {
     function validate(config, privateConfig) {
       return new AuthHelper(
         { authorizedOrigins: ['https://example.test'], ...config },
-        { private: privateConfig }
+        { private: privateConfig },
       ).isValid
     }
     test(validate, () => {
@@ -43,20 +44,20 @@ describe('AuthHelper', function () {
         // Fully configured user + pass.
         given(
           { userKey: 'myci_user', passKey: 'myci_pass', isRequired: true },
-          { myci_user: 'admin', myci_pass: 'abc123' }
+          { myci_user: 'admin', myci_pass: 'abc123' },
         ),
         given(
           { userKey: 'myci_user', passKey: 'myci_pass' },
-          { myci_user: 'admin', myci_pass: 'abc123' }
+          { myci_user: 'admin', myci_pass: 'abc123' },
         ),
         // Fully configured user or pass.
         given(
           { userKey: 'myci_user', isRequired: true },
-          { myci_user: 'admin' }
+          { myci_user: 'admin' },
         ),
         given(
           { passKey: 'myci_pass', isRequired: true },
-          { myci_pass: 'abc123' }
+          { myci_pass: 'abc123' },
         ),
         given({ userKey: 'myci_user' }, { myci_user: 'admin' }),
         given({ passKey: 'myci_pass' }, { myci_pass: 'abc123' }),
@@ -70,16 +71,16 @@ describe('AuthHelper', function () {
         // Partly configured.
         given(
           { userKey: 'myci_user', passKey: 'myci_pass', isRequired: true },
-          { myci_user: 'admin' }
+          { myci_user: 'admin' },
         ),
         given(
           { userKey: 'myci_user', passKey: 'myci_pass' },
-          { myci_user: 'admin' }
+          { myci_user: 'admin' },
         ),
         // Missing required config.
         given(
           { userKey: 'myci_user', passKey: 'myci_pass', isRequired: true },
-          {}
+          {},
         ),
         given({ userKey: 'myci_user', isRequired: true }, {}),
         given({ passKey: 'myci_pass', isRequired: true }, {}),
@@ -91,18 +92,18 @@ describe('AuthHelper', function () {
     function validate(config, privateConfig) {
       return new AuthHelper(
         { authorizedOrigins: ['https://example.test'], ...config },
-        { private: privateConfig }
+        { private: privateConfig },
       )._basicAuth
     }
     test(validate, () => {
       forCases([
         given(
           { userKey: 'myci_user', passKey: 'myci_pass', isRequired: true },
-          { myci_user: 'admin', myci_pass: 'abc123' }
+          { myci_user: 'admin', myci_pass: 'abc123' },
         ),
         given(
           { userKey: 'myci_user', passKey: 'myci_pass' },
-          { myci_user: 'admin', myci_pass: 'abc123' }
+          { myci_user: 'admin', myci_pass: 'abc123' },
         ),
       ]).expect({ username: 'admin', password: 'abc123' })
       given({ userKey: 'myci_user' }, { myci_user: 'admin' }).expect({
@@ -114,11 +115,11 @@ describe('AuthHelper', function () {
         password: 'abc123',
       })
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
-        undefined
+        undefined,
       )
       given(
         { passKey: 'myci_pass', defaultToEmptyStringForUser: true },
-        { myci_pass: 'abc123' }
+        { myci_pass: 'abc123' },
       ).expect({
         username: '',
         password: 'abc123',
@@ -168,7 +169,7 @@ describe('AuthHelper', function () {
         expect(() =>
           authHelper.enforceStrictSsl({
             options: { https: { rejectUnauthorized: false } },
-          })
+          }),
         ).to.throw(InvalidParameter)
       })
     })
@@ -192,7 +193,7 @@ describe('AuthHelper', function () {
         expect(() =>
           authHelper.enforceStrictSsl({
             options: { https: { rejectUnauthorized: false } },
-          })
+          }),
         ).not.to.throw()
       })
     })
@@ -318,7 +319,7 @@ describe('AuthHelper', function () {
           },
         },
         private: { myci_user: 'admin', myci_pass: 'abc123' },
-      }
+      },
     )
     const withBasicAuth = requestOptions =>
       authHelper.withBasicAuth(requestOptions)
@@ -376,7 +377,7 @@ describe('AuthHelper', function () {
         withBasicAuth({
           url: 'https://myci.test/api',
           options: { https: { rejectUnauthorized: false } },
-        })
+        }),
       ).to.throw(InvalidParameter)
     })
   })

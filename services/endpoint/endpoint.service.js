@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { httpErrors } from '../dynamic-common.js'
 import { optionalUrl } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
-import { BaseJsonService, InvalidParameter } from '../index.js'
+import { BaseJsonService, InvalidParameter, queryParams } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
@@ -135,16 +135,12 @@ export default class Endpoint extends BaseJsonService {
       get: {
         summary: 'Endpoint Badge',
         description,
-        parameters: [
-          {
-            name: 'url',
-            description: 'The URL to your JSON endpoint',
-            in: 'query',
-            required: true,
-            schema: { type: 'string' },
-            example: 'https://shields.redsparr0w.com/2473/monday',
-          },
-        ],
+        parameters: queryParams({
+          name: 'url',
+          description: 'The URL to your JSON endpoint',
+          required: true,
+          example: 'https://shields.redsparr0w.com/2473/monday',
+        }),
       },
     },
   }
@@ -180,7 +176,7 @@ export default class Endpoint extends BaseJsonService {
       style,
       // don't allow the user to set cacheSeconds any shorter than this._cacheLength
       cacheSeconds: Math.max(
-        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined)
+        ...[this._cacheLength, cacheSeconds].filter(x => x !== undefined),
       ),
     }
   }

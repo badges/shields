@@ -52,7 +52,7 @@ export default class GitlabLanguageCount extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
+        project,
       )}/languages`,
       httpErrors: httpErrorsFor('project not found'),
     })

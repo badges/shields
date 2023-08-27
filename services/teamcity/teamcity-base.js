@@ -20,7 +20,7 @@ export default class TeamCityBase extends BaseJsonService {
         schema,
         options,
         httpErrors: { 404: 'build not found', ...httpErrors },
-      })
+      }),
     )
   }
 }

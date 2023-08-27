@@ -18,7 +18,7 @@ const versionSchema = Joi.array()
       prerelease: Joi.boolean().required(),
       number: Joi.string().required(),
       downloads_count: nonNegativeInteger,
-    })
+    }),
   )
   .min(1)
   .required()
@@ -96,7 +96,9 @@ export default class GemDownloads extends BaseJsonService {
     let wantedVersion
     if (version === 'stable') {
       wantedVersion = latestVersion(
-        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
+        json
+          .filter(({ prerelease }) => !prerelease)
+          .map(({ number }) => number),
       )
     } else {
       wantedVersion = version

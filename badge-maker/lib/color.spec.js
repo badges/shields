@@ -75,7 +75,7 @@ test(toSvgColor, () => {
   given('papayawhip').expect('papayawhip')
   given('purple').expect('purple')
   forCases([given(''), given(undefined), given('not-a-color')]).expect(
-    undefined
+    undefined,
   )
   given('lightgray').expect('#9f9f9f')
   given('informational').expect('#007ec6')

@@ -8,7 +8,7 @@ export const t = await createServiceTester()
 
 const isDownloadsOverTimePeriod = Joi.alternatives().try(
   isMetricOverTimePeriod,
-  isZeroOverTimePeriod
+  isZeroOverTimePeriod,
 )
 
 t.create('jquery/jquery hits/day')

@@ -2,15 +2,15 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create(
-  'redirect supported django versions (valid, package version in request)'
+  'redirect supported django versions (valid, package version in request)',
 )
   .get('/djangorestframework/3.7.3.json')
   .expectRedirect(
-    '/pypi/frameworkversions/django/djangorestframework/3.7.3.json'
+    '/pypi/frameworkversions/django/djangorestframework/3.7.3.json',
   )
 
 t.create(
-  'redirect supported django versions (valid, no package version specified)'
+  'redirect supported django versions (valid, no package version specified)',
 )
   .get('/djangorestframework.json')
   .expectRedirect('/pypi/frameworkversions/django/djangorestframework.json')

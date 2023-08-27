@@ -234,7 +234,7 @@ export default class GitlabIssues extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
+        project,
       )}/issues_statistics`,
       options: labels ? { searchParams: { labels } } : undefined,
       httpErrors: httpErrorsFor('project not found'),
@@ -261,7 +261,7 @@ export default class GitlabIssues extends GitLabBase {
 
   async handle(
     { variant, raw, project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', labels }
+    { gitlab_url: baseUrl = 'https://gitlab.com', labels },
   ) {
     const { statistics } = await this.fetch({
       project,

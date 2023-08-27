@@ -96,7 +96,7 @@ export default class AzureDevOpsBuild extends BaseSvgScrapingService {
 
   async handle(
     { organization, projectId, definitionId, branch },
-    { stage, job }
+    { stage, job },
   ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
     const { status } = await fetch(this, {

@@ -13,7 +13,7 @@ const schema = Joi.object({
         .items(
           Joi.object({
             totals: Joi.array().items(nonNegativeInteger).required(),
-          }).required()
+          }).required(),
         )
         .required(),
     }).required(),

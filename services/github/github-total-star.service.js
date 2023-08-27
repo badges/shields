@@ -37,7 +37,7 @@ const nodesSchema = Joi.array()
       stargazers: Joi.object({
         totalCount: nonNegativeInteger,
       }).required(),
-    })
+    }),
   )
   .default([])
 
@@ -57,7 +57,7 @@ const schema = Joi.object({
       organization: Joi.object({
         repositories: repositoriesSchema,
       }).required(),
-    }).required()
+    }).required(),
   ).required(),
 }).required()
 

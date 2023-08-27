@@ -12,5 +12,5 @@ t.create('Stars redirect')
   .expectStatus(301)
   .expectHeader(
     'Location',
-    '/github/gist/stars/a8b8c979d200ffde13cc08505f7a6436.svg'
+    '/github/gist/stars/a8b8c979d200ffde13cc08505f7a6436.svg',
   )

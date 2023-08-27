@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const isPlatform = Joi.string().regex(
-  /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/
+  /^(osx|ios|tvos|watchos)( \| (osx|ios|tvos|watchos))*$/,
 )
 
 t.create('platform (valid)').get('/AFNetworking.json').expectBadge({
@@ -20,6 +20,6 @@ t.create('platform (missing platforms key)')
   .intercept(nock =>
     nock('https://trunk.cocoapods.org')
       .get('/api/v1/pods/AFNetworking/specs/latest')
-      .reply(200, { version: 'v1.0', license: 'MIT' })
+      .reply(200, { version: 'v1.0', license: 'MIT' }),
   )
   .expectBadge({ label: 'platform', message: 'ios | osx' })

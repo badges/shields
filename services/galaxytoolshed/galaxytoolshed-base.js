@@ -11,7 +11,7 @@ const repositoryRevisionInstallInfoSchema = Joi.array()
     Joi.object({
       create_time: Joi.date().required(),
       times_downloaded: nonNegativeInteger,
-    }).required()
+    }).required(),
   )
   .items(Joi.any())
 

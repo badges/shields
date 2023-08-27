@@ -46,7 +46,7 @@ t.create('pr (server)')
         withProperties: false,
         withAttributes: false,
       })
-      .reply(200, { size: 42 })
+      .reply(200, { size: 42 }),
   )
   .expectBadge({
     label: 'pull requests',
@@ -64,7 +64,7 @@ t.create('pr (server, invalid credentials)')
         withProperties: false,
         withAttributes: false,
       })
-      .reply(401)
+      .reply(401),
   )
   .expectBadge({
     label: 'pull requests',
@@ -82,7 +82,7 @@ t.create('pr (server, private repo)')
         withProperties: false,
         withAttributes: false,
       })
-      .reply(403)
+      .reply(403),
   )
   .expectBadge({
     label: 'pull requests',
@@ -100,7 +100,7 @@ t.create('pr (server, not found)')
         withProperties: false,
         withAttributes: false,
       })
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'pull requests',

@@ -11,7 +11,7 @@ const schema = Joi.object({
       Joi.object({
         deprecated: Joi.boolean().allow(null).required(),
         outdated: Joi.boolean().allow(null).required(),
-      })
+      }),
     )
     .default([]),
 }).required()
@@ -87,7 +87,7 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
     const url = `/${encodeURIComponent(platform)}/${
       scope ? encodeURIComponent(`${scope}/`) : ''
     }${encodeURIComponent(packageName)}/${encodeURIComponent(
-      version
+      version,
     )}/dependencies`
     const json = await this._requestJson({
       url,
@@ -122,7 +122,7 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
 
   async handle({ user, repo }) {
     const url = `/github/${encodeURIComponent(user)}/${encodeURIComponent(
-      repo
+      repo,
     )}/dependencies`
     const json = await this._requestJson({
       url,

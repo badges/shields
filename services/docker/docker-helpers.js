@@ -18,9 +18,9 @@ const archSchema = Joi.alternatives(
     'mipsle',
     'mips64',
     'mips64le',
-    'riscv64'
+    'riscv64',
   ),
-  Joi.number().valid(386).cast('string')
+  Joi.number().valid(386).cast('string'),
 )
 
 function buildDockerUrl(badgeName, includeTagRoute) {
@@ -56,8 +56,8 @@ async function getMultiPageData({ user, repo, fetch }) {
 
   const pageData = await Promise.all(
     [...Array(numberOfPages - 1).keys()].map((_, i) =>
-      fetch({ user, repo, page: ++i + 1 })
-    )
+      fetch({ user, repo, page: ++i + 1 }),
+    ),
   )
   return [...data.results].concat(...pageData.map(p => p.results))
 }

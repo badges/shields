@@ -59,7 +59,7 @@ t.create('code quality data missing for default branch')
             },
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'code quality',

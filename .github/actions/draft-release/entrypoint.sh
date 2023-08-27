@@ -2,13 +2,16 @@
 
 set -euxo pipefail
 
-# Set up a git user
-git config user.name "release[bot]"
-git config user.email "actions@users.noreply.github.com"
+# mark workspace dir as 'safe'
+git config --system --add safe.directory '/github/workspace'
 
 # Find last server-YYYY-MM-DD tag
 git fetch --unshallow --tags
 LAST_TAG=$(git tag | grep server | tail -n 1)
+
+# Set up a git user
+git config user.name "release[bot]"
+git config user.email "actions@users.noreply.github.com"
 
 # Find the marker in CHANGELOG.md
 INSERT_POINT=$(grep -n "^\-\-\-$" CHANGELOG.md | cut -f1 -d:)

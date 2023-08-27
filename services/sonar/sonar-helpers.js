@@ -12,12 +12,12 @@ const ratingScaleColors = [
 ]
 const negativeMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
-  ratingScaleColors
+  ratingScaleColors,
 )
 const positiveMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
   ratingScaleColors,
-  true
+  true,
 )
 
 function isLegacyVersion({ sonarVersion }) {
@@ -32,7 +32,7 @@ const sonarVersionSchema = Joi.alternatives(
   Joi.string()
     .regex(/[0-9.]+/)
     .optional(),
-  Joi.number().optional()
+  Joi.number().optional(),
 )
 
 const queryParamSchema = Joi.object({

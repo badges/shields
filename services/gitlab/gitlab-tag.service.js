@@ -10,7 +10,7 @@ import GitLabBase from './gitlab-base.js'
 const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
-  })
+  }),
 )
 
 const queryParamSchema = Joi.object({
@@ -89,7 +89,7 @@ export default class GitlabTag extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
+        project,
       )}/repository/tags`,
       options: { searchParams: { order_by: 'updated' } },
       httpErrors: httpErrorsFor('project not found'),
@@ -107,7 +107,7 @@ export default class GitlabTag extends GitLabBase {
 
     return latest(
       tags.map(t => t.name),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
   }
 
@@ -117,7 +117,7 @@ export default class GitlabTag extends GitLabBase {
       gitlab_url: baseUrl = 'https://gitlab.com',
       include_prereleases: pre,
       sort,
-    }
+    },
   ) {
     const tags = await this.fetch({ project, baseUrl })
     const version = this.constructor.transform({

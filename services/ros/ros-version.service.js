@@ -128,7 +128,7 @@ export default class RosVersion extends GithubAuthV4Service {
     }
     const version = this.constructor._parseReleaseVersionFromDistro(
       contentJson.data.repository.object.text,
-      repoName
+      repoName,
     )
 
     return { ...renderVersionBadge({ version }), label: `ros | ${distro}` }
@@ -157,7 +157,7 @@ export default class RosVersion extends GithubAuthV4Service {
       repoSchema,
       {
         prettyErrorMessage: `invalid section for ${repoName} in distribution.yml`,
-      }
+      },
     )
 
     // Strip off "release inc" suffix

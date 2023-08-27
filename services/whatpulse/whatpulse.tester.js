@@ -32,7 +32,7 @@ t.create('WhatPulse team as team name, keys - from Ranks')
   .expectBadge({ label: 'keys', message: isOrdinalNumber })
 
 t.create(
-  'WhatPulse invalid metric name (not one of the options from the modal`s dropdown)'
+  'WhatPulse invalid metric name (not one of the options from the modal`s dropdown)',
 )
   .get('/UpTIMe/user/jerone.json')
   .expectBadge({ label: '404', message: 'badge not found' })

@@ -13,7 +13,7 @@ describe('CratesVersion', function () {
 
   it('throws InvalidResponse on error response', function () {
     expect(() =>
-      CratesVersion.prototype.transform({ errors: [{ detail: 'idk how...' }] })
+      CratesVersion.prototype.transform({ errors: [{ detail: 'idk how...' }] }),
     ).to.throw(InvalidResponse)
   })
 })

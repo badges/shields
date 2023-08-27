@@ -64,3 +64,17 @@ t.create('valid workflow (with event)')
     label: 'build',
     message: isWorkflowStatus,
   })
+
+t.create('valid workflow with / in workflow name')
+  .get('/chris48s/blogmarks/pages/pages-build-deployment.json')
+  .expectBadge({
+    label: 'build',
+    message: isWorkflowStatus,
+  })
+
+t.create('valid workflow with special chars in workflow name')
+  .get('/chris48s/test-workflows/special%3A%26chars.yml.json')
+  .expectBadge({
+    label: 'build',
+    message: isWorkflowStatus,
+  })

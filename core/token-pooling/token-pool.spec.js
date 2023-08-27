@@ -21,16 +21,16 @@ describe('The token pool', function () {
 
   it('should yield the expected tokens', function () {
     ids.forEach(id =>
-      times(batchSize, () => expect(tokenPool.next().id).to.equal(id))
+      times(batchSize, () => expect(tokenPool.next().id).to.equal(id)),
     )
   })
 
   it('should repeat when reaching the end', function () {
     ids.forEach(id =>
-      times(batchSize, () => expect(tokenPool.next().id).to.equal(id))
+      times(batchSize, () => expect(tokenPool.next().id).to.equal(id)),
     )
     ids.forEach(id =>
-      times(batchSize, () => expect(tokenPool.next().id).to.equal(id))
+      times(batchSize, () => expect(tokenPool.next().id).to.equal(id)),
     )
   })
 

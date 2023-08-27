@@ -71,7 +71,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
     return this._requestSvg({
       schema: badgeSchema,
       url: `${baseUrl}/${decodeURIComponent(
-        project
+        project,
       )}/badges/${branch}/pipeline.svg`,
       httpErrors: httpErrorsFor('project not found'),
     })
@@ -87,7 +87,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' }
+    { gitlab_url: baseUrl = 'https://gitlab.com', branch = 'main' },
   ) {
     const data = await this.fetch({
       project,

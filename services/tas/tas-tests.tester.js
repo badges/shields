@@ -53,7 +53,7 @@ t.create('Test status on private project')
         org: 'tasdemo',
         repo: 'nexe-private',
       })
-      .reply(401)
+      .reply(401),
   )
   .expectBadge({
     label: 'tests',

@@ -54,8 +54,8 @@ export default class Wheelmap extends BaseJsonService {
             401: 'invalid token',
             404: 'node not found',
           },
-        }
-      )
+        },
+      ),
     )
   }
 

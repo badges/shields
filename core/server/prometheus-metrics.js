@@ -79,7 +79,7 @@ export default class PrometheusMetrics {
     return this.counters.serviceResponseSize.labels(
       category,
       serviceFamily,
-      service
+      service,
     )
   }
 }

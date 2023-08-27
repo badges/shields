@@ -1,28 +1,30 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.alternatives()
   .try(
     Joi.object({
       currentReleaseVersion: Joi.string().required(),
     }).required(),
-    Joi.valid(null).required()
+    Joi.valid(null).required(),
   )
   .required()
 
 export default class Flathub extends BaseJsonService {
   static category = 'version'
   static route = { base: 'flathub/v', pattern: ':packageName' }
-  static examples = [
-    {
-      title: 'Flathub',
-      namedParams: {
-        packageName: 'org.mozilla.firefox',
+  static openApi = {
+    '/flathub/v/{packageName}': {
+      get: {
+        summary: 'Flathub Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'org.mozilla.firefox',
+        }),
       },
-      staticPreview: renderVersionBadge({ version: '78.0.2' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'flathub' }
 

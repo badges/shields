@@ -22,7 +22,7 @@ const repoSchema = Joi.object({
             }).allow(null),
           }).required(),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()

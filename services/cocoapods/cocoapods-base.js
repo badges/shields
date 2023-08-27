@@ -8,7 +8,7 @@ const schema = Joi.object({
     Joi.string().required(),
     Joi.object({
       type: Joi.string().required(),
-    }).required()
+    }).required(),
   ),
   // https://github.com/badges/shields/pull/209
   platforms: Joi.object().default({ ios: '5.0', osx: '10.7' }),

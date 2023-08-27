@@ -2,6 +2,9 @@ name: Services
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - 'gh-readonly-queue/**'
 
 jobs:
   test-services:
@@ -14,7 +17,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Service tests (triggered from local branch)
         if: github.event.pull_request.head.repo.full_name == github.repository

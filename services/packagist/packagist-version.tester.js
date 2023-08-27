@@ -56,5 +56,5 @@ t.create('version (legacy redirect: vpre)')
 t.create('version (legacy redirect: vpre) (custom server)')
   .get('/vpre/symfony/symfony.svg?server=https%3A%2F%2Fpackagist.org')
   .expectRedirect(
-    '/packagist/v/symfony/symfony.svg?include_prereleases&server=https%3A%2F%2Fpackagist.org'
+    '/packagist/v/symfony/symfony.svg?include_prereleases&server=https%3A%2F%2Fpackagist.org',
   )

@@ -97,6 +97,19 @@ self-hosted Shields installation access to private repositories hosted on bitbuc
 Bitbucket badges use basic auth. Provide a username and password to give your
 self-hosted Shields installation access to a private Bitbucket Server instance.
 
+### CurseForge
+
+- `CURSEFORGE_API_KEY` (yml: `private.curseforge_api_key`)
+
+A CurseForge API key is required to use the [CurseForge API][cf api]. To obtain
+an API key, [signup to CurseForge Console][cf signup] with a Google account and
+create an organization, then go to the [API keys page][cf api key] and copy the
+generated API key.
+
+[cf api]: https://docs.curseforge.com
+[cf signup]: https://console.curseforge.com/#/signup
+[cf api key]: https://console.curseforge.com/#/api-keys
+
 ### Discord
 
 Using a token for Dicsord is optional but will allow higher API rates.
@@ -218,7 +231,7 @@ installation access to private npm packages
 
 [npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
-## Open Build Service
+### Open Build Service
 
 - `OBS_USER` (yml: `private.obs_user`)
 - `OBS_PASS` (yml: `private.obs_user`)
@@ -232,6 +245,14 @@ While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-us
 they can only be scoped to execute specific actions on a POST request. This
 means however, that an actual account is required to read the build status
 of a package.
+
+### OpenCollective
+
+- `OPENCOLLECTIVE_TOKEN` (yml: `opencollective_token`)
+
+OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
+An [API token](https://graphql-docs-v2.opencollective.com/access)
+can be provided to access a higher rate limit of 100 reqs/minute.
 
 ### SymfonyInsight (formerly Sensiolabs)
 

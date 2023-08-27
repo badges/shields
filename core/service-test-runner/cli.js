@@ -121,8 +121,8 @@ if (typeof onlyServices === 'undefined' || onlyServices.includes('*****')) {
 } else {
   console.info(
     `Running tests for ${onlyServices.length} services: ${onlyServices.join(
-      ', '
-    )}.\n`
+      ', ',
+    )}.\n`,
   )
   runner.only(onlyServices)
 }

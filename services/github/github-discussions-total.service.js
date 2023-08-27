@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { transformErrors } from './github-helpers.js'
@@ -21,18 +22,23 @@ export default class GithubTotalDiscussions extends GithubAuthV4Service {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'GitHub Discussions',
-      namedParams: {
-        user: 'vercel',
-        repo: 'next.js',
+  static openApi = {
+    '/github/discussions/{user}/{repo}': {
+      get: {
+        summary: 'GitHub Discussions',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'vercel',
+          },
+          {
+            name: 'repo',
+            example: 'next.js',
+          },
+        ),
       },
-      staticPreview: this.render({
-        discussions: '6000 total',
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'discussions', color: 'blue' }
 

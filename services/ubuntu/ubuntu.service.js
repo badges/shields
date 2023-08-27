@@ -7,7 +7,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         source_package_version: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -36,7 +36,7 @@ export default class Ubuntu extends BaseJsonService {
     const seriesParam = series
       ? {
           distro_series: `https://api.launchpad.net/1.0/ubuntu/${encodeURIComponent(
-            series
+            series,
           )}`,
         }
       : {}

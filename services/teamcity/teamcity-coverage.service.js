@@ -10,7 +10,7 @@ const buildStatisticsSchema = Joi.object({
       Joi.object({
         name: Joi.string().required(),
         value: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -77,7 +77,7 @@ export default class TeamCityCoverage extends TeamCityBase {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-Statistics
     const buildLocator = `buildType:(id:${buildId})`
     const apiPath = `app/rest/builds/${encodeURIComponent(
-      buildLocator
+      buildLocator,
     )}/statistics`
     const data = await this.fetch({
       url: `${server}/${apiPath}`,

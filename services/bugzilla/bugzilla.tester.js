@@ -11,7 +11,7 @@ const bzBugStatus = Joi.equal(
   "won't fix",
   'duplicate',
   'works for me',
-  'incomplete'
+  'incomplete',
 )
 
 t.create('Bugzilla valid bug status').get('/996038.json').expectBadge({

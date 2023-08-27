@@ -6,7 +6,7 @@ import { withRegex } from '../test-validators.js'
 // single lowercase alphabet letter suffix
 // e.g.: v1.81a
 const isVPlusDottedVersionAtLeastOneWithOptionalAlphabetLetter = withRegex(
-  /^v\d+(\.\d+)?(\.\d+)?[a-z]?$/
+  /^v\d+(\.\d+)?(\.\d+)?[a-z]?$/,
 )
 
 export const t = new ServiceTester({
@@ -29,7 +29,7 @@ t.create('license missing')
           number: 'notRelevant',
           date: 'notRelevant',
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'license',
@@ -47,7 +47,7 @@ t.create('single license')
           number: 'notRelevant',
           date: 'notRelevant',
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'license',
@@ -69,7 +69,7 @@ t.create('version')
           number: 'v1.11',
           date: '',
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'ctan',

@@ -4,7 +4,7 @@ export const t = await createServiceTester()
 
 t.create('gets the package version of com.vrchat.udonsharp')
   .get(
-    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload'
+    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload',
   )
   .expectBadge({ label: 'vpm', message: isSemver })
 
@@ -22,10 +22,10 @@ t.create('gets the latest version')
             },
           },
         },
-      })
+      }),
   )
   .get(
-    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload'
+    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload',
   )
   .expectBadge({ label: 'vpm', message: 'v2.0.0' })
 
@@ -43,9 +43,9 @@ t.create('gets the latest version including prerelease')
             },
           },
         },
-      })
+      }),
   )
   .get(
-    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload&include_prereleases'
+    '/com.vrchat.udonsharp.json?repository_url=https%3A%2F%2Fpackages.vrchat.com%2Fcurated%3Fdownload&include_prereleases',
   )
   .expectBadge({ label: 'vpm', message: 'v2.1.0-rc1' })

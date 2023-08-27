@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 
 const schema = Joi.object({
@@ -9,15 +9,17 @@ const schema = Joi.object({
 export default class FlathubDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'flathub/downloads', pattern: ':packageName' }
-  static examples = [
-    {
-      title: 'Flathub',
-      namedParams: {
-        packageName: 'org.mozilla.firefox',
+  static openApi = {
+    '/flathub/downloads/{packageName}': {
+      get: {
+        summary: 'Flathub Downloads',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'org.mozilla.firefox',
+        }),
       },
-      staticPreview: renderDownloadsBadge({ downloads: '277136' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'installs' }
 
@@ -25,7 +27,7 @@ export default class FlathubDownloads extends BaseJsonService {
     const data = await this._requestJson({
       schema,
       url: `https://flathub.org/api/v2/stats/${encodeURIComponent(
-        packageName
+        packageName,
       )}`,
     })
     return renderDownloadsBadge({ downloads: data.installs_total })

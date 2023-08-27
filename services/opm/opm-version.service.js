@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { BaseService, NotFound, InvalidResponse } from '../index.js'
+import { BaseService, NotFound, InvalidResponse, pathParams } from '../index.js'
 
 export default class OpmVersion extends BaseService {
   static category = 'version'
@@ -9,16 +9,23 @@ export default class OpmVersion extends BaseService {
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'OPM',
-      namedParams: {
-        user: 'openresty',
-        moduleName: 'lua-resty-lrucache',
+  static openApi = {
+    '/opm/v/{user}/{moduleName}': {
+      get: {
+        summary: 'OPM Version',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'openresty',
+          },
+          {
+            name: 'moduleName',
+            example: 'lua-resty-lrucache',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: 'v0.08' }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'opm',

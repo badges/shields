@@ -36,7 +36,7 @@ t.create('Tag (legacy route: tag)')
 t.create('Tag (legacy route: tag-pre)')
   .get('/tag-pre/photonstorm/phaser.svg')
   .expectRedirect(
-    '/github/v/tag/photonstorm/phaser.svg?include_prereleases&sort=semver'
+    '/github/v/tag/photonstorm/phaser.svg?include_prereleases&sort=semver',
   )
 
 t.create('Tag (legacy route: tag-date)')

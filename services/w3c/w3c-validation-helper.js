@@ -8,7 +8,7 @@ const svgExpression =
   '^SVG\\s?1\\.1\\s?,\\s?URL\\s?,\\s?XHTML\\s?,\\s?MathML\\s?3\\.0$'
 const presetRegex = new RegExp(
   `(${html5Expression})|(${html4Expression})|(${xhtmlExpression})|(${svgExpression})`,
-  'i'
+  'i',
 )
 
 const getMessage = messageTypes => {
@@ -20,7 +20,7 @@ const getMessage = messageTypes => {
   }
 
   const messages = messageTypeKeys.map(
-    key => `${messageTypes[key]} ${key}${messageTypes[key] > 1 ? 's' : ''}`
+    key => `${messageTypes[key]} ${key}${messageTypes[key] > 1 ? 's' : ''}`,
   )
   return messages.join(', ')
 }

@@ -34,7 +34,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     )
       .to.throw(InvalidParameter)
       .with.property('prettyMessage', 'default dependency not found')
@@ -49,7 +49,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     )
       .to.throw(InvalidParameter)
       .with.property('prettyMessage', 'dev dependency not found')
@@ -62,7 +62,7 @@ describe('getDependencyVersion', function () {
         lockfileData: {
           default: packages,
         },
-      })
+      }),
     ).to.deep.equal({ version: '3.0.4' })
   })
 
@@ -75,7 +75,7 @@ describe('getDependencyVersion', function () {
           default: {},
           develop: packages,
         },
-      })
+      }),
     ).to.deep.equal({ version: '3.0.4' })
   })
 
@@ -87,7 +87,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     ).to.deep.equal({ version: '3.0.4' })
   })
 
@@ -99,7 +99,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     ).to.deep.equal({ ref: '1.11.4001' })
   })
 
@@ -111,7 +111,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     ).to.deep.equal({ ref: '2df5a2b' })
   })
 
@@ -123,7 +123,7 @@ describe('getDependencyVersion', function () {
           default: packages,
           develop: {},
         },
-      })
+      }),
     )
       .to.throw(InvalidParameter)
       .with.property('prettyMessage', 'No version or ref for django-cms')

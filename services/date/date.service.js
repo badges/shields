@@ -9,7 +9,7 @@ const documentation = `
 
 export default class Date extends BaseService {
   static category = 'other'
-  static route = { base: 'date', pattern: ':timestamp([0-9]+)' }
+  static route = { base: 'date', pattern: ':timestamp(-?[0-9]+)' }
 
   static examples = [
     {

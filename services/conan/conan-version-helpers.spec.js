@@ -13,7 +13,7 @@ describe('parseLatestVersionFromConfig', function () {
           folder: all
         1.69.0:
           folder: all
-      `)
+      `),
     ).to.equal('1.70.0')
   })
 
@@ -22,12 +22,12 @@ describe('parseLatestVersionFromConfig', function () {
   })
   it('treats no results array as invalid', function () {
     expect(() =>
-      parseLatestVersionFromConfig('somethingElse: whatever')
+      parseLatestVersionFromConfig('somethingElse: whatever'),
     ).to.throw(InvalidResponse)
   })
   it('treats empty results array as not found', function () {
     expect(() => parseLatestVersionFromConfig('versions: []')).to.throw(
-      NotFound
+      NotFound,
     )
   })
 })

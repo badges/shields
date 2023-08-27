@@ -34,7 +34,7 @@ const schema = Joi.object({
                 }),
                 null,
               ]),
-            })
+            }),
           )
           .required(),
       }).required(),

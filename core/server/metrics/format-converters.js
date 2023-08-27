@@ -4,7 +4,7 @@ function promClientJsonToInfluxV2(metrics, extraLabels = {}) {
   return metrics
     .flatMap(metric => {
       const valuesByLabels = groupBy(metric.values, value =>
-        JSON.stringify(Object.entries(value.labels).sort())
+        JSON.stringify(Object.entries(value.labels).sort()),
       )
       return Object.values(valuesByLabels).map(metricsWithSameLabel => {
         const labels = Object.entries(metricsWithSameLabel[0].labels)

@@ -4,8 +4,10 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
 const documentation = `
-By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service.
-These can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)`
+The YouTube badges provided by Shields.io leverage the YouTube API Services. By using this badge, you are:
+* agreeing to be bound by the YouTube Terms of Service, which can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)
+* acknowledging and accepting the Google Privacy Policy, which can be found here: [https://policies.google.com/privacy](https://policies.google.com/privacy)
+`
 
 const schema = Joi.object({
   pageInfo: Joi.object({
@@ -23,9 +25,9 @@ const schema = Joi.object({
         Joi.object({
           viewCount: nonNegativeInteger,
           subscriberCount: nonNegativeInteger,
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
@@ -37,8 +39,6 @@ class YouTubeBase extends BaseJsonService {
     authorizedOrigins: ['https://www.googleapis.com'],
     isRequired: true,
   }
-
-  static _cacheLength = 7200
 
   static defaultBadgeData = {
     label: 'youtube',
@@ -65,8 +65,8 @@ class YouTubeBase extends BaseJsonService {
           options: {
             searchParams: { id, part: 'statistics' },
           },
-        }
-      )
+        },
+      ),
     )
   }
 

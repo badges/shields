@@ -14,11 +14,11 @@ const bitbucketPipelinesSchema = Joi.object({
               'FAILED',
               'ERROR',
               'STOPPED',
-              'EXPIRED'
+              'EXPIRED',
             ),
           }).required(),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -69,7 +69,7 @@ class BitbucketPipelines extends BaseJsonService {
 
   static transform(data) {
     const values = data.values.filter(
-      value => value.state && value.state.name === 'COMPLETED'
+      value => value.state && value.state.name === 'COMPLETED',
     )
     if (values.length > 0) {
       return values[0].state.result.name

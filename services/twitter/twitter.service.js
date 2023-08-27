@@ -17,7 +17,7 @@ class TwitterUrl extends BaseService {
 
   static examples = [
     {
-      title: 'Twitter URL',
+      title: 'X (formerly Twitter) URL',
       namedParams: {},
       queryParams: {
         url: 'https://shields.io',
@@ -35,7 +35,7 @@ class TwitterUrl extends BaseService {
   static _cacheLength = 86400
 
   static defaultBadgeData = {
-    namedLogo: 'twitter',
+    namedLogo: 'x',
   }
 
   async handle(_routeParams, { url }) {
@@ -75,7 +75,7 @@ class TwitterFollow extends BaseJsonService {
 
   static examples = [
     {
-      title: 'Twitter Follow',
+      title: 'X (formerly Twitter) Follow',
       namedParams: {
         user: 'shields_io',
       },
@@ -93,7 +93,7 @@ class TwitterFollow extends BaseJsonService {
   static _cacheLength = 86400
 
   static defaultBadgeData = {
-    namedLogo: 'twitter',
+    namedLogo: 'x',
   }
 
   static render({ user }) {
@@ -103,7 +103,7 @@ class TwitterFollow extends BaseJsonService {
       style: 'social',
       link: [
         `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
-          user
+          user,
         )}`,
       ],
     }

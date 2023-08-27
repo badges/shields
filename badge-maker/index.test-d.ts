@@ -7,19 +7,19 @@ expectError(
   makeBadge({
     message: 'passed',
     style: 'invalid style',
-  })
+  }),
 )
 
 expectType<string>(
   makeBadge({
     message: 'passed',
-  })
+  }),
 )
 expectType<string>(
   makeBadge({
     label: 'build',
     message: 'passed',
-  })
+  }),
 )
 expectType<string>(
   makeBadge({
@@ -28,7 +28,7 @@ expectType<string>(
     labelColor: 'green',
     color: 'red',
     style: 'flat',
-  })
+  }),
 )
 
 const error = new ValidationError()

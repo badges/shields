@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 
 const schema = Joi.object({
@@ -8,7 +8,7 @@ const schema = Joi.object({
 
 const ossfScorecardColorScale = colorScale(
   [2, 5, 8, 10],
-  ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen']
+  ['red', 'yellow', 'yellowgreen', 'green', 'brightgreen'],
 )
 
 export default class OSSFScorecard extends BaseJsonService {
@@ -16,17 +16,27 @@ export default class OSSFScorecard extends BaseJsonService {
 
   static route = { base: 'ossf-scorecard', pattern: ':host/:orgName/:repoName' }
 
-  static examples = [
-    {
-      title: 'OSSF-Scorecard Score',
-      namedParams: {
-        host: 'github.com',
-        orgName: 'rohankh532',
-        repoName: 'org-workflow-add',
+  static openApi = {
+    '/ossf-scorecard/{host}/{orgName}/{repoName}': {
+      get: {
+        summary: 'OSSF-Scorecard Score',
+        parameters: pathParams(
+          {
+            name: 'host',
+            example: 'github.com',
+          },
+          {
+            name: 'orgName',
+            example: 'rohankh532',
+          },
+          {
+            name: 'repoName',
+            example: 'org-workflow-add',
+          },
+        ),
       },
-      staticPreview: this.render({ score: '7.5' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'score' }
 

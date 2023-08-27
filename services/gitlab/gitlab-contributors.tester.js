@@ -24,9 +24,9 @@ t.create('Mocking the missing x-total header')
   .intercept(nock =>
     nock('https://gitlab.com')
       .get(
-        '/api/v4/projects/group%2Fproject/repository/contributors?page=1&per_page=1'
+        '/api/v4/projects/group%2Fproject/repository/contributors?page=1&per_page=1',
       )
-      .reply(200)
+      .reply(200),
   )
   .expectBadge({
     label: 'contributors',

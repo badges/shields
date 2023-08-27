@@ -30,7 +30,7 @@ const schema = Joi.object({
           Joi.object({
             type: Joi.string().required(),
             extension: Joi.string().allow('').required(),
-          })
+          }),
         ),
       })
         .allow(null)

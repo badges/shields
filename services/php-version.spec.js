@@ -37,7 +37,7 @@ describe('Text PHP version', function () {
     given(['7.0', '7.1', '7.2'], phpReleases).expect(['>= 7'])
     given(
       ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6', '7.0', '7.1', '7.2'],
-      phpReleases
+      phpReleases,
     ).expect(['>= 5'])
     given(['7.1', '7.2'], phpReleases).expect(['>= 7.1'])
     given(['7.1'], phpReleases).expect(['7.1'])

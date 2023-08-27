@@ -4,6 +4,51 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-08-01
+
+- Convert `examples` arrays to `openApi` objects (part 1) [#9320](https://github.com/badges/shields/issues/9320)
+- Migrate from docs.rs' builds API to status API [#9422](https://github.com/badges/shields/issues/9422)
+- [OpenVSX] Fix OpenVSX API call for unversioned package URLs [#9408](https://github.com/badges/shields/issues/9408)
+- Add support for [Lemmy] [#9368](https://github.com/badges/shields/issues/9368)
+- upgrade to npm 9 [#9323](https://github.com/badges/shields/issues/9323)
+- Go back to default YouTube cache [#9372](https://github.com/badges/shields/issues/9372)
+- Add [GitHubDiscussionsSearch] and GitHubRepoDiscussionsSearch service [#9340](https://github.com/badges/shields/issues/9340)
+- Allow user to filter github tags and releases [#9193](https://github.com/badges/shields/issues/9193)
+- don't URL encode slash in [githubactionsworkflow] badge [#9322](https://github.com/badges/shields/issues/9322)
+- add a bit of border to select boxes [#9348](https://github.com/badges/shields/issues/9348)
+- deprecate [snyk] badges [#9349](https://github.com/badges/shields/issues/9349)
+- increase max-age on [docker] badges, again [#9350](https://github.com/badges/shields/issues/9350) [#9369](https://github.com/badges/shields/issues/9369)
+- Dependency updates
+
+## server-2023-07-02
+
+By far the most significant change in this release is the long-awaited launch of the re-designed frontend:
+
+- migrate frontend to docusaurus [#9014](https://github.com/badges/shields/issues/9014)
+- fix a load of spacing issues in frontend content [#9281](https://github.com/badges/shields/issues/9281)
+- set a sensible meta description [#9283](https://github.com/badges/shields/issues/9283)
+- chore(frontend): open homepage feature links in new tab [#9300](https://github.com/badges/shields/issues/9300)
+- adapt opencollective images to theme background [#9298](https://github.com/badges/shields/issues/9298)
+- temp fix: wrap code examples tabs in narrow browser windows [#9302](https://github.com/badges/shields/issues/9302)
+- add a bit of border to text boxes [#9324](https://github.com/badges/shields/issues/9324)
+
+Other changes in this release:
+
+- cache [dockerpulls] badges for an hour [#9343](https://github.com/badges/shields/issues/9343)
+- Mention YouTube API services and link to Google Privacy Policy [#9339](https://github.com/badges/shields/issues/9339)
+- allow negative timestamps in relative [date] badge [#9321](https://github.com/badges/shields/issues/9321)
+- upgrade to graphql 16 [#9290](https://github.com/badges/shields/issues/9290)
+- remove obsolete travis .org examples [#9284](https://github.com/badges/shields/issues/9284)
+- increase max age on reddit badges [#9282](https://github.com/badges/shields/issues/9282)
+- feat: Add author filter option for [GithubCommitActivity] [#9251](https://github.com/badges/shields/issues/9251)
+- Fix: [GithubCommitActivity] invalid branch error handling [#9258](https://github.com/badges/shields/issues/9258)
+- Implement a pattern for dealing with upstream APIs which are slow on the first hit; affects [endpoint] [#9233](https://github.com/badges/shields/issues/9233)
+- Delete old deprecated services [#9254](https://github.com/badges/shields/issues/9254)
+- feat: add 'canceled' status to netlify deploy badge [#9240](https://github.com/badges/shields/issues/9240)
+- increase default cache on youtube badges [#9238](https://github.com/badges/shields/issues/9238)
+- embiggen youtube cache, again [#9250](https://github.com/badges/shields/issues/9250)
+- Dependency updates
+
 ## server-2023-06-01
 
 - feat: Add total commits to [GitHubCommitActivity] [#9196](https://github.com/badges/shields/issues/9196)

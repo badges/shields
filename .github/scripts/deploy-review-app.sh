@@ -10,12 +10,11 @@ org="shields-io"
 # This will fail if $PR_NUMBER is not a valid PR
 pr_json=$(curl --fail "https://api.github.com/repos/badges/shields/pulls/$PR_NUMBER")
 
-# Attempt to apply the PR diff to the target branch
-# This will fail if it does not merge cleanly
+# Checkout the PR branch
 git config user.name "actions[bot]"
 git config user.email "actions@users.noreply.github.com"
 git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
-git merge "pr-$PR_NUMBER"
+git checkout "pr-$PR_NUMBER"
 
 # If the app does not already exist, create it
 if ! flyctl status --app "$app"; then

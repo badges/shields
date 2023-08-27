@@ -18,7 +18,7 @@ after('shut down the server', async function () {
 it('should render a badge', async function () {
   this.timeout('30s')
   const { statusCode, body } = await got(
-    'http://localhost:1111/badge/fruit-apple-green.svg'
+    'http://localhost:1111/badge/fruit-apple-green.svg',
   )
   expect(statusCode).to.equal(200)
   expect(body).to.satisfy(isSvg).and.to.include('fruit').and.to.include('apple')

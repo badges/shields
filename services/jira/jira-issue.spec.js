@@ -22,8 +22,8 @@ describe('JiraIssue', function () {
         {
           issueKey: 'secure-234',
         },
-        { baseUrl: `https://${host}` }
-      )
+        { baseUrl: `https://${host}` },
+      ),
     ).to.deep.equal({
       label: 'secure-234',
       message: 'in progress',

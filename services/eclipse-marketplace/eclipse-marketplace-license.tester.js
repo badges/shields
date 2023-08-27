@@ -17,8 +17,8 @@ t.create('unspecified license')
            <node id="3108021" name="Notepad4e" url="https://marketplace.eclipse.org/content/notepad4e">
              <license/>
            </node>
-         </marketplace>`
-      )
+         </marketplace>`,
+      ),
   )
   .expectBadge({
     label: 'license',

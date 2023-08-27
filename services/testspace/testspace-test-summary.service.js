@@ -83,7 +83,7 @@ export default class TestspaceTests extends TestspaceBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const json = await this.fetch({ org, project, space })
     const { passed, failed, skipped, total } = this.transformCaseCounts(json)

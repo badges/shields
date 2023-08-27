@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.object({
   resultCount: nonNegativeInteger,
@@ -18,13 +18,17 @@ export default class Itunes extends BaseJsonService {
     pattern: ':bundleId',
   }
 
-  static examples = [
-    {
-      title: 'iTunes App Store',
-      namedParams: { bundleId: '803453959' },
-      staticPreview: renderVersionBadge({ version: 'v3.3.3' }),
+  static openApi = {
+    '/itunes/v/{bundleId}': {
+      get: {
+        summary: 'iTunes App Store',
+        parameters: pathParams({
+          name: 'bundleId',
+          example: '803453959',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'itunes app store' }
 

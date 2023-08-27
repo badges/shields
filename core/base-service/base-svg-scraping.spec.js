@@ -28,7 +28,7 @@ describe('BaseSvgScrapingService', function () {
   describe('valueFromSvgBadge', function () {
     it('should find the correct value', function () {
       expect(BaseSvgScrapingService.valueFromSvgBadge(exampleSvg)).to.equal(
-        exampleMessage
+        exampleMessage,
       )
     })
   })
@@ -40,21 +40,21 @@ describe('BaseSvgScrapingService', function () {
         Promise.resolve({
           buffer: exampleSvg,
           res: { statusCode: 200 },
-        })
+        }),
       )
     })
 
     it('invokes _requestFetcher with the expected header', async function () {
       await DummySvgScrapingService.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
         'http://example.com/foo.svg',
         {
           headers: { Accept: 'image/svg+xml' },
-        }
+        },
       )
     })
 
@@ -75,7 +75,7 @@ describe('BaseSvgScrapingService', function () {
 
       await WithCustomOptions.invoke(
         { requestFetcher },
-        { handleInternalErrors: false }
+        { handleInternalErrors: false },
       )
 
       expect(requestFetcher).to.have.been.calledOnceWith(
@@ -84,7 +84,7 @@ describe('BaseSvgScrapingService', function () {
           method: 'POST',
           headers: { Accept: 'image/svg+xml' },
           searchParams: { queryParam: 123 },
-        }
+        },
       )
     })
   })
@@ -98,8 +98,8 @@ describe('BaseSvgScrapingService', function () {
       expect(
         await DummySvgScrapingService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: exampleMessage,
       })
@@ -124,8 +124,8 @@ describe('BaseSvgScrapingService', function () {
       expect(
         await WithValueMatcher.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         message: 'a different message',
       })
@@ -139,8 +139,8 @@ describe('BaseSvgScrapingService', function () {
       expect(
         await DummySvgScrapingService.invoke(
           { requestFetcher },
-          { handleInternalErrors: false }
-        )
+          { handleInternalErrors: false },
+        ),
       ).to.deep.equal({
         isError: true,
         color: 'lightgray',

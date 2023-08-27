@@ -49,7 +49,7 @@ t.create('oss metadata in unexpected format')
         .reply(200, 'wrongkey=active'),
     {
       'Content-Type': 'text/plain;charset=UTF-8',
-    }
+    },
   )
   .expectBadge({
     label: 'oss lifecycle',

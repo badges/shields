@@ -26,8 +26,7 @@
     "badge": "lib/badge-cli.js"
   },
   "engines": {
-    "node": ">= 14",
-    "npm": ">= 6"
+    "node": ">=16"
   },
   "collective": {
     "type": "opencollective",

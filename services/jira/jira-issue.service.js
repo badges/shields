@@ -76,7 +76,7 @@ export default class JiraIssue extends BaseJsonService {
         schema,
         url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
         httpErrors: { 404: 'issue not found' },
-      })
+      }),
     )
 
     const issueStatus = json.fields.status

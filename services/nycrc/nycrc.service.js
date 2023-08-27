@@ -123,7 +123,7 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
           branch: 'HEAD',
           filename: config,
         }),
-        preferredThreshold
+        preferredThreshold,
       )
     }
     return this.constructor.render({ coverage })

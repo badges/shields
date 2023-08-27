@@ -11,7 +11,7 @@ const schema = Joi.object({
         prerelease: Joi.boolean().required(),
         yanked: Joi.boolean().required(),
         files: Joi.object().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -69,7 +69,7 @@ export default class PiWheelsVersion extends BaseJsonService {
             yanked: releases[key].yanked,
             hasFiles: Object.keys(releases[key].files).length > 0,
           }),
-        []
+        [],
       )
       .filter(release => !release.yanked) // exclude any yanked releases
       .filter(release => release.hasFiles) // exclude any releases with no wheels

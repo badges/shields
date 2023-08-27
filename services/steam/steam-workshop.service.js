@@ -28,7 +28,7 @@ const steamCollectionSchema = Joi.object({
         .items(
           Joi.object({
             children: Joi.array().required(),
-          }).required()
+          }).required(),
         )
         .required(),
     })
@@ -42,7 +42,7 @@ const steamCollectionNotFoundSchema = Joi.object({
         .items(
           Joi.object({
             result: Joi.number().integer().min(9).max(9).required(),
-          }).required()
+          }).required(),
         )
         .required(),
     })
@@ -51,7 +51,7 @@ const steamCollectionNotFoundSchema = Joi.object({
 
 const collectionFoundOrNotSchema = Joi.alternatives(
   steamCollectionSchema,
-  steamCollectionNotFoundSchema
+  steamCollectionNotFoundSchema,
 )
 
 const steamFileSchema = Joi.object({
@@ -68,7 +68,7 @@ const steamFileSchema = Joi.object({
             lifetime_subscriptions: Joi.number().integer().required(),
             lifetime_favorited: Joi.number().integer().required(),
             views: Joi.number().integer().required(),
-          })
+          }),
         )
         .min(1)
         .max(1)
@@ -84,7 +84,7 @@ const steamFileNotFoundSchema = Joi.object({
         .items(
           Joi.object({
             result: Joi.number().integer().min(9).max(9).required(),
-          }).required()
+          }).required(),
         )
         .min(1)
         .max(1)
@@ -95,7 +95,7 @@ const steamFileNotFoundSchema = Joi.object({
 
 const fileFoundOrNotSchema = Joi.alternatives(
   steamFileSchema,
-  steamFileNotFoundSchema
+  steamFileNotFoundSchema,
 )
 
 class SteamCollectionSize extends BaseSteamAPI {

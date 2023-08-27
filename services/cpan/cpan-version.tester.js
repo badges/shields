@@ -15,7 +15,7 @@ t.create('version (version is a number rather than a string)')
       .reply(200, {
         license: ['GPL'],
         version: 0.88,
-      })
+      }),
   )
   .expectBadge({
     label: 'cpan',

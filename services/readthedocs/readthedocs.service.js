@@ -47,7 +47,7 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     const { message: status } = await this._requestSvg({
       schema,
       url: `https://readthedocs.org/projects/${encodeURIComponent(
-        project
+        project,
       )}/badge/`,
       options: { searchParams: { version } },
     })

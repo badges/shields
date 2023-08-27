@@ -13,7 +13,7 @@ const packageSchema = Joi.array()
     Joi.object({
       version: Joi.string(),
       license: Joi.array(),
-    }).required()
+    }).required(),
   )
   .required()
 
@@ -60,7 +60,7 @@ export default class PackagistLicense extends BasePackagistService {
 
     const versions = BasePackagistService.expandPackageVersions(
       json,
-      packageName
+      packageName,
     )
 
     const version = this.findLatestRelease(versions)

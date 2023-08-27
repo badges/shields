@@ -16,7 +16,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '14'
           - node: '16'
           - node: '18'
           - node: '20'

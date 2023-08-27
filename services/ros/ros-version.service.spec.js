@@ -37,8 +37,8 @@ repositories:
 type: distribution
 version: 2
       `,
-        'vision_msgs'
-      )
+        'vision_msgs',
+      ),
     ).to.equal('4.0.0')
   })
 })

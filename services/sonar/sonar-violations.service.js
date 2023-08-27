@@ -10,7 +10,7 @@ import {
 
 const violationsColorScale = colorScale(
   [1, 2, 3, 5],
-  ['brightgreen', 'yellowgreen', 'yellow', 'orange', 'red']
+  ['brightgreen', 'yellowgreen', 'yellow', 'orange', 'red'],
 )
 
 const violationCategoryColorMap = {
@@ -148,7 +148,7 @@ export default class SonarViolations extends SonarBase {
 
   async handle(
     { component, metric, branch },
-    { server, sonarVersion, format }
+    { server, sonarVersion, format },
   ) {
     // If the user has requested the long format for the violations badge
     // then we need to include each individual violation metric in the call to the API

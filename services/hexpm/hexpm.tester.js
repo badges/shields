@@ -26,7 +26,7 @@ t.create('downloads (zero for period)')
         latest_stable_version: '1.0',
         latest_version: '1.0',
         meta: { licenses: ['MIT'] },
-      })
+      }),
   )
   .expectBadge({ label: 'downloads', message: '0/day' })
 
@@ -52,7 +52,7 @@ t.create('version (no stable version)')
         downloads: { all: 100 },
         latest_version: '1.0.0-rc.3',
         meta: { licenses: ['MIT'] },
-      })
+      }),
   )
   .expectBadge({
     label: 'hex',
@@ -79,7 +79,7 @@ t.create('license (multiple licenses)')
         latest_stable_version: '1.0',
         latest_version: '1.0',
         meta: { licenses: ['GPLv2', 'MIT'] },
-      })
+      }),
   )
   .expectBadge({
     label: 'licenses',
@@ -97,7 +97,7 @@ t.create('license (no license)')
         latest_stable_version: '1.0',
         latest_version: '1.0',
         meta: { licenses: [] },
-      })
+      }),
   )
   .expectBadge({
     label: 'license',

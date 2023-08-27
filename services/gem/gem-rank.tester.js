@@ -26,6 +26,6 @@ t.create('rank is null')
           date: '2019-01-06',
           daily_ranking: null,
         },
-      ])
+      ]),
   )
   .expectBadge({ label: 'rank', message: 'invalid rank' })

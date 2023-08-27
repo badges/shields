@@ -37,10 +37,11 @@ describe('GithubAuthV3Service', function () {
             'x-ratelimit-reset': 123456789,
           },
         },
-      })
+      }),
     )
     const githubApiProvider = new GithubApiProvider({
       baseUrl: 'https://github-api.example.com',
+      authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
       restApiVersion: '2022-11-28',
     })
     const mockToken = { update: sinon.mock(), invalidate: sinon.mock() }
@@ -60,7 +61,7 @@ describe('GithubAuthV3Service', function () {
           Authorization: 'token undefined',
           'X-GitHub-Api-Version': '2022-11-28',
         },
-      }
+      },
     )
   })
 })

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import {
   dockerBlue,
   buildDockerUrl,
@@ -13,16 +13,25 @@ const automatedBuildSchema = Joi.object({
 export default class DockerAutomatedBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('automated')
-  static examples = [
-    {
-      title: 'Docker Automated build',
-      namedParams: {
-        user: 'jrottenberg',
-        repo: 'ffmpeg',
+  static openApi = {
+    '/docker/automated/{user}/{repo}': {
+      get: {
+        summary: 'Docker Automated build',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'jrottenberg',
+          },
+          {
+            name: 'repo',
+            example: 'ffmpeg',
+          },
+        ),
       },
-      staticPreview: this.render({ isAutomated: true }),
     },
-  ]
+  }
+
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'docker build' }
 
@@ -38,7 +47,7 @@ export default class DockerAutomatedBuild extends BaseJsonService {
     return this._requestJson({
       schema: automatedBuildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
       httpErrors: { 404: 'repo not found' },
     })

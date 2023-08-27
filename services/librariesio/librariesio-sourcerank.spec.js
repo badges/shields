@@ -40,8 +40,8 @@ describe('LibrariesIoSourcerank', function () {
         {
           platform: 'npm',
           packageName: 'badge-maker',
-        }
-      )
+        },
+      ),
     ).to.deep.equal({
       message: 100,
       color: 'brightgreen',

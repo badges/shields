@@ -44,7 +44,7 @@ t.create('no trove classifiers')
           classifiers: [],
         },
         urls: [],
-      })
+      }),
   )
   .expectBadge({
     label: 'pypi',

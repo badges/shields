@@ -13,7 +13,7 @@ export default function checkErrorResponse(httpErrors = {}) {
       error = new NotFound({ prettyMessage: httpErrors[404] })
     } else if (res.statusCode !== 200) {
       const underlying = Error(
-        `Got status code ${res.statusCode} (expected 200)`
+        `Got status code ${res.statusCode} (expected 200)`,
       )
       const props = { underlyingError: underlying }
       if (httpErrors[res.statusCode] !== undefined) {

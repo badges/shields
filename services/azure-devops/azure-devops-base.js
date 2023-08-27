@@ -7,7 +7,7 @@ const latestBuildSchema = Joi.object({
     .items(
       Joi.object({
         id: Joi.number().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -26,7 +26,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
         url,
         options,
         httpErrors,
-      })
+      }),
     )
   }
 
@@ -35,7 +35,7 @@ export default class AzureDevOpsBase extends BaseJsonService {
     project,
     definitionId,
     branch,
-    httpErrors
+    httpErrors,
   ) {
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list?view=azure-devops-rest-5.0
     const url = `https://dev.azure.com/${organization}/${project}/_apis/build/builds`

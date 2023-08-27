@@ -9,7 +9,7 @@ describe('DockerSize', function () {
         count: 0,
         results: [],
       },
-      'amd64'
+      'amd64',
     ).expectError('Not Found: repository not found')
     given(
       {
@@ -22,7 +22,7 @@ describe('DockerSize', function () {
           },
         ],
       },
-      'amd64'
+      'amd64',
     ).expect({
       size: 219939484,
     })
@@ -55,7 +55,7 @@ describe('DockerSize', function () {
           },
         ],
       },
-      'arm64777'
+      'arm64777',
     ).expectError('Not Found: architecture not found')
   })
 
@@ -66,7 +66,7 @@ describe('DockerSize', function () {
         name: 'next',
         images: [{ architecture: 'amd64', size: 219939484 }],
       },
-      'amd64'
+      'amd64',
     ).expect({
       size: 219939484,
     })
@@ -83,7 +83,7 @@ describe('DockerSize', function () {
         name: 'next',
         images: [{ architecture: 'amd64', size: 219939484 }],
       },
-      'arm64777'
+      'arm64777',
     ).expectError('Not Found: architecture not found')
   })
 
@@ -95,7 +95,7 @@ describe('DockerSize', function () {
       size: 400000000,
     })
     given(sizeDataNoTagSemVerSort, 'nonexistentArch').expectError(
-      'Not Found: architecture not found'
+      'Not Found: architecture not found',
     )
   })
 })

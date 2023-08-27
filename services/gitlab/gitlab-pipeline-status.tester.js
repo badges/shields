@@ -15,7 +15,7 @@ t.create('Pipeline status')
 
 t.create('Pipeline status (nested groups)')
   .get(
-    '/pipeline-status/megabyte-labs/docker/ci-pipeline/ansible.json?branch=master'
+    '/pipeline-status/megabyte-labs/docker/ci-pipeline/ansible.json?branch=master',
   )
   .expectBadge({
     label: 'build',
@@ -57,5 +57,5 @@ t.create('Pipeline no branch redirect')
 t.create('Pipeline legacy route with branch redirect')
   .get('/pipeline/gitlab-org/gitlab/v10.7.6?style=flat')
   .expectRedirect(
-    '/gitlab/pipeline-status/gitlab-org/gitlab.svg?branch=v10.7.6&style=flat'
+    '/gitlab/pipeline-status/gitlab-org/gitlab.svg?branch=v10.7.6&style=flat',
   )

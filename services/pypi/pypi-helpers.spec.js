@@ -38,7 +38,7 @@ describe('PyPI helpers', function () {
   test(parseClassifiers, function () {
     given(
       classifiersFixture,
-      /^Programming Language :: Python :: ([\d.]+)$/
+      /^Programming Language :: Python :: ([\d.]+)$/,
     ).expect(['2', '2.7', '3', '3.4', '3.5', '3.6'])
 
     given(classifiersFixture, /^Framework :: Django :: ([\d.]+)$/).expect([
@@ -48,12 +48,12 @@ describe('PyPI helpers', function () {
 
     given(
       classifiersFixture,
-      /^Programming Language :: Python :: Implementation :: (\S+)$/
+      /^Programming Language :: Python :: Implementation :: (\S+)$/,
     ).expect(['cpython', 'pypy'])
 
     // regex that matches everything
     given(classifiersFixture, /^([\S\s+]+)$/).expect(
-      classifiersFixture.info.classifiers.map(e => e.toLowerCase())
+      classifiersFixture.info.classifiers.map(e => e.toLowerCase()),
     )
 
     // regex that matches nothing

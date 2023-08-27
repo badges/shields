@@ -19,7 +19,7 @@ const aurSchema = Joi.object({
         OutOfDate: nonNegativeInteger.allow(null),
         Maintainer: Joi.string().required().allow(null),
         LastModified: nonNegativeInteger,
-      })
+      }),
     )
     .required(),
 }).required()

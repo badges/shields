@@ -17,7 +17,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
     })
     ask.res.setHeader(
       'Location',
-      `https://github.com/login/oauth/authorize?${query}`
+      `https://github.com/login/oauth/authorize?${query}`,
     )
     end('')
   })
@@ -73,7 +73,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         'therefore more robust.</p>' +
         '<p>Thanks for contributing to a smoother experience for ' +
         'everyone!</p>' +
-        '<p><a href="/">Back to the website</a></p>'
+        '<p><a href="/">Back to the website</a></p>',
     )
 
     onTokenAccepted(token)

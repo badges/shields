@@ -1,5 +1,5 @@
 import { renderBuildStatusBadge } from '../build-status.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import AppVeyorBase from './appveyor-base.js'
 
 export default class AppVeyorJobBuild extends AppVeyorBase {
@@ -8,29 +8,29 @@ export default class AppVeyorJobBuild extends AppVeyorBase {
     pattern: ':user/:repo/:job/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'AppVeyor Job',
-      pattern: ':user/:repo/:job',
-      namedParams: {
-        user: 'wpmgprostotema',
-        repo: 'voicetranscoder',
-        job: 'Linux',
+  static openApi = {
+    '/appveyor/job/build/{user}/{repo}/{job}': {
+      get: {
+        summary: 'AppVeyor Job',
+        parameters: pathParams(
+          { name: 'user', example: 'wpmgprostotema' },
+          { name: 'repo', example: 'voicetranscoder' },
+          { name: 'job', example: 'Linux' },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'success' }),
     },
-    {
-      title: 'AppVeyor Job branch',
-      pattern: ':user/:repo/:job/:branch',
-      namedParams: {
-        user: 'wpmgprostotema',
-        repo: 'voicetranscoder',
-        job: 'Windows',
-        branch: 'master',
+    '/appveyor/job/build/{user}/{repo}/{job}/{branch}': {
+      get: {
+        summary: 'AppVeyor Job (with branch)',
+        parameters: pathParams(
+          { name: 'user', example: 'wpmgprostotema' },
+          { name: 'repo', example: 'voicetranscoder' },
+          { name: 'job', example: 'Windows' },
+          { name: 'branch', example: 'master' },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'success' }),
     },
-  ]
+  }
 
   transform({ data, jobName }) {
     if (!('build' in data)) {

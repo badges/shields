@@ -91,7 +91,7 @@ export default class WikiapiaryInstalls extends BaseJsonService {
     }
     const keyLowerCase = `${variant}:${name.toLowerCase()}`
     const resultKey = Object.keys(results).find(
-      key => keyLowerCase === key.toLowerCase()
+      key => keyLowerCase === key.toLowerCase(),
     )
 
     if (resultKey === undefined)

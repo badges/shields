@@ -15,7 +15,7 @@ const crateSchema = Joi.object({
       Joi.object({
         downloads: nonNegativeInteger,
         license: Joi.string().required().allow(null),
-      })
+      }),
     )
     .min(1)
     .required(),

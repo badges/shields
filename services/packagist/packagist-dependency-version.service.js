@@ -102,7 +102,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
     let packageVersion
     const versions = BasePackagistService.expandPackageVersions(
       json,
-      this.getPackageName(user, repo)
+      this.getPackageName(user, repo),
     )
 
     if (version === '') {
@@ -114,7 +114,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
           user,
           repo,
           version,
-          server
+          server,
         )
       } catch (e) {
         packageVersion = null
@@ -188,7 +188,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
 
         const versions = BasePackagistService.expandPackageVersions(
           allData,
-          this.getPackageName(user, repo)
+          this.getPackageName(user, repo),
         )
 
         return versions[this.findVersionIndex(versions, version)]

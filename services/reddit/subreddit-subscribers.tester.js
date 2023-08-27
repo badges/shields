@@ -35,7 +35,7 @@ t.create('subreddit-subscribers (private sub)')
   .intercept(nock =>
     nock('https://www.reddit.com/r')
       .get('/centuryclub/about.json')
-      .reply(200, { kind: 't5', data: {} })
+      .reply(200, { kind: 't5', data: {} }),
   )
   .expectBadge({
     label: 'reddit',

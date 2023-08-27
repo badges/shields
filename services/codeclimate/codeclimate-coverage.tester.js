@@ -53,7 +53,7 @@ t.create('test coverage when outer user repos query returns multiple items')
             },
           },
         ],
-      })
+      }),
   )
   .networkOn() // Combined with allowUnmocked: true, this allows the inner test reports query to go through.
   .expectBadge({

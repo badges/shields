@@ -63,7 +63,7 @@ t.create('license (no license)')
             LastModified: 1,
           },
         ],
-      })
+      }),
   )
   .expectBadge({ label: 'license', message: 'not specified' })
 

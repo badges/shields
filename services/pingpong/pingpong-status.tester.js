@@ -6,7 +6,7 @@ const isCorrectStatus = Joi.string().valid(
   'up',
   'issues',
   'down',
-  'maintenance'
+  'maintenance',
 )
 
 t.create('PingPong: Status (valid)')
@@ -23,6 +23,6 @@ t.create('PingPong: Status (unexpected response)')
     nock =>
       nock('https://api.pingpong.one')
         .get('/widget/shields/status/sp_key')
-        .reply(200, '{"status": "up"}') // unexpected status message
+        .reply(200, '{"status": "up"}'), // unexpected status message
   )
   .expectBadge({ label: 'status', message: 'Unknown status received' })

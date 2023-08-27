@@ -36,7 +36,7 @@ describe('SQL token persistence', function () {
 
   beforeEach('Create temporary table', async function () {
     await pool.query(
-      `CREATE TEMPORARY TABLE ${tableName} (LIKE github_user_tokens INCLUDING ALL);`
+      `CREATE TEMPORARY TABLE ${tableName} (LIKE github_user_tokens INCLUDING ALL);`,
     )
   })
   afterEach('Drop temporary table', async function () {
@@ -57,7 +57,7 @@ describe('SQL token persistence', function () {
       initialTokens.forEach(async token => {
         await pool.query(
           `INSERT INTO pg_temp.${tableName} (token) VALUES ($1::text);`,
-          [token]
+          [token],
         )
       })
     })
@@ -77,7 +77,7 @@ describe('SQL token persistence', function () {
         await persistence.noteTokenAdded(newToken)
 
         const result = await pool.query(
-          `SELECT token FROM pg_temp.${tableName};`
+          `SELECT token FROM pg_temp.${tableName};`,
         )
         const savedTokens = result.rows.map(row => row.token)
         expect(savedTokens.sort()).to.deep.equal(expected)
@@ -93,7 +93,7 @@ describe('SQL token persistence', function () {
         await persistence.noteTokenRemoved(toRemove)
 
         const result = await pool.query(
-          `SELECT token FROM pg_temp.${tableName};`
+          `SELECT token FROM pg_temp.${tableName};`,
         )
         const savedTokens = result.rows.map(row => row.token)
         expect(savedTokens.sort()).to.deep.equal(expected)

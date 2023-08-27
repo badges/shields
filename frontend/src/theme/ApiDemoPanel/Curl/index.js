@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import clsx from 'clsx'
 import codegen from 'postman-code-generators'
-import Highlight, { defaultProps } from 'prism-react-renderer'
+import { Highlight } from 'prism-react-renderer'
 import { useTypedSelector } from '@theme/ApiDemoPanel/hooks'
 import buildPostmanRequest from '@theme/ApiDemoPanel/buildPostmanRequest'
 import FloatingButton from '@theme/ApiDemoPanel/FloatingButton'
@@ -183,11 +183,11 @@ function Curl({ postman, codeSamples }) {
           }
 
           setCodeText(snippet)
-        }
+        },
       )
     } else if (language && !!language.source) {
       setCodeText(
-        language.source.replace('$url', postmanRequest.url.toString())
+        language.source.replace('$url', postmanRequest.url.toString()),
       )
     } else {
       setCodeText('')
@@ -230,7 +230,7 @@ function Curl({ postman, codeSamples }) {
             className={clsx(
               language === lang ? styles.selected : undefined,
               language === lang ? 'api-code-tab--active' : undefined,
-              'api-code-tab'
+              'api-code-tab',
             )}
             key={lang.tabName || lang.label}
             onClick={() => setLanguage(lang)}
@@ -241,7 +241,6 @@ function Curl({ postman, codeSamples }) {
       </div>
 
       <Highlight
-        {...defaultProps}
         code={codeText}
         language={language.highlight || language.lang}
         theme={languageTheme}

@@ -91,7 +91,7 @@ class BaseGraphqlService extends BaseService {
         throw exception
       } else {
         throw Error(
-          `transformErrors() must return a ShieldsRuntimeError; got ${exception}`
+          `transformErrors() must return a ShieldsRuntimeError; got ${exception}`,
         )
       }
     }

@@ -24,7 +24,7 @@ t.create('Manifest version (path)')
 
 t.create('Manifest version (path not found)')
   .get(
-    '/v/RedSparr0w/IndieGala-Helper.json?filename=invalid-directory/manifest.json'
+    '/v/RedSparr0w/IndieGala-Helper.json?filename=invalid-directory/manifest.json',
   )
   .expectBadge({
     label: 'version',
@@ -38,7 +38,7 @@ t.create('Manifest name (path)')
 
 t.create('Manifest array (path)')
   .get(
-    '/permissions/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json'
+    '/permissions/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json',
   )
   .expectBadge({
     label: 'permissions',
@@ -47,7 +47,7 @@ t.create('Manifest array (path)')
 
 t.create('Manifest object (path)')
   .get(
-    '/background/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json'
+    '/background/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json',
   )
   .expectBadge({ label: 'manifest', message: 'invalid key value' })
 

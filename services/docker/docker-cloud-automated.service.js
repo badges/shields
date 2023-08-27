@@ -17,6 +17,8 @@ export default class DockerCloudAutomatedBuild extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 14400
+
   static defaultBadgeData = { label: 'docker build' }
 
   static render({ buildSettings }) {

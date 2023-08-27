@@ -71,7 +71,7 @@ export default class Website extends BaseService {
       up_color: upColor,
       down_color: downColor,
       url,
-    }
+    },
   ) {
     let isUp
     try {

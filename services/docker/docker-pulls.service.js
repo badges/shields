@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import {
   dockerBlue,
   buildDockerUrl,
@@ -15,16 +15,25 @@ const pullsSchema = Joi.object({
 export default class DockerPulls extends BaseJsonService {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
-  static examples = [
-    {
-      title: 'Docker Pulls',
-      namedParams: {
-        user: '_',
-        repo: 'ubuntu',
+  static openApi = {
+    '/docker/pulls/{user}/{repo}': {
+      get: {
+        summary: 'Docker Pulls',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: '_',
+          },
+          {
+            name: 'repo',
+            example: 'ubuntu',
+          },
+        ),
       },
-      staticPreview: this.render({ count: 765400000 }),
     },
-  ]
+  }
+
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'docker pulls' }
 
@@ -36,7 +45,7 @@ export default class DockerPulls extends BaseJsonService {
     return this._requestJson({
       schema: pullsSchema,
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
       httpErrors: { 404: 'repo not found' },
     })
