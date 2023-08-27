@@ -294,16 +294,6 @@ function category2openapi(category, services) {
           },
           example: '20',
         },
-        logoHeight: {
-          name: 'logoHeight',
-          in: 'query',
-          required: false,
-          description: 'The height of the logo, default to `14`',
-          schema: {
-            type: 'string',
-          },
-          example: '12',
-        },
         label: {
           name: 'label',
           in: 'query',

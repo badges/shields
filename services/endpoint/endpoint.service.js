@@ -119,13 +119,6 @@ const description = `<p>
         </td>
       </tr>
       <tr>
-        <td><code>logoHeight</code></td>
-        <td>
-          Default: 14. Same meaning as the query string. Can be overridden by
-          the query string.
-        </td>
-      </tr>
-      <tr>
         <td><code>logoPosition</code></td>
         <td>
           Default: none. Same meaning as the query string. Can be overridden by
