@@ -96,6 +96,8 @@ Other classes implement useful behavior on top of [BaseService].
   implements methods for performing requests to an XML API and schema validation.
 - [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html)
   implements methods for performing requests to a YAML API and schema validation.
+- [BaseTomlService](https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html)
+  implements methods for performing requests to a TOML API and schema validation.
 - [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html)
   implements methods for retrieving information from existing third-party badges.
 - [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html)
