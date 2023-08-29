@@ -47,7 +47,7 @@ describe('async error handler', function () {
 
   context('when status is 429', function () {
     const buffer = Buffer.from('some stuff')
-    const res = { statusCode: 429, requestUrl: new URL('https://example.com/') }
+    const res = { statusCode: 429 }
 
     it('throws InvalidResponse', async function () {
       try {
