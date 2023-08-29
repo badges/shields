@@ -9,5 +9,5 @@ It is possible to use shields.io to make a wide variety of badges displaying sta
 
 For more info, see:
 
-- [Static badge builder](/badges/static-badge), including full documentation of styles and parameters
-- [Logos](/docs/logos)
+- [Static badge builder](https://shields.io/badges/static-badge), including full documentation of styles and parameters
+- [Logos](https://shields.io/docs/logos)
