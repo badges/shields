@@ -193,6 +193,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
           {
             name: 'property',
             example: 'state',
+            schema: { type: 'string', enum: this.getEnum('property') },
           },
           {
             name: 'user',
