@@ -466,4 +466,11 @@ function queryParams(...params) {
  * @property {boolean} allowEmptyValue If true, allows the ability to pass an empty value to this parameter
  */
 
-export { category2openapi, pathParam, pathParams, queryParam, queryParams }
+export {
+  category2openapi,
+  getEnum,
+  pathParam,
+  pathParams,
+  queryParam,
+  queryParams,
+}

@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { starRating } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
@@ -10,15 +11,24 @@ export default class VaadinDirectoryRating extends BaseVaadinDirectoryService {
     pattern: ':format(star|stars|rating)/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Vaadin Directory',
-      pattern: ':format(stars|rating)/:packageName',
-      namedParams: { format: 'rating', packageName: 'vaadinvaadin-grid' },
-      staticPreview: this.render({ format: 'rating', score: 4.75 }),
-      keywords: ['vaadin-directory'],
+  static openApi = {
+    '/vaadin-directory/{format}/{packageName}': {
+      get: {
+        summary: 'Vaadin Directory Rating',
+        parameters: pathParams(
+          {
+            name: 'format',
+            example: 'rating',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          },
+          {
+            name: 'packageName',
+            example: 'vaadinvaadin-grid',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'rating',

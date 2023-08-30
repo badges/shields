@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { metric as metricCount } from '../text-formatters.js'
 import TestspaceBase from './testspace-base.js'
 
@@ -8,21 +9,32 @@ export default class TestspaceTestCount extends TestspaceBase {
       ':metric(total|passed|failed|skipped|errored|untested)/:org/:project/:space+',
   }
 
-  static examples = [
-    {
-      title: 'Testspace tests',
-      namedParams: {
-        metric: 'passed',
-        org: 'swellaby',
-        project: 'swellaby:testspace-sample',
-        space: 'main',
+  static openApi = {
+    '/testspace/{metric}/{org}/{project}/{space}': {
+      get: {
+        summary: 'Testspace tests',
+        parameters: pathParams(
+          {
+            name: 'metric',
+            example: 'passed',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          },
+          {
+            name: 'org',
+            example: 'swellaby',
+          },
+          {
+            name: 'project',
+            example: 'swellaby:testspace-sample',
+          },
+          {
+            name: 'space',
+            example: 'main',
+          },
+        ),
       },
-      staticPreview: this.render({
-        metric: 'passed',
-        value: 31,
-      }),
     },
-  ]
+  }
 
   static render({ value, metric }) {
     let color = 'informational'
