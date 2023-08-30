@@ -96,7 +96,7 @@ category(), route() and handle(namedParams, queryParams)</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line81">line 81</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -211,7 +211,7 @@ this._request(this.authHelper.withBasicAuth({ url, schema, options }))</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line123">line 123</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -285,7 +285,7 @@ from the handler nor overridden by the user via query parameters.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line172">line 172</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -364,7 +364,7 @@ part of the example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line141">line 141</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -434,7 +434,7 @@ route or routes in OpenAPI format.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line150">line 150</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -514,7 +514,7 @@ the badges on the main shields.io website.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line89">line 89</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -586,7 +586,7 @@ the badges on the main shields.io website.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line101">line 101</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -741,7 +741,7 @@ defined in this.route.pattern or this.route.capture</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line326">line 326</a>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line347">line 347</a>
     </li></ul></dd>
     
 
@@ -794,6 +794,166 @@ defined in this.route.pattern or this.route.capture</p></td>
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id=".getEnum"><span class="type-signature">(static) </span>getEnum<span class="signature">(param)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extract an array of allowed values from this service's route pattern
+for a given route parameter</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of a param in this service's route pattern</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_base-service_base.js.html">core/base-service/base.js</a>, <a href="core_base-service_base.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Array of allowed values for this param</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -815,7 +975,7 @@ defined in this.route.pattern or this.route.capture</p></td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Aug 29 2023 19:09:43 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Aug 30 2023 16:24:40 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
