@@ -4,6 +4,40 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-09-01
+
+- migrate examples to openApi part 8; affects [ubuntu uptimerobot vaadin vcpkg visualstudiomarketplace wheelmap] [#9463](https://github.com/badges/shields/issues/9463)
+- Add dynamic TOML support via [DynamicToml] Service [#9517](https://github.com/badges/shields/issues/9517)
+- migrate `examples` to `openApi` part 11: enums; affects [codefactor conda depfu homebrew jsdelivr reddit sourceforge testspace vaadin github] [#9437](https://github.com/badges/shields/issues/9437)
+- Revert "log an error to sentry if an upstream service responds with `429 Too Many Requests` (#9505)" [#9523](https://github.com/badges/shields/issues/9523)
+- cache [pypi] downloads for longer [#9522](https://github.com/badges/shields/issues/9522)
+- log an error to sentry if an upstream service responds with `429 Too Many Requests` [#9505](https://github.com/badges/shields/issues/9505)
+- Docs: update TUTORIAL.md add BaseTomlService [#9518](https://github.com/badges/shields/issues/9518)
+- Replace localhost with domain in example link. [#9506](https://github.com/badges/shields/issues/9506)
+- [twitter] --> x [#9496](https://github.com/badges/shields/issues/9496)
+- use defaultBadgeData as object instead of function in tutorial docs [#9502](https://github.com/badges/shields/issues/9502)
+- add docstrings for website status service [#9495](https://github.com/badges/shields/issues/9495)
+- migrate `examples` to `openApi` part5; affects [itunes jetbrains jitpack keybase lemmy luarocks maintenance openvsx] [#9431](https://github.com/badges/shields/issues/9431)
+- migrate `examples` to `openApi` part 4; affects [ecologi elm flathub gem gitter GithubTotalDiscussions greasyfork hackage hackernews homebrew] [#9430](https://github.com/badges/shields/issues/9430)
+- [bundlejs] add badge for the npm package size [#9055](https://github.com/badges/shields/issues/9055)
+- Switch [OpenCollective] badges to use GraphQL and auth [#9387](https://github.com/badges/shields/issues/9387)
+- migrate examples to openApi part 6; affects [opencollective opm ossf powershell pub pypi reddit repology] [#9462](https://github.com/badges/shields/issues/9462)
+- devops: Add ci warning for swizzled docusaurus components [#9467](https://github.com/badges/shields/issues/9467)
+- migrate `examples` to `openApi` part 3; affects [conan cookbook coverity cpan debian docker docsrs dub eclipse] [#9429](https://github.com/badges/shields/issues/9429)
+- Add TOML support with BaseTomlService [#9438](https://github.com/badges/shields/issues/9438)
+- [Pulsar] Add Pulsar Badges for Stargazers & Downloads [#8767](https://github.com/badges/shields/issues/8767)
+- Add [CurseForge] badges [#9252](https://github.com/badges/shields/issues/9252)
+- update npm prune command [#9470](https://github.com/badges/shields/issues/9470)
+- remove obsolete entries from dependabot.yml [#9469](https://github.com/badges/shields/issues/9469)
+- output DockerHub digest in publish-docker-next workflow [#9471](https://github.com/badges/shields/issues/9471)
+- delete close-bot [#9468](https://github.com/badges/shields/issues/9468)
+- Add docstrings for version service [#9411](https://github.com/badges/shields/issues/9411)
+- deploy on node 18 [#9385](https://github.com/badges/shields/issues/9385)
+- migrate `examples` to `openApi` part 2; affects [archlinux bitcomponents bountysource cdnjs chrome clearlydefined clojars cocoapods coincap] [#9428](https://github.com/badges/shields/issues/9428)
+- allow calling [github] without auth [#9427](https://github.com/badges/shields/issues/9427)
+- fix [github] service tests [#9425](https://github.com/badges/shields/issues/9425)
+- Dependency updates
+
 ## server-2023-08-01
 
 - Convert `examples` arrays to `openApi` objects (part 1) [#9320](https://github.com/badges/shields/issues/9320)
