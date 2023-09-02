@@ -92,9 +92,12 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
+If you intend on reporting or contributing a fix related to security vulnerqbilities, please first refer to our [security policy][security].
+
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md
 [contributing]: https://github.com/badges/shields/blob/master/CONTRIBUTING.md
+[security]: https://github.com/badges/shields/blob/master/SECURITY.md
 
 ## Development
 
