@@ -13,9 +13,11 @@ jobs:
     steps:
       - name: Test badge test run conditions
         id: testCondition
+        env:
+          ISSUE_BODY: '${{ github.event.issue.body }}'
         run: |
-          product=$(echo "${{ github.event.issue.body }}" | grep -A2 "Are you experiencing an issue with.*" | tail -n 1)
-          link=$(echo "${{ github.event.issue.body }}" | grep -A2 "Link to the badge.*" | tail -n 1)
+          product=$(echo "$ISSUE_BODY" | grep -A2 "Are you experiencing an issue with.*" | tail -n 1)
+          link=$(echo "$ISSUE_BODY" | grep -A2 "Link to the badge.*" | tail -n 1)
 
           if [[ "$product" == "shields.io" && "$link" == "https://img.shields.io"* ]]; then
             echo "runNext=true" >> "$GITHUB_OUTPUT"
