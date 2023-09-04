@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'Review Apps'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: install jq
