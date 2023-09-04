@@ -12,7 +12,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `Shows the required python version for a package based on the values in the requires-python field in the pyproject.toml \n
+const documentation = `Shows the required python version for a package based on the values in the requires-python field in PEP 621 compliant pyproject.toml \n
 a URL of the toml is required, please note that when linking to files in github or similar sites, provide URL to raw file, for example:
 
 Use https://raw.githubusercontent.com/numpy/numpy/main/pyproject.toml \n
@@ -30,7 +30,7 @@ class PythonVersionFromToml extends BaseTomlService {
 
   static examples = [
     {
-      title: 'Python Required Version TOML',
+      title: 'Python Version from PEP 621 TOML',
       namedParams: {},
       queryParams: {
         tomlFilePath:
