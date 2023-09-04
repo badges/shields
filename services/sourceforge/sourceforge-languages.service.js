@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import BaseSourceForgeService from './sourceforge-base.js'
 
@@ -16,15 +17,17 @@ export default class SourceforgeLanguages extends BaseSourceForgeService {
     pattern: ':project',
   }
 
-  static examples = [
-    {
-      title: 'SourceForge languages',
-      namedParams: {
-        project: 'mingw',
+  static openApi = {
+    '/sourceforge/languages/{project}': {
+      get: {
+        summary: 'SourceForge Languages',
+        parameters: pathParams({
+          name: 'project',
+          example: 'mingw',
+        }),
       },
-      staticPreview: this.render(6),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'languages' }
 

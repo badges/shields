@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import BaseSourceForgeService from './sourceforge-base.js'
 
 const schema = Joi.object({
@@ -19,17 +20,17 @@ export default class SourceforgePlatform extends BaseSourceForgeService {
     pattern: ':project',
   }
 
-  static examples = [
-    {
-      title: 'SourceForge Platform',
-      namedParams: {
-        project: 'guitarix',
+  static openApi = {
+    '/sourceforge/platform/{project}': {
+      get: {
+        summary: 'SourceForge Platform',
+        parameters: pathParams({
+          name: 'project',
+          example: 'guitarix',
+        }),
       },
-      staticPreview: this.render({
-        platforms: ['linux', 'bsd'],
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'platform' }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderContributorBadge } from '../contributor-count.js'
 import BaseSourceForgeService from './sourceforge-base.js'
 
@@ -14,17 +15,17 @@ export default class SourceforgeContributors extends BaseSourceForgeService {
     pattern: ':project',
   }
 
-  static examples = [
-    {
-      title: 'SourceForge contributors',
-      namedParams: {
-        project: 'guitarix',
+  static openApi = {
+    '/sourceforge/contributors/{project}': {
+      get: {
+        summary: 'SourceForge Contributors',
+        parameters: pathParams({
+          name: 'project',
+          example: 'guitarix',
+        }),
       },
-      staticPreview: this.render({
-        contributorCount: 9,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'contributors' }
 
