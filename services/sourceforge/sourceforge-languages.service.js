@@ -20,7 +20,7 @@ export default class SourceforgeLanguages extends BaseSourceForgeService {
   static openApi = {
     '/sourceforge/languages/{project}': {
       get: {
-        summary: 'SourceForge languages',
+        summary: 'SourceForge Languages',
         parameters: pathParams({
           name: 'project',
           example: 'mingw',

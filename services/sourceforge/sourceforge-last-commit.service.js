@@ -24,7 +24,7 @@ export default class SourceforgeLastCommit extends BaseJsonService {
   static openApi = {
     '/sourceforge/last-commit/{project}': {
       get: {
-        summary: 'SourceForge last commit',
+        summary: 'SourceForge Last Commit',
         parameters: pathParams({
           name: 'project',
           example: 'guitarix',

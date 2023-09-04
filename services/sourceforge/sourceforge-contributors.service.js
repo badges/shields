@@ -18,7 +18,7 @@ export default class SourceforgeContributors extends BaseSourceForgeService {
   static openApi = {
     '/sourceforge/contributors/{project}': {
       get: {
-        summary: 'SourceForge contributors',
+        summary: 'SourceForge Contributors',
         parameters: pathParams({
           name: 'project',
           example: 'guitarix',
