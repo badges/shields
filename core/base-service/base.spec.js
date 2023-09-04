@@ -539,6 +539,7 @@ describe('BaseService', function () {
       ).to.not.contain('service_response_bytes_bucket')
     })
   })
+
   describe('auth', function () {
     class AuthService extends DummyService {
       static auth = {
@@ -590,6 +591,46 @@ describe('BaseService', function () {
         isError: true,
         message: 'credentials have not been configured',
       })
+    })
+  })
+
+  describe('getEnum', function () {
+    class EnumService extends DummyService {
+      static route = {
+        base: 'foo',
+        pattern: ':namedParamA/:namedParamB(this|that)',
+        queryParamSchema,
+      }
+    }
+
+    it('returns an array of allowed values', async function () {
+      expect(EnumService.getEnum('namedParamB')).to.deep.equal(['this', 'that'])
+    })
+
+    it('throws if param name is invalid', async function () {
+      expect(() => EnumService.getEnum('notAValidParam')).to.throw(
+        'Could not extract enum for param notAValidParam from pattern :namedParamA/:namedParamB(this|that)',
+      )
+    })
+
+    it('throws if param name is not an enum', async function () {
+      expect(() => EnumService.getEnum('namedParamA')).to.throw(
+        'Could not extract enum for param namedParamA from pattern :namedParamA/:namedParamB(this|that)',
+      )
+    })
+
+    it('throws if route does not have a pattern', async function () {
+      class FormatService extends DummyService {
+        static route = {
+          base: 'foo',
+          format: '([^/]+?)',
+          queryParamSchema,
+        }
+      }
+
+      expect(() => FormatService.getEnum('notAValidParam')).to.throw(
+        'getEnum() requires route to have a .pattern property',
+      )
     })
   })
 })

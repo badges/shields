@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { anyInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -18,18 +18,24 @@ export default class RedditUserKarma extends BaseJsonService {
     pattern: ':variant(link|comment|combined)/:user',
   }
 
-  static examples = [
-    {
-      title: 'Reddit User Karma',
-      namedParams: { variant: 'combined', user: 'example' },
-      staticPreview: {
-        label: 'combined karma',
-        message: 56,
-        color: 'brightgreen',
-        style: 'social',
+  static openApi = {
+    '/reddit/user-karma/{variant}/{user}': {
+      get: {
+        summary: 'Reddit User Karma',
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'combined',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
+          {
+            name: 'user',
+            example: 'example',
+          },
+        ),
       },
     },
-  ]
+  }
 
   static _cacheLength = 7200
 

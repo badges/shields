@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
 export default class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
@@ -8,14 +9,17 @@ export default class VaadinDirectoryStatus extends BaseVaadinDirectoryService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Vaadin Directory',
-      namedParams: { packageName: 'vaadinvaadin-grid' },
-      staticPreview: this.render({ status: 'published' }),
-      keywords: ['vaadin-directory', 'status'],
+  static openApi = {
+    '/vaadin-directory/status/{packageName}': {
+      get: {
+        summary: 'Vaadin Directory Status',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'vaadinvaadin-grid',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'vaadin directory',

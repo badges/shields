@@ -4,6 +4,21 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-09-04
+
+- Fix [testspace] badges [#9525](https://github.com/badges/shields/issues/9525)
+- fix rSt code example [#9528](https://github.com/badges/shields/issues/9528)
+- Add dynamic TOML support via [DynamicToml] Service [#9517](https://github.com/badges/shields/issues/9517)
+- cache [pypi] downloads for longer [#9522](https://github.com/badges/shields/issues/9522)
+- [twitter] --> x [#9496](https://github.com/badges/shields/issues/9496)
+- [bundlejs] add badge for the npm package size [#9055](https://github.com/badges/shields/issues/9055)
+- Switch [OpenCollective] badges to use GraphQL and auth [#9387](https://github.com/badges/shields/issues/9387)
+- [Pulsar] Add Pulsar Badges for Stargazers & Downloads [#8767](https://github.com/badges/shields/issues/8767)
+- Add [CurseForge] badges [#9252](https://github.com/badges/shields/issues/9252)
+- deploy on node 18 [#9385](https://github.com/badges/shields/issues/9385)
+- allow calling [github] without auth [#9427](https://github.com/badges/shields/issues/9427)
+- Dependency updates
+
 ## server-2023-08-01
 
 - Convert `examples` arrays to `openApi` objects (part 1) [#9320](https://github.com/badges/shields/issues/9320)

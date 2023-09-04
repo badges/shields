@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { StackExchangeBase } from './stackexchange-base.js'
@@ -20,17 +21,23 @@ export default class StackExchangeReputation extends StackExchangeBase {
     pattern: ':stackexchangesite/r/:query',
   }
 
-  static examples = [
-    {
-      title: 'Stack Exchange reputation',
-      namedParams: { stackexchangesite: 'stackoverflow', query: '123' },
-      staticPreview: this.render({
-        stackexchangesite: 'stackoverflow',
-        numValue: 10,
-      }),
-      keywords: ['stackexchange', 'stackoverflow'],
+  static openApi = {
+    '/stackexchange/{stackexchangesite}/r/{query}': {
+      get: {
+        summary: 'Stack Exchange reputation',
+        parameters: pathParams(
+          {
+            name: 'stackexchangesite',
+            example: 'stackoverflow',
+          },
+          {
+            name: 'query',
+            example: '123',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static render({ stackexchangesite, numValue }) {
     const label = `${stackexchangesite} reputation`
