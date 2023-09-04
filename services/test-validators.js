@@ -184,6 +184,13 @@ const isCurrency = withRegex(
  * @param {number} start - The lower bound of the range (inclusive)
  * @param {number} end - The upper bound of the range (inclusive)
  * @returns {Joi.StringSchema} A Joi schema that uses a regular expression to check if the string is a number in the range
+ * @example
+ * isWithinRange(0, 5) // 0 => true
+ * isWithinRange(0, 5) // 2.5 => true
+ * isWithinRange(0, 5) // 5 => true
+ * isWithinRange(0, 5) // 5.0 => true
+ * isWithinRange(0, 5) // -1 => false
+ * isWithinRange(0, 5) // 5.1 => false
  */
 const isWithinRange = (start, end) =>
   withRegex(new RegExp(`^([${start}-${end - 1}](.[0-9])?)|(${end}(.0)?)$`))
