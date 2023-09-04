@@ -40,6 +40,8 @@ class BaseJsonService extends BaseService {
    *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
    *    for allowed keys
    *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
@@ -49,6 +51,7 @@ class BaseJsonService extends BaseService {
     options = {},
     httpErrors = {},
     systemErrors = {},
+    logErrors = [429],
   }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
@@ -59,6 +62,7 @@ class BaseJsonService extends BaseService {
       options: mergedOptions,
       httpErrors,
       systemErrors,
+      logErrors,
     })
     const json = this._parseJson(buffer)
     return this.constructor._validate(json, schema)

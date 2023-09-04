@@ -50,6 +50,8 @@ class BaseGraphqlService extends BaseService {
    *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
    *    for allowed keys
    *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @param {Function} [attrs.transformJson=data => data] Function which takes the raw json and transforms it before
    * further procesing. In case of multiple query in a single graphql call and few of them
    * throw error, partial data might be used ignoring the error.
@@ -69,6 +71,7 @@ class BaseGraphqlService extends BaseService {
     options = {},
     httpErrorMessages = {},
     systemErrors = {},
+    logErrors = [429],
     transformJson = data => data,
     transformErrors = defaultTransformErrors,
   }) {
@@ -83,6 +86,7 @@ class BaseGraphqlService extends BaseService {
       options: mergedOptions,
       httpErrors: httpErrorMessages,
       systemErrors,
+      logErrors,
     })
     const json = transformJson(this._parseJson(buffer))
     if (json.errors) {
