@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { colorScale } from '../color-formatters.js'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer } from './weblate-base.js'
 
 const schema = Joi.object({
   translated_percent: Joi.number().required(),
@@ -23,7 +23,7 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
     {
       title: 'Weblate project translated',
       namedParams: { project: 'godot-engine' },
-      queryParams: { server: 'https://hosted.weblate.org' },
+      queryParams: { server: defaultServer },
       staticPreview: this.render({ translatedPercent: 20.5 }),
       keywords: ['i18n', 'translation', 'internationalization'],
     },
@@ -45,7 +45,7 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
     return { message: `${translatedPercent.toFixed(0)}%`, color }
   }
 
-  async fetch({ project, server = 'https://hosted.weblate.org' }) {
+  async fetch({ project, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
@@ -53,6 +53,7 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
         403: 'access denied by remote server',
         404: 'project not found',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 
