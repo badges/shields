@@ -178,6 +178,16 @@ const isCurrency = withRegex(
   /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/,
 )
 
+/**
+ * Returns a Joi schema that validates strings that represent numbers within the range [start, end].
+ *
+ * @param {number} start - The lower bound of the range (inclusive)
+ * @param {number} end - The upper bound of the range (inclusive)
+ * @returns {Joi.StringSchema} A Joi schema that uses a regular expression to check if the string is a number in the range
+ */
+const isWithinRange = (start, end) =>
+  withRegex(new RegExp(`^([${start}-${end - 1}](.[0-9])?)|(${end}(.0)?)$`))
+
 export {
   isSemver,
   isVPlusTripleDottedVersion,
@@ -214,4 +224,5 @@ export {
   isOrdinalNumberDaily,
   isHumanized,
   isCurrency,
+  isWithinRange,
 }
