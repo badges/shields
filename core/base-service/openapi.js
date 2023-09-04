@@ -31,7 +31,7 @@ function getCodeSamples(altText) {
     {
       lang: 'reStructuredText',
       label: 'rSt',
-      source: `.. image:: $url\n:   alt: ${altText}`,
+      source: `.. image:: $url\n   :alt: ${altText}`,
     },
     {
       lang: 'AsciiDoc',
