@@ -49,6 +49,7 @@ export default class DynamicYaml extends jsonPath(BaseYamlService) {
       schema,
       url,
       httpErrors,
+      logErrors: [],
     })
   }
 }

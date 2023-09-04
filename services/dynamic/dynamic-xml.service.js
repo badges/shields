@@ -109,6 +109,7 @@ export default class DynamicXml extends BaseService {
       url,
       options: { headers: { Accept: 'application/xml, text/xml' } },
       httpErrors,
+      logErrors: [],
     })
 
     const { values: value } = this.transform({
