@@ -24,6 +24,8 @@ const modulesSchema = Joi.object({
   ),
 }).required()
 
+const moduleValidationsSchema = Joi.array().required()
+
 class BasePuppetForgeUsersService extends BaseJsonService {
   async fetch({ user }) {
     return this._requestJson({
@@ -42,4 +44,17 @@ class BasePuppetForgeModulesService extends BaseJsonService {
   }
 }
 
-export { BasePuppetForgeModulesService, BasePuppetForgeUsersService }
+class BasePuppetForgeModulesValidationsService extends BaseJsonService {
+  async fetch({ user, moduleName }) {
+    return this._requestJson({
+      schema: moduleValidationsSchema,
+      url: `https://forgeapi.puppetlabs.com/private/validations/${user}-${moduleName}`,
+    })
+  }
+}
+
+export {
+  BasePuppetForgeModulesService,
+  BasePuppetForgeModulesValidationsService,
+  BasePuppetForgeUsersService,
+}

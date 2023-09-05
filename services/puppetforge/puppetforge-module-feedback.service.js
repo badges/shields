@@ -1,8 +1,8 @@
 import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
 import { NotFound } from '../index.js'
-import { BasePuppetForgeModulesService } from './puppetforge-base.js'
+import { BasePuppetForgeModulesValidationsService } from './puppetforge-base.js'
 
-export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesService {
+export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesValidationsService {
   static category = 'rating'
 
   static route = {
@@ -32,9 +32,9 @@ export default class PuppetforgeModuleFeedback extends BasePuppetForgeModulesSer
 
   async handle({ user, moduleName }) {
     const data = await this.fetch({ user, moduleName })
-    if (data.feedback_score == null) {
+    if (data.at(-1) == null || data.at(-1).score == null) {
       throw new NotFound({ prettyMessage: 'unknown' })
     }
-    return this.constructor.render({ score: data.feedback_score })
+    return this.constructor.render({ score: data.at(-1).score })
   }
 }
