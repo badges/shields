@@ -1,15 +1,16 @@
 import Joi from 'joi'
+import pep440 from '@renovate/pep440'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-const isCommaSeparatedPythonVersions = Joi.string().regex(
-  // This should test for PEP440
-  // Accepted values are one or more Version specifiers as defined at https://peps.python.org/pep-0440/#version-specifiers
-  // Some strings might include spaces, those are valid, values are comma seperated
-  // Versions should fit the version scheme https://peps.python.org/pep-0440/#version-scheme
-  // This is based on the example in PEP440 at https://peps.python.org/pep-0440/#appendix-b-parsing-version-strings-with-regular-expressions
-  /^\s*(?:(?:===|!=|<=|>=|<|>)\s*)?((?:(?:\d+!)?(?:\d+(?:\.\d+)*))(?:(?:[abc]|rc)\d+)?(?:\.post\d+)?(?:\.dev\d+)?)(?:\s*,\s*(?:(?:===|!=|<=|>=|<|>)\s*)?((?:(?:\d+!)?(?:\d+(?:\.\d+)*))(?:(?:[abc]|rc)\d+)?(?:\.post\d+)?(?:\.dev\d+)?))*\s*$/,
-)
+const validatePep440 = (value, helpers) => {
+  if (!pep440.validRange(value)) {
+    return helpers.error('any.invalid')
+  }
+  return value
+}
+
+const isCommaSeparatedPythonVersions = Joi.string().custom(validatePep440)
 
 t.create('python versions (valid)')
   .get(
