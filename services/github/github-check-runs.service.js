@@ -19,9 +19,9 @@ const schema = Joi.object({
           'skipped',
           'success',
           'timed_out',
-          null
+          null,
         ).required(),
-      })
+      }),
     )
     .default([]),
 }).required()
