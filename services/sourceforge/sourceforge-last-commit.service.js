@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 
@@ -21,17 +21,17 @@ export default class SourceforgeLastCommit extends BaseJsonService {
     pattern: ':project',
   }
 
-  static examples = [
-    {
-      title: 'SourceForge last commit',
-      namedParams: {
-        project: 'guitarix',
+  static openApi = {
+    '/sourceforge/last-commit/{project}': {
+      get: {
+        summary: 'SourceForge Last Commit',
+        parameters: pathParams({
+          name: 'project',
+          example: 'guitarix',
+        }),
       },
-      staticPreview: this.render({
-        commitDate: 1653556285,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last commit' }
 

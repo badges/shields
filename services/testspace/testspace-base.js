@@ -39,6 +39,9 @@ export default class TestspaceBase extends BaseJsonService {
         403: 'org not found or not authorized',
         404: 'org, project, or space not found',
       },
+      options: {
+        dnsLookupIpVersion: 4,
+      },
     })
   }
 

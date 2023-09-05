@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import TestspaceBase from './testspace-base.js'
 
 export default class TestspacePassRatio extends TestspaceBase {
@@ -6,20 +7,27 @@ export default class TestspacePassRatio extends TestspaceBase {
     pattern: ':org/:project/:space+',
   }
 
-  static examples = [
-    {
-      title: 'Testspace pass ratio',
-      namedParams: {
-        org: 'swellaby',
-        project: 'swellaby:testspace-sample',
-        space: 'main',
+  static openApi = {
+    '/testspace/pass-ratio/{org}/{project}/{space}': {
+      get: {
+        summary: 'Testspace pass ratio',
+        parameters: pathParams(
+          {
+            name: 'org',
+            example: 'swellaby',
+          },
+          {
+            name: 'project',
+            example: 'swellaby:testspace-sample',
+          },
+          {
+            name: 'space',
+            example: 'main',
+          },
+        ),
       },
-      staticPreview: this.render({
-        passed: 2,
-        total: 3,
-      }),
     },
-  ]
+  }
 
   static render({ passed, total }) {
     const ratio = ((passed / total) * 100).toFixed(0)

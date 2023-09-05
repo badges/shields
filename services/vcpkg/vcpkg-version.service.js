@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
 import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
 import { renderVersionBadge } from '../version.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { parseVersionFromVcpkgManifest } from './vcpkg-version-helpers.js'
 
 // Handle the different version fields available in Vcpkg manifests
@@ -29,13 +29,17 @@ export default class VcpkgVersion extends ConditionalGithubAuthV3Service {
 
   static route = { base: 'vcpkg/v', pattern: ':portName' }
 
-  static examples = [
-    {
-      title: 'Vcpkg',
-      namedParams: { portName: 'entt' },
-      staticPreview: this.render({ version: '3.11.1' }),
+  static openApi = {
+    '/vcpkg/v/{portName}': {
+      get: {
+        summary: 'Vcpkg Version',
+        parameters: pathParams({
+          name: 'portName',
+          example: 'entt',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'vcpkg' }
 

@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import parseLinkHeader from 'parse-link-header'
+import { pathParams } from '../index.js'
 import { renderContributorBadge } from '../contributor-count.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -14,18 +15,29 @@ export default class GithubContributors extends GithubAuthV3Service {
     pattern: ':variant(contributors|contributors-anon)/:user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'GitHub contributors',
-      namedParams: {
-        variant: 'contributors',
-        user: 'cdnjs',
-        repo: 'cdnjs',
+  static openApi = {
+    '/github/{variant}/{user}/{repo}': {
+      get: {
+        summary: 'GitHub contributors',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'contributors',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
+          {
+            name: 'user',
+            example: 'cdnjs',
+          },
+          {
+            name: 'repo',
+            example: 'cdnjs',
+          },
+        ),
       },
-      staticPreview: this.render({ contributorCount: 397 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'contributors' }
 

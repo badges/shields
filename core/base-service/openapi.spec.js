@@ -192,7 +192,7 @@ const expected = {
           {
             lang: 'reStructuredText',
             label: 'rSt',
-            source: '.. image:: $url\n:   alt: OpenApiService Summary',
+            source: '.. image:: $url\n   :alt: OpenApiService Summary',
           },
           {
             lang: 'AsciiDoc',
@@ -248,7 +248,7 @@ const expected = {
             lang: 'reStructuredText',
             label: 'rSt',
             source:
-              '.. image:: $url\n:   alt: OpenApiService Summary (with Tag)',
+              '.. image:: $url\n   :alt: OpenApiService Summary (with Tag)',
           },
           {
             lang: 'AsciiDoc',
@@ -301,7 +301,7 @@ const expected = {
           {
             lang: 'reStructuredText',
             label: 'rSt',
-            source: '.. image:: $url\n:   alt: LegacyService Title (with Tag)',
+            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
           },
           {
             lang: 'AsciiDoc',
@@ -347,7 +347,7 @@ const expected = {
           {
             lang: 'reStructuredText',
             label: 'rSt',
-            source: '.. image:: $url\n:   alt: LegacyService Title (with Tag)',
+            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
           },
           {
             lang: 'AsciiDoc',
