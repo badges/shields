@@ -18,8 +18,8 @@ t.create('FlakeHub (valid)')
         latest: '0.1.160',
       }),
   )
-  .expectBadge({ label: 'flakehub', message: '0.1.160' })
+  .expectBadge({ label: 'FlakeHub', message: '0.1.160' })
 
 t.create('FlakeHub (not found)')
   .get('/flake/foo/bar')
-  .expectBadge({ label: 'flakehub', message: 'not found' })
+  .expectBadge({ label: 'FlakeHub', message: 'not found' })

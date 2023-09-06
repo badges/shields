@@ -27,7 +27,7 @@ export default class FlakeHub extends BaseJsonService {
     },
   }
 
-  static defaultBadgeData = { label: 'flakehub', color: 'rgb(33,29,82)' }
+  static defaultBadgeData = { label: 'FlakeHub', color: 'rgb(33,29,82)' }
 
   async handle({ org, project }) {
     const data = await this._requestJson({
