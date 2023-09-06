@@ -13,13 +13,16 @@ export default class FlakeHub extends BaseJsonService {
     '/flakehub/flake/{org}/{project}': {
       get: {
         summary: 'FlakeHub flake version',
-        parameters: pathParams({
-          name: 'org',
-          example: 'DeterminateSystems',
-        }, {
-          name: 'project',
-          example: 'flake-schemas'
-        }),
+        parameters: pathParams(
+          {
+            name: 'org',
+            example: 'DeterminateSystems',
+          },
+          {
+            name: 'project',
+            example: 'flake-schemas',
+          },
+        ),
       },
     },
   }
@@ -29,7 +32,9 @@ export default class FlakeHub extends BaseJsonService {
   async handle({ org, project }) {
     const data = await this._requestJson({
       schema,
-      url: `https://api.flakehub.com/badge/${encodeURIComponent(org)}/${encodeURIComponent(project)}`,
+      url: `https://api.flakehub.com/badge/${encodeURIComponent(
+        org,
+      )}/${encodeURIComponent(project)}`,
     })
 
     // the upstream API indicates "not found"
