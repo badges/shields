@@ -9,7 +9,7 @@ import {
 } from './docker-helpers.js'
 
 const pullsSchema = Joi.object({
-  latest: Joi.string().required(),
+  pull_count: nonNegativeInteger,
 }).required()
 
 export default class DockerPulls extends BaseJsonService {
