@@ -1,21 +1,28 @@
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { dockerBlue, buildDockerUrl } from './docker-helpers.js'
 import { fetchBuild } from './docker-cloud-common-fetch.js'
 
 export default class DockerCloudAutomatedBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('cloud/automated')
-  static examples = [
-    {
-      title: 'Docker Cloud Automated build',
-      documentation: '<p>For the new Docker Hub (https://cloud.docker.com)</p>',
-      namedParams: {
-        user: 'jrottenberg',
-        repo: 'ffmpeg',
+  static openApi = {
+    '/docker/cloud/automated/{user}/{repo}': {
+      get: {
+        summary: 'Docker Cloud Automated build',
+        description: '<p>For the new Docker Hub (https://cloud.docker.com)</p>',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'jrottenberg',
+          },
+          {
+            name: 'repo',
+            example: 'ffmpeg',
+          },
+        ),
       },
-      staticPreview: this.render({ buildSettings: ['test'] }),
     },
-  ]
+  }
 
   static _cacheLength = 14400
 
