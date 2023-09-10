@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import { isWithinRange } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -17,7 +16,7 @@ t.create('version (valid)')
   .get('/vibe-d.json')
   .expectBadge({
     label: 'SCORE',
-    message: isWithinRange(0, 5),
+    message: Joi.number().min(0).max(5),
     color: isScoreColor,
   })
 
