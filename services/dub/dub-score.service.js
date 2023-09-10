@@ -13,17 +13,17 @@ export default class DubScore extends BaseJsonService {
 
   static examples = [
     {
-      title: 'DUB SCORE',
+      title: 'DUB Score',
       namedParams: { packageName: 'vibe-d' },
       staticPreview: this.render({ score: 4.5 }),
     },
   ]
 
-  static defaultBadgeData = { label: 'SCORE' }
+  static defaultBadgeData = { label: 'score' }
 
   static render({ score }) {
     return {
-      label: 'SCORE',
+      label: 'score',
       color: colorScale([1, 2, 3, 4, 5])(score),
       message: score,
     }

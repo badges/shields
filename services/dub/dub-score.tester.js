@@ -15,11 +15,11 @@ const isScoreColor = Joi.equal(
 t.create('version (valid)')
   .get('/vibe-d.json')
   .expectBadge({
-    label: 'SCORE',
+    label: 'score',
     message: Joi.number().min(0).max(5),
     color: isScoreColor,
   })
 
 t.create('version (not found)')
   .get('/not-a-package.json')
-  .expectBadge({ label: 'SCORE', message: 'not found' })
+  .expectBadge({ label: 'score', message: 'not found' })
