@@ -147,7 +147,7 @@
     "@docusaurus/core": "^2.0.0",
     "@easyops-cn/docusaurus-search-local": "^0.35.0",
     "@mdx-js/react": "^1.6.21",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "c8": "^8.0.1",
     "caller": "^1.1.0",
     "chai": "^4.3.8",
