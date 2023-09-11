@@ -48,7 +48,6 @@ export default class GitLabRelease extends GitLabBase {
           queryParam({
             name: 'include_prereleases',
             schema: { type: 'boolean' },
-            allowEmptyValue: true,
             example: null,
           }),
           queryParam({
