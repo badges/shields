@@ -12,13 +12,21 @@ const schema = Joi.array().items(
   }),
 )
 
+const sortEnum = ['date', 'semver']
+const displayNameEnum = ['tag', 'release']
+const dateOrderByEnum = ['created_at', 'released_at']
+
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   include_prereleases: Joi.equal(''),
-  sort: Joi.string().valid('date', 'semver').default('date'),
-  display_name: Joi.string().valid('tag', 'release').default('tag'),
+  sort: Joi.string()
+    .valid(...sortEnum)
+    .default('date'),
+  display_name: Joi.string()
+    .valid(...displayNameEnum)
+    .default('tag'),
   date_order_by: Joi.string()
-    .valid('created_at', 'released_at')
+    .valid(...dateOrderByEnum)
     .default('created_at'),
 }).required()
 
@@ -52,26 +60,17 @@ export default class GitLabRelease extends GitLabBase {
           }),
           queryParam({
             name: 'sort',
-            schema: {
-              type: 'string',
-              enum: queryParamSchema.describe().keys.sort.allow,
-            },
+            schema: { type: 'string', enum: sortEnum },
             example: 'semver',
           }),
           queryParam({
             name: 'display_name',
-            schema: {
-              type: 'string',
-              enum: queryParamSchema.describe().keys.display_name.allow,
-            },
+            schema: { type: 'string', enum: displayNameEnum },
             example: 'release',
           }),
           queryParam({
             name: 'date_order_by',
-            schema: {
-              type: 'string',
-              enum: queryParamSchema.describe().keys.date_order_by.allow,
-            },
+            schema: { type: 'string', enum: dateOrderByEnum },
             example: 'created_at',
           }),
         ],
