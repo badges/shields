@@ -52,17 +52,26 @@ export default class GitLabRelease extends GitLabBase {
           }),
           queryParam({
             name: 'sort',
-            schema: { type: 'string', enum: ['date', 'semver'] },
+            schema: {
+              type: 'string',
+              enum: queryParamSchema.describe().keys.sort.allow,
+            },
             example: 'semver',
           }),
           queryParam({
             name: 'display_name',
-            schema: { type: 'string', enum: ['tag', 'release'] },
+            schema: {
+              type: 'string',
+              enum: queryParamSchema.describe().keys.display_name.allow,
+            },
             example: 'release',
           }),
           queryParam({
             name: 'date_order_by',
-            schema: { type: 'string', enum: ['created_at', 'released_at'] },
+            schema: {
+              type: 'string',
+              enum: queryParamSchema.describe().keys.date_order_by.allow,
+            },
             example: 'created_at',
           }),
         ],
