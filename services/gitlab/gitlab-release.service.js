@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { documentation, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
@@ -22,13 +22,6 @@ const queryParamSchema = Joi.object({
     .default('created_at'),
 }).required()
 
-const commonProps = {
-  namedParams: {
-    project: 'shields-ops-group/tag-test',
-  },
-  documentation,
-}
-
 export default class GitLabRelease extends GitLabBase {
   static category = 'version'
 
@@ -38,58 +31,45 @@ export default class GitLabRelease extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab Release (latest by date)',
-      ...commonProps,
-      queryParams: { sort: 'date', date_order_by: 'created_at' },
-      staticPreview: renderVersionBadge({ version: 'v2.0.0' }),
-    },
-    {
-      title: 'GitLab Release (latest by SemVer)',
-      ...commonProps,
-      queryParams: { sort: 'semver' },
-      staticPreview: renderVersionBadge({ version: 'v4.0.0' }),
-    },
-    {
-      title: 'GitLab Release (latest by SemVer pre-release)',
-      ...commonProps,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
+  static openApi = {
+    '/gitlab/v/release/{project}': {
+      get: {
+        summary: 'GitLab Release',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            allowEmptyValue: true,
+            example: null,
+          }),
+          queryParam({
+            name: 'sort',
+            schema: { type: 'string', enum: ['date', 'semver'] },
+            example: 'semver',
+          }),
+          queryParam({
+            name: 'display_name',
+            schema: { type: 'string', enum: ['tag', 'release'] },
+            example: 'release',
+          }),
+          queryParam({
+            name: 'date_order_by',
+            schema: { type: 'string', enum: ['created_at', 'released_at'] },
+            example: 'created_at',
+          }),
+        ],
       },
-      staticPreview: renderVersionBadge({ version: 'v5.0.0-beta.1' }),
     },
-    {
-      title: 'GitLab Release (self-managed)',
-      namedParams: {
-        project: 'GNOME/librsvg',
-      },
-      documentation,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
-        gitlab_url: 'https://gitlab.gnome.org',
-        date_order_by: 'created_at',
-      },
-      staticPreview: renderVersionBadge({ version: 'v2.51.4' }),
-    },
-    {
-      title: 'GitLab Release (by release name)',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      documentation,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
-        gitlab_url: 'https://gitlab.com',
-        display_name: 'release',
-        date_order_by: 'created_at',
-      },
-      staticPreview: renderVersionBadge({ version: 'GitLab 14.2' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'release' }
 
