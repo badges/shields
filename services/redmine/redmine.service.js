@@ -7,7 +7,7 @@ export const RedminePluginRating = deprecatedService({
     pattern: ':various*',
   },
   label: 'redmine',
-  dateAdded: new Date('2023-09-11'),
+  dateAdded: new Date('2023-09-14'),
 })
 
 export const RedminePluginStars = deprecatedService({
