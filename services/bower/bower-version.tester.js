@@ -9,7 +9,7 @@ export const t = new ServiceTester({
   pathPrefix: '/bower',
 })
 
-t.create('version').timeout(10000).get('/v/angular.json').expectBadge({
+t.create('version').timeout(10000).get('/v/backbone.json').expectBadge({
   label: 'bower',
   message: isVPlusDottedVersionAtLeastOne,
 })
