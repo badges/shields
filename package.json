@@ -210,7 +210,7 @@
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "2.0.0",
     "tsd": "^0.29.0",
-    "url": "^0.11.1"
+    "url": "^0.11.3"
   },
   "engines": {
     "node": "^18.16.0",
