@@ -11,7 +11,6 @@ const globalParamRefs = [
   { $ref: '#/components/parameters/logoColor' },
   { $ref: '#/components/parameters/logoSize' },
   { $ref: '#/components/parameters/logoWidth' },
-  { $ref: '#/components/parameters/logoHeight' },
   { $ref: '#/components/parameters/label' },
   { $ref: '#/components/parameters/labelColor' },
   { $ref: '#/components/parameters/color' },
