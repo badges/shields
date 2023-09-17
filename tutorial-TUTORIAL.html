@@ -153,7 +153,7 @@ export default class Example extends BaseService {
 <li>Our service badge class will extend <code>BaseService</code> so we need to require it. Variables are declared with <code>const</code> and <code>let</code> in preference to <code>var</code>.</li>
 <li>Our module must export a class which extends <code>BaseService</code>.</li>
 <li>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</li>
-<li><code>route()</code> declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+<li><code>route</code> declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
 <ul>
 <li><code>base</code> defines the first part of the URL that doesn't change, e.g. <code>/example/</code>.</li>
 <li><code>pattern</code> defines the variable part of the route, everything that comes after <code>/example/</code>. It can include any
@@ -163,7 +163,7 @@ Because a service instance won't be created until it's time to handle a request,
 <li>There is additional documentation on conventions for <a href="./badge-urls.md">designing badge URLs</a></li>
 </ul>
 </li>
-<li>All badges must implement the <code>async handle()</code> function that receives parameters to render the badge. Parameters of <code>handle()</code> will match the name defined in <code>route()</code> Because we're capturing a single variable called <code>text</code> our function signature is <code>async handle({ text })</code>. <code>async</code> is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our <code>handle()</code> function should return an object with 3 properties:
+<li>All badges must implement the <code>async handle()</code> function that receives parameters to render the badge. Parameters of <code>handle()</code> will match the name defined in <code>route</code> Because we're capturing a single variable called <code>text</code> our function signature is <code>async handle({ text })</code>. <code>async</code> is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our <code>handle()</code> function should return an object with 3 properties:
 <ul>
 <li><code>label</code>: the text on the left side of the badge</li>
 <li><code>message</code>: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex</li>
@@ -259,7 +259,7 @@ export default class GemVersion extends BaseJsonService {
 <p>We now jump to the bottom of the example code to the function all badges must implement: <code>async handle()</code>. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called <code>gem</code>, our function signature is <code>async handle({ gem })</code>. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The <code>fetch()</code> function is responsible for calling an API endpoint to get data. The <code>render()</code> function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.</p>
 </li>
 <li>
-<p>Working our way upward, the <code>async fetch()</code> method is responsible for calling an API endpoint to get data. Extending <code>BaseJsonService</code> gives us the helper function <code>_requestJson()</code>. Note here that we pass the schema we defined in step 4 as an argument. <code>_requestJson()</code> will deal with validating the response against the schema and throwing an error if necessary.</p>
+<p>Working our way upward, the <code>async fetch()</code> method is responsible for calling an API endpoint to get data. Extending <code>BaseJsonService</code> gives us the helper function <code>_requestJson()</code>. Note here that we pass the schema we defined in step 3 as an argument. <code>_requestJson()</code> will deal with validating the response against the schema and throwing an error if necessary.</p>
 <ul>
 <li><code>_requestJson()</code> automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.</li>
 <li><code>_requestJson()</code> uses <a href="https://github.com/sindresorhus/got">got</a> to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by <code>_requestJson()</code>. There is no need to specify json, as the JSON parsing is handled by <code>_requestJson()</code>. See the <code>got</code> docs for <a href="https://github.com/sindresorhus/got/blob/main/documentation/2-options.md">supported options</a>.</li>
@@ -299,7 +299,7 @@ and can be imported via the import shortcut and then thrown:</p>
 throw new NotFound({ prettyMessage: 'package not found' })
 </code></pre>
 <h3>(4.4) Adding an Example to the Front Page</h3>
-<p>Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method <code>examples()</code> to our class.</p>
+<p>Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional array <code>examples</code> to our class.</p>
 <pre class="prettyprint source lang-js"><code>export default class GemVersion extends BaseJsonService {
   // ...
 
@@ -319,7 +319,7 @@ throw new NotFound({ prettyMessage: 'package not found' })
 }
 </code></pre>
 <ol>
-<li>We defined category earlier in the tutorial. The <code>category()</code> property defines which heading in the index our example will appear under.</li>
+<li>We defined category earlier in the tutorial. The <code>category</code> property defines which heading in the index our example will appear under.</li>
 <li>The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.</li>
 <li>Our example object should contain the following properties:
 <ul>
@@ -379,7 +379,7 @@ will review your contribution.</li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Sep 11 2023 23:17:39 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun Sep 17 2023 07:16:52 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
