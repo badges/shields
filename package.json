@@ -205,7 +205,7 @@
     "rimraf": "^5.0.1",
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.9.0",
-    "sinon": "^15.2.0",
+    "sinon": "^16.0.0",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "2.0.0",
