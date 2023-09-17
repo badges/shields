@@ -24,6 +24,7 @@ fi
 
 # Deploy
 flyctl deploy --app "$app" --region "$region"
+flyctl scale count 1 --app "$app" --yes
 
 # Post a comment on the PR
 app_url=$(flyctl status --app "$app" --json | jq -r .Hostname)
