@@ -1,26 +1,36 @@
-import { InvalidResponse } from '../index.js'
-import { BaseCratesService, keywords } from './crates-base.js'
+import { InvalidResponse, pathParams } from '../index.js'
+import { BaseCratesService } from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
   static category = 'license'
   static route = { base: 'crates/l', pattern: ':crate/:version?' }
 
-  static examples = [
-    {
-      title: 'Crates.io',
-      pattern: ':crate',
-      namedParams: { crate: 'rustc-serialize' },
-      staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
-      keywords,
+  static openApi = {
+    '/crates/l/{crate}': {
+      get: {
+        summary: 'Crates.io License',
+        parameters: pathParams({
+          name: 'crate',
+          example: 'rustc-serialize',
+        }),
+      },
     },
-    {
-      title: 'Crates.io',
-      pattern: ':crate/:version',
-      namedParams: { crate: 'rustc-serialize', version: '0.3.24' },
-      staticPreview: this.render({ license: 'MIT/Apache-2.0' }),
-      keywords,
+    '/crates/l/{crate}/{version}': {
+      get: {
+        summary: 'Crates.io License (version)',
+        parameters: pathParams(
+          {
+            name: 'crate',
+            example: 'rustc-serialize',
+          },
+          {
+            name: 'version',
+            example: '0.3.24',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license', color: 'blue' }
 

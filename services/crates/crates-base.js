@@ -2,8 +2,6 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
-const keywords = ['Rust']
-
 const crateSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
@@ -49,4 +47,4 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
-export { BaseCratesService, keywords }
+export { BaseCratesService }
