@@ -21,5 +21,5 @@ t.create('FlakeHub (valid)')
   .expectBadge({ label: 'FlakeHub', message: '0.1.160' })
 
 t.create('FlakeHub (not found)')
-  .get('/f/foo/bar')
+  .get('/f/DeterminateSystems/flakehub-this-will-never-exist-we-promise')
   .expectBadge({ label: 'FlakeHub', message: 'not found' })
