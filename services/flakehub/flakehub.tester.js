@@ -3,17 +3,17 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('FlakeHub (valid)')
-  .get('/flake/DeterminateSystems/nuenv')
+  .get('/f/DeterminateSystems/nuenv/badge')
   .expectBadge({
     label: 'flakehub',
     message: isVPlusDottedVersionNClauses,
   })
 
 t.create('FlakeHub (valid)')
-  .get('/flake/DeterminateSystems/nuenv')
+  .get('/f/DeterminateSystems/nuenv/badge')
   .intercept(nock =>
     nock('https://api.flakehub.com')
-      .get('/badge/DeterminateSystems/nuenv')
+      .get('/f/DeterminateSystems/nuenv/badge')
       .reply(200, {
         latest: '0.1.160',
       }),
@@ -21,5 +21,5 @@ t.create('FlakeHub (valid)')
   .expectBadge({ label: 'FlakeHub', message: '0.1.160' })
 
 t.create('FlakeHub (not found)')
-  .get('/flake/foo/bar')
+  .get('/f/foo/bar')
   .expectBadge({ label: 'FlakeHub', message: 'not found' })

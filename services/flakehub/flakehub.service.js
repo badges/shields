@@ -32,7 +32,7 @@ export default class FlakeHub extends BaseJsonService {
   async handle({ org, project }) {
     const data = await this._requestJson({
       schema,
-      url: `https://api.flakehub.com/flake/${encodeURIComponent(
+      url: `https://api.flakehub.com/f/${encodeURIComponent(
         org,
       )}/${encodeURIComponent(project)}/badge`,
     })
