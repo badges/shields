@@ -8,9 +8,9 @@ const schema = Joi.object({
 
 export default class FlakeHub extends BaseJsonService {
   static category = 'version'
-  static route = { base: 'flakehub/flake', pattern: ':org/:project' }
+  static route = { base: 'flakehub', pattern: ':org/:project' }
   static openApi = {
-    '/flakehub/flake/{org}/{project}': {
+    '/flakehub/{org}/{project}': {
       get: {
         summary: 'FlakeHub flake version',
         parameters: pathParams(
@@ -32,9 +32,9 @@ export default class FlakeHub extends BaseJsonService {
   async handle({ org, project }) {
     const data = await this._requestJson({
       schema,
-      url: `https://api.flakehub.com/badge/${encodeURIComponent(
+      url: `https://api.flakehub.com/flake/${encodeURIComponent(
         org,
-      )}/${encodeURIComponent(project)}`,
+      )}/${encodeURIComponent(project)}/badge`,
     })
 
     // the upstream API indicates "not found"
