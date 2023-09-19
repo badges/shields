@@ -8,9 +8,9 @@ const schema = Joi.object({
 
 export default class FlakeHub extends BaseJsonService {
   static category = 'version'
-  static route = { base: 'flakehub', pattern: ':org/:project' }
+  static route = { base: 'flake', pattern: ':org/:project' }
   static openApi = {
-    '/flakehub/{org}/{project}': {
+    '/flake/{org}/{project}': {
       get: {
         summary: 'FlakeHub flake version',
         parameters: pathParams(
