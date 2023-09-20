@@ -56,7 +56,6 @@ export default function coalesceBadge(
   } = overrides
   let {
     logoWidth: overrideLogoWidth,
-    logoHeight: overrideLogoHeight,
     logoPosition: overrideLogoPosition,
     logoSize: overrideLogoSize,
     color: overrideColor,
@@ -79,7 +78,6 @@ export default function coalesceBadge(
     overrideLabelColor = `${overrideLabelColor}`
   }
   overrideLogoWidth = +overrideLogoWidth || undefined
-  overrideLogoHeight = +overrideLogoHeight || undefined
   overrideLogoPosition = +overrideLogoPosition || undefined
 
   const {
@@ -93,7 +91,6 @@ export default function coalesceBadge(
     logoColor: serviceLogoColor,
     logoSize: serviceLogoSize,
     logoWidth: serviceLogoWidth,
-    logoHeight: serviceLogoHeight,
     logoPosition: serviceLogoPosition,
     link: serviceLink,
     cacheSeconds: serviceCacheSeconds,
@@ -129,7 +126,6 @@ export default function coalesceBadge(
     namedLogoColor,
     logoSize,
     logoWidth,
-    logoHeight,
     logoPosition,
     logoSvgBase64
   if (overrideLogo) {
@@ -147,7 +143,6 @@ export default function coalesceBadge(
     // original width or position.
     logoSize = overrideLogoSize
     logoWidth = overrideLogoWidth
-    logoHeight = overrideLogoHeight
     logoPosition = overrideLogoPosition
   } else {
     if (serviceLogoSvg) {
@@ -161,15 +156,13 @@ export default function coalesceBadge(
     }
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
     logoWidth = coalesce(overrideLogoWidth, serviceLogoWidth)
-    logoHeight = coalesce(overrideLogoHeight, serviceLogoHeight)
     logoPosition = coalesce(overrideLogoPosition, serviceLogoPosition)
   }
   if (namedLogo) {
     const iconSize = getIconSize(String(namedLogo).toLowerCase())
 
     if (!logoWidth && iconSize && logoSize === 'auto') {
-      logoWidth =
-        (iconSize.width / iconSize.height) * (logoHeight || DEFAULT_LOGO_HEIGHT)
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
     }
 
     logoSvgBase64 = prepareNamedLogo({
@@ -202,7 +195,6 @@ export default function coalesceBadge(
     namedLogo,
     logo: logoSvgBase64,
     logoWidth,
-    logoHeight,
     logoPosition,
     logoSize,
     links: toArray(overrideLink || serviceLink),
