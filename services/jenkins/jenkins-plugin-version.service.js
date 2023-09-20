@@ -1,6 +1,6 @@
 import { getCachedResource } from '../../core/base-service/resource-cache.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseService, NotFound } from '../index.js'
+import { BaseService, NotFound, pathParams } from '../index.js'
 
 export default class JenkinsPluginVersion extends BaseService {
   static category = 'version'
@@ -10,19 +10,17 @@ export default class JenkinsPluginVersion extends BaseService {
     pattern: ':plugin',
   }
 
-  static examples = [
-    {
-      title: 'Jenkins Plugins',
-      namedParams: {
-        plugin: 'blueocean',
-      },
-      staticPreview: {
-        label: 'plugin',
-        message: 'v1.10.1',
-        color: 'blue',
+  static openApi = {
+    '/jenkins/plugin/v/{plugin}': {
+      get: {
+        summary: 'Jenkins Plugin Version',
+        parameters: pathParams({
+          name: 'plugin',
+          example: 'blueocean',
+        }),
       },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'plugin' }
 
