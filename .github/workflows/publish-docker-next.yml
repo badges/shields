@@ -20,7 +20,7 @@ jobs:
           version: v0.9.1
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
         run: echo ${{ steps.docker_build_push.outputs.digest }} >> $GITHUB_STEP_SUMMARY
 
       - name: Login to GHCR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
