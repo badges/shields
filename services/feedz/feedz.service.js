@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import {
   renderVersionBadge,
   searchServiceUrl,
@@ -29,31 +29,36 @@ class FeedzVersionService extends BaseJsonService {
 
   static route = {
     base: 'feedz',
-    pattern: ':which(v|vpre)/:organization/:repository/:packageName',
+    pattern: ':variant(v|vpre)/:organization/:repository/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Feedz',
-      pattern: 'v/:organization/:repository/:packageName',
-      namedParams: {
-        organization: 'shieldstests',
-        repository: 'mongodb',
-        packageName: 'MongoDB.Driver.Core',
+  static openApi = {
+    '/feedz/{variant}/{organization}/{repository}/{packageName}': {
+      get: {
+        summary: 'Feedz Version',
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'v',
+            description: 'version or version including pre-releases',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
+          {
+            name: 'organization',
+            example: 'shieldstests',
+          },
+          {
+            name: 'repository',
+            example: 'mongodb',
+          },
+          {
+            name: 'packageName',
+            example: 'MongoDB.Driver.Core',
+          },
+        ),
       },
-      staticPreview: this.render({ version: '2.10.4' }),
     },
-    {
-      title: 'Feedz (with prereleases)',
-      pattern: 'vpre/:organization/:repository/:packageName',
-      namedParams: {
-        organization: 'shieldstests',
-        repository: 'mongodb',
-        packageName: 'MongoDB.Driver.Core',
-      },
-      staticPreview: this.render({ version: '2.11.0-beta2' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'feedz',

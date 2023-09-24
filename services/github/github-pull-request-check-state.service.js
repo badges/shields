@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import countBy from 'lodash.countby'
+import { pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchIssue } from './github-common-fetch.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -15,8 +16,6 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
-const keywords = ['pullrequest', 'detail']
-
 export default class GithubPullRequestCheckState extends GithubAuthV3Service {
   static category = 'build'
   static route = {
@@ -24,36 +23,48 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
     pattern: ':variant(s|contexts)/pulls/:user/:repo/:number(\\d+)',
   }
 
-  static examples = [
-    {
-      title: 'GitHub pull request check state',
-      pattern: 's/pulls/:user/:repo/:number',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        number: '1110',
+  static openApi = {
+    '/github/status/s/pulls/{user}/{repo}/{number}': {
+      get: {
+        summary: 'GitHub pull request check state',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'number',
+            example: '1110',
+          },
+        ),
       },
-      staticPreview: this.render({ variant: 's', state: 'pending' }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'GitHub pull request check contexts',
-      pattern: 'contexts/pulls/:user/:repo/:number',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        number: '1110',
+    '/github/status/contexts/pulls/{user}/{repo}/{number}': {
+      get: {
+        summary: 'GitHub pull request check contexts',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'number',
+            example: '1110',
+          },
+        ),
       },
-      staticPreview: this.render({
-        variant: 'contexts',
-        state: 'pending',
-        stateCounts: { passed: 5, pending: 1 },
-      }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 

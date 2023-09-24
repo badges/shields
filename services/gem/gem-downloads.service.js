@@ -3,9 +3,12 @@ import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { latest as latestVersion } from '../version.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
-
-const keywords = ['ruby']
+import {
+  BaseJsonService,
+  InvalidParameter,
+  InvalidResponse,
+  pathParams,
+} from '../index.js'
 
 const gemSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -26,56 +29,41 @@ const versionSchema = Joi.array()
 export default class GemDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
-  static examples = [
-    {
-      title: 'Gem',
-      pattern: 'dv/:gem/:version',
-      namedParams: {
-        gem: 'rails',
-        version: 'stable',
+  static openApi = {
+    '/gem/dt/{gem}': {
+      get: {
+        summary: 'Gem Total Downloads',
+        parameters: pathParams({
+          name: 'gem',
+          example: 'rails',
+        }),
       },
-      staticPreview: this.render({
-        variant: 'dv',
-        version: 'stable',
-        downloads: 70000,
-      }),
-      keywords,
     },
-    {
-      title: 'Gem',
-      pattern: 'dv/:gem/:version',
-      namedParams: {
-        gem: 'rails',
-        version: '4.1.0',
+    '/gem/dtv/{gem}': {
+      get: {
+        summary: 'Gem Downloads (for latest version)',
+        parameters: pathParams({
+          name: 'gem',
+          example: 'rails',
+        }),
       },
-      staticPreview: this.render({
-        variant: 'dv',
-        version: '4.1.0',
-        downloads: 50000,
-      }),
-      keywords,
     },
-    {
-      title: 'Gem',
-      pattern: 'dtv/:gem',
-      namedParams: { gem: 'rails' },
-      staticPreview: this.render({
-        variant: 'dtv',
-        downloads: 70000,
-      }),
-      keywords,
+    '/gem/dv/{gem}/{version}': {
+      get: {
+        summary: 'Gem Downloads (for specified version)',
+        parameters: pathParams(
+          {
+            name: 'gem',
+            example: 'rails',
+          },
+          {
+            name: 'version',
+            example: '4.1.0',
+          },
+        ),
+      },
     },
-    {
-      title: 'Gem',
-      pattern: 'dt/:gem',
-      namedParams: { gem: 'rails' },
-      staticPreview: this.render({
-        variant: 'dt',
-        downloads: 900000,
-      }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
