@@ -9,6 +9,7 @@ set -euo pipefail
 
 if ( npm run build 2>&1 | grep '\[ERROR\]' )
 then
+    echo "You probably need to run: npm update @docusaurus/preset-classic"
     exit 1
 else
     exit 0
