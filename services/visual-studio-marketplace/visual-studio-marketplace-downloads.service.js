@@ -1,7 +1,8 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-const documentation = `
+const description = `
 <p>
   This is for Visual Studio and Visual Studio Code Extensions.
 </p>
@@ -19,24 +20,28 @@ export default class VisualStudioMarketplaceDownloads extends VisualStudioMarket
       '(visual-studio-marketplace|vscode-marketplace)/:measure(d|i)/:extensionId',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio Marketplace Installs',
-      pattern: 'visual-studio-marketplace/i/:extensionId',
-      namedParams: { extensionId: 'ritwickdey.LiveServer' },
-      staticPreview: this.render({ measure: 'i', downloads: 843 }),
-      keywords: this.keywords,
-      documentation,
+  static openApi = {
+    '/visual-studio-marketplace/i/{extensionId}': {
+      get: {
+        summary: 'Visual Studio Marketplace Installs',
+        description,
+        parameters: pathParams({
+          name: 'extensionId',
+          example: 'ritwickdey.LiveServer',
+        }),
+      },
     },
-    {
-      title: 'Visual Studio Marketplace Downloads',
-      pattern: 'visual-studio-marketplace/d/:extensionId',
-      namedParams: { extensionId: 'ritwickdey.LiveServer' },
-      staticPreview: this.render({ measure: 'd', downloads: 1239 }),
-      keywords: this.keywords,
-      documentation,
+    '/visual-studio-marketplace/d/{extensionId}': {
+      get: {
+        summary: 'Visual Studio Marketplace Downloads',
+        description,
+        parameters: pathParams({
+          name: 'extensionId',
+          example: 'ritwickdey.LiveServer',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ measure, downloads }) {
     const labelOverride = measure === 'd' ? 'downloads' : 'installs'
