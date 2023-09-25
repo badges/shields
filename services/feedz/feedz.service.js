@@ -116,8 +116,8 @@ class FeedzVersionService extends BaseJsonService {
     }
   }
 
-  async handle({ which, organization, repository, packageName }) {
-    const includePrereleases = which === 'vpre'
+  async handle({ variant, organization, repository, packageName }) {
+    const includePrereleases = variant === 'vpre'
     const baseUrl = this.apiUrl({ organization, repository })
     const json = await this.fetch({ baseUrl, packageName })
     const fetchedJson = await this.fetchItems({ json })
