@@ -66,6 +66,7 @@ This repo hosts:
 - Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen)
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
 - [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
+- MacPort: ![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fports.macports.org%2Fapi%2Fv1%2Fports%2Fproxy-audio-device%2F&query=%24.version&label=macports)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
