@@ -4,6 +4,15 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-10-02
+
+- add python package total downloads from [pepy] badge [#9564](https://github.com/badges/shields/issues/9564)
+- deprecate [redmine] plugin rating badges [#9568](https://github.com/badges/shields/issues/9568)
+- fix [bower] version badge [#9567](https://github.com/badges/shields/issues/9567)
+- Add [PythonVersionFromToml] shield [#9516](https://github.com/badges/shields/issues/9516)
+- Add [dub] score badge service [#9549](https://github.com/badges/shields/issues/9549)
+- Dependency updates
+
 ## server-2023-09-04
 
 - Fix [testspace] badges [#9525](https://github.com/badges/shields/issues/9525)
