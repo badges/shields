@@ -7,13 +7,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 ## server-2023-10-02
 
 - add python package total downloads from [pepy] badge [#9564](https://github.com/badges/shields/issues/9564)
-- sync docusaurus plugin versions [#9608](https://github.com/badges/shields/issues/9608)
-- migrate examples to openApi part 10 [#9466](https://github.com/badges/shields/issues/9466)
-- migrate examples to openApi part 9; affects [bowerlicense conda freecodecamp galaxytoolshed jenkins-plugin npmtypedefinitions puppetforge] [#9465](https://github.com/badges/shields/issues/9465)
-- fix review apps [#9582](https://github.com/badges/shields/issues/9582)
 - deprecate [redmine] plugin rating badges [#9568](https://github.com/badges/shields/issues/9568)
-- fix mismatch in documentation and examples given in tutorial [#9580](https://github.com/badges/shields/issues/9580)
-- fix [aur] service tests [#9566](https://github.com/badges/shields/issues/9566)
 - fix [bower] version badge [#9567](https://github.com/badges/shields/issues/9567)
 - Add [PythonVersionFromToml] shield [#9516](https://github.com/badges/shields/issues/9516)
 - Add [dub] score badge service [#9549](https://github.com/badges/shields/issues/9549)
