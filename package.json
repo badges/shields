@@ -44,7 +44,7 @@
     "got": "^13.0.0",
     "graphql": "16.8.1",
     "graphql-tag": "^2.12.6",
-    "joi": "17.10.2",
+    "joi": "17.11.0",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^4.1.0",
     "jsonpath": "~1.1.1",
