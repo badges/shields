@@ -16,12 +16,31 @@ function _validate(format) {
     throw new ValidationError('Field `message` is required')
   }
 
-  const stringFields = ['labelColor', 'color', 'message', 'label']
+  const stringFields = ['labelColor', 'color', 'message', 'label', 'logo']
   stringFields.forEach(function (field) {
     if (field in format && typeof format[field] !== 'string') {
       throw new ValidationError(`Field \`${field}\` must be of type string`)
     }
   })
+
+  const numberFields = ['logoWidth', 'logoPosition']
+  numberFields.forEach(function (field) {
+    if (field in format && typeof format[field] !== 'number') {
+      throw new ValidationError(`Field \`${field}\` must be of type number`)
+    }
+  })
+
+  if ('links' in format) {
+    if (!Array.isArray(format.links)) {
+      throw new ValidationError('Field `links` must be an array of strings')
+    } else {
+      format.links.forEach(function (field) {
+        if (typeof field !== 'string') {
+          throw new ValidationError('Field `links` must be an array of strings')
+        }
+      })
+    }
+  }
 
   const styleValues = [
     'plastic',
@@ -38,7 +57,17 @@ function _validate(format) {
 }
 
 function _clean(format) {
-  const expectedKeys = ['label', 'message', 'labelColor', 'color', 'style']
+  const expectedKeys = [
+    'label',
+    'message',
+    'labelColor',
+    'color',
+    'style',
+    'logo',
+    'logoPosition',
+    'logoWidth',
+    'links',
+  ]
 
   const cleaned = {}
   Object.keys(format).forEach(key => {
@@ -65,7 +94,11 @@ function _clean(format) {
  * @param {string} format.message (Required) Badge message (e.g: 'passing')
  * @param {string} format.labelColor (Optional) Label color
  * @param {string} format.color (Optional) Message color
- * @param {string} format.style (Optional) Visual style e.g: 'flat'
+ * @param {string} format.style (Optional) Visual style (e.g: 'flat')
+ * @param {string} format.logo (Optional) Logo data URL
+ * @param {number} format.logoPosition (Optional) Logo position (e.g: 40)
+ * @param {number} format.logoWidth (Optional) Logo width (e.g: 40)
+ * @param {Array} format.links (Optional) Links array (e.g: ['https://example.com', 'https://example.com'])
  * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */
