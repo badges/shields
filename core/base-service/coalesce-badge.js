@@ -2,7 +2,8 @@ import {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
 } from '../../lib/logos.js'
-import { svg2base64 } from '../../lib/svg-helpers.js'
+import { svg2base64, getIconSize } from '../../lib/svg-helpers.js'
+import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
 
@@ -56,6 +57,7 @@ export default function coalesceBadge(
   let {
     logoWidth: overrideLogoWidth,
     logoPosition: overrideLogoPosition,
+    logoSize: overrideLogoSize,
     color: overrideColor,
     labelColor: overrideLabelColor,
   } = overrides
@@ -87,6 +89,7 @@ export default function coalesceBadge(
     logoSvg: serviceLogoSvg,
     namedLogo: serviceNamedLogo,
     logoColor: serviceLogoColor,
+    logoSize: serviceLogoSize,
     logoWidth: serviceLogoWidth,
     logoPosition: serviceLogoPosition,
     link: serviceLink,
@@ -119,7 +122,12 @@ export default function coalesceBadge(
     style = 'flat'
   }
 
-  let namedLogo, namedLogoColor, logoWidth, logoPosition, logoSvgBase64
+  let namedLogo,
+    namedLogoColor,
+    logoSize,
+    logoWidth,
+    logoPosition,
+    logoSvgBase64
   if (overrideLogo) {
     // `?logo=` could be a named logo or encoded svg.
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
@@ -133,6 +141,7 @@ export default function coalesceBadge(
     }
     // If the logo has been overridden it does not make sense to inherit the
     // original width or position.
+    logoSize = overrideLogoSize
     logoWidth = overrideLogoWidth
     logoPosition = overrideLogoPosition
   } else {
@@ -145,13 +154,21 @@ export default function coalesceBadge(
       )
       namedLogoColor = coalesce(overrideLogoColor, serviceLogoColor)
     }
+    logoSize = coalesce(overrideLogoSize, serviceLogoSize)
     logoWidth = coalesce(overrideLogoWidth, serviceLogoWidth)
     logoPosition = coalesce(overrideLogoPosition, serviceLogoPosition)
   }
   if (namedLogo) {
+    const iconSize = getIconSize(String(namedLogo).toLowerCase())
+
+    if (!logoWidth && iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    }
+
     logoSvgBase64 = prepareNamedLogo({
       name: namedLogo,
       color: namedLogoColor,
+      size: logoSize,
       style,
     })
   }
@@ -179,6 +196,7 @@ export default function coalesceBadge(
     logo: logoSvgBase64,
     logoWidth,
     logoPosition,
+    logoSize,
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
   }
