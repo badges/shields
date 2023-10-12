@@ -23,7 +23,7 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 
 <p>
     <object
-        data="https://opencollective.com/shields/sponsors.svg?avatarHeight=80&width=600"
+        data="https://opencollective.com/shields/tiers/sponsor.svg?avatarHeight=80&width=600"
         class="opencollective-image"
     ></object>
 </p>
@@ -34,7 +34,7 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 
 <p>
     <object
-        data="https://opencollective.com/shields/backers.svg?width=600"
+        data="https://opencollective.com/shields/tiers/backer.svg?width=600"
         class="opencollective-image">
     </object>
 </p>
