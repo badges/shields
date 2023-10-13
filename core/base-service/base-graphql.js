@@ -20,7 +20,7 @@ class BaseGraphqlService extends BaseService {
   /**
    * Parse data from JSON endpoint
    *
-   * @param {string} buffer JSON repsonse from upstream API
+   * @param {string} buffer JSON response from upstream API
    * @returns {object} Parsed response
    */
   _parseJson(buffer) {
@@ -51,7 +51,7 @@ class BaseGraphqlService extends BaseService {
    *    for allowed keys
    *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
    * @param {Function} [attrs.transformJson=data => data] Function which takes the raw json and transforms it before
-   * further procesing. In case of multiple query in a single graphql call and few of them
+   * further processing. In case of multiple query in a single graphql call and few of them
    * throw error, partial data might be used ignoring the error.
    * @param {Function} [attrs.transformErrors=defaultTransformErrors]
    *    Function which takes an errors object from a GraphQL
