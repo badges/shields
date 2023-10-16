@@ -17,3 +17,7 @@ t.create('Total Installs')
 t.create('Total Installs (not found)')
   .get('/dt/000000.json')
   .expectBadge({ label: 'installs', message: 'not found' })
+
+t.create('Total Installs (sleazyfork)')
+  .get('/dt/374903.json')
+  .expectBadge({ label: 'installs', message: isMetric })
