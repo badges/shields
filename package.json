@@ -156,7 +156,7 @@
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
     "clsx": "^2.0.0",
-    "concurrently": "^8.2.1",
+    "concurrently": "^8.2.2",
     "cypress": "^13.3.1",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.3.0",
