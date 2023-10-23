@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, NotFound } from '../index.js'
 
 const schema = Joi.object({
   daily_installs: nonNegativeInteger,
@@ -16,9 +16,17 @@ export default class BaseGreasyForkService extends BaseJsonService {
   static defaultBadgeData = { label: 'greasy fork' }
 
   async fetch({ scriptId }) {
-    return this._requestJson({
-      schema,
-      url: `https://greasyfork.org/scripts/${scriptId}.json`,
-    })
+    try {
+      return await this._requestJson({
+        schema,
+        url: `https://greasyfork.org/scripts/${scriptId}.json`,
+      })
+    } catch (e) {
+      if (!(e instanceof NotFound)) throw e
+      return this._requestJson({
+        schema,
+        url: `https://sleazyfork.org/scripts/${scriptId}.json`,
+      })
+    }
   }
 }

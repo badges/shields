@@ -14,7 +14,7 @@ class BaseJsonService extends BaseService {
   /**
    * Parse data from JSON endpoint
    *
-   * @param {string} buffer JSON repsonse from upstream API
+   * @param {string} buffer JSON response from upstream API
    * @returns {object} Parsed response
    */
   _parseJson(buffer) {

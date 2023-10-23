@@ -1,6 +1,11 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  NotFound,
+  pathParams,
+} from '../index.js'
 
 /**
  * Validates that the schema response is what we're expecting.
@@ -30,13 +35,17 @@ export default class FreeCodeCampPoints extends BaseJsonService {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'freeCodeCamp points',
-      namedParams: { username: 'sethi' },
-      staticPreview: this.render({ points: 934 }),
+  static openApi = {
+    '/freecodecamp/points/{username}': {
+      get: {
+        summary: 'freeCodeCamp points',
+        parameters: pathParams({
+          name: 'username',
+          example: 'raisedadead',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'points', color: 'info' }
 

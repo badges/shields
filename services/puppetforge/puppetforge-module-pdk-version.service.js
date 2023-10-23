@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
 export default class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesService {
@@ -10,16 +10,23 @@ export default class PuppetforgeModulePdkVersion extends BasePuppetForgeModulesS
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'Puppet Forge – PDK version',
-      namedParams: {
-        user: 'tragiccode',
-        moduleName: 'azure_key_vault',
+  static openApi = {
+    '/puppetforge/pdk-version/{user}/{moduleName}': {
+      get: {
+        summary: 'Puppet Forge - PDK version',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'tragiccode',
+          },
+          {
+            name: 'moduleName',
+            example: 'azure_key_vault',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '1.7.1' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'pdk version' }
 
