@@ -23,7 +23,7 @@
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=twitter"
+        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=X"
             alt="follow on Twitter"></a>
 </p>
 
