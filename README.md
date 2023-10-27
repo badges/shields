@@ -1,3 +1,5 @@
+# Shilds
+
 <p align="center">
     <img src="https://raw.githubusercontent.com/badges/shields/master/readme-logo.svg?sanitize=true"
         height="130">
@@ -44,9 +46,9 @@ This repo hosts:
 
 - The [Shields.io][shields.io] frontend and server code
 - An [NPM library for generating badges][badge-maker]
-  - [documentation][badge-maker-docs]
-  - [changelog][badge-maker-changelog]
-- The [badge design specification][badge-spec]
+  - [Documentation][badge-maker-docs]
+  - [Changelog][badge-maker-changelog]
+- The [Badge design specification][badge-spec]
 
 [shields.io]: https://shields.io/
 [badge-maker]: https://www.npmjs.com/package/badge-maker
@@ -56,13 +58,13 @@ This repo hosts:
 
 ## Examples
 
-- code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen)
-- stable release version: ![version](https://img.shields.io/badge/version-1.2.3-blue)
-- package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue)
-- status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange)
-- static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green)
+- Code coverage percentage: ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen)
+- table release version: ![version](https://img.shields.io/badge/version-1.2.3-blue)
+- Package manager release: ![gem](https://img.shields.io/badge/gem-2.2.0-blue)
+- Status of third-party dependencies: ![dependencies](https://img.shields.io/badge/dependencies-out%20of%20date-orange)
+- Static code analysis grade: ![codacy](https://img.shields.io/badge/codacy-B-green)
 - [SemVer](https://semver.org/) version observance: ![semver](https://img.shields.io/badge/semver-2.0.0-blue)
-- amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow)
+- Amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow)
 - Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen)
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
 - [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
@@ -76,7 +78,7 @@ This repo hosts:
 
 Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
 
-Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.
+Use the button at the bottom to copy your badge `URL or Snippet`. Which can then be added to places like your GitHub readme files or other Webpages.
 
 ## Contributing
 
