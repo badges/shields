@@ -4,6 +4,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-11-01
+
+- migrate examples to openApi part 16; affects [gitlabrelease swagger] [#9565](https://github.com/badges/shields/issues/9565)
+- twitter --> X [#9678](https://github.com/badges/shields/issues/9678)
+- fix greasyfork 404 bug [#9632](https://github.com/badges/shields/issues/9632)
+- Fix several typos [#9658](https://github.com/badges/shields/issues/9658)
+- Hacktoberfest 2023 support - resolves #9636 [#9637](https://github.com/badges/shields/issues/9637)
+- switch to fixed OpenCollective images [#9615](https://github.com/badges/shields/issues/9615)
+- Dependency updates
+
 ## server-2023-10-02
 
 - add python package total downloads from [pepy] badge [#9564](https://github.com/badges/shields/issues/9564)
