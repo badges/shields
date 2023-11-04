@@ -134,9 +134,9 @@ export default class Example extends BaseService {
 
 Description of the code:
 
-1. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
+1. Our service badge class will extend `BaseService` so we need to import it.
 2. Our module must export a class which extends `BaseService`.
-3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
+3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-documentation-to-the-frontend) for more details.
 4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
@@ -223,7 +223,7 @@ Description of the code:
 2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
 3. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string. There is further documentation on [input validation](input-validation.md).
 4. Our module exports a class which extends `BaseJsonService`
-5. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
+5. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-documentation-to-the-frontend) for more details.
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
 7. We can use `defaultBadgeData` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData` here to define it declaratively.
 8. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
@@ -269,42 +269,85 @@ import { NotFound } from '../index.js'
 throw new NotFound({ prettyMessage: 'package not found' })
 ```
 
-### (4.4) Adding an Example to the Front Page
+### (4.4) Adding Documentation to the Frontend
 
-Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional array `examples` to our class.
+To render the shields.io website, we produce an [OpenAPI 3 specification](https://swagger.io/specification/) which describes the available badge endpoints. Then we use that specification to render the frontend.
+
+Once we have implemented our badge, we want to add it to the index so that users can discover it. We will do this by adding an additional object `openApi` to our class. This object contains an [OpenAPI Paths Object](https://swagger.io/specification/#paths-object) describing the endpoint or endpoints exposed by this service class.
 
 ```js
+import { pathParams } from '../index.js'
+
 export default class GemVersion extends BaseJsonService {
   // ...
 
   // (1)
   static category = 'version'
 
-  // (2)
-  static examples = [
-    {
+  static openApi = {
+    // (2)
+    '/gem/v/{gem}': {
       // (3)
-      title: 'Gem',
-      namedParams: { gem: 'formatador' },
-      staticPreview: this.render({ version: '2.1.0' }),
-      keywords: ['ruby'],
+      get: {
+        // (4)
+        summary: 'Gem Version',
+        description:
+          'Badge showing the version of a [Ruby Gem](https://rubygems.org/)',
+        // (5)
+        parameters: pathParams({
+          name: 'gem',
+          description: 'Name of the Ruby Gem',
+          example: 'formatador',
+        }),
+      },
     },
-  ]
+  }
 }
 ```
 
 1. We defined category earlier in the tutorial. The `category` property defines which heading in the index our example will appear under.
-2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
-3. Our example object should contain the following properties:
-   - `title`: Descriptive text that will be shown next to the badge
-   - `namedParams`: Provide a valid example of params we can substitute into
-     the pattern. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador).
-   - `staticPreview`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticPreview` should be populated by calling our `render()` method with some valid data.
-   - `keywords`: If we want to provide additional keywords other than the title and the category, we can add them here. This helps users to search for relevant badges.
+2. The keys of the `openApi` object are routes. In this case we only need to describe one route. In some cases, a service class can define more than one badge route. Open API doesn't have the concept of optional path parameters (more specifically, `in: 'path'` implies `required: true`) so if there are any optional path parameters in our route, our `openApi` object needs to describe two URLs: one without the optional parameter, and another with it.
+3. The HTTP method. Shields only allows GET requests, so this is always `get`.
+4. `summary` (required) is a short title or description of the badge. `description` is an optional longer description or additional documentation. We can use markdown or HTML syntax inside the `description` field.
+5. `parameters` is an array of [Open API Parameter objects](https://swagger.io/specification/#parameter-object) describing any parameters we can pass to this route. This array should include all path parameters included in the key that this value object describes and all relevant query parameters. As a minimum, we need to supply `name` and `example`. The example must be a valid example of a value we can provide for this parameter. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador). There are also optional keys we can pass. The code
+
+   ```js
+   parameters: pathParams({
+     name: 'gem',
+     description: 'Name of the Ruby Gem',
+     example: 'formatador',
+   })
+   ```
+
+   is equivilent to
+
+   ```js
+   parameters: [
+     {
+       name: 'gem',
+       in: 'path',
+       required: true,
+       schema: { type: 'string' },
+       example: 'formatador',
+       description: 'Name of the Ruby Gem',
+     },
+   ]
+   ```
+
+   but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand. There are four helper functions we can use to assemble [Open API Parameter objects](https://swagger.io/specification/#parameter-object). These are:
+
+   - `pathParam` - returns a single Parameter object describing a path parameter
+   - `pathParams` - returns an array of path Parameter objects
+   - `queryParam` - returns a single Parameter object describing a query parameter
+   - `queryParams` - returns an array of query Parameter objects
+
+   These four helper functions are documented in more detail at http://contributing.shields.io/module-core_base-service_openapi.html
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
-If you update `examples`, you don't have to restart the server. Run `npm run defs` in another terminal window and the frontend will update.
+If you update `openApi`, you don't have to restart the server. Run `npm run defs` in another terminal window and the frontend will update.
+
+Note: Some services define this information in an array property called `examples`. This is deprecated and we're in the process of converting them. New services should declare an `openApi` object.
 
 ### (4.5) Write Tests<!-- Change the link below when you change the heading -->
 
