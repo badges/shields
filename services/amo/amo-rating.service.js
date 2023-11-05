@@ -1,7 +1,7 @@
 import { starRating } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { pathParams } from '../index.js'
-import { BaseAmoService } from './amo-base.js'
+import { BaseAmoService, description } from './amo-base.js'
 
 export default class AmoRating extends BaseAmoService {
   static category = 'rating'
@@ -11,12 +11,14 @@ export default class AmoRating extends BaseAmoService {
     '/amo/rating/{addonId}': {
       get: {
         summary: 'Mozilla Add-on Rating',
+        description,
         parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },
     '/amo/stars/{addonId}': {
       get: {
         summary: 'Mozilla Add-on Stars',
+        description,
         parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },
