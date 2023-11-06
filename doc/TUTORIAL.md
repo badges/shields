@@ -276,24 +276,25 @@ To render the shields.io website, we produce an [OpenAPI 3 specification](https:
 Once we have implemented our badge, we want to add it to the index so that users can discover it. We will do this by adding an additional object `openApi` to our class. This object contains an [OpenAPI Paths Object](https://swagger.io/specification/#paths-object) describing the endpoint or endpoints exposed by this service class.
 
 ```js
+// (1)
 import { pathParams } from '../index.js'
 
 export default class GemVersion extends BaseJsonService {
   // ...
 
-  // (1)
+  // (2)
   static category = 'version'
 
   static openApi = {
-    // (2)
+    // (3)
     '/gem/v/{gem}': {
-      // (3)
+      // (4)
       get: {
-        // (4)
+        // (5)
         summary: 'Gem Version',
         description:
-          'Badge showing the version of a [Ruby Gem](https://rubygems.org/)',
-        // (5)
+          '[Ruby Gems](https://rubygems.org/) is a registry for ruby libraries',
+        // (6)
         parameters: pathParams({
           name: 'gem',
           description: 'Name of the Ruby Gem',
@@ -305,11 +306,20 @@ export default class GemVersion extends BaseJsonService {
 }
 ```
 
-1. We defined category earlier in the tutorial. The `category` property defines which heading in the index our example will appear under.
-2. The keys of the `openApi` object are routes. In this case we only need to describe one route. In some cases, a service class can define more than one badge route. Open API doesn't have the concept of optional path parameters (more specifically, `in: 'path'` implies `required: true`) so if there are any optional path parameters in our route, our `openApi` object needs to describe two URLs: one without the optional parameter, and another with it.
-3. The HTTP method. Shields only allows GET requests, so this is always `get`.
-4. `summary` (required) is a short title or description of the badge. `description` is an optional longer description or additional documentation. We can use markdown or HTML syntax inside the `description` field.
-5. `parameters` is an array of [Open API Parameter objects](https://swagger.io/specification/#parameter-object) describing any parameters we can pass to this route. This array should include all path parameters included in the key that this value object describes and all relevant query parameters. As a minimum, we need to supply `name` and `example`. The example must be a valid example of a value we can provide for this parameter. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador). There are also optional keys we can pass. The code
+1. There are four helper functions we can use to assemble [Open API Parameter objects](https://swagger.io/specification/#parameter-object). These are:
+
+   - `pathParam` - returns a single Parameter object describing a single path parameter
+   - `pathParams` - returns an array of path parameter objects
+   - `queryParam` - returns a single Parameter object describing a single query parameter
+   - `queryParams` - returns an array of query parameter objects
+
+   These four helper functions are documented in more detail at http://contributing.shields.io/module-core_base-service_openapi.html
+
+2. We defined category earlier in the tutorial. The `category` property defines which heading in the index our example will appear under.
+3. The keys of the `openApi` object are routes. In this case we only need to describe one route. In some cases, a service class can define more than one badge route. Open API doesn't have the concept of optional path parameters (more specifically, `in: 'path'` implies `required: true`) so if there are any optional path parameters in our route, our `openApi` object needs to describe two URLs: one without the optional parameter, and another with it.
+4. The HTTP method. Shields only allows GET requests, so this is always `get`.
+5. `summary` (required) is a short title or description of the badge. `description` is an optional longer description or additional documentation. We can use markdown or HTML syntax inside the `description` field.
+6. `parameters` is an array of [Open API Parameter objects](https://swagger.io/specification/#parameter-object) describing any parameters we can pass to this route. This array should include all path parameters included in the key that this value object describes and all relevant query parameters. As a minimum, we need to supply `name` and `example`. The example must be a valid example of a value we can provide for this parameter. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador). There are also optional keys we can pass. The code
 
    ```js
    parameters: pathParams({
@@ -334,18 +344,11 @@ export default class GemVersion extends BaseJsonService {
    ]
    ```
 
-   but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand. There are four helper functions we can use to assemble [Open API Parameter objects](https://swagger.io/specification/#parameter-object). These are:
-
-   - `pathParam` - returns a single Parameter object describing a path parameter
-   - `pathParams` - returns an array of path Parameter objects
-   - `queryParam` - returns a single Parameter object describing a query parameter
-   - `queryParams` - returns an array of query Parameter objects
-
-   These four helper functions are documented in more detail at http://contributing.shields.io/module-core_base-service_openapi.html
+   but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand.
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
-If you update `openApi`, you don't have to restart the server. Run `npm run defs` in another terminal window and the frontend will update.
+If you update `openApi`, you don't have to restart the server. Run `npm run prestart` in another terminal window and the frontend will update.
 
 Note: Some services define this information in an array property called `examples`. This is deprecated and we're in the process of converting them. New services should declare an `openApi` object.
 
