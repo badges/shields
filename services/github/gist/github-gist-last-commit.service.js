@@ -16,7 +16,7 @@ export default class GistLastCommit extends GithubAuthV3Service {
     '/github/gist/last-commit/{gistId}': {
       get: {
         summary: 'GitHub Gist last commit',
-        description: documentation,
+        description: `Shows the latest commit to a GitHub Gist.\n${documentation}`,
         parameters: pathParams({
           name: 'gistId',
           example: '8710649',
