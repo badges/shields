@@ -1,6 +1,6 @@
 import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import OpenVSXBase from './open-vsx-base.js'
+import { OpenVSXBase, description } from './open-vsx-base.js'
 
 export default class OpenVSXDownloads extends OpenVSXBase {
   static category = 'downloads'
@@ -14,6 +14,7 @@ export default class OpenVSXDownloads extends OpenVSXBase {
     '/open-vsx/dt/{namespace}/{extension}': {
       get: {
         summary: 'Open VSX Downloads',
+        description,
         parameters: pathParams(
           {
             name: 'namespace',
@@ -29,6 +30,7 @@ export default class OpenVSXDownloads extends OpenVSXBase {
     '/open-vsx/dt/{namespace}/{extension}/{version}': {
       get: {
         summary: 'Open VSX Downloads (version)',
+        description,
         parameters: pathParams(
           {
             name: 'namespace',

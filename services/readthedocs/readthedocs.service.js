@@ -8,6 +8,9 @@ const schema = Joi.object({
     .required(),
 }).required()
 
+const description =
+  '[ReadTheDocs](https://readthedocs.com/) is a hosting service for documentation.'
+
 export default class ReadTheDocs extends BaseSvgScrapingService {
   static category = 'build'
 
@@ -20,6 +23,7 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     '/readthedocs/{packageName}': {
       get: {
         summary: 'Read the Docs',
+        description,
         parameters: pathParams({
           name: 'packageName',
           example: 'pip',
@@ -29,6 +33,7 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     '/readthedocs/{packageName}/{version}': {
       get: {
         summary: 'Read the Docs (version)',
+        description,
         parameters: pathParams(
           {
             name: 'packageName',

@@ -1,7 +1,7 @@
 import { pathParams } from '../index.js'
 import { starRating } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
-import OpenVSXBase from './open-vsx-base.js'
+import { OpenVSXBase, description } from './open-vsx-base.js'
 
 export default class OpenVSXRating extends OpenVSXBase {
   static category = 'rating'
@@ -15,6 +15,7 @@ export default class OpenVSXRating extends OpenVSXBase {
     '/open-vsx/{format}/{namespace}/{extension}': {
       get: {
         summary: 'Open VSX Rating',
+        description,
         parameters: pathParams(
           {
             name: 'format',
