@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const queryParamSchema = Joi.object({
   baseUrl: optionalUrl.required(),
@@ -13,19 +13,24 @@ const schema = Joi.object({
 export default class Gerrit extends BaseJsonService {
   static category = 'issue-tracking'
   static route = { base: 'gerrit', pattern: ':changeId', queryParamSchema }
-  static examples = [
-    {
-      title: 'Gerrit change status',
-      namedParams: {
-        changeId: '1011478',
+  static openApi = {
+    '/gerrit/{changeId}': {
+      get: {
+        summary: 'Gerrit change status',
+        parameters: [
+          pathParam({
+            name: 'changeId',
+            example: '1011478',
+          }),
+          queryParam({
+            name: 'baseUrl',
+            example: 'https://android-review.googlesource.com',
+            required: true,
+          }),
+        ],
       },
-      queryParams: { baseUrl: 'https://android-review.googlesource.com' },
-      staticPreview: this.render({
-        changeId: 1011478,
-        status: 'MERGED',
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'gerrit' }
 

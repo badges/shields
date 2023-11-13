@@ -1,8 +1,11 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
-const documentation = `
+const description = `
+  <p>
+    <a href="https://wikiapiary.com">WikiApiary</a> holds information about MediaWiki websites.
+  </p>
   <p>
     The name of an extension is case-sensitive excluding the first character.
   </p>
@@ -52,15 +55,22 @@ export default class WikiapiaryInstalls extends BaseJsonService {
     pattern: ':variant(extension|skin|farm|generator|host)/installs/:name',
   }
 
-  static examples = [
-    {
-      title: 'Wikiapiary installs',
-      namedParams: { variant: 'extension', name: 'ParserFunctions' },
-      staticPreview: this.render({ usage: 11170 }),
-      documentation,
-      keywords: ['mediawiki'],
+  static openApi = {
+    '/wikiapiary/{variant}/installs/{name}': {
+      get: {
+        summary: 'Wikiapiary installs',
+        description,
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'extension',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          },
+          { name: 'name', example: 'ParserFunctions' },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'installs', color: 'informational' }
 
