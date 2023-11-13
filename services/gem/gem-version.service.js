@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { latest, versionColor } from './gem-helpers.js'
 
 const schema = Joi.object({
@@ -25,23 +25,24 @@ const queryParamSchema = Joi.object({
 export default class GemVersion extends BaseJsonService {
   static category = 'version'
   static route = { base: 'gem/v', pattern: ':gem', queryParamSchema }
-  static examples = [
-    {
-      title: 'Gem',
-      namedParams: { gem: 'formatador' },
-      staticPreview: this.render({ version: '2.1.0' }),
-      keywords: ['ruby'],
-    },
-    {
-      title: 'Gem (including prereleases)',
-      namedParams: { gem: 'flame' },
-      queryParams: {
-        include_prereleases: null,
+  static openApi = {
+    '/gem/v/{gem}': {
+      get: {
+        summary: 'Gem Version',
+        parameters: [
+          pathParam({
+            name: 'gem',
+            example: 'formatador',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
       },
-      staticPreview: this.render({ version: '5.0.0.rc6' }),
-      keywords: ['ruby'],
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'gem' }
 
