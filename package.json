@@ -63,7 +63,7 @@
     "qs": "^6.11.2",
     "query-string": "^8.1.0",
     "semver": "~7.5.4",
-    "simple-icons": "9.19.0",
+    "simple-icons": "9.19.1",
     "smol-toml": "1.1.3",
     "webextension-store-meta": "^1.0.5",
     "xpath": "~0.0.33"
