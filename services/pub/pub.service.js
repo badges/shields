@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, redirector, pathParam, queryParam } from '../index.js'
+import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
   versions: Joi.array().items(Joi.string()).required(),
@@ -23,6 +24,7 @@ class PubVersion extends BaseJsonService {
     '/pub/v/{packageName}': {
       get: {
         summary: 'Pub Version',
+        description: baseDescription,
         parameters: [
           pathParam({
             name: 'packageName',

@@ -1,9 +1,10 @@
 import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
 import { BaseJsonService, pathParams } from '../index.js'
+import { baseDescription } from './pub-common.js'
 
-const description =
-  '<p>A measure of how many developers use a package, providing insight into what other developers are using.</p>'
+const description = `${baseDescription}
+  <p>This badge shows a measure of how many developers use a package, providing insight into what other developers are using.</p>`
 
 const schema = Joi.object({
   popularityScore: Joi.number().min(0).max(1).required(),

@@ -2,9 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
+import { baseDescription } from './pub-common.js'
 
-const description =
-  '<p>A measure of how many developers have liked a package. This provides a raw measure of the overall sentiment of a package from peer developers.</p>'
+const description = `${baseDescription}
+  <p>This badge shows a measure of how many developers have liked a package. This provides a raw measure of the overall sentiment of a package from peer developers.</p>`
 
 const schema = Joi.object({
   likeCount: nonNegativeInteger,

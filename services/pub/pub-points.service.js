@@ -2,9 +2,10 @@ import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
 import { BaseJsonService, pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
+import { baseDescription } from './pub-common.js'
 
-const description =
-  '<p>A measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>'
+const description = `${baseDescription}
+  <p>This badge shows a measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>`
 
 const schema = Joi.object({
   grantedPoints: nonNegativeInteger,
