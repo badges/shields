@@ -9,6 +9,7 @@ import {
   InvalidResponse,
   pathParams,
 } from '../index.js'
+import { description } from './gem-helpers.js'
 
 const gemSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -33,6 +34,7 @@ export default class GemDownloads extends BaseJsonService {
     '/gem/dt/{gem}': {
       get: {
         summary: 'Gem Total Downloads',
+        description,
         parameters: pathParams({
           name: 'gem',
           example: 'rails',
@@ -42,6 +44,7 @@ export default class GemDownloads extends BaseJsonService {
     '/gem/dtv/{gem}': {
       get: {
         summary: 'Gem Downloads (for latest version)',
+        description,
         parameters: pathParams({
           name: 'gem',
           example: 'rails',
@@ -51,6 +54,7 @@ export default class GemDownloads extends BaseJsonService {
     '/gem/dv/{gem}/{version}': {
       get: {
         summary: 'Gem Downloads (for specified version)',
+        description,
         parameters: pathParams(
           {
             name: 'gem',

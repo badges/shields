@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
-import { latest, versionColor } from './gem-helpers.js'
+import { description, latest, versionColor } from './gem-helpers.js'
 
 const schema = Joi.object({
   // In most cases `version` will be a SemVer but the registry doesn't
@@ -29,6 +29,7 @@ export default class GemVersion extends BaseJsonService {
     '/gem/v/{gem}': {
       get: {
         summary: 'Gem Version',
+        description,
         parameters: [
           pathParam({
             name: 'gem',

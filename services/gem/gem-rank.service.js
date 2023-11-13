@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
 import { ordinalNumber } from '../text-formatters.js'
 import { BaseJsonService, InvalidResponse, pathParams } from '../index.js'
+import { description } from './gem-helpers.js'
 
 const totalSchema = Joi.array()
   .items(
@@ -27,6 +28,7 @@ export default class GemRank extends BaseJsonService {
     '/gem/{period}/{gem}': {
       get: {
         summary: 'Gem download rank',
+        description,
         parameters: pathParams(
           {
             name: 'period',
