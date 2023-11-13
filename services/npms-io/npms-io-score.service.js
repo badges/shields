@@ -15,6 +15,9 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
+const description =
+  '[npms.io](https://npms.io) holds statistics for javascript packages.'
+
 export default class NpmsIOScore extends BaseJsonService {
   static category = 'analysis'
 
@@ -28,6 +31,7 @@ export default class NpmsIOScore extends BaseJsonService {
     '/npms-io/{type}/{packageName}': {
       get: {
         summary: 'npms.io',
+        description,
         parameters: pathParams(
           {
             name: 'type',
@@ -44,6 +48,7 @@ export default class NpmsIOScore extends BaseJsonService {
     '/npms-io/{type}/{scope}/{packageName}': {
       get: {
         summary: 'npms.io (scoped package)',
+        description,
         parameters: pathParams(
           {
             name: 'type',

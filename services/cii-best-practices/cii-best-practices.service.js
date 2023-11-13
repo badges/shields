@@ -37,6 +37,8 @@ export default class CIIBestPracticesService extends BaseJsonService {
     '/cii/{metric}/{projectId}': {
       get: {
         summary: 'CII Best Practices',
+        description:
+          'The Core Infrastructure Initiative (CII) Best Practices badge is a way for Open Source projects to show that they follow best practices',
         parameters: pathParams(
           {
             name: 'metric',

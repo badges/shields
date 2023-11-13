@@ -47,4 +47,7 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
-export { BaseCratesService }
+const description =
+  '[Crates.io](https://crates.io/) is a package registry for Rust.'
+
+export { BaseCratesService, description }

@@ -1,6 +1,6 @@
 import { renderVersionBadge } from '../version.js'
 import { InvalidResponse, pathParams } from '../index.js'
-import { BaseCratesService } from './crates-base.js'
+import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesVersion extends BaseCratesService {
   static category = 'version'
@@ -10,6 +10,7 @@ export default class CratesVersion extends BaseCratesService {
     '/crates/v/{crate}': {
       get: {
         summary: 'Crates.io Version',
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'rustc-serialize',

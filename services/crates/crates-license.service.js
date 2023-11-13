@@ -1,5 +1,5 @@
 import { InvalidResponse, pathParams } from '../index.js'
-import { BaseCratesService } from './crates-base.js'
+import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
   static category = 'license'
@@ -9,6 +9,7 @@ export default class CratesLicense extends BaseCratesService {
     '/crates/l/{crate}': {
       get: {
         summary: 'Crates.io License',
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'rustc-serialize',
@@ -18,6 +19,7 @@ export default class CratesLicense extends BaseCratesService {
     '/crates/l/{crate}/{version}': {
       get: {
         summary: 'Crates.io License (version)',
+        description,
         parameters: pathParams(
           {
             name: 'crate',

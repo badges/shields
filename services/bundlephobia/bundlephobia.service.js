@@ -8,6 +8,9 @@ const schema = Joi.object({
   gzip: nonNegativeInteger,
 }).required()
 
+const description =
+  '[Bundlephobia](https://bundlephobia.com) lets you understand the size of a javascript package from NPM before it becomes a part of your bundle.'
+
 export default class Bundlephobia extends BaseJsonService {
   static category = 'size'
 
@@ -20,6 +23,7 @@ export default class Bundlephobia extends BaseJsonService {
     '/bundlephobia/{format}/{packageName}': {
       get: {
         summary: 'npm bundle size',
+        description,
         parameters: pathParams(
           {
             name: 'format',
@@ -36,6 +40,7 @@ export default class Bundlephobia extends BaseJsonService {
     '/bundlephobia/{format}/{scope}/{packageName}': {
       get: {
         summary: 'npm bundle size (scoped)',
+        description,
         parameters: pathParams(
           {
             name: 'format',
@@ -56,6 +61,7 @@ export default class Bundlephobia extends BaseJsonService {
     '/bundlephobia/{format}/{packageName}/{version}': {
       get: {
         summary: 'npm bundle size (version)',
+        description,
         parameters: pathParams(
           {
             name: 'format',
@@ -76,6 +82,7 @@ export default class Bundlephobia extends BaseJsonService {
     '/bundlephobia/{format}/{scope}/{packageName}/{version}': {
       get: {
         summary: 'npm bundle size (scoped version)',
+        description,
         parameters: pathParams(
           {
             name: 'format',

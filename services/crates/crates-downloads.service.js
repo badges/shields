@@ -1,6 +1,6 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import { InvalidParameter, NotFound, pathParams } from '../index.js'
-import { BaseCratesService } from './crates-base.js'
+import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesDownloads extends BaseCratesService {
   static category = 'downloads'
@@ -13,6 +13,7 @@ export default class CratesDownloads extends BaseCratesService {
     '/crates/d/{crate}': {
       get: {
         summary: 'Crates.io Total Downloads',
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'rustc-serialize',
@@ -22,6 +23,7 @@ export default class CratesDownloads extends BaseCratesService {
     '/crates/dv/{crate}': {
       get: {
         summary: 'Crates.io Downloads (latest version)',
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'rustc-serialize',
@@ -31,6 +33,7 @@ export default class CratesDownloads extends BaseCratesService {
     '/crates/dv/{crate}/{version}': {
       get: {
         summary: 'Crates.io Downloads (version)',
+        description,
         parameters: pathParams(
           {
             name: 'crate',
@@ -46,6 +49,7 @@ export default class CratesDownloads extends BaseCratesService {
     '/crates/dr/{crate}': {
       get: {
         summary: 'Crates.io Downloads (recent)',
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'rustc-serialize',
