@@ -4,6 +4,8 @@ import { coveragePercentage as coveragePercentageColor } from '../color-formatte
 import AzureDevOpsBase from './azure-devops-base.js'
 
 const description = `
+[Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
+
 To obtain your own badge, you need to get 3 pieces of information:
 \`ORGANIZATION\`, \`PROJECT_ID\` and \`DEFINITION_ID\`.
 
