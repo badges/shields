@@ -33,6 +33,7 @@ const resourceSchema = Joi.object({
 }).required()
 
 const description = `
+<p><a href="https://ore.spongepowered.org/">Ore</a> is a Minecraft package repository.</p>
 <p>Your Plugin ID is the name of your plugin in lowercase, without any spaces or dashes.</p>
 <p>Example: <code>https://ore.spongepowered.org/Erigitic/Total-Economy</code> - Here the Plugin ID is <code>totaleconomy</code>.</p>`
 
