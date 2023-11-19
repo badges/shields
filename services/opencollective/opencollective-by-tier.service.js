@@ -58,8 +58,8 @@ class OpencollectiveBaseJson extends BaseJsonService {
         userType === 'users'
           ? 'USER'
           : userType === 'organizations'
-          ? 'ORGANIZATION'
-          : undefined,
+            ? 'ORGANIZATION'
+            : undefined,
       tierRequired: tierId,
     })
     const members = await this._requestJson({

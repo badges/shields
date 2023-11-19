@@ -8,7 +8,7 @@ import Joi from 'joi'
 
 /**
  * Joi schema for validating query params.
- * Checks if the query params obect has valid up_message, down_message, up_color and down_color properties.
+ * Checks if the query params object has valid up_message, down_message, up_color and down_color properties.
  *
  * @type {Joi}
  */

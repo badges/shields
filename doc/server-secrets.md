@@ -254,6 +254,14 @@ OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
 An [API token](https://graphql-docs-v2.opencollective.com/access)
 can be provided to access a higher rate limit of 100 reqs/minute.
 
+### Pepy
+
+- `PEPY_KEY` (yml: `pepy_key`)
+
+The Pepy API requires authentication. To obtain a key,
+Create an account, sign in and obtain generate a key on your
+[account page](https://www.pepy.tech/user).
+
 ### SymfonyInsight (formerly Sensiolabs)
 
 - `SL_INSIGHT_USER_UUID` (yml: `private.sl_insight_userUuid`)

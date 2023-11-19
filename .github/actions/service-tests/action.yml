@@ -16,6 +16,10 @@ inputs:
     description: 'The SERVICETESTS_OBS_PASS secret'
     required: false
     default: ''
+  pepy-key:
+    description: 'The SERVICETESTS_PEPY_KEY secret'
+    required: false
+    default: ''
   sl-insight-user-uuid:
     description: 'The SERVICETESTS_SL_INSIGHT_USER_UUID secret'
     required: false
@@ -66,6 +70,7 @@ runs:
         LIBRARIESIO_TOKENS: '${{ inputs.librariesio-tokens }}'
         OBS_USER: '${{ inputs.obs-user }}'
         OBS_PASS: '${{ inputs.obs-pass }}'
+        PEPY_KEY: '${{ inputs.pepy-key }}'
         SL_INSIGHT_USER_UUID: '${{ inputs.sl-insight-user-uuid }}'
         SL_INSIGHT_API_TOKEN: '${{ inputs.sl-insight-api-token }}'
         TWITCH_CLIENT_ID: '${{ inputs.twitch-client-id }}'

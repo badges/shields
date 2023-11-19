@@ -35,7 +35,7 @@ t.create('commit activity (1 year) by author')
   .get(`/y/badges/shields.json?authorFilter=${authorFilterUser}`)
   .expectBadge({
     label: `commit activity by ${authorFilterUser}`,
-    message: isMetricOverTimePeriod,
+    message: isCommitActivity,
   })
 
 t.create('commit activity (1 month)').get('/m/eslint/eslint.json').expectBadge({
@@ -47,7 +47,7 @@ t.create('commit activity (1 month) by author')
   .get(`/m/badges/shields.json?authorFilter=${authorFilterUser}`)
   .expectBadge({
     label: `commit activity by ${authorFilterUser}`,
-    message: isMetricOverTimePeriod,
+    message: isCommitActivity,
   })
 
 t.create('commit activity (4 weeks)')
@@ -61,7 +61,7 @@ t.create('commit activity (4 weeks) by author')
   .get(`/4w/badges/shields.json?authorFilter=${authorFilterUser}`)
   .expectBadge({
     label: `commit activity by ${authorFilterUser}`,
-    message: isMetricOverTimePeriod,
+    message: isCommitActivity,
   })
 
 t.create('commit activity (1 week)').get('/w/eslint/eslint.json').expectBadge({
