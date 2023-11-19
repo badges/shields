@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { pulsarPurple } from './pulsar-helper.js'
@@ -13,13 +13,17 @@ export default class PulsarStargazers extends BaseJsonService {
 
   static route = { base: 'pulsar/stargazers', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'Pulsar Stargazers',
-      namedParams: { packageName: 'hey-pane' },
-      staticPreview: this.render({ stargazerCount: 1000 }),
+  static openApi = {
+    '/pulsar/stargazers/{packageName}': {
+      get: {
+        summary: 'Pulsar Stargazers',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'hey-pane',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'stargazers' }
 

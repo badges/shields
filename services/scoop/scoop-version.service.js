@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
 import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
 import { renderVersionBadge } from '../version.js'
@@ -29,19 +29,19 @@ export default class ScoopVersion extends ConditionalGithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Scoop Version',
-      namedParams: { app: 'ngrok' },
-      staticPreview: this.render({ version: '2.3.35' }),
+  static openApi = {
+    '/scoop/v/{app}': {
+      get: {
+        summary: 'Scoop Version',
+        description:
+          '[Scoop](https://scoop.sh/) is a command-line installer for Windows',
+        parameters: [
+          pathParam({ name: 'app', example: 'ngrok' }),
+          queryParam({ name: 'bucket', example: 'extras' }),
+        ],
+      },
     },
-    {
-      title: 'Scoop Version (extras bucket)',
-      namedParams: { app: 'dnspy' },
-      queryParams: { bucket: 'extras' },
-      staticPreview: this.render({ version: '6.1.4' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'scoop' }
 

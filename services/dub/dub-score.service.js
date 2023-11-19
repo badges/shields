@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 
 const schema = Joi.object({
@@ -11,13 +11,17 @@ export default class DubScore extends BaseJsonService {
 
   static route = { base: 'dub/score', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'DUB Score',
-      namedParams: { packageName: 'vibe-d' },
-      staticPreview: this.render({ score: 4.5 }),
+  static openApi = {
+    '/dub/score/{packageName}': {
+      get: {
+        summary: 'DUB Score',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'vibe-d',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'score' }
 
