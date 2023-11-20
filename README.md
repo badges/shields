@@ -20,7 +20,7 @@
         <img src="https://img.shields.io/coveralls/github/badges/shields"
             alt="coverage"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
+        <img src="https://img.shields.io/discord/308323056592486420?logo=discord&color=5662F6"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=shields_io">
         <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=X"
