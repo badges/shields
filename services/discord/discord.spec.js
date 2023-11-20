@@ -30,7 +30,7 @@ describe('Discord', function () {
       }),
     ).to.deep.equal({
       message: '125 online',
-      color: 'brightgreen',
+      color: '#5865F2',
     })
 
     scope.done()

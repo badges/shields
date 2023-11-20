@@ -5,14 +5,14 @@ export const t = await createServiceTester()
 t.create('gets status for Reactiflux')
   .get('/102860784329052160.json')
   .expectBadge({
-    label: 'chat',
+    label: 'Discord',
     message: Joi.string().regex(/^[0-9]+ online$/),
-    color: 'brightgreen',
+    color: '#5865F2',
   })
 
 t.create('invalid server ID')
   .get('/12345.json')
-  .expectBadge({ label: 'chat', message: 'invalid server' })
+  .expectBadge({ label: 'Discord', message: 'invalid server' })
 
 t.create('widget disabled')
   .get('/12345.json')
@@ -24,7 +24,7 @@ t.create('widget disabled')
         message: 'Widget Disabled',
       }),
   )
-  .expectBadge({ label: 'chat', message: 'widget disabled' })
+  .expectBadge({ label: 'Discord', message: 'widget disabled' })
 
 t.create('server error')
   .get('/12345.json')
@@ -33,4 +33,4 @@ t.create('server error')
       .get('/api/v6/guilds/12345/widget.json')
       .reply(500, 'Something broke'),
   )
-  .expectBadge({ label: 'chat', message: 'inaccessible' })
+  .expectBadge({ label: 'Discord', message: 'inaccessible' })

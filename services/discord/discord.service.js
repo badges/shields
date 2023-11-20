@@ -47,12 +47,12 @@ export default class Discord extends BaseJsonService {
 
   static _cacheLength = 30
 
-  static defaultBadgeData = { label: 'chat' }
+  static defaultBadgeData = { label: 'Discord' }
 
   static render({ members }) {
     return {
       message: `${members} online`,
-      color: 'brightgreen',
+      color: '#5865F2',
     }
   }
 
