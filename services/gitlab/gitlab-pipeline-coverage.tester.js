@@ -30,6 +30,7 @@ t.create('Coverage (nonexistent branch)')
 // present users with a more traditional and friendly 'Not Found'
 // error message, we will simply display invalid
 // https://github.com/badges/shields/pull/5538
+// https://github.com/badges/shields/pull/9752
 t.create('Coverage (nonexistent repo)')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({

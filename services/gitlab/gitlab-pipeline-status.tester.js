@@ -36,6 +36,7 @@ t.create('Pipeline status (nonexistent branch)')
 // present users with a more traditional and friendly 'Not Found'
 // error message, we will simply display invalid
 // https://github.com/badges/shields/pull/5538
+// https://github.com/badges/shields/pull/9752
 t.create('Pipeline status (nonexistent repo)')
   .get('/pipeline-status/this-repo/does-not-exist.json?branch=master')
   .expectBadge({
