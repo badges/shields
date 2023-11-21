@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
@@ -19,14 +19,18 @@ const schema = Joi.object({
 export default class GithubSponsors extends GithubAuthV4Service {
   static category = 'funding'
   static route = { base: 'github/sponsors', pattern: ':user' }
-  static examples = [
-    {
-      title: 'GitHub Sponsors',
-      namedParams: { user: 'Homebrew' },
-      staticPreview: this.render({ count: 217 }),
-      documentation,
+  static openApi = {
+    '/github/sponsors/{user}': {
+      get: {
+        summary: 'GitHub Sponsors',
+        description: documentation,
+        parameters: pathParams({
+          name: 'user',
+          example: 'Homebrew',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'sponsors',

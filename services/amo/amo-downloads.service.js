@@ -1,8 +1,9 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import { redirector, pathParams } from '../index.js'
-import { BaseAmoService } from './amo-base.js'
+import { BaseAmoService, description as baseDescription } from './amo-base.js'
 
-const description = `
+const description = `${baseDescription}
+
 Previously \`amo/d\` provided a &ldquo;total downloads&rdquo; badge. However,
 [updates to the v3 API](https://github.com/badges/shields/issues/3079)
 only give us weekly downloads. The route \`amo/d\` redirects to \`amo/dw\`.

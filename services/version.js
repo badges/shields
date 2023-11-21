@@ -59,8 +59,8 @@ function compareDottedVersion(v1, v2) {
       return distinguisher1 < distinguisher2
         ? -1
         : distinguisher1 > distinguisher2
-        ? 1
-        : 0
+          ? 1
+          : 0
     }
   }
   return v1 < v2 ? -1 : v1 > v2 ? 1 : 0

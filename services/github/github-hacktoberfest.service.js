@@ -202,9 +202,8 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   }
 
   async handle({ user, repo, year }, { suggestion_label: suggestionLabel }) {
-    const { isBefore, daysToStart } = this.constructor.getCalendarPosition(
-      +year,
-    )
+    const { isBefore, daysToStart } =
+      this.constructor.getCalendarPosition(+year)
     if (isBefore) {
       return this.constructor.render({ hasStarted: false, daysToStart, year })
     }

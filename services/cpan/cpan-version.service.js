@@ -1,6 +1,6 @@
 import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import BaseCpanService from './cpan.js'
+import { BaseCpanService, description } from './cpan.js'
 
 export default class CpanVersion extends BaseCpanService {
   static category = 'version'
@@ -10,6 +10,7 @@ export default class CpanVersion extends BaseCpanService {
     '/cpan/v/{packageName}': {
       get: {
         summary: 'CPAN Version',
+        description,
         parameters: pathParams({
           name: 'packageName',
           example: 'Config-Augeas',

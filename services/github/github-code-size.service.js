@@ -1,4 +1,5 @@
 import prettyBytes from 'pretty-bytes'
+import { pathParams } from '../index.js'
 import { BaseGithubLanguage } from './github-languages-base.js'
 import { documentation } from './github-helpers.js'
 
@@ -9,17 +10,24 @@ export default class GithubCodeSize extends BaseGithubLanguage {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'GitHub code size in bytes',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/languages/code-size/{user}/{repo}': {
+      get: {
+        summary: 'GitHub code size in bytes',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+        ),
       },
-      staticPreview: this.render({ size: 1625000 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'code size' }
 

@@ -1,6 +1,6 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import { pathParams } from '../index.js'
-import { BaseAmoService } from './amo-base.js'
+import { BaseAmoService, description } from './amo-base.js'
 
 export default class AmoUsers extends BaseAmoService {
   static category = 'downloads'
@@ -10,6 +10,7 @@ export default class AmoUsers extends BaseAmoService {
     '/amo/users/{addonId}': {
       get: {
         summary: 'Mozilla Add-on Users',
+        description,
         parameters: pathParams({ name: 'addonId', example: 'dustman' }),
       },
     },

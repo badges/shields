@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -11,17 +12,24 @@ const schema = Joi.object({
 export default class GithubRepoSize extends GithubAuthV3Service {
   static category = 'size'
   static route = { base: 'github/repo-size', pattern: ':user/:repo' }
-  static examples = [
-    {
-      title: 'GitHub repo size',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
+  static openApi = {
+    '/github/repo-size/{user}/{repo}': {
+      get: {
+        summary: 'GitHub repo size',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'atom',
+          },
+          {
+            name: 'repo',
+            example: 'atom',
+          },
+        ),
       },
-      staticPreview: this.render({ size: 319488 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'repo size' }
 

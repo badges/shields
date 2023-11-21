@@ -29,6 +29,7 @@ jobs:
           librariesio-tokens: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
           obs-user: '${{ secrets.SERVICETESTS_OBS_USER }}'
           obs-pass: '${{ secrets.SERVICETESTS_OBS_PASS }}'
+          pepy-key: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
           sl-insight-user-uuid: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
           sl-insight-api-token: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           twitch-client-id: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'

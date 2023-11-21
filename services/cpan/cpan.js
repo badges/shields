@@ -6,6 +6,9 @@ const schema = Joi.object({
   license: Joi.array().items(Joi.string()).min(1).required(),
 }).required()
 
+const description =
+  '[CPAN](https://www.cpan.org/) is a package registry for Perl'
+
 export default class BaseCpanService extends BaseJsonService {
   static defaultBadgeData = { label: 'cpan' }
 
@@ -14,3 +17,5 @@ export default class BaseCpanService extends BaseJsonService {
     return this._requestJson({ schema, url })
   }
 }
+
+export { BaseCpanService, description }
