@@ -48,8 +48,26 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
       get: {
         summary: 'GitHub branch checks runs',
         description,
-        parameters: [
-          pathParams(
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
+      },
+      '/github/checks-runs/{user}/{repo}/{tag}': {
+        get: {
+          summary: 'GitHub tag checks runs',
+          description,
+          parameters: pathParams(
             {
               name: 'user',
               example: 'badges',
@@ -59,54 +77,30 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
               example: 'shields',
             },
             {
-              name: 'branch',
-              example: 'master',
+              name: 'tag',
+              example: '3.3.0',
             },
           ),
-        ],
-      },
-      '/github/checks-runs/{user}/{repo}/{tag}': {
-        get: {
-          summary: 'GitHub tag checks runs',
-          description,
-          parameters: [
-            pathParams(
-              {
-                name: 'user',
-                example: 'badges',
-              },
-              {
-                name: 'repo',
-                example: 'shields',
-              },
-              {
-                name: 'tag',
-                example: '3.3.0',
-              },
-            ),
-          ],
         },
       },
       '/github/checks-runs/{user}/{repo}/{commit}': {
         get: {
           summary: 'GitHub commit checks runs',
           description,
-          parameters: [
-            pathParams(
-              {
-                name: 'user',
-                example: 'badges',
-              },
-              {
-                name: 'repo',
-                example: 'shields',
-              },
-              {
-                name: 'commit',
-                example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
-              },
-            ),
-          ],
+          parameters: pathParams(
+            {
+              name: 'user',
+              example: 'badges',
+            },
+            {
+              name: 'repo',
+              example: 'shields',
+            },
+            {
+              name: 'commit',
+              example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
+            },
+          ),
         },
       },
     },
