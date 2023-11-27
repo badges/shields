@@ -1,9 +1,19 @@
 import Joi from 'joi'
 import countBy from 'lodash.countby'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, httpErrorsFor } from './github-helpers.js'
+import {
+  documentation as commonDocumentation,
+  httpErrorsFor,
+} from './github-helpers.js'
+
+const description = `
+The Check Runs service shows the status of GitHub action runs.
+
+${commonDocumentation}
+`
 
 const schema = Joi.object({
   total_count: nonNegativeInteger,
@@ -33,47 +43,74 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     pattern: ':user/:repo/:ref+',
   }
 
-  static examples = [
-    {
-      title: 'GitHub branch checks runs',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: 'master',
+  static openApi = {
+    '/github/checks-runs/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub branch checks runs',
+        description,
+        parameters: [
+          pathParams(
+            {
+              name: 'user',
+              example: 'badges',
+            },
+            {
+              name: 'repo',
+              example: 'shields',
+            },
+            {
+              name: 'branch',
+              example: 'master',
+            },
+          ),
+        ],
       },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
-    },
-    {
-      title: 'GitHub commit checks runs',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
+      '/github/checks-runs/{user}/{repo}/{tag}': {
+        get: {
+          summary: 'GitHub tag checks runs',
+          description,
+          parameters: [
+            pathParams(
+              {
+                name: 'user',
+                example: 'badges',
+              },
+              {
+                name: 'repo',
+                example: 'shields',
+              },
+              {
+                name: 'tag',
+                example: '3.3.0',
+              },
+            ),
+          ],
+        },
       },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
-    },
-    {
-      title: 'GitHub tag checks runs',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: '3.3.0',
+      '/github/checks-runs/{user}/{repo}/{commit}': {
+        get: {
+          summary: 'GitHub commit checks runs',
+          description,
+          parameters: [
+            pathParams(
+              {
+                name: 'user',
+                example: 'badges',
+              },
+              {
+                name: 'repo',
+                example: 'shields',
+              },
+              {
+                name: 'commit',
+                example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
+              },
+            ),
+          ],
+        },
       },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 
