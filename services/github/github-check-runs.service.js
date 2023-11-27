@@ -63,45 +63,45 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
           },
         ),
       },
-      '/github/checks-runs/{user}/{repo}/{tag}': {
-        get: {
-          summary: 'GitHub tag checks runs',
-          description,
-          parameters: pathParams(
-            {
-              name: 'user',
-              example: 'badges',
-            },
-            {
-              name: 'repo',
-              example: 'shields',
-            },
-            {
-              name: 'tag',
-              example: '3.3.0',
-            },
-          ),
-        },
+    },
+    '/github/checks-runs/{user}/{repo}/{commit}': {
+      get: {
+        summary: 'GitHub commit checks runs',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'commit',
+            example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
+          },
+        ),
       },
-      '/github/checks-runs/{user}/{repo}/{commit}': {
-        get: {
-          summary: 'GitHub commit checks runs',
-          description,
-          parameters: pathParams(
-            {
-              name: 'user',
-              example: 'badges',
-            },
-            {
-              name: 'repo',
-              example: 'shields',
-            },
-            {
-              name: 'commit',
-              example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
-            },
-          ),
-        },
+    },
+    '/github/checks-runs/{user}/{repo}/{tag}': {
+      get: {
+        summary: 'GitHub tag checks runs',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'tag',
+            example: '3.3.0',
+          },
+        ),
       },
     },
   }
