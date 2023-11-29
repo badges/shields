@@ -198,7 +198,7 @@
     "open-cli": "^7.2.0",
     "portfinder": "^1.0.32",
     "prettier": "3.1.0",
-    "prism-react-renderer": "^2.2.0",
+    "prism-react-renderer": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "read-all-stdin-sync": "^1.0.5",
