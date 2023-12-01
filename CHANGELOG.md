@@ -4,6 +4,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-12-01
+
+- move from @renovate/pep440 to @renovatebot/pep440 [#9614](https://github.com/badges/shields/issues/9614)
+- deprecate/fix [ansible] galaxy services [#9648](https://github.com/badges/shields/issues/9648)
+- call [pepy] with auth [#9748](https://github.com/badges/shields/issues/9748)
+- fix [GitHubCommitActivity] service tests [#9736](https://github.com/badges/shields/issues/9736)
+- migrate examples to openApi part 12; affects [GitHub Gist] [#9500](https://github.com/badges/shields/issues/9500)
+- add meaningful descriptions including keywords [#9715](https://github.com/badges/shields/issues/9715)
+- Dependency updates
+
 ## server-2023-11-01
 
 - fix greasyfork 404 bug [#9632](https://github.com/badges/shields/issues/9632)
