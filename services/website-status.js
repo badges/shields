@@ -5,6 +5,7 @@
  */
 
 import Joi from 'joi'
+import { queryParams as qP } from './index.js'
 
 /**
  * Joi schema for validating query params.
@@ -20,17 +21,18 @@ const queryParamSchema = Joi.object({
 }).required()
 
 /**
- * Example query param object.
- * Contains up_message, down_message, up_color and down_color properties.
+ * Array of OpenAPI Parameter Objects describing the
+ * up_message, down_message, up_color and down_color
+ * query params
  *
- * @type {object}
+ * @type {Array.<module:core/base-service/openapi~OpenApiParam>}
  */
-const exampleQueryParams = {
-  up_message: 'online',
-  up_color: 'blue',
-  down_message: 'offline',
-  down_color: 'lightgrey',
-}
+const queryParams = qP(
+  { name: 'up_message', example: 'online' },
+  { name: 'up_color', example: 'blue' },
+  { name: 'down_message', example: 'offline' },
+  { name: 'down_color', example: 'lightgrey' },
+)
 
 /**
  * Creates a badge object that displays information about website status.
@@ -60,4 +62,4 @@ function renderWebsiteStatus({
   }
 }
 
-export { queryParamSchema, exampleQueryParams, renderWebsiteStatus }
+export { queryParamSchema, queryParams, renderWebsiteStatus }
