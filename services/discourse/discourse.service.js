@@ -4,11 +4,15 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
+// Note: At some point, Discourse changed its metrics from e.g. 'topic_count'
+// to 'topics_count' (plural). Newer servers seem to use this plural form,
+// but older servers may exist that rely on the singular form. See also:
+// https://github.com/badges/shields/issues/9776
 const schema = Joi.object({
-  topic_count: nonNegativeInteger,
-  user_count: nonNegativeInteger,
-  post_count: nonNegativeInteger,
-  like_count: nonNegativeInteger,
+  topics_count: nonNegativeInteger,
+  users_count: nonNegativeInteger,
+  posts_count: nonNegativeInteger,
+  likes_count: nonNegativeInteger,
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -97,10 +101,10 @@ class DiscourseStatus extends DiscourseBase {
 }
 
 const metricIntegrations = [
-  { metricName: 'topics', property: 'topic_count' },
-  { metricName: 'users', property: 'user_count' },
-  { metricName: 'posts', property: 'post_count' },
-  { metricName: 'likes', property: 'like_count' },
+  { metricName: 'topics', property: 'topics_count' },
+  { metricName: 'users', property: 'users_count' },
+  { metricName: 'posts', property: 'posts_count' },
+  { metricName: 'likes', property: 'likes_count' },
 ].map(DiscourseMetricIntegrationFactory)
 
 export default [...metricIntegrations, DiscourseStatus]
