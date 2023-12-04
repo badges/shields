@@ -1,4 +1,5 @@
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { pathParams } from '../index.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreSpongeVersions extends BaseOreService {
   static category = 'platform-support'
@@ -8,17 +9,18 @@ export default class OreSpongeVersions extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Compatible versions (plugins on Ore)',
-      namedParams: {
-        pluginId: 'nucleus',
+  static openApi = {
+    '/ore/sponge-versions/{pluginId}': {
+      get: {
+        summary: 'Compatible versions (plugins on Ore)',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
       },
-      staticPreview: this.render({ versions: ['7.3', '6.0'] }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'sponge',
