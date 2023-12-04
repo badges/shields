@@ -7,9 +7,9 @@ export const t = new ServiceTester({
 })
 
 const data = {
-  topics_count: 22513,
-  posts_count: 337719,
-  users_count: 31220,
+  topic_count: 22513,
+  post_count: 337719,
+  user_count: 31220,
   topics_7_days: 143,
   topics_30_days: 551,
   posts_7_days: 2679,
@@ -18,7 +18,7 @@ const data = {
   users_30_days: 803,
   active_users_7_days: 762,
   active_users_30_days: 1495,
-  likes_count: 308833,
+  like_count: 308833,
   likes_7_days: 3633,
   likes_30_days: 13397,
 }
