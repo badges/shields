@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { BasePuppetForgeModulesService } from './puppetforge-base.js'
 
@@ -9,16 +10,23 @@ export default class PuppetforgeModuleVersion extends BasePuppetForgeModulesServ
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'Puppet Forge version',
-      namedParams: {
-        user: 'vStone',
-        moduleName: 'percona',
+  static openApi = {
+    '/puppetforge/v/{user}/{moduleName}': {
+      get: {
+        summary: 'Puppet Forge version',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'vStone',
+          },
+          {
+            name: 'moduleName',
+            example: 'percona',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '1.3.3' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'puppetforge' }
 

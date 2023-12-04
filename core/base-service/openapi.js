@@ -363,7 +363,7 @@ function pathParam({
  *   { name: 'name2', example: 'example2' },
  * )
  * ```
- * is equivilent to
+ * is equivalent to
  * ```
  * const params = [
  *   pathParam({ name: 'name1', example: 'example1' }),
@@ -409,7 +409,7 @@ function queryParam({
  *   { name: 'name2', example: 'example2' },
  * )
  * ```
- * is equivilent to
+ * is equivalent to
  * ```
  * const params = [
  *   queryParam({ name: 'name1', example: 'example1' }),

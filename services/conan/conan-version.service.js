@@ -13,6 +13,7 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
     '/conan/v/{packageName}': {
       get: {
         summary: 'Conan Center',
+        description: '[Conan](https://conan.io/) is a package manager for C++',
         parameters: pathParams({
           name: 'packageName',
           example: 'boost',

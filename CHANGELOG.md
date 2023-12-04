@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2023-12-04
+
+- move from @renovate/pep440 to @renovatebot/pep440 [#9614](https://github.com/badges/shields/issues/9614)
+- deprecate/fix [ansible] galaxy services [#9648](https://github.com/badges/shields/issues/9648)
+- call [pepy] with auth [#9748](https://github.com/badges/shields/issues/9748)
+- add meaningful descriptions including keywords [#9715](https://github.com/badges/shields/issues/9715)
+- Dependency updates
+
+## server-2023-11-01
+
+- fix greasyfork 404 bug [#9632](https://github.com/badges/shields/issues/9632)
+- Hacktoberfest 2023 support - resolves #9636 [#9637](https://github.com/badges/shields/issues/9637)
+- switch to fixed OpenCollective images [#9615](https://github.com/badges/shields/issues/9615)
+- Dependency updates
+
+## server-2023-10-02
+
+- add python package total downloads from [pepy] badge [#9564](https://github.com/badges/shields/issues/9564)
+- deprecate [redmine] plugin rating badges [#9568](https://github.com/badges/shields/issues/9568)
+- fix [bower] version badge [#9567](https://github.com/badges/shields/issues/9567)
+- Add [PythonVersionFromToml] shield [#9516](https://github.com/badges/shields/issues/9516)
+- Add [dub] score badge service [#9549](https://github.com/badges/shields/issues/9549)
+- Dependency updates
+
 ## server-2023-09-04
 
 - Fix [testspace] badges [#9525](https://github.com/badges/shields/issues/9525)

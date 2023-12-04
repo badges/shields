@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, queryParams } from '../index.js'
 
 const schema = Joi.object()
   .keys({
@@ -26,17 +26,19 @@ export default class SwaggerValidatorService extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Swagger Validator',
-      staticPreview: this.render({ status: 'valid' }),
-      namedParams: {},
-      queryParams: {
-        specUrl:
-          'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+  static openApi = {
+    '/swagger/valid/3.0': {
+      get: {
+        summary: 'Swagger Validator',
+        parameters: queryParams({
+          name: 'specUrl',
+          required: true,
+          example:
+            'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+        }),
       },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'swagger',

@@ -1,15 +1,10 @@
-import { nonNegativeInteger } from '../validators.js'
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
+  id: 'AnsibleGalaxyContentQualityScore',
+  title: 'AnsibleGalaxyContentQualityScore',
+  pathPrefix: '/ansible/quality',
+})
 
-t.create('quality score (valid)')
+t.create('quality score')
   .get('/432.json')
-  .expectBadge({ label: 'quality', message: nonNegativeInteger })
-
-t.create('quality score (project not found)')
-  .get('/0101.json')
-  .expectBadge({ label: 'quality', message: 'not found' })
-
-t.create('quality score (no score available)')
-  .get('/2504.json')
-  .expectBadge({ label: 'quality', message: 'no score available' })
+  .expectBadge({ label: 'quality', message: 'no longer available' })

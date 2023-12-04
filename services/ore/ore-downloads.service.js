@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreDownloads extends BaseOreService {
   static category = 'downloads'
@@ -9,15 +10,18 @@ export default class OreDownloads extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Ore Downloads',
-      namedParams: { pluginId: 'nucleus' },
-      staticPreview: renderDownloadsBadge({ downloads: 560891 }),
-      documentation,
-      keywords,
+  static openApi = {
+    '/ore/dt/{pluginId}': {
+      get: {
+        summary: 'Ore Downloads',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -14,19 +15,28 @@ export default class GithubSearch extends GithubAuthV3Service {
     pattern: ':user/:repo/:query+',
   }
 
-  static examples = [
-    {
-      title: 'GitHub search hit counter',
-      pattern: ':user/:repo/:query',
-      namedParams: {
-        user: 'torvalds',
-        repo: 'linux',
-        query: 'goto',
+  static openApi = {
+    '/github/search/{user}/{repo}/{query}': {
+      get: {
+        summary: 'GitHub search hit counter',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'torvalds',
+          },
+          {
+            name: 'repo',
+            example: 'linux',
+          },
+          {
+            name: 'query',
+            example: 'goto',
+          },
+        ),
       },
-      staticPreview: this.render({ query: 'goto', totalCount: 14000 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'counter',

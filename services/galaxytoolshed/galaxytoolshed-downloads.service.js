@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import BaseGalaxyToolshedService from './galaxytoolshed-base.js'
 
@@ -8,16 +9,23 @@ export default class GalaxyToolshedDownloads extends BaseGalaxyToolshedService {
     pattern: ':repository/:owner',
   }
 
-  static examples = [
-    {
-      title: 'Galaxy Toolshed - Downloads',
-      namedParams: {
-        repository: 'sra_tools',
-        owner: 'iuc',
+  static openApi = {
+    '/galaxytoolshed/downloads/{repository}/{owner}': {
+      get: {
+        summary: 'Galaxy Toolshed - Downloads',
+        parameters: pathParams(
+          {
+            name: 'repository',
+            example: 'sra_tools',
+          },
+          {
+            name: 'owner',
+            example: 'iuc',
+          },
+        ),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 10000 }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'downloads',

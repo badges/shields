@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { NotFound, InvalidParameter } from '../index.js'
+import { NotFound, InvalidParameter, pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
@@ -15,23 +15,32 @@ export default class GithubCommitStatus extends GithubAuthV3Service {
     pattern: ':user/:repo/:branch/:commit',
   }
 
-  static examples = [
-    {
-      title: 'GitHub commit merge status',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        branch: 'master',
-        commit: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
+  static openApi = {
+    '/github/commit-status/{user}/{repo}/{branch}/{commit}': {
+      get: {
+        summary: 'GitHub commit merge status',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+          {
+            name: 'commit',
+            example: '5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c',
+          },
+        ),
       },
-      staticPreview: this.render({
-        isInBranch: true,
-        branch: 'master',
-      }),
-      keywords: ['branch'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'commit status' }
 

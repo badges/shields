@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseModrinthService, documentation } from './modrinth-base.js'
+import { BaseModrinthService, description } from './modrinth-base.js'
 
 export default class ModrinthVersion extends BaseModrinthService {
   static category = 'version'
@@ -9,14 +10,18 @@ export default class ModrinthVersion extends BaseModrinthService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'Modrinth Version',
-      namedParams: { projectId: 'AANobbMI' },
-      staticPreview: renderVersionBadge({ version: '0.4.4' }),
-      documentation,
+  static openApi = {
+    '/modrinth/v/{projectId}': {
+      get: {
+        summary: 'Modrinth Version',
+        description,
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'AANobbMI',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'version' }
 

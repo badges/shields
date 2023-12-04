@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { pathParams } from '../index.js'
 import { floorCount } from '../color-formatters.js'
-import BaseCoincapService from './coincap-base.js'
+import { BaseCoincapService, description } from './coincap-base.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -19,6 +19,7 @@ export default class CoincapChangePercent24HrUsd extends BaseCoincapService {
     '/coincap/change-percent-24hr/{assetId}': {
       get: {
         summary: 'Coincap (Change Percent 24Hr)',
+        description,
         parameters: pathParams({
           name: 'assetId',
           example: 'bitcoin',

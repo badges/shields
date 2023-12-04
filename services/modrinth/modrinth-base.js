@@ -16,7 +16,7 @@ const versionSchema = Joi.array()
   )
   .required()
 
-const documentation =
+const description =
   "<p>You can use your project slug, or the project ID. The ID can be found in the 'Technical information' section of your Modrinth page.</p>"
 
 class BaseModrinthService extends BaseJsonService {
@@ -36,4 +36,4 @@ class BaseModrinthService extends BaseJsonService {
   }
 }
 
-export { BaseModrinthService, documentation }
+export { BaseModrinthService, description }
