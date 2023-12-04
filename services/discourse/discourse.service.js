@@ -18,10 +18,7 @@ const schemaPlural = Joi.object({
   likes_count: nonNegativeInteger,
 })
 
-const schema = Joi.alternatives(
-  schemaSingular,
-  schemaPlural,
-)
+const schema = Joi.alternatives(schemaSingular, schemaPlural)
 
 const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
@@ -79,11 +76,11 @@ function DiscourseMetricIntegrationFactory({ metricType }) {
     async handle(_routeParams, { server }) {
       const data = await this.fetch({ server })
       // e.g. metricType == 'topic' --> try 'topic_count' then 'topics_count'
-      let stat = data[`${metricType}_count`];
+      let stat = data[`${metricType}_count`]
       if (stat === undefined) {
-        stat = data[`${metricType}s_count`];
+        stat = data[`${metricType}s_count`]
       }
-      return this.constructor.render({ stat });
+      return this.constructor.render({ stat })
     }
   }
 }

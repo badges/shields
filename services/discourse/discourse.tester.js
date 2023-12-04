@@ -41,9 +41,9 @@ const dataCases = [
     likes_7_days: 3633,
     likes_30_days: 13397,
   },
-];
+]
 
-dataCases.forEach((data) => {
+dataCases.forEach(data => {
   t.create('Topics')
     .get('/topics.json?server=https://meta.discourse.org')
     .intercept(nock =>
@@ -97,7 +97,7 @@ dataCases.forEach((data) => {
         .reply(200, data),
     )
     .expectBadge({ label: 'discourse', message: 'online' })
-});
+})
 
 t.create('Invalid Host')
   .get('/status.json?server=https://some.host')
