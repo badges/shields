@@ -16,7 +16,7 @@ export default class OpencollectiveBackers extends OpencollectiveBase {
     },
   }
 
-  static _cacheLength = 900
+  static _cacheLength = 1800
 
   static defaultBadgeData = {
     label: 'backers',

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer } from './weblate-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
@@ -21,7 +21,7 @@ export default class WeblateComponentLicense extends WeblateBase {
     {
       title: 'Weblate component license',
       namedParams: { project: 'godot-engine', component: 'godot' },
-      queryParams: { server: 'https://hosted.weblate.org' },
+      queryParams: { server: defaultServer },
       staticPreview: this.render({ license: 'MIT' }),
       keywords: ['i18n', 'translation', 'internationalization'],
     },
@@ -33,7 +33,7 @@ export default class WeblateComponentLicense extends WeblateBase {
     return { message: `${license}` }
   }
 
-  async fetch({ project, component, server = 'https://hosted.weblate.org' }) {
+  async fetch({ project, component, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/components/${project}/${component}/`,
@@ -41,6 +41,7 @@ export default class WeblateComponentLicense extends WeblateBase {
         403: 'access denied by remote server',
         404: 'component not found',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

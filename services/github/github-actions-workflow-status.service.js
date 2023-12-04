@@ -73,6 +73,8 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
     },
   ]
 
+  static _cacheLength = 60
+
   static defaultBadgeData = {
     label: 'build',
   }

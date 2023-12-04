@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer } from './weblate-base.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger,
@@ -20,7 +20,7 @@ export default class WeblateEntities extends WeblateBase {
     {
       title: 'Weblate entities',
       namedParams: { type: 'projects' },
-      queryParams: { server: 'https://hosted.weblate.org' },
+      queryParams: { server: defaultServer },
       staticPreview: this.render({ type: 'projects', count: 533 }),
       keywords: ['i18n', 'internationalization'],
     },
@@ -32,13 +32,14 @@ export default class WeblateEntities extends WeblateBase {
     return { label: type, message: metric(count) }
   }
 
-  async fetch({ type, server = 'https://hosted.weblate.org' }) {
+  async fetch({ type, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/${type}/`,
       httpErrors: {
         403: 'access denied by remote server',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

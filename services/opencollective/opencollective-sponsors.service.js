@@ -16,7 +16,7 @@ export default class OpencollectiveSponsors extends OpencollectiveBase {
     },
   }
 
-  static _cacheLength = 900
+  static _cacheLength = 1800
 
   static defaultBadgeData = {
     label: 'sponsors',
