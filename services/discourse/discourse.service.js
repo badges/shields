@@ -4,12 +4,24 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
-const schema = Joi.object({
+const schemaSingular = Joi.object({
   topic_count: nonNegativeInteger,
   user_count: nonNegativeInteger,
   post_count: nonNegativeInteger,
   like_count: nonNegativeInteger,
 }).required()
+
+const schemaPlural = Joi.object({
+  topics_count: nonNegativeInteger,
+  users_count: nonNegativeInteger,
+  posts_count: nonNegativeInteger,
+  likes_count: nonNegativeInteger,
+})
+
+const schema = Joi.alternatives(
+  schemaSingular,
+  schemaPlural,
+)
 
 const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
