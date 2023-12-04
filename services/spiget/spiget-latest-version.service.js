@@ -1,6 +1,7 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
+import { BaseSpigetService, description } from './spiget-base.js'
 
 const versionSchema = Joi.object({
   downloads: Joi.number().required(),
@@ -15,17 +16,18 @@ export default class SpigetLatestVersion extends BaseSpigetService {
     pattern: ':resourceId',
   }
 
-  static examples = [
-    {
-      title: 'Spiget Version',
-      namedParams: {
-        resourceId: '9089',
+  static openApi = {
+    '/spiget/version/{resourceId}': {
+      get: {
+        summary: 'Spiget Version',
+        description,
+        parameters: pathParams({
+          name: 'resourceId',
+          example: '9089',
+        }),
       },
-      staticPreview: renderVersionBadge({ version: 2.1 }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'spiget',

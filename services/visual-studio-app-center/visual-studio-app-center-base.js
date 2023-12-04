@@ -1,13 +1,6 @@
 import { BaseJsonService } from '../index.js'
 
-const keywords = [
-  'visual-studio',
-  'vsac',
-  'visual-studio-app-center',
-  'app-center',
-]
-
-const documentation =
+const description =
   "You will need to create a <b>read-only</b> API token <a target='_blank' href='https://appcenter.ms/settings/apitokens'>here</a>."
 
 class BaseVisualStudioAppCenterService extends BaseJsonService {
@@ -35,4 +28,4 @@ class BaseVisualStudioAppCenterService extends BaseJsonService {
   }
 }
 
-export { keywords, documentation, BaseVisualStudioAppCenterService }
+export { description, BaseVisualStudioAppCenterService }

@@ -3,23 +3,16 @@ import emojic from 'emojic'
 import { optionalUrl } from '../validators.js'
 import {
   queryParamSchema,
-  exampleQueryParams,
+  queryParams as websiteQueryParams,
   renderWebsiteStatus,
 } from '../website-status.js'
-import { BaseService } from '../index.js'
+import { BaseService, queryParams } from '../index.js'
 import trace from '../../core/base-service/trace.js'
 
-const documentation = `
-The badge is of the form
-\`https://img.shields.io/website/PROTOCOL/URLREST.svg\`.
-
-The whole URL is obtained by concatenating the \`PROTOCOL\`
-(\`http\` or \`https\`, for example) with the
-\`URLREST\` (separating them with \`://\`).
-
+const description = `
 The existence of a specific path on the server can be checked by appending
 a path after the domain name, e.g.
-\`https://img.shields.io/website/http/www.website.com/path/to/page.html.svg\`.
+\`https://img.shields.io/website?url=http%3A//www.website.com/path/to/page.html\`.
 
 The messages and colors for the up and down states can also be customized.
 `
@@ -37,18 +30,19 @@ export default class Website extends BaseService {
     queryParamSchema: queryParamSchema.concat(urlQueryParamSchema),
   }
 
-  static examples = [
-    {
-      title: 'Website',
-      namedParams: {},
-      queryParams: {
-        ...exampleQueryParams,
-        ...{ url: 'https://shields.io' },
+  static openApi = {
+    '/website': {
+      get: {
+        summary: 'Website',
+        description,
+        parameters: queryParams({
+          name: 'url',
+          required: true,
+          example: 'https://shields.io',
+        }).concat(websiteQueryParams),
       },
-      staticPreview: renderWebsiteStatus({ isUp: true }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'website',

@@ -1,4 +1,5 @@
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { pathParams } from '../index.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreCategory extends BaseOreService {
   static category = 'other'
@@ -8,17 +9,18 @@ export default class OreCategory extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Ore Category',
-      namedParams: {
-        pluginId: 'nucleus',
+  static openApi = {
+    '/ore/category/{pluginId}': {
+      get: {
+        summary: 'Ore Category',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
       },
-      staticPreview: this.render({ category: 'misc' }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'category',

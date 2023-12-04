@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { latest, renderVersionBadge } from '../version.js'
-import { BaseJsonService, redirector } from '../index.js'
+import { BaseJsonService, redirector, pathParam, queryParam } from '../index.js'
+import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
   versions: Joi.array().items(Joi.string()).required(),
@@ -19,21 +20,25 @@ class PubVersion extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Pub Version',
-      namedParams: { packageName: 'box2d' },
-      staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
-      keywords: ['dart', 'dartlang'],
+  static openApi = {
+    '/pub/v/{packageName}': {
+      get: {
+        summary: 'Pub Version',
+        description: baseDescription,
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'box2d',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
+      },
     },
-    {
-      title: 'Pub Version (including pre-releases)',
-      namedParams: { packageName: 'box2d' },
-      queryParams: { include_prereleases: null },
-      staticPreview: renderVersionBadge({ version: 'v0.4.0' }),
-      keywords: ['dart', 'dartlang'],
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'pub' }
 

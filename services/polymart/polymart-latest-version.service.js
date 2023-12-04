@@ -1,6 +1,8 @@
+import { pathParams } from '../index.js'
 import { NotFound } from '../../core/base-service/errors.js'
 import { renderVersionBadge } from '../version.js'
-import { BasePolymartService, documentation } from './polymart-base.js'
+import { BasePolymartService, description } from './polymart-base.js'
+
 export default class PolymartLatestVersion extends BasePolymartService {
   static category = 'version'
 
@@ -9,18 +11,18 @@ export default class PolymartLatestVersion extends BasePolymartService {
     pattern: ':resourceId',
   }
 
-  static examples = [
-    {
-      title: 'Polymart Version',
-      namedParams: {
-        resourceId: '323',
+  static openApi = {
+    '/polymart/version/{resourceId}': {
+      get: {
+        summary: 'Polymart Version',
+        description,
+        parameters: pathParams({
+          name: 'resourceId',
+          example: '323',
+        }),
       },
-      staticPreview: renderVersionBadge({
-        version: 'v1.2.9',
-      }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'polymart',
