@@ -6,12 +6,12 @@ const description = `<p>
 </p>
 <ul>
   <li>
-    Label, message and color seperated by a dash <code>-</code>. For example:<br />
+    Label, message and color separated by a dash <code>-</code>. For example:<br />
     <img alt="any text: you like" src="https://img.shields.io/badge/any_text-you_like-blue" /> -
     <a href="https://img.shields.io/badge/any_text-you_like-blue">https://img.shields.io/badge/any_text-you_like-blue</a>
   </li>
   <li>
-    Message and color only, seperated by a dash <code>-</code>. For example:<br />
+    Message and color only, separated by a dash <code>-</code>. For example:<br />
     <img alt="just the message" src="https://img.shields.io/badge/just%20the%20message-8A2BE2" /> -
     <a href="https://img.shields.io/badge/just%20the%20message-8A2BE2">https://img.shields.io/badge/just%20the%20message-8A2BE2</a>
   </li>
@@ -57,7 +57,7 @@ export default class StaticBadge extends BaseStaticService {
           {
             name: 'badgeContent',
             description:
-              'Label, (optional) message, and color. Seperated by dashes',
+              'Label, (optional) message, and color. Separated by dashes',
             in: 'path',
             required: true,
             schema: { type: 'string' },

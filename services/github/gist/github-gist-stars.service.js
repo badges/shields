@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
 import { metric } from '../../text-formatters.js'
-import { NotFound } from '../../index.js'
+import { NotFound, pathParams } from '../../index.js'
 import { GithubAuthV4Service } from '../github-auth-service.js'
 import { documentation as commonDocumentation } from '../github-helpers.js'
 
@@ -20,7 +20,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `${commonDocumentation}
+const description = `${commonDocumentation}
 <p>This badge shows the number of stargazers for a gist. Gist id is accepted as input and 'gist not found' is returned if the gist is not found for the given gist id.
 </p>`
 
@@ -32,18 +32,18 @@ export default class GistStars extends GithubAuthV4Service {
     pattern: ':gistId',
   }
 
-  static examples = [
-    {
-      title: 'Github Gist stars',
-      namedParams: { gistId: '47a4d00457a92aa426dbd48a18776322' },
-      staticPreview: {
-        label: this.defaultBadgeData.label,
-        message: metric(29),
-        style: 'social',
+  static openApi = {
+    '/github/gist/stars/{gistId}': {
+      get: {
+        summary: 'Github Gist stars',
+        description,
+        parameters: pathParams({
+          name: 'gistId',
+          example: '47a4d00457a92aa426dbd48a18776322',
+        }),
       },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'Stars',

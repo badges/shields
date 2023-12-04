@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import BaseCurseForgeService, { documentation } from './curseforge-base.js'
+import BaseCurseForgeService, { description } from './curseforge-base.js'
 
 export default class CurseForgeDownloads extends BaseCurseForgeService {
   static category = 'downloads'
@@ -9,16 +10,18 @@ export default class CurseForgeDownloads extends BaseCurseForgeService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'CurseForge Downloads',
-      namedParams: {
-        projectId: '238222',
+  static openApi = {
+    '/curseforge/dt/{projectId}': {
+      get: {
+        summary: 'CurseForge Downloads',
+        description,
+        parameters: pathParams({
+          name: 'projectId',
+          example: '238222',
+        }),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 234000000 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

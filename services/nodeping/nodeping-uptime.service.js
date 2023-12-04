@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { colorScale } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const colorFormatter = colorScale([99, 99.5, 100])
 
@@ -26,13 +26,17 @@ export default class NodePingUptime extends BaseJsonService {
 
   static route = { base: 'nodeping/uptime', pattern: ':checkUuid' }
 
-  static examples = [
-    {
-      title: 'NodePing uptime',
-      namedParams: { checkUuid: sampleCheckUuid },
-      staticPreview: this.render({ uptime: 99.999 }),
+  static openApi = {
+    '/nodeping/uptime/{checkUuid}': {
+      get: {
+        summary: 'NodePing uptime',
+        parameters: pathParams({
+          name: 'checkUuid',
+          example: sampleCheckUuid,
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'uptime' }
 
