@@ -48,7 +48,10 @@ class DiscourseBase extends BaseJsonService {
   }
 }
 
-function DiscourseMetricIntegrationFactory({ metricName, property }) {
+function DiscourseMetricIntegrationFactory({ metricType }) {
+  // We supply the singular form to more easily check against both schemas.
+  // But, we use the plural form as the metric name for grammatical reasons.
+  const metricName = `${metricType}s`
   return class DiscourseMetric extends DiscourseBase {
     // The space is needed so we get 'DiscourseTopics' rather than
     // 'Discoursetopics'. `camelcase()` removes it.
@@ -75,7 +78,12 @@ function DiscourseMetricIntegrationFactory({ metricName, property }) {
 
     async handle(_routeParams, { server }) {
       const data = await this.fetch({ server })
-      return this.constructor.render({ stat: data[property] })
+      // e.g. metricType == 'topic' --> try 'topic_count' then 'topics_count'
+      let stat = data[`${metricType}_count`];
+      if (stat === undefined) {
+        stat = data[`${metricType}s_count`];
+      }
+      return this.constructor.render({ stat });
     }
   }
 }
@@ -109,10 +117,10 @@ class DiscourseStatus extends DiscourseBase {
 }
 
 const metricIntegrations = [
-  { metricName: 'topics', property: 'topic_count' },
-  { metricName: 'users', property: 'user_count' },
-  { metricName: 'posts', property: 'post_count' },
-  { metricName: 'likes', property: 'like_count' },
+  { metricType: 'topic' },
+  { metricType: 'user' },
+  { metricType: 'post' },
+  { metricType: 'like' },
 ].map(DiscourseMetricIntegrationFactory)
 
 export default [...metricIntegrations, DiscourseStatus]
