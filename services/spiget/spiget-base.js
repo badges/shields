@@ -15,11 +15,10 @@ const resourceSchema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `
+const description = `
+<p><a href="https://spiget.org/">Spiget</a> holds information about SpigotMC Resources, Plugins and Authors.</p>
 <p>You can find your resource ID in the url for your resource page.</p>
 <p>Example: <code>https://www.spigotmc.org/resources/essentialsx.9089/</code> - Here the Resource ID is 9089.</p>`
-
-const keywords = ['spigot', 'spigotmc']
 
 class BaseSpigetService extends BaseJsonService {
   async fetch({
@@ -34,4 +33,4 @@ class BaseSpigetService extends BaseJsonService {
   }
 }
 
-export { keywords, documentation, BaseSpigetService }
+export { description, BaseSpigetService }
