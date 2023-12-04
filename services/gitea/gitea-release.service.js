@@ -14,7 +14,7 @@ const schema = Joi.array().items(
 
 const sortEnum = ['date', 'semver']
 const displayNameEnum = ['tag', 'release']
-const dateOrderByEnum = ['created_at', 'released_at']
+const dateOrderByEnum = ['created_at', 'published_at']
 
 const queryParamSchema = Joi.object({
   gitea_url: optionalUrl,
@@ -90,7 +90,7 @@ export default class GiteaRelease extends GiteaBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
-      httpErrors: httpErrorsFor('repo not found'),
+      httpErrors: httpErrorsFor('user or repo not found'),
     })
   }
 
