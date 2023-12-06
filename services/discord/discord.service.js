@@ -49,7 +49,7 @@ export default class Discord extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 60
+  static _cacheLength = 300
 
   static defaultBadgeData = { label: 'chat' }
 

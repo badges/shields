@@ -65,6 +65,8 @@ export default class Bundlephobia extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 900
+
   static defaultBadgeData = { label: 'bundlephobia', color: 'informational' }
 
   static render({ format, size }) {
