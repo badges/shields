@@ -39,6 +39,8 @@ export default class WeblateUserStatistic extends WeblateBase {
     },
   ]
 
+  static _cacheLength = 600
+
   static defaultBadgeData = { color: 'informational' }
 
   static render({ statistic, count }) {

@@ -26,6 +26,8 @@ export default class WeblateEntities extends WeblateBase {
     },
   ]
 
+  static _cacheLength = 600
+
   static defaultBadgeData = { color: 'informational' }
 
   static render({ type, count }) {
