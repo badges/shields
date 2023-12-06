@@ -53,7 +53,7 @@ export default class PypiDownloads extends BaseJsonService {
     },
   ]
 
-  static _cacheLength = 21600
+  static _cacheLength = 28800
 
   static defaultBadgeData = { label: 'downloads' }
 
