@@ -95,6 +95,7 @@ async function fetchEndpointData(
     schema: anySchema,
     url,
     httpErrors,
+    logErrors: [],
     options: { decompress: true },
   })
   return validateEndpointData(json, {

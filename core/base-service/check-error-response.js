@@ -1,3 +1,4 @@
+import log from '../server/log.js'
 import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
 const defaultErrorMessages = {
@@ -5,7 +6,7 @@ const defaultErrorMessages = {
   429: 'rate limited by upstream service',
 }
 
-export default function checkErrorResponse(httpErrors = {}) {
+export default function checkErrorResponse(httpErrors = {}, logErrors = [429]) {
   return async function ({ buffer, res }) {
     let error
     httpErrors = { ...defaultErrorMessages, ...httpErrors }
@@ -25,6 +26,11 @@ export default function checkErrorResponse(httpErrors = {}) {
         error = new InvalidResponse(props)
       }
     }
+
+    if (logErrors.includes(res.statusCode)) {
+      log.error(new Error(`${res.statusCode} calling ${res.requestUrl.origin}`))
+    }
+
     if (error) {
       error.response = res
       error.buffer = buffer

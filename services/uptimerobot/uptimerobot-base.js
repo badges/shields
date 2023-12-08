@@ -74,6 +74,7 @@ export default class UptimeRobotBase extends BaseJsonService {
           ...opts,
         },
       },
+      logErrors: [],
     })
 
     if (stat === 'fail') {
