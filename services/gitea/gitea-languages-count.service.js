@@ -40,8 +40,7 @@ export default class GiteaLanguageCount extends GiteaBase {
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://try.gitea.io',
-            required: true,
+            example: 'https://codeberg.org',
           }),
         ],
       },
@@ -58,7 +57,7 @@ export default class GiteaLanguageCount extends GiteaBase {
   }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetLanguages
+    // https://codeberg.org/api/swagger#/repository/repoGetLanguages
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,
@@ -68,7 +67,7 @@ export default class GiteaLanguageCount extends GiteaBase {
 
   async handle(
     { user, repo },
-    { gitea_url: baseUrl = 'https://try.gitea.io' },
+    { gitea_url: baseUrl = 'https://codeberg.org' },
   ) {
     const data = await this.fetch({
       user,

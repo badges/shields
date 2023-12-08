@@ -1,5 +1,7 @@
 const documentation = `
-Note that the gitea_url parameter is required because there is no gitea hosted service by Gitea themselves.`
+Note that only internet-accessible Gitea compatible instances are supported, for example
+[https://codeberg.org](https://codeberg.org).
+`
 
 function httpErrorsFor(notFoundMessage = 'user or repo not found') {
   return {

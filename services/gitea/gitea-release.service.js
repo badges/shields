@@ -9,6 +9,7 @@ const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
     tag_name: Joi.string().required(),
+    prerelease: Joi.boolean().required(),
   }),
 )
 
@@ -55,8 +56,7 @@ export default class GiteaRelease extends GiteaBase {
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://try.gitea.io',
-            required: true,
+            example: 'https://codeberg.org',
           }),
           queryParam({
             name: 'include_prereleases',
@@ -86,7 +86,7 @@ export default class GiteaRelease extends GiteaBase {
   static defaultBadgeData = { label: 'release' }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetRelease
+    // https://codeberg.org/api/swagger#/repository/repoGetRelease
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
@@ -101,20 +101,27 @@ export default class GiteaRelease extends GiteaBase {
 
     const displayKey = displayName === 'tag' ? 'tag_name' : 'name'
 
-    if (!isSemver) {
-      return releases[0][displayKey]
+    if (isSemver) {
+      return latest(
+        releases.map(t => t[displayKey]),
+        { pre: includePrereleases },
+      )
     }
 
-    return latest(
-      releases.map(t => t[displayKey]),
-      { pre: includePrereleases },
-    )
+    if (!includePrereleases) {
+      const stableReleases = releases.filter(release => !release.prerelease)
+      if (stableReleases.length > 0) {
+        return stableReleases[0][displayKey]
+      }
+    }
+
+    return releases[0][displayKey]
   }
 
   async handle(
     { user, repo },
     {
-      gitea_url: baseUrl = 'https://try.gitea.io',
+      gitea_url: baseUrl = 'https://codeberg.org',
       include_prereleases: pre,
       sort,
       display_name: displayName,
