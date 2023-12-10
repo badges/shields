@@ -19,8 +19,8 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: Install NPM 9
-      run: npm install -g npm@^9.0.0
+    - name: Install NPM 10
+      run: npm install -g npm@^10.0.0
       shell: bash
 
     - name: Install dependencies
