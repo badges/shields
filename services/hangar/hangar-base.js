@@ -27,7 +27,7 @@ class BaseHangarService extends BaseJsonService {
       httpErrors: {
         401: 'Api session missing, invalid or expired',
         403: 'Not enough permission to use this endpoint',
-      }
+      },
     })
   }
 }

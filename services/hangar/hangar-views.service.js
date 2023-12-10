@@ -6,7 +6,7 @@ export default class HangarViews extends BaseHangarService {
 
   static route = {
     base: 'hangar/views',
-    pattern: ':slug'
+    pattern: ':slug',
   }
 
   static openApi = {
@@ -22,7 +22,7 @@ export default class HangarViews extends BaseHangarService {
     },
   }
 
-  static defaultBadgeData = { 
+  static defaultBadgeData = {
     label: 'views',
     color: 'blue',
   }
@@ -34,7 +34,9 @@ export default class HangarViews extends BaseHangarService {
   }
 
   async handle({ slug }) {
-    const { stats: { views } } = await this.fetch({ slug })
+    const {
+      stats: { views },
+    } = await this.fetch({ slug })
     return this.constructor.render({ views })
   }
 }
