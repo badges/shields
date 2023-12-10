@@ -14,10 +14,13 @@ jobs:
       matrix:
         include:
           - node: '16'
+            npm: '^9'
             engine-strict: 'false'
           - node: '18'
+            npm: '^9'
             engine-strict: 'false'
           - node: '20'
+            npm: '^10'
             engine-strict: 'true'
     steps:
       - name: Checkout
@@ -27,6 +30,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node-version: ${{ matrix.node }}
+          npm-version: ${{ matrix.npm }}
         env:
           NPM_CONFIG_ENGINE_STRICT: ${{ matrix.engine-strict }}
 

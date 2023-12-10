@@ -2,8 +2,12 @@ name: 'Set up project'
 description: 'Set up project'
 inputs:
   node-version:
-    description: 'Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.'
+    description: 'Version Spec of the node version to use. Examples: 12.x, 10.15.1, >=10.15.0.'
     required: true
+  npm-version:
+    description: 'Version Spec of the npm version to use. Examples: 9.x, 10.2.3, >=10.1.0.'
+    required: false
+    default: '^10'
   cypress:
     description: 'Install Cypress binary (boolean)'
     type: boolean
@@ -19,8 +23,8 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: Install NPM 10
-      run: npm install -g npm@^10.0.0
+    - name: Install NPM ${{ inputs.npm-version }}
+      run: npm install -g npm@${{ inputs.npm-version }}
       shell: bash
 
     - name: Install dependencies
