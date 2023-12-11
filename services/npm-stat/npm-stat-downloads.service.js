@@ -33,7 +33,7 @@ export default class NpmStatDownloads extends BaseJsonService {
     {
       title: 'npm (by author)',
       documentation:
-        'The total number of downloads of npm packages published by the specified author.',
+        'The total number of downloads of npm packages published by the specified author from [npm-stat](https://npm-stat.com).',
       namedParams: { interval: 'dy', author: 'dukeluo' },
       staticPreview: this.render({ interval: 'dy', downloadCount: 30000 }),
       keywords: ['node'],
