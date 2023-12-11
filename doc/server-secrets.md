@@ -112,7 +112,7 @@ generated API key.
 
 ### Discord
 
-Using a token for Dicsord is optional but will allow higher API rates.
+Using a token for Discord is optional but will allow higher API rates.
 
 - `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
 
