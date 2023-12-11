@@ -31,7 +31,7 @@ export default class RaycastInstalls extends BaseJsonService {
 
   static render({ user, extension, downloadCount }) {
     return {
-      label: 'installs',
+      label: 'Installs',
       message: metric(downloadCount),
       color: 'green',
       link: [`https://www.raycast.com/${user}/${extension}`],

@@ -24,6 +24,6 @@ t.create('installs (not existing user and extension)')
   })
 
 t.create('installs (valid)').get('/Fatpandac/bilibili.json').expectBadge({
-  label: 'installs',
+  label: 'Installs',
   message: anyInteger,
 })
