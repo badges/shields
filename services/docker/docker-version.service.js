@@ -33,6 +33,17 @@ const queryParamSchema = Joi.object({
 export default class DockerVersion extends BaseJsonService {
   static category = 'version'
   static route = { ...buildDockerUrl('v', true), queryParamSchema }
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: [
+      'https://hub.docker.com',
+      'https://registry.hub.docker.com',
+    ],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Image Version (latest by date)',
@@ -64,13 +75,18 @@ export default class DockerVersion extends BaseJsonService {
 
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson({
-      schema: buildSchema,
-      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user,
-      )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-      httpErrors: { 404: 'repository or tag not found' },
-    })
+    return this._requestJson(
+      await this.authHelper.withJwtAuth(
+        {
+          schema: buildSchema,
+          url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+            user,
+          )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
+          httpErrors: { 404: 'repository or tag not found' },
+        },
+        'https://hub.docker.com/v2/users/login/',
+      ),
+    )
   }
 
   transform({ tag, sort, data, pagedData, arch = 'amd64' }) {

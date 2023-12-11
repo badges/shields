@@ -15,6 +15,14 @@ const pullsSchema = Joi.object({
 export default class DockerPulls extends BaseJsonService {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com'],
+    isRequired: false,
+  }
+
   static openApi = {
     '/docker/pulls/{user}/{repo}': {
       get: {
@@ -42,13 +50,18 @@ export default class DockerPulls extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
-      schema: pullsSchema,
-      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user,
-      )}/${repo}`,
-      httpErrors: { 404: 'repo not found' },
-    })
+    return this._requestJson(
+      await this.authHelper.withJwtAuth(
+        {
+          schema: pullsSchema,
+          url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+            user,
+          )}/${repo}`,
+          httpErrors: { 404: 'repo not found' },
+        },
+        'https://hub.docker.com/v2/users/login/',
+      ),
+    )
   }
 
   async handle({ user, repo }) {

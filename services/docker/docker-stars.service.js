@@ -15,6 +15,14 @@ const schema = Joi.object({
 export default class DockerStars extends BaseJsonService {
   static category = 'rating'
   static route = buildDockerUrl('stars')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com'],
+    isRequired: false,
+  }
+
   static openApi = {
     '/docker/stars/{user}/{repo}': {
       get: {
@@ -45,13 +53,18 @@ export default class DockerStars extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
-      schema,
-      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user,
-      )}/${repo}/`,
-      httpErrors: { 404: 'repo not found' },
-    })
+    return this._requestJson(
+      await this.authHelper.withJwtAuth(
+        {
+          schema,
+          url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+            user,
+          )}/${repo}/`,
+          httpErrors: { 404: 'repo not found' },
+        },
+        'https://hub.docker.com/v2/users/login/',
+      ),
+    )
   }
 
   async handle({ user, repo }) {
