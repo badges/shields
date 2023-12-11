@@ -52,7 +52,7 @@ class PubVersion extends BaseJsonService {
   async handle({ packageName }, queryParams) {
     const data = await this.fetch({ packageName })
     const includePre = queryParams.include_prereleases !== undefined
-    const versions = data.versions.map((x) => x.version)
+    const versions = data.versions.map(x => x.version)
     const version = latest(versions, { pre: includePre })
     return renderVersionBadge({ version })
   }
