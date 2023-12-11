@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import dayjs from 'dayjs'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
@@ -9,16 +10,11 @@ const schema = Joi.object()
 
 const NPM_INITIAL_RELEASE_DATE = '2010-01-12'
 
-const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24
-const MILLISECONDS_IN_A_WEEK = MILLISECONDS_IN_A_DAY * 7
-const MILLISECONDS_IN_A_MONTH = MILLISECONDS_IN_A_DAY * 30
-const MILLISECONDS_IN_A_YEAR = MILLISECONDS_IN_A_DAY * 365
-
 const intervalMap = {
-  dw: { interval: 'week', difference: MILLISECONDS_IN_A_WEEK },
-  dm: { interval: 'month', difference: MILLISECONDS_IN_A_MONTH },
-  dy: { interval: 'year', difference: MILLISECONDS_IN_A_YEAR },
-  dt: { difference: -1 },
+  dw: { interval: 'week' },
+  dm: { interval: 'month' },
+  dy: { interval: 'year' },
+  dt: {},
 }
 
 export default class NpmStatDownloads extends BaseJsonService {
@@ -63,15 +59,12 @@ export default class NpmStatDownloads extends BaseJsonService {
   }
 
   async handle({ interval, author }) {
-    const format = date => date.toISOString().split('T')[0]
-
-    const { difference } = intervalMap[interval]
-    const today = new Date()
-    const until = format(today)
-    const from =
-      difference > 0
-        ? format(new Date(today.getTime() - difference))
-        : NPM_INITIAL_RELEASE_DATE
+    const unit = intervalMap[interval].interval
+    const today = dayjs()
+    const until = today.format('YYYY-MM-DD')
+    const from = unit
+      ? today.subtract(1, unit).format('YYYY-MM-DD')
+      : NPM_INITIAL_RELEASE_DATE
     const data = await this._requestJson({
       url: `https://npm-stat.com/api/download-counts?author=${author}&from=${from}&until=${until}`,
       schema,
