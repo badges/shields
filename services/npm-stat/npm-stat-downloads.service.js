@@ -8,13 +8,10 @@ const schema = Joi.object()
   .pattern(Joi.string(), Joi.object().pattern(Joi.string(), nonNegativeInteger))
   .required()
 
-const NPM_INITIAL_RELEASE_DATE = '2010-01-12'
-
 const intervalMap = {
   dw: { interval: 'week' },
   dm: { interval: 'month' },
   dy: { interval: 'year' },
-  dt: {},
 }
 
 export default class NpmStatDownloads extends BaseJsonService {
@@ -22,7 +19,7 @@ export default class NpmStatDownloads extends BaseJsonService {
 
   static route = {
     base: 'npm-stat',
-    pattern: ':interval(dw|dm|dy|dt)/:author',
+    pattern: ':interval(dw|dm|dy)/:author',
   }
 
   static examples = [
@@ -62,9 +59,7 @@ export default class NpmStatDownloads extends BaseJsonService {
     const unit = intervalMap[interval].interval
     const today = dayjs()
     const until = today.format('YYYY-MM-DD')
-    const from = unit
-      ? today.subtract(1, unit).format('YYYY-MM-DD')
-      : NPM_INITIAL_RELEASE_DATE
+    const from = today.subtract(1, unit).format('YYYY-MM-DD')
     const data = await this._requestJson({
       url: `https://npm-stat.com/api/download-counts?author=${author}&from=${from}&until=${until}`,
       schema,

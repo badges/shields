@@ -1,4 +1,4 @@
-import { isMetricOverTimePeriod, isMetric } from '../test-validators.js'
+import { isMetricOverTimePeriod } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -26,18 +26,10 @@ t.create('yearly downloads of npm author dukeluo')
     color: 'brightgreen',
   })
 
-t.create('total downloads of npm author dukeluo')
-  .get('/dt/dukeluo.json')
-  .expectBadge({
-    label: 'downloads',
-    message: isMetric,
-    color: 'brightgreen',
-  })
-
 t.create('downloads of unknown npm package author')
-  .get('/dt/npm-api-does-not-have-this-package-author.json')
+  .get('/dy/npm-api-does-not-have-this-package-author.json')
   .expectBadge({
     label: 'downloads',
-    message: '0',
+    message: '0/year',
     color: 'red',
   })
