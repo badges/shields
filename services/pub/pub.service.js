@@ -5,7 +5,7 @@ import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
   versions: Joi.array()
-    .items(Joi.object({ version: Joi.string() }))
+    .items(Joi.object({ version: Joi.string().required() }))
     .required(),
 }).required()
 
