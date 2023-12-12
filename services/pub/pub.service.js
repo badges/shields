@@ -4,7 +4,9 @@ import { BaseJsonService, redirector, pathParam, queryParam } from '../index.js'
 import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
-  versions: Joi.array().items(Joi.string()).required(),
+  versions: Joi.array()
+    .items(Joi.object({ version: Joi.string() }))
+    .required(),
 }).required()
 
 const queryParamSchema = Joi.object({
