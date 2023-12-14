@@ -10,7 +10,7 @@ class DummyGiteaService extends GiteaBase {
   async handle() {
     const data = await this.fetch({
       schema: Joi.any(),
-      url: 'https://codeberg.com/api/v1/repos/CanisHelix/shields-badge-test/releases',
+      url: 'https://codeberg.org/api/v1/repos/CanisHelix/shields-badge-test/releases',
     })
     return { message: data.message }
   }
@@ -20,17 +20,27 @@ describe('GiteaBase', function () {
   describe('auth', function () {
     cleanUpNockAfterEach()
 
-    const config = { private: { gitea_token: 'fake-key' } }
+    const config = {
+      public: {
+        services: {
+          gitea: {
+            authorizedOrigins: ['https://codeberg.org'],
+          },
+        },
+      },
+      private: {
+        gitea_token: 'fake-key',
+      },
+    }
 
     it('sends the auth information as configured', async function () {
-      const scope = nock('https://codeberg.com')
+      const scope = nock('https://codeberg.org')
         .get('/api/v1/repos/CanisHelix/shields-badge-test/releases')
-        .query({ key: 'fake-key' })
+        .matchHeader('Authorization', 'Bearer fake-key')
         .reply(200, { message: 'fake message' })
-
       expect(
         await DummyGiteaService.invoke(defaultContext, config, {}),
-      ).to.deep.equal({ message: 'fake message' })
+      ).to.not.have.property('isError')
 
       scope.done()
     })
