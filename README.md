@@ -22,9 +22,6 @@
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
-    <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=X"
-            alt="follow on Twitter"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
