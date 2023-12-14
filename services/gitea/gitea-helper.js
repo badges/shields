@@ -3,10 +3,10 @@ Note that only internet-accessible Gitea compatible instances are supported, for
 [https://codeberg.org](https://codeberg.org).
 `
 
-function httpErrorsFor(notFoundMessage = 'user or repo not found') {
+function httpErrorsFor() {
   return {
-    401: notFoundMessage,
-    404: notFoundMessage,
+    403: 'private repo',
+    404: 'user or repo not found',
   }
 }
 

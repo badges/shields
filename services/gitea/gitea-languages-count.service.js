@@ -41,6 +41,7 @@ export default class GiteaLanguageCount extends GiteaBase {
           queryParam({
             name: 'gitea_url',
             example: 'https://codeberg.org',
+            required: true,
           }),
         ],
       },

@@ -57,6 +57,7 @@ export default class GiteaRelease extends GiteaBase {
           queryParam({
             name: 'gitea_url',
             example: 'https://codeberg.org',
+            required: true,
           }),
           queryParam({
             name: 'include_prereleases',
@@ -85,12 +86,13 @@ export default class GiteaRelease extends GiteaBase {
 
   static defaultBadgeData = { label: 'release' }
 
-  async fetch({ user, repo, baseUrl }) {
+  async fetch({ user, repo, baseUrl, isSemver }) {
     // https://codeberg.org/api/swagger#/repository/repoGetRelease
-    return super.fetch({
+    return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
-      httpErrors: httpErrorsFor('user or repo not found'),
+      httpErrors: httpErrorsFor(),
+      firstPageOnly: !isSemver,
     })
   }
 
@@ -133,6 +135,7 @@ export default class GiteaRelease extends GiteaBase {
       user,
       repo,
       baseUrl,
+      isSemver,
     })
     const version = this.constructor.transform({
       releases,
