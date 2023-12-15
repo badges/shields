@@ -170,7 +170,7 @@
     "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-icedfrisby": "^0.1.0",
-    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^46.9.1",
     "eslint-plugin-mocha": "^10.2.0",
     "eslint-plugin-no-extension-in-require": "^0.2.0",
