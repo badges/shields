@@ -1,7 +1,32 @@
+import dayjs from 'dayjs'
+import nock from 'nock'
 import { expect } from 'chai'
 import { test, given, forCases } from 'sazerac'
-import { AuthHelper } from './auth-helper.js'
-import { InvalidParameter } from './errors.js'
+import { AuthHelper, clearJwtCache } from './auth-helper.js'
+import { InvalidParameter, InvalidResponse } from './errors.js'
+
+function base64UrlEncode(input) {
+  const base64 = btoa(JSON.stringify(input))
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+function getMockJwt(extras) {
+  // this function returns a mock JWT that contains enough
+  // for a unit test but ignores important aspects e.g: signing
+
+  const header = {
+    alg: 'HS256',
+    typ: 'JWT',
+  }
+  const payload = {
+    iat: Math.floor(Date.now() / 1000),
+    ...extras,
+  }
+
+  const encodedHeader = base64UrlEncode(header)
+  const encodedPayload = base64UrlEncode(payload)
+  return `${encodedHeader}.${encodedPayload}`
+}
 
 describe('AuthHelper', function () {
   describe('constructor checks', function () {
@@ -379,6 +404,146 @@ describe('AuthHelper', function () {
           options: { https: { rejectUnauthorized: false } },
         }),
       ).to.throw(InvalidParameter)
+    })
+  })
+
+  context('JTW Auth', function () {
+    describe('_isJwtValid', function () {
+      test(AuthHelper._isJwtValid, () => {
+        given(dayjs().add(1, 'month').unix()).expect(true)
+        given(dayjs().add(2, 'minutes').unix()).expect(true)
+        given(dayjs().add(30, 'seconds').unix()).expect(false)
+        given(dayjs().unix()).expect(false)
+        given(dayjs().subtract(1, 'seconds').unix()).expect(false)
+      })
+    })
+
+    describe('_getJwtExpiry', function () {
+      it('extracts expiry from valid JWT', function () {
+        expect(
+          AuthHelper._getJwtExpiry(getMockJwt({ exp: 1639026822 })),
+        ).to.equal(1639026822)
+      })
+
+      it('throws if JWT does not contain exp', function () {
+        expect(() => {
+          AuthHelper._getJwtExpiry(getMockJwt({}))
+        }).to.throw(InvalidResponse)
+      })
+
+      it('throws if JWT is invalid', function () {
+        expect(() => {
+          AuthHelper._getJwtExpiry('abc')
+        }).to.throw(InvalidResponse)
+      })
+    })
+
+    describe('withJwtAuth', function () {
+      const authHelper = new AuthHelper(
+        {
+          userKey: 'jwt_user',
+          passKey: 'jwt_pass',
+          authorizedOrigins: ['https://example.com'],
+          isRequired: false,
+        },
+        { private: { jwt_user: 'fred', jwt_pass: 'abc123' } },
+      )
+
+      beforeEach(function () {
+        clearJwtCache()
+      })
+
+      it('should use cached response if valid', async function () {
+        // the expiry is far enough in the future that the token
+        // will still be valid on the second hit
+        const mockToken = getMockJwt({ exp: dayjs().add(1, 'month').unix() })
+
+        // .times(1) ensures if we try to make a second call to this endpoint,
+        // we will throw `Nock: No match for request`
+        nock('https://example.com')
+          .post('/login')
+          .times(1)
+          .reply(200, { token: mockToken })
+        const params1 = await authHelper.withJwtAuth(
+          { url: 'https://example.com/some-endpoint' },
+          'https://example.com/login',
+        )
+        expect(nock.isDone()).to.equal(true)
+        expect(params1).to.deep.equal({
+          options: {
+            headers: {
+              Authorization: `Bearer ${mockToken}`,
+            },
+          },
+          url: 'https://example.com/some-endpoint',
+        })
+
+        // second time round, we'll get the same response again
+        // but this time served from cache
+        const params2 = await authHelper.withJwtAuth(
+          { url: 'https://example.com/some-endpoint' },
+          'https://example.com/login',
+        )
+        expect(params2).to.deep.equal({
+          options: {
+            headers: {
+              Authorization: `Bearer ${mockToken}`,
+            },
+          },
+          url: 'https://example.com/some-endpoint',
+        })
+
+        nock.cleanAll()
+      })
+
+      it('should not use cached response if expired', async function () {
+        // this time we define a token expiry is close enough
+        // that the token will not be valid on the second call
+        const mockToken1 = getMockJwt({
+          exp: dayjs().add(20, 'seconds').unix(),
+        })
+        nock('https://example.com')
+          .post('/login')
+          .times(1)
+          .reply(200, { token: mockToken1 })
+        const params1 = await authHelper.withJwtAuth(
+          { url: 'https://example.com/some-endpoint' },
+          'https://example.com/login',
+        )
+        expect(nock.isDone()).to.equal(true)
+        expect(params1).to.deep.equal({
+          options: {
+            headers: {
+              Authorization: `Bearer ${mockToken1}`,
+            },
+          },
+          url: 'https://example.com/some-endpoint',
+        })
+
+        // second time round we make another network request
+        const mockToken2 = getMockJwt({
+          exp: dayjs().add(20, 'seconds').unix(),
+        })
+        nock('https://example.com')
+          .post('/login')
+          .times(1)
+          .reply(200, { token: mockToken2 })
+        const params2 = await authHelper.withJwtAuth(
+          { url: 'https://example.com/some-endpoint' },
+          'https://example.com/login',
+        )
+        expect(nock.isDone()).to.equal(true)
+        expect(params2).to.deep.equal({
+          options: {
+            headers: {
+              Authorization: `Bearer ${mockToken2}`,
+            },
+          },
+          url: 'https://example.com/some-endpoint',
+        })
+
+        nock.cleanAll()
+      })
     })
   })
 })

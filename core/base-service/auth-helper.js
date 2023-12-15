@@ -231,7 +231,7 @@ class AuthHelper {
     )
   }
 
-  _getJwtExpiry(token) {
+  static _getJwtExpiry(token) {
     // extract the expiry date from a JWT
     const parts = token.split('.')
 
@@ -253,7 +253,7 @@ class AuthHelper {
     return json.exp
   }
 
-  _isJwtValid(expiry) {
+  static _isJwtValid(expiry) {
     // we consider the token valid if the expiry
     // datetime is later than (now + 1 minute)
     return dayjs.unix(expiry).isAfter(dayjs().add(1, 'minutes'))
@@ -266,7 +266,7 @@ class AuthHelper {
     if (
       jwtCache?.[loginEndpoint]?.[username]?.token &&
       jwtCache?.[loginEndpoint]?.[username]?.expiry &&
-      this._isJwtValid(jwtCache[loginEndpoint][username].expiry)
+      this.constructor._isJwtValid(jwtCache[loginEndpoint][username].expiry)
     ) {
       // cache hit
       return jwtCache[loginEndpoint][username].token
@@ -297,7 +297,7 @@ class AuthHelper {
     )
 
     const token = json.token
-    const expiry = this._getJwtExpiry(token)
+    const expiry = this.constructor._getJwtExpiry(token)
 
     // store in the cache
     if (!(loginEndpoint in jwtCache)) {
