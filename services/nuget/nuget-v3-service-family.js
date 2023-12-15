@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import RouteBuilder from '../route-builder.js'
 import { BaseJsonService, NotFound } from '../index.js'
+import { optionalUrl } from '../validators.js'
 import {
   renderVersionBadge,
   renderDownloadBadge,
@@ -89,6 +90,10 @@ async function fetch(
   })
 }
 
+const queryParamSchema = Joi.object({
+  source: optionalUrl,
+}).required()
+
 /*
  * Create a version and download service for a NuGet v2 API. Return an object
  * containing both services.
@@ -113,13 +118,24 @@ function createServiceFamily({
   apiBaseUrl,
   withFeed = true,
 }) {
+  /**
+   * Extract source parameters
+   */
+
+  function unpackParams({ source = apiBaseUrl }) {
+    return { source: `${source}/v3` }
+  }
+
   class NugetVersionService extends BaseJsonService {
     static category = 'version'
 
-    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
-      .push('(v|vpre)', 'which')
-      .push('(.+?)', 'packageName')
-      .toObject()
+    static route = {
+      ...buildRoute({ serviceBaseUrl, withTenant, withFeed })
+        .push('(v|vpre)', 'which')
+        .push('(.+?)', 'packageName')
+        .toObject(),
+      queryParamSchema,
+    }
 
     static examples = []
 
@@ -146,11 +162,14 @@ function createServiceFamily({
       }
     }
 
-    async handle({ tenant, feed, which, packageName }) {
+    async handle({ tenant, feed, which, packageName }, queryParams) {
       const includePrereleases = which === 'vpre'
+
+      const { source } = unpackParams(queryParams)
+
       const baseUrl = apiUrl({
         withTenant,
-        apiBaseUrl,
+        apiBaseUrl: source,
         apiDomain,
         tenant,
         withFeed,
@@ -165,10 +184,13 @@ function createServiceFamily({
   class NugetDownloadService extends BaseJsonService {
     static category = 'downloads'
 
-    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
-      .push('dt')
-      .push('(.+?)', 'packageName')
-      .toObject()
+    static route = {
+      ...buildRoute({ serviceBaseUrl, withTenant, withFeed })
+        .push('dt')
+        .push('(.+?)', 'packageName')
+        .toObject(),
+      queryParamSchema,
+    }
 
     static examples = []
 
@@ -190,10 +212,12 @@ function createServiceFamily({
       }
     }
 
-    async handle({ tenant, feed, which, packageName }) {
+    async handle({ tenant, feed, which, packageName }, queryParams) {
+      const { source } = unpackParams(queryParams)
+
       const baseUrl = apiUrl({
         withTenant,
-        apiBaseUrl,
+        apiBaseUrl: source,
         apiDomain,
         tenant,
         withFeed,
