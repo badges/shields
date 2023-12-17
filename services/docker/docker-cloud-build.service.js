@@ -5,6 +5,14 @@ import { fetchBuild } from './docker-cloud-common-fetch.js'
 export default class DockerCloudBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('cloud/build')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com', 'https://cloud.docker.com'],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Cloud Build Status',
