@@ -7,6 +7,7 @@ import {
   buildDockerUrl,
   getDockerHubUser,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
@@ -50,18 +51,13 @@ export default class DockerPulls extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson(
-      await this.authHelper.withJwtAuth(
-        {
-          schema: pullsSchema,
-          url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-            user,
-          )}/${repo}`,
-          httpErrors: { 404: 'repo not found' },
-        },
-        'https://hub.docker.com/v2/users/login/',
-      ),
-    )
+    return await fetch(this, {
+      schema: pullsSchema,
+      url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
+        user,
+      )}/${repo}`,
+      httpErrors: { 404: 'repo not found' },
+    })
   }
 
   async handle({ user, repo }) {

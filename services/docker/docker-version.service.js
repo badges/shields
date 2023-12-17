@@ -9,6 +9,7 @@ import {
   getMultiPageData,
   getDigestSemVerMatches,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -75,18 +76,13 @@ export default class DockerVersion extends BaseJsonService {
 
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson(
-      await this.authHelper.withJwtAuth(
-        {
-          schema: buildSchema,
-          url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-            user,
-          )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-          httpErrors: { 404: 'repository or tag not found' },
-        },
-        'https://hub.docker.com/v2/users/login/',
-      ),
-    )
+    return await fetch(this, {
+      schema: buildSchema,
+      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+        user,
+      )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
+      httpErrors: { 404: 'repository or tag not found' },
+    })
   }
 
   transform({ tag, sort, data, pagedData, arch = 'amd64' }) {

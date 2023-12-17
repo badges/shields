@@ -5,6 +5,7 @@ import {
   buildDockerUrl,
   getDockerHubUser,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),
@@ -55,18 +56,13 @@ export default class DockerAutomatedBuild extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson(
-      await this.authHelper.withJwtAuth(
-        {
-          schema: automatedBuildSchema,
-          url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-            user,
-          )}/${repo}`,
-          httpErrors: { 404: 'repo not found' },
-        },
-        'https://hub.docker.com/v2/users/login/',
-      ),
-    )
+    return await fetch(this, {
+      schema: automatedBuildSchema,
+      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+        user,
+      )}/${repo}`,
+      httpErrors: { 404: 'repo not found' },
+    })
   }
 
   async handle({ user, repo }) {

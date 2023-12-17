@@ -9,6 +9,7 @@ import {
   getDockerHubUser,
   getMultiPageData,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
@@ -113,20 +114,15 @@ export default class DockerSize extends BaseJsonService {
 
   async fetch({ user, repo, tag, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson(
-      await this.authHelper.withJwtAuth(
-        {
-          schema: tag ? buildSchema : pagedSchema,
-          url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-            user,
-          )}/${repo}/tags${
-            tag ? `/${tag}` : '?page_size=100&ordering=last_updated'
-          }${page}`,
-          httpErrors: { 404: 'repository or tag not found' },
-        },
-        'https://hub.docker.com/v2/users/login/',
-      ),
-    )
+    return await fetch(this, {
+      schema: tag ? buildSchema : pagedSchema,
+      url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
+        user,
+      )}/${repo}/tags${
+        tag ? `/${tag}` : '?page_size=100&ordering=last_updated'
+      }${page}`,
+      httpErrors: { 404: 'repository or tag not found' },
+    })
   }
 
   getSizeFromImageByLatestDate(data, arch) {
