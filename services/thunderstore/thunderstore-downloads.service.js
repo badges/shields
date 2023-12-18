@@ -33,7 +33,7 @@ export default class ThunderstoreDownloads extends BaseThunderstoreService {
    * @returns {Promise<*>} - Promise containing the rendered badge payload
    */
   async handle({ namespace, packageName }) {
-    const { total_downloads: downloads } = await this.fetchPackage({
+    const { downloads } = await this.fetchPackageMetrics({
       namespace,
       packageName,
     })

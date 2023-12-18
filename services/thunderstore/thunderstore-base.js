@@ -3,13 +3,16 @@ import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
 const packageSchema = Joi.object({
-  total_downloads: nonNegativeInteger,
   package_url: Joi.string().required(),
-  rating_score: Joi.number().min(0).required(),
   latest: Joi.object({
     version_number: Joi.string().required(),
   }).required(),
 }).required()
+
+const packageMetricsSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  rating_score: nonNegativeInteger,
+})
 
 const documentation = `
 <p>
@@ -52,7 +55,7 @@ const documentation = `
 
 class BaseThunderstoreService extends BaseJsonService {
   /**
-   * Fetches package from the Thunderstore API.
+   * Fetches package metadata from the Thunderstore API.
    *
    * @param {object} pkg - Package specifier
    * @param {string} pkg.namespace - the package namespace
@@ -63,6 +66,21 @@ class BaseThunderstoreService extends BaseJsonService {
     return this._requestJson({
       schema: packageSchema,
       url: `https://thunderstore.io/api/experimental/package/${namespace}/${packageName}`,
+    })
+  }
+
+  /**
+   * Fetches package metrics from the Thunderstore API.
+   *
+   * @param {object} pkg - Package specifier
+   * @param {string} pkg.namespace - the package namespace
+   * @param {string} pkg.packageName - the package name
+   * @returns {Promise<object>} - Promise containing validated package metrics
+   */
+  async fetchPackageMetrics({ namespace, packageName }) {
+    return this._requestJson({
+      schema: packageMetricsSchema,
+      url: `https://thunderstore.io/api/v1/package-metrics/${namespace}/${packageName}`,
     })
   }
 }
