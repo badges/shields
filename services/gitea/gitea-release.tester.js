@@ -30,7 +30,7 @@ t.create('Release (latest by semver pre-release)')
   .expectBadge({ label: 'release', message: 'v5.0.0-rc1', color: 'orange' })
 
 t.create('Release (project not found)')
-  .get('/CanisHelix/does-not-exist.json')
+  .get('/CanisHelix/does-not-exist.json?gitea_url=https://codeberg.org')
   .expectBadge({ label: 'release', message: 'user or repo not found' })
 
 t.create('Release (no tags)')

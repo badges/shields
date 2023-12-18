@@ -12,7 +12,7 @@ The keys could be anything and {} is a valid response (e.g: for an empty repo)
 const schema = Joi.object().pattern(/./, nonNegativeInteger)
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl,
+  gitea_url: optionalUrl.required(),
 }).required()
 
 export default class GiteaLanguageCount extends GiteaBase {
@@ -58,7 +58,7 @@ export default class GiteaLanguageCount extends GiteaBase {
   }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://codeberg.org/api/swagger#/repository/repoGetLanguages
+    // https://try.gitea.io/api/swagger#/repository/repoGetLanguages
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,
@@ -66,10 +66,7 @@ export default class GiteaLanguageCount extends GiteaBase {
     })
   }
 
-  async handle(
-    { user, repo },
-    { gitea_url: baseUrl = 'https://codeberg.org' },
-  ) {
+  async handle({ user, repo }, { gitea_url: baseUrl }) {
     const data = await this.fetch({
       user,
       repo,

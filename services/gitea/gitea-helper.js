@@ -1,6 +1,5 @@
 const documentation = `
-Note that only internet-accessible Gitea compatible instances are supported, for example
-[https://codeberg.org](https://codeberg.org).
+Note that the gitea_url parameter is required because there is canonical hosted gitea service provided by Gitea.
 `
 
 function httpErrorsFor() {

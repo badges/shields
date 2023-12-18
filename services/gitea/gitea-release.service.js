@@ -18,7 +18,7 @@ const displayNameEnum = ['tag', 'release']
 const dateOrderByEnum = ['created_at', 'published_at']
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl,
+  gitea_url: optionalUrl.required(),
   include_prereleases: Joi.equal(''),
   sort: Joi.string()
     .valid(...sortEnum)
@@ -86,13 +86,12 @@ export default class GiteaRelease extends GiteaBase {
 
   static defaultBadgeData = { label: 'release' }
 
-  async fetch({ user, repo, baseUrl, isSemver }) {
-    // https://codeberg.org/api/swagger#/repository/repoGetRelease
-    return this.fetchPaginatedArrayData({
+  async fetch({ user, repo, baseUrl }) {
+    // https://try.gitea.io/api/swagger#/repository/repoGetRelease
+    return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
       httpErrors: httpErrorsFor(),
-      firstPageOnly: !isSemver,
     })
   }
 
@@ -123,7 +122,7 @@ export default class GiteaRelease extends GiteaBase {
   async handle(
     { user, repo },
     {
-      gitea_url: baseUrl = 'https://codeberg.org',
+      gitea_url: baseUrl,
       include_prereleases: pre,
       sort,
       display_name: displayName,
