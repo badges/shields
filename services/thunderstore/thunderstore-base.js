@@ -39,7 +39,7 @@ const documentation = `
     <code>https://thunderstore.io/package/[namespace]/[packageName]</code>
   </p>
 </details>
-<details
+<details>
   <summary>Subdomain Communities</summary>
   <p>
     Some communities use a 'subdomain' alternative URL, for example, Valheim:
@@ -47,7 +47,7 @@ const documentation = `
   <p>
     <code>https://valheim.thunderstore.io/package/[namespace]/[packageName]</code>
   </p>
-<details>
+</details>
 `
 
 class BaseThunderstoreService extends BaseJsonService {
