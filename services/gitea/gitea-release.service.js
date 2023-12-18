@@ -48,11 +48,11 @@ export default class GiteaRelease extends GiteaBase {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'go-gitea',
+            example: 'forgejo',
           }),
           pathParam({
             name: 'repo',
-            example: 'gitea',
+            example: 'forgejo',
           }),
           queryParam({
             name: 'gitea_url',

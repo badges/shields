@@ -32,11 +32,11 @@ export default class GiteaLanguageCount extends GiteaBase {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'go-gitea',
+            example: 'forgejo',
           }),
           pathParam({
             name: 'repo',
-            example: 'gitea',
+            example: 'forgejo',
           }),
           queryParam({
             name: 'gitea_url',
