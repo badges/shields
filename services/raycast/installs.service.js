@@ -41,7 +41,7 @@ export default class RaycastInstalls extends BaseJsonService {
   async fetch({ user, extension }) {
     return this._requestJson({
       schema,
-      url: `https://www.raycast.com/frontend_api/users/${user}/extensions/${extension}`,
+      url: `https://www.raycast.com/api/v1/extensions/${user}/${extension}`,
       httpErrors: {
         404: 'user/extension not found',
       },
