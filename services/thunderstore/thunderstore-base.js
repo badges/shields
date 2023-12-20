@@ -3,7 +3,6 @@ import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
 const packageSchema = Joi.object({
-  package_url: Joi.string().required(),
   latest: Joi.object({
     version_number: Joi.string().required(),
   }).required(),
