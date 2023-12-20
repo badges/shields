@@ -16,7 +16,7 @@ const packageMetricsSchema = Joi.object({
 
 const documentation = `
 <p>
-  The Thunderstore badge requires the package's <code>namespace</code> and <code>name</code>.
+  The Thunderstore badges require a package's <code>namespace</code> and <code>name</code>.
 </p>
 <p>
   Everything can be discerned from your package's URL. Thunderstore package URLs have a mostly consistent
