@@ -51,6 +51,11 @@ const documentation = `
 </details>
 `
 
+/**
+ * Services which query Thunderstore endpoints should extend BaseThunderstoreService
+ *
+ * @abstract
+ */
 class BaseThunderstoreService extends BaseJsonService {
   /**
    * Fetches package metadata from the Thunderstore API.
