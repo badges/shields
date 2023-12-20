@@ -1,22 +1,22 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { anyInteger } from '../validators.js'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
+import { BaseJsonService, pathParams } from '../index.js'
+import { renderDownloadsBadge } from '../downloads.js'
 
 const schema = Joi.object({
-  download_count: anyInteger,
+  download_count: nonNegativeInteger,
 }).required()
 
 export default class RaycastInstalls extends BaseJsonService {
-  static category = 'platform-support'
+  static category = 'downloads'
 
   static route = {
-    base: 'raycast/installs',
+    base: 'raycast/dt',
     pattern: ':user/:extension',
   }
 
   static openApi = {
-    '/raycast/installs/{user}/{extension}': {
+    '/raycast/dt/{user}/{extension}': {
       get: {
         summary: 'Raycast extension downloads count',
         parameters: pathParams(
@@ -27,15 +27,8 @@ export default class RaycastInstalls extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 7200
-
-  static render({ user, extension, downloadCount }) {
-    return {
-      label: 'Installs',
-      message: metric(downloadCount),
-      color: 'green',
-      link: [`https://www.raycast.com/${user}/${extension}`],
-    }
+  static render({ downloads }) {
+    return renderDownloadsBadge({ downloads })
   }
 
   async fetch({ user, extension }) {
@@ -49,20 +42,14 @@ export default class RaycastInstalls extends BaseJsonService {
   }
 
   transform(json) {
-    const downloadCount = json.download_count
-    if (downloadCount === undefined) {
-      throw new NotFound({ prettyMessage: 'download_count not found' })
-    }
-    return { downloadCount }
+    const downloads = json.download_count
+
+    return { downloads }
   }
 
   async handle({ user, extension }) {
     const json = await this.fetch({ user, extension })
-    const { downloadCount } = this.transform(json)
-    return this.constructor.render({
-      user,
-      extension,
-      downloadCount,
-    })
+    const { downloads } = this.transform(json)
+    return this.constructor.render({ downloads })
   }
 }
