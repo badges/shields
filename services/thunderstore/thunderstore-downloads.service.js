@@ -23,7 +23,6 @@ export default class ThunderstoreDownloads extends BaseThunderstoreService {
 
   static defaultBadgeData = {
     label: 'downloads',
-    namedLogo: 'thunderstore',
   }
 
   /**
