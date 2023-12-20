@@ -5,7 +5,7 @@ export default class ThunderstoreVersion extends BaseThunderstoreService {
   static category = 'version'
 
   static route = {
-    base: 'thunderstore/version',
+    base: 'thunderstore/v',
     pattern: ':namespace/:packageName',
   }
 
