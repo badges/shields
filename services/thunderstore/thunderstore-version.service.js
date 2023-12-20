@@ -29,7 +29,7 @@ export default class ThunderstoreVersion extends BaseThunderstoreService {
    * @param {object} pkg - Package specifier
    * @param {string} pkg.namespace - the package namespace
    * @param {string} pkg.packageName - the package name
-   * @returns {Promise<*>} - Promise containing the rendered badge payload
+   * @returns {Promise<object>} - Promise containing the rendered badge payload
    */
   async handle({ namespace, packageName }) {
     const {
