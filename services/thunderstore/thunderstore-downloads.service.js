@@ -5,7 +5,7 @@ export default class ThunderstoreDownloads extends BaseThunderstoreService {
   static category = 'downloads'
 
   static route = {
-    base: 'thunderstore/downloads',
+    base: 'thunderstore/dt',
     pattern: ':namespace/:packageName',
   }
 
