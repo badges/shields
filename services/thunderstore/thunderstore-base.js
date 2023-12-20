@@ -57,6 +57,8 @@ const documentation = `
  * @abstract
  */
 class BaseThunderstoreService extends BaseJsonService {
+  static thunderstoreGreen = '23FFB0'
+
   /**
    * Fetches package metadata from the Thunderstore API.
    *
