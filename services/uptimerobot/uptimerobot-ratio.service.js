@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 import UptimeRobotBase from './uptimerobot-base.js'
 
@@ -9,24 +10,26 @@ export default class UptimeRobotRatio extends UptimeRobotBase {
     pattern: ':numberOfDays(\\d+)?/:monitorSpecificKey',
   }
 
-  static examples = [
-    {
-      title: 'Uptime Robot ratio (30 days)',
-      pattern: ':monitorSpecificKey',
-      namedParams: {
-        monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+  static openApi = {
+    '/uptimerobot/ratio/{monitorSpecificKey}': {
+      get: {
+        summary: 'Uptime Robot ratio (30 days)',
+        parameters: pathParams({
+          name: 'monitorSpecificKey',
+          example: 'm778918918-3e92c097147760ee39d02d36',
+        }),
       },
-      staticPreview: this.render({ ratio: 100 }),
     },
-    {
-      title: 'Uptime Robot ratio (7 days)',
-      pattern: '7/:monitorSpecificKey',
-      namedParams: {
-        monitorSpecificKey: 'm778918918-3e92c097147760ee39d02d36',
+    '/uptimerobot/ratio/7/{monitorSpecificKey}': {
+      get: {
+        summary: 'Uptime Robot ratio (7 days)',
+        parameters: pathParams({
+          name: 'monitorSpecificKey',
+          example: 'm778918918-3e92c097147760ee39d02d36',
+        }),
       },
-      staticPreview: this.render({ ratio: 100 }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'uptime',
