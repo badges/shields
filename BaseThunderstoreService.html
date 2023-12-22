@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/service-test-runner/services-for-title</title>
+    <title>JSDoc: Class: BaseThunderstoreService</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/service-test-runner/services-for-title</h1>
+    <h1 class="page-title">Class: BaseThunderstoreService</h1>
 
     
 
@@ -28,6 +28,11 @@
 
 <header>
     
+        <h2><span class="attribs"><span class="type-signature">(abstract) </span></span>BaseThunderstoreService<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Services which query Thunderstore endpoints should extend BaseThunderstoreService</p></div>
+        
+    
 </header>
 
 <article>
@@ -35,7 +40,28 @@
     
         
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="BaseThunderstoreService"><span class="type-signature">(abstract) </span>new BaseThunderstoreService<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -67,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_services-for-title.js.html">core/service-test-runner/services-for-title.js</a>, <a href="core_service-test-runner_services-for-title.js.html#line1">line 1</a>
+        <a href="services_thunderstore_thunderstore-base.js.html">services/thunderstore/thunderstore-base.js</a>, <a href="services_thunderstore_thunderstore-base.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -79,7 +105,24 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -106,7 +149,7 @@
     
 
     
-    <h4 class="name" id="~servicesForTitle"><span class="type-signature">(inner) </span>servicesForTitle<span class="signature">(title)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    <h4 class="name" id="fetchPackage"><span class="type-signature">(async) </span>fetchPackage<span class="signature">(pkg)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
     
 
     
@@ -114,10 +157,7 @@
 
 
 <div class="description">
-    <p>Given a pull request title like
-'[Travis Sonar] Support user token authentication'
-extract the list of service names in square brackets
-as an array of strings.</p>
+    <p>Fetches package metadata from the Thunderstore API.</p>
 </div>
 
 
@@ -153,7 +193,49 @@ as an array of strings.</p>
 
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>pkg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Package specifier</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
             
 
             <td class="type">
@@ -169,7 +251,37 @@ as an array of strings.</p>
 
             
 
-            <td class="description last"><p>Pull Request title</p></td>
+            <td class="description last"><p>the package namespace</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>packageName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the package name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -210,7 +322,7 @@ as an array of strings.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_services-for-title.js.html">core/service-test-runner/services-for-title.js</a>, <a href="core_service-test-runner_services-for-title.js.html#line16">line 16</a>
+        <a href="services_thunderstore_thunderstore-base.js.html">services/thunderstore/thunderstore-base.js</a>, <a href="services_thunderstore_thunderstore-base.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -239,7 +351,9 @@ as an array of strings.</p>
 
         
 <div class="param-desc">
-    <p>Array of service names</p>
+    <ul>
+<li>Promise containing validated package information</li>
+</ul>
 </div>
 
 
@@ -250,7 +364,240 @@ as an array of strings.</p>
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fetchPackageMetrics"><span class="type-signature">(async) </span>fetchPackageMetrics<span class="signature">(pkg)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Fetches package metrics from the Thunderstore API.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pkg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Package specifier</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the package namespace</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>packageName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the package name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_thunderstore_thunderstore-base.js.html">services/thunderstore/thunderstore-base.js</a>, <a href="services_thunderstore_thunderstore-base.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>Promise containing validated package metrics</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
 
 
     </dd>

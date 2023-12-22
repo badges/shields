@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/service-test-runner/services-for-title</title>
+    <title>JSDoc: Source: services/thunderstore/thunderstore-base.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,260 +17,111 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/service-test-runner/services-for-title</h1>
+    <h1 class="page-title">Source: services/thunderstore/thunderstore-base.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_services-for-title.js.html">core/service-test-runner/services-for-title.js</a>, <a href="core_service-test-runner_services-for-title.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~servicesForTitle"><span class="type-signature">(inner) </span>servicesForTitle<span class="signature">(title)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Given a pull request title like
-'[Travis Sonar] Support user token authentication'
-extract the list of service names in square brackets
-as an array of strings.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>title</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Pull Request title</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_services-for-title.js.html">core/service-test-runner/services-for-title.js</a>, <a href="core_service-test-runner_services-for-title.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Array of service names</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
+
+const packageSchema = Joi.object({
+  latest: Joi.object({
+    version_number: Joi.string().required(),
+  }).required(),
+}).required()
+
+const packageMetricsSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  rating_score: nonNegativeInteger,
+})
+
+const documentation = `
+&lt;p>
+  The Thunderstore badges require a package's &lt;code>namespace&lt;/code> and &lt;code>name&lt;/code>.
+&lt;/p>
+&lt;p>
+  Everything can be discerned from your package's URL. Thunderstore package URLs have a mostly consistent
+  format:
+&lt;/p>
+&lt;p>
+    &lt;code>https://thunderstore.io/c/[community]/p/[namespace]/[packageName]&lt;/code>
+&lt;/p>
+&lt;p>
+  For example: &lt;code>https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/&lt;/code>.
+  &lt;ul>
+    &lt;li>&lt;code>namespace = "notnotnotswipez"&lt;/code>&lt;/li>
+    &lt;li>&lt;code>packageName = "MoreCompany"&lt;/code>&lt;/li>
+  &lt;/ul>
+&lt;/p>
+&lt;details>
+  &lt;summary>Risk Of Rain 2&lt;/summary>
+  &lt;p>
+    The 'default community', Risk of Rain 2, has an alternative URL:
+  &lt;/p>
+  &lt;p>
+    &lt;code>https://thunderstore.io/package/[namespace]/[packageName]&lt;/code>
+  &lt;/p>
+&lt;/details>
+&lt;details>
+  &lt;summary>Subdomain Communities&lt;/summary>
+  &lt;p>
+    Some communities use a 'subdomain' alternative URL, for example, Valheim:
+  &lt;/p>
+  &lt;p>
+    &lt;code>https://valheim.thunderstore.io/package/[namespace]/[packageName]&lt;/code>
+  &lt;/p>
+&lt;/details>
+`
+
+/**
+ * Services which query Thunderstore endpoints should extend BaseThunderstoreService
+ *
+ * @abstract
+ */
+class BaseThunderstoreService extends BaseJsonService {
+  static thunderstoreGreen = '23FFB0'
+
+  /**
+   * Fetches package metadata from the Thunderstore API.
+   *
+   * @param {object} pkg - Package specifier
+   * @param {string} pkg.namespace - the package namespace
+   * @param {string} pkg.packageName - the package name
+   * @returns {Promise&lt;object>} - Promise containing validated package information
+   */
+  async fetchPackage({ namespace, packageName }) {
+    return this._requestJson({
+      schema: packageSchema,
+      url: `https://thunderstore.io/api/experimental/package/${namespace}/${packageName}`,
+    })
+  }
+
+  /**
+   * Fetches package metrics from the Thunderstore API.
+   *
+   * @param {object} pkg - Package specifier
+   * @param {string} pkg.namespace - the package namespace
+   * @param {string} pkg.packageName - the package name
+   * @returns {Promise&lt;object>} - Promise containing validated package metrics
+   */
+  async fetchPackageMetrics({ namespace, packageName }) {
+    return this._requestJson({
+      schema: packageMetricsSchema,
+      url: `https://thunderstore.io/api/v1/package-metrics/${namespace}/${packageName}`,
+    })
+  }
+}
+
+export { BaseThunderstoreService, documentation }
+</code></pre>
+        </article>
+    </section>
 
 
 
