@@ -1,9 +1,11 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
 import AzureDevOpsBase from './azure-devops-base.js'
-import { keywords } from './azure-devops-helpers.js'
 
-const documentation = `
+const description = `
+[Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
+
 To obtain your own badge, you need to get 3 pieces of information:
 \`ORGANIZATION\`, \`PROJECT_ID\` and \`DEFINITION_ID\`.
 
@@ -47,33 +49,52 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
     pattern: ':organization/:project/:definitionId/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'Azure DevOps coverage',
-      pattern: ':organization/:project/:definitionId',
-      namedParams: {
-        organization: 'swellaby',
-        project: 'opensource',
-        definitionId: '25',
+  static openApi = {
+    '/azure-devops/coverage/{organization}/{project}/{definitionId}': {
+      get: {
+        summary: 'Azure DevOps coverage',
+        description,
+        parameters: pathParams(
+          {
+            name: 'organization',
+            example: 'swellaby',
+          },
+          {
+            name: 'project',
+            example: 'opensource',
+          },
+          {
+            name: 'definitionId',
+            example: '25',
+          },
+        ),
       },
-      staticPreview: this.render({ coverage: 100 }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Azure DevOps coverage (branch)',
-      pattern: ':organization/:project/:definitionId/:branch',
-      namedParams: {
-        organization: 'swellaby',
-        project: 'opensource',
-        definitionId: '25',
-        branch: 'master',
+    '/azure-devops/coverage/{organization}/{project}/{definitionId}/{branch}': {
+      get: {
+        summary: 'Azure DevOps coverage (branch)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'organization',
+            example: 'swellaby',
+          },
+          {
+            name: 'project',
+            example: 'opensource',
+          },
+          {
+            name: 'definitionId',
+            example: '25',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
-      staticPreview: this.render({ coverage: 100 }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 

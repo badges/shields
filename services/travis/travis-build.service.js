@@ -1,6 +1,10 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, deprecatedService } from '../index.js'
+import {
+  BaseSvgScrapingService,
+  deprecatedService,
+  pathParams,
+} from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -17,30 +21,42 @@ export class TravisComBuild extends BaseSvgScrapingService {
     capture: ['userRepo', 'branch'],
   }
 
-  static examples = [
-    {
-      title: 'Travis (.com)',
-      pattern: 'com/:user/:repo',
-      namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+  static openApi = {
+    '/travis/com/{user}/{repo}': {
+      get: {
+        summary: 'Travis (.com)',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+        ),
       },
     },
-    {
-      title: 'Travis (.com) branch',
-      pattern: 'com/:user/:repo/:branch',
-      namedParams: {
-        user: 'ivandelabeldad',
-        repo: 'rackian-gateway',
-        branch: 'master',
-      },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+    '/travis/com/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Travis (.com) branch',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
     },
-  ]
+  }
 
   static staticPreview = {
     message: 'passing',
