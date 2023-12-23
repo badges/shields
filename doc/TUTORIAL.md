@@ -329,7 +329,7 @@ export default class GemVersion extends BaseJsonService {
    })
    ```
 
-   is equivilent to
+   is equivalent to
 
    ```js
    parameters: [
