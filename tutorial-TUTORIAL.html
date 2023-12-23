@@ -150,9 +150,9 @@ export default class Example extends BaseService {
 </code></pre>
 <p>Description of the code:</p>
 <ol>
-<li>Our service badge class will extend <code>BaseService</code> so we need to require it. Variables are declared with <code>const</code> and <code>let</code> in preference to <code>var</code>.</li>
+<li>Our service badge class will extend <code>BaseService</code> so we need to import it.</li>
 <li>Our module must export a class which extends <code>BaseService</code>.</li>
-<li>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</li>
+<li>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-documentation-to-the-frontend">section 4.4</a> for more details.</li>
 <li><code>route</code> declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
 <ul>
 <li><code>base</code> defines the first part of the URL that doesn't change, e.g. <code>/example/</code>.</li>
@@ -247,7 +247,7 @@ export default class GemVersion extends BaseJsonService {
 <p>Our module exports a class which extends <code>BaseJsonService</code></p>
 </li>
 <li>
-<p>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-an-example-to-the-front-page">section 4.4</a> for more details on examples.</p>
+<p>Returns the name of the category to sort this badge into (eg. &quot;build&quot;). Used to sort the examples on the main <a href="https://shields.io">shields.io</a> website. <a href="https://github.com/badges/shields/blob/master/services/categories.js">Here</a> is the list of the valid categories. See <a href="#44-adding-documentation-to-the-frontend">section 4.4</a> for more details.</p>
 </li>
 <li>
 <p>As with our previous badge, we need to declare a route. This time we will capture a variable called <code>gem</code>.</p>
@@ -298,41 +298,87 @@ and can be imported via the import shortcut and then thrown:</p>
 
 throw new NotFound({ prettyMessage: 'package not found' })
 </code></pre>
-<h3>(4.4) Adding an Example to the Front Page</h3>
-<p>Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional array <code>examples</code> to our class.</p>
-<pre class="prettyprint source lang-js"><code>export default class GemVersion extends BaseJsonService {
+<h3>(4.4) Adding Documentation to the Frontend</h3>
+<p>To render the shields.io website, we produce an <a href="https://swagger.io/specification/">OpenAPI 3 specification</a> which describes the available badge endpoints. Then we use that specification to render the frontend.</p>
+<p>Once we have implemented our badge, we want to add it to the index so that users can discover it. We will do this by adding an additional object <code>openApi</code> to our class. This object contains an <a href="https://swagger.io/specification/#paths-object">OpenAPI Paths Object</a> describing the endpoint or endpoints exposed by this service class.</p>
+<pre class="prettyprint source lang-js"><code>// (1)
+import { pathParams } from '../index.js'
+
+export default class GemVersion extends BaseJsonService {
   // ...
 
-  // (1)
+  // (2)
   static category = 'version'
 
-  // (2)
-  static examples = [
-    {
-      // (3)
-      title: 'Gem',
-      namedParams: { gem: 'formatador' },
-      staticPreview: this.render({ version: '2.1.0' }),
-      keywords: ['ruby'],
+  static openApi = {
+    // (3)
+    '/gem/v/{gem}': {
+      // (4)
+      get: {
+        // (5)
+        summary: 'Gem Version',
+        description:
+          '[Ruby Gems](https://rubygems.org/) is a registry for ruby libraries',
+        // (6)
+        parameters: pathParams({
+          name: 'gem',
+          description: 'Name of the Ruby Gem',
+          example: 'formatador',
+        }),
+      },
     },
-  ]
+  }
 }
 </code></pre>
 <ol>
-<li>We defined category earlier in the tutorial. The <code>category</code> property defines which heading in the index our example will appear under.</li>
-<li>The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.</li>
-<li>Our example object should contain the following properties:
+<li>
+<p>There are four helper functions we can use to assemble <a href="https://swagger.io/specification/#parameter-object">Open API Parameter objects</a>. These are:</p>
 <ul>
-<li><code>title</code>: Descriptive text that will be shown next to the badge</li>
-<li><code>namedParams</code>: Provide a valid example of params we can substitute into
-the pattern. In this case we need a valid ruby gem, so we've picked <a href="https://rubygems.org/gems/formatador">formatador</a>.</li>
-<li><code>staticPreview</code>: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. <code>staticPreview</code> should be populated by calling our <code>render()</code> method with some valid data.</li>
-<li><code>keywords</code>: If we want to provide additional keywords other than the title and the category, we can add them here. This helps users to search for relevant badges.</li>
+<li><code>pathParam</code> - returns a single Parameter object describing a single path parameter</li>
+<li><code>pathParams</code> - returns an array of path parameter objects</li>
+<li><code>queryParam</code> - returns a single Parameter object describing a single query parameter</li>
+<li><code>queryParams</code> - returns an array of query parameter objects</li>
 </ul>
+<p>These four helper functions are documented in more detail at http://contributing.shields.io/module-core_base-service_openapi.html</p>
+</li>
+<li>
+<p>We defined category earlier in the tutorial. The <code>category</code> property defines which heading in the index our example will appear under.</p>
+</li>
+<li>
+<p>The keys of the <code>openApi</code> object are routes. In this case we only need to describe one route. In some cases, a service class can define more than one badge route. Open API doesn't have the concept of optional path parameters (more specifically, <code>in: 'path'</code> implies <code>required: true</code>) so if there are any optional path parameters in our route, our <code>openApi</code> object needs to describe two URLs: one without the optional parameter, and another with it.</p>
+</li>
+<li>
+<p>The HTTP method. Shields only allows GET requests, so this is always <code>get</code>.</p>
+</li>
+<li>
+<p><code>summary</code> (required) is a short title or description of the badge. <code>description</code> is an optional longer description or additional documentation. We can use markdown or HTML syntax inside the <code>description</code> field.</p>
+</li>
+<li>
+<p><code>parameters</code> is an array of <a href="https://swagger.io/specification/#parameter-object">Open API Parameter objects</a> describing any parameters we can pass to this route. This array should include all path parameters included in the key that this value object describes and all relevant query parameters. As a minimum, we need to supply <code>name</code> and <code>example</code>. The example must be a valid example of a value we can provide for this parameter. In this case we need a valid ruby gem, so we've picked <a href="https://rubygems.org/gems/formatador">formatador</a>. There are also optional keys we can pass. The code</p>
+<pre class="prettyprint source lang-js"><code>parameters: pathParams({
+  name: 'gem',
+  description: 'Name of the Ruby Gem',
+  example: 'formatador',
+})
+</code></pre>
+<p>is equivalent to</p>
+<pre class="prettyprint source lang-js"><code>parameters: [
+  {
+    name: 'gem',
+    in: 'path',
+    required: true,
+    schema: { type: 'string' },
+    example: 'formatador',
+    description: 'Name of the Ruby Gem',
+  },
+]
+</code></pre>
+<p>but we have used the helper function <code>pathParams</code> to imply some defaults and reduce the amount of code we need to write by hand.</p>
 </li>
 </ol>
 <p>Save, run <code>npm start</code>, and you can see it <a href="http://127.0.0.1:3000/">locally</a>.</p>
-<p>If you update <code>examples</code>, you don't have to restart the server. Run <code>npm run defs</code> in another terminal window and the frontend will update.</p>
+<p>If you update <code>openApi</code>, you don't have to restart the server. Run <code>npm run prestart</code> in another terminal window and the frontend will update.</p>
+<p>Note: Some services define this information in an array property called <code>examples</code>. This is deprecated and we're in the process of converting them. New services should declare an <code>openApi</code> object.</p>
 <h3>(4.5) Write Tests<!-- Change the link below when you change the heading --></h3>
 <p>When creating a badge for a new service or changing a badge's behavior, tests
 should be included. They serve several purposes:</p>
@@ -379,7 +425,7 @@ will review your contribution.</li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Dec 23 2023 00:26:57 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Dec 23 2023 00:28:55 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
