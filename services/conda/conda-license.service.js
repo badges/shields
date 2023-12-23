@@ -10,10 +10,10 @@ const schema = Joi.object({
 
 export default class CondaLicense extends BaseCondaService {
   static category = 'license'
-  static route = { base: 'conda', pattern: 'l/:channel/:pkg' }
+  static route = { base: 'conda', pattern: 'l/:channel/:packageName' }
 
   static openApi = {
-    '/conda/l/{channel}/{package}': {
+    '/conda/l/{channel}/{packageName}': {
       get: {
         summary: 'Conda - License',
         parameters: pathParams(
@@ -22,7 +22,7 @@ export default class CondaLicense extends BaseCondaService {
             example: 'conda-forge',
           },
           {
-            name: 'package',
+            name: 'packageName',
             example: 'setuptools',
           },
         ),
@@ -36,10 +36,10 @@ export default class CondaLicense extends BaseCondaService {
     return renderLicenseBadge({ licenses })
   }
 
-  async handle({ channel, pkg }) {
+  async handle({ channel, packageName }) {
     const json = await this._requestJson({
       schema,
-      url: `https://api.anaconda.org/package/${channel}/${pkg}`,
+      url: `https://api.anaconda.org/package/${channel}/${packageName}`,
     })
     return this.constructor.render({
       licenses: toArray(json.license),

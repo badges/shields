@@ -3,10 +3,13 @@ import BaseCondaService from './conda-base.js'
 
 export default class CondaPlatform extends BaseCondaService {
   static category = 'platform-support'
-  static route = { base: 'conda', pattern: ':variant(p|pn)/:channel/:pkg' }
+  static route = {
+    base: 'conda',
+    pattern: ':variant(p|pn)/:channel/:packageName',
+  }
 
   static openApi = {
-    '/conda/{variant}/{channel}/{package}': {
+    '/conda/{variant}/{channel}/{packageName}': {
       get: {
         summary: 'Conda Platform',
         parameters: pathParams(
@@ -20,7 +23,7 @@ export default class CondaPlatform extends BaseCondaService {
             example: 'conda-forge',
           },
           {
-            name: 'package',
+            name: 'packageName',
             example: 'python',
           },
         ),
@@ -35,8 +38,8 @@ export default class CondaPlatform extends BaseCondaService {
     }
   }
 
-  async handle({ variant, channel, pkg }) {
-    const json = await this.fetch({ channel, pkg })
+  async handle({ variant, channel, packageName }) {
+    const json = await this.fetch({ channel, packageName })
     return this.constructor.render({ variant, platforms: json.conda_platforms })
   }
 }
