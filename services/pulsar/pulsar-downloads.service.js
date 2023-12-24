@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { pulsarPurple } from './pulsar-helper.js'
@@ -13,13 +13,17 @@ export default class PulsarDownloads extends BaseJsonService {
 
   static route = { base: 'pulsar/dt', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'Pulsar Downloads',
-      namedParams: { packageName: 'hey-pane' },
-      staticPreview: this.render({ downloadCount: 1000 }),
+  static openApi = {
+    '/pulsar/dt/{packageName}': {
+      get: {
+        summary: 'Pulsar Downloads',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'hey-pane',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
