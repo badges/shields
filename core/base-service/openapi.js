@@ -413,7 +413,7 @@ function queryParam({
  * ```
  * const params = [
  *   queryParam({ name: 'name1', example: 'example1' }),
- *   queryParams({ name: 'name2', example: 'example2' }),
+ *   queryParam({ name: 'name2', example: 'example2' }),
  * ]
  * ```
  *
