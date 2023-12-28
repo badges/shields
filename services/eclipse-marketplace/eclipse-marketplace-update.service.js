@@ -15,7 +15,11 @@ const updateResponseSchema = Joi.object({
 
 export default class EclipseMarketplaceUpdate extends EclipseMarketplaceBase {
   static category = 'activity'
-  static route = this.buildRoute('eclipse-marketplace/last-update')
+  static route = {
+    base: 'eclipse-marketplace/last-update',
+    pattern: ':name',
+  }
+
   static openApi = {
     '/eclipse-marketplace/last-update/{name}': {
       get: {
