@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import dayjs from 'dayjs'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 
 const schema = Joi.object()
@@ -22,16 +22,27 @@ export default class NpmStatDownloads extends BaseJsonService {
     pattern: ':interval(dw|dm|dy)/:author',
   }
 
-  static examples = [
-    {
-      title: 'npm (by author)',
-      documentation:
-        'The total number of downloads of npm packages published by the specified author from [npm-stat](https://npm-stat.com).',
-      namedParams: { interval: 'dy', author: 'dukeluo' },
-      staticPreview: this.render({ interval: 'dy', downloadCount: 30000 }),
-      keywords: ['node'],
+  static openApi = {
+    '/npm-stat/{interval}/{author}': {
+      get: {
+        summary: 'NPM Downloads by package author',
+        description:
+          'The total number of downloads of npm packages published by the specified author from [npm-stat](https://npm-stat.com).',
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dw',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Downloads per week, month or year',
+          },
+          {
+            name: 'author',
+            example: 'dukeluo',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 21600
 
