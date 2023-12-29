@@ -241,10 +241,10 @@ function category2openapi(category, services) {
           name: 'style',
           in: 'query',
           required: false,
-          description:
-            'One of: flat (default), flat-square, plastic, for-the-badge, social',
+          description: 'If not specified, the defautl style is "flat".',
           schema: {
             type: 'string',
+            enum: ['flat', 'flat-square', 'plastic', 'for-the-badge', 'social'],
           },
           example: 'flat',
         },
