@@ -24,11 +24,22 @@ t.create('License for repo without a license')
     color: 'lightgrey',
   })
 
-t.create('Other license').get('/gitlab-org/gitlab-foss.json').expectBadge({
-  label: 'license',
-  message: 'Other',
-  color: unknownLicenseColor,
-})
+t.create('Other license')
+  .get('/group/project.json')
+  .intercept(nock =>
+    nock('https://gitlab.com')
+      .get('/api/v4/projects/group%2Fproject?license=1')
+      .reply(200, {
+        license: {
+          name: 'Other',
+        },
+      }),
+  )
+  .expectBadge({
+    label: 'license',
+    message: 'Other',
+    color: unknownLicenseColor,
+  })
 
 t.create('License for unknown repo')
   .get('/user1/gitlab-does-not-have-this-repo.json')

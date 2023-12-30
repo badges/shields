@@ -1,8 +1,9 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import GitLabBase from './gitlab-base.js'
-import { documentation } from './gitlab-helper.js'
+import { description } from './gitlab-helper.js'
 
 const schema = Joi.object({
   forks_count: nonNegativeInteger,
@@ -21,21 +22,24 @@ export default class GitlabForks extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab forks',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/forks/{project}': {
+      get: {
+        summary: 'GitLab Forks',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+        ],
       },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'Fork',
-        message: '6.4k',
-        style: 'social',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'forks', namedLogo: 'gitlab' }
 
