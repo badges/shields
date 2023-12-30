@@ -44,6 +44,7 @@ export default class GithubStars extends GithubAuthV3Service {
     const slug = `${encodeURIComponent(user)}/${encodeURIComponent(repo)}`
     return {
       message: metric(stars),
+      style: 'social',
       color: 'blue',
       link: [
         `https://github.com/${slug}`,

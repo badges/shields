@@ -29,6 +29,7 @@ export default class GithubFollowers extends GithubAuthV3Service {
   static render({ followers }) {
     return {
       message: metric(followers),
+      style: 'social',
       color: 'blue',
     }
   }
