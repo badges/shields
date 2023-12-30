@@ -70,7 +70,7 @@ class YouTubeBase extends BaseJsonService {
     )
   }
 
-  async handle({ channelId, videoId }, queryParams) {
+  async handle({ channelId, videoId }) {
     const id = channelId || videoId
     const json = await this.fetch({ id })
     if (json.pageInfo.totalResults === 0) {
@@ -79,7 +79,7 @@ class YouTubeBase extends BaseJsonService {
       })
     }
     const statistics = json.items[0].statistics
-    return this.constructor.render({ statistics, id }, queryParams)
+    return this.constructor.render({ statistics, id })
   }
 }
 
