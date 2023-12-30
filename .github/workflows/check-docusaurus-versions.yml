@@ -17,7 +17,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 18
+          node-version: 20
           cypress: true
 
       - run: .github/scripts/check-docusaurus-versions.sh

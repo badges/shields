@@ -19,7 +19,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Build
         run: npm run build-docs

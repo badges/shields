@@ -4,13 +4,13 @@ This document describes how to host your own shields server either from source o
 
 ## Installing from Source
 
-You will need Node 18 or later, which you can install using a
+You will need Node 20 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
