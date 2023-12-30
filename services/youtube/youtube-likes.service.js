@@ -23,12 +23,11 @@ export default class YouTubeLikes extends YouTubeVideoBase {
     ]
   }
 
-  static render({ statistics, id }, queryParams) {
-    const renderedBadge = super.renderSingleStat({
+  static render({ statistics, id }) {
+    return super.renderSingleStat({
       statistics,
       statisticName: 'like',
       id,
     })
-    return renderedBadge
   }
 }
