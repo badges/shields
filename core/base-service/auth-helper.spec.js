@@ -420,9 +420,18 @@ describe('AuthHelper', function () {
 
     describe('_getJwtExpiry', function () {
       it('extracts expiry from valid JWT', function () {
+        const nowPlus30Mins = dayjs().add(30, 'minutes').unix()
         expect(
-          AuthHelper._getJwtExpiry(getMockJwt({ exp: 1639026822 })),
-        ).to.equal(1639026822)
+          AuthHelper._getJwtExpiry(getMockJwt({ exp: nowPlus30Mins })),
+        ).to.equal(nowPlus30Mins)
+      })
+
+      it('caps expiry at max', function () {
+        const nowPlus1Hour = dayjs().add(1, 'hours').unix()
+        const nowPlus2Hours = dayjs().add(2, 'hours').unix()
+        expect(
+          AuthHelper._getJwtExpiry(getMockJwt({ exp: nowPlus2Hours })),
+        ).to.equal(nowPlus1Hour)
       })
 
       it('throws if JWT does not contain exp', function () {
@@ -456,7 +465,7 @@ describe('AuthHelper', function () {
       it('should use cached response if valid', async function () {
         // the expiry is far enough in the future that the token
         // will still be valid on the second hit
-        const mockToken = getMockJwt({ exp: dayjs().add(1, 'month').unix() })
+        const mockToken = getMockJwt({ exp: dayjs().add(1, 'hours').unix() })
 
         // .times(1) ensures if we try to make a second call to this endpoint,
         // we will throw `Nock: No match for request`

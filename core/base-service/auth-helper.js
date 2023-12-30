@@ -231,8 +231,8 @@ class AuthHelper {
     )
   }
 
-  static _getJwtExpiry(token) {
-    // extract the expiry date from a JWT
+  static _getJwtExpiry(token, max = dayjs().add(1, 'hours').unix()) {
+    // get the expiry timestamp for this JWT (capped at a max length)
     const parts = token.split('.')
 
     if (parts.length < 2) {
@@ -250,7 +250,7 @@ class AuthHelper {
       Joi.object({ exp: Joi.number().required() }).required(),
     )
 
-    return json.exp
+    return Math.min(json.exp, max)
   }
 
   static _isJwtValid(expiry) {
