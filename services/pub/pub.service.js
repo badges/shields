@@ -4,7 +4,9 @@ import { BaseJsonService, redirector, pathParam, queryParam } from '../index.js'
 import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
-  versions: Joi.array().items(Joi.string()).required(),
+  versions: Joi.array()
+    .items(Joi.object({ version: Joi.string().required() }))
+    .required(),
 }).required()
 
 const queryParamSchema = Joi.object({
@@ -45,14 +47,14 @@ class PubVersion extends BaseJsonService {
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
-      url: `https://pub.dartlang.org/packages/${packageName}.json`,
+      url: `https://pub.dev/api/packages/${packageName}`,
     })
   }
 
   async handle({ packageName }, queryParams) {
     const data = await this.fetch({ packageName })
     const includePre = queryParams.include_prereleases !== undefined
-    const versions = data.versions
+    const versions = data.versions.map(x => x.version)
     const version = latest(versions, { pre: includePre })
     return renderVersionBadge({ version })
   }

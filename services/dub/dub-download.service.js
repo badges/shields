@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   downloads: Joi.object({
@@ -38,39 +38,48 @@ export default class DubDownloads extends BaseJsonService {
     pattern: ':interval(dd|dw|dm|dt)/:packageName/:version*',
   }
 
-  static examples = [
-    {
-      title: 'DUB',
-      namedParams: { interval: 'dm', packageName: 'vibe-d' },
-      staticPreview: this.render({ interval: 'dm', downloads: 5000 }),
-    },
-    {
-      title: 'DUB (version)',
-      namedParams: {
-        interval: 'dm',
-        packageName: 'vibe-d',
-        version: '0.8.4',
+  static openApi = {
+    '/dub/{interval}/{packageName}': {
+      get: {
+        summary: 'DUB Downloads',
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dm',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, Monthly, or Total downloads',
+          },
+          {
+            name: 'packageName',
+            example: 'vibe-d',
+          },
+        ),
       },
-      staticPreview: this.render({
-        interval: 'dm',
-        version: '0.8.4',
-        downloads: 100,
-      }),
     },
-    {
-      title: 'DUB (latest)',
-      namedParams: {
-        interval: 'dm',
-        packageName: 'vibe-d',
-        version: 'latest',
+    '/dub/{interval}/{packageName}/{version}': {
+      get: {
+        summary: 'DUB Downloads (specific version)',
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dm',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, Monthly, or Total downloads',
+          },
+          {
+            name: 'packageName',
+            example: 'vibe-d',
+          },
+          {
+            name: 'version',
+            description:
+              'This can either be a numeric version like `0.8.4` or the string `latest`',
+            example: '0.8.4',
+          },
+        ),
       },
-      staticPreview: this.render({
-        interval: 'dm',
-        version: 'latest',
-        downloads: 100,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

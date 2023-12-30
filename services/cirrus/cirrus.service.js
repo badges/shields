@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   subject: Joi.string().required(),
@@ -21,37 +21,31 @@ export default class Cirrus extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Cirrus CI - Base Branch Build Status',
-      namedParams: { user: 'flutter', repo: 'flutter' },
-      pattern: 'github/:user/:repo',
-      staticPreview: this.render({ status: 'passing' }),
+  static openApi = {
+    '/cirrus/github/{user}/{repo}': {
+      get: {
+        summary: 'Cirrus CI - Default Branch Build Status',
+        parameters: [
+          pathParam({ name: 'user', example: 'flutter' }),
+          pathParam({ name: 'repo', example: 'flutter' }),
+          queryParam({ name: 'task', example: 'build_docker' }),
+          queryParam({ name: 'script', example: 'test' }),
+        ],
+      },
     },
-    {
-      title: 'Cirrus CI - Specific Branch Build Status',
-      pattern: 'github/:user/:repo/:branch',
-      namedParams: { user: 'flutter', repo: 'flutter', branch: 'master' },
-      staticPreview: this.render({ status: 'passing' }),
+    '/cirrus/github/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Cirrus CI - Specific Branch Build Status',
+        parameters: [
+          pathParam({ name: 'user', example: 'flutter' }),
+          pathParam({ name: 'repo', example: 'flutter' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          queryParam({ name: 'task', example: 'build_docker' }),
+          queryParam({ name: 'script', example: 'test' }),
+        ],
+      },
     },
-    {
-      title: 'Cirrus CI - Specific Task Build Status',
-      pattern: 'github/:user/:repo',
-      queryParams: { task: 'build_docker' },
-      namedParams: { user: 'flutter', repo: 'cocoon' },
-      staticPreview: this.render({
-        subject: 'build_docker',
-        status: 'passing',
-      }),
-    },
-    {
-      title: 'Cirrus CI - Task and Script Build Status',
-      pattern: 'github/:user/:repo',
-      queryParams: { task: 'build_docker', script: 'test' },
-      namedParams: { user: 'flutter', repo: 'cocoon' },
-      staticPreview: this.render({ subject: 'test', status: 'passing' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 

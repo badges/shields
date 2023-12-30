@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({
@@ -19,192 +20,44 @@ const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
 
-const labelDocumentation = `
-<p>
-  If you want to use multiple labels then please use commas (<code>,</code>) to separate them, e.g. <code>foo,bar</code>.
-</p>
-`
-
 export default class GitlabIssues extends GitLabBase {
   static category = 'issue-tracking'
 
   static route = {
     base: 'gitlab/issues',
-    pattern: ':variant(all|open|closed):raw(-raw)?/:project+',
+    pattern: ':variant(all|all-raw|open|open-raw|closed|closed-raw)/:project+',
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab issues',
-      pattern: 'open/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/issues/{variant}/{project}': {
+      get: {
+        summary: 'GitLab Issues',
+        description,
+        parameters: [
+          pathParam({
+            name: 'variant',
+            example: 'all',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          }),
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'labels',
+            example: 'test,failure::new',
+            description:
+              'If you want to use multiple labels, you can use a comma (<code>,</code>) to separate them, e.g. <code>foo,bar</code>',
+          }),
+        ],
       },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '44k open',
-        color: 'yellow',
-      },
-      documentation,
     },
-    {
-      title: 'GitLab issues',
-      pattern: 'open-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'open issues',
-        message: '44k',
-        color: 'yellow',
-      },
-      documentation,
-    },
-    {
-      title: 'GitLab issues by-label',
-      pattern: 'open/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: {
-        labels: 'test,failure::new',
-        gitlab_url: 'https://gitlab.com',
-      },
-      staticPreview: {
-        label: 'test,failure::new issues',
-        message: '16 open',
-        color: 'yellow',
-      },
-      documentation: documentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab issues by-label',
-      pattern: 'open-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: {
-        labels: 'test,failure::new',
-        gitlab_url: 'https://gitlab.com',
-      },
-      staticPreview: {
-        label: 'open test,failure::new issues',
-        message: '16',
-        color: 'yellow',
-      },
-      documentation: documentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab closed issues',
-      pattern: 'closed/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '72k closed',
-        color: 'yellow',
-      },
-      documentation,
-    },
-    {
-      title: 'GitLab closed issues',
-      pattern: 'closed-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'closed issues',
-        message: '72k ',
-        color: 'yellow',
-      },
-      documentation,
-    },
-    {
-      title: 'GitLab closed issues by-label',
-      pattern: 'closed/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: {
-        labels: 'test,failure::new',
-        gitlab_url: 'https://gitlab.com',
-      },
-      staticPreview: {
-        label: 'test,failure::new issues',
-        message: '4 closed',
-        color: 'yellow',
-      },
-      documentation: documentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab closed issues by-label',
-      pattern: 'closed-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: {
-        labels: 'test,failure::new',
-        gitlab_url: 'https://gitlab.com',
-      },
-      staticPreview: {
-        label: 'closed test,failure::new issues',
-        message: '4',
-        color: 'yellow',
-      },
-      documentation: documentation + labelDocumentation,
-    },
-    {
-      title: 'GitLab all issues',
-      pattern: 'all/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'issues',
-        message: '115k all',
-        color: 'yellow',
-      },
-      documentation,
-    },
-    {
-      title: 'GitLab all issues',
-      pattern: 'all-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'all issues',
-        message: '115k',
-        color: 'yellow',
-      },
-      documentation,
-    },
-    {
-      title: 'GitLab all issues by-label',
-      pattern: 'all-raw/:project+',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      queryParams: {
-        labels: 'test,failure::new',
-        gitlab_url: 'https://gitlab.com',
-      },
-      staticPreview: {
-        label: 'all test,failure::new issues',
-        message: '20',
-        color: 'yellow',
-      },
-      documentation: documentation + labelDocumentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
@@ -215,7 +68,7 @@ export default class GitlabIssues extends GitLabBase {
 
     let labelPrefix = ''
     let messageSuffix = ''
-    if (raw !== undefined) {
+    if (raw) {
       labelPrefix = `${state} `
     } else {
       messageSuffix = state
@@ -246,12 +99,15 @@ export default class GitlabIssues extends GitLabBase {
     let issueCount
     switch (state) {
       case 'open':
+      case 'open-raw':
         issueCount = statistics.counts.opened
         break
       case 'closed':
+      case 'closed-raw':
         issueCount = statistics.counts.closed
         break
       case 'all':
+      case 'all-raw':
         issueCount = statistics.counts.all
         break
     }
@@ -260,7 +116,7 @@ export default class GitlabIssues extends GitLabBase {
   }
 
   async handle(
-    { variant, raw, project },
+    { variant, project },
     { gitlab_url: baseUrl = 'https://gitlab.com', labels },
   ) {
     const { statistics } = await this.fetch({
@@ -269,8 +125,8 @@ export default class GitlabIssues extends GitLabBase {
       labels,
     })
     return this.constructor.render({
-      variant,
-      raw,
+      variant: variant.split('-')[0],
+      raw: variant.endsWith('-raw'),
       labels,
       issueCount: this.constructor.transform({ variant, statistics }),
     })

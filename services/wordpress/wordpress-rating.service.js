@@ -1,6 +1,7 @@
-import { starRating, metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
-import { documentation, BaseWordpress } from './wordpress-base.js'
+import { pathParams } from '../index.js'
+import { starRating, metric } from '../text-formatters.js'
+import { description, BaseWordpress } from './wordpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -30,17 +31,21 @@ function RatingForExtensionType(extensionType) {
       pattern: ':slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Rating`,
-        namedParams: { slug: exampleSlug },
-        staticPreview: this.render({
-          rating: 80,
-          numRatings: 100,
-        }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/rating/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Rating`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static render({ rating, numRatings }) {
       const scaledAndRounded = ((rating / 100) * 5).toFixed(1)
@@ -71,17 +76,21 @@ function StarsForExtensionType(extensionType) {
       pattern: '(stars|r)/:slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Rating`,
-        pattern: 'stars/:slug',
-        namedParams: { slug: exampleSlug },
-        staticPreview: this.render({
-          rating: 80,
-        }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/stars/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Stars`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static render({ rating }) {
       const scaled = (rating / 100) * 5

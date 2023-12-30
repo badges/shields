@@ -1,7 +1,7 @@
 import { pathParams } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
-import OpenVSXBase from './open-vsx-base.js'
+import { OpenVSXBase, description } from './open-vsx-base.js'
 
 export default class OpenVSXReleaseDate extends OpenVSXBase {
   static category = 'activity'
@@ -15,6 +15,7 @@ export default class OpenVSXReleaseDate extends OpenVSXBase {
     '/open-vsx/release-date/{namespace}/{extension}': {
       get: {
         summary: 'Open VSX Release Date',
+        description,
         parameters: pathParams(
           {
             name: 'namespace',

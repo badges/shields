@@ -128,6 +128,7 @@ const publicConfigSchema = Joi.object({
       },
       restApiVersion: Joi.date().raw().required(),
     },
+    gitea: defaultService,
     gitlab: defaultService,
     jira: defaultService,
     jenkins: Joi.object({
@@ -170,6 +171,7 @@ const privateConfigSchema = Joi.object({
   gh_client_id: Joi.string(),
   gh_client_secret: Joi.string(),
   gh_token: Joi.string(),
+  gitea_token: Joi.string(),
   gitlab_token: Joi.string(),
   jenkins_user: Joi.string(),
   jenkins_pass: Joi.string(),

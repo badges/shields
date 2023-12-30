@@ -112,7 +112,7 @@ generated API key.
 
 ### Discord
 
-Using a token for Dicsord is optional but will allow higher API rates.
+Using a token for Discord is optional but will allow higher API rates.
 
 - `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
 
@@ -178,6 +178,15 @@ token, though it's not required.
 These settings are used by shields.io for GitHub OAuth app authorization
 but will not be necessary for most self-hosted installations. See
 [production-hosting.md](./production-hosting.md).
+
+### Gitea
+
+- `GITEA_ORIGINS` (yml: `public.services.gitea.authorizedOrigins`)
+- `GITEA_TOKEN` (yml: `private.gitea_token`)
+
+A Gitea [Personal Access Token][gitea-pat] is required for accessing private content. If you need a Gitea token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
+
+[gitea-pat]: https://docs.gitea.com/development/api-usage#generating-and-listing-api-tokens
 
 ### GitLab
 

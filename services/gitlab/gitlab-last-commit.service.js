@@ -1,8 +1,9 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array()
@@ -25,7 +26,7 @@ const refText = `
 </p>
 `
 
-const defaultDocumentation = documentation + refText
+const lastCommitDescription = description + refText
 
 export default class GitlabLastCommit extends GitLabBase {
   static category = 'activity'
@@ -36,17 +37,28 @@ export default class GitlabLastCommit extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab last commit',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/last-commit/{project}': {
+      get: {
+        summary: 'GitLab Last Commit',
+        description: lastCommitDescription,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'ref',
+            example: 'master',
+          }),
+        ],
       },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
-      documentation: defaultDocumentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last commit' }
 

@@ -1,6 +1,6 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { InvalidParameter, NotFound } from '../index.js'
-import { BaseCratesService, keywords } from './crates-base.js'
+import { InvalidParameter, NotFound, pathParams } from '../index.js'
+import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesDownloads extends BaseCratesService {
   static category = 'downloads'
@@ -9,49 +9,54 @@ export default class CratesDownloads extends BaseCratesService {
     pattern: ':variant(d|dv|dr)/:crate/:version?',
   }
 
-  static examples = [
-    {
-      title: 'Crates.io',
-      pattern: 'd/:crate',
-      namedParams: {
-        crate: 'rustc-serialize',
+  static openApi = {
+    '/crates/d/{crate}': {
+      get: {
+        summary: 'Crates.io Total Downloads',
+        description,
+        parameters: pathParams({
+          name: 'crate',
+          example: 'rustc-serialize',
+        }),
       },
-      staticPreview: this.render({ variant: 'd', downloads: 5000000 }),
-      keywords,
     },
-    {
-      title: 'Crates.io (latest)',
-      pattern: 'dv/:crate',
-      namedParams: {
-        crate: 'rustc-serialize',
+    '/crates/dv/{crate}': {
+      get: {
+        summary: 'Crates.io Downloads (latest version)',
+        description,
+        parameters: pathParams({
+          name: 'crate',
+          example: 'rustc-serialize',
+        }),
       },
-      staticPreview: this.render({ variant: 'dv', downloads: 2000000 }),
-      keywords,
     },
-    {
-      title: 'Crates.io (version)',
-      pattern: 'dv/:crate/:version',
-      namedParams: {
-        crate: 'rustc-serialize',
-        version: '0.3.24',
+    '/crates/dv/{crate}/{version}': {
+      get: {
+        summary: 'Crates.io Downloads (version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'crate',
+            example: 'rustc-serialize',
+          },
+          {
+            name: 'version',
+            example: '0.3.24',
+          },
+        ),
       },
-      staticPreview: this.render({
-        variant: 'dv',
-        downloads: 2000000,
-        version: '0.3.24',
-      }),
-      keywords,
     },
-    {
-      title: 'Crates.io (recent)',
-      pattern: 'dr/:crate',
-      namedParams: {
-        crate: 'rustc-serialize',
+    '/crates/dr/{crate}': {
+      get: {
+        summary: 'Crates.io Downloads (recent)',
+        description,
+        parameters: pathParams({
+          name: 'crate',
+          example: 'rustc-serialize',
+        }),
       },
-      staticPreview: this.render({ variant: 'dr', downloads: 2000000 }),
-      keywords,
     },
-  ]
+  }
 
   static render({ variant, downloads, version }) {
     let labelOverride
