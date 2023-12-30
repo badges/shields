@@ -33,7 +33,7 @@ export default class NpmStatDownloads extends BaseJsonService {
             name: 'interval',
             example: 'dw',
             schema: { type: 'string', enum: this.getEnum('interval') },
-            description: 'Downloads per week, month or year',
+            description: 'Downloads per Week, Month or Year',
           },
           {
             name: 'author',
