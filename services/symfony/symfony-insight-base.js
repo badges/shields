@@ -30,7 +30,8 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const keywords = ['sensiolabs', 'sensio']
+const description =
+  'SymfonyInsight (formerly SensioLabs) is a code analysis service'
 
 const gradeColors = {
   none: 'red',
@@ -124,4 +125,4 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 }
 
-export { SymfonyInsightBase, keywords, gradeColors }
+export { SymfonyInsightBase, description, gradeColors }
