@@ -16,7 +16,7 @@ export default class JsDelivrHitsGitHub extends BaseJsDelivrService {
             name: 'period',
             example: 'hm',
             schema: { type: 'string', enum: this.getEnum('period') },
-            description: 'Hits per day, week, month or year',
+            description: 'Hits per Day, Week, Month or Year',
           },
           {
             name: 'user',

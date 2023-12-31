@@ -36,6 +36,7 @@ export default class TwitchStatus extends TwitchBase {
   static render({ user, isLive }) {
     return {
       message: isLive ? 'live' : 'offline',
+      style: 'social',
       color: isLive ? 'red' : 'lightgrey',
       link: `https://www.twitch.tv/${user}`,
     }

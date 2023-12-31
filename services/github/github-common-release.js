@@ -43,6 +43,7 @@ async function fetchReleases(serviceInstance, { user, repo }) {
     url: `/repos/${user}/${repo}/releases`,
     schema: releaseInfoArraySchema,
     ...commonAttrs,
+    options: { searchParams: { per_page: 100 } },
   })
   return releases
 }

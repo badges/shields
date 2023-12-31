@@ -9,6 +9,7 @@ import {
   getDockerHubUser,
   getMultiPageData,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const buildSchema = Joi.object({
   name: Joi.string().required(),
@@ -61,6 +62,17 @@ function getImageSizeForArch(images, arch) {
 export default class DockerSize extends BaseJsonService {
   static category = 'size'
   static route = { ...buildDockerUrl('image-size', true), queryParamSchema }
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: [
+      'https://hub.docker.com',
+      'https://registry.hub.docker.com',
+    ],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Image Size (latest by date)',
@@ -102,7 +114,7 @@ export default class DockerSize extends BaseJsonService {
 
   async fetch({ user, repo, tag, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson({
+    return await fetch(this, {
       schema: tag ? buildSchema : pagedSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user,

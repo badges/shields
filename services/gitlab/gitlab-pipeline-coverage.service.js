@@ -1,8 +1,13 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { BaseSvgScrapingService, NotFound } from '../index.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import {
+  BaseSvgScrapingService,
+  NotFound,
+  pathParam,
+  queryParam,
+} from '../index.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
   message: Joi.string()
@@ -47,40 +52,32 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Gitlab code coverage',
-      namedParams: { project: 'gitlab-org/gitlab-runner' },
-      queryParams: { branch: 'master' },
-      staticPreview: this.render({ coverage: 67 }),
-      documentation: documentation + moreDocs,
-    },
-    {
-      title: 'Gitlab code coverage (specific job)',
-      namedParams: { project: 'gitlab-org/gitlab-runner' },
-      queryParams: { job_name: 'test coverage report', branch: 'master' },
-      staticPreview: this.render({ coverage: 96 }),
-      documentation: documentation + moreDocs,
-    },
-    {
-      title: 'Gitlab code coverage (self-managed)',
-      namedParams: { project: 'GNOME/at-spi2-core' },
-      queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
-      staticPreview: this.render({ coverage: 93 }),
-      documentation: documentation + moreDocs,
-    },
-    {
-      title: 'Gitlab code coverage (self-managed, specific job)',
-      namedParams: { project: 'GNOME/libhandy' },
-      queryParams: {
-        gitlab_url: 'https://gitlab.gnome.org',
-        job_name: 'unit-test',
-        branch: 'master',
+  static openApi = {
+    '/gitlab/pipeline-coverage/{project}': {
+      get: {
+        summary: 'Gitlab Code Coverage',
+        description: description + moreDocs,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'job_name',
+            example: 'jest-integration',
+          }),
+          queryParam({
+            name: 'branch',
+            example: 'master',
+          }),
+        ],
       },
-      staticPreview: this.render({ coverage: 93 }),
-      documentation: documentation + moreDocs,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 

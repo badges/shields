@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import { renderLicenseBadge } from '../licenses.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.object({
@@ -23,33 +24,24 @@ export default class GitlabLicense extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/license/{project}': {
+      get: {
+        summary: 'GitLab License',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+        ],
       },
-      staticPreview: {
-        label: 'license',
-        message: 'MIT License',
-        color: 'green',
-      },
-      documentation,
     },
-    {
-      title: 'GitLab (self-managed)',
-      namedParams: {
-        project: 'gitlab-cn/gitlab',
-      },
-      queryParams: { gitlab_url: 'https://jihulab.com' },
-      staticPreview: {
-        label: 'license',
-        message: 'MIT License',
-        color: 'green',
-      },
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 
