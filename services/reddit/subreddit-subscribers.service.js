@@ -40,6 +40,7 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     return {
       label: `follow r/${subreddit}`,
       message: metric(subscribers),
+      style: 'social',
       color: 'red',
       link: [`https://www.reddit.com/r/${subreddit}`],
     }

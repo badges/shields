@@ -46,6 +46,7 @@ describe('TwitchStatus', function () {
         }),
       ).to.deep.equal({
         message: 'offline',
+        style: 'social',
         link: 'https://www.twitch.tv/undefined',
         color: 'lightgrey',
       })

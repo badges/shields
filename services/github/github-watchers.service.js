@@ -43,6 +43,7 @@ export default class GithubWatchers extends GithubAuthV3Service {
   static render({ watchers, user, repo }) {
     return {
       message: metric(watchers),
+      style: 'social',
       color: 'blue',
       link: [
         `https://github.com/${user}/${repo}`,

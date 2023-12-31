@@ -46,6 +46,7 @@ export default class GitlabStars extends GitLabBase {
   static render({ baseUrl, project, starCount }) {
     return {
       message: metric(starCount),
+      style: 'social',
       color: 'blue',
       link: [`${baseUrl}/${project}`, `${baseUrl}/${project}/-/starrers`],
     }

@@ -33,6 +33,7 @@ export default class ThunderstoreLikes extends BaseThunderstoreService {
   static render({ likes }) {
     return {
       message: metric(likes),
+      style: 'social',
       color: `#${this.thunderstoreGreen}`,
     }
   }
