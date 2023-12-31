@@ -13,7 +13,7 @@ const packageMetricsSchema = Joi.object({
   rating_score: nonNegativeInteger,
 })
 
-const documentation = `
+const description = `
 <p>
   The Thunderstore badges require a package's <code>namespace</code> and <code>name</code>.
 </p>
@@ -90,4 +90,4 @@ class BaseThunderstoreService extends BaseJsonService {
   }
 }
 
-export { BaseThunderstoreService, documentation }
+export { BaseThunderstoreService, description }

@@ -1,5 +1,6 @@
 import { renderVersionBadge } from '../version.js'
-import { BaseThunderstoreService, documentation } from './thunderstore-base.js'
+import { pathParams } from '../index.js'
+import { BaseThunderstoreService, description } from './thunderstore-base.js'
 
 export default class ThunderstoreVersion extends BaseThunderstoreService {
   static category = 'version'
@@ -9,17 +10,18 @@ export default class ThunderstoreVersion extends BaseThunderstoreService {
     pattern: ':namespace/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Thunderstore Version',
-      namedParams: {
-        namespace: 'notnotnotswipez',
-        packageName: 'MoreCompany',
+  static openApi = {
+    '/thunderstore/v/{namespace}/{packageName}': {
+      get: {
+        summary: 'Thunderstore Version',
+        description,
+        parameters: pathParams(
+          { name: 'namespace', example: 'notnotnotswipez' },
+          { name: 'packageName', example: 'MoreCompany' },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '1.4.5' }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'thunderstore',

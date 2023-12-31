@@ -16,7 +16,7 @@ export default class JsDelivrHitsNPM extends BaseJsDelivrService {
             name: 'period',
             schema: { type: 'string', enum: this.getEnum('period') },
             example: 'hm',
-            description: 'Hits per day, week, month or year',
+            description: 'Hits per Day, Week, Month or Year',
           },
           {
             name: 'packageName',
@@ -33,7 +33,7 @@ export default class JsDelivrHitsNPM extends BaseJsDelivrService {
             name: 'period',
             schema: { type: 'string', enum: this.getEnum('period') },
             example: 'hm',
-            description: 'Hits per day, week, month or year',
+            description: 'Hits per Day, Week, Month or Year',
           },
           {
             name: 'scope',

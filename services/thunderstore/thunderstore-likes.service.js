@@ -1,5 +1,6 @@
 import { metric } from '../text-formatters.js'
-import { BaseThunderstoreService, documentation } from './thunderstore-base.js'
+import { pathParams } from '../index.js'
+import { BaseThunderstoreService, description } from './thunderstore-base.js'
 
 export default class ThunderstoreLikes extends BaseThunderstoreService {
   static category = 'social'
@@ -9,21 +10,18 @@ export default class ThunderstoreLikes extends BaseThunderstoreService {
     pattern: ':namespace/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Thunderstore Likes',
-      namedParams: {
-        namespace: 'notnotnotswipez',
-        packageName: 'MoreCompany',
+  static openApi = {
+    '/thunderstore/likes/{namespace}/{packageName}': {
+      get: {
+        summary: 'Thunderstore Likes',
+        description,
+        parameters: pathParams(
+          { name: 'namespace', example: 'notnotnotswipez' },
+          { name: 'packageName', example: 'MoreCompany' },
+        ),
       },
-      staticPreview: {
-        label: 'likes',
-        message: '150',
-        style: 'social',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'likes',
