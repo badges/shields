@@ -3,7 +3,7 @@ import { BaseJsonService, NotFound } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
-const documentation = `
+const description = `
 The YouTube badges provided by Shields.io leverage the YouTube API Services. By using this badge, you are:
 * agreeing to be bound by the YouTube Terms of Service, which can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)
 * acknowledging and accepting the Google Privacy Policy, which can be found here: [https://policies.google.com/privacy](https://policies.google.com/privacy)
@@ -91,4 +91,4 @@ class YouTubeChannelBase extends YouTubeBase {
   static type = 'channel'
 }
 
-export { documentation, YouTubeVideoBase, YouTubeChannelBase }
+export { description, YouTubeVideoBase, YouTubeChannelBase }
