@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { queryParam, pathParam } from '../index.js'
 import {
   testResultQueryParamSchema,
   renderTestResultBadge,
@@ -6,23 +7,11 @@ import {
 } from '../test-results.js'
 import AzureDevOpsBase from './azure-devops-base.js'
 
-const commonAttrs = {
-  keywords: ['vso', 'vsts', 'azure-devops'],
-  namedParams: {
-    organization: 'azuredevops-powershell',
-    project: 'azuredevops-powershell',
-    definitionId: '1',
-    branch: 'master',
-  },
-  queryParams: {
-    passed_label: 'passed',
-    failed_label: 'failed',
-    skipped_label: 'skipped',
-    compact_message: null,
-  },
-  documentation: `
+const description = `
+[Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
+
 To obtain your own badge, you need to get 3 pieces of information:
-\`ORGANIZATION\`, \`PROJECT_ID\`, \`DEFINITION_ID\`.
+\`ORGANIZATION\`, \`PROJECT\`, \`DEFINITION_ID\`.
 
 First, you need to select your build definition and look at the url:
 
@@ -37,8 +26,7 @@ Optionally, you can specify a named branch:
 \`https://img.shields.io/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg\`.
 
 ${commonDocumentation}
-`,
-}
+`
 
 const buildTestResultSummarySchema = Joi.object({
   aggregatedResultsAnalysis: Joi.object({
@@ -65,48 +53,84 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
     queryParamSchema: testResultQueryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Azure DevOps tests',
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-      }),
-      ...commonAttrs,
-    },
-    {
-      title: 'Azure DevOps tests (compact)',
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-        isCompact: true,
-      }),
-      ...commonAttrs,
-    },
-    {
-      title: 'Azure DevOps tests with custom labels',
-      queryParams: {
-        passed_label: 'good',
-        failed_label: 'bad',
-        skipped_label: 'n/a',
-        compact_message: null,
+  static openApi = {
+    '/azure-devops/tests/{organization}/{project}/{definitionId}': {
+      get: {
+        summary: 'Azure DevOps tests',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'project',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '1',
+          }),
+          queryParam({
+            name: 'passed_label',
+            example: 'passed',
+          }),
+          queryParam({
+            name: 'failed_label',
+            example: 'failed',
+          }),
+          queryParam({
+            name: 'skipped_label',
+            example: 'skipped',
+          }),
+          queryParam({
+            name: 'compact_message',
+            example: null,
+          }),
+        ],
       },
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-        passedLabel: 'good',
-        failedLabel: 'bad',
-        skippedLabel: 'n/a',
-      }),
-      ...commonAttrs,
     },
-  ]
+    '/azure-devops/tests/{organization}/{project}/{definitionId}/{branch}': {
+      get: {
+        summary: 'Azure DevOps tests (branch)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'project',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '1',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'master',
+          }),
+          queryParam({
+            name: 'passed_label',
+            example: 'passed',
+          }),
+          queryParam({
+            name: 'failed_label',
+            example: 'failed',
+          }),
+          queryParam({
+            name: 'skipped_label',
+            example: 'skipped',
+          }),
+          queryParam({
+            name: 'compact_message',
+            example: null,
+          }),
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'tests' }
 
