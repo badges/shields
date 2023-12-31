@@ -119,6 +119,18 @@ Using a token for Discord is optional but will allow higher API rates.
 Register an application in the [Discord developer console](https://discord.com/developers).
 To obtain a token, simply create a bot for your application.
 
+### DockerHub
+
+Using authentication for DockerHub is optional but can be used to allow
+higher API rates or access to private repos.
+
+- `DOCKERHUB_USER` (yml: `private.dockerhub_username`)
+- `DOCKERHUB_PAT` (yml: `private.dockerhub_pat`)
+
+`DOCKERHUB_PAT` is a Personal Access Token. Generate a token in your
+[account security settings](https://hub.docker.com/settings/security) with
+"Read-Only" or "Public Repo Read-Only", depending on your needs.
+
 ### Drone
 
 - `DRONE_ORIGINS` (yml: `public.services.drone.authorizedOrigins`)
