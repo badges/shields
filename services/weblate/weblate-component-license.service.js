@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import WeblateBase, { defaultServer } from './weblate-base.js'
+import { pathParam, queryParam } from '../index.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
@@ -17,15 +18,19 @@ export default class WeblateComponentLicense extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Weblate component license',
-      namedParams: { project: 'godot-engine', component: 'godot' },
-      queryParams: { server: defaultServer },
-      staticPreview: this.render({ license: 'MIT' }),
-      keywords: ['i18n', 'translation', 'internationalization'],
+  static openApi = {
+    '/weblate/l/{project}/{component}': {
+      get: {
+        summary: 'Weblate component license',
+        description,
+        parameters: [
+          pathParam({ name: 'project', example: 'godot-engine' }),
+          pathParam({ name: 'component', example: 'godot' }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license', color: 'informational' }
 

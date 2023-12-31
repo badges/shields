@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import TwitchBase from './twitch-base.js'
 
 const helixSchema = Joi.object({
@@ -13,20 +14,17 @@ export default class TwitchStatus extends TwitchBase {
     pattern: ':user',
   }
 
-  static examples = [
-    {
-      title: 'Twitch Status',
-      namedParams: {
-        user: 'andyonthewings',
-      },
-      queryParams: { style: 'social' },
-      staticPreview: {
-        message: 'live',
-        color: 'red',
-        style: 'social',
+  static openApi = {
+    '/twitch/status/{user}': {
+      get: {
+        summary: 'Twitch Status',
+        parameters: pathParams({
+          name: 'user',
+          example: 'andyonthewings',
+        }),
       },
     },
-  ]
+  }
 
   static _cacheLength = 30
 
