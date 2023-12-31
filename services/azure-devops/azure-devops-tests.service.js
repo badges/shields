@@ -1,6 +1,7 @@
 import Joi from 'joi'
-import { queryParam, pathParam } from '../index.js'
+import { pathParam } from '../index.js'
 import {
+  testResultOpenApiQueryParams,
   testResultQueryParamSchema,
   renderTestResultBadge,
   documentation as commonDocumentation,
@@ -71,22 +72,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
             name: 'definitionId',
             example: '1',
           }),
-          queryParam({
-            name: 'passed_label',
-            example: 'passed',
-          }),
-          queryParam({
-            name: 'failed_label',
-            example: 'failed',
-          }),
-          queryParam({
-            name: 'skipped_label',
-            example: 'skipped',
-          }),
-          queryParam({
-            name: 'compact_message',
-            example: null,
-          }),
+          ...testResultOpenApiQueryParams,
         ],
       },
     },
@@ -111,22 +97,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
             name: 'branch',
             example: 'master',
           }),
-          queryParam({
-            name: 'passed_label',
-            example: 'passed',
-          }),
-          queryParam({
-            name: 'failed_label',
-            example: 'failed',
-          }),
-          queryParam({
-            name: 'skipped_label',
-            example: 'skipped',
-          }),
-          queryParam({
-            name: 'compact_message',
-            example: null,
-          }),
+          ...testResultOpenApiQueryParams,
         ],
       },
     },
