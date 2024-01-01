@@ -1,14 +1,21 @@
 import Joi from 'joi'
+import { pathParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   fetchLatestRelease,
   queryParamSchema,
+  openApiQueryParams,
 } from './github-common-release.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
+
+const versionDescription = `
+<p><code>version</code> can either be a tag or the special value <code>latest</code></p>
+<p>If <code>version</code> is <code>latest</code>, the <code>include_prereleases</code> , <code>sort</code> and <code>filter</code> params can be used to configure how we determine the latest version. If <code>version</code> is a tag, these params are ignored.</p>
+`
 
 export default class GithubCommitsSince extends GithubAuthV3Service {
   static category = 'activity'
@@ -18,110 +25,41 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub commits since tagged version',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: '3.4.7',
+  static openApi = {
+    '/github/commits-since/{user}/{repo}/{version}': {
+      get: {
+        summary: 'GitHub commits since version',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'SubtitleEdit' }),
+          pathParam({ name: 'repo', example: 'subtitleedit' }),
+          pathParam({
+            name: 'version',
+            example: '3.4.7',
+            description: versionDescription,
+          }),
+          ...openApiQueryParams,
+        ],
       },
-      staticPreview: this.render({
-        version: '3.4.7',
-        commitCount: 4225,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub commits since tagged version (branch)',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: '3.4.7',
-        branch: 'master',
+    '/github/commits-since/{user}/{repo}/{version}/{branch}': {
+      get: {
+        summary: 'GitHub commits since version (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'SubtitleEdit' }),
+          pathParam({ name: 'repo', example: 'subtitleedit' }),
+          pathParam({
+            name: 'version',
+            example: '3.4.7',
+            description: versionDescription,
+          }),
+          pathParam({ name: 'branch', example: 'main' }),
+          ...openApiQueryParams,
+        ],
       },
-      staticPreview: this.render({
-        version: '3.4.7',
-        commitCount: 4225,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub commits since latest release (by date)',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: 'latest',
-      },
-      staticPreview: this.render({
-        version: '3.5.7',
-        commitCount: 157,
-      }),
-      documentation,
-    },
-    {
-      title: 'GitHub commits since latest release (by date) for a branch',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: 'latest',
-        branch: 'master',
-      },
-      staticPreview: this.render({
-        version: '3.5.7',
-        commitCount: 157,
-      }),
-      documentation,
-    },
-    {
-      title:
-        'GitHub commits since latest release (by date including pre-releases)',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: 'latest',
-      },
-      queryParams: { include_prereleases: null },
-      staticPreview: this.render({
-        version: 'v3.5.8-alpha.1',
-        isPrerelease: true,
-        commitCount: 158,
-      }),
-      documentation,
-    },
-    {
-      title: 'GitHub commits since latest release (by SemVer)',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: 'latest',
-      },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({
-        version: 'v4.0.1',
-        sort: 'semver',
-        commitCount: 200,
-      }),
-      documentation,
-    },
-    {
-      title:
-        'GitHub commits since latest release (by SemVer including pre-releases)',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
-        version: 'latest',
-      },
-      queryParams: { sort: 'semver', include_prereleases: null },
-      staticPreview: this.render({
-        version: 'v4.0.2-alpha.1',
-        sort: 'semver',
-        isPrerelease: true,
-        commitCount: 201,
-      }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'github', namedLogo: 'github' }
 
