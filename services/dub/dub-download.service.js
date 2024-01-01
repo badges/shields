@@ -47,6 +47,7 @@ export default class DubDownloads extends BaseJsonService {
             name: 'interval',
             example: 'dm',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, Monthly, or Total downloads',
           },
           {
             name: 'packageName',
@@ -63,6 +64,7 @@ export default class DubDownloads extends BaseJsonService {
             name: 'interval',
             example: 'dm',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, Monthly, or Total downloads',
           },
           {
             name: 'packageName',

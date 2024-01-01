@@ -44,11 +44,13 @@ export default class KeybasePGP extends KeybaseProfile {
   static defaultBadgeData = {
     label: 'pgp',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ fingerprint }) {
     return {
       message: fingerprint.slice(-16).toUpperCase(),
+      style: 'social',
     }
   }
 

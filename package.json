@@ -41,7 +41,7 @@
     "fast-xml-parser": "^4.3.2",
     "glob": "^10.3.10",
     "global-agent": "^3.0.0",
-    "got": "^13.0.0",
+    "got": "^14.0.0",
     "graphql": "16.8.1",
     "graphql-tag": "^2.12.6",
     "joi": "17.11.0",
@@ -63,7 +63,7 @@
     "qs": "^6.11.2",
     "query-string": "^8.1.0",
     "semver": "~7.5.4",
-    "simple-icons": "10.3.0",
+    "simple-icons": "10.4.0",
     "smol-toml": "1.1.3",
     "webextension-store-meta": "^1.0.5",
     "xpath": "~0.0.34"
@@ -97,7 +97,7 @@
     "pretest": "cross-env BASE_URL=http://localhost:8080 run-s --silent defs",
     "test": "run-s --silent --continue-on-error lint test:package test:core test:entrypoint check-types:package prettier:check",
     "check-types:package": "tsd badge-maker",
-    "depcheck": "check-node-version --node \">= 18.0\"",
+    "depcheck": "check-node-version --node \">= 20.0\"",
     "prebuild": "run-s --silent depcheck",
     "defs": "node scripts/export-openapi-cli.js",
     "build": "rimraf public && run-s defs docusaurus:build",
@@ -145,9 +145,9 @@
   },
   "devDependencies": {
     "@docusaurus/core": "^2.4.3",
-    "@easyops-cn/docusaurus-search-local": "^0.39.0",
+    "@easyops-cn/docusaurus-search-local": "^0.40.1",
     "@mdx-js/react": "^1.6.21",
-    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/parser": "^6.16.0",
     "c8": "^8.0.1",
     "caller": "^1.1.0",
     "chai": "^4.3.10",
@@ -157,7 +157,7 @@
     "child-process-promise": "^2.2.1",
     "clsx": "^2.0.0",
     "concurrently": "^8.2.2",
-    "cypress": "^13.6.1",
+    "cypress": "^13.6.2",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^11.3.1",
     "deepmerge": "^4.3.1",
@@ -209,12 +209,12 @@
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "2.0.3",
-    "tsd": "^0.30.0",
+    "tsd": "^0.30.1",
     "url": "^0.11.3"
   },
   "engines": {
-    "node": "^18.16.0",
-    "npm": "^9.0.0"
+    "node": "^20.10.0",
+    "npm": "^9.0.0 || ^10.0.0"
   },
   "type": "module",
   "collective": {

@@ -29,6 +29,7 @@ export default class EclipseMarketplaceDownloads extends EclipseMarketplaceBase 
             name: 'interval',
             example: 'dt',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Monthly or Total downloads',
           },
           {
             name: 'name',

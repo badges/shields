@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import WeblateBase, { defaultServer } from './weblate-base.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   translated: nonNegativeInteger,
@@ -29,15 +30,23 @@ export default class WeblateUserStatistic extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Weblate user statistic',
-      namedParams: { statistic: 'translations', user: 'nijel' },
-      queryParams: { server: defaultServer },
-      staticPreview: this.render({ statistic: 'translations', count: 30585 }),
-      keywords: ['i18n', 'internationalization'],
+  static openApi = {
+    '/weblate/{statistic}/{user}': {
+      get: {
+        summary: 'Weblate user statistic',
+        description,
+        parameters: [
+          pathParam({
+            name: 'statistic',
+            example: 'translations',
+            schema: { type: 'string', enum: this.getEnum('statistic') },
+          }),
+          pathParam({ name: 'user', example: 'nijel' }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
 
   static _cacheLength = 600
 

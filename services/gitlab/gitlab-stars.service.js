@@ -1,8 +1,9 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import GitLabBase from './gitlab-base.js'
-import { documentation } from './gitlab-helper.js'
+import { description } from './gitlab-helper.js'
 
 const schema = Joi.object({
   star_count: nonNegativeInteger,
@@ -21,27 +22,31 @@ export default class GitlabStars extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab stars',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/stars/{project}': {
+      get: {
+        summary: 'GitLab Stars',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+        ],
       },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'stars',
-        message: '3.9k',
-        style: 'social',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'stars', namedLogo: 'gitlab' }
 
   static render({ baseUrl, project, starCount }) {
     return {
       message: metric(starCount),
+      style: 'social',
       color: 'blue',
       link: [`${baseUrl}/${project}`, `${baseUrl}/${project}/-/starrers`],
     }

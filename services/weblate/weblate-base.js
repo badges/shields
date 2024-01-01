@@ -3,6 +3,8 @@ import { BaseJsonService } from '../index.js'
 import { optionalUrl } from '../validators.js'
 
 export const defaultServer = 'https://hosted.weblate.org'
+export const description =
+  'Weblate is an web-based tool for translation and internationalization'
 
 export default class WeblateBase extends BaseJsonService {
   static queryParamSchema = Joi.object({

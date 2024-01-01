@@ -52,6 +52,7 @@ export default class RedditUserKarma extends BaseJsonService {
     return {
       label,
       message: metric(karma),
+      style: 'social',
       color: karma > 0 ? 'brightgreen' : karma === 0 ? 'orange' : 'red',
       link: [`https://www.reddit.com/u/${user}`],
     }

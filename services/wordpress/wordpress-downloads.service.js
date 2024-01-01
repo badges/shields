@@ -65,6 +65,7 @@ function DownloadsForExtensionType(extensionType) {
               name: 'interval',
               example: 'dm',
               schema: { type: 'string', enum: this.getEnum('interval') },
+              description: 'Daily, Weekly, Monthly, Yearly, or Total downloads',
             },
             {
               name: 'slug',

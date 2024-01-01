@@ -140,6 +140,7 @@ class HexPmDownloads extends BaseHexPmService {
             name: 'interval',
             example: 'dw',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, or Total downloads',
           },
           {
             name: 'packageName',

@@ -42,7 +42,7 @@ export default class PackagistDownloads extends BasePackagistService {
 
   static route = {
     base: 'packagist',
-    pattern: ':interval(dm|dd|dt)/:user/:repo',
+    pattern: ':interval(dd|dm|dt)/:user/:repo',
     queryParamSchema,
   }
 
@@ -56,6 +56,7 @@ export default class PackagistDownloads extends BasePackagistService {
             name: 'interval',
             example: 'dm',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Monthly, or Total downloads',
           }),
           pathParam({
             name: 'user',

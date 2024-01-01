@@ -47,6 +47,7 @@ export default class HomebrewDownloads extends BaseJsonService {
             name: 'interval',
             example: 'dm',
             schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Monthly, Quarterly or Yearly downloads',
           },
           {
             name: 'formula',
