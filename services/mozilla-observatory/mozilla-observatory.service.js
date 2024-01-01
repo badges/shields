@@ -29,7 +29,9 @@ const description = `
 The [Mozilla HTTP Observatory](https://observatory.mozilla.org)
 is a set of security tools to analyze your website
 and inform you if you are utilizing the many available methods to secure it.
+`
 
+const publishDescription = `
 By default the scan result is hidden from the public result list.
 You can activate the publication of the scan result
 by setting the \`publish\` parameter.
@@ -69,6 +71,7 @@ export default class MozillaObservatory extends BaseJsonService {
             name: 'publish',
             schema: { type: 'boolean' },
             example: null,
+            description: publishDescription,
           }),
         ],
       },
