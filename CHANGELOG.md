@@ -39,7 +39,6 @@ It is now possible to use [authentication for DockerHub](https://github.com/badg
 - increase page size for github release badge by semver [#9818](https://github.com/badges/shields/issues/9818)
 - Dependency updates
 
-
 ## server-2023-12-04
 
 - move from @renovate/pep440 to @renovatebot/pep440 [#9614](https://github.com/badges/shields/issues/9614)
