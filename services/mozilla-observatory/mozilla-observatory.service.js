@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, queryParam, pathParam } from '../index.js'
 
 const schema = Joi.object({
   state: Joi.string()
@@ -25,9 +25,9 @@ const queryParamSchema = Joi.object({
   publish: Joi.equal(''),
 }).required()
 
-const documentation = `
+const description = `
 The [Mozilla HTTP Observatory](https://observatory.mozilla.org)
-is a set of tools to analyze your website
+is a set of security tools to analyze your website
 and inform you if you are utilizing the many available methods to secure it.
 
 By default the scan result is hidden from the public result list.
@@ -50,21 +50,30 @@ export default class MozillaObservatory extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Mozilla HTTP Observatory Grade',
-      namedParams: { format: 'grade', host: 'github.com' },
-      staticPreview: this.render({
-        format: 'grade',
-        state: 'FINISHED',
-        grade: 'A+',
-        score: 115,
-      }),
-      queryParams: { publish: null },
-      keywords: ['scanner', 'security'],
-      documentation,
+  static openApi = {
+    '/mozilla-observatory/{format}/{host}': {
+      get: {
+        summary: 'Mozilla HTTP Observatory Grade',
+        description,
+        parameters: [
+          pathParam({
+            name: 'format',
+            example: 'grade',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          }),
+          pathParam({
+            name: 'host',
+            example: 'github.com',
+          }),
+          queryParam({
+            name: 'publish',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'observatory',
