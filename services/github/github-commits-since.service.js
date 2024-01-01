@@ -12,10 +12,8 @@ import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
-const versionDescription = `
-<p><code>version</code> can either be a tag or the special value <code>latest</code></p>
-<p>If <code>version</code> is <code>latest</code>, the <code>include_prereleases</code> , <code>sort</code> and <code>filter</code> params can be used to configure how we determine the latest version. If <code>version</code> is a tag, these params are ignored.</p>
-`
+const latestDocs =
+  '<p>The <code>include_prereleases</code>, <code>sort</code> and <code>filter</code> params can be used to configure how we determine the latest version.</p>'
 
 export default class GithubCommitsSince extends GithubAuthV3Service {
   static category = 'activity'
@@ -28,7 +26,7 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
   static openApi = {
     '/github/commits-since/{user}/{repo}/{version}': {
       get: {
-        summary: 'GitHub commits since version',
+        summary: 'GitHub commits since tagged version',
         description: documentation,
         parameters: [
           pathParam({ name: 'user', example: 'SubtitleEdit' }),
@@ -36,15 +34,13 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
           pathParam({
             name: 'version',
             example: '3.4.7',
-            description: versionDescription,
           }),
-          ...openApiQueryParams,
         ],
       },
     },
     '/github/commits-since/{user}/{repo}/{version}/{branch}': {
       get: {
-        summary: 'GitHub commits since version (branch)',
+        summary: 'GitHub commits since tagged version (branch)',
         description: documentation,
         parameters: [
           pathParam({ name: 'user', example: 'SubtitleEdit' }),
@@ -52,8 +48,29 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
           pathParam({
             name: 'version',
             example: '3.4.7',
-            description: versionDescription,
           }),
+          pathParam({ name: 'branch', example: 'main' }),
+        ],
+      },
+    },
+    '/github/commits-since/{user}/{repo}/latest': {
+      get: {
+        summary: 'GitHub commits since latest release',
+        description: documentation + latestDocs,
+        parameters: [
+          pathParam({ name: 'user', example: 'SubtitleEdit' }),
+          pathParam({ name: 'repo', example: 'subtitleedit' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+    '/github/commits-since/{user}/{repo}/latest/{branch}': {
+      get: {
+        summary: 'GitHub commits since latest release (branch)',
+        description: documentation + latestDocs,
+        parameters: [
+          pathParam({ name: 'user', example: 'SubtitleEdit' }),
+          pathParam({ name: 'repo', example: 'subtitleedit' }),
           pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
