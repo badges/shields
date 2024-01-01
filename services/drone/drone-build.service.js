@@ -30,16 +30,15 @@ export default class DroneBuild extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'harness',
+            example: 'drone',
           }),
           pathParam({
             name: 'repo',
-            example: 'drone',
+            example: 'autoscaler',
           }),
           queryParam({
             name: 'server',
             example: 'https://drone.shields.io',
-            required: true,
           }),
         ],
       },
@@ -50,11 +49,11 @@ export default class DroneBuild extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'harness',
+            example: 'drone',
           }),
           pathParam({
             name: 'repo',
-            example: 'drone',
+            example: 'autoscaler',
           }),
           pathParam({
             name: 'branch',
@@ -63,7 +62,6 @@ export default class DroneBuild extends BaseJsonService {
           queryParam({
             name: 'server',
             example: 'https://drone.shields.io',
-            required: true,
           }),
         ],
       },
