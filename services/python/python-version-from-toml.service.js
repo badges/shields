@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import BaseTomlService from '../../core/base-service/base-toml.js'
+import { queryParams } from '../index.js'
 import { optionalUrl } from '../validators.js'
 
 const queryParamSchema = Joi.object({
@@ -12,7 +13,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `Shows the required python version for a package based on the values in the requires-python field in PEP 621 compliant pyproject.toml \n
+const description = `Shows the required python version for a package based on the values in the requires-python field in PEP 621 compliant pyproject.toml \n
 a URL of the toml is required, please note that when linking to files in github or similar sites, provide URL to raw file, for example:
 
 Use https://raw.githubusercontent.com/numpy/numpy/main/pyproject.toml \n
@@ -28,18 +29,20 @@ class PythonVersionFromToml extends BaseTomlService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Python Version from PEP 621 TOML',
-      namedParams: {},
-      queryParams: {
-        tomlFilePath:
-          'https://raw.githubusercontent.com/numpy/numpy/main/pyproject.toml',
+  static openApi = {
+    '/python/required-version-toml': {
+      get: {
+        summary: 'Python Version from PEP 621 TOML',
+        description,
+        parameters: queryParams({
+          name: 'tomlFilePath',
+          example:
+            'https://raw.githubusercontent.com/numpy/numpy/main/pyproject.toml',
+          required: true,
+        }),
       },
-      staticPreview: this.render({ requiresPythonString: '>=3.9' }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'python' }
 
