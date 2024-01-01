@@ -7,6 +7,7 @@ import {
   buildDockerUrl,
   getDockerHubUser,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
@@ -15,6 +16,14 @@ const pullsSchema = Joi.object({
 export default class DockerPulls extends BaseJsonService {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com'],
+    isRequired: false,
+  }
+
   static openApi = {
     '/docker/pulls/{user}/{repo}': {
       get: {
@@ -42,7 +51,7 @@ export default class DockerPulls extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
+    return await fetch(this, {
       schema: pullsSchema,
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
         user,

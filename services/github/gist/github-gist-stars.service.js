@@ -52,7 +52,11 @@ export default class GistStars extends GithubAuthV4Service {
   }
 
   static render({ stargazerCount, url, stargazers }) {
-    return { message: metric(stargazerCount), link: [url, stargazers] }
+    return {
+      message: metric(stargazerCount),
+      style: 'social',
+      link: [url, stargazers],
+    }
   }
 
   async fetch({ gistId }) {

@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar.js'
 import duration from 'dayjs/plugin/duration.js'
 import relativeTime from 'dayjs/plugin/relativeTime.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { metric as formatMetric, ordinalNumber } from '../text-formatters.js'
 dayjs.extend(calendar)
 dayjs.extend(duration)
@@ -37,29 +37,37 @@ export default class WhatPulse extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'WhatPulse user metric',
-      namedParams: { metric: 'keys', userType: 'user', id: '179734' },
-      staticPreview: this.render({
-        metric: 'keys',
-        metricValue: '21G',
-      }),
-    },
-    {
-      title: 'WhatPulse team metric - rank',
-      namedParams: {
-        metric: 'upload',
-        userType: 'team',
-        id: 'dutch power cows',
+  static openApi = {
+    '/whatpulse/{metric}/{userType}/{id}': {
+      get: {
+        summary: 'WhatPulse',
+        parameters: [
+          pathParam({
+            name: 'metric',
+            example: 'keys',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          }),
+          pathParam({
+            name: 'userType',
+            example: 'team',
+            schema: { type: 'string', enum: this.getEnum('userType') },
+          }),
+          pathParam({
+            name: 'id',
+            example: '179734',
+            description:
+              'Either a user ID (e.g: `179734`) or a group ID (e.g: `dutch power cows`)',
+          }),
+          queryParam({
+            name: 'rank',
+            description: 'show rank instead of value',
+            example: null,
+            schema: { type: 'boolean' },
+          }),
+        ],
       },
-      queryParams: { rank: null },
-      staticPreview: this.render({
-        metric: 'upload',
-        metricValue: '1ˢᵗ',
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'whatpulse' }
 

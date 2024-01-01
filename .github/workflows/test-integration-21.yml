@@ -1,4 +1,4 @@
-name: Integration@node 20
+name: Integration@node 21
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -8,7 +8,7 @@ on:
       - 'dependabot/**'
 
 jobs:
-  test-integration-20:
+  test-integration-21:
     runs-on: ubuntu-latest
     env:
       PAT_EXISTS: ${{ secrets.GH_PAT != '' }}
@@ -35,7 +35,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 20
+          node-version: 21
         env:
           NPM_CONFIG_ENGINE_STRICT: 'false'
 

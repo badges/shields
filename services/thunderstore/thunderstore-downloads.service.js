@@ -1,5 +1,6 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseThunderstoreService, documentation } from './thunderstore-base.js'
+import { pathParams } from '../index.js'
+import { BaseThunderstoreService, description } from './thunderstore-base.js'
 
 export default class ThunderstoreDownloads extends BaseThunderstoreService {
   static category = 'downloads'
@@ -9,17 +10,18 @@ export default class ThunderstoreDownloads extends BaseThunderstoreService {
     pattern: ':namespace/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Thunderstore Downloads',
-      namedParams: {
-        namespace: 'notnotnotswipez',
-        packageName: 'MoreCompany',
+  static openApi = {
+    '/thunderstore/dt/{namespace}/{packageName}': {
+      get: {
+        summary: 'Thunderstore Downloads',
+        description,
+        parameters: pathParams(
+          { name: 'namespace', example: 'notnotnotswipez' },
+          { name: 'packageName', example: 'MoreCompany' },
+        ),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 120000 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'downloads',
