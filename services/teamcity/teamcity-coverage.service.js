@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParam, queryParam } from '../index.js'
 import TeamCityBase from './teamcity-base.js'
 
 const buildStatisticsSchema = Joi.object({
@@ -28,20 +28,20 @@ export default class TeamCityCoverage extends TeamCityBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'TeamCity Coverage',
-      namedParams: {
-        buildId: 'ReactJSNet_PullRequests',
+  static openApi = {
+    '/teamcity/coverage/{buildId}': {
+      get: {
+        summary: 'TeamCity Coverage',
+        parameters: [
+          pathParam({ name: 'buildId', example: 'ReactJSNet_PullRequests' }),
+          queryParam({
+            name: 'server',
+            example: 'https://teamcity.jetbrains.com',
+          }),
+        ],
       },
-      queryParams: {
-        server: 'https://teamcity.jetbrains.com',
-      },
-      staticPreview: this.render({
-        coverage: 82,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'coverage',
