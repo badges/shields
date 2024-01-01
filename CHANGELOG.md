@@ -4,6 +4,48 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-01-01
+
+- migrate some services from examples to openApi [#9856](https://github.com/badges/shields/issues/9856)
+- migrate examples to openApi part 32; affects [azuredevops youtube] [#9861](https://github.com/badges/shields/issues/9861)
+- call [docker] with auth [#9803](https://github.com/badges/shields/issues/9803)
+- migrate some services from examples to openApi part 28; affects [aur cran mastodon matrix npmstat nyc thunderstore twitter] [#9855](https://github.com/badges/shields/issues/9855)
+- Ensure social category badges are rendered with social style and logo; affects [gitlab keybase lemmy modrinth thunderstore twitch] gist github reddit [#9859](https://github.com/badges/shields/issues/9859)
+- deploy on node 20 [#9799](https://github.com/badges/shields/issues/9799)
+- Small [YouTube] cleanup [#9860](https://github.com/badges/shields/issues/9860)
+- add description to interval enums [#9854](https://github.com/badges/shields/issues/9854)
+- convert 'style' param to enum [#9853](https://github.com/badges/shields/issues/9853)
+- increase page size for github release badge by semver [#9818](https://github.com/badges/shields/issues/9818)
+- migrate examples to openApi part 26; affects [gitlab] [#9752](https://github.com/badges/shields/issues/9752)
+- migrate some services from examples to openApi [#9841](https://github.com/badges/shields/issues/9841)
+- migrate some services from examples to openApi [#9737](https://github.com/badges/shields/issues/9737)
+- migrate examples to openApi part 23; affects [wordpress] [#9732](https://github.com/badges/shields/issues/9732)
+- Fix typo in queryParams documentation [#9840](https://github.com/badges/shields/issues/9840)
+- migrate some services from examples to openApi [#9749](https://github.com/badges/shields/issues/9749)
+- migrate examples to openApi part 18; affects [conda feedz gem openvsx readthedocs] github [#9607](https://github.com/badges/shields/issues/9607)
+- migrate some services from examples to openApi [#9716](https://github.com/badges/shields/issues/9716)
+- migrate some services from examples to openApi [#9731](https://github.com/badges/shields/issues/9731)
+- migrate examples to openApi part 20: TUTORIAL.md [#9713](https://github.com/badges/shields/issues/9713)
+- link to mterczynski.pl/joi-schema-generator in validation docs [#9700](https://github.com/badges/shields/issues/9700)
+- [Thunderstore] Add Thunderstore Badges [#9782](https://github.com/badges/shields/issues/9782)
+- migrate examples to openApi part 19; affects [azuredevops codacy greasyfork jenkinsplugininstalls jetbrains osslifecycle travis visualstudio] and librariesio, uptimerobot [#9610](https://github.com/badges/shields/issues/9610)
+- migrate examples to openApi part 17; affects [buildkite cii codeship crates jsdelivr npms] and bundlephobia [#9584](https://github.com/badges/shields/issues/9584)
+- Add [Raycast] Badge [#9801](https://github.com/badges/shields/issues/9801)
+- [GITEA] add new gitea service (release/languages) [#9781](https://github.com/badges/shields/issues/9781)
+- improve documentation for [dynamicxml] service [#9798](https://github.com/badges/shields/issues/9798)
+- Add [NpmStatDownloads] Badge [#9783](https://github.com/badges/shields/issues/9783)
+- [pub] Use official version endpoint for pub-service [#9802](https://github.com/badges/shields/issues/9802)
+- fix typo in docs [#9804](https://github.com/badges/shields/issues/9804)
+- stop linking to twitter [#9685](https://github.com/badges/shields/issues/9685)
+- cache weblate badges for longer [#9786](https://github.com/badges/shields/issues/9786)
+- [Discourse] Update schema keys to use plural form (`topic_count` -> `topics_count`) [#9778](https://github.com/badges/shields/issues/9778)
+- cache some badges for longer [#9785](https://github.com/badges/shields/issues/9785)
+- log 429s to sentry (attempt 2); affects [dynamic endpoint uptimerobot weblate opencollective discord github] [#9546](https://github.com/badges/shields/issues/9546)
+- migrate examples to openApi part 15; affects [pingpong polymart spiget] [#9561](https://github.com/badges/shields/issues/9561)
+- migrate examples to openApi part 14; affects [azuredevops discord netlify opencollective pub ros visualstudio] [#9560](https://github.com/badges/shields/issues/9560)
+- migrate examples to openApi part 13; affects [curseforge date fedora hsts modrinth ore] [#9499](https://github.com/badges/shields/issues/9499)
+- Dependency updates
+
 ## server-2023-12-04
 
 - move from @renovate/pep440 to @renovatebot/pep440 [#9614](https://github.com/badges/shields/issues/9614)
