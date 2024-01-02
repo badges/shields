@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderLicenseBadge } from '../licenses.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService, InvalidResponse } from '../index.js'
+import { BaseJsonService, InvalidResponse, pathParams } from '../index.js'
 
 const schema = Joi.object({
   license: Joi.array().items(Joi.string()).single(),
@@ -10,6 +10,8 @@ const schema = Joi.object({
     date: Joi.string().allow('').required(),
   }).required(),
 }).required()
+
+const description = '[CTAN](https://ctan.org/) is a package registry for TeX.'
 
 class BaseCtanService extends BaseJsonService {
   static defaultBadgeData = { label: 'ctan' }
@@ -27,14 +29,18 @@ class CtanLicense extends BaseCtanService {
   static category = 'license'
   static route = { base: 'ctan/l', pattern: ':library' }
 
-  static examples = [
-    {
-      title: 'CTAN',
-      namedParams: { library: 'novel' },
-      staticPreview: this.render({ licenses: ['ppl1.3c', 'ofl'] }),
-      keywords: ['tex'],
+  static openApi = {
+    '/ctan/l/{library}': {
+      get: {
+        summary: 'CTAN License',
+        description,
+        parameters: pathParams({
+          name: 'library',
+          example: 'novel',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 
@@ -53,14 +59,18 @@ class CtanVersion extends BaseCtanService {
   static category = 'version'
   static route = { base: 'ctan/v', pattern: ':library' }
 
-  static examples = [
-    {
-      title: 'CTAN',
-      namedParams: { library: 'tex' },
-      staticPreview: this.render({ version: '3.14159265' }),
-      keywords: ['tex'],
+  static openApi = {
+    '/ctan/v/{library}': {
+      get: {
+        summary: 'CTAN Version',
+        description,
+        parameters: pathParams({
+          name: 'library',
+          example: 'tex',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ version }) {
     return renderVersionBadge({ version })

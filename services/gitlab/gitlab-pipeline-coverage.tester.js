@@ -23,11 +23,19 @@ t.create('Coverage (nonexistent branch)')
     message: 'not set up',
   })
 
+// Gitlab will redirect users to a sign-in page
+// (which we ultimately see as a 403 error) in the event
+// a nonexistent, or private, repository is specified.
+// Given the additional complexity that would've been required to
+// present users with a more traditional and friendly 'Not Found'
+// error message, we will simply display invalid
+// https://github.com/badges/shields/pull/5538
+// https://github.com/badges/shields/pull/9752
 t.create('Coverage (nonexistent repo)')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({
     label: 'coverage',
-    message: 'inaccessible',
+    message: 'invalid',
   })
 
 t.create('Coverage (custom job)')

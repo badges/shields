@@ -4,6 +4,49 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-01-01
+
+The most important changes in this release for users hosting their own instance are:
+
+The shields docker image is now based on node 20:
+
+- deploy on node 20 [#9799](https://github.com/badges/shields/issues/9799)
+
+It is now possible to use [authentication for DockerHub](https://github.com/badges/shields/blob/master/doc/server-secrets.md#dockerhub) to allow higher API rate limit or access to private repos:
+
+- call [docker] with auth [#9803](https://github.com/badges/shields/issues/9803)
+
+### New Badges
+
+- [Thunderstore] Add Thunderstore Badges [#9782](https://github.com/badges/shields/issues/9782)
+- Add [Raycast] Badge [#9801](https://github.com/badges/shields/issues/9801)
+- [GITEA] add new gitea service (release/languages) [#9781](https://github.com/badges/shields/issues/9781)
+- Add [NpmStatDownloads] Badge [#9783](https://github.com/badges/shields/issues/9783)
+
+### Frontend Changes
+
+- improve documentation for [dynamicxml] service [#9798](https://github.com/badges/shields/issues/9798)
+- add description to interval enums [#9854](https://github.com/badges/shields/issues/9854)
+- convert 'style' param to enum [#9853](https://github.com/badges/shields/issues/9853)
+- Ensure social category badges are rendered with social style and logo; affects [gitlab keybase lemmy modrinth thunderstore twitch] gist github reddit [#9859](https://github.com/badges/shields/issues/9859)
+
+### Fixes
+
+- [pub] Use official version endpoint for pub-service [#9802](https://github.com/badges/shields/issues/9802)
+- cache weblate badges for longer [#9786](https://github.com/badges/shields/issues/9786)
+- [Discourse] Update schema keys to use plural form (`topic_count` -> `topics_count`) [#9778](https://github.com/badges/shields/issues/9778)
+- cache some badges for longer [#9785](https://github.com/badges/shields/issues/9785)
+- increase page size for github release badge by semver [#9818](https://github.com/badges/shields/issues/9818)
+- Dependency updates
+
+## server-2023-12-04
+
+- move from @renovate/pep440 to @renovatebot/pep440 [#9614](https://github.com/badges/shields/issues/9614)
+- deprecate/fix [ansible] galaxy services [#9648](https://github.com/badges/shields/issues/9648)
+- call [pepy] with auth [#9748](https://github.com/badges/shields/issues/9748)
+- add meaningful descriptions including keywords [#9715](https://github.com/badges/shields/issues/9715)
+- Dependency updates
+
 ## server-2023-11-01
 
 - fix greasyfork 404 bug [#9632](https://github.com/badges/shields/issues/9632)

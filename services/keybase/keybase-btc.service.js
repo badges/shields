@@ -48,11 +48,13 @@ export default class KeybaseBTC extends KeybaseProfile {
   static defaultBadgeData = {
     label: 'btc',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ address }) {
     return {
       message: address,
+      style: 'social',
     }
   }
 

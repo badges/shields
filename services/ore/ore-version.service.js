@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreVersion extends BaseOreService {
   static category = 'version'
@@ -9,17 +10,18 @@ export default class OreVersion extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Ore Version',
-      namedParams: {
-        pluginId: 'nucleus',
+  static openApi = {
+    '/ore/v/{pluginId}': {
+      get: {
+        summary: 'Ore Version',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
       },
-      staticPreview: renderVersionBadge({ version: '2.2.3' }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'version',

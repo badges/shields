@@ -1,8 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus } from '../build-status.js'
 
-const keywords = ['vso', 'vsts', 'azure-devops']
-
 const schema = Joi.object({
   message: Joi.alternatives()
     .try(
@@ -26,4 +24,4 @@ async function fetch(serviceInstance, { url, searchParams = {}, httpErrors }) {
   return { status }
 }
 
-export { keywords, fetch }
+export { fetch }

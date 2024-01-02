@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
-import { BaseModrinthService, documentation } from './modrinth-base.js'
+import { BaseModrinthService, description } from './modrinth-base.js'
 
 export default class ModrinthFollowers extends BaseModrinthService {
   static category = 'social'
@@ -9,23 +10,25 @@ export default class ModrinthFollowers extends BaseModrinthService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'Modrinth Followers',
-      namedParams: { projectId: 'AANobbMI' },
-      staticPreview: Object.assign(this.render({ followers: 176 }), {
-        label: 'Followers',
-        style: 'social',
-      }),
-      documentation,
+  static openApi = {
+    '/modrinth/followers/{projectId}': {
+      get: {
+        summary: 'Modrinth Followers',
+        description,
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'AANobbMI',
+        }),
+      },
     },
-  ]
+  }
 
-  static defaultBadgeData = { label: 'followers' }
+  static defaultBadgeData = { label: 'followers', namedLogo: 'modrinth' }
 
   static render({ followers }) {
     return {
       message: metric(followers),
+      style: 'social',
       color: 'blue',
     }
   }

@@ -1,5 +1,8 @@
 import { valid, maxSatisfying, prerelease } from '@renovatebot/ruby-semver'
 
+const description =
+  '[Ruby Gems](https://rubygems.org/) is a registry for ruby libraries'
+
 function latest(versions) {
   // latest Ruby Gems version, including pre-releases
   return maxSatisfying(versions, '>0')
@@ -22,4 +25,4 @@ function versionColor(version) {
   return 'blue'
 }
 
-export { latest, versionColor }
+export { description, latest, versionColor }

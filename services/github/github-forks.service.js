@@ -45,6 +45,7 @@ export default class GithubForks extends GithubAuthV4Service {
   static render({ user, repo, forkCount }) {
     return {
       message: metric(forkCount),
+      style: 'social',
       color: 'blue',
       link: [
         `https://github.com/${user}/${repo}/fork`,

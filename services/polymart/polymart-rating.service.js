@@ -1,7 +1,8 @@
+import { pathParams } from '../index.js'
 import { starRating, metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
 import { NotFound } from '../../core/base-service/errors.js'
-import { BasePolymartService, documentation } from './polymart-base.js'
+import { BasePolymartService, description } from './polymart-base.js'
 
 export default class PolymartRatings extends BasePolymartService {
   static category = 'rating'
@@ -11,30 +12,25 @@ export default class PolymartRatings extends BasePolymartService {
     pattern: ':format(rating|stars)/:resourceId',
   }
 
-  static examples = [
-    {
-      title: 'Polymart Stars',
-      pattern: 'stars/:resourceId',
-      namedParams: {
-        resourceId: '323',
+  static openApi = {
+    '/polymart/{format}/{resourceId}': {
+      get: {
+        summary: 'Polymart Rating',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            example: 'rating',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          },
+          {
+            name: 'resourceId',
+            example: '323',
+          },
+        ),
       },
-      staticPreview: this.render({
-        format: 'stars',
-        total: 14,
-        average: 5,
-      }),
-      documentation,
     },
-    {
-      title: 'Polymart Rating',
-      pattern: 'rating/:resourceId',
-      namedParams: {
-        resourceId: '323',
-      },
-      staticPreview: this.render({ total: 14, average: 5 }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'rating',

@@ -1,8 +1,8 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import {
   BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
+  description,
 } from './visual-studio-app-center-base.js'
 
 const schema = Joi.object({
@@ -18,19 +18,28 @@ export default class VisualStudioAppCenterReleasesOSVersion extends BaseVisualSt
     pattern: ':owner/:app/:token',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio App Center (Minimum) OS Version',
-      namedParams: {
-        owner: 'jct',
-        app: 'my-amazing-app',
-        token: 'ac70cv...',
+  static openApi = {
+    '/visual-studio-app-center/releases/osver/{owner}/{app}/{token}': {
+      get: {
+        summary: 'Visual Studio App Center (Minimum) OS Version',
+        description,
+        parameters: pathParams(
+          {
+            name: 'owner',
+            example: 'jct',
+          },
+          {
+            name: 'app',
+            example: 'my-amazing-app',
+          },
+          {
+            name: 'token',
+            example: 'ac70cv...',
+          },
+        ),
       },
-      staticPreview: this.render({ minOS: '4.1', appOS: 'Android' }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'min version',

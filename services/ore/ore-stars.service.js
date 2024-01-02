@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreStars extends BaseOreService {
   static category = 'rating'
@@ -9,17 +10,18 @@ export default class OreStars extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Ore Stars',
-      namedParams: {
-        pluginId: 'nucleus',
+  static openApi = {
+    '/ore/stars/{pluginId}': {
+      get: {
+        summary: 'Ore Stars',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
       },
-      staticPreview: this.render({ stars: 1000 }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'stars',

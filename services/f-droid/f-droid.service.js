@@ -5,7 +5,7 @@ import {
 } from '../validators.js'
 import { addv } from '../text-formatters.js'
 import { version as versionColor } from '../color-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   packageName: Joi.string().required(),
@@ -23,21 +23,26 @@ const queryParamSchema = Joi.object({
 export default class FDroid extends BaseJsonService {
   static category = 'version'
   static route = { base: 'f-droid/v', pattern: ':appId', queryParamSchema }
-  static examples = [
-    {
-      title: 'F-Droid',
-      namedParams: { appId: 'org.thosp.yourlocalweather' },
-      staticPreview: this.render({ version: '1.0' }),
-      keywords: ['fdroid', 'android', 'app'],
+  static openApi = {
+    '/f-droid/v/{appId}': {
+      get: {
+        summary: 'F-Droid Version',
+        description:
+          '[F-Droid](https://f-droid.org/) is a catalogue of Open Source Android apps',
+        parameters: [
+          pathParam({
+            name: 'appId',
+            example: 'org.dystopia.email',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
+      },
     },
-    {
-      title: 'F-Droid (including pre-releases)',
-      namedParams: { appId: 'org.dystopia.email' },
-      queryParams: { include_prereleases: null },
-      staticPreview: this.render({ version: '1.2.1' }),
-      keywords: ['fdroid', 'android', 'app'],
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'f-droid' }
 

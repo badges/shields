@@ -85,7 +85,7 @@ export class BaseWordpress extends BaseJsonService {
   }
 }
 
-export const documentation = `
+export const description = `
 <p>
   These badges rely on an API that is no longer supported by Wordpress. You are
   still free to use them, simply bear in mind that Shields.io cannot guarantee

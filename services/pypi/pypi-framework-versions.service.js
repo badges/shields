@@ -1,4 +1,4 @@
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
@@ -37,7 +37,7 @@ const frameworkNameMap = {
   },
 }
 
-const documentation = `
+const description = `
 <p>
   This service currently support the following Frameworks: <br/>
   ${Object.values(frameworkNameMap).map(obj => ` <strong>${obj.name}</strong>`)}
@@ -53,21 +53,22 @@ export default class PypiFrameworkVersion extends PypiBase {
     )})/:packageName+`,
   }
 
-  static examples = [
-    {
-      title: 'PyPI - Versions from Framework Classifiers',
-      namedParams: {
-        frameworkName: 'Plone',
-        packageName: 'plone.volto',
+  static openApi = {
+    '/pypi/frameworkversions/{frameworkName}/{packageName}': {
+      get: {
+        summary: 'PyPI - Versions from Framework Classifiers',
+        description,
+        parameters: pathParams(
+          {
+            name: 'frameworkName',
+            example: 'plone',
+            schema: { type: 'string', enum: Object.keys(frameworkNameMap) },
+          },
+          { name: 'packageName', example: 'plone.volto' },
+        ),
       },
-      staticPreview: this.render({
-        name: 'Plone',
-        versions: ['5.2', '6.0'],
-      }),
-      keywords: ['python'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'versions' }
 

@@ -22,9 +22,6 @@
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
-    <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=X"
-            alt="follow on Twitter"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
@@ -101,8 +98,8 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
-1. Install Node 18 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 18 and 20.
+1. Install Node 20 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 20 and 21.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
